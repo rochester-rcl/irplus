@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!-- ****************************************** --> 
+<!-- Application context file for dspace_export -->
+<!-- ****************************************** -->    
+<beans>
+
+    <!-- ****************************************** --> 
+    <!-- Data Source -->
+    <!-- ****************************************** --> 
+    <import resource="data-source.xml"/>
+    
+    
+     <bean id="itemExporter" class="edu.ur.dspace.export.DefaultItemExporter">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="bitstreamFileLoader" ref="bitstreamFileLoader"/>
+     </bean>
+     
+     <bean id="communityExporter" class="edu.ur.dspace.export.DefaultCommunityExporter">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="bitstreamFileLoader" ref="bitstreamFileLoader"/>
+     </bean>
+     
+     <bean id="collectionExporter" class="edu.ur.dspace.export.DefaultCollectionExporter">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="bitstreamFileLoader" ref="bitstreamFileLoader"/>
+     </bean>
+     
+     <bean id="userExporter" class="edu.ur.dspace.export.DefaultUserExporter">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="dspaceAdminDeterminer" ref="dspaceAdminDeterminer"/>
+        <property name="dspaceSubmitDeterminer" ref="dspaceSubmitDeterminer"/>
+     </bean>
+     
+      <bean id="groupExporter" class="edu.ur.dspace.export.DefaultGroupExporter">
+        <property name="dataSource" ref="dataSource"/>
+     </bean>
+     
+     <bean id="researcherExporter" class="edu.ur.dspace.export.DefaultResearcherExporter">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="bitstreamFileLoader" ref="bitstreamFileLoader"/>
+     </bean>
+     
+     <bean id="dspaceAdminDeterminer" class="edu.ur.dspace.export.DefaultDspaceAdminDeterminer">
+        <property name="dataSource" ref="dataSource"/>
+     </bean>
+     
+     <bean id="dspaceSubmitDeterminer" class="edu.ur.dspace.export.DefaultDspaceSubmitDeterminer">
+        <property name="dataSource" ref="dataSource"/>
+     </bean>
+     
+     <bean id="bitstreamFileLoader" class="edu.ur.dspace.export.DefaultBitstreamFileLoader">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="assetStores">
+            <list>
+                <value>/dspace/assetstore</value>
+            </list>
+        </property>
+        <property name="digitsPerLevel" value="2"/>
+        <property name="directoryLevels" value="3"/>
+     </bean>
+ 
+</beans>
