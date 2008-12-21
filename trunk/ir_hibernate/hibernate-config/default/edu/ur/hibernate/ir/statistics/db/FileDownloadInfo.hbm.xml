@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for file download info 
+	
+	@author Sharmila Ranganathan
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.statistics">
+	<class name="FileDownloadInfo" schema="ir_statistics" table="file_download_info"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="file_download_info_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_statistics.file_download_info_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+			
+		<property name="ipAddress" column="ip_address" type="text"
+			access="field" />
+
+		<property name="ipAddressPart1" column="ip_address_part1" type="int"
+			access="field" />
+
+		<property name="ipAddressPart2" column="ip_address_part2" type="int"
+			access="field" />
+			
+		<property name="ipAddressPart3" column="ip_address_part3" type="int"
+			access="field" />
+
+		<property name="ipAddressPart4" column="ip_address_part4" type="int"
+			access="field" />
+						
+						
+		<property name="irFileId" column="ir_file_id" type="long"
+			access="field" />
+
+		<property name="count" column="count" type="int"
+			access="field" />
+		
+		<property name="downloadDate" column="download_date" type="date"
+			access="field" />
+
+	</class>
+
+
+    <!-- named query for getting a the download info -->
+	<query name="getDownloadInfo">
+		from FileDownloadInfo as fileDownloadInfo where
+		fileDownloadInfo.ipAddress = ? AND
+		fileDownloadInfo.irFileId = ? AND
+		fileDownloadInfo.downloadDate  = ?
+	</query>
+	
+		<!-- named query for getting a count of all the downloads in the repository -->
+	<query name="getIrFileDownloadCount">
+		select sum(fileDownloadInfo.count) from FileDownloadInfo fileDownloadInfo 
+		where fileDownloadInfo.irFileId = ?
+		and (select count(*) from IgnoreIpAddress as ignore 
+		       where fileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
+		       and fileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
+		       and fileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
+		       and fileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
+		
+	</query>
+	
+	<!-- named query for getting a count of all the downloads in the repository -->
+	<query name="getRepositoryFileDownloadCount">
+		select sum(fileDownloadInfo.count) from FileDownloadInfo fileDownloadInfo 
+		where (select count(*) from IgnoreIpAddress as ignore 
+		       where fileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
+		       and fileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
+		       and fileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
+		       and fileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
+		
+	</query>
+	
+    <!-- named query for getting a count of all the downloads in the repository -->
+	<query name="getCollectionFileDownloadCount">
+		select sum(fileDownloadInfo.count) from FileDownloadInfo as fileDownloadInfo, 
+		InstitutionalCollection as institutionalCollection 
+	    join institutionalCollection.items institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemFiles itemFile 
+	    where institutionalCollection.id =  ? 
+	    and itemFile.irFile.id = fileDownloadInfo.irFileId
+	    and (select count(*) from IgnoreIpAddress as ignore 
+		       where fileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
+		       and fileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
+		       and fileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
+		       and fileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
+	</query>
+	
+	<!-- named query for getting a count of all the downloads in the repository including children-->
+	<query name="getCollectionFileDownloadCountWithChildren">
+	    select sum(fileDownloadInfo.count) from FileDownloadInfo as fileDownloadInfo, 
+		InstitutionalCollection as institutionalCollection 
+	    join institutionalCollection.items institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemFiles itemFile
+	    where  itemFile.irFile.id = fileDownloadInfo.irFileId
+	    and institutionalCollection.leftValue  &gt;= ? 
+	    and institutionalCollection.leftValue &lt;= ? 
+	    and institutionalCollection.treeRoot.id = ?
+	    and (select count(*) from IgnoreIpAddress as ignore 
+		       where fileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
+		       and fileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
+		       and fileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
+		       and fileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
+	</query>
+	
+	<!-- No. of downloads for an item -->
+	<query name="getItemFileDownloadCount">
+		select sum(fileDownloadInfo.count) from FileDownloadInfo as fileDownloadInfo,
+		GenericItem as item 
+		join item.itemFiles itemFile 
+	    where item.id = ?
+	    and itemFile.irFile.id = fileDownloadInfo.irFileId
+	    and (select count(*) from IgnoreIpAddress as ignore 
+		       where fileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
+		       and fileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
+		       and fileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
+		       and fileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
+	</query>
+	
+	<!-- Count of institutional item contributed by given person name -->
+	<query name="getInstitutionalItemDownloadCountByPersonName">
+	    select sum(fileDownloadInfo.count) as downloadCount, max(institutionalItemVersion.dateOfDeposit) as latestDatePublished, institutionalItem from FileDownloadInfo as fileDownloadInfo,  
+	    InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as  versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    join item.itemFiles itemFile
+	    where  itemFile.irFile.id = fileDownloadInfo.irFileId
+	    and contributor.personName.id in (:personNameIds)
+	    and (select count(*) from IgnoreIpAddress as ignore 
+		       where fileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
+		       and fileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
+		       and fileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
+		       and fileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0 
+		group by institutionalItem 
+		order by sum(fileDownloadInfo.count) desc, max(institutionalItemVersion.dateOfDeposit) desc
+	</query>
+		
+</hibernate-mapping>

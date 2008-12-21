@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for download date
+	
+	@author Sharmila Ranganathan
+-->
+<hibernate-mapping package="edu.ur.ir.statistics">
+	<class name="IgnoreIpAddress" schema="ir_statistics" table="ip_address_ignore"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="ip_address_ignore_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_statistics.ip_address_ignore_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+			
+		<property name="name" column="name" type="string"
+			access="field" />
+		
+		<property name="description" column="description" type="string"
+			access="field" />
+			
+		<property name="fromAddress1" column="from_ip_address_part1" type="int"
+			access="field" />
+			
+		<property name="fromAddress2" column="from_ip_address_part2" type="int"
+			access="field" />
+
+		<property name="fromAddress3" column="from_ip_address_part3" type="int"
+			access="field" />			
+		
+		<property name="fromAddress4" column="from_ip_address_part4" type="int"
+			access="field" />
+			
+		<property name="toAddress4" column="to_ip_address_part4" type="int"
+			access="field" />			
+
+	</class>
+	
+	<!-- named query for getting ip address -->
+	<query name="getIgnoreIpAddress">
+		from IgnoreIpAddress as ignoreIpAddress where
+		ignoreIpAddress.fromAddress1 = ?
+		and ignoreIpAddress.fromAddress2 = ?
+		and ignoreIpAddress.fromAddress3 = ?
+		and ignoreIpAddress.fromAddress4 = ?
+		and ignoreIpAddress.toAddress4 = ?
+	</query>
+	
+	<!-- named query for getting ip address name asc -->
+	<query name="getIgnoreIPOrderByNameAsc">
+		from IgnoreIpAddress as ignoreIpAddress order by 
+		ignoreIpAddress.name asc
+	</query>
+
+	<!-- named query for getting ip address name desc -->
+	<query name="getIgnoreIPOrderByNameDesc">
+		from IgnoreIpAddress as ignoreIpAddress order by 
+		ignoreIpAddress.name desc
+	</query>
+	
+		<!-- named query for getting ip address count -->
+	<query name="ipCount">
+		select count(*) from IgnoreIpAddress 
+	</query>
+</hibernate-mapping>
