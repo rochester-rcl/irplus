@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+    
+<beans>
+
+   <!-- ****************************************** --> 
+   <!-- File download info information  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="fileDownloadInfoDAOTarget" 
+       class="edu.ur.hibernate.ir.statistics.db.HbFileDownloadInfoDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="fileDownloadInfoDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="fileDownloadInfoDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Ignore IP Address 								   -->
+   <!-- ****************************************** --> 
+   
+   <bean id="ignoreIpAddressDAOTarget" 
+       class="edu.ur.hibernate.ir.statistics.db.HbIgnoreIpAddressDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="ignoreIpAddressDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="ignoreIpAddressDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+</beans>

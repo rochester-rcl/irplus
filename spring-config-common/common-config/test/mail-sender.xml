@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+    
+<beans>
+
+    <!-- ****************************************** --> 
+    <!-- Email Sender 								-->
+    <!-- ****************************************** --> 
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+         <property name="host" value="mail.ur.rochester.edu"/>
+         <property name="port" value="25"/>
+    </bean>
+
+    <bean id = "userExistMailMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="subject"> <value>  <![CDATA[ From %FIRST_NAME% %LAST_NAME% - Invitation to collaborate on a document ]]> </value> </property>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			You are invited to collaborate on the document(s) - '%NAME%'. The shared document is placed in your Shared file inbox.
+    			
+    			You can login into the system using the below link:
+    			%BASE_WEB_APP_PATH%home.action
+    			
+      			Note: Until the email address is verified, other users will not be able to share files with you 
+    			using this Email address.		
+    			
+    			]]>
+    		</value>
+    	</property>
+    </bean>
+
+    <bean id = "userNotExistMailMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>    	
+    	<property name="subject"> <value> <![CDATA[ From %FIRST_NAME% %LAST_NAME% - Invitation to collaborate on a document ]]> </value> </property>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			You are invited to collaborate on the document(s) - '%NAME%'. 
+    			Please click on the below link to register with the system:
+    			
+    			%BASE_WEB_APP_PATH%inviteLogin.action?token=%TOKEN%
+    			
+    			]]>
+    		</value>
+    	</property>
+    </bean>
+
+    <bean id = "unShareMailMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="subject"> <value> <![CDATA[ From %FIRST_NAME% %LAST_NAME% - Document unshared! ]]> </value> </property>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			The document - '%NAME%' is removed from the share. You no longer have access to collaborate on this document.
+    			
+    			]]>
+    		</value>
+    	</property>
+    </bean>
+
+    <bean id = "passwordTokenMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="subject" value="User Login - Forgot password"/>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			Please click on the following link to change your password:
+    			
+    			%BASE_WEB_APP_PATH%viewChangePassword.action?token=%TOKEN%
+    			
+    			]]>
+    		</value>
+    	</property>
+    </bean>
+    
+    <bean id = "accountCreationMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="subject" value="UR Research - New account details"/>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			New account has been created for you in UR Research.
+    			
+    			User name : %USERNAME%
+    			Password  : %PASSWORD%
+    			
+    			Please login using the above details and change your default password at the following location:
+    			
+    			%BASE_WEB_APP_PATH%
+    			
+    			]]>
+    		</value>
+    	</property>
+    </bean>
+
+    <bean id = "resetPasswordMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>    	
+    	<property name="subject" value="New password"/>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			Your password has been reset.
+    			
+    			New Password : %PASSWORD%
+    			
+    			Please login using the above password and change your default password.
+    			
+    			%MESSAGE%
+    			
+    			]]>
+    		</value>
+    	</property>
+    </bean>
+
+	<bean id = "userAffiliationMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>    
+    	<property name="subject" value="User Affiliation Confimation"/>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			Dear %USERNAME%,
+    			Your affiliation with the system is confirmed to be : "%AFFILIATION%" 
+    			
+    			You can login into the system using the below link:
+    			%BASE_WEB_APP_PATH%home.action
+    			
+    			]]>
+    		</value>
+    	</property>
+    </bean>
+    
+	<bean id = "affiliationVerificationMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+		<property name="subject" value="Verify User Affiliation"/>
+		<property name="text">
+			<value>
+				<![CDATA[
+				Dear admin,
+				Please verify the affiliation : "%AFFILIATION%"  for user: "%USERNAME%" 
+				
+				You can login into the system using the below link:
+				%BASE_WEB_APP_PATH%home.action
+				
+				]]>
+			</value>
+		</property>
+    </bean>
+    
+	<bean id = "accountVerificationMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="subject" value="Registration with XR system"/>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			Dear %USERNAME%,
+    			
+    			Your account has been created successfully.
+    			
+    			Please click on the below link to login into the system and complete the registration process.
+    			%BASE_WEB_APP_PATH%user/emailVerification.action?token=%TOKEN%
+
+ 	  			]]>
+    		</value>
+    	</property>
+    </bean>
+    
+    <bean id = "userPendingAffiliationMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="subject" value="Registration with XR system"/>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			Dear %USERNAME%,
+    			
+    			You affiliation with the system - "%AFFILIATION%" is being verified. You will be notified by Email when the verification process is complete.
+    			Until then only the basic functionalities are given to your account.
+    			
+    			]]>
+    		</value>
+    	</property>
+    </bean>  
+      
+    <bean id = "emailVerificationMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="subject" value="Verify your Email"/>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			Dear %USERNAME%,
+    			
+    			Please verify your email address by clicking on the below link and logging into the XR website.
+    			%BASE_WEB_APP_PATH%user/emailVerification.action?token=%TOKEN%
+    			
+    			Note: Until the email address is verified, other users will not be able to share files with you 
+    			using this Email address.    			
+    			]]>
+    		</value>
+    	</property>
+    </bean>
+    
+    <bean id = "itemReviewMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="subject" value="Item review"/>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			Dear %FIRSTNAME% %LASTNAME%,
+    			
+    			Publication - %ITEMNAME% is waiting for the review before submission.
+    			Please login into the system and review the publication.
+    			
+    			Thanks!
+    			]]>
+    		</value>
+    	</property>
+    </bean>
+              
+    <bean id = "itemAcceptedMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="subject" value="Publication Accepted"/>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			Dear %FIRSTNAME% %LASTNAME%,
+    			
+    			Publication - " %ITEMNAME% " is accepted for submission.
+    			
+    			Congratulations!
+    			]]>
+    		</value>
+    	</property>
+    </bean> 
+    
+    <bean id = "itemRejectedMessage" class="org.springframework.mail.SimpleMailMessage">
+    	<property name="from" value="noreply@ur.rochester.edu"/>
+    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="subject" value="Publication Rejected"/>
+    	<property name="text">
+    		<value>
+    			<![CDATA[
+    			Dear %FIRSTNAME% %LASTNAME%,
+    			
+    			Publication - " %ITEMNAME% " is not accepted for submission.
+    			
+    			Reason for rejection: %REASON%
+
+    			]]>
+    		</value>
+    	</property>
+    </bean>     
+</beans>
