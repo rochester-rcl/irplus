@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!-- ****************************************** --> 
+<!-- Application context file for ir_hibernate -->
+<!-- ****************************************** -->    
+<beans>
+
+    <!-- ****************************************** --> 
+    <!-- Data Source -->
+    <!-- ****************************************** --> 
+    <import resource="data-source.xml"/>
+
+    <!-- ****************************************** --> 
+    <!-- Session factory for hibernate -->
+    <!-- ****************************************** --> 
+    <import resource="session-factory.xml"/>
+
+    <!-- ****************************************** --> 
+    <!-- Transaction management -->
+    <!-- ****************************************** --> 
+    <import resource="transaction-manager.xml"/>
+    
+    <!-- ****************************************** --> 
+    <!-- Folder Info  -->
+    <!-- File Database  -->
+    <!-- File Server  -->
+    <!-- File Information  -->
+    <!-- Checksum Algorithm Information  -->
+    <!-- Top media type  -->
+    <!-- Top sub type  -->
+    <!-- sub type extension-->
+    <!-- ****************************************** --> 
+    <import resource="file-db-hibernate.xml"/>
+    
+ 
+    <import resource="ir-file-hibernate.xml"/>
+    <import resource="ir-item-hibernate.xml"/>
+    <import resource="ir-person-hibernate.xml"/>
+    <import resource="ir-repository-hibernate.xml"/>
+    <import resource="ir-institution-hibernate.xml"/>
+    <import resource="ir-security-hibernate.xml"/>
+    <import resource="ir-user-hibernate.xml"/>
+    <import resource="ir-news-hibernate.xml"/>
+    <import resource="ir-researcher-hibernate.xml"/>
+    <import resource="ir-statistics-hibernate.xml"/>
+    
+    <!-- ****************************************** --> 
+    <!-- File database service -->
+    <!-- ****************************************** --> 
+    <import resource="file-db-service.xml"/>
+    
+    
+    <!-- ****************************************** --> 
+    <!-- IR Core classes -->
+    <!-- ****************************************** --> 
+    <import resource="ir-core.xml"/>
+    
+
+</beans>

@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a personal versioned file.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.user">
+
+	<class name="PersonalItem" schema="ir_user" table="personal_item"
+		lazy="true">
+
+        <cache usage="read-write" />
+		<!-- Common id property. -->
+		<id name="id" type="long" column="personal_item_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_user.personal_item_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+			
+        <!--  The versioned file this personal versioned file wraps -->
+        <many-to-one name="versionedItem" 
+              lazy="false"
+              fetch="join"
+              class="edu.ur.ir.item.VersionedItem" 
+              unique="true" 
+              column="versioned_item_id" 
+              cascade="save-update"
+              not-null="true"
+              access="field"/>
+                      
+        <!--  The personal folder -->
+        <many-to-one name="personalCollection" class="PersonalCollection" 
+              unique="true" column="personal_collection_id" cascade="save-update"
+               access="field"/>
+        
+         <!--  The user who owns this file -->
+        <many-to-one name="owner" class="IrUser" 
+              unique="true" column="user_id"  
+              not-null="true" access="field"/>
+
+        
+	</class>
+	
+	<!-- named query for getting root personal items  -->
+	<query name="getRootPersonalItems">
+		from PersonalItem as PersonalItem where
+		PersonalItem.owner.id = ? and PersonalItem.personalCollection.id is NULL
+	</query>
+	
+		<!-- named query for getting root personal items  -->
+	<query name="getSubPersonalItems">
+		from PersonalItem as PersonalItem 
+		where PersonalItem.owner.id = ? 
+		and PersonalItem.personalCollection.id = ?
+	</query>
+	
+		<!-- named query for getting items in a collection -->
+	<query name="getPersonalItemsInCollectionForUser">
+		from PersonalItem as personalItem where
+		personalItem.owner.id = ? and personalItem.personalCollection.id = ?
+	</query>
+    
+    <!-- named query for getting item by generic item id -->
+	<query name="getPersonalItemsByGenericId">
+		from PersonalItem as personalItem where
+		personalItem.versionedItem.currentVersion.item.id = ?
+	</query>
+	
+		<!-- Get specified personal items for user -->
+	<query name="getAllPersonalItemsInList">
+	   from PersonalCollection as personalCollection 
+	    where personalCollection.owner.id = :ownerId
+	    and personalCollection.id in (:itemIds)
+	</query>
+	
+</hibernate-mapping>
