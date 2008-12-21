@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+    
+<beans>
+
+   <!-- ****************************************** --> 
+   <!-- Person Name Authority                                    -->
+   <!-- ****************************************** --> 
+
+   <bean id="personNameAuthorityDAOTarget" 
+       class="edu.ur.hibernate.ir.person.db.HbPersonNameAuthorityDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="personNameAuthorityDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="personNameAuthorityDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Person Name                                     -->
+   <!-- ****************************************** --> 
+
+   <bean id="personNameDAOTarget" 
+       class="edu.ur.hibernate.ir.person.db.HbPersonNameDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="personNameDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="personNameDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Person Name Title                          -->
+   <!-- ****************************************** --> 
+
+   <bean id="personNameTitleDAOTarget" 
+       class="edu.ur.hibernate.ir.person.db.HbPersonNameTitleDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="personNameTitleDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="personNameTitleDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Contributor Type                           -->
+   <!-- ****************************************** --> 
+
+   <bean id="contributorTypeDAOTarget" 
+       class="edu.ur.hibernate.ir.person.db.HbContributorTypeDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="contributorTypeDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="contributorTypeDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Contributor                                -->
+   <!-- ****************************************** --> 
+
+   <bean id="contributorDAOTarget" 
+       class="edu.ur.hibernate.ir.person.db.HbContributorDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="contributorDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="contributorDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Birth date -->
+   <!-- ****************************************** --> 
+
+   <bean id="birthDateDAOTarget" 
+       class="edu.ur.hibernate.ir.person.db.HbBirthDateDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="birthDateDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="birthDateDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Death date -->
+   <!-- ****************************************** --> 
+
+   <bean id="deathDateDAOTarget" 
+       class="edu.ur.hibernate.ir.person.db.HbDeathDateDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="deathDateDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="deathDateDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+
+</beans>
