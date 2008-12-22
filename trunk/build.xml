@@ -18,7 +18,7 @@
 <!-- this is the master build file for the irplus project -->
 <project name="master-build" default="do-file-db">
     
-	<property name="target" value="full-clean"/>
+	<property name="target" value="publish-local"/>
 
     <target name="do-ur-common-util" 
     	description="-->runs the described target for ur common util">

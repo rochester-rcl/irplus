@@ -17,6 +17,11 @@
  
 <!-- this is the master build file for the irplus project -->
 <project name="base-build" xmlns:ivy="antlib:org.apache.ivy.ant" >
+	
+	<!-- uncomment this to run the tests  it does not matter what the value is so long as the 
+	     line is uncommented.
+	<property file="run.tests" vaule="true"/>
+	-->
 
     <!-- lib directory -->
     <property name="lib.dir" value="${basedir}/lib"/> 
