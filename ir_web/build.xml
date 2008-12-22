@@ -76,8 +76,7 @@
 	<property name="spring.config.data.source.local" value="../spring-config-common/data-source/run-local"/> 
 
 	<!-- production datasource files for spring -->
-	<property name="spring.config.data.source.local" value="../spring-config-common/data-source/production"/> 
-
+	<property name="spring.config.data.source.production" value="../spring-config-common/data-source/production"/> 
 	
 	<!-- top level spring config directory -->
 	<property name="spring.config.common" value="../spring-config-common"/> 
@@ -85,6 +84,10 @@
 	<!-- common configuration files for testing -->
 	<property name="spring.config.common.config.test" value="${spring.config.common}/common-config/test"/> 
 
+	<!-- common configuration files for testing -->
+	<property name="spring.config.common.config.production" value="${spring.config.common}/common-config/production"/> 
+
+	
 	<!-- common configuration files that don't change-->
 	<property name="spring.config.common.config" value="${spring.config.common}/common"/> 
 	
@@ -137,7 +140,7 @@
 	<!-- Tomcat library directory -->
 	<property name="tomcat.lib.dir" value="${librarydir}/tomcat/tomcat-6.0.14"/>
 	
-	<property name="production.staging.dir" value="${basedir}/production-staging"/>
+	<property name="production.stageing.dir" value="${basedir}/production-staging"/>
 
 	
 	<!-- import the base set of files -->
@@ -228,19 +231,10 @@
     </target>
 
 
+	<!-- no tests for web layer -->
 	<target name="test" depends="test-build" description="-->Run the tests">
 		<echo message="running tests" />
 		 <!-- run the tests -->
-		<taskdef resource="testngtasks" classpathref="test.libraries"  
-	        classpath="testng-5.8.jar"/>
-		<testng classpathref="test.libraries"
-		        outputDir="${test.report.dir}"
-			    haltonfailure="true"
-			    verbose="2"
-			    dumpCommand="false">
-
-		   <xmlfileset dir="${testng.config}" includes="testng.xml"/>
-		</testng>
 	</target>
 
     <!-- generate the documentation -->
@@ -294,7 +288,7 @@
 	     You must first tell your web-browser to look
 	     at your webapps directory 
 	-->
-   <target name="prep-run-webapp-local" depends="build, clean-run-webapp-local">
+   <target name="prep-run-webapp-local" depends="build, clean-run-webapp-local, prep-yui">
         <!-- Remove the old classes -->
         <delete dir="${webapp.classes.dir}" />
 
@@ -340,7 +334,7 @@
      </target>
 	
 	<!-- unzip the YUI files in correct directory -->
-	<target name="prep-yui" depends="retrieve" description="--> unzips the yui libraries">
+	<target name="prep-yui"  description="--> unzips the yui libraries">
 		<mkdir dir="${basedir}/yui-unzip"/>
 		<unzip dest="${basedir}/yui-unzip" src="${lib.dir}/yui-2.6.0.zip"/>
 		<move todir="${webapp.dir}/page-resources/yui">
@@ -353,8 +347,10 @@
 		 <delete dir="${webapp.webinf.dir}"/>
 	</target>
 	
+
+	
 	<!-- publish the local war file -->
-	<target name="publish-local" depends="prep-run-webapp-local" description="-->build a local war file">
+	<target name="test-run-local" depends="prep-run-webapp-local" description="-->build a local test environment file">
 		
 		<war destfile="local-${project.name}.war" webxml="${webapp.conf.dir}/web.xml">
 		    <webinf dir="${webapp.conf.dir}/WEB-INF"/>
@@ -367,30 +363,47 @@
 				      
 		 </war>
 	</target>
-	
-	<!-- delete the webapp production staging files -->
-	<target name="clean-production-staging">
-		 <delete dir="${production.staging.dir}"/>
-	</target>
-	
+
 	
 	<!-- publish the distribution jar file to the local repository -->
 	<!-- this sets production settings.  -->
 	<!--     Make sure the production configuration files have been set properly -->
-	
-	<target name="make-production-war" depends="build, clean-production-staging" description="-->build a local war file">
-		
+	<target name="publish-local" depends="build, clean-production-staging" description="-->build production war file">
 		<!-- re-create production stag -->
 		<mkdir dir="${production.stageing.dir}"/>
 		
+		<!-- make the classes dir-->
 		<mkdir dir="${production.stageing.dir}/classes"/>
 		
+		<!-- production web-inf directory -->
+		<mkdir dir="${production.stageing.dir}/web-inf"/>
+		
+		<!-- copy the configuration files into the directory -->
 	    <copy todir="${production.stageing.dir}/classes">
 	           <fileset dir="${build.dir}/classes"/>
 	    	   <fileset dir="${struts.config.dir.common}"/>
 	    	   <fileset dir="${struts.config.dir.production}"/>
 	    	   <fileset dir="${spring.config.data.source.production}"/>
 	    </copy>
+
+        <!-- overwrite the logging file to be the production appender -->
+		<copy todir="${webapp.classes.dir}" overwrite="true">
+	    	   <fileset dir="${log4j.production.appender}"/>
+	   	</copy>
+
+		
+        <copy todir="${production.stageing.dir}/web-inf">
+	        <fileset refid="web.libs"/>
+        </copy>
+
+   	    <!-- create the web inf directory -->
+        <copy todir="${production.stageing.dir}/web-inf" overwrite="true">
+        	<fileset dir="${spring.config.data.source.production}"/>
+        	<fileset dir="${spring.project.config.production}"/>
+        	<fileset dir="${spring.config.common.config.production}"/>
+        	<fileset dir="${spring.config.common.config}"/>
+        	<fileset dir="${webapp.conf.dir}/WEB-INF"/>
+        </copy>
 		
 		<war destfile="production-${project.name}.war" webxml="${webapp.conf.dir}/web.xml">
 		    <webinf dir="${webapp.conf.dir}/WEB-INF"/>
@@ -398,13 +411,17 @@
 			    <exclude name="WEB-INF/**"/>
 			</fileset>
 			
-			<classes dir="${webapp.classes.dir}"/>
+			<classes dir="${production.stageing.dir}/classes"/>
 			<lib dir="${webapp.lib.dir}"/>
 				      
 		 </war>
+		
 	</target>
-
-
-   
+	
+	<!-- delete the webapp production staging files -->
+	<target name="clean-production-staging">
+		 <delete dir="${production.staging.dir}"/>
+	</target>
+	
 
 </project>
