@@ -18,14 +18,19 @@
 <!-- this is the master build file for the irplus project -->
 <project name="master-build" default="do-file-db" basedir=".">
     
+	<!-- defalt target to run across all sub projects -->
 	<property name="target" value="publish-local"/>
 	
+	<!-- current version of the project - also see base.xml to see version for all sub projects -->
 	<property name="version" value="alpha-0.1"/>
 	
+	<!-- full distribution project name for downloading as a zip file -->
 	<property name="project.name" value="ir_plus"/>
 	
+	<!-- top folder name to give in the zip file -->
 	<property name="top.folder.name" value="${project.name}-${version}"/>
 	
+	<!-- name of the zip file for distribution -->
 	<property name="zip.name" value="${project.name}-${version}.zip"/>
 
     <target name="do-ur-common-util" 
