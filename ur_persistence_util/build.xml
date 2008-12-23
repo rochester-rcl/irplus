@@ -152,20 +152,10 @@
     </target>
 
     
-	<target name="test" depends="test-build" description="-->Run the tests">
+	<target name="test" depends="test-build" if="run.tests" description="-->Run the tests">
 		<echo message="running tests" />
 		
 		 <!-- there are no tests yet so this does not call any tests -->
-		 <!-- run the tests 
-		<taskdef resource="testngtasks" classpathref="test.libraries"  classpath="testng-5.8.jar"/>
-		<testng classpathref="test.libraries"
-		        outputDir="${test.report.dir}"
-		        haltOnfailure="true"
-			    dumpCommand="true">
-
-		   <xmlfileset dir="${test.dir}" includes="testng.xml"/>
-		</testng>
-		-->
 	</target>
 
     <!-- generate the documentation -->
