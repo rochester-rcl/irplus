@@ -391,11 +391,6 @@
 	    	   <fileset dir="${log4j.production.appender}"/>
 	   	</copy>
 
-		
-        <copy todir="${production.stageing.dir}/web-inf">
-	        <fileset refid="web.libs"/>
-        </copy>
-
    	    <!-- create the web inf directory -->
         <copy todir="${production.stageing.dir}/web-inf" overwrite="true">
         	<fileset dir="${spring.config.data.source.production}"/>
@@ -406,7 +401,7 @@
         </copy>
 		
 		<war destfile="production-${project.name}.war" webxml="${webapp.conf.dir}/web.xml">
-		    <webinf dir="${webapp.conf.dir}/WEB-INF"/>
+		    <webinf dir="${production.stageing.dir}/web-inf"/>
 			<fileset dir="${webapp.dir}">
 			    <exclude name="WEB-INF/**"/>
 			</fileset>
@@ -420,7 +415,7 @@
 	
 	<!-- delete the webapp production staging files -->
 	<target name="clean-production-staging">
-		 <delete dir="${production.staging.dir}"/>
+		 <delete dir="${production.stageing.dir}"/>
 	</target>
 	
 
