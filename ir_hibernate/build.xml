@@ -42,9 +42,6 @@
     <!-- project name -->
     <property name="project.name" value="ir_hibernate"/> 
 
-    <!-- version -->
-    <property name="project.version" value="0.1"/> 
-
     <!-- distribution directory -->
     <property name="dist.dir" value="${basedir}/${project.name}"/> 
 

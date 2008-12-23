@@ -43,9 +43,6 @@
     <!-- project name -->
     <property name="project.name" value="file_db_service"/> 
 
-    <!-- version -->
-    <property name="project.version" value="0.1"/> 
-
     <!-- distribution directory -->
     <property name="dist.dir" value="${basedir}/${project.name}"/> 
 
