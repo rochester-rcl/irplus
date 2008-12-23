@@ -43,10 +43,7 @@
     <!-- project name -->
     <property name="project.name" value="ir_dao"/> 
 
-    <!-- version -->
-    <property name="project.version" value="0.1"/> 
-
-    <!-- distribution directory -->
+     <!-- distribution directory -->
     <property name="dist.dir" value="${basedir}/${project.name}"/> 
 
     <!-- top level location for reports -->

@@ -16,9 +16,17 @@
  -->
  
 <!-- this is the master build file for the irplus project -->
-<project name="master-build" default="do-file-db">
+<project name="master-build" default="do-file-db" basedir=".">
     
 	<property name="target" value="publish-local"/>
+	
+	<property name="version" value="alpha-0.1"/>
+	
+	<property name="project.name" value="ir_plus"/>
+	
+	<property name="top.folder.name" value="${project.name}-${version}"/>
+	
+	<property name="zip.name" value="${project.name}-${version}.zip"/>
 
     <target name="do-ur-common-util" 
     	description="-->runs the described target for ur common util">
@@ -75,6 +83,16 @@
     	description="-->runs the described target for ir web">
     	<ant dir="ir_web" target="${target}" inheritAll="false"/>
     </target>
+	
+	<target name="clean-zip">
+		<delete file="${zip.name}"/>
+	</target>
+	
+	<target name="zip-all" depends="clean-zip">
+		<zip destfile="${zip.name}">
+			 <zipfileset dir="${basedir}" excludes=".project" prefix="${top.folder.name}"/>
+		</zip>
+	</target>
 	
 	
 </project>
