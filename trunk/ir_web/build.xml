@@ -214,9 +214,10 @@
     </target>
 	
 	<!-- clean up the build directories plus lib directory -->
-    <target name="full-clean" depends="clean, clean-run-webapp-local" description="-->Clean the project and lib directory">
+    <target name="full-clean" depends="clean, clean-run-webapp-local,clean-production-staging" description="-->Clean the project and lib directory">
         <delete dir="${lib.dir}"/>
     	<delete dir="${ivy.dir}"/>
+    	<delete file=""/>
     </target>	
 
     <!-- build the test class files of the project -->
