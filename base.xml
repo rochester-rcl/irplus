@@ -19,15 +19,76 @@
 <project name="base-build" xmlns:ivy="antlib:org.apache.ivy.ant" >
 	
 	<!-- uncomment this to run the tests  it does not matter what the value is so long as the 
-	     line is uncommented.
-	<property file="run.tests" vaule="true"/>
-	-->
+		     line is uncommented.-->
+	<property name="run.tests" value="true"/>
+	
+    <!-- build directory -->
+    <property name="build.dir" value="${basedir}/build"/> 
 
+    <!-- source directory -->
+    <property name="src.dir" value="${basedir}/src"/> 
+
+    <!-- test source directory -->
+    <property name="test.dir" value="${basedir}/test"/> 
+	
+    <!-- testng library -->
+    <property name="testng.dir" value="${basedir}/test"/> 
+
+    <!-- lib directory -->
+    <property name="lib.dir" value="${basedir}/lib"/> 
+	
     <!-- lib directory -->
     <property name="lib.dir" value="${basedir}/lib"/> 
 
     <!-- location for reports -->
     <property name="report.dir" value="${basedir}/reports"/> 
+	
+    <!-- distribution directory -->
+    <property name="dist.dir" value="${basedir}/${project.name}"/> 
+
+    <!-- top level location for reports -->
+    <property name="report.dir" value="${basedir}/reports"/>
+
+    <!-- location for the test reports -->
+    <property name="test.report.dir" value="${report.dir}/test-reports"/>
+	
+    <!-- location of the checkstyle xml file -->
+	<property name="checkstyle.xml" value="../checkstyle-xml/sun_checks.xml"/>
+	
+	<!-- location of the checkstyle xml file -->
+	<property name="checkstyle.xsl" value="../checkstyle-xml/checkstyle-frames.xsl"/>
+	
+	<!-- location for checkstyle report directory -->
+	<property name="checkstyle.report.dir" value="${report.dir}/checkstyle-reports"/>
+	
+	<!-- location for checkstyle report xml file-->
+    <property name="checkstyle.report.xml" value="${checkstyle.report.dir}/checkstyle.xml"/>
+	
+	<!-- location for checkstyle report html file-->
+	<property name="checkstyle.report.html" value="${checkstyle.report.dir}/checkstyle.html"/>
+
+	<!-- common configuration files for spring -->
+	<property name="spring.config.common.config" value="../spring-config-common/common"/> 
+
+	<!-- project specific configuration files for spring (usually testing)-->
+	<property name="spring.project.config" value="${basedir}/spring-config"/> 
+	
+	<!-- common configuration files for ehcache -->
+	<property name="ehcache.config" value="../ehcache-config"/> 
+	
+	<!-- folder location for log4j debug file appender -->
+	<property name="log4j.debug.file.appender" value="${basedir}/log4j-config/debug-file-appender"/>
+	
+	<!-- folder location for production log4j debug console output -->
+	<property name="log4j.debug.console.appender" value="${basedir}/log4j-config/debug-console-appender"/>
+	
+	<!-- folder location for production log4j config xml file -->
+	<property name="log4j.production.appender" value="${basedir}/log4j-config/production-appender"/>
+
+	<!-- folder location for testng config file -->
+	<property name="testng.config" value="${basedir}/testng-config"/>
+
+	
 
     <!-- ivy dir -->
     <property name="ivy.dir" value="${basedir}/ivy"/>  
@@ -58,6 +119,10 @@
 	
     <!-- project version -->
     <property name="project.version" value="0.1"/> 
+	
+	<!-- test properties file location -->
+	<property name="properties.config.test" value="../properties/test"/>
+
 
     <target name="download-ivy" unless="skip.download">
        <mkdir dir="${ivy.dir}" />
@@ -172,6 +237,6 @@
 	</target>
 	
 	<target name="checkstyle" depends="checkstyle-report"/>
-
+	
 
 </project>

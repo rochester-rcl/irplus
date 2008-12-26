@@ -24,91 +24,26 @@
     <!-- Use the build.properties file for user specific settings -->
     <property file="build.properties"/>
 
-    <!-- build directory -->
-    <property name="build.dir" value="${basedir}/build"/> 
-
-    <!-- source directory -->
-    <property name="src.dir" value="${basedir}/src"/> 
-
-    <!-- test source directory -->
-    <property name="test.dir" value="${basedir}/test"/> 
-	
-    <!-- testng library -->
-    <property name="testng.dir" value="${basedir}/test"/> 
-
-    <!-- lib directory -->
-    <property name="lib.dir" value="${basedir}/lib"/> 
-
     <!-- project name -->
     <property name="project.name" value="ir_web"/> 
 
-     <!-- distribution directory -->
-    <property name="dist.dir" value="${basedir}/${project.name}"/> 
-
-    <!-- top level location for reports -->
-    <property name="report.dir" value="${basedir}/reports"/>
-
-    <!-- location for the test reports -->
-    <property name="test.report.dir" value="${report.dir}/test-reports"/>
-
     <!-- location of the base build file -->
     <property name="base.build.file" value="../base.xml"/>
-
-    <!-- location of the checkstyle xml file -->
-	<property name="checkstyle.xml" value="../checkstyle-xml/sun_checks.xml"/>
 	
-	<!-- location of the checkstyle xml file -->
-	<property name="checkstyle.xsl" value="../checkstyle-xml/checkstyle-frames.xsl"/>
+	<!-- top level folder for ir plus properties files -->
+	<property name="ir.plus.properties" value="../properties"/> 
 	
-	<!-- location for checkstyle report directory -->
-	<property name="checkstyle.report.dir" value="${report.dir}/checkstyle-reports"/>
+	<!-- folder that contains the properties for running the system locally -->
+	<property name="ir.plus.properties.local" value="${ir.plus.properties}/local"/>
 	
-	<!-- location for checkstyle report xml file-->
-    <property name="checkstyle.report.xml" value="${checkstyle.report.dir}/checkstyle.xml"/>
-	
-	<!-- location for checkstyle report html file-->
-	<property name="checkstyle.report.html" value="${checkstyle.report.dir}/checkstyle.html"/>
-
-	<!-- test datasource files for spring -->
-	<property name="spring.config.data.source.local" value="../spring-config-common/data-source/run-local"/> 
-
-	<!-- production datasource files for spring -->
-	<property name="spring.config.data.source.production" value="../spring-config-common/data-source/production"/> 
-	
-	<!-- top level spring config directory -->
-	<property name="spring.config.common" value="../spring-config-common"/> 
-		
-	<!-- common configuration files for testing -->
-	<property name="spring.config.common.config.test" value="${spring.config.common}/common-config/test"/> 
-
-	<!-- common configuration files for testing -->
-	<property name="spring.config.common.config.production" value="${spring.config.common}/common-config/production"/> 
-
-	
-	<!-- common configuration files that don't change-->
-	<property name="spring.config.common.config" value="${spring.config.common}/common"/> 
+	<!-- folder that contains the properties for running the system in production -->
+	<property name="ir.plus.properties.production" value="${ir.plus.properties}/production"/>
 	
 	<!-- project specific configuration files for spring (usually testing)or local running-->
 	<property name="spring.project.config" value="${basedir}/spring-config/local"/> 
 
 	<!-- project specific configuration files for production war file-->
 	<property name="spring.project.config.production" value="${basedir}/spring-config/production"/> 
-
-	
-	<!-- common configuration files for ehcache -->
-	<property name="ehcache.config" value="../ehcache-config"/> 
-	
-	<!-- folder location for log4j debug file appender -->
-	<property name="log4j.debug.file.appender" value="${basedir}/log4j-config/debug-file-appender"/>
-	
-	<!-- folder location for production log4j debug console output -->
-	<property name="log4j.debug.console.appender" value="${basedir}/log4j-config/debug-console-appender"/>
-	
-	<!-- folder location for production log4j config xml file -->
-	<property name="log4j.production.appender" value="${basedir}/log4j-config/production-appender"/>
-
-	<!-- folder location for testng config file -->
-	<property name="testng.config" value="${basedir}/testng-config"/>
 	
 	<!-- The web app directory -->
 	<property name="webapps.dir" value="${basedir}/webapps"/>
@@ -137,9 +72,9 @@
 	<!-- Tomcat library directory -->
 	<property name="tomcat.lib.dir" value="${librarydir}/tomcat/tomcat-6.0.14"/>
 	
+	<!-- location for production staging -->
 	<property name="production.stageing.dir" value="${basedir}/production-staging"/>
 
-	
 	<!-- import the base set of files -->
     <import file="${base.build.file}"/>
 	
@@ -168,23 +103,6 @@
     <path id="libraries">
 	  <fileset dir="${lib.dir}" includes="*.jar"/>
     </path>
-
-    <!-- This is the path for testing -->
-	<path id="test.libraries">
-		<path refid="libraries"/>
-		<pathelement location="${build.dir}/classes"/>
-		
-		<!-- spring configuration files for testing -->
-		<pathelement location="${spring.config.data.source.test}"/>
-		
-	    <!-- common spring configuration files -->
-		<pathelement location="${spring.config.common.config}"/>
-		<pathelement location="${spring.project.config}"/>
-		<pathelement location="${spring.config.common.config.test}"/>
-		
-		<!-- test file configurations and properties -->
-		<pathelement location="${testng.config}"/>
-	</path>
 
     <!-- Copy non java resources -->
 	<target name="copy-resources" description="-->Copy the non java resources into the build directory">
@@ -306,7 +224,7 @@
          -->
         <copy todir="${webapp.classes.dir}">
            <fileset dir="${build.dir}/classes"/>
-           <fileset dir="${struts.config.dir.common}"/>
+        	<fileset dir="${struts.config.dir.common}"/>
            <fileset dir="${struts.config.dir.test}"/>
         </copy>
    	
@@ -320,8 +238,7 @@
 
    	    <!-- create the web inf directory -->
         <copy todir="${webapp.webinf.dir}" overwrite="true">
-        	<fileset dir="${spring.config.data.source.local}"/>
-        	<fileset dir="${spring.config.common.config.test}"/>
+        	<fileset dir="${ir.plus.properties.local}"/>
         	<fileset dir="${spring.config.common.config}"/>
         	<fileset dir="${spring.project.config}"/>
         	<fileset dir="${webapp.conf.dir}/WEB-INF"/>

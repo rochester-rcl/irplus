@@ -24,46 +24,14 @@
     <!-- Use the build.properties file for user specific settings -->
     <property file="build.properties"/>
 
-    <!-- build directory -->
-    <property name="build.dir" value="${basedir}/build"/> 
-
-    <!-- source directory -->
-    <property name="src.dir" value="${basedir}/src"/> 
-
-    <!-- lib directory -->
-    <property name="lib.dir" value="${basedir}/lib"/> 
-
     <!-- project name -->
     <property name="project.name" value="file_db_dao"/> 
-
-      <!-- distribution directory -->
-    <property name="dist.dir" value="${basedir}/${project.name}"/> 
-
-    <!-- top level location for reports -->
-    <property name="report.dir" value="${basedir}/reports"/>
 
     <!-- location of the base build file -->
     <property name="base.build.file" value="../base.xml"/>
 
-    <!-- location of the checkstyle xml file -->
-	<property name="checkstyle.xml" value="../checkstyle-xml/sun_checks.xml"/>
-	
-	<!-- location of the checkstyle xml file -->
-	<property name="checkstyle.xsl" value="../checkstyle-xml/checkstyle-simple.xsl"/>
-	
-	<!-- location for checkstyle report directory -->
-	<property name="checkstyle.report.dir" value="${report.dir}/checkstyle-reports"/>
-	
-	<!-- location for checkstyle report xml file-->
-    <property name="checkstyle.report.xml" value="${checkstyle.report.dir}/checkstyle.xml"/>
-	
-	<!-- location for checkstyle report html file-->
-	<property name="checkstyle.report.html" value="${checkstyle.report.dir}/checkstyle.html"/>
-	
 	<!-- import the base set of files -->
     <import file="${base.build.file}"/>
-	
-	
 
     <!-- Allow users to see their properties and how they are set -->
     <target name="echo-properties" 
