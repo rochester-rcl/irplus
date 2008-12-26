@@ -22,13 +22,26 @@
 <!-- Application context file for ir_core -->
 <!-- ****************************************** -->    
 <beans>
+    <!-- ****************************************** --> 
+    <!-- Property configuration -->
+    <!-- ****************************************** --> 
+
+    <bean id="propertyConfigurer" 
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>ir_plus.properties</value>
+            </list>
+        </property>
+    </bean>
+
     
     <!-- ****************************************** --> 
     <!-- File database service -->
     <!-- ****************************************** --> 
     <import resource="file-db-service.xml"/>
     
-        <!-- ****************************************** --> 
+    <!-- ****************************************** --> 
     <!-- Repository service -->
     <!-- ****************************************** --> 
     <import resource="ir-core.xml"/>

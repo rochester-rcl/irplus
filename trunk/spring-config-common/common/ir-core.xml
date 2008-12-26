@@ -26,7 +26,7 @@
 
    <bean id="temporaryFileCreator" 
        class="edu.ur.ir.file.DefaultTemporaryFileCreator">
-       <property name="temporaryDirectory" value="C:\a_temp_dir"/>
+       <property name="temporaryDirectory" value="${temporary.thumbnail.directory}"/>
    </bean> 
 
 

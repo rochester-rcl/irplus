@@ -25,14 +25,14 @@
     <!-- ****************************************** --> 
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-         <property name="driverClassName" value="org.postgresql.Driver"/>
-         <property name="url" value="jdbc:postgresql://localhost:5432/urresearch"/>
-         <property name="username" value="urresearch"/>
-         <property name="password" value="private2urresearch"/>
-         <property name="maxWait" value="5000"/>
-         <property name="minIdle" value="5"/>
-         <property name="maxIdle" value="25"/>
-         <property name="maxActive" value="25"/>
+         <property name="driverClassName" value="${db.driver}"/>
+         <property name="url" value="${db.url}"/>
+         <property name="username" value="${db.user_name}"/>
+         <property name="password" value="${db.password}"/>
+         <property name="maxWait" value="${db.max_wait}"/>
+         <property name="minIdle" value="${db.min_idle}"/>
+         <property name="maxIdle" value="${db.max_idle}"/>
+         <property name="maxActive" value="${db.max_active}"/>
     </bean>
     
 </beans>

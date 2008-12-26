@@ -19,7 +19,7 @@
 <project name="master-build" default="do-file-db" basedir=".">
     
 	<!-- defalt target to run across all sub projects -->
-	<property name="target" value="publish-local"/>
+	<property name="target" value="full-clean"/>
 	
 	<!-- current version of the project - also see base.xml to see version for all sub projects -->
 	<property name="version" value="alpha-0.1"/>

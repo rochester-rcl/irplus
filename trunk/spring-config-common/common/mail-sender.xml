@@ -19,19 +19,20 @@
     "http://www.springframework.org/dtd/spring-beans.dtd">
     
 <beans>
+    
 
     <!-- ****************************************** --> 
     <!-- Email Sender 								-->
     <!-- ****************************************** --> 
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-         <property name="host" value="mail.ur.rochester.edu"/>
-         <property name="port" value="25"/>
+         <property name="host" value="${mail.sender.host}"/>
+         <property name="port" value="${mail.sender.port}"/>
     </bean>
 
     <bean id = "userExistMailMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
     	<property name="subject"> <value>  <![CDATA[ From %FIRST_NAME% %LAST_NAME% - Invitation to collaborate on a document ]]> </value> </property>
     	<property name="text">
     		<value>
@@ -50,8 +51,8 @@
     </bean>
 
     <bean id = "userNotExistMailMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>    	
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>    	
     	<property name="subject"> <value> <![CDATA[ From %FIRST_NAME% %LAST_NAME% - Invitation to collaborate on a document ]]> </value> </property>
     	<property name="text">
     		<value>
@@ -67,8 +68,8 @@
     </bean>
 
     <bean id = "unShareMailMessage" class="org.springframework.mail.SimpleMailMessage">
-        <property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+        <property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
     	<property name="subject"> <value> <![CDATA[ From %FIRST_NAME% %LAST_NAME% - Document unshared! ]]> </value> </property>
     	<property name="text">
     		<value>
@@ -81,8 +82,8 @@
     </bean>
 
     <bean id = "passwordTokenMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
     	<property name="subject" value="User Login - Forgot password"/>
     	<property name="text">
     		<value>
@@ -97,8 +98,8 @@
     </bean>
     
     <bean id = "accountCreationMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
     	<property name="subject" value="UR Research - New account details"/>
     	<property name="text">
     		<value>
@@ -118,8 +119,8 @@
     </bean>
 
     <bean id = "resetPasswordMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>    	
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>    	
     	<property name="subject" value="New password"/>
     	<property name="text">
     		<value>
@@ -138,8 +139,8 @@
     </bean>
 
 	<bean id = "userAffiliationMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>    
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>    
     	<property name="subject" value="User Affiliation Confimation"/>
     	<property name="text">
     		<value>
@@ -156,8 +157,8 @@
     </bean>
     
 	<bean id = "affiliationVerificationMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
 		<property name="subject" value="Verify User Affiliation"/>
 		<property name="text">
 			<value>
@@ -174,8 +175,8 @@
     </bean>
     
 	<bean id = "accountVerificationMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
     	<property name="subject" value="Registration with XR system"/>
     	<property name="text">
     		<value>
@@ -193,8 +194,8 @@
     </bean>
     
     <bean id = "userPendingAffiliationMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
     	<property name="subject" value="Registration with XR system"/>
     	<property name="text">
     		<value>
@@ -210,8 +211,8 @@
     </bean>  
       
     <bean id = "emailVerificationMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
     	<property name="subject" value="Verify your Email"/>
     	<property name="text">
     		<value>
@@ -229,8 +230,8 @@
     </bean>
     
     <bean id = "itemReviewMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
     	<property name="subject" value="Item review"/>
     	<property name="text">
     		<value>
@@ -247,8 +248,8 @@
     </bean>
               
     <bean id = "itemAcceptedMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
     	<property name="subject" value="Publication Accepted"/>
     	<property name="text">
     		<value>
@@ -264,8 +265,8 @@
     </bean> 
     
     <bean id = "itemRejectedMessage" class="org.springframework.mail.SimpleMailMessage">
-    	<property name="from" value="noreply@ur.rochester.edu"/>
-    	<property name="replyTo" value="urresearch-help@rochester.edu"/>
+    	<property name="from" value="${mail.sender.from}"/>
+    	<property name="replyTo" value="${mail.sender.replyTo}"/>
     	<property name="subject" value="Publication Rejected"/>
     	<property name="text">
     		<value>

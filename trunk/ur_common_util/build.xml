@@ -22,68 +22,14 @@
     <!-- Use the build.properties file for user specific settings -->
     <property file="build.properties"/>
 
-    <!-- build directory -->
-    <property name="build.dir" value="${basedir}/build"/> 
-
-    <!-- source directory -->
-    <property name="src.dir" value="${basedir}/src"/> 
-
-    <!-- test source directory -->
-    <property name="test.dir" value="${basedir}/test"/> 
-	
-    <!-- testng library -->
-    <property name="testng.dir" value="${basedir}/test"/> 
-
-    <!-- lib directory -->
-    <property name="lib.dir" value="${basedir}/lib"/> 
-
     <!-- project name -->
     <property name="project.name" value="ur_common_util"/> 
 
-    <!-- distribution directory -->
-    <property name="dist.dir" value="${basedir}/${project.name}"/> 
-
-    <!-- top level location for reports -->
-    <property name="report.dir" value="${basedir}/reports"/>
-
-    <!-- location for the test reports -->
-    <property name="test.report.dir" value="${report.dir}/test-reports"/>
-
     <!-- location of the base build file -->
     <property name="base.build.file" value="../base.xml"/>
-
-    <!-- location of the checkstyle xml file -->
-	<property name="checkstyle.xml" value="../checkstyle-xml/sun_checks.xml"/>
-	
-	<!-- location of the checkstyle xml file -->
-	<property name="checkstyle.xsl" value="../checkstyle-xml/checkstyle-simple.xsl"/>
-	
-	<!-- location for checkstyle report directory -->
-	<property name="checkstyle.report.dir" value="${report.dir}/checkstyle-reports"/>
-	
-	<!-- location for checkstyle report xml file-->
-    <property name="checkstyle.report.xml" value="${checkstyle.report.dir}/checkstyle.xml"/>
-	
-	<!-- location for checkstyle report html file-->
-	<property name="checkstyle.report.html" value="${checkstyle.report.dir}/checkstyle.html"/>
-	
-	<!-- folder location for log4j file appender -->
-	<property name="log4j.debug.file.appender" value="${basedir}/log4j-config/debug-file-appender"/>
-	
-	<!-- folder location for production log4j debug console output -->
-	<property name="log4j.debug.console.appender" value="${basedir}/log4j-config/debug-console-appender"/>
-	
-	<!-- folder location for production log4j config xml file -->
-	<property name="log4j.production.appender" value="${basedir}/log4j-config/production-appender"/>
-
-	<!-- folder location for testng config file -->
-	<property name="testng.config" value="${basedir}/testng-config"/>
-
 	
 	<!-- import the base set of files -->
     <import file="${base.build.file}"/>
-	
-	
 
     <!-- Allow users to see their properties and how they are set -->
     <target name="echo-properties" 

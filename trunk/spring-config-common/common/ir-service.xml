@@ -54,7 +54,7 @@
        <property name="accountVerificationMessage" ref="accountVerificationMessage"/>
        <property name="emailVerificationMessage" ref="emailVerificationMessage"/>
        <property name="researcherService" ref="researcherService"/>
-       <property name="baseWebAppPath" value="http://ir:8080/ir_web/"/>
+       <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="institutionalItemService" ref="institutionalItemService"/>
    </bean>
    
@@ -281,7 +281,7 @@
        <property name="unShareMailMessage" ref="unShareMailMessage"/>
        <property name="securityService" ref="securityService"/>
        <property name="userFileSystemService" ref="userFileSystemService"/>
-       <property name="baseWebAppPath" value="http://ir:8080/ir_web/"/>
+       <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="roleService" ref="roleService"/>
    </bean>
      
