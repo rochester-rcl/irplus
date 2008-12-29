@@ -15,12 +15,13 @@
    limitations under the License.
  -->
  
-<!-- this is the master build file for the irplus project -->
+<!-- this is the base build file for the irplus project -->
 <project name="base-build" xmlns:ivy="antlib:org.apache.ivy.ant" >
 	
 	<!-- uncomment this to run the tests  it does not matter what the value is so long as the 
-		     line is uncommented.-->
+		     line is uncommented.
 	<property name="run.tests" value="true"/>
+	-->
 	
     <!-- build directory -->
     <property name="build.dir" value="${basedir}/build"/> 
@@ -88,8 +89,6 @@
 	<!-- folder location for testng config file -->
 	<property name="testng.config" value="${basedir}/testng-config"/>
 
-	
-
     <!-- ivy dir -->
     <property name="ivy.dir" value="${basedir}/ivy"/>  
     
@@ -114,7 +113,7 @@
     <!-- set the javac depreciation mode -->
     <property name="javac.deprecation.mode" value="on"/>
 
-     <!-- java version to compoile with -->
+     <!-- java version to compile with -->
     <property name="javac.java.version" value="1.6"/>
 	
     <!-- project version -->
