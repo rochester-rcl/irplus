@@ -90,8 +90,8 @@
 	<!-- context source for connecting to the LDAP directory -->
 	<bean id="contextSource"
         class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
-        <constructor-arg value="ldap://corona-dmc.its.rochester.edu:389/ou=people,dc=rochester,dc=edu"/>
-        <property name="userDn" value="ou=people,dc=rochester,dc=edu"/>
+        <constructor-arg value="${ldap.server.location}"/>
+        <property name="userDn" value="${user.dn}"/>
         <property name="anonymousReadOnly" value="true"/>
     </bean>
 	

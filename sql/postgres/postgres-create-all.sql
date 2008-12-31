@@ -33,7 +33,7 @@
 -- information.
 -- ---------------------------------------------
 
-CREATE SCHEMA file_system AUTHORIZATION urresearch;
+CREATE SCHEMA file_system AUTHORIZATION ir_plus;
 
 -- ---------------------------------------------
 -- Sequence for naming files and folders on the file
@@ -41,7 +41,7 @@ CREATE SCHEMA file_system AUTHORIZATION urresearch;
 -- ---------------------------------------------
 
 CREATE SEQUENCE file_system.file_system_name_seq; 
-ALTER TABLE file_system.file_system_name_seq OWNER TO urresearch;
+ALTER TABLE file_system.file_system_name_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- File Server information
@@ -55,11 +55,11 @@ CREATE TABLE file_system.file_server
   description TEXT,
   version INTEGER
 );
-ALTER TABLE file_system.file_server OWNER TO urresearch;
+ALTER TABLE file_system.file_server OWNER TO ir_plus;
 
 -- The folder name sequence
 CREATE SEQUENCE file_system.file_server_seq;
-ALTER TABLE file_system.file_server_seq OWNER TO urresearch;
+ALTER TABLE file_system.file_server_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- File Database Information
@@ -81,11 +81,11 @@ CREATE TABLE file_system.file_database
   UNIQUE (name, file_server_id), 
   UNIQUE (name, path)
 );
-ALTER TABLE file_system.file_database OWNER TO urresearch;
+ALTER TABLE file_system.file_database OWNER TO ir_plus;
 
 -- The folder name sequence
 CREATE SEQUENCE file_system.file_database_seq;
-ALTER TABLE file_system.file_database_seq OWNER TO urresearch;
+ALTER TABLE file_system.file_database_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Folder Information
@@ -113,7 +113,7 @@ CREATE TABLE file_system.folder
  (file_database_id),
   UNIQUE (parent_id, folder_name)
 );
-ALTER TABLE file_system.folder OWNER TO urresearch;
+ALTER TABLE file_system.folder OWNER TO ir_plus;
 
 CREATE INDEX folder_display_name_idx ON file_system.folder USING btree 
 
@@ -121,7 +121,7 @@ CREATE INDEX folder_display_name_idx ON file_system.folder USING btree
 
 -- The folder sequence
 CREATE SEQUENCE file_system.folder_seq;
-ALTER TABLE file_system.folder_seq OWNER TO urresearch;
+ALTER TABLE file_system.folder_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- File Information
@@ -144,14 +144,14 @@ CREATE TABLE file_system.file
   FOREIGN KEY (folder_id) REFERENCES file_system.folder (folder_id),
   UNIQUE (folder_id, file_name)
 );
-ALTER TABLE file_system.file OWNER TO urresearch;
+ALTER TABLE file_system.file OWNER TO ir_plus;
 
 -- Index on the file Name
 CREATE INDEX file_display_name_idx ON file_system.file USING btree (display_name);
 
 -- The file sequence
 CREATE SEQUENCE file_system.file_seq;
-ALTER TABLE file_system.file_seq OWNER TO urresearch;
+ALTER TABLE file_system.file_seq OWNER TO ir_plus;
 
 
 
@@ -170,11 +170,11 @@ CREATE TABLE file_system.file_checksum
   version INTEGER,
   FOREIGN KEY (file_id) REFERENCES file_system.file (file_id)
 );
-ALTER TABLE file_system.file_checksum OWNER TO urresearch;
+ALTER TABLE file_system.file_checksum OWNER TO ir_plus;
 
 -- The checksum sequence
 CREATE SEQUENCE file_system.file_checksum_seq;
-ALTER TABLE file_system.file_checksum_seq OWNER TO urresearch;
+ALTER TABLE file_system.file_checksum_seq OWNER TO ir_plus;
 
 
 
@@ -199,7 +199,7 @@ ALTER TABLE file_system.file_checksum_seq OWNER TO urresearch;
 -- information.
 -- ---------------------------------------------
 
-CREATE SCHEMA mime AUTHORIZATION urresearch;
+CREATE SCHEMA mime AUTHORIZATION ir_plus;
 
 -- ---------------------------------------------
 -- Create the mime top media type table
@@ -213,18 +213,18 @@ CREATE TABLE mime.top_media_type
   version INTEGER,
   UNIQUE (name)
 );
-ALTER TABLE mime.top_media_type OWNER TO urresearch;
+ALTER TABLE mime.top_media_type OWNER TO ir_plus;
 
 -- sequence for top level media mime types
 CREATE SEQUENCE mime.top_media_type_seq; 
-ALTER TABLE mime.top_media_type_seq OWNER TO urresearch;
+ALTER TABLE mime.top_media_type_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Create the mime sub type table
 -- ---------------------------------------------
 -- squences for mime sub types
 CREATE SEQUENCE mime.sub_type_seq;
-ALTER TABLE mime.sub_type_seq OWNER TO urresearch;
+ALTER TABLE mime.sub_type_seq OWNER TO ir_plus;
 
 -- the sub level mime type
 CREATE TABLE mime.sub_type
@@ -240,14 +240,14 @@ CREATE TABLE mime.sub_type
 (top_media_type_id),
   UNIQUE (top_media_type_id, name)
 );
-ALTER TABLE mime.sub_type OWNER TO urresearch;
+ALTER TABLE mime.sub_type OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Create the mime sub type extensions table
 -- ---------------------------------------------
 -- create a sequence for the mime type extensions
 CREATE SEQUENCE mime.sub_type_extension_seq;
-ALTER TABLE mime.sub_type_extension_seq OWNER TO urresearch;
+ALTER TABLE mime.sub_type_extension_seq OWNER TO ir_plus;
 
 -- create a table for the extensions
 CREATE TABLE mime.sub_type_extension
@@ -261,7 +261,7 @@ CREATE TABLE mime.sub_type_extension
   FOREIGN KEY (sub_type_id)  REFERENCES mime.sub_type (sub_type_id),
   UNIQUE (sub_type_id, extension)
 );
-ALTER TABLE mime.sub_type_extension OWNER TO urresearch;
+ALTER TABLE mime.sub_type_extension OWNER TO ir_plus;
 
 
 CREATE INDEX sub_type_extension_ext_idx ON mime.sub_type_extension(extension);
@@ -284,7 +284,7 @@ CREATE INDEX sub_type_extension_ext_idx ON mime.sub_type_extension(extension);
 -- Person Schema
 -- ---------------------------------------------
 
-CREATE SCHEMA person AUTHORIZATION urresearch;
+CREATE SCHEMA person AUTHORIZATION ir_plus;
 
 
 -- ---------------------------------------------
@@ -305,11 +305,11 @@ CREATE TABLE person.birth_date (
   PRIMARY KEY (birth_date_id)
   
 ) ;
-ALTER TABLE person.birth_date OWNER TO urresearch;
+ALTER TABLE person.birth_date OWNER TO ir_plus;
 
 -- The birth date sequence
 CREATE SEQUENCE person.birth_date_seq ;
-ALTER TABLE person.birth_date_seq OWNER TO urresearch;
+ALTER TABLE person.birth_date_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -331,11 +331,11 @@ CREATE TABLE person.death_date (
   
   
 ) ;
-ALTER TABLE person.death_date OWNER TO urresearch;
+ALTER TABLE person.death_date OWNER TO ir_plus;
 
 -- The death date sequence
 CREATE SEQUENCE person.death_date_seq ;
-ALTER TABLE person.death_date_seq OWNER TO urresearch;
+ALTER TABLE person.death_date_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Contributor Type table
@@ -349,11 +349,11 @@ CREATE TABLE person.contributor_type
     description TEXT,
     UNIQUE(name)
 );
-ALTER TABLE person.contributor_type OWNER TO urresearch;
+ALTER TABLE person.contributor_type OWNER TO ir_plus;
 
 -- The contributory type sequence
 CREATE SEQUENCE person.contributor_type_seq;
-ALTER TABLE person.contributor_type_seq OWNER TO urresearch;
+ALTER TABLE person.contributor_type_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -369,11 +369,11 @@ CREATE TABLE person.person_name_authority
 	FOREIGN KEY (birth_date_id) REFERENCES person.birth_date(birth_date_id),
 	FOREIGN KEY (death_date_id) REFERENCES person.death_date(death_date_id)    
 );
-ALTER TABLE person.person_name_authority OWNER TO urresearch;
+ALTER TABLE person.person_name_authority OWNER TO ir_plus;
 
 -- The person authority sequence
 CREATE SEQUENCE person.person_name_authority_seq ;
-ALTER TABLE person.person_name_authority_seq OWNER TO urresearch;
+ALTER TABLE person.person_name_authority_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -412,13 +412,13 @@ CREATE TABLE person.person_name
     UNIQUE (person_name_authority_id, person_name_id),
     FOREIGN KEY (person_name_authority_id) REFERENCES person.person_name_authority(person_name_authority_id)
 );
-ALTER TABLE person.person_name OWNER TO urresearch;
+ALTER TABLE person.person_name OWNER TO ir_plus;
 
 CREATE INDEX person_name_first_char_idx ON person.person_name(surname_first_char);
 
 -- The person name sequence
 CREATE SEQUENCE person.person_name_seq ;
-ALTER TABLE person.person_name_seq OWNER TO urresearch;
+ALTER TABLE person.person_name_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Person Name Title 
@@ -431,11 +431,11 @@ CREATE TABLE person.person_name_title
     value TEXT,
     FOREIGN KEY (person_name_id) REFERENCES person.person_name(person_name_id)
 );
-ALTER TABLE person.person_name_title OWNER TO urresearch;
+ALTER TABLE person.person_name_title OWNER TO ir_plus;
 
 -- The person name sequence
 CREATE SEQUENCE person.person_name_title_seq ;
-ALTER TABLE person.person_name_title_seq OWNER TO urresearch;
+ALTER TABLE person.person_name_title_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Constraint for authoritative name
@@ -461,11 +461,11 @@ CREATE TABLE person.contributor
     FOREIGN KEY (person_name_id) REFERENCES person.person_name(person_name_id),
     FOREIGN KEY (contributor_type_id) REFERENCES person.contributor_type(contributor_type_id)
 );
-ALTER TABLE person.contributor OWNER TO urresearch;
+ALTER TABLE person.contributor OWNER TO ir_plus;
 
 -- The contributory sequence
 CREATE SEQUENCE person.contributor_seq ;
-ALTER TABLE person.contributor_seq OWNER TO urresearch;
+ALTER TABLE person.contributor_seq OWNER TO ir_plus;
 
 
 
@@ -485,7 +485,7 @@ ALTER TABLE person.contributor_seq OWNER TO urresearch;
 -- Create a schema to hold security information
 -- ---------------------------------------------
 
-CREATE SCHEMA ir_user AUTHORIZATION urresearch;
+CREATE SCHEMA ir_user AUTHORIZATION ir_plus;
 
 -- ---------------------------------------------
 -- Affiliation table
@@ -504,11 +504,11 @@ CREATE TABLE ir_user.affiliation
   CONSTRAINT affiliation_name_key UNIQUE (name)
 ); 
 
-ALTER TABLE ir_user.affiliation OWNER TO urresearch;
+ALTER TABLE ir_user.affiliation OWNER TO ir_plus;
 
 -- The affiliation sequence
 CREATE SEQUENCE ir_user.affiliation_seq ;
-ALTER TABLE ir_user.affiliation_seq OWNER TO urresearch;
+ALTER TABLE ir_user.affiliation_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Department table
@@ -523,11 +523,11 @@ CREATE TABLE ir_user.department
   UNIQUE (name)
 ); 
 
-ALTER TABLE ir_user.department OWNER TO urresearch;
+ALTER TABLE ir_user.department OWNER TO ir_plus;
 
 -- The department sequence
 CREATE SEQUENCE ir_user.department_seq ;
-ALTER TABLE ir_user.department_seq OWNER TO urresearch;
+ALTER TABLE ir_user.department_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -563,11 +563,11 @@ CREATE TABLE ir_user."user"
   FOREIGN KEY (person_name_authority_id) REFERENCES person.person_name_authority (person_name_authority_id),
   UNIQUE (username)
 );
-ALTER TABLE ir_user.user OWNER TO urresearch;
+ALTER TABLE ir_user.user OWNER TO ir_plus;
 
 -- The user sequence
 CREATE SEQUENCE ir_user.user_seq ;
-ALTER TABLE ir_user.user_seq OWNER TO urresearch;
+ALTER TABLE ir_user.user_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -582,11 +582,11 @@ CREATE TABLE ir_user.role
     description TEXT,
     UNIQUE(name)
 );
-ALTER TABLE ir_user.role OWNER TO urresearch;
+ALTER TABLE ir_user.role OWNER TO ir_plus;
 
 -- The role sequence
 CREATE SEQUENCE ir_user.role_seq ;
-ALTER TABLE ir_user.role_seq OWNER TO urresearch;
+ALTER TABLE ir_user.role_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Group table for grouping users
@@ -600,11 +600,11 @@ CREATE TABLE ir_user.user_group
     description TEXT,
     UNIQUE(name, group_id)
 );
-ALTER TABLE ir_user.user_group OWNER TO urresearch;
+ALTER TABLE ir_user.user_group OWNER TO ir_plus;
 
 -- The group sequence
 CREATE SEQUENCE ir_user.user_group_seq ;
-ALTER TABLE ir_user.user_group_seq OWNER TO urresearch;
+ALTER TABLE ir_user.user_group_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Link between a group and a set of users
@@ -618,7 +618,7 @@ CREATE TABLE ir_user.user_group_users
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
     FOREIGN KEY (group_id) REFERENCES ir_user.user_group(group_id)
 );
-ALTER TABLE ir_user.user_group_users OWNER TO urresearch;
+ALTER TABLE ir_user.user_group_users OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Link between a group and the admins of that group
@@ -632,7 +632,7 @@ CREATE TABLE ir_user.user_group_admins
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
     FOREIGN KEY (group_id) REFERENCES ir_user.user_group(group_id)
 );
-ALTER TABLE ir_user.user_group_admins OWNER TO urresearch;
+ALTER TABLE ir_user.user_group_admins OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- User Role table
@@ -646,7 +646,7 @@ CREATE TABLE ir_user.user_role
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
     FOREIGN KEY (role_id) REFERENCES ir_user.role(role_id)
 );
-ALTER TABLE ir_user.user_role OWNER TO urresearch;
+ALTER TABLE ir_user.user_role OWNER TO ir_plus;
 
 
 
@@ -664,7 +664,7 @@ ALTER TABLE ir_user.user_role OWNER TO urresearch;
 -- information.
 -- ---------------------------------------------
 
-CREATE SCHEMA ir_file AUTHORIZATION urresearch;
+CREATE SCHEMA ir_file AUTHORIZATION ir_plus;
 
 
 -- ---------------------------------------------
@@ -682,11 +682,11 @@ CREATE TABLE ir_file.ir_file
     FOREIGN KEY (file_id) REFERENCES file_system.file (file_id),
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
 );
-ALTER TABLE ir_file.ir_file OWNER TO urresearch;
+ALTER TABLE ir_file.ir_file OWNER TO ir_plus;
 
 -- The ir file sequence
 CREATE SEQUENCE ir_file.ir_file_seq ;
-ALTER TABLE ir_file.ir_file_seq OWNER TO urresearch;
+ALTER TABLE ir_file.ir_file_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -701,11 +701,11 @@ CREATE TABLE ir_file.transformed_file_type
     version INTEGER,
     UNIQUE(system_code)
 );
-ALTER TABLE ir_file.transformed_file_type OWNER TO urresearch;
+ALTER TABLE ir_file.transformed_file_type OWNER TO ir_plus;
 
 -- The transformed file type seq
 CREATE SEQUENCE ir_file.transformed_file_type_seq ;
-ALTER TABLE ir_file.transformed_file_type_seq OWNER TO urresearch;
+ALTER TABLE ir_file.transformed_file_type_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Transformed File Information
@@ -723,11 +723,11 @@ CREATE TABLE ir_file.transformed_file
     FOREIGN KEY (transformed_file_type_id) REFERENCES 
         ir_file.transformed_file_type (transformed_file_type_id)
 );
-ALTER TABLE ir_file.transformed_file OWNER TO urresearch;
+ALTER TABLE ir_file.transformed_file OWNER TO ir_plus;
 
 -- The transformed file type seq
 CREATE SEQUENCE ir_file.transformed_file_seq ;
-ALTER TABLE ir_file.transformed_file_seq OWNER TO urresearch;
+ALTER TABLE ir_file.transformed_file_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -752,11 +752,11 @@ CREATE TABLE ir_file.versioned_file
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
     FOREIGN KEY (locked_user_id) REFERENCES ir_user.user(user_id)
 );
-ALTER TABLE ir_file.versioned_file OWNER TO urresearch;
+ALTER TABLE ir_file.versioned_file OWNER TO ir_plus;
 
 -- The versioned ir file sequence
 CREATE SEQUENCE ir_file.versioned_file_seq;
-ALTER TABLE ir_file.versioned_file_seq OWNER TO urresearch;
+ALTER TABLE ir_file.versioned_file_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- File Collaborator
@@ -775,11 +775,11 @@ ir_file.versioned_file(versioned_file_id),
 
 versioned_file_id)
 );
-ALTER TABLE ir_file.file_collaborator OWNER TO urresearch;
+ALTER TABLE ir_file.file_collaborator OWNER TO ir_plus;
 
 -- The person name sequence
 CREATE SEQUENCE ir_file.file_collaborator_seq ;
-ALTER TABLE ir_file.file_collaborator_seq OWNER TO urresearch;
+ALTER TABLE ir_file.file_collaborator_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -802,11 +802,11 @@ CREATE TABLE ir_file.file_version
 (versioned_file_id) ,
   FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
 );
-ALTER TABLE ir_file.file_version OWNER TO urresearch;
+ALTER TABLE ir_file.file_version OWNER TO ir_plus;
 
 -- The version sequence
 CREATE SEQUENCE ir_file.file_version_seq;
-ALTER TABLE ir_file.file_version_seq OWNER TO urresearch;
+ALTER TABLE ir_file.file_version_seq OWNER TO ir_plus;
 
 
 
@@ -829,7 +829,7 @@ ALTER TABLE ir_file.file_version_seq OWNER TO urresearch;
 -- information.
 -- ---------------------------------------------
 
-CREATE SCHEMA ir_item AUTHORIZATION urresearch;
+CREATE SCHEMA ir_item AUTHORIZATION ir_plus;
 
 -- ---------------------------------------------
 -- Content Type table
@@ -843,11 +843,11 @@ CREATE TABLE ir_item.content_type
     unique_system_code TEXT,
     UNIQUE(name)
 );
-ALTER TABLE ir_item.content_type OWNER TO urresearch;
+ALTER TABLE ir_item.content_type OWNER TO ir_plus;
 
 -- The content type sequence
 CREATE SEQUENCE ir_item.content_type_seq;
-ALTER TABLE ir_item.content_type_seq OWNER TO urresearch;
+ALTER TABLE ir_item.content_type_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -861,11 +861,11 @@ CREATE TABLE ir_item.extent_type
     description TEXT,
     UNIQUE(name)
 );
-ALTER TABLE ir_item.extent_type OWNER TO urresearch;
+ALTER TABLE ir_item.extent_type OWNER TO ir_plus;
 
 -- The extent type sequence
 CREATE SEQUENCE ir_item.extent_type_seq;
-ALTER TABLE ir_item.extent_type_seq OWNER TO urresearch;
+ALTER TABLE ir_item.extent_type_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Publisher table
@@ -877,11 +877,11 @@ CREATE TABLE ir_item.publisher
     name TEXT,
     description TEXT
 );
-ALTER TABLE ir_item.publisher OWNER TO urresearch;
+ALTER TABLE ir_item.publisher OWNER TO ir_plus;
 
 -- The publisher sequence
 CREATE SEQUENCE ir_item.publisher_seq;
-ALTER TABLE ir_item.publisher_seq OWNER TO urresearch;
+ALTER TABLE ir_item.publisher_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Language type table
@@ -897,11 +897,11 @@ CREATE TABLE ir_item.language_type
     description TEXT,
     UNIQUE(name)
 );
-ALTER TABLE ir_item.language_type OWNER TO urresearch;
+ALTER TABLE ir_item.language_type OWNER TO ir_plus;
 
 -- The language type sequence
 CREATE SEQUENCE ir_item.language_type_seq ;
-ALTER TABLE ir_item.language_type_seq OWNER TO urresearch;
+ALTER TABLE ir_item.language_type_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Identifier type table
@@ -915,11 +915,11 @@ CREATE TABLE ir_item.identifier_type
     description TEXT,
     CONSTRAINT identifier_type_name_key UNIQUE(name)
 ) ;
-ALTER TABLE ir_item.identifier_type OWNER TO urresearch;
+ALTER TABLE ir_item.identifier_type OWNER TO ir_plus;
 
 -- The identifier type sequence
 CREATE SEQUENCE ir_item.identifier_type_seq;
-ALTER TABLE ir_item.identifier_type_seq OWNER TO urresearch;
+ALTER TABLE ir_item.identifier_type_seq OWNER TO ir_plus;
 
 
 
@@ -935,11 +935,11 @@ CREATE TABLE ir_item.sponsor(
   UNIQUE (name)
   
 ) ;
-ALTER TABLE ir_item.sponsor OWNER TO urresearch;
+ALTER TABLE ir_item.sponsor OWNER TO ir_plus;
 
 -- The sponser sequence
 CREATE SEQUENCE ir_item.sponsor_seq ;
-ALTER TABLE ir_item.sponsor_seq OWNER TO urresearch;
+ALTER TABLE ir_item.sponsor_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -960,11 +960,11 @@ CREATE TABLE ir_item.published_date (
   PRIMARY KEY (published_date_id)
   
 ) ;
-ALTER TABLE ir_item.published_date OWNER TO urresearch;
+ALTER TABLE ir_item.published_date OWNER TO ir_plus;
 
 -- The published date sequence
 CREATE SEQUENCE ir_item.published_date_seq ;
-ALTER TABLE ir_item.published_date_seq OWNER TO urresearch;
+ALTER TABLE ir_item.published_date_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -984,11 +984,11 @@ CREATE TABLE ir_item.external_published_item(
 	(published_date_id)   
   
 ) ;
-ALTER TABLE ir_item.external_published_item OWNER TO urresearch;
+ALTER TABLE ir_item.external_published_item OWNER TO ir_plus;
 
 -- The external published item sequence
 CREATE SEQUENCE ir_item.external_published_item_seq ;
-ALTER TABLE ir_item.external_published_item_seq OWNER TO urresearch;
+ALTER TABLE ir_item.external_published_item_seq OWNER TO ir_plus;
 
       
 -- ---------------------------------------------
@@ -1018,11 +1018,11 @@ CREATE TABLE ir_item.first_available_date (
   PRIMARY KEY (first_available_date_id)
   
 ) ;
-ALTER TABLE ir_item.first_available_date OWNER TO urresearch;
+ALTER TABLE ir_item.first_available_date OWNER TO ir_plus;
 
 -- The published date sequence
 CREATE SEQUENCE ir_item.first_available_date_seq ;
-ALTER TABLE ir_item.first_available_date_seq OWNER TO urresearch;
+ALTER TABLE ir_item.first_available_date_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1044,11 +1044,11 @@ CREATE TABLE ir_item.original_item_creation_date (
   
   
 ) ;
-ALTER TABLE ir_item.original_item_creation_date OWNER TO urresearch;
+ALTER TABLE ir_item.original_item_creation_date OWNER TO ir_plus;
 
 -- The published date sequence
 CREATE SEQUENCE ir_item.original_item_creation_date_seq ;
-ALTER TABLE ir_item.original_item_creation_date_seq OWNER TO urresearch;
+ALTER TABLE ir_item.original_item_creation_date_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Item Information
@@ -1087,14 +1087,14 @@ CREATE TABLE ir_item.item
 
 ir_item.external_published_item (external_published_item_id)
 ) ;
-ALTER TABLE ir_item.item OWNER TO urresearch;
+ALTER TABLE ir_item.item OWNER TO ir_plus;
 
 -- Index on the item Name
 CREATE INDEX item_name_idx ON ir_item.item USING btree (name);
 
 -- The item sequence
 CREATE SEQUENCE ir_item.item_seq;
-ALTER TABLE ir_item.item_seq OWNER TO urresearch;
+ALTER TABLE ir_item.item_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Constraint for first available date 
@@ -1119,7 +1119,7 @@ CREATE TABLE ir_item.item_content_type
     FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type (content_type_id),
     FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id) 
 );
-ALTER TABLE ir_item.item_content_type OWNER TO urresearch;
+ALTER TABLE ir_item.item_content_type OWNER TO ir_plus;
             
 -- ---------------------------------------------
 -- Item Sponsor table
@@ -1135,11 +1135,11 @@ CREATE TABLE ir_item.item_sponsor
     FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id),
     FOREIGN KEY (sponsor_id) REFERENCES ir_item.sponsor(sponsor_id)
 );
-ALTER TABLE ir_item.item_sponsor OWNER TO urresearch;
+ALTER TABLE ir_item.item_sponsor OWNER TO ir_plus;
 
 -- The sponsor sequence
 CREATE SEQUENCE ir_item.item_sponsor_seq ;
-ALTER TABLE ir_item.item_sponsor_seq OWNER TO urresearch;
+ALTER TABLE ir_item.item_sponsor_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 -- Item Contributor table
 -- ---------------------------------------------     
@@ -1154,11 +1154,11 @@ CREATE TABLE ir_item.item_contributor
     FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id),
     FOREIGN KEY (contributor_id) REFERENCES person.contributor(contributor_id)
 );
-ALTER TABLE ir_item.item_contributor OWNER TO urresearch;
+ALTER TABLE ir_item.item_contributor OWNER TO ir_plus;
 
 -- The contributory sequence
 CREATE SEQUENCE ir_item.item_contributor_seq ;
-ALTER TABLE ir_item.item_contributor_seq OWNER TO urresearch;
+ALTER TABLE ir_item.item_contributor_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 -- Versioned IR Item Information
 -- ---------------------------------------------
@@ -1174,11 +1174,11 @@ CREATE TABLE ir_item.versioned_item
     user_id BIGINT,
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
 );
-ALTER TABLE ir_item.versioned_item OWNER TO urresearch;
+ALTER TABLE ir_item.versioned_item OWNER TO ir_plus;
 
 -- The versioned ir file sequence
 CREATE SEQUENCE ir_item.versioned_item_seq;
-ALTER TABLE ir_item.versioned_item_seq OWNER TO urresearch;
+ALTER TABLE ir_item.versioned_item_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1199,11 +1199,11 @@ CREATE TABLE ir_item.item_version
 
 (versioned_item_id) 
 );
-ALTER TABLE ir_item.item_version OWNER TO urresearch;
+ALTER TABLE ir_item.item_version OWNER TO ir_plus;
 
 -- The version sequence
 CREATE SEQUENCE ir_item.item_version_seq;
-ALTER TABLE ir_item.item_version_seq OWNER TO urresearch;
+ALTER TABLE ir_item.item_version_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1223,11 +1223,11 @@ CREATE TABLE ir_item.item_file
   FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id),
   UNIQUE (ir_file_id, item_id)
 ); 
-ALTER TABLE ir_item.item_file OWNER TO urresearch;
+ALTER TABLE ir_item.item_file OWNER TO ir_plus;
 
 -- The item sequence
 CREATE SEQUENCE ir_item.item_file_seq;
-ALTER TABLE ir_item.item_file_seq OWNER TO urresearch;
+ALTER TABLE ir_item.item_file_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Constraint for link to item file primary image
@@ -1254,11 +1254,11 @@ CREATE TABLE ir_item.item_link
     UNIQUE(item_id, name),
     FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id)
 );
-ALTER TABLE ir_item.item_link OWNER TO urresearch;
+ALTER TABLE ir_item.item_link OWNER TO ir_plus;
 
 -- The item link sequence
 CREATE SEQUENCE ir_item.item_link_seq ;
-ALTER TABLE ir_item.item_link_seq OWNER TO urresearch;
+ALTER TABLE ir_item.item_link_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Item title table
@@ -1272,11 +1272,11 @@ CREATE TABLE ir_item.item_title
     item_id BIGINT NOT NULL,
     FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id)
 );
-ALTER TABLE ir_item.item_title OWNER TO urresearch;
+ALTER TABLE ir_item.item_title OWNER TO ir_plus;
 
 -- The item link sequence
 CREATE SEQUENCE ir_item.item_title_seq ;
-ALTER TABLE ir_item.item_title_seq OWNER TO urresearch;
+ALTER TABLE ir_item.item_title_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1295,11 +1295,11 @@ CREATE TABLE ir_item.item_identifier
 
 (identifier_type_id) 
 );
-ALTER TABLE ir_item.item_identifier OWNER TO urresearch;
+ALTER TABLE ir_item.item_identifier OWNER TO ir_plus;
 
 -- The item identifier sequence
 CREATE SEQUENCE ir_item.item_identifier_seq ;
-ALTER TABLE ir_item.item_identifier_seq OWNER TO urresearch;
+ALTER TABLE ir_item.item_identifier_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1316,11 +1316,11 @@ CREATE TABLE ir_item.item_extent
     FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id),
     FOREIGN KEY (extent_type_id) REFERENCES ir_item.extent_type (extent_type_id) 
 );
-ALTER TABLE ir_item.item_extent OWNER TO urresearch;
+ALTER TABLE ir_item.item_extent OWNER TO ir_plus;
 
 -- The item extent sequence
 CREATE SEQUENCE ir_item.item_extent_seq ;
-ALTER TABLE ir_item.item_extent_seq OWNER TO urresearch;
+ALTER TABLE ir_item.item_extent_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1334,7 +1334,7 @@ ALTER TABLE ir_item.item_extent_seq OWNER TO urresearch;
 --    FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id),
 --    FOREIGN KEY (license_id) REFERENCES ir_repository.license(license_id)
 --);
---ALTER TABLE ir_item.item_license OWNER TO urresearch;
+--ALTER TABLE ir_item.item_license OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Series
@@ -1348,11 +1348,11 @@ CREATE TABLE ir_item.series(
   PRIMARY KEY (series_id),
   UNIQUE (number)
 ) ;
-ALTER TABLE ir_item.series OWNER TO urresearch;
+ALTER TABLE ir_item.series OWNER TO ir_plus;
 
 -- The item series sequence
 CREATE SEQUENCE ir_item.series_seq ;
-ALTER TABLE ir_item.series_seq OWNER TO urresearch;
+ALTER TABLE ir_item.series_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Item series Report number
@@ -1369,11 +1369,11 @@ CREATE TABLE ir_item.item_series_report_number(
   FOREIGN KEY (item_id)
       REFERENCES ir_item.item (item_id)
 ) ;
-ALTER TABLE ir_item.item_series_report_number OWNER TO urresearch;
+ALTER TABLE ir_item.item_series_report_number OWNER TO ir_plus;
 
 -- The report sequence
 CREATE SEQUENCE ir_item.item_series_report_number_seq ;
-ALTER TABLE ir_item.item_series_report_number_seq OWNER TO urresearch;
+ALTER TABLE ir_item.item_series_report_number_seq OWNER TO ir_plus;
 
 
 -- ----------------------------------------------
@@ -1391,7 +1391,7 @@ ALTER TABLE ir_item.item_series_report_number_seq OWNER TO urresearch;
 -- information.
 -- ---------------------------------------------
 
-CREATE SCHEMA ir_repository AUTHORIZATION urresearch;
+CREATE SCHEMA ir_repository AUTHORIZATION ir_plus;
 
 -- ---------------------------------------------
 -- Repository Information
@@ -1417,11 +1417,11 @@ CREATE TABLE ir_repository.repository
   FOREIGN KEY (researcher_index_folder_id ) REFERENCES file_system.folder (folder_id),
   FOREIGN KEY (file_database_id) REFERENCES file_system.file_database (file_database_id)
 );
-ALTER TABLE ir_repository.repository OWNER TO urresearch;
+ALTER TABLE ir_repository.repository OWNER TO ir_plus;
 
 -- The repository sequence
 CREATE SEQUENCE ir_repository.repository_seq;
-ALTER TABLE ir_repository.repository_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.repository_seq OWNER TO ir_plus;
 
 -- Create a new table to hold repository pictures in the system
 CREATE TABLE ir_repository.repository_picture
@@ -1433,11 +1433,11 @@ CREATE TABLE ir_repository.repository_picture
   FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id)
 
 );
-ALTER TABLE ir_repository.repository_picture OWNER TO urresearch;
+ALTER TABLE ir_repository.repository_picture OWNER TO ir_plus;
 
 -- The repository sequence
 CREATE SEQUENCE ir_repository.repository_picture_seq;
-ALTER TABLE ir_repository.repository_picture_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.repository_picture_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1470,7 +1470,7 @@ CREATE TABLE ir_repository.institutional_collection
   UNIQUE (repository_id, path, name)
 );
 
-ALTER TABLE ir_repository.institutional_collection OWNER TO urresearch;
+ALTER TABLE ir_repository.institutional_collection OWNER TO ir_plus;
 CREATE INDEX collection_name_idx ON ir_repository.institutional_collection USING 
 btree (name);
 
@@ -1480,7 +1480,7 @@ CREATE INDEX collection_tree_root_idx ON ir_repository.institutional_collection(
 
 -- The collection sequence
 CREATE SEQUENCE ir_repository.institutional_collection_seq ;
-ALTER TABLE ir_repository.institutional_collection_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.institutional_collection_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1498,12 +1498,12 @@ CREATE TABLE ir_repository.institutional_collection_link
   FOREIGN KEY (institutional_collection_id) REFERENCES 
      ir_repository.institutional_collection (institutional_collection_id)
 );
-ALTER TABLE ir_repository.institutional_collection_link OWNER TO urresearch;
+ALTER TABLE ir_repository.institutional_collection_link OWNER TO ir_plus;
 
 
 -- The collection link sequence
 CREATE SEQUENCE ir_repository.institutional_collection_link_seq ;
-ALTER TABLE ir_repository.institutional_collection_link_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.institutional_collection_link_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1520,7 +1520,7 @@ CREATE TABLE ir_repository.institutional_collection_picture
      ir_repository.institutional_collection (institutional_collection_id),
   FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id)
 );
-ALTER TABLE ir_repository.institutional_collection_picture OWNER TO urresearch;
+ALTER TABLE ir_repository.institutional_collection_picture OWNER TO ir_plus;
 
 
 
@@ -1538,7 +1538,7 @@ CREATE TABLE ir_repository.institutional_collection_subscription
      ir_repository.institutional_collection (institutional_collection_id),
   FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id)
 );
-ALTER TABLE ir_repository.institutional_collection_subscription OWNER TO urresearch;
+ALTER TABLE ir_repository.institutional_collection_subscription OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1556,11 +1556,11 @@ CREATE TABLE ir_repository.license
     UNIQUE (name, license_version),
     FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id)
 ) ;
-ALTER TABLE ir_repository.license OWNER TO urresearch;
+ALTER TABLE ir_repository.license OWNER TO ir_plus;
 
 -- The item sequence
 CREATE SEQUENCE ir_repository.license_seq;
-ALTER TABLE ir_repository.license_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.license_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1576,11 +1576,11 @@ CREATE TABLE ir_repository.versioned_institutional_item
     current_published_version_id bigint,
     version INTEGER
 );
-ALTER TABLE ir_repository.versioned_institutional_item OWNER TO urresearch;
+ALTER TABLE ir_repository.versioned_institutional_item OWNER TO ir_plus;
 
 -- The versioned ir file sequence
 CREATE SEQUENCE ir_repository.versioned_institutional_item_seq;
-ALTER TABLE ir_repository.versioned_institutional_item_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.versioned_institutional_item_seq OWNER TO ir_plus;
 
 -- create an index on the versioned item name lower case
 CREATE INDEX versioned_institutional_item_lower_name_idx 
@@ -1606,11 +1606,11 @@ CREATE TABLE ir_repository.institutional_item
     UNIQUE(institutional_collection_id, versioned_institutional_item_id),
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
 );
-ALTER TABLE ir_repository.institutional_item OWNER TO urresearch;
+ALTER TABLE ir_repository.institutional_item OWNER TO ir_plus;
 
 -- The ir file sequence
 CREATE SEQUENCE ir_repository.institutional_item_seq;
-ALTER TABLE ir_repository.institutional_item_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.institutional_item_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1627,11 +1627,11 @@ CREATE TABLE ir_repository.deleted_institutional_item
     version INTEGER,
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
 );
-ALTER TABLE ir_repository.deleted_institutional_item OWNER TO urresearch;
+ALTER TABLE ir_repository.deleted_institutional_item OWNER TO ir_plus;
 
 -- The deleted institutional item seq
 CREATE SEQUENCE ir_repository.deleted_institutional_item_seq;
-ALTER TABLE ir_repository.deleted_institutional_item_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.deleted_institutional_item_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -1650,11 +1650,11 @@ CREATE TABLE ir_repository.published_version
        REFERENCES ir_repository.versioned_institutional_item (versioned_institutional_item_id),
     FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id)
 );
-ALTER TABLE ir_repository.published_version OWNER TO urresearch;
+ALTER TABLE ir_repository.published_version OWNER TO ir_plus;
 
 -- The ir file sequence
 CREATE SEQUENCE ir_repository.published_version_seq;
-ALTER TABLE ir_repository.published_version_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.published_version_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Withdrawn token
@@ -1672,11 +1672,11 @@ CREATE TABLE ir_repository.withdrawn_token
     FOREIGN KEY (published_version_id) 
        REFERENCES ir_repository.published_version (published_version_id)
 );
-ALTER TABLE ir_repository.withdrawn_token OWNER TO urresearch;
+ALTER TABLE ir_repository.withdrawn_token OWNER TO ir_plus;
 
 
 CREATE SEQUENCE ir_repository.withdrawn_token_seq;
-ALTER TABLE ir_repository.withdrawn_token_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.withdrawn_token_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Re-Instate token
@@ -1693,11 +1693,11 @@ CREATE TABLE ir_repository.reinstate_token
     FOREIGN KEY (published_version_id) 
        REFERENCES ir_repository.published_version (published_version_id)
 );
-ALTER TABLE ir_repository.reinstate_token OWNER TO urresearch;
+ALTER TABLE ir_repository.reinstate_token OWNER TO ir_plus;
 
 
 CREATE SEQUENCE ir_repository.reinstate_token_seq;
-ALTER TABLE ir_repository.reinstate_token_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.reinstate_token_seq OWNER TO ir_plus;
 
 
 
@@ -1727,11 +1727,11 @@ CREATE TABLE ir_repository.reviewable_item
     FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id),
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
 );
-ALTER TABLE ir_repository.reviewable_item OWNER TO urresearch;
+ALTER TABLE ir_repository.reviewable_item OWNER TO ir_plus;
 
 -- The reviewable item sequence
 CREATE SEQUENCE ir_repository.reviewable_item_seq;
-ALTER TABLE ir_repository.reviewable_item_seq OWNER TO urresearch;
+ALTER TABLE ir_repository.reviewable_item_seq OWNER TO ir_plus;
 
 
 
@@ -1754,7 +1754,7 @@ ALTER TABLE ir_repository.reviewable_item_seq OWNER TO urresearch;
 -- information.
 -- ---------------------------------------------
 
-CREATE SCHEMA fedora_file_system AUTHORIZATION urresearch;
+CREATE SCHEMA fedora_file_system AUTHORIZATION ir_plus;
 
 -- ---------------------------------------------
 -- Sequence for naming files and folders on the file
@@ -1762,7 +1762,7 @@ CREATE SCHEMA fedora_file_system AUTHORIZATION urresearch;
 -- ---------------------------------------------
 
 CREATE SEQUENCE fedora_file_system.file_system_name_seq; 
-ALTER TABLE fedora_file_system.file_system_name_seq OWNER TO urresearch;
+ALTER TABLE fedora_file_system.file_system_name_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- File Server information
@@ -1776,11 +1776,11 @@ CREATE TABLE fedora_file_system.file_server
   description TEXT,
   version INTEGER
 );
-ALTER TABLE fedora_file_system.file_server OWNER TO urresearch;
+ALTER TABLE fedora_file_system.file_server OWNER TO ir_plus;
 
 -- The folder name sequence
 CREATE SEQUENCE fedora_file_system.file_server_seq;
-ALTER TABLE fedora_file_system.file_server_seq OWNER TO urresearch;
+ALTER TABLE fedora_file_system.file_server_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Fedora File Database Information
@@ -1806,11 +1806,11 @@ CREATE TABLE fedora_file_system.file_database
 (file_server_id),
   UNIQUE (name, file_server_id)
 );
-ALTER TABLE fedora_file_system.file_database OWNER TO urresearch;
+ALTER TABLE fedora_file_system.file_database OWNER TO ir_plus;
 
 -- The folder name sequence
 CREATE SEQUENCE fedora_file_system.file_database_seq;
-ALTER TABLE fedora_file_system.file_database_seq OWNER TO urresearch;
+ALTER TABLE fedora_file_system.file_database_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Datastream Information
@@ -1836,11 +1836,11 @@ CREATE TABLE fedora_file_system.datastream_info
   version INTEGER,
   UNIQUE (pid)
 );
-ALTER TABLE fedora_file_system.datastream_info OWNER TO urresearch;
+ALTER TABLE fedora_file_system.datastream_info OWNER TO ir_plus;
 
 -- The file sequence
 CREATE SEQUENCE fedora_file_system.datastream_info_seq;
-ALTER TABLE fedora_file_system.datastream_info_seq OWNER TO urresearch;
+ALTER TABLE fedora_file_system.datastream_info_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Alternate Id 
@@ -1857,11 +1857,11 @@ CREATE TABLE fedora_file_system.alternate_id
 
 (datastream_info_id)
 );
-ALTER TABLE fedora_file_system.alternate_id OWNER TO urresearch;
+ALTER TABLE fedora_file_system.alternate_id OWNER TO ir_plus;
 
 -- The file sequence
 CREATE SEQUENCE fedora_file_system.alternate_id_seq;
-ALTER TABLE fedora_file_system.alternate_id_seq OWNER TO urresearch;
+ALTER TABLE fedora_file_system.alternate_id_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- File Information
@@ -1890,7 +1890,7 @@ CREATE TABLE fedora_file_system.file
 (datastream_info_id),
   UNIQUE (file_name)
 );
-ALTER TABLE fedora_file_system.file OWNER TO urresearch;
+ALTER TABLE fedora_file_system.file OWNER TO ir_plus;
 
 -- Index on the file Name
 CREATE INDEX fedora_file_display_name_idx ON fedora_file_system.file USING btree 
@@ -1899,7 +1899,7 @@ CREATE INDEX fedora_file_display_name_idx ON fedora_file_system.file USING btree
 
 -- The file sequence
 CREATE SEQUENCE fedora_file_system.file_seq;
-ALTER TABLE fedora_file_system.file_seq OWNER TO urresearch;
+ALTER TABLE fedora_file_system.file_seq OWNER TO ir_plus;
 
 
 
@@ -1948,13 +1948,13 @@ CREATE TABLE ir_user.personal_folder
   UNIQUE (parent_id, name),
   UNIQUE (user_id, path, name)
 );
-ALTER TABLE ir_user.personal_folder OWNER TO urresearch;
+ALTER TABLE ir_user.personal_folder OWNER TO ir_plus;
 
 CREATE INDEX personal_folder_idx ON ir_user.personal_folder USING btree (name);
 
 -- The collection sequence
 CREATE SEQUENCE ir_user.personal_folder_seq ;
-ALTER TABLE ir_user.personal_folder_seq OWNER TO urresearch;
+ALTER TABLE ir_user.personal_folder_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Personal file Information
@@ -1971,11 +1971,11 @@ CREATE TABLE ir_user.personal_file
     FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
     UNIQUE(user_id, personal_folder_id, versioned_file_id)
 );
-ALTER TABLE ir_user.personal_file OWNER TO urresearch;
+ALTER TABLE ir_user.personal_file OWNER TO ir_plus;
 
 -- The ir file sequence
 CREATE SEQUENCE ir_user.personal_file_seq;
-ALTER TABLE ir_user.personal_file_seq OWNER TO urresearch;
+ALTER TABLE ir_user.personal_file_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -2001,13 +2001,13 @@ CREATE TABLE ir_user.personal_collection
   UNIQUE (parent_id, name),
   UNIQUE (user_id, path, name)
 );
-ALTER TABLE ir_user.personal_collection OWNER TO urresearch;
+ALTER TABLE ir_user.personal_collection OWNER TO ir_plus;
 
 CREATE INDEX personal_collection_idx ON ir_user.personal_collection USING btree (name);
 
 -- The collection sequence
 CREATE SEQUENCE ir_user.personal_collection_seq ;
-ALTER TABLE ir_user.personal_collection_seq OWNER TO urresearch;
+ALTER TABLE ir_user.personal_collection_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -2025,11 +2025,11 @@ CREATE TABLE ir_user.personal_item
     FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
     UNIQUE(user_id, personal_collection_id, versioned_item_id)
 );
-ALTER TABLE ir_user.personal_item OWNER TO urresearch;
+ALTER TABLE ir_user.personal_item OWNER TO ir_plus;
 
 -- The ir file sequence
 CREATE SEQUENCE ir_user.personal_item_seq;
-ALTER TABLE ir_user.personal_item_seq OWNER TO urresearch;
+ALTER TABLE ir_user.personal_item_seq OWNER TO ir_plus;
 
 
 
@@ -2049,12 +2049,12 @@ CREATE TABLE ir_user.user_email
   UNIQUE (user_id, user_email_id),
   UNIQUE (email)
 ) ; 
-ALTER TABLE ir_user.user_email OWNER TO urresearch;
+ALTER TABLE ir_user.user_email OWNER TO ir_plus;
 
 
 -- The ir file sequence
 CREATE SEQUENCE ir_user.user_email_seq;
-ALTER TABLE ir_user.user_email_seq OWNER TO urresearch;
+ALTER TABLE ir_user.user_email_seq OWNER TO ir_plus;
 
 
 
@@ -2106,11 +2106,11 @@ CREATE TABLE ir_user.invite_info
   user_id BIGINT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES ir_user."user" (user_id) 
 );
-ALTER TABLE ir_user.invite_info OWNER TO urresearch;
+ALTER TABLE ir_user.invite_info OWNER TO ir_plus;
 
 -- The ir file sequence
 CREATE SEQUENCE ir_user.invite_info_seq;
-ALTER TABLE ir_user.invite_info_seq OWNER TO urresearch;
+ALTER TABLE ir_user.invite_info_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -2125,7 +2125,7 @@ CREATE TABLE ir_user.invite_files
     FOREIGN KEY (invite_info_id) REFERENCES ir_user.invite_info(invite_info_id),
     FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file(versioned_file_id)
 );
-ALTER TABLE ir_user.invite_files OWNER TO urresearch;
+ALTER TABLE ir_user.invite_files OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Shared inbox table
@@ -2142,11 +2142,11 @@ CREATE TABLE ir_user.shared_inbox_file
   UNIQUE(shared_with_user_id, versioned_file_id)
 ); 
 
-ALTER TABLE ir_user.shared_inbox_file OWNER TO urresearch;
+ALTER TABLE ir_user.shared_inbox_file OWNER TO ir_plus;
 
 -- The share file sequence
 CREATE SEQUENCE ir_user.shared_inbox_file_seq ;
-ALTER TABLE ir_user.shared_inbox_file_seq OWNER TO urresearch;
+ALTER TABLE ir_user.shared_inbox_file_seq OWNER TO ir_plus;
 
 
 
@@ -2175,7 +2175,7 @@ ALTER TABLE ir_user.shared_inbox_file_seq OWNER TO urresearch;
 -- Create a schema to hold security information
 -- ---------------------------------------------
 
-CREATE SCHEMA ir_security AUTHORIZATION urresearch;
+CREATE SCHEMA ir_security AUTHORIZATION ir_plus;
 -- ---------------------------------------------
 -- Class type table
 -- ---------------------------------------------
@@ -2188,11 +2188,11 @@ CREATE TABLE ir_security.class_type
     version INTEGER,
     UNIQUE (name)
 ) ;
-ALTER TABLE ir_security.class_type OWNER TO urresearch;
+ALTER TABLE ir_security.class_type OWNER TO ir_plus;
 
 -- The class type sequence
 CREATE SEQUENCE ir_security.class_type_seq ;
-ALTER TABLE ir_security.class_type_seq OWNER TO urresearch;
+ALTER TABLE ir_security.class_type_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Security information 
@@ -2227,11 +2227,11 @@ CREATE TABLE ir_security.class_type_permission
     UNIQUE (class_type_id, name),
     FOREIGN KEY (class_type_id) REFERENCES ir_security.class_type(class_type_id)
 ) ;
-ALTER TABLE ir_security.class_type_permission OWNER TO urresearch;
+ALTER TABLE ir_security.class_type_permission OWNER TO ir_plus;
 
 -- The class type sequence
 CREATE SEQUENCE ir_security.class_type_permission_seq ;
-ALTER TABLE ir_security.class_type_permission_seq OWNER TO urresearch;
+ALTER TABLE ir_security.class_type_permission_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -2246,7 +2246,7 @@ CREATE TABLE ir_user.invite_permissions
     FOREIGN KEY (invite_info_id) REFERENCES ir_user.invite_info(invite_info_id),
     FOREIGN KEY (class_type_permission_id) REFERENCES ir_security.class_type_permission(class_type_permission_id)
 );
-ALTER TABLE ir_user.invite_permissions OWNER TO urresearch;
+ALTER TABLE ir_user.invite_permissions OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Insert values for Class type permission
@@ -2379,11 +2379,11 @@ CREATE TABLE ir_security.acl
    FOREIGN KEY (class_type_id) REFERENCES ir_security.class_type(class_type_id)
 
 );
-ALTER TABLE ir_security.acl OWNER TO urresearch;
+ALTER TABLE ir_security.acl OWNER TO ir_plus;
 
 -- The object identity sequence
 CREATE SEQUENCE ir_security.acl_seq ;
-ALTER TABLE ir_security.acl_seq OWNER TO urresearch;
+ALTER TABLE ir_security.acl_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- User Acess control list table.
@@ -2398,11 +2398,11 @@ CREATE TABLE ir_security.user_control_entry
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
     FOREIGN KEY (acl_id) REFERENCES ir_security.acl(acl_id)
 );
-ALTER TABLE ir_security.user_control_entry OWNER TO urresearch;
+ALTER TABLE ir_security.user_control_entry OWNER TO ir_plus;
 
 -- The object identity sequence
 CREATE SEQUENCE ir_security.user_control_entry_seq ;
-ALTER TABLE ir_security.user_control_entry_seq OWNER TO urresearch;
+ALTER TABLE ir_security.user_control_entry_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Permissions for the user control entries
@@ -2418,7 +2418,7 @@ ir_security.user_control_entry(user_control_entry_id),
     FOREIGN KEY (class_type_permission_id) 
         REFERENCES ir_security.class_type_permission(class_type_permission_id)
 );
-ALTER TABLE ir_security.user_control_entry_permission OWNER TO urresearch;
+ALTER TABLE ir_security.user_control_entry_permission OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Role Acess control list table.
@@ -2432,11 +2432,11 @@ CREATE TABLE ir_security.role_control_entry
     FOREIGN KEY (role_id) REFERENCES ir_user.role(role_id),
     FOREIGN KEY (acl_id) REFERENCES ir_security.acl(acl_id)
 );
-ALTER TABLE ir_security.role_control_entry OWNER TO urresearch;
+ALTER TABLE ir_security.role_control_entry OWNER TO ir_plus;
 
 -- The object identity sequence
 CREATE SEQUENCE ir_security.role_control_entry_seq ;
-ALTER TABLE ir_security.role_control_entry_seq OWNER TO urresearch;
+ALTER TABLE ir_security.role_control_entry_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Permissions for the role control entries
@@ -2452,7 +2452,7 @@ ir_security.role_control_entry(role_control_entry_id),
     FOREIGN KEY (class_type_permission_id) 
         REFERENCES ir_security.class_type_permission(class_type_permission_id)
 );
-ALTER TABLE ir_security.role_control_entry_permission OWNER TO urresearch;
+ALTER TABLE ir_security.role_control_entry_permission OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -2468,11 +2468,11 @@ CREATE TABLE ir_security.user_group_control_entry
     FOREIGN KEY (user_group_id) REFERENCES ir_user.user_group(group_id),
     FOREIGN KEY (acl_id) REFERENCES ir_security.acl(acl_id)
 );
-ALTER TABLE ir_security.user_group_control_entry OWNER TO urresearch;
+ALTER TABLE ir_security.user_group_control_entry OWNER TO ir_plus;
 
 -- The object identity sequence
 CREATE SEQUENCE ir_security.user_group_control_entry_seq ;
-ALTER TABLE ir_security.user_group_control_entry_seq OWNER TO urresearch;
+ALTER TABLE ir_security.user_group_control_entry_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Permissions for the user group control entries
@@ -2487,7 +2487,7 @@ CREATE TABLE ir_security.user_group_control_entry_permission
     FOREIGN KEY (class_type_permission_id) 
         REFERENCES ir_security.class_type_permission(class_type_permission_id)
 );
-ALTER TABLE ir_security.user_group_control_entry_permission OWNER TO urresearch;
+ALTER TABLE ir_security.user_group_control_entry_permission OWNER TO ir_plus;
 
 
 
@@ -2503,7 +2503,7 @@ ALTER TABLE ir_security.user_group_control_entry_permission OWNER TO urresearch;
 
 
 
-CREATE SCHEMA ir_news AUTHORIZATION urresearch;
+CREATE SCHEMA ir_news AUTHORIZATION ir_plus;
 
 
 -- ---------------------------------------------
@@ -2528,12 +2528,12 @@ CREATE TABLE ir_news.news_item
   CONSTRAINT news_name_key UNIQUE (name)
 ); 
 
-ALTER TABLE ir_news.news_item OWNER TO urresearch;
+ALTER TABLE ir_news.news_item OWNER TO ir_plus;
 
 -- The news sequence
 
 CREATE SEQUENCE ir_news.news_item_seq;
-ALTER TABLE ir_news.news_item_seq OWNER TO urresearch;
+ALTER TABLE ir_news.news_item_seq OWNER TO ir_plus;
 
 -- Create a new table to hold news pictures in the system
 CREATE TABLE ir_news.news_item_picture
@@ -2544,7 +2544,7 @@ CREATE TABLE ir_news.news_item_picture
   FOREIGN KEY (news_item_id) REFERENCES ir_news.news_item (news_item_id),
   FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id)
 );
-ALTER TABLE ir_news.news_item_picture OWNER TO urresearch;
+ALTER TABLE ir_news.news_item_picture OWNER TO ir_plus;
 
 
 
@@ -2561,7 +2561,7 @@ ALTER TABLE ir_news.news_item_picture OWNER TO urresearch;
 -- Create a schema to hold researcher information
 -- ---------------------------------------------
 
-CREATE SCHEMA ir_researcher AUTHORIZATION urresearch;
+CREATE SCHEMA ir_researcher AUTHORIZATION ir_plus;
 
 
 -- ---------------------------------------------
@@ -2574,11 +2574,11 @@ CREATE TABLE ir_researcher.field
     version INTEGER,
     description TEXT
 );
-ALTER TABLE ir_researcher.field OWNER TO urresearch;
+ALTER TABLE ir_researcher.field OWNER TO ir_plus;
 
 -- The field sequence
 CREATE SEQUENCE ir_researcher.field_seq ;
-ALTER TABLE ir_researcher.field_seq OWNER TO urresearch;
+ALTER TABLE ir_researcher.field_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Researcher
@@ -2601,11 +2601,11 @@ CREATE TABLE ir_researcher.researcher
     FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
     FOREIGN KEY (primary_picture_id) REFERENCES ir_file.ir_file (ir_file_id)
 );
-ALTER TABLE ir_researcher.researcher OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher OWNER TO ir_plus;
 
 -- The researcher sequence
 CREATE SEQUENCE ir_researcher.researcher_seq ;
-ALTER TABLE ir_researcher.researcher_seq OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Researcher department table
@@ -2619,7 +2619,7 @@ CREATE TABLE ir_researcher.researcher_department
     FOREIGN KEY (researcher_id) REFERENCES ir_researcher.researcher(researcher_id),
     FOREIGN KEY (department_id) REFERENCES ir_user.department(department_id)
 );
-ALTER TABLE ir_researcher.researcher_department OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_department OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Researcher field table
@@ -2633,7 +2633,7 @@ CREATE TABLE ir_researcher.researcher_field
     FOREIGN KEY (researcher_id) REFERENCES ir_researcher.researcher(researcher_id),
     FOREIGN KEY (field_id) REFERENCES ir_researcher.field(field_id)
 );
-ALTER TABLE ir_researcher.researcher_field OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_field OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Researcher personal Links
@@ -2650,12 +2650,12 @@ CREATE TABLE ir_researcher.researcher_personal_link
   FOREIGN KEY (researcher_id) REFERENCES 
      ir_researcher.researcher (researcher_id)
 );
-ALTER TABLE ir_researcher.researcher_personal_link OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_personal_link OWNER TO ir_plus;
 
 
 -- The collection link sequence
 CREATE SEQUENCE ir_researcher.researcher_personal_link_seq ;
-ALTER TABLE ir_researcher.researcher_personal_link_seq OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_personal_link_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -2671,7 +2671,7 @@ CREATE TABLE ir_researcher.researcher_picture
   FOREIGN KEY (researcher_id) REFERENCES ir_researcher.researcher (researcher_id),
   FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id)
 );
-ALTER TABLE ir_researcher.researcher_picture OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_picture OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Researcher Folder Information
@@ -2698,13 +2698,13 @@ CREATE TABLE ir_researcher.researcher_folder
   UNIQUE (parent_id, name),
   UNIQUE (researcher_id, path, name)
 );
-ALTER TABLE ir_researcher.researcher_folder OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_folder OWNER TO ir_plus;
 
 CREATE INDEX researcher_folder_idx ON ir_researcher.researcher_folder USING btree (name);
 
 -- The researcher folder  sequence
 CREATE SEQUENCE ir_researcher.researcher_folder_seq ;
-ALTER TABLE ir_researcher.researcher_folder_seq OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_folder_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Researcher file Information
@@ -2722,11 +2722,11 @@ CREATE TABLE ir_researcher.researcher_file
     FOREIGN KEY (researcher_id) REFERENCES ir_researcher.researcher (researcher_id),
     UNIQUE(researcher_id, researcher_folder_id, ir_file_id)
 );
-ALTER TABLE ir_researcher.researcher_file OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_file OWNER TO ir_plus;
 
 -- The researcher file sequence
 CREATE SEQUENCE ir_researcher.researcher_file_seq;
-ALTER TABLE ir_researcher.researcher_file_seq OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_file_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Researcher publication Information
@@ -2743,11 +2743,11 @@ CREATE TABLE ir_researcher.researcher_publication
     FOREIGN KEY (researcher_id) REFERENCES ir_researcher.researcher (researcher_id),
     UNIQUE(researcher_id, researcher_folder_id, item_id)
 );
-ALTER TABLE ir_researcher.researcher_publication OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_publication OWNER TO ir_plus;
 
 -- The researcher publication sequence
 CREATE SEQUENCE ir_researcher.researcher_publication_seq;
-ALTER TABLE ir_researcher.researcher_publication_seq OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_publication_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Researcher institutional item Information
@@ -2764,11 +2764,11 @@ CREATE TABLE ir_researcher.researcher_institutional_item
     FOREIGN KEY (researcher_id) REFERENCES ir_researcher.researcher (researcher_id),
     UNIQUE(researcher_id, researcher_folder_id, institutional_item_id)
 );
-ALTER TABLE ir_researcher.researcher_institutional_item OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_institutional_item OWNER TO ir_plus;
 
 -- The researcher institutional item sequence
 CREATE SEQUENCE ir_researcher.researcher_institutional_item_seq;
-ALTER TABLE ir_researcher.researcher_institutional_item_seq OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_institutional_item_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Researcher link Information
@@ -2786,11 +2786,11 @@ CREATE TABLE ir_researcher.researcher_link
     FOREIGN KEY (researcher_id) REFERENCES ir_researcher.researcher (researcher_id),
     UNIQUE(researcher_id, researcher_folder_id, name)
 );
-ALTER TABLE ir_researcher.researcher_link OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_link OWNER TO ir_plus;
 
 -- The researcher link sequence
 CREATE SEQUENCE ir_researcher.researcher_link_seq;
-ALTER TABLE ir_researcher.researcher_link_seq OWNER TO urresearch;
+ALTER TABLE ir_researcher.researcher_link_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Insert values for admin researcher 
@@ -2819,7 +2819,7 @@ null, null, null, null, null, null from ir_user.user where ir_user.user.username
 -- Create a schema to hold statistics information
 -- ---------------------------------------------
 
-CREATE SCHEMA ir_statistics AUTHORIZATION urresearch;
+CREATE SCHEMA ir_statistics AUTHORIZATION ir_plus;
 
 
 -- ---------------------------------------------
@@ -2839,11 +2839,11 @@ CREATE TABLE ir_statistics.file_download_info
     count INTEGER,
     UNIQUE(ip_address, ir_file_id, download_date)
 );
-ALTER TABLE ir_statistics.file_download_info OWNER TO urresearch;
+ALTER TABLE ir_statistics.file_download_info OWNER TO ir_plus;
 
 -- The field sequence
 CREATE SEQUENCE ir_statistics.file_download_info_seq ;
-ALTER TABLE ir_statistics.file_download_info_seq OWNER TO urresearch;
+ALTER TABLE ir_statistics.file_download_info_seq OWNER TO ir_plus;
       
 
 -- ---------------------------------------------
@@ -2862,9 +2862,9 @@ CREATE TABLE ir_statistics.ip_address_ignore
     version INTEGER
     
 );
-ALTER TABLE ir_statistics.ip_address_ignore OWNER TO urresearch;
+ALTER TABLE ir_statistics.ip_address_ignore OWNER TO ir_plus;
 
 -- The field sequence
 CREATE SEQUENCE ir_statistics.ip_address_ignore_seq ;
-ALTER TABLE ir_statistics.ip_address_ignore_seq OWNER TO urresearch;
+ALTER TABLE ir_statistics.ip_address_ignore_seq OWNER TO ir_plus;
       

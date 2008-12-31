@@ -36,7 +36,7 @@ var removeNameAction =  basePath + 'admin/removeUserAuthoritativeName.action';
 var addNameAction =  basePath + 'admin/addUserAuthoritativeName.action';
 
 // object to hold the user emails.
-var myEmailTable = new UrTable('myEmails', 'newEmails');
+var myEmailTable = new YAHOO.ur.table.Table('myEmails', 'newEmails');
 
 
 /**
@@ -68,11 +68,12 @@ YAHOO.ur.email = {
 		    {
 		        var divToUpdate = document.getElementById('newEmails');
 		        divToUpdate.innerHTML = o.responseText; 
+		        
 		    },
 			
 			failure: function(o) 
 			{
-			    alert('Get user Failure ' + o.status + ' status text ' + o.statusText );
+			    alert('Get user email Failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 
@@ -152,7 +153,7 @@ YAHOO.ur.email = {
 		    	} 
 
 		    }
-		    myEmailTable.submitForm(myEmailAction);
+		    YAHOO.ur.email.getEmails();
 		};
 		
 		// handle form sbumission failure
@@ -407,7 +408,7 @@ YAHOO.ur.email = {
 		    }
 		    
 		    // reload the table
-		    myEmailTable.submitForm(myEmailAction);
+		    YAHOO.ur.email.getEmails();
 		};
 		
 		// handle form submission failure

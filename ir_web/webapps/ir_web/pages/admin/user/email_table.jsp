@@ -17,81 +17,81 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
-<div class="jmesa">
-	<ur:basicForm method="post" id="emails" name="myEmails" >
-	 <input type="hidden" name="id" value="${id}"/>
-	    <ur:table cssClass="table" 
-	        border="0" 
-	        cellPadding="0" 
-	        cellSpacing="0" 
-	        width="0"
-	        collection="${emails}"
-	        caption="Emails">
-	        
-	        <ur:tableRow var="email" 
-	            totalNumberOfPages="${totalNumberOfPages}" 
-	            totalResults="${totalNumberOfResults}"
-	            currentPage="${currentPage}"
-	            rowStart="${displayRowStart}"
-	            rowEnd="${displayRowEnd}"
-	            divId="newEmails"
-	            javascriptObject="myEmailTable"
-	            submitUrl="${pageContext.request.contextPath}/admin/getEmails.action">
-	            <ur:tableHeaderToolbar>
-	                <ur:simpleTablePager />
-	                <ur:maxResultsPicker maxResultsPerPage="${maxResultsPerPage}"
-	                                     choices="${maxResultChoices}"/>
-	            </ur:tableHeaderToolbar>
-	            <ur:column  filter="false">
-	                <ur:columnHeader sort="false"><ur:checkbox name="checkAllSetting" 
+
+
+<div class="dataTable">
+	<ur:basicForm method="post" id="myEmails" name="myEmails" >           
+	    <urstb:table width="100%">
+	        <urstb:thead>
+	            <urstb:tr>
+					<urstb:td><ur:checkbox name="checkAllSetting" 
 	                    value="off" 
-	                    onClick="YAHOO.ur.email.setCheckboxes();"/>Email Id</ur:columnHeader>
-	                <ur:columnContent>
-	                    <c:if test="${email.id != email.irUser.defaultEmail.id}">
-	                        <ur:checkbox name="emailIds" value="${email.id}"/>
-	                    </c:if>
-	                    <c:if test="${email.id == email.irUser.defaultEmail.id}">
-	                        <strong>[Default Email]</strong>
-	                    </c:if>
-	                </ur:columnContent>
-	               
-	            </ur:column>
-	            <ur:column  filter="true" sortFilterProperty="id">
-	                <ur:columnHeader sort="true"
-	                 sortOrder="${nextAvailableSortOrder}">&nbsp;Id&nbsp;</ur:columnHeader>
-	                 <ur:columnContent>
-	                     ${email.id}
-	                 </ur:columnContent>
-	            </ur:column >
+	                    onClick="YAHOO.ur.email.setCheckboxes();"/>Email Id</urstb:td>         
+	                <urstb:td>Id</urstb:td>
+	                <urstb:td>Email</urstb:td>
+	                <urstb:td>Status</urstb:td>
+	            </urstb:tr>
+	        </urstb:thead>
+	        <urstb:tbody
+	                var="email" 
+	                oddRowClass="odd"
+	                evenRowClass="even"
+	                currentRowClassVar="rowClass"
+	                collection="${emails}">
+	                    <urstb:tr 
+	                        cssClass="${rowClass}"
+	                        onMouseOver="this.className='highlight'"
+	                        onMouseOut="this.className='${rowClass}'">
+	                        <urstb:td>
+		                        <c:if test="${email.id != email.irUser.defaultEmail.id}">
+	                                <ur:checkbox name="emailIds" value="${email.id}"/>
+	                            </c:if>
+	                            <c:if test="${email.id == email.irUser.defaultEmail.id}">
+	                                <strong>[Default Email]</strong>
+	                            </c:if>
+	                        </urstb:td>
+	                        <urstb:td>
+		                         ${email.id}
+	                        </urstb:td>
+	                        <urstb:td>
+		                   		<c:if test="${(email.id != email.irUser.defaultEmail.id) && (email.verified)}">
+	                   		        <a href="javascript:YAHOO.ur.email.editEmail('${email.irUser.id}',
+	                   		            '${email.id}','${email.email}','${email.irUser.defaultEmail.id}');">${email.email}</a>
+	                           	</c:if> 
+	                 	        <c:if test="${(email.id == email.irUser.defaultEmail.id) || !(email.verified)}">
+	                   		        ${email.email}
+	                   	        </c:if> 
+	                        </urstb:td>
+	                        <urstb:td>
+		                   		<c:if test="${email.verified}">
+	                       		    Verified
+	                    	    </c:if>
+	                   		    <c:if test="${!email.verified}">
+	                       		     Pending verification 
+	                    	     </c:if>
+	                        </urstb:td>
+	                    </urstb:tr>
+	            </urstb:tbody>
+	        </urstb:table>
+	    </ur:basicForm>
+</div>	
 
-	            <ur:column filter="true" sortFilterProperty="email">
-	                <ur:columnHeader sort="true" sortOrder="${nextAvailableSortOrder}">Email</ur:columnHeader>
-	                <ur:columnContent>
-	                 	<c:if test="${(email.id != email.irUser.defaultEmail.id) && (email.verified)}">
-	                   		<a href="javascript:YAHOO.ur.email.editEmail('${email.irUser.id}',
-	                   		'${email.id}','${email.email}','${email.irUser.defaultEmail.id}');">${email.email}</a>
-	                   	</c:if> 
-	                 	<c:if test="${(email.id == email.irUser.defaultEmail.id) || !(email.verified)}">
-	                   		${email.email}
-	                   	</c:if> 
 
-	                </ur:columnContent>
-	            </ur:column >
-	            
-	            <ur:column>
-	                <ur:columnHeader>Status</ur:columnHeader>
-	                <ur:columnContent>
-	                   		<c:if test="${email.verified}">
-	                       		Verified
-	                    	</c:if>
-	                   		<c:if test="${!email.verified}">
-	                       		Pending verification 
-	                    	</c:if>
 
-	                </ur:columnContent>
-	            </ur:column >	            
-      </ur:tableRow>
-	    </ur:table>
-    </ur:basicForm>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

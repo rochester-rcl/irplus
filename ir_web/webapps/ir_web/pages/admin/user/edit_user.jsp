@@ -53,8 +53,9 @@
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
-    <ur:js src="page-resources/ur-research/ur-table/ur-table.js"/>
-  
+    
+    <ur:js src="pages/js/ur_table.js"/>
+ 	
     <ur:js src="page-resources/js/admin/edit_user.js"/>
 
     <script type="text/javascript">

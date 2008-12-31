@@ -14,7 +14,6 @@
    limitations under the License.
 -->
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
@@ -24,7 +23,7 @@
 
 <html>
     <head>
-        <title><s:text name="home.welcome"/></title>
+        <title>Edit Account</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
@@ -48,7 +47,7 @@
 	    <ur:js src="page-resources/js/util/ur_util.js"/>
 	    <ur:js src="page-resources/js/menu/main_menu.js"/>
 	 	
-	    <ur:js src="page-resources/ur-research/ur-table/ur-table.js"/>
+	 	<ur:js src="pages/js/ur_table.js"/>
  	    <ur:js src="page-resources/js/admin/edit_user.js"/>
         <ur:js src="page-resources/js/user/edit_my_account.js"/>
         <ur:js src="page-resources/js/admin/edit_person.js"/>
