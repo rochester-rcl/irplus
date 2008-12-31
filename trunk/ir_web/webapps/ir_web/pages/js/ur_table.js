@@ -46,7 +46,7 @@ YAHOO.ur.table.Table.prototype.formSuccess = function(o)
  */
 YAHOO.ur.table.Table.prototype.formFailure = function(o)
 {
-    alert('UrTable Failure ' + o.status + ' status text ' + o.statusText );
+    alert('YAHOO.ur.table.Table Failure ' + o.status + ' status text ' + o.statusText );
 }
 
 /**

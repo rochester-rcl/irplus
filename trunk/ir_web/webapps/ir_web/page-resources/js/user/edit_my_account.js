@@ -29,8 +29,6 @@ var newEmailAction = basePath + 'user/createEmail.action';
 var deleteEmailAction = basePath + 'user/deleteEmail.action';
 var updateEmailAction = basePath + 'user/updateEmail.action';
 
-// object to hold the user emails.
-var myEmailTable = new UrTable('myEmails', 'newEmails');
 
 // Action to change password
 var changePasswordAction = basePath + 'user/changeMyPassword.action';

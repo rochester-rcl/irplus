@@ -16,10 +16,10 @@
  -->
  
 <!-- this is the master build file for the irplus project -->
-<project name="master-build" default="do-file-db" basedir=".">
+<project name="master-build" default="do-ir-web" basedir=".">
     
 	<!-- defalt target to run across all sub projects -->
-	<property name="target" value="full-clean"/>
+	<property name="target" value="publish-local"/>
 	
 	<!-- current version of the project - also see base.xml to see version for all sub projects -->
 	<property name="version" value="alpha-0.1"/>

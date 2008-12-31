@@ -31,35 +31,35 @@
 -- information
 -- ---------------------------------------------
 
-CREATE SCHEMA dspace_convert AUTHORIZATION urresearch;
+CREATE SCHEMA dspace_convert AUTHORIZATION ir_plus;
 
 -- Create a new table to hold link between old dspace community
--- and new urresearch collection
+-- and new ir_plus collection
 CREATE TABLE dspace_convert.community
 (
   dspace_community_id BIGINT PRIMARY KEY,
   ur_research_collection_id BIGINT
 );
-ALTER TABLE dspace_convert.community OWNER TO urresearch;
+ALTER TABLE dspace_convert.community OWNER TO ir_plus;
 
 
 -- Create a new table to hold link between old dspace collection
--- and new urresearch collection
+-- and new ir_plus collection
 CREATE TABLE dspace_convert.collection
 (
   dspace_collection_id BIGINT PRIMARY KEY,
   ur_research_collection_id BIGINT
 );
-ALTER TABLE dspace_convert.collection OWNER TO urresearch;
+ALTER TABLE dspace_convert.collection OWNER TO ir_plus;
 
 -- Create a new table to hold link between old dspace users
--- and new urresearch user
+-- and new ir_plus user
 CREATE TABLE dspace_convert.ir_user
 (
   dspace_eperson_id BIGINT PRIMARY KEY,
   ur_research_user_id BIGINT
 );
-ALTER TABLE dspace_convert.ir_user OWNER TO urresearch;
+ALTER TABLE dspace_convert.ir_user OWNER TO ir_plus;
 
 
 -- Create a new table to hold link between old dspace users
@@ -69,36 +69,36 @@ CREATE TABLE dspace_convert.researcher
   dspace_researcher_id BIGINT PRIMARY KEY,
   ur_research_researcher_id BIGINT
 );
-ALTER TABLE dspace_convert.researcher OWNER TO urresearch;
+ALTER TABLE dspace_convert.researcher OWNER TO ir_plus;
 
 -- Create a new table to hold link between old dspace users
--- and new urresearch user
+-- and new ir_plus user
 CREATE TABLE dspace_convert.item
 (
   dspace_item_id BIGINT,
   ur_research_institutional_item_id BIGINT,
   PRIMARY KEY(dspace_item_id, ur_research_institutional_item_id)
 );
-ALTER TABLE dspace_convert.item OWNER TO urresearch;
+ALTER TABLE dspace_convert.item OWNER TO ir_plus;
 
 
 -- Create a new table to hold link between old dspace users
--- and new urresearch user
+-- and new ir_plus user
 CREATE TABLE dspace_convert.item_file
 (
   dspace_bitstream_id BIGINT,
   ur_research_institutional_item_file_id BIGINT,
   PRIMARY KEY(dspace_bitstream_id, ur_research_institutional_item_file_id)
 );
-ALTER TABLE dspace_convert.item_file OWNER TO urresearch;
+ALTER TABLE dspace_convert.item_file OWNER TO ir_plus;
 
 -- Create a new table to hold link between old dspace groups
--- and new urresearch groups
+-- and new ir_plus groups
 CREATE TABLE dspace_convert.ir_group
 (
   dspace_group_id BIGINT PRIMARY KEY,
   ur_research_group_id BIGINT
 );
-ALTER TABLE dspace_convert.ir_group OWNER TO urresearch;
+ALTER TABLE dspace_convert.ir_group OWNER TO ir_plus;
 
 

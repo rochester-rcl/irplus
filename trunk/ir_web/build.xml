@@ -39,11 +39,9 @@
 	<!-- folder that contains the properties for running the system in production -->
 	<property name="ir.plus.properties.production" value="${ir.plus.properties}/production"/>
 	
-	<!-- project specific configuration files for spring (usually testing)or local running-->
+	<!-- project specific configuration files for spring -->
 	<property name="spring.project.config" value="${basedir}/spring-config/local"/> 
 
-	<!-- project specific configuration files for production war file-->
-	<property name="spring.project.config.production" value="${basedir}/spring-config/production"/> 
 	
 	<!-- The web app directory -->
 	<property name="webapps.dir" value="${basedir}/webapps"/>
@@ -283,7 +281,7 @@
 	<!-- publish the distribution jar file to the local repository -->
 	<!-- this sets production settings.  -->
 	<!--     Make sure the production configuration files have been set properly -->
-	<target name="publish-local" depends="build, clean-production-staging" description="-->build production war file">
+	<target name="publish-local" depends="build, clean-production-staging, prep-yui" description="-->build production war file">
 		<!-- re-create production stag -->
 		<mkdir dir="${production.stageing.dir}"/>
 		
@@ -293,12 +291,19 @@
 		<!-- production web-inf directory -->
 		<mkdir dir="${production.stageing.dir}/web-inf"/>
 		
+		<!-- production lib directory -->
+        <mkdir dir="${production.stageing.dir}/lib"/>
+
+		<!--copy the necessary library directories -->
+        <copy todir="${production.stageing.dir}/lib">
+	        <fileset refid="web.libs"/>
+        </copy>
+		
 		<!-- copy the configuration files into the directory -->
 	    <copy todir="${production.stageing.dir}/classes">
 	           <fileset dir="${build.dir}/classes"/>
 	    	   <fileset dir="${struts.config.dir.common}"/>
 	    	   <fileset dir="${struts.config.dir.production}"/>
-	    	   <fileset dir="${spring.config.data.source.production}"/>
 	    </copy>
 
         <!-- overwrite the logging file to be the production appender -->
@@ -308,21 +313,20 @@
 
    	    <!-- create the web inf directory -->
         <copy todir="${production.stageing.dir}/web-inf" overwrite="true">
-        	<fileset dir="${spring.config.data.source.production}"/>
-        	<fileset dir="${spring.project.config.production}"/>
-        	<fileset dir="${spring.config.common.config.production}"/>
+        	<fileset dir="${ir.plus.properties.production}"/>
         	<fileset dir="${spring.config.common.config}"/>
+        	<fileset dir="${spring.project.config}"/>
         	<fileset dir="${webapp.conf.dir}/WEB-INF"/>
         </copy>
 		
-		<war destfile="production-${project.name}.war" webxml="${webapp.conf.dir}/web.xml">
+		<war destfile="../ir_plus.war" webxml="${webapp.conf.dir}/web.xml">
 		    <webinf dir="${production.stageing.dir}/web-inf"/>
 			<fileset dir="${webapp.dir}">
 			    <exclude name="WEB-INF/**"/>
 			</fileset>
 			
 			<classes dir="${production.stageing.dir}/classes"/>
-			<lib dir="${webapp.lib.dir}"/>
+			<lib dir="${production.stageing.dir}/lib"/>
 				      
 		 </war>
 		

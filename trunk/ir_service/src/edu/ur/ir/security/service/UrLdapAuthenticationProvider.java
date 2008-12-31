@@ -239,7 +239,6 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
 
         try {
         	
-        	System.out.println("Tring username =  " + username + " and password " + password);
         	// convert to username/password for bind
         	DirContextOperations userData = getAuthenticator().authenticate(new UsernamePasswordAuthenticationToken(username, password));
  
