@@ -58,7 +58,7 @@
     <!--  this is the body regin of the page -->
     <div id="bd">
     
-            <h1> Add New Picture to Repository</h1>
+            <h3> Add New Picture to Repository</h3>
 
 	        <ur:basicForm id="repositoryPicture" name="newPicture" enctype="multipart/form-data" 
 	            action="admin/uploadRepositoryPicture.action">
