@@ -52,8 +52,13 @@ YAHOO.ur.subType =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newSubTypes');
-                divToUpdate.innerHTML = o.responseText; 
+                // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               
+                    var divToUpdate = document.getElementById('newSubTypes');
+                    divToUpdate.innerHTML = o.responseText; 
+                }
             },
 	
 	        failure: function(o) 
@@ -118,31 +123,36 @@ YAHOO.ur.subType =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a sub type
-	        var response = o.responseText;
-	        var SubTypeForm = document.getElementById('newSubTypeDialogFields');
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               	    
+	            //get the response from adding a sub type
+	            var response = o.responseText;
+	            var SubTypeForm = document.getElementById('newSubTypeDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        SubTypeForm.innerHTML = o.responseText;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            SubTypeForm.innerHTML = o.responseText;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("newSubTypeForm_success").value;
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("newSubTypeForm_success").value;
 	    
-	        //if the top media type was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.subType.newSubTypeDialog.show();
+	            //if the top media type was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.subType.newSubTypeDialog.show();
+	            }
+	            else
+	            {
+	                // we can clear the form if the top media type was added
+	                YAHOO.ur.subType.clearSubTypeForm();
+	                YAHOO.ur.subType.newSubTypeDialog.hide();
+	            }
+	            mySubTypesTable.submitForm(mySubTypeAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the top media type was added
-	            YAHOO.ur.subType.clearSubTypeForm();
-	            YAHOO.ur.subType.newSubTypeDialog.hide();
-	        }
-	        mySubTypesTable.submitForm(mySubTypeAction);
 	    };
 	
 	    // handle form sbumission failure
@@ -229,10 +239,15 @@ YAHOO.ur.subType =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newSubTypeDialogFields');
-                divToUpdate.innerHTML = o.responseText; 
-                document.newSubTypeForm.newSubType.value = "false";
-                YAHOO.ur.subType.newSubTypeDialog.showDialog();
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               
+                    var divToUpdate = document.getElementById('newSubTypeDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                    document.newSubTypeForm.newSubType.value = "false";
+                    YAHOO.ur.subType.newSubTypeDialog.showDialog();
+                }
             },
 	
 	        failure: function(o) 
@@ -281,26 +296,31 @@ YAHOO.ur.subType =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a top media type
-	        var response = eval("("+o.responseText+")");
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+	            //get the response from adding a top media type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the top media type was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.subTypeDeleted == "false" )
-	        {
-	            var deleteTopMediaTypeError = document.getElementById('form_deleteSubTypeError');
-                deleteTopMediaTypeError.innerHTML = '<p id="newDeleteSubTypeError">' 
-                + response.message + '</p>';
-                YAHOO.ur.subType.deleteSubTypeDialog.showDialog();
+	            //if the top media type was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.subTypeDeleted == "false" )
+	            {
+	                var deleteTopMediaTypeError = document.getElementById('form_deleteSubTypeError');
+                    deleteTopMediaTypeError.innerHTML = '<p id="newDeleteSubTypeError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.subType.deleteSubTypeDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the top media types were deleted
+	                YAHOO.ur.subType.clearDeleteSubTypeForm();
+	                YAHOO.ur.subType.deleteSubTypeDialog.hide();
+	            }
+	            // reload the table
+	            mySubTypesTable.submitForm(mySubTypeAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the top media types were deleted
-	            YAHOO.ur.subType.clearDeleteSubTypeForm();
-	            YAHOO.ur.subType.deleteSubTypeDialog.hide();
-	        }
-	        // reload the table
-	        mySubTypesTable.submitForm(mySubTypeAction);
 	
 	    };
 	
@@ -332,26 +352,31 @@ YAHOO.ur.subType =
         //override the submit
         YAHOO.ur.subType.deleteSubTypeDialog.submit = function()
         {
-            //get the response from adding a sub type
-	        var response = eval("("+o.responseText+")");
+            // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+                //get the response from adding a sub type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the sub type was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.SubTypeDeleted == "false" )
-	        {
-	            var deleteSubTypeError = document.getElementById('form_deleteSubTypeError');
-                deleteSubTypeError.innerHTML = '<p id="newDeleteSubTypeError">' 
-                + response.message + '</p>';
-                YAHOO.ur.subType.deleteSubTypeDialog.showDialog();
+	            //if the sub type was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.SubTypeDeleted == "false" )
+	            {
+	                var deleteSubTypeError = document.getElementById('form_deleteSubTypeError');
+                    deleteSubTypeError.innerHTML = '<p id="newDeleteSubTypeError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.subType.deleteSubTypeDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the sub types were deleted
+	                YAHOO.ur.subType.deleteSubTypeDialog.clearDeleteSubTypeForm();
+	                YAHOO.ur.subType.deleteSubTypeDialog.hide();
+	            }
+	            // reload the table
+	            mySubTypesTable.submitForm(mySubTypeAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the sub types were deleted
-	            YAHOO.ur.subType.deleteSubTypeDialog.clearDeleteSubTypeForm();
-	            YAHOO.ur.subType.deleteSubTypeDialog.hide();
-	        }
-	        // reload the table
-	        mySubTypesTable.submitForm(mySubTypeAction);
             
         }
         

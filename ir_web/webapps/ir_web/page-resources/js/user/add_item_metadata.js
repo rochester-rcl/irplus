@@ -158,8 +158,13 @@ YAHOO.ur.item.metadata = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('type_form');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               			    
+		            var divToUpdate = document.getElementById('type_form');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -187,8 +192,13 @@ YAHOO.ur.item.metadata = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('series_forms');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               			    
+		            var divToUpdate = document.getElementById('series_forms');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -228,19 +238,24 @@ YAHOO.ur.item.metadata = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('series_forms');
-		        var newSeries = o.responseText;
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               			    
+		            var divToUpdate = document.getElementById('series_forms');
+		            var newSeries = o.responseText;
 		                
-		        // id to give to the table
-		    	document.getElementById("series_table_id").value = parseInt(document.getElementById("series_table_id").value) + 1; 
+		            // id to give to the table
+		    	    document.getElementById("series_table_id").value = parseInt(document.getElementById("series_table_id").value) + 1; 
 		    	
-		        // Replace the table id with the latest Id
-		        newSeries = newSeries.replace("series_table_i","series_table_" + document.getElementById("series_table_id").value, "gm");
+		            // Replace the table id with the latest Id
+		            newSeries = newSeries.replace("series_table_i","series_table_" + document.getElementById("series_table_id").value, "gm");
 		        
-		        var newDiv = document.getElementById('new_series');
-		        newDiv.innerHTML = newSeries;
-		        divToUpdate.appendChild(document.getElementById('series_table_'+document.getElementById("series_table_id").value));
-		        newDiv.innerHTML = "";
+		            var newDiv = document.getElementById('new_series');
+		            newDiv.innerHTML = newSeries;
+		            divToUpdate.appendChild(document.getElementById('series_table_'+document.getElementById("series_table_id").value));
+		            newDiv.innerHTML = "";
+		        }
 		
 		    },
 			
@@ -279,42 +294,50 @@ YAHOO.ur.item.metadata = {
 	createNewSeriesDialog : function()
 	{
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 			
 		// handle a cancel of the adding series dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.item.metadata.newSeriesDialog.hide();
 		    YAHOO.ur.item.metadata.clearSeriesForm();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a series
-		    var response = o.responseText;
-		    var seriesForm = document.getElementById('newSeriesDialogFields');
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               			
+		        //get the response from adding a series
+		        var response = o.responseText;
+		        var seriesForm = document.getElementById('newSeriesDialogFields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    seriesForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        seriesForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newSeriesForm_success").value;
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newSeriesForm_success").value;
 		    
-		    //if the series was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.item.metadata.newSeriesDialog.showDialog();
-		    }
-		    else
-		    {
-		        // we can clear the form if the series was added
-		        YAHOO.ur.item.metadata.newSeriesDialog.hide();
-		        YAHOO.ur.item.metadata.clearSeriesForm();
-		        YAHOO.ur.item.metadata.saveItemMetadataAndGetSeries();
+		        //if the series was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.item.metadata.newSeriesDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the series was added
+		            YAHOO.ur.item.metadata.newSeriesDialog.hide();
+		            YAHOO.ur.item.metadata.clearSeriesForm();
+		            YAHOO.ur.item.metadata.saveItemMetadataAndGetSeries();
+		        }
 		    }
 		};
 		
@@ -400,21 +423,24 @@ YAHOO.ur.item.metadata = {
 		
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('identifier_forms');
-		        var newIdentifier = o.responseText;
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               			    
+		            var divToUpdate = document.getElementById('identifier_forms');
+		            var newIdentifier = o.responseText;
 		        
-		        // id to give to the table
-		    	document.getElementById("identifier_table_id").value = parseInt(document.getElementById("identifier_table_id").value) + 1; 
+		            // id to give to the table
+		    	    document.getElementById("identifier_table_id").value = parseInt(document.getElementById("identifier_table_id").value) + 1; 
 		        
-		        // Replace the table id with the latest Id
-		        newIdentifier = newIdentifier.replace("identifier_table_i","identifier_table_" + document.getElementById("identifier_table_id").value, "gm");
+		            // Replace the table id with the latest Id
+		            newIdentifier = newIdentifier.replace("identifier_table_i","identifier_table_" + document.getElementById("identifier_table_id").value, "gm");
 		        
-		        var newDiv = document.getElementById('new_identifier');
-		        newDiv.innerHTML = newIdentifier;
-		        divToUpdate.appendChild(document.getElementById('identifier_table_'+document.getElementById("identifier_table_id").value));
-		        newDiv.innerHTML = "";
-		        
-		        
+		            var newDiv = document.getElementById('new_identifier');
+		            newDiv.innerHTML = newIdentifier;
+		            divToUpdate.appendChild(document.getElementById('identifier_table_'+document.getElementById("identifier_table_id").value));
+		            newDiv.innerHTML = "";
+		        }
 		    },
 			
 			failure: function(o) 
@@ -453,8 +479,13 @@ YAHOO.ur.item.metadata = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('identifier_forms');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               			    
+		            var divToUpdate = document.getElementById('identifier_forms');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -480,37 +511,44 @@ YAHOO.ur.item.metadata = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 			
 		// handle a cancel of the adding identifier type dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.item.metadata.identifierTypeDialog.hide();
 		    YAHOO.ur.item.metadata.clearIdentifierTypeForm();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a identifier type
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		
+		        //get the response from adding a identifier type
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the identifier type was not added then show the user the error message.
-		    // received from the server
-		    if( response.identifierTypeAdded == "false" )
-		    {
-		        var identifierTypeNameError = document.getElementById('identifierTypeError');
-	            identifierTypeNameError.innerHTML = '<p id="newIdentifierTypeForm_nameError">' + response.message + '</p>';
-	            YAHOO.ur.item.metadata.identifierTypeDialog.showDialog();
+		        //if the identifier type was not added then show the user the error message.
+		        // received from the server
+		        if( response.identifierTypeAdded == "false" )
+		        {
+		            var identifierTypeNameError = document.getElementById('identifierTypeError');
+	                identifierTypeNameError.innerHTML = '<p id="newIdentifierTypeForm_nameError">' + response.message + '</p>';
+	                YAHOO.ur.item.metadata.identifierTypeDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the identifier type was added
+		            YAHOO.ur.item.metadata.clearIdentifierTypeForm();
+		            YAHOO.ur.item.metadata.identifierTypeDialog.hide();
+		       	    YAHOO.ur.item.metadata.saveItemMetadataAndGetIdentifier();
+		        }
 		    }
-		    else
-		    {
-		        // we can clear the form if the identifier type was added
-		        YAHOO.ur.item.metadata.clearIdentifierTypeForm();
-		        YAHOO.ur.item.metadata.identifierTypeDialog.hide();
-		       	YAHOO.ur.item.metadata.saveItemMetadataAndGetIdentifier();
-		    }
-		  
 		};
 		
 		// handle form sbumission failure
@@ -596,21 +634,24 @@ YAHOO.ur.item.metadata = {
 		
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('extent_forms');
-		        var newExtent = o.responseText;
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('extent_forms');
+		            var newExtent = o.responseText;
 		        
-		        // id to give to the table
-		    	document.getElementById("extent_table_id").value = parseInt(document.getElementById("extent_table_id").value) + 1; 
+		            // id to give to the table
+		    	    document.getElementById("extent_table_id").value = parseInt(document.getElementById("extent_table_id").value) + 1; 
 		        
-		        // Replace the table id with the latest Id
-		        newExtent = newExtent.replace("extent_table_i","extent_table_" + document.getElementById("extent_table_id").value, "gm");
+		            // Replace the table id with the latest Id
+		            newExtent = newExtent.replace("extent_table_i","extent_table_" + document.getElementById("extent_table_id").value, "gm");
 		        
-		        var newDiv = document.getElementById('new_extent');
-		        newDiv.innerHTML = newExtent;
-		        divToUpdate.appendChild(document.getElementById('extent_table_'+document.getElementById("extent_table_id").value));
-		        newDiv.innerHTML = "";
-		        
-		        
+		            var newDiv = document.getElementById('new_extent');
+		            newDiv.innerHTML = newExtent;
+		            divToUpdate.appendChild(document.getElementById('extent_table_'+document.getElementById("extent_table_id").value));
+		            newDiv.innerHTML = "";
+		        }
 		    },
 			
 			failure: function(o) 
@@ -649,8 +690,13 @@ YAHOO.ur.item.metadata = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('extent_forms');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('extent_forms');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -676,37 +722,44 @@ YAHOO.ur.item.metadata = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 			
 		// handle a cancel of the adding extent type dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.item.metadata.extentTypeDialog.hide();
 		    YAHOO.ur.item.metadata.clearExtentTypeForm();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a extent type
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		
+		        //get the response from adding a extent type
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the extent type was not added then show the user the error message.
-		    // received from the server
-		    if( response.extentTypeAdded == "false" )
-		    {
-		        var extentTypeNameError = document.getElementById('extentTypeError');
-	            extentTypeNameError.innerHTML = '<p id="newExtentTypeForm_nameError">' + response.message + '</p>';
-	            YAHOO.ur.item.metadata.extentTypeDialog.showDialog();
-		    }
-		    else
-		    {
-		        // we can clear the form if the extent type was added
-		        YAHOO.ur.item.metadata.clearExtentTypeForm();
-		        YAHOO.ur.item.metadata.extentTypeDialog.hide();
-		       	YAHOO.ur.item.metadata.saveItemMetadataAndGetExtent();
-		    }
-		  
+		        //if the extent type was not added then show the user the error message.
+		        // received from the server
+		        if( response.extentTypeAdded == "false" )
+		        {
+		            var extentTypeNameError = document.getElementById('extentTypeError');
+	                extentTypeNameError.innerHTML = '<p id="newExtentTypeForm_nameError">' + response.message + '</p>';
+	                YAHOO.ur.item.metadata.extentTypeDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the extent type was added
+		            YAHOO.ur.item.metadata.clearExtentTypeForm();
+		            YAHOO.ur.item.metadata.extentTypeDialog.hide();
+		       	    YAHOO.ur.item.metadata.saveItemMetadataAndGetExtent();
+		        }
+		    }  
 		};
 		
 		// handle form sbumission failure
@@ -791,21 +844,24 @@ YAHOO.ur.item.metadata = {
 		
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('sponsor_forms');
-		        var newSponsor = o.responseText;
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('sponsor_forms');
+		            var newSponsor = o.responseText;
 		        
-		        // id to give to the table
-		    	document.getElementById("sponsor_table_id").value = parseInt(document.getElementById("sponsor_table_id").value) + 1; 
+		            // id to give to the table
+		    	    document.getElementById("sponsor_table_id").value = parseInt(document.getElementById("sponsor_table_id").value) + 1; 
 		        
-		        // Replace the table id with the latest Id
-		        newSponsor = newSponsor.replace("sponsor_table_i","sponsor_table_" + document.getElementById("sponsor_table_id").value, "gm");
+		            // Replace the table id with the latest Id
+		            newSponsor = newSponsor.replace("sponsor_table_i","sponsor_table_" + document.getElementById("sponsor_table_id").value, "gm");
 		        
-		        var newDiv = document.getElementById('new_sponsor');
-		        newDiv.innerHTML = newSponsor;
-		        divToUpdate.appendChild(document.getElementById('sponsor_table_'+document.getElementById("sponsor_table_id").value));
-		        newDiv.innerHTML = "";
-		        
-		        
+		            var newDiv = document.getElementById('new_sponsor');
+		            newDiv.innerHTML = newSponsor;
+		            divToUpdate.appendChild(document.getElementById('sponsor_table_'+document.getElementById("sponsor_table_id").value));
+		            newDiv.innerHTML = "";
+		        }
 		    },
 			
 			failure: function(o) 
@@ -844,8 +900,13 @@ YAHOO.ur.item.metadata = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('sponsor_forms');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('sponsor_forms');
+		            divToUpdate.innerHTML = o.responseText;
+		        } 
 		    },
 			
 			failure: function(o) 
@@ -872,45 +933,51 @@ YAHOO.ur.item.metadata = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 			
 		// handle a cancel of the adding sponsor dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.item.metadata.newSponsorDialog.hide();
 		    YAHOO.ur.item.metadata.clearSponsorForm();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a sponsor
-		    var response = o.responseText;
-		    var sponsorForm = document.getElementById('newSponsorDialogFields');
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		
+		        //get the response from adding a sponsor
+		        var response = o.responseText;
+		        var sponsorForm = document.getElementById('newSponsorDialogFields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    sponsorForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        sponsorForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newSponsorForm_success").value;
-		    
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newSponsorForm_success").value;
 		  
-		    //if the sponsor was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.item.metadata.newSponsorDialog.showDialog();
+		        //if the sponsor was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.item.metadata.newSponsorDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the sponsor was added
+		            YAHOO.ur.item.metadata.newSponsorDialog.hide();
+		            YAHOO.ur.item.metadata.clearSponsorForm();
+		            YAHOO.ur.item.metadata.saveItemMetadataAndGetSponsor();
+		        }
 		    }
-		    else
-		    {
-		        // we can clear the form if the sponsor was added
-		        YAHOO.ur.item.metadata.newSponsorDialog.hide();
-		        YAHOO.ur.item.metadata.clearSponsorForm();
-		        YAHOO.ur.item.metadata.saveItemMetadataAndGetSponsor();
-		    }
-		   
 		};
 		
 		// handle form sbumission failure
@@ -984,8 +1051,13 @@ YAHOO.ur.item.metadata = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('publisher_form');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('publisher_form');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -1028,45 +1100,51 @@ YAHOO.ur.item.metadata = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 			
 		// handle a cancel of the adding publisher dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.item.metadata.clearPublisherForm();
 		    YAHOO.ur.item.metadata.newPublisherDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-		
-		    //get the response from adding a publisher
-		    var response = o.responseText;
-		    var publisherForm = document.getElementById('newPublisherDialogFields');
+		var handleSuccess = function(o) 
+		{
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		
+		        //get the response from adding a publisher
+		        var response = o.responseText;
+		        var publisherForm = document.getElementById('newPublisherDialogFields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    publisherForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        publisherForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newPublisherForm_success").value;
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newPublisherForm_success").value;
 		    
-		    //if the publisher was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.item.metadata.newPublisherDialog.showDialog();
+		        //if the publisher was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.item.metadata.newPublisherDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the publisher was added
+		            YAHOO.ur.item.metadata.newPublisherDialog.hide();
+		            YAHOO.ur.item.metadata.clearPublisherForm();
+		            YAHOO.ur.item.metadata.saveItemMetadataAndGetPublisher();
+		        }
 		    }
-		    else
-		    {
-		        // we can clear the form if the publisher was added
-		        YAHOO.ur.item.metadata.newPublisherDialog.hide();
-		        YAHOO.ur.item.metadata.clearPublisherForm();
-		        YAHOO.ur.item.metadata.saveItemMetadataAndGetPublisher();
-		    }
-		    
 		};
 		
 		// handle form sbumission failure

@@ -49,8 +49,13 @@ YAHOO.ur.content.type = {
 			{
 			    success: function(o) 
 			    {
-			        var divToUpdate = document.getElementById('newContentTypes');
-			        divToUpdate.innerHTML = o.responseText; 
+			        // check for the timeout - forward user to login page if timout
+	                // occured
+	                if( !urUtil.checkTimeOut(o.responseText) )
+	                {
+			            var divToUpdate = document.getElementById('newContentTypes');
+			            divToUpdate.innerHTML = o.responseText; 
+			        }
 			    },
 				
 				failure: function(o) 
@@ -105,44 +110,52 @@ YAHOO.ur.content.type = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 			
 		// handle a cancel of the adding content type dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.content.type.newContentTypeDialog.hide();
 		    YAHOO.ur.content.type.clearContentTypeForm();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a content type
-		    var response = o.responseText;
-		    var contentTypeForm = document.getElementById('newContentTypeDialogFields');
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a content type
+		        var response = o.responseText;
+		        var contentTypeForm = document.getElementById('newContentTypeDialogFields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    contentTypeForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        contentTypeForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newContentTypeForm_success").value;
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newContentTypeForm_success").value;
 		    
 		  
-		    //if the content type was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.content.type.newContentTypeDialog.showDialog();
+		        //if the content type was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.content.type.newContentTypeDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the content type was added
+		            YAHOO.ur.content.type.newContentTypeDialog.hide();
+		            YAHOO.ur.content.type.clearContentTypeForm();
+		        }
+		        myContentTypeTable.submitForm(myContentTypeAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the content type was added
-		        YAHOO.ur.content.type.newContentTypeDialog.hide();
-		        YAHOO.ur.content.type.clearContentTypeForm();
-		    }
-		    myContentTypeTable.submitForm(myContentTypeAction);
 		};
 		
 		// handle form sbumission failure
@@ -255,7 +268,8 @@ YAHOO.ur.content.type = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 		    YAHOO.util.Connect.setForm('myContentTypes');
 		    
 		    //delete the content type
@@ -265,31 +279,38 @@ YAHOO.ur.content.type = {
 		
 			
 		// handle a cancel of deleting content type dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.content.type.deleteContentTypeDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a content type
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a content type
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the content type was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.contentTypeDeleted == "false" )
-		    {
-		        var deleteContentTypeError = document.getElementById('form_deleteContentTypeError');
-	            deleteContentTypeError.innerHTML = '<p id="newDeleteContentTypeError">' 
-	            + response.message + '</p>';
-	            YAHOO.ur.content.type.deleteContentTypeDialog.showDialog();
+		        //if the content type was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.contentTypeDeleted == "false" )
+		        {
+		            var deleteContentTypeError = document.getElementById('form_deleteContentTypeError');
+	                deleteContentTypeError.innerHTML = '<p id="newDeleteContentTypeError">' 
+	                + response.message + '</p>';
+	                YAHOO.ur.content.type.deleteContentTypeDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the content types were deleted
+		            YAHOO.ur.content.type.clearDeleteContentTypeForm();
+		            YAHOO.ur.content.type.deleteContentTypeDialog.hide();
+		        }
+		        // reload the table
+		        myContentTypeTable.submitForm(myContentTypeAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the content types were deleted
-		        YAHOO.ur.content.type.clearDeleteContentTypeForm();
-		        YAHOO.ur.content.type.deleteContentTypeDialog.hide();
-		    }
-		    // reload the table
-		    myContentTypeTable.submitForm(myContentTypeAction);
 		};
 		
 		// handle form submission failure

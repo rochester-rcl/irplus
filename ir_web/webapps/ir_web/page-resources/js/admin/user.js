@@ -54,8 +54,13 @@ YAHOO.ur.user = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newUsers');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               
+		            var divToUpdate = document.getElementById('newUsers');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -114,43 +119,50 @@ YAHOO.ur.user = {
 	createNewUserDialog : function()
 	{
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 			
 		// handle a cancel of the adding user dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 			YAHOO.ur.user.userDialog.hide();
 		    YAHOO.ur.user.clearAddUserForm();
 		};
 		
-		var handleSuccess = function(o) {
-		
-		    var response = o.responseText;
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               		
+		        var response = o.responseText;
 		    
-		    var userForm = document.getElementById('newUserDialogFields');
+		        var userForm = document.getElementById('newUserDialogFields');
 	
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    userForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        userForm.innerHTML = o.responseText;
 		    
-		    // determine if the add was a success
-		    var success = document.getElementById("newUserForm_success").value;
-		    var userId = document.getElementById("newUserForm_id").value;
+		        // determine if the add was a success
+		        var success = document.getElementById("newUserForm_success").value;
+		        var userId = document.getElementById("newUserForm_id").value;
 	
-		    //if the user was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.user.userDialog.showDialog();
-		    }
-		    else
-		    {
-		        // we can clear the form if the user was added
-		        YAHOO.ur.user.userDialog.hide();
-		        YAHOO.ur.user.clearAddUserForm();
-				window.location = viewEditUserAction + '?id=' + userId;	        
+		        //if the user was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.user.userDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the user was added
+		            YAHOO.ur.user.userDialog.hide();
+		            YAHOO.ur.user.clearAddUserForm();
+				    window.location = viewEditUserAction + '?id=' + userId;	        
+		        }
 		    }
 		    
 		};
@@ -384,7 +396,8 @@ YAHOO.ur.user = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 		    YAHOO.util.Connect.setForm('myUsers');
 		    
 		    //delete the user
@@ -394,31 +407,38 @@ YAHOO.ur.user = {
 		
 			
 		// handle a cancel of deleting user dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.user.deleteUserDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a user
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               		
+		        //get the response from adding a user
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the user was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.userDeleted == "false" )
-		    {
-		        var deleteUserError = document.getElementById('form_deleteUserError');
-	            deleteUserError.innerHTML = '<p id="newDeleteUserError">' 
-	            + response.message + '</p>';
-	            YAHOO.ur.user.deleteUserDialog.showDialog();
+		        //if the user was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.userDeleted == "false" )
+		        {
+		            var deleteUserError = document.getElementById('form_deleteUserError');
+	                deleteUserError.innerHTML = '<p id="newDeleteUserError">' 
+	                + response.message + '</p>';
+	                YAHOO.ur.user.deleteUserDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the users were deleted
+		            YAHOO.ur.user.clearDeleteUserForm();
+		            YAHOO.ur.user.deleteUserDialog.hide();
+		        }
+		        // reload the table
+		        YAHOO.ur.user.getUsers(0,1,1,'lastName','asc');
 		    }
-		    else
-		    {
-		        // we can clear the form if the users were deleted
-		        YAHOO.ur.user.clearDeleteUserForm();
-		        YAHOO.ur.user.deleteUserDialog.hide();
-		    }
-		    // reload the table
-		    YAHOO.ur.user.getUsers(0,1,1,'lastName','asc');
 		};
 		
 		// handle form submission failure
@@ -510,8 +530,13 @@ YAHOO.ur.user = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('search_results_div');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               		    
+		            var divToUpdate = document.getElementById('search_results_div');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 

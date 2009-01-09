@@ -74,10 +74,14 @@ YAHOO.ur.institution.item.permission = {
 	
 	    var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('all_user_groups');
-            divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.institution.item.permission.removeGroupConfirmDialog.hide();
-
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('all_user_groups');
+                divToUpdate.innerHTML = o.responseText; 
+                YAHOO.ur.institution.item.permission.removeGroupConfirmDialog.hide();
+            }
 	    };
 	
 	    // handle form sbumission failure
@@ -156,10 +160,14 @@ YAHOO.ur.institution.item.permission = {
 	
 	    var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('file_user_groups');
-            divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.institution.item.permission.removeItemFileGroupConfirmDialog.hide();
-
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('file_user_groups');
+                divToUpdate.innerHTML = o.responseText; 
+                YAHOO.ur.institution.item.permission.removeItemFileGroupConfirmDialog.hide();
+            }
 	    };
 	
 	    // handle form sbumission failure

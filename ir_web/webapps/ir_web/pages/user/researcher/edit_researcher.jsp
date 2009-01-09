@@ -90,8 +90,6 @@
 		        	<a href="viewResearcherPage.action?researcherId=${researcher.id}">Preview Researcher Page</a> 
 	            </div>	        
 
-
-                <H3>Hello! </H3>
 		        <div id="publi" align="right">
 		        	Researcher Page : 
 		        	<input type="radio" name="isPublic" onclick="javascript:YAHOO.ur.edit.researcher.changePublicValue(false);"

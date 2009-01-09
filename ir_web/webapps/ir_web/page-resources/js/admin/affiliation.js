@@ -42,8 +42,13 @@ YAHOO.ur.affiliation = {
          {
              success: function(o) 
              {
-                 var divToUpdate = document.getElementById('newAffiliations');
-                 divToUpdate.innerHTML = o.responseText; 
+ 	             // check for the timeout - forward user to login page if timout
+	             // occured
+	             if( !urUtil.checkTimeOut(o.responseText) )
+	             {                    
+                      var divToUpdate = document.getElementById('newAffiliations');
+                     divToUpdate.innerHTML = o.responseText; 
+                 }
              },
 	
 	         failure: function(o) 
@@ -112,30 +117,36 @@ YAHOO.ur.affiliation = {
 	    {
 	        //get the response from adding a affiliation
 	        var response = o.responseText;
-	        var affiliationForm = document.getElementById('newAffiliationDialogFields');
+	        
+	         // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var affiliationForm = document.getElementById('newAffiliationDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        affiliationForm.innerHTML = o.responseText;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            affiliationForm.innerHTML = o.responseText;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("newAffiliationForm_success").value;
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("newAffiliationForm_success").value;
 	    
 	  
-	        //if the affiliation was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.affiliation.newAffiliationDialog.showDialog();
+	            //if the affiliation was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.affiliation.newAffiliationDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the affiliation was added
+	                YAHOO.ur.affiliation.newAffiliationDialog.hide();
+	                YAHOO.ur.affiliation.clearNewAffiliationForm();
+	            }
+	            myAffiliationTable.submitForm(myAffiliationAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the affiliation was added
-	            YAHOO.ur.affiliation.newAffiliationDialog.hide();
-	            YAHOO.ur.affiliation.clearNewAffiliationForm();
-	        }
-	        myAffiliationTable.submitForm(myAffiliationAction);
 	    };
 
 	    // handle form sbumission failure
@@ -279,26 +290,31 @@ YAHOO.ur.affiliation = {
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a affiliation
-	        var response = eval("("+o.responseText+")");
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a affiliation
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the affiliation was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.affiliationDeleted == "false" )
-	        {
-	            var deleteAffiliationError = document.getElementById('form_deleteAffiliationError');
-                deleteAffiliationError.innerHTML = '<p id="newDeleteAffiliationError">' 
-                + response.message + '</p>';
-                YAHOO.ur.affiliation.deleteAffiliationDialog.showDialog();
+	            //if the affiliation was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.affiliationDeleted == "false" )
+	            {
+	                var deleteAffiliationError = document.getElementById('form_deleteAffiliationError');
+                    deleteAffiliationError.innerHTML = '<p id="newDeleteAffiliationError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.affiliation.deleteAffiliationDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the affiliations were deleted
+	                YAHOO.ur.affiliation.deleteAffiliationDialog.hide();
+	                YAHOO.ur.affiliation.clearDeleteAffiliationForm();
+	            }
+	            // reload the table
+	            myAffiliationTable.submitForm(myAffiliationAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the affiliations were deleted
-	            YAHOO.ur.affiliation.deleteAffiliationDialog.hide();
-	            YAHOO.ur.affiliation.clearDeleteAffiliationForm();
-	        }
-	        // reload the table
-	        myAffiliationTable.submitForm(myAffiliationAction);
 	    };
 	
 	    // handle form submission failure

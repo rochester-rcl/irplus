@@ -43,8 +43,13 @@ YAHOO.ur.field =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newFields');
-                divToUpdate.innerHTML = o.responseText; 
+                // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('newFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                }
             },
 	
 	        failure: function(o) 
@@ -101,32 +106,36 @@ YAHOO.ur.field =
 	
 	    var handleSuccess = function(o) 
 	    {
-            //get the response from adding a field
-	        var response = o.responseText;
-	        var fieldForm = document.getElementById('newFieldDialogFields');
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+                //get the response from adding a field
+	            var response = o.responseText;
+	            var fieldForm = document.getElementById('newFieldDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        fieldForm.innerHTML = o.responseText;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            fieldForm.innerHTML = o.responseText;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("newFieldForm_success").value;
-	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("newFieldForm_success").value;
 	  
-	        //if the field was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.field.newFieldDialog.showDialog();
+	            //if the field was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.field.newFieldDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the field was added
+	                YAHOO.ur.field.newFieldDialog.hide();
+	                YAHOO.ur.field.clearFieldForm();
+	            }
+	            myFieldTable.submitForm(myFieldAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the field was added
-	            YAHOO.ur.field.newFieldDialog.hide();
-	            YAHOO.ur.field.clearFieldForm();
-	        }
-	        myFieldTable.submitForm(myFieldAction);
 	    };
 	
 	    // handle form sbumission failure
@@ -244,26 +253,31 @@ YAHOO.ur.field =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a field
-	        var response = eval("("+o.responseText+")");
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a field
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the field was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.fieldDeleted == "false" )
-	        {
-	            var deleteFieldError = document.getElementById('form_deleteFieldError');
-                deleteFieldError.innerHTML = '<p id="newDeleteFieldError">' 
-                + response.message + '</p>';
-                YAHOO.ur.field.deleteFieldDialog.showDialog();
+	            //if the field was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.fieldDeleted == "false" )
+	            {
+	                var deleteFieldError = document.getElementById('form_deleteFieldError');
+                    deleteFieldError.innerHTML = '<p id="newDeleteFieldError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.field.deleteFieldDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the fields were deleted
+	                YAHOO.ur.field.deleteFieldDialog.hide();
+	                YAHOO.ur.field.clearDeleteFieldForm();
+	            }
+	            // reload the table
+	            myFieldTable.submitForm(myFieldAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the fields were deleted
-	            YAHOO.ur.field.deleteFieldDialog.hide();
-	            YAHOO.ur.field.clearDeleteFieldForm();
-	        }
-	        // reload the table
-	        myFieldTable.submitForm(myFieldAction);
 	    };
 	
 	    // handle form submission failure

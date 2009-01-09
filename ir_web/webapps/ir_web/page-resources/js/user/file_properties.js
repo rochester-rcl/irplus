@@ -48,8 +48,13 @@ YAHOO.ur.file.properties =
         {
             success : function(o)
             {
-               var div = document.getElementById('file_properties');
-               div.innerHTML = o.responseText;
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {                   
+                    var div = document.getElementById('file_properties');
+                    div.innerHTML = o.responseText;
+                }
             },
             
             failure : function(o)
@@ -78,8 +83,13 @@ YAHOO.ur.file.properties =
                 if( o != null )
                 {
                     if( o.responseText != null )
-                    {   
-	                    var response = eval("("+o.responseText+")");
+                    {
+			            // check for the timeout - forward user to login page if timout
+	                    // occured
+	                    if( !urUtil.checkTimeOut(o.responseText) )
+	                    {                              
+	                        var response = eval("("+o.responseText+")");
+	                    }
 	                }
 	            }
 	    
@@ -129,7 +139,12 @@ YAHOO.ur.file.properties =
                 {
                     if( o.responseText != null )
                     {
-	                    var response = eval("("+o.responseText+")");
+			            // check for the timeout - forward user to login page if timout
+	                    // occured
+	                    if( !urUtil.checkTimeOut(o.responseText) )
+	                    {                           
+	                        var response = eval("("+o.responseText+")");
+	                    }
 	                }
 	            }
 	    
@@ -190,29 +205,34 @@ YAHOO.ur.file.properties =
 	    //handle the sucessful upload
 	    var handleSuccess = function(o) 
 	    {
-	        var response = o.responseText;
-	        var uploadForm = document.getElementById('version_upload_form_fields');
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        uploadForm.innerHTML = o.responseText;
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            var response = o.responseText;
+	            var uploadForm = document.getElementById('version_upload_form_fields');
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            uploadForm.innerHTML = o.responseText;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("version_added").value;
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("version_added").value;
 	    
-	        //if the new version not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.file.properties.versionedFileUploadDialog.showDialog();
-	        }
-	        else
-	        {
-	            // we can clear the upload form and get the pictures
-	            YAHOO.ur.file.properties.versionedFileUploadDialog.hide();
-	            var fileId = document.getElementById("personal_file_id").value;
-	            YAHOO.ur.file.properties.getFileProperties(fileId);
-	            YAHOO.ur.file.properties.clearVersionedFileUploadForm();
+	            //if the new version not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.file.properties.versionedFileUploadDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the upload form and get the pictures
+	                YAHOO.ur.file.properties.versionedFileUploadDialog.hide();
+	                var fileId = document.getElementById("personal_file_id").value;
+	                YAHOO.ur.file.properties.getFileProperties(fileId);
+	                YAHOO.ur.file.properties.clearVersionedFileUploadForm();
+	            }
 	        }
 	    };
 	
@@ -332,34 +352,37 @@ YAHOO.ur.file.properties =
 	    // handle a successful return
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from renaming a file
-	        var response = o.responseText;
-	        var renameForm = document.getElementById('renameFileDialogFields');
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            //get the response from renaming a file
+	            var response = o.responseText;
+	            var renameForm = document.getElementById('renameFileDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        renameForm.innerHTML = response;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            renameForm.innerHTML = response;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("renameForm_success").value;
-	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("renameForm_success").value;
 	  
-	        //if the rename was not success then show the user the error message
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.file.properties.renameFileDialog.showDialog();
+	            //if the rename was not success then show the user the error message
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.file.properties.renameFileDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the file was renamed
+	                YAHOO.ur.file.properties.renameFileDialog.hide();
+	                YAHOO.ur.file.properties.clearFileRenameForm();
+	                var fileId = document.getElementById("personal_file_id").value;
+	                YAHOO.ur.file.properties.getFileProperties(fileId);
+	            }
 	        }
-	        else
-	        {
-	            // we can clear the form if the file was renamed
-	            YAHOO.ur.file.properties.renameFileDialog.hide();
-	            YAHOO.ur.file.properties.clearFileRenameForm();
-	            var fileId = document.getElementById("personal_file_id").value;
-	            YAHOO.ur.file.properties.getFileProperties(fileId);
-	        }
-
 	    };
 	
 	    // handle form sbumission failure
@@ -432,9 +455,14 @@ YAHOO.ur.file.properties =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('renameFileDialogFields');
-                divToUpdate.innerHTML = o.responseText; 
-				YAHOO.ur.file.properties.renameFileDialog.showDialog();                
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {                   
+                    var divToUpdate = document.getElementById('renameFileDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+				    YAHOO.ur.file.properties.renameFileDialog.showDialog(); 
+				}               
             },
 	
 	        failure: function(o) 

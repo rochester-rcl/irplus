@@ -43,31 +43,37 @@ YAHOO.ur.edit.institution.collection = {
 	
 	    var success = function(o) 
 	    {
-	        var response = o.responseText;
-	        var uploadForm = document.getElementById('upload_form_fields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        uploadForm.innerHTML = o.responseText;
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var response = o.responseText;
+	            var uploadForm = document.getElementById('upload_form_fields');
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("picture_added").value;
-	        var collectionId = document.getElementById("collection_id").value;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            uploadForm.innerHTML = o.responseText;
+	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("picture_added").value;
+	            var collectionId = document.getElementById("collection_id").value;
 	  
-	        //if the content type was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.edit.institution.collection.uploadCollectionPictureDialog.showDialog();
+	            //if the content type was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.edit.institution.collection.uploadCollectionPictureDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the upload form and get the pictures
+	                YAHOO.ur.edit.institution.collection.uploadCollectionPictureDialog.hide();
+	                YAHOO.ur.edit.institution.collection.clearUploadPictureForm();
+	                YAHOO.ur.edit.institution.collection.getCollectionPictures(collectionId);
+	            } 
 	        }
-	        else
-	        {
-	            // we can clear the upload form and get the pictures
-	            YAHOO.ur.edit.institution.collection.uploadCollectionPictureDialog.hide();
-	            YAHOO.ur.edit.institution.collection.clearUploadPictureForm();
-	            YAHOO.ur.edit.institution.collection.getCollectionPictures(collectionId);
-	        } 
 	    };
 	
 	    // handle form sbumission failure
@@ -163,8 +169,13 @@ YAHOO.ur.edit.institution.collection = {
        // Success action on getting the picture
        var getPicturesSuccess = function(o) 
        {
-           var divToUpdate = document.getElementById('collection_pictures');
-           divToUpdate.innerHTML = o.responseText; 
+           	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+               var divToUpdate = document.getElementById('collection_pictures');
+                divToUpdate.innerHTML = o.responseText;
+            } 
        };
     
        // Faiure action on getting a picture
@@ -195,8 +206,13 @@ YAHOO.ur.edit.institution.collection = {
         // Success action on getting the picture
         var getPicturesSuccess = function(o) 
         {
-            var divToUpdate = document.getElementById('collection_pictures');
-            divToUpdate.innerHTML = o.responseText; 
+            // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+                var divToUpdate = document.getElementById('collection_pictures');
+                divToUpdate.innerHTML = o.responseText; 
+            }
         };
     
         //  Faiure action on getting a picture
@@ -310,24 +326,29 @@ YAHOO.ur.edit.institution.collection = {
 	    // handle a successful return
 	    var success = function(o) 
 	    { 
-	        // received from the server
-	        var response = o.responseText;
-	        var contentArea = document.getElementById('default_error_dialog_content');
-	        contentArea.innerHTML = o.responseText; 
-	        var success = document.getElementById('base_collection_updated').value;
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            // received from the server
+	            var response = o.responseText;
+	            var contentArea = document.getElementById('default_error_dialog_content');
+	            contentArea.innerHTML = o.responseText; 
+	            var success = document.getElementById('base_collection_updated').value;
 	    
-	        //if the collection was not added then show the user the error message.
-	        if( success == "false" )
-	        {
-	            var collectionName = document.getElementById('current_collection_name').value;
-	            var collectionDescription = document.getElementById('current_collection_description').value;
-	            document.getElementById('collection_name').value = collectionName;
-	            document.getElementById('collection_description').value = collectionDescription;
-                YAHOO.ur.edit.institution.collection.errorDialog.showDialog();
-	        }
-	        else
-	        {
-	            contentArea.innerHTML = "";
+	            //if the collection was not added then show the user the error message.
+	            if( success == "false" )
+	            {
+	                var collectionName = document.getElementById('current_collection_name').value;
+	                var collectionDescription = document.getElementById('current_collection_description').value;
+	                document.getElementById('collection_name').value = collectionName;
+	                document.getElementById('collection_description').value = collectionDescription;
+                    YAHOO.ur.edit.institution.collection.errorDialog.showDialog();
+	            }
+	           else
+	           {
+	               contentArea.innerHTML = "";
+	           }
 	        }
 	    };
 	
@@ -379,9 +400,14 @@ YAHOO.ur.edit.institution.collection = {
 	
 	    var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('edit_view_permission');
-            divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.edit.institution.collection.editPermissionDialog.hide();
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('edit_view_permission');
+                divToUpdate.innerHTML = o.responseText; 
+                YAHOO.ur.edit.institution.collection.editPermissionDialog.hide();
+            }
             
 	    };
 	
@@ -454,9 +480,14 @@ YAHOO.ur.edit.institution.collection = {
         // Success action on getting the picture
         var handleSuccess = function(o) 
         {
-            var divToUpdate = document.getElementById('edit_permission');
-            divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.edit.institution.collection.editPermissionDialog.showDialog();
+            // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+                var divToUpdate = document.getElementById('edit_permission');
+                divToUpdate.innerHTML = o.responseText; 
+                YAHOO.ur.edit.institution.collection.editPermissionDialog.showDialog();
+            }
         };
     
         //Faiure action on getting a picture
@@ -502,10 +533,14 @@ YAHOO.ur.edit.institution.collection = {
 	
 	    var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('current_collection_groups_div');
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('current_collection_groups_div');
                 divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.edit.institution.collection.removeGroupConfirmDialog.hide();
-
+                YAHOO.ur.edit.institution.collection.removeGroupConfirmDialog.hide();
+            }
 	    };
 	
 	    // handle form sbumission failure

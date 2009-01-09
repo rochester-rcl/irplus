@@ -191,33 +191,37 @@ YAHOO.ur.folder =
 	   // handle a successful return
 	   var handleSuccess = function(o) 
 	   {
-	        //get the response from adding a folder
-	        var response = o.responseText;
-	        var folderForm = document.getElementById('newFolderDialogFields');
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 	   
+	            //get the response from adding a folder
+	            var response = o.responseText;
+	            var folderForm = document.getElementById('newFolderDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        folderForm.innerHTML = response;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            folderForm.innerHTML = response;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("newFolderForm_success").value;
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("newFolderForm_success").value;
 	    
-	  
-	        //if the affiliation was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.folder.newFolderDialog.showFolder();
-	        }
-	        else
-	        {
-	            // we can clear the form if the folder was added
-	            YAHOO.ur.folder.newFolderDialog.hide();
-	            YAHOO.ur.folder.clearFolderForm();
-	        }
+	            //if the folder was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.folder.newFolderDialog.showFolder();
+	            }
+	            else
+	            {
+	                // we can clear the form if the folder was added
+	                YAHOO.ur.folder.newFolderDialog.hide();
+	                YAHOO.ur.folder.clearFolderForm();
+	            }
 	        
-	        myPersonalFolderTable.submitForm(myFolderAction);
+	            myPersonalFolderTable.submitForm(myFolderAction);
+	        }
 	    };
 	
 	    // handle form sbumission failure
@@ -299,10 +303,16 @@ YAHOO.ur.folder =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newFolderDialogFields');
-                divToUpdate.innerHTML = o.responseText; 
-                document.newFolderForm.newFolder.value = "false";
-                YAHOO.ur.folder.newFolderDialog.showFolder();
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		             
+                    var divToUpdate = document.getElementById('newFolderDialogFields');
+                    divToUpdate.innerHTML = o.responseText;
+
+                    document.newFolderForm.newFolder.value = "false";
+                    YAHOO.ur.folder.newFolderDialog.showFolder();
+                }
                 
             },
 	
@@ -520,7 +530,7 @@ YAHOO.ur.folder =
         if( other == null )
         {
             //path to look at properties for a file
-            propertiesUrl = basePath + 'user/viewPersonalFile.action?personalFileId='+ fileId;
+            filePropertiesUrl = basePath + 'user/viewPersonalFile.action?personalFileId='+ fileId;
                
             /*
                Instantiate the menu.  The first argument passed to the 
@@ -571,7 +581,7 @@ YAHOO.ur.folder =
              dropMenu.addItems([
                  { text: '<span class="reportGoBtnImg">&nbsp;</span> Publish', url: "javascript:YAHOO.ur.folder.publishSingle('file_checkbox_"+ fileId +"')" },             
                  { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:YAHOO.ur.folder.deleteSingleConfirm('file_checkbox_"+ fileId +"')" },
-                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: "javascript:YAHOO.ur.folder.getPropertiesForFile(" + fileId +")" }
+                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: filePropertiesUrl }
              ]);
          
              dropMenu.showEvent.subscribe(function () {
@@ -607,8 +617,13 @@ YAHOO.ur.folder =
                 {
                     if( o.responseText != null )
                     {   
-	                    var response = eval("("+o.responseText+")");
-	                }
+	                     // check for the timeout - forward user to login page if timout
+	                     // occured
+	                     if( !urUtil.checkTimeOut(o.responseText) )
+	                     {
+	                         var response = eval("("+o.responseText+")");
+	                     }
+	                 }
 	            }
 	    
 	            if( response.lockStatus == 'LOCK_OBTAINED')
@@ -660,7 +675,12 @@ YAHOO.ur.folder =
                 {
                     if( o.responseText != null )
                     {
-	                    var response = eval("("+o.responseText+")");
+	                     // check for the timeout - forward user to login page if timout
+	                     // occured
+	                     if( !urUtil.checkTimeOut(o.responseText) )
+	                     {
+	                         var response = eval("("+o.responseText+")");
+	                     }
 	                }
 	            }
 	    
@@ -761,33 +781,40 @@ YAHOO.ur.folder =
 	        
 	        YAHOO.ur.folder.destroyFolderMenus();
 	        var response = o.responseText;
-	        var uploadForm = document.getElementById('upload_form_fields');
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        uploadForm.innerHTML = o.responseText;
+	        
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	        
+	            var uploadForm = document.getElementById('upload_form_fields');
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            uploadForm.innerHTML = o.responseText;
 	         
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("file_added").value;
-	        var parentFolderId = document.getElementById("file_upload_parent_folder_id").value;
-	        //if the content type was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-	            YAHOO.ur.folder.waitDialog.hide();
-                YAHOO.ur.folder.singleFileUploadDialog.showDialog();
-	        }
-	        else
-	        {
-	            // we can clear the upload form and get the pictures
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("file_added").value;
+	            var parentFolderId = document.getElementById("file_upload_parent_folder_id").value;
+	            //if the content type was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+	                YAHOO.ur.folder.waitDialog.hide();
+                    YAHOO.ur.folder.singleFileUploadDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the upload form and get the pictures
 	           
-	            YAHOO.ur.folder.clearSingleFileUploadForm();
-	            myPersonalFolderTable.submitForm(myFolderAction);  
-	            YAHOO.ur.folder.waitDialog.hide(); 
+	                YAHOO.ur.folder.clearSingleFileUploadForm();
+	                myPersonalFolderTable.submitForm(myFolderAction);  
+	                YAHOO.ur.folder.waitDialog.hide(); 
+	            }
 	        }
 	    };
 	
-	    // handle form sbumission failure
+	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
 	        YAHOO.ur.folder.waitDialog.hide();
@@ -856,51 +883,6 @@ YAHOO.ur.folder =
         div.innerHTML= "";
     },   
     
-    getPropertiesForFile : function (fileId)
-    {
-
-        //get the file properties
-        var filePropertiesUrl = basePath + 'user/viewPersonalFile.action';
-   
-       // success when getting the file properties
-       var handleSuccess = function(o) 
-       {
-	       YAHOO.ur.folder.destroyFolderMenus();
-	       var response = o.responseText;
-	       var contentArea = document.getElementById('newPersonalFolders');
-	       contentArea.innerHTML = o.responseText; 
-
-	       //hide buttons that do not make sense
-           var buttonsDiv = document.getElementById("files_folders_buttons");
-           buttonsDiv.style.visibility = 'hidden';
-        
-           YAHOO.ur.folder.changeButtonClass("addVersionedFileButton", "ur_button");
-        
-           // set the id of the file in the form
-           document.getElementById('personal_file_id').value = fileId;
-        
-           // listener for showing the dialog when clicked.
-	       YAHOO.util.Event.addListener("addVersionedFileButton", "click", 
-	       YAHOO.ur.folder.versionedFileUploadDialog.show, 
-	       YAHOO.ur.folder.versionedFileUploadDialog, true);
-       };
-   
-   
-       // failure when getting the file properties
-       var  handleFailure = function(o) 
-       {
-	        alert('Get file properties failed ' + o.status);
-       };
-   
-       // Wire up the success and failure handlers
-       var callback = { success: handleSuccess, failure: handleFailure };
-   
-       var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-             filePropertiesUrl + '?personalFileId='+ fileId +
-             '&bustcache='+new Date().getTime(), 
-             callback, null);
-    },
-    
     /**
      * function to change the class on a button
      */
@@ -960,37 +942,44 @@ YAHOO.ur.folder =
 	    {
 	        YAHOO.ur.folder.destroyFolderMenus();
 	        var response = o.responseText;
-	        var uploadForm = document.getElementById('version_upload_form_fields');
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        uploadForm.innerHTML = o.responseText;
-	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("version_added").value;
-	    
-	        var pageType = document.getElementById("page_type").value;
-	        //if the content type was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
+	        
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
-	            YAHOO.ur.folder.waitDialog.hide();
-                YAHOO.ur.folder.versionedFileUploadDialog.show();
-	        }
-	        else
-	        {
-	            // we can clear the upload form and get the pictures
-	            if( pageType == "properties_page" )
+	        
+	            var uploadForm = document.getElementById('version_upload_form_fields');
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            uploadForm.innerHTML = o.responseText;
+	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("version_added").value;
+	    
+	            var pageType = document.getElementById("page_type").value;
+	            //if the content type was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
 	            {
-	                var fileId = document.getElementById("personal_file_id").value;
-	                YAHOO.ur.folder.getPropertiesForFile(fileId);
+	                YAHOO.ur.folder.waitDialog.hide();
+                    YAHOO.ur.folder.versionedFileUploadDialog.show();
 	            }
-	            else 
+	            else
 	            {
-	                var folderId = document.getElementById("myFolders_parentFolderId").value;
-	                YAHOO.ur.folder.getFolderById(folderId); 
+	                // we can clear the upload form and get the pictures
+	                if( pageType == "properties_page" )
+	                {
+	                    var fileId = document.getElementById("personal_file_id").value;
+	                    YAHOO.ur.folder.getPropertiesForFile(fileId);
+	                }
+	                else 
+	                {
+	                    var folderId = document.getElementById("myFolders_parentFolderId").value;
+	                    YAHOO.ur.folder.getFolderById(folderId); 
+	                }
+	                YAHOO.ur.folder.waitDialog.hide();
 	            }
-	            YAHOO.ur.folder.waitDialog.hide();
 	        }
 	    };
 	
@@ -1105,36 +1094,43 @@ YAHOO.ur.folder =
 	    {
 
 	        var response = o.responseText;
-	        var inviteForm = document.getElementById('invite_form_fields');
+	        
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	        
+	            var inviteForm = document.getElementById('invite_form_fields');
 
-	        // update the form fields with the response.
-	        inviteForm.innerHTML = o.responseText;
+	            // update the form fields with the response.
+	            inviteForm.innerHTML = o.responseText;
 	    
-	        // determine if there any files that has no SHARE permission
-	        var hasSharePermission = document.getElementById("has_permission").value;
+	            // determine if there any files that has no SHARE permission
+	            var hasSharePermission = document.getElementById("has_permission").value;
 	    
-	        //if there are files that cannot be shared then show the list of files
-	        // that has no SHARE permission
-	        if( hasSharePermission == "false" )
-	        {
-                YAHOO.ur.folder.inviteErrorDialog.showDialog();
-	        }
-	        else
-	        {
-	            // make sure a file or folder has been selected
-	            if (!urUtil.checkForNoSelections(document.myFolders.folderIds) &&
-	                !urUtil.checkForNoSelections(document.myFolders.fileIds))
-		        {
-			         alert('Please select at least one checkbox next to the files or folders you wish to share.');
-	            } 
+	            //if there are files that cannot be shared then show the list of files
+	            // that has no SHARE permission
+	            if( hasSharePermission == "false" )
+	            {
+                    YAHOO.ur.folder.inviteErrorDialog.showDialog();
+	            }
 	            else
 	            {
-		            YAHOO.ur.folder.destroyFolderMenus();
+	                // make sure a file or folder has been selected
+	                if (!urUtil.checkForNoSelections(document.myFolders.folderIds) &&
+	                    !urUtil.checkForNoSelections(document.myFolders.fileIds))
+		            {
+			             alert('Please select at least one checkbox next to the files or folders you wish to share.');
+	                } 
+	                else
+	                {
+		                YAHOO.ur.folder.destroyFolderMenus();
 		    
-		            // If user have SHARE permission for all files then goto invite screen
-			        document.inviteFilesForm.action = inviteUserAction;
-			        document.inviteFilesForm.submit();
-			    }
+		                // If user have SHARE permission for all files then goto invite screen
+			            document.inviteFilesForm.action = inviteUserAction;
+			            document.inviteFilesForm.submit();
+			        }
+	            }
 	        }
 	    };
 	
@@ -1216,29 +1212,35 @@ YAHOO.ur.folder =
 	    {
 	        //get the response from renaming a file
 	        var response = o.responseText;
-	        var renameForm = document.getElementById('renameFileDialogFields');
+	        
+	        	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var renameForm = document.getElementById('renameFileDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        renameForm.innerHTML = response;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            renameForm.innerHTML = response;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("renameForm_success").value;
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("renameForm_success").value;
 	    
 	  
-	        //if the rename was not success then show the user the error message
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.folder.renameFileDialog.showDialog();
-	        }
-	        else
-	        {
-	            // we can clear the form if the file was renamed
-	            YAHOO.ur.folder.renameFileDialog.hide();
-	            YAHOO.ur.folder.clearFileRenameForm();
-	            myPersonalFolderTable.submitForm(myFolderAction);
+	            //if the rename was not success then show the user the error message
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.folder.renameFileDialog.showDialog();
+	            }
+	            else
+	            {
+	                 // we can clear the form if the file was renamed
+	                 YAHOO.ur.folder.renameFileDialog.hide();
+	                YAHOO.ur.folder.clearFileRenameForm();
+	                myPersonalFolderTable.submitForm(myFolderAction);
+	            }
 	        }
 
 	    };
@@ -1314,9 +1316,14 @@ YAHOO.ur.folder =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('renameFileDialogFields');
-                divToUpdate.innerHTML = o.responseText; 
-				YAHOO.ur.folder.renameFileDialog.showDialog();                
+                // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('renameFileDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+				    YAHOO.ur.folder.renameFileDialog.showDialog();   
+				}             
             },
 	
 	        failure: function(o) 

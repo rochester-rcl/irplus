@@ -42,8 +42,13 @@ YAHOO.ur.item.collection = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('all_collections');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		 		    
+		            var divToUpdate = document.getElementById('all_collections');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -67,13 +72,18 @@ YAHOO.ur.item.collection = {
 	 */
 	addCollectionToPublication : function(collectionId) 
 	{ 
-		var handleSuccess = function(o) {
-	
-	 		var divToUpdate = document.getElementById('selected_collections');
-	        divToUpdate.innerHTML = o.responseText; 	
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 	
+	 		    var divToUpdate = document.getElementById('selected_collections');
+	            divToUpdate.innerHTML = o.responseText; 	
 		   
-		   document.getElementById('all_collections_form_collectionIds').value 
-		   		= document.getElementById('selected_collections_form_collectionIds').value
+		        document.getElementById('all_collections_form_collectionIds').value 
+		   		    = document.getElementById('selected_collections_form_collectionIds').value
+		    }
 		};
 		
 		// handle form submission failure
@@ -98,17 +108,24 @@ YAHOO.ur.item.collection = {
 	 */
 	 removeCollectionFromPublication : function(collectionId) 
 	 {
-		var handleSuccess = function(o) {
+		var handleSuccess = function(o) 
+		{
 	
-	 		var divToUpdate = document.getElementById('selected_collections');
-	        divToUpdate.innerHTML = o.responseText; 	
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 
+	 		    var divToUpdate = document.getElementById('selected_collections');
+	            divToUpdate.innerHTML = o.responseText; 	
 		   
-		   document.getElementById('all_collections_form_collectionIds').value 
-		   		= document.getElementById('selected_collections_form_collectionIds').value
+		        document.getElementById('all_collections_form_collectionIds').value 
+		   		    = document.getElementById('selected_collections_form_collectionIds').value
+		    }
 		};
 		
 		// handle form submission failure
-		var handleFailure = function(o) {
+		var handleFailure = function(o) 
+		{
 		    alert('Collection removal failed ' + o.status);
 		};
 	

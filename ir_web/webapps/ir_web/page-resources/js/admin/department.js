@@ -44,8 +44,13 @@ YAHOO.ur.department = {
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newDepartments');
-                divToUpdate.innerHTML = o.responseText; 
+                // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('newDepartments');
+                    divToUpdate.innerHTML = o.responseText; 
+                }
             },
 	
 	        failure: function(o) 
@@ -108,32 +113,38 @@ YAHOO.ur.department = {
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a department
-	        var response = o.responseText;
-	        var departmentForm = document.getElementById('newDepartmentDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        departmentForm.innerHTML = o.responseText;
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a department
+	            var response = o.responseText;
+	            var departmentForm = document.getElementById('newDepartmentDialogFields');
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("newDepartmentForm_success").value;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            departmentForm.innerHTML = o.responseText;
+	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("newDepartmentForm_success").value;
 	    
 	  
-	        //if the department was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.department.newDepartmentDialog.showDialog();
+	            //if the department was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                     YAHOO.ur.department.newDepartmentDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the department was added
+	                YAHOO.ur.department.newDepartmentDialog.hide();
+	                YAHOO.ur.department.clearDepartmentForm();
+	            }
+	            myDepartmentTable.submitForm(myDepartmentAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the department was added
-	            YAHOO.ur.department.newDepartmentDialog.hide();
-	            YAHOO.ur.department.clearDepartmentForm();
-	        }
-	        myDepartmentTable.submitForm(myDepartmentAction);
 	    };
 	
 	    // handle form sbumission failure
@@ -253,26 +264,31 @@ YAHOO.ur.department = {
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a department
-	        var response = eval("("+o.responseText+")");
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a department
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the department was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.departmentDeleted == "false" )
-	        {
-	            var deleteDepartmentError = document.getElementById('form_deleteDepartmentError');
-                deleteDepartmentError.innerHTML = '<p id="newDeleteDepartmentError">' 
-                + response.message + '</p>';
-                YAHOO.ur.department.deleteDepartmentDialog.showDialog();
-	        }
-	        else
-	        {
-	            // we can clear the form if the departments were deleted
-	            YAHOO.ur.department.deleteDepartmentDialog.hide();
-	            YAHOO.ur.department.clearDeleteDepartmentForm();
-	        }
-	        // reload the table
-	        myDepartmentTable.submitForm(myDepartmentAction);
+	            //if the department was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.departmentDeleted == "false" )
+	            {
+	                var deleteDepartmentError = document.getElementById('form_deleteDepartmentError');
+                    deleteDepartmentError.innerHTML = '<p id="newDeleteDepartmentError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.department.deleteDepartmentDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the departments were deleted
+	                YAHOO.ur.department.deleteDepartmentDialog.hide();
+	                YAHOO.ur.department.clearDeleteDepartmentForm();
+	            }
+	            // reload the table
+	            myDepartmentTable.submitForm(myDepartmentAction);
+	         }
 	    };
 	
 	    // handle form submission failure

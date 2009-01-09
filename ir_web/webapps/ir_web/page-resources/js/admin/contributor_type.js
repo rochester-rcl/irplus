@@ -48,8 +48,13 @@ YAHOO.ur.contributor.type = {
          {
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newContributorTypes');
-		        divToUpdate.innerHTML = o.responseText; 
+		    	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('newContributorTypes');
+		            divToUpdate.innerHTML = o.responseText;
+		        } 
 		    },
 			
 			failure: function(o) 
@@ -113,24 +118,30 @@ YAHOO.ur.contributor.type = {
 		};
 		
 		var handleSuccess = function(o) {
-		    //get the response from adding a contributor type
-		    var response = eval("("+o.responseText+")");
+		
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a contributor type
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the contributor type was not added then show the user the error message.
-		    // received from the server
-		    if( response.contributorTypeAdded == "false" )
-		    {
-		        var contributorTypeNameError = document.getElementById('contributorTypeError');
-	            contributorTypeNameError.innerHTML = '<p id="newContributorTypeForm_nameError">' + response.message + '</p>';
-	            YAHOO.ur.contributor.type.contributorTypeDialog.showDialog();
+		        //if the contributor type was not added then show the user the error message.
+		        // received from the server
+		        if( response.contributorTypeAdded == "false" )
+		        {
+		            var contributorTypeNameError = document.getElementById('contributorTypeError');
+	                contributorTypeNameError.innerHTML = '<p id="newContributorTypeForm_nameError">' + response.message + '</p>';
+	                YAHOO.ur.contributor.type.contributorTypeDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the contributor type was added
+		            YAHOO.ur.contributor.type.contributorTypeDialog.hide();
+		            YAHOO.ur.contributor.type.clearContributorTypeForm();
+		        }
+		        myContributorTypeTable.submitForm(myContributorTypeAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the contributor type was added
-		        YAHOO.ur.contributor.type.contributorTypeDialog.hide();
-		        YAHOO.ur.contributor.type.clearContributorTypeForm();
-		    }
-		    myContributorTypeTable.submitForm(myContributorTypeAction);
 		};
 		
 		// handle form sbumission failure
@@ -256,27 +267,32 @@ YAHOO.ur.contributor.type = {
 		};
 		
 		var handleSuccess = function(o) {
-		    //get the response from adding a contributor type
-		    var response = eval("("+o.responseText+")");
+		
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a contributor type
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the contributor type was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.contributorTypeDeleted == "false" )
-		    {
-		        var deleteContributorTypeError = document.getElementById('form_deleteContributorTypeError');
-	            deleteContributorTypeError.innerHTML = '<p id="newDeleteContributorTypeError">' 
-	            + response.message + '</p>';
-	            YAHOO.ur.contributor.type.deleteContributorTypeDialog.showDialog();
+		        //if the contributor type was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.contributorTypeDeleted == "false" )
+		        {
+		            var deleteContributorTypeError = document.getElementById('form_deleteContributorTypeError');
+	                deleteContributorTypeError.innerHTML = '<p id="newDeleteContributorTypeError">' 
+	                + response.message + '</p>';
+	                YAHOO.ur.contributor.type.deleteContributorTypeDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the contributor types were deleted
+		            YAHOO.ur.contributor.type.deleteContributorTypeDialog.hide();
+		            YAHOO.ur.contributor.type.clearDeleteContributorTypeForm();
+		        }
+		        // reload the table
+		        myContributorTypeTable.submitForm(myContributorTypeAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the contributor types were deleted
-		        YAHOO.ur.contributor.type.deleteContributorTypeDialog.hide();
-		        YAHOO.ur.contributor.type.clearDeleteContributorTypeForm();
-
-		    }
-		    // reload the table
-		    myContributorTypeTable.submitForm(myContributorTypeAction);
 		};
 		
 		// handle form submission failure

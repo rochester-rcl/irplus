@@ -44,8 +44,13 @@ YAHOO.ur.news =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newNewsItems');
-                divToUpdate.innerHTML = o.responseText; 
+                // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('newNewsItems');
+                    divToUpdate.innerHTML = o.responseText;
+                } 
             },
 	
 	        failure: function(o) 
@@ -105,24 +110,29 @@ YAHOO.ur.news =
 	    
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a news item
-	        var response = eval("("+o.responseText+")");
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a news item
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the news item was not added then show the user the error message.
-	        // received from the server
-	        if( response.newsItemAdded == "false" )
-	        {
-	            var newsItemNameError = document.getElementById('newsItemError');
-	            newsItemNameError.innerHTML = '<p id="newNewsItemForm_nameError">' + response.message + '</p>';
-                YAHOO.ur.news.newNewsItemDialog.showDialog();
-               myNewsItemTable.submitForm(myNewsItemAction);
-	        }
-	        else
-	        {
-	            // we can clear the form if the news item was added
-	            YAHOO.ur.news.clearNewsItemForm();
-	            YAHOO.ur.news.newNewsItemDialog.hide();
-	            window.location = editNewsItemAction + '?id=' + response.newsItemId;
+	            //if the news item was not added then show the user the error message.
+	            // received from the server
+	            if( response.newsItemAdded == "false" )
+	            {
+	                var newsItemNameError = document.getElementById('newsItemError');
+	                newsItemNameError.innerHTML = '<p id="newNewsItemForm_nameError">' + response.message + '</p>';
+                    YAHOO.ur.news.newNewsItemDialog.showDialog();
+                    myNewsItemTable.submitForm(myNewsItemAction);
+	            }
+	            else
+	            {
+	                // we can clear the form if the news item was added
+	                YAHOO.ur.news.clearNewsItemForm();
+	                YAHOO.ur.news.newNewsItemDialog.hide();
+	                window.location = editNewsItemAction + '?id=' + response.newsItemId;
+	            }
 	        }
 	    };
 	
@@ -237,26 +247,31 @@ YAHOO.ur.news =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a news item 
-	        var response = eval("("+o.responseText+")");
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a news item 
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the news item was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.newsItemDeleted == "false" )
-	        {
-	            var deleteNewsItemError = document.getElementById('form_deleteNewsItemError');
-                deleteNewsItemError.innerHTML = '<p id="newDeleteNewsItemError">' 
-                + response.message + '</p>';
-                YAHOO.ur.news.deleteNewsItemDialog.showDialog();
+	            //if the news item was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.newsItemDeleted == "false" )
+	            {
+	                var deleteNewsItemError = document.getElementById('form_deleteNewsItemError');
+                    deleteNewsItemError.innerHTML = '<p id="newDeleteNewsItemError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.news.deleteNewsItemDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the news item were deleted
+	                YAHOO.ur.news.deleteNewsItemDialog.hide();
+	                YAHOO.ur.news.clearDeleteNewsItemForm();
+	            }
+	            // reload the table
+	            myNewsItemTable.submitForm(myNewsItemAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the news item were deleted
-	            YAHOO.ur.news.deleteNewsItemDialog.hide();
-	            YAHOO.ur.news.clearDeleteNewsItemForm();
-	        }
-	        // reload the table
-	        myNewsItemTable.submitForm(myNewsItemAction);
 	    };
 	
 	    // handle form submission failure

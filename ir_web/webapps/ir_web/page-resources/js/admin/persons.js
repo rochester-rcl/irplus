@@ -56,8 +56,13 @@ YAHOO.ur.person = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newPersons');
-		        divToUpdate.innerHTML = o.responseText; 
+		        // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('newPersons');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -123,36 +128,43 @@ YAHOO.ur.person = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 		   this.submit();
 		};
 			
 		// handle a cancel of the adding person type dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.person.clearPersonForm();
 		    YAHOO.ur.person.newPersonDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-
-		    //get the response from adding a person type
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a person type
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the person type was not added then show the user the error message.
-		    // received from the server
-		    if( response.personAdded == "false" )
-		    {
-		        var personNameError = document.getElementById('personError');
-	            personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
-	            YAHOO.ur.person.newPersonDialog.showDialog();
+		        //if the person type was not added then show the user the error message.
+		        // received from the server
+		        if( response.personAdded == "false" )
+		        {
+		            var personNameError = document.getElementById('personError');
+	                personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
+	                YAHOO.ur.person.newPersonDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the person type was added
+		            YAHOO.ur.person.clearPersonForm();
+		            YAHOO.ur.person.newPersonDialog.hide();
+		        }
+		        myPersonTable.submitForm(myPersonAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the person type was added
-		        YAHOO.ur.person.clearPersonForm();
-		        YAHOO.ur.person.newPersonDialog.hide();
-		    }
-		    myPersonTable.submitForm(myPersonAction);
 		};
 		
 		// handle form sbumission failure
@@ -289,7 +301,8 @@ YAHOO.ur.person = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 		    YAHOO.util.Connect.setForm('myPersons');
 		    
 		    //delete the person type
@@ -299,37 +312,42 @@ YAHOO.ur.person = {
 		
 			
 		// handle a cancel of deleting person type dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.person.deletePersonDialog.hide();
 		};
 		
 		// handle deleting a person form success.
-		var handleSuccess = function(o) {
-	
-		    //get the response from adding a person type
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a person type
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the person type was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.personDeleted == "false" )
-		    {
-		    	YAHOO.ur.person.deletePersonDialog.hide();
+		        //if the person type was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.personDeleted == "false" )
+		        {
+		    	    YAHOO.ur.person.deletePersonDialog.hide();
 		        
-		        var deletePersonError = document.getElementById('deletePersonMessage');
-	            deletePersonError.innerHTML = '<p id="newDeletePersonMessage">' 
-	            + response.message + '</p>';
+		            var deletePersonError = document.getElementById('deletePersonMessage');
+	                deletePersonError.innerHTML = '<p id="newDeletePersonMessage">' 
+	                + response.message + '</p>';
 	            
-	            YAHOO.ur.person.deletePersonMessageDialog.showDialog();
-	            
+	                YAHOO.ur.person.deletePersonMessageDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the person types were deleted
+		            YAHOO.ur.person.clearDeletePersonForm();
+		            YAHOO.ur.person.deletePersonDialog.hide();
+		        }
+		        // reload the table
+		        myPersonTable.submitForm(myPersonAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the person types were deleted
-		        YAHOO.ur.person.clearDeletePersonForm();
-		        YAHOO.ur.person.deletePersonDialog.hide();
-		    }
-		    // reload the table
-		    myPersonTable.submitForm(myPersonAction);
 		};
 		
 		// handle form submission failure
@@ -409,8 +427,13 @@ YAHOO.ur.person = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('search_results_div');
-		        divToUpdate.innerHTML = o.responseText; 
+		        // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('search_results_div');
+		            divToUpdate.innerHTML = o.responseText;
+		        } 
 		    },
 			
 			failure: function(o) 

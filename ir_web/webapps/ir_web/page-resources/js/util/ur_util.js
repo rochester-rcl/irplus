@@ -99,3 +99,24 @@ urUtil.checkForNoSelections = function(field) {
 	
 	  return false;
 }
+
+// checks the page for the login page
+// if the login page is found, it means
+// the user has been logged out and we 
+// will forward to the login page 
+// this affects dealing with partial page returns
+// which tries to  put the entire login page 
+// in the ajax value
+urUtil.checkTimeOut = function(responseText)
+{
+
+  if(responseText != null && responseText.search(/loginForm/) > -1 )
+  {
+      alert('Action not Performed! Your session has timed out and you must log back in.');
+      // action to perform when submitting the personal folder form.
+      var loginAction =  basePath + 'user/workspace.action';
+      window.location = loginAction
+      return true;
+  }
+  return false;
+}

@@ -50,8 +50,13 @@ YAHOO.ur.sponsor = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newSponsors');
-		        divToUpdate.innerHTML = o.responseText; 
+		        // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('newSponsors');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -116,34 +121,38 @@ YAHOO.ur.sponsor = {
 		    YAHOO.ur.sponsor.clearSponsorForm();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a sponsor
-		    var response = o.responseText;
-		    var sponsorForm = document.getElementById('newSponsorDialogFields');
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a sponsor
+		        var response = o.responseText;
+		        var sponsorForm = document.getElementById('newSponsorDialogFields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    sponsorForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        sponsorForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newSponsorForm_success").value;
-		    
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newSponsorForm_success").value;
 		  
-		    //if the sponsor was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.sponsor.newSponsorDialog.showDialog();
+		        //if the sponsor was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.sponsor.newSponsorDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the sponsor was added
+		            YAHOO.ur.sponsor.newSponsorDialog.hide();
+		            YAHOO.ur.sponsor.clearSponsorForm();
+		        }
+		        mySponsorTable.submitForm(mySponsorAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the sponsor was added
-		        YAHOO.ur.sponsor.newSponsorDialog.hide();
-		        YAHOO.ur.sponsor.clearSponsorForm();
-
-		    }
-		    mySponsorTable.submitForm(mySponsorAction);
 		};
 		
 		// handle form sbumission failure
@@ -252,7 +261,8 @@ YAHOO.ur.sponsor = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 		    YAHOO.util.Connect.setForm('mySponsors');
 		    
 		    //delete the sponsor
@@ -262,32 +272,38 @@ YAHOO.ur.sponsor = {
 		
 			
 		// handle a cancel of deleting sponsor dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.sponsor.deleteSponsorDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a sponsor
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a sponsor
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the sponsor was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.sponsorDeleted == "false" )
-		    {
-		        var deleteSponsorError = document.getElementById('form_deleteSponsorError');
-	            deleteSponsorError.innerHTML = '<p id="newDeleteSponsorError">' 
-	            + response.message + '</p>';
-	            YAHOO.ur.sponsor.deleteSponsorDialog.showDialog();
+		        //if the sponsor was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.sponsorDeleted == "false" )
+		        {
+		            var deleteSponsorError = document.getElementById('form_deleteSponsorError');
+	                deleteSponsorError.innerHTML = '<p id="newDeleteSponsorError">' 
+	                + response.message + '</p>';
+	                YAHOO.ur.sponsor.deleteSponsorDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the sponsors were deleted
+		            YAHOO.ur.sponsor.deleteSponsorDialog.hide();
+		            YAHOO.ur.sponsor.clearDeleteSponsorForm();
+		        }
+		        // reload the table
+		        mySponsorTable.submitForm(mySponsorAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the sponsors were deleted
-		        YAHOO.ur.sponsor.deleteSponsorDialog.hide();
-		        YAHOO.ur.sponsor.clearDeleteSponsorForm();
-
-		    }
-		    // reload the table
-		    mySponsorTable.submitForm(mySponsorAction);
 		};
 		
 		// handle form submission failure

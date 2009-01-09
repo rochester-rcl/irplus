@@ -39,13 +39,17 @@ YAHOO.ur.affiliation.approval = {
 	 */
 	getPendingApprovals : function(rowStart, startPageNumber, currentPageNumber, order)
 	{
-
 		var callback =
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newPendingApprovals');
-		        divToUpdate.innerHTML = o.responseText; 
+		    	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('newPendingApprovals');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 

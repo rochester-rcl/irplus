@@ -44,8 +44,13 @@ YAHOO.ur.identifier.type =
          {
              success: function(o) 
              {
-                 var divToUpdate = document.getElementById('newIdentifierTypes');
-                 divToUpdate.innerHTML = o.responseText; 
+             	 // check for the timeout - forward user to login page if timout
+	             // occured
+	             if( !urUtil.checkTimeOut(o.responseText) )
+	             {
+                     var divToUpdate = document.getElementById('newIdentifierTypes');
+                     divToUpdate.innerHTML = o.responseText; 
+                 }
              },
 	
 	         failure: function(o) 
@@ -110,25 +115,29 @@ YAHOO.ur.identifier.type =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a identifier type
-	        var response = eval("("+o.responseText+")");
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a identifier type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the identifier type was not added then show the user the error message.
-	        // received from the server
-	        if( response.identifierTypeAdded == "false" )
-	        {
-	            var identifierTypeNameError = document.getElementById('identifierTypeError');
-                identifierTypeNameError.innerHTML = '<p id="newIdentifierTypeForm_nameError">' + response.message + '</p>';
-                YAHOO.ur.identifier.type.identifierTypeDialog.showDialog();
+	            //if the identifier type was not added then show the user the error message.
+	            // received from the server
+	            if( response.identifierTypeAdded == "false" )
+	            {
+	                var identifierTypeNameError = document.getElementById('identifierTypeError');
+                    identifierTypeNameError.innerHTML = '<p id="newIdentifierTypeForm_nameError">' + response.message + '</p>';
+                    YAHOO.ur.identifier.type.identifierTypeDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the identifier type was added
+	                YAHOO.ur.identifier.type.identifierTypeDialog.hide();
+	                YAHOO.ur.identifier.type.clearIdentifierTypeForm();
+	            }
+	            myIdentifierTypeTable.submitForm(myIdentifierTypeAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the identifier type was added
-	            YAHOO.ur.identifier.type.identifierTypeDialog.hide();
-	            YAHOO.ur.identifier.type.clearIdentifierTypeForm();
-	        
-	        }
-	        myIdentifierTypeTable.submitForm(myIdentifierTypeAction);
 	    };
 	
 	    // handle form sbumission failure
@@ -246,27 +255,31 @@ YAHOO.ur.identifier.type =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a identifier type
-	        var response = eval("("+o.responseText+")");
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a identifier type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the identifier type was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.identifierTypeDeleted == "false" )
-	        {
-	            var deleteIdentifierTypeError = document.getElementById('form_deleteIdentifierTypeError');
-                deleteIdentifierTypeError.innerHTML = '<p id="newDeleteIdentifierTypeError">' 
-                + response.message + '</p>';
-                YAHOO.ur.identifier.type.deleteIdentifierTypeDialog.showDialog();
+	            //if the identifier type was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.identifierTypeDeleted == "false" )
+	            {
+	                 var deleteIdentifierTypeError = document.getElementById('form_deleteIdentifierTypeError');
+                    deleteIdentifierTypeError.innerHTML = '<p id="newDeleteIdentifierTypeError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.identifier.type.deleteIdentifierTypeDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the identifier types were deleted
+	                YAHOO.ur.identifier.type.deleteIdentifierTypeDialog.hide();
+	                YAHOO.ur.identifier.type.clearDeleteIdentifierTypeForm();
+	            }
+	            // reload the table
+	            myIdentifierTypeTable.submitForm(myIdentifierTypeAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the identifier types were deleted
-	            YAHOO.ur.identifier.type.deleteIdentifierTypeDialog.hide();
-	            YAHOO.ur.identifier.type.clearDeleteIdentifierTypeForm();
-	            
-	        }
-	        // reload the table
-	        myIdentifierTypeTable.submitForm(myIdentifierTypeAction);
 	    };
 	
 	    // handle form submission failure

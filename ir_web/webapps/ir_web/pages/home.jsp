@@ -47,6 +47,7 @@
         
         <!--  base path information -->
  	    <ur:js src="pages/js/base_path.js"/>
+ 	    <ur:js src="page-resources/js/util/ur_util.js"/>
         <ur:js src="page-resources/js/public/home.js"/>
         
         <!--  styling for page specific elements -->

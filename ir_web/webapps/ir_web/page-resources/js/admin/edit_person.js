@@ -52,8 +52,13 @@ YAHOO.ur.person.names = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('personNames');
-		        divToUpdate.innerHTML = o.responseText; 
+		    	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('personNames');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -110,70 +115,86 @@ YAHOO.ur.person.names = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 		   this.submit();
 		};
 		
 		// Define various event handlers for Dialog
-		var addPersonForUser = function() {
+		var addPersonForUser = function() 
+		{
 	            var cObj = YAHOO.util.Connect.asyncRequest('post',
 	            newPersonAction, personCallback);
 		};
 		
 			
 		// handle a cancel of the adding person type dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.person.names.newPersonNameDialog.hide();
 		    YAHOO.ur.person.names.clearPersonNameForm();
 		};
 		
-		var handleNewPersonNameFormSuccess = function(o) {
+		var handleNewPersonNameFormSuccess = function(o) 
+		{
 
-		    //get the response from adding a person type
-		    var response = eval("("+o.responseText+")");
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a person type
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the person type was not added then show the user the error message.
-		    // received from the server
-		    if( response.personNameAdded == "false" )
-		    {
-		        var personNameError = document.getElementById('personError');
-	            personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
-	            YAHOO.ur.person.names.newPersonNameDialog.showDialog();
+		        //if the person type was not added then show the user the error message.
+		        // received from the server
+		        if( response.personNameAdded == "false" )
+		        {
+		            var personNameError = document.getElementById('personError');
+	                personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
+	                YAHOO.ur.person.names.newPersonNameDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the person type was added
+		            YAHOO.ur.person.names.newPersonNameDialog.hide();
+		            YAHOO.ur.person.names.clearPersonNameForm();
+		        }
+		        myPersonNamesTable.submitForm(myPersonNamesAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the person type was added
-		        YAHOO.ur.person.names.newPersonNameDialog.hide();
-		        YAHOO.ur.person.names.clearPersonNameForm();
-		    }
-		    myPersonNamesTable.submitForm(myPersonNamesAction);
 		};
 	
 		// handle form submission failure
-		var handleNewPersonNameFormFailure = function(o) {
+		var handleNewPersonNameFormFailure = function(o) 
+		{
 		    alert('person name submission failed ' + o.status);
 		};
 	
 		// Adds new person to a user
-		var handleNewPersonForUserFormSuccess = function(o) {
-		    //get the response from adding a person type
-		    var response = eval("("+o.responseText+")");
+		var handleNewPersonForUserFormSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a person type
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the person type was not added then show the user the error message.
-		    // received from the server
-		    if( response.personAdded == "false" )
-		    {
-		        var personNameError = document.getElementById('personError');
-	            personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
-	            YAHOO.ur.person.names.newPersonNameDialog.show();
-		    }
-		    else
-		    {
-		        // we can clear the form if the person type was added
-		        YAHOO.ur.person.names.newPersonNameDialog.hide();
-		        YAHOO.ur.person.names.clearPersonNameForm();
-			    document.getElementById('newPersonNameForm_personId').value = response.personId; 
-			    YAHOO.ur.person.names.getPersonNames(response.personId);
+		        //if the person type was not added then show the user the error message.
+		        // received from the server
+		        if( response.personAdded == "false" )
+		        {
+		            var personNameError = document.getElementById('personError');
+	                personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
+	                YAHOO.ur.person.names.newPersonNameDialog.show();
+		        }
+		        else
+		        {
+		            // we can clear the form if the person type was added
+		            YAHOO.ur.person.names.newPersonNameDialog.hide();
+		            YAHOO.ur.person.names.clearPersonNameForm();
+			        document.getElementById('newPersonNameForm_personId').value = response.personId; 
+			        YAHOO.ur.person.names.getPersonNames(response.personId);
+			    }
 			}
 		};
 		
@@ -300,7 +321,8 @@ YAHOO.ur.person.names = {
 	{
 	
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 		    YAHOO.util.Connect.setForm('myPersonNames');
 		    
 		    //delete the person type
@@ -310,36 +332,42 @@ YAHOO.ur.person.names = {
 		
 			
 		// handle a cancel of deleting person type dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.person.names.deletePersonNameDialog.hide();
 		};
 		
 		// handle deleting a person form success.
-		var handleSuccess = function(o) {
-		
-		    //get the response from adding a person type
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a person type
+		        var response = eval("("+o.responseText+")");
 	
-		    //if the person type was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.personNameDeleted == "false" )
-		    {
-		    	YAHOO.ur.person.names.deletePersonNameDialog.hide();
-		        var deletePersonNameError = document.getElementById('deletePersonNameMessage');
-	            deletePersonNameError.innerHTML = '<p id="newDeletePersonNameError">' 
-	            + response.message + '</p>';
+		        //if the person type was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.personNameDeleted == "false" )
+		        {
+		    	    YAHOO.ur.person.names.deletePersonNameDialog.hide();
+		            var deletePersonNameError = document.getElementById('deletePersonNameMessage');
+	                deletePersonNameError.innerHTML = '<p id="newDeletePersonNameError">' 
+	                + response.message + '</p>';
 	            
-	            YAHOO.ur.person.names.deletePersonNameMessageDialog.showDialog();
+	                YAHOO.ur.person.names.deletePersonNameMessageDialog.showDialog();
 	            
+		        }
+		        else
+		        {
+		            // we can clear the form if the person types were deleted
+		            YAHOO.ur.person.names.deletePersonNameDialog.hide();
+		            YAHOO.ur.person.names.clearDeletePersonNameForm();
+		        }
+		        // reload the table
+		        myPersonNamesTable.submitForm(myPersonNamesAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the person types were deleted
-		        YAHOO.ur.person.names.deletePersonNameDialog.hide();
-		        YAHOO.ur.person.names.clearDeletePersonNameForm();
-		    }
-		    // reload the table
-		    myPersonNamesTable.submitForm(myPersonNamesAction);
 		};
 		
 		// handle form submission failure

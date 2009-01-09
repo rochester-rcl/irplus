@@ -75,10 +75,10 @@
             <!--  this is the header of the page -->
             <c:import url="/inc/header.jsp"/>
             
-            <!--  this is the body regin of the page -->
+            <!--  this is the body region of the page -->
             <div id="bd">
             
-                <h2>Institutional Collection Administration</h2>
+                <h3>Institutional Collection Administration</h3>
             
               <ur:div id="newInstitutionalCollections">
     	          <ur:basicForm id="institutionalCollections" name="institutionalCollections">
