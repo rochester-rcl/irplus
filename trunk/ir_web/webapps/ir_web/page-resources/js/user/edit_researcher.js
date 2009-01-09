@@ -66,47 +66,50 @@ YAHOO.ur.edit.researcher = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 			
 		// handle a cancel of the adding field dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.edit.researcher.newFieldDialog.hide();
 		    YAHOO.ur.edit.researcher.clearFieldForm();
 		};
 		
-		var handleSuccess = function(o) {
-
-		    //get the response from adding a field
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       
+		        //get the response from adding a field
+		        var response = o.responseText;
+		        var fieldForm = document.getElementById('newFieldDialogFields');
 		    
-		    var response = o.responseText;
-		    var fieldForm = document.getElementById('newFieldDialogFields');
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        fieldForm.innerHTML = o.responseText;
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    fieldForm.innerHTML = o.responseText;
-		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newFieldForm_success").value;
-		    
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newFieldForm_success").value;
 		  
-		    //if the field was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.edit.researcher.newFieldDialog.showDialog();
+		        //if the field was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.edit.researcher.newFieldDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the field was added
+		            YAHOO.ur.edit.researcher.newFieldDialog.hide();
+			        YAHOO.ur.edit.researcher.clearFieldForm();
+		            YAHOO.ur.edit.researcher.saveResearcherAndGetField();
+		        }
 		    }
-		    else
-		    {
-		        // we can clear the form if the field was added
-		        YAHOO.ur.edit.researcher.newFieldDialog.hide();
-			    YAHOO.ur.edit.researcher.clearFieldForm();
-		        YAHOO.ur.edit.researcher.saveResearcherAndGetField();
-		    }
-		    
-		    
 		};
 		
 		// handle form sbumission failure
@@ -194,44 +197,51 @@ YAHOO.ur.edit.researcher = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 			
 		// handle a cancel of the adding department dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.edit.researcher.clearDepartmentForm();
 		    YAHOO.ur.edit.researcher.newDepartmentDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a department
-		    var response = o.responseText;
-		    var departmentForm = document.getElementById('newDepartmentDialogFields');
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		
+		        //get the response from adding a department
+		        var response = o.responseText;
+		        var departmentForm = document.getElementById('newDepartmentDialogFields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    departmentForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        departmentForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newDepartmentForm_success").value;
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newDepartmentForm_success").value;
 		    
 		  
-		    //if the department was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.edit.researcher.newDepartmentDialog.showDialog();
+		        //if the department was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.edit.researcher.newDepartmentDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the department was added
+		            YAHOO.ur.edit.researcher.newDepartmentDialog.hide();
+		            YAHOO.ur.edit.researcher.clearDepartmentForm();
+	                YAHOO.ur.edit.researcher.saveResearcherAndGetDepartment();
+		        }
 		    }
-		    else
-		    {
-		        // we can clear the form if the department was added
-		        YAHOO.ur.edit.researcher.newDepartmentDialog.hide();
-		        YAHOO.ur.edit.researcher.clearDepartmentForm();
-	            YAHOO.ur.edit.researcher.saveResearcherAndGetDepartment();
-		    }
-		    
 		};
 		
 		// handle form sbumission failure
@@ -302,45 +312,50 @@ YAHOO.ur.edit.researcher = {
 	createPictureUploadDialog : function()
 	{
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 		// handle a cancel of the adding researcher item dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.edit.researcher.uploadResearcherPictureDialog.hide();
 		    YAHOO.ur.edit.researcher.clearUploadPictureForm();
 		};
 		
-		var handleSuccess = function(o) {
-
-		    var response = o.responseText;
-		    var uploadForm = document.getElementById('upload_form_fields');
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       
+		        var response = o.responseText;
+		        var uploadForm = document.getElementById('upload_form_fields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    uploadForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        uploadForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("picture_added").value;
-		    var researcherId = document.getElementById("researcher_id").value;
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("picture_added").value;
+		        var researcherId = document.getElementById("researcher_id").value;
 		  
-		    //if the content type was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.edit.researcher.uploadResearcherPictureDialog.showDialog();
+		        //if the content type was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.edit.researcher.uploadResearcherPictureDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the upload form and get the pictures
+		            YAHOO.ur.edit.researcher.uploadResearcherPictureDialog.hide();
+		            YAHOO.ur.edit.researcher.clearUploadPictureForm();
+		            YAHOO.ur.edit.researcher.getResearcherPictures(researcherId);
+		        }
 		    }
-		    else
-		    {
-		        // we can clear the upload form and get the pictures
-		        YAHOO.ur.edit.researcher.uploadResearcherPictureDialog.hide();
-		        YAHOO.ur.edit.researcher.clearUploadPictureForm();
-		        YAHOO.ur.edit.researcher.getResearcherPictures(researcherId);
-		    }
-		    
-		   
 		};
 		
 		// handle form sbumission failure
@@ -437,8 +452,13 @@ YAHOO.ur.edit.researcher = {
 		{
 		    success : function(o) 
 		    {
-		        var divToUpdate = document.getElementById('researcher_pictures');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('researcher_pictures');
+		            divToUpdate.innerHTML = o.responseText;
+		        } 
 		    },
 		    
 		    failure : function(o) 
@@ -471,8 +491,13 @@ YAHOO.ur.edit.researcher = {
 		{	 
 		    success : function(o) 
 		    {
-		        var divToUpdate = document.getElementById('researcher_pictures');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('researcher_pictures');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 		    
 		    failure : function(o) 
@@ -551,8 +576,13 @@ YAHOO.ur.edit.researcher = {
 	     */
 	    var getDefaultPicturesSuccess = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('researcher_pictures');
-	        divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            var divToUpdate = document.getElementById('researcher_pictures');
+	            divToUpdate.innerHTML = o.responseText; 
+	        }
 	    };
 	    
 	    /*
@@ -665,24 +695,26 @@ YAHOO.ur.edit.researcher = {
 	       
 		var callback =
 		{
-		
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('field_form');
-		        var newField = o.responseText;
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('field_form');
+		            var newField = o.responseText;
 		        
-		        // id to give to the table
-		    	document.getElementById("field_table_id").value = parseInt(document.getElementById("field_table_id").value) + 1; 
+		            // id to give to the table
+		    	    document.getElementById("field_table_id").value = parseInt(document.getElementById("field_table_id").value) + 1; 
 		        
-		        // Replace the table id with the latest Id
-		        newField = newField.replace("field_table_i","field_table_" + document.getElementById("field_table_id").value, "gm");
+		            // Replace the table id with the latest Id
+		            newField = newField.replace("field_table_i","field_table_" + document.getElementById("field_table_id").value, "gm");
 		        
-		        var newDiv = document.getElementById('new_field');
-		        newDiv.innerHTML = newField;
-		        divToUpdate.appendChild(document.getElementById('field_table_'+document.getElementById("field_table_id").value));
-		        newDiv.innerHTML = "";
-		        
-		        
+		            var newDiv = document.getElementById('new_field');
+		            newDiv.innerHTML = newField;
+		            divToUpdate.appendChild(document.getElementById('field_table_'+document.getElementById("field_table_id").value));
+		            newDiv.innerHTML = "";
+		        }
 		    },
 			
 			failure: function(o) 
@@ -706,8 +738,13 @@ YAHOO.ur.edit.researcher = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('field_form');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('field_form');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -749,21 +786,24 @@ YAHOO.ur.edit.researcher = {
 		
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('department_form');
-		        var newDepartment = o.responseText;
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('department_form');
+		            var newDepartment = o.responseText;
 		        
-		        // id to give to the table
-		    	document.getElementById("department_table_id").value = parseInt(document.getElementById("department_table_id").value) + 1; 
+		            // id to give to the table
+		    	    document.getElementById("department_table_id").value = parseInt(document.getElementById("department_table_id").value) + 1; 
 		        
-		        // Replace the table id with the latest Id
-		        newDepartment = newDepartment.replace("department_table_i","department_table_" + document.getElementById("department_table_id").value, "gm");
+		            // Replace the table id with the latest Id
+		            newDepartment = newDepartment.replace("department_table_i","department_table_" + document.getElementById("department_table_id").value, "gm");
 		        
-		        var newDiv = document.getElementById('new_department');
-		        newDiv.innerHTML = newDepartment;
-		        divToUpdate.appendChild(document.getElementById('department_table_'+document.getElementById("department_table_id").value));
-		        newDiv.innerHTML = "";
-		        
-		        
+		            var newDiv = document.getElementById('new_department');
+		            newDiv.innerHTML = newDepartment;
+		            divToUpdate.appendChild(document.getElementById('department_table_'+document.getElementById("department_table_id").value));
+		            newDiv.innerHTML = "";
+		        }
 		    },
 			
 			failure: function(o) 
@@ -787,8 +827,13 @@ YAHOO.ur.edit.researcher = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('department_form');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('department_form');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 

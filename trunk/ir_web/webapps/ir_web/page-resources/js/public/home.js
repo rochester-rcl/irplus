@@ -40,8 +40,13 @@ YAHOO.ur.public.home =
         // Success action on getting the picture
         var handleSuccess = function(o) 
         {
-            var divToUpdate = document.getElementById('repository_picture');
-            divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {                       
+                var divToUpdate = document.getElementById('repository_picture');
+                divToUpdate.innerHTML = o.responseText;
+            } 
         };
     
         //Faiure action on getting a picture
@@ -78,8 +83,13 @@ YAHOO.ur.public.home =
        //Success action on getting the news item
        var handleSuccess = function(o) 
        {
-            var divToUpdate = document.getElementById('news_items');
-            divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {                      
+                var divToUpdate = document.getElementById('news_items');
+                divToUpdate.innerHTML = o.responseText; 
+            }
        };
     
        //Faiure action on getting the news item
@@ -113,8 +123,13 @@ YAHOO.ur.public.home =
         // Success action on getting the institutional collection
         var handleSuccess = function(o) 
         { 
-            var divToUpdate = document.getElementById('institutional_collections');
-            divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {                       
+                var divToUpdate = document.getElementById('institutional_collections');
+                divToUpdate.innerHTML = o.responseText; 
+            }
         };
     
         // Faiure action on getting the institutional collection
@@ -143,8 +158,13 @@ YAHOO.ur.public.home =
         // Success action on getting the researcher information
         var handleSuccess = function(o) 
         {
-            var divToUpdate = document.getElementById('researcher_picture');
-            divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {                       
+                var divToUpdate = document.getElementById('researcher_picture');
+                divToUpdate.innerHTML = o.responseText; 
+            }
         };
     
         //Failure action on getting a picture
@@ -174,8 +194,13 @@ YAHOO.ur.public.home =
         // Success action on getting the statistics information
         var handleSuccess = function(o) 
         {
-            var divToUpdate = document.getElementById('statistics_div');
-            divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+                var divToUpdate = document.getElementById('statistics_div');
+                divToUpdate.innerHTML = o.responseText; 
+            }
         };
     
         //Failure action on getting statistics 

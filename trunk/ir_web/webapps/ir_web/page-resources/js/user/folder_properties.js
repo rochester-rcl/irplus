@@ -35,8 +35,13 @@ YAHOO.ur.folder.properties =
         {
             success : function(o)
             {
-               var div = document.getElementById('folder_properties');
-               div.innerHTML = o.responseText;
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {                   
+                    var div = document.getElementById('folder_properties');
+                    div.innerHTML = o.responseText;
+                }
             },
             
             failure : function(o)
@@ -87,32 +92,36 @@ YAHOO.ur.folder.properties =
 	   // handle a successful return
 	   var handleSuccess = function(o) 
 	   {
-	        //get the response from adding a folder
-	        var response = o.responseText;
-	        var folderForm = document.getElementById('newFolderDialogFields');
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	   
+	            //get the response from adding a folder
+	            var response = o.responseText;
+	            var folderForm = document.getElementById('newFolderDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        folderForm.innerHTML = response;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            folderForm.innerHTML = response;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("newFolderForm_success").value;
-	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("newFolderForm_success").value;
 	  
-	        //if the affiliation was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.folder.properties.newFolderDialog.showFolder();
-	        }
-	        else
-	        {
-	            // we can clear the form if the folder was added
-	            YAHOO.ur.folder.properties.newFolderDialog.hide();
-	            YAHOO.ur.folder.properties.clearFolderForm();
-	            var folderId = document.getElementById("personalFolderId").value;
-	            YAHOO.ur.folder.properties.getFolderProperties(folderId);
+	            //if the affiliation was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.folder.properties.newFolderDialog.showFolder();
+	            }
+	            else
+	            {
+	                // we can clear the form if the folder was added
+	                YAHOO.ur.folder.properties.newFolderDialog.hide();
+	                YAHOO.ur.folder.properties.clearFolderForm();
+	                var folderId = document.getElementById("personalFolderId").value;
+	                YAHOO.ur.folder.properties.getFolderProperties(folderId);
+	            }
 	        }
 	    };
 	
@@ -185,11 +194,15 @@ YAHOO.ur.folder.properties =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newFolderDialogFields');
-                divToUpdate.innerHTML = o.responseText; 
-                document.newFolderForm.newFolder.value = "false";
-                YAHOO.ur.folder.properties.newFolderDialog.showFolder();
-                
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {                   
+                    var divToUpdate = document.getElementById('newFolderDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                    document.newFolderForm.newFolder.value = "false";
+                    YAHOO.ur.folder.properties.newFolderDialog.showFolder();
+                }
             },
 	
 	        failure: function(o) 

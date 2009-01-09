@@ -75,9 +75,14 @@ YAHOO.ur.institution = {
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newInstitutionalCollections');
-                divToUpdate.innerHTML = o.responseText; 
-                YAHOO.ur.institution.insertHiddenParentCollectionId();  
+                // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('newInstitutionalCollections');
+                    divToUpdate.innerHTML = o.responseText; 
+                    YAHOO.ur.institution.insertHiddenParentCollectionId(); 
+                } 
             },
 	
 	        failure: function(o) 
@@ -133,27 +138,31 @@ YAHOO.ur.institution = {
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a collection
-	        var response = eval("("+o.responseText+")");
-	    
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a collection
+	            var response = eval("("+o.responseText+")");
 	  
-	        //if the collection was not added then show the user the error message.
-	        // received from the server
-	        if( response.collectionAdded == "false" )
-	        {
-	            var collectionNameError = document.getElementById('collectionNameError');
-                collectionNameError.innerHTML = '<p id="newCollectionForm_nameError">' + response.collectionMessage + '</p>';
-                YAHOO.ur.institution.newCollectionDialog.showDialog();
-	        }
-	        else
-	        {
-	            //hide the dialog
-	            YAHOO.ur.institution.newCollectionDialog.hide();
-	            // we can clear the form if the collection was added
-	            YAHOO.ur.institution.clearCollectionForm();
+	            //if the collection was not added then show the user the error message.
+	            // received from the server
+	            if( response.collectionAdded == "false" )
+	            {
+	                var collectionNameError = document.getElementById('collectionNameError');
+                    collectionNameError.innerHTML = '<p id="newCollectionForm_nameError">' + response.collectionMessage + '</p>';
+                    YAHOO.ur.institution.newCollectionDialog.showDialog();
+	            }
+	            else
+	            {
+	                //hide the dialog
+	                YAHOO.ur.institution.newCollectionDialog.hide();
+	                // we can clear the form if the collection was added
+	                YAHOO.ur.institution.clearCollectionForm();
 	        
-	            //forward to edit collection action
-	            window.location = viewInstitutionalCollectionAction + '?collectionId=' +response.collectionId ;
+	                //forward to edit collection action
+	                window.location = viewInstitutionalCollectionAction + '?collectionId=' +response.collectionId ;
+	            }
 	        }
 	    };
 	

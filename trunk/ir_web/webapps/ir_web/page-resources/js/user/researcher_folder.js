@@ -79,24 +79,29 @@ YAHOO.ur.researcher.folder = {
 		// handle a successful return
 		var handleSuccess = function(o) 
 		{
-		    //get the response from adding a folder
-		    var response = eval("("+o.responseText+")");
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		
+		        //get the response from adding a folder
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the folder was not added then show the user the error message.
-		    // received from the server
-		    if( response.added == "false" )
-		    {
-		        var folderNameError = document.getElementById('folderNameError');
-	            folderNameError.innerHTML = '<p id="newFolderForm_nameError">' + response.message + '</p>';
-	            YAHOO.ur.researcher.folder.newFolderDialog.showDialog();
+		        //if the folder was not added then show the user the error message.
+		        // received from the server
+		        if( response.added == "false" )
+		        {
+		            var folderNameError = document.getElementById('folderNameError');
+	                folderNameError.innerHTML = '<p id="newFolderForm_nameError">' + response.message + '</p>';
+	                YAHOO.ur.researcher.folder.newFolderDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the folder was added
+		            YAHOO.ur.researcher.folder.clearFolderForm();
+		            YAHOO.ur.researcher.folder.newFolderDialog.hide();
+		        }
+		        myResearcherFolderTable.submitForm(myFolderAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the folder was added
-		        YAHOO.ur.researcher.folder.clearFolderForm();
-		        YAHOO.ur.researcher.folder.newFolderDialog.hide();
-		    }
-		    myResearcherFolderTable.submitForm(myFolderAction);
 		};
 		
 		// handle form submission failure
@@ -203,7 +208,8 @@ YAHOO.ur.researcher.folder = {
 	createFolderDeleteConfirmDialog : function() 
 	{
 	    // Define various event handlers for Dialog
-		var handleYes = function() {
+		var handleYes = function() 
+		{
 	 		
 	 		YAHOO.util.Connect.setForm('myFolders');
 		    
@@ -213,7 +219,8 @@ YAHOO.ur.researcher.folder = {
 			this.hide();
 		};
 		
-		var handleNo = function() {
+		var handleNo = function() 
+		{
 		    //uncheck all the ones that have been checked
 		    checked = document.myFolders.checkAllSetting.checked = false;
 		    YAHOO.ur.researcher.folder.setCheckboxes();
@@ -221,15 +228,20 @@ YAHOO.ur.researcher.folder = {
 		};
 		
 		    // success when getting the file properties
-	    var handleSuccess = function(o) {
-		    var response = o.responseText;
-		    var contentArea = document.getElementById('newResearcherFolders');
-		    contentArea.innerHTML = o.responseText; 
+	    var handleSuccess = function(o) 
+	    {
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		    
+		        var response = o.responseText;
+		        var contentArea = document.getElementById('newResearcherFolders');
+		        contentArea.innerHTML = o.responseText; 
 		    
-		    //show buttons that  make sense
-	        var buttonsDiv = document.getElementById("files_folders_buttons");
-	        buttonsDiv.style.visibility = 'visible';
-	        
+		        //show buttons that  make sense
+	            var buttonsDiv = document.getElementById("files_folders_buttons");
+	            buttonsDiv.style.visibility = 'visible';
+	        }
 	    };
 	   
 	    // success when getting the file properties
@@ -310,25 +322,29 @@ YAHOO.ur.researcher.folder = {
 		// handle a successful return
 		var handleSuccess = function(o) 
 		{
-	
-		    //get the response from adding a folder
-		    var response = eval("("+o.responseText+")");
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 	
+		        //get the response from adding a folder
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the folder was not added then show the user the error message.
-		    // received from the server
-		    if( response.added == "false" )
-		    {
-		        var linkNameError = document.getElementById('linkNameError');
-	            linkNameError.innerHTML = '<p id="newLinkForm_nameError">' + response.message + '</p>';
-	            YAHOO.ur.researcher.folder.newLinkDialog.show();
+		        //if the folder was not added then show the user the error message.
+		        // received from the server
+		        if( response.added == "false" )
+		        {
+		            var linkNameError = document.getElementById('linkNameError');
+	                linkNameError.innerHTML = '<p id="newLinkForm_nameError">' + response.message + '</p>';
+	                YAHOO.ur.researcher.folder.newLinkDialog.show();
+		        }
+		        else
+		        {
+		            // we can clear the form if the folder was added
+		            YAHOO.ur.researcher.folder.newLinkDialog.hide();
+		            YAHOO.ur.researcher.folder.clearLinkForm();
+		        }
+		        myResearcherFolderTable.submitForm(myFolderAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the folder was added
-		        YAHOO.ur.researcher.folder.newLinkDialog.hide();
-		        YAHOO.ur.researcher.folder.clearLinkForm();
-		    }
-		    myResearcherFolderTable.submitForm(myFolderAction);
 		};
 		
 		// handle form sbumission failure
@@ -433,15 +449,20 @@ YAHOO.ur.researcher.folder = {
 		var callback =
 		{
 		    success : function(o) {
-			    var response = o.responseText;
-			    var contentArea = document.getElementById('newResearcherFolders');
-			    contentArea.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		 		    
+			        var response = o.responseText;
+			        var contentArea = document.getElementById('newResearcherFolders');
+			        contentArea.innerHTML = o.responseText; 
 			    
-			    //show buttons that  make sense
-		        var buttonsDiv = document.getElementById("files_folders_buttons");
-		        buttonsDiv.style.visibility = 'visible';
+			        //show buttons that  make sense
+		            var buttonsDiv = document.getElementById("files_folders_buttons");
+		            buttonsDiv.style.visibility = 'visible';
 		        
-		        YAHOO.ur.researcher.folder.insertHiddenParentFolderId();
+		            YAHOO.ur.researcher.folder.insertHiddenParentFolderId();
+		        }
 		    },
 		   
 		    failure : function(o) {

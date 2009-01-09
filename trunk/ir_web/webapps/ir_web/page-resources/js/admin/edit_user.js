@@ -66,9 +66,13 @@ YAHOO.ur.email = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newEmails');
-		        divToUpdate.innerHTML = o.responseText; 
-		        
+		        // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('newEmails');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -105,55 +109,66 @@ YAHOO.ur.email = {
 	{
 	   
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 			
 		// handle a cancel of the adding/editing email dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.email.clearEmailForm();
 		    YAHOO.ur.email.newEmailDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a email
-		    var response = o.responseText;
-		    var emailForm = document.getElementById('newEmailDialogFields');
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a email
+		        var response = o.responseText;
+		        var emailForm = document.getElementById('newEmailDialogFields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    emailForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        emailForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newEmailForm_success").value;
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newEmailForm_success").value;
 		  
-		    //if the email was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-            	YAHOO.ur.email.newEmailDialog.showDialog();
-		    }
-		    else
-		    {
-		    	if (document.getElementById("newEmailForm_message").value != '') {
-			    	var emailConfirmationMessage = document.getElementById('emailConfirmationDialogFields');
-				    emailConfirmationMessage.innerHTML = document.getElementById("newEmailForm_message").value;
+		        //if the email was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+            	    YAHOO.ur.email.newEmailDialog.showDialog();
+		        }
+		        else
+		        {
+		    	    if (document.getElementById("newEmailForm_message").value != '')
+		    	    {
+			    	    var emailConfirmationMessage = document.getElementById('emailConfirmationDialogFields');
+				        emailConfirmationMessage.innerHTML = document.getElementById("newEmailForm_message").value;
 				    
-			        // we can clear the form if the email was added
-			        YAHOO.ur.email.clearEmailForm();
-			        YAHOO.ur.email.newEmailDialog.hide();				    
+			            // we can clear the form if the email was added
+			            YAHOO.ur.email.clearEmailForm();
+			            YAHOO.ur.email.newEmailDialog.hide();				    
 		    		
-		    		YAHOO.ur.email.emailConfirmationDialog.showDialog();
-		    	} else {
-			        // we can clear the form if the email was added
-			        YAHOO.ur.email.clearEmailForm();
-			        YAHOO.ur.email.newEmailDialog.hide();
-		    	} 
+		    		    YAHOO.ur.email.emailConfirmationDialog.showDialog();
+		    	    } 
+		    	    else 
+		    	    {
+			            // we can clear the form if the email was added
+			            YAHOO.ur.email.clearEmailForm();
+			            YAHOO.ur.email.newEmailDialog.hide();
+		    	    } 
 
+		        }
+		        YAHOO.ur.email.getEmails();
 		    }
-		    YAHOO.ur.email.getEmails();
 		};
 		
 		// handle form sbumission failure
@@ -300,16 +315,20 @@ YAHOO.ur.email = {
 		{
 			success: function(o)
 			{
-			
-			    var response = o.responseText;
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+			        var response = o.responseText;
 			    
-			    var userForm = document.getElementById('editUserDialogFields');
+			        var userForm = document.getElementById('editUserDialogFields');
 		
-			    // update the form fields with the response.  This updates
-			    // the form, if there was an issue, update the form with
-			    // the error messages.
-			    userForm.innerHTML = o.responseText;
-			    alert("Saved");
+			        // update the form fields with the response.  This updates
+			        // the form, if there was an issue, update the form with
+			        // the error messages.
+			        userForm.innerHTML = o.responseText;
+			        alert("Saved");
+			    }
 		    
 			},
 		
@@ -388,27 +407,32 @@ YAHOO.ur.email = {
 		};
 		
 		var handleSuccess = function(o) {
-		    //get the response from deleting the email
-		    var response = eval("("+o.responseText+")");
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from deleting the email
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the email was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.emailDeleted == "false" )
-		    {
-		        var deleteEmailError = document.getElementById('deleteEmailError');
-	            deleteEmailError.innerHTML = '<p id="newDeleteEmailError">' 
-	            + response.message + '</p>';
-	            YAHOO.ur.email.deleteEmailDialog.showDialog();
-		    }
-		    else
-		    {
-		        // we can clear the form if the emails were deleted
-		        YAHOO.ur.email.deleteEmailDialog.hide();
-		        YAHOO.ur.email.clearDeleteEmailForm();
-		    }
+		        //if the email was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.emailDeleted == "false" )
+		        {
+		            var deleteEmailError = document.getElementById('deleteEmailError');
+	                deleteEmailError.innerHTML = '<p id="newDeleteEmailError">' 
+	                + response.message + '</p>';
+	                YAHOO.ur.email.deleteEmailDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the emails were deleted
+		            YAHOO.ur.email.deleteEmailDialog.hide();
+		            YAHOO.ur.email.clearDeleteEmailForm();
+		        }
 		    
-		    // reload the table
-		    YAHOO.ur.email.getEmails();
+		        // reload the table
+		        YAHOO.ur.email.getEmails();
+		    }
 		};
 		
 		// handle form submission failure
@@ -482,8 +506,13 @@ YAHOO.ur.email = {
 	{
 	    success: function(o) 
 	    {
-	        var divToUpdate = document.getElementById('newNames');
-	        divToUpdate.innerHTML = o.responseText; 
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('newNames');
+	            divToUpdate.innerHTML = o.responseText; 
+	        }
 	    },
 		
 		failure: function(o) 
@@ -500,9 +529,14 @@ YAHOO.ur.email = {
 	{
 	    success: function(o) 
 	    {
-	        var divToUpdate = document.getElementById('user_auth_name');
-	        divToUpdate.innerHTML = o.responseText;
-	        YAHOO.ur.email.handleSearchFormSubmit(); 
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('user_auth_name');
+	            divToUpdate.innerHTML = o.responseText;
+	            YAHOO.ur.email.handleSearchFormSubmit(); 
+	        }
 	    },
 		
 		failure: function(o) 

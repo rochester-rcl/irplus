@@ -125,7 +125,8 @@
                           </font>
                    </c:if>
 
-
+                <!--  DO NOT chage the id value of this form  it is used to determine if the
+                      login form is present see ur_util.js  -->
                 <div id="loginForm">
                  <form name="f" action="<c:url value='j_spring_security_check'/>" method="POST">
                  

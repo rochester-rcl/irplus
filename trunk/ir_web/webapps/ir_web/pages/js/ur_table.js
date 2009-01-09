@@ -37,8 +37,13 @@ YAHOO.ur.table.Table = function(formName, div)
  */
 YAHOO.ur.table.Table.prototype.formSuccess = function(o)
 {
-    var divToUpdate = document.getElementById(this.myTable.myDiv);
-    divToUpdate.innerHTML = o.responseText;
+	// check for the timeout - forward user to login page if timout
+	// occured
+	if( !urUtil.checkTimeOut(o.responseText) )
+	{       		 
+        var divToUpdate = document.getElementById(this.myTable.myDiv);
+        divToUpdate.innerHTML = o.responseText;
+    }
 }
 
 /**

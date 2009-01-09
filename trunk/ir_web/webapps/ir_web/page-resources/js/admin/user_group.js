@@ -49,8 +49,13 @@ YAHOO.ur.usergroup =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newUserGroups');
-                divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {                           
+                    var divToUpdate = document.getElementById('newUserGroups');
+                    divToUpdate.innerHTML = o.responseText;
+                } 
             },
 	
 	        failure: function(o) 
@@ -108,31 +113,36 @@ YAHOO.ur.usergroup =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a content type
-	        var response = o.responseText;
-	        var userGroupForm = document.getElementById('newUserGroupDialogFields');
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               	    
+	            //get the response from adding a content type
+	            var response = o.responseText;
+	            var userGroupForm = document.getElementById('newUserGroupDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        userGroupForm.innerHTML = o.responseText;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            userGroupForm.innerHTML = o.responseText;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("newUserGroupForm_success").value;
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("newUserGroupForm_success").value;
 	  
-	        //if the content type was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.usergroup.newUserGroupDialog.showDialog();
+	            //if the content type was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.usergroup.newUserGroupDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the content type was added
+	                YAHOO.ur.usergroup.clearUserGroupForm();
+	                YAHOO.ur.usergroup.newUserGroupDialog.hide();
+	            }
+	            myUserGroupsTable.submitForm(getUserGroupsAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the content type was added
-	            YAHOO.ur.usergroup.clearUserGroupForm();
-	            YAHOO.ur.usergroup.newUserGroupDialog.hide();
-	        }
-	        myUserGroupsTable.submitForm(getUserGroupsAction);
 	    };
 	
 	    // handle form sbumission failure
@@ -244,26 +254,31 @@ YAHOO.ur.usergroup =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a content type
-	        var response = eval("("+o.responseText+")");
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               	    
+	            //get the response from adding a content type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the content type was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.userGroupDeleted == "false" )
-	        {
-	            var deleteUserGroupError = document.getElementById('form_deleteUserGroupError');
-                deleteUserGroupError.innerHTML = '<p id="newDeleteUserGroupError">' 
-                + response.message + '</p>';
-                YAHOO.ur.usergroup.deleteUserGroupDialog.showDialog();
+	            //if the content type was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.userGroupDeleted == "false" )
+	            {
+	                var deleteUserGroupError = document.getElementById('form_deleteUserGroupError');
+                    deleteUserGroupError.innerHTML = '<p id="newDeleteUserGroupError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.usergroup.deleteUserGroupDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the content types were deleted
+	                YAHOO.ur.usergroup.clearDeleteUserGroupForm();
+	                YAHOO.ur.usergroup.deleteUserGroupDialog.hide();
+	            }
+	            // reload the table
+	            myUserGroupsTable.submitForm(getUserGroupsAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the content types were deleted
-	            YAHOO.ur.usergroup.clearDeleteUserGroupForm();
-	            YAHOO.ur.usergroup.deleteUserGroupDialog.hide();
-	        }
-	        // reload the table
-	        myUserGroupsTable.submitForm(getUserGroupsAction);
 	    };
 	
 	    // handle form submission failure

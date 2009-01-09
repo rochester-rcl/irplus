@@ -61,11 +61,13 @@ YAHOO.ur.item = {
 	{
 	    success: function(o) 
 	    {
-	   
-	        var divToUpdate = document.getElementById('newPersonalFolders');
-	      
-	        divToUpdate.innerHTML = o.responseText; 
-	  
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	   
+	            var divToUpdate = document.getElementById('newPersonalFolders');
+	            divToUpdate.innerHTML = o.responseText; 
+	        }
 	    },
 		
 		failure: function(o) 
@@ -115,8 +117,13 @@ YAHOO.ur.item = {
 	{
 	    success: function(o) 
 	    {
-	        var divToUpdate = document.getElementById('newSelectedFiles');
-	        divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            var divToUpdate = document.getElementById('newSelectedFiles');
+	            divToUpdate.innerHTML = o.responseText; 
+	        }
 	    },
 		
 		failure: function(o) 
@@ -134,10 +141,14 @@ YAHOO.ur.item = {
 	{
 	    success: function(o) 
 	    {
-	    
-	        var divToUpdate = document.getElementById('newSelectedFiles');
-	        divToUpdate.innerHTML = o.responseText; 
-	        YAHOO.ur.item.getFolder();
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       
+	            var divToUpdate = document.getElementById('newSelectedFiles');
+	            divToUpdate.innerHTML = o.responseText; 
+	            YAHOO.ur.item.getFolder();
+	        }
 	    },
 		
 		failure: function(o) 
@@ -230,19 +241,25 @@ YAHOO.ur.item = {
 		{
 		    success: function(o) 
 		    {
-			    var response = eval("("+o.responseText+")");
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+			        var response = eval("("+o.responseText+")");
 
-			    // If file added, update selected files column
-			    if( response.fileAdded == "true" )
-			    {
-					YAHOO.ur.item.getSelectedFiles();
-					YAHOO.ur.item.getFolder();
-			    }
-			    else {
-			        var divToUpdate = document.getElementById('fileNameErrorDiv');
+			        // If file added, update selected files column
+			        if( response.fileAdded == "true" )
+			        {
+					    YAHOO.ur.item.getSelectedFiles();
+					    YAHOO.ur.item.getFolder();
+			        }
+			        else 
+			        {
+			            var divToUpdate = document.getElementById('fileNameErrorDiv');
 			      
-			        divToUpdate.innerHTML = response.message; 
-			        YAHOO.ur.item.addFileErrorDialog.showDialog();
+			            divToUpdate.innerHTML = response.message; 
+			            YAHOO.ur.item.addFileErrorDialog.showDialog();
+			        }
 			    }
 		    },
 			
@@ -269,21 +286,25 @@ YAHOO.ur.item = {
 		{
 		    success: function(o) 
 		    {
-			    var response = eval("("+o.responseText+")");
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+			        var response = eval("("+o.responseText+")");
 
-			    // If file added, update selected files column
-			    if( response.fileAdded == "true" )
-			    {
-					YAHOO.ur.item.getSelectedFiles();
-			    }
-			    else {
-			    	YAHOO.ur.item.getSelectedFiles();
-			    	
-			        var divToUpdate = document.getElementById('fileNameErrorDiv');
-			      
-			        divToUpdate.innerHTML = response.message; 
-			        YAHOO.ur.item.addFileErrorDialog.showDialog();
-			    }
+			        // If file added, update selected files column
+			        if( response.fileAdded == "true" )
+			        {
+					    YAHOO.ur.item.getSelectedFiles();
+			        }
+			        else 
+			        {
+			    	    YAHOO.ur.item.getSelectedFiles();
+			            var divToUpdate = document.getElementById('fileNameErrorDiv');
+			            divToUpdate.innerHTML = response.message; 
+			            YAHOO.ur.item.addFileErrorDialog.showDialog();
+			        }
+			     }
 		    },
 			
 			failure: function(o) 

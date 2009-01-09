@@ -37,8 +37,13 @@ YAHOO.ur.usergroup.edit = {
         {
             success: function(o) 
             {  
-                var divToUpdate = document.getElementById('users_search_results_div');
-                divToUpdate.innerHTML = o.responseText; 
+            	 // check for the timeout - forward user to login page if timout
+	             // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('users_search_results_div');
+                    divToUpdate.innerHTML = o.responseText; 
+                }
             },
 	
 	        failure: function(o) 
@@ -75,10 +80,15 @@ YAHOO.ur.usergroup.edit = {
         {
             success: function(o) 
             {  
-                var divToUpdate = document.getElementById('group_members_div');
-                divToUpdate.innerHTML = o.responseText; 
-                rowStart = document.getElementById('user_row_start').value; 
-                YAHOO.ur.usergroup.edit.userSearch(rowStart);
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('group_members_div');
+                    divToUpdate.innerHTML = o.responseText; 
+                    rowStart = document.getElementById('user_row_start').value; 
+                    YAHOO.ur.usergroup.edit.userSearch(rowStart);
+                }
             },
 	
 	        failure: function(o) 
@@ -103,10 +113,15 @@ YAHOO.ur.usergroup.edit = {
         {
             success: function(o) 
             {  
-                var divToUpdate = document.getElementById('group_members_div');
-                divToUpdate.innerHTML = o.responseText;
-                rowStart = document.getElementById('user_row_start').value; 
-                YAHOO.ur.usergroup.edit.userSearch(rowStart); 
+                // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('group_members_div');
+                    divToUpdate.innerHTML = o.responseText;
+                    rowStart = document.getElementById('user_row_start').value; 
+                    YAHOO.ur.usergroup.edit.userSearch(rowStart); 
+                }
             },
 	
 	        failure: function(o) 
@@ -133,6 +148,10 @@ YAHOO.ur.usergroup.edit = {
         {
             success: function(o) 
             {  
+            	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
                 var divToUpdate = document.getElementById('admin_search_results_div');
                 divToUpdate.innerHTML = o.responseText; 
             },
@@ -171,10 +190,15 @@ YAHOO.ur.usergroup.edit = {
         {
             success: function(o) 
             {  
-                var divToUpdate = document.getElementById('group_admins_div');
-                divToUpdate.innerHTML = o.responseText; 
-                rowStart = document.getElementById('admin_row_start').value; 
-                YAHOO.ur.usergroup.edit.adminSearch(rowStart);
+                // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('group_admins_div');
+                    divToUpdate.innerHTML = o.responseText; 
+                    rowStart = document.getElementById('admin_row_start').value; 
+                    YAHOO.ur.usergroup.edit.adminSearch(rowStart);
+                }
             },
 	
 	        failure: function(o) 
@@ -199,10 +223,15 @@ YAHOO.ur.usergroup.edit = {
         {
             success: function(o) 
             {  
-                var divToUpdate = document.getElementById('group_admins_div');
-                divToUpdate.innerHTML = o.responseText;
-                rowStart = document.getElementById('admin_row_start').value; 
-                YAHOO.ur.usergroup.edit.adminSearch(rowStart); 
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('group_admins_div');
+                    divToUpdate.innerHTML = o.responseText;
+                    rowStart = document.getElementById('admin_row_start').value; 
+                    YAHOO.ur.usergroup.edit.adminSearch(rowStart);
+                } 
             },
 	
 	        failure: function(o) 

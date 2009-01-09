@@ -38,8 +38,13 @@ YAHOO.ur.researcher.page = {
         // Success action on getting the picture
         var handleSuccess = function(o) 
         {
-            var divToUpdate = document.getElementById('researcher_picture');
-            divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+                var divToUpdate = document.getElementById('researcher_picture');
+                divToUpdate.innerHTML = o.responseText; 
+            }
         };
     
         //Faiure action on getting a picture

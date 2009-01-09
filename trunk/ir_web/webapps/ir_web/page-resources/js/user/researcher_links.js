@@ -47,28 +47,31 @@ YAHOO.ur.researcher.link = {
 	    // handle a successful return
 	    var handleSuccess = function(o) 
 	    {
-	    	// received from the server
-	        var response = o.responseText;
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 	    
+	    	    // received from the server
+	            var response = o.responseText;
 	        
-	        var div = document.getElementById('researcher_personal_link_fields');
-	        div.innerHTML = o.responseText;
+	            var div = document.getElementById('researcher_personal_link_fields');
+	            div.innerHTML = o.responseText;
 	        
-	        
-	        var success = document.getElementById('researcher_personal_link_form_success').value;
+	            var success = document.getElementById('researcher_personal_link_form_success').value;
 	    
-	        //if the link was not saved then show the user the error message.
-	        if( success == "false" )
-	        {
-	           YAHOO.ur.researcher.link.newLinkDialog.showLinkDialog();
-	        }
-	        else
-	        {
-	            researcherId = document.getElementById('hidden_researcher_id').value;
-	            YAHOO.ur.researcher.link.newLinkDialog.hide();
-	            YAHOO.ur.researcher.link.clearLinkForm();
-	            YAHOO.ur.researcher.link.viewLinks(researcherId);
-	        }
-	         
+	            //if the link was not saved then show the user the error message.
+	            if( success == "false" )
+	            {
+	                YAHOO.ur.researcher.link.newLinkDialog.showLinkDialog();
+	            }
+	            else
+	            {
+	                researcherId = document.getElementById('hidden_researcher_id').value;
+	                YAHOO.ur.researcher.link.newLinkDialog.hide();
+	                YAHOO.ur.researcher.link.clearLinkForm();
+	                YAHOO.ur.researcher.link.viewLinks(researcherId);
+	            }
+	         }
 	    };
 	
 	    // handle form sbumission failure
@@ -165,9 +168,14 @@ YAHOO.ur.researcher.link = {
     {
         var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('researcher_personal_link_fields');
-            divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.researcher.link.newLinkDialog.showLinkDialog();
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 
+	            var divToUpdate = document.getElementById('researcher_personal_link_fields');
+                divToUpdate.innerHTML = o.responseText; 
+                YAHOO.ur.researcher.link.newLinkDialog.showLinkDialog();
+            }
  	    };
 	
 	    // handle form sbumission failure
@@ -219,10 +227,14 @@ YAHOO.ur.researcher.link = {
 	
 	    var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('researcher_personal_links');
-            divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.researcher.link.deleteLinkDialog.hide();
-
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 	    
+	            var divToUpdate = document.getElementById('researcher_personal_links');
+                divToUpdate.innerHTML = o.responseText; 
+                YAHOO.ur.researcher.link.deleteLinkDialog.hide();
+            }
 	    };
 	
 	    // handle form sbumission failure
@@ -278,8 +290,13 @@ YAHOO.ur.researcher.link = {
     {
     	var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('researcher_personal_links');
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 	    
+	            var divToUpdate = document.getElementById('researcher_personal_links');
                 divToUpdate.innerHTML = o.responseText; 
+            }
  	    };
 	
 	    // handle form sbumission failure
@@ -310,8 +327,13 @@ YAHOO.ur.researcher.link = {
     {
         var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('researcher_personal_links');
-                divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 	    
+	            var divToUpdate = document.getElementById('researcher_personal_links');
+                divToUpdate.innerHTML = o.responseText;
+            } 
  	    };
 	
 	    // handle form sbumission failure
@@ -342,8 +364,13 @@ YAHOO.ur.researcher.link = {
     {
         var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('researcher_personal_links');
-                divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 	    
+	            var divToUpdate = document.getElementById('researcher_personal_links');
+                divToUpdate.innerHTML = o.responseText;
+            } 
  	    };
 	
 	    // handle form sbumission failure

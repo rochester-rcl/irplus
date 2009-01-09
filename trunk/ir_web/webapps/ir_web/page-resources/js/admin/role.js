@@ -49,8 +49,13 @@ YAHOO.ur.role = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newRoles');
-		        divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {		    
+		            var divToUpdate = document.getElementById('newRoles');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -114,27 +119,31 @@ YAHOO.ur.role = {
 		    YAHOO.ur.role.clearRoleForm();
 		};
 		
-		var handleSuccess = function(o) {
-
-		    //get the response from adding a role
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a role
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the role was not added then show the user the error message.
-		    // received from the server
-		    if( response.roleAdded == "false" )
-		    {
-		        var roleNameError = document.getElementById('roleError');
-	            roleNameError.innerHTML = '<p id="newRoleForm_nameError">' + response.message + '</p>';
-	            YAHOO.ur.role.newRoleDialog.showDialog();
+		        //if the role was not added then show the user the error message.
+		        // received from the server
+		        if( response.roleAdded == "false" )
+		        {
+		            var roleNameError = document.getElementById('roleError');
+	                roleNameError.innerHTML = '<p id="newRoleForm_nameError">' + response.message + '</p>';
+	                YAHOO.ur.role.newRoleDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the role was added
+		            YAHOO.ur.role.newRoleDialog.hide();
+		            YAHOO.ur.role.clearRoleForm();
+		        }
+		        myRoleTable.submitForm(myRoleAction);
 		    }
-		    else
-		    {
-		   
-		        // we can clear the form if the role was added
-		        YAHOO.ur.role.newRoleDialog.hide();
-		        YAHOO.ur.role.clearRoleForm();
-		    }
-		    myRoleTable.submitForm(myRoleAction);
 		};
 		
 		// handle form submission failure
@@ -258,28 +267,33 @@ YAHOO.ur.role = {
 		    YAHOO.ur.role.deleteRoleDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a role
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a role
+		        var response = eval("("+o.responseText+")");
 
-		    //if the role was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.roleDeleted == "false" )
-		    {
-		        var deleteRoleError = document.getElementById('form_deleteRoleError');
-	            deleteRoleError.innerHTML = '<p id="newDeleteRoleError">' 
-	            + response.message + '</p>';
-	            YAHOO.ur.role.deleteRoleDialog.showDialog();
+		        //if the role was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.roleDeleted == "false" )
+		        {
+		            var deleteRoleError = document.getElementById('form_deleteRoleError');
+	                deleteRoleError.innerHTML = '<p id="newDeleteRoleError">' 
+	                + response.message + '</p>';
+	                YAHOO.ur.role.deleteRoleDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the roles were deleted
+		            YAHOO.ur.role.deleteRoleDialog.hide();
+		            YAHOO.ur.role.clearDeleteRoleForm();
+		        }
+		        // reload the table
+		        myRoleTable.submitForm(myRoleAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the roles were deleted
-		        YAHOO.ur.role.deleteRoleDialog.hide();
-		        YAHOO.ur.role.clearDeleteRoleForm();
-
-		    }
-		    // reload the table
-		    myRoleTable.submitForm(myRoleAction);
 		};
 		
 		// handle form submission failure

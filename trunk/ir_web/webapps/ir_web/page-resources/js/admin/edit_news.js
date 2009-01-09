@@ -49,30 +49,35 @@ YAHOO.ur.edit.news =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        var response = o.responseText;
-	        var uploadForm = document.getElementById('upload_form_fields');
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var response = o.responseText;
+	            var uploadForm = document.getElementById('upload_form_fields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        uploadForm.innerHTML = o.responseText;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            uploadForm.innerHTML = o.responseText;
 	    
-	    	// determine if the add/edit was a success
-	        var success = document.getElementById("picture_added").value;
-	        var itemId = document.getElementById("news_item_id").value;
+	    	    // determine if the add/edit was a success
+	            var success = document.getElementById("picture_added").value;
+	            var itemId = document.getElementById("news_item_id").value;
 	  
-	        //if the content type was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.edit.news.uploadNewsPictureDialog.showDialog();
-	        }
-	        else
-	        {
-	            // we can clear the upload form and get the pictures
-	            YAHOO.ur.edit.news.uploadNewsPictureDialog.hide();
-	            YAHOO.ur.edit.news.clearUploadPictureForm();
-	            YAHOO.ur.edit.news.getNewsPictures(itemId);
+	            //if the content type was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.edit.news.uploadNewsPictureDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the upload form and get the pictures
+	                YAHOO.ur.edit.news.uploadNewsPictureDialog.hide();
+	                YAHOO.ur.edit.news.clearUploadPictureForm();
+	                YAHOO.ur.edit.news.getNewsPictures(itemId);
+	            }
 	        }
 	    };
 	
@@ -151,8 +156,13 @@ YAHOO.ur.edit.news =
         // Success action on getting the picture
         var handleSuccess = function(o) 
         {
-            var divToUpdate = document.getElementById('news_item_pictures');
-            divToUpdate.innerHTML = o.responseText; 
+            // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+                var divToUpdate = document.getElementById('news_item_pictures');
+                divToUpdate.innerHTML = o.responseText; 
+            }
         };
     
         // Faiure action on getting a picture
@@ -194,10 +204,15 @@ YAHOO.ur.edit.news =
 	    //handle success
         var handleSuccess = function(o) 
         {
-            var divToUpdate = document.getElementById('news_item_pictures');
-            divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.edit.news.deletePictureDialog.hide();
-            YAHOO.ur.edit.news.clearPicutreDeleteForm();
+        	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+                var divToUpdate = document.getElementById('news_item_pictures');
+                divToUpdate.innerHTML = o.responseText; 
+                YAHOO.ur.edit.news.deletePictureDialog.hide();
+                YAHOO.ur.edit.news.clearPicutreDeleteForm();
+            }
         };
     
         // handle failure

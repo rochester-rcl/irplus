@@ -49,8 +49,13 @@ YAHOO.ur.publisher = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newPublishers');
-		        divToUpdate.innerHTML = o.responseText; 
+		        // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('newPublishers');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -104,44 +109,51 @@ YAHOO.ur.publisher = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 			
 		// handle a cancel of the adding publisher dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.publisher.newPublisherDialog.hide();
 		    YAHOO.ur.publisher.clearPublisherForm();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a publisher
-		    var response = o.responseText;
-		    var publisherForm = document.getElementById('newPublisherDialogFields');
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a publisher
+		        var response = o.responseText;
+		        var publisherForm = document.getElementById('newPublisherDialogFields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    publisherForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        publisherForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newPublisherForm_success").value;
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newPublisherForm_success").value;
 		    
-		  
-		    //if the publisher was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.publisher.newPublisherDialog.showDialog();
+		        //if the publisher was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.publisher.newPublisherDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the publisher was added
+		            YAHOO.ur.publisher.newPublisherDialog.hide();
+		            YAHOO.ur.publisher.clearPublisherForm();
+		        }
+		        myPublisherTable.submitForm(myPublisherAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the publisher was added
-		        YAHOO.ur.publisher.newPublisherDialog.hide();
-		        YAHOO.ur.publisher.clearPublisherForm();
-		    }
-		    myPublisherTable.submitForm(myPublisherAction);
 		};
 		
 		// handle form sbumission failure
@@ -251,7 +263,8 @@ YAHOO.ur.publisher = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 		    YAHOO.util.Connect.setForm('myPublishers');
 		    
 		    //delete the publisher
@@ -261,31 +274,38 @@ YAHOO.ur.publisher = {
 		
 			
 		// handle a cancel of deleting publisher dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.publisher.deletePublisherDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a publisher
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {		
+		        //get the response from adding a publisher
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the publisher was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.publisherDeleted == "false" )
-		    {
-		        var deletePublisherError = document.getElementById('form_deletePublisherError');
-	            deletePublisherError.innerHTML = '<p id="newDeletePublisherError">' 
-	            + response.message + '</p>';
-	            YAHOO.ur.publisher.deletePublisherDialog.showDialog();
+		        //if the publisher was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.publisherDeleted == "false" )
+		        {
+		            var deletePublisherError = document.getElementById('form_deletePublisherError');
+	                deletePublisherError.innerHTML = '<p id="newDeletePublisherError">' 
+	                + response.message + '</p>';
+	                YAHOO.ur.publisher.deletePublisherDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the publishers were deleted
+		            YAHOO.ur.publisher.clearDeletePublisherForm();
+		            YAHOO.ur.publisher.deletePublisherDialog.hide();
+		        }
+		        // reload the table
+		        myPublisherTable.submitForm(myPublisherAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the publishers were deleted
-		        YAHOO.ur.publisher.clearDeletePublisherForm();
-		        YAHOO.ur.publisher.deletePublisherDialog.hide();
-		    }
-		    // reload the table
-		    myPublisherTable.submitForm(myPublisherAction);
 		};
 		
 		// handle form submission failure

@@ -51,13 +51,18 @@ YAHOO.ur.group.item = {
 	
 	    var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('all_user_groups');
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('all_user_groups');
                 divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.group.item.editGroupPermissionsDialog.hide();
+                YAHOO.ur.group.item.editGroupPermissionsDialog.hide();
             
-            //set permission checkbox's to off
-            var permissionIds = document.getElementsByName('permissionIds');
-            urUtil.setCheckboxes(permissionIds, false);
+                //set permission checkbox's to off
+                var permissionIds = document.getElementsByName('permissionIds');
+                urUtil.setCheckboxes(permissionIds, false);
+            }
 	    };
 	
 	    // handle form sbumission failure
@@ -118,9 +123,15 @@ YAHOO.ur.group.item = {
 	    
 	    var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('permissions_for_group');
-            divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.group.item.showGroupPermissionsDialog(groupId);
+	    
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('permissions_for_group');
+                divToUpdate.innerHTML = o.responseText; 
+                YAHOO.ur.group.item.showGroupPermissionsDialog(groupId);
+            }
 	    };
 	
 	    // handle form sbumission failure
@@ -144,8 +155,13 @@ YAHOO.ur.group.item = {
 	    
 	    var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('all_user_groups');
-            divToUpdate.innerHTML = o.responseText; 
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('all_user_groups');
+                divToUpdate.innerHTML = o.responseText; 
+            }
 	    };
 	
 	    // handle form sbumission failure

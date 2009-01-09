@@ -60,19 +60,20 @@ YAHOO.ur.researcher.publications = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newPersonalCollections');
-		      
-		        divToUpdate.innerHTML = o.responseText; 
-		  
+		        // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       
+		            var divToUpdate = document.getElementById('newPersonalCollections');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
 			{
-		
 			    alert('Get personal folder Failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
-	
 	
 	    YAHOO.util.Connect.setForm('myPersonalCollections');
 	       
@@ -104,8 +105,13 @@ YAHOO.ur.researcher.publications = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newResearcherFolders');
-		        divToUpdate.innerHTML = o.responseText; 
+		    	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       
+		            var divToUpdate = document.getElementById('newResearcherFolders');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 

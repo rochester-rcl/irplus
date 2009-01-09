@@ -83,8 +83,13 @@ YAHOO.ur.item.contributor = {
 	{
 	    success: function(o) 
 	    {
-	        var divToUpdate = document.getElementById('newNames');
-	        divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               	    
+	            var divToUpdate = document.getElementById('newNames');
+	            divToUpdate.innerHTML = o.responseText; 
+	        }
 	    },
 		
 		failure: function(o) 
@@ -161,19 +166,24 @@ YAHOO.ur.item.contributor = {
 	{ 
 		var handleSuccess = function(o) 
 		{
-		    var response = eval("("+o.responseText+")");
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               		
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the name was not added then show the user the error message.
-		    // received from the server
-		    if( response.nameAdded == "true" )
-		    {
-				YAHOO.ur.item.contributor.getNames();
-				YAHOO.ur.item.contributor.getContributors();
+		        //if the name was not added then show the user the error message.
+		        // received from the server
+		        if( response.nameAdded == "true" )
+		        {
+				    YAHOO.ur.item.contributor.getNames();
+				    YAHOO.ur.item.contributor.getContributors();
+		        }
+		        else
+		        {
+		    	    alert('Adding name to the item failed');
+		        }
 		    }
-		    else {
-		    	alert('Adding name to the item failed');
-		    }
-		    
 		};
 
 		// handle form submission failure
@@ -211,8 +221,13 @@ YAHOO.ur.item.contributor = {
 	{
 	    success: function(o) 
 	    {
-	        var divToUpdate = document.getElementById('item_contributors');
-	        divToUpdate.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               	    
+	            var divToUpdate = document.getElementById('item_contributors');
+	            divToUpdate.innerHTML = o.responseText;
+	        } 
 	    },
 		
 		failure: function(o) 
@@ -324,42 +339,49 @@ YAHOO.ur.item.contributor = {
 	createNewPersonNameDialog : function(){
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();		   
 		};
 		
 			
 		// handle a cancel of the adding person type dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.item.contributor.newPersonNameDialog.hide();
 		    YAHOO.ur.item.contributor.clearPersonNameForm();
 		};
 		
-		var handleSuccess = function(o) {
-	
-		    //get the response from adding a person type
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               	
+		        //get the response from adding a person type
+		        var response = eval("("+o.responseText+")");
 
-		    //if the person type was not added then show the user the error message.
-		    // received from the server
-		    if( response.personNameAdded == "false" )
-		    {
-		        var personNameError = document.getElementById('personNameError');
-	            personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
-	            YAHOO.ur.item.contributor.newPersonNameDialog.showDialog();
+		        //if the person type was not added then show the user the error message.
+		        // received from the server
+		        if( response.personNameAdded == "false" )
+		        {
+		            var personNameError = document.getElementById('personNameError');
+	                personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
+	                YAHOO.ur.item.contributor.newPersonNameDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the person type was added
+		            YAHOO.ur.item.contributor.clearPersonNameForm();
+		            YAHOO.ur.item.contributor.newPersonNameDialog.hide();
+	        	    YAHOO.ur.item.contributor.getNames();
+		        }
 		    }
-		    else
-		    {
-		        // we can clear the form if the person type was added
-		        YAHOO.ur.item.contributor.clearPersonNameForm();
-		        YAHOO.ur.item.contributor.newPersonNameDialog.hide();
-	        	YAHOO.ur.item.contributor.getNames();
-		    }
-		
 		};
 		
 		// handle form sbumission failure
-		var handleFailure = function(o) {
+		var handleFailure = function(o) 
+		{
 		    alert('person name submission failed ' + o.status);
 		};
 	
@@ -450,73 +472,88 @@ YAHOO.ur.item.contributor = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 		// Define various event handlers for Dialog
-		var addPersonNameForUser = function() {
+		var addPersonNameForUser = function() 
+		{
 	            var cObj = YAHOO.util.Connect.asyncRequest('post',
 	            newPersonNameAction, personNameCallback);
 		};	
 			
 		// handle a cancel of the adding person type dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.item.contributor.newPersonDialog.hide();
 		    YAHOO.ur.item.contributor.clearPersonForm();
 		};
 		
-		var handleNewPersonFormSuccess = function(o) {
+		var handleNewPersonFormSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+		        //get the response from adding a person type
+		        var response = eval("("+o.responseText+")");
 
-		    //get the response from adding a person type
-		    var response = eval("("+o.responseText+")");
-
-		    //if the person type was not added then show the user the error message.
-		    // received from the server
-		    if( response.personAdded == "false" )
-		    {
-		        var personNameError = document.getElementById('personError');
-	            personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
-	            YAHOO.ur.item.contributor.newPersonDialog.showDialog();
-		    }
-		    else
-		    {
-				if (document.newPersonForm.myName.checked) {
-					document.newPersonForm.personId.value = response.personNameAuthorityId;
-				}
+		        //if the person type was not added then show the user the error message.
+		        // received from the server
+		        if( response.personAdded == "false" )
+		        {
+		            var personNameError = document.getElementById('personError');
+	                personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
+	                YAHOO.ur.item.contributor.newPersonDialog.showDialog();
+		        }
+		        else
+		        {
+				    if (document.newPersonForm.myName.checked) 
+				    {
+					    document.newPersonForm.personId.value = response.personNameAuthorityId;
+				    }
 					    
-		        // we can clear the form if the person type was added
-		        YAHOO.ur.item.contributor.newPersonDialog.hide();
-		        YAHOO.ur.item.contributor.clearPersonForm();
-		        YAHOO.ur.item.contributor.addName(response.personNameId);
+		            // we can clear the form if the person type was added
+		            YAHOO.ur.item.contributor.newPersonDialog.hide();
+		            YAHOO.ur.item.contributor.clearPersonForm();
+		            YAHOO.ur.item.contributor.addName(response.personNameId);
+		        }
 		    }
 		};
 		
 		// handle form sbumission failure
-		var handleNewPersonFormFailure = function(o) {
+		var handleNewPersonFormFailure = function(o) 
+		{
 		    alert('person submission failed ' + o.status);
 		};
 	
-		var handleNewPersonNameForUserFormSuccess = function(o) {
-		    //get the response from adding a person type
-		    var response = eval("("+o.responseText+")");
+		var handleNewPersonNameForUserFormSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               		
+		        //get the response from adding a person type
+		        var response = eval("("+o.responseText+")");
 	
-		    //if the person type was not added then show the user the error message.
-		    // received from the server
-		    if( response.personNameAdded == "false" )
-		    {
-		        var personNameError = document.getElementById('personError');
-	            personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
-	            YAHOO.ur.item.contributor.newPersonDialog.showDialog();
+		        //if the person type was not added then show the user the error message.
+		        // received from the server
+		        if( response.personNameAdded == "false" )
+		        {
+		            var personNameError = document.getElementById('personError');
+	                personNameError.innerHTML = '<p id="newPersonForm_Error">' + response.message + '</p>';
+	                YAHOO.ur.item.contributor.newPersonDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the person type was added
+		            YAHOO.ur.item.contributor.newPersonDialog.hide();
+		            YAHOO.ur.item.contributor.clearPersonForm();
+	        	    YAHOO.ur.item.contributor.addName(response.personNameId);
+		        }
 		    }
-		    else
-		    {
-		        // we can clear the form if the person type was added
-		        YAHOO.ur.item.contributor.newPersonDialog.hide();
-		        YAHOO.ur.item.contributor.clearPersonForm();
-	        	YAHOO.ur.item.contributor.addName(response.personNameId);
-		    }
-		
 		};
 		
 		// handle form sbumission failure

@@ -44,8 +44,13 @@ YAHOO.ur.subTypeExtension =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newSubTypeExtensions');
-                divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {                
+                    var divToUpdate = document.getElementById('newSubTypeExtensions');
+                    divToUpdate.innerHTML = o.responseText; 
+                }
             },
 	
 	        failure: function(o) 
@@ -110,31 +115,36 @@ YAHOO.ur.subTypeExtension =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a sub type
-	        var response = o.responseText;
-	        var SubTypeExtensionForm = document.getElementById('newSubTypeExtensionDialogFields');
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               	    
+	            //get the response from adding a sub type
+	            var response = o.responseText;
+	            var SubTypeExtensionForm = document.getElementById('newSubTypeExtensionDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        SubTypeExtensionForm.innerHTML = o.responseText;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            SubTypeExtensionForm.innerHTML = o.responseText;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("newSubTypeExtensionForm_success").value;
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("newSubTypeExtensionForm_success").value;
 	    
-	        //if the top media type was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.subTypeExtension.newSubTypeExtensionDialog.showDialog();
+	            //if the top media type was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.subTypeExtension.newSubTypeExtensionDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the top media type was added
+	                YAHOO.ur.subTypeExtension.newSubTypeExtensionDialog.hide();
+	                YAHOO.ur.subTypeExtension.clearSubTypeExtensionForm();
+	            }
+	            mySubTypeExtensionsTable.submitForm(mySubTypeExtensionAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the top media type was added
-	            YAHOO.ur.subTypeExtension.newSubTypeExtensionDialog.hide();
-	            YAHOO.ur.subTypeExtension.clearSubTypeExtensionForm();
-	        }
-	        mySubTypeExtensionsTable.submitForm(mySubTypeExtensionAction);
 	    };
 	
 	    // handle form sbumission failure
@@ -215,10 +225,15 @@ YAHOO.ur.subTypeExtension =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newSubTypeExtensionDialogFields');
-                divToUpdate.innerHTML = o.responseText; 
-                document.newSubTypeExtensionForm.newSubTypeExtension.value = "false";
-                YAHOO.ur.subTypeExtension.newSubTypeExtensionDialog.showDialog();
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {                           
+                    var divToUpdate = document.getElementById('newSubTypeExtensionDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                    document.newSubTypeExtensionForm.newSubTypeExtension.value = "false";
+                    YAHOO.ur.subTypeExtension.newSubTypeExtensionDialog.showDialog();
+                }
             },
 	
 	        failure: function(o) 
@@ -231,12 +246,6 @@ YAHOO.ur.subTypeExtension =
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
             editSubTypeExtensionAction + '?subTypeExtensionId=' + id +  '&bustcache='+new Date().getTime(), 
             callback, null);
-            
-    	//document.getElementById('newSubTypeExtensionForm_name').value = name;
-	    //document.getElementById('newSubTypeExtensionForm_description').value = description;
-	    //document.getElementById('newSubTypeExtensionForm_subTypeExtensionId').value = id;
-	    //document.newSubTypeExtensionForm.newSubTypeExtension.value = "false";
-	    //YAHOO.ur.subTypeExtension.newSubTypeExtensionDialog.showDialog();
     },
     
     // clear the sub type extension form
@@ -270,26 +279,31 @@ YAHOO.ur.subTypeExtension =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a sub type
-	        var response = eval("("+o.responseText+")");
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               	    
+	            //get the response from adding a sub type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the sub type was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.SubTypeExtensionDeleted == "false" )
-	        {
-	            var deleteSubTypeExtensionError = document.getElementById('form_deleteSubTypeExtensionError');
-                deleteSubTypeExtensionError.innerHTML = '<p id="newDeleteSubTypeExtensionError">' 
-                + response.message + '</p>';
-                YAHOO.ur.subTypeExtension.deleteSubTypeExtensionDialog.showDialog();
+	            //if the sub type was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.SubTypeExtensionDeleted == "false" )
+	            {
+	                var deleteSubTypeExtensionError = document.getElementById('form_deleteSubTypeExtensionError');
+                    deleteSubTypeExtensionError.innerHTML = '<p id="newDeleteSubTypeExtensionError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.subTypeExtension.deleteSubTypeExtensionDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the sub types were deleted
+	                YAHOO.ur.subTypeExtension.deleteSubTypeExtensionDialog.hide();
+	                YAHOO.ur.subTypeExtension.clearDeleteSubTypeExtensionForm();
+	            }
+	            // reload the table
+	            mySubTypeExtensionsTable.submitForm(mySubTypeExtensionAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the sub types were deleted
-	            YAHOO.ur.subTypeExtension.deleteSubTypeExtensionDialog.hide();
-	            YAHOO.ur.subTypeExtension.clearDeleteSubTypeExtensionForm();
-	        }
-	        // reload the table
-	       mySubTypeExtensionsTable.submitForm(mySubTypeExtensionAction);
 	    };
 	
 	    // handle form Submission failure

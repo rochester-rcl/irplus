@@ -22,11 +22,11 @@
 <div class="dataTable">
 
 	<ur:basicForm method="post" id="folders" name="myFolders" >
-	   Path: /<span class="folderBtnImg">&nbsp;</span>${researcher.user.username}/
+	   <h3>Path: /<span class="folderBtnImg">&nbsp;</span>${researcher.user.username}/
 	    <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.folder.getFolderById('0')">researcherFolders</ur:a>/
            <c:forEach var="folder" items="${folderPath}">
                <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.folder.getFolderById('${folder.id}')">${folder.name}</ur:a>/
-           </c:forEach>
+           </c:forEach></h3>
 	    
            <input type="hidden" id="myFolders_parentFolderId" name="parentFolderId" value="${parentFolderId}"/>
 		   <input type="hidden" id="myFolders_researcherId" name="researcherId" value="${researcher.id}"/>   
@@ -34,9 +34,9 @@
 	       <input type="hidden" id="folder_sort_element" name="sortElement" value="${sortElement}"/>
    
        
-       <!-- Table for files and folders  -->            
+       <!-- Table for files and folders  -->    
+        <h3>Researcher Folders</h3>        
         <urstb:table width="100%">
-            <urstb:caption>Researcher Folders</urstb:caption>
             <urstb:thead>
                 <urstb:tr>
                     <urstb:td><ur:checkbox name="checkAllSetting" 

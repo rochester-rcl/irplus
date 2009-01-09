@@ -50,8 +50,13 @@ YAHOO.ur.language.type = {
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newLanguageTypes');
-                divToUpdate.innerHTML = o.responseText; 
+                // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('newLanguageTypes');
+                    divToUpdate.innerHTML = o.responseText; 
+                }
             },
 	
 	        failure: function(o) 
@@ -115,24 +120,29 @@ YAHOO.ur.language.type = {
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a language type
-	        var response = eval("("+o.responseText+")");
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a language type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the language type was not added then show the user the error message.
-	        // received from the server
-	        if( response.languageTypeAdded == "false" )
-	        {
-	            var languageTypeNameError = document.getElementById('languageTypeError');
-                languageTypeNameError.innerHTML = '<p id="newLanguageTypeForm_nameError">' + response.message + '</p>';
-                YAHOO.ur.language.type.languageTypeDialog.showDialog();
+	            //if the language type was not added then show the user the error message.
+	            // received from the server
+	            if( response.languageTypeAdded == "false" )
+	            {
+	                var languageTypeNameError = document.getElementById('languageTypeError');
+                    languageTypeNameError.innerHTML = '<p id="newLanguageTypeForm_nameError">' + response.message + '</p>';
+                    YAHOO.ur.language.type.languageTypeDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the language type was added
+	                YAHOO.ur.language.type.languageTypeDialog.hide();
+	                YAHOO.ur.language.type.clearLanguageTypeForm();
+	            }
+	            myLanguageTypeTable.submitForm(myLanguageTypeAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the language type was added
-	            YAHOO.ur.language.type.languageTypeDialog.hide();
-	            YAHOO.ur.language.type.clearLanguageTypeForm();
-	        }
-	        myLanguageTypeTable.submitForm(myLanguageTypeAction);
 	    };
 	
 	    // handle form sbumission failure
@@ -247,26 +257,31 @@ YAHOO.ur.language.type = {
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a language type
-	        var response = eval("("+o.responseText+")");
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a language type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the language type was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.languageTypeDeleted == "false" )
-	        {
-	            var deleteLanguageTypeError = document.getElementById('form_deleteLanguageTypeError');
-                deleteLanguageTypeError.innerHTML = '<p id="newDeleteLanguageTypeError">' 
-                + response.message + '</p>';
-                YAHOO.ur.language.type.deleteLanguageTypeDialog.showDialog();
+	            //if the language type was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.languageTypeDeleted == "false" )
+	            {
+	                var deleteLanguageTypeError = document.getElementById('form_deleteLanguageTypeError');
+                    deleteLanguageTypeError.innerHTML = '<p id="newDeleteLanguageTypeError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.language.type.deleteLanguageTypeDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the language types were deleted
+	                YAHOO.ur.language.type.clearDeleteLanguageTypeForm();
+	                YAHOO.ur.language.type.deleteLanguageTypeDialog.hide();
+	            }
+	            // reload the table
+	            myLanguageTypeTable.submitForm(myLanguageTypeAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the language types were deleted
-	            YAHOO.ur.language.type.clearDeleteLanguageTypeForm();
-	            YAHOO.ur.language.type.deleteLanguageTypeDialog.hide();
-	        }
-	        // reload the table
-	        myLanguageTypeTable.submitForm(myLanguageTypeAction);
 	    };
 	
 	    // handle form submission failure

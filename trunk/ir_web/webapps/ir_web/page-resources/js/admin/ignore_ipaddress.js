@@ -49,8 +49,13 @@ YAHOO.ur.ignore.ipaddress = {
 			{
 			    success: function(o) 
 			    {
-			        var divToUpdate = document.getElementById('newIgnoreIpAddresses');
-			        divToUpdate.innerHTML = o.responseText; 
+			        // check for the timeout - forward user to login page if timout
+	                // occured
+	                if( !urUtil.checkTimeOut(o.responseText) )
+	                {
+			            var divToUpdate = document.getElementById('newIgnoreIpAddresses');
+			            divToUpdate.innerHTML = o.responseText;
+			        } 
 			    },
 				
 				failure: function(o) 
@@ -110,44 +115,51 @@ YAHOO.ur.ignore.ipaddress = {
 	{
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 			this.submit();
 		};
 		
 			
 		// handle a cancel of the adding ip address dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.ignore.ipaddress.newIgnoreIpAddressDialog.hide();
 		    YAHOO.ur.ignore.ipaddress.clearIgnoreIpAddressForm();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a ip address
-		    var response = o.responseText;
-		    var ignoreIpAddressForm = document.getElementById('newIgnoreIpAddressDialogFields');
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a ip address
+		        var response = o.responseText;
+		        var ignoreIpAddressForm = document.getElementById('newIgnoreIpAddressDialogFields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    ignoreIpAddressForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        ignoreIpAddressForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newIgnoreIpAddressForm_success").value;
-		    
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newIgnoreIpAddressForm_success").value;
 		  
-		    //if the ip address was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.ignore.ipaddress.newIgnoreIpAddressDialog.showDialog();
+		        //if the ip address was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.ignore.ipaddress.newIgnoreIpAddressDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the ip address was added
+		            YAHOO.ur.ignore.ipaddress.newIgnoreIpAddressDialog.hide();
+		            YAHOO.ur.ignore.ipaddress.clearIgnoreIpAddressForm();
+		        }
+		        myIgnoreIpAddressTable.submitForm(myIgnoreIpAddressAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the ip address was added
-		        YAHOO.ur.ignore.ipaddress.newIgnoreIpAddressDialog.hide();
-		        YAHOO.ur.ignore.ipaddress.clearIgnoreIpAddressForm();
-		    }
-		    myIgnoreIpAddressTable.submitForm(myIgnoreIpAddressAction);
 		};
 		
 		// handle form sbumission failure
@@ -284,31 +296,38 @@ YAHOO.ur.ignore.ipaddress = {
 		
 			
 		// handle a cancel of deleting ip address dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.ignore.ipaddress.deleteIgnoreIpAddressDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a ip address
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a ip address
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the ip address was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.ignoreIpAddressDeleted == "false" )
-		    {
-		        var deleteIgnoreIpAddressError = document.getElementById('form_deleteIgnoreIpAddressError');
-	            deleteIgnoreIpAddressError.innerHTML = '<p id="newDeleteIgnoreIpAddressError">' 
-	            + response.message + '</p>';
-	            YAHOO.ur.ignore.ipaddress.deleteIgnoreIpAddressDialog.showDialog();
+		        //if the ip address was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.ignoreIpAddressDeleted == "false" )
+		        {
+		            var deleteIgnoreIpAddressError = document.getElementById('form_deleteIgnoreIpAddressError');
+	                deleteIgnoreIpAddressError.innerHTML = '<p id="newDeleteIgnoreIpAddressError">' 
+	                + response.message + '</p>';
+	                YAHOO.ur.ignore.ipaddress.deleteIgnoreIpAddressDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the ip addresses were deleted
+		            YAHOO.ur.ignore.ipaddress.clearDeleteIgnoreIpAddressForm();
+		            YAHOO.ur.ignore.ipaddress.deleteIgnoreIpAddressDialog.hide();
+		        }
+		        // reload the table
+		        myIgnoreIpAddressTable.submitForm(myIgnoreIpAddressAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the ip addresses were deleted
-		        YAHOO.ur.ignore.ipaddress.clearDeleteIgnoreIpAddressForm();
-		        YAHOO.ur.ignore.ipaddress.deleteIgnoreIpAddressDialog.hide();
-		    }
-		    // reload the table
-		    myIgnoreIpAddressTable.submitForm(myIgnoreIpAddressAction);
 		};
 		
 		// handle form submission failure

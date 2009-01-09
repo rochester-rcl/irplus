@@ -32,8 +32,13 @@ YAHOO.ur.shared.file.move =
 	    // handle a successful return
 	    var handleSuccess = function(o) 
 	    {
-	        var response = o.responseText;
-	        document.getElementById('move_shared_file_frag').innerHTML = response;
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            var response = o.responseText;
+	            document.getElementById('move_shared_file_frag').innerHTML = response;
+	        }
 	    };
 	
 	    // handle form submission failure
@@ -53,29 +58,34 @@ YAHOO.ur.shared.file.move =
     	// handle a successful return
 	    var handleSuccess = function(o) 
 	    {
-	        var response = o.responseText;
-	        document.getElementById('move_shared_file_frag').innerHTML = response;
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	    
+	            var response = o.responseText;
+	            document.getElementById('move_shared_file_frag').innerHTML = response;
 
-	        var success = document.getElementById('action_success').value;
+	            var success = document.getElementById('action_success').value;
 	  
-	        if( success != 'true' )
-	        {
-	            var errorMessage = document.getElementById('move_error').innerHTML;
-	            document.getElementById('default_error_dialog_content').innerHTML= errorMessage;
-	            YAHOO.ur.shared.file.move.moveErrorDialog.center();
-	            YAHOO.ur.shared.file.move.moveErrorDialog.show();
- 	        }
-	        else
-	        {
-	            var destinationId = document.getElementById('destination_id').value;
-	            var getFoldersAction = basePath + 'user/workspace.action'
+	            if( success != 'true' )
+	            {
+	                var errorMessage = document.getElementById('move_error').innerHTML;
+	                document.getElementById('default_error_dialog_content').innerHTML= errorMessage;
+	                YAHOO.ur.shared.file.move.moveErrorDialog.center();
+	                YAHOO.ur.shared.file.move.moveErrorDialog.show();
+ 	            }
+	            else
+	            {
+	                var destinationId = document.getElementById('destination_id').value;
+	                var getFoldersAction = basePath + 'user/workspace.action'
 	        
-	            getFoldersAction = getFoldersAction +
+	                getFoldersAction = getFoldersAction +
 	                 '?parentFolderId=' + destinationId + '&bustcache='+new Date().getTime();
 	            
-	            window.location = getFoldersAction;
+	                window.location = getFoldersAction;
+	            }
 	        }
-	
 	    };
 	
 	    // handle form submission failure

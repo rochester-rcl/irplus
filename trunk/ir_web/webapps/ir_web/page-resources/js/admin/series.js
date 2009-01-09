@@ -49,8 +49,13 @@ YAHOO.ur.series = {
 		{
 		    success: function(o) 
 		    {
-		        var divToUpdate = document.getElementById('newSeries');
-		        divToUpdate.innerHTML = o.responseText; 
+		        // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('newSeries');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
 		    },
 			
 			failure: function(o) 
@@ -105,44 +110,51 @@ YAHOO.ur.series = {
 	createNewSeriesDialog : function(){
 	    
 		// Define various event handlers for Dialog
-		var handleSubmit = function() {
+		var handleSubmit = function() 
+		{
 		   this.submit();
 		};
 		
 			
 		// handle a cancel of the adding series dialog
-		var handleCancel = function() {
+		var handleCancel = function() 
+		{
 		    YAHOO.ur.series.newSeriesDialog.hide();
 		    YAHOO.ur.series.clearSeriesForm();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a series
-		    var response = o.responseText;
-		    var seriesForm = document.getElementById('newSeriesDialogFields');
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+		        //get the response from adding a series
+		        var response = o.responseText;
+		        var seriesForm = document.getElementById('newSeriesDialogFields');
 		    
-		    // update the form fields with the response.  This updates
-		    // the form, if there was an issue, update the form with
-		    // the error messages.
-		    seriesForm.innerHTML = o.responseText;
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        seriesForm.innerHTML = o.responseText;
 		    
-		    // determine if the add/edit was a success
-		    var success = document.getElementById("newSeriesForm_success").value;
-		    
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newSeriesForm_success").value;
 		  
-		    //if the series was not added then show the user the error message.
-		    // received from the server
-		    if( success == "false" )
-		    {
-	            YAHOO.ur.series.newSeriesDialog.showDialog();
+		        //if the series was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.series.newSeriesDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the series was added
+		            YAHOO.ur.series.newSeriesDialog.hide();
+				    YAHOO.ur.series.clearSeriesForm();
+		        }
+		        mySeriesTable.submitForm(mySeriesAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the series was added
-		        YAHOO.ur.series.newSeriesDialog.hide();
-				YAHOO.ur.series.clearSeriesForm();
-		    }
-		    mySeriesTable.submitForm(mySeriesAction);
 		};
 		
 		// handle form sbumission failure
@@ -273,27 +285,33 @@ YAHOO.ur.series = {
 		    YAHOO.ur.series.deleteSeriesDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-		    //get the response from adding a series
-		    var response = eval("("+o.responseText+")");
+		var handleSuccess = function(o) 
+		{
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {		
+		        //get the response from adding a series
+		        var response = eval("("+o.responseText+")");
 		    
-		    //if the series was not deleted then show the user the error message.
-		    // received from the server
-		    if( response.seriesDeleted == "false" )
-		    {
-		        var deleteSeriesError = document.getElementById('form_deleteSeriesError');
-	            deleteSeriesError.innerHTML = '<p id="newDeleteSeriesError">' 
-	            + response.message + '</p>';
-	            YAHOO.ur.series.deleteSeriesDialog.showDialog();
+		        //if the series was not deleted then show the user the error message.
+		        // received from the server
+		        if( response.seriesDeleted == "false" )
+		        {
+		            var deleteSeriesError = document.getElementById('form_deleteSeriesError');
+	                deleteSeriesError.innerHTML = '<p id="newDeleteSeriesError">' 
+	                + response.message + '</p>';
+	                YAHOO.ur.series.deleteSeriesDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the series were deleted
+		            YAHOO.ur.series.clearDeleteSeriesForm();
+		            YAHOO.ur.series.deleteSeriesDialog.hide();
+		        }
+		        // reload the table
+		        mySeriesTable.submitForm(mySeriesAction);
 		    }
-		    else
-		    {
-		        // we can clear the form if the series were deleted
-		        YAHOO.ur.series.clearDeleteSeriesForm();
-		        YAHOO.ur.series.deleteSeriesDialog.hide();
-		    }
-		    // reload the table
-		    mySeriesTable.submitForm(mySeriesAction);
 		};
 		
 		// handle form submission failure

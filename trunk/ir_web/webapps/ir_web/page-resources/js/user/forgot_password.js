@@ -63,34 +63,38 @@ YAHOO.ur.login =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a password token
-	        var response = o.responseText;
-	        var forgotPasswordForm = document.getElementById('forgotPasswordDialogFields');
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            //get the response from adding a password token
+	            var response = o.responseText;
+	            var forgotPasswordForm = document.getElementById('forgotPasswordDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        forgotPasswordForm.innerHTML = o.responseText;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            forgotPasswordForm.innerHTML = o.responseText;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("forgotPasswordForm_success").value;
-	        var message = document.getElementById("forgotPasswordForm_message").value;
-	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("forgotPasswordForm_success").value;
+	            var message = document.getElementById("forgotPasswordForm_message").value;
 	  
-	        //if the password token not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-	            var emailError = document.getElementById('emailError');
-                emailError.innerHTML = '<p id="forgotPasswordForm_emailError">' + message + '</p>';
+	            //if the password token not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+	                var emailError = document.getElementById('emailError');
+                    emailError.innerHTML = '<p id="forgotPasswordForm_emailError">' + message + '</p>';
    
-                YAHOO.ur.login.forgotPasswordDialog.showDialog();
-	        }
-	        else
-	        {
-	            // we can clear the form if the password token was added
-	            YAHOO.ur.login.clearForgotPasswordForm();
-	            YAHOO.ur.login.forgotPasswordDialog.hide();
+                    YAHOO.ur.login.forgotPasswordDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the password token was added
+	                YAHOO.ur.login.clearForgotPasswordForm();
+	                YAHOO.ur.login.forgotPasswordDialog.hide();
+	            }
 	        }
 	    };
 	

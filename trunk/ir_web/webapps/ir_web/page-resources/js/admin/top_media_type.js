@@ -51,8 +51,13 @@ YAHOO.ur.topMediaType = {
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newTopMediaTypes');
-                divToUpdate.innerHTML = o.responseText; 
+                // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               
+                    var divToUpdate = document.getElementById('newTopMediaTypes');
+                    divToUpdate.innerHTML = o.responseText; 
+                }
             },
 	
 	        failure: function(o) 
@@ -113,31 +118,36 @@ YAHOO.ur.topMediaType = {
 	
 	    var handleSuccess = function(o) 
 	    {
-	    	//get the response from adding a content type
-	        var response = o.responseText;
-	        var topMediaTypeForm = document.getElementById('newTopMediaTypeDialogFields');
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+	    	    //get the response from adding a content type
+	            var response = o.responseText;
+	            var topMediaTypeForm = document.getElementById('newTopMediaTypeDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        topMediaTypeForm.innerHTML = o.responseText;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            topMediaTypeForm.innerHTML = o.responseText;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("newTopMediaTypeForm_success").value;
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("newTopMediaTypeForm_success").value;
 	    
-	        //if the top media type was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.topMediaType.newTopMediaTypeDialog.showDialog();
+	            //if the top media type was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.topMediaType.newTopMediaTypeDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the top media type was added
+	                YAHOO.ur.topMediaType.newTopMediaTypeDialog.hide();
+	                YAHOO.ur.topMediaType.clearTopMediaTypeForm();
+	            }
+	            myTopMediaTypesTable.submitForm(myTopMediaTypeAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the top media type was added
-	            YAHOO.ur.topMediaType.newTopMediaTypeDialog.hide();
-	            YAHOO.ur.topMediaType.clearTopMediaTypeForm();
-	        }
-	        myTopMediaTypesTable.submitForm(myTopMediaTypeAction);
 	    };
 	
 	    // handle form sbumission failure
@@ -224,11 +234,15 @@ YAHOO.ur.topMediaType = {
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newTopMediaTypeDialogFields');
-                divToUpdate.innerHTML = o.responseText; 
-                document.newTopMediaTypeForm.newTopMediaType.value = "false";
-                YAHOO.ur.topMediaType.newTopMediaTypeDialog.showDialog();
-                
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {               
+                    var divToUpdate = document.getElementById('newTopMediaTypeDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                    document.newTopMediaTypeForm.newTopMediaType.value = "false";
+                    YAHOO.ur.topMediaType.newTopMediaTypeDialog.showDialog();
+                }
             },
 	
 	        failure: function(o) 
@@ -275,26 +289,31 @@ YAHOO.ur.topMediaType = {
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a top media type
-	        var response = eval("("+o.responseText+")");
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+	            //get the response from adding a top media type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the top media type was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.topMediaTypeDeleted == "false" )
-	        {
-	            var deleteTopMediaTypeError = document.getElementById('form_deleteTopMediaTypeError');
-                deleteTopMediaTypeError.innerHTML = '<p id="newDeleteTopMediaTypeError">' 
-                + response.message + '</p>';
-                YAHOO.ur.topMediaType.deleteTopMediaTypeDialog.showDialog();
+	            //if the top media type was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.topMediaTypeDeleted == "false" )
+	            {
+	                var deleteTopMediaTypeError = document.getElementById('form_deleteTopMediaTypeError');
+                    deleteTopMediaTypeError.innerHTML = '<p id="newDeleteTopMediaTypeError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.topMediaType.deleteTopMediaTypeDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the top media types were deleted
+	                YAHOO.ur.topMediaType.clearDeleteTopMediaTypeForm();
+	                YAHOO.ur.topMediaType.deleteTopMediaTypeDialog.hide();
+	            }
+	            // reload the table
+	            myTopMediaTypesTable.submitForm(myTopMediaTypeAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the top media types were deleted
-	            YAHOO.ur.topMediaType.clearDeleteTopMediaTypeForm();
-	            YAHOO.ur.topMediaType.deleteTopMediaTypeDialog.hide();
-	        }
-	        // reload the table
-	        myTopMediaTypesTable.submitForm(myTopMediaTypeAction);
 	    };
 	
 	    // handle form submission failure

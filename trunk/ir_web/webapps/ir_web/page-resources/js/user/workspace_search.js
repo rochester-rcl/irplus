@@ -32,8 +32,13 @@ YAHOO.ur.workspace.search =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('search_results');
-                divToUpdate.innerHTML = o.responseText; 
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		             
+                    var divToUpdate = document.getElementById('search_results');
+                    divToUpdate.innerHTML = o.responseText; 
+                }
             },
 	
 	        failure: function(o) 

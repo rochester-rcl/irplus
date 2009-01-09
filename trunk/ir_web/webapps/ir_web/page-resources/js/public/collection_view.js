@@ -31,8 +31,13 @@ YAHOO.ur.public.collection.view =
         //Success action on getting the picture
         var handleSuccess = function(o) 
         {
-            var divToUpdate = document.getElementById('collection_picture');
-            divToUpdate.innerHTML = o.responseText; 
+            // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {                       
+                var divToUpdate = document.getElementById('collection_picture');
+                divToUpdate.innerHTML = o.responseText;
+            } 
         };
     
         // Faiure action on getting a picture
@@ -60,10 +65,15 @@ YAHOO.ur.public.collection.view =
         //Success action on getting the picture
         var handleSuccess = function(o) 
         {
-        	//get the response from subscribing to collection
-		    var response = o.responseText;
-            var divToUpdate = document.getElementById('collection_subscription');
-            divToUpdate.innerHTML = response;
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+        	    //get the response from subscribing to collection
+		        var response = o.responseText;
+                var divToUpdate = document.getElementById('collection_subscription');
+                divToUpdate.innerHTML = response;
+            }
         };
     
         // Faiure action on getting a picture
@@ -89,10 +99,15 @@ YAHOO.ur.public.collection.view =
         //Success action on getting the picture
         var handleSuccess = function(o) 
         {
-        	//get the response from subscribing to collection
-		    var response = o.responseText;
-            var divToUpdate = document.getElementById('collection_subscription');
-            divToUpdate.innerHTML = response;
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+        	    //get the response from subscribing to collection
+		        var response = o.responseText;
+                var divToUpdate = document.getElementById('collection_subscription');
+                divToUpdate.innerHTML = response;
+            }
         };
     
         // Faiure action on getting a picture
@@ -119,10 +134,15 @@ YAHOO.ur.public.collection.view =
         //Success action on getting the picture
         var handleSuccess = function(o) 
         {
-        	//get the response from subscribing to collection
-		    var response = o.responseText;
-            var divToUpdate = document.getElementById('collection_subscription');
-            divToUpdate.innerHTML = response;
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {                       
+        	    //get the response from subscribing to collection
+		        var response = o.responseText;
+                var divToUpdate = document.getElementById('collection_subscription');
+                divToUpdate.innerHTML = response;
+            }
         };
     
         // Faiure action on getting a picture
@@ -150,10 +170,15 @@ YAHOO.ur.public.collection.view =
         // Success action on getting the statistics
         var handleSuccess = function(o) 
         {
-        	//get the response statistics
-		    var response = o.responseText;
-            var divToUpdate = document.getElementById('statistics_div');
-            divToUpdate.innerHTML = response;
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+        	    //get the response statistics
+		        var response = o.responseText;
+                var divToUpdate = document.getElementById('statistics_div');
+                divToUpdate.innerHTML = response;
+            }
         };
     
         // Faiure action on getting a statistics

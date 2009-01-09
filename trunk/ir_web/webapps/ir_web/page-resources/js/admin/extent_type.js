@@ -44,8 +44,13 @@ YAHOO.ur.extent.type =
          {
              success: function(o) 
              {
-                 var divToUpdate = document.getElementById('newExtentTypes');
-                 divToUpdate.innerHTML = o.responseText; 
+                 // check for the timeout - forward user to login page if timout
+	             // occured
+	             if( !urUtil.checkTimeOut(o.responseText) )
+	             {
+                     var divToUpdate = document.getElementById('newExtentTypes');
+                     divToUpdate.innerHTML = o.responseText; 
+                 }
              },
 	
 	         failure: function(o) 
@@ -110,25 +115,30 @@ YAHOO.ur.extent.type =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a extent type
-	        var response = eval("("+o.responseText+")");
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a extent type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the extent type was not added then show the user the error message.
-	        // received from the server
-	        if( response.extentTypeAdded == "false" )
-	        {
-	            var extentTypeNameError = document.getElementById('extentTypeError');
-                extentTypeNameError.innerHTML = '<p id="newExtentTypeForm_nameError">' + response.message + '</p>';
-                YAHOO.ur.extent.type.extentTypeDialog.showDialog();
-	        }
-	        else
-	        {
-	            // we can clear the form if the extent type was added
-	            YAHOO.ur.extent.type.extentTypeDialog.hide();
-	            YAHOO.ur.extent.type.clearExtentTypeForm();
+	            //if the extent type was not added then show the user the error message.
+	            // received from the server
+	            if( response.extentTypeAdded == "false" )
+	            {
+	                var extentTypeNameError = document.getElementById('extentTypeError');
+                    extentTypeNameError.innerHTML = '<p id="newExtentTypeForm_nameError">' + response.message + '</p>';
+                    YAHOO.ur.extent.type.extentTypeDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the extent type was added
+	                YAHOO.ur.extent.type.extentTypeDialog.hide();
+	                YAHOO.ur.extent.type.clearExtentTypeForm();
 	        
+	            }
+	            myExtentTypeTable.submitForm(myExtentTypeAction);
 	        }
-	        myExtentTypeTable.submitForm(myExtentTypeAction);
 	    };
 	
 	    // handle form sbumission failure
@@ -250,27 +260,31 @@ YAHOO.ur.extent.type =
 	
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a extent type
-	        var response = eval("("+o.responseText+")");
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            //get the response from adding a extent type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the extent type was not deleted then show the user the error message.
-	        // received from the server
-	        if( response.extentTypeDeleted == "false" )
-	        {
-	            var deleteExtentTypeError = document.getElementById('form_deleteExtentTypeError');
-                deleteExtentTypeError.innerHTML = '<p id="newDeleteExtentTypeError">' 
-                + response.message + '</p>';
-                YAHOO.ur.extent.type.deleteExtentTypeDialog.showDialog();
+	            //if the extent type was not deleted then show the user the error message.
+	            // received from the server
+	            if( response.extentTypeDeleted == "false" )
+	            {
+	                var deleteExtentTypeError = document.getElementById('form_deleteExtentTypeError');
+                    deleteExtentTypeError.innerHTML = '<p id="newDeleteExtentTypeError">' 
+                    + response.message + '</p>';
+                    YAHOO.ur.extent.type.deleteExtentTypeDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the extent types were deleted
+	                YAHOO.ur.extent.type.deleteExtentTypeDialog.hide();
+	                YAHOO.ur.extent.type.clearDeleteExtentTypeForm();
+	            }
+	            // reload the table
+	            myExtentTypeTable.submitForm(myExtentTypeAction);
 	        }
-	        else
-	        {
-	            // we can clear the form if the extent types were deleted
-	            YAHOO.ur.extent.type.deleteExtentTypeDialog.hide();
-	            YAHOO.ur.extent.type.clearDeleteExtentTypeForm();
-	            
-	        }
-	        // reload the table
-	        myExtentTypeTable.submitForm(myExtentTypeAction);
 	    };
 	
 	    // handle form submission failure

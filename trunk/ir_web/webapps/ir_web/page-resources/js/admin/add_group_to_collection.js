@@ -51,13 +51,19 @@ YAHOO.ur.group.collection = {
 	
 	    var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('current_collection_groups_div');
+	    
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('current_collection_groups_div');
                 divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.group.collection.editGroupPermissionsDialog.hide();
+                YAHOO.ur.group.collection.editGroupPermissionsDialog.hide();
             
-            //set permission checkbox's to off
-            var permissionIds = document.getElementsByName('permissionIds');
-            urUtil.setCheckboxes(permissionIds, false);
+                //set permission checkbox's to off
+                var permissionIds = document.getElementsByName('permissionIds');
+                urUtil.setCheckboxes(permissionIds, false);
+            }
 	    };
 	
 	    // handle form sbumission failure
@@ -118,9 +124,15 @@ YAHOO.ur.group.collection = {
             
 	    var success = function(o) 
 	    {
-	        var divToUpdate = document.getElementById('permissions_for_group');
-            divToUpdate.innerHTML = o.responseText; 
-            YAHOO.ur.group.collection.showGroupPermissionsDialog(groupId);
+	    
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {
+	            var divToUpdate = document.getElementById('permissions_for_group');
+                divToUpdate.innerHTML = o.responseText; 
+                YAHOO.ur.group.collection.showGroupPermissionsDialog(groupId);
+            }
 	    };
 	
 	    // handle form sbumission failure

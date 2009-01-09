@@ -40,10 +40,14 @@ YAHOO.ur.invite =
     {
         success: function(o) 
         {
-            var divToUpdate = document.getElementById('newCollaborators');
-            divToUpdate.innerHTML = o.responseText; 
-
-            document.newInviteForm.shareFileIds.value = document.getElementById('collaborators_share_file_ids').value;
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               
+                var divToUpdate = document.getElementById('newCollaborators');
+                divToUpdate.innerHTML = o.responseText; 
+                document.newInviteForm.shareFileIds.value = document.getElementById('collaborators_share_file_ids').value;
+            }
         },
 	
 	    failure: function(o) 
@@ -145,23 +149,28 @@ YAHOO.ur.invite =
 	    // handle a successful return
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from adding a contributor type
-	        var response = eval("("+o.responseText+")");
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            //get the response from adding a contributor type
+	            var response = eval("("+o.responseText+")");
 	    
-	        //if the contributor type was not added then show the user the error message.
-	        // received from the server
-	        if( response.inviteSent == "false" )
-	        {
-	            var inviteError = document.getElementById('inviteUserError');
-                inviteError.innerHTML = '<p id="inviteForm_emailError">' + response.inviteErrorMessage + '</p>';
-	        }
-	        else
-	        {
-	            // we can clear the form if the contributor type was added
-	            YAHOO.ur.invite.clearInviteForm();
-	        }
+	            //if the contributor type was not added then show the user the error message.
+	            // received from the server
+	            if( response.inviteSent == "false" )
+	            {
+	                var inviteError = document.getElementById('inviteUserError');
+                    inviteError.innerHTML = '<p id="inviteForm_emailError">' + response.inviteErrorMessage + '</p>';
+	            }
+	            else
+	            {
+	                // we can clear the form if the contributor type was added
+	                YAHOO.ur.invite.clearInviteForm();
+	            }
 
-    	    YAHOO.ur.invite.getCollaboratorById(document.newInviteForm.shareFileIds.value);
+    	        YAHOO.ur.invite.getCollaboratorById(document.newInviteForm.shareFileIds.value);
+    	    }
 	    };
 	
 	    // handle form submission failure
@@ -234,30 +243,35 @@ YAHOO.ur.invite =
 
 	    var handleSuccess = function(o) 
 	    {
-	        //get the response from updating permissions
-	        var response = o.responseText;
-	        var permissionForm = document.getElementById('editPermissionsDialogFields');
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	        
+	            //get the response from updating permissions
+	            var response = o.responseText;
+	            var permissionForm = document.getElementById('editPermissionsDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        permissionForm.innerHTML = o.responseText;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            permissionForm.innerHTML = o.responseText;
 
-	        // determine if the edit was a success
-	        var success = document.getElementById("editPermissionseForm_success").value;
+	            // determine if the edit was a success
+	            var success = document.getElementById("editPermissionseForm_success").value;
 	    
-	        //if the update was not successfull then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.invite.editPermissionsDialog.showDialog();
+	            //if the update was not successfull then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.invite.editPermissionsDialog.showDialog();
+	            }
+	            else
+	            {
+		            YAHOO.ur.invite.clearEditPermissionsForm();
+	                YAHOO.ur.invite.editPermissionsDialog.hide();
+	            }
 	        }
-	        else
-	        {
-		        YAHOO.ur.invite.clearEditPermissionsForm();
-	            YAHOO.ur.invite.editPermissionsDialog.hide();
-	        }
-
 	    };
 
 	    var handleFailure = function(o) 
@@ -326,11 +340,15 @@ YAHOO.ur.invite =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('editPermissionsDialogFields');
-                divToUpdate.innerHTML = o.responseText;
-
-		        YAHOO.ur.invite.editPermissionsDialog.render();
-                YAHOO.ur.invite.editPermissionsDialog.showDialog();
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {                   
+                    var divToUpdate = document.getElementById('editPermissionsDialogFields');
+                    divToUpdate.innerHTML = o.responseText;
+		            YAHOO.ur.invite.editPermissionsDialog.render();
+                    YAHOO.ur.invite.editPermissionsDialog.showDialog();
+                }
             },
 	
 	        failure: function(o) 

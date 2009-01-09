@@ -187,17 +187,21 @@ YAHOO.ur.personal.collection =
 			{
 			    success: function(o) 
 			    {
-				    var response = eval("("+o.responseText+")");
+			        // check for the timeout - forward user to login page if timout
+	                // occured
+	                if( !urUtil.checkTimeOut(o.responseText) )
+	                {       		 			    
+				        var response = eval("("+o.responseText+")");
 	
-				    // If file added, update selected files column
-				    if ( response.hasOwnFiles == "false" )
-				    {
-				        var divToUpdate = document.getElementById('file_ownership_error_div');
-				      
-				        divToUpdate.innerHTML = response.message; 
-				    }
+				        // If file added, update selected files column
+				        if ( response.hasOwnFiles == "false" )
+				        {
+				            var divToUpdate = document.getElementById('file_ownership_error_div');
+				            divToUpdate.innerHTML = response.message; 
+				        }
 				    
-				    YAHOO.ur.personal.collection.newItemDialog.showDialog();
+				        YAHOO.ur.personal.collection.newItemDialog.showDialog();
+				    }
 			    },
 				
 				failure: function(o) 
@@ -306,34 +310,38 @@ YAHOO.ur.personal.collection =
 	
 	    var handleSuccess = function(o)
 	    {
-	        //get the response from adding a collection
-	        var response = o.responseText;
-	        var collectionForm = document.getElementById('newCollectionDialogFields');
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		 	    
+	            //get the response from adding a collection
+	            var response = o.responseText;
+	            var collectionForm = document.getElementById('newCollectionDialogFields');
 	    
-	        // update the form fields with the response.  This updates
-	        // the form, if there was an issue, update the form with
-	        // the error messages.
-	        collectionForm.innerHTML = response;
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            collectionForm.innerHTML = response;
 	    
-	        // determine if the add/edit was a success
-	        var success = document.getElementById("newCollectionForm_success").value;
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("newCollectionForm_success").value;
 	    
 	  
-	        //if the collection was not added then show the user the error message.
-	        // received from the server
-	        if( success == "false" )
-	        {
-                YAHOO.ur.personal.collection.newCollectionDialog.showDialog();
-	        }
-	        else
-	        {
-	            // we can clear the form if the collection was added
-	            YAHOO.ur.personal.collection.newCollectionDialog.hide();
-	            YAHOO.ur.personal.collection.clearCollectionForm();
+	            //if the collection was not added then show the user the error message.
+	            // received from the server
+	            if( success == "false" )
+	            {
+                    YAHOO.ur.personal.collection.newCollectionDialog.showDialog();
+	            }
+	            else
+	            {
+	                // we can clear the form if the collection was added
+	                YAHOO.ur.personal.collection.newCollectionDialog.hide();
+	                YAHOO.ur.personal.collection.clearCollectionForm();
+	            }
 
+	            myPersonalCollectionsTable.submitForm(myCollectionAction);
 	        }
-
-	        myPersonalCollectionsTable.submitForm(myCollectionAction);
 	    };
 	
 	    var handleFailure = function(o) 
@@ -414,10 +422,15 @@ YAHOO.ur.personal.collection =
         {
             success: function(o) 
             {
-                var divToUpdate = document.getElementById('newCollectionDialogFields');
-                divToUpdate.innerHTML = o.responseText; 
-                document.newCollectionForm.newCollection.value = "false";
-                YAHOO.ur.personal.collection.newCollectionDialog.showDialog();
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		             
+                    var divToUpdate = document.getElementById('newCollectionDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                    document.newCollectionForm.newCollection.value = "false";
+                    YAHOO.ur.personal.collection.newCollectionDialog.showDialog();
+                }
                 
             },
 	

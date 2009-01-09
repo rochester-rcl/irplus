@@ -46,14 +46,19 @@ YAHOO.ur.shared.file.inbox =
         // success when getting the file properties
         var handleSuccess = function(o) 
         {
-	        var response = o.responseText;
-	        var contentArea = document.getElementById('shared_folder_inbox');
-	        contentArea.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		         
+	            var response = o.responseText;
+	            var contentArea = document.getElementById('shared_folder_inbox');
+	            contentArea.innerHTML = o.responseText; 
 	        
-	        // Set the number of inbox files in Tab 
- 			var inboxFilesCount = document.getElementById('inbox_files_count');
- 			var countAndSpan = '<span id="inbox_files_count">' + document.getElementById('shared_inbox_files_count').value + '</span>' ;
-	        inboxFilesCount.innerHTML = countAndSpan ; 	        
+	            // Set the number of inbox files in Tab 
+ 			    var inboxFilesCount = document.getElementById('inbox_files_count');
+ 			    var countAndSpan = '<span id="inbox_files_count">' + document.getElementById('shared_inbox_files_count').value + '</span>' ;
+	            inboxFilesCount.innerHTML = countAndSpan ; 
+	        }	        
         };
    
         // success when getting the file properties
@@ -83,14 +88,19 @@ YAHOO.ur.shared.file.inbox =
         // success when getting the file properties
         var handleSuccess = function(o) 
         {
-	        var response = o.responseText;
-	        var contentArea = document.getElementById('shared_folder_inbox');
-	        contentArea.innerHTML = o.responseText; 
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		         
+	            var response = o.responseText;
+	            var contentArea = document.getElementById('shared_folder_inbox');
+	            contentArea.innerHTML = o.responseText; 
 	        
-	        // Set the number of inbox files in Tab 
- 			var inboxFilesCount = document.getElementById('inbox_files_count');
- 			var countAndSpan = '<span id="inbox_files_count">' + document.getElementById('shared_inbox_files_count').value + '</span>' ;
-	        inboxFilesCount.innerHTML = countAndSpan ; 	        
+	            // Set the number of inbox files in Tab 
+ 			    var inboxFilesCount = document.getElementById('inbox_files_count');
+ 			    var countAndSpan = '<span id="inbox_files_count">' + document.getElementById('shared_inbox_files_count').value + '</span>';
+	            inboxFilesCount.innerHTML = countAndSpan;
+	        } 	        
         };
    
         // success when getting the file properties

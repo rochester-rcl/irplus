@@ -54,9 +54,14 @@ YAHOO.ur.repository =
         //success action
         var handleSuccess = function(o) 
         {
-            YAHOO.ur.repository.deleteRepositoryPictureDialog.hide();
-            var divToUpdate = document.getElementById('repository_pictures');
-            divToUpdate.innerHTML = o.responseText; 
+		    // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {            
+                YAHOO.ur.repository.deleteRepositoryPictureDialog.hide();
+                var divToUpdate = document.getElementById('repository_pictures');
+                divToUpdate.innerHTML = o.responseText; 
+            }
         };
     
         // Faiure action on getting a picture
