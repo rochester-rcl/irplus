@@ -63,7 +63,13 @@
 		                        ${pendingUser.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   ${pendingUser.username}
+			                   ${pendingUser.username} 
+	                        </urstb:td>
+	                         <urstb:td>
+			                   ${pendingUser.firstName} 
+	                        </urstb:td>
+	                         <urstb:td>
+			                   ${pendingUser.lastName} 
 	                        </urstb:td>
 	                        <urstb:td>
 			                     <select id="affiliation_id" name="affiliationId" />

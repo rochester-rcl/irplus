@@ -110,7 +110,7 @@ span.reportGoBtnImg, span.groupAddBtnImg, span.worldAddBtnImg, span.packageAddBt
 span.folderBtnImg, span.blueDownBtnImg, span.lockBtnImg, span.wrenchBtnImg, 
 span.pageWhitePutBtnImg,
 span.unlockBtnImg, span.deleteLockBtnImg, span.worldBtnImg, span.packageBtnImg, 
-span.reportEditBtnImg, span.arrowBtnImg
+span.reportEditBtnImg, span.arrowBtnImg, span.addBtnImg
 {
     display: inline;
 	overflow: hidden;
@@ -123,7 +123,8 @@ span.reportEditBtnImg, span.arrowBtnImg
 	font-size: 15px;
 }
 
-span.arrowBtnImg {background-position: 0 -55px;}
+span.addBtnImg {background-position: 0 -20px;}
+span.addFolderBtnImg {background-position: 0 -320px;}
 span.addFolderBtnImg {background-position: 0 -320px;}
 span.deleteBtnImg{background-position: 0 -180px;}
 span.pageAddBtnImg{background-position: 0 -800px;}

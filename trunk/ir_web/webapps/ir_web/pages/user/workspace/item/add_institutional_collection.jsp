@@ -44,6 +44,7 @@
 	    
         <!-- Source File -->
         <ur:js src="pages/js/base_path.js"/>
+        <ur:js src="page-resources/js/util/ur_util.js"/>
         <ur:js src="page-resources/js/menu/main_menu.js"/>
 
   		<ur:js src="page-resources/js/user/submit_item_to_institutional_collection.js"/>
@@ -105,7 +106,7 @@
 	                               	<!--  Table of selected institutional collections -->
 	                               	<div id="selected_collections" >
 	                               		
-	                               		<%@ include file="/pages/user/workspace/item/selected_collections_table.jsp" %>
+	                               		<%@ include file="selected_collections_table.jsp" %>
 	                                </div>
 	                  				<!--  end table of selected institutional collections div -->
 	                      </ur:basicForm>

@@ -61,7 +61,7 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h2>Affiliations</h2>
+        <h3>Affiliations</h3>
   
         <div id="bd">
       

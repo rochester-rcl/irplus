@@ -23,7 +23,7 @@
 	       
 	       
 	       <c:if test="${!collection.publiclyViewable}">
-		   		<strong>hidden.</strong>
+		   		<strong>Private.</strong>
 	       </c:if>
 	       
  	       <button class="ur_button" type="button"

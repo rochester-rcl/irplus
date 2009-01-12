@@ -61,21 +61,14 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h2>Approve user affiliation</h2>
+        <h3>Approve user affiliation</h3>
   
         <div id="bd">
       
-            <table>
-	            <tr>
-					<td>
-		                <button id="showApproveAffiliation1" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Approve</button> 
-	                </td>
-
-	            </tr>
-	        </table>
-	        
+		    <button id="showApproveAffiliation1" class="ur_button" 
+ 		            onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';">Approve</button> 
+	         
 	        <ur:div id="newPendingApprovals"></ur:div>
 	      
         

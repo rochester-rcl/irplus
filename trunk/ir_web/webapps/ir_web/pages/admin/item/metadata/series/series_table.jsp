@@ -45,6 +45,7 @@
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+					<urstb:td>Number</urstb:td>
 					<urstb:td>Description</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>
@@ -67,6 +68,9 @@
 	                        <urstb:td>
 			                   <a href="javascript:YAHOO.ur.series.editSeries('${series.id}',
 			                           '${series.name}','${series.number}', '${series.description}');">${series.name}</a>
+	                        </urstb:td>
+	                        <urstb:td>
+	                             ${series.number}
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${series.description}
