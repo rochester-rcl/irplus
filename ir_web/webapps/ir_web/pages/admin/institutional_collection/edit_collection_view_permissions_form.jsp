@@ -46,12 +46,6 @@
 			  	</td>
     	  	</tr> 
 	     </c:if> 
-	     
-			<tr>
-				<td align="left">
-			  	  <input type="radio" name="updateChildrenPermission" value="0" checked> No change </input> 
-			  	</td>
-    	  	</tr>	     
-	    		    	
+
 	
 </table>

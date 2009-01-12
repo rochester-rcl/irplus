@@ -73,7 +73,7 @@
              <!--  this is the header of the page -->
             <c:import url="/inc/header.jsp"/>
             
-            <h1>Add Group Permissions on Collection: ${collection.name}</h1>
+            <h3>Add Group Permissions on Collection: ${collection.name}</h3>
            
             <c:url var="viewCollection" value="/admin/viewInstitutionalCollection.action">
                 <c:param name="collectionId" value="${collection.id}"/> 

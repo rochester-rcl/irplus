@@ -43,6 +43,9 @@
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+					<urstb:td>Author Permission</urstb:td>
+					<urstb:td>Researcher Permission</urstb:td>
+					<urstb:td>Approval Required</urstb:td>
 					<urstb:td>Description</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>
@@ -63,8 +66,20 @@
 		                        ${affiliation.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.affiliation.editContentType('${affiliation.id}',
+	                         <a href="javascript:YAHOO.ur.affiliation.editAffiliation('${affiliation.id}',
 			                           '${affiliation.name}','${affiliation.description}');">${affiliation.name}</a>
+	                        </urstb:td>
+	                         <urstb:td>
+		                        <input type="checkbox" disabled="disabled" 
+                               <c:if test='${affiliation.author}'>checked="checked"</c:if>/>
+	                        </urstb:td>
+	                        <urstb:td>
+			                   <input type="checkbox" disabled="disabled" 
+                               <c:if test='${affiliation.researcher}'>checked="checked"</c:if>/>
+	                        </urstb:td>
+	                        <urstb:td>
+		                        <input type="checkbox" disabled="disabled" 
+                                <c:if test='${affiliation.needsApproval}'>checked="checked"</c:if>/>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${affiliation.description}

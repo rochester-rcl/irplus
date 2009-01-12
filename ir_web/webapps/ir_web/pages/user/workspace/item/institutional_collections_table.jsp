@@ -48,26 +48,24 @@ Displayed on the left hand side of the add files to item page -->
 			<tr >
 				<td class="tdItemFolderLeftBorder" >
 					<c:if test="${collectionPermission.permission == 'DIRECT_SUBMIT'}">
-		            	<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/addarrow.jpg"/>
-		            	<a href="JAVASCRIPT:YAHOO.ur.item.collection.addCollectionToPublication('${collectionPermission.institutionalCollection.id}');">Direct</a>
+		            	<span class="addBtnImg">&nbsp;</span><a href="JAVASCRIPT:YAHOO.ur.item.collection.addCollectionToPublication('${collectionPermission.institutionalCollection.id}');">Direct</a>
 	                </c:if>
 					<c:if test="${collectionPermission.permission == 'REVIEW_SUBMIT'}">
-						<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/adduser.jpg"/>
-		                <a href="JAVASCRIPT:YAHOO.ur.item.collection.addCollectionToPublication('${collectionPermission.institutionalCollection.id}');">Review</a>
+		                <span class="groupAddBtnImg">&nbsp;</span><a href="JAVASCRIPT:YAHOO.ur.item.collection.addCollectionToPublication('${collectionPermission.institutionalCollection.id}');">Review</a>
 	                </c:if>
 					<c:if test="${collectionPermission.permission == 'NO_PERMISSION'}">
-		                 <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/stop.jpg"/> Can't Submit
+		                 <span class="deleteBtnImg">&nbsp;</span> Can't Submit
 	                </c:if>
 					<c:if test="${collectionPermission.permission == 'ALREADY_SUBMITTED'}">
-		                 <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/world.gif"/>Already submitted
+		                 <span class="worldBtnImg">&nbsp;</span>Already submitted
 	                </c:if>
 					<c:if test="${collectionPermission.permission == 'REVIEW_PENDING'}">
-		                 <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/page_white_magnify.gif"/>Review Pending 
+		                  <span class="magnifierBtnImg">&nbsp;</span>Review Pending 
 	                </c:if>
 				</td>
 				
 				<td class="tdItemFolderRightBorder">
-                 	<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/>
+                 	<span class="folderImg">&nbsp;</span>
                  	<ur:a href="javascript:YAHOO.ur.item.collection.getCollections('${collectionPermission.institutionalCollection.id}')"> ${collectionPermission.institutionalCollection.name} </ur:a>
 				</td>
 			</tr>

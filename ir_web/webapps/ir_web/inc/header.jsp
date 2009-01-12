@@ -71,7 +71,7 @@
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewSponsors.action"/>"><fmt:message key="menu.viewSponsors" /></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPublishers.action"/>"><fmt:message key="menu.viewPublishers" /></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewSeries.action"/>"><fmt:message key="menu.viewSeries" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPersons.action" />"><fmt:message key="menu.viewPeople" /></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPersons.action" />">Person Name Authority</a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewUsers.action" />"><fmt:message key="menu.viewUsers" /></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPendingApproval.action" />"><fmt:message key="menu.viewPendingApproval" /></a></li>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN", "OR")}'>

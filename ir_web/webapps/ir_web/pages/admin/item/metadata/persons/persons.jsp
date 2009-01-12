@@ -26,7 +26,7 @@
 <html>
 
 <head>
-    <title>Manage People</title>
+    <title>Manage Person Authoritative Names</title>
         
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -62,7 +62,7 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>Edit Person</h3>
+        <h3>Edit Person Name Authorities</h3>
   
         <div id="bd">  
 	        <!--  set up tabs for the workspace -->

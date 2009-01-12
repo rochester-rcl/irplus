@@ -71,7 +71,7 @@
 	               <button class="ur_button" onclick="javascript:document.addFilesForm.submit();"
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
-	                       id="addFilesButton"><span class="pageCopyBtnImg">&nbsp;</span>Add Files</button>
+	                       id="addFilesButton"><span class="deleteBtnImg">&nbsp;</span>Add Files</button>
 	               <button class="ur_button" id="showPublishItem" 
 	                   onclick="javascript:YAHOO.ur.personal.collection.newItemDialog.createFromFilesFolders();"
 	                   onmouseover="this.className='ur_buttonover';"
