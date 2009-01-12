@@ -148,12 +148,13 @@ YAHOO.ur.usergroup.edit = {
         {
             success: function(o) 
             {  
-            	        // check for the timeout - forward user to login page if timout
-	        // occured
-	        if( !urUtil.checkTimeOut(o.responseText) )
-	        {
-                var divToUpdate = document.getElementById('admin_search_results_div');
-                divToUpdate.innerHTML = o.responseText; 
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('admin_search_results_div');
+                    divToUpdate.innerHTML = o.responseText;
+                } 
             },
 	
 	        failure: function(o) 

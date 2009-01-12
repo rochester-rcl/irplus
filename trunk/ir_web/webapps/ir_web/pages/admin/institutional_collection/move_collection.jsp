@@ -37,7 +37,6 @@
 
     <ur:styleSheet href="page-resources/css/main_menu.css"/>
     <ur:styleSheet href="page-resources/css/global.css"/>
-    <ur:styleSheet href="page-resources/jmesa/jmesa.css"/>
     <ur:styleSheet href="page-resources/css/tables.css"/>
  
     

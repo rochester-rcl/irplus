@@ -33,7 +33,6 @@
 
         <ur:styleSheet href="page-resources/css/main_menu.css"/>
         <ur:styleSheet href="page-resources/css/global.css"/>
-        <ur:styleSheet href="page-resources/jmesa/jmesa.css"/>
         <ur:styleSheet href="page-resources/css/tables.css"/>
     
         <!--  Style for dialog boxes -->
@@ -181,7 +180,7 @@
 				      </table>
 				      <br/>
 				    <input type="hidden" id="editUserForm_id" value="${irUser.id}">
-					<ur:div id="newEmails" cssClass="jmesa"></ur:div>
+					<ur:div id="newEmails"></ur:div>
 					<div class="clear">&nbsp;</div>
 					
 				 </div>
@@ -210,7 +209,7 @@
 				      <br/>
 				    
 					
-					<ur:div id="personNames" cssClass="jmesa"></ur:div>
+					<ur:div id="personNames"></ur:div>
 					
 					<div class="clear">&nbsp;</div>
 					

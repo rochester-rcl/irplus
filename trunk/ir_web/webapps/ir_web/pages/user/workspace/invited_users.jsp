@@ -18,7 +18,7 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<div class="jmesa">
+<div>
 	<input type="hidden" id="collaborators_share_file_ids"	name="shareFileIds" value="${shareFileIds}"/>
 	<div class="clear">&nbsp;</div>
 	<table class="formTable">

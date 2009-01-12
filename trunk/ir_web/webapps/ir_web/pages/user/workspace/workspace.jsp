@@ -126,7 +126,7 @@
 	                  
 	                  <!--  start second tab -->
 	                  <div id="tab2">
-	                      <div id="newPersonalCollections" cssClass="jmesa">
+	                      <div id="newPersonalCollections">
 	                      <ur:basicForm id="collections" name="myCollections">
 	                          <input type="hidden" id="myCollections_parentCollectionId" 
 	                               name="parentCollectionId" 
