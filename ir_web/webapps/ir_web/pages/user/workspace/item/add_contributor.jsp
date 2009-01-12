@@ -141,7 +141,7 @@
 			        <div class="yui-u first">
 			        
 		       			 <!--  table of names -->
-	                      <ur:div id="newNames" cssClass="jmesa">
+	                      <ur:div id="newNames">
 								<ur:basicForm method="post" id="names" name="myNames">
 								
 									 <input type="hidden" id="names_query" name="query" value="${query}"/>

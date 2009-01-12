@@ -164,7 +164,7 @@
 		                        </div>
 		                   
 		                        <div class="contentBoxContent">
-						     		<ur:div id="newCollaborators" cssClass="jmesa"></ur:div>
+						     		<ur:div id="newCollaborators"></ur:div>
 		                        </div>
 		                    </div>
 		                </div>

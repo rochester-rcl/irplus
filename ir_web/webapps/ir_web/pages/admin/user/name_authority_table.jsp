@@ -21,7 +21,7 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<div class="jmesa">
+<div>
 	<ur:basicForm method="post" id="names" name="myNames" 
 	     action="javascript:YAHOO.ur.email.getNames(0)">
 	

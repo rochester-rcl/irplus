@@ -39,7 +39,6 @@
     
     <ur:styleSheet href="page-resources/css/main_menu.css"/>
     <ur:styleSheet href="page-resources/css/global.css"/>
-    <ur:styleSheet href="page-resources/jmesa/jmesa.css"/>
     <ur:styleSheet href="page-resources/css/tables.css"/>
     <ur:styleSheet href="page-resources/yui/tabview/assets/skins/sam/tabview.css"/>
     <ur:styleSheet href="page-resources/yui/tabview/assets/border_tabs.css"/>    
@@ -149,7 +148,7 @@
 			      <div class="clear">&nbsp;</div>
 			      <div class="clear">&nbsp;</div>
 					
-				  <ur:div id="newEmails" cssClass="jmesa"></ur:div>
+				  <ur:div id="newEmails"></ur:div>
 				  
 				  <div class="clear">&nbsp;</div>
 				  <div class="clear">&nbsp;</div>
@@ -187,7 +186,7 @@
                              </td>
                              <td valign="top">
  								<!--  table of names -->
-	                      		<ur:div id="newNames" cssClass="jmesa"></ur:div>
+	                      		<ur:div id="newNames"></ur:div>
 	                      		<!--  end table of names div -->
                              </td>
                          </tr>

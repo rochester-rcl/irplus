@@ -70,7 +70,7 @@
 	        <div id="user-group-tabs" class="yui-navset">
 	             <ul class="yui-nav">
                      <li class="selected"><a href="#tab1"><em>User Group</em></a></li>
-                     <li><a href="#tab2"><em>Group Memebers</em></a></li>
+                     <li><a href="#tab2"><em>Group Members</em></a></li>
                      <li><a href="#tab3"><em>Group Administrators</em></a></li>
                  </ul>
                  <c:url var="updateUserGroupUrl" value="/admin/updateUserGroup.action"/>

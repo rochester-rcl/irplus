@@ -32,7 +32,6 @@
 	
 	    <ur:styleSheet href="page-resources/css/main_menu.css"/>
 	    <ur:styleSheet href="page-resources/css/global.css"/>
-	    <ur:styleSheet href="page-resources/jmesa/jmesa.css"/>
 	    <ur:styleSheet href="page-resources/css/home_page_content_area.css"/>
 	    <ur:styleSheet href="page-resources/css/tables.css"/>
         
@@ -92,7 +91,7 @@
 			        		<input type="hidden" id="all_collections_form_collectionIds" name="selectedCollectionIds" value="${selectedCollectionIds}"/>
 			        		
 		       			    <!--  table of institutional collections  -->
-	                        <ur:div id="all_collections" cssClass="jmesa"></ur:div>
+	                        <ur:div id="all_collections"></ur:div>
 	                        <!--  end table of institutional collections div -->
 						</ur:basicForm>	                     
 		       
