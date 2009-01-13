@@ -51,6 +51,7 @@
 
     <!--  base path information -->
     <ur:js src="pages/js/base_path.js" />
+    <ur:js src="page-resources/js/util/ur_util.js" />
     <ur:js src="page-resources/js/admin/move_institutional_collection.js" />
 </head>
 
@@ -59,7 +60,7 @@
     <div id="doc2"><!--  this is the header of the page --> 
         <c:import url="/inc/header.jsp" /> 
 
-        <h1>Move Institutional Collection Information</h1>
+        <h3>Move Institutional Collection Information</h3>
 
         <!--  this is the body regin of the page -->
         <div id="bd">

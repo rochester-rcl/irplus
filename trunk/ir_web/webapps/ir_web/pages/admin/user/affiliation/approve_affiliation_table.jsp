@@ -43,6 +43,8 @@
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+					<urstb:td>First Name</urstb:td>
+					<urstb:td>Last Name</urstb:td>
 					<urstb:td>Affiliation</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>

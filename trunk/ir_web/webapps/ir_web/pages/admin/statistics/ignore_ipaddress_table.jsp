@@ -45,6 +45,8 @@
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+					<urstb:td>From</urstb:td>
+					<urstb:td>To</urstb:td>
 					<urstb:td>Description</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>
@@ -69,6 +71,12 @@
 			                           '${ignoreIpAddress.name}','${ignoreIpAddress.description}', ${ignoreIpAddress.fromAddress1},
 			                           ${ignoreIpAddress.fromAddress2}, ${ignoreIpAddress.fromAddress3},
 			                           ${ignoreIpAddress.fromAddress4},${ignoreIpAddress.toAddress4});">${ignoreIpAddress.name}</a>
+	                        </urstb:td>
+	                        <urstb:td>
+	                             ${ignoreIpAddress.fromAddress1}.${ignoreIpAddress.fromAddress2}.${ignoreIpAddress.fromAddress3}.${ignoreIpAddress.fromAddress4}
+	                        </urstb:td>
+	                        <urstb:td>
+	                            ${ignoreIpAddress.toAddress4}
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${ignoreIpAddress.description}
