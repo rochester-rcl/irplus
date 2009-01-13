@@ -699,6 +699,7 @@ YAHOO.ur.edit.institution.collection = {
     },
     
     
+
     
     /**
      * Clear the link form of data

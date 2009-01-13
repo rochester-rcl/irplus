@@ -146,6 +146,77 @@ YAHOO.ur.group.collection = {
         "groupId=" + groupId + "&collectionId=" + collectionId);
     },
     
+    /**
+     * Make sure the permissions are set correctly
+     */
+    autoCheckPermission : function(permission, permissions) 
+    {
+	    if (permission.id == 'ADMINISTRATION') 
+	    {
+		    if (permission.checked) 
+		    {
+		         permissions[1].checked=true;
+		         permissions[2].checked=true;
+		         permissions[3].checked=false;
+		         permissions[4].checked=true;
+		    }
+	    }
+	
+	    if (permission.id == 'REVIEWER') 
+	    {
+		    if (permission.checked) 
+		    {
+			    permissions[2].checked=true;
+			    permissions[3].checked=false;
+		        permissions[4].checked=true;
+		    } 
+		    else 
+		    {
+			    permissions[0].checked=false; 
+		    }
+	    }
+
+	    if (permission.id == 'DIRECT_SUBMIT') 
+	    {
+		    if (permission.checked) 
+		    {
+			    permissions[3].checked=false;
+			    permissions[4].checked=true;
+		    } 
+		    else
+		    {
+		        permissions[0].checked=false; 
+		        permissions[1].checked=false;
+		    }
+	    }
+	    
+	    if (permission.id == 'REVIEW_SUBMIT') 
+	    {
+		    if (permission.checked) 
+		    {
+			    permissions[4].checked=true;
+			    permissions[0].checked=false; 
+		        permissions[1].checked=false;
+		        permissions[2].checked=false;
+		    } 
+		    else
+		    {
+			    permissions[4].checked=false;
+		    }
+	    }
+	    
+	    if (permission.id == 'VIEW') 
+	    {
+		    if (!permission.checked) 
+		    {
+			    urUtil.setCheckboxes(permissions, false);
+		    } 
+		    
+	    }
+	    
+	    return true;
+    },
+    
     /** 
      * initialize the page
      * this is called once the dom has

@@ -45,8 +45,6 @@
 
  	<ur:js src="page-resources/js/admin/edit_institutional_collection.js"/>
  	<ur:js src="page-resources/js/admin/add_group_to_collection.js"/>
-
-
  	
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
