@@ -23,11 +23,13 @@
         <td align="left">
             <input type="checkbox" 
                 name="permissionIds" 
+                id="${permission.name}"
                 value="${permission.id}"
+                onclick="YAHOO.ur.group.collection.autoCheckPermission(this, permissionIds);"
                 <c:if test="${ir:groupHasPermissionForCollection(acl, collection, userGroup, permission)}">
                 checked="true"
                 </c:if>
-                 />  
+             />  
         </td>
         <td align="left">
             <p>${permission.name} - ${permission.description}</p>
