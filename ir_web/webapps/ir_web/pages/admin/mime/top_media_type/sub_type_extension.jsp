@@ -66,7 +66,7 @@
   <!--  this is the header of the page -->
   <c:import url="/inc/header.jsp"/>
     
-  <h2>Extensions for Sub Type: ${subType.name}</h2>
+  <h3>Extensions for Sub Type: ${subType.name}</h3>
   <c:url var="viewTopMediaTypeUrl" value="/admin/initSubType.action">
        <c:param name="id" value="${topMediaType.id}"/>
   </c:url>

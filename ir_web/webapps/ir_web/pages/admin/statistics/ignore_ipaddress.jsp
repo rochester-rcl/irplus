@@ -61,25 +61,19 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h2>Ignore Ipaddress range</h2>
+        <h3>Ignore Ipaddress range</h3>
   
         <div id="bd">
       
-	        <table>
-	            <tr>
-	                <td>
+
 		                <button id="showIgnoreIpAddress" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">New Ignore IpAddress</button> 
-	                </td>
-	                <td>
+	      
 	                    <button id="showDeleteIgnoreIpAddress" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>
-	            </tr>
-	        </table>
-	        	        
+	     
 	        <ur:div id="newIgnoreIpAddresses"></ur:div>
 	      
 

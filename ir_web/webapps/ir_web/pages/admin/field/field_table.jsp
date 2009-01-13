@@ -53,7 +53,7 @@
 	                oddRowClass="odd"
 	                evenRowClass="even"
 	                currentRowClassVar="rowClass"
-	                collection="${researcherFields}">
+	                collection="${fields}">
 	                    <urstb:tr 
 	                        cssClass="${rowClass}"
 	                        onMouseOver="this.className='highlight'"

@@ -65,7 +65,7 @@
     <!--  this is the header of the page -->
     <c:import url="/inc/header.jsp"/>
     
-    <h2>Sub Types for Top Media Type: ${topMediaType.name}</h2>
+    <h3>Sub Types for Top Media Type: ${topMediaType.name}</h3>
     
     <a href="<c:url value="/admin/viewTopMediaTypes.action"/>">Top Media Types</a>
     <br/><br/>

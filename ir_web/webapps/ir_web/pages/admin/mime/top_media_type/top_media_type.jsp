@@ -62,7 +62,7 @@
     <!--  this is the header of the page -->
     <c:import url="/inc/header.jsp"/>
     
-    <h2>Top Media Types</h2>
+    <h3>Top Media Types</h3>
     
     <div id="bd">      
 	      <table>

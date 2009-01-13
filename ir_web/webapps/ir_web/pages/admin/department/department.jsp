@@ -62,7 +62,7 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h2>Departments</h2>
+        <h3>Departments</h3>
   
         <div id="bd">
       
