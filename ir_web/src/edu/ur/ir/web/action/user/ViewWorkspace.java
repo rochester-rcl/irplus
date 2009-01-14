@@ -28,6 +28,7 @@ import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.SharedInboxFile;
@@ -106,18 +107,34 @@ UserIdAware {
 	public String execute() throws Exception{
 		log.debug("execute called");
 		log.debug("Token = " + token);
-		if (token != null) {
-			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
-					false);
-			Set<SharedInboxFile> inboxFiles = inviteUserService.shareFileForUserWithToken(userId, token);
-
-			for(SharedInboxFile sif : inboxFiles)
-			{
-				userWorkspaceIndexService.addToIndex(repository, sif);
-			}
-		}	
 		
-		return SUCCESS;
+		IrUser user = userService.getUser(userId, false);
+		
+		if( user.hasRole(IrRole.ADMIN_ROLE) ||
+			user.hasRole(IrRole.COLLABORATOR_ROLE) ||
+			user.hasRole(IrRole.AUTHOR_ROLE) ||
+			user.hasRole(IrRole.RESEARCHER_ROLE) ||
+			user.hasRole(IrRole.COLLECTION_ADMIN_ROLE))
+		{
+		    if (token != null) {
+			    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
+					    false);
+			    Set<SharedInboxFile> inboxFiles = inviteUserService.shareFileForUserWithToken(userId, token);
+
+			    for(SharedInboxFile sif : inboxFiles)
+			    {
+				    userWorkspaceIndexService.addToIndex(repository, sif);
+			    }
+		    }
+		    return SUCCESS;
+		}
+		else
+		{
+			// this is a basic user who does not have a workspace account
+			return "basic_view";
+		}
+		
+		
 		
 	}
 	
