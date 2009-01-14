@@ -62,26 +62,19 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h2>Fields</h2>
+        <h3>Fields</h3>
   
         <div id="bd">
       
-          <table>
-	            <tr>
-	                <td>
-		                <button id="showField" class="ur_button" 
+ 		<button id="showField" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">New field</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeleteField" class="ur_button" 
+
+	    <button id="showDeleteField" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>
-	            </tr>
-	        </table>
-	        
-	        <ur:div id="newFields"></ur:div>
+
+	    <ur:div id="newFields"></ur:div>
 	      
 
 	        
