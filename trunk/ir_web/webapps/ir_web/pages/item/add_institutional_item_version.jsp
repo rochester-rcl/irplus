@@ -48,6 +48,7 @@
 
      <!--  base path information -->
     <ur:js src="pages/js/base_path.js" />
+    <ur:js src="page-resources/js/util/ur_util.js" />
     <ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="pages/js/ur_table.js"/>
     <ur:js src="page-resources/js/user/add_institutional_item_version.js" />
@@ -58,7 +59,7 @@
     <div id="doc2"><!--  this is the header of the page --> 
         <c:import url="/inc/header.jsp" /> 
 
-        <h2>Add new version for "${institutionalItem.name}"</h2>
+        <h3>Add new version for "${institutionalItem.name}"</h3>
 
         <!--  this is the body regin of the page -->
         <div id="bd">

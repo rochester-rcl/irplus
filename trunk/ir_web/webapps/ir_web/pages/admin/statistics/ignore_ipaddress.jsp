@@ -65,7 +65,7 @@
   
         <div id="bd">
       
-
+       
 		<button id="showIgnoreIpAddress" class="ur_button" 
  		        onmouseover="this.className='ur_buttonover';"
  		        onmouseout="this.className='ur_button';">New Ignore IpAddress</button> 
@@ -73,8 +73,10 @@
 	    <button id="showDeleteIgnoreIpAddress" class="ur_button" 
  		          onmouseover="this.className='ur_buttonover';"
  		          onmouseout="this.className='ur_button';">Delete</button>
-	     
-	        <ur:div id="newIgnoreIpAddresses"></ur:div>
+	    <br/>
+        <br/>
+	    
+	    <ur:div id="newIgnoreIpAddresses"></ur:div>
 	      
 
 	        

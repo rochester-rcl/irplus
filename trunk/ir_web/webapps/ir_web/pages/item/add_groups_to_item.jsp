@@ -73,7 +73,7 @@
              <!--  this is the header of the page -->
             <c:import url="/inc/header.jsp"/>
             
-            <h2>Add Group Permissions for Item: ${item.name}</h2>
+            <h3>Add Group Permissions for Publication: ${item.name}</h3>
            
             <c:url var="viewItem" value="/admin/viewInstitutionalItemPermissions.action">
                 <c:param name="itemId" value="${item.id}"/>

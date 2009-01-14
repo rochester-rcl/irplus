@@ -92,7 +92,7 @@ public class NextResearcherPicture extends ActionSupport {
     		if(  researcherCount == 1 || researcherCount == 2)
     		{
     			currentLocation = 0;
-    			researcherService.getPublicResearchersOrderedByLastFirstName(0, 2);
+    			researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(0, 2));
     		}
     		else if ( type.equals(INIT))
      	    {

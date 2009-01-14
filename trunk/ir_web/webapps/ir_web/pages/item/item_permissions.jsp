@@ -74,7 +74,7 @@
             
             <!--  this is the body of the page -->
             <div id="bd">
-
+            
             <form id="hidden_collection_form" name="hiddenCollectionId">
                 <input type="hidden" id="hidden_collection_id" value="${item.id}"/>
             	<input type="hidden" id="show_item_file_tab" name="showItemFileTab" value="${showItemFileTab}">
@@ -82,7 +82,7 @@
 
             <!--  this is the header of the page -->
             <c:import url="/inc/header.jsp"/>
-      		
+      		<h3>Managing permissions for publication "${item.name}"</h3>
       		<div class="clear">&nbsp;</div>
       		
            <ur:basicForm name="viewPublication" 
@@ -101,8 +101,8 @@
             <!--  set up tabs for the workspace -->
 	        <div id="item-permission-tabs" class="yui-navset">
 	             <ul class="yui-nav">
-                     <li class="selected"><a href="#tab1"><em>Item Permission</em></a></li>
-                     <li><a href="#tab2"><em>Item File Permission</em></a></li>
+                     <li class="selected"><a href="#tab1"><em>Publication Permission</em></a></li>
+                     <li><a href="#tab2"><em>Publication File Permission</em></a></li>
                  </ul>
       
 	             <div class="yui-content">
@@ -129,7 +129,7 @@
 							 <br/>
 		                     <br/>
 		                      
-		                     <a href="${addGroupsUrl}">Add Groups To Item</a>
+		                     <a href="${addGroupsUrl}">Add Groups To Publication</a>
 		                     <br/>
 		                     <div id="all_user_groups">
 		                         <c:import url="item_group_permissions_frag.jsp"></c:import>
