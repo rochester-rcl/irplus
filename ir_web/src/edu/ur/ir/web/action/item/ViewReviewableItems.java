@@ -34,6 +34,7 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.order.AscendingOrderComparator;
+import org.apache.log4j.Logger;
 
 /**
  * Action to view items pending review
@@ -51,6 +52,9 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 	
 	/** Service to access institutional item index */
 	private InstitutionalItemIndexService institutionalItemIndexService;
+	
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(ViewReviewableItems.class);
 	
 	/** Service to access institutional item */
 	private RepositoryService repositoryService;
@@ -79,11 +83,11 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 	 * View all pending items
 	 */
 	public String viewPendingItems() {
-		
+		log.debug("view pending items");
 		IrUser user = userService.getUser(userId, false);
 		
 		items = reviewableItemService.getPendingReviewableItems(user);
-		
+		log.debug("number of reviewable items = " + items.size());
 		return SUCCESS;
 	}
 	

@@ -76,6 +76,7 @@ public class DefaultReviewableItemService implements ReviewableItemService {
 		
 		List<ReviewableItem> itemsForReview = new LinkedList<ReviewableItem>();
 		
+		log.debug("Checking reviewer permissions for " + pendingItems.size() );
 		for(ReviewableItem item: pendingItems) {
 			long permission = institutionalCollectionSecurityService.hasPermission(item.getInstitutionalCollection(),
 					user, InstitutionalCollectionSecurityService.REVIEWER_PERMISSION);

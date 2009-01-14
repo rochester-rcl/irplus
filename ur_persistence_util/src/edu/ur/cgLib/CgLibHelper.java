@@ -39,13 +39,19 @@ public class CgLibHelper
 		{
 			return null;
 		}
-
 		
 		if( name.indexOf("CGLIB") != -1 )
 		{
 		    String realClassname = name.substring(0,
 		    name.indexOf("$$"));
 		    return realClassname;
+		}
+	
+		if( name.indexOf("javassist") != -1)
+		{
+			String realClassname = name.substring(0,
+		    name.indexOf("_$$_javassist"));
+			return realClassname;
 		}
 		else
 		{
