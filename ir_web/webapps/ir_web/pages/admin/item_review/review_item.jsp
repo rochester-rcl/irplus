@@ -49,7 +49,7 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="pages/js/ur_table.js"/>
-    <!-- <ur:js src="page-resources/js/admin/review_item.js"/> -->
+    <ur:js src="page-resources/js/admin/review_item.js"/> 
 </head>
 
 <body class="yui-skin-sam">
@@ -60,7 +60,7 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h2>Publications for review</h2>
+        <h3>Publications for review</h3>
   
         <div id="bd">
         <div class="dataTable">
@@ -68,7 +68,7 @@
 	            <urstb:thead>
 	                <urstb:tr>
 	                    <urstb:td>Id</urstb:td>
-	                    <urstb:td>Item name</urstb:td>
+	                    <urstb:td>Publication name</urstb:td>
 	                    <urstb:td>Collection</urstb:td>
 	                </urstb:tr>
 	            </urstb:thead>
