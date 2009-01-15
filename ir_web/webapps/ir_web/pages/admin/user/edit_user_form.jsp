@@ -142,17 +142,18 @@
 	<tr>
 		 <td class="label" colspan="2"> 		  
  		     <input type="checkbox"
+ 		            onclick="YAHOO.ur.email.autoCheckRoles(this);"
  		     <c:if test='${ir:checkUserHasRole(irUser, "ROLE_ADMIN", "")}'> 
                  checked="true" 
              </c:if>
              id="editUserForm_isAdmin" name="adminRole" value="true"/>  Admin
 		</td>
-		
 	</tr>
 
 	<tr>
 		 <td class="label" colspan="2"> 	
              <input type="checkbox"
+                 onclick="YAHOO.ur.email.autoCheckRoles(this);"
              <c:if test='${ir:checkUserHasRole(irUser, "ROLE_USER", "")}'> 
               checked="true" 
              </c:if>
@@ -163,6 +164,7 @@
 	<tr>
 		<td class="label" colspan="2"> 	
             <input type="checkbox"
+                onclick="YAHOO.ur.email.autoCheckRoles(this);"
             <c:if test='${ir:checkUserHasRole(irUser, "ROLE_AUTHOR", "")}'> 
                 checked="true" 
             </c:if>  
@@ -173,6 +175,7 @@
 	<tr>
 		<td class="label" colspan="2"> 	
             <input type="checkbox"
+                onclick="YAHOO.ur.email.autoCheckRoles(this);"
             <c:if test='${ir:checkUserHasRole(irUser, "ROLE_RESEARCHER", "")}'> 
                  checked="true"   
             </c:if>
@@ -183,6 +186,7 @@
 	<tr>
 		<td class="label" colspan="2"> 
 		 <input type="checkbox"	
+		     onclick="YAHOO.ur.email.autoCheckRoles(this);"
 		     <c:if test='${ir:checkUserHasRole(irUser, "ROLE_COLLECTION_ADMIN", "")}'> 
                 checked="true" 
              </c:if>

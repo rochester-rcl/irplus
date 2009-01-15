@@ -43,6 +43,74 @@ var myUserTable = new YAHOO.ur.table.Table('myUsers', 'newUsers');
  * sponsor namespace
  */
 YAHOO.ur.user = {
+
+    /**
+     * Make sure the permissions are set correctly
+     */
+    autoCheckRoles : function(permission) 
+    {
+        var userRole = document.getElementById("newUserForm_isUser");
+        var adminRole = document.getElementById("newUserForm_isAdmin");
+        var authorRole = document.getElementById("newUserForm_isAuthor");
+        var researcherRole = document.getElementById("newUserForm_isResearcher");
+        var collectionAdminRole = document.getElementById("newUserForm_isCollectionAdmin");
+        
+	    if (permission.id == 'newUserForm_isAdmin') 
+	    {
+		    if (permission.checked) 
+		    {
+		        userRole.checked = true;
+		        authorRole.checked = true;
+		        researcherRole.checked = true;
+		    }
+	    }
+	
+	    if (permission.id == 'newUserForm_isResearcher') 
+	    {
+		    if (permission.checked) 
+		    {
+		        userRole.checked = true;
+		        authorRole.checked = true;
+		    } 
+		    else 
+		    {
+		        adminRole.checked = false;
+		    }
+	    }
+
+	    if (permission.id == 'newUserForm_isAuthor') 
+	    {
+		    if (permission.checked) 
+		    {
+		        userRole.checked = true;
+		    } 
+		    else
+		    {
+		        adminRole.checked = false;
+		        researcherRole.checked = false;
+		    }
+	    }
+	    
+	    if (permission.id == 'newUserForm_isCollectionAdmin') 
+	    {
+		    if (permission.checked) 
+		    {
+		        userRole.checked = true;
+		    } 
+	    }
+	    
+	    if (permission.id == 'newUserForm_isUser') 
+	    {
+		    if (!permission.checked) 
+		    {
+		        adminRole.checked = false;
+		        authorRole.checked = false;
+		        researcherRole.checked = false;
+		        collectionAdminRole.checked = false;
+		    }
+	    }
+	    return true;
+    },
 	
 	/**
 	 *  Function that retireves users from 
