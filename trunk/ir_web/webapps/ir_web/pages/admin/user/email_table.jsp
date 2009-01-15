@@ -28,7 +28,7 @@
 	            <urstb:tr>
 					<urstb:td><ur:checkbox name="checkAllSetting" 
 	                    value="off" 
-	                    onClick="YAHOO.ur.email.setCheckboxes();"/>Email Id</urstb:td>         
+	                    onClick="YAHOO.ur.email.setCheckboxes();"/>&nbsp;Email Type</urstb:td>         
 	                <urstb:td>Id</urstb:td>
 	                <urstb:td>Email</urstb:td>
 	                <urstb:td>Status</urstb:td>

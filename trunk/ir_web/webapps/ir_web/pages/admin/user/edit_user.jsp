@@ -128,30 +128,19 @@
               	 <!--  start second tab -->
                	 <div id="tab2">
          		 
-         		 <div class="clear">&nbsp;</div>
-         		 <div class="clear">&nbsp;</div>
-			      <table>
-			          <tr>
-						<td>
+         		 <br/>
 			                <button id="showEmail" class="ur_button" 
 	 		                               onmouseover="this.className='ur_buttonover';"
 	 		                               onmouseout="this.className='ur_button';">New Email</button> 
-		                </td>
-		                <td>
 		                    <button id="showDeleteEmail" class="ur_button" 
 	 		                               onmouseover="this.className='ur_buttonover';"
 	 		                               onmouseout="this.className='ur_button';">Delete</button>
-		                </td>	            
-			          </tr>
-			      </table>
 			      
-			      <div class="clear">&nbsp;</div>
-			      <div class="clear">&nbsp;</div>
-					
+				  <br/>
+				  <br/>
 				  <ur:div id="newEmails"></ur:div>
 				  
-				  <div class="clear">&nbsp;</div>
-				  <div class="clear">&nbsp;</div>
+				  
 				
 				 </div>
 	             <!--  end tab 2 -->
