@@ -104,7 +104,7 @@
     	<property name="text">
     		<value>
     			<![CDATA[
-    			New account has been created for you in UR Research.
+    			New account has been created for you in ir plus.
     			
     			User name : %USERNAME%
     			Password  : %PASSWORD%
@@ -219,7 +219,7 @@
     			<![CDATA[
     			Dear %USERNAME%,
     			
-    			Please verify your email address by clicking on the below link and logging into the XR website.
+    			Please verify your email address by clicking on the below link and logging into the ir plus website.
     			%BASE_WEB_APP_PATH%user/emailVerification.action?token=%TOKEN%
     			
     			Note: Until the email address is verified, other users will not be able to share files with you 
@@ -273,7 +273,7 @@
     			<![CDATA[
     			Dear %FIRSTNAME% %LASTNAME%,
     			
-    			Publication - " %ITEMNAME% " is not accepted for submission.
+    			Publication - " %ITEMNAME% " was not accepted for submission.
     			
     			Reason for rejection: %REASON%
 
