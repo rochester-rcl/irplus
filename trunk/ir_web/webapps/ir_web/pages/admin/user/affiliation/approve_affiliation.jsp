@@ -68,7 +68,9 @@
 		    <button id="showApproveAffiliation1" class="ur_button" 
  		            onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';">Approve</button> 
-	         
+	        
+	        <br/>
+	        <br/>
 	        <ur:div id="newPendingApprovals"></ur:div>
 	      
         
