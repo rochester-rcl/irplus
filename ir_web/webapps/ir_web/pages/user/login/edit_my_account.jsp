@@ -70,7 +70,7 @@
 		            <ul class="yui-nav">
 		                <li class="selected"><a href="#tab1"><em>User Information</em></a></li>
 		                <li><a href="#tab2"><em>Emails</em></a></li>
-		                <li><a href="#tab3"><em>Names</em></a></li>
+		                <li><a href="#tab3"><em>Publication Names</em></a></li>
 		            </ul>
 		
 		            <div class="yui-content">
@@ -162,22 +162,15 @@
               	 <!--  start second tab -->
                	 <div id="tab2">
 			          <br/>
-				      <table>
-				          <tr>
-				              <td>
 					              <button class="ur_button" id="showEmail" 
 	                               onmouseover="this.className='ur_buttonover';"
 	                               onmouseout="this.className='ur_button';"
 	                               >New Email</button>
-				              </td>
-				              <td>
 					              <button class="ur_button" id="showDeleteEmail" 
 	                               onmouseover="this.className='ur_buttonover';"
 	                               onmouseout="this.className='ur_button';"
 	                               >Delete Email</button>
-				               </td>
-				          </tr>
-				      </table>
+				      <br/>
 				      <br/>
 				    <input type="hidden" id="editUserForm_id" value="${irUser.id}">
 					<ur:div id="newEmails"></ur:div>
@@ -189,25 +182,19 @@
 				<!--  start third tab -->
                	 <div id="tab3">
 			          <br/>
-				      <table>
-				          <tr>
-				              <td>
-				               
+				    
 					              <button class="ur_button" id="showPersonName" 
 	                               onmouseover="this.className='ur_buttonover';"
 	                               onmouseout="this.className='ur_button';"
 	                               >New Name</button>
-				              </td>
-				              <td>
+				              
 									<button class="ur_button" id="showDeletePersonName" 
 	                               onmouseover="this.className='ur_buttonover';"
 	                               onmouseout="this.className='ur_button';"
 	                               >Delete Name</button>				              
-				              </td>
-				          </tr>
-				      </table>
+				  
 				      <br/>
-				    
+				      <br/>
 					
 					<ur:div id="personNames"></ur:div>
 					
