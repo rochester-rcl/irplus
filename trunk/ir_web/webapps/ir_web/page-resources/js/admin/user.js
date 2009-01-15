@@ -96,6 +96,7 @@ YAHOO.ur.user = {
 		    if (permission.checked) 
 		    {
 		        userRole.checked = true;
+		        authorRole.checked = true;
 		    } 
 	    }
 	    
