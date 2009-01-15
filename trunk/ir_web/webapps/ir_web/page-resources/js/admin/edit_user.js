@@ -44,9 +44,77 @@ var myEmailTable = new YAHOO.ur.table.Table('myEmails', 'newEmails');
  */
 YAHOO.ur.email = {
 
+    /**
+     * Make sure the permissions are set correctly
+     */
+    autoCheckRoles : function(permission) 
+    {
+        var userRole = document.getElementById("editUserForm_isUser");
+        var adminRole = document.getElementById("editUserForm_isAdmin");
+        var authorRole = document.getElementById("editUserForm_isAuthor");
+        var researcherRole = document.getElementById("editUserForm_isResearcher");
+        var collectionAdminRole = document.getElementById("editUserForm_isCollectionAdmin");
+        
+	    if (permission.id == 'editUserForm_isAdmin') 
+	    {
+		    if (permission.checked) 
+		    {
+		        userRole.checked = true;
+		        authorRole.checked = true;
+		        researcherRole.checked = true;
+		    }
+	    }
+	
+	    if (permission.id == 'editUserForm_isResearcher') 
+	    {
+		    if (permission.checked) 
+		    {
+		        userRole.checked = true;
+		        authorRole.checked = true;
+		    } 
+		    else 
+		    {
+		        adminRole.checked = false;
+		    }
+	    }
+
+	    if (permission.id == 'editUserForm_isAuthor') 
+	    {
+		    if (permission.checked) 
+		    {
+		        userRole.checked = true;
+		    } 
+		    else
+		    {
+		        adminRole.checked = false;
+		        researcherRole.checked = false;
+		    }
+	    }
+	    
+	    if (permission.id == 'editUserForm_isCollectionAdmin') 
+	    {
+		    if (permission.checked) 
+		    {
+		        userRole.checked = true;
+		    } 
+	    }
+	    
+	    if (permission.id == 'editUserForm_isUser') 
+	    {
+		    if (!permission.checked) 
+		    {
+		        adminRole.checked = false;
+		        authorRole.checked = false;
+		        researcherRole.checked = false;
+		        collectionAdminRole.checked = false;
+		    }
+	    }
+	    return true;
+    },
+
 
     /**
-     * Set all sponsor id's form
+     * Set all email ids in the form
      */
     setCheckboxes : function()
     {

@@ -159,6 +159,7 @@
          <tr>
              <td align="left" class="input">
                  <input
+                      onclick="YAHOO.ur.user.autoCheckRoles(this);"
 	                 <c:if test="${adminRole == true}"> 
                         checked="true" 
                      </c:if>
@@ -168,7 +169,8 @@
         
          <tr>
              <td align="left" class="input">
-             <input
+                 <input
+                      onclick="YAHOO.ur.user.autoCheckRoles(this);"
                      <c:if test="${userRole == true}"> 
                         checked="true" 
                      </c:if>
@@ -179,6 +181,7 @@
         <tr>
             <td align="left" class="input">
                 <input
+                     onclick="YAHOO.ur.user.autoCheckRoles(this);"
                     <c:if test="${authorRole == true}"> 
                         checked="true" 
                      </c:if>
@@ -188,6 +191,7 @@
         <tr>
             <td align="left" class="input">
                 <input 
+                     onclick="YAHOO.ur.user.autoCheckRoles(this);"
                     <c:if test="${researcherRole == true}"> 
                         checked="true" 
                      </c:if>
@@ -197,7 +201,8 @@
         <tr>
             <td align="left" class="input">
                 
-                <input 
+                <input
+                     onclick="YAHOO.ur.user.autoCheckRoles(this);" 
                     <c:if test="${collectionAdminRole == true}"> 
                         checked="true" 
                      </c:if>
@@ -206,12 +211,13 @@
         </tr>
         <tr>
             <td align="left" class="input">
+            Email user name and password to user
 		        <input type="checkbox" 
 		            <c:if test="${emailPassword == true}"> 
                         checked="true" 
                     </c:if>
 		        id="newUserForm_send_Email" name="emailPassword" value="true">
-		Email user name and password to user
+		
 		    </td>
 		</tr>
 </table>        
