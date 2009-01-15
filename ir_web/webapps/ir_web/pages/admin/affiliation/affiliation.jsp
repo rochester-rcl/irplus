@@ -65,20 +65,16 @@
   
         <div id="bd">
       
-	        <table>
-	            <tr>
-	                <td>
-		                <button id="showAffiliation" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New affiliation</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeleteAffiliation" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>
-	            </tr>
-	        </table>
+
+		   <button id="showAffiliation" class="ur_button" 
+ 		       onmouseover="this.className='ur_buttonover';"
+ 		       onmouseout="this.className='ur_button';">New affiliation</button> 
+	
+	       <button id="showDeleteAffiliation" class="ur_button" 
+ 		       onmouseover="this.className='ur_buttonover';"
+ 		       onmouseout="this.className='ur_button';">Delete</button>
+	        <br/>
+	        
 	        <ur:div id="newAffiliations"></ur:div>
       </div>
       <!--  end body div -->
