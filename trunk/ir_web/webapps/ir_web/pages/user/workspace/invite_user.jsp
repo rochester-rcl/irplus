@@ -179,8 +179,7 @@
 	                  
               	 <!--  start second tab -->
                	 <div id="tab2">
-                     <ur:basicForm id="emailSearchForm" name="emailSearchForm" 
-                         onSubmit="return false;">
+                     <ur:basicForm id="emailSearchForm" name="emailSearchForm" action="javascript:YAHOO.ur.invite.search.executeEmailSearch(0,1,1);" >
                          
                          <table class="formTable">
                              <tr>

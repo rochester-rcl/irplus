@@ -31,7 +31,7 @@
             <c:url var="rootFolderUrl" value="/user/workspace.action">
                <c:param name="parentFolderId" value="0"/>
             </c:url>
-            <h3> File Properties for :  /<span class="folderBtnImg">&nbsp;</span><a href="${rootFolderUrl}">personalFolders</a>/
+            <h3> File Properties for :  /<span class="folderBtnImg">&nbsp;</span><a href="${rootFolderUrl}">My Files</a>/
                  <c:forEach var="folder" items="${folderPath}">
                      <c:url var="folderUrl" value="/user/workspace.action">
                          <c:param name="parentFolderId" value="${folder.id}"/>
@@ -48,10 +48,10 @@
                  <input type="hidden" name="parentFolderId" value="${personalFile.personalFolder.id}"/>
 	         </form>
 	    
-	         <br/>
+	         <h3>Current Version Information</h3>
               <table class="table">
                   <tr>
-                      <td><strong>Current Editing Status:&nbsp;</strong></td>
+                      <td><strong>Editing Status:&nbsp;&nbsp;&nbsp;</strong></td>
                       <td><c:if test="${personalFile.versionedFile.locked}">
                               <span class="lockBtnImg">&nbsp;</span> File Locked by ${personalFile.versionedFile.lockedBy.username}
                           </c:if>
@@ -61,35 +61,39 @@
                       </td>
                   </tr>
                   <tr>
-                      <td><strong>Current Version Name:&nbsp;</strong></td>
+                      <td><strong>Name:&nbsp;</strong></td>
                       <td>${personalFile.versionedFile.nameWithExtension}</td>
                   </tr>
                   <tr>
-                      <td><strong>Current Version:&nbsp;</strong></td>
+                      <td><strong>Version:&nbsp;</strong></td>
                       <td>${personalFile.versionedFile.currentVersion.versionNumber}</td>
                   </tr>
                   <tr>
-                      <td><strong>Current Version Created Date:&nbsp;</strong></td>
+                      <td><strong>Created Date:&nbsp;</strong></td>
                       <td>${personalFile.versionedFile.currentVersion.irFile.fileInfo.createdDate}</td>
                   </tr>
                   <tr>
-                      <td><strong>Current Version Created By:&nbsp;</strong></td>
+                      <td><strong>Created By:&nbsp;</strong></td>
                       <td>${personalFile.versionedFile.currentVersion.versionCreator.username}</td>
                   </tr>
-                  <tr>
-                      <td><strong>Current Version Size:&nbsp;</strong></td>
-                      <td>${ir:infoSizeOnDisk(personalFile.versionedFile.currentVersion.irFile.fileInfo)}</td>
+                   <tr>
+                      <td><strong>Size:&nbsp;</strong></td>
+                      <td><ir:fileSizeDisplay sizeInBytes="${personalFile.versionedFile.currentVersion.irFile.fileInfo.size}"/></td>
                   </tr>
                   <tr>
-                      <td><strong>Current Version Path:&nbsp;</strong></td>
+                      <td><strong>Size on Disk:&nbsp;</strong></td>
+                      <td><ir:fileSizeDisplay sizeInBytes="${ir:infoSizeOnDisk(personalFile.versionedFile.currentVersion.irFile.fileInfo)}"/></td>
+                  </tr>
+                  <tr>
+                      <td><strong>Path:&nbsp;</strong></td>
                       <td>${personalFile.versionedFile.currentVersion.irFile.fileInfo.fullPath}</td>
                   </tr>
                   <tr>
-                      <td><strong>Current File Info Id:&nbsp;</strong></td>
+                      <td><strong>File Info Id:&nbsp;</strong></td>
                       <td>${personalFile.versionedFile.currentVersion.irFile.fileInfo.id}</td>
                   </tr>
                   <tr>
-                      <td><strong>Current Version Checksums:&nbsp;</strong></td>
+                      <td><strong>Checksums:&nbsp;</strong></td>
                       <td>
                           <c:forEach var="fileInfoChecksum"
                               items="${personalFile.versionedFile.currentVersion.irFile.fileInfo.fileInfoChecksums}">
