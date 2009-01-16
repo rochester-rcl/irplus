@@ -37,7 +37,7 @@
 		
 		
 		        <div id="destination_path">
-		            Move To Location: /<ur:a href="javascript:YAHOO.ur.collection.move.getMoveCollection('0');">${user.username}</ur:a>/
+		            Move To Location: /<ur:a href="javascript:YAHOO.ur.collection.move.getMoveCollection('0');">Personal Collections</ur:a>/
 		            <c:forEach var="collection" items="${destinationPath}">
 			            <ur:a href="javascript:YAHOO.ur.collection.move.getMoveCollection('${collection.id}')">${collection.name}</ur:a>/
                     </c:forEach>

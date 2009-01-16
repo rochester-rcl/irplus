@@ -66,7 +66,7 @@
 	                            <a href="${inboxFileDownloadUrl}"><ur:maxText numChars="50" text="${sharedInboxFile.versionedFile.nameWithExtension}"></ur:maxText></a>
                         </urstb:td>
                         <urstb:td>
-                            ${sharedInboxFile.sharingUser.firstName} ${sharedInboxFile.sharingUser.lastName}
+                            ${sharedInboxFile.sharingUser.firstName}&nbsp;${sharedInboxFile.sharingUser.lastName}
                         </urstb:td>
                 </urstb:tr>
             </urstb:tbody>

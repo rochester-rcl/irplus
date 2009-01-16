@@ -59,7 +59,7 @@
     <div id="doc2"><!--  this is the header of the page --> 
         <c:import url="/inc/header.jsp" /> 
 
-        <h1>Move Personal Collection Information</h1>
+        <h3>Move Personal Collection Information</h3>
 
         <!--  this is the body regin of the page -->
         <div id="bd">

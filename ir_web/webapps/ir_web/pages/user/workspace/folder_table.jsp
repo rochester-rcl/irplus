@@ -27,10 +27,10 @@
   <h3>Path:&nbsp;/
 	    <span class="folderBtnImg">&nbsp;</span>
 	          <c:if test="${parentFolderId != 0}">
-                   <a href="javascript:YAHOO.ur.folder.getFolderById('0')">${user.username}</a>&nbsp;/
+                   <a href="javascript:YAHOO.ur.folder.getFolderById('0')">My Files</a>&nbsp;/
                </c:if>
                <c:if test="${parentFolderId == 0}">
-                   ${user.username}&nbsp;/
+                   My Files&nbsp;/
                </c:if>
 	    
            <c:forEach var="folder" items="${folderPath}">
