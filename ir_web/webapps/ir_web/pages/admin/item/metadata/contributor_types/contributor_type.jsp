@@ -14,7 +14,6 @@
    limitations under the License.
 -->
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -66,21 +65,16 @@
         <h3>Edit Contributor Types</h3>
   
         <div id="bd">
-	    <table>
-	        <tr>
-	            <td>
-		            <button id="showContributorType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Contributor type</button> 
-	            </td>
-	            <td>
-	                <button id="showDeleteContributorType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button>
-	            </td>
-	        </tr>
-	    </table>
+		<button id="showContributorType" class="ur_button" 
+ 		    onmouseover="this.className='ur_buttonover';"
+ 		    onmouseout="this.className='ur_button';">New Contributor type</button> 
 	    
+	    <button id="showDeleteContributorType" class="ur_button" 
+ 		    onmouseover="this.className='ur_buttonover';"
+ 		    onmouseout="this.className='ur_button';">Delete</button>
+	   
+	    <br/>
+	    <br/> 
 	    <ur:div id="newContributorTypes"> </ur:div>
       </div>
       <!--  end body div -->
@@ -97,27 +91,9 @@
 		    <ur:basicForm id="addContributorType" name="newContributorType" method="post" 
 		              action="user/addContributorType.action">
 		              
-		          <input type="hidden" id="newContributorTypeForm_id"
-		               name="id" value=""/>
-		               
-		          <input type="hidden" id="newContributorType_new"
-		               name="newContributorType" value="true"/>
-		              
-		          <ur:div id="contributorTypeError" cssClass="errorMessage"></ur:div>
-		          <table class="formTable">    
-					    <tr>       
-				            <td align="left" class="label">Name:*</td>
-				            <td align="left" class="input"><input type="text" 
-						    id="newContributorTypeForm_name" name="contributorType.name"
-						    value="" size="45"/> </td>
-						</tr>
-						<tr>
-						    <td align="left" class="label">Description:</td>
-						    <td align="left" colspan="2" class="input"> <textarea id="newContributorTypeForm_description"
-						         name="contributorType.description" cols="42" rows="4"></textarea>
-				            </td>
-						</tr>
-			      </table>
+                <div id="contributorTypeDialogFields">
+                    <c:import url="contributor_type_form.jsp"/>
+                </div>
 	        </ur:basicForm>
         </ur:div>
     </ur:div>

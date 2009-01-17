@@ -150,6 +150,17 @@ public class ManageContributorTypes extends Pager implements Preparable{
 		deleted = true;
 		return "deleted";
 	}
+	
+	/**
+	 * Get the contributor type
+	 * 
+	 * @return get
+	 */
+	public String get()
+	{
+		contributorType = contributorTypeService.get(id, false);
+		return "get";
+	}
  
 
 	
