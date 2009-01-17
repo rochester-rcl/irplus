@@ -66,7 +66,7 @@
 		                        ${identifierType.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.identifier.type.editIdentifierType2(${identifierType.id});">${identifierType.name}</a>
+			                   <a href="javascript:YAHOO.ur.identifier.type.editIdentifierType(${identifierType.id});">${identifierType.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${identifierType.description}

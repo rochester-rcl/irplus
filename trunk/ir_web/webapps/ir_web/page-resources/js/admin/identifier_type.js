@@ -111,7 +111,7 @@ YAHOO.ur.identifier.type =
 	    var handleCancel = function() 
 	    {
 	        YAHOO.ur.identifier.type.identifierTypeDialog.hide();
-	        YAHOO.ur.identifier.type.clearIdentifierTypeForm();
+	        YAHOO.ur.identifier.type.clearIndentifierTypeForm();
 	    };
 	
 	    var handleSuccess = function(o) 
@@ -211,19 +211,10 @@ YAHOO.ur.identifier.type =
 	        YAHOO.ur.identifier.type.identifierTypeDialog, true);
     },
     
-    editIdentifierType : function(id, name, description)
-    {
-        document.getElementById('newIdentifierTypeForm_name').value = name;
-	    document.getElementById('newIdentifierTypeForm_description').value = description;
-	    document.getElementById('newIdentifierTypeForm_id').value = id;
-	    document.newIdentifierType.newIdentifierType.value = "false";
-	    YAHOO.ur.identifier.type.identifierTypeDialog.showDialog();
-    },
-    
-        /**
+    /**
      * function to edit content type information
      */
-    editIdentifierType2 : function(id)
+    editIdentifierType : function(id)
     {	    
 	    /*
          * This call back updates the html when a editing an identifier type
@@ -236,6 +227,7 @@ YAHOO.ur.identifier.type =
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
 	            {     
+	                alert(o.responseText);
                     var divToUpdate = document.getElementById('identifierTypeFormFields');
                     divToUpdate.innerHTML = o.responseText; 
 	                document.getElementById('newIdentifierTypeForm_id').value = id;
