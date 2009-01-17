@@ -27,6 +27,8 @@ var myLanguageTypeAction = basePath + 'admin/getLanguageTypes.action';
 var updateLanguageTypeAction = basePath + 'admin/updateLanguageType.action';
 var newLanguageTypeAction = basePath + 'admin/createLanguageType.action';
 var deleteLanguageTypeAction = basePath + 'admin/deleteLanguageType.action';
+var getLanguageTypeAction = basePath + 'admin/getLanguageType.action';
+
 
 // object to hold the specified language type data.
 var myLanguageTypeTable = new YAHOO.ur.table.Table('myLanguageTypes', 'newLanguageTypes');
@@ -82,6 +84,9 @@ YAHOO.ur.language.type = {
 	    
 	    document.getElementById('newLanguageTypeForm_name').value="";
 	    document.getElementById('newLanguageTypeForm_description').value="";
+	    document.getElementById('newLanguageTypeForm_languageTypeId').value="";
+	    document.getElementById('newLanguageTypeForm_639_2').value="";
+	    document.getElementById('newLanguageTypeForm_639_1').value="";
 
 	    document.newLanguageType.newLanguageType.value = "true";
     }, 
@@ -215,15 +220,40 @@ YAHOO.ur.language.type = {
     
     }, 
     
-    // function to edit language type information
-    editLanguageType : function(id, name, description)
-    {
-    	document.getElementById('newLanguageTypeForm_name').value = name;
-	    document.getElementById('newLanguageTypeForm_description').value = description;
-	    document.getElementById('newLanguageTypeForm_languageTypeId').value = id;
-	    document.newLanguageType.newLanguageType.value = "false";
-	    YAHOO.ur.language.type.languageTypeDialog.showDialog();
+    /**
+     * function to edit language type information
+     */
+    editLanguageType : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing a language type
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('languageTypeForm');
+                    divToUpdate.innerHTML = o.responseText; 
+                    document.newLanguageType.newLanguageType.value = "false";
+	                YAHOO.ur.language.type.languageTypeDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get language type failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getLanguageTypeAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
     },
+    
     
     /**
      * Clear out the form

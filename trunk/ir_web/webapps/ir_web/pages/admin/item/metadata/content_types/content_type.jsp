@@ -65,27 +65,18 @@
   
         <div id="bd">
       
-	        <table>
-	            <tr>
-	                <td>
-		                <button id="showContentType" class="ur_button" 
+		    <button id="showContentType" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">New Content type</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeleteContentType" class="ur_button" 
+	        <button id="showDeleteContentType" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>
-	            </tr>
-	        </table>
-	        
-	        <ur:div id="newContentTypes"></ur:div>
-	      
 
-	        
-      </div>
-      <!--  end body div -->
+            <br/>
+            <br/>
+	        <ur:div id="newContentTypes"></ur:div>
+         </div>
+         <!--  end body div -->
       
       <!--  this is the footer of the page -->
       <c:import url="/inc/footer.jsp"/>
@@ -100,7 +91,7 @@
 		                    method="post" 
 		                    action="admin/createContentType.action">
 	    <ur:div id="newContentTypeDialogFields">
-	      <%@ include file="/pages/admin/item/metadata/content_types/content_type_form.jsp" %>
+	       <c:import url="content_type_form.jsp"/>
 	    </ur:div>
 	  </ur:basicForm>
     </ur:div>

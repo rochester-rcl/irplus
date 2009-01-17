@@ -26,7 +26,7 @@
 		       
 		<!--  if editing an id must be passed -->     
 	    <input type="hidden" id="newContentTypeForm_id"
-		        name="id" value=""/>
+		        name="id" value="${contentType.id}"/>
 		               
 	    <input type="hidden" id="newContentTypeForm_new"
 		        name="newContentType" value="true"/>

@@ -66,21 +66,14 @@
   
         <div id="bd">
       
-	        <table>
-	            <tr>
-	                <td>
-		                <button id="showUserGroup" class="ur_button" 
+		    <button id="showUserGroup" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">New User Group</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeleteUserGroup" class="ur_button" 
+	        <button id="showDeleteUserGroup" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>
-	            </tr>
-	        </table>
-	        
+	        <br/>
+	        <br/>
 	        <ur:div id="newUserGroups"></ur:div>
       </div>
       <!--  end body div -->

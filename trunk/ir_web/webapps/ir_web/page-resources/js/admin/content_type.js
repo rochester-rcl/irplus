@@ -27,6 +27,7 @@ var myContentTypeAction = basePath + 'admin/getContentTypes.action';
 var updateContentTypeAction = basePath + 'admin/updateContentType.action';
 var newContentTypeAction = basePath + 'admin/createContentType.action';
 var deleteContentTypeAction = basePath + 'admin/deleteContentType.action';
+var getContentTypeAction = basePath + 'admin/getContentType.action';
 
 // object to hold the specified content type data.
 var myContentTypeTable = new YAHOO.ur.table.Table('myContentTypes', 'newContentTypes');
@@ -230,14 +231,38 @@ YAHOO.ur.content.type = {
 		    
 	},
 	
-    // function to edit content type information
-    editContentType : function(id, name, description)
-    {
-    	document.getElementById('newContentTypeForm_name').value = name;
-	    document.getElementById('newContentTypeForm_description').value = description;
-	    document.getElementById('newContentTypeForm_id').value = id;
-	    document.newContentTypeForm.newContentType.value = "false";
-	    YAHOO.ur.content.type.newContentTypeDialog.showDialog();
+    /**
+     * function to edit content type information
+     */
+    editContentType : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing a content type
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('newContentTypeDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                    document.newContentTypeForm.newContentType.value = "false";
+                    YAHOO.ur.content.type.newContentTypeDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get content type failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getContentTypeAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
     },
     	
 	 /** 

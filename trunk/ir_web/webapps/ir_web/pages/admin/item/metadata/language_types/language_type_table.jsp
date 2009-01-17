@@ -68,8 +68,7 @@
 		                        ${languageType.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.language.type.editLanguageType('${languageType.id}',
-			                           '${languageType.name}','${languageType.description}');">${languageType.name}</a>
+			                   <a href="javascript:YAHOO.ur.language.type.editLanguageType(${languageType.id});">${languageType.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 		                   		${languageType.iso639_2}
