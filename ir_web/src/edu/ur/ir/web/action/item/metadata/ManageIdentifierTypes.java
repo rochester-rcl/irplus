@@ -106,6 +106,17 @@ public class ManageIdentifierTypes extends Pager implements  Preparable{
 	}
 	
 	/**
+	 * Get an identifier type
+	 * 
+	 * @return the identifier type
+	 */
+	public String get()
+	{
+		identifierType = identifierTypeService.get(id, false);
+		return "get";
+	}
+	
+	/**
 	 * Method to update an existing identifier type.
 	 * 
 	 * @return

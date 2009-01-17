@@ -65,24 +65,18 @@
         <h3>Edit Languages</h3>
   
         <div id="bd">
-      
- 	        <table>
-	            <tr>
-	                <td>
-		                <button id="showLanguageType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Language type</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeleteLanguageType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>
-	             </tr>
-	         </table>
+		    <button id="showLanguageType" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">New Language type</button> 
+
+	        <button id="showDeleteLanguageType" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">Delete</button>
 	      
-	         <ur:div id="newLanguageTypes"></ur:div>
-      <div>
+	        <br/>
+	        <br/>
+	        <ur:div id="newLanguageTypes"></ur:div>
+       <div>
        <!--  end body div -->
 
       <!--  this is the footer of the page -->
@@ -97,31 +91,9 @@
 		         
 		         <ur:basicForm id="addLanguageType" name="newLanguageType" method="POST" 
 		              action="user/addLanguageType.action">
-		              
-		              <input type="hidden" id="newLanguageTypeForm_languageTypeId"
-		               name="id" value=""/>
-		               
-		              <input type="hidden" id="newLanguageType_new"
-		               name="newLanguageType" value="true"/>
-		              
-		              <ur:div id="languageTypeError" cssClass="errorMessage"></ur:div>
-		              <table class="formTable"> 
-			              <tr>
-			                    <td align="left" class="label">Name:*</td>
-			                    <td align="left" class="input"><input type="text" 
-			                         id="newLanguageTypeForm_name" size="45" 
-			                         name="languageType.name" value=""/></td>
-			              </tr>
-			              <tr>
-			                 <td align="left" class="label">Description:</td>
-			                  <td colspan="2" align="left" class="input"><textarea 
-			                     id="newLanguageTypeForm_description"
-			                     name="languageType.description" cols="42" rows="4"></textarea></td>
-			              </tr>
-			              <tr>
-			                
-			             </tr>
-			         </table>
+		              <div id="languageTypeForm">
+		                  <c:import url="language_type_form.jsp"/>
+		              </div>
 		          </ur:basicForm>
 		          </ur:div>
 	         </ur:div>

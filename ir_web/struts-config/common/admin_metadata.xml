@@ -35,6 +35,7 @@
             <result name="input">/pages/admin/item/metadata/content_types/content_type.jsp</result>
             <result name="added">/pages/admin/item/metadata/content_types/content_type_form.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/content_types/content_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/content_types/content_type_form.jsp</result>
         </action>
         
                 
@@ -59,6 +60,7 @@
             <result name="input">/pages/admin/item/metadata/language_types/language_type.jsp</result>
             <result name="added">/pages/admin/item/metadata/language_types/language_type_added.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/language_types/language_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/language_types/language_type_form.jsp</result>
         </action>
         
         <!--  ************************************ -->
@@ -82,6 +84,7 @@
             <result name="input">/pages/admin/item/metadata/identifier_types/identifier_type.jsp</result>
             <result name="added">/pages/admin/item/metadata/identifier_types/identifier_type_added.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/identifier_types/identifier_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/identifier_types/identifier_type_form.jsp</result>
         </action>
 
         <!--  ************************************ -->

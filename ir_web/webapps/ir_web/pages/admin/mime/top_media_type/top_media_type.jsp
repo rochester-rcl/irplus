@@ -65,21 +65,15 @@
     <h3>Top Media Types</h3>
     
     <div id="bd">      
-	      <table>
-	          <tr>
-	              <td>
-	                <button id="showTopMediaType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Top Media Type</button> 
-	               </td>
-	               <td>
-	                <button id="showDeleteTopMediaType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button> 
-	               </td>
-	          </tr>
-	      </table>
-
+	     <button id="showTopMediaType" class="ur_button" 
+ 		         onmouseover="this.className='ur_buttonover';"
+ 		         onmouseout="this.className='ur_button';">New Top Media Type</button> 
+	     
+	     <button id="showDeleteTopMediaType" class="ur_button" 
+ 		         onmouseover="this.className='ur_buttonover';"
+ 		         onmouseout="this.className='ur_button';">Delete</button> 
+ 		  <br/>
+ 		  <br/>
 	      <ur:div id="newTopMediaTypes"></ur:div>
 	      
 	      <ur:div id="newTopMediaTypeDialog">

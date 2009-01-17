@@ -70,23 +70,17 @@
     <a href="<c:url value="/admin/viewTopMediaTypes.action"/>">Top Media Types</a>
     <br/><br/>
     <div id="bd">      
-          <table>
-	          <tr>
-	              <td>
-	                <button id="showSubType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Sub Type</button> 
-	              </td>
-	              <td>
-	                <button id="showDeleteSubType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete Sub Type</button> 
-	               </td>
-	          </tr>
-	      </table>
-	      
-	      
-	      <ur:div id="newSubTypes"></ur:div>
+	    <button id="showSubType" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">New Sub Type</button> 
+	    
+	    <button id="showDeleteSubType" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">Delete Sub Type</button> 
+
+       	<br/>
+       	<br/>      
+	    <ur:div id="newSubTypes"></ur:div>
 	      
 	      <ur:div id="newSubTypeDialog">
 	          <ur:div cssClass="hd">Sub Type Information</ur:div>

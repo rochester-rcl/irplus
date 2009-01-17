@@ -27,6 +27,7 @@ var myIdentifierTypeAction = basePath + 'admin/getIdentifierTypes.action';
 var updateIdentifierTypeAction = basePath + 'admin/updateIdentifierType.action';
 var newIdentifierTypeAction = basePath + 'admin/createIdentifierType.action';
 var deleteIdentifierTypeAction = basePath + 'admin/deleteIdentifierType.action';
+var getIdentifierTypeAction = basePath + 'admin/getIdentifierType.action';
 
 // object to hold the specified identifier type data.
 var myIdentifierTypeTable = new YAHOO.ur.table.Table('myIdentifierTypes', 'newIdentifierTypes');
@@ -134,7 +135,7 @@ YAHOO.ur.identifier.type =
 	            {
 	                // we can clear the form if the identifier type was added
 	                YAHOO.ur.identifier.type.identifierTypeDialog.hide();
-	                YAHOO.ur.identifier.type.clearIdentifierTypeForm();
+	                YAHOO.ur.identifier.type.clearIndentifierTypeForm();
 	            }
 	            myIdentifierTypeTable.submitForm(myIdentifierTypeAction);
 	        }
@@ -161,7 +162,6 @@ YAHOO.ur.identifier.type =
 		YAHOO.ur.identifier.type.identifierTypeDialog.submit = function()
 		{
 		    YAHOO.util.Connect.setForm('newIdentifierType');
-	    
 	        //based on what we need to do (update or create a 
 	        // new identifier type) based on the action.
             var action = newIdentifierTypeAction;
@@ -172,7 +172,6 @@ YAHOO.ur.identifier.type =
 	                action = updateIdentifierTypeAction;
 	            }
 	        }
-
             var cObj = YAHOO.util.Connect.asyncRequest('post', action, callback);
 		}
 		
@@ -186,8 +185,8 @@ YAHOO.ur.identifier.type =
  	    // Validate the entries in the form to require that both first and last name are entered
 	    YAHOO.ur.identifier.type.validate = function() 
 	    {
-	        var data = this.getData();
-		    if (data.folderName == "" || data.folderName == null) 
+	        var name = document.getElementById('newIdentifierTypeForm_name').value;
+		    if (name == "" || name == null) 
 		    {
 		        alert('An Identifier type name must be entered');
 			    return false;
@@ -220,6 +219,42 @@ YAHOO.ur.identifier.type =
 	    document.newIdentifierType.newIdentifierType.value = "false";
 	    YAHOO.ur.identifier.type.identifierTypeDialog.showDialog();
     },
+    
+        /**
+     * function to edit content type information
+     */
+    editIdentifierType2 : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing an identifier type
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('identifierTypeFormFields');
+                    divToUpdate.innerHTML = o.responseText; 
+	                document.getElementById('newIdentifierTypeForm_id').value = id;
+	                document.newIdentifierType.newIdentifierType.value = "false";
+	                YAHOO.ur.identifier.type.identifierTypeDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get identifier type failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getIdentifierTypeAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
+    },
+    
     
     /*
      * Clear the form of any error messages

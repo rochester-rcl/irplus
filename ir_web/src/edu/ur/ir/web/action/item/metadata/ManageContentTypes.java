@@ -133,6 +133,17 @@ public class ManageContentTypes extends Pager implements  Preparable{
 	}
 	
 	/**
+	 * Get a content type
+	 * 
+	 * @return the content type
+	 */
+	public String get()
+	{
+		ContentType contentType = contentTypeService.getContentType(id, false);	
+		return "get";
+	}
+	
+	/**
 	 * Removes the selected items and collections.
 	 * 
 	 * @return

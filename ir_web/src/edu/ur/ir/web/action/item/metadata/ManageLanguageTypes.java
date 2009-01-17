@@ -152,6 +152,17 @@ public class ManageLanguageTypes extends Pager implements Preparable{
 		deleted = true;
 		return "deleted";
 	}
+	
+	/**
+	 * Get the language type 
+	 * 
+	 * @return
+	 */
+	public String get()
+	{
+		languageTypeService.get(id, false);
+		return "get";
+	}
  
 
 	

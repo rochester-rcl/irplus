@@ -80,27 +80,17 @@
     <br/>
   <div id="bd">      
           
-          <br/>
-	      <table>
-	          <tr>
-	              <td>
-                      <ur:div>
-		                <button id="showSubTypeExtension" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Extension</button> 
-	                  </ur:div>
-	               </td>
-	               <td>
-	                    <ur:div id="deleteSubTypeExtensionDiv">
-		                <button id="showDeleteSubTypeExtension" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete Extension</button> 
-	                    
-	                    </ur:div>
-	               </td>
-	          </tr>
-	      </table>
+          
+		  <button id="showSubTypeExtension" class="ur_button" 
+ 		      onmouseover="this.className='ur_buttonover';"
+ 		      onmouseout="this.className='ur_button';">New Extension</button> 
+		  
+		  <button id="showDeleteSubTypeExtension" class="ur_button" 
+ 		      onmouseover="this.className='ur_buttonover';"
+ 		      onmouseout="this.className='ur_button';">Delete Extension</button> 
 	      
+	      <br/>
+	      <br/>              
 	      <ur:div id="newSubTypeExtensions">
 	      </ur:div>
 	      

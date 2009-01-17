@@ -66,8 +66,7 @@
 		                        ${contentType.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.content.type.editContentType('${contentType.id}',
-			                           '${contentType.name}','${contentType.description}');">${contentType.name}</a>
+			                   <a href="javascript:YAHOO.ur.content.type.editContentType(${contentType.id});">${contentType.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 		                   		${contentType.uniqueSystemCode}

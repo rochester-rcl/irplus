@@ -14,7 +14,6 @@
    limitations under the License.
 -->
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -65,21 +64,16 @@
   
         <div id="bd">  
  	        
-	        <table>
-	            <tr>
-	                <td>
- 		                <button id="showIdentifierType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Identifier type</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeleteIdentifierType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>
-	            </tr>
-	        </table>
+ 		    <button id="showIdentifierType" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">New Identifier type</button> 
 	        
+	        <button id="showDeleteIdentifierType" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">Delete</button>
+	        
+	        <br/>
+	        <br/>
 	        <ur:div id="newIdentifierTypes"></ur:div>
 	      
       <div>
@@ -96,29 +90,9 @@
 		        <ur:div cssClass="bd">
 		            <ur:basicForm id="addIdentifierType" name="newIdentifierType" method="POST" 
 		                  action="user/addIdentifierType.action">
-		              
-		                <input type="hidden" id="newIdentifierTypeForm_id"
-		                    name="id" value=""/>
-		               
-		                <input type="hidden" id="newIdentifierType_new"
-		                    name="newIdentifierType" value="true"/>
-		              
-		                <ur:div id="identifierTypeError" cssClass="errorMessage"></ur:div>
-			            
-			            <table class="formTable">    
-		                    <tr>
-			                    <td align="left" class="label">Name:</td>
-			                    <td align="left" class="input"><input type="text" 
-			                       id="newIdentifierTypeForm_name" size="45" 
-			                       name="identifierType.name" value=""/> </td>
-			                </tr>
-			                <tr>
-			                    <td align="left" class="label">Description:</td>
-			                    <td colspan="2" align="left" class="input"><textarea 
-			                      id="newIdentifierTypeForm_description"
-			                      name="identifierType.description" cols="42" rows="4"></textarea></td>
-			                </tr>
-			            </table>
+		                <div id="identifierTypeFormFields">
+		                    <c:import url="identifier_type_form.jsp"/>
+		                </div>
 		            </ur:basicForm>
 		        </ur:div>
 	         </ur:div>
