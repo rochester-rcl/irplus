@@ -131,6 +131,7 @@
             <result name="input">/pages/admin/item/metadata/contributor_types/contributor_type.jsp</result>
             <result name="added">/pages/admin/item/metadata/contributor_types/contributor_type_added.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/contributor_types/contributor_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/contributor_types/contributor_type_form.jsp</result>
         </action>
         
         <!--  ************************************ -->

@@ -27,6 +27,7 @@ var myContributorTypeAction = basePath + 'admin/getContributorTypes.action';
 var updateContributorTypeAction = basePath + 'admin/updateContributorType.action';
 var newContributorTypeAction = basePath + 'admin/createContributorType.action';
 var deleteContributorTypeAction = basePath + 'admin/deleteContributorType.action';
+var getContributorTypeAction = basePath + 'admin/getContributorType.action';
 
 // object to hold the specified contributor type data.
 var myContributorTypeTable = new  YAHOO.ur.table.Table('myContributorTypes', 'newContributorTypes');
@@ -81,6 +82,7 @@ YAHOO.ur.contributor.type = {
         var div = document.getElementById('contributorTypeError');
         div.innerHTML = "";
         
+        document.getElementById('newContributorTypeForm_id').value="";
 		document.getElementById('newContributorTypeForm_name').value="";
 		document.getElementById('newContributorTypeForm_description').value="";
 	
@@ -214,15 +216,39 @@ YAHOO.ur.contributor.type = {
 		    YAHOO.ur.contributor.type.contributorTypeDialog, true);
 	},
 	
-	 // function to edit contributor type information
-	editContributorType : function(id, name, description)
-    {
-    	document.getElementById('newContributorTypeForm_name').value = name;
-	    document.getElementById('newContributorTypeForm_description').value = description;
-	    document.getElementById('newContributorTypeForm_id').value = id;
-	    document.newContributorType.newContributorType.value = "false";
-	    YAHOO.ur.contributor.type.contributorTypeDialog.showDialog();
-    },
+    /**
+     * function to edit contributor type information
+     */
+    editContributorType2 : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing a content type
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('contributorTypeDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                   	document.newContributorType.newContributorType.value = "false";
+	                YAHOO.ur.contributor.type.contributorTypeDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get contributor type failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getContributorTypeAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
+     },
 	
 	 /** 
 	  * clear out any form data messages or input
