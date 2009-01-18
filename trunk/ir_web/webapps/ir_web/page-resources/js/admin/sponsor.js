@@ -27,6 +27,7 @@ var mySponsorAction = basePath + 'admin/getSponsors.action';
 var updateSponsorAction = basePath + 'admin/updateSponsor.action';
 var newSponsorAction = basePath + 'admin/createSponsor.action';
 var deleteSponsorAction = basePath + 'admin/deleteSponsor.action';
+var getSponsorAction = basePath + 'admin/getSponsor.action';
 
 // object to hold the specified sponsor data.
 var mySponsorTable = new YAHOO.ur.table.Table('mySponsors', 'newSponsors');
@@ -210,8 +211,7 @@ YAHOO.ur.sponsor = {
 	    }
 	
 		// Wire up the success and failure handlers
-		var callback = { success: handleSuccess,
-											         failure: handleFailure };
+		var callback = { success: handleSuccess, failure: handleFailure };
 				
 				
 		// Render the Dialog
@@ -223,15 +223,41 @@ YAHOO.ur.sponsor = {
 		    YAHOO.ur.sponsor.newSponsorDialog, true);
 	},   
 	    
-    // function to edit sponsor information
-    editSponsor : function(id, name, description)
-    {
-    	document.getElementById('newSponsorForm_name').value = name;
-	    document.getElementById('newSponsorForm_description').value = description;
-	    document.getElementById('newSponsorForm_id').value = id;
-	    document.newSponsorForm.newSponsor.value = "false";
-	    YAHOO.ur.sponsor.newSponsorDialog.show();
+    
+    /**
+     * function to edit sponsor information
+     */
+    editSponsor : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing a sponsor
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('newSponsorDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+	                document.newSponsorForm.newSponsor.value = "false";
+	                YAHOO.ur.sponsor.newSponsorDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get sponsor failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getSponsorAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
     },
+    
 	
 	 /** 
 	  * clear out any form data messages or input

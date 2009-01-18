@@ -45,7 +45,6 @@
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
-	                <urstb:td>System Code</urstb:td>
 					<urstb:td>Description</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>
@@ -66,8 +65,7 @@
 		                        ${publisher.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.publisher.editPublisher('${publisher.id}',
-			                           '${publisher.name}','${publisher.description}');">${publisher.name}</a>
+			                   <a href="javascript:YAHOO.ur.publisher.editPublisher(${publisher.id});">${publisher.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${publisher.description}

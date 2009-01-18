@@ -152,7 +152,16 @@ public class ManageSponsors extends Pager implements Preparable{
 		return "deleted";
 	}
  
-
+	/**
+	 * Get the sponsor 
+	 * 
+	 * @return
+	 */
+    public String get()
+    {
+    	sponsor = sponsorService.getSponsor(id, false);
+    	return "get";
+    }
 	
 	/**
 	 * Get the sponsors table data.

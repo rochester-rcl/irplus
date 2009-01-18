@@ -26,7 +26,7 @@
 		       
 		<!--  if editing an id must be passed -->     
 	    <input type="hidden" id="newPublisherForm_id"
-		        name="id" value=""/>
+		        name="id" value="${publisher.id}"/>
 		               
 	    <input type="hidden" id="newPublisherForm_new"
 		        name="newPublisher" value="true"/>

@@ -183,6 +183,7 @@
             <result name="input">/pages/admin/item/metadata/sponsors/sponsor.jsp</result>
             <result name="added">/pages/admin/item/metadata/sponsors/sponsor_form.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/sponsors/sponsor_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/sponsors/sponsor_form.jsp</result>
         </action>
         
         
@@ -207,6 +208,7 @@
             <result name="input">/pages/admin/item/metadata/publishers/publisher.jsp</result>
             <result name="added">/pages/admin/item/metadata/publishers/publisher_form.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/publishers/publisher_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/publishers/publisher_form.jsp</result>
         </action>
         
         <!--  ************************************ -->
@@ -216,7 +218,7 @@
             <result name="success">/pages/admin/item/metadata/series/series.jsp</result>
         </action>
         
-        <action name="getSeries" 
+        <action name="getAllSeries" 
             class="edu.ur.ir.web.action.item.metadata.ManageSeries"
             method="viewSeries">
             <result name="success">/pages/admin/item/metadata/series/series_table.jsp</result>
@@ -230,5 +232,6 @@
             <result name="input">/pages/admin/item/metadata/series/series.jsp</result>
             <result name="added">/pages/admin/item/metadata/series/series_form.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/series/series_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/series/series_form.jsp</result>
         </action>        
         

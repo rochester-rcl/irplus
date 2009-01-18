@@ -66,8 +66,7 @@
 		                        ${series.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.series.editSeries('${series.id}',
-			                           '${series.name}','${series.number}', '${series.description}');">${series.name}</a>
+			                   <a href="javascript:YAHOO.ur.series.editSeries(${series.id});">${series.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${series.number}

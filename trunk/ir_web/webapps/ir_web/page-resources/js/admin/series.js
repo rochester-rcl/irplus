@@ -21,12 +21,13 @@
 YAHOO.namespace("ur.series");
 
 // action to perform when submitting the personal series.
-var mySeriesAction = basePath + 'admin/getSeries.action';
+var mySeriesAction = basePath + 'admin/getAllSeries.action';
 
 // actions for adding and removing folders
 var updateSeriesAction = basePath + 'admin/updateSeries.action';
 var newSeriesAction = basePath + 'admin/createSeries.action';
 var deleteSeriesAction = basePath + 'admin/deleteSeries.action';
+var getSeriesAction = basePath + 'admin/getSeries.action';
 
 // object to hold the specified series data.
 var mySeriesTable = new YAHOO.ur.table.Table('mySeries', 'newSeries');
@@ -231,16 +232,38 @@ YAHOO.ur.series = {
 		    YAHOO.ur.series.newSeriesDialog, true);
 	},
 	    
-	    
-	// function to edit series information
-    editSeries : function(id, name,  number, description)
-    {
-    	document.getElementById('newSeriesForm_name').value = name;
-    	document.getElementById('newSeriesForm_number').value = number;
-	    document.getElementById('newSeriesForm_description').value = description;
-	    document.getElementById('newSeriesForm_id').value = id;
-	    document.newSeriesForm.newSeries.value = "false";
-	    YAHOO.ur.series.newSeriesDialog.show();
+    /**
+     * function to edit series information
+     */
+    editSeries : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing a series
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('newSeriesDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+	                document.newSeriesForm.newSeries.value = "false";
+	                YAHOO.ur.series.newSeriesDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get series failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getSeriesAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
     },
 	
 	/** 

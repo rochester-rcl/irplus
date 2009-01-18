@@ -151,8 +151,17 @@ public class ManageSeries extends Pager implements Preparable{
 		deleted = true;
 		return "deleted";
 	}
- 
-
+	
+	/**
+	 * Get the series
+	 * 
+	 * @return
+	 */
+	public String get()
+	{
+		series = seriesService.getSeries(id, false);
+		return "get";
+	}
 	
 	/**
 	 * Get the series table data.

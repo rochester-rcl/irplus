@@ -64,7 +64,7 @@
 		                        ${contributorType.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.contributor.type.editContributorType2(${contributorType.id});">${contributorType.name}</a>
+			                   <a href="javascript:YAHOO.ur.contributor.type.editContributorType(${contributorType.id});">${contributorType.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 		                   		${contributorType.uniqueSystemCode}

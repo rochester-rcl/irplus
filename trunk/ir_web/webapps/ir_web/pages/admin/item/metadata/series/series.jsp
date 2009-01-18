@@ -14,7 +14,6 @@
    limitations under the License.
 -->
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -61,25 +60,20 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h2>Edit Series</h2>
+        <h3>Edit Series</h3>
   
         <div id="bd">
       
-	        <table>
-	            <tr>
-	                <td>
-		                <button id="showSeries" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Series</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeleteSeries" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>
-	            </tr>	        
-	        </table>
+		    <button id="showSeries" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">New Series</button> 
+
+	        <button id="showDeleteSeries" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">Delete</button>
 	        
+	        <br/>
+	        <br/>
 	        <ur:div id="newSeries"></ur:div>
 	      
 	        <ur:div id="newSeriesDialog" cssClass="hidden">
@@ -89,7 +83,7 @@
 		                    method="post" 
 		                    action="user/addSeries.action">
 	                  <ur:div id="newSeriesDialogFields">
-	                       <%@ include file="/pages/admin/item/metadata/series/series_form.jsp" %>
+	                      <c:import url="series_form.jsp"/>
 	                  </ur:div>
 	                </ur:basicForm>
                 </ur:div>

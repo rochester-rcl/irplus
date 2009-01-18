@@ -151,6 +151,17 @@ public class ManagePublishers extends Pager implements Preparable{
 		deleted = true;
 		return "deleted";
 	}
+	
+	/**
+	 * Get the publisher.
+	 * 
+	 * @return
+	 */
+	public String get()
+	{
+		publisher = publisherService.getPublisher(id, false);
+		return "get";
+	}
  
 
 	

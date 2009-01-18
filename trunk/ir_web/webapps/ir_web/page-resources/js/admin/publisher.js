@@ -27,6 +27,7 @@ var myPublisherAction = basePath + 'admin/getPublishers.action';
 var updatePublisherAction = basePath + 'admin/updatePublisher.action';
 var newPublisherAction = basePath + 'admin/createPublisher.action';
 var deletePublisherAction = basePath + 'admin/deletePublisher.action';
+var getPublisherAction = basePath + 'admin/getPublisher.action';
 
 // object to hold the specified publisher data.
 var myPublisherTable = new YAHOO.ur.table.Table('myPublishers', 'newPublishers');
@@ -224,16 +225,41 @@ YAHOO.ur.publisher = {
 		    YAHOO.ur.publisher.newPublisherDialog, true);
 		    
 	 },
-	    
-    // function to edit publisher information
-    editPublisher : function(id, name, description)
-    {
-    	document.getElementById('newPublisherForm_name').value = name;
-	    document.getElementById('newPublisherForm_description').value = description;
-	    document.getElementById('newPublisherForm_id').value = id;
-	    document.newPublisherForm.newPublisher.value = "false";
-	    YAHOO.ur.publisher.newPublisherDialog.showDialog();
+    
+    /**
+     * function to edit publisher information
+     */
+    editPublisher : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing a publisher
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('newPublisherDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+	                document.newPublisherForm.newPublisher.value = "false";
+	                YAHOO.ur.publisher.newPublisherDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get publisher failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getPublisherAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
     },
+    
 	
 	 /** 
 	  * clear out any form data messages or input

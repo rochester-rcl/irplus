@@ -14,7 +14,6 @@
    limitations under the License.
 -->
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -61,25 +60,20 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h2>Edit Publishers</h2>
+        <h3>Edit Publishers</h3>
   
         <div id="bd">
-      
-	        <table>
-	            <tr>
-					<td>
-		                <button id="showPublisher" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Publisher</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeletePublisher" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>		            
-	            </tr>
-	        </table>
-	        
+   
+		    <button id="showPublisher" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">New Publisher</button> 
+
+	        <button id="showDeletePublisher" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">Delete</button>
+
+            <br/>
+            <br/>	        
 	        <ur:div id="newPublishers" ></ur:div>
 	      
 	        <ur:div id="newPublisherDialog" cssClass="hidden">
@@ -89,7 +83,7 @@
 		                    method="post" 
 		                    action="user/addPublisher.action">
 	                  <ur:div id="newPublisherDialogFields">
-	                       <%@ include file="/pages/admin/item/metadata/publishers/publisher_form.jsp" %>
+	                      <c:import url="publisher_form.jsp"/>
 	                  </ur:div>
 	                </ur:basicForm>
                 </ur:div>

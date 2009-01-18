@@ -19,6 +19,8 @@
       is an issue.
  -->
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 
 		<!--  represents a successful submission -->
 		<input type="hidden" id="newAffiliationForm_success" 
@@ -26,7 +28,7 @@
 		       
 		<!--  if editing an id must be passed -->     
 	    <input type="hidden" id="newAffiliationForm_id"
-		        name="id" value=""/>
+		        name="id" value="${affiliation.id}"/>
 		               
 	    <input type="hidden" id="newAffiliationForm_new"
 		        name="newAffiliation" value="true"/>
@@ -59,16 +61,25 @@
 	         <tr>
 	             <td colspan="2" align="left"><input type="checkbox" 
 	             id="newAffiliationForm_author"  
-	             name="author" value="true"/> Assign Author permission </td>
+	             name="author" 
+	             onclick="YAHOO.ur.affiliation.autoCheckPermission(this);"
+	             <c:if test="${affiliation.author}">checked="checked"</c:if>
+	             value="true"/> Assign Author permission </td>
 	         </tr>
 		     <tr>
-	             <td colspan="2" align="left"> <input type="checkbox" id="newAffiliationForm_researcher" name="researcher" value="true"/>
+	             <td colspan="2" align="left"> <input type="checkbox" id="newAffiliationForm_researcher" 
+	                 name="researcher" 
+	                 onclick="YAHOO.ur.affiliation.autoCheckPermission(this);"
+	                 <c:if test="${affiliation.researcher}">checked="checked"</c:if>
+	             value="true"/>
 	    Assign Researcher permission</td>
 	         </tr>
 	    
 		     <tr>
 	             <td colspan="2" align="left"> 
-	    <input type="checkbox" id="newAffiliationForm_needsApproval" name="needsApproval" value="true"/>
+	    <input type="checkbox" id="newAffiliationForm_needsApproval" name="needsApproval" 
+	        <c:if test="${affiliation.needsApproval}">checked="checked"</c:if>
+	        value="true"/>
 	    Needs Approval by admin
 	             </td>
 	         </tr>
