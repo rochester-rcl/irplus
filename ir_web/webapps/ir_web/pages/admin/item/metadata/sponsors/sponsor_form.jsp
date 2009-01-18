@@ -26,7 +26,7 @@
 		       
 		<!--  if editing an id must be passed -->     
 	    <input type="hidden" id="newSponsorForm_id"
-		        name="id" value=""/>
+		        name="id" value="${sponsor.id}"/>
 		               
 	    <input type="hidden" id="newSponsorForm_new"
 		        name="newSponsor" value="true"/>

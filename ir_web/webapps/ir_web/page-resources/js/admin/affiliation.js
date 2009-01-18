@@ -27,6 +27,7 @@ var myAffiliationAction = basePath + 'admin/getAffiliations.action';
 var updateAffiliationAction = basePath + 'admin/updateAffiliation.action';
 var newAffiliationAction = basePath + 'admin/createAffiliation.action';
 var deleteAffiliationAction = basePath + 'admin/deleteAffiliation.action';
+var getAffiliationAction = basePath + 'admin/getAffiliation.action';
 
 // object to hold the specified affiliation data.
 var myAffiliationTable = new YAHOO.ur.table.Table('myAffiliations', 'newAffiliations');
@@ -217,46 +218,67 @@ YAHOO.ur.affiliation = {
 	        YAHOO.ur.affiliation.newAffiliationDialog, true);
     },
      
-     /**
-      * Allow a user to edit an affilation
-      */
-    editAffiliation : function (id, name, description, author, researcher, needsApproval)
-    {
-        document.getElementById('newAffiliationForm_name').value = name;
-	    document.getElementById('newAffiliationForm_description').value = description;
-	    document.getElementById('newAffiliationForm_id').value = id;
-
-	    if (author == "true") 
-	    {
-	        document.getElementById('newAffiliationForm_author').checked = true;
-	    } 
-	    else 
-	    {
-	        document.getElementById('newAffiliationForm_author').checked = false;
-	    }
-
-	    if (researcher == "true") 
-	    {
-	        document.getElementById('newAffiliationForm_researcher').checked= true;
-	    } 
-	    else 
-	    {
-	        document.getElementById('newAffiliationForm_researcher').checked= false;
-	    }
-	    
-	    if (needsApproval == "true") 
-	    {
-	        document.getElementById('newAffiliationForm_needsApproval').checked= true;
-	    } 
-	    else 
-	    {
-	        document.getElementById('newAffiliationForm_needsApproval').checked= false;
-	    }
-	    
-	    document.newAffiliationForm.newAffiliation.value = "false";
-	    YAHOO.ur.affiliation.newAffiliationDialog.showDialog();
     
+    /**
+     * function to edit affiliation information
+     */
+    editAffiliation : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing an affiliation
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('newAffiliationDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+	                document.newAffiliationForm.newAffiliation.value = "false";
+	                YAHOO.ur.affiliation.newAffiliationDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get series failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getAffiliationAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
     },
+    
+    /**
+     * Make sure the permissions are set correctly
+     */
+    autoCheckPermission : function(permission) 
+    {
+        var authorPermission = document.getElementById('newAffiliationForm_author');
+        var researcherPermission = document.getElementById('newAffiliationForm_researcher');
+	    if (permission.id == 'newAffiliationForm_author') 
+	    {
+		    if (!permission.checked) 
+		    {
+		         researcherPermission.checked=false;
+		    }
+	    }
+	
+	    if (permission.id == 'newAffiliationForm_researcher') 
+	    {
+		    if (permission.checked) 
+		    {
+			    authorPermission.checked = true;
+		    } 
+	    }
+
+	    return true;
+    },
+    
     
     /**
      * clears the delete affiliation form data
@@ -264,7 +286,10 @@ YAHOO.ur.affiliation = {
     clearDeleteAffiliationForm : function ()
     {
         var div = document.getElementById('affiliationError');
-        div.innerHTML = "";
+        if( div != null )
+        {
+            div.innerHTML = "";
+        }
     },
     
     /**

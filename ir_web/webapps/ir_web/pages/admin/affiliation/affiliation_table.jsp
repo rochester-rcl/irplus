@@ -66,8 +66,7 @@
 		                        ${affiliation.id}
 	                        </urstb:td>
 	                        <urstb:td>
-	                         <a href="javascript:YAHOO.ur.affiliation.editAffiliation('${affiliation.id}',
-			                           '${affiliation.name}','${affiliation.description}');">${affiliation.name}</a>
+	                         <a href="javascript:YAHOO.ur.affiliation.editAffiliation(${affiliation.id});">${affiliation.name}</a>
 	                        </urstb:td>
 	                         <urstb:td>
 		                        <input type="checkbox" disabled="disabled" 

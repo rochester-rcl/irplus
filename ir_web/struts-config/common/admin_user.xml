@@ -178,6 +178,7 @@
             <result name="input">/pages/admin/affiliation/affiliation.jsp</result>
             <result name="added">/pages/admin/affiliation/affiliation_form.jsp</result>
             <result name="deleted">/pages/admin/affiliation/affiliation_deleted.jsp</result>
+            <result name="get">/pages/admin/affiliation/affiliation_form.jsp</result>
         </action>
         
 

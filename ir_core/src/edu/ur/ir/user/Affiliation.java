@@ -117,6 +117,12 @@ public class Affiliation extends CommonPersistent {
 		sb.append(description);
 		sb.append(" id = ");
 		sb.append(id);
+		sb.append(" needs approval = ");
+		sb.append(needsApproval);
+		sb.append(" author ");
+		sb.append(author);
+		sb.append(" researcher ");
+		sb.append(researcher);
 		sb.append(" version = ");
 		sb.append(version);
 		sb.append("]");
@@ -124,6 +130,11 @@ public class Affiliation extends CommonPersistent {
 	}
 
 	public boolean isNeedsApproval() {
+		return needsApproval;
+	}
+	
+	public boolean getNeedsApproval()
+	{
 		return needsApproval;
 	}
 

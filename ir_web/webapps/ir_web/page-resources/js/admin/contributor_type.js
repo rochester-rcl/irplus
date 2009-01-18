@@ -219,7 +219,7 @@ YAHOO.ur.contributor.type = {
     /**
      * function to edit contributor type information
      */
-    editContributorType2 : function(id)
+    editContributorType : function(id)
     {	    
 	    /*
          * This call back updates the html when a editing a content type

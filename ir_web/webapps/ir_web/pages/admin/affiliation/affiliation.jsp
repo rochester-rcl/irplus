@@ -14,7 +14,6 @@
    limitations under the License.
 -->
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -92,7 +91,7 @@
 		<ur:basicForm id="addAffiliation" name="newAffiliationForm"
 			method="post" action="admin/createAffiliation.action">
 			<ur:div id="newAffiliationDialogFields">
-				<%@ include file="/pages/admin/affiliation/affiliation_form.jsp"%>
+			    <c:import url="affiliation_form.jsp"/>
 			</ur:div>
 		</ur:basicForm>
 	</ur:div>

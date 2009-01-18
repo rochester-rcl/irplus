@@ -167,6 +167,17 @@ public class ManageAffiliations extends Pager implements   Preparable{
 		deleted = true;
 		return "deleted";
 	}
+	
+	/**
+	 * Get the affiliation
+	 * 
+	 * @return
+	 */
+	public String get()
+	{
+	    affiliation = affiliationService.getAffiliation(id, false);
+	    return "get";
+	}
  
 
 	

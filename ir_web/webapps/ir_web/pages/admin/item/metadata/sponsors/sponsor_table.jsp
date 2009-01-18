@@ -63,8 +63,7 @@
 		                        ${sponsor.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.sponsor.editSponsor('${sponsor.id}',
-			                           '${sponsor.name}','${sponsor.description}');">${sponsor.name}</a>
+			                   <a href="javascript:YAHOO.ur.sponsor.editSponsor(${sponsor.id});">${sponsor.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${sponsor.description}

@@ -210,14 +210,6 @@ YAHOO.ur.usergroup =
  
     },
     
-    editUserGroup : function(id, name, description)
-    {
-        document.getElementById('newUserGroupForm_name').value = name;
-	    document.getElementById('newUserGroupForm_description').value = description;
-	    document.getElementById('newUserGroupForm_id').value = id;
-	    YAHOO.ur.usergroup.newUserGroupDialog.showDialog();
-    },
-    
      /** 
       * clear out any form data messages or input
       * in the new content type form
