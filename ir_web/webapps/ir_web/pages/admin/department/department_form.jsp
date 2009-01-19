@@ -26,7 +26,7 @@
 		       
 		<!--  if editing an id must be passed -->     
 	    <input type="hidden" id="newDepartmentForm_id"
-		        name="id" value=""/>
+		        name="id" value="${department.id}"/>
 		               
 	    <input type="hidden" id="newDepartmentForm_new"
 		        name="newDepartment" value="true"/>

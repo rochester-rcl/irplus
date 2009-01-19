@@ -154,6 +154,17 @@ public class ManageExtentTypes extends Pager implements Preparable{
 		deleted = true;
 		return "deleted";
 	}
+	
+	/**
+	 * Load a specified extent type.
+	 * 
+	 * return "get" 
+	 */
+	public String get()
+	{
+		extentType = extentTypeService.getExtentType(id, false);
+		return "get";
+	}
  	
 	/**
 	 * Get the extent types table data.

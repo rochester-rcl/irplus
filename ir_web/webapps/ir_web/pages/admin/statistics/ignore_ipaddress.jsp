@@ -14,7 +14,6 @@
    limitations under the License.
 -->
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -96,7 +95,7 @@
 		                    method="post" 
 		                    action="admin/createIgnoreIpAddress.action">
 	    <ur:div id="newIgnoreIpAddressDialogFields">
-	      <%@ include file="/pages/admin/statistics/ignore_ipaddress_form.jsp" %>
+	        <c:import url="ignore_ipaddress_form.jsp"/>
 	    </ur:div>
 	  </ur:basicForm>
     </ur:div>

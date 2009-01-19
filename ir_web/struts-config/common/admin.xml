@@ -194,6 +194,7 @@
             <result name="input">/pages/admin/statistics/ignore_ipaddress.jsp</result>
             <result name="added">/pages/admin/statistics/ignore_ipaddress_form.jsp</result>
             <result name="deleted">/pages/admin/statistics/ignore_ipaddress_deleted.jsp</result>
+            <result name="get">/pages/admin/statistics/ignore_ipaddress_form.jsp</result>
         </action>       
            
     </package>

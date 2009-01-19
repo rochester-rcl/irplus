@@ -14,7 +14,6 @@
    limitations under the License.
 -->
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -61,26 +60,20 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h2>Edit Extent Types</h2> 
+        <h3>Edit Extent Types</h3> 
   
         <div id="bd">  
 	        
-	        <table>
-	            <tr>
-	                <td>
- 		                <button id="showExtentType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Extent type</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeleteExtentType" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>
-	            </tr>
-	        </table>
-	        
-	        <ur:div id="newExtentTypes"></ur:div>
+ 		<button id="showExtentType" class="ur_button" 
+ 		    onmouseover="this.className='ur_buttonover';"
+ 		    onmouseout="this.className='ur_button';">New Extent type</button> 
+	     <button id="showDeleteExtentType" class="ur_button" 
+ 		     onmouseover="this.className='ur_buttonover';"
+ 		      onmouseout="this.className='ur_button';">Delete</button>
+ 		                
+	      <br/>
+	      <br/>  
+	      <ur:div id="newExtentTypes"></ur:div>
 	      
       <div>
       <!--  end bd div -->
@@ -97,28 +90,10 @@
 		            <ur:basicForm id="addExtentType" name="newExtentType" method="POST" 
 		                  action="user/addExtentType.action">
 		              
-		                <input type="hidden" id="newExtentTypeForm_id"
-		                    name="id" value=""/>
-		               
-		                <input type="hidden" id="newExtentType_new"
-		                    name="newExtentType" value="true"/>
-		              
-		                <ur:div id="extentTypeError" cssClass="errorMessage"></ur:div>
-			            
-			            <table class="formTable">    
-		                    <tr>
-			                    <td align="left" class="label">Name:</td>
-			                    <td align="left" class="input"><input type="text" 
-			                       id="newExtentTypeForm_name" size="45" 
-			                       name="extentType.name" value=""/> </td>
-			                </tr>
-			                <tr>
-			                    <td align="left" class="label">Description:</td>
-			                    <td colspan="2" align="left" class="input"><textarea 
-			                      id="newExtentTypeForm_description"
-			                      name="extentType.description" cols="42" rows="4"></textarea></td>
-			                </tr>
-			            </table>
+		            <div id="extent_type_form_fields">
+		                <c:import url="extent_type_form.jsp"/>
+		            </div>
+		                
 		            </ur:basicForm>
 		        </ur:div>
 	         </ur:div>

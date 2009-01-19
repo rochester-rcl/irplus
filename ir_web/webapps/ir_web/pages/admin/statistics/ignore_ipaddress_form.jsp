@@ -26,7 +26,7 @@
 		       
 		<!--  if editing an id must be passed -->     
 	    <input type="hidden" id="newIgnoreIpAddressForm_id"
-		        name="id" value=""/>
+		        name="id" value="${ignoreIpAddress.id}"/>
 		               
 	    <input type="hidden" id="newIgnoreIpAddressForm_new"
 		        name="newIgnoreIpAddress" value="true"/>

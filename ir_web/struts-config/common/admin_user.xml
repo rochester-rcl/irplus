@@ -203,6 +203,7 @@
             <result name="input">/pages/admin/department/department.jsp</result>
             <result name="added">/pages/admin/department/department_form.jsp</result>
             <result name="deleted">/pages/admin/department/department_deleted.jsp</result>
+            <result name="get">/pages/admin/department/department_form.jsp</result>
         </action>
         
         <!--  ************************************ -->
@@ -225,6 +226,7 @@
             <interceptor-ref name="crudStack" />
             <result name="added">/pages/admin/field/field_form.jsp</result>
             <result name="deleted">/pages/admin/field/field_deleted.jsp</result>
+            <result name="get">/pages/admin/field/field_form.jsp</result>
         </action>    
         
         <!--  ************************************ -->

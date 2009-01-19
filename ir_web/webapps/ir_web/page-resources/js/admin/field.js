@@ -27,6 +27,7 @@ var myFieldAction = basePath + 'admin/getFields.action';
 var updateFieldAction = basePath + 'admin/updateField.action';
 var newFieldAction = basePath + 'admin/createField.action';
 var deleteFieldAction = basePath + 'admin/deleteField.action';
+var getFieldAction = basePath + 'admin/getField.action';
 
 // object to hold the specified field data.
 var myFieldTable = new YAHOO.ur.table.Table('myFields', 'newFields');
@@ -212,14 +213,40 @@ YAHOO.ur.field =
 	        YAHOO.ur.field.newFieldDialog, true);
 	},
     
-    editField : function (id, name, description)
-    {
-        document.getElementById('newFieldForm_name').value = name;
-	    document.getElementById('newFieldForm_description').value = description;
-	    document.getElementById('newFieldForm_id').value = id;
-	    document.newFieldForm.newField.value = "false";
-	    YAHOO.ur.field.newFieldDialog.showDialog();
-    }, 
+ 
+    /**
+     * function to edit field information
+     */
+    editField : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing a field
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('newFieldDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                   	document.newFieldForm.newField.value = "false";
+	                YAHOO.ur.field.newFieldDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get field failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getFieldAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
+     },
     
     /**
      * Clear the delete fine

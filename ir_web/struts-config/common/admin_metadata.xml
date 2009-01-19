@@ -108,6 +108,8 @@
             <result name="input">/pages/admin/item/metadata/extent_types/extent_type.jsp</result>
             <result name="added">/pages/admin/item/metadata/extent_types/extent_type_added.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/extent_types/extent_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/extent_types/extent_type_form.jsp</result>
+ 
         </action>
                 
         <!--  ************************************ -->

@@ -27,6 +27,7 @@ var myExtentTypeAction = basePath + 'admin/getExtentTypes.action';
 var updateExtentTypeAction = basePath + 'admin/updateExtentType.action';
 var newExtentTypeAction = basePath + 'admin/createExtentType.action';
 var deleteExtentTypeAction = basePath + 'admin/deleteExtentType.action';
+var getExtentTypeAction = basePath + 'admin/getExtentType.action';
 
 // object to hold the specified extent type data.
 var myExtentTypeTable = new YAHOO.ur.table.Table('myExtentTypes', 'newExtentTypes');
@@ -79,6 +80,7 @@ YAHOO.ur.extent.type =
 
 	    document.getElementById('newExtentTypeForm_name').value="";
 	    document.getElementById('newExtentTypeForm_description').value="";
+	    document.getElementById('newExtentTypeForm_id').value="";
 	    document.newExtentType.newExtentType.value = "true";
     }, 
     
@@ -217,14 +219,40 @@ YAHOO.ur.extent.type =
 	        YAHOO.ur.extent.type.extentTypeDialog, true);
     },
     
-    editExtentType : function(id, name, description)
-    {
-        document.getElementById('newExtentTypeForm_name').value = name;
-	    document.getElementById('newExtentTypeForm_description').value = description;
-	    document.getElementById('newExtentTypeForm_id').value = id;
-	    document.newExtentType.newExtentType.value = "false";
-	    YAHOO.ur.extent.type.extentTypeDialog.showDialog();
-    },
+
+     /**
+     * function to edit extent type information
+     */
+     editExtentType : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing an extent type
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('extent_type_form_fields');
+                    divToUpdate.innerHTML = o.responseText; 
+                   	document.newExtentType.newExtentType.value = "false";
+	                YAHOO.ur.extent.type.extentTypeDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get extent types failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getExtentTypeAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
+     },
     
     /*
      * Clear the form of any error messages

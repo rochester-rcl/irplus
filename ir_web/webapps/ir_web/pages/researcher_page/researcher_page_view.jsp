@@ -139,9 +139,8 @@
 	                            </div>
 	                            <div> 
 					               <p>
-					                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href""> Send Message </a> 
-						            &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; <a href""> All work in XR </a>
-									</p>
+					                All work in: <a href""> IR Plus </a>
+								   </p>
 									
 								   <p> <strong> Researcher Information </strong>  <br/>
 		                              <c:if test="${!ir:isStringEmpty(researcher.campusLocation)}">

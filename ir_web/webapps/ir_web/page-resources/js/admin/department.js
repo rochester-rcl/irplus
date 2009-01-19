@@ -27,6 +27,7 @@ var myDepartmentAction = basePath + 'admin/getDepartments.action';
 var updateDepartmentAction = basePath + 'admin/updateDepartment.action';
 var newDepartmentAction = basePath + 'admin/createDepartment.action';
 var deleteDepartmentAction = basePath + 'admin/deleteDepartment.action';
+var getDepartmentAction = basePath + 'admin/getDepartment.action';
 
 // object to hold the specified department data.
 var myDepartmentTable = new YAHOO.ur.table.Table('myDepartments', 'newDepartments');
@@ -222,17 +223,38 @@ YAHOO.ur.department = {
     },
     
     /**
-     * function to allow a department to be edited
+     * function to edit department information
      */
-    editDepartment : function(id, name, description)
-    {
-        document.getElementById('newDepartmentForm_name').value = name;
-	    document.getElementById('newDepartmentForm_description').value = description;
-	    document.getElementById('newDepartmentForm_id').value = id;
-	    document.newDepartmentForm.newDepartment.value = "false";
-	    YAHOO.ur.department.newDepartmentDialog.showDialog();
-    
-    },
+    editDepartment : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing a department
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('newDepartmentDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                   	document.newDepartmentForm.newDepartment.value = "false";
+	                YAHOO.ur.department.newDepartmentDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get department failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getDepartmentAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
+     },
     
     /**
      * clear out any error messages in the department form

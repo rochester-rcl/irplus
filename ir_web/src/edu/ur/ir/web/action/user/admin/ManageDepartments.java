@@ -152,6 +152,15 @@ public class ManageDepartments extends Pager implements Preparable{
 		deleted = true;
 		return "deleted";
 	}
+	
+	/**
+	 * Get the department.
+	 */
+	public String get()
+	{
+		department = departmentService.getDepartment(id, false);
+		return "get";
+	}
  
 
 	

@@ -27,6 +27,7 @@ var myIgnoreIpAddressAction = basePath + 'admin/getIgnoreIpAddresses.action';
 var updateIgnoreIpAddressAction = basePath + 'admin/updateIgnoreIpAddress.action';
 var newIgnoreIpAddressAction = basePath + 'admin/createIgnoreIpAddress.action';
 var deleteIgnoreIpAddressAction = basePath + 'admin/deleteIgnoreIpAddress.action';
+var getIgnoreIpAddressAction = basePath + 'admin/getIgnoreIpAddress.action';
 
 // object to hold the specified ignore ipaddress data.
 var myIgnoreIpAddressTable = new YAHOO.ur.table.Table('myIgnoreIpAddresses', 'newIgnoreIpAddresses');
@@ -243,20 +244,41 @@ YAHOO.ur.ignore.ipaddress = {
 		    
 	},
 	
-    // function to edit ip address information
-    editIgnoreIpAddress : function(id, name, description, fromIp1, fromIp2, fromIp3, fromIp4, toIp4)
-    {
-    	document.getElementById('newIgnoreIpAddressForm_name').value = name;
-	    document.getElementById('newIgnoreIpAddressForm_description').value = description;
-	    document.getElementById('newIgnoreIpAddressForm_id').value = id;
-	    document.getElementById('newIgnoreIpAddressForm_fromAddress1').value = fromIp1;
-	    document.getElementById('newIgnoreIpAddressForm_fromAddress2').value = fromIp2;
-	    document.getElementById('newIgnoreIpAddressForm_fromAddress3').value = fromIp3;
-	    document.getElementById('newIgnoreIpAddressForm_fromAddress4').value = fromIp4;
-	    document.getElementById('newIgnoreIpAddressForm_toAddress4').value = toIp4;
-	    document.newIgnoreIpAddressForm.newIgnoreIpAddress.value = "false";
-	    YAHOO.ur.ignore.ipaddress.newIgnoreIpAddressDialog.showDialog();
-    },
+     /**
+     * function to edit ip address information
+     */
+     editIgnoreIpAddress : function(id)
+    {	    
+	    /*
+         * This call back updates the html when a editing an ip address
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+                    var divToUpdate = document.getElementById('newIgnoreIpAddressDialogFields');
+                    divToUpdate.innerHTML = o.responseText; 
+                   	document.newIgnoreIpAddressForm.newIgnoreIpAddress.value = "false";
+	                YAHOO.ur.ignore.ipaddress.newIgnoreIpAddressDialog.showDialog();
+
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get ip address failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            getIgnoreIpAddressAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            callback, null);
+     },
+    
     	
 	 /** 
 	  * clear out any form data messages or input

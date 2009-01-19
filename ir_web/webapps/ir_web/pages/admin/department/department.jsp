@@ -65,26 +65,18 @@
         <h3>Departments</h3>
   
         <div id="bd">
-      
-          <table>
-	            <tr>
-	                <td>
-		                <button id="showDepartment" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New department</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeleteDepartment" class="ur_button" 
+ 
+		    <button id="showDepartment" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">New department</button> 
+	        
+	        <button id="showDeleteDepartment" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>
-	            </tr>
-	        </table>
 	        
+	        <br/>
+	        <br/>
 	        <ur:div id="newDepartments"></ur:div>
-	      
-
-	        
       </div>
       <!--  end body div -->
       
@@ -102,7 +94,7 @@
 		                    method="POST"
 		                    action="admin/createDepartment.action">
 	          <ur:div id="newDepartmentDialogFields">
-	                       <%@ include file="/pages/admin/department/department_form.jsp" %>
+	              <c:import url="department_form.jsp"/>
 	          </ur:div>
 	      </ur:basicForm>
       </ur:div>

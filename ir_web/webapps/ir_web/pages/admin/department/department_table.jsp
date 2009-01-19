@@ -63,8 +63,7 @@
 		                        ${department.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.department.editDepartment('${department.id}',
-			                           '${department.name}','${department.description}');">${department.name}</a>
+			                   <a href="javascript:YAHOO.ur.department.editDepartment(${department.id});">${department.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${department.description}

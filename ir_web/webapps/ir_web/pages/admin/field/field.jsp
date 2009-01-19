@@ -14,7 +14,6 @@
    limitations under the License.
 -->
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -67,13 +66,15 @@
         <div id="bd">
       
  		<button id="showField" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New field</button> 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">New field</button> 
 
 	    <button id="showDeleteField" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button>
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">Delete</button>
 
+        <br/>
+        <br/>
 	    <ur:div id="newFields"></ur:div>
 	      
 
@@ -94,7 +95,7 @@
 		                    method="post" 
 		                    action="admin/createField.action">
 	          <ur:div id="newFieldDialogFields">
-	                       <%@ include file="/pages/admin/field/field_form.jsp" %>
+	              <c:import url="field_form.jsp"/>
 	          </ur:div>
 	      </ur:basicForm>
       </ur:div>

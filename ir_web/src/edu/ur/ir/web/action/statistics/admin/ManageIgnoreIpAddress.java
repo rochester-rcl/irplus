@@ -151,6 +151,16 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 		deleted = true;
 		return "deleted";
 	}
+	
+	/**
+	 * Get the ip address to edit
+	 * @return String get 
+	 */
+	public String get()
+	{
+		ignoreIpAddress = ignoreIpAddressService.getIgnoreIpAddress(id, false);
+		return "get";
+	}
  
 
 	
