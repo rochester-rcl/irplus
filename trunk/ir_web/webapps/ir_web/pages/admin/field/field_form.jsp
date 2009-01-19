@@ -26,7 +26,7 @@
 		       
 		<!--  if editing an id must be passed -->     
 	    <input type="hidden" id="newFieldForm_id"
-		        name="id" value=""/>
+		        name="id" value="${field.id}"/>
 		               
 	    <input type="hidden" id="newFieldForm_new"
 		        name="newField" value="true"/>

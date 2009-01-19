@@ -65,8 +65,7 @@
 		                        ${extentType.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.extent.type.editExtentType('${extentType.id}',
-			                           '${extentType.name}','${extentType.description}');">${extentType.name}</a>
+			                   <a href="javascript:YAHOO.ur.extent.type.editExtentType(${extentType.id});">${extentType.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${extentType.description}

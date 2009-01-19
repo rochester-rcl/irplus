@@ -67,10 +67,7 @@
 		                        ${ignoreIpAddress.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.ignore.ipaddress.editIgnoreIpAddress('${ignoreIpAddress.id}',
-			                           '${ignoreIpAddress.name}','${ignoreIpAddress.description}', ${ignoreIpAddress.fromAddress1},
-			                           ${ignoreIpAddress.fromAddress2}, ${ignoreIpAddress.fromAddress3},
-			                           ${ignoreIpAddress.fromAddress4},${ignoreIpAddress.toAddress4});">${ignoreIpAddress.name}</a>
+			                   <a href="javascript:YAHOO.ur.ignore.ipaddress.editIgnoreIpAddress(${ignoreIpAddress.id});">${ignoreIpAddress.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${ignoreIpAddress.fromAddress1}.${ignoreIpAddress.fromAddress2}.${ignoreIpAddress.fromAddress3}.${ignoreIpAddress.fromAddress4}

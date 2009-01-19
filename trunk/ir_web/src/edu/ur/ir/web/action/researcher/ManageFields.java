@@ -152,6 +152,15 @@ public class ManageFields extends Pager implements Preparable{
 		deleted = true;
 		return "deleted";
 	}
+	
+	/**
+	 * Get the fields
+	 */
+	public String get()
+	{
+		field = fieldService.getField(id, false);
+		return "get";
+	}
  
 
 	

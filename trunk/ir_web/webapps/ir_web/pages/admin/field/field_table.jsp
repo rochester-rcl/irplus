@@ -59,14 +59,13 @@
 	                        onMouseOver="this.className='highlight'"
 	                        onMouseOut="this.className='${rowClass}'">
 	                        <urstb:td>
-		                        <ur:checkbox name="researcherFieldIds" value="${field.id}"/>
+		                        <ur:checkbox name="fieldIds" value="${field.id}"/>
 	                        </urstb:td>
 	                        <urstb:td>
 		                        ${field.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.field.editField('${field.id}',
-			                           '${field.name}','${field.description}');">${field.name}</a>
+			                   <a href="javascript:YAHOO.ur.field.editField(${field.id});">${field.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${field.description}
