@@ -121,7 +121,7 @@
                                     </td>
                                     <td class="input">
                                         <input type="text" size="75" id="collection_name" name="collectionName" 
-                                               value="${collection.name}"/>
+                                               value="<c:out value='${collection.name}'/>"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -132,7 +132,7 @@
                                 <tr>
                                     <td class="input" colspan="2">
                                         <textarea name="collectionDescription" id="collection_description" 
-                                        rows="20" cols="75">${collection.description}</textarea>
+                                        rows="20" cols="75"><c:out value='${collection.description}'/></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -169,7 +169,7 @@
 	                     <br/>
                          <br/>
                          <div id="edit_view_permission" align="right">
-                         	<%@ include file="/pages/admin/institutional_collection/collection_permission_frag.jsp" %>
+                            <c:import url="collection_permission_frag.jsp"/>
                          </div>
                          
                          <c:url var="addGroupsUrl" value="/admin/addGroupsToCollection.action">
@@ -335,7 +335,7 @@
 		             <input type="hidden" id="collectionId" name="collectionId" value="${collection.id}"/>
 
               	    <div id="new_link_fields">
-               		    <%@ include file="add_collection_link_form.jsp" %>
+              	        <c:import url="add_collection_link_form.jsp"/>
               	    </div>
 
 		         </form>

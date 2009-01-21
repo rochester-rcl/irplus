@@ -121,7 +121,7 @@
 	      	      	
 		  <tr>
 		  <td class="rowBorder">
-	          <label  for="itemForm_item_type">Published Item Type(s)</label>
+	          <label  for="itemForm_item_type">Publication Type(s)</label>
 	      </td>
 	      </tr>    
 	
@@ -143,8 +143,8 @@
 	      <tr>
 	        <td > Secondary Types:
 	        	<div id="type_form">
-	        		<%@ include file="/pages/user/workspace/item/content_type_list.jsp" %>
-		      	 </div>
+	        	    <c:import url="content_type_list.jsp"/>
+	         	 </div>
 		    </td>
 	      </tr>
 	
@@ -156,8 +156,8 @@
 	      
 	      <tr>
 	      <td>
-	           <input type="button" class="ur_button" id="itemForm_add_series" value="Add Series" onclick="javascript:YAHOO.ur.item.metadata.getSeries();"/>
-	           <input type="button" class="ur_button" id="show_series" value="Add New Series"/>
+	           <input type="button" class="ur_button" id="itemForm_add_series" value="Add Existing Series" onclick="javascript:YAHOO.ur.item.metadata.getSeries();"/>
+	           <input type="button" class="ur_button" id="show_series" value="Create New Series"/>
 	      </td>
 	      </tr>
 	      
@@ -167,7 +167,7 @@
 	          <div id="new_series"> </div>
               <!--  this table is built dynamically -->
               <div id="series_forms">
-               		<%@ include file="/pages/user/workspace/item/series_list.jsp" %>
+                    <c:import url="series_list.jsp"/>
                </div> 
 	      </td>
 	      </tr>
@@ -180,8 +180,8 @@
 	
 		  <tr>
 	      <td>
-	           <input type="button" class="ur_button" id="itemForm_add_identifier" value="Add Identifier" onclick="javascript:YAHOO.ur.item.metadata.getIdentifiers();"/>
-	           <input type="button" class="ur_button" id="show_identifier_type" value="Add New Identifier"/>
+	           <input type="button" class="ur_button" id="itemForm_add_identifier" value="Add Another Identifier Entry" onclick="javascript:YAHOO.ur.item.metadata.getIdentifiers();"/>
+	           <input type="button" class="ur_button" id="show_identifier_type" value="Create New Identifier Type"/>
 	      </td>
 	      </tr>
 	      
@@ -191,7 +191,7 @@
 		         <div id="new_identifier"> </div>
 	               <!--  this table is built dynamically -->
 	               <div id="identifier_forms">
-	               		<%@ include file="/pages/user/workspace/item/identifier_list.jsp" %>
+	                   <c:import url="identifier_list.jsp"/>
 	               </div>  
 	
 	      </td>
@@ -205,8 +205,8 @@
 	
 		  <tr>
 	      <td>
-	           <input type="button" class="ur_button" id="itemForm_add_extent" value="Add Extent" onclick="javascript:YAHOO.ur.item.metadata.getExtents();"/>
-	           <input type="button" class="ur_button" id="show_extent_type" value="Add New Extent"/>
+	           <input type="button" class="ur_button" id="itemForm_add_extent" value="Add Another Extent Type Entry" onclick="javascript:YAHOO.ur.item.metadata.getExtents();"/>
+	           <input type="button" class="ur_button" id="show_extent_type" value="Create New Extent Type"/>
 	      </td>
 	      </tr>
 	      
@@ -216,7 +216,7 @@
 		         <div id="new_extent"> </div>
 	               <!--  this table is built dynamically -->
 	               <div id="extent_forms">
-	               		<%@ include file="/pages/user/workspace/item/extent_list.jsp" %>
+	                   <c:import url="extent_list.jsp"/>
 	               </div>  
 	
 	      </td>
@@ -225,7 +225,7 @@
 	      
 	      <tr>
 			<td class="rowBorder"> 				          
-	          <label  for="itemForm_languages">Language(s)</label>
+	          <label  for="itemForm_languages">Language</label>
 		  </td>
 		   </tr>
 	
@@ -246,7 +246,7 @@
 	
 	      <tr>
 	      <td class="rowBorder">				  
-	          <label  for="itemForm_keywords">Subject Keywords</label>
+	          <label  for="itemForm_keywords">Subject Keywords (comma separated)</label>
 	      </td>
 	      </tr>
 	
@@ -276,8 +276,8 @@
 
 		  <tr>
 	      <td>
-	           <input type="button" class="ur_button" id="itemForm_add_sponsor" value="Add Sponsor" onclick="javascript:YAHOO.ur.item.metadata.getSponsors();"/>
-	           <input type="button" class="ur_button" id="show_sponsor" value="Add New Sponsor"/>
+	           <input type="button" class="ur_button" id="itemForm_add_sponsor" value="Add Another Sponsor Entry" onclick="javascript:YAHOO.ur.item.metadata.getSponsors();"/>
+	           <input type="button" class="ur_button" id="show_sponsor" value="Create New Sponsor"/>
 	      </td>
 	      </tr>
 	      
@@ -287,15 +287,15 @@
 		         <div id="new_sponsor"> </div>
 	               <!--  this table is built dynamically -->
 	               <div id="sponsor_forms">
-	               		<%@ include file="/pages/user/workspace/item/sponsor_list.jsp" %>
+	                   <c:import url="sponsor_list.jsp"/>
 	               </div>  
 	
 	      </td>
 	      </tr>
 
 		  <tr>
-		  <td class="rowBorder">
-	          <label for="itemForm_dateAvailable" >Date this publication was first presented to the public (MM/DD/YYYY)</label>
+		  <td class="rowBorder" colspan="3">
+	          <strong>Date this publication was first presented to the public (MM/DD/YYYY)</strong>
 	      </td>
 	      </tr>    
 	
@@ -327,8 +327,8 @@
 	      </tr> 
 	      
 		  <tr>
-		  <td class="rowBorder">
-	          <label for="itemForm_releaseDate" >Date this publication can be made available to the public (MM/DD/YYYY) </label>
+		  <td class="rowBorder" colspan="2">
+	          <strong>Date this publication can be made available to the public (MM/DD/YYYY)</strong>
 	      </td>
 	      </tr>    
 	
@@ -360,8 +360,8 @@
 	      </tr> 	      
 
 		  <tr>
-		  <td class="rowBorder">
-	          <label for="itemForm_originalItemCreationDate" >Date this publication was originally created (MM/DD/YYYY) </label>
+		  <td class="rowBorder" colspan="2">
+	          <strong>Date this publication was originally created (MM/DD/YYYY) </strong>
 	      </td>
 	      </tr>    
 	
@@ -393,7 +393,7 @@
 	      </tr> 	      
 	      	      
 	      <tr>
-	        <td class="rowBorder">
+	        <td class="rowBorder" colspan="2">
 	          <label  for="itemForm_externallyPublished">Has the item been published or publically distributed before?</label>
 	        </td>
 	       </tr>
@@ -429,7 +429,7 @@
 			          <tr>
 			              <td>
 			              	<div id="publisher_form">
-	        				<%@ include file="/pages/user/workspace/item/publisher_list.jsp" %>
+			              	    <c:import url="publisher_list.jsp"/>
 		      	 		    </div>
 			              </td>
 			          </tr>

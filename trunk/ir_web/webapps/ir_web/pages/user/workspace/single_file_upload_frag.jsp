@@ -15,6 +15,7 @@
 -->
 
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
@@ -30,6 +31,15 @@
                     <br/>
                     </c:forEach> 
                 </p>
+                <p class="errorMessage">
+                    <c:forEach var="illegalFileName" items="${illegalFileNames}">
+                        The name: "${illegalFileName.fileName}" has illegal file name characters 
+                        <br/>
+                    </c:forEach> 
+                    <c:if test="${!ur:isEmpty(illegalFileNames)}">
+                        The following are illegal characters: ${illegalFileNameCharacters}
+                    </c:if>
+                </p> 
             </div>
         </td>
     </tr>

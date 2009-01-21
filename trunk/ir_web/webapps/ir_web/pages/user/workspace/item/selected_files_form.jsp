@@ -35,7 +35,7 @@
 <table class="itemSelectTable" width="100%" >
 	<thead>
 		<tr>
-			<th colspan="2" class="thItemSelect">Files</th>
+			<th colspan="2" class="thItemSelect">Files Added to Publication</th>
 			<th class="thItemSelect" width="15%">Remove</th>
 		</tr>
 	</thead>

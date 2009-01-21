@@ -285,7 +285,7 @@
 		         <input type="hidden" id="file_upload_parent_folder_id" 
 		                     name="folderId" value="${parentFolderId}"/>
 		         <div id="upload_form_fields">
-		                     <c:import url="/pages/user/workspace/single_file_upload_frag.jsp"/>
+		                     <c:import url="single_file_upload_frag.jsp"/>
 		         </div>
 		    </ur:basicForm>
 		</div>
@@ -331,7 +331,7 @@
 		    action="user/singleFileUpload.action">
 		                 
 		    <div id="version_upload_form_fields">
-		        <c:import url="/pages/user/workspace/upload_new_file_version.jsp"/>
+		        <c:import url="upload_new_file_version.jsp"/>
 		    </div>
 		</ur:basicForm>
 		</div>
@@ -355,7 +355,7 @@
 		         method="post" enctype="multipart/form-data"
 		        action="user/viewInviteUser.action">		          
 			    <div id="invite_form_fields">
-			        <c:import url="/pages/user/workspace/invite_files_confirmation.jsp"/>
+			        <c:import url="invite_files_confirmation.jsp"/>
 			    </div>
 		    </ur:basicForm>
 		              
@@ -392,7 +392,7 @@
 		         method="post" enctype="multipart/form-data">		
 		         <p align="left">
 	              	<div id="renameFileDialogFields">
-	               		<%@ include file="/pages/user/workspace/rename_file_form.jsp" %>
+	              	    <c:import url="rename_file_form.jsp"/>
 	              	<div>		             
 		         </p>
 		     </ur:basicForm>		          

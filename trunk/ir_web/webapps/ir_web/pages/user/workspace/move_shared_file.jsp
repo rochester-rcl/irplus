@@ -51,6 +51,7 @@
 
     <!--  base path information -->
     <ur:js src="pages/js/base_path.js" />
+    <ur:js src="page-resources/js/util/ur_util.js"/>
     <ur:js src="page-resources/js/user/move_shared_file.js" />
 </head>
 
@@ -59,12 +60,12 @@
     <div id="doc2"><!--  this is the header of the page --> 
         <c:import url="/inc/header.jsp" /> 
 
-        <h1>Move Shared file</h1>
+        <h3>Move Shared file</h3>
 
         <!--  this is the body regin of the page -->
         <div id="bd">
             <div id="move_shared_file_frag">
-                <c:import url="/pages/user/workspace/move_shared_file_frag.jsp"/>
+                <c:import url="move_shared_file_frag.jsp"/>
             </div>
 
             <!--  generic error dialog -->   	     
