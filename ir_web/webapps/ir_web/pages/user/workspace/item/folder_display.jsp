@@ -39,9 +39,9 @@ Displayed on the left hand side of the add files to item page -->
 
 <!-- Displays the folder path -->
 <div class="button_height">
-/<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><ur:a href="javascript:YAHOO.ur.item.getFolderById('0')">${user.username}</ur:a>/
+/<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.item.getFolderById('0')">${user.username}</ur:a>/
    <c:forEach var="folder" items="${folderPath}">
-       <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><ur:a href="javascript:YAHOO.ur.item.getFolderById('${folder.id}')">${folder.name}</ur:a>/
+       <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.item.getFolderById('${folder.id}')">${folder.name}</ur:a>/
    </c:forEach>
 </div>
  <br/>	    
@@ -50,7 +50,7 @@ Displayed on the left hand side of the add files to item page -->
 	<thead>
 		<tr>
 			<th class="thItemFolder" width="20%">Add</th>
-			<th class="thItemFolder">Files</th>
+			<th class="thItemFolder">File System</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -61,7 +61,7 @@ Displayed on the left hand side of the add files to item page -->
 				    
 				    	<c:if test='${user.id == fileSystemObject.versionedFile.owner.id}'>
 						    <c:if test='${!ir:fileExistsInItem(fileSystemObject, item)}'>
-			                    <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/add.gif"/> <a href="javascript:YAHOO.ur.item.addFile('${fileSystemObject.versionedFile.id}');"> Add</a> 
+			                    <span class="addBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.item.addFile('${fileSystemObject.versionedFile.id}');"> Add</a> 
 							</c:if>
 							<c:if test='${ir:fileExistsInItem(fileSystemObject, item)}'>
 								Added
@@ -74,14 +74,14 @@ Displayed on the left hand side of the add files to item page -->
 	                 </c:if>
 
 				    <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                    <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/add.gif"/> <a href="javascript:YAHOO.ur.item.addFolder('${fileSystemObject.id}');"> Add</a> 
+	                    <span class="addBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.item.addFolder('${fileSystemObject.id}');"> Add</a> 
 	                 </c:if>
                    
 				</td>
 				
 				<td class="tdItemFolderRightBorder">
 					 <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                 	<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/> <ur:a href="javascript:YAHOO.ur.item.getFolderById('${fileSystemObject.id}')"> <ur:maxText numChars="40" text="${fileSystemObject.name}"></ur:maxText> </ur:a>
+	                 	<span class="folderBtnImg">&nbsp;</span> <a href="javascript:YAHOO.ur.item.getFolderById('${fileSystemObject.id}')"> <ur:maxText numChars="40" text="${fileSystemObject.name}"></ur:maxText> </a>
 	                 </c:if>
 	                 
 	                 <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">

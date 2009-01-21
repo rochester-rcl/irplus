@@ -30,6 +30,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.FileSystem;
 import edu.ur.ir.file.TemporaryFileCreator;
 import edu.ur.ir.file.TransformedFileType;
 import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
@@ -81,6 +82,9 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	/** description of the file  */
 	private String[] userFileDescription;
 	
+	/** characters that cannot exist in file names */
+	private String illegalFileNameCharacters = "";
+	
 	/** actual set of files uploaded */
 	private File[] file;
 	
@@ -123,6 +127,7 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	 */
 	public String uploadFiles() throws IOException
 	{
+		
 		log.debug("Upload files called");
 		
 		IrUser user = userService.getUser(userId, false);
@@ -219,6 +224,14 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		}
 		else
 		{
+			if( illegalFileNames.size() > 0 )
+			{
+			    char[] invalidCharacters = FileSystem.INVALID_CHARACTERS;
+			    for(char ch : invalidCharacters )
+			    {
+				    illegalFileNameCharacters = illegalFileNameCharacters + " " + ch;
+			    }
+			}
 			return INPUT;
 		}
 	}
@@ -446,6 +459,11 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 
 	public LinkedList<FileUploadInfo> getIllegalFileNames() {
 		return illegalFileNames;
+	}
+	
+	public String getIllegalFileNameCharacters()
+	{
+		return illegalFileNameCharacters;
 	}
 
 }

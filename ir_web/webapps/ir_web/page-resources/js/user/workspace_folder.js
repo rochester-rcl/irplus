@@ -43,8 +43,8 @@ var folderMoveAction = basePath + 'user/movePersonalFileSystemObjects.action';
 var inviteUserAction = basePath + 'user/viewInviteUser.action';
 var checkSharePermissionsAction = basePath + 'user/checkSharePermission.action';
 
-// add a new version of a file
-var uploadNewFileVersion = basePath + 'user/viewNewFileVersionUpload.action';
+// view the version of a file
+var viewFileVersion = basePath + 'user/viewNewFileVersionUpload.action';
 
 // object to hold the specified folder data.
 var myPersonalFolderTable = new YAHOO.ur.table.Table('myFolders', 'newPersonalFolders');
@@ -458,7 +458,7 @@ YAHOO.ur.folder =
              dropMenu.addItems([
                  { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:YAHOO.ur.folder.deleteSingleConfirm('folder_checkbox_"+ folderId +"')" },
                  { text: '<span class="groupAddBtnImg">&nbsp;</span> Share',  url: "javascript:YAHOO.ur.folder.shareSingleConfirm('folder_checkbox_"+ folderId +"')" },
-                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Edit',  url: "javascript:YAHOO.ur.folder.editFolder('"  +folderId +"' ,'" + folderName + "','" + folderDescription +"');" }
+                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Edit',  url: "javascript:YAHOO.ur.folder.editFolder(" + folderId + ")" }
              ]);
                
              dropMenu.showEvent.subscribe(function () {
@@ -565,7 +565,7 @@ YAHOO.ur.folder =
          
              if( canEdit )
              {
-                 dropMenu.addItem({text: '<span class="pageAddBtnImg">&nbsp;</span> Add New Version', url: 'javascript:YAHOO.ur.folder.dropDownVersionedFileUpload( ' + fileId +",'" + fileName +"')" });
+                 dropMenu.addItem({text: '<span class="pageAddBtnImg">&nbsp;</span> Add New Version', url: 'javascript:YAHOO.ur.folder.dropDownVersionedFileUpload( ' + fileId + ')'});
              }
          
              if( canBreakLock )
@@ -895,14 +895,35 @@ YAHOO.ur.folder =
     /**
      * Versioned file upload
      */
-    dropDownVersionedFileUpload : function(fileId, fileName)
-    {
-        YAHOO.ur.folder.clearVersionedFileUploadForm();
-        // set the id of the file in the form
-        document.getElementById('personal_file_id').value = fileId;
-        YAHOO.ur.folder.versionedFileUploadDialog.showDialog();
-        var versionUploadHeader = document.getElementById('add_version_note');
-        versionUploadHeader.innerHTML = 'Add new version to: ' + fileName;  
+   dropDownVersionedFileUpload : function(fileId)
+    {	    
+	    /*
+         * This call back updates the html when a adding a new versioned file
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+            	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {   
+	                alert(o.responseText);  
+                    var divToUpdate = document.getElementById('version_upload_form_fields');
+                    divToUpdate.innerHTML = o.responseText; 
+	                YAHOO.ur.folder.versionedFileUploadDialog.showDialog();
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Get new versioned info file failed ' + o.status + ' status text ' + o.statusText );
+	        }
+        };
+        
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+           viewFileVersion + '?personalFileId=' + fileId +  '&bustcache='+new Date().getTime(), 
+            callback, null);
     },
     
     /**

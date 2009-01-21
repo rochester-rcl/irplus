@@ -227,7 +227,6 @@ YAHOO.ur.identifier.type =
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
 	            {     
-	                alert(o.responseText);
                     var divToUpdate = document.getElementById('identifierTypeFormFields');
                     divToUpdate.innerHTML = o.responseText; 
 	                document.getElementById('newIdentifierTypeForm_id').value = id;

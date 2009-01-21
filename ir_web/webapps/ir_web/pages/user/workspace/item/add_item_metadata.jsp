@@ -172,7 +172,7 @@
 					<input type="hidden" name="institutionalItemId" value="${institutionalItemId}"/>
 					       	        
        	        	<ur:div id="item_metadata_form">
-						<%@ include file="/pages/user/workspace/item/item_metadata_form.jsp" %>
+       	        	    <c:import url="item_metadata_form.jsp"/>
 					</ur:div>
 				</ur:basicForm>
 			   
@@ -210,7 +210,7 @@
 		                    method="post" 
 		                    action="user/addSeries.action">
 	                  <ur:div id="newSeriesDialogFields">
-	                       <%@ include file="/pages/user/workspace/item/series_form.jsp" %>
+	                      <c:import url="series_form.jsp"/>
 	                  </ur:div>
 	                </ur:basicForm>
                 </ur:div>
@@ -223,7 +223,7 @@
 		                    method="post" 
 		                    action="user/addSponsor.action">
 	                  <ur:div id="newSponsorDialogFields">
-	                       <%@ include file="/pages/admin/item/metadata/sponsors/sponsor_form.jsp" %>
+	                       <c:import url="/pages/admin/item/metadata/sponsors/sponsor_form.jsp"/>
 	                  </ur:div>
 	                </ur:basicForm>
                 </ur:div>
@@ -298,7 +298,7 @@
 		                    method="post" 
 		                    action="user/addPublisher.action">
 	                  <ur:div id="newPublisherDialogFields">
-	                       <%@ include file="/pages/admin/item/metadata/publishers/publisher_form.jsp" %>
+	                       <c:import url="/pages/admin/item/metadata/publishers/publisher_form.jsp"/>
 	                  </ur:div>
 	                </ur:basicForm>
                 </ur:div>

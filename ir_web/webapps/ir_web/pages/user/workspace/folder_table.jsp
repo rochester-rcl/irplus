@@ -170,7 +170,6 @@
 	                          where id  is the id of the folder 
 	                          clicking on a link creates a popup menu-->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                        
 	                             <button type="button" class="table_button" 
 	                                onclick="javascript:YAHOO.ur.folder.buildFolderMenu(${fileSystemObject.id}, 
 	                                this,'folder_'+ ${fileSystemObject.id}, 
