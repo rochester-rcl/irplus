@@ -389,9 +389,18 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		
 		tm.commit(ts);
         
+		// start new transaction
+        ts = tm.getTransaction(td);
+        // make sure you can get the list of personal items for a user
+        List<Long> itemIds = new LinkedList<Long>();
+        itemIds.add(it.getId());
+        userPublishingFileSystemService.getPersonalItems(user.getId(), itemIds);
+        tm.commit(ts);
+		
 		
 		// start new transaction
         ts = tm.getTransaction(td);
+        
         assert it.getId() != null : "Personal publication should not have a null id " + it;
         List<PersonalCollection> collectionsToMove = new LinkedList<PersonalCollection>();
         collectionsToMove.add(myCollection);
