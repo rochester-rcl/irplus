@@ -25,10 +25,10 @@
 
     <h3>Path: /<span class="worldBtnImg">&nbsp;</span>
          <c:if test="${parentCollectionId != 0}">
-             <a href="javascript:YAHOO.ur.personal.collection.getCollectionById('0')">personalCollections</a>&nbsp;/
+             <a href="javascript:YAHOO.ur.personal.collection.getCollectionById('0')">My Publications</a>&nbsp;/
          </c:if>
          <c:if test="${parentCollectionId == 0}">
-                   personalCollections&nbsp;/
+                   My Publications&nbsp;/
          </c:if>
          
          <c:forEach var="collection" items="${collectionPath}">
@@ -46,7 +46,7 @@
         <tr>
             <td align="left">
                 <select onchange="javascript:YAHOO.ur.personal.collection.executeCheckboxAction(this.options[this.selectedIndex].value);">
-                    <option value="action" id="collection_checkbox_action_set"  selected="selected">Action on checked items and publications ...</option>
+                    <option value="action" id="collection_checkbox_action_set"  selected="selected">Action on checked collections and publications ...</option>
                     <option value="delete">Delete</option>
                     <option value="move">Move</option>
 	            </select>
