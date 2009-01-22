@@ -66,17 +66,17 @@
   
         <!--  this is the body regin of the page -->
         <div id="bd">
-
+            <h3> Properties for : ${personalItem.name}  </h3>
 		    <h3>Path: /<span class="worldBtnImg">&nbsp;</span>
 		         <c:if test="${parentCollectionId != 0}">
                       <c:url var="viewRootCollectionsUrl" value="/user/workspace.action">
                           <c:param name="parentCollectionId" value="0"/>
                           <c:param name="showCollectionTab" value="true"/>
                       </c:url>
-		             <a href="${viewRootCollectionsUrl}">personalCollections</a>&nbsp;/
+		             <a href="${viewRootCollectionsUrl}">My Publications</a>&nbsp;/
 		         </c:if>
 		         <c:if test="${parentCollectionId == 0}">
-		                   personalCollections&nbsp;/
+		                   My Publications&nbsp;/
 		         </c:if>
 		         
 	             <c:url var="viewCollectionsUrl" value="/user/workspace.action">
@@ -96,7 +96,7 @@
 		    </h3>
 
         	
-        	<h3> Properties for : ${personalItem.name}  </h3>
+        	
         	
         	<strong> All versions </strong>
         	<div class="clear">&nbsp;</div>
