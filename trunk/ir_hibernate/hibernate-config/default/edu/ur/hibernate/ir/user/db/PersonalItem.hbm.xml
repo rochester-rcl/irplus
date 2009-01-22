@@ -93,7 +93,7 @@
 	
 		<!-- Get specified personal items for user -->
 	<query name="getAllPersonalItemsInList">
-	   from PersonalCollection as personalCollection 
+	    from PersonalCollection as personalCollection 
 	    where personalCollection.owner.id = :ownerId
 	    and personalCollection.id in (:itemIds)
 	</query>
