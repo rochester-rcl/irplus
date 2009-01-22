@@ -204,6 +204,8 @@ public class DefaultNewsServiceTest {
 		String fileName = properties.getProperty("ur_research_home_jpg");
 		
 		File f = new File(path + fileName);
+		
+		assert f.exists() : "File should exist " + f.getAbsolutePath();
 		newsItem = newsService.getNewsItem(newsItem.getId(), false);
 		IrFile primaryPicture = newsService.addPrimaryNewsItemPicture(newsItem, repo, f, "apicture", "test adding picture");
 		
