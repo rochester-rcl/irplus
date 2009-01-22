@@ -62,7 +62,7 @@
 	<bean id="contextSource"
         class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
         <constructor-arg value="${ldap.server.location}"/>
-        <property name="userDn" value="${ldap.dn}"/>
+        <property name="userDn" value="${user.dn}"/>
         <property name="anonymousReadOnly" value="true"/>
     </bean>
 	
