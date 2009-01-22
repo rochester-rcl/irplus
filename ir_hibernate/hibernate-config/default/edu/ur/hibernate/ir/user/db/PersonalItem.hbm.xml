@@ -93,9 +93,9 @@
 	
 		<!-- Get specified personal items for user -->
 	<query name="getAllPersonalItemsInList">
-	    from PersonalCollection as personalCollection 
-	    where personalCollection.owner.id = :ownerId
-	    and personalCollection.id in (:itemIds)
+	    from PersonalItem as personalItem 
+	    where personalItem.owner.id = :ownerId
+	    and personalItem.id in (:itemIds)
 	</query>
 	
 </hibernate-mapping>
