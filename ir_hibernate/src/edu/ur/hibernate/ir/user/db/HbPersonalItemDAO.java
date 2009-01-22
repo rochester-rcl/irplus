@@ -100,8 +100,8 @@ public class HbPersonalItemDAO implements PersonalItemDAO {
 		List<PersonalItem> foundItems = new LinkedList<PersonalItem>();
 		if( itemIds.size() > 0 )
 		{
-		foundItems = 
-		    (List<PersonalItem>) hbCrudDAO.getHibernateTemplate().findByNamedParam("getAllPersonalItemsInList", parameters, values);
+		    foundItems = 
+		        (List<PersonalItem>) hbCrudDAO.getHibernateTemplate().findByNamedQueryAndNamedParam("getAllPersonalItemsInList", parameters, values);
 		}
 		
 	
