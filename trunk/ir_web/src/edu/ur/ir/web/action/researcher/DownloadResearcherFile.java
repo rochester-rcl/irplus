@@ -28,9 +28,11 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.db.FileInfo;
+import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherFile;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.web.util.WebIoUtils;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Allows a researcher file to be downloaded.
@@ -60,6 +62,8 @@ implements ServletResponseAware, ServletRequestAware
 	/**  Servlet request made */
 	private HttpServletRequest request;
 	
+	/** id of the user **/
+	private Long userId;
 
 	private WebIoUtils webIoUtils;
 
@@ -73,13 +77,22 @@ implements ServletResponseAware, ServletRequestAware
 	    
         if (researcherFileId == null) {
         	log.debug("File  id is null");
-            return INPUT;
+        	return "notFound";
         }
         
         ResearcherFile researcherFile = researcherService.getResearcherFile(researcherFileId, false);
-        FileInfo fileInfo =  researcherFile.getIrFile().getFileInfo();
-        webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), false, true);
-        return SUCCESS;
+        Researcher researcher = researcherFile.getResearcher();
+        
+        if( researcher.isPublic()  || researcher.getUser().getId().equals(userId))
+        {	
+            FileInfo fileInfo =  researcherFile.getIrFile().getFileInfo();
+            webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), false, true);
+            return SUCCESS;
+        }
+        else
+        {
+        	return "accessDenied";
+        }
     }
 	
 
@@ -115,6 +128,16 @@ implements ServletResponseAware, ServletRequestAware
 	 */
 	public ResearcherService getResearcherService() {
 		return researcherService;
+	}
+	
+	/**
+	 * Get the user id.
+	 * 
+	 * @param userId
+	 */
+	public void setUserId(Long userId)
+	{
+		this.userId = userId;
 	}
 
 
