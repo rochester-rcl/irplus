@@ -52,14 +52,14 @@ Displayed on the left hand side of the add files to item page -->
 			<tr >
 				<td class="tdItemFolderLeftBorder">
 				    <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
-	                    <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/add.gif"/> <a href="javascript:YAHOO.ur.researcher.publications.addPublication('${fileSystemObject.versionedItem.id}');"> Add</a> 
+	                    <span class="addBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.researcher.publications.addPublication('${fileSystemObject.versionedItem.id}');"> Add</a> 
 	                 </c:if>
                    
 				</td>
 				
 				<td class="tdItemFolderRightBorder">
 					 <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
-	                 	<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/> <ur:a href="javascript:YAHOO.ur.researcher.publications.getPersonalCollectionById('${fileSystemObject.id}')"> <ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText> </ur:a>
+	                 	<span class="folderBtnImg">&nbsp;</span> <ur:a href="javascript:YAHOO.ur.researcher.publications.getPersonalCollectionById('${fileSystemObject.id}')"> <ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText> </ur:a>
 	                 </c:if>
 	                 
 	                 <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">

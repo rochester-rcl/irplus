@@ -32,9 +32,9 @@ Displayed on the left hand side of the add files to item page -->
 </form>
 
 <!-- Displays the folder path -->
-/<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><ur:a href="javascript:YAHOO.ur.researcher.files.getPersonalFolderById('0')">${user.username}</ur:a>/
+/<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.files.getPersonalFolderById('0')">My Research</ur:a>/
    <c:forEach var="folder" items="${personalFolderPath}">
-       <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><ur:a href="javascript:YAHOO.ur.researcher.files.getPersonalFolderById('${folder.id}')">${folder.name}</ur:a>/
+       <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.files.getPersonalFolderById('${folder.id}')">${folder.name}</ur:a>/
    </c:forEach>
 	    
 <div class="clear">&nbsp;</div>      
@@ -52,15 +52,13 @@ Displayed on the left hand side of the add files to item page -->
 			<tr >
 				<td class="tdItemFolderLeftBorder">
 				    <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
-	                    <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/add.gif"/> <a href="javascript:YAHOO.ur.researcher.files.addFile('${fileSystemObject.versionedFile.id}');"> Add</a> 
-					
-	                 </c:if>
-                   
-				</td>
+	                    <span class="addBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.researcher.files.addFile('${fileSystemObject.versionedFile.id}');"> Add</a> 
+				     </c:if>
+ 				</td>
 				
 				<td class="tdItemFolderRightBorder">
 					 <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                 	<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/> <ur:a href="javascript:YAHOO.ur.researcher.files.getPersonalFolderById('${fileSystemObject.id}')"> <ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText></ur:a>
+	                 	<span class="folderBtnImg">&nbsp;</span> <ur:a href="javascript:YAHOO.ur.researcher.files.getPersonalFolderById('${fileSystemObject.id}')"> <ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText></ur:a>
 	                 </c:if>
 	                 
 	                 <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
