@@ -40,6 +40,7 @@ import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
@@ -142,6 +143,12 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			user = userService.getUser(userId, false);
 		}
 		
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		{
+		    return "accessDenied";
+		}
+		
+		
 		return SUCCESS;
 	}
 
@@ -161,6 +168,15 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	 * 
 	 */
 	public String getItemContributors() {
+		
+		if (userId != null) {
+			user = userService.getUser(userId, false);
+		}
+		
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		{
+		    return "accessDenied";
+		}
 		
 		log.debug("getting contriutors for item id = " + genericItemId);
 		

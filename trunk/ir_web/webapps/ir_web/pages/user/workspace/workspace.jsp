@@ -393,7 +393,7 @@
 		         <p align="left">
 	              	<div id="renameFileDialogFields">
 	              	    <c:import url="rename_file_form.jsp"/>
-	              	<div>		             
+	              	</div>		             
 		         </p>
 		     </ur:basicForm>		          
 		 </div>
@@ -401,7 +401,12 @@
 	 <!--  end rename file dialog -->
 	 
 	 <!-- Div to render the delete collection -->
-	 <div id="deleteCollectionDiv"></div>
+	 <div id="deleteCollectionDiv" class="hidden">
+	     <div class="hd">Delete?</div>
+		 <div class="bd">
+		     Do you want to delete the selected publications and collections?
+		 </div>
+	 </div>
 
 </body>
 </html>

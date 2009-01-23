@@ -21,7 +21,7 @@
 <table >
 <tr>
 <td>		
-<h1>Pictures</h1>
+<h3>Pictures</h3>
 </td>
 </tr>
 

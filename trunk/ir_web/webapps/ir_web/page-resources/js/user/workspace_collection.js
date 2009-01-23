@@ -705,16 +705,13 @@ YAHOO.ur.personal.collection =
 
 	    // Instantiate the Dialog
 	    YAHOO.ur.personal.collection.deleteCollection = 
-	        new YAHOO.widget.SimpleDialog("deleteCollection", 
+	        new YAHOO.widget.SimpleDialog("deleteCollectionDiv", 
 			{ width: "500px",
 			  visible: false,
-			  text: "Do you want to delete the selected items and collections?",
-			  icon: YAHOO.widget.SimpleDialog.ICON_HELP,
+			  modal: true,
 			  buttons: [ { text:"Yes", handler:handleSubmit, isDefault:true },
 						 { text:"No",  handler:handleCancel } ]
 			} );
-	
-	    YAHOO.ur.personal.collection.deleteCollection.setHeader("Delete?");
 	
 	    YAHOO.ur.personal.collection.deleteCollection.showDialog = function()
 	    {
@@ -732,7 +729,7 @@ YAHOO.ur.personal.collection =
 	    };
 	    
 	    // Render the Dialog
-	    YAHOO.ur.personal.collection.deleteCollection.render("deleteCollectionDiv");
+	    YAHOO.ur.personal.collection.deleteCollection.render();
     },
 
     /**

@@ -33,6 +33,7 @@ import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.util.WebIoUtils;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Allows a shared in box file to be downloaded.
@@ -41,7 +42,7 @@ import edu.ur.ir.web.util.WebIoUtils;
  *
  */
 public class DownloadSharedInboxFile extends ActionSupport 
-implements ServletResponseAware, ServletRequestAware
+implements ServletResponseAware, ServletRequestAware, UserIdAware
 {
 
 	/** Eclipse generated id. */
@@ -70,6 +71,9 @@ implements ServletResponseAware, ServletRequestAware
 	
 	/** Utility for streaming files */
 	private WebIoUtils webIoUtils;
+	
+	/** id of the user accessing the data */
+	private Long userId;
 
 	/**
      * Allows a file to be downloaded
@@ -85,6 +89,15 @@ implements ServletResponseAware, ServletRequestAware
         }
         
         SharedInboxFile sharedInboxFile = userFileSystemService.getSharedInboxFile(inboxFileId, false);
+        
+        // do not let the user access the file unless they are the user 
+        // who the file has been shared with.
+        if(!sharedInboxFile.getSharedWithUser().getId().equals(userId))
+        {
+        	return "accessDenied";
+        }
+        
+        
         FileVersion fileVersion = null;
         if( versionNumber != 0)
         {
@@ -185,6 +198,16 @@ implements ServletResponseAware, ServletRequestAware
 	 */
 	public UserFileSystemService getUserFileSystemService() {
 		return userFileSystemService;
+	}
+	
+	/** 
+	 * Set the user id.
+	 * 
+	 * @param userId
+	 */
+	public void setUserId(Long userId)
+	{
+		this.userId = userId;
 	}
 
 

@@ -23,14 +23,13 @@
 
 <html>
     <head>
-        <title>Welcome</title>
+        <title>Add Files to Researcher Page</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
-     <ur:styleSheet href="page-resources/yui/reset-fonts-grids/reset-fonts-grids.css"/>
-    <ur:styleSheet href="page-resources/css/base-ur.css"/>
     <ur:styleSheet href="page-resources/yui/assets/skins/sam/skin.css"/>
-    <ur:styleSheet href="page-resources/yui/tabview/assets/skins/sam/tabview.css"/>
-    <ur:styleSheet href="page-resources/yui/tabview/assets/border_tabs.css"/>
+    <ur:styleSheet href="page-resources/yui/reset-fonts-grids/reset-fonts-grids.css"/>
+    <ur:styleSheet href="page-resources/css/base-ur.css"/>
+    
     
     <ur:styleSheet href="page-resources/css/main_menu.css"/>
     <ur:styleSheet href="page-resources/css/global.css"/>
@@ -42,8 +41,8 @@
  	<ur:js src="page-resources/yui/button/button-min.js"/>
  	
  	<ur:js src="pages/js/base_path.js"/>
+ 	<ur:js src="page-resources/js/util/ur_util.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
- 	<ur:js src="pages/js/base_path.js"/>
 	<ur:js src="page-resources/js/user/add_files.js"/>    
  	
     <!--  Style for dialog boxes -->
@@ -69,7 +68,7 @@
             <!--  this is the header of the page -->
             <c:import url="/inc/header.jsp"/>
 
-            <h2> Add files to Researcher </h2>
+            <h3> Add files to Researcher </h3>
 
             <!--  this is the body region of the page -->
             <div id="bd">

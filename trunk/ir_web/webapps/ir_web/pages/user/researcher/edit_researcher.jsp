@@ -306,43 +306,34 @@
 	                 <div id="tab2">
 	                 	  <br/>
 	                      <div id="files_folders_buttons">
-	                      <table>
-	                          <tr> 
-	                              <td>
+	                     
  		                              <button class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';"
  		                               id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
-	                              </td>
-	                              <td>
+	                              
  		                              <button class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';"
  		                               id="showLink"><img  alt="" class="buttonImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link_add.gif"/>
  		                               <fmt:message key="new_link"/></button> 
-	                              </td>	                              
-	                              <td>
+	                              
 	                                  <button class="ur_button" id="showAddFile"
 	                                  onmouseover="this.className='ur_buttonover';"
  		                              onmouseout="this.className='ur_button';"
  		                              onclick="javascript:YAHOO.ur.edit.researcher.viewAddFiles();"><span class="pageAddBtnImg">&nbsp;</span>Add file</button>
-	                              </td>
-	                              <td>
+	                              
 	                                  <button class="ur_button" id="showAddPublication"
 	                                  onmouseover="this.className='ur_buttonover';"
  		                              onmouseout="this.className='ur_button';"
  		                              onclick="javascript:YAHOO.ur.edit.researcher.viewAddPublications();"><span class="packageAddBtnImg">&nbsp;</span>Add Publication</button>
-	                              </td>
-	                              <td>
+	                              
 	                                  <button class="ur_button" id="showDeleteFolder"
 	                                  onmouseover="this.className='ur_buttonover';"
  		                              onmouseout="this.className='ur_button';"><span class="deleteBtnImg">&nbsp;</span>Delete</button>
-	                              </td>
-
-	                          </tr>
-	                      </table>
+	                             
 	                      </div>
-	                      <br/>
+	                      
 
 	                      <!--  table of files and folders -->
 	                      <div id="newResearcherFolders" >
