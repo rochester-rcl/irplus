@@ -19,6 +19,8 @@ package edu.ur.hibernate.ir.user.db;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -38,6 +40,9 @@ import edu.ur.ir.user.PersonalItem;
  *
  */
 public class HbPersonalCollectionDAO implements PersonalCollectionDAO{
+	
+	/** Logger */
+	private static final Logger log = Logger.getLogger(HbPersonalCollectionDAO.class);
 
 	/**
 	 * Helper for stroring hibernate information.
@@ -221,18 +226,13 @@ public class HbPersonalCollectionDAO implements PersonalCollectionDAO{
 	public List<PersonalCollection> getSubPersonalCollections( final Long userId, 
 			final Long parentPersonalCollectionId) {
 		
-		List<PersonalCollection> personalCollections = (List<PersonalCollection>)hbCrudDAO.getHibernateTemplate().executeFind( new HibernateCallback() 
-		{
-	         public Object doInHibernate(Session session)
-	         {
-	     	    Query query = session.getNamedQuery("getRootPersonalCollections");
-	     	    query.setParameter(1, userId);
-	     	    query.setParameter(2, parentPersonalCollectionId);
-                return query.list();
-	         }
-		});
-        return personalCollections;
+		log.debug("get sub personal collections 2");
+        Long[] values = new Long[] {userId, parentPersonalCollectionId};
 		
+        List<PersonalCollection> personalCollections  =  
+			(List<PersonalCollection>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getPersonalSubCollectionsForCollection", 
+					values);
+		return personalCollections;
 		
 	}
 
