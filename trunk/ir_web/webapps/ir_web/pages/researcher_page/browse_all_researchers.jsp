@@ -14,7 +14,6 @@
    limitations under the License.
 -->
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
@@ -192,11 +191,12 @@
 							                             ${researcher.id}
 						                        </urstb:td>
 						                        <urstb:td>
-						                             <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
-                                                     <c:if test="${url != null}">
-                                                         <img height="66px" width="100px" src="${url}"/>
-                                                     </c:if>
-			                                              
+						                             <c:if test="${researcher.public}">
+						                                 <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
+                                                         <c:if test="${url != null}">
+                                                             <img height="66px" width="100px" src="${url}"/>
+                                                         </c:if>
+			                                         </c:if>    
 			                                         <c:if test="${url == null }">
 	                                                      <img height="66px" width="100px" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
 			                                         </c:if>	
@@ -373,12 +373,14 @@
 							                        ${researcher.id}
 						                        </urstb:td>
 						                        <urstb:td>
-						                        	<c:if test="${researcher.primaryPicture != null }">
-						                              <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
-                                                       <c:if test="${url != null}">
-                                                         <img height="66px" width="100px" src="${url}"/></a>
-                                                       </c:if> 
-						                            </c:if>	
+						                            <c:if test="${researcher.public}">
+						                        	    <c:if test="${researcher.primaryPicture != null }">
+						                                    <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
+                                                             <c:if test="${url != null}">
+                                                                 <img height="66px" width="100px" src="${url}"/></a>
+                                                             </c:if> 
+						                                </c:if>	
+						                            </c:if>
 						                        </urstb:td>
 						                        <urstb:td>
 						                            <c:url var="researcherView" value="/viewResearcherPage.action">
