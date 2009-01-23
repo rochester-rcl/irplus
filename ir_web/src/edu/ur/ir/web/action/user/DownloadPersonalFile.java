@@ -30,9 +30,11 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.user.PersonalFile;
+import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.util.WebIoUtils;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Allows a personal file to be downloaded.
@@ -41,7 +43,7 @@ import edu.ur.ir.web.util.WebIoUtils;
  *
  */
 public class DownloadPersonalFile extends ActionSupport 
-implements ServletResponseAware, ServletRequestAware
+implements ServletResponseAware, ServletRequestAware, UserIdAware
 {
 
 	/** Eclipse generated id. */
@@ -52,6 +54,9 @@ implements ServletResponseAware, ServletRequestAware
 	
 	/**  File to download */
 	private Long personalFileId;
+	
+	/** id of the user **/
+	private Long userId;
 	
 	/**  Version of the file to download */
 	private int versionNumber;
@@ -81,10 +86,17 @@ implements ServletResponseAware, ServletRequestAware
 	    
         if (personalFileId == null) {
         	log.debug("File  id is null");
-            return INPUT;
+            return "notFound";
         }
         
         PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
+        IrUser user = userService.getUser(userId, false);
+        
+        if( !personalFile.getOwner().equals(user))
+        {
+        	return "accessDenied";
+        }
+        
         FileVersion fileVersion = null;
         if( versionNumber != 0)
         {
@@ -187,6 +199,11 @@ implements ServletResponseAware, ServletRequestAware
 		return userFileSystemService;
 	}
 
+	/** id of the user */
+	public void setUserId(Long userId)
+	{
+		this.userId = userId;
+	}
 
 	/**
 	 * Set the user file system service.
