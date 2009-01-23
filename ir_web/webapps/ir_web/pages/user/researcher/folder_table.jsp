@@ -22,8 +22,7 @@
 <div class="dataTable">
 
 	<ur:basicForm method="post" id="folders" name="myFolders" >
-	   <h3>Path: /<span class="folderBtnImg">&nbsp;</span>${researcher.user.username}/
-	    <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.folder.getFolderById('0')">researcherFolders</ur:a>/
+	   <h3>Path: /<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.folder.getFolderById('0')">My Research</ur:a>/
            <c:forEach var="folder" items="${folderPath}">
                <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.folder.getFolderById('${folder.id}')">${folder.name}</ur:a>/
            </c:forEach></h3>
@@ -127,8 +126,7 @@
 		                	 </c:if>	
 		                	 
 		                	  <c:if test="${fileSystemObject.fileSystemType.type == 'researcherInstitutionalItem'}">
-		                    	<img  alt="" 
-			                       src="${pageContext.request.contextPath}/page-resources/images/all-images/package.gif"/> 
+		                    	<span class="packageBtnImg">&nbsp;</span> 
 		                	 </c:if>	               
 	                         
                         </urstb:td>  

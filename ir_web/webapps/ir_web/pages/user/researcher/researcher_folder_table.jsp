@@ -30,9 +30,9 @@
 </form>
 
 <!-- Displays the folder path -->
-/<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><ur:a href="javascript:YAHOO.ur.researcher.files.getResearcherFolderById('0')">${user.username}</ur:a>/
+/<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.files.getResearcherFolderById('0')">My Research</ur:a>/
    <c:forEach var="folder" items="${researcherFolderPath}">
-       <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><ur:a href="javascript:YAHOO.ur.researcher.files.getResearcherFolderById('${folder.id}')">${folder.name}</ur:a>/
+       <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.files.getResearcherFolderById('${folder.id}')">${folder.name}</ur:a>/
    </c:forEach>
 	    
 <div class="clear">&nbsp;</div>      
@@ -50,7 +50,7 @@
 				<td class="tdItemFolderSideBorder">
 				
 					 <c:if test="${researcherFileSystemVersion.researcherFileSystem.fileSystemType.type == 'researcherFolder'}">
-	                 	<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/> <ur:a href="javascript:YAHOO.ur.researcher.files.getResearcherFolderById('${researcherFileSystemVersion.researcherFileSystem.id}')"> <ur:maxText numChars="50" text="${researcherFileSystemVersion.researcherFileSystem.name}"></ur:maxText> </ur:a>
+	                 	<span class="folderBtnImg">&nbsp;</span> <ur:a href="javascript:YAHOO.ur.researcher.files.getResearcherFolderById('${researcherFileSystemVersion.researcherFileSystem.id}')"> <ur:maxText numChars="50" text="${researcherFileSystemVersion.researcherFileSystem.name}"></ur:maxText> </ur:a>
 	                 </c:if>
 	                 
 	                 <c:if test="${researcherFileSystemVersion.researcherFileSystem.fileSystemType.type == 'researcherFile'}">
