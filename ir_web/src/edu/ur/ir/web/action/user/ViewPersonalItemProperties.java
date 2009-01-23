@@ -29,6 +29,7 @@ import edu.ur.ir.item.ItemVersion;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Loads the item properties
@@ -36,7 +37,8 @@ import edu.ur.ir.user.UserPublishingFileSystemService;
  * @author Sharmila Ranganathan
  *
  */
-public class ViewPersonalItemProperties extends ActionSupport {
+public class ViewPersonalItemProperties extends ActionSupport implements 
+UserIdAware {
 	
 	/** Eclipse generated id */
 	private static final long serialVersionUID = 6266345166053778172L;
@@ -57,6 +59,9 @@ public class ViewPersonalItemProperties extends ActionSupport {
     
     /** Institutional item service */
     private InstitutionalItemService institutionalItemService;
+    
+    /** id of the user accessing the data */
+    private Long userId;
 
     
 	/**
@@ -65,6 +70,12 @@ public class ViewPersonalItemProperties extends ActionSupport {
 	public String execute()
 	{
 	    personalItem = userPublishingFileSystemService.getPersonalItem(personalItemId, false);
+	    
+	    if( !personalItem.getOwner().getId().equals(userId))
+	    {
+	    	return "accessDenied";
+	    }
+	    
 	    PersonalCollection parentCollection = personalItem.getPersonalCollection();
 	    if( parentCollection != null )
 	    {
@@ -155,6 +166,11 @@ public class ViewPersonalItemProperties extends ActionSupport {
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
+	}
+	
+	public void setUserId(Long userId)
+	{
+		this.userId = userId;
 	}
 
 }

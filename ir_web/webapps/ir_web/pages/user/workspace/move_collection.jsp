@@ -51,6 +51,7 @@
 
     <!--  base path information -->
     <ur:js src="pages/js/base_path.js" />
+    <ur:js src="page-resources/js/util/ur_util.js" />
     <ur:js src="page-resources/js/user/move_personal_collection.js" />
 </head>
 
@@ -64,7 +65,7 @@
         <!--  this is the body regin of the page -->
         <div id="bd">
             <div id="move_collection_frag">
-                <c:import url="/pages/user/workspace/move_collection_frag.jsp"/>
+                <c:import url="move_collection_frag.jsp"/>
             </div>
 
             <!--  generic error dialog -->   	     

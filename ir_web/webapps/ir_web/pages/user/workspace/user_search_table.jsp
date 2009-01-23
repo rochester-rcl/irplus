@@ -54,9 +54,7 @@
                                      versionedFile="${fileSystemObject.versionedFile}"/><a href="${personalFileDownloadUrl}">${fileSystemObject.versionedFile.nameWithExtension}</a>
                             </c:if>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                            <img class="tableImg" 
-	                             alt="" 
-	                             src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><a href="javascript:YAHOO.ur.workspace.search.showFolder('${fileSystemObject.id}')">${fileSystemObject.name}</a>
+	                            <span class="folderBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.workspace.search.showFolder('${fileSystemObject.id}')">${fileSystemObject.name}</a>
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'sharedInboxFile'}">
 	                            <c:url var="inboxFileDownloadUrl" value="/user/inboxFileDownload.action">
@@ -69,12 +67,26 @@
                                 <c:url var="personalItemPreviewUrl" value="/user/previewPublication.action">
 		                            <c:param name="genericItemId" value="${fileSystemObject.versionedItem.currentVersion.item.id}"/>
 		                        </c:url>
-                                <img class="tableImg" 
-	                             alt="" 
-	                             src="${pageContext.request.contextPath}/page-resources/images/all-images/package.gif"/><a href="${personalItemPreviewUrl}">${fileSystemObject.name}</a>
-                            </c:if>	                        
+                                <span class="packageBtnImg">&nbsp;</span><a href="${personalItemPreviewUrl}">${fileSystemObject.name}</a>
+                            </c:if>	
+                            <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
+                                <<span class="worldBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.workspace.search.showFolder('${fileSystemObject.id}')">${fileSystemObject.name}</a>
+                            </c:if>                        
                         </urstb:td>
-                        <urstb:td>${fileSystemObject.path}</urstb:td>
+                        <urstb:td>
+                            <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
+                               /My Files${fileSystemObject.path}
+                            </c:if>
+                            <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
+	                           /My Files${fileSystemObject.path}
+	                        </c:if>
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'sharedInboxFile'}">
+	                            /Shared File Inbox${fileSystemObject.path}
+	                        </c:if>
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
+	                            /My Publications${fileSystemObject.path}
+	                        </c:if>
+                        </urstb:td>
                         <urstb:td>${fileSystemObject.description}</urstb:td>
                         <urstb:td> 
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">

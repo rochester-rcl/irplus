@@ -43,12 +43,15 @@ import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserWorkspaceIndexService;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.IrRole;;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.order.AscendingOrderComparator;
 
@@ -141,6 +144,9 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 
 	/** Institutional item index service for indexing files */
 	private InstitutionalItemIndexService institutionalItemIndexService;
+	
+	/** service for user data */
+	private UserService userService;
 
 	/**
 	 * Prepare for action
@@ -154,13 +160,17 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		}
 
 	}
-
+	
 	/**
 	 * Create the file system to view.
 	 */
 	public String getFolders()
 	{
-
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+		    return "accessDenied";
+		}
 		if(parentFolderId != null && parentFolderId > 0)
 		{
 		    folderPath = userFileSystemService.getPersonalFolderPath(parentFolderId);
@@ -191,7 +201,11 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 * 
 	 */
 	public String addFile() throws NoIndexFoundException {
-
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+		    return "accessDenied";
+		}
 		fileAdded = true;
 		
 		if (versionedFileId != null) {
@@ -293,7 +307,11 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 * 
 	 */
 	public String changeFileVersion() throws NoIndexFoundException {
-		
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+		    return "accessDenied";
+		}
 		FileVersion fileVersion = repositoryService.getFileVersion(fileVersionId, false);
 		ItemFile itemFile = item.getItemFile(itemObjectId);
 		itemFile.setIrFile(fileVersion.getIrFile());
@@ -333,7 +351,11 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 * 
 	 */
 	public String updateDescription() {
-		
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+		    return "accessDenied";
+		}
 		ItemObject itemObject = item.getItemObject(itemObjectId, itemObjectType);
 		itemObject.setDescription(description);
 
@@ -347,7 +369,11 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 * 
 	 */
 	public String getFiles() {
-		
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+		    return "accessDenied";
+		}
 		List<ItemObject> itemObjects = item.getItemObjects();
 		
 		// Sort item objects by order
@@ -395,9 +421,13 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 * 
 	 */
 	public String removeFile() throws NoIndexFoundException {
-		
 		log.debug("Remove FileId = " + itemObjectId);
-		
+
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+		    return "accessDenied";
+		}
 		ItemObject removeItemObject = item.getItemObject(itemObjectId, itemObjectType);
 		
 		if (itemObjectType.equalsIgnoreCase(ItemFile.TYPE)) {
@@ -453,8 +483,15 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 * 
 	 */
 	public String moveFileUp() {
-		
 		log.debug("Item file Id::"+itemObjectId);
+		
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+		    return "accessDenied";
+		}
+		
+		
 		ItemObject moveUpItemObject = item.getItemObject(itemObjectId, itemObjectType);
 		ItemObject moveDownItemObject = item.getItemObjectByPosition(moveUpItemObject.getOrder() - 1);
 		
@@ -473,8 +510,13 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 * 
 	 */
 	public String moveFileDown() {
-		
 		log.debug("Item file Id::"+itemObjectId);
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+		    return "accessDenied";
+		}
+		
 		ItemObject moveDownItemObject = item.getItemObject(itemObjectId, itemObjectType);
 		ItemObject moveUpItemObject = item.getItemObjectByPosition(moveDownItemObject.getOrder() + 1);
 		
@@ -495,8 +537,18 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 */
 	public String execute() { 
 		
+		IrUser user = userService.getUser(userId, false);
+		
 		if (genericItemId != null) {
 			item = itemService.getGenericItem(genericItemId, false);
+		}
+		
+		if( item != null )
+		{
+			if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+			{
+				return "accessDenied";
+			}
 		}
 		
 		return SUCCESS;
@@ -506,7 +558,11 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 * Creates new publication version
      */
 	public String createPublicationVersion() {
-		
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+		    return "accessDenied";
+		}
 		PersonalItem personalItem = userPublishingFileSystemService.getPersonalItem(personalItemId, false);
 		
 		GenericItem oldItem = personalItem.getVersionedItem().getCurrentVersion().getItem();
@@ -841,6 +897,11 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	public void setInstitutionalItemIndexService(
 			InstitutionalItemIndexService institutionalItemIndexService) {
 		this.institutionalItemIndexService = institutionalItemIndexService;
+	}
+	
+	public void setUserService(UserService userService)
+	{
+		this.userService = userService;
 	}
 
 

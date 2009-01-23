@@ -29,7 +29,9 @@ import edu.ur.ir.item.ItemService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
+import edu.ur.ir.user.IrUser;
 import edu.ur.order.AscendingOrderComparator;
+import edu.ur.ir.web.action.UserIdAware;
 
 
 /**
@@ -38,7 +40,7 @@ import edu.ur.order.AscendingOrderComparator;
  * @author Sharmila Ranganathan
  *
  */
-public class ViewPersonalPublication extends ActionSupport {
+public class ViewPersonalPublication extends ActionSupport implements UserIdAware {
 
 	/**  Eclipse generated id  */
 	private static final long serialVersionUID = -1202241827964719011L;
@@ -53,6 +55,9 @@ public class ViewPersonalPublication extends ActionSupport {
 	private Long genericItemId;
 	
 	private Long researcherId;
+	
+	/** id of the user trying to access the document */
+	private Long userId;
 	
 	/**  Generic Item being viewed */
 	private GenericItem item;
@@ -89,6 +94,15 @@ public class ViewPersonalPublication extends ActionSupport {
 			item = itemService.getGenericItem(genericItemId, false);
 		}
 
+		IrUser user = item.getOwner();
+		
+		// make sure the user is the owner.
+		if( userId == null || !user.getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
+		
 		if( researcherId != null )
 		{
 			researcher = researcherService.getResearcher(researcherId, false);
@@ -196,6 +210,11 @@ public class ViewPersonalPublication extends ActionSupport {
 
 	public void setPersonalItemId(Long personalItemId) {
 		this.personalItemId = personalItemId;
+	}
+	
+	public void setUserId(Long userId)
+	{
+		this.userId = userId;
 	}
 
 

@@ -298,6 +298,7 @@
               
         <action name="inboxFileDownload" class="edu.ur.ir.web.action.user.DownloadSharedInboxFile">
             <result name="success" type="no-op"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
         </action>               
         
         <!--  ************************************ -->
@@ -373,6 +374,7 @@
         <action name="viewPersonalItemProperties"
             class="edu.ur.ir.web.action.user.ViewPersonalItemProperties">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item_properties.jsp</result>
         </action>
         
@@ -380,6 +382,7 @@
             class="edu.ur.ir.web.action.item.ViewPersonalPublication">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/workspace/item/view_personal_item_version.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
         </action>
                 
         <!--  ************************************ -->
@@ -417,6 +420,7 @@
                 method="getFolders"
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/folder_display.jsp</result>
         </action>
         
@@ -425,6 +429,7 @@
                 method="getFiles"
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
                 <interceptor-ref name="editStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/selected_files_form.jsp</result>
         </action>
         
@@ -433,6 +438,7 @@
                 method="removeFile"
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/selected_files_form.jsp</result>
         </action>
         
@@ -441,6 +447,7 @@
                 method="addFile"
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/add_file_response.jsp</result>
         </action>
         
@@ -449,6 +456,7 @@
                 method="changeFileVersion"
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/selected_files_form.jsp</result>
         </action>
         
@@ -457,6 +465,7 @@
                 method="updateDescription"
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
                 <interceptor-ref name="editStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>    
             <result name="success">/pages/user/workspace/item/selected_files_form.jsp</result>
         </action>        
         
@@ -465,6 +474,7 @@
                 method="moveFileDown"
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
                 <interceptor-ref name="editStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
         </action>
         
@@ -472,13 +482,16 @@
         <action name="moveFileUp"
                 method="moveFileUp"
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
-                <interceptor-ref name="editStack"/>
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
         </action>
         
         <!--  Edit item -->
         <action name="viewEditItem"
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/add_files_to_item.jsp</result>
         </action>
 
@@ -486,7 +499,8 @@
         <action name="viewItemMetadata"
                 method="viewItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
-                <interceptor-ref name="editStack"/>
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/add_item_metadata.jsp</result>
         </action>
 
@@ -661,6 +675,7 @@
         <action name="viewItemContributor"
                 class="edu.ur.ir.web.action.item.AddContributorsToItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/add_contributor.jsp</result>
         </action>
         
@@ -669,6 +684,7 @@
                 method="getItemContributors"
                 class="edu.ur.ir.web.action.item.AddContributorsToItem">
                 <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" >/pages/user/workspace/item/selected_contributors_form.jsp</result>
         </action>
         
@@ -778,6 +794,8 @@
         <!--  Action to preview publication  -->
         <action name="previewPublication" 
             class="edu.ur.ir.web.action.item.ViewPersonalPublication">
+             <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/preview_publication.jsp</result>
         </action>
         

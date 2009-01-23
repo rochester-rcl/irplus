@@ -102,7 +102,7 @@ implements ServletResponseAware, ServletRequestAware
                 log.debug("Found ir File " + irFile);
             }
            
-             webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
+            webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
 		}
         
         return SUCCESS;
