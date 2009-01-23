@@ -178,7 +178,11 @@
             <result name="input">/pages/user/workspace/upload_new_file_version.jsp</result>
         </action>
         
-        <action name="personalFileDownload" class="edu.ur.ir.web.action.user.DownloadPersonalFile">
+        <action name="personalFileDownload" 
+            class="edu.ur.ir.web.action.user.DownloadPersonalFile">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/fileNotFound.jsp</result>
             <result name="success" type="no-op"/>
         </action> 
 

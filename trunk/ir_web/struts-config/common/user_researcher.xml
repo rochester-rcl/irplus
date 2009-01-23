@@ -191,7 +191,10 @@
         </action>        
         
         <action name="researcherFileDownload" class="edu.ur.ir.web.action.researcher.DownloadResearcherFile">
+            <interceptor-ref name="editStack"/>
             <result name="success" type="no-op"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/fileNotFound.jsp</result>
         </action> 
         
         <!--  Change file version -->
