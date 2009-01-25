@@ -41,7 +41,7 @@ import edu.ur.ir.web.action.UserIdAware;
  *
  */
 public class DownloadResearcherFile extends ActionSupport 
-implements ServletResponseAware, ServletRequestAware
+implements ServletResponseAware, ServletRequestAware, UserIdAware
 {
 
 	/** Eclipse generated id. */
@@ -62,7 +62,7 @@ implements ServletResponseAware, ServletRequestAware
 	/**  Servlet request made */
 	private HttpServletRequest request;
 	
-	/** id of the user **/
+	/** id of the user downloading the file**/
 	private Long userId;
 
 	private WebIoUtils webIoUtils;
