@@ -23,7 +23,7 @@
 
 <html>
     <head>
-        <title>Researcher: ${researcher.user.firstName} ${researcher.user.lastName}</title>
+        <title>Researcher: ${researcher.user.firstName}&nbsp;${researcher.user.lastName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
@@ -91,7 +91,7 @@
 				  <c:if test="${researcher != null && (!researcher.public)}">
 				      	<div class="clear">&nbsp;</div>
 				  
-	                	<h3>The researcher page of ${researcher.user.firstName} ${researcher.user.lastName} is hidden.</h3>
+	                	<h3>The researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName} is hidden.</h3>
 	                    <br/>
 	                    <br/>
                   </c:if>

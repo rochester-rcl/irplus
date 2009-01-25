@@ -99,7 +99,7 @@
     <property name="ivy.report.dir" value="${report.dir}/ivy_report" />
 
     <!-- version of ivy to be used -->
-    <property name="ivy.version" value="2.0.0-rc2" />
+    <property name="ivy.version" value="2.0.0" />
 
     <!-- set the javac debug mode -->
     <property name="javac.debug.mode" value="on" />

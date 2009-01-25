@@ -21,6 +21,7 @@
         <action name="personalPublicationPublicView" 
             class="edu.ur.ir.web.action.item.ViewPersonalPublication">
             <result name="success">/pages/item/personal_publication_view.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
         </action>
         
         <action name="institutionalPublicationPublicView" 

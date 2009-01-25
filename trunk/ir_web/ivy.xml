@@ -116,11 +116,11 @@
         </dependency>
         
         <!--  struts 2 files and dependencies -->
-        <dependency org="org.apache.struts" name="struts2-core" rev="2.1.2" transitive="false">
+        <dependency org="org.apache.struts" name="struts2-core" rev="2.1.6" transitive="false">
             <artifact name="struts2-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.apache.struts" name="struts2-spring-plugin" rev="2.1.2" transitive="false">
+        <dependency org="org.apache.struts" name="struts2-spring-plugin" rev="2.1.6" transitive="false">
             <artifact name="struts2-spring-plugin" type="jar"/>
         </dependency>
         
@@ -132,17 +132,12 @@
             <artifact name="freemarker" type="jar"/>
         </dependency>
 
-        <dependency org="com.opensymphony" name="xwork" rev="2.1.1">
-            <artifact name="xwork" type="jar"/>
-        </dependency>
-
         <dependency org="opensymphony" name="ognl" rev="2.6.11">
             <artifact name="ognl" type="jar"/>
         </dependency>
-
         
         <!--  xwork files -->
-        <dependency org="com.opensymphony" name="xwork" rev="2.1.1" transitive="false">
+        <dependency org="com.opensymphony" name="xwork" rev="2.1.2" transitive="false">
             <artifact name="xwork" type="jar"/>
         </dependency>
 
