@@ -65,7 +65,7 @@
 				 <c:url value="viewResearcherPage.action" var="viewResearcherPage">
 				     <c:param name="researcherId" value="${researcher.id}"/>
 				 </c:url>
-				 <h3>Researcher: <a href="${viewResearcherPage}">${researcher.user.firstName} ${researcher.user.lastName}</a> <br/><br/>
+				 <h3>Researcher: <a href="${viewResearcherPage}">${researcher.user.firstName}&nbsp;${researcher.user.lastName}</a> <br/><br/>
 				    <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
     			    <c:if test="${url != null }">
 						     <img align="middle" src="${url}" />
