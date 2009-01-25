@@ -200,6 +200,7 @@ YAHOO.ur.researcher.page = {
 				linkObj.html = linkImg + "<a href=\"" + node.links[i].url + "\">" + node.links[i].name + "</a>";
 				if( node.links[i].description != null &&  node.links[i].description != '')
 				{
+				    
 				    linkObj.html = linkObj.html + " - " + node.links[i].description + "<br/><br/>";
 				}
 				var linkNode = new YAHOO.widget.HTMLNode(linkObj, parentNode, false, true);

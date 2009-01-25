@@ -263,7 +263,7 @@
                 <input type="hidden" id="newItemForm_parentCollectionId" name="parentCollectionId" />
 		        <table align="left" class="formTable">
 				<tr>
-				    <td> Publication Name: </td>
+				    <td> Publication Title: </td>
 		            <td>
 					    <input type="text" class="input" name="itemName" size="50" id ="newItemForm_itemName" value="${itemName}"/>		                          
 				    </td>
