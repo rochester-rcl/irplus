@@ -20,6 +20,13 @@
      This is the build file for ir_web
 -->
 <project name="ir_web" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
+	
+	<!-- uncomment this to automatically have the YUI libraries unzipped  
+	          it does not matter what the value is so long as the 
+		     line is uncommented.
+    -->    
+	<property name="yui.unzip" value="true"/>
+	
 
     <!-- Use the build.properties file for user specific settings -->
     <property file="build.properties"/>
@@ -42,7 +49,6 @@
 	<!-- project specific configuration files for spring -->
 	<property name="spring.project.config" value="${basedir}/spring-config/local"/> 
 
-	
 	<!-- The web app directory -->
 	<property name="webapps.dir" value="${basedir}/webapps"/>
 	
@@ -202,7 +208,7 @@
 	     You must first tell your web-browser to look
 	     at your webapps directory 
 	-->
-   <target name="prep-run-webapp-local" depends="build, clean-run-webapp-local, prep-yui">
+   <target name="prep-run-webapp-local" depends="build, clean-run-webapp-local, move-yui">
         <!-- Remove the old classes -->
         <delete dir="${webapp.classes.dir}" />
 
@@ -246,14 +252,20 @@
 			file="${webapp.conf.dir}/web.xml"/>
      </target>
 	
-	<!-- unzip the YUI files in correct directory -->
-	<target name="prep-yui"  description="--> unzips the yui libraries">
+	<!-- unzip the YUI files  -->
+	<target name="prep-yui"  if="yui.unzip" description="--> unzips the yui libraries">
 		<mkdir dir="${basedir}/yui-unzip"/>
 		<unzip dest="${basedir}/yui-unzip" src="${lib.dir}/yui-2.6.0.zip"/>
-		<move todir="${webapp.dir}/page-resources/yui">
-			<fileset dir="${basedir}/yui-unzip/yui/build/"/>
-		</move>
 	</target>
+	
+	<!-- copy the YUI files  -->
+	<target name="move-yui" depends="prep-yui">
+		<copy todir="${webapp.dir}/page-resources/yui">
+		    <fileset dir="${basedir}/yui-unzip/yui/build/"/>
+	    </copy>
+	</target>
+	
+	
 	
 	<!-- delete the webapp local files -->
 	<target name="clean-run-webapp-local">
@@ -281,7 +293,7 @@
 	<!-- publish the distribution jar file to the local repository -->
 	<!-- this sets production settings.  -->
 	<!--     Make sure the production configuration files have been set properly -->
-	<target name="publish-local" depends="build, clean-production-staging, prep-yui" description="-->build production war file">
+	<target name="publish-local" depends="build, clean-production-staging, move-yui" description="-->build production war file">
 		<!-- re-create production stag -->
 		<mkdir dir="${production.stageing.dir}"/>
 		
