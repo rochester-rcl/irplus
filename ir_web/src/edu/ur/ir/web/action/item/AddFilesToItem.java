@@ -51,7 +51,7 @@ import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.user.UserService;
-import edu.ur.ir.user.IrRole;;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.order.AscendingOrderComparator;
 
