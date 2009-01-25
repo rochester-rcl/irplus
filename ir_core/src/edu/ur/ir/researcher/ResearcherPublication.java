@@ -249,7 +249,16 @@ DescriptionAware, FileSystem{
 		
 		try {
 			jsonObj.put("name",getName().replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
-			jsonObj.put("description",getDescription().replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
+			
+			String description = getDescription();
+			if( description != null )
+			{
+			    jsonObj.put("description",description.replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
+			}
+			else
+			{
+				jsonObj.put("description", "");
+			}
 			jsonObj.put("id",id);
 			jsonObj.put("publicationId",publication.getId());
 			jsonObj.put("type",fileSystemType.getType());

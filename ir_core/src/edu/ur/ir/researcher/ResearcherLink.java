@@ -258,9 +258,17 @@ public class ResearcherLink extends CommonPersistent implements UrlAware, FileSy
 			jsonObj.put("name",getName().replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
 			jsonObj.put("id",id);
 			jsonObj.put("type",fileSystemType.getType());
-			jsonObj.put("url",getUrl());
-			jsonObj.put("description",getDescription().replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
-
+			jsonObj.put("url",getLink());
+			
+			if(description != null)
+			{
+			    jsonObj.put("description",getDescription().replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
+			}
+			else
+			{
+				jsonObj.put("description", "");
+			}
+				
 		} catch (Exception e) {
 			 log.debug("jsonObj Exception::"+e.getMessage());
 		}

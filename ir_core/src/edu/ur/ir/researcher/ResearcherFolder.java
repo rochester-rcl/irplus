@@ -962,8 +962,15 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 			jsonObj.put("name",name.replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
 			jsonObj.put("id",id);
 			jsonObj.put("type",fileSystemType.getType());
-			jsonObj.put("description",description.replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
 			
+			if( description != null )
+			{
+			    jsonObj.put("description",description.replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
+			}
+			else
+			{
+				jsonObj.put("description", "");
+			}
 			// Put sub folders
 			JSONArray jsonSubFolders = new JSONArray();
 		 	for(ResearcherFolder folder: children) {
