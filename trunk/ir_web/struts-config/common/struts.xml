@@ -270,6 +270,13 @@
                 <interceptor-ref name="editStack" />
                 <result name="success">/pages/researcher_page/researcher_page_view.jsp</result>
         </action>
+        
+        <action name="researcherPublicationView" 
+            class="edu.ur.ir.web.action.researcher.ViewResearcherPublication">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/item/personal_publication_view.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+        </action>
 
         <!-- Download Researcher picture  -->
         <action name="downloadResearcherPicture"
@@ -286,6 +293,8 @@
         
         <action name="researcherFileDownload" 
                 class="edu.ur.ir.web.action.researcher.DownloadResearcherFile">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="no-op"/>
         </action>
 
