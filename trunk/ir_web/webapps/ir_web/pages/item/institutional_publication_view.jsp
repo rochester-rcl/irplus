@@ -392,7 +392,9 @@
 							
 						</c:if>
 						</td>
-						
+				    </c:if>
+				    
+				    <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
 						<td>  
 							<c:if test="${!institutionalItemVersion.withdrawn}">
 								<button class="ur_button" 
@@ -407,6 +409,8 @@
 					                       id="reinstate_publication">Reinstate Publication</button>     	        
 							</c:if>					
 		 				</td> 
+		 	        </c:if>
+		 	        <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
 		 				<td>
 				           <ur:basicForm name="movePublicationForm" 
 				              method="post" action="/user/viewMoveInstitutionalItemLocations.action">
@@ -420,6 +424,8 @@
 				                       id="move_publication">Move Publication</button>
 				            </ur:basicForm>  
 		 				</td>
+		 		   </c:if>
+		 		   <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
 						<td>  
 				           <ur:basicForm name="permissionForm" 
 				              method="post" action="/admin/viewInstitutionalItemPermissions.action">
@@ -432,6 +438,8 @@
 					                       id="manage_permissions">Manage Permissions</button>    
 				            </ur:basicForm>  			                        	        
 						</td>
+				   </c:if>
+				   <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
 						<td>  
 				           <ur:basicForm name="newVersionForm" 
 				              method="post" action="/user/viewAddInstitutionalItemVersion.action">
@@ -443,7 +451,9 @@
 				 		                   onmouseout="this.className='ur_button';"
 					                       id="new_version">Add New Version</button>    
 				            </ur:basicForm>  			                        	        
-						</td>	
+						</td>
+				 </c:if>
+				 <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">	
 						<td>  
 				           <ur:basicForm name="deleteForm" method="post" action="/user/deleteInstitutionalItem.action">
 								<input type="hidden" id="institutional_item_id" name="institutionalItemId" value="${institutionalItem.id}"/>
@@ -454,7 +464,7 @@
 				 		                   onmouseout="this.className='ur_button';"
 					                       id="delete_item">Delete</button>    
 						</td>	
-			        </c:if>   
+			      </c:if>   
 				</tr> 
 				 
 					<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN,ROLE_RESEARCHER', 'OR')}">
