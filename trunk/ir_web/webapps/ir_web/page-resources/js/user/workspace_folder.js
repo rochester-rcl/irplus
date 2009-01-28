@@ -908,7 +908,6 @@ YAHOO.ur.folder =
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
 	            {   
-	                alert(o.responseText);  
                     var divToUpdate = document.getElementById('version_upload_form_fields');
                     divToUpdate.innerHTML = o.responseText; 
 	                YAHOO.ur.folder.versionedFileUploadDialog.showDialog();
