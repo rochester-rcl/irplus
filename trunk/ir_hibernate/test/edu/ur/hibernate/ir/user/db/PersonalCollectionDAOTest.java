@@ -536,9 +536,7 @@ public class PersonalCollectionDAOTest {
 			"Should not be able to find personal collection";
 		
 		versionedItemDAO.makeTransient(versionedItemDAO.getById(versionedItem.getId(), false));
-		
 	    itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
-		
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		tm.commit(ts);
 	}

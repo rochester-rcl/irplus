@@ -54,8 +54,12 @@ DescriptionAware, FileSystem{
 	
 	/** represents the file system type for this researcher publication */
 	private FileSystemType fileSystemType = FileSystemType.RESEARCHER_PUBLICATION;
+	
+	/** version number of the publication */
+	private int versionNumber;
 
 	
+
 	/**
 	 * Package protected constructor.
 	 */
@@ -65,12 +69,13 @@ DescriptionAware, FileSystem{
 	 * Create a researcher publication with a null researcher folder.  This means this
 	 * is a root researcher publication.
 	 * 
-	 * @param publicationVersion
+	 * @param versionNumber
 	 */
-	public ResearcherPublication(Researcher researcher, GenericItem publication)
+	public ResearcherPublication(Researcher researcher, GenericItem publication, int versionNumber)
 	{
 		setResearcher(researcher);
 		setPublication(publication);
+		setVersionNumber(versionNumber);
 	}
 	
 	/**
@@ -79,7 +84,7 @@ DescriptionAware, FileSystem{
 	 * @param publication - publication to create a link with
 	 * @param parentFolder - folder the publication is in.  
 	 */
-	ResearcherPublication(Researcher researcher, ResearcherFolder parentFolder, GenericItem publication)
+	ResearcherPublication(Researcher researcher, ResearcherFolder parentFolder, GenericItem publication, int versionNumber)
 	{
 		if(publication == null)
 		{
@@ -90,11 +95,12 @@ DescriptionAware, FileSystem{
 		setResearcher(researcher);
 		setPublication(publication);
 		setParentFolder(parentFolder);
+		setVersionNumber(versionNumber);
 	}
 
 
 	/**
-	 * Returns the path for this publicationVersion.
+	 * Returns the path for this versionNumber.
 	 * 
 	 * The path is the path of the parent folder 
 	 * 
@@ -115,6 +121,25 @@ DescriptionAware, FileSystem{
 		return path;
 	}
 	
+	/**
+	 * version of the publication.
+	 * 
+	 * @return - the version of the publication
+	 */
+	public int getVersionNumber() {
+		return versionNumber;
+	}
+
+	/**
+	 * Version of the publication.
+	 * 
+	 * @param pubicationVersion
+	 */
+	public void setVersionNumber(int pubicationVersion) {
+		this.versionNumber = pubicationVersion;
+	}
+
+	
 	
 	/**
 	 * Overridden to string method.
@@ -131,6 +156,8 @@ DescriptionAware, FileSystem{
 		sb.append(parentFolder);
 		sb.append(" publication = ");
 		sb.append(publication);
+		sb.append(" publication version = ");
+		sb.append(versionNumber);
 		sb.append("]");
 		return sb.toString();
 		
@@ -139,7 +166,7 @@ DescriptionAware, FileSystem{
 
 	
 	/**
-	 * Get the full path of this publicationVersion.  If there is 
+	 * Get the full path of this versionNumber.  If there is 
 	 * no parent folder the path is just the name of
 	 * the publication.
 	 * 
@@ -183,7 +210,7 @@ DescriptionAware, FileSystem{
 			(other.getFullPath() == null && getFullPath() != null )	) return false;
 		
 		if( (other.getPublication() != null && !other.getPublication().equals(getPublication())) ||
-				(other.getPublication() == null && getPublication() != null )	) return false;
+			(other.getPublication() == null && getPublication() != null )	) return false;
 		
 		return true;
 	}

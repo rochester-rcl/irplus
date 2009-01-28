@@ -42,7 +42,7 @@
 	 	<ur:js src="pages/js/base_path.js"/>
 	 	<ur:js src="page-resources/js/util/ur_util.js"/>
 	 	<ur:js src="page-resources/js/menu/main_menu.js"/>
-	    <ur:js src="page-resources/js/user/add_publications.js"/>
+	    <ur:js src="page-resources/js/user/researcher_add_publications.js"/>
 	 	
 	    <!--  Style for dialog boxes -->
 	    <style>
@@ -74,8 +74,9 @@
             
        	        <div class="yui-g">
 			        <div class="yui-u first">
-		       			 <!--  table of files and folders -->
+		       			 <!--  table of personal publications and collections -->
 	                      <div id="newPersonalCollections" >
+	                          
 	                          <ur:basicForm  id="collections" name="myPersonalCollections"  method="POST" action="user/getPersonalCollectionsAndItems.action">
 	                             <input type="hidden" id="myCollections_parentCollectionId" 
 	                                   name="parentCollectionId" 
@@ -86,6 +87,7 @@
 	                             <input type="hidden" id="myCollections_parentFolderId" 
 	                                   name="parentFolderId" 
 	                                   value="${parentFolderId}"/>
+	                             
 	                          </ur:basicForm>
 	                      </div>
 	                      <!--  end personal files and folders div -->
@@ -97,9 +99,6 @@
         	        	<!--  Table of selected files -->
                     	<div id="newResearcherFolders" >
 	                          <ur:basicForm  id="files" name="myResearcherFolders"  method="POST" action="user/getResearcherFolders.action">
-	                              <input type="hidden" id="myResearcherFolders_researcherId" 
-	                                   name="researcherId" 
-	                                   value="${researcherId}"/>
 	                              <input type="hidden" id="myResearcherFolders_parentFolderId" 
 	                                   name="parentFolderId" 
 	                                   value="${parentFolderId}"/>

@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.GenericItemDAO;
 import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.item.VersionedItemDAO;
 import edu.ur.ir.user.IrUser;
@@ -74,6 +75,8 @@ public class PersonalItemDAOTest {
     VersionedItemDAO versionedItemDAO = 
     	(VersionedItemDAO) ctx.getBean("versionedItemDAO");
     
+    /** Generic item data access*/
+    GenericItemDAO itemDAO = (GenericItemDAO)ctx.getBean("itemDAO");
     
 	/**
 	 * Test personal item persistence
@@ -111,11 +114,65 @@ public class PersonalItemDAOTest {
 		
 		personalItemDAO.makeTransient(other);
 		versionedItemDAO.makeTransient(otherVersionedItem);
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
 	    userDAO.makeTransient(userDAO.getById(user.getId(), false));
 	    tm.commit(ts);
 	
 	}
 	
+	/**
+	 * Test retrieveing a personal item by a generic item id
+	 * 
+	*/
+	@Test
+	public void getPersonalItemByGenericItemIdDAOTest() {
+
+		TransactionStatus ts = tm.getTransaction(td);
+		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+
+		// create a user who has their own folder
+		IrUser user = new IrUser("user", "password");
+		user.setPasswordEncoding("none");
+		user.addUserEmail(userEmail, true);
+		
+		// create the user 
+		userDAO.makePersistent(user);
+		tm.commit(ts);
+		
+
+		ts = tm.getTransaction(td);
+		GenericItem genericItem = new GenericItem("aItem");
+		GenericItem genericItem2 = new GenericItem("aSecondItem");
+		VersionedItem versionedItem = new VersionedItem(user, genericItem, "myItem");
+		versionedItem.addNewVersion(genericItem2);
+		PersonalItem personalItem = new PersonalItem(user, versionedItem);
+		personalItemDAO.makePersistent(personalItem);
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		PersonalItem other = personalItemDAO.getById(personalItem.getId(), false);
+		VersionedItem otherVersionedItem = other.getVersionedItem();
+		assert otherVersionedItem != null : "Versioned Item should be found";
+		assert otherVersionedItem.getOwner() != null : "Owner should not be null";
+		assert other.equals(personalItem) : "The personal item " + personalItem + " should be found";
+		
+		// make sure select works 
+		PersonalItem other2 = personalItemDAO.getPersonalItem(genericItem.getId());
+		assert other2.equals(other) : " other 2 = " + other2 + " other = " + other;
+		
+		PersonalItem other3 = personalItemDAO.getPersonalItem(genericItem2.getId());
+		assert other3.equals(other) : " other 3 = " + other3 + " other = " + other;
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		personalItemDAO.makeTransient(personalItemDAO.getById(personalItem.getId(), false));
+		versionedItemDAO.makeTransient(versionedItemDAO.getById(versionedItem.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem2.getId(), false));
+	    userDAO.makeTransient(userDAO.getById(user.getId(), false));
+	    tm.commit(ts);
+	}
+	 
 	/**
 	 * Test getting the set of root personal items
 	 */
@@ -138,7 +195,7 @@ public class PersonalItemDAOTest {
 		IrUser other = userDAO.getById(user.getId(), false);
 		GenericItem genericItem = new GenericItem("aItem");
 		VersionedItem versionedItem = new VersionedItem(user, genericItem, "myItem");
-		other.createRootPersonalItem(versionedItem);
+		PersonalItem personalItem = other.createRootPersonalItem(versionedItem);
 
 		//complete the transaction
 		tm.commit(ts);
@@ -157,6 +214,9 @@ public class PersonalItemDAOTest {
 		
 		
 		ts = tm.getTransaction(td);
+		personalItemDAO.makeTransient(personalItemDAO.getById(personalItem.getId(), false));
+		versionedItemDAO.makeTransient(versionedItemDAO.getById(versionedItem.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
 		userDAO.makeTransient(userDAO.getById(other.getId(), false));
 		tm.commit(ts);
 		

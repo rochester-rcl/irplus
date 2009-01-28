@@ -43,7 +43,7 @@
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
-	<ur:js src="page-resources/js/user/add_files.js"/>    
+	<ur:js src="page-resources/js/user/researcher_add_files.js"/>    
  	
     <!--  Style for dialog boxes -->
     <style>
@@ -83,9 +83,6 @@
 	                              <input type="hidden" id="myFolders_parentPersonalFolderId" 
 	                                   name="parentPersonalFolderId" 
 	                                   value="${parentPersonalFolderId}"/>
-	                              <input type="hidden" id="myFolders_researcherId" 
-	                                   name="researcherId" 
-	                                   value="${researcherId}"/>
 	                              <input type="hidden" id="myFolders_parentFolderId" 
 	                                   name="parentFolderId" 
 	                                   value="${parentFolderId}"/>

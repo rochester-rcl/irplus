@@ -518,7 +518,7 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 	}
 
 	/**
-	 * Get personal item which has specified generic item as the latest version 
+	 * Get personal item which has specified generic item 
 	 * 
 	 * @param item
 	 * @return

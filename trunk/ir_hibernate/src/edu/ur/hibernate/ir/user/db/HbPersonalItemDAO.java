@@ -19,10 +19,10 @@ package edu.ur.hibernate.ir.user.db;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.PersonalItemDAO;
 
@@ -34,6 +34,9 @@ import edu.ur.ir.user.PersonalItemDAO;
  */
 public class HbPersonalItemDAO implements PersonalItemDAO {
 
+	/** Logger */
+	private static final Logger log = Logger.getLogger( HbPersonalItemDAO.class);
+	
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */
@@ -139,8 +142,21 @@ public class HbPersonalItemDAO implements PersonalItemDAO {
 	 * @param genericItemId
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public PersonalItem getPersonalItem(Long genericItemId) {
+		// this can return multiple personal items if the generic item is contaned twice within the personal item  - for example
+	    // for reverting to an older version so we will only return the first one.
+		// it is an error to have the same generic item (unique id) within more than one personal item
+		List<PersonalItem> items = hbCrudDAO.getHibernateTemplate().findByNamedQuery("getPersonalItemByGenericId", genericItemId);
+		log.debug("found " + items.size() + " personal items ");
+		if( items.size() == 0 )
+		{
+			return null;
+		}
+		else
+		{
+			return items.get(0);
+		}
 		
-		return (PersonalItem)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getPersonalItemsByGenericId", genericItemId));
 	}
 }

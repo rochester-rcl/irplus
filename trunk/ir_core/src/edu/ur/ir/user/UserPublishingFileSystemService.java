@@ -266,7 +266,7 @@ public interface UserPublishingFileSystemService {
 	public List<PersonalItem> getPersonalItemsInCollection(Long userId, Long parentCollectionId);
 
 	/**
-	 * Get personal item which has specified generic item as the latest version 
+	 * Get personal item which has specified generic item 
 	 * 
 	 * @param item
 	 * @return

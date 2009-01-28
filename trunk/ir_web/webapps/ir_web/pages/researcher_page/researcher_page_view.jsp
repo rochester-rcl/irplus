@@ -89,15 +89,14 @@
  				
 				 <input type="hidden" id="researcher_id" value="${researcher.id}"/>
 				  <c:if test="${researcher != null && (!researcher.public)}">
-				      	<div class="clear">&nbsp;</div>
-				  
-	                	<h3>The researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName} is hidden.</h3>
+				      	<br/>
+	                	<h3 class="errorMessage">The researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName} is hidden.</h3>
 	                    <br/>
 	                    <br/>
                   </c:if>
 
                 <c:if test="${researcher == null}">
-                	<div class="clear">&nbsp;</div>
+                	<br/>
                 	
                 	The researcher page is not available.
                 </c:if>
@@ -142,18 +141,21 @@
 					                All work in: <a href""> IR Plus </a>
 								   </p>
 									
-								   <p> <strong> Researcher Information </strong>  <br/>
+								   <p> <strong> Researcher Information </strong>  <br/><br/>
+								      <c:if test="${!ir:isStringEmpty(researcher.campusLocation)}">
+		                              <strong>Title:</strong>${researcher.title} <br/>
+		                              </c:if>
 		                              <c:if test="${!ir:isStringEmpty(researcher.campusLocation)}">
-		                              ${researcher.campusLocation} <br/>
+		                              <strong>Location:</strong> ${researcher.campusLocation} <br/>
 		                              </c:if>
 		                              <c:if test="${!ir:isStringEmpty(researcher.phoneNumber)}">
-		                              Phone: ${researcher.phoneNumber} <br/>
+		                              <strong>Phone:</strong> ${researcher.phoneNumber} <br/>
 		                              </c:if>
 		                              <c:if test="${!ir:isStringEmpty(researcher.email)}">
-		                              Email: ${researcher.email} <br/>
+		                              <strong>Email:</strong> ${researcher.email} <br/>
 		                              </c:if>
 		                              <c:if test="${!ir:isStringEmpty(researcher.fax)}">
-		                           	  Fax: ${researcher.fax} 
+		                           	  <strong>Fax:</strong> ${researcher.fax} 
 		                           	  </c:if>
 		                           </p>
 		                           

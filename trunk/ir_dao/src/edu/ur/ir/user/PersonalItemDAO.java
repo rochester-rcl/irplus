@@ -61,7 +61,7 @@ public interface PersonalItemDAO  extends CrudDAO<PersonalItem>
 	public List<PersonalItem> getRootPersonalItems(Long userId);
 
 	/**
-	 * Get personal item which has specified generic item id as the latest version
+	 * Get personal item which has specified generic item 
 	 * 
 	 * @param genericItemId
 	 * @return

@@ -23,21 +23,40 @@ YAHOO.namespace("ur.edit.researcher");
 /**
  * Edit researcher namespace
  */
-YAHOO.ur.edit.researcher = {
-
-	
+YAHOO.ur.edit.researcher = 
+{
 	/*
 	 * update the institutional collection
 	 */
-	updatePersonalInfo : function() {
-	 
+	updatePersonalInfo : function() 
+	{
+	
+	    var callback = 
+	    {
+	        success : function(o) 
+	        {
+		        // check for the timeout - forward user to login page if timout
+                // occured
+                if( !urUtil.checkTimeOut(o.responseText) )
+                {       		    
+	                alert('Saved');
+	            } 
+	        },
+	    
+	        failure : function(o) 
+		    {
+		        alert('Could not save researcher info ' 
+		            + o.status + ' status text ' + o.statusText );
+		    }
+	    }
+	    
 	    // action to perform when updating a collection
 	    var updatePersonalInfo = basePath + 'user/updatePersonalInformation.action';
 	
 	 	YAHOO.util.Connect.setForm('base_researcher_information');
 		
 	    var cObj = YAHOO.util.Connect.asyncRequest('POST',
-	        updatePersonalInfo, null);
+	        updatePersonalInfo, callback, null);
 	 
 	},
 	

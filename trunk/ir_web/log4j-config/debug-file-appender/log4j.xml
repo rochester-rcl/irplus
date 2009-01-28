@@ -35,7 +35,7 @@
    </appender>
    
    <appender name="appenderFileDBCon" class="org.apache.log4j.RollingFileAppender">
-     <param name="File" value="C:/a_log/ir_web/ir_web.db.log"/>
+     <param name="File" value="C:/ir_plus_log/ir_plus_web.db.log"/>
      <param name="Append" value="true"/>
      <param name="MaxFileSize" value="500KB"/>
      <param name="MaxBackupIndex" value="1"/>
@@ -105,8 +105,7 @@
     </logger>
    
    <root>
-       <level value="error"/>
-       <appender-ref ref="appenderConsole" />
+       <level value="debug"/>
        <appender-ref ref="appenderFile" />
    </root>
 

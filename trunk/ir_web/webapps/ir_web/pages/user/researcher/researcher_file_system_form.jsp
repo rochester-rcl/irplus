@@ -33,9 +33,9 @@
 </form>
 
 <!-- Displays the folder path -->
-/<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><ur:a href="javascript:YAHOO.ur.researcher.institutional.item.getResearcherFolderById('0')">${user.username}</ur:a>/
+/<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.institutional.item.getResearcherFolderById('0')">My Research</ur:a>/
    <c:forEach var="folder" items="${researcherFolderPath}">
-       <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><ur:a href="javascript:YAHOO.ur.researcher.institutional.item.getResearcherFolderById('${folder.id}')">${folder.name}</ur:a>/
+       <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.institutional.item.getResearcherFolderById('${folder.id}')">${folder.name}</ur:a>/
    </c:forEach>
 	    
 <div class="clear">&nbsp;</div>      
@@ -52,7 +52,7 @@
 			<tr >
 				<td class="tdItemFolderSideBorder">
 					 <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFolder'}">
-	                 	<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/> <ur:a href="javascript:YAHOO.ur.researcher.institutional.item.getResearcherFolderById('${fileSystemObject.id}')"> <ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText> </ur:a>
+	                 	<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.institutional.item.getResearcherFolderById('${fileSystemObject.id}')"> <ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText> </ur:a>
 	                 </c:if>
 	                 
 	                 <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFile'}">
@@ -70,8 +70,7 @@
 	                 
 	                 <c:if test="${fileSystemObject.fileSystemType.type == 'researcherInstitutionalItem'}">
 	                 
-	                   	&nbsp;<img  alt="" class="buttonImg"
-		                       src="${pageContext.request.contextPath}/page-resources/images/all-images/package.gif"/><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText>
+	                   	&nbsp;<span class="packageBtnImg">&nbsp;</span><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText>
 	                 </c:if>                	                                 
 				</td>
 			</tr>

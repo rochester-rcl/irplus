@@ -44,7 +44,7 @@ public class ResearcherPublicationTest {
 		IrUser user = new IrUser("nate", "password");
 		Researcher researcher = new Researcher(user); 
 
-		ResearcherPublication researcherPublication = new ResearcherPublication(researcher, genericItem);
+		ResearcherPublication researcherPublication = new ResearcherPublication(researcher, genericItem, 1);
 		assert researcherPublication.getPublication() != null : "Should be able to find publication";
 		
 		assert researcherPublication.getPublication().equals(genericItem) : "Publications should be equal";

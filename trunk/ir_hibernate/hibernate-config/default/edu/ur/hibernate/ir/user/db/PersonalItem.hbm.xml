@@ -86,12 +86,15 @@
 	</query>
     
     <!-- named query for getting item by generic item id -->
-	<query name="getPersonalItemsByGenericId">
-		from PersonalItem as personalItem where
-		personalItem.versionedItem.currentVersion.item.id = ?
+	<query name="getPersonalItemByGenericId">
+		select personalItem from PersonalItem as personalItem 
+		join personalItem.versionedItem versionedItem
+		join versionedItem.versions itemVersion
+		join itemVersion.item item
+		where item.id = ?
 	</query>
 	
-		<!-- Get specified personal items for user -->
+	<!-- Get specified personal items for user -->
 	<query name="getAllPersonalItemsInList">
 	    from PersonalItem as personalItem 
 	    where personalItem.owner.id = :ownerId

@@ -81,7 +81,7 @@
             <!--  this is the body of the page -->
             <div id="bd">
             
-            <h3> Researcher page of ${researcher.user.firstName} ${researcher.user.lastName}</h3>
+            <h3> Researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName}</h3>
     
             <!--  set up tabs for the researcher -->
 	        <div id="researcher-properties-tabs" class="yui-navset">
@@ -123,8 +123,7 @@
                              
                              <input type="hidden" id="field_table_id" value="${researcherFieldsCount}"/>
                              <input type="hidden" id="department_table_id" value="${researcherDepartmentsCount}"/>
-                             <input type="hidden" id="researcherId" 
-                                  name="researcherId" value="${researcher.id}" />
+                             <input type="hidden" id="researcherId"   name="researcherId" value="${researcher.id}" />
 
 					        <div class="yui-g">
 

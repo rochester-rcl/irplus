@@ -26,7 +26,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
@@ -40,9 +39,12 @@ import edu.ur.ir.researcher.ResearcherInstitutionalItem;
 import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserFileSystemService;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Action to add file to researcher page
@@ -50,7 +52,7 @@ import edu.ur.ir.user.UserFileSystemService;
  * @author Sharmila Ranganathan
  *
  */
-public class AddResearcherFile extends ActionSupport implements Preparable{
+public class AddResearcherFile extends ActionSupport implements UserIdAware{
 
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = 3846183502445990945L;
@@ -64,14 +66,14 @@ public class AddResearcherFile extends ActionSupport implements Preparable{
 	/** File system service for user */
 	private UserFileSystemService userFileSystemService;
 	
+	/** Service for dealing with user information */
+	private UserService userService;
+
 	/** File system service for files */
 	private RepositoryService repositoryService;
 	
 	/** File id to add / remove files action*/
 	private Long versionedFileId;
-	
-	/** Id of the personal item to add the files */
-	private Long researcherId;
 	
 	/** User logged in */
 	private Researcher researcher;
@@ -104,17 +106,21 @@ public class AddResearcherFile extends ActionSupport implements Preparable{
 	
 	/** Id of the file version */
 	private Long fileVersionId;
+	
+	/** id of the user accessing the information */
+	private Long userId;
+	
+	
 	/**
 	 * Prepare for action
 	 */
-	public void prepare() {
-		
-		log.debug("researcherId Id:"+ researcherId);
-		
-		if (researcherId != null) {
-			researcher = researcherService.getResearcher(researcherId, false);
+	public void loadResearcher() {
+		log.debug("load researcher user Id:"+ userId);
+		IrUser user = userService.getUser(userId, false);
+		if(user != null)
+		{
+			researcher = user.getResearcher();
 		}
-
 	}
 
 	/**
@@ -122,7 +128,6 @@ public class AddResearcherFile extends ActionSupport implements Preparable{
 	 */
 	public String getPersonalFolders()
 	{
-		Long userId = researcher.getUser().getId();
 
 		if(parentPersonalFolderId != null && parentPersonalFolderId > 0)
 		{
@@ -156,7 +161,7 @@ public class AddResearcherFile extends ActionSupport implements Preparable{
 	public String addResearcherFile() {
 		
 		log.debug("Add file versionedFileId = " + versionedFileId);
-				
+		loadResearcher();		
 		VersionedFile vf = repositoryService.getVersionedFile(versionedFileId, false);
 				
 		if (parentFolderId != null && parentFolderId > 0) {
@@ -176,21 +181,21 @@ public class AddResearcherFile extends ActionSupport implements Preparable{
 	 * 
 	 */
 	public String getResearcherFolders() {
-		
+		loadResearcher();
 		if(parentFolderId != null && parentFolderId > 0)
 		{
 			researcherFolderPath = researcherService.getResearcherFolderPath(parentFolderId);
 		}
 		
-		Collection<ResearcherFolder> myResearcherFolders = researcherService.getFoldersForResearcher(researcherId, parentFolderId);
+		Collection<ResearcherFolder> myResearcherFolders = researcherService.getFoldersForResearcher(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherFile> myResearcherFiles = researcherService.getResearcherFiles(researcherId, parentFolderId);
+		Collection<ResearcherFile> myResearcherFiles = researcherService.getResearcherFiles(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherPublication> myResearcherPublications = researcherService.getResearcherPublications(researcherId, parentFolderId);
+		Collection<ResearcherPublication> myResearcherPublications = researcherService.getResearcherPublications(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherLink> myResearcherLinks = researcherService.getResearcherLinks(researcherId, parentFolderId);
+		Collection<ResearcherLink> myResearcherLinks = researcherService.getResearcherLinks(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherService.getResearcherInstitutionalItems(researcherId, parentFolderId);
+		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherService.getResearcherInstitutionalItems(researcher.getId(), parentFolderId);
 		
 		Collection<FileSystem> researcherFileSystem = new LinkedList<FileSystem>();
 
@@ -294,9 +299,7 @@ public class AddResearcherFile extends ActionSupport implements Preparable{
 	 */
 	public String execute() { 
 		
-		if (researcherId != null) {
-			researcher = researcherService.getResearcher(researcherId, false);
-		}
+		loadResearcher();
 		
 		return SUCCESS;
 	}
@@ -336,24 +339,6 @@ public class AddResearcherFile extends ActionSupport implements Preparable{
 	 */
 	public void setVersionedFileId(Long versionedFileId) {
 		this.versionedFileId = versionedFileId;
-	}
-
-	/**
-	 * Get the item id
-	 * 
-	 * @return item id
-	 */
-	public Long getItemId() {
-		return researcherId;
-	}
-
-	/**
-	 * Set the item id
-	 * 
-	 * @param researcherId item id
-	 */
-	public void setItemId(Long researcherId) {
-		this.researcherId = researcherId;
 	}
 
 	/**
@@ -418,6 +403,24 @@ public class AddResearcherFile extends ActionSupport implements Preparable{
 	public Long getParentFolderId() {
 		return parentFolderId;
 	}
+	
+	/**
+	 * Service for dealing with user information.
+	 * 
+	 * @return
+	 */
+	public UserService getUserService() {
+		return userService;
+	}
+
+	/**
+	 * Service for dealing with user information.
+	 * 
+	 * @param userService
+	 */
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 
 	/**
 	 * Set parent collection id
@@ -442,14 +445,6 @@ public class AddResearcherFile extends ActionSupport implements Preparable{
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Long getResearcherId() {
-		return researcherId;
-	}
-
-	public void setResearcherId(Long researcherId) {
-		this.researcherId = researcherId;
 	}
 
 	public Collection<ResearcherFolder> getResearcherFolderPath() {
@@ -500,6 +495,10 @@ public class AddResearcherFile extends ActionSupport implements Preparable{
 
 	public void setFileVersionId(Long fileVersionId) {
 		this.fileVersionId = fileVersionId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;	
 	}
 
 }

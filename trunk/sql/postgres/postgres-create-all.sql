@@ -2737,6 +2737,7 @@ CREATE TABLE ir_researcher.researcher_publication
     researcher_folder_id BIGINT,
     researcher_id BIGINT NOT NULL,
     item_id BIGINT NOT NULL,
+    version_number INTEGER NOT NULL,
     version INTEGER,
     FOREIGN KEY (researcher_folder_id) REFERENCES ir_researcher.researcher_folder (researcher_folder_id),
     FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id),

@@ -19,14 +19,16 @@ package edu.ur.ir.web.action.researcher;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.FileSystemType;
 import edu.ur.ir.item.ItemService;
+import edu.ur.ir.item.ItemVersion;
 import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
@@ -39,17 +41,27 @@ import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Action to add publications to researcher page.
  * 
  * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
-public class AddResearcherPublication extends ActionSupport implements Preparable{
+public class AddResearcherPublication extends ActionSupport implements UserIdAware{
 
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = -6004377183730549814L;
+
+	/** id of the user making the change */
+	private Long userId;
+	
+	/** user service for accessing user information */
+	private UserService userService;
+	
 
 	/**  Logger for add files to item action */
 	private static final Logger log = Logger.getLogger(AddResearcherPublication.class);
@@ -66,16 +78,19 @@ public class AddResearcherPublication extends ActionSupport implements Preparabl
 	/** File id to add / remove files action*/
 	private Long versionedItemId;
 	
-	/** Id of the personal item to add the files */
-	private Long researcherId;
-	
 	/** User logged in */
 	private Researcher researcher;
 		
 	/**  Personal folder id */
 	private Long parentFolderId;
 	
-	 /** A collection of folders and files for a user in a given location of
+	/** id of the publication version */
+	private Long itemVersionId;
+	
+	/** id of the researcher publication to change */
+	private Long publicationId;
+
+	/** A collection of folders and files for a user in a given location of
     their personal directory.*/
 	private Collection<FileSystem> collectionFileSystem;
 	
@@ -97,28 +112,26 @@ public class AddResearcherPublication extends ActionSupport implements Preparabl
 	
 	/** Service for dealing with user file system. */
 	private UserPublishingFileSystemService userPublishingFileSystemService;
+	
+	 /** A collection of folders and files for a user in a given location of
+    their personal directory.*/
+	List<ResearcherItemFileSystemVersion> researcherItemFileSystemVersions = new LinkedList<ResearcherItemFileSystemVersion>();
 
 
-	/**
-	 * Prepare for action
-	 */
-	public void prepare() {
-		
-		log.debug("researcherId Id:"+ researcherId);
-		
-		if (researcherId != null) {
-			researcher = researcherService.getResearcher(researcherId, false);
-		}
-
-	}
+    private void loadResearcher()
+    {
+    	researcher = userService.getUser(userId, false).getResearcher();
+    }
 
 	/**
 	 * Create the collection file system to view.
 	 */
 	public String getPersonalCollections()
 	{
+		
 		log.debug("getPersonalCollections");
-		Long userId = researcher.getUser().getId();
+		loadResearcher();
+		
 
 		if(parentCollectionId != null && parentCollectionId > 0)
 		{
@@ -152,17 +165,23 @@ public class AddResearcherPublication extends ActionSupport implements Preparabl
 	 * 
 	 */
 	public String addResearcherPublication() {
-		
-		log.debug("Add publication versionedFileId = " + versionedItemId);
+
+		log.debug("Add publication versionedItemId = " + versionedItemId + " parent folder id = " + parentFolderId);
 				
 		VersionedItem vi = itemService.getVersionedItem(versionedItemId, false);
-
+		if( !userId.equals(vi.getOwner().getId()))
+		{
+			return "accessDenied";
+		}
+		
+		loadResearcher();
 		if (parentFolderId != null && parentFolderId > 0) {
 			
 			ResearcherFolder parentFolder = researcherService.getResearcherFolder(parentFolderId, false);
-			researcherService.createPublication(parentFolder, vi.getCurrentVersion().getItem());
+			researcherService.createPublication(parentFolder, vi.getCurrentVersion().getItem(), vi.getLargestVersion());
 		} else {
-			researcher.createRootPublication(vi.getCurrentVersion().getItem());
+			ItemVersion currentVersion = vi.getCurrentVersion();
+			researcher.createRootPublication(currentVersion.getItem(), currentVersion.getVersionNumber());
 			researcherService.saveResearcher(researcher);
 		}
 
@@ -174,7 +193,7 @@ public class AddResearcherPublication extends ActionSupport implements Preparabl
 	 * 
 	 */
 	public String getResearcherFolders() {
-		
+		loadResearcher();
 		if(parentFolderId != null && parentFolderId > 0)
 		{
 			researcherFolderPath = researcherService.getResearcherFolderPath(parentFolderId);
@@ -184,15 +203,15 @@ public class AddResearcherPublication extends ActionSupport implements Preparabl
 		
 		log.debug("**** Parent Folder Id ::" + parentFolderId);
 		
-		Collection<ResearcherFolder> myResearcherFolders = researcherService.getFoldersForResearcher(researcherId, parentFolderId);
+		Collection<ResearcherFolder> myResearcherFolders = researcherService.getFoldersForResearcher(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherFile> myResearcherFiles = researcherService.getResearcherFiles(researcherId, parentFolderId);
+		Collection<ResearcherFile> myResearcherFiles = researcherService.getResearcherFiles(researcher.getId(), parentFolderId);
 
-		Collection<ResearcherPublication> myResearcherPublications = researcherService.getResearcherPublications(researcherId, parentFolderId);
+		Collection<ResearcherPublication> myResearcherPublications = researcherService.getResearcherPublications(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherLink> myResearcherLinks = researcherService.getResearcherLinks(researcherId, parentFolderId);
+		Collection<ResearcherLink> myResearcherLinks = researcherService.getResearcherLinks(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherService.getResearcherInstitutionalItems(researcherId, parentFolderId);
+		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherService.getResearcherInstitutionalItems(researcher.getId(), parentFolderId);
 		
 		researcherFileSystem = new LinkedList<FileSystem>();
 		
@@ -201,8 +220,56 @@ public class AddResearcherPublication extends ActionSupport implements Preparabl
     	researcherFileSystem.addAll(myResearcherPublications);
     	researcherFileSystem.addAll(myResearcherLinks);
     	researcherFileSystem.addAll(myResearcherInstitutionalItems);
-    	
+    	createResearcherFileSystemForDisplay(researcherFileSystem);
     	return SUCCESS;
+	}
+	
+	
+	/**
+	 * Simple class to help with the display of the 
+	 * item versions available.
+	 * 
+	 * @author Nathan Sarr
+	 *
+	 */
+	public class ResearcherItemFileSystemVersion
+	{
+		private FileSystem researcherFileSystem;
+		
+		private VersionedItem versions;
+		
+		public ResearcherItemFileSystemVersion(FileSystem researcherFileSystem, VersionedItem versions)
+		{
+			this.researcherFileSystem = researcherFileSystem;
+			this.versions= versions;
+		}
+
+		public FileSystem getResearcherFileSystem() {
+			return researcherFileSystem;
+		}
+
+		public VersionedItem getVersionedItem() {
+			return versions;
+		}
+	}
+	
+	/**
+	 * Change version of publication in researcher
+	 * 
+	 */
+	public String changePublicationVersion() {
+		log.debug("change publication version itemVersionId = " + itemVersionId + " publication Id = " + publicationId);
+		loadResearcher();
+		ItemVersion itemVersion = itemService.getItemVersion(itemVersionId, false);
+		if( itemVersion.getVersionedItem().getOwner().getId() != userId )
+		{
+			return "accessDenied";
+		}
+		ResearcherPublication researcherPublication = researcherService.getResearcherPublication(publicationId, false);
+		researcherPublication.setPublication(itemVersion.getItem());
+		researcherPublication.setVersionNumber(itemVersion.getVersionNumber());
+		researcherService.saveResearcher(researcherPublication.getResearcher());
+		return SUCCESS;
 	}
 	
 	/**
@@ -210,13 +277,71 @@ public class AddResearcherPublication extends ActionSupport implements Preparabl
 	 * 
 	 */
 	public String execute() { 
-		
-		if (researcherId != null) {
-			researcher = researcherService.getResearcher(researcherId, false);
-		}
-		
+		loadResearcher();
 		return SUCCESS;
 	}
+	
+	/*
+	 * Retrieves the file version of the IrFile for the display of versions
+	 */
+	private void createResearcherFileSystemForDisplay(Collection<FileSystem> researcherFileSystem) {
+		
+		researcherItemFileSystemVersions = new LinkedList<ResearcherItemFileSystemVersion>(); 
+			
+		for (FileSystem fileSystem:researcherFileSystem) {
+			ResearcherItemFileSystemVersion researcherItemFileSystemVersion = null;
+			
+			if (fileSystem.getFileSystemType().equals(FileSystemType.RESEARCHER_PUBLICATION)) {
+				log.debug("getting personal item for generic item " + ((ResearcherPublication)fileSystem).getPublication());
+				PersonalItem pi = userPublishingFileSystemService.getPersonalItem( ((ResearcherPublication)fileSystem).getPublication() );
+				VersionedItem vi = pi.getVersionedItem();
+				researcherItemFileSystemVersion = new ResearcherItemFileSystemVersion(fileSystem, vi);
+			} else {
+				researcherItemFileSystemVersion = new ResearcherItemFileSystemVersion(fileSystem, null);
+			}
+			
+			
+			researcherItemFileSystemVersions.add(researcherItemFileSystemVersion);
+		}
+		
+	}
+	
+	/**
+	 * Id of the version of the publication to set.
+	 * 
+	 * @return id of the publication to set
+	 */
+	public Long getItemVersionId() {
+		return itemVersionId;
+	}
+
+	/**
+	 * The id of the publication version to set.
+	 * 
+	 * @param publicationVersionId
+	 */
+	public void setItemVersionId(Long itemVersionId) {
+		this.itemVersionId = itemVersionId;
+	}
+	
+	/**
+	 * Researcher publication to change.
+	 * 
+	 * @return
+	 */
+	public Long getPublicationId() {
+		return publicationId;
+	}
+
+	/**
+	 * Researcher publication to change.
+	 * 
+	 * @param publicationId
+	 */
+	public void setPublicationId(Long publicationId) {
+		this.publicationId = publicationId;
+	}
+	
 
 	/**
 	 * Get the parent folder id
@@ -234,24 +359,6 @@ public class AddResearcherPublication extends ActionSupport implements Preparabl
 	 */
 	public void setParentCollectionId(Long parentCollectionId) {
 		this.parentCollectionId = parentCollectionId;
-	}
-
-	/**
-	 * Get the item id
-	 * 
-	 * @return item id
-	 */
-	public Long getItemId() {
-		return researcherId;
-	}
-
-	/**
-	 * Set the item id
-	 * 
-	 * @param researcherId item id
-	 */
-	public void setItemId(Long researcherId) {
-		this.researcherId = researcherId;
 	}
 
 	/**
@@ -324,13 +431,6 @@ public class AddResearcherPublication extends ActionSupport implements Preparabl
 		this.description = description;
 	}
 
-	public Long getResearcherId() {
-		return researcherId;
-	}
-
-	public void setResearcherId(Long researcherId) {
-		this.researcherId = researcherId;
-	}
 
 	public Collection<ResearcherFolder> getResearcherFolderPath() {
 		return researcherFolderPath;
@@ -389,4 +489,20 @@ public class AddResearcherPublication extends ActionSupport implements Preparabl
 			UserPublishingFileSystemService userPublishingFileSystemService) {
 		this.userPublishingFileSystemService = userPublishingFileSystemService;
 	}
+	
+	public List<ResearcherItemFileSystemVersion> getResearcherItemFileSystemVersions() {
+		return researcherItemFileSystemVersions;
+	}
+
+	/**
+	 * id of the user making the change
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
 }

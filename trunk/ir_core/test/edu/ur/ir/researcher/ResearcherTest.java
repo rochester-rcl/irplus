@@ -282,7 +282,7 @@ public class ResearcherTest {
 		
 		GenericItem item = new GenericItem("myItem");
 	    
-		ResearcherPublication researcherPublication= researcher.createRootPublication(item);
+		ResearcherPublication researcherPublication= researcher.createRootPublication(item, 1);
 		researcherPublication.setId(35l);
 		
 		assert researcher.getRootPublication("myItem").equals(researcherPublication) :

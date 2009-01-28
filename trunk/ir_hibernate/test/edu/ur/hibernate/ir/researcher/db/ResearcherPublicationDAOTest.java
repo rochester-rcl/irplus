@@ -105,7 +105,7 @@ public class ResearcherPublicationDAOTest {
 
 		ts = tm.getTransaction(td);
 		GenericItem genericItem = new GenericItem("aItem");
-		ResearcherPublication researcherPublication = new ResearcherPublication(researcher, genericItem);
+		ResearcherPublication researcherPublication = new ResearcherPublication(researcher, genericItem, 1);
 		researcherPublicationDAO.makePersistent(researcherPublication);
 		tm.commit(ts);
 		
@@ -154,7 +154,7 @@ public class ResearcherPublicationDAOTest {
         TransactionStatus ts = tm.getTransaction(td);
         Researcher otherResearcher = researcherDAO.getById(researcher.getId(), false);
 		GenericItem genericItem = new GenericItem("aItem");
-		otherResearcher.createRootPublication(genericItem);
+		otherResearcher.createRootPublication(genericItem, 1);
 
 		//complete the transaction
 		tm.commit(ts);

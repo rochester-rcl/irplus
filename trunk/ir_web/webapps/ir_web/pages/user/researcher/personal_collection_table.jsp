@@ -29,15 +29,19 @@ Displayed on the left hand side of the add files to item page -->
 	    name="researcherId" value="${researcherId}"/>
     <input type="hidden" id="myCollections_parentFolderId" 
            name="parentFolderId" value="${parentFolderId}"/>
+    <input type="hidden" id="myCollections_versionedItemId" 
+	                                   name="versionedItemId" 
+	                                   value=""/>  
 </form>
 
 <!-- Displays the folder path -->
-/<img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><ur:a href="javascript:YAHOO.ur.researcher.publications.getPersonalCollectionById('0')">${user.username}</ur:a>/
+/<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.publications.getPersonalCollectionById('0')">My Publications</ur:a>/
    <c:forEach var="collection" items="${collectionPath}">
-       <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/folder.gif"/><ur:a href="javascript:YAHOO.ur.researcher.publications.getPersonalCollectionById('${collection.id}')">${collection.name}</ur:a>/
+       <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.publications.getPersonalCollectionById('${collection.id}')">${collection.name}</ur:a>/
    </c:forEach>
 	    
-<div class="clear">&nbsp;</div>      
+<br/>    
+<br/>
 
 <!-- Table for files and folders  -->            
 <table class="itemFolderTable" width="100%">
@@ -52,7 +56,7 @@ Displayed on the left hand side of the add files to item page -->
 			<tr >
 				<td class="tdItemFolderLeftBorder">
 				    <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
-	                    <span class="addBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.researcher.publications.addPublication('${fileSystemObject.versionedItem.id}');"> Add</a> 
+	                    <span class="addBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.researcher.publications.addPublication(${fileSystemObject.versionedItem.id});"> Add</a> 
 	                 </c:if>
                    
 				</td>

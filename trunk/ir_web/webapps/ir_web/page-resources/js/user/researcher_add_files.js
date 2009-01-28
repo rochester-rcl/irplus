@@ -52,6 +52,8 @@ YAHOO.ur.researcher.files = {
 	           
 	           
 	},
+	
+
 		
 	/*
 	 * Action to go back to researcher folders

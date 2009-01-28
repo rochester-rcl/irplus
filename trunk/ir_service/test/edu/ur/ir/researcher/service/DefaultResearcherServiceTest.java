@@ -241,7 +241,7 @@ public class DefaultResearcherServiceTest {
 			// new transaction
 			ts = tm.getTransaction(td);
 			
-			ResearcherPublication p = researcherService.createRootPublication(researcher, item);
+			ResearcherPublication p = researcherService.createRootPublication(researcher, item, 1);
 			
 			tm.commit(ts);
 			

@@ -175,11 +175,11 @@ public class DefaultResearcherService implements ResearcherService{
 	/**
 	 * Create the root publication.
 	 * 
-	 * @see edu.ur.ir.researcher.ResearcherService#createRootPublication(Researcher, GenericItem)
+	 * @see edu.ur.ir.researcher.ResearcherService#createRootPublication(edu.ur.ir.researcher.Researcher, edu.ur.ir.item.GenericItem, int)
 	 */
-	public ResearcherPublication createRootPublication(Researcher researcher, GenericItem item) {
+	public ResearcherPublication createRootPublication(Researcher researcher, GenericItem item, int versionNumber) {
 	
-		ResearcherPublication researcherPublication = researcher.createRootPublication(item);
+		ResearcherPublication researcherPublication = researcher.createRootPublication(item, versionNumber);
 		researcherPublicationDAO.makePersistent(researcherPublication);
 		return researcherPublication;
 	}
@@ -228,11 +228,11 @@ public class DefaultResearcherService implements ResearcherService{
 	 * Allows a researcher to create a new publication.
 	 * 
 	 *  
-	 * @see edu.ur.ir.researcher.ResearcherService#createPublication(ResearcherFolder, GenericItem)
+	 * @see edu.ur.ir.researcher.ResearcherService#createPublication(edu.ur.ir.researcher.ResearcherFolder, edu.ur.ir.item.GenericItem, int)
 	 */
-	public ResearcherPublication createPublication(ResearcherFolder parentFolder, GenericItem item) {
+	public ResearcherPublication createPublication(ResearcherFolder parentFolder, GenericItem item, int versionNumber) {
 		
-		ResearcherPublication rp = parentFolder.createPublication(item);
+		ResearcherPublication rp = parentFolder.createPublication(item, versionNumber);
 		researcherFolderDAO.makePersistent(parentFolder);
 		return rp;
 	}
