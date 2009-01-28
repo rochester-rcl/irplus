@@ -77,7 +77,7 @@
                 method="updatePersonalInformation"
                 class="edu.ur.ir.web.action.researcher.EditResearcher">
                 <interceptor-ref name="crudStack"/>
-            <result name="success" type="redirect">getDepartmentsInformation.action?researcherId=${researcher.id}</result>
+            <result name="success" type="redirect">getDepartmentsInformation.action</result>
         </action>                          
                 
         <action name="setResearcherPagePermission" class="edu.ur.ir.web.action.researcher.EditResearcher"
@@ -117,7 +117,7 @@
                 method="updatePersonalInformation"
                 class="edu.ur.ir.web.action.researcher.EditResearcher">
                 <interceptor-ref name="crudStack"/>
-            <result name="success" type="redirect">getFieldsInformation.action?researcherId=${researcher.id}</result>
+            <result name="success" type="redirect">getFieldsInformation.action</result>
         </action>                          
         
         <!--  ************************************ -->
@@ -179,7 +179,7 @@
                 method="getResearcherFolders"
                 class="edu.ur.ir.web.action.researcher.AddResearcherFile">
                 <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/researcher/researcher_folder_table.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_file_add_table.jsp</result>
         </action>
 
         <!-- Action to get the personal folders and files for display in the table  -->
@@ -229,7 +229,7 @@
                 method="getResearcherFolders"
                 class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
                 <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/researcher/researcher_folder_form.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_publication_add_table.jsp</result>
         </action>
 
         <!-- Action to get the personal folders and files for display in the table  -->
@@ -238,7 +238,15 @@
                 class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
                 <interceptor-ref name="editStack"/>
             <result name="success" type="no-op"/>
-        </action>        
+        </action>  
+        
+                <!--  Change file version -->
+        <action name="changeResearcherPublicationVersion"
+                method="changePublicationVersion"
+                class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
+                <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+        </action>              
         
         <!--  ************************************ -->
         <!--  Researcher Link Actions            -->

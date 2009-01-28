@@ -192,14 +192,15 @@ public interface ResearcherService {
 	 * 
 	 * @param researcher researcher creating the publication
 	 * @param item Item to add to the researcher
+	 * @param the version of the publication 
 	 */
-	public ResearcherPublication createRootPublication(Researcher researcher, GenericItem item);
+	public ResearcherPublication createRootPublication(Researcher researcher, GenericItem item, int versionNumber);
 
 	/**
-	 * Create the root institutional item.
+	 * Create the root institutional item
 	 * 
 	 * @param researcher researcher creating the publication
-	 * @param item INstitutional Item to add to the researcher
+	 * @param item Institutional Item to add to the researcher
 	 */
 	public ResearcherInstitutionalItem createRootInstitutionalItem(Researcher researcher, InstitutionalItem item);
 
@@ -287,10 +288,11 @@ public interface ResearcherService {
 	 *
 	 * @param parentFolder Folder to create the publication in
 	 * @param item Item to create publication
+	 * @param versionNumber - version of the personal publication 
 	 *
 	 * @return Newly created publication
 	 */
-	public ResearcherPublication createPublication(ResearcherFolder parentFolder, GenericItem item);
+	public ResearcherPublication createPublication(ResearcherFolder parentFolder, GenericItem item, int versionNumber);
 
 	/**
 	 * Allows a researcher to create a new Institutional Item.

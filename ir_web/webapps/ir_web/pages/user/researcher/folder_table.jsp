@@ -146,7 +146,7 @@
 			                 </c:if>
 	
 							<c:if test="${fileSystemObject.fileSystemType.type == 'researcherPublication'}">
-		                    	<ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText>
+		                    	<ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText>[v${fileSystemObject.versionNumber}]
 		                	</c:if>		  
 		                	
 		                	<c:if test="${fileSystemObject.fileSystemType.type == 'researcherLink'}">

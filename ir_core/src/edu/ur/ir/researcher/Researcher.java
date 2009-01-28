@@ -399,10 +399,10 @@ public class Researcher extends BasePersistent{
 	 * @param publication publication to add to this researcher.
 	 * @return Created researcher publication if it does not already exist
 	 */
-	public ResearcherPublication createRootPublication(GenericItem publication)
+	public ResearcherPublication createRootPublication(GenericItem publication, int versionNumber)
 	{ 
 		ResearcherPublication researcherPublication = null;
-		researcherPublication = new ResearcherPublication(this, publication);
+		researcherPublication = new ResearcherPublication(this, publication, versionNumber);
 	    rootPublications.add(researcherPublication);
 		
 		return researcherPublication;

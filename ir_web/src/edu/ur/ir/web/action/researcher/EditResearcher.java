@@ -36,7 +36,6 @@ import edu.ur.ir.researcher.ResearcherIndexService;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.user.Department;
 import edu.ur.ir.user.DepartmentService;
-import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -133,7 +132,12 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	{
 		
 		log.debug("update called researcher Id = " + researcherId );
-
+        
+		if( !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
 		researcher.removeAllFields();
 		researcher.removeAllDepartments();
 		researcherService.saveResearcher(researcher);
@@ -174,9 +178,15 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	 */
 	public String getPictures()
 	{
+		
 		log.debug("get pictures called");
-		researcher = 
-			researcherService.getResearcher(researcherId, false);
+		if (userId != null) {
+			researcher = userService.getUser(userId, false).getResearcher();
+		}
+		else
+		{
+			return "accessDenied";
+		}
 		return SUCCESS;
 	}
 	
@@ -187,10 +197,14 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	 */ 
 	public String view()
 	{
-		IrUser user = userService.getUser(userId, true);
-		researcher = 
-			researcherService.getResearcher(user.getResearcher().getId(), false);
-		
+		log.debug("view called for researcher ");
+		if (userId != null) {
+			researcher = userService.getUser(userId, false).getResearcher();
+		}
+		else
+		{
+			return "accessDenied";
+		}
 		if (researcher != null) {
 			researcherJSONObject = researcher.toJSONObject();
 		}
@@ -210,7 +224,13 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	public String setResearcherPagePermission() {
 		
 		log.debug("isPublic::"+isPublic);
-		
+		if (userId != null) {
+			researcher = userService.getUser(userId, false).getResearcher();
+		}
+		else
+		{
+			return "accessDenied";
+		}
 		researcher.setPublic(isPublic);
 		
 		researcherService.saveResearcher(researcher);
@@ -236,6 +256,13 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	 * @return
 	 */
 	public String getDepartmentsInformation() {
+		if (userId != null) {
+			researcher = userService.getUser(userId, false).getResearcher();
+		}
+		else
+		{
+			return "accessDenied";
+		}
 		researcherDepartmentsCount = researcher.getDepartments().size();
 		departments= departmentService.getAllDepartmentsNameOrder();
 		return SUCCESS;
@@ -247,6 +274,13 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	 * @return
 	 */
 	public String getFieldsInformation() {
+		if (userId != null) {
+			researcher = userService.getUser(userId, false).getResearcher();
+		}
+		else
+		{
+			return "accessDenied";
+		}
 		researcherFieldsCount = researcher.getFields().size();
 		fields = fieldService.getAllFieldsNameOrder();
 		return SUCCESS;
@@ -268,7 +302,15 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	 * @return
 	 */
 	public int getNumberOfResearcherPictures() {
+		if (userId != null) {
+			researcher = userService.getUser(userId, false).getResearcher();
+		}
+		else
+		{
+			return 0;
+		}
 		return researcher.getPictures().size();
+		
 	}
 
 	public Researcher getResearcher() {
@@ -306,14 +348,6 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
-	}
-
-	public void prepare(){
-		log.debug("Prepare researcher Id = " + researcherId );
-		if (researcherId != null) {
-			researcher = researcherService.getResearcher(researcherId, false);
-		}
-				
 	}
 
 	public DepartmentService getDepartmentService() {
@@ -432,5 +466,14 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 
 	public void setDepartmentIds(Long[] departmentIds) {
 		this.departmentIds = departmentIds;
+	}
+
+	
+	public void prepare() throws Exception {
+		if( researcherId != null )
+		{
+			researcher = researcherService.getResearcher(researcherId, false);
+		}
+		
 	}
 }

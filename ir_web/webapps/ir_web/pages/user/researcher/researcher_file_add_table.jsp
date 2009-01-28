@@ -23,7 +23,6 @@
 <!-- Form to store the selected file ids and item id the user is working on -->
 <form name="myResearcherFolders" method="post">
 	
-	<input type="hidden" id="myResearcherFolders_researcherId" name="researcherId" value="${researcherId}"/>
 	<input type="hidden" id="myResearcherFolders_parentFolderId" 
 	                                   name="parentFolderId" 
 	                                   value="${parentFolderId}"/> 
@@ -54,7 +53,7 @@
 	                 </c:if>
 	                 
 	                 <c:if test="${researcherFileSystemVersion.researcherFileSystem.fileSystemType.type == 'researcherFile'}">
-	                    <ir:fileTypeImg cssClass="tableImg" irFile="${researcherFileSystemVersion.researcherFileSystem.irFile}"/> <ur:maxText numChars="50" text="${researcherFileSystemVersion.researcherFileSystem.name}"></ur:maxText>
+	                    <ir:fileTypeImg cssClass="tableImg" irFile="${researcherFileSystemVersion.researcherFileSystem.irFile}"/> <ur:maxText numChars="50" text="${researcherFileSystemVersion.researcherFileSystem.name}"> - this one</ur:maxText>
 
 				      	   <select id="file_version" name="version_${researcherFileSystemVersion.researcherFileSystem.id}" onChange="javascript:YAHOO.ur.researcher.files.changeFileVersion(this, '${researcherFileSystemVersion.researcherFileSystem.id}');" /> 
 				      	   
@@ -79,8 +78,7 @@
 
 	                 <c:if test="${researcherFileSystemVersion.researcherFileSystem.fileSystemType.type == 'researcherInstitutionalItem'}">
 	                 
-	                   	&nbsp;<img  alt="" class="buttonImg"
-		                       src="${pageContext.request.contextPath}/page-resources/images/all-images/package.gif"/><ur:maxText numChars="50" text="${researcherFileSystemVersion.researcherFileSystem.name}"></ur:maxText>
+	                   	&nbsp;<span class="packageBtnImg">&nbsp;</span><ur:maxText numChars="50" text="${researcherFileSystemVersion.researcherFileSystem.name}"></ur:maxText>
 	                 </c:if>	                 
 				</td>
 			</tr>

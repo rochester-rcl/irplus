@@ -32,24 +32,51 @@ var addPublicationAction = basePath + 'user/addResearcherPublication.action';
 // Action to add files to item
 var researcherFolderAction = basePath + 'user/viewResearcher.action?showFoldersTab=true';
 
+var changePersonalPublicationVersionAction = basePath + 'user/changeResearcherPublicationVersion.action';
+
 /**
  * Researcher publications namespace
  */
 YAHOO.ur.researcher.publications = {
 	
-	/*
+	/**
+	 *  Function the publication version
+	 *
+	 */
+	changePersonalPublicationVersion : function(object, researcherPublicationId) {
+
+	    var callback =
+	    {
+	        success: function(o) 
+	        {
+	            // check for the timeout - forward user to login page if timout
+                // occured
+                if( !urUtil.checkTimeOut(o.responseText) )
+                {    
+                	//do nothing
+	            }
+	        },
+		
+		    failure: function(o) 
+		    {
+		        alert('change personal publication Failure ' + o.status + ' status text ' + o.statusText );
+		    }
+	    }
+		var cObj = YAHOO.util.Connect.asyncRequest('post',
+		           changePersonalPublicationVersionAction, callback, 'publicationId=' + researcherPublicationId + '&itemVersionId=' + object.value);
+	},	
+		
+	/**
 	 * Action to go back to researcher folders
 	 */
 	viewResearcherFolders : function()
 	{
-	
 	    document.myResearcherFolders.action = researcherFolderAction;
-	    
 	    document.myResearcherFolders.submit();
 	},
 	 
 	/**
-	 *  Function that retireves folder information
+	 *  Function that retrieves folder information
 	 *  based on the given folder id.
 	 *
 	 *  The folder id used to get the folder.
@@ -100,7 +127,8 @@ YAHOO.ur.researcher.publications = {
 	 *
 	 */
 	getResearcherFolders : function()
-	{ 
+	{
+		
 		var callback =
 		{
 		    success: function(o) 
@@ -108,7 +136,7 @@ YAHOO.ur.researcher.publications = {
 		    	// check for the timeout - forward user to login page if timout
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
-	            {       
+	            {    
 		            var divToUpdate = document.getElementById('newResearcherFolders');
 		            divToUpdate.innerHTML = o.responseText; 
 		        }
@@ -116,12 +144,12 @@ YAHOO.ur.researcher.publications = {
 			
 			failure: function(o) 
 			{
-			    //alert('Get selected files Failure ' + o.status + ' status text ' + o.statusText );
+			    alert('Get selected files Failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 	
 		YAHOO.util.Connect.setForm('myResearcherFolders');
-	   
+		   
 	    var cObj = YAHOO.util.Connect.asyncRequest('POST',
 	           myResearcherFoldersAction , callback);
 	   
@@ -156,22 +184,19 @@ YAHOO.ur.researcher.publications = {
 			} 
 		}	
 		
+		document.getElementById('myCollections_versionedItemId').value = versionedPublicationId;
 		YAHOO.util.Connect.setForm('myPersonalCollections');
 		
-	    var cObj = YAHOO.util.Connect.asyncRequest('post',
-	         addPublicationAction + '?versionedItemId=' + versionedPublicationId, callback, null);
+	    var cObj = YAHOO.util.Connect.asyncRequest('post', addPublicationAction, callback);
+	   
 	},
 	
 	/* initialize the page this is called once the dom has
 	 * been created
 	 */
 	init : function() {
-	
 	    YAHOO.ur.researcher.publications.getPersonalCollection();
-	    
 	    YAHOO.ur.researcher.publications.getResearcherFolders();
-	    YAHOO.ur.researcher.publications.createPublicationDialog();
-	    
 	}
 }
 

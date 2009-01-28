@@ -271,9 +271,9 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 * 
 	 * @param irFile
 	 */
-	public ResearcherPublication createPublication(GenericItem item) {
+	public ResearcherPublication createPublication(GenericItem item, int versionNumber) {
 		 
-		ResearcherPublication rp = new ResearcherPublication(researcher, this, item);
+		ResearcherPublication rp = new ResearcherPublication(researcher, this, item, versionNumber);
 		publications.add(rp);
 		return rp;
 	}

@@ -32,7 +32,7 @@ Displayed on the left hand side of the add files to item page -->
 </form>
 
 <!-- Displays the folder path -->
-/<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.files.getPersonalFolderById('0')">My Research</ur:a>/
+/<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.files.getPersonalFolderById('0')">My Files</ur:a>/
    <c:forEach var="folder" items="${personalFolderPath}">
        <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.files.getPersonalFolderById('${folder.id}')">${folder.name}</ur:a>/
    </c:forEach>
