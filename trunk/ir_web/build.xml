@@ -139,6 +139,8 @@
     <target name="full-clean" depends="clean, clean-run-webapp-local,clean-production-staging" description="-->Clean the project and lib directory">
         <delete dir="${lib.dir}"/>
     	<delete dir="${ivy.dir}"/>
+    	<delete dir="${basedir}/yui-unzip"/>
+    	<delete dir="${webapp.dir}/page-resources/yui"/>
     	<delete file=""/>
     </target>	
 
