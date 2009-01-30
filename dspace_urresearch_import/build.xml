@@ -29,9 +29,19 @@
 
     <!-- location of the base build file -->
     <property name="base.build.file" value="../base.xml"/>
+	
+	<!-- top level folder for ir plus properties files -->
+	<property name="ir.plus.properties" value="../properties"/> 
+
+	<!-- folder that contains the properties for running the system in production -->
+	<property name="ir.plus.properties.production" value="${ir.plus.properties}/production"/>
+
+	<!-- folder that contains session factory for production web -->
+	<property name="web.session.factory" value="../ir_web/spring-config/local/session-factory.xml"/>
 
 	<!-- import the base set of files -->
     <import file="${base.build.file}"/>
+	
 
     <!-- Allow users to see their properties and how they are set -->
     <target name="echo-properties" 
@@ -69,6 +79,7 @@
 		<pathelement location="${spring.config.common.config}"/>
 		<pathelement location="${spring.project.config}"/>
 		<pathelement location="${spring.config.common.config.test}"/>
+		<pathelement location="${ir.plus.properties.production}"/>
 		
 		<!-- test file configurations and properties -->
 		<pathelement location="${testng.config}"/>
@@ -77,12 +88,18 @@
     <!-- Copy non java resources -->
 	<target name="copy-resources" description="-->Copy the non java resources into the build directory">
 		<copy todir="${build.dir}/classes">
-			<fileset dir="${src.dir}">
-				<exclude name="**/*.java" />
-			</fileset>
 			
 			<!-- logger configuration-->
 			<fileset dir="${log4j.production.appender}"/>
+			
+			<!-- local spring project configuration files -->
+			<fileset dir="${spring.project.config}"/>
+			
+			<!-- common spring configuration files -->
+			<fileset dir="${spring.config.common.config}"/>
+			
+			<!-- session factory file -->
+			<fileset file="${web.session.factory}"/>
 		</copy>
 	</target>
 
