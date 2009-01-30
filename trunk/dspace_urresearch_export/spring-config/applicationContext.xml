@@ -31,7 +31,7 @@
         class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>ir_plus.properties</value>
+                <value>dspace_irplus_export.properties</value>
             </list>
         </property>
     </bean>
