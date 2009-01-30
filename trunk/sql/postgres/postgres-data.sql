@@ -4634,23 +4634,19 @@ select nextval('ir_user.role_seq'), 0, 'ROLE_ADMIN', 'Indicates the user is an
 administrator';
 
 insert into ir_user.role (role_id, version, name, description)
-select nextval('ir_user.role_seq'), 0, 'ROLE_COLLABORATOR', 'Indicates the user is an 
-
+select nextval('ir_user.role_seq'), 0, 'ROLE_COLLABORATOR', 'Indicates the user is a
 collaborator';
 
 insert into ir_user.role (role_id, version, name, description)
-select nextval('ir_user.role_seq'), 0, 'ROLE_RESEARCHER', 'Indicates the user is an 
-
+select nextval('ir_user.role_seq'), 0, 'ROLE_RESEARCHER', 'Indicates the user is a 
 researcher';
 
 insert into ir_user.role (role_id, version, name, description)
-select nextval('ir_user.role_seq'), 0, 'ROLE_AUTHOR', 'Indicates the user is an 
-
+select nextval('ir_user.role_seq'), 0, 'ROLE_AUTHOR', 'Indicates the user is a 
 Author';
 
 insert into ir_user.role (role_id, version, name, description)
-select nextval('ir_user.role_seq'), 0, 'ROLE_COLLECTION_ADMIN', 'Indicates the user is an 
-
+select nextval('ir_user.role_seq'), 0, 'ROLE_COLLECTION_ADMIN', 'Indicates the user is a 
 Collection Administrator';
 
 -- ---------------------------------------------
@@ -4733,7 +4729,7 @@ select nextval('ir_user.affiliation_seq'), 'Staff',
 insert into ir_user.affiliation( affiliation_id, 
 name, description, version, is_author, is_researcher, needs_approval)
 select nextval('ir_user.affiliation_seq'), 'Undergraduate student', 
-'User is a undergraduate student at the university', 0,false, false, false;
+'User is an undergraduate student at the university', 0,false, false, false;
 
 insert into ir_user.affiliation( affiliation_id, 
 name, description, version, is_author, is_researcher, needs_approval)
@@ -4744,13 +4740,13 @@ select nextval('ir_user.affiliation_seq'), 'Graduate student',
 insert into ir_user.affiliation( affiliation_id, 
 name, description, version, is_author, is_researcher, needs_approval)
 select nextval('ir_user.affiliation_seq'), 'Alumni', 
-'User is a alumni of the university', 0,false, false, false;
+'User is an alumni of the university', 0,false, false, false;
 
 
 insert into ir_user.affiliation( affiliation_id, 
 name, description, version, is_author, is_researcher, needs_approval)
 select nextval('ir_user.affiliation_seq'), 'Faculty', 
-'User is a faculty in the university', 0, true,true, true;
+'User is a faculty member of the university', 0, true,true, true;
 
 -- ---------------------------------------------
 -- Insert Affiliations
