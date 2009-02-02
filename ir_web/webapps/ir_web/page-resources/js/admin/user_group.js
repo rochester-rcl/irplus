@@ -15,8 +15,7 @@
 */
 
 /**
- * This code is for dealing with adding and removing folders 
- * in the workspace.
+ * This code is for dealing with user groups
  */
 YAHOO.namespace("ur.usergroup");
 
