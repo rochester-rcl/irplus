@@ -225,7 +225,7 @@
 		               name="parentFolderId" value="${parentFolderId}"/>
 
               	<div id="newFolderDialogFields">
-               		<%@ include file="/pages/user/workspace/personal_folder_form.jsp" %>
+              	    <c:import url="personal_folder_form.jsp"/>
               	</div>
 
 		     </ur:basicForm>
@@ -244,7 +244,7 @@
 		        name="parentCollectionId" value="${parentCollectionId}"/>
 
               	<div id="newCollectionDialogFields">
-               		<%@ include file="/pages/user/workspace/personal_collection_form.jsp" %>
+              	    <c:import url="personal_collection_form.jsp"/>
               	</div>
               			              
 		    </ur:basicForm>
