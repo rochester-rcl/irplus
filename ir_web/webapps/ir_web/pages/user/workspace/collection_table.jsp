@@ -18,8 +18,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="ir" uri="ir-tags"%>
 
-
+<c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
 <fmt:setBundle basename="messages"/>
 
 
@@ -198,3 +199,8 @@
 	    
     </ur:basicForm>
 </div>
+</c:if>
+<c:if test='${!ir:userHasRole("ROLE_AUTHOR", "OR")}'>
+    <br/>
+    <h3>You do not have permissions to create publications</h3>
+</c:if>
