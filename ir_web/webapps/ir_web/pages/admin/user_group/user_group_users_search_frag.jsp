@@ -48,10 +48,10 @@
                     onMouseOver="this.className='highlight'"
                     onMouseOut="this.className='${rowClass}'">
                         <c:if test="${!ir:isInGroup(user,userGroup)}">
-                        <urstb:td><a href="javascript:YAHOO.ur.usergroup.edit.addMember(${user.id}, ${userGroup.id});">Add User</a></urstb:td>
+                        <urstb:td><a href="javascript:YAHOO.ur.usergroup.edit.addMember(${user.id}, ${userGroup.id}, ${rowStart}, ${startPageNumber}, ${currentPageNumber});">Add User</a></urstb:td>
                         </c:if>
                         <c:if test="${ir:isInGroup(user,userGroup)}">
-                        <urstb:td><a href="javascript:YAHOO.ur.usergroup.edit.removeMember(${user.id}, ${userGroup.id});">Remove User</a></urstb:td>
+                        <urstb:td><a href="javascript:YAHOO.ur.usergroup.edit.removeMember(${user.id}, ${userGroup.id}, ${rowStart}, ${startPageNumber}, ${currentPageNumber});">Remove User</a></urstb:td>
                         </c:if>
                         <urstb:td>${user.username}</urstb:td>
                         <urstb:td>${user.firstName}</urstb:td>

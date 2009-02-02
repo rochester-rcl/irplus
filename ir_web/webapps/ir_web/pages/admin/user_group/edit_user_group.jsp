@@ -62,7 +62,7 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>Edit User Groups</h3>
+        <h3>Edit User Group - ${userGroup.name}</h3>
   
         <div id="bd">
       
