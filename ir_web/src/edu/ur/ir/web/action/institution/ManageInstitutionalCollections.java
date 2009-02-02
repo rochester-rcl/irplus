@@ -139,7 +139,7 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 	 */
 	public String deleteCollectionSystemObjects()
 	{
-		log.debug("Delete folders called");
+		log.debug("Delete collection system objects called");
 		
 		IrUser user = userService.getUser(userId, false);
 		

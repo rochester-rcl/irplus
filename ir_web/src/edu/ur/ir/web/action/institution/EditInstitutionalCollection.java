@@ -36,8 +36,12 @@ import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.IrUserGroupAccessControlEntry;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.UserGroupService;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Manage an institutional collection.
@@ -45,7 +49,10 @@ import edu.ur.ir.user.UserGroupService;
  * @author Nathan Sarr
  *
  */
-public class EditInstitutionalCollection extends ActionSupport {
+public class EditInstitutionalCollection extends ActionSupport implements UserIdAware {
+	
+	/** id of the user making changes */
+	private Long userId;
 
 	/**  Logger. */
 	private static final Logger log = Logger.getLogger(EditInstitutionalCollection.class);
@@ -57,11 +64,15 @@ public class EditInstitutionalCollection extends ActionSupport {
 	private Long parentCollectionId= 0l;
 	
 	/** Repository service for dealing with institutional repository information */
-	RepositoryService repositoryService;
+	private RepositoryService repositoryService;
 	
 	/** Repository service for dealing with institutional repository information */
-	InstitutionalCollectionSecurityService institutionalCollectionSecurityService;
+	private InstitutionalCollectionSecurityService institutionalCollectionSecurityService;
 	
+	/** service for dealing with user information */
+	private UserService userService;
+	
+
 	/** Name of the collection */
 	private String collectionName;
 	
@@ -105,23 +116,57 @@ public class EditInstitutionalCollection extends ActionSupport {
 	 */
 	public String create() {
 		log.debug("create called");
+		actionSuccess = false;
+		
+		// user making the changes
+		IrUser user = userService.getUser(userId, false);
 		
 		// assume that if the current collection id is null or equal to 0
 		// then we are adding a root collection to the user.
 		if(parentCollectionId == null || parentCollectionId == 0)
 		{
-			actionSuccess = addRootCollection();
+			 // only admins can add root collections
+			 if(!user.hasRole(IrRole.ADMIN_ROLE))
+			 {
+				return "accessDenied";
+			 }
+			 Repository repository = 
+				 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
+						 false);
+			try {
+				collection = repository.createInstitutionalCollection(collectionName);
+				repositoryService.saveRepository(repository);
+				actionSuccess = true;
+			   
+			} catch (DuplicateNameException e) {
+				log.error(e);
+				collectionMessage = getText("institutionalCollectionAlreadyExists", 
+						new String[]{collectionName});
+			}
 		}
 		else
 		{
-			actionSuccess = addSubCollection();
+			// creating sub collection
+			InstitutionalCollection parent = 
+				institutionalCollectionService.getCollection(parentCollectionId, false); 
+			
+			    
+			try {
+				if( user.hasRole(IrRole.ADMIN_ROLE) || institutionalCollectionSecurityService.hasPermission(parent, user, InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION) > 0 )
+				{
+				    collection = parent.createChild(collectionName);
+				    institutionalCollectionService.saveCollection(parent);
+				    institutionalCollectionSecurityService.givePermissionsToParentCollections(collection);
+				    actionSuccess = true;
+				}
+			} catch (DuplicateNameException e) {
+					log.error(e);
+					collectionMessage = getText("institutionalCollectionAlreadyExists", 
+							new String[]{collectionName});
+			}
 		}
 		
-		if( !actionSuccess)
-		{
-			collectionMessage = getText("institutionalCollectionAlreadyExists", 
-					new String[]{collectionName});
-		}
+		
         return "create";
 	}
 	
@@ -215,42 +260,14 @@ s	 */
 		return "view";
 	}
 
-	/**
-	 * Creates a new root collection 
-	 */
-	private boolean addRootCollection() 
-	{
-		 boolean collectionAdded = false;
-		 Repository repository = 
-			 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
-					 false);
-		try {
-			collection = repository.createInstitutionalCollection(collectionName);
-			repositoryService.saveRepository(repository);
-		    collectionAdded = true;
-		} catch (DuplicateNameException e) {
-			log.debug(e);
-		}
-		
-		return collectionAdded;
-	}
-	
+
 	/**
 	 * adds a sub collection to an existing collection
 	 */
 	private boolean addSubCollection() 
 	{
 		boolean collectionAdded = false;
-		InstitutionalCollection parent = 
-			institutionalCollectionService.getCollection(parentCollectionId, false); 
-		try {
-			collection = parent.createChild(collectionName);
-			institutionalCollectionService.saveCollection(parent);
-			institutionalCollectionSecurityService.givePermissionsToParentCollections(collection);
-			collectionAdded = true;
-		} catch (DuplicateNameException e) {
-				log.error(e);
-		}
+		
 		return collectionAdded;
 	}
 	
@@ -477,5 +494,18 @@ s	 */
 	public void setPermissions(List<IrClassTypePermission> permissions) {
 		this.permissions = permissions;
 	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
 
 }
