@@ -91,7 +91,7 @@
 		                    method="post" 
 		                    action="admin/createUserGroup.action">
 	    <ur:div id="newUserGroupDialogFields">
-	      <%@ include file="/pages/admin/user_group/user_group_form.jsp" %>
+	        <c:import url="user_group_form.jsp"/>
 	    </ur:div>
 	  </ur:basicForm>
     </ur:div>

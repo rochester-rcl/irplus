@@ -45,11 +45,10 @@
 	        </tr>
 	        <tr>
 	            <td align="left" class="label">Description:</td>
-	        </tr>
-	        <tr>
+	       
 	            <td colspan="2" class="input"><textarea name="userGroup.description" 
 	                  id="newUserGroupForm_description" 
-	                  cols="42" rows="4">${userGroup.description}</textarea></td>
+	                  cols="50" rows="4">${userGroup.description}</textarea></td>
 	        </tr>
 	    </table>
 	   
