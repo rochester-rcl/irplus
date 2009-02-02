@@ -70,7 +70,7 @@ YAHOO.ur.usergroup.edit = {
     },
     
     /* Adds a member to the group*/
-    addMember: function(userId, groupId)
+    addMember: function(userId, groupId, rowStart, startPageNumber, currentPageNumber)
     {
             // action to perform for searching names
         var action =  basePath + 'admin/addUserToGroup.action';
@@ -86,8 +86,7 @@ YAHOO.ur.usergroup.edit = {
 	            {
                     var divToUpdate = document.getElementById('group_members_div');
                     divToUpdate.innerHTML = o.responseText; 
-                    rowStart = document.getElementById('user_row_start').value; 
-                    YAHOO.ur.usergroup.edit.userSearch(rowStart);
+                    YAHOO.ur.usergroup.edit.userSearch(rowStart, startPageNumber, currentPageNumber);
                 }
             },
 	
@@ -103,7 +102,7 @@ YAHOO.ur.usergroup.edit = {
     },
     
     /* Removes a member from the group*/
-    removeMember: function(userId, groupId)
+    removeMember: function(userId, groupId, rowStart, startPageNumber, currentPageNumber)
     {
             // action to perform for searching names
         var action =  basePath + 'admin/removeUserFromGroup.action';
@@ -119,8 +118,7 @@ YAHOO.ur.usergroup.edit = {
 	            {
                     var divToUpdate = document.getElementById('group_members_div');
                     divToUpdate.innerHTML = o.responseText;
-                    rowStart = document.getElementById('user_row_start').value; 
-                    YAHOO.ur.usergroup.edit.userSearch(rowStart); 
+                    YAHOO.ur.usergroup.edit.userSearch(rowStart, startPageNumber, currentPageNumber); 
                 }
             },
 	
