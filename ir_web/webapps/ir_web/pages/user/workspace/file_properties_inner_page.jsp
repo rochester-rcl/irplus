@@ -103,63 +103,51 @@
                   </tr>
               </table>
               
-              <table>
-	             <tr>
-	                 <td>
-	                     <ir:acl domainObject="${personalFile.versionedFile}" hasPermission="EDIT">
-           
-	                        <button class="ur_button" id="addVersionedFileButton" 
-	                            onclick="YAHOO.ur.file.properties.versionedFileUploadDialog.showDialog()";
-	                            onmouseover="this.className='ur_buttonover';"
- 		                        onmouseout="this.className='ur_button';"><span class="pageAddBtnImg">&nbsp;</span> Add New Version</button>
-	                     </ir:acl>
-	                 </td>
-	                 <td>
-	                     <button class="ur_button" onclick="" 
-	                         onmouseover="this.className='ur_buttonover';"
- 		                     onmouseout="this.className='ur_button';"><span class="reportGoBtnImg">&nbsp;</span> Publish</button>
-	                 </td>
-	                 <td>
-	                    
-	                     <c:if test="${ir:canShareFile(user, personalFile.versionedFile)}">   
-	                         <button class="ur_button" onclick="javascript:shareWithUsers.submit()" 
-	                             onmouseover="this.className='ur_buttonover';"
- 		                         onmouseout="this.className='ur_button';"><span class="groupAddBtnImg">&nbsp;</span>Share</button>
-	                     </c:if>
-	                 </td>
-	                  
-	                 <c:if test="${ir:canLockFile(user, personalFile.versionedFile)}">
-	                 <td>
-	                      <button class="ur_button" onclick="javascript:YAHOO.ur.file.properties.getLockOnFileId('${personalFile.id}', '${user.id}');" 
-	                          onmouseover="this.className='ur_buttonover';"
- 		                      onmouseout="this.className='ur_button';"><span class="lockBtnImg">&nbsp;</span>Lock &amp; Edit</button>
-	                 </td>
-	                 </c:if>
+   
+	         <ir:acl domainObject="${personalFile.versionedFile}" hasPermission="EDIT">
+                 <button class="ur_button" id="addVersionedFileButton" 
+	                     onclick="YAHOO.ur.file.properties.versionedFileUploadDialog.showDialog()";
+	                     onmouseover="this.className='ur_buttonover';"
+ 		                 onmouseout="this.className='ur_button';"><span class="pageAddBtnImg">&nbsp;</span> Add New Version</button>
+	         </ir:acl>
+	                
+	         <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
+	             <button class="ur_button" onclick="" 
+	                onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';"><span class="reportGoBtnImg">&nbsp;</span> Publish</button>
+ 		     </c:if>
+	                 
+	         <c:if test="${ir:canShareFile(user, personalFile.versionedFile)}">   
+	             <button class="ur_button" onclick="javascript:shareWithUsers.submit()" 
+	                     onmouseover="this.className='ur_buttonover';"
+ 		                 onmouseout="this.className='ur_button';"><span class="groupAddBtnImg">&nbsp;</span>Share</button>
+	         </c:if>
+	                
+	         <c:if test="${ir:canLockFile(user, personalFile.versionedFile)}">
+	             <button class="ur_button" onclick="javascript:YAHOO.ur.file.properties.getLockOnFileId('${personalFile.id}', '${user.id}');" 
+	                     onmouseover="this.className='ur_buttonover';"
+ 		                 onmouseout="this.className='ur_button';"><span class="lockBtnImg">&nbsp;</span>Lock &amp; Edit</button>
+	         </c:if>
 	             
-	                 <c:if test="${ir:isLocker(user,personalFile.versionedFile)}">
-	                 <td>
-	                     <button class="ur_button" onclick="javascript:YAHOO.ur.file.properties.unLockFile('${personalFile.id}', '${user.id}');" 
-	                         onmouseover="this.className='ur_buttonover';"
- 		                     onmouseout="this.className='ur_button';"> <span class="unlockBtnImg">&nbsp;</span>Unlock</button>
-	                 </td>
-	                 </c:if>
-	             
-	                 <td>
-	                     <button class="ur_button" onClick="javascript:YAHOO.ur.file.properties.renameFile('${personalFile.id}');" 
-	                         onmouseover="this.className='ur_buttonover';"
- 		                     onmouseout="this.className='ur_button';"
+	         <c:if test="${ir:isLocker(user,personalFile.versionedFile)}">
+	             <button class="ur_button" onclick="javascript:YAHOO.ur.file.properties.unLockFile('${personalFile.id}', '${user.id}');" 
+	                     onmouseover="this.className='ur_buttonover';"
+ 		                 onmouseout="this.className='ur_button';"> <span class="unlockBtnImg">&nbsp;</span>Unlock</button>
+	         </c:if>
+	         
+	         <ir:acl domainObject="${personalFile.versionedFile}" hasPermission="EDIT">
+	             <button class="ur_button" onClick="javascript:YAHOO.ur.file.properties.renameFile('${personalFile.id}');" 
+	                 onmouseover="this.className='ur_buttonover';"
+ 		             onmouseout="this.className='ur_button';"
  		                ><span class="reportEditBtnImg">&nbsp;</span>Rename</button>
-	                 </td>
-
-	                 <td>
-	                     <button class="ur_button" id="change_owner" 
-	                         onmouseover="this.className='ur_buttonover';"
- 		                     onmouseout="this.className='ur_button';"
- 		                >Change Owner</button>
-	                 </td>	                 
-	             </tr>
-	          </table>
-          
+		     </ir:acl>
+		     
+		     <c:if test="${ir:isOwner(user, fileSystemObject.versionedFile)}">             
+		         <button class="ur_button" id="change_owner" 
+	                     onmouseover="this.className='ur_buttonover';"
+ 		                 onmouseout="this.className='ur_button';">Change Owner</button>
+              </c:if>
+              
               <h3>Sharing</h3>
           
               <table class="simpleTable">
