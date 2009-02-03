@@ -73,6 +73,10 @@
                       <td>${personalFile.versionedFile.currentVersion.irFile.fileInfo.createdDate}</td>
                   </tr>
                   <tr>
+                      <td><strong>File Onwer:&nbsp;</strong></td>
+                      <td>${personalFile.versionedFile.owner.firstName}&nbsp;${personalFile.versionedFile.owner.lastName}</td>
+                  </tr>
+                  <tr>
                       <td><strong>Created By:&nbsp;</strong></td>
                       <td>${personalFile.versionedFile.currentVersion.versionCreator.username}</td>
                   </tr>
@@ -142,7 +146,7 @@
  		                ><span class="reportEditBtnImg">&nbsp;</span>Rename</button>
 		     </ir:acl>
 		     
-		     <c:if test="${ir:isOwner(user, fileSystemObject.versionedFile)}">             
+		     <c:if test="${ir:isOwner(user, personalFile.versionedFile)}">             
 		         <button class="ur_button" id="change_owner" 
 	                     onmouseover="this.className='ur_buttonover';"
  		                 onmouseout="this.className='ur_button';">Change Owner</button>

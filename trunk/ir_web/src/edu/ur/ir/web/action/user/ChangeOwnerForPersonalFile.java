@@ -55,6 +55,12 @@ public class ChangeOwnerForPersonalFile extends ActionSupport implements UserIdA
 	
 	/** user making the change */
 	private Long userId;
+	
+	/** reason for access denied if access is denied */
+	private String reason;
+
+
+
 
 	/**
 	 * changes the file owner 
@@ -68,8 +74,9 @@ public class ChangeOwnerForPersonalFile extends ActionSupport implements UserIdA
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
 		
 		// user must be an owner of the file
-		if(!personalFile.getOwner().getId().equals(userId))
+		if(!personalFile.getVersionedFile().getOwner().getId().equals(userId))
 		{
+			reason = "You are not the owner";
 			return "accessDenied";
 		}
 		
@@ -80,6 +87,20 @@ public class ChangeOwnerForPersonalFile extends ActionSupport implements UserIdA
 		userFileSystemService.makePersonalFilePersistent(personalFile);
 		
 		return SUCCESS;
+	}
+	
+	/**
+	 * reason for access denied.
+	 * 
+	 * @return
+	 */
+	public String getReason() {
+		return reason;
+	}
+
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 
 
