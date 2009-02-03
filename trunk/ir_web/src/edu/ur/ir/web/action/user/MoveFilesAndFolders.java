@@ -116,6 +116,12 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 		    destination = 
 		    	userFileSystemService.getPersonalFolder(destinationId, false);
 		    
+		    if( !destination.getOwner().getId().equals(userId))
+		    {
+		    	// user cannot move file into a destination that they do not own
+		    	return "accessDenied";
+		    }
+		    
 		    // make sure the user has not navigated into a child or itself- this is illegal
 		    for(PersonalFolder folder: foldersToMove)
 		    {
@@ -166,6 +172,16 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 		}
 		
 		foldersToMove = userFileSystemService.getFolders(userId, listFolderIds);
+		
+		for( PersonalFolder f : foldersToMove)
+		{
+			// user cannot move folders that they do not own
+			if( !f.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
+		}
+		
 
 		List<Long> listFileIds = new LinkedList<Long>();
 		for( Long id : fileIds)
@@ -174,6 +190,15 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 		}
 		
 		filesToMove = userFileSystemService.getFiles(userId, listFileIds);
+		
+		for( PersonalFile f : filesToMove)
+		{
+			// user cannot move files that they do not own
+			if( !f.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
+		}
 		
 		log.debug( "destination id = " + destinationId);
 		if( !destinationId.equals(UserFileSystemService.ROOT_FOLDER_ID))
