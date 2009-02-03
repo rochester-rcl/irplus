@@ -174,6 +174,7 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 	    return "get";
 	}
 	
+	
 	/**
 	 * The user service for dealing with actions.
 	 * 
