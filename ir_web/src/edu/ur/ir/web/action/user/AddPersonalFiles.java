@@ -36,6 +36,7 @@ import edu.ur.ir.file.TransformedFileType;
 import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
@@ -131,6 +132,27 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		log.debug("Upload files called");
 		
 		IrUser user = userService.getUser(userId, false);
+		
+		//only authoring roles can add personal files
+		if( !user.hasRole(IrRole.AUTHOR_ROLE)  )
+		{
+			for( int index = 0; index < file.length; index++)
+			{
+				String theFileName = userFileName[index];
+	
+				if(userFileName[index] == null || userFileName[index].trim().equals(""))
+				{
+					theFileName = FilenameUtils.getName(fileFileName[index]);
+				}
+				
+				FileUploadInfo fileUploadInfo = new FileUploadInfo(theFileName, userFileName[index],
+						userFileDescription[index]);
+				filesNotAdded.add(fileUploadInfo);
+			}
+			return INPUT;
+		}
+			
+		
 		LinkedList<PersonalFile> addedFiles = new LinkedList<PersonalFile>();
 		
 		if( file != null)
