@@ -86,7 +86,7 @@
 				</td>
 				
 				<td width="100" class="tdItemSelectRightBorder">
-				     <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/delete.gif"/>  <a href="javascript:YAHOO.ur.item.contributor.removeContributor('${itemContributor.id}');"> Remove </a>
+				     <span class="deleteBtnImg">&nbsp;</span> <a href="javascript:YAHOO.ur.item.contributor.removeContributor('${itemContributor.id}');"> Remove </a>
 				</td>
 			</tr>
 		</c:forEach>
