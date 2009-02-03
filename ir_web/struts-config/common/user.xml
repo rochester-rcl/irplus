@@ -414,6 +414,7 @@
                 method="createItem"
                 class="edu.ur.ir.web.action.item.AddItemToCollection">
             <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success"  type="redirect">viewEditItem.action?genericItemId=${item.id}&amp;parentFolderId=${parentFolderId}&amp;parentCollectionId=${personalItem.personalCollection.id}</result>
         </action>
 
