@@ -28,7 +28,6 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.user.IrUser;
-import edu.ur.tag.TagUtil;
 
 /**
  * To display the names in indented manner for adding authoritative name to user
@@ -72,9 +71,8 @@ public class DisplayAuthoritativeNameTag extends SimpleTagSupport{
 			out.write("&nbsp;&nbsp;Added");
 		} else {
 			try {
-				out.write(" <img class=\"tableImg\" alt=\"\" src=\"");
-				out.print(TagUtil.fixRelativePath(addImg, context));
-				out.write("\"/> <a href=\"javascript:YAHOO.ur.email.addName('" + user.getId() + "','" + personNameAuthority.getId() + "');\"> Add</a>");
+				out.write(" <span class=\"addBtnImg\">&nbsp;</span>");
+				out.write("<a href=\"javascript:YAHOO.ur.email.addName('" + user.getId() + "','" + personNameAuthority.getId() + "');\"> Add</a>");
 			} catch (Exception e) {
 			       throw new JspException(e);
 			}				

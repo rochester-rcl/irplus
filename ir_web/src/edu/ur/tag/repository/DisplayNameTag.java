@@ -85,9 +85,8 @@ public class DisplayNameTag extends SimpleTagSupport{
 			out.write("&nbsp;&nbsp;Added");
 		} else {
 			try {
-				out.write(" <img class=\"tableImg\" alt=\"\" src=\"");
-				out.print(TagUtil.fixRelativePath(addImg, context));
-				out.write("\"/> <a href=\"javascript:YAHOO.ur.item.contributor.addName('" + personNameAuthority.getAuthoritativeName().getId() + "');\"> Add</a>");
+				out.write(" <span class=\"addBtnImg\">&nbsp;</span>");
+				out.write("<a href=\"javascript:YAHOO.ur.item.contributor.addName('" + personNameAuthority.getAuthoritativeName().getId() + "');\"> Add</a>");
 			} catch (Exception e) {
 			       throw new JspException(e);
 			}				
