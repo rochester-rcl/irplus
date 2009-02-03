@@ -62,7 +62,7 @@
  		                   onmouseout="this.className='ur_button';"
  		                   onClick="YAHOO.ur.folder.newFolderDialog.showFolder();"
  		                   id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
-	           <c:if test='${ir:userHasRole("ROLE_AUTHOR,ROLE_RESEARCHER", "OR")}'>
+	           <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
 	               <button class="ur_button" 
 	                       onclick="YAHOO.ur.folder.singleFileUploadDialog.showDialog();"
 	                       onmouseover="this.className='ur_buttonover';"
@@ -235,7 +235,7 @@
                                 <c:url var="folderProperties" value="/user/viewFolderProperties.action">
                                     <c:param name="personalFolderId" value="${fileSystemObject.id}"/>
                                 </c:url>	                        
-	                           <a href="${folderProperties}">Properties</a>
+	                           <a href="${folderProperties}">properties</a>
 	                        </c:if>
                         </urstb:td>
                         <urstb:td>
