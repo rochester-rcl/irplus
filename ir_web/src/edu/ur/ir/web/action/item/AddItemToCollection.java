@@ -113,6 +113,15 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 			return "accessDenied";
 		}
 		
+		// make sure someone did not try to slip in a file id
+		checkFileOwnership();
+		if( !hasOwnFiles )
+		{
+			log.debug("user does not own the files");
+			return "accessDenied";
+		}
+		
+		
 		PersonalItem personalItem = null;
 		if( parentCollectionId == null || parentCollectionId == ROOT_COLLECTION_ID)
 		{
@@ -220,6 +229,8 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		
 		return SUCCESS;
 	}
+	
+
 	
 	/**
 	 * Set User Id

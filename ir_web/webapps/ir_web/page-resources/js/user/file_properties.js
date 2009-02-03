@@ -481,6 +481,41 @@ YAHOO.ur.file.properties =
      */
     createChangeOwnerDialog : function()
     {
+		
+	    /*
+         * This call back updates the html when editing file name
+         */
+        var callback =
+        {
+            success: function(o) 
+            {
+   		    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {   
+	            	if( o.responseText != null && o.responseText != "")
+	            	{
+	            	    var response = eval("("+o.responseText+")");
+	            	    if( response.messageType == 'accessDenied')
+	            	    {
+	            		    alert('Access denied - Reason: ' + response.reason);
+	            	    }
+	            	}
+	            	else
+	            	{
+	            		// assume success update the page
+	            		var fileId = document.getElementById("personal_file_id").value;
+		                YAHOO.ur.file.properties.getFileProperties(fileId);
+	            	}
+				}               
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('Change owner file Failure ' + o.status + ' status text ' + o.statusText );
+	        }
+        }
+        
 	    // Define various event handlers for Dialog
 	    var handleSubmit = function() 
 	    {
@@ -510,7 +545,7 @@ YAHOO.ur.file.properties =
 	        YAHOO.util.Connect.setForm('changeOwnerForm');
 	    
                 var cObj = YAHOO.util.Connect.asyncRequest('POST',
-                changeOwnerAction, null);
+                changeOwnerAction, callback);
         }
             	
 	    YAHOO.ur.file.properties.changeOwnerDialog.showDialog = function()

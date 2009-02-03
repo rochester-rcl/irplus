@@ -150,7 +150,7 @@
 		         <p>
 
 	              	<div id="renameFileDialogFields">
-	               		<%@ include file="/pages/user/workspace/rename_file_form.jsp" %>
+	              	    <c:import url="/pages/user/workspace/rename_file_form.jsp"/>
 	              	<div>		             
 		         </p>
 		     </ur:basicForm>		          

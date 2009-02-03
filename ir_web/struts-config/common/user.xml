@@ -223,7 +223,8 @@
         <!--  Change owner for  file  -->
         <action name="changeOwner" class="edu.ur.ir.web.action.user.ChangeOwnerForPersonalFile" >
             <interceptor-ref name="editStack"/>
-             <result name="success" type="no-op"/>
+            <result name="accessDenied">/access_denied_js.jsp</result>
+            <result name="success" type="no-op"/>
         </action>  
                 
         <action name="viewMovePersonalFolderLocations"
