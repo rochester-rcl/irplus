@@ -26,6 +26,7 @@ import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalFile;
@@ -105,6 +106,12 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		log.debug("Create Item :" + itemName + " under collection Id:" + parentCollectionId);
 		
 		IrUser user = userService.getUser(userId, false);
+		
+		// user must be an author
+		if( !user.hasRole(IrRole.AUTHOR_ROLE) )
+		{
+			return "accessDenied";
+		}
 		
 		PersonalItem personalItem = null;
 		if( parentCollectionId == null || parentCollectionId == ROOT_COLLECTION_ID)
