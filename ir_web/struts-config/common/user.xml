@@ -129,6 +129,7 @@
             method ="{1}"
             class="edu.ur.ir.web.action.user.AddPersonalFolder">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="added">/pages/user/workspace/personal_folder_form.jsp</result>
             <result name="get">/pages/user/workspace/personal_folder_form.jsp</result>
         </action>
@@ -138,6 +139,7 @@
             method ="deleteFileSystemObjects"
             class="edu.ur.ir.web.action.user.ViewPersonalFolders">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/folder_table.jsp</result>
         </action>
         
@@ -693,6 +695,7 @@
                 method="addNameToItem"
                 class="edu.ur.ir.web.action.item.AddContributorsToItem">
                 <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" >/pages/user/workspace/item/add_name_response.jsp</result>
         </action>
         
@@ -701,6 +704,7 @@
                 method="removeContributor"
                 class="edu.ur.ir.web.action.item.AddContributorsToItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getContributors.action?genericItemId=${genericItemId}</result>
         </action>
         
@@ -709,6 +713,7 @@
                 method="addContributorType"
                 class="edu.ur.ir.web.action.item.AddContributorsToItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getContributors.action?genericItemId=${genericItemId}</result>
         </action>
         
@@ -717,6 +722,7 @@
                 method="moveContributorUp"
                 class="edu.ur.ir.web.action.item.AddContributorsToItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getContributors.action?genericItemId=${genericItemId}</result>
         </action>
         
@@ -725,6 +731,7 @@
                 method="moveContributorDown"
                 class="edu.ur.ir.web.action.item.AddContributorsToItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getContributors.action?genericItemId=${genericItemId}</result>
         </action>
         
@@ -733,6 +740,7 @@
             method="create"
             class="edu.ur.ir.web.action.person.ManagePersonNames">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="added">/pages/user/workspace/item/person_name_added.jsp</result>
         </action>
 
@@ -741,6 +749,7 @@
             method="create"
             class="edu.ur.ir.web.action.person.ManagePersons">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="added">/pages/user/workspace/item/person_added.jsp</result>
         </action>        
 
