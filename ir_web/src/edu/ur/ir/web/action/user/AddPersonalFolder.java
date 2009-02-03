@@ -17,8 +17,6 @@
 
 package edu.ur.ir.web.action.user;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -89,16 +87,80 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	public String add() throws Exception
 	{
 		log.debug("creating a personal folder parent folderId = " + parentFolderId);
+		
+		Repository repository = 
+			repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		IrUser thisUser = userService.getUser(userId, true);
+
+		
 		folderAdded = false;
 		// assume that if the current folder id is null or equal to 0
 		// then we are adding a root folder to the user.
 		if(parentFolderId == null || parentFolderId == 0)
 		{
-			folderAdded = addRootFolder();
+			 // add root folder
+			 if( thisUser.getRootFolder(folderName) == null )
+		     {
+				 PersonalFolder personalFolder = null;
+				 try {
+					personalFolder = thisUser.createRootFolder(folderName);
+					personalFolder.setDescription(folderDescription);
+					userFileSystemService.makePersonalFolderPersistent(personalFolder);
+					 
+					IrUser user = personalFolder.getOwner();
+					if( user.getPersonalIndexFolder() == null )
+					{
+							userFileSystemService.createIndexFolder(user, repository, 
+									user.getUsername() + " Index Folder");
+					}
+					userWorkspaceIndexService.addToIndex(repository, personalFolder);
+					
+			        folderAdded = true;
+				 } catch (DuplicateNameException e) {
+					folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
+					addFieldError("personalFolderAlreadyExists", folderMessage);
+				 }
+				 catch(IllegalFileSystemNameException ifsne)
+				 {
+					folderMessage = getText("illegalPersonalFolderName", new String[]{folderName, String.valueOf(ifsne.getIllegalCharacters())});
+					addFieldError("illegalPersonalFolderName", folderMessage);
+				 }
+	         } else {
+	        	 folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
+	        	 addFieldError("personalFolderAlreadyExists", folderMessage);
+	         }
 		}
 		else
 		{
-			folderAdded = addSubFolder();
+		    // add sub folder	
+			PersonalFolder folder = userFileSystemService.getPersonalFolder(parentFolderId, true);
+			
+			// user must be owner of folder
+			if( !folder.getOwner().getId().equals(thisUser.getId()))
+			{
+				return "accessDenied";
+			}
+			
+			try
+			{
+			    PersonalFolder personalFolder = folder.createChild(folderName);
+			    personalFolder.setDescription(folderDescription);
+			    userFileSystemService.makePersonalFolderPersistent(folder);
+			  
+			    userWorkspaceIndexService.addToIndex(repository, personalFolder);
+				
+			    folderAdded = true;
+			}
+			catch(DuplicateNameException e)
+			{
+				folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
+				addFieldError("personalFolderAlreadyExists", folderMessage);
+			}
+			catch(IllegalFileSystemNameException ifsne)
+			{
+				folderMessage = getText("illegalPersonalFolderName", new String[]{folderName, String.valueOf(ifsne.getIllegalCharacters())});
+				addFieldError("illegalPersonalFolderName", folderMessage);
+			}
 		}
 
         return "added";
@@ -137,6 +199,13 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		if( other == null)
 		{
 			PersonalFolder existingFolder = userFileSystemService.getPersonalFolder(updateFolderId, true);
+			
+			// do not allow user if they do not own the folder
+            if( !existingFolder.getOwner().getId().equals(userId))
+            {
+            	return "accessDenied";
+            }
+			
 			try {
 				existingFolder.reName(folderName);
 				userFileSystemService.makePersonalFolderPersistent(existingFolder);
@@ -179,6 +248,13 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		log.debug("get called");
 		
 		PersonalFolder folder = userFileSystemService.getPersonalFolder(updateFolderId, true);
+		
+		if( !folder.getOwner().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
+		
 		folderName = folder.getName();
 		folderDescription = folder.getDescription();
 		
@@ -257,84 +333,6 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		this.parentFolderId = currentFolderId;
 	}
 
-	
-	/**
-	 * Creates a new root folder 
-	 * @throws DuplicateNameException 
-	 * @throws IOException 
-	 */
-	private boolean addRootFolder()  throws IllegalFileSystemNameException
-	{
-		Repository repository = 
-			repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		 boolean added = false;
-		 IrUser thisUser = userService.getUser(userId, true);
-		 if( thisUser.getRootFolder(folderName) == null )
-	     {
-			 PersonalFolder personalFolder = null;
-			 try {
-				personalFolder = thisUser.createRootFolder(folderName);
-				personalFolder.setDescription(folderDescription);
-				userFileSystemService.makePersonalFolderPersistent(personalFolder);
-				 
-				IrUser user = personalFolder.getOwner();
-				if( user.getPersonalIndexFolder() == null )
-				{
-						userFileSystemService.createIndexFolder(user, repository, 
-								user.getUsername() + " Index Folder");
-				}
-				userWorkspaceIndexService.addToIndex(repository, personalFolder);
-				
-		        added = true;
-			 } catch (DuplicateNameException e) {
-				folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
-				addFieldError("personalFolderAlreadyExists", folderMessage);
-			 }
-			 catch(IllegalFileSystemNameException ifsne)
-			 {
-				folderMessage = getText("illegalPersonalFolderName", new String[]{folderName, String.valueOf(ifsne.getIllegalCharacters())});
-				addFieldError("illegalPersonalFolderName", folderMessage);
-			 }
-         } else {
-        	 folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
-        	 addFieldError("personalFolderAlreadyExists", folderMessage);
-         }
-		 return added;
-	}
-	
-	/**
-	 * adds a sub folder to an existing folder
-	 * @throws IOException 
-	 */
-	private boolean addSubFolder() 
-	{
-		boolean added = false;
-		PersonalFolder folder = userFileSystemService.getPersonalFolder(parentFolderId, true);
-		Repository repository = 
-			repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		try
-		{
-		    PersonalFolder personalFolder = folder.createChild(folderName);
-		    personalFolder.setDescription(folderDescription);
-		    userFileSystemService.makePersonalFolderPersistent(folder);
-		  
-		    userWorkspaceIndexService.addToIndex(repository, personalFolder);
-			
-		    added = true;
-		}
-		catch(DuplicateNameException e)
-		{
-			folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
-			addFieldError("personalFolderAlreadyExists", folderMessage);
-		}
-		catch(IllegalFileSystemNameException ifsne)
-		{
-			folderMessage = getText("illegalPersonalFolderName", new String[]{folderName, String.valueOf(ifsne.getIllegalCharacters())});
-			addFieldError("illegalPersonalFolderName", folderMessage);
-		}
-		return added;
-	}
-	
 	/**
 	 * Indicates if the folder has been added 
 	 * 

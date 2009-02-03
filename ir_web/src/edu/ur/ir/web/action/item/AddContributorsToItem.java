@@ -197,6 +197,14 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	public String removeContributor() throws NoIndexFoundException {
 		
 		log.debug("Remove contributor " + contributorId + "from item:: item id = " + genericItemId);
+		if (userId != null) {
+			user = userService.getUser(userId, false);
+		}
+		
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		{
+		    return "accessDenied";
+		}
 		
 		ItemContributor removeContributor = item.getContributor(contributorId);
 
@@ -237,6 +245,14 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	 * 
 	 */
 	public String addNameToItem() throws NoIndexFoundException {
+		if (userId != null) {
+			user = userService.getUser(userId, false);
+		}
+		
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		{
+		    return "accessDenied";
+		}
 		
 		PersonName personName = personService.getName(personNameId, false);
 		ContributorType contributorType= contributorTypeService.getByUniqueSystemCode("AUTHOR");
@@ -292,6 +308,14 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	 * Adds the selected contributor type to the item and saves the item
 	 */
 	public String addContributorType() {
+		if (userId != null) {
+			user = userService.getUser(userId, false);
+		}
+		
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		{
+		    return "accessDenied";
+		}
 		
 		ContributorType contributorType= contributorTypeService.get(contributorTypeId, false);
 		ItemContributor itemContributor = item.getContributor(contributorId);
@@ -335,6 +359,14 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	 * 
 	 */
 	public String moveContributorUp() {
+		if (userId != null) {
+			user = userService.getUser(userId, false);
+		}
+		
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		{
+		    return "accessDenied";
+		}
 		log.debug("Move up contributorId = " + contributorId);
 		
 		ItemContributor moveUpcontributor = item.getContributor(contributorId);
@@ -351,6 +383,14 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	 * 
 	 */
 	public String moveContributorDown() {
+		if (userId != null) {
+			user = userService.getUser(userId, false);
+		}
+		
+		if( user == null || (!item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
+		{
+		    return "accessDenied";
+		}
 		log.debug("Move down contributorId = " + contributorId);
 		
 		ItemContributor moveDowncontributor = item.getContributor(contributorId);

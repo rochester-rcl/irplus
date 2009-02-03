@@ -25,6 +25,7 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Action to change personal file owner
@@ -32,7 +33,7 @@ import edu.ur.ir.user.UserService;
  * @author Sharmila Ranganathan
  *
  */
-public class ChangeOwnerForPersonalFile extends ActionSupport{
+public class ChangeOwnerForPersonalFile extends ActionSupport implements UserIdAware{
 
 	/** Eclipse generated Id	 */
 	private static final long serialVersionUID = -7262077243101493697L;
@@ -51,6 +52,9 @@ public class ChangeOwnerForPersonalFile extends ActionSupport{
 	
 	/** Collaborator to be made as new owner */
 	private Long newOwnerId;
+	
+	/** user making the change */
+	private Long userId;
 
 	/**
 	 * changes the file owner 
@@ -62,6 +66,12 @@ public class ChangeOwnerForPersonalFile extends ActionSupport{
 		log.debug("Change owner Personal file::" + personalFileId);
 		
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
+		
+		// user must be an owner of the file
+		if(!personalFile.getOwner().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
 		
 		IrUser newOwner = userService.getUser(newOwnerId, false);
 		
@@ -121,6 +131,11 @@ public class ChangeOwnerForPersonalFile extends ActionSupport{
 
 	public void setNewOwnerId(Long newOwnerId) {
 		this.newOwnerId = newOwnerId;
+	}
+
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }
