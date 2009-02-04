@@ -26,7 +26,7 @@
 <html>
 
 <head>
-    <title><fmt:message key="home.welcome" /></title>
+    <title>Upload files</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -60,7 +60,7 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h1>Upload file(s) to: <c:if test="${folderId > 0}">${personalFolder.fullPath}</c:if><c:if test="${folderId <=0 }">${user.username}</c:if></h1>
+        <h3>Upload file(s) to: <c:if test="${folderId > 0}">${personalFolder.fullPath}</c:if><c:if test="${folderId <=0 }">${user.username}</c:if></h3>
   
         <div id="bd">  
             <c:url var="myFoldersUrl" value="/user/workspace.action"/>
@@ -82,35 +82,23 @@
 	            <input type="hidden" value="${folderId}" name="parentFolderId"/>
 	        </form>
             
-            <br/>
-            <br/>
-            
 	        <ur:basicForm id="fileInfo" name="newFiles" enctype="multipart/form-data" 
 	            action="user/uploadFiles.action">
 	           <input type="hidden" id="file_upload_table_id" value="1"/>
-	           <table class="formTable">
-	           
-	           
-	               <tr>
-	                   <td>
-	                       <button type="button" class="ur_button" 
-	                                      onmouseover="this.className='ur_buttonover';"
- 		                                  onmouseout="this.className='ur_button';"
- 		                                  onclick="javascript:YAHOO.ur.file.upload.addFileSets(1, false)">Add Another</button>
-	                   </td>
-	                   <td>
-	                       <input type="submit" class="ur_button" 
-	                                      onmouseover="this.className='ur_buttonover';"
- 		                                  onmouseout="this.className='ur_button';"  value="Upload Files"/>
-	                   </td>
-	                   <td>
-	                       <button type="button" class="ur_button" 
-	                                      onmouseover="this.className='ur_buttonover';"
- 		                                  onmouseout="this.className='ur_button';"
- 		                                  onclick="javascript:document.cancelAddFilesForm.submit();">Cancel</button>
-	                   </td>
-	               </tr>
-	           </table>
+	
+	          <button type="button" class="ur_button" 
+	              onmouseover="this.className='ur_buttonover';"
+ 		          onmouseout="this.className='ur_button';"
+ 		          onclick="javascript:YAHOO.ur.file.upload.addFileSets(1, false)">Add Another</button>
+	          
+	          <input type="submit" class="ur_button" 
+	              onmouseover="this.className='ur_buttonover';"
+ 		          onmouseout="this.className='ur_button';"  value="Upload Files"/>
+	          
+	          <button type="button" class="ur_button" 
+	                 onmouseover="this.className='ur_buttonover';"
+ 		             onmouseout="this.className='ur_button';"
+ 		             onclick="javascript:document.cancelAddFilesForm.submit();">Cancel</button>
 	           <input type="hidden" name="folderId" value="${folderId}"/>
                
                
