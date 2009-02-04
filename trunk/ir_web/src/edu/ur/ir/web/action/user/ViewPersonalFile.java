@@ -25,6 +25,8 @@ import com.opensymphony.xwork2.Preparable;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserFileSystemService;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Loads a file for viewing.  This also loads the folder path for
@@ -33,7 +35,7 @@ import edu.ur.ir.user.UserFileSystemService;
  * @author Nathan Sarr
  *
  */
-public class ViewPersonalFile extends ActionSupport implements Preparable{
+public class ViewPersonalFile extends ActionSupport implements Preparable, UserIdAware{
 	
 	/** Eclipse generated id */
 	private static final long serialVersionUID = -897765911300935590L;
@@ -44,7 +46,14 @@ public class ViewPersonalFile extends ActionSupport implements Preparable{
 	/** Personal file the user wishes to look at */
 	private PersonalFile personalFile;
 	
+	/** service for accessing user file system */
 	private UserFileSystemService userFileSystemService;
+	
+	/** user service for dealing with user information */
+	private UserService userService;
+
+	/** id of the user accessing the information */
+	private Long userId;
 	
     /** set of folders that are the path for the current file */
     private Collection <PersonalFolder> folderPath;
@@ -59,6 +68,8 @@ public class ViewPersonalFile extends ActionSupport implements Preparable{
 
 	public void prepare() throws Exception {
 	    personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
+	    
+
 	    PersonalFolder parentFolder = personalFile.getPersonalFolder();
 	    if( parentFolder != null )
 	    {
@@ -66,8 +77,22 @@ public class ViewPersonalFile extends ActionSupport implements Preparable{
 	    }
 	}
 	
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+	
 	public String execute()
 	{
+	    if( !personalFile.getOwner().getId().equals(userId))
+	    {
+	    	return "accessDenied";
+	    }
+	    
+	    
 		return SUCCESS;
 	}
 
@@ -93,5 +118,11 @@ public class ViewPersonalFile extends ActionSupport implements Preparable{
 
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
+	}
+
+	@Override
+	public void setUserId(Long userId) {
+		// TODO Auto-generated method stub
+		
 	}
 }
