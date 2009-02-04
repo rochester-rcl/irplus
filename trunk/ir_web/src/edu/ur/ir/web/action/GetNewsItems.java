@@ -86,7 +86,6 @@ public class GetNewsItems extends ActionSupport{
     	Date d = new Date();
     	int newsItemCount = newsService.getAvailableNewsItemsCount(d).intValue();
     	
-    	System.out.println("Getting researhcer picture researcher count = " + newsItemCount);
     	if( newsItemCount > 0 )
     	{
     		// we can grab them all at once
