@@ -66,6 +66,12 @@ public class ViewPersonalFolderProperties extends ActionSupport implements UserI
 	public String execute()
 	{
 	    personalFolder = userFileSystemService.getPersonalFolder(personalFolderId, false);
+	    
+	    if( !personalFolder.getOwner().getId().equals(userId))
+	    {
+	    	return "accessDenied";
+	    }
+	    
 	    PersonalFolder parentFolder = personalFolder.getParent();
 	    if( parentFolder != null )
 	    {
@@ -73,6 +79,7 @@ public class ViewPersonalFolderProperties extends ActionSupport implements UserI
 	    }
 	    
 	    IrUser user = userService.getUser(userId, false);
+	    
 	    folderSize = userFileSystemService.getFolderSize(user, personalFolder);
 	    
 	    filesCount = personalFolder.getFiles().size();
