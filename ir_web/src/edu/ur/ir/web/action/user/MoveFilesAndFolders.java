@@ -193,7 +193,11 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 		{
 		    destination = 
 		    	userFileSystemService.getPersonalFolder(destinationId, false);
-		    
+		    if( !destination.getOwner().getId().equals(userId))
+		    {
+		    	// user cannot move file into a destination that they do not own
+		    	return "accessDenied";
+		    }
 		    
 		    notMoved = 
 				userFileSystemService.moveFolderSystemInformation(destination, 
