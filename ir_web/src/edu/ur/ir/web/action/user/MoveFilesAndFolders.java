@@ -159,7 +159,7 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 	 */
 	public String move()
 	{
-		log.debug("move called");
+		log.debug("move files and folders called");
 		user = userService.getUser(userId, false);
 
 		List<FileSystem> notMoved = new LinkedList<FileSystem>();
@@ -168,38 +168,26 @@ public class MoveFilesAndFolders extends ActionSupport implements UserIdAware {
 		List<Long> listFolderIds = new LinkedList<Long>();
 		for( Long id : folderIds)
 		{
+			log.debug("adding folder id " + id);
 		    listFolderIds.add(id);
 		}
 		
+		// folders are accessed by user id so they cannot move folders that do
+		// not belong to them.
 		foldersToMove = userFileSystemService.getFolders(userId, listFolderIds);
-		
-		for( PersonalFolder f : foldersToMove)
-		{
-			// user cannot move folders that they do not own
-			if( !f.getOwner().getId().equals(userId))
-			{
-				return "accessDenied";
-			}
-		}
-		
 
 		List<Long> listFileIds = new LinkedList<Long>();
 		for( Long id : fileIds)
 		{
+			log.debug("adding file id " + id);
 		    listFileIds.add(id);
 		}
 		
+		// files are accessed by user id so this prevents users from accessing files
+		// that do not belong to them
 		filesToMove = userFileSystemService.getFiles(userId, listFileIds);
 		
-		for( PersonalFile f : filesToMove)
-		{
-			// user cannot move files that they do not own
-			if( !f.getOwner().getId().equals(userId))
-			{
-				return "accessDenied";
-			}
-		}
-		
+
 		log.debug( "destination id = " + destinationId);
 		if( !destinationId.equals(UserFileSystemService.ROOT_FOLDER_ID))
 		{
