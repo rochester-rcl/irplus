@@ -106,53 +106,49 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
 
+	
+	private void moveToUser(Repository repository)
+	{
+ 		for(SharedInboxFile inboxFile : filesToMove)
+		{
+			PersonalFile pf = null;
+		    try 
+		    {
+			    pf = userFileSystemService.addSharedInboxFileToFolders(user, 
+							    inboxFile);
+				userWorkspaceIndexService.addToIndex(repository, pf);
+				userWorkspaceIndexService.deleteFromIndex(inboxFile);
+			}
+		    catch (DuplicateNameException e) 
+		    {
+		    	filesNotMoved.add(inboxFile);
+			}	
+		}
+	}
 
 	/**
 	 * Removes the selected files to workspace
 	 * 
 	 * @return
 	 */
-	private void moveToFolder()
+	private void moveToFolder(Repository repository)
 	{
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
-			false);
-		for(Long fileId : sharedInboxFileIds)
+		for(SharedInboxFile inboxFile : filesToMove)
 		{
-			SharedInboxFile inboxFile = userFileSystemService.getSharedInboxFile(fileId, false);
-	        PersonalFile pf = null;
+			PersonalFile pf = null;
 	        
-				if( inboxFile != null )
-				{
-					// get the index folder
-					if( !destinationId.equals(UserFileSystemService.ROOT_FOLDER_ID))
-					{
-					    destination = 
-					    	userFileSystemService.getPersonalFolder(destinationId, false);
-
-			            try {
-							pf = userFileSystemService.addSharedInboxFileToFolders(destination,  inboxFile);
-							userWorkspaceIndexService.addToIndex(repository , pf);
-							userWorkspaceIndexService.deleteFromIndex(inboxFile);
-			            } catch (DuplicateNameException e) {
-			            	filesNotMoved.add(inboxFile);
-						}
-			            
-			        }
-			        else
-			        {
-			    	    try {
-							pf = userFileSystemService.addSharedInboxFileToFolders(user, 
-								    inboxFile);
-							userWorkspaceIndexService.addToIndex(repository, pf);
-							userWorkspaceIndexService.deleteFromIndex(inboxFile);
-							
-						} catch (DuplicateNameException e) {
-			    			filesNotMoved.add(inboxFile);
-						}	
-			        }
+			if( inboxFile != null )
+			{
+		        try 
+		        {
+				    pf = userFileSystemService.addSharedInboxFileToFolders(destination,  inboxFile);
+					userWorkspaceIndexService.addToIndex(repository , pf);
+					userWorkspaceIndexService.deleteFromIndex(inboxFile);
+		        } catch (DuplicateNameException e) {
+		            filesNotMoved.add(inboxFile);
 				}
+			}
 		}
-
 	}
 	
 	/**
@@ -177,6 +173,11 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		    destination = 
 		    	userFileSystemService.getPersonalFolder(destinationId, false);
 		    
+		    // user passed in destination that does not belong to them
+		    if( !destination.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
 		    destinationPath = userFileSystemService.getPersonalFolderPath(destination.getId());
 		    currentDestinationContents.addAll(destination.getChildren());
 		    currentDestinationContents.addAll(destination.getFiles());
@@ -210,7 +211,24 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		
 		filesToMove = userFileSystemService.getSharedInboxFiles(userId, listFileIds);
 		
-		moveToFolder();
+		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
+				false);
+		
+		
+		if( !destinationId.equals(UserFileSystemService.ROOT_FOLDER_ID))
+		{
+			log.debug("checking destination");
+			destination = userFileSystemService.getPersonalFolder(destinationId, false);
+			if( !destination.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
+		    moveToFolder(repository);
+		}
+		else
+		{
+			moveToUser(repository);
+		}
 		
 		if( filesNotMoved.size() > 0 )
 		{
@@ -268,6 +286,13 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		
 		for (Long id : sharedInboxFileIds) {
 			SharedInboxFile inboxFile = userFileSystemService.getSharedInboxFile(id, false);
+			
+			// user trying to delete files that do not belong to them
+			// exit immediately
+			if(!inboxFile.getSharedWithUser().getId().equals(userId))
+			{
+				return ("accessDenied");
+			}
 			inviteUserService.deleteSharedInboxFile(inboxFile);
 		}
 		

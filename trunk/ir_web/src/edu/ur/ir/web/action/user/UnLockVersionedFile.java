@@ -26,6 +26,7 @@ import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.UserFileSystemService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Unlock the versioned file.
@@ -33,11 +34,13 @@ import edu.ur.ir.user.UserFileSystemService;
  * @author Nathan Sarr
  *
  */
-public class UnLockVersionedFile extends ActionSupport{
+public class UnLockVersionedFile extends ActionSupport implements UserIdAware {
 	
 	public static final String UN_LOCK_NOT_ALLOWED = "UN_LOCK_NOT_ALLOWED";
 	public static final String UN_LOCKED_BY_USER = "UN_LOCKED_BY_USER";
 	
+	/** id of the user attempting access */
+	private Long userId;
 	
 	/** Eclipse generated id. */
 	private static final long serialVersionUID = -4846716439383595220L;
@@ -74,6 +77,14 @@ public class UnLockVersionedFile extends ActionSupport{
 		
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
 		IrUser user = personalFile.getOwner();
+		
+		// verify access
+		if( !user.getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
+		
 		VersionedFile versionedFile =  personalFile.getVersionedFile();
 		
 		if( repositoryService.canUnlockFile(versionedFile, user) )
@@ -200,6 +211,16 @@ public class UnLockVersionedFile extends ActionSupport{
 	 */
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
+	}
+
+
+	/**
+	 * User tying to access the data
+	 * 
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

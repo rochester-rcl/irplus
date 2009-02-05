@@ -178,6 +178,11 @@ public class ManageUsers extends Pager implements Preparable{
 	/** Row End */
 	private int rowEnd;
 	
+	/** message sent to the user */
+	private String message;
+	
+
+
 	/** Default constructor */
 	public  ManageUsers() 
 	{
@@ -415,9 +420,13 @@ public class ManageUsers extends Pager implements Preparable{
 	 * @throws UserHasPublishedDeleteException
 	 * @throws UserDeletedPublicationException 
 	 */
-	public String delete() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public String delete() 
 	{
 		log.debug("Delete users called");
+		
+		message = "The following users could not be deleted because they have published into the system :";
+		
+		deleted = true;
 		if( userIds != null ) {
 			List<Long> myIds = new LinkedList<Long>();
 
@@ -429,7 +438,23 @@ public class ManageUsers extends Pager implements Preparable{
 		    
 		    for( IrUser user : users)
 		    {
- 			    userService.deleteUser(user);
+ 			    try 
+ 			    {
+					userService.deleteUser(user);
+				} 
+ 			    catch (UserHasPublishedDeleteException e) 
+ 			    {
+ 			    	message = message + " " + user.getUsername() + ", ";
+ 			    	deleted = false;
+					log.error("user has published", e);
+					
+				} 
+ 			    catch (UserDeletedPublicationException e) 
+ 			    {
+ 			    	message = message + " " + user.getUsername() + ", ";
+ 			    	deleted = false;
+					log.error("user has published", e);
+				}
 		    }
  			
  			for( IrUser u : users)
@@ -441,7 +466,7 @@ public class ManageUsers extends Pager implements Preparable{
  			}
 		}
 
-		deleted = true;
+		
 		return "deleted";
 	}
  
@@ -818,7 +843,6 @@ public class ManageUsers extends Pager implements Preparable{
 				}
 			} else {
 				irUser.removeRole(IrRole.RESEARCHER_ROLE);
-				// TODO revoke researcher role
 			}
     	}
     	
@@ -990,6 +1014,14 @@ public class ManageUsers extends Pager implements Preparable{
 	public void setResearcherIndexService(
 			ResearcherIndexService researcherIndexService) {
 		this.researcherIndexService = researcherIndexService;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 
