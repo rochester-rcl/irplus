@@ -108,32 +108,22 @@
                <!--  this table is built dynamically -->
                <div id="file_forms">
                </div>
-	         
+     
+	           <button type="button" class="ur_button" 
+	               onmouseover="this.className='ur_buttonover';"
+ 		           onmouseout="this.className='ur_button';"
+ 		           onclick="javascript:YAHOO.ur.file.upload.addFileSets(1, false)">Add Another</button>
 
-              <table class="formTable">
+	           <input type="submit" class="ur_button" 
+	               onmouseover="this.className='ur_buttonover';"
+ 		           onmouseout="this.className='ur_button';"  value="Upload Files"/>
 	           
-	           
-	               <tr>
-	                   <td>
-	                       <button type="button" class="ur_button" 
-	                                      onmouseover="this.className='ur_buttonover';"
- 		                                  onmouseout="this.className='ur_button';"
- 		                                  onclick="javascript:YAHOO.ur.file.upload.addFileSets(1, false)">Add Another</button>
-	                   </td>
-	                   <td>
-	                       <input type="submit" class="ur_button" 
-	                                      onmouseover="this.className='ur_buttonover';"
- 		                                  onmouseout="this.className='ur_button';"  value="Upload Files"/>
-	                   </td>
-	                   <td>
-	                       <button type="button" class="ur_button" 
-	                                      onmouseover="this.className='ur_buttonover';"
- 		                                  onmouseout="this.className='ur_button';"
- 		                                  onclick="javascript:document.cancelAddFilesForm.submit();">Cancel</button>
-	                   </td>
-	               </tr>
-	           </table>
-	        </ur:basicForm>
+	           <button type="button" class="ur_button" 
+	               onmouseover="this.className='ur_buttonover';"
+ 		           onmouseout="this.className='ur_button';"
+ 		           onclick="javascript:document.cancelAddFilesForm.submit();">Cancel</button>
+	        
+	         </ur:basicForm>
              <!--  end body div -->
       </div>
       <!--  end body div -->

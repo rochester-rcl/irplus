@@ -219,7 +219,7 @@
                     <ur:basicForm id="editPermissions" name="editPermissionsForm" 
 		                    method="post" action="user/editPermissions.action">
 		            	<ur:div id="editPermissionsDialogFields">
-	                       <%@ include file="/pages/user/workspace/edit_permissions_form.jsp"%>
+		            	    <c:import url="edit_permissions_form.jsp"/>
 	                  	</ur:div>
 				          
 	                </ur:basicForm>
