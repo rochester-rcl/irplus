@@ -103,6 +103,7 @@
         <action name="uploadFiles" method="uploadFiles"
                class="edu.ur.ir.web.action.user.AddPersonalFiles">
             <interceptor-ref name="urUploadStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">workspace.action?parentFolderId=${folderId}</result>
             <result name="input">/pages/user/workspace/upload_files.jsp</result>
         </action>
@@ -110,6 +111,7 @@
         <action name="singleFileUpload" method="uploadFiles" 
             class="edu.ur.ir.web.action.user.AddPersonalFiles">
             <interceptor-ref name="urUploadStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/single_file_upload_frag.jsp</result>
             <result name="input">/pages/user/workspace/single_file_upload_frag.jsp</result>
         </action>
@@ -146,24 +148,28 @@
         <!-- Allows a user to view the information for a personal file -->
         <action name="viewPersonalFile" class="edu.ur.ir.web.action.user.ViewPersonalFile">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/file_properties.jsp</result>
         </action>
  
          <!-- Allows a user to view the properties for a personal folder -->
         <action name="viewFolderProperties" class="edu.ur.ir.web.action.user.ViewPersonalFolderProperties">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/folder_properties.jsp</result>
         </action>
                
         <!-- This only returns a fragment of the personal folder properties -->
         <action name="getPersonalFolderProperties" class="edu.ur.ir.web.action.user.ViewPersonalFolderProperties">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/folder_properties_inner_page.jsp</result>
         </action>
                        
         <!-- This only returns a fragment of the personal file properties -->
         <action name="getPersonalFileProperties" class="edu.ur.ir.web.action.user.ViewPersonalFile">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/file_properties_inner_page.jsp</result>
         </action>
         
@@ -189,12 +195,6 @@
         </action> 
 
         
-        <!--  Returns a list of folders that are available based on what the user wishes to move -->
-        <action name="availablePersonalFoldersMove" class="edu.ur.ir.web.action.user.AvailablePersonalFolderMove">
-            <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/workspace/available_folders_move.jsp</result>
-        </action>
-
         <!--  moves the selected files and folders to a given location -->
         <action name="movePersonalFileSystemObjects" class="edu.ur.ir.web.action.user.MoveFilesAndFolders">
             <interceptor-ref name="editStack"/>
@@ -204,18 +204,21 @@
         <!--  lock a file so that no other user can upload changes -->
         <action name="lockVersionedFile" class="edu.ur.ir.web.action.user.LockVersionedFile" >
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/lock_file_response.jsp</result>
         </action>
         
         <!--  un lock a file so that other users can upload changes -->
         <action name="unLockVersionedFile" class="edu.ur.ir.web.action.user.UnLockVersionedFile" >
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/unlock_file_response.jsp</result>
         </action>
         
         <!--  Rename file  -->
         <action name="*File" class="edu.ur.ir.web.action.user.RenamePersonalFile" method="{1}">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/rename_file_form.jsp</result>
             <result name="get">/pages/user/workspace/rename_file_form.jsp</result>
         </action>   
@@ -231,6 +234,7 @@
             class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
             method="viewLocations">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/move_folder.jsp</result>
         </action>
         
@@ -239,6 +243,7 @@
             class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
             method="viewLocations">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/move_folder_frag.jsp</result>
         </action>
         
@@ -247,6 +252,7 @@
             class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
             method="move">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/move_folder_frag.jsp</result>
         </action>
 
@@ -273,6 +279,7 @@
             class="edu.ur.ir.web.action.user.ManageSharedInboxFiles"
             method="viewLocations">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/move_shared_file.jsp</result>
         </action>
         
@@ -281,14 +288,15 @@
             class="edu.ur.ir.web.action.user.ManageSharedInboxFiles"
             method="viewLocations">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/move_shared_file_frag.jsp</result>
-        </action>
-        
+        </action>     
         
         <action name="moveSharedFileInformation"
             class="edu.ur.ir.web.action.user.ManageSharedInboxFiles"
             method="move">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/move_shared_file_frag.jsp</result>
         </action>        
 
@@ -296,6 +304,7 @@
             class="edu.ur.ir.web.action.user.ManageSharedInboxFiles"
             method="deleteSharedInboxFiles">
             <interceptor-ref name="crudStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/shared_file_inbox_table_frag.jsp</result>
         </action>  
               
@@ -335,12 +344,6 @@
         <!--  Move Collections and Publications actions	 -->
         <!--  ****************************************** -->
         
-        <!--  Returns a list of collections that are available based on what the user wishes to move -->
-        <action name="availablePersonalCollectionsMove" class="edu.ur.ir.web.action.user.AvailablePersonalCollectionMove">
-            <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/workspace/available_collections_move.jsp</result>
-        </action>
-
         <!--  moves the selected publications and collections to a given location -->
         <action name="movePersonalCollectionSystemObjects" class="edu.ur.ir.web.action.user.MoveItemsAndCollections">
             <interceptor-ref name="editStack"/>
@@ -841,7 +844,7 @@
         </action>
         
         <action name="viewInviteUser" class="edu.ur.ir.web.action.user.InviteUser">
-            <interceptor-ref name="editStack"/>
+            <interceptor-ref name="editStack"/>           
             <result name="success">/pages/user/workspace/invite_user.jsp</result>
         </action>
        
@@ -858,12 +861,15 @@
 
         <action name="updatePermissions" method="updatePermissions"  
         		class="edu.ur.ir.web.action.user.InviteUser">
+        	<interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="added">/pages/user/workspace/edit_permissions_form.jsp</result>
         </action>
 
         <action name="deleteCollaborator" method="deleteCollaborator" 
                class="edu.ur.ir.web.action.user.InviteUser">
             <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">viewInviteUser.action?shareFileIds=${shareFileIds}&amp;parentFolderId=${parentFolderId}</result>
             <result name="workspace" type="redirect">workspace.action?parentFolderId=${parentFolderId}</result>
         </action>
@@ -883,6 +889,7 @@
             method="sendInvite"
             class="edu.ur.ir.web.action.user.InviteUser">
             <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="input">/pages/user/workspace/invite_user.jsp</result>
             <result name="added">/pages/user/workspace/add_invite_response.jsp</result>
         </action> 
