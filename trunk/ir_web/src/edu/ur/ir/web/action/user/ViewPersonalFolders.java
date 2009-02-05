@@ -112,6 +112,14 @@ public class ViewPersonalFolders extends ActionSupport implements
 	 */
 	public String getTable()
 	{
+		if(parentFolderId != null && parentFolderId > 0)
+		{
+		    PersonalFolder parent = userFileSystemService.getPersonalFolder(parentFolderId, false);
+		    if( !parent.getOwner().getId().equals(userId))
+		    {
+		    	return "accessDenied";
+		    }
+		}
 		log.debug("getTableCalled");
 		createFileSystem();
 
