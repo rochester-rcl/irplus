@@ -91,8 +91,6 @@ public class ViewPersonalFile extends ActionSupport implements Preparable, UserI
 	    {
 	    	return "accessDenied";
 	    }
-	    
-	    
 		return SUCCESS;
 	}
 
@@ -120,9 +118,7 @@ public class ViewPersonalFile extends ActionSupport implements Preparable, UserI
 		this.userFileSystemService = userFileSystemService;
 	}
 
-	@Override
 	public void setUserId(Long userId) {
-		// TODO Auto-generated method stub
-		
+		this.userId = userId;
 	}
 }

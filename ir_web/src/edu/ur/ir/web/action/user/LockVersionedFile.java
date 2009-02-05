@@ -26,6 +26,7 @@ import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.UserFileSystemService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * This action is for locking a versioned file.
@@ -33,12 +34,14 @@ import edu.ur.ir.user.UserFileSystemService;
  * @author Nathan Sarr
  *
  */
-public class LockVersionedFile extends ActionSupport{
+public class LockVersionedFile extends ActionSupport implements UserIdAware {
 	
 	public static final String LOCK_OBTAINED = "LOCK_OBTAINED";
 	public static final String LOCK_NOT_ALLOWED = "LOCK_NOT_ALLOWED";
 	public static final String LOCK_BY_USER = "LOCKED_BY_USER";
 	
+	/** user id accessing the inforamtion */
+	private Long userId;
 	
 	/** Eclipse generated id. */
 	private static final long serialVersionUID = -4846716439383595220L;
@@ -75,6 +78,15 @@ public class LockVersionedFile extends ActionSupport{
 		
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
 		IrUser user = personalFile.getOwner();
+		
+		// verify access
+		if( !user.getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
+		
+		
 		VersionedFile versionedFile =  personalFile.getVersionedFile();
 		
 		if( repositoryService.canLockVersionedFile(versionedFile, user))
@@ -189,6 +201,11 @@ public class LockVersionedFile extends ActionSupport{
 
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
+	}
+
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

@@ -31,6 +31,7 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserFileSystemService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Action to rename personal file
@@ -38,7 +39,7 @@ import edu.ur.ir.user.UserFileSystemService;
  * @author Sharmila Ranganathan
  *
  */
-public class RenamePersonalFile extends ActionSupport{
+public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 
 	/** Eclipse generated Id	 */
 	private static final long serialVersionUID = -7262077243101493697L;
@@ -60,6 +61,9 @@ public class RenamePersonalFile extends ActionSupport{
 	
 	/** Id of personal file */
 	private Long personalFileId;
+	
+	/** id of the user trying to make the change */
+	private Long userId;
 
 	/**
 	 * Renames a file
@@ -71,6 +75,13 @@ public class RenamePersonalFile extends ActionSupport{
 		log.debug("Rename Personal file::" + personalFileId);
 		
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
+		
+		// check access
+		if( !personalFile.getOwner().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
 
 		boolean hasIllegalCharacter = false;
 		try {
@@ -268,6 +279,11 @@ public class RenamePersonalFile extends ActionSupport{
 	 */
 	public void setNewFileName(String newFileName) {
 		this.newFileName = newFileName;
+	}
+
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

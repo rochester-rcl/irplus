@@ -130,8 +130,15 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	{
 		
 		log.debug("Upload files called");
-		
 		IrUser user = userService.getUser(userId, false);
+		
+		if( personalFolder != null && !personalFolder.getOwner().getId().equals(userId))
+    	{
+			//destination does not belong to user
+    		log.error("user does not own folder = " + personalFolder + " user = " + user);
+    		return("accessDenied");
+    		
+    	}
 		
 		//only authoring roles can add personal files
 		if( !user.hasRole(IrRole.AUTHOR_ROLE)  )
@@ -199,21 +206,21 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 					    log.debug( "Creating EMPTY file " + fileFileName[index]);
 					    if( personalFolder == null)
 					    {
-					    	try
-					    	{
+					        try
+					        {
 					            pf = userFileSystemService.addFileToUser(repository, 
-							    user, 
-							    theFileName,
-							    userFileDescription[index],
-							    fileFileName[index]);
+						        user, 
+						        theFileName,
+						        userFileDescription[index],
+						        fileFileName[index]);
 					            addedFiles.add(pf);
-					    	}
-					    	catch(DuplicateNameException e)
-					    	{
-					    		filesNotAdded.add(fileUploadInfo);
-					    	} catch (IllegalFileSystemNameException ifsne) {
-					    		illegalFileNames.add(fileUploadInfo);
-					    	}
+					        }
+					        catch(DuplicateNameException e)
+					        {
+					    	    filesNotAdded.add(fileUploadInfo);
+					        } catch (IllegalFileSystemNameException ifsne) {
+					    	    illegalFileNames.add(fileUploadInfo);
+					        }
 					    }
 					    else
 					    {

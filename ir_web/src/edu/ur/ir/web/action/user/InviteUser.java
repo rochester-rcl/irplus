@@ -167,6 +167,8 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 				parsedFileIds.add(fileId);
 			}
 			
+		    // files to share are accessed using user id - so no unauthorized 
+		    // access can occur
 		    filesToShare = userFileSystemService.getFiles(userId, parsedFileIds);
 		}
 		return SUCCESS;
@@ -265,13 +267,41 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	
 
 	/**
 	 * Send Invite for a user to collaborate on a document
 	 */
 	public String sendInvite() {
 		inviteSent = false;
+		
+		// Create invite info object
+		IrUser invitingUser = userService.getUser(userId, true);
+		
+		StringTokenizer tokenizer = new StringTokenizer(shareFileIds, ",");
+		
+		List<PersonalFile> personalFilesToShare = new LinkedList<PersonalFile>();
 
+		// Make a list of files that has to be shared - verify permissions to share
+	    while(tokenizer.hasMoreElements())
+	    {
+	    	Long fileId = new Long(tokenizer.nextToken());
+
+			PersonalFile personalFile = userFileSystemService.getPersonalFile(fileId, false);
+			IrAcl acl = securityService.getAcl(personalFile.getVersionedFile(), invitingUser);
+			if( acl == null || !acl.isGranted(SHARE, invitingUser, false))
+			{
+				return("accessDenied");
+			}
+			
+			log.debug("Inviting a user to collaborate on personal file ID = " + personalFile.toString() );
+	
+			personalFilesToShare.add(personalFile);
+
+	    }
+		
+	
+		
 		if (selectedPermissions.size() == 0) {
 			inviteErrorMessage = getText("emptyPermissions");
 			return "added";
@@ -282,8 +312,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		// Check if user exist in the system
 		IrUser invitedUser = userService.getUserForVerifiedEmail(email);
 
-		// Create invite info object
-		IrUser invitingUser = userService.getUser(userId, true);
+
 		
 		//check if the user is sharing the file with themselves
 		if (invitingUser.equals(invitedUser)) {
@@ -292,26 +321,18 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		}		
 		
 		Set<VersionedFile>  versionedFiles = new HashSet<VersionedFile>();
-		
-		StringTokenizer tokenizer = new StringTokenizer(shareFileIds, ",");
-
-		// Make a list of files that has to be shared
-	    while(tokenizer.hasMoreElements())
-	    {
-	    	Long fileId = new Long(tokenizer.nextToken());
-
-			PersonalFile personalFile = userFileSystemService.getPersonalFile(fileId, false);
-			log.debug("Inviting a user to collaborate on personal file ID = " + personalFile.toString() );
-	
-			VersionedFile versionedFile = personalFile.getVersionedFile();
-	
+		for(PersonalFile pf : personalFilesToShare)
+		{
+			VersionedFile versionedFile = pf.getVersionedFile();
+			
 			//check if the file is already shared with this user 
 			//AND 
 			//check if email is already sent to this Id for sharing and the user has not created the account yet
 			if ((versionedFile.getCollaborator(invitedUser) == null) && (!versionedFile.getInviteeEmails().contains(email))) {
 				versionedFiles.add(versionedFile);
 			}
-	    }
+		}
+
 	
 		InviteInfo inviteInfo
 		= new InviteInfo(invitingUser, versionedFiles);
@@ -382,11 +403,19 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	public String deleteCollaborator() {
 
 		String returnResult = SUCCESS;
+		FileCollaborator fileCollaborator = inviteUserService.findFileCollaborator(fileCollaboratorId, true);
 		
-		FileCollaborator fileCollaborator 
-			= inviteUserService.findFileCollaborator(fileCollaboratorId, true);
+		// make sure user doing the un-inviting is valid
+		IrUser unInvitingUser = userService.getUser(userId, true);
+		
+		IrAcl acl = securityService.getAcl(fileCollaborator.getVersionedFile(), unInvitingUser);
+		if( acl == null || !acl.isGranted(SHARE, unInvitingUser, false))
+		{
+		    return("accessDenied");
+		}
 		
 		IrUser user = fileCollaborator.getCollaborator();
+
 		// If user is unsharing themselves, then unshare the user and load the parent folder
 		if (userId.equals(user.getId())) {
 			returnResult =  "workspace";
@@ -394,7 +423,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 
 		// un-index the file
 		PersonalFile pf = userFileSystemService.getPersonalFile(user, fileCollaborator.getVersionedFile());
-	
+
 		// Check if personal file exist. Sometimes the file may be still in Shared file inbox.
 		// In that case, there is no need to delete from index
 		if (pf != null) {
@@ -419,6 +448,25 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	 */
 	public String deletePendingInvitee() {
 		log.debug("Removing Pending invit info Id= " + inviteInfoId);
+		
+		// verify access to unshare
+		PersonalFile unsharingUserPersonalFile = userFileSystemService.getPersonalFile(personalFileId, false);
+		
+		if(unsharingUserPersonalFile != null)
+		{
+		    // make sure user doing the un-inviting is valid
+		    IrUser unInvitingUser = userService.getUser(userId, true);
+		
+		    IrAcl acl = securityService.getAcl(unsharingUserPersonalFile.getVersionedFile(), unInvitingUser);
+		    if( acl == null || !acl.isGranted(SHARE, unInvitingUser, false))
+		    {
+			    return("accessDenied");
+		    }
+		}
+		else
+		{
+			return("accessDenied");
+		}
 
 		InviteInfo inviteInfo = inviteUserService.getInviteInfoById(inviteInfoId, false);
 		
@@ -461,6 +509,20 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	public String updatePermissions() {
 		
 		log.debug("Update Permissions for :" + fileCollaboratorId);
+		FileCollaborator fileCollaborator  = inviteUserService.findFileCollaborator(fileCollaboratorId, true);
+		
+		// verify access to unshare
+		VersionedFile versionedFile = fileCollaborator.getVersionedFile();
+
+		// make sure user doing the un-inviting is valid
+		IrUser changingPermissionsUser = userService.getUser(userId, true);
+		
+		IrAcl acl = securityService.getAcl(versionedFile, changingPermissionsUser);
+		if( acl == null || !acl.isGranted(SHARE, changingPermissionsUser, false))
+		{
+		    return("accessDenied");
+		}
+		
 		
 		added = false;
 
@@ -470,8 +532,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			return "added";
 		}
 		
-		FileCollaborator fileCollaborator 
-		= inviteUserService.findFileCollaborator(fileCollaboratorId, true);
+
 		
 		securityService.deletePermissions(fileCollaborator.getVersionedFile().getId(),
 				CgLibHelper.cleanClassName(fileCollaborator.getVersionedFile().getClass().getName()), fileCollaborator.getCollaborator());
