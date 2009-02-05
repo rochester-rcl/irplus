@@ -77,36 +77,30 @@
 	        <!--  first tab -->
 	        <div class="yui-content">
 	            <div id="tab1">
-	            	  <br>
-	            	  
-				      <table>
-				          <tr>
-								<td>
-					                <button id="showUser" class="ur_button" 
-			 		                               onmouseover="this.className='ur_buttonover';"
-			 		                               onmouseout="this.className='ur_button';">New User</button> 
-				                </td>
-				                <td>
-				                    <button id="showDeleteUser" class="ur_button" 
-			 		                               onmouseover="this.className='ur_buttonover';"
-			 		                               onmouseout="this.className='ur_button';">Delete</button>
-				                </td>		          
-				          </tr>
-				      </table>
-				      
+	            	 
+	            	  <br/>
+					     <button id="showUser" class="ur_button" 
+			 		         onmouseover="this.className='ur_buttonover';"
+			 		         onmouseout="this.className='ur_button';">New User</button> 
+				             
+				         <button id="showDeleteUser" class="ur_button" 
+			 		         onmouseover="this.className='ur_buttonover';"
+			 		         onmouseout="this.className='ur_button';">Delete</button>
 				      <ur:div id="newUsers"></ur:div>
 				</div>
 
 	            <div id="tab2">
 	            	<ur:basicForm method="post" id="user_search_form" name="userSearchForm" action="javascript:YAHOO.ur.user.searchUser(0,1,1);" >
-	            		<br>
+	            		
+	            		<br/>
 						Search User : <input type="input" name="query" size="50"/>
 						<button id="search_user" class="ur_button" type="button"
 		                       onmouseover="this.className='ur_buttonover';"
 		                       onmouseout="this.className='ur_button';"
 		                       onclick="javascript:YAHOO.ur.user.searchUser(0,1,1);">Search</button>
 					</ur:basicForm>
-					
+					<br/>
+	                <br/>
 					<div id="search_results_div"></div>
 				</div>
 
@@ -125,10 +119,8 @@
 		              action="admin/createUser.action">
 	                
 	                  <ur:div id="newUserDialogFields">
-	                       <%@ include file="/pages/admin/user/add_user_form.jsp" %>
+	                       <c:import url="/pages/admin/user/add_user_form.jsp"/>
 	                  </ur:div>
-
-
 		          </ur:basicForm>
 		      </ur:div>
 	      </ur:div>
@@ -140,10 +132,8 @@
 		              action="admin/changePassword.action">
 	                
 	                  <ur:div id="changePasswordDialogFields">
-	                       <%@ include file="/pages/admin/user/change_password_form.jsp" %>
+	                      <c:import url="/pages/admin/user/change_password_form.jsp"/>
 	                  </ur:div>
-
-
 		          </ur:basicForm>
 		      </ur:div>
 	      </ur:div>
@@ -154,8 +144,6 @@
 		      <ur:div cssClass="bd">
 		          <ur:basicForm id="deleteUser" name="deleteUser" method="POST" 
 		              action="admin/deleteUser.action">
-		              
-		              
 		              <ur:div id="deleteUserError" cssClass="errorMessage"></ur:div>
 			          <p>Are you sure you wish to delete the selected users?</p>
 		          </ur:basicForm>
@@ -173,6 +161,15 @@
 		          </ur:basicForm>
 		      </ur:div>
 	      </ur:div>
+	      
+	      	          
+	     <div id="error_dialog_box" class="hidden">
+	         <div class="hd">Error</div>
+		     <div class="bd">
+		         <div id="default_error_dialog_content">
+		         </div>
+		     </div>
+	     </div>
    </div>  
    <!--  end doc div -->    
 
