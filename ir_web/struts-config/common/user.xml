@@ -124,6 +124,7 @@
             method="getTable"
             class="edu.ur.ir.web.action.user.ViewPersonalFolders">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/folder_table.jsp</result>
         </action>
         
@@ -321,6 +322,7 @@
             method="getTable"
             class="edu.ur.ir.web.action.user.ViewPersonalCollections">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/collection_table.jsp</result>
         </action>
 
@@ -337,6 +339,7 @@
             method ="deleteCollectionSystemObjects"
             class="edu.ur.ir.web.action.user.ViewPersonalCollections">
             <interceptor-ref name="crudStack" />
+             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/collection_table.jsp</result>
         </action>
 
