@@ -486,25 +486,23 @@ YAHOO.ur.user = {
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
-	        {               		
+	        {  
+	            // we can clear the form if the users were deleted
+	            YAHOO.ur.user.clearDeleteUserForm();
+	            YAHOO.ur.user.deleteUserDialog.hide();
+	            
 		        //get the response from adding a user
 		        var response = eval("("+o.responseText+")");
-		    
+		       
 		        //if the user was not deleted then show the user the error message.
 		        // received from the server
 		        if( response.userDeleted == "false" )
 		        {
-		            var deleteUserError = document.getElementById('form_deleteUserError');
-	                deleteUserError.innerHTML = '<p id="newDeleteUserError">' 
-	                + response.message + '</p>';
-	                YAHOO.ur.user.deleteUserDialog.showDialog();
+		            var deleteUserError = document.getElementById('default_error_dialog_content');
+	                deleteUserError.innerHTML =  response.message;
+	                YAHOO.ur.user.errorDialog.showDialog();
 		        }
-		        else
-		        {
-		            // we can clear the form if the users were deleted
-		            YAHOO.ur.user.clearDeleteUserForm();
-		            YAHOO.ur.user.deleteUserDialog.hide();
-		        }
+		       
 		        // reload the table
 		        YAHOO.ur.user.getUsers(0,1,1,'lastName','asc');
 		    }
@@ -620,6 +618,39 @@ YAHOO.ur.user = {
 	        callback, null);			
 	},	
 	
+	createErrorDialog : function()
+	{
+	    // Define various event handlers for Dialog
+		var handleYes = function() 
+		{
+		    var contentArea = document.getElementById('default_error_dialog_content');
+		    contentArea.innerHTML = ""; 
+		    this.hide();
+		};
+
+		// Instantiate the Dialog
+		YAHOO.ur.user.errorDialog = 
+		    new YAHOO.widget.Dialog("error_dialog_box", 
+										     { width: "600px",
+											   visible: false,
+											   modal: true,
+											   close: false,										   
+											   buttons: [ { text:"Ok", handler:handleYes, isDefault:true } ]
+											} );
+		
+		YAHOO.ur.user.errorDialog.setHeader("Error");
+		
+		// Show the dialog
+	    YAHOO.ur.user.errorDialog.showDialog = function()
+	    {
+	        YAHOO.ur.user.errorDialog.show();
+	        YAHOO.ur.user.errorDialog.center();
+	    }			
+		
+		    // Render the Dialog
+		YAHOO.ur.user.errorDialog.render();
+	}, 
+	
  	//show the confirmation dialog
     loginAsUser : function(id)
     {
@@ -633,6 +664,7 @@ YAHOO.ur.user = {
 	init : function() 
 	{
 	    YAHOO.ur.user.getUsers(0,1,1,'lastName','asc');
+	    YAHOO.ur.user.createErrorDialog();
 	    YAHOO.ur.user.createNewUserDialog();
 	    YAHOO.ur.user.createDeleteUserDialog();
 	    YAHOO.ur.user.createChangePasswordDialog();
