@@ -114,6 +114,15 @@ public class ViewPersonalCollections extends ActionSupport implements
 	 */
 	public String getTable()
 	{
+		if(parentCollectionId != null && parentCollectionId > 0)
+		{
+			PersonalCollection parent = userPublishingFileSystemService.getPersonalCollection(parentCollectionId, false);
+			if(!parent.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
+			
+		}
 		log.debug("getTableCalled");
 		createFileSystem();
 		return SUCCESS;
@@ -133,6 +142,10 @@ public class ViewPersonalCollections extends ActionSupport implements
 		    {
 			    log.debug("Deleting collection with id " + collectionIds[index]);
 			    PersonalCollection pc = userPublishingFileSystemService.getPersonalCollection(collectionIds[index], false);
+			    if(!pc.getOwner().getId().equals(userId))
+			    {
+			    	return "accessDenied";
+			    }
 			    userPublishingFileSystemService.deletePersonalCollection(pc);
 		    }
 		}
@@ -143,6 +156,10 @@ public class ViewPersonalCollections extends ActionSupport implements
 			{
 				log.debug("Deleting item with id " + itemIds[index]);
 				PersonalItem pi = userPublishingFileSystemService.getPersonalItem(itemIds[index], false);
+				if( !pi.getOwner().getId().equals(userId))
+				{
+					return "accessDenied";
+				}
 				userPublishingFileSystemService.deletePersonalItem(pi);
 			}
 		}
@@ -211,9 +228,6 @@ public class ViewPersonalCollections extends ActionSupport implements
 	    		collectionNameSort = "none";
 	    	}
 	    }
-
-		
-	    
 	}
 	
 
