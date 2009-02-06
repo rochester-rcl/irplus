@@ -73,8 +73,6 @@
     <!-- sub type extension-->
     <!-- ****************************************** --> 
     <import resource="file-db-hibernate.xml"/>
-    
- 
     <import resource="ir-file-hibernate.xml"/>
     <import resource="ir-item-hibernate.xml"/>
     <import resource="ir-person-hibernate.xml"/>
@@ -101,11 +99,6 @@
    <!-- News Service  -->
    <!-- ****************************************** --> 
    <import resource="news-service.xml"/>
-   
-   <!-- ****************************************** --> 
-   <!-- Spring Security                             -->
-   <!-- ****************************************** --> 
-   <import resource="acegi-security.xml"/>
    
    <!-- ****************************************** --> 
    <!-- DSpace import Security                             -->
