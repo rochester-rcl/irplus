@@ -24,7 +24,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Creates an xml file of users
- * @author nathans
+ * @author Nathan Sarr
  *
  */
 public class DspaceUserExporter {
