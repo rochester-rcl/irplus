@@ -34,7 +34,7 @@
 	<property name="ir.plus.properties" value="../properties"/> 
 
 	<!-- folder that contains the properties for running the system in production -->
-	<property name="ir.plus.properties.production" value="${ir.plus.properties}/production"/>
+	<property name="ir.plus.properties.production" value="${ir.plus.properties}/production/ir_plus.properties"/>
 
 	<!-- folder that contains session factory for production web -->
 	<property name="web.session.factory" value="../ir_web/spring-config/local/session-factory.xml"/>
@@ -100,6 +100,10 @@
 			
 			<!-- session factory file -->
 			<fileset file="${web.session.factory}"/>
+			
+			<!-- session factory file -->
+		    <fileset file="${ir.plus.properties.production}"/>
+			
 		</copy>
 	</target>
 
