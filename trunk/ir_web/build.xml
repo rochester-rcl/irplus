@@ -26,7 +26,6 @@
 		     line is uncommented.
      --> 
  	<property name="yui.unzip" value="true"/>
-	
 
     <!-- Use the build.properties file for user specific settings -->
     <property file="build.properties"/>
@@ -141,7 +140,6 @@
     	<delete dir="${ivy.dir}"/>
     	<delete dir="${basedir}/yui-unzip"/>
     	<delete dir="${webapp.dir}/page-resources/yui"/>
-    	<delete file=""/>
     </target>	
 
     <!-- build the test class files of the project -->
@@ -266,8 +264,6 @@
 		    <fileset dir="${basedir}/yui-unzip/yui/build/"/>
 	    </copy>
 	</target>
-	
-	
 	
 	<!-- delete the webapp local files -->
 	<target name="clean-run-webapp-local">
