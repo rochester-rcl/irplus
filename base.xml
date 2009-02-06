@@ -104,17 +104,14 @@
     <!-- set the javac debug mode -->
     <property name="javac.debug.mode" value="on" />
 
-    <!-- set the javac debug level -->
-    <property name="javac.debug.level" value="lines,vars,source" />
-
-    <!-- set the javac debug level -->
+     <!-- set the javac debug level -->
     <property name="javac.debug.level" value="lines,vars,source" />
 
     <!-- set the javac depreciation mode -->
     <property name="javac.deprecation.mode" value="on"/>
 
      <!-- java version to compile with -->
-    <property name="javac.java.version" value="1.6"/>
+    <property name="javac.java.version" value="1.5"/>
 	
     <!-- project version -->
     <property name="project.version" value="0.1"/> 
