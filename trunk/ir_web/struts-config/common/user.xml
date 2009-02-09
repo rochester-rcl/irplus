@@ -330,6 +330,7 @@
             method ="{1}"
             class="edu.ur.ir.web.action.user.AddPersonalCollection">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="added">/pages/user/workspace/personal_collection_form.jsp</result>
             <result name="get">/pages/user/workspace/personal_collection_form.jsp</result>
         </action>
