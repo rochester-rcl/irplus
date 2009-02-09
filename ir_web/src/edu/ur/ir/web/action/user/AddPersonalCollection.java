@@ -17,13 +17,12 @@
 
 package edu.ur.ir.web.action.user;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.UserPublishingFileSystemService;
@@ -81,16 +80,58 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 	{
 		log.debug("creating a personal collection parent collectionId = " +
 				parentCollectionId);
+		collectionAdded = false;
+		IrUser thisUser = userService.getUser(userId, true);
+		
+		// user must be an author to use this aspect
+		if( !thisUser.hasRole(IrRole.AUTHOR_ROLE))
+		{
+			return "accessDenied";
+		}
 		
 		// assume that if the current collection id is null or equal to 0
 		// then we are adding a root collection to the user.
 		if(parentCollectionId == null || parentCollectionId == 0)
 		{
-			collectionAdded = addRootCollection();
+			 if( thisUser.getRootPersonalCollection(collectionName) == null )
+		     {
+				 try 
+				 {
+					 PersonalCollection personalCollection = 
+						 thisUser.createRootPersonalCollection(collectionName);
+			         personalCollection.setDescription(collectionDescription);
+					 userService.makeUserPersistent(thisUser);
+					 collectionAdded = true;
+				 }
+				 catch(DuplicateNameException e)
+				 {
+					 log.debug("Duplicate name execption ", e);
+				 }
+	         }
 		}
 		else
 		{
-			collectionAdded = addSubCollection();
+			
+			PersonalCollection collection = userPublishingFileSystemService.getPersonalCollection(parentCollectionId, 
+					true);
+			
+			if( !collection.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
+			if( collection.getChild(collectionName) == null)
+			{
+				try 
+				{
+					PersonalCollection personalCollection = 
+						collection.createChild(collectionName);
+					personalCollection.setDescription(collectionDescription);
+					userPublishingFileSystemService.makePersonalCollectionPersistent(collection);
+					collectionAdded = true;
+				} catch(DuplicateNameException e) {
+					log.debug("Duplicate name execption ", e);
+				}
+			}
 		}
 		
 		if( !collectionAdded)
@@ -112,7 +153,6 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 	{
 		log.debug("updating a personal collection collectionId = " + parentCollectionId);
 		collectionAdded = false;
-
 		
 		PersonalCollection other = null;
 		
@@ -126,10 +166,16 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 			other = userPublishingFileSystemService.getPersonalCollection(collectionName, parentCollectionId);
 		}
 		
+		// make sure name does not already exist
 		if( other == null)
 		{
 			PersonalCollection existingCollection = 
 				userPublishingFileSystemService.getPersonalCollection(updateCollectionId, true);
+			
+			if( !existingCollection.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
 			
 			try {
 				existingCollection.reName(collectionName);
@@ -141,8 +187,13 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 			}
 			
 		}
+		// updating existing with the same name - description change
 		else if(other.getId().equals(updateCollectionId))
 		{
+			if( !other.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
 			//it was found by name so we don't need to add it.
 			other.setDescription(collectionDescription);
 			userPublishingFileSystemService.makePersonalCollectionPersistent(other);
@@ -166,8 +217,12 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 	public String get()
 	{
 		log.debug("get called");
-		
+	
 		PersonalCollection collection = userPublishingFileSystemService.getPersonalCollection(updateCollectionId, true);
+		if( !collection.getOwner().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
 		collectionName= collection.getName();
 		collectionDescription = collection.getDescription();
 		
@@ -247,58 +302,6 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 		this.parentCollectionId = currentCollectionId;
 	}
 
-	
-	/**
-	 * Creates a new root collection 
-	 * @throws IOException 
-	 */
-	private boolean addRootCollection() 
-	{
-		 boolean collectionAdded = false;
-		 IrUser thisUser = userService.getUser(userId, true);
-		 if( thisUser.getRootPersonalCollection(collectionName) == null )
-	     {
-			 try {
-				 PersonalCollection personalCollection = 
-					 thisUser.createRootPersonalCollection(collectionName);
-		         personalCollection.setDescription(collectionDescription);
-				 userService.makeUserPersistent(thisUser);
-				 collectionAdded = true;
-			 }
-			 catch(DuplicateNameException e)
-			  {
-				 throw new IllegalStateException("Handle this move exception");
-			  }
-	         
-         }
-		 return collectionAdded;
-	}
-	
-	/**
-	 * adds a sub collection to an existing collection
-	 * @throws IOException 
-	 */
-	private boolean addSubCollection() 
-	{
-		boolean collectionAdded = false;
-		PersonalCollection collection = userPublishingFileSystemService.getPersonalCollection(parentCollectionId, 
-				true);
-		if( collection.getChild(collectionName) == null)
-		{
-			try {
-				PersonalCollection personalCollection = 
-					collection.createChild(collectionName);
-				personalCollection.setDescription(collectionDescription);
-				userPublishingFileSystemService.makePersonalCollectionPersistent(collection);
-				collectionAdded = true;
-			} catch(DuplicateNameException e) {
-				 throw new IllegalStateException("Handle this move exception");
-			}
-		}
-		
-		return collectionAdded;
-	}
-	
 	/**
 	 * Get the collection added message.
 	 * 
