@@ -324,12 +324,29 @@ public class DefaultRepositoryService implements RepositoryService {
 			String originalFileName, 
 			IrUser versionCreator) {
 	    
+		addNewFileToVersionedFile(repository, versionedFile, f, originalFileName, null);
+		
+	}
+	
+	/**
+	 * Add a new file to a versioned file as the next file in the set of versions.
+	 * 
+	 * @see edu.ur.ir.repository.RepositoryService#addNewFileToVersionedFile(java.lang.Long, java.lang.Long, java.io.File, java.lang.String)
+	 */
+	public void addNewFileToVersionedFile(Repository repository, 
+			VersionedFile versionedFile, 
+			File f, 
+			String originalFileName, 
+			String description,
+			IrUser versionCreator) {
+	    
 		
 		// if they can lock it they can edit it
 		if( versionedFile.getLockedBy().equals(versionCreator) )
 		{
-			FileInfo info = createFileInfo(repository, f, originalFileName, null);
-			versionedFile.addNewVersion(info, versionCreator);
+			FileInfo info = createFileInfo(repository, f, originalFileName, description);
+			FileVersion version = versionedFile.addNewVersion(info, versionCreator);
+			version.getIrFile().setDescription(description);
 		    versionedFileDAO.makePersistent(versionedFile);
 		}
 		else
