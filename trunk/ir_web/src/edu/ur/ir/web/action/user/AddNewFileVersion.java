@@ -137,7 +137,8 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 			if(versionedFile.getLockedBy().equals(user))
 			{
 				repositoryService.addNewFileToVersionedFile(repository, 
-						versionedFile, file, fileFileName, user);
+						versionedFile, file, fileFileName, userFileDescription,user);
+			
 				versionAdded = true;
 			    IrFile irFile = personalFile.getVersionedFile().getCurrentVersion().getIrFile();
 			    FileInfo fileInfo = irFile.getFileInfo();
