@@ -212,6 +212,7 @@
 	                            <c:if test="${fileSystemObject.versionedFile.locked}">
 	                                <span class="lockBtnImg">&nbsp;</span><div class="smallText">Locked by ${fileSystemObject.versionedFile.lockedBy.username}</div>
 	                            </c:if>
+	                            <c:if test="${fileSystemObject.versionedFile.description != '' && fileSystemObject.versionedFile.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.versionedFile.description}"/></div></c:if>
 	                         </c:if>
                         </urstb:td>
                         <urstb:td>
