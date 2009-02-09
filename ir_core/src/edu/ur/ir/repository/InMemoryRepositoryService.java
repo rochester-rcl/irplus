@@ -135,6 +135,10 @@ public class InMemoryRepositoryService implements RepositoryService{
 		
 	}
 
+	public void addNewFileToVersionedFile(Repository repository, VersionedFile versionedFile, File f, String originalFileName, String description, IrUser versionCreator) {
+		// TODO Auto-generated method stub
+		
+	}
 	public VersionedFile createVersionedFile(IrUser user,
 			Repository repository, File f, String fileName, String description) {
 		// TODO Auto-generated method stub

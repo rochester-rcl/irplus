@@ -181,6 +181,24 @@ public interface RepositoryService {
 			IrUser versionCreator);
 	
 	/**
+	 * Adds a new version of a file to the repository.
+	 * 
+	 * @param repository - the repository to add the file to.
+	 * @param versionedFile - id of the versioned file to add the file to
+	 * @param f - file to add
+	 * @param originalFileName - original name of the file when uploaded or added to the system
+	 * @param description - description of the file / changes
+	 * @param versionCreator - User creating the user
+	 * 
+	 */
+	public void addNewFileToVersionedFile( Repository repository, 
+			VersionedFile versionedFile, 
+			File f, 
+			String originalFileName, 
+			String description,
+			IrUser versionCreator);
+	
+	/**
 	 * Find a transformed file type by system code.
 	 * 
 	 * @param systemCode - unique system code.
