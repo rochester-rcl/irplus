@@ -197,6 +197,12 @@
 	                          Thumbnail
 	                      </th>
 	                      <th>
+	                          Name
+	                      </th>
+	                      <th>
+	                          Description
+	                      </th>
+	                      <th>
 	                          File Version
 	                      </th>
 	                      <th>
@@ -229,7 +235,9 @@
 	                          <c:param name="personalFileId" value="${personalFile.id}"/>
 	                          <c:param name="versionNumber" value="${version.versionNumber}"/>
 	                      </c:url>
-                          <td class="${rowType}"><a href="${personalFileDownloadUrl}">${version.versionNumber}</a></td>
+	                      <td class="${rowType}"><a href="${personalFileDownloadUrl}">${version.irFile.name}</a></td>
+	                      <td class="${rowType}">${version.irFile.description}</td>
+                          <td class="${rowType}">${version.versionNumber}</td>
                           <td class="${rowType}">
                               <c:forEach var="fileInfoChecksum"
                                   items="${version.irFile.fileInfo.fileInfoChecksums}">
