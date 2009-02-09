@@ -565,6 +565,14 @@ CREATE TABLE ir_user."user"
 );
 ALTER TABLE ir_user.user OWNER TO ir_plus;
 
+
+
+-- Index on the file Name
+CREATE INDEX user_last_name_idx ON ir_user."user" USING btree (last_name);
+
+-- Index on the file Name
+CREATE INDEX user_name_idx ON ir_user."user" USING btree (username);
+
 -- The user sequence
 CREATE SEQUENCE ir_user.user_seq ;
 ALTER TABLE ir_user.user_seq OWNER TO ir_plus;
