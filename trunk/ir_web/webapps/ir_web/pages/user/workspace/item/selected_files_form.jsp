@@ -100,7 +100,7 @@
 				
 				
 				<td class="tdItemFileRightBorder" width="15%">
-				     <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/delete.gif"/>  <a href="javascript:YAHOO.ur.item.removeFile('${itemFileVersion.itemObject.id}', '${itemFileVersion.itemObject.type}');"> Remove </a>
+				     <span class="deleteBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.item.removeFile('${itemFileVersion.itemObject.id}', '${itemFileVersion.itemObject.type}');"> Remove </a>
 				</td>
 			</tr>
 			
