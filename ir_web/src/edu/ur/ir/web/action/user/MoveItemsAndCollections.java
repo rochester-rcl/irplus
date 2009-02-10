@@ -116,6 +116,11 @@ public class MoveItemsAndCollections extends ActionSupport implements UserIdAwar
 		    destination = 
 		    	userPublishingFileSystemService.getPersonalCollection(destinationId, false);
 		    
+		    if( !destination.getOwner().getId().equals(userId))
+		    {
+		    	return "accessDenied";
+		    }
+		    
 		    // make sure the user has not navigated into a child or itself- this is illegal
 		    for(PersonalCollection collection: collectionsToMove)
 		    {
@@ -165,14 +170,16 @@ public class MoveItemsAndCollections extends ActionSupport implements UserIdAwar
 		    listCollectionIds.add(id);
 		}
 		
+		// this action is protected because user id is used in fetch
 		collectionsToMove = userPublishingFileSystemService.getPersonalCollections(userId, listCollectionIds);
-
+		
 		List<Long> listItemIds = new LinkedList<Long>();
 		for( Long id : itemIds)
 		{
 		    listItemIds.add(id);
 		}
 		
+		// this action is protected because user id is used in fetch
 		itemsToMove = userPublishingFileSystemService.getPersonalItems(userId, listItemIds);
 		
 		log.debug( "destination id = " + destinationId);
@@ -180,6 +187,10 @@ public class MoveItemsAndCollections extends ActionSupport implements UserIdAwar
 		{
 		    destination = 
 		    	userPublishingFileSystemService.getPersonalCollection(destinationId, false);
+		    if( !destination.getOwner().getId().equals(userId))
+		    {
+		    	return "accessDenied";
+		    }
 		    
 		    
 		    notMoved = 

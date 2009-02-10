@@ -56,9 +56,13 @@ import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.item.SponsorService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
+import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.order.AscendingOrderComparator;
 
 
@@ -68,13 +72,19 @@ import edu.ur.order.AscendingOrderComparator;
  * @author Sharmila Ranganathan
  *
  */
-public class AddItemMetadata extends ActionSupport implements Preparable {
+public class AddItemMetadata extends ActionSupport implements Preparable, UserIdAware {
 
 	/**
 	 * Eclipse generated id
 	 */
 	private static final long serialVersionUID = 1847379201528051595L;
 	
+	/** sue making the change */
+	private Long userId;
+	
+	/** service for dealing with users */
+	private UserService userService;
+
 	/**  Logger for add metadata to item action */
 	private static final Logger log = Logger.getLogger(AddItemMetadata.class);
 	
@@ -301,6 +311,12 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * @return
 	 */
 	public String viewItemMetadata() {
+		log.debug("view item metadata item id =  " + item.getId() + " user id = " + userId + " owner id = " + item.getOwner().getId());
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			return "accessDenied";
+		}
 
 		contentTypes = contentTypeService.getAllContentTypeByNameOrder();
 		
@@ -355,6 +371,12 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * @return
 	 */
 	public String getSeriesInformation() {
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			return "accessDenied";
+		}
+
 		
 		reportsCount = item.getItemReports().size();
 		
@@ -368,8 +390,15 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * 
 	 * @return
 	 */
-	public String getIdentifierInformation() {
-		
+	public String getIdentifierInformation() 
+	{
+	
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			return "accessDenied";
+		}
+
 		itemIdentifiersCount = item.getItemIdentifiers().size();
 		
 		identifierTypes = identifierTypeService.getAll();
@@ -382,8 +411,14 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * 
 	 * @return
 	 */
-	public String getExtentInformation() {
-		
+	public String getExtentInformation() 
+	{
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			return "accessDenied";
+		}
+	
 		itemExtentsCount = item.getItemExtents().size();
 		
 		extentTypes = extentTypeService.getAllExtentTypes();
@@ -396,8 +431,15 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * 
 	 * @return
 	 */
-	public String getSponsorInformation() {
-		
+	public String getSponsorInformation() 
+	{
+	
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			return "accessDenied";
+		}
+
 		itemSponsorsCount = item.getItemSponsors().size();
 		
 		sponsors = sponsorService.getAllSponsor();
@@ -410,14 +452,21 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * 
 	 * @return
 	 */
-	public String getPublisherInformation() {
-		
+	public String getPublisherInformation() 
+	{
 		publishers = publisherService.getAllPublisher();
 		
 		return SUCCESS;
 	}
 	
-	public String saveContentType() {
+	public String saveContentType() 
+	{
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			return "accessDenied";
+		}
+
 		item.setPrimaryContentType(contentTypeService.getContentType(contentTypeId, false));
 		item.removeAllSecondaryContentTypes();
 		itemService.makePersistent(item);
@@ -442,8 +491,14 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * 
 	 * @return
 	 */
-	public String saveItemMetadata() throws NoIndexFoundException {
-		
+	public String saveItemMetadata() throws NoIndexFoundException 
+	{
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			return "accessDenied";
+		}
+
 		// Sets the item metadata
 		item.setName(itemName);
 		item.setDescription(itemDescription);
@@ -640,7 +695,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * 
 	 * @return All series
 	 */
-	public String getSeries() {
+	public String getSeries() 
+	{
 		seriesList = seriesService.getAllSeries();
 		
 		return SUCCESS;
@@ -651,7 +707,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * 
 	 * @return All Identifiers
 	 */
-	public String getIdentifiers() {
+	public String getIdentifiers() 
+	{
 		identifierTypes = identifierTypeService.getAll();
 	
 		return SUCCESS;
@@ -662,7 +719,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * 
 	 * @return All extents
 	 */
-	public String getExtents() {
+	public String getExtents() 
+	{
 		extentTypes = extentTypeService.getAllExtentTypes();
 	
 		return SUCCESS;
@@ -673,7 +731,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	 * 
 	 * @return All extents
 	 */
-	public String getAllSponsors() {
+	public String getAllSponsors() 
+	{
 		sponsors = sponsorService.getAllSponsor();
 	
 		return SUCCESS;
@@ -1455,5 +1514,19 @@ public class AddItemMetadata extends ActionSupport implements Preparable {
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
+	}
+	
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }

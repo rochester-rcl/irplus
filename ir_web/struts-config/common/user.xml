@@ -340,7 +340,7 @@
             method ="deleteCollectionSystemObjects"
             class="edu.ur.ir.web.action.user.ViewPersonalCollections">
             <interceptor-ref name="crudStack" />
-             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/collection_table.jsp</result>
         </action>
 
@@ -348,32 +348,27 @@
         <!--  Move Collections and Publications actions	 -->
         <!--  ****************************************** -->
         
-        <!--  moves the selected publications and collections to a given location -->
-        <action name="movePersonalCollectionSystemObjects" class="edu.ur.ir.web.action.user.MoveItemsAndCollections">
-            <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/workspace/move_collections_response.jsp</result>
-        </action>
-        
         <action name="viewMovePersonalCollectionLocations"
             class="edu.ur.ir.web.action.user.MoveItemsAndCollections"
             method="viewLocations">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/move_collection.jsp</result>
         </action>
-        
         
         <action name="getMovePersonalCollectionDestinations"
             class="edu.ur.ir.web.action.user.MoveItemsAndCollections"
             method="viewLocations">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/move_collection_frag.jsp</result>
         </action>
-        
         
         <action name="movePersonalCollectionInformation"
             class="edu.ur.ir.web.action.user.MoveItemsAndCollections"
             method="move">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/move_collection_frag.jsp</result>
         </action>        
 
@@ -520,6 +515,7 @@
                 method="getSeriesInformation"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/series_list.jsp</result>
         </action>    
         
@@ -528,6 +524,7 @@
                 method="getIdentifierInformation"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/identifier_list.jsp</result>
         </action> 
 
@@ -536,6 +533,7 @@
                 method="getExtentInformation"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/extent_list.jsp</result>
         </action>
                 
@@ -544,6 +542,7 @@
                 method="getSponsorInformation"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/sponsor_list.jsp</result>
         </action>         
 
@@ -552,6 +551,7 @@
                 method="getPublisherInformation"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/publisher_list.jsp</result>
         </action>         
         
@@ -560,6 +560,7 @@
                 method="saveItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">workspace.action?parentCollectionId=${parentCollectionId}&amp;showCollectionTab=true</result>
         </action>
         
@@ -568,6 +569,7 @@
                 method="saveItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">institutionalPublicationPublicView.action?institutionalItemId=${institutionalItemId}</result>
         </action>
         
@@ -576,6 +578,7 @@
                 method="saveItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getSeriesInformation.action?genericItemId=${item.id}</result>
         </action>
         
@@ -584,6 +587,7 @@
                 method="saveItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getIdentifierInformation.action?genericItemId=${item.id}</result>
         </action>        
 
@@ -592,6 +596,7 @@
                 method="saveItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getExtentInformation.action?genericItemId=${item.id}</result>
         </action> 
          
@@ -600,6 +605,7 @@
                 method="saveItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getSponsorInformation.action?genericItemId=${item.id}</result>
         </action>        
  
@@ -608,6 +614,7 @@
                 method="saveItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getPublisherInformation.action?genericItemId=${item.id}</result>
         </action>        
        
@@ -616,6 +623,7 @@
                 method="saveItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">viewEditItem.action?genericItemId=${genericItemId}&amp;parentCollectionId=${parentCollectionId}&amp;institutionalItemId=${institutionalItemId}</result>
         </action>
         
@@ -624,6 +632,7 @@
                 method="saveItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">viewItemContributor.action?genericItemId=${genericItemId}&amp;parentCollectionId=${parentCollectionId}&amp;institutionalItemId=${institutionalItemId}</result>
         </action>
 
@@ -632,6 +641,7 @@
                 method="saveItemMetadata"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">previewPublication.action?genericItemId=${genericItemId}&amp;parentCollectionId=${parentCollectionId}&amp;institutionalItemId=${institutionalItemId}</result>
         </action>
 
@@ -640,6 +650,7 @@
                 method="saveContentType"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/content_type_list.jsp</result>
         </action>
                 
