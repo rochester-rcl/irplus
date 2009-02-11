@@ -468,11 +468,8 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		}
 
 		InviteInfo inviteInfo = inviteUserService.getInviteInfoById(inviteInfoId, false);
-		
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
-	
 		inviteInfo.removeFile(personalFile.getVersionedFile());
-		
 		inviteUserService.makeInviteInfoPersistent(inviteInfo);
 		
 		return SUCCESS;
