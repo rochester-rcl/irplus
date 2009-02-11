@@ -107,6 +107,7 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 		
 		log.debug("change Password");
 		
+		// loaded from session 
 		userToChangePassword = userService.getUser(userId, false);
 		
 		// Set the password change to false 
