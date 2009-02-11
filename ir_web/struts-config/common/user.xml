@@ -551,7 +551,6 @@
                 method="getPublisherInformation"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/publisher_list.jsp</result>
         </action>         
         
@@ -659,6 +658,7 @@
                 method="getSeries"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/item_series.jsp</result>
         </action>
         
@@ -667,6 +667,7 @@
                 method="getIdentifiers"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/item_identifier.jsp</result>
         </action>
 
@@ -675,6 +676,7 @@
                 method="getExtents"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/item_extent.jsp</result>
         </action>
 
@@ -683,6 +685,7 @@
                 method="getAllSponsors"
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/item_sponsor.jsp</result>
         </action>
                         
@@ -777,6 +780,7 @@
         <action name="viewAddItemToCollections" 
             class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
             <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/add_institutional_collection.jsp</result>
         </action> 
         
@@ -785,6 +789,7 @@
             method="getCollectionsTable"
             class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/institutional_collections_table.jsp</result>
         </action>   
 
@@ -793,6 +798,7 @@
             method="addInstitutionalCollection"
             class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/selected_collections_table.jsp</result>
         </action>             
 
@@ -801,6 +807,7 @@
             method="removeInstitutionalCollection"
             class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/selected_collections_table.jsp</result>
         </action>             
 
@@ -809,6 +816,7 @@
             method="submitPublication"
             class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">workspace.action?parentCollectionId=${parentCollectionId}&amp;showCollectionTab=true</result>
         </action>     
         

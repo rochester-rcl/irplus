@@ -38,6 +38,7 @@ import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -128,8 +129,18 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	{
 		log.debug("Peronal ItemId = " + genericItemId);
 
+		IrUser user = null;
+		if( userId != null )
+		{
+			user = userService.getUser(userId, false);
+		}
 		if (genericItemId != null) {
 			item = itemService.getGenericItem(genericItemId, false);
+		}
+		
+		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
+		{
+			return "accessDenied";
 		}
 		
 		return SUCCESS;
@@ -143,6 +154,23 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	public String getCollectionsTable()
 	{
 		log.debug("getTableCalled");
+		
+		item = itemService.getGenericItem(genericItemId, false);
+		
+		IrUser user = null;
+		if( userId != null )
+		{
+			user = userService.getUser(userId, false);
+		}
+		if (genericItemId != null) {
+			item = itemService.getGenericItem(genericItemId, false);
+		}
+		
+		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
+		{
+			return "accessDenied";
+		}
+		
 		Collection<InstitutionalCollection> institutionalCollections;
 
 		// don't hit the database unless we need to
@@ -159,7 +187,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			institutionalCollections = repository.getInstitutionalCollections();
 		}
 				
-		collectionsPermission = getSubmitPermissionForCollections(institutionalCollections);
+		collectionsPermission = getSubmitPermissionForCollections(institutionalCollections, user, item);
 
 		return SUCCESS;
 	}
@@ -168,12 +196,8 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	 * Retrieves submit permission for the user on each collection
 	 */
 	private Collection<InstitutionalCollectionSubmitPermission> getSubmitPermissionForCollections(
-			Collection<InstitutionalCollection> institutionalCollections) {
-		
-		IrUser user = userService.getUser(userId, false);
-		
-		item = itemService.getGenericItem(genericItemId, false);
-		
+			Collection<InstitutionalCollection> institutionalCollections, IrUser user, GenericItem item) {
+		 
 		Collection<InstitutionalCollectionSubmitPermission> collectionSubmitPermission 
 			= new LinkedHashSet<InstitutionalCollectionSubmitPermission>();
 		
@@ -239,6 +263,23 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	 * 
 	 */
 	public String addInstitutionalCollection() {
+		
+		item = itemService.getGenericItem(genericItemId, false);
+		
+		IrUser user = null;
+		if( userId != null )
+		{
+			user = userService.getUser(userId, false);
+		}
+		if (genericItemId != null) {
+			item = itemService.getGenericItem(genericItemId, false);
+		}
+		
+		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
+		{
+			return "accessDenied";
+		}
+		
 		log.debug("Institutional Collection Id: "+ institutionalCollectionId);
 
 		// Add the file id only if its not in the selected list 
@@ -253,7 +294,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		
 		Collection<InstitutionalCollection> collections = institutionalCollectionService.getCollections(collectionIds);
 		
-		selectedCollectionsPermission = getSubmitPermissionForCollections(collections);
+		selectedCollectionsPermission = getSubmitPermissionForCollections(collections, user, item);
 		
 		return SUCCESS;
 	
@@ -270,6 +311,21 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		boolean directAdd = false;
 		item = itemService.getGenericItem(genericItemId, false);
 		
+		IrUser user = null;
+		if( userId != null )
+		{
+			user = userService.getUser(userId, false);
+		}
+		if (genericItemId != null) {
+			item = itemService.getGenericItem(genericItemId, false);
+		}
+		
+		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
+		{
+			return "accessDenied";
+		}
+
+		
 		log.debug("Institutional Collection selectedCollectionIds: "+ selectedCollectionIds);
 		
 		List<Long> collectionIds = getSelectedCollectionIdList();
@@ -277,15 +333,13 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 
 		boolean publicCollectionExist = false;
 		boolean isItemPublished = item.isPublishedToSystem();
-		for(Long collectionId: collectionIds) {
-			
-			log.debug("Institutional Collection Id: "+ collectionId);
 		
-			InstitutionalCollection institutionalCollection
-					= institutionalCollectionService.getCollection(collectionId, false);
+		Collection<InstitutionalCollection> collections = institutionalCollectionService.getCollections(collectionIds);
+		
+		for(InstitutionalCollection institutionalCollection: collections) {
 			
-			IrUser user = userService.getUser(userId, false);
-
+			log.debug("Institutional Collection Id: "+ institutionalCollection.getId());
+			
 			InstitutionalItem institutionalItem = null;
 			if( institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION))
 			{
@@ -306,13 +360,13 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			}
 			else
 			{
-				throw new IllegalStateException("operation not permitted");
+				return "accessDenied";
 			}
 			
 			institutionalCollectionService.saveCollection(institutionalCollection);
 			
 			// only index if the item was added directly to the collection
-			if( directAdd)
+			if(directAdd)
 			{
 				Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 				String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
@@ -341,6 +395,22 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	public String removeInstitutionalCollection(){
 		
 		log.debug("Remove FileId = " + institutionalCollectionId);
+		
+		item = itemService.getGenericItem(genericItemId, false);
+		
+		IrUser user = null;
+		if( userId != null )
+		{
+			user = userService.getUser(userId, false);
+		}
+		if (genericItemId != null) {
+			item = itemService.getGenericItem(genericItemId, false);
+		}
+		
+		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
+		{
+			return "accessDenied";
+		}
 
 		StringTokenizer tokenizer = null;
 		List<Long> collectionIds = null; 
@@ -367,7 +437,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		
 		Collection<InstitutionalCollection> collections = institutionalCollectionService.getCollections(collectionIds);
 		
-		selectedCollectionsPermission = getSubmitPermissionForCollections(collections);;
+		selectedCollectionsPermission = getSubmitPermissionForCollections(collections, user, item);
 		
 		return SUCCESS;
 	}
