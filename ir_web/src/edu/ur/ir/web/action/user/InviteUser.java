@@ -155,7 +155,6 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		log.debug("Get collaborators");
 
 		filesToShare = new LinkedList<PersonalFile>();
-		
 		if( shareFileIds != null )
 		{
 			List<Long> parsedFileIds = new LinkedList<Long>();
@@ -486,15 +485,23 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	 * 
 	 * @return permissions for a collaborator on a file 
 	 */
-	public String getPermissions() {
+	public String getPermissions() 
+	{
+		// user who is getting the permissions
+	    IrUser viewingUser = userService.getUser(userId, true);
+	
+		FileCollaborator fileCollaborator = inviteUserService.findFileCollaborator(fileCollaboratorId, true);
 
-		
-		FileCollaborator fileCollaborator 
-		= inviteUserService.findFileCollaborator(fileCollaboratorId, true);
+	    IrAcl acl = securityService.getAcl(fileCollaborator.getVersionedFile(),viewingUser);
+	    if( acl == null || !acl.isGranted("VIEW", viewingUser, false))
+	    {
+		    return("accessDenied");
+	    }
 
-		  collaboratorPermissions = securityService.getPermissions(fileCollaborator.getVersionedFile(), fileCollaborator.getCollaborator());
+		collaboratorPermissions = securityService.getPermissions(fileCollaborator.getVersionedFile(), 
+				  fileCollaborator.getCollaborator());
 		
-		  classTypePermissions = securityService.getClassTypePermissions(
+		classTypePermissions = securityService.getClassTypePermissions(
 				  CgLibHelper.cleanClassName(fileCollaborator.getVersionedFile().getClass().getName()));
 			
 		  return SUCCESS;

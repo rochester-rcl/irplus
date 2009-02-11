@@ -33,9 +33,11 @@ import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserWorkspaceIndexService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Action to add a link to the item.
@@ -43,13 +45,16 @@ import edu.ur.ir.user.UserWorkspaceIndexService;
  * @author Sharmila Ranganarhan
  *
  */
-public class AddItemLink extends ActionSupport implements Preparable {
+public class AddItemLink extends ActionSupport implements Preparable, UserIdAware {
 	
 	/** the name of the folder to add */
 	private String linkName;
 	
 	/** Description of the folder */
 	private String linkDescription;
+	
+	/** id of the user */
+	private Long userId;
 	
 	/** URL */
 	private String linkUrl;
@@ -91,13 +96,11 @@ public class AddItemLink extends ActionSupport implements Preparable {
 	 * Prepare for action
 	 */
 	public void prepare() {
-		
 		log.debug("Item Id:"+ genericItemId);
 		
 		if (genericItemId != null) {
 			item = itemService.getGenericItem(genericItemId, false);
 		}
-
 	}
 	
 	/**
@@ -106,6 +109,14 @@ public class AddItemLink extends ActionSupport implements Preparable {
 	public String save() throws NoIndexFoundException
 	{
 		log.debug("Add link " );
+		
+        IrUser user = item.getOwner();
+		
+		// make sure the user is the owner.
+		if( userId == null || !user.getId().equals(userId))
+		{
+			return "accessDenied";
+		}
 
 		ItemLink itemLink = item.createLink(linkName, linkUrl);
 		itemLink.setDescription(linkDescription);
@@ -148,6 +159,14 @@ public class AddItemLink extends ActionSupport implements Preparable {
 	 */
 	public String updateLink() throws NoIndexFoundException
 	{
+        IrUser user = item.getOwner();
+		
+		// make sure the user is the owner.
+		if( userId == null || !user.getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+
 		ItemLink  link = item.getItemLink(updateLinkId);
 		link.setName(linkName);
 		link.setDescription(linkDescription);
@@ -261,5 +280,10 @@ public class AddItemLink extends ActionSupport implements Preparable {
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
+	}
+
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
