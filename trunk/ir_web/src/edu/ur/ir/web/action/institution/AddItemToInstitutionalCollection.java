@@ -127,7 +127,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	 */
 	public String execute()
 	{
-		log.debug("Peronal ItemId = " + genericItemId);
+		log.debug("Personal ItemId = " + genericItemId + " user id = " + userId);
 
 		IrUser user = null;
 		if( userId != null )
@@ -137,6 +137,8 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		if (genericItemId != null) {
 			item = itemService.getGenericItem(genericItemId, false);
 		}
+		
+		log.debug(" owner id = " + item.getOwner().getId());
 		
 		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
 		{
