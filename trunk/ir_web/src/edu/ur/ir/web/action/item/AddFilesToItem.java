@@ -558,12 +558,18 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 * Creates new publication version
      */
 	public String createPublicationVersion() {
-		IrUser user = userService.getUser(userId, false);
-		if( !item.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE))
+		PersonalItem personalItem = userPublishingFileSystemService.getPersonalItem(personalItemId, false);
+		IrUser user = null;
+		if( userId != null )
+		{
+		   user = userService.getUser(userId, false);
+		}
+		
+		if( user == null || (!personalItem.getOwner().equals(user) && !user.hasRole(IrRole.ADMIN_ROLE)))
 		{
 		    return "accessDenied";
 		}
-		PersonalItem personalItem = userPublishingFileSystemService.getPersonalItem(personalItemId, false);
+		
 		
 		GenericItem oldItem = personalItem.getVersionedItem().getCurrentVersion().getItem();
 		item = oldItem.clone();

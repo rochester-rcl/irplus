@@ -455,7 +455,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	public String getPublisherInformation() 
 	{
 		publishers = publisherService.getAllPublisher();
-		
 		return SUCCESS;
 	}
 	

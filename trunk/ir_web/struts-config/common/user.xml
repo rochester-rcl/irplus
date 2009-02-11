@@ -825,6 +825,7 @@
             method="createPublicationVersion"
             class="edu.ur.ir.web.action.item.AddFilesToItem">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">viewEditItem.action?genericItemId=${item.id}&amp;parentCollectionId=${parentCollectionId}</result>
         </action>  
                         
@@ -844,6 +845,7 @@
             method ="save"
             class="edu.ur.ir.web.action.item.AddItemLink">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
         </action>
         
@@ -851,10 +853,9 @@
             method ="updateLink"
             class="edu.ur.ir.web.action.item.AddItemLink">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
         </action>
-        
-
         
         <!--  ************************************ -->
         <!--  Invite User actions			       -->
@@ -879,6 +880,8 @@
 
         <action name="getPermissions" method="getPermissions"  
         		class="edu.ur.ir.web.action.user.InviteUser">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/edit_permissions_form.jsp</result>
         </action>
 
@@ -905,6 +908,7 @@
 
         <action name="deletePendingInvitee" method="deletePendingInvitee" class="edu.ur.ir.web.action.user.InviteUser">
             <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getCollaborators.action?shareFileIds=${shareFileIds}</result>
         </action>
                  
@@ -1090,8 +1094,6 @@
             <interceptor-ref name="crudStack" />
             <result name="success" type="redirect">institutionalPublicationPublicView.action?institutionalItemId=${institutionalItemId}&amp;versionNumber=${versionNumber}</result>
         </action>        
-
- 
  
         <!--  ****************************************** -->
         <!--  Move Institutional Publications actions	 -->
@@ -1110,7 +1112,6 @@
             <interceptor-ref name="editStack"/>
             <result name="success">/pages/item/move_item.jsp</result>
         </action>
-                
         
         <action name="getMoveInstitutionalCollectionDestinations"
             class="edu.ur.ir.web.action.institution.MoveInstitutionalCollectionData"
