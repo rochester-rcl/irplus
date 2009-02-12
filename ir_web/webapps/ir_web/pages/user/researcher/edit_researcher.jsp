@@ -145,14 +145,15 @@
 	                                <tr>
 	                                    <td class="label">
 	                                        <strong>Department</strong> 
-	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="researcherForm_add_department" value="Add Department" onclick="javascript:YAHOO.ur.edit.researcher.getDepartments();"/>
-	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="show_department" value="Add New Department"/>
+	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="researcherForm_add_department" value="Add" onclick="javascript:YAHOO.ur.edit.researcher.getDepartments();"/>
+	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="show_department" value="New Department"/>
 	                                    </td>
 	                               </tr>
 	                               <tr>
 	                                    <td class="input">
 	                					   <div id="new_department"> </div>
 	                                       <!--  this table is built dynamically -->
+	                                      
 							               <div id="department_form">
 							                    <c:import url="department_list.jsp"/>
 							               </div> 

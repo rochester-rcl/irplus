@@ -21,6 +21,7 @@
        		method="view"
             class="edu.ur.ir.web.action.researcher.EditResearcher">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="view">/pages/user/researcher/edit_researcher.jsp</result>
         </action>
         

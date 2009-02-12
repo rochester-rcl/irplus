@@ -36,6 +36,8 @@ import edu.ur.ir.researcher.ResearcherIndexService;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.user.Department;
 import edu.ur.ir.user.DepartmentService;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -198,14 +200,26 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	public String view()
 	{
 		log.debug("view called for researcher ");
-		if (userId != null) {
-			researcher = userService.getUser(userId, false).getResearcher();
+		
+		if (userId != null)
+		{
+			IrUser user = userService.getUser(userId, false);
+			researcher = user.getResearcher();
+			
+			log.debug( "user " + user + " has role " + user.hasRole(IrRole.RESEARCHER_ROLE) );
+			if( !user.hasRole(IrRole.RESEARCHER_ROLE))
+			{
+				return "accessDenied";
+			}
 		}
 		else
 		{
 			return "accessDenied";
 		}
-		if (researcher != null) {
+		
+		
+		if (researcher != null) 
+		{
 			researcherJSONObject = researcher.toJSONObject();
 		}
 		
