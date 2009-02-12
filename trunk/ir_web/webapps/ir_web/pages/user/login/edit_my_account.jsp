@@ -270,7 +270,7 @@
 		                   name="personId" value="${irUser.personNameAuthority.id}"/>
 		                   
   					<input type="hidden" id="newPersonNameForm_userId"
-		                   name="userId" value="${irUser.id}"/>		                   
+		                   name="addToUserId" value="${irUser.id}"/>		                   
 		               
 		         	<input type="hidden" id="newPersonNameForm_new"
 		                   name="newPersonName" value="true"/>

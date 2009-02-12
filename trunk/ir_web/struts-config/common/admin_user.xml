@@ -75,6 +75,7 @@
  		<action name="getEmails" 
             class="edu.ur.ir.web.action.user.admin.ManageEmails"
             method="viewEmails">
+            <interceptor-ref name="editStack" />
             <result name="success">/pages/admin/user/email_table.jsp</result>
         </action>
         
