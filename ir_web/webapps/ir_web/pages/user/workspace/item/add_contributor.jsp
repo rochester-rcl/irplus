@@ -212,9 +212,10 @@
 		              
    	             	 <input type="hidden" id="person_id"
 		                   name="personId" value="${user.personNameAuthority.id}"/>
-		                   
+		             
+		             ${user.id}   
   				     <input type="hidden" id="user_id"
-		                   name="userId" value="${user.id}"/>		                   
+		                   name="addToUserId" value="${user.id}"/>		                   
 		              
 		              <ur:div id="personError" cssClass="errorMessage"></ur:div>
 			          

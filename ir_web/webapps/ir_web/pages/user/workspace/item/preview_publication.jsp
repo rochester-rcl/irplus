@@ -109,7 +109,7 @@
                   </tr>
                 </table>
 
-            	<div class="clear">&nbsp;</div>
+            	<br/>
             	
             	<form name="previewForm" method="post">
             		<input type="hidden" name="genericItemId" value="${item.id}"/>
@@ -190,7 +190,7 @@
 										<c:forEach items="${item.contributors}" var="itemContributor">
 										<tr>
 											<td>
-												${itemContributor.contributor.personName.forename} ${itemContributor.contributor.personName.surname} - ${itemContributor.contributor.contributorType.name}
+												${itemContributor.contributor.personName.forename}&nbsp;${itemContributor.contributor.personName.surname} - ${itemContributor.contributor.contributorType.name}
 											</td>
 										</tr>
 										</c:forEach>
@@ -201,7 +201,7 @@
 										
 										<tr>
 											<td>
-												${item.owner.firstName} ${item.owner.lastName}
+												${item.owner.firstName}&nbsp;${item.owner.lastName}
 											</td>
 										</tr>
 
