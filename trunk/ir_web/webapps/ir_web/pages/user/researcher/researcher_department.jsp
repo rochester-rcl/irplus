@@ -34,7 +34,7 @@
       	   </select>
       </td>
       <td>   
-      	   <input type="button" class="ur_button" id="researcherForm_remove" value="Remove Department" onclick="javascript:YAHOO.ur.edit.researcher.removeDepartment('department_table_i');"/>
+      	   <input type="button" class="ur_button" id="researcherForm_remove" value="Remove" onclick="javascript:YAHOO.ur.edit.researcher.removeDepartment('department_table_i');"/>
       </td>
       </tr>
 </table>
