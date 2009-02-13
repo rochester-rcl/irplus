@@ -25,6 +25,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -73,7 +74,10 @@ public class ReinstateInstitutionalPublication extends ActionSupport implements 
 		
 		if (institutionalItemId != null) {
 			InstitutionalItem institutionalItem = institutionalItemService.getInstitutionalItem(institutionalItemId, false);
-
+			if( !institutionalItem.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+			{
+				return "accessDenied";
+			}
 			if (reinstateAllVersions) {
 				Set<InstitutionalItemVersion> versions = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions();
 				for (InstitutionalItemVersion version : versions) {

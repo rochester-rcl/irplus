@@ -37,9 +37,11 @@ import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.PropertyConverter;
 import edu.ur.ir.web.table.TableCollectionInfo;
 import edu.ur.ir.web.table.TableRequestHelper;
@@ -51,7 +53,7 @@ import edu.ur.ir.web.table.TableRequestHelper;
  *
  */
 public class ManagePersonNames extends ActionSupport implements  
-ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable{
+ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdAware{
 	
 	/** eclipse generated id. */
 	private static final long serialVersionUID = 9067167667985194047L;
@@ -118,6 +120,9 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable{
     
     /** User service */
     private UserService userService;
+    
+    /** id of the user */
+    private Long userId;
 
 	/**
 	 * Loads a person for viewing and editing.
@@ -171,6 +176,21 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable{
 	{
 		log.debug("updating person name = " + personNameAuthority);
 		log.debug("authoritative = " + authoritative);
+		
+		// user who has the 
+		IrUser user = userService.getUserByPersonNameAuthority(personId);
+		// get the user making the change
+		IrUser userMakingChange = userService.getUser(userId, false);
+		// user making change to a name that does not belong to them.
+    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE))
+    	{
+    		if(user == null || !user.equals(userMakingChange))
+    		{
+    			return "accessDenied";
+    		}
+    	}
+		
+		
 	    if( authoritative )
 	    {
 	    	if( personNameAuthority.changeAuthoritativeName(personName.getId()))
@@ -188,7 +208,7 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable{
 		File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
 		nameAuthorityIndexService.updateIndex(personNameAuthority, nameAuthorityFolder);
 		
-		IrUser user = userService.getUserByPersonNameAuthority(personId);
+		
 
 		if (user != null) {
 		    userIndexService.updateIndex(user, 
@@ -209,6 +229,21 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable{
 	{
 		log.debug("Delete person names called");
 		deleted = true;
+		
+		// user who has the name
+		IrUser user = userService.getUserByPersonNameAuthority(personId);
+		
+		// get the user making the change
+		IrUser userMakingChange = userService.getUser(userId, false);
+		
+		// user making change to a name that does not belong to them.
+    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE))
+    	{
+    		if(user == null || !user.equals(userMakingChange))
+    		{
+    			return "accessDenied";
+    		}
+    	}
 		
 		if( personNameIds != null )
 		{
@@ -241,8 +276,6 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable{
 	    	
 			File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
 			nameAuthorityIndexService.updateIndex(personNameAuthority, nameAuthorityFolder);
-
-			IrUser user = userService.getUserByPersonNameAuthority(personId);
 
 			if (user != null) {
 			    userIndexService.updateIndex(user, 
@@ -620,6 +653,11 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable{
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

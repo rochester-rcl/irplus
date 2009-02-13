@@ -26,6 +26,7 @@ import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 
@@ -75,9 +76,15 @@ public class WithdrawInstitutionalPublication extends ActionSupport implements U
 	public String execute(){
 		log.debug("Institutional ItemId = " + institutionalItemId);
         IrUser user = userService.getUser(userId, false);
-		
+        
+ 		
 		if (institutionalItemId != null) {
 			InstitutionalItem institutionalItem = institutionalItemService.getInstitutionalItem(institutionalItemId, false);
+			
+			if( !institutionalItem.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+			{
+				return "accessDenied";
+			}
 			
 		    if (withdrawAllVersions) {
 				Set<InstitutionalItemVersion> versions = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions();

@@ -25,6 +25,10 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.user.Department;
 import edu.ur.ir.user.DepartmentService;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -33,7 +37,7 @@ import edu.ur.ir.web.table.Pager;
  * @author Sharmila Ranganathan
  *
  */
-public class ManageDepartments extends Pager implements Preparable{
+public class ManageDepartments extends Pager implements Preparable, UserIdAware{
 	
 	/** generated version id. */
 	private static final long serialVersionUID = -3229962214403823020L;
@@ -75,6 +79,13 @@ public class ManageDepartments extends Pager implements Preparable{
 	/** Row End */
 	private int rowEnd;
 	
+	/** service for accessing user information */
+	private UserService userService;
+
+
+	/** id of the user */
+	private Long userId;
+	
 	/** Default constructor */
 	public  ManageDepartments() 
 	{
@@ -90,6 +101,12 @@ public class ManageDepartments extends Pager implements Preparable{
 	public String create()
 	{
 		log.debug("creating a department = " + department.getName());
+		IrUser user = userService.getUser(userId, false);
+		if(!user.hasRole(IrRole.RESEARCHER_ROLE) || !user.hasRole(IrRole.ADMIN_ROLE) )
+		{
+			return "accessDenied";
+		}
+		
 		added = false;
 		Department other = departmentService.getDepartment(department.getName());
 		if( other == null)
@@ -161,8 +178,6 @@ public class ManageDepartments extends Pager implements Preparable{
 		department = departmentService.getDepartment(id, false);
 		return "get";
 	}
- 
-
 	
 	/**
 	 * Get the departments table data.
@@ -295,6 +310,18 @@ public class ManageDepartments extends Pager implements Preparable{
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 
 }
