@@ -324,7 +324,7 @@ public class DefaultRepositoryService implements RepositoryService {
 			String originalFileName, 
 			IrUser versionCreator) {
 	    
-		addNewFileToVersionedFile(repository, versionedFile, f, originalFileName, null);
+		addNewFileToVersionedFile(repository, versionedFile, f, originalFileName, null, versionCreator);
 		
 	}
 	

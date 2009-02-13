@@ -17,6 +17,8 @@
 
 package edu.ur.ir.person.service;
 
+import java.util.List;
+
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorDAO;
 import edu.ur.ir.person.ContributorService;
@@ -41,8 +43,20 @@ public class DefaultContributorService implements ContributorService{
 	 * @see edu.ur.ir.person.ContributorService#get(edu.ur.ir.person.PersonName, edu.ur.ir.person.ContributorType)
 	 */
 	public Contributor get(PersonName personName,
-			ContributorType contributorType) {
+			ContributorType contributorType) 
+	{
 		return contributorDAO.findByNameType(personName.getId(), contributorType.getId());
+	}
+	
+	/**
+	 * Get the contributors for the person name
+	 *  
+	 *  
+	 *  @return List of contributors for the person name
+	 */
+	public List<Contributor> get(PersonName personName)
+	{
+		return contributorDAO.getAllForName(personName.getId());
 	}
 
 	public ContributorDAO getContributorDAO() {
