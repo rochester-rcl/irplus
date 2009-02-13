@@ -70,13 +70,15 @@
             <result name="success">/pages/admin/institutional_collection/institutional_collections_table.jsp</result>
         </action>
         
+        <!--  ****************************************** -->
+        <!--  Move Institutional Collection actions	 -->
+        <!--  ****************************************** -->
         <action name="viewMoveInstitutionalCollectionLocations"
             class="edu.ur.ir.web.action.institution.MoveInstitutionalCollectionData"
             method="viewLocations">
             <interceptor-ref name="editStack"/>
             <result name="success">/pages/admin/institutional_collection/move_collection.jsp</result>
         </action>
-        
         
         <action name="getMoveInstitutionalCollectionDestinations"
             class="edu.ur.ir.web.action.institution.MoveInstitutionalCollectionData"
@@ -92,6 +94,56 @@
             <interceptor-ref name="editStack"/>
             <result name="success">/pages/admin/institutional_collection/move_collection_frag.jsp</result>
         </action>
+       
+        
+        
+        <!--  ****************************************** -->
+        <!--  Move Institutional Publications actions	 -->
+        <!--  ****************************************** -->
+
+        <!--  moves the selected publications to a given location -->
+        <action name="moveInstitutionalItemSystemObjects" 
+            class="edu.ur.ir.web.action.institution.MoveInstitutionalCollectionData">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/item/move_item_response.jsp</result>
+        </action>
+        
+        <action name="viewMoveInstitutionalItemLocations"
+            class="edu.ur.ir.web.action.institution.MoveInstitutionalCollectionData"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/item/move_item.jsp</result>
+        </action>
+
+        <action name="getMoveInstitutionalPublicationDestinations"
+            class="edu.ur.ir.web.action.institution.MoveInstitutionalCollectionData"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/item/move_item_frag.jsp</result>
+        </action>
+        
+        <action name="moveInstitutionalItemInformation"
+            class="edu.ur.ir.web.action.institution.MoveInstitutionalCollectionData"
+            method="move">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/item/move_item_frag.jsp</result>
+        </action>  
+        
+        
+        <!--  **************************************************** -->
+        <!--  Delete Institutional Publication actions	 -->
+        <!--  **************************************************** -->
+
+        <!--  delete item -->  
+        <action name="deleteInstitutionalItem"  
+            class="edu.ur.ir.web.action.institution.DeleteInstitutionalItem">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirect">institutionalPublicationPublicView.action?institutionalItemId=${institutionalItemId}</result>
+        </action>  
+        
+        <!--  **************************************************** -->
+        <!-- Manage an institutional collection actions	 -->
+        <!--  **************************************************** -->
         
         <!--  Manages a single institutional collection for the repository -->
         <action name="*InstitutionalCollection"
@@ -103,6 +155,9 @@
             <result name="view">/pages/admin/institutional_collection/edit_institutional_collection.jsp</result>
         </action>
 
+       <!--  **************************************************** -->
+        <!--  Collection Group actions	 -->
+        <!--  **************************************************** -->
         <!--  add the group with the specified permissions -->
         <action name="addCollectionPermissionsToGroup"
             method="addCollectionPermissionsToGroup"
