@@ -18,6 +18,7 @@ package edu.ur.ir.web.action.person;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -26,6 +27,8 @@ import com.opensymphony.xwork2.Preparable;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.person.BirthDate;
+import edu.ur.ir.person.Contributor;
+import edu.ur.ir.person.ContributorService;
 import edu.ur.ir.person.DeathDate;
 import edu.ur.ir.person.NameAuthorityIndexService;
 import edu.ur.ir.person.PersonName;
@@ -33,9 +36,11 @@ import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -44,7 +49,7 @@ import edu.ur.ir.web.table.Pager;
  * @author Nathan Sarr
  *
  */
-public class ManagePersons extends Pager implements  Preparable{
+public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	
 	/**eclipse generated id */
 	private static final long serialVersionUID = -3575881684154936394L;
@@ -108,14 +113,21 @@ public class ManagePersons extends Pager implements  Preparable{
 
 	/** Year person died  */
 	private int deathYear;
+	
+	/** id of the user to add the person to */
+	private Long addToUserId;
 
-    /** Id of the User to add the Person to */ 
+    /** Id of the User making the changes */ 
     private Long userId;
     
     /** User service */
     private UserService userService;
     
-    /** User's name */
+    /** service for dealing with contributors*/
+    private ContributorService contributorService;
+    
+ 
+	/** User's name */
     private boolean myName;
     
     /** User index service */
@@ -151,6 +163,19 @@ public class ManagePersons extends Pager implements  Preparable{
 	{
 		
 		log.debug("Creating a person with person name " + personName);
+		
+		// In user account, to add the names to a user or to assign in admin section
+		if (addToUserId != null) 
+		{
+			IrUser user = userService.getUser(userId, false);
+			
+			// users who are not administrators can only add person to an account
+			// account
+			if( !addToUserId.equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+			{
+			    return "accessDenied";	
+			}
+		}
 
 		personNameAuthority = new PersonNameAuthority(personName);
 		personNameAuthority.addBirthDate(birthMonth, birthDay, birthYear);
@@ -161,9 +186,10 @@ public class ManagePersons extends Pager implements  Preparable{
 		File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
 		nameAuthorityIndexService.addToIndex(personNameAuthority, nameAuthorityFolder);
 		
+		log.debug( " my Name = " + myName + " add to user id = " + addToUserId);
 		// In user account, to add the names to a user
-		if (myName && (userId != null)) {
-			IrUser user = userService.getUser(userId, false);
+		if (myName && (addToUserId != null)) {
+			IrUser user = userService.getUser(addToUserId, false);
 			user.setPersonNameAuthority(personNameAuthority);
 			userService.makeUserPersistent(user);
 		    userIndexService.updateIndex(user, 
@@ -204,15 +230,26 @@ public class ManagePersons extends Pager implements  Preparable{
 		dd.setMonth(deathMonth);
 		dd.setYear(deathYear);
 
+		IrUser user = userService.getUserByPersonNameAuthority(id);
+		// get the user making the change
+		IrUser userMakingChange = userService.getUser(userId, false);
+		// user making change to a name that does not belong to them.
+    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE))
+    	{
+    		if(!user.equals(userMakingChange))
+    		{
+    			return "accessDenied";
+    		}
+    	}
+		
 		personService.save(personNameAuthority);
 
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
 		nameAuthorityIndexService.updateIndex(personNameAuthority, nameAuthorityFolder);
 
-		IrUser user = userService.getUserByPersonNameAuthority(id);
-
-		if (user != null) {
+		if (user != null) 
+		{
 			userIndexService.updateIndex(user, 
 				new File( repo.getUserIndexFolder().getFullPath()) );	
 		}
@@ -239,6 +276,8 @@ public class ManagePersons extends Pager implements  Preparable{
 			Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 			File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
 			
+			// get the user making the change
+			IrUser userMakingChange = userService.getUser(userId, false);
 			
 		    for(int index = 0; index < personIds.length; index++)
 		    {
@@ -256,15 +295,36 @@ public class ManagePersons extends Pager implements  Preparable{
 			    // Delete Person only if the person is not a contributor
 			    if (!isContributor) {
 			    	IrUser user = userService.getUserByPersonNameAuthority(personIds[index]);
-				    personService.delete(p);
-	
-				    nameAuthorityIndexService.deleteFromIndex(p, nameAuthorityFolder);
+				    
+			    	// user making change to a name that does not belong to them.
+			    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE) && !userMakingChange.hasRole(IrRole.COLLECTION_ADMIN_ROLE))
+			    	{
+			    		if(user == null || !user.equals(userMakingChange))
+			    		{
+			    			return "accessDenied";
+			    		}
+			    	}
+			    	
+			    	for (PersonName personName: p.getNames()) 
+			    	{
+			    		// delete any old contributors
+					    List<Contributor> contributors = contributorService.get(personName);
+					    for( Contributor c : contributors)
+					    {
+					    	contributorService.delete(c);
+					    }
+					    
+					}
 					
-				    // Update the user indes with user's person names
+				    // Update the user indices with user's person names
 					if (user != null) {
+						user.setPersonNameAuthority(null);
+						userService.makeUserPersistent(user);
 						userIndexService.updateIndex(user, 
 							new File( repo.getUserIndexFolder().getFullPath()) );	
-					}				    
+					}
+					personService.delete(p);
+				    nameAuthorityIndexService.deleteFromIndex(p, nameAuthorityFolder);
 			    } else {
 			    	deleted = false;
 			    	personsNotDeleted.append(p.getAuthoritativeName().getForename());
@@ -526,12 +586,12 @@ public class ManagePersons extends Pager implements  Preparable{
 		this.itemService = itemService;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public Long getAddToUserId() {
+		return addToUserId;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setAddToUserId(Long addToUserId) {
+		this.addToUserId = addToUserId;
 	}
 
 	public UserService getUserService() {
@@ -641,5 +701,18 @@ public class ManagePersons extends Pager implements  Preparable{
 	public int getTotalHits() {
 		return totalHits;
 	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public ContributorService getContributorService() {
+		return contributorService;
+	}
+
+	public void setContributorService(ContributorService contributorService) {
+		this.contributorService = contributorService;
+	}
+
 
 }

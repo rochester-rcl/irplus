@@ -33,10 +33,12 @@ import edu.ur.dao.CriteriaHelper;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.PropertyConverter;
 import edu.ur.ir.web.table.TableCollectionInfo;
 import edu.ur.ir.web.table.TableRequestHelper;
@@ -49,7 +51,7 @@ import edu.ur.util.TokenGenerator;
  *
  */
 public class ManageEmails extends ActionSupport implements  
-ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable{
+ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable, UserIdAware{
 
 	/** eclipse generated id */
 	private static final long serialVersionUID = 4890200754192783056L;
@@ -80,6 +82,9 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable{
 	
 	/** id of the user  */
 	private Long id;
+	
+	/** id of the user making the changes - could be admin - could be user */
+	private Long userId;
 	
 	/** id of the email  */
 	private Long emailId;
@@ -138,7 +143,22 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable{
 		IrUser otherUser = userService.getUserByEmail(email.getEmail());
 		StringBuffer buffer = new StringBuffer();
 		
+
+		
 		if (otherUser == null) {
+			//user making the change
+			IrUser changeMakingUser = userService.getUser(userId, false);
+			
+			// if they are not an administrator and trying to change
+			// an account that does not belong to them then deny
+			// access 
+			if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
+			{
+				if( !changeMakingUser.equals(irUser))
+				{
+				    return "accessDenied";
+				}
+			}
 			
 			String emailToken = TokenGenerator.getToken();
 			email.setToken(emailToken);
@@ -185,6 +205,20 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable{
 		UserEmail userEmail = userService.getUserEmailByEmail(email.getEmail());
 
 		if ((userEmail == null) || (emailId.equals(userEmail.getId()))) {
+			
+			//user making the change
+			IrUser changeMakingUser = userService.getUser(userId, false);
+			
+			// if they are not an administrator and trying to change
+			// an account that does not belong to them then deny
+			// access 
+			if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
+			{
+				if( !changeMakingUser.equals(irUser))
+				{
+				    return "accessDenied";
+				}
+			}
 
 			if (!email.getEmail().equals(oldEmail)) {
 			    String emailToken = TokenGenerator.getToken();
@@ -234,11 +268,19 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable{
 	public String delete()
 	{
 		log.debug("Delete emails called" + emailIds);
+		
+		//user making the change
+		IrUser changeMakingUser = userService.getUser(userId, false);
+		
 		if( emailIds != null )
 		{
 		    for(Long emailId :emailIds)
 		    {
 			    UserEmail removeEmail = userService.getEmail(emailId, false);
+			    if( !removeEmail.getIrUser().equals(changeMakingUser) && !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
+			    {
+			    	 return "accessDenied";
+			    }
 			    userService.makeEmailTransient(removeEmail);
 		    }
 		}
@@ -253,10 +295,24 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable{
 	 */
 	public String viewEmails()
 	{
+		//user making the change
+		IrUser changeMakingUser = userService.getUser(userId, false);
+		
+		// if they are not an administrator and trying to view
+		// an account that does not belong to them then deny
+		// access 
+		if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
+		{
+			if( !changeMakingUser.getId().equals(id))
+			{
+			    return "accessDenied";
+			}
+		}
 		
 		TableRequestHelper helper = new TableRequestHelper();
 		helper.processTableData(request, this, this);
 		List<CriteriaHelper> criteria = helper.getCriteriaHelpers();
+		
 		emails = userService.getEmails(id, criteria, 
 				helper.getRowStart(), helper.getRowEnd());
 		return SUCCESS;
@@ -521,6 +577,10 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable{
 
 	public String getEmailVerificationMessage() {
 		return emailVerificationMessage;
+	}
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
 
