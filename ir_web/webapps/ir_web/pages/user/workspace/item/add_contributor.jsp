@@ -212,8 +212,7 @@
 		              
    	             	 <input type="hidden" id="person_id"
 		                   name="personId" value="${user.personNameAuthority.id}"/>
-		             
-		             ${user.id}   
+		
   				     <input type="hidden" id="user_id"
 		                   name="addToUserId" value="${user.id}"/>		                   
 		              
