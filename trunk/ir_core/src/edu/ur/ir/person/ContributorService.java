@@ -16,6 +16,8 @@
 
 package edu.ur.ir.person;
 
+import java.util.List;
+
 /**
  * Service for dealing with contributors.
  * 
@@ -33,6 +35,15 @@ public interface ContributorService {
 	 * @return - the found contributor type or null if the contributor is not found
 	 */
 	public Contributor get(PersonName personName, ContributorType contributorType);
+	
+	
+	/**
+	 * Get all contribution types for the given person name.
+	 * 
+	 * @param personName
+	 * @return set of contributions for the person name
+	 */
+	public List<Contributor> get(PersonName personName);
 	
     /**
      * Get a contributor  by id
