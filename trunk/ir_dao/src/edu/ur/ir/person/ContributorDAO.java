@@ -18,6 +18,7 @@ package edu.ur.ir.person;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import java.util.List;
 
 /**
  * Data access for a contributor 
@@ -37,4 +38,12 @@ CrudDAO<Contributor>
      * @return the found contributor.
      */
     public Contributor findByNameType(Long personNameId, Long contributorTypeId);	
+    
+	/**
+	 * Get all contribution types for the given person name.
+	 * 
+	 * @param personNameId - id of the person name
+	 * @return set of contributions for the person name
+	 */
+	public List<Contributor> getAllForName(Long personNameId);
 }
