@@ -74,10 +74,14 @@ public class ContributorDAOTest {
 	
   		ContributorType ct = new ContributorType("ctName");
  		ct.setDescription("ctDescription");
+ 		
+		ContributorType ct2 = new ContributorType("ctName2");
+ 		ct2.setDescription("ctDescription2");
 
         TransactionStatus ts = tm.getTransaction(td);
 
         contributorTypeDAO.makePersistent(ct);
+        contributorTypeDAO.makePersistent(ct2);
          
  		PersonName name = new PersonName();
 		name.setFamilyName("familyName");
@@ -94,8 +98,10 @@ public class ContributorDAOTest {
 		personNameAuthorityDAO.makePersistent(p);
 		
 		Contributor contrib = new Contributor(name, ct);
-		
 		contributorDAO.makePersistent(contrib);
+		
+		Contributor contrib2 = new Contributor(name, ct2);
+		contributorDAO.makePersistent(contrib2);
 		tm.commit(ts);
 		
         // Start the transaction 
@@ -103,18 +109,24 @@ public class ContributorDAOTest {
 		Contributor other = contributorDAO.getById(contrib.getId(), false);
 		assert other.equals(contrib) : "The contributors should be equal";
 
-		assert contributorDAO.findByNameType(name.getId(), ct.getId()) != null : "Should find the contributor type";
+		assert contributorDAO.findByNameType(name.getId(), ct.getId()) != null : "Should find the contributor " + ct;
+		assert contributorDAO.getAllForName(name.getId()).size() == 2 : "Should find the two contributor types";
+
+		
 		
 		//complete the transaction
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
-		contributorDAO.makeTransient(other);
+		contributorDAO.makeTransient(contributorDAO.getById(contrib.getId(), false));
+		contributorDAO.makeTransient(contributorDAO.getById(contrib2.getId(), false));
 		assert contributorDAO.getById(other.getId(), false) == null : "Should not be able to find other";
 		
-		contributorTypeDAO.makeTransient(ct);
-		personNameAuthorityDAO.makeTransient(p);
+		contributorTypeDAO.makeTransient(contributorTypeDAO.getById(ct.getId(), false));
+		contributorTypeDAO.makeTransient(contributorTypeDAO.getById(ct2.getId(), false));
+		personNameAuthorityDAO.makeTransient(personNameAuthorityDAO.getById(p.getId(), false));
 		tm.commit(ts);
 	}
+	
 
 }
