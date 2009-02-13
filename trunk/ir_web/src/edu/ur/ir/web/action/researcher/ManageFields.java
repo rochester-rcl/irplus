@@ -25,6 +25,10 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.researcher.Field;
 import edu.ur.ir.researcher.FieldService;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -33,7 +37,7 @@ import edu.ur.ir.web.table.Pager;
  * @author Sharmila Ranganathan
  *
  */
-public class ManageFields extends Pager implements Preparable{
+public class ManageFields extends Pager implements Preparable, UserIdAware {
 	
 	/** generated version id. */
 	private static final long serialVersionUID = -3229962214403823020L;
@@ -47,6 +51,11 @@ public class ManageFields extends Pager implements Preparable{
 	/** Set of fields for viewing the fields */
 	private Collection<Field> fields;
 	
+	/** service for users */
+	private UserService userService;
+	
+
+
 	/**  ResearcherField for loading  */
 	private Field field;
 
@@ -61,6 +70,9 @@ public class ManageFields extends Pager implements Preparable{
 	
 	/** id of the field  */
 	private Long id;
+	
+	/** id of the user making the change */
+	private Long userId;
 	
 	/** Set of field ids */
 	private long[] fieldIds;
@@ -90,6 +102,12 @@ public class ManageFields extends Pager implements Preparable{
 	public String create()
 	{
 		log.debug("creating a field = " + field.getName());
+		IrUser user = userService.getUser(userId, false);
+		if(!user.hasRole(IrRole.RESEARCHER_ROLE) || !user.hasRole(IrRole.ADMIN_ROLE) )
+		{
+			return "accessDenied";
+		}
+		
 		added = false;
 		Field other = fieldService.getField(field.getName());
 		if( other == null)
@@ -295,6 +313,18 @@ public class ManageFields extends Pager implements Preparable{
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 
 }

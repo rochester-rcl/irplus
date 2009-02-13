@@ -231,12 +231,13 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		dd.setYear(deathYear);
 
 		IrUser user = userService.getUserByPersonNameAuthority(id);
+		
 		// get the user making the change
 		IrUser userMakingChange = userService.getUser(userId, false);
 		// user making change to a name that does not belong to them.
     	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE))
     	{
-    		if(!user.equals(userMakingChange))
+    		if(user == null || !user.equals(userMakingChange))
     		{
     			return "accessDenied";
     		}

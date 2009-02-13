@@ -36,6 +36,7 @@ import edu.ur.ir.item.ItemService;
 import edu.ur.ir.item.ItemVersion;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalItem;
@@ -133,6 +134,17 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 		log.debug("Institutional Item Id = " + institutionalItemId);
 		institutionalItem = institutionalItemService.getInstitutionalItem(institutionalItemId, false);
 		
+		IrUser user = userService.getUser(userId, false);
+			
+		// only admin and owner of object can execute this action
+		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			if(!institutionalItem.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
+		}
+		
 		return SUCCESS;
 	}
 	
@@ -145,6 +157,18 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 	public String addVersion() throws NoIndexFoundException {
 		
 		institutionalItem = institutionalItemService.getInstitutionalItem(institutionalItemId, false);
+		
+		IrUser user = userService.getUser(userId, false);
+		
+		// only admin and owner of object can execute this action
+		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			if(!institutionalItem.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
+		}
+		
 		
 		ItemVersion version = itemService.getItemVersion(itemVersionId, false);
 		
