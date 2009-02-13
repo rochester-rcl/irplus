@@ -71,10 +71,16 @@
 	</query>
 	
 	<!--  Get a contributor by type id and person name id -->
-	<query name="findByNameType">
+	<query name="findContributorByNameType">
 	    from Contributor as contributor
 	    where contributor.personName.id = ?
 	    and contributor.contributorType.id = ?
+	</query>
+	
+   <!--  Get all contribution types for a given person name -->
+	<query name="getAllContributorForName">
+	    from Contributor as contributor
+	    where contributor.personName.id = ?
 	</query>
 	
 </hibernate-mapping>

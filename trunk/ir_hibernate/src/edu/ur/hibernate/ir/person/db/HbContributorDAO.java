@@ -74,8 +74,20 @@ public class HbContributorDAO implements ContributorDAO{
 	public Contributor findByNameType(Long personNameId, Long contributorTypeId)
 	{
 		Object[] values = new Object[] {personNameId, contributorTypeId};
-		return (Contributor)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("findByNameType", values));
+		return (Contributor)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("findContributorByNameType", values));
 	}
+	
+	/**
+	 * Find the contibutor by person name id, contributor type id.
+	 * 
+	 * @see edu.ur.ir.person.ContributorDAO#findByNameType(java.lang.Long, java.lang.Long)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Contributor> getAllForName(Long personNameId)
+	{
+		return (List<Contributor>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllContributorForName", personNameId);
+	}
+
 
 	@SuppressWarnings("unchecked")
 	public List getAll() {
