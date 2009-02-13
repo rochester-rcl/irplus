@@ -413,7 +413,7 @@
 		 	        <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
 		 				<td>
 				           <ur:basicForm name="movePublicationForm" 
-				              method="post" action="/user/viewMoveInstitutionalItemLocations.action">
+				              method="post" action="/admin/viewMoveInstitutionalItemLocations.action">
 								
 								<input type="hidden" id="move_items_destination_id" name="destinationId" value="${institutionalItem.institutionalCollection.id}"/>
 								<input type="hidden" id="move_items_item_ids" name="itemIds" value="${institutionalItemId}"/>
@@ -455,7 +455,7 @@
 				 </c:if>
 				 <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">	
 						<td>  
-				           <ur:basicForm name="deleteForm" method="post" action="/user/deleteInstitutionalItem.action">
+				           <ur:basicForm name="deleteForm" method="post" action="/admin/deleteInstitutionalItem.action">
 								<input type="hidden" id="institutional_item_id" name="institutionalItemId" value="${institutionalItem.id}"/>
 				            </ur:basicForm>  			                        	        
 			

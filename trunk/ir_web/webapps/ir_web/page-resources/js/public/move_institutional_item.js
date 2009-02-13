@@ -25,7 +25,7 @@ YAHOO.ur.institutional.item.move =
 {
     getMoveCollection : function(destinationId)
     {
-        var viewMoveCollectionsAction = basePath + 'user/getMoveInstitutionalCollectionDestinations.action';
+        var viewMoveCollectionsAction = basePath + 'admin/getMoveInstitutionalPublicationDestinations.action';
         document.getElementById("destination_id").value = destinationId;
         document.viewChildContentsForMove.action = viewMoveCollectionsAction;
 
@@ -77,7 +77,7 @@ YAHOO.ur.institutional.item.move =
 	            else
 	            {
 	                var itemId = document.getElementById('item_ids').value;
-	                var viewInstitutionalItemAction = basePath + 'institutionalPublicationPublicView.action'
+	                var viewInstitutionalItemAction = basePath + '/user/institutionalPublicationPublicView.action'
 	        
 	                viewInstitutionalItemAction = viewInstitutionalItemAction +
 	                 '?institutionalItemId=' + itemId + '&bustcache='+new Date().getTime();
@@ -100,7 +100,7 @@ YAHOO.ur.institutional.item.move =
 
 
 	    YAHOO.util.Connect.setForm('viewChildContentsForMove');
-        var action = basePath + "user/moveInstitutionalItemInformation.action";
+        var action = basePath + "admin/moveInstitutionalItemInformation.action";
         var cObj = YAHOO.util.Connect.asyncRequest('POST',
                 action, callback);
     },
