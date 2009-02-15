@@ -132,10 +132,11 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	 */
 	public String updatePersonalInformation() throws NoIndexFoundException
 	{
-		
 		log.debug("update called researcher Id = " + researcherId );
-        
-		if( !researcher.getUser().getId().equals(userId))
+		IrUser user = researcher.getUser();
+		
+		if(user== null || !user.hasRole(IrRole.RESEARCHER_ROLE) || 
+				!researcher.getUser().getId().equals(userId))
 		{
 			return "accessDenied";
 		}
@@ -183,7 +184,12 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		
 		log.debug("get pictures called");
 		if (userId != null) {
-			researcher = userService.getUser(userId, false).getResearcher();
+			IrUser user = userService.getUser(userId, false);
+			if( !user.hasRole(IrRole.RESEARCHER_ROLE))
+			{
+				return "accessDenied";
+			}
+			researcher = user.getResearcher();
 		}
 		else
 		{
@@ -239,7 +245,14 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		
 		log.debug("isPublic::"+isPublic);
 		if (userId != null) {
-			researcher = userService.getUser(userId, false).getResearcher();
+			IrUser user = userService.getUser(userId, false);
+			researcher = user.getResearcher();
+			
+			log.debug( "user " + user + " has role " + user.hasRole(IrRole.RESEARCHER_ROLE) );
+			if( !user.hasRole(IrRole.RESEARCHER_ROLE))
+			{
+				return "accessDenied";
+			}
 		}
 		else
 		{
@@ -271,7 +284,14 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	 */
 	public String getDepartmentsInformation() {
 		if (userId != null) {
-			researcher = userService.getUser(userId, false).getResearcher();
+			IrUser user = userService.getUser(userId, false);
+			researcher = user.getResearcher();
+			
+			log.debug( "user " + user + " has role " + user.hasRole(IrRole.RESEARCHER_ROLE) );
+			if( !user.hasRole(IrRole.RESEARCHER_ROLE))
+			{
+				return "accessDenied";
+			}
 		}
 		else
 		{
@@ -289,7 +309,14 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	 */
 	public String getFieldsInformation() {
 		if (userId != null) {
-			researcher = userService.getUser(userId, false).getResearcher();
+			IrUser user = userService.getUser(userId, false);
+			researcher = user.getResearcher();
+			
+			log.debug( "user " + user + " has role " + user.hasRole(IrRole.RESEARCHER_ROLE) );
+			if( !user.hasRole(IrRole.RESEARCHER_ROLE))
+			{
+				return "accessDenied";
+			}
 		}
 		else
 		{
