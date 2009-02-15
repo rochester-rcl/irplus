@@ -289,6 +289,7 @@
         <action name="nextPicture"
             class="edu.ur.ir.web.action.researcher.PublicResearcherPageView" 
             method="getPictures">
+            <interceptor-ref name="editStack" />
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/researcher_page/next_researcher_picture_frag.jsp</result>
         </action>  
