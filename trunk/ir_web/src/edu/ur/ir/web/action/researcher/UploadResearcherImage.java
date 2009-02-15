@@ -100,9 +100,15 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 			repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
 		IrFile picture = null;
-		
-		
 		researcher = researcherService.getResearcher(researcherId, false);
+		
+		
+		// only a user can edit their own researcher page
+		if( !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
 		
 		picture = repositoryService.createIrFile(repository, file, fileFileName, "primary news picture for researcher id = " 
 				+ researcher.getId());

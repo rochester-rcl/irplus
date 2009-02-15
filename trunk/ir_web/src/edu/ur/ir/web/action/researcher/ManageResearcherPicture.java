@@ -26,6 +26,7 @@ import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Manage the researcher pictures.
@@ -33,7 +34,7 @@ import edu.ur.ir.researcher.ResearcherService;
  * @author Sharmila Ranganathan
  *
  */
-public class ManageResearcherPicture extends ActionSupport implements Preparable {
+public class ManageResearcherPicture extends ActionSupport implements Preparable, UserIdAware {
 
 	/** Eclipse generated id */
 	private static final long serialVersionUID = 3980266197680971615L;
@@ -59,6 +60,9 @@ public class ManageResearcherPicture extends ActionSupport implements Preparable
 	/** Repository service */
 	private RepositoryService repositoryService;
 	
+	/** id of the user making the changes */
+	private Long userId;
+	
 	
 	
 	/**
@@ -79,6 +83,12 @@ public class ManageResearcherPicture extends ActionSupport implements Preparable
 		{
 		    log.debug("execute delete");
 		}
+		
+		if( researcher == null || !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
 		
 		if( primaryResearcherPicture)
 		{
@@ -117,6 +127,11 @@ public class ManageResearcherPicture extends ActionSupport implements Preparable
 		if( log.isDebugEnabled())
 		{
 		    log.debug("setDefaultPicture");
+		}
+		
+		if( researcher == null || !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
 		}
 		
 		// If there is a primary picturee, move it to collection of pictures 
@@ -218,5 +233,9 @@ public class ManageResearcherPicture extends ActionSupport implements Preparable
 	 */
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }

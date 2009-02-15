@@ -89,6 +89,10 @@ Comparator<IrFile> {
 		researcher = researcherService.getResearcher(researcherId, false);
 
 		if (researcher != null) {
+		 	if( !researcher.isPublic())
+	    	{
+	    		return "accessDenied";
+	    	}
 			researcherJSONObject = researcher.toJSONObject();
 		}
 
@@ -110,6 +114,10 @@ Comparator<IrFile> {
     	}
 
     	researcher = researcherService.getResearcher(researcherId, false);
+    	if( !researcher.isPublic())
+    	{
+    		return "accessDenied";
+    	}
 	    
     	LinkedList<IrFile> pictures = new LinkedList<IrFile>();
 	    
