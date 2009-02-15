@@ -147,20 +147,30 @@
 									<tr>
 									<td width="60%" valign="top" class="greyBorderTableTd">
 										<table class="noPaddingTable" width="100%" align="left">
+										    <tr>
+											    <td><label for="description" class="previewLabel"> Other Titles </label> </td>
+											</tr> 
 											<tr>
-											<td>	<label for="description" class="previewLabel"> Description </label> </td>
+											    <td>
+											        <c:forEach items="${institutionalItemVersion.item.subTitles}" var="otherTitle">
+											            ${otherTitle.title}<br/>
+											        </c:forEach>
+											    </td>
+											</tr>
+											<tr>
+											    <td><label for="description" class="previewLabel"> Description </label> </td>
 											</tr> 
 										
 											<tr>
-											<td>	${institutionalItemVersion.item.description} </td>
+											    <td>${institutionalItemVersion.item.description}</td>
 											</tr>
 	
 											<tr>
-											<td>	<label for="abstract" class="previewLabel"> Abstract </label> </td>
+											    <td><label for="abstract" class="previewLabel"> Abstract </label></td>
 											</tr> 
 										
 											<tr>
-											<td>	${institutionalItemVersion.item.itemAbstract} </td>
+											    <td>${institutionalItemVersion.item.itemAbstract}</td>
 											</tr>
 										</table>
 									</td>
