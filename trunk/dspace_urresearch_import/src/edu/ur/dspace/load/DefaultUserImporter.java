@@ -154,12 +154,24 @@ public class DefaultUserImporter implements UserImporter{
 		 
          for(DspaceUser u : users)
          {
+        	 
         	 if( !userEmailExists(u.email) && !userNameAlreadyExits(u.email) && !userNetIdExists(u.netId))
         	 {
-        		 System.out.println("processing user " + u);
-        	     IrUser user = createUser(u);
+        		 if( !userAlreadyImported(u.dspaceId))
+        		 {	 
+        		     log.debug("processing user " + u);
+        	         IrUser user = createUser(u);
         	     
-        	     jdbcTemplate.execute("insert into dspace_convert.ir_user(dspace_eperson_id, ur_research_user_id) values (" + u.dspaceId + "," + user.getId() + ")");
+        	         jdbcTemplate.execute("insert into dspace_convert.ir_user(dspace_eperson_id, ur_research_user_id) values (" + u.dspaceId + "," + user.getId() + ")");
+        		 }
+        		 else
+        		 {
+        			 log.debug( "User " + u + " has already been imported");
+        		 }
+        	 }
+        	 else
+        	 {
+        		 log.debug("user data " + u + " already exists" );
         	 }
          }		 
 	}
@@ -321,6 +333,25 @@ public class DefaultUserImporter implements UserImporter{
             }
         }
 		return u;
+	}
+	
+	/**
+	 * Determine if the user is already imported
+	 * 
+	 * @param epersonId
+	 * @return true if the user is already imported.
+	 */
+	public boolean userAlreadyImported(Long epersonId)
+	{
+		int count = jdbcTemplate.queryForInt("select count(*) from dspace_convert.ir_user where dspace_eperson_id = " + epersonId);
+	    if(count == 0)
+	    {
+	    	return false;
+	    }
+	    else
+	    {
+	    	return true;
+	    }
 	}
 
 	public UserService getUserService() {

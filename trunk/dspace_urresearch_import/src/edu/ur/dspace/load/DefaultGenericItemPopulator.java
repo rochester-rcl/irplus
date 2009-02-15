@@ -675,8 +675,6 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		}
 		return publishedDate;
 	}
-	
-	
 
 	
 	/**
@@ -695,7 +693,6 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			log.debug("adding title " + title);
 		    genericItem.addSubTitle(title);
 		}
-		
 	}
 	
 	/**
