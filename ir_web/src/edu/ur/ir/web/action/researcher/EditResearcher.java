@@ -127,7 +127,7 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	}
 
 	/**
-	 * Update an existing institutional collection 
+	 * Update personal researcher information 
 	 * 
 	 */
 	public String updatePersonalInformation() throws NoIndexFoundException

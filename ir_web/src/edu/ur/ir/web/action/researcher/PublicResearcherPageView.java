@@ -29,6 +29,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Action to display researcher page
@@ -37,7 +38,7 @@ import edu.ur.ir.researcher.ResearcherService;
  *
  */
 public class PublicResearcherPageView extends ActionSupport implements
-Comparator<IrFile> {
+Comparator<IrFile>, UserIdAware {
 
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = 5154383076462883720L;
@@ -76,6 +77,9 @@ Comparator<IrFile> {
 	
 	/** Type represents NEXT, PREVIOUS, INIT */
 	private String type;
+	
+	/** id of the user trying to access the data */
+	private Long userId;
 
 
 	/**
@@ -89,7 +93,9 @@ Comparator<IrFile> {
 		researcher = researcherService.getResearcher(researcherId, false);
 
 		if (researcher != null) {
-		 	if( !researcher.isPublic())
+			// if the researcher page is not public and the user accessing the file
+			// is not the owner
+		 	if( !researcher.isPublic() && !researcher.getUser().getId().equals(userId))
 	    	{
 	    		return "accessDenied";
 	    	}
@@ -114,7 +120,7 @@ Comparator<IrFile> {
     	}
 
     	researcher = researcherService.getResearcher(researcherId, false);
-    	if( !researcher.isPublic())
+    	if( !researcher.isPublic() && !researcher.getUser().getId().equals(userId))
     	{
     		return "accessDenied";
     	}
@@ -266,5 +272,14 @@ Comparator<IrFile> {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	/**
+	 * Set the user id.
+	 * 
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
