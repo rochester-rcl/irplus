@@ -30,6 +30,7 @@
             class="edu.ur.ir.web.action.researcher.UploadResearcherImage"
             method="addNewPicture">
             <interceptor-ref name="urUploadStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_upload_form_frag.jsp</result>
         </action>
         
@@ -37,24 +38,28 @@
             class="edu.ur.ir.web.action.researcher.EditResearcher"
             method="getPictures">
             <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_pictures_frag.jsp</result>
         </action>
         
         <action name="deleteResearcherPicture" method="delete"
             class="edu.ur.ir.web.action.researcher.ManageResearcherPicture">
             <interceptor-ref name="crudStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_pictures_frag.jsp</result>
         </action>    
         
         <action name="setDefaultPicture" method="setDefaultPicture"
             class="edu.ur.ir.web.action.researcher.ManageResearcherPicture">
             <interceptor-ref name="crudStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_pictures_frag.jsp</result>
         </action>
         
         <action name="updatePersonalInformation" method="updatePersonalInformation"
             class="edu.ur.ir.web.action.researcher.EditResearcher">
             <interceptor-ref name="crudStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="no-op"/>
         </action>  
 
@@ -62,6 +67,7 @@
             class="edu.ur.ir.web.action.researcher.EditResearcher"
             method="getAllDepartments">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_department.jsp</result>
         </action>
 
@@ -70,6 +76,7 @@
                 method="getDepartmentsInformation"
                 class="edu.ur.ir.web.action.researcher.EditResearcher">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/department_list.jsp</result>
         </action>
         
@@ -78,12 +85,14 @@
                 method="updatePersonalInformation"
                 class="edu.ur.ir.web.action.researcher.EditResearcher">
                 <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getDepartmentsInformation.action</result>
         </action>                          
                 
         <action name="setResearcherPagePermission" class="edu.ur.ir.web.action.researcher.EditResearcher"
         	method="setResearcherPagePermission">
         	<interceptor-ref name="editStack"/>
+        	<result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="no-op"/>
         </action>
         
