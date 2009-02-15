@@ -281,5 +281,14 @@
   
   </div>
   <!--  End doc div-->
+  
+   <!--  wait div -->
+   <div id="wait_dialog_box" class="hidden">
+	    <div class="hd">Processing...</div>
+		<div class="bd">
+		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
+		    <p><img src="${wait}"></img></p>
+		</div>
+	</div>       
 </body>
 </html>

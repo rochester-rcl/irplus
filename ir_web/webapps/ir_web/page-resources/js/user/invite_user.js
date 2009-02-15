@@ -137,9 +137,9 @@ YAHOO.ur.invite =
 	        YAHOO.util.Connect.setForm('newInviteForm');
 	        if(validate())
 	        {
-	            //based on what we need to do (update or create a 
-	            // new folder) based on the action.
+	            // invite the user
                 var action = newInviteUserAction;
+                YAHOO.ur.invite.waitDialog.showDialog();
                 var cObj = YAHOO.util.Connect.asyncRequest('post', action, callback);
             }
 	    };
@@ -149,6 +149,7 @@ YAHOO.ur.invite =
 	    // handle a successful return
 	    var handleSuccess = function(o) 
 	    {
+	    	 YAHOO.ur.invite.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -176,6 +177,7 @@ YAHOO.ur.invite =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
+	    	YAHOO.ur.invite.waitDialog.hide();
 	        alert('Invite user failed ' + o.status);
 	    };
   
@@ -517,6 +519,34 @@ YAHOO.ur.invite =
 	},
 	
     /**
+     * Dialog to handle waiting display
+     */
+    createWaitDialog : function()
+    {
+         var handleClose = function()
+         {
+        	 YAHOO.ur.invite.waitDialog.close();
+         };
+          
+	     // Instantiate the Dialog
+         YAHOO.ur.invite.waitDialog = 
+	         new YAHOO.widget.Dialog("wait_dialog_box", 
+									     { width: "600px",
+										   visible: false,
+										   modal: true,
+										   close: false
+										  } );
+										
+         YAHOO.ur.invite.waitDialog.showDialog = function()
+		 {
+        	 YAHOO.ur.invite.waitDialog.center();
+        	 YAHOO.ur.invite.waitDialog.show();
+		 };
+		 
+		 YAHOO.ur.invite.waitDialog.render();
+    },
+	
+    /**
      * initialize the page
      * this is called once the dom has
      * been created
@@ -530,6 +560,7 @@ YAHOO.ur.invite =
 	    YAHOO.ur.invite.createUnshareFileConfirmDialog();
 	    YAHOO.ur.invite.createUnsharePendingInviteeConfirmDialog();
 	    YAHOO.ur.invite.createRemoveFileConfirmDialog();
+	    YAHOO.ur.invite. createWaitDialog();
     }
     
 };
