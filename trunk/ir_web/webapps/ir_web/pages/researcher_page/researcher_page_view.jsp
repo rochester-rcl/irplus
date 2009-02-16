@@ -145,6 +145,13 @@
 								      <c:if test="${!ir:isStringEmpty(researcher.campusLocation)}">
 		                              <strong>Title:</strong>${researcher.title} <br/>
 		                              </c:if>
+		                              <c:if test="${!ur:isEmpty(researcher.departments)}">
+		                                  <strong>Department(s):</strong><br/>
+		                                  <c:forEach items="${researcher.departments}" var="department">
+		                                      ${department.name}<br/>
+		                                  </c:forEach>
+		                                  <br/>
+		                              </c:if>
 		                              <c:if test="${!ir:isStringEmpty(researcher.campusLocation)}">
 		                              <strong>Location:</strong> ${researcher.campusLocation} <br/>
 		                              </c:if>
