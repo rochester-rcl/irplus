@@ -54,8 +54,6 @@ public class ManageFields extends Pager implements Preparable, UserIdAware {
 	/** service for users */
 	private UserService userService;
 	
-
-
 	/**  ResearcherField for loading  */
 	private Field field;
 

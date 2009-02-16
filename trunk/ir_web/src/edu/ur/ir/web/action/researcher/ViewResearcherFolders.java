@@ -33,6 +33,7 @@ import edu.ur.ir.researcher.ResearcherInstitutionalItem;
 import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.action.user.FileSystemSortHelper;
 
 
@@ -42,10 +43,13 @@ import edu.ur.ir.web.action.user.FileSystemSortHelper;
  * @author Sharmila Ranganathan
  *
  */
-public class ViewResearcherFolders extends ActionSupport {
+public class ViewResearcherFolders extends ActionSupport implements UserIdAware {
 	
 	/**Eclipse gernerated id */
 	private static final long serialVersionUID = -7255565089170626513L;
+	
+	/** id of the user accessing the data */
+	private long userId;
 
 	/**  Id of the researcher */
 	private Long researcherId;
@@ -112,7 +116,17 @@ public class ViewResearcherFolders extends ActionSupport {
 	public String getTable()
 	{
 		log.debug("getTableCalled");
-		createFileSystem();
+		researcher = researcherService.getResearcher(researcherId, false);
+		
+		// deny access if user is not owner of the data
+		if( researcher.getUser().getId().equals(userId) )
+		{
+		    createFileSystem();
+		}
+		else
+		{
+			return "accessDenied";
+		}
 		return SUCCESS;
 	}
 	
@@ -126,6 +140,12 @@ public class ViewResearcherFolders extends ActionSupport {
 		log.debug("Delete folders called");
 		researcher = researcherService.getResearcher(researcherId, false);
 		
+		// deny access if user is not owner of the data
+		if( !researcher.getUser().getId().equals(userId) )
+		{
+			return "accessDenied";
+		}
+		
 		if( folderIds != null )
 		{
 		    for(int index = 0; index < folderIds.length; index++)
@@ -133,6 +153,10 @@ public class ViewResearcherFolders extends ActionSupport {
 			    log.debug("Deleting folder with id " + folderIds[index]);
 			    ResearcherFolder pf = researcherService.getResearcherFolder(folderIds[index], false);
 			    
+			    if( !pf.getResearcher().getUser().getId().equals(userId))
+			    {
+			    	return "accessDenied";
+			    }
 
 			    researcherService.deleteFolder(pf);
 		    }
@@ -144,6 +168,12 @@ public class ViewResearcherFolders extends ActionSupport {
 			{
 				log.debug("Deleting file with id " + fileIds[index]);
 				ResearcherFile rf = researcherService.getResearcherFile( fileIds[index], false);
+				
+				if( !rf.getResearcher().getUser().getId().equals(userId))
+				{
+					return "accessDenied";
+				}
+				
 				researcherService.deleteFile(rf);
 			}
 		}
@@ -154,6 +184,10 @@ public class ViewResearcherFolders extends ActionSupport {
 			{
 				log.debug("Deleting publication with id " + publicationIds[index]);
 				ResearcherPublication rp = researcherService.getResearcherPublication( publicationIds[index], false);
+				if( !rp.getResearcher().getUser().getId().equals(userId))
+				{
+					return "accessDenied";
+				}
 				researcherService.deletePublication(rp);
 			}
 		}
@@ -164,6 +198,10 @@ public class ViewResearcherFolders extends ActionSupport {
 			{
 				log.debug("Deleting Institutional Item with id " + institutionalItemIds[index]);
 				ResearcherInstitutionalItem ri = researcherService.getResearcherInstitutionalItem(institutionalItemIds[index], false);
+				if( !ri.getResearcher().getUser().getId().equals(userId))
+				{
+					return "accessDenied";
+				}
 				researcherService.deleteInstitutionalItem(ri);
 			}
 		}		
@@ -174,6 +212,10 @@ public class ViewResearcherFolders extends ActionSupport {
 			{
 				log.debug("Deleting link with id " + linkIds[index]);
 				ResearcherLink rl = researcherService.getResearcherLink( linkIds[index], false);
+				if( !rl.getResearcher().getUser().getId().equals(userId))
+				{
+					return "accessDenied";
+				}
 				researcherService.deleteLink(rl);
 			}
 		}
@@ -187,7 +229,7 @@ public class ViewResearcherFolders extends ActionSupport {
 	 */
 	private void createFileSystem()
 	{
-		researcher = researcherService.getResearcher(researcherId, false);
+		
 		
 		if(parentFolderId != null && parentFolderId > 0)
 		{
@@ -387,6 +429,10 @@ public class ViewResearcherFolders extends ActionSupport {
 
 	public void setInstitutionalItemIds(Long[] institutionalItemIds) {
 		this.institutionalItemIds = institutionalItemIds;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 
