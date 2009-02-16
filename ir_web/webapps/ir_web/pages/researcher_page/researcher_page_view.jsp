@@ -152,6 +152,13 @@
 		                                  </c:forEach>
 		                                  <br/>
 		                              </c:if>
+		                              <c:if test="${!ur:isEmpty(researcher.fields)}">
+		                                  <strong>Field(s):</strong><br/>
+		                                  <c:forEach items="${researcher.fields}" var="field">
+		                                      ${field.name}<br/>
+		                                  </c:forEach>
+		                                  <br/>
+		                              </c:if>
 		                              <c:if test="${!ir:isStringEmpty(researcher.campusLocation)}">
 		                              <strong>Location:</strong> ${researcher.campusLocation} <br/>
 		                              </c:if>
