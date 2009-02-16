@@ -64,7 +64,7 @@
              
         </interceptors>
         
-        <!--  Home page actions -->
+       
         <default-action-ref name="unknownAction" />
 
         <global-results>
@@ -77,6 +77,7 @@
         <!--  ************************************ -->
         &item_public;
         
+         <!--  Home page actions -->
         <action name="goHome">
             <result name="success" type="redirect">home.action</result>
         </action>
@@ -282,6 +283,7 @@
         <!-- Download Researcher picture  -->
         <action name="downloadResearcherPicture"
             class="edu.ur.ir.web.action.researcher.ResearcherPictureFileDownload">
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="no-op"/>
         </action>
         

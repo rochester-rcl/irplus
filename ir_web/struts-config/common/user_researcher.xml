@@ -99,14 +99,6 @@
         <!--  ************************************ -->
         <!--  Field Actions            	   -->
         <!--  ************************************ -->
-        <!--  This handles update, save and delete -->
-        <action name="addField" 
-            method="add"
-            class="edu.ur.ir.web.action.researcher.ManageFields">
-            <interceptor-ref name="crudStack" />
-            <result name="added">/pages/admin/field/field_form.jsp</result>
-        </action>
-                   
 		<action name="getAllFields" 
             class="edu.ur.ir.web.action.researcher.EditResearcher"
             method="getAllFields">
@@ -119,6 +111,7 @@
                 method="getFieldsInformation"
                 class="edu.ur.ir.web.action.researcher.EditResearcher">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/field_list.jsp</result>
         </action>
         
@@ -127,6 +120,7 @@
                 method="updatePersonalInformation"
                 class="edu.ur.ir.web.action.researcher.EditResearcher">
                 <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getFieldsInformation.action</result>
         </action>                          
         
@@ -138,14 +132,15 @@
             method="getTable"
             class="edu.ur.ir.web.action.researcher.ViewResearcherFolders">
             <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/folder_table.jsp</result>
         </action>
-        
         
         <action name="addResearcherFolder"
             method ="save"
             class="edu.ur.ir.web.action.researcher.AddResearcherFolder">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/add_response.jsp</result>
         </action>
         
@@ -153,15 +148,16 @@
             method ="updateFolder"
             class="edu.ur.ir.web.action.researcher.AddResearcherFolder">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/add_response.jsp</result>
         </action>
-        
         
         <!--  Allows a user to delete files and folders -->
         <action name="deleteResearcherFileSystemObjects"
             method ="deleteFileSystemObjects"
             class="edu.ur.ir.web.action.researcher.ViewResearcherFolders">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/folder_table.jsp</result>
         </action>
         
@@ -275,15 +271,6 @@
             class="edu.ur.ir.web.action.researcher.AddResearcherLink">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/user/researcher/add_response.jsp</result>
-        </action>
-        
-        
-        <!--  Allows a user to delete files and folders -->
-        <action name="deleteResearcherFileSystemObjects"
-            method ="deleteFileSystemObjects"
-            class="edu.ur.ir.web.action.researcher.ViewResearcherFolders">
-            <interceptor-ref name="crudStack" />
-            <result name="success">/pages/user/researcher/folder_table.jsp</result>
         </action>
         
        <!--  ************************************ 			   -->

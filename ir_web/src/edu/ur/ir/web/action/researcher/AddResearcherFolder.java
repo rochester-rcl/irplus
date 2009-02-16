@@ -25,6 +25,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Action to add a folder to the researcher page.
@@ -32,7 +33,7 @@ import edu.ur.ir.researcher.ResearcherService;
  * @author Sharmila Ranganarhan
  *
  */
-public class AddResearcherFolder extends ActionSupport {
+public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 	
 	/** User file system service. */
 	private ResearcherService researcherService;
@@ -64,22 +65,60 @@ public class AddResearcherFolder extends ActionSupport {
 	/** Message that can be displayed to the user. */
 	private String message;
 	
+	/** id of the user making changes */
+	private Long userId;
+	
 	/**
 	 * Create the new folder
 	 */
 	public String save()throws Exception
 	{
 		log.debug("creating a researcher folder parent folderId = " + parentFolderId);
+		Researcher researcher = researcherService.getResearcher(researcherId, false);
+		
+		if( !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
 		added = false;
 		// assume that if the current folder id is null or equal to 0
 		// then we are adding a root folder to the user.
 		if(parentFolderId == null || parentFolderId == 0)
 		{
-			added = addRootFolder();
+			 if( researcher.getRootFolder(folderName) == null )
+		     {
+				 ResearcherFolder researcherFolder = null;
+				 try {
+					researcherFolder = researcher.createRootFolder(folderName);
+					researcherFolder.setDescription(folderDescription);
+					researcherService.saveResearcherFolder(researcherFolder);
+					added = true;
+				 } catch (DuplicateNameException e) {
+					throw new RuntimeException("Fix this save error");
+				 }
+	         }
 		}
 		else
 		{
-			added = addSubFolder();
+			ResearcherFolder folder = researcherService.getResearcherFolder(parentFolderId, true);
+			if( !folder.getResearcher().getUser().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
+		
+			try
+			{
+			    ResearcherFolder researcherFolder = folder.createChild(folderName);
+			    researcherFolder.setDescription(folderDescription);
+			    researcherService.saveResearcherFolder(folder);
+			    added = true;
+			}
+			catch(DuplicateNameException e)
+			{
+				added = false;
+			}
+			
 		}
 		
 		if( !added)
@@ -119,6 +158,10 @@ public class AddResearcherFolder extends ActionSupport {
 		if( other == null)
 		{
 			ResearcherFolder existingFolder = researcherService.getResearcherFolder(updateFolderId, true);
+			if( !existingFolder.getResearcher().getUser().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
 			existingFolder.setName(folderName);
 			existingFolder.setDescription(folderDescription);
 			researcherService.saveResearcherFolder(existingFolder);
@@ -127,6 +170,10 @@ public class AddResearcherFolder extends ActionSupport {
 		// name has not been changed
 		else if(other.getId().equals(updateFolderId))
 		{
+			if( !other.getResearcher().getUser().getId().equals(userId) )
+			{
+				return "accessDenied";
+			}
 			other.setDescription(folderDescription);
 			researcherService.saveResearcherFolder(other);
 			added = true;
@@ -176,54 +223,6 @@ public class AddResearcherFolder extends ActionSupport {
 	 */
 	public void setParentFolderId(Long currentFolderId) {
 		this.parentFolderId = currentFolderId;
-	}
-
-	
-	/**
-	 * Creates a new root folder 
-	 * 
-	 */
-	private boolean addRootFolder()  
-	{
-		 boolean added = false;
-		 Researcher researcher = researcherService.getResearcher(researcherId, false);
-		 if( researcher.getRootFolder(folderName) == null )
-	     {
-			 ResearcherFolder researcherFolder = null;
-			 try {
-				researcherFolder = researcher.createRootFolder(folderName);
-				researcherFolder.setDescription(folderDescription);
-				researcherService.saveResearcherFolder(researcherFolder);
-				 
-				added = true;
-			 } catch (DuplicateNameException e) {
-				throw new RuntimeException("Fix this move error");
-			 }
-
-         }
-		 return added;
-	}
-	
-	/**
-	 * Adds a sub folder to an existing folder
-	 */
-	private boolean addSubFolder() 
-	{
-		boolean added = false;
-		ResearcherFolder folder = researcherService.getResearcherFolder(parentFolderId, true);
-	
-		try
-		{
-		    ResearcherFolder researcherFolder = folder.createChild(folderName);
-		    researcherFolder.setDescription(folderDescription);
-		    researcherService.saveResearcherFolder(folder);
-		    added = true;
-		}
-		catch(DuplicateNameException e)
-		{
-			added = false;
-		}
-		return added;
 	}
 	
 	/**
@@ -285,5 +284,9 @@ public class AddResearcherFolder extends ActionSupport {
 
 	public void setResearcherId(Long researcherId) {
 		this.researcherId = researcherId;
+	}
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
