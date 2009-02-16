@@ -127,6 +127,10 @@
             <artifact name="jai-core" type="jar"/>
         </dependency>
         
+         <dependency org="com.sun.media" name="jai-codec" rev="1.1.3">
+            <artifact name="jai-codec" type="jar"/>
+        </dependency>
+        
         <!-- lucene files -->
         <dependency org="org.apache.lucene" name="lucene-core" rev="2.3.2">
             <artifact name="lucene-core" type="jar"/>
