@@ -95,7 +95,7 @@
         </dependency>
         
          <!-- postgresql jar files -->
-	    <dependency org="postgresql" name="postgresql" rev="8.3-604.jdbc4" transitive="false">
+	    <dependency org="postgresql" name="postgresql" rev="8.3-604.jdbc3" transitive="false">
 	        <artifact name="postgresql" type="jar"/>
  	    </dependency>
         
