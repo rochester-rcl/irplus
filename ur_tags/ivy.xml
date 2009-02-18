@@ -30,16 +30,16 @@
     <dependencies>
 
 
+
         <!-- jsp api files -->
-        <dependency org="javax.servlet" name="jsp-api" rev="2.0" transitive="false">
+        <dependency org="org.apache.tomcat" name="jsp-api" rev="6.0.14" transitive="false">
             <artifact name="jsp-api" type="jar"/>
         </dependency>
-
-        <!-- servlet api files -->
-        <dependency org="javax.servlet" name="servlet-api" rev="2.5" transitive="false">
+        
+         <!-- servlet api files -->
+        <dependency org="org.apache.tomcat" name="servlet-api" rev="6.0.14" transitive="false">
             <artifact name="servlet-api" type="jar"/>
         </dependency>
-
 
         <!-- log 4j files -->
         <dependency org="log4j" name="log4j" rev="1.2.14">
