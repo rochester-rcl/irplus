@@ -99,7 +99,7 @@ public class NameSearch extends Pager implements  UserIdAware, Preparable  {
 	/** Default constructor */
 	public  NameSearch()
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 
