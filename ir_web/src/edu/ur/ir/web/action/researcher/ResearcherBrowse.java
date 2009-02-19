@@ -60,7 +60,7 @@ public class ResearcherBrowse extends Pager {
 	/** Default constructor */
 	public ResearcherBrowse()
 	{
-		numberOfResultsToShow = 100;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 20;
 	}
 

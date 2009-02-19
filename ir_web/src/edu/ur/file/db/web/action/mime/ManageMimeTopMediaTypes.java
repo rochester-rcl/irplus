@@ -76,7 +76,7 @@ public class ManageMimeTopMediaTypes extends Pager implements  Preparable{
 	
 	/** Default constructor */
 	public   ManageMimeTopMediaTypes() {
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 

@@ -86,7 +86,7 @@ public class ApproveAffiliationAction extends Pager {
 	/** Default constructor */
 	public  ApproveAffiliationAction() {
 		
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 

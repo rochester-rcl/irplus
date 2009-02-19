@@ -71,7 +71,7 @@ public class PersonNameSearch extends Pager  {
 	 * and the number of pages to show
 	 */
 	public PersonNameSearch() {
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;		
 	}
 	

@@ -77,7 +77,7 @@ public class ManageSponsors extends Pager implements Preparable{
 	/** Default constructor */
 	public ManageSponsors()
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 

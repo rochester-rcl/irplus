@@ -118,7 +118,7 @@ public class ResearcherSearch extends Pager {
 	
 	public ResearcherSearch()
 	{
-		numberOfResultsToShow = 100;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 20;
 	}
 	

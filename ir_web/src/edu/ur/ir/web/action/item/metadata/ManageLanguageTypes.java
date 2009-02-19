@@ -77,7 +77,7 @@ public class ManageLanguageTypes extends Pager implements Preparable{
 	/** Default constructor */
 	public ManageLanguageTypes()
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 

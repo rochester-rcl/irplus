@@ -89,7 +89,7 @@ public class ManageDepartments extends Pager implements Preparable, UserIdAware{
 	/** Default constructor */
 	public  ManageDepartments() 
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 

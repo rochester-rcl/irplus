@@ -87,7 +87,7 @@ public class ManageAffiliations extends Pager implements   Preparable{
 	/** Default constructor */
 	public  ManageAffiliations()
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 

@@ -78,7 +78,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	/** Default constructor */
 	public  ManageIgnoreIpAddress()
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 

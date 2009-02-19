@@ -80,7 +80,7 @@ public class ManageRoles extends Pager implements Preparable{
 	/** Default constructor */
 	public  ManageRoles() 
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 

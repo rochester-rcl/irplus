@@ -88,7 +88,7 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 	/** Default constructor */
 	public  ManageUserGroups() 
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 	

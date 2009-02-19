@@ -77,7 +77,7 @@ public class ManagePublishers extends Pager implements Preparable{
 	/** Default constructor */
 	public ManagePublishers() {
 	
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 	

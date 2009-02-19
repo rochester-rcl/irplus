@@ -77,7 +77,7 @@ public class ManageContentTypes extends Pager implements  Preparable{
 	/** Default constructor */
 	public  ManageContentTypes() 
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 
