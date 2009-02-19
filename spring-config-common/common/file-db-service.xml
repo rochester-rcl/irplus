@@ -47,7 +47,7 @@
        <property name="treeFolderInfoDAO" ref="treeFolderInfoDAO"/>
        <property name="uniqueNameGenerator" ref="uniqueNameGenerator"/>
        <property name="fileDatabaseDAO" ref="fileDatabaseDAO"/>
-       <property name="maxNumberOfFilesPerFolder" value="5000"/>
+       <property name="maxNumberOfFilesPerFolder" value="1000"/>
    </bean> 
    
    
