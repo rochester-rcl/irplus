@@ -75,7 +75,7 @@ public class UserSearch extends Pager {
 	 * and the number of pages to show
 	 */
 	public UserSearch() {
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;		
 	}
 	
