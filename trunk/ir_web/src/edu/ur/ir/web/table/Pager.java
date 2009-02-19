@@ -37,7 +37,7 @@ public abstract class Pager extends ActionSupport {
 	protected int rowStart = 0;
 	
 	/** number of results to show per page */
-	protected int numberOfResultsToShow = 5;
+	protected int numberOfResultsToShow = 25;
 	
 	/** number of pages to show  */
 	protected int numberOfPagesToShow = 5;

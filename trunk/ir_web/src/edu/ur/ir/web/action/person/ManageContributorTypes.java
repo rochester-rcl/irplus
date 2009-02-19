@@ -76,7 +76,7 @@ public class ManageContributorTypes extends Pager implements Preparable{
 	/** Default constructor */
 	public  ManageContributorTypes()
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 	/**

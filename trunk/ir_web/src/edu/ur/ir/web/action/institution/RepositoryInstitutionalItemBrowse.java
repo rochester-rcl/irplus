@@ -79,7 +79,7 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 	/** Default constructor */
 	public RepositoryInstitutionalItemBrowse()
 	{
-		numberOfResultsToShow = 100;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 20;
 	}
 	

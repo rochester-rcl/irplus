@@ -123,7 +123,7 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 	
 	public RepositoryInstitutionalItemSearch()
 	{
-		numberOfResultsToShow = 20;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 	

@@ -87,7 +87,7 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 	/** Default constructor */
 	public CollectionInstitutionalItemBrowse()
 	{
-		numberOfResultsToShow = 20;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 20;
 	}
 	

@@ -96,7 +96,7 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 	/** Default constructor */
 	public  ManageInstitutionalCollections()
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 

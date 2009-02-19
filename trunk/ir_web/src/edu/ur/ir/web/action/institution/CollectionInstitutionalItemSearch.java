@@ -119,7 +119,7 @@ public class CollectionInstitutionalItemSearch extends Pager {
 	
 	public CollectionInstitutionalItemSearch()
 	{
-		numberOfResultsToShow = 20;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 	

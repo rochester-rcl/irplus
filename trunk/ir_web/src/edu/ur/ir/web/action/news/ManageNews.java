@@ -93,7 +93,7 @@ public class ManageNews extends Pager implements  Preparable{
 	/** Default constructor */
 	public  ManageNews()
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 	

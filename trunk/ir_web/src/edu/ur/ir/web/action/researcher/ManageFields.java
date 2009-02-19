@@ -88,7 +88,7 @@ public class ManageFields extends Pager implements Preparable, UserIdAware {
 	/** Default constructor */
 	public  ManageFields() 
 	{
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 

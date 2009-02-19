@@ -77,7 +77,7 @@ public class ManageIdentifierTypes extends Pager implements  Preparable{
 	public ManageIdentifierTypes() 
 	{
 	
-		numberOfResultsToShow = 50;
+		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
 	}
 
