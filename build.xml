@@ -83,8 +83,12 @@
     	description="-->runs the described target for ir service">
     	<ant dir="ir_service" target="${target}" inheritAll="false"/>
     </target>
+	
+    <target name="do-ur-tags"  description="-->runs the described target for ur tags">
+        <ant dir="ur_tags" target="${target}" inheritAll="false"/>
+    </target>
 
-	<target name="do-ir-web" depends="do-ir-service" 
+	<target name="do-ir-web" depends="do-ir-service, do-ur-tags" 
     	description="-->runs the described target for ir web">
     	<ant dir="ir_web" target="${target}" inheritAll="false"/>
     </target>
