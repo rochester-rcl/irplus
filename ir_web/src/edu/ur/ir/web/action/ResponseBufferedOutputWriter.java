@@ -44,10 +44,10 @@ public class ResponseBufferedOutputWriter {
 	 */
 	public static void writeStream(InputStream is, OutputStream os, int bufferSize) throws IOException 
 	{
-        final BufferedInputStream input = new BufferedInputStream(is);
-        final BufferedOutputStream output = new BufferedOutputStream(os);
+        BufferedInputStream input = new BufferedInputStream(is);
+        BufferedOutputStream output = new BufferedOutputStream(os);
         
-        final byte[] buffer = new byte[bufferSize];
+        byte[] buffer = new byte[bufferSize];
 
         try
         {
@@ -64,6 +64,7 @@ public class ResponseBufferedOutputWriter {
         }
         finally
         {
+        	buffer = null;
             output.flush();
             input.close();
             output.close();
