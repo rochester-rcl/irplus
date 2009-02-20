@@ -20,12 +20,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<input type="hidden" name="personalFileId" id="personal_file_id" value="${personalFile.id}"/>
-<input type="hidden" id="version_added" name="versionAdded" value="${versionAdded}"/>
+
 
 <table class="formTable">
-    
     <tr>
+        <td>
+            <input type="hidden" name="personalFileId" id="personal_file_id" value="${personalFile.id}"/>
+            <input type="hidden" id="version_added" name="versionAdded" value="${versionAdded}"/>
+        </td>
+    </tr>
+
+    <tr>
+
         <td colspan="2" id="locked_by_user_error"><p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="lockedByUser"/></p><br/>
 		                       <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
