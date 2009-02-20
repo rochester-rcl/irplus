@@ -21,11 +21,12 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Action to add a link to the researcher page.
@@ -33,7 +34,7 @@ import edu.ur.ir.researcher.ResearcherService;
  * @author Sharmila Ranganarhan
  *
  */
-public class AddResearcherLink extends ActionSupport {
+public class AddResearcherLink extends ActionSupport implements UserIdAware{
 	
 
 	/** User file system service. */
@@ -69,22 +70,51 @@ public class AddResearcherLink extends ActionSupport {
 	/** Message that can be displayed to the user. */
 	private String message;
 	
+	/** id of the user making the changes */
+	private Long userId;
+	
 	/**
 	 * Create the new link
 	 */
 	public String save()throws Exception
 	{
 		log.debug("creating a researcher link in parent folderId = " + parentFolderId);
+		Researcher researcher = researcherService.getResearcher(researcherId, false);
+		 
+		if( !researcher.getUser().getId().equals(userId) || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE))
+		{
+			 return "accessDenied";
+		}
 		added = false;
 		// assume that if the current folder id is null or equal to 0
 		// then we are adding a root folder to the user.
 		if(parentFolderId == null || parentFolderId == 0)
 		{
-			added = addRootLink();
+			 if( researcher.getRootLink(linkName) == null )
+		     {
+				 ResearcherLink researcherLink = researcher.createRootLink(linkUrl, linkName, linkDescription);
+				 researcherService.saveResearcherLink(researcherLink);
+				 added = true;
+	         } 
 		}
 		else
 		{
-			added = addLinkToFolder();
+			ResearcherFolder folder = researcherService.getResearcherFolder(parentFolderId, true);
+			
+			if(!folder.getResearcher().getId().equals(researcher.getId()))
+			{
+				return "accessDenied";
+			}
+			
+			ResearcherLink researcherLink = folder.getResearcherLink(linkName);
+			
+			if( researcherLink == null )
+		    {
+			    researcherLink = folder.createLink(linkName, linkUrl, linkDescription);
+			    researcherService.saveResearcherFolder(folder);
+			    added = true;
+
+			}
 		}
 		
 		if (!added) {
@@ -106,6 +136,11 @@ public class AddResearcherLink extends ActionSupport {
 		added = false;
 
 		Researcher researcher = researcherService.getResearcher(researcherId, false);
+		
+		if(!researcher.getUser().getId().equals(userId) || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE))
+		{
+			return "accessDenied";
+		}
 		 
 		ResearcherLink other = null;
 		
@@ -119,12 +154,20 @@ public class AddResearcherLink extends ActionSupport {
 		else
 		{
 			other = researcherService.getResearcherLink(linkName, parentFolderId);
+			if( !other.getResearcher().getId().equals(researcher.getId()))
+			{
+				return "accessDenied";
+			}
 		}
 		
 		// name has been changed and does not conflict
 		if( other == null)
 		{
 			ResearcherLink existingLink = researcherService.getResearcherLink(updateLinkId, true);
+			if( !existingLink.getResearcher().getId().equals(researcher.getId()))
+			{
+				return "accessDenied";
+			}
 			existingLink.setName(linkName);
 			existingLink.setDescription(linkDescription);
 			existingLink.setLink(linkUrl);
@@ -168,50 +211,6 @@ public class AddResearcherLink extends ActionSupport {
 		this.parentFolderId = currentFolderId;
 	}
 
-	
-	/**
-	 * Creates a new root link
-	 *  
-	 *  
-	 */
-	private boolean addRootLink()  
-	{
-		 boolean added = false;
-		 
-		 Researcher researcher = researcherService.getResearcher(researcherId, false);
-
-		 if( researcher.getRootLink(linkName) == null )
-	     {
-			 ResearcherLink researcherLink = researcher.createRootLink(linkUrl, linkName, linkDescription);
-			 researcherService.saveResearcherLink(researcherLink);
-			 added = true;
-         } 
-		 return added;
-	}
-	
-	/**
-	 * Adds a link to an existing folder
-	 * @throws DuplicateNameException 
-	 * 
-	 *  
-	 */
-	private boolean addLinkToFolder() throws DuplicateNameException 
-	{
-		boolean added = false;
-		
-		ResearcherFolder folder = researcherService.getResearcherFolder(parentFolderId, true);
-		
-		ResearcherLink researcherLink = folder.getResearcherLink(linkName);
-		
-		if( researcherLink == null )
-	    {
-		    researcherLink = folder.createLink(linkName, linkUrl, linkDescription);
-		    researcherService.saveResearcherFolder(folder);
-		    added = true;
-
-		}
-		return added;
-	}
 	
 	/**
 	 * Indicates if the folder has been added 
@@ -295,5 +294,9 @@ public class AddResearcherLink extends ActionSupport {
 
 	public void setLinkDescription(String linkDescription) {
 		this.linkDescription = linkDescription;
+	}
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
