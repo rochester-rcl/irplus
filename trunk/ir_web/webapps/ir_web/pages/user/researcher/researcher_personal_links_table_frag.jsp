@@ -90,8 +90,7 @@
                             ${link.order}   
                         </urstb:td>
                         <urstb:td>
-                             <img class="tableImg" alt="" 
-                                 src="${pageContext.request.contextPath}/page-resources/images/all-images/delete.gif"/>  <a href="javascript:YAHOO.ur.researcher.link.removeLink('${link.name}');"> Remove </a>
+                             <span class="deleteBtnImg">&nbsp;</span>  <a href="javascript:YAHOO.ur.researcher.link.removeLink('${link.name}');"> Remove </a>
                         </urstb:td>
                         
                     </urstb:tr>
