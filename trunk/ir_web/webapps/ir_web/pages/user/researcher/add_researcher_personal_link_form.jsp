@@ -16,19 +16,22 @@
 
 <%@ taglib prefix="ir" uri="ir-tags"%>
 
-<!--  represents a successful submission -->
-<input type="hidden" id="researcher_personal_link_form_success"  value="${linkAdded}"/>
-		   		               
-<input type="hidden" id="researcher_personal_link_form_new" name="newLink" value="true"/>
-      
-<input type="hidden" id="researcher_personal_link_id"  name="linkId" value="${linkId}"/>
-
-<div id="researcher_personal_link_error_div">       
-    <!--  get the error messages from fieldErrors -->
-    <p class="errorMessage"><ir:printError errors="${fieldErrors}"  key="linkNameAlreadyExists"/></p>
-</div>
-    
 <table class="formTable">
+
+    <tr>
+        <td>
+            <!--  represents a successful submission -->
+            <input type="hidden" id="researcher_personal_link_form_success"  value="${linkAdded}"/>
+		   		               
+            <input type="hidden" id="researcher_personal_link_form_new" name="newLink" value="true"/>
+      
+            <input type="hidden" id="researcher_personal_link_id"  name="linkId" value="${linkId}"/>
+            <div id="researcher_personal_link_error_div">       
+                <!--  get the error messages from fieldErrors -->
+                <p class="errorMessage"><ir:printError errors="${fieldErrors}"  key="linkNameAlreadyExists"/></p>
+            </div>
+        </td>
+    </tr>
 
      <tr>
          <td class="label">Link Name:</td>
