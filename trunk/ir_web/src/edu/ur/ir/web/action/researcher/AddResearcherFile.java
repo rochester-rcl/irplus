@@ -131,11 +131,15 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 
 		if(parentPersonalFolderId != null && parentPersonalFolderId > 0)
 		{
+			PersonalFolder personalFolder = userFileSystemService.getPersonalFolder(parentPersonalFolderId, false);
+			if(personalFolder == null || !personalFolder.getOwner().getId().equals(userId))
+			{
+				return "accessDenied";
+			}
 		    personalFolderPath = userFileSystemService.getPersonalFolderPath(parentPersonalFolderId);
 		}
 		
 		Collection<PersonalFolder> myPersonalFolders = userFileSystemService.getPersonalFoldersForUser(userId, parentPersonalFolderId);
-		
 		Collection<PersonalFile> myPersonalFiles = userFileSystemService.getPersonalFilesInFolder(userId, parentPersonalFolderId);
 		
 	    personalFileSystem = new LinkedList<FileSystem>();
@@ -161,8 +165,20 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 	public String addResearcherFile() {
 		
 		log.debug("Add file versionedFileId = " + versionedFileId);
-		loadResearcher();		
+		loadResearcher();	
+		
+		if( researcher == null )
+		{
+			return "accessDenied";
+		}
+		
 		VersionedFile vf = repositoryService.getVersionedFile(versionedFileId, false);
+		
+		// user must be the owner or collaborator of the versioned file
+		if( !vf.getOwner().getId().equals(userId) && !vf.isUserACollaborator(researcher.getUser()))
+		{
+			return "accessDenied";
+		}
 				
 		if (parentFolderId != null && parentFolderId > 0) {
 			
@@ -182,8 +198,17 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 	 */
 	public String getResearcherFolders() {
 		loadResearcher();
+		if( researcher == null )
+		{
+			return "accessDenied";
+		}
 		if(parentFolderId != null && parentFolderId > 0)
 		{
+			ResearcherFolder reseacherFolder = researcherService.getResearcherFolder(parentFolderId, false);
+			if(!reseacherFolder.getResearcher().getId().equals(researcher.getId()))
+			{
+				return "accessDenied";
+			}
 			researcherFolderPath = researcherService.getResearcherFolderPath(parentFolderId);
 		}
 		
@@ -246,9 +271,29 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 	 * 
 	 */
 	public String changeFileVersion() {
-		
+		loadResearcher();
+		if( researcher == null )
+		{
+			return "accessDenied";
+		}
 		FileVersion fileVersion = repositoryService.getFileVersion(fileVersionId, false);
+		
+		VersionedFile vf = fileVersion.getVersionedFile();
+		
+		// user must be the owner or collaborator of the versioned file
+		if( !vf.getOwner().getId().equals(userId) && !vf.isUserACollaborator(researcher.getUser()))
+		{
+			return "accessDenied";
+		}
+		
 		ResearcherFile researcherFile = researcherService.getResearcherFile(researcherFileId, false);
+		// researchers can only access their own information
+		if(!researcherFile.getResearcher().getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
+		
 		researcherFile.setIrFile(fileVersion.getIrFile());
 		researcherFile.setVersionNumber(fileVersion.getVersionNumber());
 
@@ -300,6 +345,10 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 	public String execute() { 
 		
 		loadResearcher();
+		if( researcher == null )
+		{
+			return "accessDenied";
+		}
 		
 		return SUCCESS;
 	}
