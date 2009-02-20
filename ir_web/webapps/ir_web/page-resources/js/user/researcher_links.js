@@ -47,7 +47,7 @@ YAHOO.ur.researcher.link = {
 	    // handle a successful return
 	    var handleSuccess = function(o) 
 	    {
-			// check for the timeout - forward user to login page if timout
+			// check for the timeout - forward user to login page if timeout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {       		 	    
@@ -195,7 +195,7 @@ YAHOO.ur.researcher.link = {
         var action =  basePath + 'user/editResearcherPersonalLinkView.action?researcherId=' + researcherId + '&linkId=' + linkId;
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            action, 
+            action + '&bustcache='+new Date().getTime(), 
             callback);
     },
     
@@ -293,7 +293,7 @@ YAHOO.ur.researcher.link = {
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
-	        {       		 	    
+	        {      
 	            var divToUpdate = document.getElementById('researcher_personal_links');
                 divToUpdate.innerHTML = o.responseText; 
             }
@@ -316,7 +316,7 @@ YAHOO.ur.researcher.link = {
         var action =  basePath + 'user/viewResearcherPersonalLinks.action?researcherId=' + researcherId;
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            action, 
+            action + '&bustcache='+new Date().getTime(), 
             callback);
     },
     
@@ -353,7 +353,7 @@ YAHOO.ur.researcher.link = {
 	    var action =  basePath + 'user/moveResearcherPersonalLinkUp.action?researcherId=' + researcherId + '&linkName=' + linkName;
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            action, 
+            action +'&bustcache='+new Date().getTime(), 
             callback);
     },
     
@@ -390,7 +390,7 @@ YAHOO.ur.researcher.link = {
         var action =  basePath + 'user/moveResearcherPersonalLinkDown.action?researcherId=' + researcherId + '&linkName=' + linkName;
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            action, 
+            action +'&bustcache='+new Date().getTime(), 
             callback);
     },
     
