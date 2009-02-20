@@ -38,6 +38,7 @@ import edu.ur.ir.researcher.ResearcherInstitutionalItem;
 import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
@@ -61,7 +62,6 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 	
 	/** user service for accessing user information */
 	private UserService userService;
-	
 
 	/**  Logger for add files to item action */
 	private static final Logger log = Logger.getLogger(AddResearcherPublication.class);
@@ -118,6 +118,9 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 	List<ResearcherItemFileSystemVersion> researcherItemFileSystemVersions = new LinkedList<ResearcherItemFileSystemVersion>();
 
 
+    /**
+     * Load the researcher using the user id.
+     */
     private void loadResearcher()
     {
     	researcher = userService.getUser(userId, false).getResearcher();
@@ -131,10 +134,19 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 		
 		log.debug("getPersonalCollections");
 		loadResearcher();
+		if( researcher == null || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE))
+		{
+			return "accessDenied";
+		}
 		
 
 		if(parentCollectionId != null && parentCollectionId > 0)
 		{
+			PersonalCollection personalCollection = userPublishingFileSystemService.getPersonalCollection(parentCollectionId, false);
+			if( !personalCollection.getOwner().getId().equals(userId) )
+			{
+				return "accessDenied";
+			}
 		    collectionPath = userPublishingFileSystemService.getPersonalCollectionPath(parentCollectionId);
 		}
 		
@@ -167,17 +179,28 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 	public String addResearcherPublication() {
 
 		log.debug("Add publication versionedItemId = " + versionedItemId + " parent folder id = " + parentFolderId);
-				
+		loadResearcher();
+		if( researcher == null || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE))
+		{
+			return "accessDenied";
+		}
+		
+		// researchers can add only their own items
 		VersionedItem vi = itemService.getVersionedItem(versionedItemId, false);
 		if( !userId.equals(vi.getOwner().getId()))
 		{
 			return "accessDenied";
 		}
 		
-		loadResearcher();
+		
 		if (parentFolderId != null && parentFolderId > 0) {
 			
 			ResearcherFolder parentFolder = researcherService.getResearcherFolder(parentFolderId, false);
+			if(!parentFolder.getResearcher().getId().equals(researcher.getId()))
+			{
+				return "accessDenied";
+			}
+			
 			researcherService.createPublication(parentFolder, vi.getCurrentVersion().getItem(), vi.getLargestVersion());
 		} else {
 			ItemVersion currentVersion = vi.getCurrentVersion();
@@ -194,8 +217,17 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 	 */
 	public String getResearcherFolders() {
 		loadResearcher();
+		if( researcher == null || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE))
+		{
+			return "accessDenied";
+		}
 		if(parentFolderId != null && parentFolderId > 0)
 		{
+			ResearcherFolder folder = researcherService.getResearcherFolder(parentFolderId, false);
+			if(!folder.getResearcher().getId().equals(researcher.getId()))
+			{
+				return "accessDenied";
+			}
 			researcherFolderPath = researcherService.getResearcherFolderPath(parentFolderId);
 		}
 		
@@ -260,6 +292,10 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 	public String changePublicationVersion() {
 		log.debug("change publication version itemVersionId = " + itemVersionId + " publication Id = " + publicationId);
 		loadResearcher();
+		if( researcher == null || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE))
+		{
+			return "accessDenied";
+		}
 		ItemVersion itemVersion = itemService.getItemVersion(itemVersionId, false);
 		if( itemVersion.getVersionedItem().getOwner().getId() != userId )
 		{
@@ -278,6 +314,10 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 	 */
 	public String execute() { 
 		loadResearcher();
+		if( researcher == null || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE) )
+		{
+			return "accessDenied";
+		}
 		return SUCCESS;
 	}
 	

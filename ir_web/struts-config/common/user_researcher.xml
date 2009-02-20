@@ -169,6 +169,7 @@
         <action name="viewAddFiles"
             class="edu.ur.ir.web.action.researcher.AddResearcherFile">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/add_files_to_researcher.jsp</result>
         </action>        
         
@@ -177,6 +178,7 @@
                 method="getPersonalFolders"
                 class="edu.ur.ir.web.action.researcher.AddResearcherFile">
                 <interceptor-ref name="editStack"/>
+                <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/personal_folder_table.jsp</result>
         </action>
         
@@ -185,6 +187,7 @@
                 method="getResearcherFolders"
                 class="edu.ur.ir.web.action.researcher.AddResearcherFile">
                 <interceptor-ref name="editStack"/>
+                <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_file_add_table.jsp</result>
         </action>
 
@@ -193,7 +196,8 @@
                 method="addResearcherFile"
                 class="edu.ur.ir.web.action.researcher.AddResearcherFile">
                 <interceptor-ref name="editStack"/>
-            <result name="success" type="no-op"/>
+                <result name="accessDenied">/accessDenied.jsp</result>
+                <result name="success" type="no-op"/>
         </action>        
         
         <action name="researcherFileDownload" class="edu.ur.ir.web.action.researcher.DownloadResearcherFile">
@@ -208,7 +212,8 @@
                 method="changeFileVersion"
                 class="edu.ur.ir.web.action.researcher.AddResearcherFile">
                 <interceptor-ref name="editStack"/>
-            <result name="success" type="no-op"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+             <result name="success" type="no-op"/>
         </action>        
         
         <!--  ************************************ -->
@@ -219,6 +224,7 @@
         <action name="viewAddPublications"
             class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/add_publications_to_researcher.jsp</result>
         </action>        
         
@@ -227,6 +233,7 @@
                 method="getPersonalCollections"
                 class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/personal_collection_table.jsp</result>
         </action>
         
@@ -235,6 +242,7 @@
                 method="getResearcherFolders"
                 class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_publication_add_table.jsp</result>
         </action>
 
@@ -243,14 +251,16 @@
                 method="addResearcherPublication"
                 class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="no-op"/>
         </action>  
         
-                <!--  Change file version -->
+        <!--  Change file version -->
         <action name="changeResearcherPublicationVersion"
                 method="changePublicationVersion"
                 class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="no-op"/>
         </action>              
         
