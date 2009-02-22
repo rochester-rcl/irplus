@@ -43,7 +43,7 @@ public class ItemLink extends CommonPersistent implements UrlAware, ItemObject {
 	private int order;
 	
 	/** Type of the object */
-	private String TYPE = "URL";
+	public static final String TYPE = "URL";
 	
 	/**
 	 * Generated id.
