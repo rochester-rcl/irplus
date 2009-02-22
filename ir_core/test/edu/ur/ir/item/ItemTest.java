@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
@@ -52,6 +53,9 @@ public class ItemTest {
 	
 	/** Get the properties file  */
 	Properties properties = propertiesLoader.getProperties();
+	
+	/**  Logger */
+	protected static final Logger log = Logger.getLogger(ItemTest.class);
 	
 	/**
 	 * Test the basic get and set  methods
@@ -432,6 +436,80 @@ public class ItemTest {
 		assert clonedItem.getItemSponsors().iterator().next().getSponsor().equals(sponsor) : "Sponsor should be equal";
 		assert clonedItem.getSubTitles().size() == 1: "SubTitles should be equal";
 		assert clonedItem.getOriginalItemCreationDate().equals(item.getOriginalItemCreationDate()) : "Release Date should be equal";
+		repoHelper.cleanUpRepository();
+	}
+	
+	/**
+	 * Test getting a file from an item
+	 * @throws DuplicateNameException 
+	 */
+	public void testItemObjectMove() throws DuplicateNameException, IllegalFileSystemNameException {
+		
+		log.debug("HERE IS SOME OUTPUT");
+
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_core_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+		
+		// create the first file to store in the temporary folder
+		File f = testUtil.creatFile(directory, "testFile",
+				"Hello  - ItemFile This is text in a file"); 
+		
+		// get the file database 
+		FileDatabase fd = repo.getFileDatabase();
+
+		FileInfo fileInfo1 = fd.addFile(f, "newFile1");
+		fileInfo1.setDisplayName("displayName1");
+
+		// create a collection
+		InstitutionalCollection col = repo.createInstitutionalCollection("colName");
+		col.setDescription("colDescription");
+
+		GenericItem item = new GenericItem("item1");
+		
+		IrFile irFile = new IrFile(fileInfo1, "myNewFile");
+		
+		item.addFile(irFile);
+		ItemFile info = item.getItemFile("myNewFile");
+		assert info.getIrFile().equals(irFile) : "file should be equal";
+		assert info.getOrder() == 0 : "item file order should be 0 but is " + info.getOrder();
+		
+		ItemLink itemLink = new ItemLink();
+		itemLink.setName("ItemLinkName");
+		itemLink.setUrlValue("http://www.hotmail.com");
+		itemLink.setDescription("ItemLinkDescription");
+		
+		item.addLink(itemLink);
+		
+		assert itemLink.getOrder() == 1 : " link order should be 1 but is " + itemLink.getOrder();
+		
+		ItemLink itemLink2 = new ItemLink();
+		itemLink2.setName("ItemLinkName2");
+		itemLink2.setUrlValue("http://www.cnn.com");
+		itemLink2.setDescription("ItemLinkDescription2");
+		
+		item.addLink(itemLink2);
+		
+		assert itemLink2.getOrder() == 2 : " link 2 order should be 2 but is " + itemLink2.getOrder();
+		
+		item.moveItemObject(info, 1);
+		
+		assert itemLink.getOrder() == 0 : " link order should be 0 but is " + itemLink.getOrder();
+		assert info.getOrder() == 1 :  "item file order should be 1 but is " + info.getOrder();
+		assert itemLink2.getOrder() == 2 : " link 2 order should be 2 but is " + itemLink2.getOrder();
+		
 		repoHelper.cleanUpRepository();
 	}
 }
