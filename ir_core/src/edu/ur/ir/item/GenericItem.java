@@ -27,6 +27,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.item.ItemFile;
+import edu.ur.ir.item.ItemLink;
+import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
@@ -315,6 +318,21 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		ItemFile itemFile = new ItemFile(this, irFile);
 		if( !itemFiles.contains(itemFile))
 		{
+			// set the order of the file
+		    List<ItemObject> allObjects = getItemObjects();
+		    ItemObject max = null;
+		    if( allObjects.size() > 0 )
+		    {
+		        max = Collections.max(allObjects, new AscendingOrderComparator());
+		    }
+		
+		    int order = 0;
+		    if( max != null )
+		    {
+			    order = max.getOrder() + 1;
+		    }
+		    itemFile.setOrder(order);
+
 			itemFiles.add(itemFile);
 		} else {
 			return null;
@@ -675,12 +693,12 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	}
 	
     /**
-     * Move the link to the specified order position.  If the order is less than 1
+     * Move the contributor to the specified order position.  If the order is less than 1
      * it is moved to the beginning of the list.  If the order is larger than the 
      * size of the list it is moved to the end.  The list is re-ordered
  
-     * @param link
-     * @param order
+     * @param contributor - item object being moved
+     * @param position - position to move th object to
      * @return - true if the link is moved
      * 
      */
@@ -748,6 +766,92 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		
 		// order the links
     	Collections.sort(contributors , new AscendingOrderComparator());
+    	return true;
+    }
+    
+    /**
+     * Move the item object to the specified order position.  If the order is less than 1
+     * it is moved to the beginning of the list.  If the order is larger than the 
+     * size of the list it is moved to the end.  The list is re-ordered
+ 
+     * @param item object - object to move
+     * @param position - position to move the object to.
+     * @return - true if the link is moved
+     * 
+     */
+    public boolean moveItemObject(ItemObject o, int position) 
+    {
+    	ItemObject theObject = null;
+    	
+    	if( o.getType().equals(ItemFile.TYPE))
+    	{
+    		theObject = this.getItemFile(((ItemFile)o).getIrFile().getName());
+    	}
+    	else if( o.getType().equals(ItemLink.TYPE))
+    	{
+    	    theObject = this.getItemLink(o.getName());
+    	}
+    	
+    	if( theObject == null)
+    	{
+    		return false;
+    	}
+    	
+    	List<ItemObject> allObjects = getItemObjects();
+    	int currentItemObjectPosition = o.getOrder();
+    	
+    	// if the position is greater than the size of the list put it at the end
+		if(position > (allObjects.size() - 1))
+		{
+			position = allObjects.size() - 1;
+		}
+		
+		if( position < 0 )
+		{
+			position = 0;
+		}
+		
+		int change = 0;
+		
+		
+		// moving up in list
+		if( (currentItemObjectPosition - position) > 0 )
+		{
+			change = 1;
+		}
+		else // moving down in list
+		{
+			change = -1;
+		}
+		
+
+		for(ItemObject aObject : allObjects)
+		{
+		    if(!aObject.equals(o))
+			{
+		    	// move up
+		    	if( change == 1)
+		    	{
+		    		if( aObject.getOrder() < currentItemObjectPosition && aObject.getOrder() >= position)
+		    		{
+		    			aObject.setOrder(aObject.getOrder() + change);
+		    		}
+		    	}
+		    	else if( change == -1)
+		    	{
+		    		if( aObject.getOrder() <= position && aObject.getOrder() > currentItemObjectPosition)
+		    		{
+		    			aObject.setOrder(aObject.getOrder() + change);
+		    		}
+		    	}
+			}
+		    else
+		    {
+		    	aObject.setOrder(position);
+		    }
+		   
+		}
+		
     	return true;
     }
 	
@@ -1023,6 +1127,20 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		    	throw new IllegalStateException("Item link could not be remvoed from other item");
 		    }
 		}
+		// set the order of the file
+	    List<ItemObject> allObjects = getItemObjects();
+	    ItemObject max = null;
+	    if( allObjects.size() > 0 )
+	    {
+	        max = Collections.max(allObjects, new AscendingOrderComparator());
+	    }
+	
+	    int order = 0;
+	    if( max != null )
+	    {
+		    order = max.getOrder() + 1;
+	    }
+	    link.setOrder(order);
 		link.setItem(this);
 		links.add(link);
 	}
