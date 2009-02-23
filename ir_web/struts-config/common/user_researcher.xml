@@ -294,6 +294,7 @@
             method="create"
             class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/add_researcher_personal_link_form.jsp</result>
         </action>
         
@@ -302,6 +303,7 @@
             method="update"
             class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/add_researcher_personal_link_form.jsp</result>
         </action>
         
@@ -310,6 +312,7 @@
             method="delete"
             class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
             <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_personal_links_table_frag.jsp</result>
         </action> 
         
@@ -318,15 +321,8 @@
             method="view"
             class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
             <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_personal_links_table_frag.jsp</result>
-        </action>
-        
-        <!--  view links -->
-        <action name="editResearcherPersonalLinkView"
-            method="viewLink"
-            class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
-            <interceptor-ref name="editStack" />
-            <result name="success">/pages/user/researcher/researcher_add_personal_link_form.jsp</result>
         </action>
         
          <!--  view links -->
@@ -334,6 +330,7 @@
             method="viewLink"
             class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
             <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/add_researcher_personal_link_form.jsp</result>
         </action>
         
@@ -342,6 +339,7 @@
             method="moveLinkUp"
             class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
             <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_personal_links_table_frag.jsp</result>
         </action> 
         
@@ -350,6 +348,7 @@
             method="moveLinkDown"
             class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
             <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_personal_links_table_frag.jsp</result>
         </action>   
         
