@@ -159,6 +159,10 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 	 * 
 	 */
 	public String getResearcherFolders() {
+		if( researcher == null || !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
 		
 		if(parentFolderId != null && parentFolderId > 0)
 		{
