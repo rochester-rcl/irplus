@@ -149,7 +149,7 @@ public class ManageCollectionLinks extends ActionSupport {
 	public String moveLinkUp()
 	{
 		collection = institutionalCollectionService.getCollection(collectionId, false);
-		link = collection.getLink(linkName);
+		link = collection.getLink(linkId);
 		collection.moveLink(link, link.getOrder() - 1);
 		institutionalCollectionService.saveCollection(collection);
 		return SUCCESS;
@@ -163,7 +163,7 @@ public class ManageCollectionLinks extends ActionSupport {
 	public String moveLinkDown()
 	{
 		collection = institutionalCollectionService.getCollection(collectionId, false);
-		link = collection.getLink(linkName);
+		link = collection.getLink(linkId);
 		collection.moveLink(link, link.getOrder() + 1);
 		institutionalCollectionService.saveCollection(collection);
 		return SUCCESS;
@@ -177,7 +177,7 @@ public class ManageCollectionLinks extends ActionSupport {
 	public String delete()
 	{
 		collection = institutionalCollectionService.getCollection(collectionId, false);
-        collection.removLink(collection.getLink(linkName));
+        collection.removLink(collection.getLink(linkId));
         institutionalCollectionService.saveCollection(collection);
 		return SUCCESS;
 	}

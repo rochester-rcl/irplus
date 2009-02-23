@@ -820,12 +820,12 @@ YAHOO.ur.edit.institution.collection = {
     },
     
     /**
-     * remove the link with the specified name fromt the collection
+     * remove the link with the specified name from the collection
      */
-    removeLink : function(linkName)
+    removeLink : function(linkId)
     {
        //set the name in the form
-       document.getElementById('remove_link_name').value = linkName;
+       document.getElementById('remove_link_id').value = linkId;
        YAHOO.ur.edit.institution.collection.deleteLinkDialog.showDialog();
     },
     
@@ -857,14 +857,14 @@ YAHOO.ur.edit.institution.collection = {
         var action =  basePath + 'admin/viewCollectionLinks.action?collectionId=' + collectionId;
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            action, 
+            action + '&bustcache='+new Date().getTime(), 
             callback);
     },
     
     /**
      * Move a link up one position
      */
-    moveLinkUp : function(linkName, collectionId)
+    moveLinkUp : function(linkId, collectionId)
     {
         var success = function(o) 
 	    {
@@ -886,7 +886,7 @@ YAHOO.ur.edit.institution.collection = {
 	    };
 	    
 	    // action to perform move
-	    var action =  basePath + 'admin/moveCollectionLinkUp.action?collectionId=' + collectionId + '&linkName=' + linkName;
+	    var action =  basePath + 'admin/moveCollectionLinkUp.action?collectionId=' + collectionId + '&linkId=' + linkId;
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
             action, 
@@ -896,7 +896,7 @@ YAHOO.ur.edit.institution.collection = {
     /**
      * Move a link up down one position
      */
-    moveLinkDown : function(linkName, collectionId)
+    moveLinkDown : function(linkId, collectionId)
     {
         var success = function(o) 
 	    {
@@ -918,7 +918,7 @@ YAHOO.ur.edit.institution.collection = {
 	    };
 	    
 	    // action to perform for searching names
-        var action =  basePath + 'admin/moveCollectionLinkDown.action?collectionId=' + collectionId + '&linkName=' + linkName;
+        var action =  basePath + 'admin/moveCollectionLinkDown.action?collectionId=' + collectionId + '&linkId=' + linkId;
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
             action, 
