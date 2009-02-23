@@ -223,10 +223,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 			if (fileAdded)
 			{
 				ItemFile itemFile = item.addFile(vf.getCurrentVersion().getIrFile());
-				
-				itemFile.setOrder(item.getItemObjects().size());
 				itemFile.setVersionNumber(vf.getLargestVersion());
-	
 				itemService.makePersistent(item);
 			}
 		}
@@ -258,7 +255,6 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 							ItemFile itemFile = item.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 							
 							if (itemFile != null) {
-								itemFile.setOrder(item.getItemObjects().size());
 								itemFile.setVersionNumber(pf.getVersionedFile().getLargestVersion());
 							}
 						}
@@ -491,12 +487,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		    return "accessDenied";
 		}
 		
-		
 		ItemObject moveUpItemObject = item.getItemObject(itemObjectId, itemObjectType);
-		ItemObject moveDownItemObject = item.getItemObjectByPosition(moveUpItemObject.getOrder() - 1);
-		
-		moveDownItemObject.setOrder(moveDownItemObject.getOrder() + 1);
-		moveUpItemObject.setOrder(moveUpItemObject.getOrder() - 1);
+		item.moveItemObject(moveUpItemObject, moveUpItemObject.getOrder() - 1);
 		
 		// Save the item
 		itemService.makePersistent(item);
@@ -518,10 +510,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		}
 		
 		ItemObject moveDownItemObject = item.getItemObject(itemObjectId, itemObjectType);
-		ItemObject moveUpItemObject = item.getItemObjectByPosition(moveDownItemObject.getOrder() + 1);
-		
-		moveUpItemObject.setOrder(moveUpItemObject.getOrder() - 1);
-		moveDownItemObject.setOrder(moveDownItemObject.getOrder() + 1);
+		item.moveItemObject(moveDownItemObject, moveDownItemObject.getOrder() + 1);
 		
 		// Save the item
 		itemService.makePersistent(item);
