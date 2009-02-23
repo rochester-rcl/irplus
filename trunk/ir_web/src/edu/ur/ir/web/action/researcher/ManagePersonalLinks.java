@@ -25,6 +25,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherPersonalLink;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Class to manage personal links for a researcher.
@@ -32,7 +33,7 @@ import edu.ur.ir.researcher.ResearcherService;
  * @author Nathan Sarr
  *
  */
-public class ManagePersonalLinks extends ActionSupport {
+public class ManagePersonalLinks extends ActionSupport implements UserIdAware{
 
 	
 	/** Eclipse generated id */
@@ -65,19 +66,27 @@ public class ManagePersonalLinks extends ActionSupport {
 	/**  link created or loaded */
 	private ResearcherPersonalLink link; 
 	
+	/** id of the user accessing the data */
+	private Long userId;
+	
 	/**  Logger */
 	private static final Logger log = Logger.getLogger(ManagePersonalLinks.class);
 	
 	
 	/**
-	 * Create a new collection link.
+	 * Create a new researcher link.
 	 * 
 	 * @return
 	 */
 	public String create()
 	{
-		researcher = researcherService.getResearcher(researcherId, false);
 		log.debug("create link called for collection " + researcher);
+		researcher = researcherService.getResearcher(researcherId, false);
+		if( !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		
 		try
 		{
 		    link = researcher.addPersonalLink(linkName, linkUrl);
@@ -99,6 +108,10 @@ public class ManagePersonalLinks extends ActionSupport {
 	{
 		
 		researcher = researcherService.getResearcher(researcherId, false);
+		if( !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
 		ResearcherPersonalLink link = researcher.getPersonalLink(linkId);
 		
 		log.debug("updateing link " + link);
@@ -128,6 +141,10 @@ public class ManagePersonalLinks extends ActionSupport {
 	public String viewLink()
 	{
 		researcher =  researcherService.getResearcher(researcherId, false);
+		if( !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
 		ResearcherPersonalLink link = researcher.getPersonalLink(linkId);
 		
 		if( link != null)
@@ -148,7 +165,11 @@ public class ManagePersonalLinks extends ActionSupport {
 	public String moveLinkUp()
 	{
 		researcher =  researcherService.getResearcher(researcherId, false);
-		link = researcher.getPersonalLink(linkName);
+		if( !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		link = researcher.getPersonalLink(linkId);
 		researcher.movePersonalLink(link, link.getOrder() - 1);
 		researcherService.saveResearcher(researcher);
 		return SUCCESS;
@@ -162,7 +183,11 @@ public class ManagePersonalLinks extends ActionSupport {
 	public String moveLinkDown()
 	{
 		researcher =  researcherService.getResearcher(researcherId, false);
-		link = researcher.getPersonalLink(linkName);
+		if( !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+		link = researcher.getPersonalLink(linkId);
 		researcher.movePersonalLink(link, link.getOrder() + 1);
 		researcherService.saveResearcher(researcher);
 		return SUCCESS;
@@ -176,7 +201,11 @@ public class ManagePersonalLinks extends ActionSupport {
 	public String delete()
 	{
 		researcher =  researcherService.getResearcher(researcherId, false);
-        researcher.removPersonalLink(researcher.getPersonalLink(linkName));
+		if( !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
+        researcher.removPersonalLink(researcher.getPersonalLink(linkId));
         researcherService.saveResearcher(researcher);
 		return SUCCESS;
 	}
@@ -185,6 +214,10 @@ public class ManagePersonalLinks extends ActionSupport {
 	public String view()
 	{
 		researcher = researcherService.getResearcher(researcherId, false);
+		if( !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
 		return SUCCESS;
 	}
 
@@ -267,6 +300,10 @@ public class ManagePersonalLinks extends ActionSupport {
 
 	public void setLink(ResearcherPersonalLink link) {
 		this.link = link;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 
