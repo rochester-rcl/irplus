@@ -351,7 +351,7 @@
 		     <div class="bd">
 		          <div id="remove_link">
 		              <form method="POST" id="remove_link_collection_form" action="">
-		                  <input type="hidden" id="remove_link_name" name="linkName" value=""/>
+		                  <input type="hidden" id="remove_link_id" name="linkId" value=""/>
 		                  <input type="hidden" name="collectionId" value="${collection.id}"/>
 		              </form>
 		              <p>Are you sure you wish to remove the selected link?</p>
