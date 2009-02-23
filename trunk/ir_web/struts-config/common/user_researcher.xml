@@ -360,6 +360,7 @@
         <action name="viewResearcherInstitutionalItem"
             class="edu.ur.ir.web.action.researcher.AddResearcherInstitutionalItem">
             <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/add_institutional_item_to_researcher.jsp</result>
         </action>   
 
@@ -368,6 +369,7 @@
                 method="getResearcherFolders"
                 class="edu.ur.ir.web.action.researcher.AddResearcherInstitutionalItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/researcher_file_system_form.jsp</result>
         </action>        
 
@@ -376,5 +378,6 @@
                 method="addResearcherInstitutionalItem"
                 class="edu.ur.ir.web.action.researcher.AddResearcherInstitutionalItem">
                 <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">viewResearcher.action?showFoldersTab=true</result>
         </action>         
