@@ -54,7 +54,7 @@
 
 								<c:if test="${rowStatus != 0}">
 								<td>
-									<a href="javascript:YAHOO.ur.edit.institution.collection.moveLinkUp('${link.name}', '${collection.id}');"><img class="tableImg" alt="Move Up" 
+									<a href="javascript:YAHOO.ur.edit.institution.collection.moveLinkUp('${link.id}', '${collection.id}');"><img class="tableImg" alt="Move Up" 
 									    src="${pageContext.request.contextPath}/page-resources/images/all-images/move_arrow_up.gif" /></a>
 								</td>
 								</c:if>
@@ -65,7 +65,7 @@
 						<tr>
 								<c:if test="${(rowStatus + 1) != linkSize}">
 								<td>
-									<a href="javascript:YAHOO.ur.edit.institution.collection.moveLinkDown('${link.name}', '${collection.id}');"><img class="tableImg" alt="Move Down" 
+									<a href="javascript:YAHOO.ur.edit.institution.collection.moveLinkDown('${link.id}', '${collection.id}');"><img class="tableImg" alt="Move Down" 
 									    src="${pageContext.request.contextPath}/page-resources/images/all-images/move_arrow_down.gif" /></a>
 									</td>
 								</c:if>  
@@ -91,7 +91,7 @@
                         </urstb:td>
                         <urstb:td>
                              <img class="tableImg" alt="" 
-                                 src="${pageContext.request.contextPath}/page-resources/images/all-images/delete.gif"/>  <a href="javascript:YAHOO.ur.edit.institution.collection.removeLink('${link.name}');"> Remove </a>
+                                 src="${pageContext.request.contextPath}/page-resources/images/all-images/delete.gif"/>  <a href="javascript:YAHOO.ur.edit.institution.collection.removeLink('${link.id}');"> Remove </a>
                         </urstb:td>
                         
                     </urstb:tr>
