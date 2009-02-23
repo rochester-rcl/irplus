@@ -42,8 +42,8 @@
 	 	<ur:js src="page-resources/yui/button/button-min.js"/>
 	 	
 	 	<ur:js src="pages/js/base_path.js"/>
+	 	<ur:js src="page-resources/js/util/ur_util.js" />
 	 	<ur:js src="page-resources/js/menu/main_menu.js"/>
-	 	<ur:js src="pages/js/base_path.js"/>
 	    <ur:js src="page-resources/js/user/add_institutional_item.js"/>
 	 	
 	    <!--  Style for dialog boxes -->
@@ -91,7 +91,7 @@
 							<tbody>
 								<tr >
 									<td class="tdItemFolderLeftBorder">
-					                    <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/add.gif"/> <a href="javascript:YAHOO.ur.researcher.institutional.item.addInstitutionalItem('${institutionalItem.id}');"> Add</a> 
+					                    <span class="addBtnImg">&nbsp;</span> <a href="javascript:YAHOO.ur.researcher.institutional.item.addInstitutionalItem('${institutionalItem.id}');"> Add</a> 
 									</td>
 									
 									<td class="tdItemFolderRightBorder">
