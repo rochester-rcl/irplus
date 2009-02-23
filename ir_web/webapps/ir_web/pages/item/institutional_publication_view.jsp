@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>Viewing Institutional Publication: ${institutionalItemVersion.item.name} </title>
+        <title>Viewing Institutional Publication: ${institutionalItemVersion.item.name}</title>
         <c:import url="/inc/meta-frag.jsp"/>
                 
     <!-- Core + Skin CSS -->
@@ -534,6 +534,7 @@
                           <c:set value="odd" var="rowType"/>
                       </c:if>
                       <tr>
+                          <c:if test="${version.item.publiclyViewable || (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '') || showPublication}">
                           <td class="${rowType}">
                               <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${version.item.primaryImageFile.irFile}" var="url"/>
                               <c:if test="${url != null}">
@@ -552,6 +553,12 @@
 	                      </c:url>
                           <td class="${rowType}"><a href="${publicationVersionDownloadUrl}">${version.versionNumber}</a></td>
                           <td class="${rowType}">${version.dateOfDeposit}</td>
+                          </c:if>
+                          <c:if test="${!version.item.publiclyViewable && !(institutionalItem.owner == user) && !ir:userHasRole('ROLE_ADMIN', '') && !showPublication}">
+                              <td class="${rowType}" colspan="4">
+                                  The version of this item is private
+                              </td>
+                          </c:if>
 
                      </tr>
                      </c:forEach>  
