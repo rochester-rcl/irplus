@@ -21,7 +21,7 @@
   
   
   <appender name="A1" class="org.apache.log4j.RollingFileAppender"> 
-    <param name="file" value="C:/a_log/ir_service/ir_service.log"/>
+    <param name="file" value="C:/ir_plus_log/ir_service/ir_service.log"/>
     <param name="MaxFileSize" value="1024KB"/>
     <!-- Keep up to 20 files around -->
     <param name="MaxBackupIndex" value="20"/>
