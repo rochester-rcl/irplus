@@ -120,7 +120,6 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 
 		ItemLink itemLink = item.createLink(linkName, linkUrl);
 		itemLink.setDescription(linkDescription);
-		itemLink.setOrder(item.getItemFiles().size() + item.getLinks().size());
 		
 		itemService.makePersistent(item);
 
