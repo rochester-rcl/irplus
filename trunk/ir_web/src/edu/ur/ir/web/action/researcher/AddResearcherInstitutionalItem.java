@@ -39,6 +39,7 @@ import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.UserPublishingFileSystemService;
+import edu.ur.ir.web.action.UserIdAware;
 
 /**
  * Action to add institutional item to researcher page.
@@ -46,7 +47,7 @@ import edu.ur.ir.user.UserPublishingFileSystemService;
  * @author Sharmila Ranganathan
  *
  */
-public class AddResearcherInstitutionalItem extends ActionSupport implements Preparable{
+public class AddResearcherInstitutionalItem extends ActionSupport implements Preparable, UserIdAware{
 
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = -5294823577282271716L;
@@ -102,6 +103,9 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 	private InstitutionalItemService institutionalItemService;
 	
 	private InstitutionalItem institutionalItem;
+	
+	/** id of the user tyring to make the changes */
+	private Long userId;
 
 
 	/**
@@ -124,14 +128,25 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 	public String addResearcherInstitutionalItem() {
 		
 		log.debug("Add  institutionalItemId = " + institutionalItemId);
-				
+	
+		if( researcher == null || !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
 		InstitutionalItem item = institutionalItemService.getInstitutionalItem(institutionalItemId, false);
 
-		if (parentFolderId != null && parentFolderId > 0) {
+		if (parentFolderId != null && parentFolderId > 0) 
+		{
 			
 			ResearcherFolder parentFolder = researcherService.getResearcherFolder(parentFolderId, false);
+			if( !parentFolder.getResearcher().getId().equals(researcher.getId()))
+			{
+				return "accessDenied";
+			}
 			researcherService.createInstitutionalItem(parentFolder, item);
-		} else {
+		} 
+		else 
+		{
 			researcher.createRootInstitutionalItem(item);
 			researcherService.saveResearcher(researcher);
 		}
@@ -147,6 +162,11 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 		
 		if(parentFolderId != null && parentFolderId > 0)
 		{
+			ResearcherFolder folder = researcherService.getResearcherFolder(parentFolderId, false);
+			if( !folder.getResearcher().getId().equals(researcher.getId()))
+			{
+				return "accessDenied";
+			}
 			researcherFolderPath = researcherService.getResearcherFolderPath(parentFolderId);
 		}
 		
@@ -183,9 +203,11 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 		if (researcherId != null) {
 			researcher = researcherService.getResearcher(researcherId, false);
 		}
-		
+		if( researcher == null || !researcher.getUser().getId().equals(userId))
+		{
+			return "accessDenied";
+		}
 		institutionalItem  = institutionalItemService.getInstitutionalItem(institutionalItemId, false);
-
 		
 		return SUCCESS;
 	}
@@ -373,5 +395,9 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 
 	public void setInstitutionalItem(InstitutionalItem institutionalItem) {
 		this.institutionalItem = institutionalItem;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
