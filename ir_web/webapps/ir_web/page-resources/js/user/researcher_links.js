@@ -276,10 +276,10 @@ YAHOO.ur.researcher.link = {
     /**
      * remove the link with the specified name fromt the collection
      */
-    removeLink : function(linkName)
+    removeLink : function(linkId)
     {
        //set the name in the form
-       document.getElementById('remove_link_name').value = linkName;
+       document.getElementById('remove_link_id').value = linkId;
        YAHOO.ur.researcher.link.deleteLinkDialog.showDialog();
     },
     
@@ -323,7 +323,7 @@ YAHOO.ur.researcher.link = {
     /**
      * Move a link up one position
      */
-    moveLinkUp : function(linkName, researcherId)
+    moveLinkUp : function(linkId, researcherId)
     {
         var success = function(o) 
 	    {
@@ -350,7 +350,7 @@ YAHOO.ur.researcher.link = {
 	    };
 	    
 	    // action to perform move
-	    var action =  basePath + 'user/moveResearcherPersonalLinkUp.action?researcherId=' + researcherId + '&linkName=' + linkName;
+	    var action =  basePath + 'user/moveResearcherPersonalLinkUp.action?researcherId=' + researcherId + '&linkId=' + linkId;
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
             action +'&bustcache='+new Date().getTime(), 
@@ -360,7 +360,7 @@ YAHOO.ur.researcher.link = {
     /**
      * Move a link up down one position
      */
-    moveLinkDown : function(linkName, researcherId)
+    moveLinkDown : function(linkId, researcherId)
     {
         var success = function(o) 
 	    {
@@ -387,7 +387,7 @@ YAHOO.ur.researcher.link = {
 	    };
 	    
 	    // action to perform for searching names
-        var action =  basePath + 'user/moveResearcherPersonalLinkDown.action?researcherId=' + researcherId + '&linkName=' + linkName;
+        var action =  basePath + 'user/moveResearcherPersonalLinkDown.action?researcherId=' + researcherId + '&linkId=' + linkId;
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
             action +'&bustcache='+new Date().getTime(), 
