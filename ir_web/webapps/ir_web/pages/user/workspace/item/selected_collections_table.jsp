@@ -51,7 +51,7 @@
 				</td>
 
 				<td class="tdItemSelectRightBorder">
-				     <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/delete.gif"/>
+				     <span class="deleteBtnImg">&nbsp;</span>
 				     <a href="javascript:YAHOO.ur.item.collection.removeCollectionFromPublication('${collectionPermission.institutionalCollection.id}');"> Remove </a>
 				</td>
 				
