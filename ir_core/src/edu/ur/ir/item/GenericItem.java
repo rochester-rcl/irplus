@@ -1164,9 +1164,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	public ItemLink createLink(String name, String url)
 	{
 		ItemLink itemLink = new ItemLink(this, name, url);
-		
-		links.add(itemLink);
-		
+		this.addLink(itemLink);
 		return itemLink;
 	}
 
