@@ -54,7 +54,7 @@
 
 								<c:if test="${rowStatus != 0}">
 								<td>
-									<a href="javascript:YAHOO.ur.researcher.link.moveLinkUp('${link.name}', '${researcher.id}');"><img class="tableImg" alt="Move Up" 
+									<a href="javascript:YAHOO.ur.researcher.link.moveLinkUp('${link.id}', '${researcher.id}');"><img class="tableImg" alt="Move Up" 
 									    src="${pageContext.request.contextPath}/page-resources/images/all-images/move_arrow_up.gif" /></a>
 								</td>
 								</c:if>
@@ -65,7 +65,7 @@
 						<tr>
 								<c:if test="${(rowStatus + 1) != linkSize}">
 								<td>
-									<a href="javascript:YAHOO.ur.researcher.link.moveLinkDown('${link.name}', '${researcher.id}');"><img class="tableImg" alt="Move Down" 
+									<a href="javascript:YAHOO.ur.researcher.link.moveLinkDown('${link.id}', '${researcher.id}');"><img class="tableImg" alt="Move Down" 
 									    src="${pageContext.request.contextPath}/page-resources/images/all-images/move_arrow_down.gif" /></a>
 									</td>
 								</c:if>  
@@ -90,7 +90,7 @@
                             ${link.order}   
                         </urstb:td>
                         <urstb:td>
-                             <span class="deleteBtnImg">&nbsp;</span>  <a href="javascript:YAHOO.ur.researcher.link.removeLink('${link.name}');"> Remove </a>
+                             <span class="deleteBtnImg">&nbsp;</span>  <a href="javascript:YAHOO.ur.researcher.link.removeLink('${link.id}');"> Remove </a>
                         </urstb:td>
                         
                     </urstb:tr>
