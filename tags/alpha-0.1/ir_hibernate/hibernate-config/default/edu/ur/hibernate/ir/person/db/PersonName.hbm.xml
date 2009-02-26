@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a Person name
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.person">
+	<class name="PersonName" table="person.person_name"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="person_name_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">person.person_name_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="forename" column="forename" type="string"
+			not-null="false" access="field" />
+			
+		<property name="surname" column="surname" type="string"
+			not-null="false" access="field"/>
+		
+		<property name="surnameFirstChar" column="surname_first_char" type="char"
+			not-null="false" access="field"/>
+		
+		<property name="familyName" column="family_name" type="string"
+			not-null="false" access="field"/>
+			
+		<property name="middleName" column="middle_name" type="string"
+			not-null="false" access="field"/>
+			
+		<property name="initials" column="initials" type="string"
+			not-null="false" access="field"/>
+		
+		<property name="numeration" column="numeration" type="string"
+			not-null="false" access="field"/>
+
+		<!--  Person who owns the name-->
+		<many-to-one class="PersonNameAuthority" 
+			name="personNameAuthority" 
+			column="person_name_authority_id" 
+			insert="true"
+			update="true" unique="true" access="field"/>
+			
+		<!--  Titles and other words for this name -->
+		<set name="personNameTitles" 
+		    cascade="all" 
+		    access="field"
+		    order-by="value" 
+		    lazy="true"
+		    fetch="subselect">
+		    <key column="person_name_id" not-null="true"/>
+		    <one-to-many class="PersonNameTitle"/>
+		</set>
+
+    </class>
+		
+	<!--  Get a count of folders in the system -->
+	<query name="personNameCount">
+	    select count(*) from PersonName
+	</query>
+	
+	<!-- named query for getting all personNames ordered by surname forename familyName-->
+    <query name="getAllPersonNameAsc">from PersonName order by surname, forename, familyName, middleName </query>
+    
+    <!-- named query for getting all personNames like the specified first name -->
+    <query name="findPersonLikeFirstName">from PersonName personName where upper(personName.forename) like upper(?) order by  forename, surname, familyName, middleName </query>
+
+    <!-- named query for getting all personNames like the specified last name -->
+    <query name="findPersonLikeLastName">from PersonName personName where upper(personName.surname) like upper(?) order by  surname, forename, familyName, middleName </query>
+
+    <!-- named query for getting all personNames like the specified first and last name -->
+    <query name="findPersonLikeFirstLastName">from PersonName personName where upper(personName.surname) like upper(?) and
+    upper(personName.forename) like upper(?) order by  surname, forename, familyName, middleName </query>
+	
+</hibernate-mapping>

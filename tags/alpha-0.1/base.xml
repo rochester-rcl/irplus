@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+ 
+<!-- this is the base build file for the irplus project -->
+<project name="base-build" xmlns:ivy="antlib:org.apache.ivy.ant" >
+	
+	<!-- uncomment this to run the tests  it does not matter what the value is so long as the 
+		     line is uncommented.
+	<property name="run.tests" value="true"/>
+	-->
+	
+    <!-- build directory -->
+    <property name="build.dir" value="${basedir}/build"/> 
+
+    <!-- source directory -->
+    <property name="src.dir" value="${basedir}/src"/> 
+
+    <!-- test source directory -->
+    <property name="test.dir" value="${basedir}/test"/> 
+	
+    <!-- testng library -->
+    <property name="testng.dir" value="${basedir}/test"/> 
+
+    <!-- lib directory -->
+    <property name="lib.dir" value="${basedir}/lib"/> 
+	
+    <!-- lib directory -->
+    <property name="lib.dir" value="${basedir}/lib"/> 
+
+    <!-- location for reports -->
+    <property name="report.dir" value="${basedir}/reports"/> 
+	
+    <!-- distribution directory -->
+    <property name="dist.dir" value="${basedir}/${project.name}"/> 
+
+    <!-- top level location for reports -->
+    <property name="report.dir" value="${basedir}/reports"/>
+
+    <!-- location for the test reports -->
+    <property name="test.report.dir" value="${report.dir}/test-reports"/>
+	
+    <!-- location of the checkstyle xml file -->
+	<property name="checkstyle.xml" value="../checkstyle-xml/sun_checks.xml"/>
+	
+	<!-- location of the checkstyle xml file -->
+	<property name="checkstyle.xsl" value="../checkstyle-xml/checkstyle-frames.xsl"/>
+	
+	<!-- location for checkstyle report directory -->
+	<property name="checkstyle.report.dir" value="${report.dir}/checkstyle-reports"/>
+	
+	<!-- location for checkstyle report xml file-->
+    <property name="checkstyle.report.xml" value="${checkstyle.report.dir}/checkstyle.xml"/>
+	
+	<!-- location for checkstyle report html file-->
+	<property name="checkstyle.report.html" value="${checkstyle.report.dir}/checkstyle.html"/>
+
+	<!-- common configuration files for spring -->
+	<property name="spring.config.common.config" value="../spring-config-common/common"/> 
+
+	<!-- project specific configuration files for spring (usually testing)-->
+	<property name="spring.project.config" value="${basedir}/spring-config"/> 
+	
+	<!-- common configuration files for ehcache -->
+	<property name="ehcache.config" value="../ehcache-config"/> 
+	
+	<!-- folder location for log4j debug file appender -->
+	<property name="log4j.debug.file.appender" value="${basedir}/log4j-config/debug-file-appender"/>
+	
+	<!-- folder location for production log4j debug console output -->
+	<property name="log4j.debug.console.appender" value="${basedir}/log4j-config/debug-console-appender"/>
+	
+	<!-- folder location for production log4j config xml file -->
+	<property name="log4j.production.appender" value="${basedir}/log4j-config/production-appender"/>
+
+	<!-- folder location for testng config file -->
+	<property name="testng.config" value="${basedir}/testng-config"/>
+
+    <!-- ivy dir -->
+    <property name="ivy.dir" value="${basedir}/ivy"/>  
+    
+    <!-- ivy jar file -->
+    <property name="ivy.jar" value="${ivy.dir}/ivy.jar" />
+
+    <!-- ivy jar file -->
+    <property name="ivy.report.dir" value="${report.dir}/ivy_report" />
+
+    <!-- version of ivy to be used -->
+    <property name="ivy.version" value="2.0.0" />
+
+    <!-- set the javac debug mode -->
+    <property name="javac.debug.mode" value="on" />
+
+     <!-- set the javac debug level -->
+    <property name="javac.debug.level" value="lines,vars,source" />
+
+    <!-- set the javac depreciation mode -->
+    <property name="javac.deprecation.mode" value="on"/>
+
+     <!-- java version to compile with -->
+    <property name="javac.java.version" value="1.5"/>
+	
+    <!-- project version -->
+    <property name="project.version" value="0.1"/> 
+	
+	<!-- test properties file location -->
+	<property name="properties.config.test" value="../properties/test"/>
+
+
+    <target name="download-ivy" unless="skip.download">
+       <mkdir dir="${ivy.dir}" />
+       <!--  download Ivy from web site so that it can be used
+              even without any special installation -->
+       <echo message="Please wait this may take a few minutes - installing ivy..." />
+       <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/ivy-${ivy.version}.jar"
+           dest="${ivy.jar}" usetimestamp="true" />
+    </target>
+
+    <!--  =================================
+          target: install-ivy
+	  
+	  this target is not necessary if you put ivy.jar in your ant lib directory
+          if you already have ivy in your ant lib, you can simply remove this
+          target and the dependency the 'go' target has on it
+         =================================
+     -->
+
+    <target name="install-ivy" depends="download-ivy"
+        description="--> install ivy in classpath for other targets">
+         <!--   try to load ivy here from local ivy dir, in case the user has not already dropped
+    	        it into ant's lib dir (note that the latter copy will always take precedence).
+    	        We will not fail as long as local lib dir exists (it may be empty) and
+    	        ivy is in at least one of ant's lib dir or the local lib dir.
+         -->
+        <path id="ivy.lib.path">
+             <fileset dir="${ivy.dir}" includes="*.jar" />
+        </path>
+
+        <taskdef resource="org/apache/ivy/ant/antlib.xml"
+                uri="antlib:org.apache.ivy.ant"
+                classpathref="ivy.lib.path" />
+    </target>
+
+
+    <!--   =================================
+           target: clean-ivy
+           =================================
+    -->
+    <target name="clean-ivy" description="--> clean the ivy installation">
+        <delete dir="${ivy.dir}" />
+    </target>
+
+    <!-- clean the ivy cache -->
+    <target name="clean-cache" depends="install-ivy"
+       description="--> clean the ivy cache">
+       <ivy:cleancache />
+    </target>
+
+    <!-- Ivy depencency report -->
+    <target name="ivy-report" depends="resolve"
+       description="--> report the resolve actions">
+       <mkdir dir="${ivy.report.dir}" />
+       <ivy:report todir="${ivy.report.dir}" />
+    </target>
+
+    <!-- use ivy to retive the jar files into the repository set by the
+        ivy configuration settings -->
+    <target name="resolve"
+        depends="install-ivy"
+        description="--> places the files in the ivy repository">
+        <ivy:resolve />
+    </target>
+
+    <!-- download and place into the default lib folder -->
+    <target name="retrieve" depends="ivy-report" 
+       description="-->Place the files in location for project">
+       <ivy:retrieve sync="true"/>
+    </target>
+	
+    <!-- define the base javac complie command to make sure proper settings
+    across all projects -->
+    <presetdef name="javac" uri="http://edu.ur/d1/ext">
+        <javac debug="${javac.debug.mode}"
+            nowarn="false"
+            deprecation="${javac.deprecation.mode}"
+            source="${javac.java.version}"
+            debuglevel="${javac.debug.level}"
+            target="${javac.java.version}"/>
+    </presetdef>
+	
+	<target name="checkstyle-run" depends="retrieve" xmlns:cs="antlib:com.puppycrawl.checkstyle">
+		
+		<path id="checkstyle.lib.path">
+		     <fileset dir="${lib.dir}" includes="checkstyle-5.0-beta01.jar" />
+		</path>
+		
+		<typedef resource="checkstyletask.properties"
+		    uri="antlib:com.puppycrawl.checkstyle"
+			classpathref="libraries"
+		    onerror="failall"/>
+		
+		<mkdir dir="${checkstyle.report.dir}"/>
+		
+		<cs:checkstyle classpathref="libraries"
+		    failOnViolation="false"
+		    failureProperty="checkstyle.failed"
+		    config="${checkstyle.xml}">
+		    <formatter type="plain"/>
+		    <formatter type="xml"
+		        toFile="${checkstyle.report.xml}"/>
+		    <fileset dir="${src.dir}" includes="**/*.java"/>
+		    <fileset dir="${test.dir}" includes="**/*.java"/>
+		</cs:checkstyle>
+
+	</target>
+	
+	<target name="checkstyle-report" depends="checkstyle-run" if="checkstyle.failed">
+		<xslt style="${checkstyle.xsl}" in="${checkstyle.report.xml}"
+		    out="${checkstyle.report.html}"/>
+	</target>
+	
+	<target name="checkstyle" depends="checkstyle-report"/>
+	
+
+</project>

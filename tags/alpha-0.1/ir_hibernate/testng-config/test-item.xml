@@ -1,0 +1,42 @@
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+
+<suite name="ir_hibernate_item">
+
+	<test name="IR Hibernate Testing - Item">
+		<classes>
+		     <class name="edu.ur.hibernate.ir.item.db.ItemVersionDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.VersionedItemDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.PublisherDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.LanguageTypeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.LicenseDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.IdentifierTypeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ContentTypeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ItemDAOTest"/> 
+		     <class name="edu.ur.hibernate.ir.item.db.ItemLinkDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ItemIdentifierDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.SeriesDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ExternalPublishedItemDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.SponsorDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ExtentTypeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ItemExtentDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ItemSponsorDAOTest"/>
+		</classes>
+	</test>
+	
+</suite>

@@ -1,0 +1,204 @@
+/**  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
+
+package edu.ur.ir.web.spring.security;
+
+import org.apache.log4j.Logger;
+import org.springframework.security.Authentication;
+import org.springframework.security.AuthenticationException;
+
+import org.springframework.security.providers.AbstractAuthenticationToken;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+
+import org.springframework.security.ui.AbstractProcessingFilter;
+import org.springframework.security.ui.FilterChainOrder;
+import org.springframework.security.util.TextUtils;
+import org.springframework.util.Assert;
+
+import edu.ur.ir.security.service.LdapAuthenticationToken;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+
+/**
+ * Authenticating processing filter.  This prevents more than one type of authentication 
+ * from being accessed.  This removes the security hole of two different users in two different
+ * systems having the same authentication.
+ * 
+ * 
+ * @author Nathan Sarr
+ *
+ */
+public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
+	
+	/**  Logger for managing departments*/
+	private static final Logger log = Logger.getLogger(UrAuthenticationProcessingFilter.class);
+    //~ Static fields/initializers =====================================================================================
+
+    public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "j_username";
+    public static final String SPRING_SECURITY_FORM_PASSWORD_KEY = "j_password";
+    public static final String SPRING_SECURITY_FORM_AUTHORIZATION_TYPE_KEY = "j_auth_type";
+    public static final String SPRING_SECURITY_LAST_USERNAME_KEY = "SPRING_SECURITY_LAST_USERNAME";
+
+    private String usernameParameter = SPRING_SECURITY_FORM_USERNAME_KEY;
+    private String passwordParameter = SPRING_SECURITY_FORM_PASSWORD_KEY;
+    private String authorizationTypeParameter = SPRING_SECURITY_FORM_AUTHORIZATION_TYPE_KEY;
+
+    //~ Methods ========================================================================================================
+
+    public Authentication attemptAuthentication(HttpServletRequest request) throws AuthenticationException {
+        String username = obtainUsername(request);
+        String password = obtainPassword(request);
+        String authType = obtainAuthorizationType(request);
+        
+        if (username == null) {
+            username = "";
+        }
+
+        if (password == null) {
+            password = "";
+        }
+        
+        if( authType == null)
+        {
+        	authType = "";
+        }
+        
+        username = username.trim();
+
+        AbstractAuthenticationToken authRequest = null;
+        
+        log.debug("auth type = " + authType);
+        if( authType.equals("local"))
+        {
+        	log.debug("creating user name password authentication token");
+        	authRequest = new UsernamePasswordAuthenticationToken(username, password);
+        }
+        if( authType.equals("ldap"))
+        {
+        	log.debug("creating LDAP authentication token");
+        	authRequest = new LdapAuthenticationToken(username, password);
+        }
+
+ 
+        // Place the last username attempted into HttpSession for views
+        HttpSession session = request.getSession(false);
+
+        if (session != null || getAllowSessionCreation()) {
+            request.getSession().setAttribute(SPRING_SECURITY_LAST_USERNAME_KEY, TextUtils.escapeEntities(username));
+        }
+
+        // Allow subclasses to set the "details" property
+        setDetails(request, authRequest);
+
+        return this.getAuthenticationManager().authenticate(authRequest);
+    }
+
+    /**
+     * This filter by default responds to <code>/j_spring_security_check</code>.
+     *
+     * @return the default
+     */
+    public String getDefaultFilterProcessesUrl() {
+        return "/j_spring_security_check";
+    }
+
+    /**
+     * Enables subclasses to override the composition of the password, such as by including additional values
+     * and a separator.<p>This might be used for example if a postcode/zipcode was required in addition to the
+     * password. A delimiter such as a pipe (|) should be used to separate the password and extended value(s). The
+     * <code>AuthenticationDao</code> will need to generate the expected password in a corresponding manner.</p>
+     *
+     * @param request so that request attributes can be retrieved
+     *
+     * @return the password that will be presented in the <code>Authentication</code> request token to the
+     *         <code>AuthenticationManager</code>
+     */
+    protected String obtainPassword(HttpServletRequest request) {
+        return request.getParameter(passwordParameter);
+    }
+
+    /**
+     * Enables subclasses to override the composition of the username, such as by including additional values
+     * and a separator.
+     *
+     * @param request so that request attributes can be retrieved
+     *
+     * @return the username that will be presented in the <code>Authentication</code> request token to the
+     *         <code>AuthenticationManager</code>
+     */
+    protected String obtainUsername(HttpServletRequest request) {
+        return request.getParameter(usernameParameter);
+    }
+    
+    /**
+     * Enables subclasses to override the composition of the auth type, such as by including additional values
+     * and a separator.
+     *
+     * @param request so that request attributes can be retrieved
+     *
+     * @return the username that will be presented in the <code>Authentication</code> request token to the
+     *         <code>AuthenticationManager</code>
+     */
+    protected String obtainAuthorizationType(HttpServletRequest request) {
+        return request.getParameter(authorizationTypeParameter);
+    }
+
+    /**
+     * Provided so that subclasses may configure what is put into the authentication request's details
+     * property.
+     *
+     * @param request that an authentication request is being created for
+     * @param authRequest the authentication request object that should have its details set
+     */
+    protected void setDetails(HttpServletRequest request, AbstractAuthenticationToken authRequest) {
+        authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
+    }
+
+    /**
+     * Sets the parameter name which will be used to obtain the username from the login request.
+     *
+     * @param usernameParameter the parameter name. Defaults to "j_username".
+     */
+    public void setUsernameParameter(String usernameParameter) {
+        Assert.hasText(usernameParameter, "Username parameter must not be empty or null");
+        this.usernameParameter = usernameParameter;
+    }
+
+    /**
+     * Sets the parameter name which will be used to obtain the password from the login request..
+     *
+     * @param passwordParameter the parameter name. Defaults to "j_password".
+     */
+    public void setPasswordParameter(String passwordParameter) {
+        Assert.hasText(passwordParameter, "Password parameter must not be empty or null");
+        this.passwordParameter = passwordParameter;
+    }
+
+    public int getOrder() {
+        return FilterChainOrder.AUTHENTICATION_PROCESSING_FILTER;
+    }
+
+    String getUsernameParameter() {
+        return usernameParameter;
+    }
+
+    String getPasswordParameter() {
+        return passwordParameter;
+    }
+}
