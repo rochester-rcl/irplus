@@ -158,7 +158,7 @@
                           
                    </form>
                    <p align="left"><a class ="a" href="javascript:YAHOO.ur.login.forgotPassword();"> Forgot password? </a> or  
-                          <a href="<c:url value='http://ir:8080/ir_web/viewUserRegistration.action'/>">Create New Account?</a></p>
+                          <a href="<c:url value='viewUserRegistration.action'/>">Create New Account?</a></p>
                    </div>
                    
 			        <ur:div id="forgotPasswordDialog" cssClass="hidden">
