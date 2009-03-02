@@ -8,7 +8,7 @@ import edu.ur.persistent.BasePersistent;
  * @author Nathan Sarr
  *
  */
-public class NameAuthority extends BasePersistent{
+public class HandleNameAuthority extends BasePersistent{
 
 	/** eclipse generated id  */
 	private static final long serialVersionUID = 5099575658284711364L;
@@ -26,7 +26,7 @@ public class NameAuthority extends BasePersistent{
 	/**
 	 * Package protected constructor
 	 */
-	NameAuthority(){}
+	HandleNameAuthority(){}
 	
 	/**
 	 * Create a handle name authority
@@ -34,7 +34,7 @@ public class NameAuthority extends BasePersistent{
 	 * @param handleNamingAuthority
 	 * @param handleLocalName
 	 */
-	public NameAuthority(String namingAuthority, String localName)
+	public HandleNameAuthority(String namingAuthority, String localName)
 	{
 		this.setLocalName(localName);
 		this.setNamingAuthority(namingAuthority);
@@ -78,9 +78,9 @@ public class NameAuthority extends BasePersistent{
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof NameAuthority)) return false;
+		if (!(o instanceof HandleNameAuthority)) return false;
 
-		final NameAuthority other = (NameAuthority) o;
+		final HandleNameAuthority other = (HandleNameAuthority) o;
 		if( (namingAuthority != null && !namingAuthority.equals(other.getNamingAuthority()) ) ||
 			(namingAuthority == null && other.getNamingAuthority() != null ) ) return false;
 		
