@@ -25,7 +25,6 @@ import java.util.List;
 
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.GenericItem;
-import edu.ur.ir.item.License;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
@@ -76,16 +75,6 @@ CrudDAO<GenericItem>, NameListDAO, NonUniqueNameDAO<GenericItem>
 	 * @return list of available contributions.
 	 */
 	public List<ContributorType> getPossibleContributions(Long personNameId, Long itemId);
-	
-	/**
-	 * Get the list of licenses that can be applied to this item.  It
-	 * should not include a license that is already associated 
-	 * to this item.  
-	 * 	
-	 * @param itemId - GenericItem the contribution was made to.
-	 * @return list of available licenses.
-	 */
-	public List<License> getPossibleLicenses(Long itemId);
 	
 	
 	/**
