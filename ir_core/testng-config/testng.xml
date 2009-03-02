@@ -36,7 +36,6 @@
 			<class name="edu.ur.ir.item.ItemLinkTest"/>
 			<class name="edu.ur.ir.item.LanguageTypeTest"/>
 			<class name="edu.ur.ir.item.ContentTypeTest"/>
-			<class name="edu.ur.ir.item.LicenseTest"/>
 			<class name="edu.ur.ir.item.IdentifierTypeTest"/>
 			<class name="edu.ur.ir.item.ItemIdentifierTest"/>
 			<class name="edu.ur.ir.item.PublisherTest"/>
@@ -103,6 +102,9 @@
 			<class name="edu.ur.ir.statistics.FileDownloadInfoTest"/>
 			<class name="edu.ur.ir.statistics.IgnoreIpAddressTest"/>    
 			<class name="edu.ur.ir.SearchHelperTest"/>  
+			
+			<class name="edu.ur.ir.handle.NamingAuthorityTest"/>
+			<class name="edu.ur.ir.handle.HandleInfoTest"/>
 		</classes>
 	</test>
 </suite>
