@@ -27,7 +27,6 @@ import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.GenericItemDAO;
-import edu.ur.ir.item.License;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
@@ -138,21 +137,6 @@ public class HbGenericItemDAO implements GenericItemDAO{
 	{
 		return (Long)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemContributionCount", contributor.getId()) );
-	}
-	
-	/**
-	 * Get the list of licenses that can be applied to this item.  It
-	 * should not include a license that is already associated 
-	 * to this item.  
-	 * 	
-	 * @param itemId - GenericItem the contribution was made to.
-	 * @return list of available licenses.
-	 */
-	@SuppressWarnings("unchecked")
-	public List<License> getPossibleLicenses(Long itemId)
-	{
-		Object[] values = new Object[] {itemId};
-		return (List<License>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getPossibleLicenses", values);
 	}
 	
 	/**
