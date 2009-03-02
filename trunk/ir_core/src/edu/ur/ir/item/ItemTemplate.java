@@ -26,6 +26,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.person.Contributor;
+import edu.ur.ir.repository.License;
 import edu.ur.persistent.CommonPersistent;
 
 /**

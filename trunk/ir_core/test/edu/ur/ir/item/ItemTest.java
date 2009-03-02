@@ -266,54 +266,7 @@ public class ItemTest {
 		assert item1.getContributor(44l).equals(itemContributor2) : "Should be able to find contrib2";
 	}
 	
-	/**
-	 * Test adding and removing licenses to an item.
-	 */
-	public void itemLicenseTest() throws IllegalFileSystemNameException
-	{
-		
-		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
-		Repository repo = repoHelper.createRepository("localFileServer", 
-				"displayName",
-				"file_database", 
-				"my_repository", 
-				properties.getProperty("a_repo_path"),
-				"default_folder");
 
-		// create the first file to store in the temporary folder
-		String tempDirectory = properties.getProperty("ir_core_temp_directory");
-		File directory = new File(tempDirectory);
-		
-        // helper to create the file
-		FileUtil testUtil = new FileUtil();
-		testUtil.createDirectory(directory);
-		
-		GenericItem item1  = new GenericItem("genericItem");
-
-		// create the first file to store in the temporary folder
-		File f = testUtil.creatFile(directory, "licenseFile",
-				"Hello  -  This is text in a License file"); 
-		
-		// get the file database 
-		FileDatabase fd = repo.getFileDatabase();
-		
-		FileInfo fileInfo1 = fd.addFile(f, "newLicense1");
-		fileInfo1.setDisplayName("licenseDisplayName1");
-		
-		License license = new License();
-		license.setDescription("My License");
-		IrFile irFile = new IrFile(fileInfo1, "my license");
-		license.setIrFile(irFile);
-		license.setId(2l);
-		license.setLicenseVersion("123");
-		
-		item1.addLicense(license);
-		
-		assert item1.getLicense(2l).equals(license) : "Make sure the item has the license";
-	
-		repoHelper.cleanUpRepository();
-				
-	}
 	
 	/**
 	 * Item Clone test
@@ -378,8 +331,7 @@ public class ItemTest {
 		
 		IrFile irFile = new IrFile(fileInfo1, "my test file");
 
-		License license = new License();
-		license.setId(12l);
+
 		
 		item.setDescription("description");
 		item.setPrimaryContentType(contentType);
@@ -396,7 +348,6 @@ public class ItemTest {
 		item.setItemKeywords("itemKeywords");
 		item.addReport(new Series("series", "Series10"), "Report15");
 		item.setLanguageType(new LanguageType("English"));
-		item.addLicense(license);
 		item.addLink(itemLink);
 		item.setName("Itemname");
 		item.setOwner(owner);
