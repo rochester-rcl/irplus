@@ -16,6 +16,18 @@ public interface HandleService {
 	 * 
 	 * @return - the created naming authority
 	 */
-	public NameAuthority addNamingAuthority(String namingAuthority, String localName);
+	public NameAuthority createNamingAuthority(String namingAuthority, String localName);
+	
+	/**
+	 * Get a name authority 
+	 * 
+	 * @param nameAuthority - name authority
+	 * @param localName - local name
+	 * 
+	 * @return the name authority with the name authority and local name
+	 */
+	public NameAuthority getNameAuthority(String nameAuthority, String localName);
+	
+	
 
 }

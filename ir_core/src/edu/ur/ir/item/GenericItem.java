@@ -32,6 +32,7 @@ import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.PersonName;
+import edu.ur.ir.repository.License;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.AscendingOrderComparator;
 import edu.ur.persistent.CommonPersistent;

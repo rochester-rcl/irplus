@@ -5,7 +5,7 @@ import edu.ur.persistent.BasePersistent;
 /**
  * This class represents the naming authority including the local name
  * 
- * @author NathanS
+ * @author Nathan Sarr
  *
  */
 public class NameAuthority extends BasePersistent{
@@ -19,6 +19,9 @@ public class NameAuthority extends BasePersistent{
 	/** local handle name */
 	private String localName;
 	
+	/** url for the authority  */
+	private String authorityBaseUrl;
+
 
 	/**
 	 * Package protected constructor
@@ -51,6 +54,14 @@ public class NameAuthority extends BasePersistent{
 
 	public void setLocalName(String handleLocalName) {
 		this.localName = handleLocalName;
+	}
+	
+	public String getAuthorityBaseUrl() {
+		return authorityBaseUrl;
+	}
+
+	public void setAuthorityBaseUrl(String authorityBaseUrl) {
+		this.authorityBaseUrl = authorityBaseUrl;
 	}
 	
 	/**
@@ -95,6 +106,8 @@ public class NameAuthority extends BasePersistent{
 		sb.append( namingAuthority);
 		sb.append(" localName = ");
 		sb.append(localName);
+		sb.append( " base url = ");
+		sb.append(authorityBaseUrl);
 		sb.append("]");
 		return sb.toString();
 	}
