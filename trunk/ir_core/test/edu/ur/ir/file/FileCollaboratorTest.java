@@ -43,7 +43,7 @@ public class FileCollaboratorTest {
 	/**
 	 * Test creating a file collaborator
 	 */
-	public void basictest() throws IllegalFileSystemNameException
+	public void basicTest() throws IllegalFileSystemNameException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
