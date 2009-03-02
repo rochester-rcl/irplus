@@ -74,7 +74,7 @@ public class HandleInfo extends BasePersistent{
 	private boolean publicWrite = DEFAULT_PUBLIC_WRITE;
 	
 	/** name authority for this handle */
-	private NameAuthority nameAuthority;
+	private HandleNameAuthority nameAuthority;
 	
 
 	/**
@@ -89,7 +89,7 @@ public class HandleInfo extends BasePersistent{
 	 * @param data - data for the handle
 	 * @param nameAuthority - name authority for this handle
 	 */
-	public HandleInfo(Long index, String data, NameAuthority nameAuthority)
+	public HandleInfo(Long index, String data, HandleNameAuthority nameAuthority)
 	{
 	   setId(index);
 	   setData(data);
@@ -164,11 +164,11 @@ public class HandleInfo extends BasePersistent{
 		this.publicWrite = publicWrite;
 	}
 	
-	public NameAuthority getNameAuthority() {
+	public HandleNameAuthority getNameAuthority() {
 		return nameAuthority;
 	}
 
-	public void setNameAuthority(NameAuthority nameAuthority) {
+	public void setNameAuthority(HandleNameAuthority nameAuthority) {
 		this.nameAuthority = nameAuthority;
 	}
 

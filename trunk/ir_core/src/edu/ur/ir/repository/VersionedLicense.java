@@ -34,8 +34,7 @@ public class VersionedLicense extends CommonPersistent {
 	private LicenseVersion currentVersion;
 
 	/** Package protected versioned item constructor. */
-	VersionedLicense() {
-	}
+	VersionedLicense() {}
 
 	/**
 	 * Create a new versioned license with the initial version
