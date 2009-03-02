@@ -14,10 +14,11 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.item;
+package edu.ur.ir.repository;
 
+import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.CommonPersistent;
-import edu.ur.ir.file.IrFile;
+
 /**
  * A license saved in the IR.
  * 
@@ -26,22 +27,15 @@ import edu.ur.ir.file.IrFile;
  */
 public class License extends CommonPersistent{
 
-	/**
-	 * Generated id.
-	 */
+	/**  Generated id. */
 	private static final long serialVersionUID = 2380384082339838487L;
 	
-	/**
-	 * The version of the license
-	 */
-	private String licenseVersion;
-	
-	/**
-	 * The file information for the license. 
-	 */
-	private IrFile irFile;
-	
-	
+	/** User who created the license  */
+	private IrUser creator;
+
+	/** text for the license */
+	private String text;
+
 	/**
 	 * Package protected constructor
 	 */
@@ -53,60 +47,48 @@ public class License extends CommonPersistent{
 	 * @param name
 	 * @param licenseVersion
 	 */
-	public License(String name, String licenseVersion)
+	public License(String name, String text, IrUser creator)
 	{
 		setName(name);
-		setLicenseVersion(licenseVersion);
+		setText(text);
+		setCreator(creator);
 	}
 	
 	/**
-	 * Create a license with the name, version and specified file.
-	 * 
-	 * @param name - Name of the license
-	 * @param licenseVersion - Version of the license
-	 * @param file - file that holds the actual license
-	 */
-	public License(String name, String licenseVersion, IrFile irFile)
-	{
-		setIrFile(irFile);
-		setName(name);
-		setLicenseVersion(licenseVersion);
-	}
-
-	/**
-	 * File information for the license.
+	 * License text.
 	 * 
 	 * @return
 	 */
-	public IrFile getIrFile() {
-		return irFile;
+	public String getText() {
+		return text;
 	}
-
+	
 	/**
-	 * File information for the license.
-	 * 
-	 * @param fileInfo
-	 */
-	public void setIrFile(IrFile irFile) {
-		this.irFile = irFile;
-	}
-
-	/**
-	 * Version of the license
+	 * User who created the license.
 	 * 
 	 * @return
 	 */
-	public String getLicenseVersion() {
-		return licenseVersion;
+	public IrUser getCreator() {
+		return creator;
 	}
 
 	/**
-	 * Version of the license.
+	 * User who created the license.
 	 * 
-	 * @param licenseVersion
+	 * @param creator
 	 */
-	public void setLicenseVersion(String licenseVersion) {
-		this.licenseVersion = licenseVersion;
+	void setCreator(IrUser creator) {
+		this.creator = creator;
+	}
+
+
+	/**
+	 * Licnese text.
+	 * 
+	 * @param text
+	 */
+	public void setText(String text) {
+		this.text = text;
 	}
 	
 	/**
@@ -117,7 +99,7 @@ public class License extends CommonPersistent{
 	{
 		int value = 0;
 		value += getName() == null ? 0 : getName().hashCode();
-		value += getLicenseVersion() == null? 0 : getLicenseVersion().hashCode();
+		value += getText() == null? 0 : getText().hashCode();
 		return value;
 	}
 	
@@ -134,11 +116,14 @@ public class License extends CommonPersistent{
 		if( ( name != null && !name.equals(other.getName()) ) ||
 			( name == null && other.getName() != null ) ) return false;
 		
-		if( ( getLicenseVersion() != null && !getLicenseVersion().equals(other.getLicenseVersion()) ) ||
-		    ( getLicenseVersion() == null && other.getLicenseVersion() != null ) ) return false;
+		if( ( getText() != null && !getText().equals(other.getText()) ) ||
+		    ( getText() == null && other.getText() != null ) ) return false;
 
 		return true;
 	}
+	
+	
+
 
 	/** 
 	 * 
@@ -146,8 +131,14 @@ public class License extends CommonPersistent{
 	 */
 	public String toString()
 	{
-		return "License id = " + id + " version = " + version + " name = " + name
-		+ " licenseVersion = " + licenseVersion ;
+		StringBuffer sb = new StringBuffer ("[ id = ");
+		sb.append(id);
+		sb.append(" name = ");
+		sb.append(name);
+		sb.append(" text = ");
+		sb.append(text);
+		sb.append("]");
+		return sb.toString();
 	}
 
 }
