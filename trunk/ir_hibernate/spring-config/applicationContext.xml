@@ -89,5 +89,10 @@
     <!-- ****************************************** --> 
     <import resource="ir-core.xml"/>
     
+    <!-- ****************************************** --> 
+    <!-- Handle persistence classes -->
+    <!-- ****************************************** --> 
+    <import resource="ir-handle-hibernate.xml"/>
+    
 
 </beans>
