@@ -2876,4 +2876,67 @@ ALTER TABLE ir_statistics.ip_address_ignore OWNER TO ir_plus;
 -- The field sequence
 CREATE SEQUENCE ir_statistics.ip_address_ignore_seq ;
 ALTER TABLE ir_statistics.ip_address_ignore_seq OWNER TO ir_plus;
+
+
+
+
+-- ---------------------------------------------
+-- Create a schema to hold all handle information
+-- ---------------------------------------------
+
+CREATE SCHEMA handle AUTHORIZATION ir_plus;
+
+-- ---------------------------------------------
+-- Sequence for handle values
+-- ---------------------------------------------
+
+CREATE SEQUENCE handle.handle_idx_seq; 
+ALTER TABLE handle.handle_idx_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- handle nameing authority information
+-- ---------------------------------------------
+CREATE TABLE handle.handle_name_authority
+(
+  handle_name_authority_id BIGINT PRIMARY KEY,
+  handle_name_authority TEXT NOT NULL,
+  local_name TEXT NOT NULL,
+  base_url TEXT,
+  description TEXT,
+  version INTEGER,
+  UNIQUE(handle_name_authority, local_name)
+);
+ALTER TABLE handle.handle_name_authority OWNER TO ir_plus;
+CREATE INDEX handle_name_authority_idx ON handle.handle_name_authority(handle_name_authority, local_name);
+
+
+CREATE SEQUENCE handle.handle_name_authority_seq;
+ALTER TABLE handle.handle_name_authority_seq OWNER TO ir_plus;
+-- ---------------------------------------------
+-- handle information
+-- ---------------------------------------------
+CREATE TABLE handle.handle_info
+(
+    handle_id BIGINT NOT NULL PRIMARY KEY,
+    handle_name_authority_id BIGINT NOT NULL,
+    handle_idx BIGINT NOT NULL,
+    handle text NOT NULL, 
+    data_type TEXT,
+    data TEXT,
+    time_to_live_type INT,
+    time_to_live INT,
+    timestap INT,
+    refs TEXT,
+    version INTEGER,
+    admin_read BOOLEAN,
+    admin_write BOOLEAN,
+    pub_read BOOLEAN,
+    pub_write BOOLEAN,
+    UNIQUE(handle_name_authority_id, handle_idx)
+);
+ALTER TABLE handle.handle_name_authority OWNER TO ir_plus;
+
+CREATE SEQUENCE handle.handle_info_seq;
+ALTER TABLE handle.handle_info_seq OWNER TO ir_plus;
+
       
