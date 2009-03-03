@@ -338,3 +338,15 @@ DROP SEQUENCE ir_statistics.file_download_info_seq;
 DROP SEQUENCE ir_statistics.ip_address_ignore_seq;
 
 DROP SCHEMA ir_statistics;
+
+-- ---------------------------------------------
+-- Drop handle tables
+-- ---------------------------------------------
+DROP TABLE handle.handle_info;
+DROP TABLE handle.handle_name_authority;
+
+DROP SEQUENCE handle.handle_idx_seq;
+DROP SEQUENCE handle.handle_name_authority_seq;
+DROP SEQUENCE handle.handle_info_seq;
+
+DROP SCHEMA handle;
