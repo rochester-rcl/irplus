@@ -52,7 +52,6 @@ import edu.ur.ir.item.ItemIdentifierDAO;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.LanguageType;
 import edu.ur.ir.item.LanguageTypeDAO;
-import edu.ur.ir.item.LicenseDAO;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorDAO;
 import edu.ur.ir.person.ContributorType;
@@ -116,9 +115,6 @@ public class ItemDAOTest {
 	
 	/** Item identifier relational data access  */
 	ItemIdentifierDAO itemIdentifierDAO = (ItemIdentifierDAO) ctx.getBean("itemIdentifierDAO");
-	
-	/**  License relational data access */
-	LicenseDAO licenseDAO = (LicenseDAO) ctx.getBean("licenseDAO");
 	
     /** user data access  */
     IrUserDAO userDAO= (IrUserDAO) ctx
@@ -537,46 +533,6 @@ public class ItemDAOTest {
 		
 		identifierTypeDAO.makeTransient(identifierType);
 	}
-	
-	/**
-	 * Test add a license to an item.
-	 */
-	@Test
-	public void addItemLicenseDAOTest() throws Exception{
-		/*
-		License license = new License("licenseName", "licenseVersion");
-		licenseDAO.makePersistent(license);
-
-        // Start the transaction 
-		TransactionStatus ts = tm.getTransaction(td);
-        
-		GenericItem item = new GenericItem("item1");
-		//add the license and persist the item
-		item.addLicense(license);
-		itemDAO.makePersistent(item);
-		tm.commit(ts);
-		
-		ts = tm.getTransaction(td);
-		
-		GenericItem other = itemDAO.findById(item.getId(), false);
-		assert other != null;
-		assert other.getLicenses().size() == 1 : "Size should be one but is " + other.getLicenses().size();
-		assert other.getLicenses().contains(license) : "License should be in the set";
-
-		assert license.getId() != null : "License should not be null";
-		assert other.getLicense(license.getId()) != null: "License should not be null";
-		assert other.getLicense(license.getId()).equals(license) : "Licenses should be equal";
-		
-		assert itemDAO.getPossibleLicenses(item.getId()).size() == 0 : "Should be no available licenses";
-		assert itemDAO.getPossibleLicenses(0L).size() == 1 : "Should be one license that can be applied";
-		
-		tm.commit(ts);
-		
-		itemDAO.makeTransient(other);
-		licenseDAO.makeTransient(license);
-	*/
-	}
-	
 	
 	
 	/**

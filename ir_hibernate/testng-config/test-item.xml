@@ -24,7 +24,6 @@
 		     <class name="edu.ur.hibernate.ir.item.db.VersionedItemDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.db.PublisherDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.db.LanguageTypeDAOTest"/>
-		     <class name="edu.ur.hibernate.ir.item.db.LicenseDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.db.IdentifierTypeDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.db.ContentTypeDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.db.ItemDAOTest"/> 

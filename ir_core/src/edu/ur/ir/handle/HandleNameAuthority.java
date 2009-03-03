@@ -3,7 +3,8 @@ package edu.ur.ir.handle;
 import edu.ur.persistent.BasePersistent;
 
 /**
- * This class represents the naming authority including the local name
+ * This class represents the naming authority including the local name and
+ * the base url of the naming authority.
  * 
  * @author Nathan Sarr
  *
@@ -21,7 +22,18 @@ public class HandleNameAuthority extends BasePersistent{
 	
 	/** url for the authority  */
 	private String authorityBaseUrl;
+	
+	/** Description of the handle name authority */
+	private String description;
 
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	/**
 	 * Package protected constructor
@@ -40,18 +52,38 @@ public class HandleNameAuthority extends BasePersistent{
 		this.setNamingAuthority(namingAuthority);
 	}
 
+	/**
+	 *  Name representing the naming authority
+	 *  
+	 * @return
+	 */
 	public String getNamingAuthority() {
 		return namingAuthority;
 	}
 
+	/**
+	 *  Name representing the naming authority
+	 *  
+	 * @param handleNamingAuthority
+	 */
 	public void setNamingAuthority(String handleNamingAuthority) {
 		this.namingAuthority = handleNamingAuthority;
 	}
 	
+	/**
+	 * Local part of the naming authority
+	 * 
+	 * @return
+	 */
 	public String getLocalName() {
 		return localName;
 	}
 
+	/**
+	 * Local part of the naming authority
+	 * 
+	 * @param handleLocalName
+	 */
 	public void setLocalName(String handleLocalName) {
 		this.localName = handleLocalName;
 	}
