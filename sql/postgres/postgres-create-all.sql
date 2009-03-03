@@ -2879,10 +2879,13 @@ ALTER TABLE ir_statistics.ip_address_ignore_seq OWNER TO ir_plus;
 
 
 
+-- **********************************************
+       
+-- Handle SCHEMA     
 
--- ---------------------------------------------
--- Create a schema to hold all handle information
--- ---------------------------------------------
+-- **********************************************
+-- ----------------------------------------------
+
 
 CREATE SCHEMA handle AUTHORIZATION ir_plus;
 
@@ -2925,16 +2928,17 @@ CREATE TABLE handle.handle_info
     data TEXT,
     time_to_live_type INT,
     time_to_live INT,
-    timestap INT,
+    time_stamp INT,
     refs TEXT,
     version INTEGER,
     admin_read BOOLEAN,
     admin_write BOOLEAN,
-    pub_read BOOLEAN,
-    pub_write BOOLEAN,
-    UNIQUE(handle_name_authority_id, handle_idx)
+    public_read BOOLEAN,
+    public_write BOOLEAN,
+    UNIQUE(handle_name_authority_id, handle, handle_idx),
+    FOREIGN KEY (handle_name_authority_id) REFERENCES handle.handle_name_authority (handle_name_authority_id)
 );
-ALTER TABLE handle.handle_name_authority OWNER TO ir_plus;
+ALTER TABLE handle.handle_info OWNER TO ir_plus;
 
 CREATE SEQUENCE handle.handle_info_seq;
 ALTER TABLE handle.handle_info_seq OWNER TO ir_plus;
