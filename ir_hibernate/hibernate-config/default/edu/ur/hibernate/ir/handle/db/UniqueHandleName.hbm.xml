@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+
 <!--  
    Copyright 2008 University of Rochester
 
@@ -14,12 +16,19 @@
    limitations under the License.
 -->   
 
-<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
 
-<suite name="ir hibernate test single">
-	<test name="Test Single">
-		<classes>
-            <class name="edu.ur.hibernate.ir.handle.db.UniqueHandleNameDAOTest"/>
-		</classes>
-	</test>
-</suite>
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	
+	Mapping for handle names information
+	
+	@author Nathan Sarr
+	
+-->
+<hibernate-mapping package="edu.ur.ir.handle">
+    
+    <!--  Sequence to get next squence value for file names -->
+    <sql-query name="getUniqueHandleName">select nextval ('handle.unique_handle_name_seq')</sql-query>
+	
+</hibernate-mapping>

@@ -2893,8 +2893,8 @@ CREATE SCHEMA handle AUTHORIZATION ir_plus;
 -- Sequence for handle values
 -- ---------------------------------------------
 
-CREATE SEQUENCE handle.handle_idx_seq; 
-ALTER TABLE handle.handle_idx_seq OWNER TO ir_plus;
+CREATE SEQUENCE handle.unique_handle_name_seq; 
+ALTER TABLE handle.unique_handle_name_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- handle nameing authority information
