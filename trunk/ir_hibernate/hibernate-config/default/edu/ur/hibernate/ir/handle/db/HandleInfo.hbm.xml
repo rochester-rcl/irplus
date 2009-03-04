@@ -45,7 +45,7 @@
 		<property name="index" column="handle_idx" type="int"
 			not-null="true" access="field" />
 		
-		<property name="handle" column="handle" type="string"
+		<property name="localName" column="local_name" type="string"
 			not-null="true" access="field" />
 
         <property name="dataType" column="data_type" type="string"
@@ -89,9 +89,16 @@
 			
 	 </class>
 	 
-	 <!--  Get a count of item content types in the system -->
+	 <!--  Get a count of handles in the system -->
 	<query name="handleInfoCount">
 	    select count(*) from HandleInfo
+	</query>
+	
+		 <!--  Get a count of handles in the system -->
+	<query name="handleByNameAuthorityLocalName">
+	    select handleInfo from HandleInfo handleInfo
+	    where handleInfo.nameAuthority.namingAuthority = ?
+	    and handleInfo.localName = ? 
 	</query>
 	 
 		

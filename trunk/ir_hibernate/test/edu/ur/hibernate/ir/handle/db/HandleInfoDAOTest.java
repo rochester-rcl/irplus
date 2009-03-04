@@ -76,6 +76,12 @@ public class HandleInfoDAOTest {
  	    HandleInfo other = handleInfoDAO.getById(info.getId(), false);
         assert other.equals(info) : "handle info's should be equal other = " + 
         other + " handle info = " + info;
+        
+        HandleInfo byAuthorityLocalName = handleInfoDAO.get(other.getNameAuthority().getNamingAuthority(), other.getLocalName());
+        assert byAuthorityLocalName != null : "Should be able to find handle info by with " + other.getNameAuthority().getNamingAuthority() 
+        + " and " + other.getLocalName();
+        assert byAuthorityLocalName.equals(other) : "handle info's should be equal other = " + 
+        other + " byAuthorityLocalName = " +  byAuthorityLocalName;
         tm.commit(ts);
         
         ts = tm.getTransaction(td);

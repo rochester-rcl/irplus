@@ -69,9 +69,14 @@ public class HandleNameAuthorityDAOTest
  	    HandleNameAuthority other = handleNameAuthorityDAO.getById(handleNameAuthority.getId(), false);
         assert other.equals(handleNameAuthority) : "Authorities should be equal other = " + 
         other + " handleNameAuthority = " + handleNameAuthority;
-         
-  
-        handleNameAuthorityDAO.makeTransient(other);
+      
+        HandleNameAuthority byName = handleNameAuthorityDAO.findByUniqueName(other.getNamingAuthority());
+        
+        assert byName != null : "Should be able to find authority by name";
+        assert byName.equals(other) : "Authorities should be equal other = " + 
+        other + " byName = " + byName;
+        
+        handleNameAuthorityDAO.makeTransient(handleNameAuthorityDAO.getById(other.getId(), false));
         assert  handleNameAuthorityDAO.getById(other.getId(), false) == null : "Should no longer be able to find handle naming authority";
 	    tm.commit(ts);
 	}
