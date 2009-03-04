@@ -16,11 +16,9 @@ import edu.ur.ir.handle.HandleNameAuthority;
  * @author Nathan Sarr
  *
  */
-public class HbHandleNameAuthorityDAO implements  HandleNameAuthorityDAO{
+public class HbHandleNameAuthorityDAO implements HandleNameAuthorityDAO{
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/**  Helper for persisting information using hibernate. */
 	private final HbCrudDAO<HandleNameAuthority> hbCrudDAO;
 	
 	/**

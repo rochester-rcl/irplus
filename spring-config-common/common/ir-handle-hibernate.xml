@@ -21,7 +21,7 @@
 <beans>
 
    <!-- ****************************************** --> 
-   <!-- Handle Information        -->
+   <!-- Handle Name Authority Information        -->
    <!-- ****************************************** --> 
 
    <bean id="handleNameAuthorityDAOTarget" 
@@ -41,5 +41,28 @@
            </props>
        </property>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Handle Information        -->
+   <!-- ****************************************** --> 
+
+   <bean id="handleInfoDAOTarget" 
+       class="edu.ur.hibernate.ir.handle.db.HbHandleInfoDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="handleInfoDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="handleInfoDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
 
 </beans>
