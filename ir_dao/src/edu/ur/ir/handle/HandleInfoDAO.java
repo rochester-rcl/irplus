@@ -9,4 +9,15 @@ import edu.ur.dao.CrudDAO;
  * @author Nathan Sarr
  *
  */
-public interface HandleInfoDAO extends CountableDAO, CrudDAO<HandleInfo>{}
+public interface HandleInfoDAO extends CountableDAO, CrudDAO<HandleInfo>
+{
+	/**
+	 * Get a handle info object by authority name and local name.
+	 * 
+	 * @param authorityName - authority name for the handle
+	 * @param localName - local name for the handle
+	 * 
+	 * @return the found handle or null if the handle does not exist
+	 */
+	HandleInfo get(String authorityName, String localName);
+}

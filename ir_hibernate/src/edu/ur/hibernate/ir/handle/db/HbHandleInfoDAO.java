@@ -74,5 +74,13 @@ public class HbHandleInfoDAO implements HandleInfoDAO{
 	public void makeTransient(HandleInfo entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+	
+	/**
+	 * @see edu.ur.ir.handle.HandleInfoDAO#get(java.lang.String, java.lang.String)
+	 */
+	public HandleInfo get(String authorityName, String localName) {
+		Object[] values = new Object[] {authorityName, localName};
+		return (HandleInfo)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("handleByNameAuthorityLocalName", values));
+	}
 
 }

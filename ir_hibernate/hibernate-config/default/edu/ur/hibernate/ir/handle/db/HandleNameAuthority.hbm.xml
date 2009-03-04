@@ -57,6 +57,12 @@
 	<query name="handleNameAuthorityCount">
 	    select count(*) from HandleNameAuthority
 	</query>
+	
+	  <!-- named query for getting an authority-->
+	<query name="getHandleNameAuthorityByName">
+		from HandleNameAuthority as HandleNameAuthority where
+		HandleNameAuthority.namingAuthority = ?
+	</query>
 	 
 		
 

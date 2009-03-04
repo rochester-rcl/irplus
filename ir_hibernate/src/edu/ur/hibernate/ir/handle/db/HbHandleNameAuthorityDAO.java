@@ -64,4 +64,10 @@ public class HbHandleNameAuthorityDAO implements HandleNameAuthorityDAO{
 		hbCrudDAO.makeTransient(entity);
 	}
 
+	
+	public HandleNameAuthority findByUniqueName(String nameAuthority) {
+		return (HandleNameAuthority) 
+	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getHandleNameAuthorityByName", nameAuthority));
+	}
+
 }
