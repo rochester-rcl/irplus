@@ -18,7 +18,7 @@ public class NamingAuthorityTest {
 	 */
 	public void testBasicSets() 
 	{
-		NameAuthority authority = new NameAuthority();
+		HandleNameAuthority authority = new HandleNameAuthority();
 		authority.setNamingAuthority("0.NA");
 		authority.setLocalName("12345");
 		authority.setId(55l);
@@ -36,20 +36,20 @@ public class NamingAuthorityTest {
 	public void testEquals()
 	{
 	
-		NameAuthority authority1 = new NameAuthority();
+		HandleNameAuthority authority1 = new HandleNameAuthority();
 		authority1.setNamingAuthority("0.NA");
 		authority1.setLocalName("12345");
 		authority1.setId(1l);
 		authority1.setVersion(33);
 		
-		NameAuthority authority2 = new NameAuthority();
+		HandleNameAuthority authority2 = new HandleNameAuthority();
 		authority2.setNamingAuthority("0.NA1");
 		authority2.setLocalName("111111");
 		authority2.setId(2l);
 		authority2.setVersion(33);
 
 		
-		NameAuthority authority3 = new NameAuthority();
+		HandleNameAuthority authority3 = new HandleNameAuthority();
 		authority3.setNamingAuthority("0.NA");
 		authority3.setLocalName("12345");
 		authority3.setId(1l);
