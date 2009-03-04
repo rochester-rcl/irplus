@@ -2922,7 +2922,7 @@ CREATE TABLE handle.handle_info
     handle_id BIGINT NOT NULL PRIMARY KEY,
     handle_name_authority_id BIGINT NOT NULL,
     handle_idx BIGINT NOT NULL,
-    handle text NOT NULL, 
+    local_name text NOT NULL, 
     data_type TEXT,
     data TEXT,
     time_to_live_type INT,
@@ -2934,7 +2934,7 @@ CREATE TABLE handle.handle_info
     admin_write BOOLEAN,
     public_read BOOLEAN,
     public_write BOOLEAN,
-    UNIQUE(handle_name_authority_id, handle, handle_idx),
+    UNIQUE(handle_name_authority_id, local_name, handle_idx),
     FOREIGN KEY (handle_name_authority_id) REFERENCES handle.handle_name_authority (handle_name_authority_id)
 );
 ALTER TABLE handle.handle_info OWNER TO ir_plus;
