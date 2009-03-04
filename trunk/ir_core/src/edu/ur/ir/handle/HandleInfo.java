@@ -19,7 +19,7 @@ package edu.ur.ir.handle;
 import edu.ur.persistent.BasePersistent;
 
 /**
- * Class that represents handle information.  
+ * Class that represents localName information.  
  * 
  * @author Nathan Sarr
  *
@@ -62,13 +62,13 @@ public class HandleInfo extends BasePersistent{
 	/** index - positive integer value - this should be unique across the local naming authority */
 	private Integer index = DEFAULT_INDEX ;
 	
-	private String handle;
+	private String localName;
 	
 
-	/** the type of data for the handle data */
+	/** the type of data for the localName data */
 	private String dataType = URL_DATA_TYPE;
 	
-	/** data for the handle - will usually be a URL */
+	/** data for the localName - will usually be a URL */
 	private String data;
 	
 	/** time to live type */
@@ -80,7 +80,7 @@ public class HandleInfo extends BasePersistent{
 	/** time stamp value */
 	private Integer timestamp = DEFAULT_TIMESTAMP_VALUE;
 	
-	/** references for this handle */
+	/** references for this localName */
 	private String references = DEFAULT_REFERENCES;
 	
 	/** admin read permissions */
@@ -95,7 +95,7 @@ public class HandleInfo extends BasePersistent{
 	/** public write permissions */
 	private boolean publicWrite = DEFAULT_PUBLIC_WRITE;
 	
-	/** name authority for this handle */
+	/** name authority for this localName */
 	private HandleNameAuthority nameAuthority;
 	
 
@@ -105,15 +105,15 @@ public class HandleInfo extends BasePersistent{
 	HandleInfo(){}
 	
 	/**
-	 * Public constructor for handle.
+	 * Public constructor for localName.
 	 * 
 	 * @param index - unique index for the naming authority
-	 * @param data - data for the handle
-	 * @param nameAuthority - name authority for this handle
+	 * @param data - data for the localName
+	 * @param nameAuthority - name authority for this localName
 	 */
 	public HandleInfo(String handle, String data, HandleNameAuthority nameAuthority)
 	{
-	   setHandle(handle);
+	   setLocalName(handle);
 	   setData(data);
 	   setNameAuthority(nameAuthority);
 	}
@@ -198,17 +198,17 @@ public class HandleInfo extends BasePersistent{
 	{
 		int value = 0;
 		value += nameAuthority == null ? 0 : nameAuthority.hashCode();
-		value += handle == null ? 0 : handle.hashCode();
+		value += localName == null ? 0 : localName.hashCode();
 		value += index == null ? 0 : index.hashCode();
 		return value;
 	}
 	
-	public String getHandle() {
-		return handle;
+	public String getLocalName() {
+		return localName;
 	}
 
-	public void setHandle(String handle) {
-		this.handle = handle;
+	public void setLocalName(String handle) {
+		this.localName = handle;
 	}
 
 	
@@ -219,8 +219,8 @@ public class HandleInfo extends BasePersistent{
 		if (!(o instanceof HandleInfo)) return false;
 
 		final HandleInfo other = (HandleInfo) o;
-		if( (handle != null && !handle.equals(other.getHandle()) ) ||
-			(handle == null && other.getHandle() != null ) ) return false;
+		if( (localName != null && !localName.equals(other.getLocalName()) ) ||
+			(localName == null && other.getLocalName() != null ) ) return false;
 		
 		if( (index != null && !index.equals(other.getIndex()) ) ||
 			(index == null && other.getIndex() != null ) ) return false;
@@ -235,8 +235,8 @@ public class HandleInfo extends BasePersistent{
 	{
 		StringBuffer sb = new StringBuffer("[ id ");
 		sb.append(id);
-		sb.append(" handle = ");
-		sb.append(handle);
+		sb.append(" localName = ");
+		sb.append(localName);
 		sb.append(" index = ");
 		sb.append(index);
 		sb.append(" dataType = ");
