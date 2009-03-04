@@ -59,7 +59,7 @@ public class HandleNameAuthorityDAOTest
 	 */
 	public void baseHandleNameAuthorityDAOTest() throws Exception
 	{
-		HandleNameAuthority handleNameAuthority = new HandleNameAuthority("0.NA", "12345678");
+		HandleNameAuthority handleNameAuthority = new HandleNameAuthority("12345678");
  		
         TransactionStatus ts = tm.getTransaction(td);
         handleNameAuthorityDAO.makePersistent(handleNameAuthority);

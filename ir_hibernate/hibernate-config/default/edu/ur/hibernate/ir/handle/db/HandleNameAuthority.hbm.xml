@@ -45,9 +45,6 @@
 		<property name="namingAuthority" column="handle_name_authority" type="string"
 			not-null="true" access="field" />
 
-        <property name="localName" column="local_name" type="string"
-			not-null="true" access="field" />
-			
 	    <property name="authorityBaseUrl" column="base_url" type="string"
 			not-null="false" access="field" />
 			

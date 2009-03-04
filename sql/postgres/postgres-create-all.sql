@@ -2903,14 +2903,13 @@ CREATE TABLE handle.handle_name_authority
 (
   handle_name_authority_id BIGINT PRIMARY KEY,
   handle_name_authority TEXT NOT NULL,
-  local_name TEXT NOT NULL,
   base_url TEXT,
   description TEXT,
   version INTEGER,
-  UNIQUE(handle_name_authority, local_name)
+  UNIQUE(handle_name_authority)
 );
 ALTER TABLE handle.handle_name_authority OWNER TO ir_plus;
-CREATE INDEX handle_name_authority_idx ON handle.handle_name_authority(handle_name_authority, local_name);
+CREATE INDEX handle_name_authority_idx ON handle.handle_name_authority(handle_name_authority);
 
 
 CREATE SEQUENCE handle.handle_name_authority_seq;
