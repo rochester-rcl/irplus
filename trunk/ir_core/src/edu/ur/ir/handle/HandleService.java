@@ -12,11 +12,10 @@ public interface HandleService {
 	 * Get a name authority 
 	 * 
 	 * @param nameAuthority - name authority
-	 * @param localName - local name
 	 * 
-	 * @return the name authority with the name authority and local name
+	 * @return the name authority with the name authority
 	 */
-	public HandleNameAuthority getNameAuthority(String nameAuthority, String localName);
+	public HandleNameAuthority getNameAuthority(String nameAuthority);
 	
 	/**
 	 * Get a name authority by it's unique id.
