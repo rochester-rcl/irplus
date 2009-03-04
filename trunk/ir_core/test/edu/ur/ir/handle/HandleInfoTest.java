@@ -17,15 +17,11 @@ public class HandleInfoTest {
 	public void testEquals()
 	{
 	
-		HandleNameAuthority authority1 = new HandleNameAuthority();
-		authority1.setNamingAuthority("0.NA");
-		authority1.setLocalName("12345");
+		HandleNameAuthority authority1 = new HandleNameAuthority("12345");
 		authority1.setId(1l);
 		authority1.setVersion(33);
 		
-		HandleNameAuthority authority2 = new HandleNameAuthority();
-		authority2.setNamingAuthority("0.NA1");
-		authority2.setLocalName("111111");
+		HandleNameAuthority authority2 = new HandleNameAuthority("111111");
 		authority2.setId(2l);
 		authority2.setVersion(33);
 

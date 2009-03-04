@@ -17,9 +17,6 @@ public class HandleNameAuthority extends BasePersistent{
 	/** Name representing the naming authority */
 	private String namingAuthority;
 	
-	/** local handle name */
-	private String localName;
-	
 	/** url for the authority  */
 	private String authorityBaseUrl;
 	
@@ -46,9 +43,8 @@ public class HandleNameAuthority extends BasePersistent{
 	 * @param handleNamingAuthority
 	 * @param handleLocalName
 	 */
-	public HandleNameAuthority(String namingAuthority, String localName)
+	public HandleNameAuthority(String namingAuthority)
 	{
-		this.setLocalName(localName);
 		this.setNamingAuthority(namingAuthority);
 	}
 
@@ -70,24 +66,7 @@ public class HandleNameAuthority extends BasePersistent{
 		this.namingAuthority = handleNamingAuthority;
 	}
 	
-	/**
-	 * Local part of the naming authority
-	 * 
-	 * @return
-	 */
-	public String getLocalName() {
-		return localName;
-	}
 
-	/**
-	 * Local part of the naming authority
-	 * 
-	 * @param handleLocalName
-	 */
-	public void setLocalName(String handleLocalName) {
-		this.localName = handleLocalName;
-	}
-	
 	public String getAuthorityBaseUrl() {
 		return authorityBaseUrl;
 	}
@@ -96,16 +75,7 @@ public class HandleNameAuthority extends BasePersistent{
 		this.authorityBaseUrl = authorityBaseUrl;
 	}
 	
-	/**
-	 * Returns the full name authority
-	 *  e.g. 0.NA/12345 where
-	 *  0.NA is the naming authority and 12345 is the local name
-	 * @return
-	 */
-	public String getFullNameAuthority()
-	{
-		return namingAuthority + "/" + localName;
-	}
+
 	
 	public boolean equals(Object o)
 	{
@@ -116,9 +86,6 @@ public class HandleNameAuthority extends BasePersistent{
 		if( (namingAuthority != null && !namingAuthority.equals(other.getNamingAuthority()) ) ||
 			(namingAuthority == null && other.getNamingAuthority() != null ) ) return false;
 		
-		if( (localName != null && !localName.equals(other.getLocalName()) ) ||
-			(localName == null && other.getLocalName() != null ) ) return false;
-		
 		return true;
 	}
 	
@@ -126,7 +93,6 @@ public class HandleNameAuthority extends BasePersistent{
 	{
 		int value = 0;
 		value += namingAuthority == null ? 0 : namingAuthority.hashCode();
-		value += localName == null ? 0 : localName.hashCode();
 		return value;
 	}
 
@@ -136,8 +102,6 @@ public class HandleNameAuthority extends BasePersistent{
 		sb.append(id);
 		sb.append(" namingAuthority = ");
 		sb.append( namingAuthority);
-		sb.append(" localName = ");
-		sb.append(localName);
 		sb.append( " base url = ");
 		sb.append(authorityBaseUrl);
 		sb.append("]");
