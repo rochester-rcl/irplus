@@ -18,15 +18,11 @@ public class NamingAuthorityTest {
 	 */
 	public void testBasicSets() 
 	{
-		HandleNameAuthority authority = new HandleNameAuthority();
-		authority.setNamingAuthority("0.NA");
-		authority.setLocalName("12345");
+		HandleNameAuthority authority = new HandleNameAuthority("12345");
 		authority.setId(55l);
 		authority.setVersion(33);
 		
-		assert authority.getNamingAuthority().equals("0.NA") : "Should equal 0.NA but equals " + authority.getNamingAuthority();
-		assert authority.getLocalName().equals("12345") : "Shoud equal 12345 but equals " + authority.getLocalName();
-		assert authority.getFullNameAuthority().equals("0.NA/12345") : "should equal 0.NA/12345 but equals " + authority.getFullNameAuthority(); 
+		assert authority.getNamingAuthority().equals("12345") : "Should equal 12345 but equals " + authority.getNamingAuthority();
 	}
 	
 	
@@ -36,22 +32,15 @@ public class NamingAuthorityTest {
 	public void testEquals()
 	{
 	
-		HandleNameAuthority authority1 = new HandleNameAuthority();
-		authority1.setNamingAuthority("0.NA");
-		authority1.setLocalName("12345");
+		HandleNameAuthority authority1 = new HandleNameAuthority("12345");
 		authority1.setId(1l);
 		authority1.setVersion(33);
 		
-		HandleNameAuthority authority2 = new HandleNameAuthority();
-		authority2.setNamingAuthority("0.NA1");
-		authority2.setLocalName("111111");
+		HandleNameAuthority authority2 = new HandleNameAuthority("111111");
 		authority2.setId(2l);
 		authority2.setVersion(33);
 
-		
-		HandleNameAuthority authority3 = new HandleNameAuthority();
-		authority3.setNamingAuthority("0.NA");
-		authority3.setLocalName("12345");
+		HandleNameAuthority authority3 = new HandleNameAuthority("12345");
 		authority3.setId(1l);
 		authority3.setVersion(33);
 		
