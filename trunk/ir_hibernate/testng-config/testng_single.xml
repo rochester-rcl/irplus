@@ -19,7 +19,9 @@
 <suite name="ir hibernate test single">
 	<test name="Test Single">
 		<classes>
-            <class name="edu.ur.hibernate.ir.handle.db.UniqueHandleNameDAOTest"/>
+            <class name="edu.ur.hibernate.ir.handle.db.HandleNameAuthorityDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.handle.db.HandleInfoDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.handle.db.UniqueHandleNameDAOTest"/>
 		</classes>
 	</test>
 </suite>
