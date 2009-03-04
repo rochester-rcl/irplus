@@ -55,6 +55,12 @@
 			not-null="false" access="field"/>
 		
 	 </class>
+	 
+	 <!--  Get a count of item content types in the system -->
+	<query name="handleNameAuthorityCount">
+	    select count(*) from HandleNameAuthority
+	</query>
+	 
 		
 
 </hibernate-mapping>

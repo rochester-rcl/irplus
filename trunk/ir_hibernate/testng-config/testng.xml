@@ -86,6 +86,7 @@
 		     <class name="edu.ur.hibernate.ir.statistics.db.IgnoreIpAddressDAOTest"/>
 		     
 		     <class name="edu.ur.hibernate.ir.handle.db.HandleNameAuthorityDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.handle.db.HandleInfoDAOTest"/>
 		</classes>
 	</test>
 	
