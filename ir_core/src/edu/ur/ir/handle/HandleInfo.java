@@ -3,7 +3,7 @@ package edu.ur.ir.handle;
 import edu.ur.persistent.BasePersistent;
 
 /**
- * Class that represents handle information.
+ * Class that represents handle information.  
  * 
  * @author Nathan Sarr
  *
@@ -18,6 +18,9 @@ public class HandleInfo extends BasePersistent{
 	
 	/** 24 hours - default time to live */
 	public static final Integer DEFAULT_TIME_TO_LIVE = new Integer(86400);
+	
+	/** default integer index */
+	public static final Integer DEFAULT_INDEX = new Integer(100);
 	
 	/**  relative time to live */
 	public static final Integer RELATIVE_TIME_TO_LIVE_TYPE = new Integer(0);
@@ -41,8 +44,11 @@ public class HandleInfo extends BasePersistent{
 	public static final boolean DEFAULT_PUBLIC_WRITE = false;
 	
 	/** index - positive integer value - this should be unique across the local naming authority */
-	private Long index;
+	private Integer index = DEFAULT_INDEX ;
 	
+	private String handle;
+	
+
 	/** the type of data for the handle data */
 	private String dataType = URL_DATA_TYPE;
 	
@@ -89,18 +95,18 @@ public class HandleInfo extends BasePersistent{
 	 * @param data - data for the handle
 	 * @param nameAuthority - name authority for this handle
 	 */
-	public HandleInfo(Long index, String data, HandleNameAuthority nameAuthority)
+	public HandleInfo(String handle, String data, HandleNameAuthority nameAuthority)
 	{
-	   setId(index);
+	   setHandle(handle);
 	   setData(data);
 	   setNameAuthority(nameAuthority);
 	}
 	
 	
-	public Long getIndex() {
+	public Integer getIndex() {
 		return index;
 	}
-	public void setIndex(Long index) {
+	public void setIndex(Integer index) {
 		this.index = index;
 	}
 	public String getDataType() {
@@ -176,9 +182,19 @@ public class HandleInfo extends BasePersistent{
 	{
 		int value = 0;
 		value += nameAuthority == null ? 0 : nameAuthority.hashCode();
+		value += handle == null ? 0 : handle.hashCode();
 		value += index == null ? 0 : index.hashCode();
 		return value;
 	}
+	
+	public String getHandle() {
+		return handle;
+	}
+
+	public void setHandle(String handle) {
+		this.handle = handle;
+	}
+
 	
 	
 	public boolean equals(Object o)
@@ -187,6 +203,9 @@ public class HandleInfo extends BasePersistent{
 		if (!(o instanceof HandleInfo)) return false;
 
 		final HandleInfo other = (HandleInfo) o;
+		if( (handle != null && !handle.equals(other.getHandle()) ) ||
+			(handle == null && other.getHandle() != null ) ) return false;
+		
 		if( (index != null && !index.equals(other.getIndex()) ) ||
 			(index == null && other.getIndex() != null ) ) return false;
 		
@@ -200,6 +219,8 @@ public class HandleInfo extends BasePersistent{
 	{
 		StringBuffer sb = new StringBuffer("[ id ");
 		sb.append(id);
+		sb.append(" handle = ");
+		sb.append(handle);
 		sb.append(" index = ");
 		sb.append(index);
 		sb.append(" dataType = ");

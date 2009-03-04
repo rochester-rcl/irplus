@@ -17,22 +17,22 @@ public class HandleInfoTest {
 	public void testEquals()
 	{
 	
-		NameAuthority authority1 = new NameAuthority();
+		HandleNameAuthority authority1 = new HandleNameAuthority();
 		authority1.setNamingAuthority("0.NA");
 		authority1.setLocalName("12345");
 		authority1.setId(1l);
 		authority1.setVersion(33);
 		
-		NameAuthority authority2 = new NameAuthority();
+		HandleNameAuthority authority2 = new HandleNameAuthority();
 		authority2.setNamingAuthority("0.NA1");
 		authority2.setLocalName("111111");
 		authority2.setId(2l);
 		authority2.setVersion(33);
 
 		
-		HandleInfo handleInfo1 = new HandleInfo(1l, "http://www.google.com", authority1);
-		HandleInfo handleInfo2 = new HandleInfo(1l, "http://www.google.com", authority2);
-		HandleInfo handleInfo3 = new HandleInfo(1l, "http://www.google.com", authority1);
+		HandleInfo handleInfo1 = new HandleInfo("12345", "http://www.google.com", authority1);
+		HandleInfo handleInfo2 = new HandleInfo("12345", "http://www.google.com", authority2);
+		HandleInfo handleInfo3 = new HandleInfo("12345", "http://www.google.com", authority1);
 		
 		
 		assert handleInfo1.equals(handleInfo3) : "Name handleInfos should be equal handleInfo1 = " + handleInfo1 + " handleInfo 3 = " + handleInfo3;
