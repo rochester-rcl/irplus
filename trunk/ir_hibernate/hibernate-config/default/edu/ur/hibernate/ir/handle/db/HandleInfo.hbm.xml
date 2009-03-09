@@ -80,6 +80,7 @@
 					
 	    <!-- Handle info name authority -->
 		<many-to-one class="HandleNameAuthority" 
+		    cascade="save-update"
 			name="nameAuthority" 
 			access="field"
 			not-null="true"
