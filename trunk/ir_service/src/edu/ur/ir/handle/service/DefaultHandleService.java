@@ -34,13 +34,23 @@ public class DefaultHandleService implements HandleService {
 	}
 
 	public HandleInfo getHandleInfo(String fullHandle) {
-		// TODO Auto-generated method stub
-		return null;
+		HandleInfo info = null;
+		if( fullHandle != null )
+		{
+		    String[] parts = fullHandle.split("/");
+		    if( parts.length == 2)
+		    {
+		    	String prefix = parts[0];
+		    	String localName = parts[1];
+		    	System.out.println("prefix = " + prefix + " localName = " + localName);
+		    	info =handleInfoDAO.get(prefix, localName);
+		    }
+		}
+		return info;
 	}
 
 	public HandleNameAuthority getNameAuthority(String nameAuthority) {
-		// TODO Auto-generated method stub
-		return null;
+		return handleNameAuthorityDAO.findByUniqueName(nameAuthority);
 	}
 
 	public HandleNameAuthority getNameAuthority(Long id, boolean lock) {
