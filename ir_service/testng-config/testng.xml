@@ -48,6 +48,8 @@
 		    <class name="edu.ur.ir.item.service.DefaultItemServiceTest"/>
 		    <class name="edu.ur.ir.researcher.service.DefaultResearcherServiceTest"/>
 		    <class name="edu.ur.ir.statistics.service.DefaultStatisticsServiceTest"/>
+		    
+		    <class name="edu.ur.ir.handle.service.HandleServiceTest"/>
 
 		</classes>
 	</test>
