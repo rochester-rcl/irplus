@@ -473,4 +473,13 @@
 	   <property name="itemAcceptedMessage" ref="itemAcceptedMessage"/>
 	   <property name="institutionalItemService" ref="institutionalItemService"/>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Handle service                             -->
+   <!-- ****************************************** --> 
+   <bean id="handleService" 
+       class="edu.ur.ir.handle.service.DefaultHandleService">
+	   <property name="handleInfoDAO" ref="handleInfoDAO"/>
+	   <property name="handleNameAuthorityDAO" ref="handleNameAuthorityDAO"/>
+   </bean>
 </beans>
