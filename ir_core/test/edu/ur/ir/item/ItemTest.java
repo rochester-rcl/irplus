@@ -369,7 +369,7 @@ public class ItemTest {
 		}
 		
 		assert clonedItem.getExternalPublishedItem().equals(item.getExternalPublishedItem()) : "ExternalPublishedItem should be equal";
-		assert clonedItem.getFirstAvailableDate().equals(item.getFirstAvailableDate()) : "FirstAvailableDate should be equal";
+		assert clonedItem.getFirstAvailableDate().equals(item.getFirstAvailableDate()) : "FirstAvailableDate should be equal cloned = " + clonedItem.getFirstAvailableDate() + " original = " + item.getFirstAvailableDate();
 		assert !item.getId().equals(clonedItem.getId()) : "Id should not be equal";
 		assert clonedItem.getIsThesis() == (item.getIsThesis()) : "Thesis should be equal";
 		assert clonedItem.getItemAbstract().equals(item.getItemAbstract()) : "Item Abstract should be equal";
@@ -386,7 +386,7 @@ public class ItemTest {
 		assert clonedItem.getItemSponsors().size() == 1 : "Sponsor should be 1";
 		assert clonedItem.getItemSponsors().iterator().next().getSponsor().equals(sponsor) : "Sponsor should be equal";
 		assert clonedItem.getSubTitles().size() == 1: "SubTitles should be equal";
-		assert clonedItem.getOriginalItemCreationDate().equals(item.getOriginalItemCreationDate()) : "Release Date should be equal";
+		assert clonedItem.getOriginalItemCreationDate().equals(item.getOriginalItemCreationDate()) : "Original creation Date should be equal coloned = " + clonedItem.getOriginalItemCreationDate() + " original = " + item.getOriginalItemCreationDate();
 		repoHelper.cleanUpRepository();
 	}
 	
