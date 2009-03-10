@@ -154,6 +154,7 @@ public class DefaultUserImporter implements UserImporter{
 		 
          for(DspaceUser u : users)
          {
+        	 System.out.println("Loading user " + u);
         	 
         	 if( !userEmailExists(u.email) && !userNameAlreadyExits(u.email) && !userNetIdExists(u.netId))
         	 {
