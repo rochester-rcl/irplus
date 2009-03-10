@@ -534,6 +534,7 @@ public class DefaultItemImporter implements ItemImporter{
 	 */
 	private void loadItem(DspaceItem i,  File zipFile, Repository repo, boolean publicOnly) throws NoIndexFoundException, IOException
 	{
+		log.debug("loading dspace item " + i);
 		GenericItem genericItem = genericItemPopulator.createGenericItem(repo, i);
 		List<InstitutionalCollection> urResearchCollections = getCollections(i);
 		
@@ -614,6 +615,7 @@ public class DefaultItemImporter implements ItemImporter{
 	 */
 	private Long getUrCollectionId(long dspaceCollectionId)
 	{
+		log.debug("getting ur collection id for dspace collection id = " + dspaceCollectionId);
 		return jdbcTemplate.queryForLong("select ur_research_collection_id from dspace_convert.collection where dspace_collection_id = " + dspaceCollectionId);
 	}
 	
