@@ -30,9 +30,19 @@
     </layout> 
   </appender> 
   
-      <logger name="org.apache.commons.io">
+  
+   <logger name="edu.ur">
+       <level value="debug"/> 
+   </logger>
+   
+   <logger name="org.apache.commons.io">
     <!-- Print only messages of level error or above in the package org.apache.commons.io -->
     <level value="error"/> 
+   </logger>
+   
+   <logger name="org.hibernate">
+       <!-- Print only messages of level error or above in the package org.apache.commons.io -->
+       <level value="error"/> 
    </logger>
    
    <logger name="org.apache.catalina.core">
