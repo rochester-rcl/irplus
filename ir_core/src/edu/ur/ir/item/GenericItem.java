@@ -27,6 +27,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemObject;
@@ -124,6 +125,9 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	
 	/** Indicates that this item can be viewed by the public. */
 	private boolean publiclyViewable = true;
+	
+	/** handle information for the item  */
+	private HandleInfo handleInfo;
 	
 	/**
 	 * Default constructor; 
@@ -1303,8 +1307,27 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		newItem.setLanguageType(this.getLanguageType());
 		newItem.setOwner(this.getOwner());
 		newItem.setPrimaryContentType(this.getPrimaryContentType());
-		newItem.setFirstAvailableDate(this.getFirstAvailableDate());
-		newItem.setOriginalItemCreationDate(this.getOriginalItemCreationDate());
+		
+		FirstAvailableDate firstAvailDate = new FirstAvailableDate();
+		firstAvailDate.setDay(firstAvailableDate.getDay());
+		firstAvailDate.setFractionOfSecond(firstAvailableDate.getFractionOfSecond());
+		firstAvailDate.setHours(firstAvailableDate.getFractionOfSecond());
+		firstAvailDate.setItem(newItem);
+		firstAvailDate.setMonth(firstAvailableDate.getMonth());
+		firstAvailDate.setSeconds(firstAvailableDate.getSeconds());
+		firstAvailDate.setYear(firstAvailableDate.getYear());
+		newItem.setFirstAvailableDate(firstAvailDate);
+
+		OriginalItemCreationDate origCreationDate = new OriginalItemCreationDate();
+		origCreationDate.setDay(originalItemCreationDate.getDay());
+		origCreationDate.setFractionOfSecond(originalItemCreationDate.getFractionOfSecond());
+		origCreationDate.setHours(originalItemCreationDate.getFractionOfSecond());
+		origCreationDate.setItem(newItem);
+		origCreationDate.setMonth(originalItemCreationDate.getMonth());
+		origCreationDate.setSeconds(originalItemCreationDate.getSeconds());
+		origCreationDate.setYear(originalItemCreationDate.getYear());
+		newItem.setOriginalItemCreationDate(origCreationDate);
+		
 		newItem.setReleaseDate(this.getReleaseDate());
 		
 
@@ -1354,7 +1377,6 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 			newExternalPublishedItem.setPublisher(oldExternalPublishedItem.getPublisher());
 			newItem.setExternalPublishedItem(newExternalPublishedItem);
 		}
-		
 		
 		// Copy Contributors
 		for(ItemContributor oldContributor:this.getContributors()) {
@@ -1594,6 +1616,14 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 
 	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
+	}
+	
+	public HandleInfo getHandleInfo() {
+		return handleInfo;
+	}
+
+	public void setHandleInfo(HandleInfo handleInfo) {
+		this.handleInfo = handleInfo;
 	}
 
 }

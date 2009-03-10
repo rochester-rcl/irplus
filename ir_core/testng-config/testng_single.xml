@@ -19,8 +19,7 @@
 <suite name="ur_research">
 	<test name="UR IR Core Test">
 		<classes>
-		    <class name="edu.ur.ir.handle.NamingAuthorityTest"/>
-		    <class name="edu.ur.ir.handle.HandleInfoTest"/>
+		    <class name="edu.ur.ir.item.ItemTest"/>
 		</classes>
 	</test>
 </suite>
