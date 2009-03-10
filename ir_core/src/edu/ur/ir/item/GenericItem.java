@@ -27,7 +27,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemObject;
@@ -126,8 +125,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	/** Indicates that this item can be viewed by the public. */
 	private boolean publiclyViewable = true;
 	
-	/** handle information for the item  */
-	private HandleInfo handleInfo;
+
 	
 	/**
 	 * Default constructor; 
@@ -1618,12 +1616,5 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		this.releaseDate = releaseDate;
 	}
 	
-	public HandleInfo getHandleInfo() {
-		return handleInfo;
-	}
-
-	public void setHandleInfo(HandleInfo handleInfo) {
-		this.handleInfo = handleInfo;
-	}
 
 }
