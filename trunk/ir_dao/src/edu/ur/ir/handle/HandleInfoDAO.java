@@ -20,4 +20,12 @@ public interface HandleInfoDAO extends CountableDAO, CrudDAO<HandleInfo>
 	 * @return the found handle or null if the handle does not exist
 	 */
 	HandleInfo get(String authorityName, String localName);
+	
+	/**
+	 * Get a count of the handles with the specified name authority.
+	 *  
+	 * @param nameAuthorityId - id for the name authority
+	 * @return - count of handles found for the name authority
+	 */
+	public Long getHandleCountForNameAuthority(Long nameAuthorityId);
 }
