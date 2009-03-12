@@ -1,5 +1,7 @@
 package edu.ur.ir.handle.service;
 
+import java.util.List;
+
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleInfoDAO;
 import edu.ur.ir.handle.HandleNameAuthority;
@@ -80,6 +82,23 @@ public class DefaultHandleService implements HandleService {
 	public void setHandleNameAuthorityDAO(
 			HandleNameAuthorityDAO handleNameAuthorityDAO) {
 		this.handleNameAuthorityDAO = handleNameAuthorityDAO;
+	}
+
+	public Long getHandleCount() {
+		return handleInfoDAO.getCount();
+	}
+
+	public Long getNameAuthorityCount() {
+		return handleNameAuthorityDAO.getCount();
+	}
+
+	public Long getHandleCountForNameAuthority(Long nameAuthorityId) {
+	    return handleInfoDAO.getHandleCountForNameAuthority(nameAuthorityId);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<HandleNameAuthority> getAllNameAuthorities() {
+		return handleNameAuthorityDAO.getAll();
 	}
 
 
