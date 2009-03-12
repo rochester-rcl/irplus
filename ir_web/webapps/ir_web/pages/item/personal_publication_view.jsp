@@ -150,7 +150,7 @@
 										<c:forEach items="${item.contributors}" var="itemContributor">
 										<tr>
 											<td>
-												${itemContributor.contributor.personName.forename} ${itemContributor.contributor.personName.surname} - ${itemContributor.contributor.contributorType.name}
+												<ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/> - ${itemContributor.contributor.contributorType.name}
 											</td>
 										</tr>
 										</c:forEach>

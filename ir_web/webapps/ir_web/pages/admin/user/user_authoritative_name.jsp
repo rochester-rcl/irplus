@@ -29,14 +29,14 @@
 				<tr>
 				<td class="tdItemContributorLeftBorder"> <a href="javascript:YAHOO.ur.email.removeName(${irUser.id});">Remove</a>
 				</td>
-				<td class="tdItemContributorRightBorder"> ${irUser.personNameAuthority.authoritativeName.forename} ${irUser.personNameAuthority.authoritativeName.surname}
+				<td class="tdItemContributorRightBorder"> <ir:authorName personName="${name}" displayDates="true"/> 
 					[Authoritative name]
 				</td>
 				<c:forEach  var="name" items="${irUser.personNameAuthority.names}">
 					<c:if test="${name.id != irUser.personNameAuthority.authoritativeName.id}">
 						<tr>
 						<td></td>
-						<td class="tdItemContributorRightBorder"> ${name.forename} ${name.surname}</td>
+						<td class="tdItemContributorRightBorder"> <ir:authorName personName="${name}" displayDates="false"/></td>
 						</tr>
 					</c:if>
 				</c:forEach>

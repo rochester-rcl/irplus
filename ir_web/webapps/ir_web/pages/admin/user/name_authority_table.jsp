@@ -46,7 +46,35 @@
 			</thead>
 			<tbody>
 				<c:forEach var="nameAuthority" items="${nameAuthorities}">
-					<ir:authoritativeNames personNameAuthority="${nameAuthority}" user="${irUser}"/>
+				    <tr>
+				        
+				            <c:if test="${(irUser.personNameAuthority != null) && 
+				                          (nameAuthority.id == irUser.personNameAuthority.id)}">
+				                 <td class="tdItemFolderLeftBorder"> &nbsp;&nbsp;&nbsp;Added </td>
+				                 <td class="tdItemFolderRightBorder">
+				                     <ir:authorName personName="${name}" displayDates="true"/> [Authoritative Name]
+		                             
+		                             <c:forEach var="name" items="${nameAuthority.names}">
+				                         <c:if test="${name.id != nameAuthority.authoritativeName.id}">
+				                            <br/><br/><ir:authorName personName="${name}" displayDates="false"/>
+				                         </c:if>
+				                     </c:forEach>
+				                 </td>
+				            </c:if>
+				            <c:if test="${(irUser.personNameAuthority == null) || 
+				                          (nameAuthority.id != irUser.personNameAuthority.id)}">
+				                <td class="tdItemFolderLeftBorder">&nbsp;<span class="addBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.email.addName('${irUser.id}','${nameAuthority.id}');">Add</a></td>
+				                <td class="tdItemFolderRightBorder">
+		                             <ir:authorName personName="${nameAuthority.authoritativeName}" displayDates="true"/> [Authoritative Name]
+		                             
+		                             <c:forEach var="name" items="${nameAuthority.names}">
+				                         <c:if test="${name.id != nameAuthority.authoritativeName.id}">
+				                            <br/><br/><ir:authorName personName="${nameAuthority.authoritativeName}" displayDates="false"/>
+				                         </c:if>
+				                     </c:forEach>
+		                         </td>
+				            </c:if>
+				    </tr>
 				</c:forEach>
 			</tbody>
 		</table>	

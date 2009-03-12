@@ -202,12 +202,7 @@
 									                    <c:url var="contributorUrl" value="/viewContributorPage.action">
 														    <c:param name="contributorId" value="${itemContributor.contributor.id}"/>
 														</c:url>						                             
-						                                 <a href="${contributorUrl}"> ${itemContributor.contributor.personName.forename}&nbsp;
-						                                 <c:if test="${itemContributor.contributor.personName.middleName != 'null'}">${itemContributor.contributor.personName.middleName}</c:if>&nbsp;
-						                                 ${itemContributor.contributor.personName.surname}
-						                                 <c:if test="${itemContributor.contributor.personName.personNameAuthority.birthDate.year != 0}">,&nbsp;${itemContributor.contributor.personName.personNameAuthority.birthDate.year} - </c:if> 
-						                                 <c:if test="${itemContributor.contributor.personName.personNameAuthority.deathDate.year != 0}">&nbsp;${itemContributor.contributor.personName.personNameAuthority.deathDate.year}</c:if></a>&nbsp;
-						                                 ${itemContributor.contributor.contributorType.name} <br/> 
+						                                 <a href="${contributorUrl}"><ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/><br/> 
 						                             </c:forEach>
 						                        </urstb:td>
 						                    </urstb:tr>
@@ -425,7 +420,7 @@
 									                    <c:url var="contributorUrl" value="/viewContributorPage.action">
 														    <c:param name="contributorId" value="${itemContributor.contributor.id}"/>
 														</c:url>						                             
-						                                 <a href="${contributorUrl}"> ${itemContributor.contributor.personName.forename} ${itemContributor.contributor.personName.surname}</a> - ${itemContributor.contributor.contributorType.name} <br/> 
+						                                 <a href="${contributorUrl}"> <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/></a> - ${itemContributor.contributor.contributorType.name} <br/> 
 						                             </c:forEach>
 						                        </urstb:td>
 						                    </urstb:tr>

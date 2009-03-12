@@ -75,7 +75,7 @@
 						        </c:if>
 						     </td>
 						     <td width="22%">
-						     	<h3>${contributor.personName.forename}&nbsp;${contributor.personName.surname}</h3>
+						     	<h3><ir:authorName personName="${contributor.personName}" displayDates="true"/></h3>
 						     	
 						     	<table 	class="blueBox">
 						     		<tr> <td> Total Publications : ${publicationsCount}</td></tr>
@@ -97,7 +97,7 @@
 			                     <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
 						     </td>						
 							<td width="22%">
-								<h3>${contributor.personName.forename} ${contributor.personName.surname}</h3>
+								<h3><ir:authorName personName="${contributor.personName}" displayDates="true"/></h3>
 						     	
 						     	<table 	class="blueBox">
 						     		<tr> <td> Total Publications : ${publicationsCount}</td></tr>
@@ -177,7 +177,7 @@
                           </td>
   
 						  <td class="${rowType}">
-							${contributorPublication.contributor.personName.forename}&nbsp;${contributorPublication.contributor.personName.surname}
+						    <ir:authorName personName="${contributorPublication.contributor.personName}" displayDates="false"/>
                           </td>
                           
                           <td class="${rowType}">

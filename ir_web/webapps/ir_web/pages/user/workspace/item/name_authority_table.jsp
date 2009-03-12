@@ -40,13 +40,41 @@
 	<table class="itemFolderTable" width="100%">
 		<thead>
 			<tr>
-				<th class="thItemFolder" width="17%">Add</th>
 				<th class="thItemFolder">Contributors</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach var="nameAuthority" items="${nameAuthorities}">
-				<ir:displayNames personNameAuthority="${nameAuthority}" genericItem="${item}" user="${user}"/>
+			    <tr>
+		             <td class="tdItemContributorRightBorder"> <a href="javascript:YAHOO.ur.item.contributor.addPersonName('${nameAuthority.id}')"> Add Person name</a></td>
+			    </tr>
+			    <tr>
+			        <td class="tdItemFolderRightBorder">
+			            <c:if test="${(user.personNameAuthority != null) && (user.personNameAuthority.id == nameAuthority.id)}">
+			               <h3>Your Name</h3>
+			            </c:if>
+			            <c:if test="${ir:isContributor(item, nameAuthority.authoritativeName)}">
+			                &nbsp;&nbsp;[Added]
+			            </c:if>
+			            <c:if test="${!ir:isContributor(item, nameAuthority.authoritativeName)}">
+			                <span class="addBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.item.contributor.addName('${nameAuthority.authoritativeName.id}')"> Add</a>
+			            </c:if>
+			           <ir:authorName personName="${nameAuthority.authoritativeName}" displayDates="true"/> - [Authoritative Name]<br/><br/>
+			            			   
+			            <c:forEach var="name" items="${nameAuthority.names}">
+			                <c:if test="${name.id != nameAuthority.authoritativeName.id}">
+			                    <c:if test="${ir:isContributor(item, name)}">
+			                        &nbsp;&nbsp;[Added]
+			                    </c:if>
+			                    <c:if test="${!ir:isContributor(item, name)}">
+			                        <span class="addBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.item.contributor.addName('${name.id}')"> Add</a>
+			                    </c:if>
+			                    <ir:authorName personName="${name}" displayDates="false"/><br/><br/>
+			                    
+			                </c:if>
+			            </c:forEach>
+			        </td>
+			    </tr>
 			</c:forEach>
 		</tbody>
 	</table>	
