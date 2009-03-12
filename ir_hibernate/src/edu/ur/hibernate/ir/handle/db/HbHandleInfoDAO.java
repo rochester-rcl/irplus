@@ -82,5 +82,16 @@ public class HbHandleInfoDAO implements HandleInfoDAO{
 		Object[] values = new Object[] {authorityName, localName};
 		return (HandleInfo)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("handleByNameAuthorityLocalName", values));
 	}
+	
+	/**
+	 * Get a count of the handles with the specified name authority.
+	 *  
+	 * @param nameAuthorityId - id for the name authority
+	 * @return - count of handles found for the name authority
+	 */
+	public Long getHandleCountForNameAuthority(Long nameAuthorityId)
+	{		
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("countHandleByNameAuthority", nameAuthorityId));
+	}
 
 }
