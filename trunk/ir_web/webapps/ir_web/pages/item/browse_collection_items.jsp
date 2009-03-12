@@ -220,7 +220,7 @@
 						                                 <c:url var="contributorUrl" value="/viewContributorPage.action">
 														    <c:param name="contributorId" value="${itemContributor.contributor.id}"/>
 														</c:url>						                             
-						                                 <a href="${contributorUrl}"> ${itemContributor.contributor.personName.forename}&nbsp;${itemContributor.contributor.personName.surname}</a> - ${itemContributor.contributor.contributorType.name} <br/> 
+						                                 <a href="${contributorUrl}"><ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/></a> - ${itemContributor.contributor.contributorType.name} <br/> 
 						                             </c:forEach>
 						                        </urstb:td>
 						                    </urstb:tr>
@@ -429,7 +429,7 @@
 						                                 <c:url var="contributorUrl" value="/viewContributorPage.action">
 														    <c:param name="contributorId" value="${itemContributor.contributor.id}"/>
 														</c:url>						                             
-						                                 <a href="${contributorUrl}"> ${itemContributor.contributor.personName.forename} ${itemContributor.contributor.personName.surname}</a> - ${itemContributor.contributor.contributorType.name} <br/> 
+						                                 <a href="${contributorUrl}"> <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/></a> - ${itemContributor.contributor.contributorType.name} <br/> 
 						                             </c:forEach>
 						                        </urstb:td>
 						                    </urstb:tr>

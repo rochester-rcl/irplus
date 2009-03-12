@@ -70,7 +70,7 @@
 				</td>
 				
 				<td class="tdItemSelect">
-                  		<ur:maxText numChars="25" text="${itemContributor.contributor.personName.forename} ${itemContributor.contributor.personName.surname}"></ur:maxText>
+				        <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/>
 				</td>
 
 				<td class="tdItemSelect">
