@@ -1,5 +1,7 @@
 package edu.ur.ir.handle;
 
+import java.util.List;
+
 /**
  * Interface for dealing with handle information.
  * 
@@ -16,6 +18,20 @@ public interface HandleService {
 	 * @return the name authority with the name authority
 	 */
 	public HandleNameAuthority getNameAuthority(String nameAuthority);
+	
+	/**
+	 * Get a count of name authorities.
+	 * 
+	 * @return the number of name authorities
+	 */
+	public Long getNameAuthorityCount();
+	
+	/**
+	 * Get a count of the number of handles.
+	 * 
+	 * @return count in number of handles
+	 */
+	public Long getHandleCount();
 	
 	/**
 	 * Get a name authority by it's unique id.
@@ -39,6 +55,21 @@ public interface HandleService {
 	 * @param handleNameAuthority
 	 */
 	public void delete(HandleNameAuthority handleNameAuthority);
+	
+	/**
+	 * Get a count of the handles with the specified name authority.
+	 *  
+	 * @param nameAuthorityId - id for the name authority
+	 * @return - count of handles found for the name authority
+	 */
+	public Long getHandleCountForNameAuthority(Long nameAuthorityId);
+	
+	/**
+	 * Get all name authorities in the system.
+	 * 
+	 * @return all name authorities in the system.
+	 */
+	public List<HandleNameAuthority> getAllNameAuthorities();
 	
 	/**
 	 * Get the handle information.

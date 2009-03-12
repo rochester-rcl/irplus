@@ -82,6 +82,9 @@ public class HandleInfoDAOTest {
         + " and " + other.getLocalName();
         assert byAuthorityLocalName.equals(other) : "handle info's should be equal other = " + 
         other + " byAuthorityLocalName = " +  byAuthorityLocalName;
+        
+        long count = handleInfoDAO.getHandleCountForNameAuthority(handleNameAuthority.getId());
+        assert  count == 1l : " Count should equal one but equals " + count;
         tm.commit(ts);
         
         ts = tm.getTransaction(td);
