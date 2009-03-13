@@ -15,15 +15,14 @@
 */
 
 /**
- * This code is for dealing with adding and removing folders 
- * in the workspace.
+ * This code is for dealing with adding and removing content types
  */
 YAHOO.namespace("ur.content.type");
 
-// action to perform when submitting the personal content types.
+// action to perform when getting the personal content types.
 var myContentTypeAction = basePath + 'admin/getContentTypes.action';
 
-// actions for adding and removing folders
+// actions for adding,updating and removing content types
 var updateContentTypeAction = basePath + 'admin/updateContentType.action';
 var newContentTypeAction = basePath + 'admin/createContentType.action';
 var deleteContentTypeAction = basePath + 'admin/deleteContentType.action';
@@ -40,9 +39,6 @@ YAHOO.ur.content.type = {
 	
 	/**
 	 *  Function that retireves content information
-	 *  based on the given content id.
-	 *
-	 *  The content id used to get the folder.
 	 */
 	getContentTypes : function(rowStart, startPageNumber, currentPageNumber, order)
 	{
