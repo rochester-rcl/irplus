@@ -48,7 +48,7 @@ public class RepositoryTest {
 	 * 
 	 * @param description
 	 */
-	public void testBasicSets() 
+	public void testBasicRepositorySets() 
 	{
 		Repository repository  = new Repository();
 		repository.setDescription("myDescription");
@@ -61,7 +61,7 @@ public class RepositoryTest {
 	/**
 	 * Test equals and hash code methods.
 	 */
-	public void testEquals()
+	public void testRepositoryEquals()
 	{
 		Repository repository1  = new Repository();
 		Repository repository2  = new Repository();
