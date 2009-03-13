@@ -84,6 +84,7 @@
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIgnoreIpAddresses.action" />"><fmt:message key="menu.ignoreIpAddress" /></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExtentTypes.action"/>"><fmt:message key="menu.viewExtentTypes" /></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewReviewPendingItems.action"/>">Review Pending Publications</a></li>
+				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewHandleNameAuthorities.action"/>">Handle Name Authorities</a></li>
 
                             </ul>
                         </div>
