@@ -17,7 +17,6 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!--  document type -->
 <c:import url="/inc/doctype-frag.jsp"/>
@@ -26,7 +25,7 @@
 <html>
 
 <head>
-    <title>Content Types</title>
+    <title>Handle Name Authorities</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -49,7 +48,7 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="pages/js/ur_table.js"/>
-    <ur:js src="page-resources/js/admin/content_type.js"/>
+    <ur:js src="page-resources/js/admin/handle_name_authority.js"/>
 </head>
 
 <body class="yui-skin-sam">
@@ -60,20 +59,20 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>Edit Content Types</h3>
+        <h3>Edit Handle Name Authorities</h3>
   
         <div id="bd">
       
-		    <button id="showContentType" class="ur_button" 
+		    <button id="showHandleNameAuthority" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Content type</button> 
-	        <button id="showDeleteContentType" class="ur_button" 
+ 		                               onmouseout="this.className='ur_button';">New Handle Name Authority</button> 
+	        <button id="showDeleteHandleNameAuthority" class="ur_button" 
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">Delete</button>
 
             <br/>
             <br/>
-	        <ur:div id="newContentTypes"></ur:div>
+	        <div id="newHandleNameAuthorities"></div>
          </div>
          <!--  end body div -->
       
@@ -83,28 +82,28 @@
   </div>
   <!--  End doc div-->
   
-  <ur:div id="newContentTypeDialog" cssClass="hidden">
-    <ur:div cssClass="hd">Content Type Information</ur:div>
-    <ur:div cssClass="bd">
-      <ur:basicForm id="addContentType" name="newContentTypeForm" 
+  <div id="newHandleNameAuthorityDialog" class="hidden">
+    <div class="hd">Handle Name Authority Information</div>
+    <div class="bd">
+      <form id="addHandleNameAuthority" name="newHandleNameAuthorityForm" 
 		                    method="post" 
-		                    action="admin/createContentType.action">
-	    <ur:div id="newContentTypeDialogFields">
-	       <c:import url="content_type_form.jsp"/>
-	    </ur:div>
-	  </ur:basicForm>
-    </ur:div>
-  </ur:div>
+		                    action="admin/createHandleNameAuthority.action">
+	    <div id="newHandleNameAuthorityDialogFields">
+	       <c:import url="handle_name_authority_form.jsp"/>
+	    </div>
+	  </form>
+    </div>
+  </div>
 	         
-  <ur:div id="deleteContentTypeDialog" cssClass="hidden">
-    <ur:div cssClass="hd">Delete Content Types</ur:div>
-	  <ur:div cssClass="bd">
-	    <ur:basicForm id="deleteContentType" name="deleteContentType" method="post" 
-		                action="admin/deleteContentType.action">
-		 <ur:div id="deleteContentTypeError" cssClass="errorMessage"></ur:div>
-		   <p>Are you sure you wish to delete the selected content types?</p>
-        </ur:basicForm>
-      </ur:div>
-  </ur:div>
+  <div id="deleteHandleNameAuthorityDialog" class="hidden">
+    <div class="hd">Delete Handle Name Authorities</div>
+	  <div class="bd">
+	    <form id="deleteContentType" name="deleteContentType" method="post" 
+		                action="admin/deleteHandleNameAuthority.action">
+		 <div id="deleteHandleNameAuthorityError" class="errorMessage"></div>
+		   <p>Are you sure you wish to delete the selected handle name authorities?</p>
+        </form>
+      </div>
+  </div>
 </body>
 </html>
