@@ -32,7 +32,7 @@ import edu.ur.ir.web.table.Pager;
  * @author Nathan Sarr
  *
  */
-public class ManageContentTypes extends Pager implements  Preparable{
+public class ManageContentTypes extends Pager implements Preparable {
 	
 	/** generated version id. */
 	private static final long serialVersionUID = -7954124847449231029L;
@@ -139,7 +139,7 @@ public class ManageContentTypes extends Pager implements  Preparable{
 	 */
 	public String get()
 	{
-		ContentType contentType = contentTypeService.getContentType(id, false);	
+		contentType = contentTypeService.getContentType(id, false);	
 		return "get";
 	}
 	
