@@ -48,7 +48,6 @@
                 <value>edu/ur/hibernate/ir/item/db/VersionedItem.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/ContentType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/LanguageType.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/item/db/License.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/IdentifierType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/ItemIdentifier.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/ItemLink.hbm.xml</value>
@@ -127,6 +126,11 @@
 
                 <value>edu/ur/hibernate/ir/statistics/db/FileDownloadInfo.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/statistics/db/IgnoreIpAddress.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/handle/db/HandleNameAuthority.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/handle/db/HandleInfo.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/handle/db/UniqueHandleName.hbm.xml</value>
+                
             </set>
         </property>
         <property name="hibernateProperties">
