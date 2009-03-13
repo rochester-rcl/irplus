@@ -16,6 +16,9 @@
 
 package edu.ur.ir.repository;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.CommonPersistent;
 
@@ -35,6 +38,9 @@ public class License extends CommonPersistent{
 
 	/** text for the license */
 	private String text;
+	
+	/** Date license was created */
+	private Timestamp dateCreated;
 
 	/**
 	 * Package protected constructor
@@ -52,6 +58,7 @@ public class License extends CommonPersistent{
 		setName(name);
 		setText(text);
 		setCreator(creator);
+		dateCreated = new Timestamp(new Date().getTime());
 	}
 	
 	/**
@@ -116,8 +123,8 @@ public class License extends CommonPersistent{
 		if( ( name != null && !name.equals(other.getName()) ) ||
 			( name == null && other.getName() != null ) ) return false;
 		
-		if( ( getText() != null && !getText().equals(other.getText()) ) ||
-		    ( getText() == null && other.getText() != null ) ) return false;
+		if( ( id != null && !id.equals(other.getId()) ) ||
+			( id == null && other.getId() != null ) ) return false;
 
 		return true;
 	}
@@ -140,5 +147,15 @@ public class License extends CommonPersistent{
 		sb.append("]");
 		return sb.toString();
 	}
+
+	public Timestamp getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Timestamp dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+
 
 }

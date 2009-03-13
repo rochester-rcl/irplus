@@ -41,9 +41,9 @@ public class VersionedLicense extends CommonPersistent {
 	 * 
 	 * @param irFile
 	 */
-	public VersionedLicense(IrUser creator, License license, String name) {
+	public VersionedLicense(IrUser creator, String licenseText, String name) {
 		setMaxVersion(INITIAL_LICENSE_VERSION);
-		license.setCreator(creator);
+		License license = new License(name, licenseText, creator);
 		LicenseVersion version = new LicenseVersion(license, this, maxVersion);
 		setName(name);
 		currentVersion = version;
@@ -56,8 +56,9 @@ public class VersionedLicense extends CommonPersistent {
 	 * 
 	 * @param fileInfo
 	 */
-	public LicenseVersion addNewVersion(License license, IrUser creator) {
+	public LicenseVersion addNewVersion(String licenseText, IrUser creator) {
 		setMaxVersion(maxVersion + 1);
+		License license = new License(name, licenseText, creator);
 		license.setCreator(creator);
 		LicenseVersion version = new LicenseVersion(license, this, maxVersion);
 		versions.add(version);
