@@ -296,21 +296,17 @@ YAHOO.ur.handle.authority = {
 		
 		var handleSuccess = function(o) 
 		{
-			alert('d')
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
-	        	alert('e')
 	        	alert(o.responseText);
 		        //get the response from adding a content type
 		        var response = eval("("+o.responseText+")");
-	        	alert('f')
 		        //if the handle name authority was not deleted then show the user the error message.
 		        // received from the server
 		        if( response.handleNameAuthorityDeleted == "false" )
 		        {
-		        	alert('g')
 		            var deleteHandleNameAuthorityError = document.getElementById('form_deleteHandleNameAuthorityError');
 	                deleteHandleNameAuthorityError.innerHTML = '<p id="newDeleteContentTypeError">' 
 	                + response.message + '</p>';
@@ -318,7 +314,6 @@ YAHOO.ur.handle.authority = {
 		        }
 		        else
 		        {
-		        	alert('h')
 		            // we can clear the form if the content types were deleted
 		            YAHOO.ur.handle.authority.clearDeleteHandleNameAuthorityForm();
 		            YAHOO.ur.handle.authority.deleteHandleNameAuthorityDialog.hide();
