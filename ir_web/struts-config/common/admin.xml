@@ -24,6 +24,7 @@
     <!ENTITY mime SYSTEM "admin_mime.xml">
     <!ENTITY repository SYSTEM "admin_repository.xml">
     <!ENTITY insitutional_collection SYSTEM "admin_collection.xml">
+    <!ENTITY handle SYSTEM "admin_handle.xml">
     ]>
     
 <struts>
@@ -102,6 +103,11 @@
         <!--  Insitutional Collection Actions      -->
         <!--  ************************************ -->
         &insitutional_collection;
+        
+        <!--  ************************************ -->
+        <!--  Handle Actions                       -->
+        <!--  ************************************ -->
+        &handle;
         
         <!--  ************************************ -->
         <!--  Administration Home Page             -->
