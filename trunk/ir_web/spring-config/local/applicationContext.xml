@@ -83,7 +83,8 @@
     <import resource="ir-user-hibernate.xml"/>
 	<import resource="ir-news-hibernate.xml"/>  
 	<import resource="ir-researcher-hibernate.xml"/>
-	<import resource="ir-statistics-hibernate.xml"/>	 
+	<import resource="ir-statistics-hibernate.xml"/>	
+	<import resource="ir-handle-hibernate.xml"/> 
    <!-- ****************************************** --> 
    <!-- User Service  -->
    <!-- ****************************************** --> 
@@ -104,4 +105,5 @@
    <!-- News Service  -->
    <!-- ****************************************** --> 
    <import resource="news-service.xml"/>   
+   
 </beans>
