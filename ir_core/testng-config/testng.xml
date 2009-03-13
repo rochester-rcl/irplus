@@ -46,8 +46,9 @@
 			<class name="edu.ur.ir.item.ExtentTypeTest"/>
 			<class name="edu.ur.ir.item.ItemExtentTest"/>
 			
-			
 			<class name="edu.ur.ir.repository.RepositoryTest"/>
+			<class name="edu.ur.ir.repository.LicenseTest"/>
+		    <class name="edu.ur.ir.repository.VersionedLicenseTest"/>
 			
 			<class name="edu.ur.ir.institution.InstitutionalCollectionTest"/>
 			<class name="edu.ur.ir.institution.InstitutionalItemTest"/>
