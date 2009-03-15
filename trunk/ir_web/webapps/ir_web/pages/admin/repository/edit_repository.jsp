@@ -20,6 +20,7 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+
 <!--  document type -->
 <c:import url="/inc/doctype-frag.jsp"/>
 
@@ -70,8 +71,9 @@
            <div id="bd">
               <b><fmt:message key="edit_repository.edit"/></b>
     
+          
               <ur:basicForm method="post" name="viewRepository"  
-                   action="/ir_web/admin/viewRepository.action">
+                   action="admin/viewRepository.action">
                   <table class="formTable">
                       <tr>
                           <td class="label">
@@ -87,6 +89,29 @@
                           </td>
                           <td class="input" colspan="2">
                               <ur:textInput name="repository.institutionName" value="${repository.institutionName}"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="label">
+                              Default Handle Name Authority:
+                          </td>
+                          <td class="input" colspan="2">
+                              <select name="handleNameAuthorityId">
+                                  <c:if test="${repository.defaultHandleNameAuthority == null}">
+                                      <option selected="true" value="-1">No Naming Authority</option>
+                                  </c:if>
+                                   <c:if test="${repository.defaultHandleNameAuthority != null}">
+                                      <option value="-1">No Naming Authority</option>
+                                  </c:if>
+                                  <c:forEach var="nameAuthority" items="${handleNameAuthorities}">
+                                      <c:if test="${repository.defaultHandleNameAuthority.id == nameAuthority.id}">
+                                          <option selected="true" value="${nameAuthority.id}">${nameAuthority.namingAuthority}</option>
+                                      </c:if>
+                                       <c:if test="${repository.defaultHandleNameAuthority.id != nameAuthority.id}">
+                                          <option value="${nameAuthority.id}">${nameAuthority.namingAuthority}</option>
+                                      </c:if>
+                                  </c:forEach>
+                              </select>
                           </td>
                       </tr>
                       <tr>
