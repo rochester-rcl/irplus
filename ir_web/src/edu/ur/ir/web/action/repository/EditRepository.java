@@ -16,6 +16,8 @@
 
 package edu.ur.ir.web.action.repository;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -23,6 +25,8 @@ import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.Validateable;
 
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.handle.HandleService;
+import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryIndexerService;
 import edu.ur.ir.repository.RepositoryService;
@@ -52,9 +56,20 @@ Validateable{
 	/** Delete the picture from the repository */
 	private Long irFilePictureId;
 	
+	/** id of the name authority to set on the repository */
+	private Long handleNameAuthorityId;
+	
 	/** Service for re-indexing repository information */
 	private RepositoryIndexerService repositoryIndexerService;
 	
+	/** Service for dealing with handle information  */
+	private HandleService handleService;
+	
+	/** Set of handle name authorities in the system  */
+	private List<HandleNameAuthority> handleNameAuthorities;
+
+
+	/** batch size for re-indexing repository information - number of records to process*/
 	private int batchSize = 10;
 	
 	/**
@@ -65,6 +80,7 @@ Validateable{
 	public void prepare() throws Exception{
 		log.debug("prepare called");
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		handleNameAuthorities = handleService.getAllNameAuthorities();
 	}
 	
 	/**
@@ -80,6 +96,23 @@ Validateable{
 		{
 			throw new IllegalStateException ("repository service is null");
 		}
+		
+		if( handleNameAuthorityId == -1  )
+		{
+			repository.setDefaultHandleNameAuthority(null);
+		}
+		else
+		{
+			HandleNameAuthority repositoryHandleAuthority = repository.getDefaultHandleNameAuthority();
+			
+			if( repositoryHandleAuthority == null || 
+				!repositoryHandleAuthority.getId().equals(handleNameAuthorityId) )
+			{
+			    HandleNameAuthority authority = handleService.getNameAuthority(handleNameAuthorityId, false);
+			    repository.setDefaultHandleNameAuthority(authority);
+			}
+		}
+		
 		
 		if( log.isDebugEnabled())
 		{
@@ -181,4 +214,30 @@ Validateable{
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
 	}
+	
+	public HandleService getHandleService() {
+		return handleService;
+	}
+
+	public void setHandleService(HandleService handleService) {
+		this.handleService = handleService;
+	}
+	
+	public List<HandleNameAuthority> getHandleNameAuthorities() {
+		return handleNameAuthorities;
+	}
+
+	public void setHandleNameAuthorities(
+			List<HandleNameAuthority> handleNameAuthorities) {
+		this.handleNameAuthorities = handleNameAuthorities;
+	}
+	
+	public Long getHandleNameAuthorityId() {
+		return handleNameAuthorityId;
+	}
+
+	public void setHandleNameAuthorityId(Long handleNameAuthorityId) {
+		this.handleNameAuthorityId = handleNameAuthorityId;
+	}
+
 }
