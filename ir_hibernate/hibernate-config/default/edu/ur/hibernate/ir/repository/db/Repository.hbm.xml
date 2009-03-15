@@ -96,6 +96,16 @@
 			access="field" 
 			unique="true"/>
 			
+		<!-- Default handle name authority to use for the repository -->
+		<many-to-one class="edu.ur.ir.handle.HandleNameAuthority" 
+			name="defaultHandleNameAuthority"
+			cascade="save-update" 
+			column="default_handle_authority_id" 
+			insert="true"
+			update="true" 
+			access="field" 
+			unique="true"/>
+			
 	    <!--  Top level institutional collections in the repository -->
 		<set name="institutionalCollections" 
 		     optimistic-lock="false"

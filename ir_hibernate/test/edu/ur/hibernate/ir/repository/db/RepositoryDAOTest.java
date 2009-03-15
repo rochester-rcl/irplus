@@ -33,6 +33,8 @@ import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.IrFileDAO;
+import edu.ur.ir.handle.HandleNameAuthority;
+import edu.ur.ir.handle.HandleNameAuthorityDAO;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryDAO;
 import edu.ur.util.FileUtil;
@@ -57,6 +59,10 @@ public class RepositoryDAOTest {
 	
 	/** Repository relational data access  */
 	RepositoryDAO repositoryDAO = (RepositoryDAO) ctx.getBean("repositoryDAO");
+	
+	/** used to store handle name authority data */
+	HandleNameAuthorityDAO handleNameAuthorityDAO = (HandleNameAuthorityDAO) ctx
+	.getBean("handleNameAuthorityDAO");
 
 	/** Ir File relational data access.  */
 	IrFileDAO irFileDAO = (IrFileDAO) ctx.getBean("irFileDAO");
@@ -84,7 +90,6 @@ public class RepositoryDAOTest {
 				properties.getProperty("a_repo_path"),
 				"default_folder");
 
-		
 		tm.commit(ts);
 		
 		Long id = repo.getId();
@@ -96,6 +101,48 @@ public class RepositoryDAOTest {
 		"the repository by id";
 		
 		assert other.equals(repo) : "Repositories should be equal";		
+		tm.commit(ts);		
+	
+		//create a new transaction
+		ts = tm.getTransaction(td);
+		repoHelper.cleanUpRepository();
+		tm.commit(ts);	
+		
+	}
+	
+	/**
+	 * Test Repository persistance
+	 */
+	@Test
+	public void addDefaultNameAuthorityhDAOTest() {
+
+		TransactionStatus ts = tm.getTransaction(td);
+		
+		// create a repository to store files in.
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+
+		HandleNameAuthority handleNameAuthority = new HandleNameAuthority("12345678");
+		handleNameAuthorityDAO.makePersistent(handleNameAuthority);
+		repo.setDefaultHandleNameAuthority(handleNameAuthority);
+		tm.commit(ts);
+		
+		Long id = repo.getId();
+		//create a new transaction
+		ts = tm.getTransaction(td);
+		// make sure we can find a repository by id
+		Repository other = repositoryDAO.getById(id, false);
+		
+	    HandleNameAuthority defaultAuthority = other.getDefaultHandleNameAuthority();
+	    assert defaultAuthority != null : "Handle name authority should not be null";
+	    assert defaultAuthority.equals(handleNameAuthority) : "Should be eaual Default authority = " + defaultAuthority +    
+	    " handleNameAuthority =  " + handleNameAuthority;
+		
 		tm.commit(ts);		
 	
 		//create a new transaction

@@ -27,6 +27,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FolderInfo;
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.persistent.CommonPersistent;
 
@@ -79,7 +80,11 @@ public class Repository extends CommonPersistent {
 	/** Folder containing the index for researcher in the system*/ 
 	private FolderInfo researcherIndexFolder;
 	
- 	/**
+	/** Default handle name authority to use when assigning handle values  */
+	private HandleNameAuthority defaultHandleNameAuthority;
+	
+
+	/**
      * Default constructor
      */
     public Repository(){}
@@ -451,5 +456,24 @@ public class Repository extends CommonPersistent {
 
 	public FolderInfo getResearcherIndexFolder() {
 		return researcherIndexFolder;
+	}
+	
+ 	/**
+ 	 * Default handle name authority for submissions.
+ 	 * 
+ 	 * @return default name authority
+ 	 */
+ 	public HandleNameAuthority getDefaultHandleNameAuthority() {
+		return defaultHandleNameAuthority;
+	}
+
+	/**
+	 * Set the default name authority.
+	 * 
+	 * @param defaultHandleNameAuthority
+	 */
+	public void setDefaultHandleNameAuthority(
+			HandleNameAuthority defaultHandleNameAuthority) {
+		this.defaultHandleNameAuthority = defaultHandleNameAuthority;
 	}
 }
