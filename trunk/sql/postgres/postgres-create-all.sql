@@ -1418,6 +1418,7 @@ CREATE TABLE ir_repository.repository
   user_index_folder_id BIGINT,
   institutional_item_index_folder_id BIGINT,
   researcher_index_folder_id BIGINT,
+  default_handle_authority_id BIGINT,
   UNIQUE (name),
   FOREIGN KEY (name_index_folder_id) REFERENCES file_system.folder (folder_id),
   FOREIGN KEY (user_index_folder_id) REFERENCES file_system.folder (folder_id),
