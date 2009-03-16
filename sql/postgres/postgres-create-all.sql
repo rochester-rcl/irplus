@@ -18,6 +18,71 @@
 -- **********************************************
 -- ----------------------------------------------
 
+-- **********************************************
+       
+-- Handle SCHEMA     
+
+-- **********************************************
+-- ----------------------------------------------
+
+
+CREATE SCHEMA handle AUTHORIZATION ir_plus;
+
+-- ---------------------------------------------
+-- Sequence for handle values
+-- ---------------------------------------------
+
+CREATE SEQUENCE handle.unique_handle_name_seq; 
+ALTER TABLE handle.unique_handle_name_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- handle nameing authority information
+-- ---------------------------------------------
+CREATE TABLE handle.handle_name_authority
+(
+  handle_name_authority_id BIGINT PRIMARY KEY,
+  handle_name_authority TEXT NOT NULL,
+  base_url TEXT,
+  description TEXT,
+  version INTEGER,
+  UNIQUE(handle_name_authority)
+);
+ALTER TABLE handle.handle_name_authority OWNER TO ir_plus;
+CREATE INDEX handle_name_authority_idx ON handle.handle_name_authority(handle_name_authority);
+
+
+CREATE SEQUENCE handle.handle_name_authority_seq;
+ALTER TABLE handle.handle_name_authority_seq OWNER TO ir_plus;
+-- ---------------------------------------------
+-- handle information
+-- ---------------------------------------------
+CREATE TABLE handle.handle_info
+(
+    handle_id BIGINT NOT NULL PRIMARY KEY,
+    handle_name_authority_id BIGINT NOT NULL,
+    handle_idx BIGINT NOT NULL,
+    local_name text NOT NULL, 
+    data_type TEXT,
+    data TEXT,
+    time_to_live_type INT,
+    time_to_live INT,
+    time_stamp INT,
+    refs TEXT,
+    version INTEGER,
+    admin_read BOOLEAN,
+    admin_write BOOLEAN,
+    public_read BOOLEAN,
+    public_write BOOLEAN,
+    UNIQUE(handle_name_authority_id, local_name, handle_idx),
+    FOREIGN KEY (handle_name_authority_id) REFERENCES handle.handle_name_authority (handle_name_authority_id)
+);
+ALTER TABLE handle.handle_info OWNER TO ir_plus;
+
+CREATE SEQUENCE handle.handle_info_seq;
+ALTER TABLE handle.handle_info_seq OWNER TO ir_plus;
+
+
+
 
 
 -- ----------------------------------------------
@@ -1083,6 +1148,7 @@ CREATE TABLE ir_item.item
   locked_for_review BOOLEAN,
   publicly_viewable BOOLEAN, 
   primary_image_item_file_id BIGINT,
+  handle_info_id BIGINT,
   FOREIGN KEY (language_type_id) REFERENCES ir_item.language_type 
 	(language_type_id),
   FOREIGN KEY (original_item_creation_date_id) REFERENCES ir_item.original_item_creation_date 
@@ -1091,9 +1157,8 @@ CREATE TABLE ir_item.item
 	(first_available_date_id),	
   FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type (content_type_id),
   FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
-  FOREIGN KEY (external_published_item_id) REFERENCES 
-
-ir_item.external_published_item (external_published_item_id)
+  FOREIGN KEY (handle_info_id) REFERENCES handle.handle_info(handle_id),
+  FOREIGN KEY (external_published_item_id) REFERENCES ir_item.external_published_item (external_published_item_id)
 ) ;
 ALTER TABLE ir_item.item OWNER TO ir_plus;
 
@@ -2879,68 +2944,5 @@ CREATE SEQUENCE ir_statistics.ip_address_ignore_seq ;
 ALTER TABLE ir_statistics.ip_address_ignore_seq OWNER TO ir_plus;
 
 
-
--- **********************************************
-       
--- Handle SCHEMA     
-
--- **********************************************
--- ----------------------------------------------
-
-
-CREATE SCHEMA handle AUTHORIZATION ir_plus;
-
--- ---------------------------------------------
--- Sequence for handle values
--- ---------------------------------------------
-
-CREATE SEQUENCE handle.unique_handle_name_seq; 
-ALTER TABLE handle.unique_handle_name_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- handle nameing authority information
--- ---------------------------------------------
-CREATE TABLE handle.handle_name_authority
-(
-  handle_name_authority_id BIGINT PRIMARY KEY,
-  handle_name_authority TEXT NOT NULL,
-  base_url TEXT,
-  description TEXT,
-  version INTEGER,
-  UNIQUE(handle_name_authority)
-);
-ALTER TABLE handle.handle_name_authority OWNER TO ir_plus;
-CREATE INDEX handle_name_authority_idx ON handle.handle_name_authority(handle_name_authority);
-
-
-CREATE SEQUENCE handle.handle_name_authority_seq;
-ALTER TABLE handle.handle_name_authority_seq OWNER TO ir_plus;
--- ---------------------------------------------
--- handle information
--- ---------------------------------------------
-CREATE TABLE handle.handle_info
-(
-    handle_id BIGINT NOT NULL PRIMARY KEY,
-    handle_name_authority_id BIGINT NOT NULL,
-    handle_idx BIGINT NOT NULL,
-    local_name text NOT NULL, 
-    data_type TEXT,
-    data TEXT,
-    time_to_live_type INT,
-    time_to_live INT,
-    time_stamp INT,
-    refs TEXT,
-    version INTEGER,
-    admin_read BOOLEAN,
-    admin_write BOOLEAN,
-    public_read BOOLEAN,
-    public_write BOOLEAN,
-    UNIQUE(handle_name_authority_id, local_name, handle_idx),
-    FOREIGN KEY (handle_name_authority_id) REFERENCES handle.handle_name_authority (handle_name_authority_id)
-);
-ALTER TABLE handle.handle_info OWNER TO ir_plus;
-
-CREATE SEQUENCE handle.handle_info_seq;
-ALTER TABLE handle.handle_info_seq OWNER TO ir_plus;
 
       
