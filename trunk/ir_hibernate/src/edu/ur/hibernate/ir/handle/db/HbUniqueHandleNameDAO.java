@@ -25,7 +25,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import edu.ur.hibernate.HbHelper;
-import edu.ur.ir.handle.NextUniqueHandleName;
+import edu.ur.ir.handle.NextUniqueHandleNameGenerator;
 
 /**
  * Returns the next unique handle name from a sequence.
@@ -33,7 +33,7 @@ import edu.ur.ir.handle.NextUniqueHandleName;
  * @author Nathan Sarr
  *
  */
-public class HbUniqueHandleNameDAO implements NextUniqueHandleName {
+public class HbUniqueHandleNameDAO implements NextUniqueHandleNameGenerator {
 	
     SessionFactory sessionFactory;
     HibernateTemplate hibernateTemplate;
@@ -54,7 +54,7 @@ public class HbUniqueHandleNameDAO implements NextUniqueHandleName {
     /**
      * Gets the next unique handle name
      * 
-     * @see edu.ur.ir.handle.NextUniqueHandleName#nextName()
+     * @see edu.ur.ir.handle.NextUniqueHandleNameGenerator#nextName()
      */
     @SuppressWarnings("unchecked")
 	public String nextName() {

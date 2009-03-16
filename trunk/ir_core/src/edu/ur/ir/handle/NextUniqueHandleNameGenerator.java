@@ -8,7 +8,7 @@ package edu.ur.ir.handle;
  * @author Nathan Sarr
  *
  */
-public interface NextUniqueHandleName {
+public interface NextUniqueHandleNameGenerator {
 	
 	/**
 	 * Gets the next unique handle name.
