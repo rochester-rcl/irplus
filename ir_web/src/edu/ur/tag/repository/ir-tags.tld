@@ -362,8 +362,7 @@
 			edu.ur.tag.repository.FileWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean isOwner(edu.ur.ir.user.IrUser,
-			edu.ur.ir.file.VersionedFile)
+			boolean isOwner(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
 		</function-signature>
 	</function>
 
@@ -373,8 +372,7 @@
 			edu.ur.tag.repository.FileWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean isLocker(edu.ur.ir.user.IrUser,
-			edu.ur.ir.file.VersionedFile)
+			boolean isLocker(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
 		</function-signature>
 	</function>
 
@@ -384,8 +382,7 @@
 			edu.ur.tag.repository.GroupWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean isInGroup(edu.ur.ir.user.IrUser,
-			edu.ur.ir.user.IrUserGroup)
+			boolean isInGroup(edu.ur.ir.user.IrUser, edu.ur.ir.user.IrUserGroup)
 		</function-signature>
 	</function>
 
@@ -395,8 +392,7 @@
 			edu.ur.tag.repository.GroupWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean isAdminOfGroup(edu.ur.ir.user.IrUser,
-			edu.ur.ir.user.IrUserGroup)
+			boolean isAdminOfGroup(edu.ur.ir.user.IrUser, edu.ur.ir.user.IrUserGroup)
 		</function-signature>
 	</function>
 
@@ -406,9 +402,7 @@
 			edu.ur.tag.repository.SecurityUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean
-			entryHasPermission(edu.ur.ir.security.AccessControlEntry,
-			java.lang.String)
+			boolean entryHasPermission(edu.ur.ir.security.AccessControlEntry, java.lang.String)
 		</function-signature>
 	</function>
 
@@ -418,9 +412,7 @@
 			edu.ur.tag.repository.SecurityUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean groupHasAceForCollection(edu.ur.ir.security.IrAcl,
-			edu.ur.ir.institution.InstitutionalCollection,
-			edu.ur.ir.user.IrUserGroup)
+			boolean groupHasAceForCollection(edu.ur.ir.security.IrAcl, edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.user.IrUserGroup)
 		</function-signature>
 	</function>
 
@@ -430,11 +422,7 @@
 			edu.ur.tag.repository.SecurityUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean
-			groupHasPermissionForCollection(edu.ur.ir.security.IrAcl,
-			edu.ur.ir.institution.InstitutionalCollection,
-			edu.ur.ir.user.IrUserGroup,
-			edu.ur.ir.security.IrClassTypePermission)
+			boolean groupHasPermissionForCollection(edu.ur.ir.security.IrAcl, edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.user.IrUserGroup, edu.ur.ir.security.IrClassTypePermission)
 		</function-signature>
 	</function>
 
@@ -445,8 +433,7 @@
 			edu.ur.tag.repository.InstitutionalCollectionUtils
 		</function-class>
 		<function-signature>
-			boolean canMoveToCollection(java.util.Collection,
-			edu.ur.ir.FileSystem)
+			boolean canMoveToCollection(java.util.Collection, edu.ur.ir.FileSystem)
 		</function-signature>
 	</function>
 
@@ -456,9 +443,7 @@
 			edu.ur.tag.repository.InstitutionalCollectionUtils
 		</function-class>
 		<function-signature>
-			boolean
-			isInstitutionalPublicationToBeMoved(java.util.Collection,
-			edu.ur.ir.FileSystem)
+			boolean isInstitutionalPublicationToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
 		</function-signature>
 	</function>
 
@@ -468,8 +453,7 @@
 			edu.ur.tag.repository.FileWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean canMoveToFolder(java.util.Collection,
-			edu.ur.ir.FileSystem)
+			boolean canMoveToFolder(java.util.Collection, edu.ur.ir.FileSystem)
 		</function-signature>
 	</function>
 
@@ -479,8 +463,7 @@
 			edu.ur.tag.repository.FileWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean isFileToBeMoved(java.util.Collection,
-			edu.ur.ir.FileSystem)
+			boolean isFileToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
 		</function-signature>
 	</function>
 
@@ -490,8 +473,7 @@
 			edu.ur.tag.repository.CollectionWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean canMoveToPersonalCollection(java.util.Collection,
-			edu.ur.ir.FileSystem)
+			boolean canMoveToPersonalCollection(java.util.Collection, edu.ur.ir.FileSystem)
 		</function-signature>
 	</function>
 
@@ -501,8 +483,7 @@
 			edu.ur.tag.repository.CollectionWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean isPublicationToBeMoved(java.util.Collection,
-			edu.ur.ir.FileSystem)
+			boolean isPublicationToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
 		</function-signature>
 	</function>
 
@@ -512,8 +493,7 @@
 			edu.ur.tag.repository.FileWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean canLockFile(edu.ur.ir.user.IrUser,
-			edu.ur.ir.file.VersionedFile)
+			boolean canLockFile(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
 		</function-signature>
 	</function>
 
@@ -523,8 +503,7 @@
 			edu.ur.tag.repository.FileWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean canShareFile(edu.ur.ir.user.IrUser,
-			edu.ur.ir.file.VersionedFile)
+			boolean canShareFile(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
 		</function-signature>
 	</function>
 
@@ -534,8 +513,7 @@
 			edu.ur.tag.repository.FileWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean canEditFile(edu.ur.ir.user.IrUser,
-			edu.ur.ir.file.VersionedFile)
+			boolean canEditFile(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
 		</function-signature>
 	</function>
 
@@ -545,8 +523,7 @@
 			edu.ur.tag.repository.FileWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean canBreakLock(edu.ur.ir.user.IrUser,
-			edu.ur.ir.file.VersionedFile)
+			boolean canBreakLock(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
 		</function-signature>
 	</function>
 
@@ -556,8 +533,7 @@
 			edu.ur.tag.repository.FileWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean fileExistsInItem(edu.ur.ir.user.PersonalFile,
-			edu.ur.ir.item.GenericItem)
+			boolean fileExistsInItem(edu.ur.ir.user.PersonalFile, edu.ur.ir.item.GenericItem)
 		</function-signature>
 	</function>
 
@@ -567,8 +543,7 @@
 			edu.ur.tag.repository.FileWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean hasTransformedFile(edu.ur.ir.file.IrFile,
-			java.lang.String)
+			boolean hasTransformedFile(edu.ur.ir.file.IrFile, java.lang.String)
 		</function-signature>
 	</function>
 
@@ -588,8 +563,7 @@
 			edu.ur.tag.repository.UserWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean checkUserHasRole(edu.ur.ir.user.IrUser,
-			java.lang.String, java.lang.String)
+			boolean checkUserHasRole(edu.ur.ir.user.IrUser, java.lang.String, java.lang.String)
 		</function-signature>
 	</function>
 
@@ -619,8 +593,7 @@
 			edu.ur.tag.repository.SearchUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean facetSelected(edu.ur.ir.FacetSearchHelper,
-			edu.ur.ir.search.FacetResult)
+			boolean facetSelected(edu.ur.ir.FacetSearchHelper, edu.ur.ir.search.FacetResult)
 		</function-signature>
 	</function>
 
@@ -630,9 +603,7 @@
 			edu.ur.tag.repository.SecurityUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean groupHasPermissionForItem(edu.ur.ir.security.IrAcl,
-			edu.ur.ir.item.GenericItem, edu.ur.ir.user.IrUserGroup,
-			edu.ur.ir.security.IrClassTypePermission)
+			boolean groupHasPermissionForItem(edu.ur.ir.security.IrAcl, edu.ur.ir.item.GenericItem, edu.ur.ir.user.IrUserGroup, edu.ur.ir.security.IrClassTypePermission)
 		</function-signature>
 	</function>
 
@@ -642,8 +613,7 @@
 			edu.ur.tag.repository.SecurityUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean groupHasAceForItem(edu.ur.ir.security.IrAcl,
-			edu.ur.ir.item.GenericItem, edu.ur.ir.user.IrUserGroup)
+			boolean groupHasAceForItem(edu.ur.ir.security.IrAcl, edu.ur.ir.item.GenericItem, edu.ur.ir.user.IrUserGroup)
 		</function-signature>
 	</function>
 
@@ -653,8 +623,7 @@
 			edu.ur.tag.repository.SecurityUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean groupHasAceForItemFile(edu.ur.ir.security.IrAcl,
-			edu.ur.ir.item.ItemFile, edu.ur.ir.user.IrUserGroup)
+			boolean groupHasAceForItemFile(edu.ur.ir.security.IrAcl, edu.ur.ir.item.ItemFile, edu.ur.ir.user.IrUserGroup)
 		</function-signature>
 	</function>
 
@@ -694,8 +663,7 @@
 			edu.ur.tag.repository.GenericItemWebUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean isContributor(edu.ur.ir.item.GenericItem,
-			edu.ur.ir.person.PersonName)
+			boolean isContributor(edu.ur.ir.item.GenericItem, edu.ur.ir.person.PersonName)
 		</function-signature>
 	</function>
 </taglib>
