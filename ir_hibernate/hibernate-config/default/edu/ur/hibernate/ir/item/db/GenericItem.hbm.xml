@@ -128,16 +128,6 @@
 			unique="true"  
 			access="field"
 			cascade="all"/>
-	
-       <!--  The handle information for the generic item-->
-		<many-to-one class="edu.ur.ir.handle.HandleInfo" 
-			unique="true" 
-			name="handleInfo" 
-			column="handle_info_id" 
-			cascade="save-update"
-			access="field" 
-			insert="true"
-			update="true"/>
 
 		<!--  Sponsors for this Item -->	
 		<set name="itemSponsors" 

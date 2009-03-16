@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Collections;
 
+import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
@@ -58,8 +59,12 @@ public class InstitutionalItemVersion extends BasePersistent{
 	/** history of reinstate actions*/
 	private Set<ReinstateToken> reinstateHistory = new HashSet<ReinstateToken>();
 	
-
+	/** handle information for the item  */
+	private HandleInfo handleInfo;
 	
+
+
+
 	InstitutionalItemVersion(){
 		dateOfDeposit = new java.sql.Timestamp(new Date().getTime());
 	}
@@ -251,6 +256,15 @@ public class InstitutionalItemVersion extends BasePersistent{
 
 	void setReinstateHistory(Set<ReinstateToken> reInstateHistory) {
 		this.reinstateHistory = reInstateHistory;
+	}
+	
+	
+	public HandleInfo getHandleInfo() {
+		return handleInfo;
+	}
+
+	public void setHandleInfo(HandleInfo handleInfo) {
+		this.handleInfo = handleInfo;
 	}
 	
 

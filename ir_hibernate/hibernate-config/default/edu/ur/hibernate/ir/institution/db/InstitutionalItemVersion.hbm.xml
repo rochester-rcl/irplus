@@ -78,7 +78,17 @@
               cascade="save-update"
               not-null="true" 
               access="field"/>
-         
+        
+        <!--  The handle information for the generic item-->
+		<many-to-one class="edu.ur.ir.handle.HandleInfo" 
+			unique="true" 
+			name="handleInfo" 
+			column="handle_info_id" 
+			cascade="save-update"
+			access="field" 
+			insert="true"
+			update="true"/>
+			
         <!--  withdrawn history -->
 		<set name="withdrawHistory" 
 		     optimistic-lock="false"

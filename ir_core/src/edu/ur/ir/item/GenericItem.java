@@ -126,8 +126,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	/** Indicates that this item can be viewed by the public. */
 	private boolean publiclyViewable = true;
 	
-	/** handle information for the item  */
-	private HandleInfo handleInfo;
+
 	
 	/**
 	 * Default constructor; 
@@ -1617,15 +1616,5 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
 	}
-	
-	public HandleInfo getHandleInfo() {
-		return handleInfo;
-	}
-
-	public void setHandleInfo(HandleInfo handleInfo) {
-		this.handleInfo = handleInfo;
-	}
-
-	
 
 }
