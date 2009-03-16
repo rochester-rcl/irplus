@@ -17,6 +17,7 @@ public class InstitutionalItemVersionUrlGenerator
 	/** should already contain the trailing slash(/) */
 	private String baseWebPath;
 	
+
 	/** action to view the institutional publication */
 	private String action = "institutionalPublicationPublicView.action?";
 	
@@ -40,12 +41,13 @@ public class InstitutionalItemVersionUrlGenerator
 		return url;
 	}
 	
-	public String getBaseUrl() {
+	public String getBaseWebPath() {
 		return baseWebPath;
 	}
 
-	public void setBaseUrl(String baseUrl) {
-		this.baseWebPath = baseUrl;
+
+	public void setBaseWebPath(String baseWebPath) {
+		this.baseWebPath = baseWebPath;
 	}
 
 	public String getAction() {
