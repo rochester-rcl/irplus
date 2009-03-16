@@ -23,7 +23,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
-import edu.ur.ir.handle.NextUniqueHandleName;
+import edu.ur.ir.handle.NextUniqueHandleNameGenerator;
 
 /**
  * Class for testing handle name authority persistence.
@@ -39,7 +39,7 @@ public class UniqueHandleNameDAOTest
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 
 	/** used to store handle name authority data */
-	NextUniqueHandleName uniqueHandleNameGenerator = (NextUniqueHandleName) ctx
+	NextUniqueHandleNameGenerator uniqueHandleNameGenerator = (NextUniqueHandleNameGenerator) ctx
 	.getBean("uniqueHandleNameGenerator");
 	
 	/** transaction manager */
