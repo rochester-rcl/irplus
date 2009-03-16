@@ -39,10 +39,6 @@ import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileVersionDAO;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.IrFileDAO;
-import edu.ur.ir.handle.HandleInfo;
-import edu.ur.ir.handle.HandleInfoDAO;
-import edu.ur.ir.handle.HandleNameAuthority;
-import edu.ur.ir.handle.HandleNameAuthorityDAO;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeDAO;
 import edu.ur.ir.item.GenericItem;
@@ -120,15 +116,6 @@ public class ItemDAOTest {
 	/** Item identifier relational data access  */
 	ItemIdentifierDAO itemIdentifierDAO = (ItemIdentifierDAO) ctx.getBean("itemIdentifierDAO");
 
-	/** used to store handle name authority data */
-	HandleNameAuthorityDAO handleNameAuthorityDAO = (HandleNameAuthorityDAO) ctx
-	.getBean("handleNameAuthorityDAO");
-	
-	/** used to store handle name authority data */
-	HandleInfoDAO handleInfoDAO = (HandleInfoDAO) ctx
-	.getBean("handleInfoDAO");
-	
-	
     /** user data access  */
     IrUserDAO userDAO= (IrUserDAO) ctx
 	.getBean("irUserDAO");
@@ -156,7 +143,7 @@ public class ItemDAOTest {
 	}
 	
 	/**
-	 * Test Item persistance
+	 * Test Item persistence
 	 */
 	@Test
 	public void baseItemDAOTest() {
@@ -174,12 +161,7 @@ public class ItemDAOTest {
  		// persist the language type
         languageTypeDAO.makePersistent(lt);
         
-		HandleNameAuthority handleNameAuthority = new HandleNameAuthority("12345678");
-		
-		HandleInfo handleInfo = new HandleInfo("1234", "http://www.google.com", handleNameAuthority);
- 		
-	    handleNameAuthorityDAO.makePersistent(handleNameAuthority);
-	    handleInfoDAO.makePersistent(handleInfo);
+
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
@@ -188,7 +170,6 @@ public class ItemDAOTest {
 		
 		item.setPrimaryContentType(contentTypeDAO.getById(ct.getId(), false));
 		item.setLanguageType(languageTypeDAO.getById(lt.getId(), false));
-		item.setHandleInfo(handleInfoDAO.getById(handleInfo.getId(), false));
 		itemDAO.makePersistent(item);
 		
 		tm.commit(ts);

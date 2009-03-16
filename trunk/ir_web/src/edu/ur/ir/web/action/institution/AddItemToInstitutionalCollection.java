@@ -34,6 +34,7 @@ import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.Repository;
@@ -42,6 +43,9 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.handle.HandleInfo;
+import edu.ur.ir.handle.HandleNameAuthority;
+import edu.ur.ir.handle.UniqueHandleNameGenerator;
 
 /**
  * Action to submit items to institutional collection
@@ -109,8 +113,14 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
-
 	
+	/** generates unique handle names */
+	private UniqueHandleNameGenerator uniqueHandleNameGenerator;
+	
+	/** url generator for institutional items. */
+	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
+
+
 	/**
 	 * Set the user id.
 	 * 
@@ -311,7 +321,9 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	public String submitPublication() throws NoIndexFoundException {
 
 		boolean directAdd = false;
+		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		item = itemService.getGenericItem(genericItemId, false);
+		HandleInfo info = null;
 		
 		IrUser user = null;
 		if( userId != null )
@@ -320,6 +332,8 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		}
 		if (genericItemId != null) {
 			item = itemService.getGenericItem(genericItemId, false);
+			
+
 		}
 		
 		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
@@ -352,6 +366,20 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 					privateCollections.add(institutionalCollection);
 				}
 				
+				// add a handle if the handle service is available
+				HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
+				if( handleNameAuthority != null)
+				{
+					String nextHandleName = uniqueHandleNameGenerator.nextName();
+				    InstitutionalItemVersion itemVersion = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
+					
+					String url = this.institutionalItemVersionUrlGenerator.createUrl(institutionalItem, itemVersion.getVersionNumber());
+					info = new HandleInfo(nextHandleName, url, handleNameAuthority);
+					
+				    itemVersion.setHandleInfo(info);
+				}
+				
+				
                 directAdd = true;
 			}
 			
@@ -367,12 +395,19 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			
 			institutionalCollectionService.saveCollection(institutionalCollection);
 			
+
+		
+			
 			// only index if the item was added directly to the collection
 			if(directAdd)
 			{
-				Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 				String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
 				institutionalItemIndexService.addItem(institutionalItem, new File(indexFolder));
+			}
+			
+			if( info != null)
+			{
+				info.setData("");
 			}
 		}
 		
@@ -667,6 +702,24 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	public void setParentInstitutionalCollectionId(
 			Long parentInstitutionalCollectionId) {
 		this.parentInstitutionalCollectionId = parentInstitutionalCollectionId;
+	}
+	
+	public UniqueHandleNameGenerator getUniqueHandleNameGenerator() {
+		return uniqueHandleNameGenerator;
+	}
+
+	public void setUniqueHandleNameGenerator(
+			UniqueHandleNameGenerator uniqueHandleNameGenerator) {
+		this.uniqueHandleNameGenerator = uniqueHandleNameGenerator;
+	}
+	
+	public InstitutionalItemVersionUrlGenerator getInstitutionalItemVersionUrlGenerator() {
+		return institutionalItemVersionUrlGenerator;
+	}
+
+	public void setInstitutionalItemVersionUrlGenerator(
+			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
 	}
 
 }

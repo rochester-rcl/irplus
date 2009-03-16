@@ -30,6 +30,14 @@
        <property name="repositoryService" ref="repositoryService"/>
        <property name="downloadStatisticsService" ref="downloadStatisticsService"/>
    </bean>
+   
+   <!-- File group entries for the web application -->
+   <bean id="institutionalItemVersionUrlGenerator" class="edu.ur.ir.web.action.institution.InstitutionalItemVersionUrlGenerator">
+       <property name="baseWebPath" ref="${base.web.path}"/>
+       <property name="action" value="institutionalPublicationPublicView.action?"/>
+       <property name="itemIdIdentifier" value="institutionalItemId="/>
+       <property name="versionNumberIdentifier" value="versionNumber="/>
+   </bean>
 
    <!-- File group entries for the web application -->
    <bean id="fileGroupEntriesTag" class="edu.ur.tag.repository.FileGroupEntriesTag">
