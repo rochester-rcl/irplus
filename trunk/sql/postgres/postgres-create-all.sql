@@ -1148,7 +1148,6 @@ CREATE TABLE ir_item.item
   locked_for_review BOOLEAN,
   publicly_viewable BOOLEAN, 
   primary_image_item_file_id BIGINT,
-  handle_info_id BIGINT,
   FOREIGN KEY (language_type_id) REFERENCES ir_item.language_type 
 	(language_type_id),
   FOREIGN KEY (original_item_creation_date_id) REFERENCES ir_item.original_item_creation_date 
@@ -1157,7 +1156,6 @@ CREATE TABLE ir_item.item
 	(first_available_date_id),	
   FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type (content_type_id),
   FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
-  FOREIGN KEY (handle_info_id) REFERENCES handle.handle_info(handle_id),
   FOREIGN KEY (external_published_item_id) REFERENCES ir_item.external_published_item (external_published_item_id)
 ) ;
 ALTER TABLE ir_item.item OWNER TO ir_plus;
@@ -1718,11 +1716,13 @@ CREATE TABLE ir_repository.published_version
     versioned_institutional_item_id BIGINT NOT NULL,
     withdrawn_token_id BIGINT,
     version_number int,
+    handle_info_id BIGINT,
     date_of_deposit timestamp with time zone,
     version INTEGER,
     FOREIGN KEY (versioned_institutional_item_id) 
        REFERENCES ir_repository.versioned_institutional_item (versioned_institutional_item_id),
-    FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id)
+    FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id),
+    FOREIGN KEY (handle_info_id) REFERENCES handle.handle_info(handle_id)
 );
 ALTER TABLE ir_repository.published_version OWNER TO ir_plus;
 
