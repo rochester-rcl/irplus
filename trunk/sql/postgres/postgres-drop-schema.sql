@@ -19,6 +19,8 @@
 -- ----------------------------------------------
 
 
+
+
 -- ---------------------------------------------
 -- Drop security tables
 -- ---------------------------------------------
@@ -350,3 +352,4 @@ DROP SEQUENCE handle.handle_name_authority_seq;
 DROP SEQUENCE handle.handle_info_seq;
 
 DROP SCHEMA handle;
+
