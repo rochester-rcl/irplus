@@ -36,7 +36,7 @@ public class InstitutionalItemVersionUrlGenerator
 	public String createUrl(InstitutionalItem institutionalItem,  int version)
 	{
 		String url = baseWebPath;
-		url = baseWebPath + action + itemIdIdentifier + institutionalItem.getId() + versionNumberIdentifier + version;
+		url = baseWebPath + action + "?" + itemIdIdentifier + "=" + institutionalItem.getId() +"&" + versionNumberIdentifier + "=" + version;
 		
 		return url;
 	}
