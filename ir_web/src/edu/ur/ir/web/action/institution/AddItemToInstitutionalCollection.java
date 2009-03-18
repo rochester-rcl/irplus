@@ -366,18 +366,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 					privateCollections.add(institutionalCollection);
 				}
 				
-				// add a handle if the handle service is available
-				HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
-				if( handleNameAuthority != null)
-				{
-					String nextHandleName = uniqueHandleNameGenerator.nextName();
-				    InstitutionalItemVersion itemVersion = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
-					
-					String url = this.institutionalItemVersionUrlGenerator.createUrl(institutionalItem, itemVersion.getVersionNumber());
-					info = new HandleInfo(nextHandleName, url, handleNameAuthority);
-					
-				    itemVersion.setHandleInfo(info);
-				}
+				
 				
 				
                 directAdd = true;
@@ -396,7 +385,20 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			institutionalCollectionService.saveCollection(institutionalCollection);
 			
 
-		
+			// add a handle if the handle service is available
+			HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
+			if( handleNameAuthority != null)
+			{
+				String nextHandleName = uniqueHandleNameGenerator.nextName();
+			    InstitutionalItemVersion itemVersion = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
+				
+				String url = this.institutionalItemVersionUrlGenerator.createUrl(institutionalItem, itemVersion.getVersionNumber());
+				info = new HandleInfo(nextHandleName, url, handleNameAuthority);
+				
+			    itemVersion.setHandleInfo(info);
+			}
+			// save the item with the new handle information.
+			institutionalItemService.saveInstitutionalItem(institutionalItem);
 			
 			// only index if the item was added directly to the collection
 			if(directAdd)
