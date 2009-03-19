@@ -124,12 +124,7 @@
         <mkdir dir="${dist.dir}"/>
 		<!-- Put everything in ${build} into the {project.name}-version.jar file -->
 		<jar jarfile="${dist.dir}/${project.name}-${project.version}.jar"
-			basedir="${build.dir}/classes"
-			excludes="**/*Test.class,
-						**/*testng*, 
-						testing_unix.properties, 
-						testing_windows.properties,
-						log4j.properties"/>
+			basedir="${build.dir}/classes"/>
     </target>
 	
 	<!-- publish the distribution jar file to the local repository -->

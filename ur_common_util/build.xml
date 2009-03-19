@@ -136,7 +136,7 @@
 		<!-- Put everything in ${build} into the {project.name}-version.jar file -->
 		<jar jarfile="${dist.dir}/${project.name}-${project.version}.jar"
 			basedir="${build.dir}/classes"
-			excludes="**/*Test.class, log4j.properties"/>
+			excludes="**/*Test.class, log4j.xml"/>
     </target>
 	
 	<!-- publish the distribution jar file to the local repository -->

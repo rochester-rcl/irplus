@@ -131,7 +131,7 @@
         <mkdir dir="${dist.dir}"/>
 		<!-- Put everything in ${build} into the {project.name}-version.jar file -->
 		<jar jarfile="${dist.dir}/${project.name}-${project.version}.jar"
-			basedir="${build.dir}/classes">
+			basedir="${build.dir}/classes" excludes="log4j.xml">
 			<metainf dir="config/metainf"/>
 		</jar>
     </target>

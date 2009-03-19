@@ -164,7 +164,7 @@
 						**/*testng*, 
 						testing_unix.properties, 
 						testing_windows.properties,
-						log4j.properties"/>
+			            log4j.xml"/>
     </target>
 	
 	<!-- publish the distribution jar file to the local repository -->
