@@ -161,7 +161,7 @@
 		<jar jarfile="${dist.dir}/${project.name}-${project.version}.jar"
 			basedir="${build.dir}/classes"
 			excludes="**/*Test.class,
-						**/*testng*"/>
+						**/*testng*, log4j.xml"/>
     </target>
 	
 	<!-- publish the distribution jar file to the local repository -->

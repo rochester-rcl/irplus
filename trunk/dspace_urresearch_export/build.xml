@@ -147,8 +147,7 @@
 		<!-- Put everything in ${build} into the {project.name}-version.jar file -->
 		<jar jarfile="${dist.dir}/${project.name}-${project.version}.jar"
 			basedir="${build.dir}/classes"
-			excludes="**/*Test.class,
-						**/*testng*"/>
+			excludes="**/*Test.class, **/*testng*"/>
     </target>
 	
 	<!-- publish the distribution jar file to the local repository -->

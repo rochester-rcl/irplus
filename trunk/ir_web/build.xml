@@ -24,9 +24,10 @@
 	<!-- uncomment this to automatically have the YUI libraries unzipped  
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
-     --> 
+    
  	<property name="yui.unzip" value="true"/>
-
+    -->  
+	
     <!-- Use the build.properties file for user specific settings -->
     <property file="build.properties"/>
 
@@ -189,7 +190,7 @@
 						**/*testng*, 
 						testing_unix.properties, 
 						testing_windows.properties,
-						log4j.properties"/>
+						log4j.xml"/>
     </target>
 	
 	<fileset id="web.libs" dir="${lib.dir}">
