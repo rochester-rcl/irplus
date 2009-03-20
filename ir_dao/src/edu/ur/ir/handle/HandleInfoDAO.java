@@ -1,5 +1,7 @@
 package edu.ur.ir.handle;
 
+import java.util.List;
+
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 
@@ -20,6 +22,15 @@ public interface HandleInfoDAO extends CountableDAO, CrudDAO<HandleInfo>
 	 * @return the found handle or null if the handle does not exist
 	 */
 	HandleInfo get(String authorityName, String localName);
+	
+	/**
+	 * Get all the handles for a particular authority name
+	 * 
+	 * @param authorityName - authority name for the handle
+	 * 
+	 * @return the found handle or null if the handle does not exist
+	 */
+	List<HandleInfo> getAllHandlesForAuthority(String authorityName);
 	
 	/**
 	 * Get a count of the handles with the specified name authority.

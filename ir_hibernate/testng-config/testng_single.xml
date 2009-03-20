@@ -19,7 +19,7 @@
 <suite name="ir hibernate test single">
 	<test name="Test Single">
 		<classes>
-             <class name="edu.ur.hibernate.ir.institution.db.InstitutionalItemVersionDAOTest"/>
+             <class name="edu.ur.hibernate.ir.handle.db.HandleInfoDAOTest"/>
 		</classes>
 	</test>
 </suite>
