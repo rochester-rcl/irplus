@@ -50,7 +50,7 @@ public class HandleServiceTest {
 	 * Test creating the default groups
 	 * @throws DuplicateNameException 
 	 */
-	public void assignParentPermissionsTest() throws DuplicateNameException
+	public void getHandleByAuthorityLocalNameTest() throws DuplicateNameException
 	{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
