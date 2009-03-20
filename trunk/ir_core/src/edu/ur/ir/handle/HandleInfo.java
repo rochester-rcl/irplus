@@ -39,10 +39,10 @@ public class HandleInfo extends BasePersistent{
 	public static final Integer DEFAULT_INDEX = new Integer(100);
 	
 	/**  relative time to live */
-	public static final Integer RELATIVE_TIME_TO_LIVE_TYPE = new Integer(0);
+	public static final Integer RELATIVE_TIME_TO_LIVE_TYPE = new Integer(100);
 	
 	/** time stamp value  */
-	public static final Integer DEFAULT_TIMESTAMP_VALUE = new Integer(0);
+	public static final Integer DEFAULT_TIMESTAMP_VALUE = new Integer(100);
 	
 	/** default references */
 	public static final String DEFAULT_REFERENCES = "";
