@@ -16,6 +16,8 @@
 
 package edu.ur.hibernate.ir.handle.db;
 
+import java.util.List;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -91,6 +93,58 @@ public class HandleInfoDAOTest {
         handleInfoDAO.makeTransient(handleInfoDAO.getById(info.getId(), false));
         handleNameAuthorityDAO.makeTransient(handleNameAuthorityDAO.getById(handleNameAuthority.getId(), false));
         assert  handleInfoDAO.getById(other.getId(), false) == null : "Should no longer be able to find handle info";
+	    tm.commit(ts);
+	}
+	
+	/**
+	 * Test basic persistance.
+	 * 
+	 * @throws Exception
+	 */
+	public void getHandlesByNameAuthorityDAOTest() throws Exception
+	{
+		HandleNameAuthority handleNameAuthority1 = new HandleNameAuthority("12345678");
+		HandleNameAuthority handleNameAuthority2 = new HandleNameAuthority("22222222");
+		
+		HandleInfo info1 = new HandleInfo("1111", "http://www.google.com", handleNameAuthority1);
+		HandleInfo info2 = new HandleInfo("2222", "http://www.google.com", handleNameAuthority1);
+		HandleInfo info3 = new HandleInfo("3333", "http://www.google.com", handleNameAuthority1);
+		HandleInfo info4 = new HandleInfo("4444", "http://www.google.com", handleNameAuthority2);
+ 		
+        TransactionStatus ts = tm.getTransaction(td);
+        handleNameAuthorityDAO.makePersistent(handleNameAuthority1);
+        handleNameAuthorityDAO.makePersistent(handleNameAuthority2);
+
+        handleInfoDAO.makePersistent(info1);
+        handleInfoDAO.makePersistent(info2);
+        handleInfoDAO.makePersistent(info3);
+        handleInfoDAO.makePersistent(info4);
+
+        tm.commit(ts);
+ 	    
+ 	    ts = tm.getTransaction(td);
+ 	    
+ 	    List<HandleInfo> handles = handleInfoDAO.getAllHandlesForAuthority(handleNameAuthority1.getNamingAuthority());
+ 	    assert handles.size() == 3 : "There should be 3 handles but there are " + handles.size();
+ 	    
+ 	    assert handles.contains(info1) : " Should have handle info " + info1;
+ 	    assert handles.contains(info2) : " Should have handle info " + info2;
+ 	    assert handles.contains(info3) : " Should have handle info " + info3;
+ 	    
+ 	    handles = handleInfoDAO.getAllHandlesForAuthority(handleNameAuthority2.getNamingAuthority());
+ 	    assert handles.size() == 1 : "There should be 1 handle but there are " + handles.size();
+ 	    assert handles.contains(info4) : "Should have handle info " + info4;
+ 	    
+        tm.commit(ts);
+        
+        ts = tm.getTransaction(td);
+        handleInfoDAO.makeTransient(handleInfoDAO.getById(info1.getId(), false));
+        handleInfoDAO.makeTransient(handleInfoDAO.getById(info2.getId(), false));
+        handleInfoDAO.makeTransient(handleInfoDAO.getById(info3.getId(), false));
+        handleInfoDAO.makeTransient(handleInfoDAO.getById(info4.getId(), false));
+
+        handleNameAuthorityDAO.makeTransient(handleNameAuthorityDAO.getById(handleNameAuthority1.getId(), false));
+        handleNameAuthorityDAO.makeTransient(handleNameAuthorityDAO.getById(handleNameAuthority2.getId(), false));
 	    tm.commit(ts);
 	}
 

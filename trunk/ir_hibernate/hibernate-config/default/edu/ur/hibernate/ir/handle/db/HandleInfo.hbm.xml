@@ -95,14 +95,20 @@
 	    select count(*) from HandleInfo
 	</query>
 	
-	<!--  Get a count of handles in the system -->
+	<!--  Get a handle by local name and naming authority -->
 	<query name="handleByNameAuthorityLocalName">
 	    select handleInfo from HandleInfo handleInfo
 	    where handleInfo.nameAuthority.namingAuthority = ?
 	    and handleInfo.localName = ? 
 	</query>
 	
-	<!--  Get a count of handles in the system -->
+    <!--  Get all of the handles for a handle name authority -->
+	<query name="findAllHandlesByNameAuthority">
+	    select handleInfo from HandleInfo handleInfo
+	    where handleInfo.nameAuthority.namingAuthority = ?
+	</query>
+	
+	<!--  Get a count of handles in the system for a given name authority -->
 	<query name="countHandleByNameAuthority">
 	    select count(*) from HandleInfo handleInfo
 	    where handleInfo.nameAuthority.id = ?

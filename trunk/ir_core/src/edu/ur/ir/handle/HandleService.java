@@ -89,6 +89,14 @@ public interface HandleService {
 	public HandleInfo getHandleInfo(String fullHandle);
 	
 	/**
+	 * Get all handles for a given name authority.
+	 * 
+	 * @param nameAuthority - name authority
+	 * @return list of handles found for the name authority
+	 */
+	public List<HandleInfo> getAllHandlesForAuthority(String nameAuthority);
+	
+	/**
 	 * Save the handle information
 	 * 
 	 * @param handleNameAuthority

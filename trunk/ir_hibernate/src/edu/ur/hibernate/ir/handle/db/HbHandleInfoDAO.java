@@ -84,6 +84,15 @@ public class HbHandleInfoDAO implements HandleInfoDAO{
 	}
 	
 	/**
+	 * @see edu.ur.ir.handle.HandleInfoDAO#getAllHandlesForAuthority(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<HandleInfo> getAllHandlesForAuthority(String authorityName)
+	{
+		return (List<HandleInfo>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("findAllHandlesByNameAuthority", authorityName);
+	}
+	
+	/**
 	 * Get a count of the handles with the specified name authority.
 	 *  
 	 * @param nameAuthorityId - id for the name authority
