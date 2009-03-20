@@ -62,8 +62,8 @@ public class HandleInfo extends BasePersistent{
 	/** index - positive integer value - this should be unique across the local naming authority */
 	private Integer index = DEFAULT_INDEX ;
 	
+	/** local name for the handle */
 	private String localName;
-	
 
 	/** the type of data for the localName data */
 	private String dataType = URL_DATA_TYPE;
