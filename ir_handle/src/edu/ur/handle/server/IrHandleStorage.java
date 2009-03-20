@@ -124,7 +124,7 @@ public class IrHandleStorage implements HandleStorage{
             // cni handle value
              HandleValue value = new HandleValue();
         
-            // transfer the data
+            // transfer the data for irplus model to cni model
              value.setIndex(handleInfo.getIndex());
              value.setType(Util.encodeString(handleInfo.getDataType()));
              value.setData(Util.encodeString(handleInfo.getData()));
