@@ -148,6 +148,7 @@ public class RepositoryDAOTest {
 		//create a new transaction
 		ts = tm.getTransaction(td);
 		repoHelper.cleanUpRepository();
+		handleNameAuthorityDAO.makeTransient(handleNameAuthorityDAO.getById(handleNameAuthority.getId(), false));
 		tm.commit(ts);	
 		
 	}

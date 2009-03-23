@@ -123,6 +123,12 @@
 	    join itemContributor.contributor as contributor
 	    where contributor.personName.id in (:personNameIds) order by item.name asc, institutionalItemVersion.versionNumber desc
 	</query>	
+	
+	<!-- institutional item version for a given handle -->
+	<query name="getInstitutionalItemByHandleId">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion
+	    where handleInfo.id = ?
+	</query>	
 		
     
 </hibernate-mapping>

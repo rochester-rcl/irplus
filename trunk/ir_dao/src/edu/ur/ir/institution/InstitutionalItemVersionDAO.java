@@ -30,5 +30,13 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 * @return List of publication versions
 	 */
 	public List<InstitutionalItemVersion> getPublicationVersionsByPersonName(List<Long> personNameId);
+	
+	/**
+	 * Get an item version by handle id.
+	 * 
+	 * @param handleId - id of the handle
+	 * @return - the item version that uses the handle or null if not found
+	 */
+	public InstitutionalItemVersion getItemVersionByHandleId(Long handleId);
 
 }
