@@ -146,13 +146,6 @@ public class InstitutionalItemVersionDAOTest {
 		col.setDescription("colDescription");
 		
 		institutionalCollectionDAO.makePersistent(col);
-		
-		HandleNameAuthority handleNameAuthority = new HandleNameAuthority("12345678");
-		
-		HandleInfo handleInfo = new HandleInfo("1234", "http://www.google.com", handleNameAuthority);
- 		
-	    handleNameAuthorityDAO.makePersistent(handleNameAuthority);
-	    handleInfoDAO.makePersistent(handleInfo);
 		tm.commit(ts);
 		
 		// start a new transaction
@@ -172,18 +165,12 @@ public class InstitutionalItemVersionDAOTest {
 		
 		InstitutionalItemVersion institutionalItemVersion = 
 			institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(institutionalItem.getVersionedInstitutionalItem().getLargestVersion());
-
-		HandleInfo myInfo = handleInfoDAO.getById(handleInfo.getId(), false);
-		assert myInfo != null : "Should be able to find handle info " + myInfo;
-		institutionalItemVersion.setHandleInfo(myInfo);
-		assert institutionalItemVersion.getHandleInfo() != null : "Should be able to find handle information " + myInfo;
 		institutionalItemDAO.makePersistent(institutionalItem);
 		tm.commit(ts);
 
 		ts = tm.getTransaction(td);
 		InstitutionalItemVersion other = institutionalItemVersionDAO.getById(institutionalItemVersion.getId(), false);
 		assert other.equals(institutionalItemVersion) : "Should be able to find item " + institutionalItemVersion;
-		assert other.getHandleInfo().equals(handleInfo) : " Item should have handle info " + handleInfo;
 		tm.commit(ts);
 
 		//create a new transaction
@@ -191,8 +178,6 @@ public class InstitutionalItemVersionDAOTest {
 		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(col.getId(), false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		repoHelper.cleanUpRepository();
-		handleInfoDAO.makeTransient(handleInfoDAO.getById(handleInfo.getId(), false));
-		handleNameAuthorityDAO.makeTransient(handleNameAuthorityDAO.getById(handleNameAuthority.getId(), false));
 		tm.commit(ts);	
 		
 		assert institutionalItemDAO.getById(institutionalItem.getId(), false) == null : 
@@ -490,6 +475,87 @@ public class InstitutionalItemVersionDAOTest {
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		repoHelper.cleanUpRepository();
 		tm.commit(ts);	
+	}
+	
+	/**
+	 * Test handle infor with institutional item
+	 * 
+	 * @throws DuplicateNameException 
+	 */
+	@Test
+	public void institutionalItemHandleInfoDAOTest() throws DuplicateNameException {
+
+	    // start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+		
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+
+		//commit the transaction 
+		// create a collection
+		InstitutionalCollection col = repo.createInstitutionalCollection("colName");
+		col.setDescription("colDescription");
+		
+		institutionalCollectionDAO.makePersistent(col);
+		
+		HandleNameAuthority handleNameAuthority = new HandleNameAuthority("12345678");
+		
+		HandleInfo handleInfo = new HandleInfo("1234", "http://www.google.com", handleNameAuthority);
+ 		
+	    handleNameAuthorityDAO.makePersistent(handleNameAuthority);
+	    handleInfoDAO.makePersistent(handleInfo);
+		tm.commit(ts);
+		
+		// start a new transaction
+		ts = tm.getTransaction(td);
+		
+		UserEmail userEmail = new UserEmail("email");
+		
+		IrUser user = new IrUser("user", "password");
+		user.setPasswordEncoding("encoding");
+		user.addUserEmail(userEmail, true);
+
+        userDAO.makePersistent(user);
+		col = institutionalCollectionDAO.getById(col.getId(), false);
+		GenericItem genericItem = new GenericItem("genericItem");
+		
+		InstitutionalItem institutionalItem = col.createInstitutionalItem(genericItem);
+		
+		InstitutionalItemVersion institutionalItemVersion = 
+			institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(institutionalItem.getVersionedInstitutionalItem().getLargestVersion());
+
+		HandleInfo myInfo = handleInfoDAO.getById(handleInfo.getId(), false);
+		assert myInfo != null : "Should be able to find handle info " + myInfo;
+		institutionalItemVersion.setHandleInfo(myInfo);
+		assert institutionalItemVersion.getHandleInfo() != null : "Should be able to find handle information " + myInfo;
+		institutionalItemDAO.makePersistent(institutionalItem);
+		tm.commit(ts);
+
+		ts = tm.getTransaction(td);
+		InstitutionalItemVersion other = institutionalItemVersionDAO.getById(institutionalItemVersion.getId(), false);
+		assert other.equals(institutionalItemVersion) : "Should be able to find item " + institutionalItemVersion;
+		assert other.getHandleInfo().equals(handleInfo) : " Item should have handle info " + handleInfo;
+		InstitutionalItemVersion other2 = institutionalItemVersionDAO.getItemVersionByHandleId(handleInfo.getId());
+		assert other2 != null : "should find item for handle " + handleInfo;
+		assert other2.equals(other) : "Other 2: " + other2 + " should equal other: " + other;
+		tm.commit(ts);
+
+		//create a new transaction
+		ts = tm.getTransaction(td);
+		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(col.getId(), false));
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		repoHelper.cleanUpRepository();
+		handleInfoDAO.makeTransient(handleInfoDAO.getById(handleInfo.getId(), false));
+		handleNameAuthorityDAO.makeTransient(handleNameAuthorityDAO.getById(handleNameAuthority.getId(), false));
+		tm.commit(ts);	
+		
+		assert institutionalItemDAO.getById(institutionalItem.getId(), false) == null : 
+			"Should not be able to find the insitutional item" + institutionalItem;
 	}
 
 }

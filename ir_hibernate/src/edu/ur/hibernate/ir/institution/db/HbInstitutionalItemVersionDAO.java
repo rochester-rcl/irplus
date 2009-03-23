@@ -22,6 +22,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 
@@ -110,6 +111,16 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	    
 	    return versions;
 
+	}
+
+	/**
+	 * Get the institutional item version by handle id.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemVersionByHandleId(java.lang.Long)
+	 */
+	public InstitutionalItemVersion getItemVersionByHandleId(Long handleId) {
+		return (InstitutionalItemVersion)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalItemByHandleId", handleId));
 	}
 
 }
