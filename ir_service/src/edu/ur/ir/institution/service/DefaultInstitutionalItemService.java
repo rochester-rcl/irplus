@@ -502,4 +502,14 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public List<InstitutionalItem> getInstitutionalItemsByGenericItemId(Long genericItemId) {
 		return institutionalItemDAO.getInstitutionalItemsForGenericItemId(genericItemId);
 	}
+
+	
+	/**
+	 * Get the institutional item version by the handle id.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getInstitutionalItemByHandleId(java.lang.Long)
+	 */
+	public InstitutionalItemVersion getInstitutionalItemByHandleId(Long handleId) {
+		return institutionalItemVersionDAO.getItemVersionByHandleId(handleId);
+	}
 }
