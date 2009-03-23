@@ -1,4 +1,4 @@
-package edu.ur.ir.web.action.institution;
+package edu.ur.ir.institution.service;
 
 
 import edu.ur.ir.institution.InstitutionalItem;
@@ -16,7 +16,6 @@ public class InstitutionalItemVersionUrlGenerator
 	
 	/** should already contain the trailing slash(/) */
 	private String baseWebPath;
-	
 
 	/** action to view the institutional publication */
 	private String action = "institutionalPublicationPublicView.action?";
