@@ -482,4 +482,15 @@
 	   <property name="handleInfoDAO" ref="handleInfoDAO"/>
 	   <property name="handleNameAuthorityDAO" ref="handleNameAuthorityDAO"/>
    </bean>
+   
+   
+   <!-- ****************************************** --> 
+   <!-- Handle service                             -->
+   <!-- ****************************************** --> 
+   <bean id="institutionalItemVersionUrlGenerator" class="edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator">
+       <property name="baseWebPath" value="${base.web.path}"/>
+       <property name="action" value="institutionalPublicationPublicView.action"/>
+       <property name="itemIdIdentifier" value="institutionalItemId"/>
+       <property name="versionNumberIdentifier" value="versionNumber"/>
+   </bean>
 </beans>
