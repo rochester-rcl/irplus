@@ -93,6 +93,25 @@
     	<ant dir="ir_web" target="${target}" inheritAll="false"/>
     </target>
 	
+	<target name="do-urresearch-export-import"  description="-->runs the described target for export/import common">
+	    	<ant dir="dspace_urresearch_import_export" target="${target}" inheritAll="false"/>
+	    </target>
+	
+	<target name="do-urresearch-export"  depends="do-urresearch-export-import"
+		description="-->runs the described target for export">
+    	<ant dir="dspace_urresearch_export" target="${target}" inheritAll="false"/>
+    </target>
+	
+	<target name="do-urresearch-import" depends="do-urresearch-export-import"
+		     description="-->runs the described target for import">
+	    	<ant dir="dspace_urresearch_import" target="${target}" inheritAll="false"/>
+	</target>
+	
+	<target name="do-all" depends="do-urresearch-export, do-urresearch-import, do-ir-web"
+		     description="-->runs the described target for import">
+	    	<!-- do nothing but make sure all targets are called -->
+	</target>
+	
 	<target name="clean-zip">
 		<delete file="${zip.name}"/>
 	</target>
