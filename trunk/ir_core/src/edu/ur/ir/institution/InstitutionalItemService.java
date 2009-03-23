@@ -358,4 +358,12 @@ public interface InstitutionalItemService {
 	 * @return Institutional items found
 	 */
 	public List<InstitutionalItem> getInstitutionalItemsByGenericItemId(Long genericItemId) ;
+	
+	/**
+	 * Get an institutional item version by handle id.
+	 * 
+	 * @param handleId - id of the handle to get the institutional item by.
+	 * @return the found institutional item or null if item version is not found.
+	 */
+	public InstitutionalItemVersion getInstitutionalItemByHandleId(Long handleId);
 }
