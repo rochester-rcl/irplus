@@ -80,7 +80,10 @@ public class Repository extends CommonPersistent {
 	/** Folder containing the index for researcher in the system*/ 
 	private FolderInfo researcherIndexFolder;
 	
-	/** Default handle name authority to use when assigning handle values  */
+	/** default license for the repository */
+	private VersionedLicense defaultLicense;
+	
+ 	/**   Default handle name authority to use when assigning handle values  */
 	private HandleNameAuthority defaultHandleNameAuthority;
 	
 
@@ -475,5 +478,13 @@ public class Repository extends CommonPersistent {
 	public void setDefaultHandleNameAuthority(
 			HandleNameAuthority defaultHandleNameAuthority) {
 		this.defaultHandleNameAuthority = defaultHandleNameAuthority;
+	}
+
+	public VersionedLicense getDefaultLicense() {
+		return defaultLicense;
+	}
+
+	public void setDefaultLicense(VersionedLicense defaultLicense) {
+		this.defaultLicense = defaultLicense;
 	}
 }
