@@ -1307,26 +1307,32 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		newItem.setOwner(this.getOwner());
 		newItem.setPrimaryContentType(this.getPrimaryContentType());
 		
-		FirstAvailableDate firstAvailDate = new FirstAvailableDate();
-		firstAvailDate.setDay(firstAvailableDate.getDay());
-		firstAvailDate.setFractionOfSecond(firstAvailableDate.getFractionOfSecond());
-		firstAvailDate.setHours(firstAvailableDate.getFractionOfSecond());
-		firstAvailDate.setItem(newItem);
-		firstAvailDate.setMonth(firstAvailableDate.getMonth());
-		firstAvailDate.setSeconds(firstAvailableDate.getSeconds());
-		firstAvailDate.setYear(firstAvailableDate.getYear());
-		newItem.setFirstAvailableDate(firstAvailDate);
+        if( firstAvailableDate != null )
+        {
+		    FirstAvailableDate firstAvailDate = new FirstAvailableDate();
+		    firstAvailDate.setDay(firstAvailableDate.getDay());
+		    firstAvailDate.setFractionOfSecond(firstAvailableDate.getFractionOfSecond());
+		    firstAvailDate.setHours(firstAvailableDate.getFractionOfSecond());
+		    firstAvailDate.setItem(newItem);
+		    firstAvailDate.setMonth(firstAvailableDate.getMonth());
+		    firstAvailDate.setSeconds(firstAvailableDate.getSeconds());
+		    firstAvailDate.setYear(firstAvailableDate.getYear());
+		    newItem.setFirstAvailableDate(firstAvailDate);
+        }
 
-		OriginalItemCreationDate origCreationDate = new OriginalItemCreationDate();
-		origCreationDate.setDay(originalItemCreationDate.getDay());
-		origCreationDate.setFractionOfSecond(originalItemCreationDate.getFractionOfSecond());
-		origCreationDate.setHours(originalItemCreationDate.getFractionOfSecond());
-		origCreationDate.setItem(newItem);
-		origCreationDate.setMonth(originalItemCreationDate.getMonth());
-		origCreationDate.setSeconds(originalItemCreationDate.getSeconds());
-		origCreationDate.setYear(originalItemCreationDate.getYear());
-		newItem.setOriginalItemCreationDate(origCreationDate);
-		
+        if( originalItemCreationDate != null )
+        {
+		    OriginalItemCreationDate origCreationDate = new OriginalItemCreationDate();
+		    origCreationDate.setDay(originalItemCreationDate.getDay());
+		    origCreationDate.setFractionOfSecond(originalItemCreationDate.getFractionOfSecond());
+		    origCreationDate.setHours(originalItemCreationDate.getFractionOfSecond());
+		    origCreationDate.setItem(newItem);
+		    origCreationDate.setMonth(originalItemCreationDate.getMonth());
+		    origCreationDate.setSeconds(originalItemCreationDate.getSeconds());
+		    origCreationDate.setYear(originalItemCreationDate.getYear());
+		    newItem.setOriginalItemCreationDate(origCreationDate);
+        }
+        
 		newItem.setReleaseDate(this.getReleaseDate());
 		
 
