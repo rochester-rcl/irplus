@@ -2833,6 +2833,7 @@ CREATE TABLE ir_researcher.researcher_institutional_item
     researcher_folder_id BIGINT,
     researcher_id BIGINT NOT NULL,
     institutional_item_id BIGINT NOT NULL,
+    description TEXT,
     version INTEGER,
     FOREIGN KEY (researcher_folder_id) REFERENCES ir_researcher.researcher_folder (researcher_folder_id),
     FOREIGN KEY (institutional_item_id) REFERENCES ir_repository.institutional_item (institutional_item_id),
