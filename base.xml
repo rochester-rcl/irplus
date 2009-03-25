@@ -20,8 +20,9 @@
 	
 	<!-- uncomment this to run the tests  it does not matter what the value is so long as the 
 		     line is uncommented.
+		     -->
 	<property name="run.tests" value="true"/>
-	-->
+	
 	
     <!-- build directory -->
     <property name="build.dir" value="${basedir}/build"/> 
@@ -118,6 +119,12 @@
 	
 	<!-- test properties file location -->
 	<property name="properties.config.test" value="../properties/test"/>
+	
+	<!--local properties file location -->
+	<property name="properties.config.local" value="../properties/local"/>
+
+	<!--production properties file location -->
+	<property name="properties.config.production" value="../properties/production"/>
 
 
     <target name="download-ivy" unless="skip.download">
