@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleService;
 
@@ -86,12 +87,30 @@ public class IrHandleStorage implements HandleStorage{
 		return false;
 	}
 
+	/**
+	 * Return an enumeration of all the handles for a given naming authority.  This could be 
+	 * a very expensive call as it retrieves all of the handles at once.
+	 * 
+	 * @param namingAuthorityBytes
+	 * @return
+	 * @throws HandleException
+	 */
+	@SuppressWarnings("unchecked")
 	public Enumeration getHandlesForNA(byte[] namingAuthorityBytes) throws HandleException {
 		log.debug("Get handles for na called ");
 		String namingAuthority = Util.decodeString(namingAuthorityBytes);
 		log.debug("Naming authority = " + namingAuthority);
 		
-		return null;
+		List<HandleInfo> handles = handleService.getAllHandlesForAuthority(namingAuthority);
+		
+		List<byte[]> handleValues = new LinkedList<byte[]>();
+		
+		for(HandleInfo hi : handles)
+		{
+			String handle = namingAuthority + "/" + hi.getLocalName();
+			handleValues.add(Util.encodeString(handle));
+		}
+		return Collections.enumeration(handleValues);
 	}
 
 	/**
