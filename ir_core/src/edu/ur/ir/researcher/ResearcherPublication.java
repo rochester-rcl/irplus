@@ -57,9 +57,7 @@ DescriptionAware, FileSystem{
 	
 	/** version number of the publication */
 	private int versionNumber;
-
 	
-
 	/**
 	 * Package protected constructor.
 	 */

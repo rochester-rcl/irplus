@@ -53,6 +53,9 @@ DescriptionAware, FileSystem{
 	
 	/** represents the file system type for this researcher publication */
 	private FileSystemType fileSystemType = FileSystemType.RESEARCHER_INSTITUTIONAL_ITEM;
+	
+	/** Researcher given description of the institutional item */
+	private String description;
 
 	
 	/**
@@ -202,7 +205,17 @@ DescriptionAware, FileSystem{
 	 * @see edu.ur.simple.type.DescriptionAware#getDescription()
 	 */
 	public String getDescription() {
-		return institutionalItem.getDescription();
+		return description;
+	}
+	
+	/**
+	 * Set the researcher description of the institutional item.
+	 * 
+	 * @param description
+	 */
+	public void setDescription(String description)
+	{
+	   this.description = description;	
 	}
 
 	/* (non-Javadoc)
@@ -243,6 +256,15 @@ DescriptionAware, FileSystem{
 			jsonObj.put("id",id);
 			jsonObj.put("institutionalItemId",institutionalItem.getId());
 			jsonObj.put("type",fileSystemType.getType());
+			String description = getDescription();
+			if( description != null )
+			{
+			    jsonObj.put("description",description.replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
+			}
+			else
+			{
+				jsonObj.put("description", "");
+			}
 
 		} catch (Exception e) {
 			 log.debug("jsonObj Exception::"+e.getMessage());
