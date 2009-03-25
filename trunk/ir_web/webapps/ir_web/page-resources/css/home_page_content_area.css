@@ -74,14 +74,14 @@
 
 .repository_image {
 	display: inline;
-	width: 464px;
+	width: 100%;
 	border: 0px;
 	clear: both;
 }
 
 .researcher_image {
 	display: inline;
-	width: 464px;
+	width: 100%;
 	border: 0px;
 	clear: both;
 }
