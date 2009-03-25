@@ -14,9 +14,9 @@
    limitations under the License.
 -->
 
-<table class="baseTable">
-   <tr> <td>Number of collections  : ${numberOfCollections}</td></tr>
-   <tr> <td>Number of publications : ${numberOfPublications}</td></tr>
-   <tr> <td>Number of file downloads : ${numberOfFileDownloads}</td></tr>
-</table>
+<p>
+   Number of collections  : ${numberOfCollections}<br/><br/>
+   Number of publications : ${numberOfPublications}<br/><br/>
+   Number of file downloads : ${numberOfFileDownloads}<br/>
+</p>
  
