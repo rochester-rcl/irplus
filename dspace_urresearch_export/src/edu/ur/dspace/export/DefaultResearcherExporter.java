@@ -121,7 +121,7 @@ public class DefaultResearcherExporter implements ResearcherExporter {
 	@SuppressWarnings("unchecked")
 	private DspaceResearcherFolder buildTree(DspaceResearcherFolder parent, List<DspaceResearcherFolder> folders)
 	{
-		log.debug(" Hello -testing - building tree for parent " + parent);
+		log.debug(" building tree for parent " + parent);
 		DspaceResearcherFolder currentParent = null;
 		if(parent == null)
 		{

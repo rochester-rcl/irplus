@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import edu.ur.dspace.model.DspaceItem;
+import edu.ur.dspace.model.DspaceMetadataLabel;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.item.ContentType;
@@ -64,6 +65,7 @@ import edu.ur.ir.person.PersonService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
+
 
 /**
  * Handles setting up a generic item for inserting items into the repository.
@@ -145,7 +147,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		// submitter from the system
 		Long urresearchUserId = getUrResearchUser(dspaceItem.submitterId);
 		
-		String title  = ItemMetadataHelper.getSingleDataForLabel(dspaceItem, "title");
+		String title  = dspaceItem.getSingleDataForLabel("title");
 		log.debug("processing item title found " + title);
 		if( title == null )
 		{
@@ -167,10 +169,10 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		// both contributors and authors will be processed in the same way
 		processAuthors(repository, dspaceItem, genericItem, DspaceMetadataLabel.AUTHORS);
 		processAuthors(repository, dspaceItem, genericItem, DspaceMetadataLabel.CONTRIBUTORS);
-		genericItem.setItemAbstract(ItemMetadataHelper.getSingleDataForLabel(dspaceItem, DspaceMetadataLabel.ABSTRACT));
+		genericItem.setItemAbstract(dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.ABSTRACT));
 		genericItem.setFirstAvailableDate(getFirstAvailableDate(dspaceItem));
 		genericItem.setOriginalItemCreationDate(getOriginalCreationDate(dspaceItem)); 
-	    String description = ItemMetadataHelper.getSingleDataForLabel(dspaceItem, DspaceMetadataLabel.DESCRIPTION);
+	    String description = dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.DESCRIPTION);
 	    genericItem.setDescription(description);
 	    processIdentifiers(dspaceItem, genericItem, "GOVT_DOC", DspaceMetadataLabel.GOVERNMENT_DOC_NO);
 	    processIdentifiers(dspaceItem, genericItem, "ISBN", DspaceMetadataLabel.ISBN);
@@ -200,7 +202,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	private void processSeriesReportNo(DspaceItem dspaceItem, GenericItem genericItem)
 	{
 		log.debug("Processing series report numbers");
-		String seriesReportNumber = ItemMetadataHelper.getSingleDataForLabel(dspaceItem, DspaceMetadataLabel.SERIES_REPORT_NO);
+		String seriesReportNumber = dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.SERIES_REPORT_NO);
 	    List<String> seriesReportParts = seriesReportNumberSplitter.splitSeriesReport(seriesReportNumber, ";");
 	    
 	    log.debug("Series report parts size = " + seriesReportParts.size());
@@ -235,7 +237,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	private void processSponsors(DspaceItem dspaceItem, GenericItem genericItem)
 	{
 		log.debug("Processing sponsors");
-		String sponsor = ItemMetadataHelper.getSingleDataForLabel(dspaceItem, DspaceMetadataLabel.SPONSORS);
+		String sponsor = dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.SPONSORS);
 		
 		if( sponsor != null )
 		{
@@ -277,21 +279,16 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	private void processUris(DspaceItem dspaceItem, GenericItem genericItem)
 	{
 		log.debug("processing uri's");
-		List<String> uris = ItemMetadataHelper.getMultipleDataForLabel(dspaceItem, DspaceMetadataLabel.URI);
+		List<String> uris = dspaceItem.getMultipleDataForLabel(DspaceMetadataLabel.URI);
 		
 		for(String uri : uris)
 		{
-			if( uri.indexOf("handle") > -1 )
+			log.debug("Found uri " + uri);
+			//we've found a handle
+			// it should be in the form: http://hdl.handle.net/[name-authority]/[local-name]
+			if( uri.indexOf("http://hdl.handle.net/") > -1 )
 			{
-				IdentifierType identifierType = identifierTypeService.getByUniqueSystemCode("HANDLE");
-				if(identifierType == null)
-				{
-					throw new IllegalStateException("Identifier type for system code HANDLE could not be found");
-				}
-				
-				log.debug("Handle found " + uri);
-				genericItem.addItemIdentifier(uri, identifierType);
-		       
+				// do nothing no processing of handles yet
 			}
 			else
 			{
@@ -318,7 +315,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		log.debug("Processing external publishing data");
 	    Publisher publisher = getPublisher(dspaceItem);
 	   
-	    String citation = ItemMetadataHelper.getSingleDataForLabel(dspaceItem, DspaceMetadataLabel.CITATION);
+	    String citation = dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.CITATION);
 	    log.debug("citation = " + citation);
 	    PublishedDate publishedDate = getPublishedDate(dspaceItem);
 	    log.debug("Published date = " + publishedDate);
@@ -359,7 +356,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	{
 		log.debug("Getting first available date");
 		FirstAvailableDate firstAvailableDate = null;
-		String dspaceDate = ItemMetadataHelper.getSingleDataForLabel(dspaceItem, DspaceMetadataLabel.AVAILABLE_DATE);
+		String dspaceDate = dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.AVAILABLE_DATE);
 		
 		if(dspaceDate != null && !dspaceDate.trim().equals(""))
 		{
@@ -392,7 +389,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	{
 		log.debug("Getting original creation date date");
 		OriginalItemCreationDate originalItemCreationDate = null;
-		String dspaceDate = ItemMetadataHelper.getSingleDataForLabel(dspaceItem, DspaceMetadataLabel.CREATION_DATE);
+		String dspaceDate = dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.CREATION_DATE);
 		
 		if(dspaceDate != null && !dspaceDate.trim().equals(""))
 		{
@@ -425,7 +422,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	{
 		Publisher publisher = null;
 		log.debug("Getting publisher");
-		String publisherName = ItemMetadataHelper.getSingleDataForLabel(item, DspaceMetadataLabel.PUBLISHER);
+		String publisherName = item.getSingleDataForLabel(DspaceMetadataLabel.PUBLISHER);
 		
 		if( publisherName != null )
 		{
@@ -453,7 +450,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	private void processLanguages(DspaceItem item, GenericItem genericItem, String dspaceMetadatalabel)
 	{
 		log.debug("publishing languages");
-		List<String> languages = ItemMetadataHelper.getMultipleDataForLabel(item, dspaceMetadatalabel);
+		List<String> languages = item.getMultipleDataForLabel(dspaceMetadatalabel);
 		
 		for(String language : languages)
 		{
@@ -514,7 +511,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			throw new IllegalStateException("Identifier type for system code " + uniqueTypeSystemCode + " could not be found");
 		}
 		
-        List<String> values = ItemMetadataHelper.getMultipleDataForLabel(item, dspaceMetadatalabel);
+        List<String> values = item.getMultipleDataForLabel(dspaceMetadatalabel);
 		
 		for(String value : values)
 		{
@@ -535,7 +532,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	private void processItemType( DspaceItem item, GenericItem genericItem)
 	{
 		log.debug("Processing item type");
-		List<String> itemTypes = ItemMetadataHelper.getMultipleDataForLabel(item, DspaceMetadataLabel.TYPE);
+		List<String> itemTypes = item.getMultipleDataForLabel(DspaceMetadataLabel.TYPE);
 		
 		
 		for(String type : itemTypes)
@@ -653,7 +650,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	{
 		log.debug("Processing publish date");
 		PublishedDate publishedDate = null;
-		String dspaceDate = ItemMetadataHelper.getSingleDataForLabel(dspaceItem, DspaceMetadataLabel.DATE_OF_ISSUE);
+		String dspaceDate = dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.DATE_OF_ISSUE);
 		
 		log.debug("Publish date = " + dspaceDate);
 		
@@ -686,7 +683,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	private void processOtherTitles(DspaceItem item, GenericItem genericItem)
 	{
 		log.debug("Processing other titles");
-		List<String> otherTitles = ItemMetadataHelper.getMultipleDataForLabel(item, DspaceMetadataLabel.OTHER_TITLES);
+		List<String> otherTitles = item.getMultipleDataForLabel(DspaceMetadataLabel.OTHER_TITLES);
 	
 		for(String title : otherTitles)
 		{
@@ -704,7 +701,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	private void processSubjectKeywords(DspaceItem item, GenericItem genericItem)
 	{
 		log.debug("Processing subject keywords ");
-		List<String> keywords = ItemMetadataHelper.getMultipleDataForLabel(item, DspaceMetadataLabel.SUBJECT_KEYWORDS);
+		List<String> keywords = item.getMultipleDataForLabel(DspaceMetadataLabel.SUBJECT_KEYWORDS);
 		String keywordList = "";
 		Iterator<String> iter = keywords.iterator();
 		
@@ -743,7 +740,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			throw new IllegalStateException("Author contributor type could not be found");
 		}
 		
-		List<String> authorNames = ItemMetadataHelper.getMultipleDataForLabel(item, label);
+		List<String> authorNames = item.getMultipleDataForLabel(label);
 		List<PersonNameAuthority> personNameAuthorities = new LinkedList<PersonNameAuthority>();
 		
 		for(String authorName : authorNames)
@@ -821,7 +818,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	        	{
 	        		PersonNameAuthority foundName = iterator.next();
 	        		log.debug("comparing found name " + foundName + " to name " + name);
-	        		if( foundName.softEquals(name))
+	        		if( foundName!= null && foundName.softEquals(name))
 	        		{
 	        			log.debug("Name found!");
 	        			found = true;
@@ -1027,5 +1024,5 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	public void setSponsorService(SponsorService sponsorService) {
 		this.sponsorService = sponsorService;
 	}
-
+	
 }
