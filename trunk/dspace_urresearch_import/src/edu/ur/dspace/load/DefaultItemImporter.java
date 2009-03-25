@@ -55,11 +55,16 @@ import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TemporaryFileCreator;
 import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.handle.HandleInfo;
+import edu.ur.ir.handle.HandleNameAuthority;
+import edu.ur.ir.handle.HandleService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemFileSecurityService;
@@ -119,6 +124,15 @@ public class DefaultItemImporter implements ItemImporter{
 	/** Service for dealing with users */
 	private UserService userService;
 	
+	/** Handle service for dealing with handles */
+	private HandleService handleService;
+	
+	/** Creates urls for the institutional items */
+	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
+
+
+
+
 	/**
 	 * Data source for accessing the database.
 	 * 
@@ -590,7 +604,48 @@ public class DefaultItemImporter implements ItemImporter{
 		    for(InstitutionalCollection ic : urResearchCollections)
 		    {
 			    InstitutionalItem institutionalItem = ic.createInstitutionalItem(genericItem);
+			    
+			    // this must be done as it creates the id for the institutional item which
+			    // is used in the handle url.
 			    institutionalItemService.saveInstitutionalItem(institutionalItem);
+			    
+			    String handle = i.getHandle();
+			    
+			    if( handle != null )
+			    {
+			    	log.debug("Procesing Handle " + handle);
+					
+					String prefixLocalName = handle.replaceAll("http://hdl.handle.net/", "");
+					String[] prefixLocalNameParts = prefixLocalName.split("/");
+					
+					if( prefixLocalNameParts.length == 2)
+					{
+						String prefix = prefixLocalNameParts[0];
+						String localName = prefixLocalNameParts[1];
+						log.debug("Found prefix = " + prefix + " and local name = " + localName);
+						HandleNameAuthority authority = handleService.getNameAuthority(prefix);
+						
+						if( authority == null )
+						{
+							authority = new HandleNameAuthority(prefix);
+							handleService.save(authority);
+						}
+						
+						
+						InstitutionalItemVersion version = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
+						String url = this.institutionalItemVersionUrlGenerator.createUrl(institutionalItem, version.getVersionNumber());
+					    
+						HandleInfo handleInfo = new HandleInfo(localName, url, authority);
+						version.setHandleInfo(handleInfo);
+						institutionalItemService.saveInstitutionalItem(institutionalItem);
+					}
+					else
+					{
+						log.debug("invalid handle prefixLocalNameParts.length = " + prefixLocalNameParts.length);
+					}
+					
+			    }
+			    
 			    institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
 			    jdbcTemplate.execute("insert into dspace_convert.item(dspace_item_id, ur_research_institutional_item_id) values (" + i.itemId + "," + institutionalItem.getId() + ")");
 
@@ -1086,5 +1141,21 @@ public class DefaultItemImporter implements ItemImporter{
 	}
 
 
+	public HandleService getHandleService() {
+		return handleService;
+	}
+
+	public void setHandleService(HandleService handleService) {
+		this.handleService = handleService;
+	}
+	
+	public InstitutionalItemVersionUrlGenerator getInstitutionalItemVersionUrlGenerator() {
+		return institutionalItemVersionUrlGenerator;
+	}
+
+	public void setInstitutionalItemVersionUrlGenerator(
+			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
+	}
 
 }

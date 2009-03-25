@@ -65,6 +65,8 @@
         <property name="defaultThumbnailTransformer" ref="defaultThumbnailTransformer"/>
         <property name="temporaryFileCreator" ref="temporaryFileCreator"/>
         <property name="researcherIndexService" ref="researcherIndexService"/>
+        <property name="handleService" ref="handleService"/>
+        <property name="institutionalItemService" ref="institutionalItemService"/>
    </bean>
    
    
@@ -103,6 +105,8 @@
         <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
         <property name="defaultThumbnailTransformer" ref="defaultThumbnailTransformer"/>
         <property name="temporaryFileCreator" ref="temporaryFileCreator"/>
+        <property name="handleService" ref="handleService"/>
+        <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
    </bean>
    
    <!--  Class to import user groups -->

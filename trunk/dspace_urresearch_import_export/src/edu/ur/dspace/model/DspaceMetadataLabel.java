@@ -14,7 +14,7 @@
    limitations under the License.
 */  
 
-package edu.ur.dspace.load;
+package edu.ur.dspace.model;
 
 public class DspaceMetadataLabel {
 	

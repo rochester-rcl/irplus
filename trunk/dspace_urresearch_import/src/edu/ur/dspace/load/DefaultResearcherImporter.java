@@ -52,12 +52,18 @@ import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TemporaryFileCreator;
 import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.handle.HandleInfo;
+import edu.ur.ir.handle.HandleService;
+import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.Field;
 import edu.ur.ir.researcher.FieldService;
 import edu.ur.ir.researcher.ResearcherFolder;
+import edu.ur.ir.researcher.ResearcherInstitutionalItem;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.researcher.ResearcherIndexService;
 import edu.ur.ir.user.Department;
@@ -107,6 +113,13 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 	
 	/** Service for accessing role information */
 	private RoleService roleService;
+	
+	/** Service for dealing with handle based link data */
+	private HandleService handleService;
+
+	/** Service for dealing with items */
+	private InstitutionalItemService institutionalItemService;
+
 
 	/**
 	 * Data source for accessing the database.
@@ -444,6 +457,7 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 		{
 			for(ResearcherFolderLink l : tree.links)
 			{
+				log.debug("Processing REG_LINK ");
 				if( l.linkType.equals("REG_LINK"))
 				{
 				    try {
@@ -452,6 +466,40 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 						log.debug("could not add link " + l.title + " because a link with the name already exists");
 					}
 				}
+				else if(l.linkType.equals("DSPACE_LINK"))
+				{
+					log.debug("Processing DSPACE_LINK " + l.url);
+					
+					
+					String prefixLocalName = l.url.replaceAll("/handle/", "");
+					String[] prefixLocalNameParts = prefixLocalName.split("/");
+					
+					if( prefixLocalNameParts.length == 2)
+					{
+						String prefix = prefixLocalNameParts[0];
+						String localName = prefixLocalNameParts[1];
+						log.debug("Found prefix = " + prefix + " and local name = " + localName);
+						
+						HandleInfo info = handleService.getHandleInfo(prefix.trim() +"/" + localName.trim());
+						log.debug( "info = " + info);
+						if( info != null )
+						{
+							InstitutionalItemVersion version = this.institutionalItemService.getInstitutionalItemByHandleId(info.getId());
+						    if( version != null )
+						    {
+						    	InstitutionalItem item = institutionalItemService.getInstitutionalItemByVersionId(version.getVersionedInstitutionalItem().getId());
+						    	ResearcherInstitutionalItem ri = new ResearcherInstitutionalItem(f.getResearcher(), item);
+						    	ri.setDescription(l.description);
+						    	f.addInstitutionalItem(ri);
+						    }
+						}
+						else
+						{
+							log.debug(" info was null ");
+						}
+					}
+				}
+					
 			}
 		}
 			
@@ -749,5 +797,25 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 			ResearcherIndexService researcherIndexService) {
 		this.researcherIndexService = researcherIndexService;
 	}
+	
+	public HandleService getHandleService() {
+		return handleService;
+	}
+
+
+	public void setHandleService(HandleService handleService) {
+		this.handleService = handleService;
+	}
+	
+	public InstitutionalItemService getInstitutionalItemService() {
+		return institutionalItemService;
+	}
+
+
+	public void setInstitutionalItemService(
+			InstitutionalItemService institutionalItemService) {
+		this.institutionalItemService = institutionalItemService;
+	}
+
 
 }

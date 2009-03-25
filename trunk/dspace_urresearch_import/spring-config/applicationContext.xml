@@ -85,7 +85,6 @@
     <import resource="ir-statistics-hibernate.xml"/>
     <import resource="ir-handle-hibernate.xml"/>
     
-    
    <!-- ****************************************** --> 
    <!-- Institutional Repository services  -->
    <!-- ****************************************** --> 
@@ -106,7 +105,5 @@
    <!-- ****************************************** --> 
    <import resource="dspace-import.xml"/>
 
-     
-
- 
+  
 </beans>

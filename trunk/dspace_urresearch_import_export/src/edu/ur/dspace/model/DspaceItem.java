@@ -19,6 +19,8 @@ package edu.ur.dspace.model;
 import java.util.LinkedList;
 import java.util.List;
 
+
+
 /**
  * Represents an item in dspace
  * 
@@ -53,6 +55,73 @@ public class DspaceItem {
 	
 	/** Eperson permissions for this item */
 	public List<EpersonPermission> epersonPermissions = new LinkedList<EpersonPermission>();
+	
+	/**
+	 * Get the handle for the item else return null if not found.
+	 * @return the found handle string in the form 
+	 * 
+	 * http://hdl.handle.net/[name-authority]/[local-name]
+	 */
+	public String getHandle()
+	{
+		List<String> uris = getMultipleDataForLabel(DspaceMetadataLabel.URI);
+		
+		for(String uri : uris)
+		{
+			//we've found a handle
+			// it should be in the form: http://hdl.handle.net/[name-authority]/[local-name]
+			if( uri.indexOf("http://hdl.handle.net/") > -1 )
+			{
+				return uri;
+			}
+		}
+		return null;
+	}
+		
+	/**
+	 * This should be used for data that should be singular in the system.
+	 * This returns the data for the found information or null if not found.
+	 * 
+	 * @param item - item to retrieve the data out of
+	 * @param label - label for the data
+	 * 
+	 * @return the found data or null if nothing found for the specified label.
+	 */
+	public String getSingleDataForLabel(String label)
+	{
+		for(DspaceItemMetadata meta : metadata)
+		{
+			if( label.equalsIgnoreCase(meta.label))
+			{
+				return meta.value;
+			}
+		}
+		return null;
+	}
+		
+	/**
+	 * Returns a list of data of all metadata found with the specified label.  
+	 * 
+	 * @param item - item that has the data
+	 * @param label - lable the metatadata must have.
+	 * 
+	 * @return - list of data for the found metadata or an empty list if no data
+	 * with the label is found.
+	 */
+	public List<String> getMultipleDataForLabel( String label)
+	{
+		LinkedList<String> values = new LinkedList<String>();
+			
+		for(DspaceItemMetadata meta : metadata)
+		{
+			if( label.equalsIgnoreCase(meta.label))
+			{
+				values.add(meta.value);
+			}
+		}
+			
+		return values;
+	}
 	
 	public String toString()
 	{
