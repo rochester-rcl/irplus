@@ -18,8 +18,6 @@ package edu.ur.ir.person;
 
 import java.util.List;
 
-import edu.ur.dao.CriteriaHelper;
-
 /**
  * Service for dealing with person information.
  * 
@@ -84,18 +82,16 @@ public interface PersonService {
 	 * 
 	 * @return List of people containing the specified information.
 	 */
-	public List<PersonName> get( final List<CriteriaHelper> criteriaHelpers,
-			final int rowStart, final int rowEnd, Long personId);
+	public List<PersonName> get(final int rowStart, final int rowEnd, Long personId);
 
     /**
      * Get a count of peerson names with given filter list.
      *  
-     * @param criteria to apply to the selections
      * @param id of the person to which the names should belong.
      * 
      * @return - the number of collections found
      */
-    public Integer getCount(final List<CriteriaHelper> criteriaHelpers, Long personId);
+    public Integer getCount(Long personId);
     
     /**
      * Delete a person name.
@@ -120,13 +116,5 @@ public interface PersonService {
      */
     public void save(PersonName name);
 
-    /**
-	 * Search the person name having the specified first and last name.
-	 * 
-	 * @param firstName first name to search for
-	 * @param lastName last name to search for
-	 * 
-	 * @return List of Person names containing the specified first and last name.
-	 */
-	public List<PersonName> search(String firstName, String lastName);
+ 
 }

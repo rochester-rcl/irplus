@@ -17,7 +17,6 @@
 package edu.ur.ir.person;
 
 import edu.ur.dao.CountableDAO;
-import edu.ur.dao.CriteriaHelper;
 import edu.ur.dao.CrudDAO;
 import edu.ur.dao.NameListDAO;
 import java.util.List;
@@ -68,32 +67,19 @@ CrudDAO<PersonName>, NameListDAO
 	 * Get the list of person names with the specified person id.
 	 * 
 	 * 
-	 * @param criteria - how to sort and filter the list
 	 * @param rowStart - start position
 	 * @param rowEnd - number of rows to grab.
 	 * @param personId - id of the person to get the names for
 	 * 
 	 * @return list of person names found.
 	 */
-	public List<PersonName> getPersonNames( final List<CriteriaHelper> criteriaHelpers,
-			final int rowStart, final int rowEnd, Long personId);
+	public List<PersonName> getPersonNames( final int rowStart, final int rowEnd, Long personId);
 	
 	/**
 	 * Get the count of person names based on the filter criteria for the specified person
 	 * 
-	 * @param criteria - criteria to use to get the contributor types.
 	 * @return count of people for the given criteria
 	 */
-	public Integer getPersonNamesCount(final List<CriteriaHelper> criteriaHelpers, Long personId);
-	
-	/**
-	 * Searches for person name containing the given string
-	 * 
-	 * @param name the part of the name to be searched
-	 * 
-	 * @return List of person names containing the given search string
-	 */
-	public List<PersonName> searchPersonName(String name);
-	
+	public Integer getPersonNamesCount(Long personId);
 	
 }
