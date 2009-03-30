@@ -30,8 +30,6 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
-import edu.ur.dao.CriteriaHelper;
-import edu.ur.hibernate.CriteriaBuilder;
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.person.PersonName;
@@ -174,14 +172,11 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	/**
 	 * @see edu.ur.ir.person.PersonNameDAO#getPersonNamesCount(java.util.List, java.lang.Long)
 	 */
-	public Integer getPersonNamesCount(final List<CriteriaHelper> criteriaHelpers,
-			final Long personId) {
+	public Integer getPersonNamesCount(final Long personId) {
 		Integer count = (Integer) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
             public Object doInHibernate(Session session)
                     throws HibernateException, SQLException {
                 Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
-                criteriaBuilder.executeWithFiltersOnly(criteria, criteriaHelpers);
                 criteria.createCriteria("personNameAuthority").add(Restrictions.idEq(personId));
                 return criteria.setProjection(Projections.rowCount()).uniqueResult();
             }
@@ -194,17 +189,14 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	 * @see edu.ur.ir.person.PersonNameDAO#getPersonNames(java.util.List, int, int, java.lang.Long)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PersonName> getPersonNames(final List<CriteriaHelper> criteriaHelpers,
-			final int rowStart, final int rowEnd, final Long personId) {
+	public List<PersonName> getPersonNames(final int rowStart, final int rowEnd, final Long personId) {
 		List<PersonName> names = 
 			(List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
             public Object doInHibernate(Session session)
                     throws HibernateException, SQLException {
                 Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
                 
-                CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
                 criteria.createCriteria("personNameAuthority").add(Restrictions.idEq(personId));
-                criteriaBuilder.execute(criteria, criteriaHelpers);
                 criteria.setFirstResult(rowStart);
                 criteria.setMaxResults(rowEnd - rowStart);
                 return criteria.list();

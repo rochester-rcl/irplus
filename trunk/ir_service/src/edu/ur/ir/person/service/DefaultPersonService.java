@@ -19,7 +19,6 @@ package edu.ur.ir.person.service;
 
 import java.util.List;
 
-import edu.ur.dao.CriteriaHelper;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonNameAuthorityDAO;
 import edu.ur.ir.person.PersonName;
@@ -113,19 +112,17 @@ public class DefaultPersonService implements PersonService {
 	/**
 	 * @see edu.ur.ir.person.PersonService#get(java.util.List, int, int, java.lang.Long)
 	 */
-	public List<PersonName> get(
-			List<CriteriaHelper> criteriaHelpers, int rowStart, int rowEnd,
+	public List<PersonName> get(  int rowStart, int rowEnd,
 			Long personId) {
 		
-		return personNameDAO.getPersonNames(criteriaHelpers, rowStart, rowEnd, personId);
+		return personNameDAO.getPersonNames( rowStart, rowEnd, personId);
 	}
 
 	/**
 	 * @see edu.ur.ir.person.PersonService#getCount(java.util.List, java.lang.Long)
 	 */
-	public Integer getCount(List<CriteriaHelper> criteriaHelpers,
-			Long personId) {
-		return personNameDAO.getPersonNamesCount(criteriaHelpers, personId);
+	public Integer getCount(Long personId) {
+		return personNameDAO.getPersonNamesCount(personId);
 	}
 
 	/**

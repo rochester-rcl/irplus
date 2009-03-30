@@ -316,8 +316,7 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdA
 			criteria.add(crit);
 		}
 		
-		personNames =  personService.get(criteria, 
-				helper.getRowStart(), helper.getRowEnd(), personId);
+		personNames =  personService.get( helper.getRowStart(), helper.getRowEnd(), personId);
 		return SUCCESS;
 
 	}
@@ -352,7 +351,7 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdA
 	 * @see edu.ur.ir.web.table.TableCollectionInfo#getTotalNumberOfResults(java.util.List)
 	 */
 	public int getTotalNumberOfResults(List<CriteriaHelper> criteriaHelpers) {
-		totalNumberOfPersonNames = personService.getCount(criteriaHelpers, personId);
+		totalNumberOfPersonNames = personService.getCount(personId);
 		log.debug("Total number of results = " + totalNumberOfPersonNames);
 		return totalNumberOfPersonNames;
 	}
