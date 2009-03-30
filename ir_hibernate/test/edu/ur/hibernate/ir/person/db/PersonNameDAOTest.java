@@ -33,6 +33,7 @@ import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonNameAuthorityDAO;
 import edu.ur.ir.person.PersonNameDAO;
 import edu.ur.ir.person.PersonNameTitle;
+import edu.ur.order.OrderType;
 
 /**
  * Test the persistance methods for Institution Information
@@ -174,6 +175,89 @@ public class PersonNameDAOTest {
 		
 		personNameAuthorityDAO.makeTransient(personNameAuthorityDAO.getById(p.getId(), false));
 		personNameAuthorityDAO.makeTransient(personNameAuthorityDAO.getById(p2.getId(), false));
+		tm.commit(ts);
+
+	}
+	
+	/**
+	 * Test getting a person by their last name first character
+	 */
+	@Test
+	public void personNameGetByFirstCharTest()throws Exception{
+		
+ 		PersonName name = new PersonName();
+		name.setForename("forename1");
+		name.setSurname("surname1");
+		
+		PersonNameAuthority p = new PersonNameAuthority(name);
+		p.addBirthDate(1,1,2005);
+		p.addDeathDate(1, 1, 2105);
+
+        // Start the transaction this is for lazy loading
+        TransactionStatus ts = tm.getTransaction(td);
+
+		personNameAuthorityDAO.makePersistent(p);
+		
+		
+		PersonName name2 = new PersonName();
+		name2.setForename("Bore2name");
+		name2.setSurname("bur2name");
+		
+		PersonNameAuthority p2 = new PersonNameAuthority(name2);
+		p2.addBirthDate(1,1,2005);
+		p2.addDeathDate(1, 1, 2105);
+		
+		personNameAuthorityDAO.makePersistent(p2);
+		p2.addName(name2, true);
+		personNameDAO.makePersistent(name2);
+		
+		PersonName name3 = new PersonName();
+		name3.setForename("Robore2name");
+		name3.setSurname("bar2name");
+		
+		PersonNameAuthority p3 = new PersonNameAuthority(name3);
+		p3.addBirthDate(1,1,2005);
+		p3.addDeathDate(1, 1, 2105);
+		
+		personNameAuthorityDAO.makePersistent(p3);
+		p3.addName(name3, true);
+		personNameDAO.makePersistent(name3);
+		
+		tm.commit(ts);
+
+		ts = tm.getTransaction(td);
+		
+		// test single character counts
+		Long count = personNameDAO.getCount('B');
+		assert count == 2l : "Count should equal 2 but equals " + count;
+		
+		count = personNameDAO.getCount('s');
+		assert count == 1l : "Count should equal 1 but equals " + count;
+		
+		// test single character
+		List<PersonName> names = personNameDAO.getPersonNamesByChar(0, 20, 'B', OrderType.ASCENDING_ORDER);
+		assert names.size() == 2;
+		
+		assert names.contains(name2) : "Should contain " + name2;
+		assert names.contains(name3) : "Should contain " + name3;
+		assert names.get(0).equals(name3) : "Index 0 should contain " + name3;
+		
+		names = personNameDAO.getPersonNamesByChar(0, 20, 's', OrderType.ASCENDING_ORDER);
+		assert names.size() == 1;
+		assert names.contains(name) : " should contain " + name;
+		
+		names = personNameDAO.getPersonNamesByChar(0, 20, 's', OrderType.ASCENDING_ORDER);
+		
+		
+		// test range counts
+		count = personNameDAO.getCount('B', 'C');
+		assert count == 2l : "Count should equal 2 but equals " + count;
+		
+		names = personNameDAO.getPersonNamesByChar(0, 20, 's', OrderType.ASCENDING_ORDER);
+		
+		personNameAuthorityDAO.makeTransient(personNameAuthorityDAO.getById(p.getId(), false));
+		personNameAuthorityDAO.makeTransient(personNameAuthorityDAO.getById(p2.getId(), false));
+		personNameAuthorityDAO.makeTransient(personNameAuthorityDAO.getById(p3.getId(), false));
 		tm.commit(ts);
 
 	}

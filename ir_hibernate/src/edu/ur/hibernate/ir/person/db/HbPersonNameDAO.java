@@ -17,6 +17,7 @@
 package edu.ur.hibernate.ir.person.db;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -32,8 +33,10 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameDAO;
+import edu.ur.order.OrderType;
 
 
 /**
@@ -246,11 +249,228 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	}
 
 	/**
-	 * Searches for person name containing the given string
-	 * 
-	 * @see edu.ur.ir.person.PersonNameDAO#searchPersonName(String)
+	 * @see edu.ur.ir.person.PersonNameDAO#getCollectionPersonNamesBetweenChar(int, int, edu.ur.ir.institution.InstitutionalCollection, char, char, edu.ur.order.OrderType)
 	 */
-	public List<PersonName> searchPersonName(String name) {
-		return null;
+	@SuppressWarnings("unchecked")
+	public List<PersonName> getCollectionPersonNamesBetweenChar(final int rowStart,
+			final int maxResults, final InstitutionalCollection collection, final char firstChar,
+			final char lastChar, final OrderType orderType) {
+		List<PersonName> personNames = new LinkedList<PersonName>();
+		
+		personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getCollectionPersonNameByCharRangeOrderDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getCollectionPersonNameByCharRangeOrderAsc");
+			    }
+			    
+			    q.setLong(0, collection.getLeftValue());
+			    q.setLong(1, collection.getRightValue());
+			    q.setLong(2, collection.getTreeRoot().getId());
+			    q.setCharacter( 3, Character.toLowerCase(firstChar) );
+			    q.setCharacter( 4, Character.toLowerCase(lastChar) );
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+        return personNames;	
 	}
+
+	/**
+	 * @see edu.ur.ir.person.PersonNameDAO#getCollectionPersonNamesByChar(int, int, edu.ur.ir.institution.InstitutionalCollection, char, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PersonName> getCollectionPersonNamesByChar(final int rowStart,
+			final int maxResults, final InstitutionalCollection collection,
+			final char firstChar, final OrderType orderType) {
+        List<PersonName> personNames = new LinkedList<PersonName>();
+		
+		personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getCollectionPersonNameByCharOrderDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getCollectionPersonNameByCharOrderAsc");
+			    }
+			    
+			    q.setLong(0, collection.getLeftValue());
+			    q.setLong(1, collection.getRightValue());
+			    q.setLong(2, collection.getTreeRoot().getId());
+			    q.setCharacter( 3, Character.toLowerCase(firstChar) );
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+        return personNames;	
+	}
+
+	/**
+	 * @see edu.ur.ir.person.PersonNameDAO#getCollectionPersonNamesByLastName(int, int, edu.ur.ir.institution.InstitutionalCollection, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PersonName> getCollectionPersonNamesByLastName(final int rowStart,
+			final int maxResults, final InstitutionalCollection collection,
+			final OrderType orderType) {
+		List<PersonName> personNames = new LinkedList<PersonName>();
+		
+		personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getCollectionPersonNameByNameOrderDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getCollectionPersonNameByNameOrderAsc");
+			    }
+			    
+			    q.setLong(0, collection.getLeftValue());
+			    q.setLong(1, collection.getRightValue());
+			    q.setLong(2, collection.getTreeRoot().getId());
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+	
+        return personNames;	
+	}
+
+	/**
+	 * @see edu.ur.ir.person.PersonNameDAO#getCount(char)
+	 */
+	public Long getCount(char nameFirstChar) {
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("allPersonNameByChar", new Character(Character.toLowerCase(nameFirstChar))));
+	}
+
+	/**
+	 * @see edu.ur.ir.person.PersonNameDAO#getCount(char, char)
+	 */
+	public Long getCount(char lastNameFirstCharRange, char lastNamelastCharRange) {
+		Object[] values = new Object[]{new Character(Character.toLowerCase(lastNameFirstCharRange)), new Character(Character.toLowerCase(lastNamelastCharRange))};
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personNameCountByCharRange", values));
+	}
+
+	/**
+	 * @see edu.ur.ir.person.PersonNameDAO#getCount(edu.ur.ir.institution.InstitutionalCollection, char)
+	 */
+	public Long getCount(InstitutionalCollection collection,
+			char lastNameFirstChar) {
+		Object[] values = new Object[]{collection.getLeftValue(), collection.getRightValue(), 
+				collection.getTreeRoot().getId(), new Character(Character.toLowerCase(lastNameFirstChar))};
+
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personCollectionNameCountByChar", values));
+
+	}
+
+	/**
+	 * @see edu.ur.ir.person.PersonNameDAO#getCount(edu.ur.ir.institution.InstitutionalCollection, char, char)
+	 */
+	public Long getCount(InstitutionalCollection collection,
+			char lastNameFirstCharRange, char lastNamelastCharRange) {
+		Object[] values = new Object[]{collection.getLeftValue(), collection.getRightValue(), 
+				collection.getTreeRoot().getId(), new Character(Character.toLowerCase(lastNameFirstCharRange)), new Character(Character.toLowerCase(lastNamelastCharRange))};
+
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personCollectionNameCountByCharRange", values));
+	}
+
+	/**
+	 * @see edu.ur.ir.person.PersonNameDAO#getPersonNamesBetweenChar(int, int, char, char, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PersonName> getPersonNamesBetweenChar(final int rowStart,
+			final int maxResults, final char firstChar, final char lastChar, final OrderType orderType) {
+		List<PersonName> personNames = new LinkedList<PersonName>();
+		
+		personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if(orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("etPersonNameByCharRangeOrderDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getPersonNameByCharRangeOrderAsc");
+			    }
+			    q.setCharacter( 0, Character.toLowerCase(firstChar) );
+			    q.setCharacter( 1, Character.toLowerCase(lastChar) );
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+        return personNames;	
+	}
+
+	/**
+	 * @see edu.ur.ir.person.PersonNameDAO#getPersonNamesByChar(int, int, char, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PersonName> getPersonNamesByChar(final int rowStart, final int maxResults,
+			final char firstChar, final OrderType orderType) {
+		List<PersonName> personNames = new LinkedList<PersonName>();
+		
+		personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getPersonNameByCharOrderDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getPersonNameByCharOrderAsc");
+			    }
+			    q.setCharacter( 0, Character.toLowerCase(firstChar) );
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+        return personNames;	
+	}
+
+	public List<PersonName> getPersonNamesByLastName(int rowStart,
+			int maxResults, OrderType orderType) {
+		
+		if( orderType.equals(OrderType.DESCENDING_ORDER))
+		{
+			return hbCrudDAO.getByQuery("getAllPersonNameDesc", rowStart, maxResults);
+		}
+		else
+		{
+			return hbCrudDAO.getByQuery("getAllPersonNameAsc", rowStart, maxResults);
+		}
+		
+	}
+
+
 }
