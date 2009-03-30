@@ -122,7 +122,7 @@ public interface InstitutionalItemService {
 	 * 
 	 * @param rowStart - Start row to fetch the data from
 	 * @param rowEnd -  End row to get data
-	 * @param collectionId - id of the collection to get items 
+	 * @param repositoryId - id of the repository to get items 
 	 * @param propertyName - The property to sort on
 	 * @param orderType - The order to sort by (ascending/descending)
 	 * 
@@ -210,7 +210,6 @@ public interface InstitutionalItemService {
 	 * @param rowStart - Start row to fetch the data from
 	 * @param rowEnd -  End row to get data
 	 * @param collectionId - id of the collection to get items 
-	 * @param propertyName - The property to sort on
 	 * @param orderType - The order to sort by (ascending/descending)
 	 * 
 	 * @return List of institutional items
