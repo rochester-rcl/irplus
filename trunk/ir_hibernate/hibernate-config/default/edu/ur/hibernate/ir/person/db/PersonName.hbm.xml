@@ -87,16 +87,193 @@
 	</query>
 	
 	<!-- named query for getting all personNames ordered by surname forename familyName-->
-    <query name="getAllPersonNameAsc">from PersonName order by surname, forename, familyName, middleName </query>
+    <query name="getAllPersonNameAsc">from PersonName order by surname asc, forename asc, familyName asc, middleName desc </query>
+
+	<!-- named query for getting all personNames ordered by surname forename familyName-->
+    <query name="getAllPersonNameDesc">from PersonName order by surname desc, forename desc, familyName desc, middleName desc </query>
+
     
     <!-- named query for getting all personNames like the specified first name -->
-    <query name="findPersonLikeFirstName">from PersonName personName where upper(personName.forename) like upper(?) order by  forename, surname, familyName, middleName </query>
+    <query name="findPersonLikeFirstName">from PersonName personName where upper(personName.forename) like upper(?) order by  surname asc, forename asc, familyName asc, middleName asc </query>
 
     <!-- named query for getting all personNames like the specified last name -->
-    <query name="findPersonLikeLastName">from PersonName personName where upper(personName.surname) like upper(?) order by  surname, forename, familyName, middleName </query>
+    <query name="findPersonLikeLastName">from PersonName personName where upper(personName.surname) like upper(?) order by surname asc, forename asc, familyName asc, middleName asc </query>
 
     <!-- named query for getting all personNames like the specified first and last name -->
     <query name="findPersonLikeFirstLastName">from PersonName personName where upper(personName.surname) like upper(?) and
-    upper(personName.forename) like upper(?) order by  surname, forename, familyName, middleName </query>
+    upper(personName.forename) like upper(?) order by  surname asc, forename asc, familyName asc, middleName asc </query>
+    
+  
+	
+	<!-- ********************************************************* -->
+	<!-- count of all person names in the system -->
+	<!-- By character  -->
+	<!-- ********************************************************* -->
+	<query name="allPersonNameByChar">
+	    select count(*) from PersonName as personName
+	    where personName.surnameFirstChar = ?
+	</query>
+	
+	<query name="getPersonNameByCharOrderAsc">
+	    select personName from PersonName as personName 	  
+	    where  personName.surnameFirstChar = ?
+	    order by personName.surname asc, personName.forename asc, personName.familyName asc, personName.middleName asc
+	</query>
+	
+    <query name="getPersonNameByCharOrderDesc">
+	    select personName from PersonName as personName 	  
+	    where  personName.surnameFirstChar = ?
+	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
+	</query>
+	
+	<!-- ********************************************************* -->
+	<!-- count of all person names in the system -->
+	<!-- By character RANGE  -->
+	<!-- ********************************************************* -->
+	<query name="personNameCountByCharRange">
+	    select count(*) from PersonName as personName
+	    where personName.surnameFirstChar between ? and ?
+	</query>
+	
+	<query name="getPersonNameByCharRangeOrderAsc">
+	    select personName from PersonName as personName	  
+	    where personName.surnameFirstChar between ? and ?
+	    order by personName.surname asc, personName.forename asc, personName.familyName asc, personName.middleName asc
+	</query>
+	
+    <query name="getPersonNameByCharRangeOrderDesc">
+	    select personName from PersonName as personName	  
+	    where personName.surnameFirstChar between ? and ?
+	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
+	</query>
+	
+	
+	<!-- ********************************************************* -->
+	<!-- get all person names in the system for a collection -->
+	<!-- ********************************************************* -->
+
+	<query name="getCollectionPersonNameByNameOrderAsc">
+	    select personName 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor 
+	    join contributor.personName as personName	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    order by personName.surname asc, personName.forename asc, personName.familyName asc, personName.middleName asc
+	</query>
+		
+    <query name="getCollectionPersonNameByNameOrderDesc">
+	    select personName 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor 
+	    join contributor.personName as personName	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
+	</query>
+	
+    <!-- ********************************************************* -->
+	<!-- count of all institutional items in the system for a collection by letter-->
+	<!-- ********************************************************* -->
+	<query name="personCollectionNameCountByChar">
+	    select  count(*) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor 
+	    join contributor.personName as personName	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and personName.surnameFirstChar = ?
+	</query>
+	
+	<query name="getCollectionPersonNameByCharOrderAsc">
+	    select personName 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor 
+	    join contributor.personName as personName	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and personName.surnameFirstChar = ?
+	    order by personName.surname asc, personName.forename asc, personName.familyName asc, personName.middleName asc
+	</query>
+	
+    <query name="getCollectionPersonNameByCharOrderDesc">
+	    select personName
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor 
+	    join contributor.personName as personName	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and personName.surnameFirstChar = ?
+	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
+	</query>
+	
+   <!-- ********************************************************* -->
+	<!-- count of all institutional items in the system for a collection tree -->
+	<!-- By character RANGE  -->
+	<!-- ********************************************************* -->
+	<query name="personCollectionNameCountByCharRange">
+	    select count(*) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor 
+	    join contributor.personName as personName	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and personName.surnameFirstChar between ? and ?
+	</query>
+	
+	<query name="getCollectionPersonNameByCharRangeOrderAsc">
+	    select personName
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor 
+	    join contributor.personName as personName	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and personName.surnameFirstChar between ? and ?
+	    order by personName.surname asc, personName.forename asc, personName.familyName asc, personName.middleName asc
+	</query>
+	
+    <query name="getCollectionPersonNameByCharRangeOrderDesc">
+	    select personName
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor 
+	    join contributor.personName as personName	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and personName.surnameFirstChar between ? and ?
+	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
+	</query>
+	
 	
 </hibernate-mapping>

@@ -124,7 +124,7 @@
 	
 	<!-- ********************************************************* -->
 	<!-- count of all institutional items in the system for a repository -->
-	<!-- By character  -->
+	<!-- By Name  -->
 	<!-- ********************************************************* -->
 	<query name="getRepositoryItemsByNameOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem

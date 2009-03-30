@@ -218,12 +218,12 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	public Long getCount(Long repositoryId, char nameFirstCharRange, char namelastCharRange);
 	
 	/**
-	 * Get a count of institutional items in the repository with a name
+	 * Get a count of institutional items in the collection with a name
 	 * that starts with the specified first character.
 	 * 
 	 * NOTE: This search includes all items in child collections
 	 * 
-	 * @param repositoryId - id of the repository
+	 * @param collection -  institutional collection to look in
 	 * @param nameFirstChar - first character of the name
 	 * 
 	 * @return the count found
@@ -231,11 +231,11 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	public Long getCount(InstitutionalCollection collection, char nameFirstChar);
 	
 	/**
-	 * Get a count of institutional items in the repository with a name
+	 * Get a count of institutional items in the collection with a name
 	 * that starts with the specified first character in the given range.  
 	 * NOTE: This search includes all items in child collections
 	 * 
-	 * @param repositoryId - id of the repository
+	 * @param collection - institutional collection to look in
 	 * @param nameFirstCharRange - first character of the name start of range
 	 * @param nameLastCharRange- first character of the name end of range
 	 * 
