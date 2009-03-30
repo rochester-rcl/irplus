@@ -20,7 +20,8 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
- * Class for comparing to orderable objects.
+ * Class for comparing to orderable objects.  Order is considered to be 
+ * 1 is the first object, 2 is the second and so on.
  * 
  * @author Nathan Sarr
  *
