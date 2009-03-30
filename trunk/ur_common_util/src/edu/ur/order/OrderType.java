@@ -9,7 +9,11 @@ package edu.ur.order;
  */
 public class OrderType {
 	
+	/** Ascending order type  */
 	public static final OrderType ASCENDING_ORDER = new OrderType("asc");
+	
+	
+	/** Descending order type  */
 	public static final OrderType DESCENDING_ORDER = new OrderType("desc");
 	
 	
