@@ -1,3 +1,19 @@
+/**  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
 package edu.ur.ir.person;
 
 import java.util.List;
@@ -87,13 +103,13 @@ public interface PersonNameService {
 	 * Get a list of person names ordered by name in the system.
 	 * 
 	 * @param rowStart - Start row to fetch the data from
-	 * @param rowEnd -  End row to get data
+	 * @param maxResults -  Max number of restults to grab
 	 * @param propertyName - The property to sort on
 	 * @param orderType - The order to sort by (asc/desc)
 	 * 
 	 * @return List of person names
 	 */
-	public List<PersonName> getPersonNamesOrderByLastName(int rowStart, int rowEnd,  
+	public List<PersonName> getPersonNamesOrderByLastName(int rowStart, int maxResults,  
 			OrderType orderType) ;	
 	
 	/**
@@ -117,14 +133,14 @@ public interface PersonNameService {
 	 * Get the list of person names for the specified collection.  This includes person names in sub collections
 	 * 
 	 * @param rowStart - Start row to fetch the data from
-	 * @param rowEnd -  End row to get data
+	 * @param maxResults -  Max number of results to grab
 	 * @param Institutional collection -   collection to get person names
 	 * @param orderType - The order to sort by (ascending/descending)
 	 * 
 	 * @return List of person names
 	 */
 	public List<PersonName> getCollectionPersonNamesOrderByLastName(int rowStart, 
-			int rowEnd, 
+			int maxResults, 
 			InstitutionalCollection collection, 
 			OrderType orderType) ;
 	
@@ -144,7 +160,7 @@ public interface PersonNameService {
 			int maxResults, 
 			InstitutionalCollection institutionalCollection,
 			char firstChar,
-			String orderType);
+			OrderType orderType);
 	
 	/**
 	 * Get a list of person names for a specified collection by  person last names
