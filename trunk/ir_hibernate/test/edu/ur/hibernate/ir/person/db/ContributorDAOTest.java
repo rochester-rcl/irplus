@@ -48,13 +48,16 @@ public class ContributorDAOTest {
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
      
-		PersonNameAuthorityDAO personNameAuthorityDAO = (PersonNameAuthorityDAO) ctx
+	/** person name authority data access */
+	PersonNameAuthorityDAO personNameAuthorityDAO = (PersonNameAuthorityDAO) ctx
 	.getBean("personNameAuthorityDAO");
-		
+	
+	/** contributor type data access */
      ContributorTypeDAO contributorTypeDAO = (ContributorTypeDAO) ctx
 	.getBean("contributorTypeDAO");
 
-     ContributorDAO contributorDAO = (ContributorDAO) ctx
+    /** contributor data access object */
+    ContributorDAO contributorDAO = (ContributorDAO) ctx
 		.getBean("contributorDAO");
      
 	static final String birthDate = "1/1/2005";
