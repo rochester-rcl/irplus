@@ -458,6 +458,9 @@ public class HbPersonNameDAO  implements PersonNameDAO {
         return personNames;	
 	}
 
+	/**
+	 * @see edu.ur.ir.person.PersonNameDAO#getPersonNamesByLastName(int, int, edu.ur.order.OrderType)
+	 */
 	public List<PersonName> getPersonNamesByLastName(int rowStart,
 			int maxResults, OrderType orderType) {
 		
@@ -470,6 +473,17 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 			return hbCrudDAO.getByQuery("getAllPersonNameAsc", rowStart, maxResults);
 		}
 		
+	}
+
+	
+	/**
+	 * @see edu.ur.ir.person.PersonNameDAO#getCount(edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public Long getCount(InstitutionalCollection collection) {
+		Object[] values = new Object[]{collection.getLeftValue(), collection.getRightValue(), 
+				collection.getTreeRoot().getId()};
+
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personCollectionNameCount", values));
 	}
 
 
