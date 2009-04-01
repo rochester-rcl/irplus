@@ -262,16 +262,6 @@ s	 */
 
 
 	/**
-	 * adds a sub collection to an existing collection
-	 */
-	private boolean addSubCollection() 
-	{
-		boolean collectionAdded = false;
-		
-		return collectionAdded;
-	}
-	
-	/**
 	 * Load the permissions allowed for an institutional collection
 	 */
 	private void loadPermissions()

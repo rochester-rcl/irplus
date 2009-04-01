@@ -53,7 +53,7 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 	/** Service for accessing institutional collections*/
 	private InstitutionalItemService institutionalItemService;
 	
-	/** List of researchers */
+	/** List of institutional items found from searching */
 	private List<InstitutionalItem> institutionalItems;
 	
 	/** type of sort [ ascending | descending ] 
