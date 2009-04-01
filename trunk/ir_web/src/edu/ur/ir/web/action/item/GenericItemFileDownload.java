@@ -81,48 +81,6 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	/** Item file security service */
 	private ItemFileSecurityService itemFileSecurityService; 
 	
-	/**
-     * Allows a file to be downloaded
-     *
-     * @return {@link #SUCCESS}
-     */
-    public String fileDownloadWithoutPermissionCheck() throws Exception {
-    	
-	    log.debug("Trying to download the file to user");
-	    
-        if (itemFileId == null) {
-        	log.debug("file id is null");
-            return INPUT;
-        }
-        
-        if( itemId == null)
-        {
-        	log.debug("item id is null");
-        	return INPUT;
-        }
-         
-        GenericItem genericItem = itemService.getGenericItem(itemId, false);
- 
-        if( genericItem == null)
-        {
-        	log.debug("Item  is null");
-        	return INPUT;
-        }
-        
-        ItemFile itemFile = genericItem.getItemFile(itemFileId);
- 
-        if( itemFile == null)
-        {
-        	log.debug("Item file is null");
-        	return INPUT;
-        }
-
-        downloadFile(itemFile);
-        
-
-        return SUCCESS;
-    }
-	
     /**
      * Checks for user permission and then downloads the file 
      * 
@@ -160,23 +118,29 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         	return INPUT;
         }
         
-         // Check if file can be downloaded by user
-        if (!itemFile.isPublic()) {
-        	
-            if (userId != null) {
-            	IrUser user = userService.getUser(userId, false);
-
-            	if (itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) <= 0) {
-                	log.debug("User has no Read permission for this file");
-                	return INPUT;
-            	}
-            } else {
-            	log.debug("File is private.");
-            	return INPUT;
-            }
+        IrUser user = null;
+        
+        if (userId != null) {
+        	user = userService.getUser(userId, false);
         }
         
-        downloadFile(itemFile);
+         // Check if file can be downloaded by user
+        if (itemFile.isPublic() ) {
+        	downloadFile(itemFile);
+        }
+        else if ( user != null)
+        {
+        	if( genericItem.getOwner().equals(user) || 
+            		(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) )
+        	{
+        		downloadFile(itemFile);
+        	}
+        }
+        else
+        {
+        	log.debug("File is private.");
+        	return INPUT;
+        }
         
         return SUCCESS;
 

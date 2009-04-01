@@ -34,13 +34,6 @@
             <result name="input">/pages/item/no_access_file_download_error.jsp</result>
         </action>
 
-        <action name="genericItemFileDownload" 
-        		method="fileDownloadWithoutPermissionCheck"
-                class="edu.ur.ir.web.action.item.GenericItemFileDownload">
-            <result name="success" type="no-op"/>
-            <result name="input">/pages/item/file_not_exist_download_error.jsp</result>
-        </action>
-                
         <action name="startSearchRepositoryItems" 
              class="edu.ur.ir.web.action.institution.RepositoryInstitutionalItemSearch">
              <result name="success">/pages/item/browse_all_items.jsp</result>
