@@ -475,6 +475,15 @@
    </bean>
    
    <!-- ****************************************** --> 
+   <!-- Person Name service                             -->
+   <!-- ****************************************** --> 
+   <bean id="personNameService" 
+       class="edu.ur.ir.handle.service.DefaultPersonNameService">
+	   <property name="personNameDAO" ref="personNameDAO"/>
+   </bean>
+   
+   
+   <!-- ****************************************** --> 
    <!-- Handle service                             -->
    <!-- ****************************************** --> 
    <bean id="handleService" 
@@ -485,7 +494,7 @@
    
    
    <!-- ****************************************** --> 
-   <!-- Handle service                             -->
+   <!-- Handle url service                             -->
    <!-- ****************************************** --> 
    <bean id="institutionalItemVersionUrlGenerator" class="edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator">
        <property name="baseWebPath" value="${base.web.path}"/>
