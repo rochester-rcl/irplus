@@ -49,11 +49,16 @@
 	    <ur:js src="page-resources/js/menu/main_menu.js"/>
          
          <c:url var="browseRepositoryItems" value="/browseRepositoryItems.action"/>
+         <c:url var="browsePersonNames" value="/browsePersonNames.action"/>
          <c:url var="searchRepositoryItems" value="/startSearchRepositoryItems.action"/>
 		 <script type="text/javascript">
     
           function handleBrowseClick(e) {  
                window.location='${browseRepositoryItems}';
+          }
+
+          function handleBrowseNamesClick(e) { 
+              window.location='${browsePersonNames}';
           }
           
           function handleSearchClick(e)
@@ -69,6 +74,9 @@
 	            
 	            var tab1 = myTabs.getTab(1);
 	            tab1.addListener('click', handleSearchClick);
+
+	            var tab2 = myTabs.getTab(2);
+	            tab2.addListener('click', handleBrowseNamesClick);
           }
           
           // initialize the code once the dom is ready
@@ -94,12 +102,19 @@
 		        <div id="all-items-tabs" class="yui-navset">
 		            <ul class="yui-nav">
 		               <c:if test='${viewType == "browse"}'>
-		                    <li class="selected"><a href="${browseRepositoryItems}"><em>Browse</em></a></li>
+		                    <li class="selected"><a href="${browseRepositoryItems}"><em>Browse Items</em></a></li>
 		                    <li><a href="${searchRepositoryItems}"><em>Search</em></a></li>
+		                    <li><a href="${browsePersonNames}"><em>Browse Contributors</em></a></li>
 		               </c:if>
 		               <c:if test='${viewType == "search"}'>
-		                    <li><a href="${browseRepositoryItems}"><em>Browse</em></a></li>
+		                    <li><a href="${browseRepositoryItems}"><em>Browse Items</em></a></li>
 		                    <li class="selected"><a href="${searchRepositoryItems}"><em>Search</em></a></li>
+		                    <li><a href="${browsePersonNames}"><em>Browse Contributors</em></a></li>
+		               </c:if>
+		                <c:if test='${viewType == "browsePersonName"}'>
+		                    <li><a href="${browseRepositoryItems}"><em>Browse Items</em></a></li>
+		                    <li><a href="${searchRepositoryItems}"><em>Search</em></a></li>
+		                    <li class="selected"><a href="${searchPersonNames}"><em>Browse Contributors</em></a></li>
 		               </c:if>
 		            </ul>
 		
@@ -438,6 +453,68 @@
 						</c:if>
 					 </div>
 		             <!--  end tab 2 -->
+		             
+		             <!--  start 3rd tab -->
+		                <div id="tab3">
+		                  
+				         <c:if test='${viewType == "browsePersonName"}'>
+				         
+				         <div class="center">
+				              <c:import url="browse_all_person_names_alpha_list.jsp"/>
+				         </div>
+				    	 <c:if test="${totalHits > 0}">
+				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
+				         </c:if>  
+				         <c:import url="browse_all_person_names_pager.jsp"/>
+						
+						
+						<div class="dataTable">
+							             
+					        <urstb:table width="100%">
+					            <urstb:thead>
+					                <urstb:tr>
+					                    <urstb:td>Id</urstb:td>
+					                    <urstb:td>Last Name</urstb:td>
+					                    <urstb:td>First Name</urstb:td>
+						                </urstb:tr>
+						            </urstb:thead>
+						            <urstb:tbody
+						                var="personName" 
+						                oddRowClass="odd"
+						                evenRowClass="even"
+						                currentRowClassVar="rowClass"
+						                collection="${personNames}">
+						                    <urstb:tr 
+						                        cssClass="${rowClass}"
+						                        onMouseOver="this.className='highlight'"
+						                        onMouseOut="this.className='${rowClass}'">
+						                        <urstb:td>
+							                        ${personName.id}
+						                        </urstb:td>
+						                        <urstb:td>
+						                             ${personName.surname}
+						                        </urstb:td>
+						                        <urstb:td>
+						                             ${personName.forename}
+						                        </urstb:td>
+						                    </urstb:tr>
+						            </urstb:tbody>
+						        </urstb:table>
+						    </div>	
+                         
+					        <c:import url="browse_all_person_names_pager.jsp"/>
+					        
+					         <br/>
+				             <br/>
+				             
+					        <div class="center">
+				                 <c:import url="browse_all_person_names_alpha_list.jsp"/>
+				            </div>
+				         
+				        
+					        </c:if>
+			        </div>
+		            <!--  end tab  3-->
 		             
 		          </div>
 		          <!--  end content -->

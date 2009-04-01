@@ -69,7 +69,7 @@ public class RepositoryPersonNameBrowse extends Pager {
 	private long parentCollectionId = 0l;
 	
 	/** Indicates this is a browse */
-	private String viewType = "browse";
+	private String viewType = "browsePersonName";
 	
 	/** Default constructor */
 	public RepositoryPersonNameBrowse()
@@ -91,7 +91,7 @@ public class RepositoryPersonNameBrowse extends Pager {
 	 * 
 	 * @return
 	 */
-	public String browseRepositoryItems() {
+	public String execute() {
 		log.debug("selected Alpha = " + selectedAlpha);
 		rowEnd = rowStart + numberOfResultsToShow;
 		if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
@@ -110,7 +110,6 @@ public class RepositoryPersonNameBrowse extends Pager {
 		{
 			personNames = personNameService.getPersonNamesByLastNameChar(rowStart, numberOfResultsToShow, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
 			totalHits = personNameService.getCount(selectedAlpha.charAt(0)).intValue();
-			return SUCCESS;
 		}
 		
 		if(rowEnd > totalHits)
