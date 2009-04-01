@@ -24,7 +24,6 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
-import edu.ur.ir.repository.Repository;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -56,7 +55,7 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 	/** Service for dealing with institutional collections */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
-	/** List of researchers */
+	/** List of institutional items found in the browse */
 	private List<InstitutionalItem> institutionalItems;
 	
 	/** type of sort [ ascending | descending ] 
@@ -122,7 +121,7 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		{
 			institutionalItems = institutionalItemService.getCollectionItemsBetweenChar(rowStart, numberOfResultsToShow, 
 					institutionalCollection, '0', '9', sortType);
-			totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, '0', '9').intValue();
+			totalHits = institutionalItemService.getCount(institutionalCollection, '0', '9').intValue();
 		}
 		else
 		{
