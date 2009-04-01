@@ -259,7 +259,6 @@ public interface MimeTypeService extends BasicMimeTypeService {
 	/**
 	 * Get a count of top media types with the specified criteria.
 	 * 
-	 * @param criteriaHelpers
 	 * @return set of found media types.
 	 */
 	public Long getTopMediaTypesCount();
