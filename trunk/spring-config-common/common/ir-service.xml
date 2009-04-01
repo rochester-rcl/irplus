@@ -478,7 +478,7 @@
    <!-- Person Name service                             -->
    <!-- ****************************************** --> 
    <bean id="personNameService" 
-       class="edu.ur.ir.handle.service.DefaultPersonNameService">
+       class="edu.ur.ir.person.service.DefaultPersonNameService">
 	   <property name="personNameDAO" ref="personNameDAO"/>
    </bean>
    
