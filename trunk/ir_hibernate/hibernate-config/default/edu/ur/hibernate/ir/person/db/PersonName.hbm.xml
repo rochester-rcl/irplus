@@ -180,6 +180,22 @@
 	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
 	</query>
 	
+	<!-- ********************************************************* -->
+	<!-- count of all institutional items in the system for a collection -->
+	<!-- ********************************************************* -->
+	<query name="personCollectionNameCount">
+	    select count(distinct personName.id ) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor 
+	    join contributor.personName as personName	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	</query>
+	
     <!-- ********************************************************* -->
 	<!-- count of all institutional items in the system for a collection by letter-->
 	<!-- ********************************************************* -->

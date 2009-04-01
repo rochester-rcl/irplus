@@ -58,6 +58,17 @@ public interface PersonNameService {
 	 */
 	public Long getCount(char lastNameFirstCharRange, char lastNamelastCharRange);
 	
+	
+	/**
+	 * Get a count of all person names in the specified collection.  
+	 * THIS INCLUDES person names in child collections 
+	 * 
+	 * @param institutional collection - parent collection
+	 * @param lastNameFirstChar - first character in the last name of the person name
+	 * @return count of  person names found
+	 */
+	public Long getCount(InstitutionalCollection collection);
+	
 	/**
 	 * Get a count of all person names in the specified collection with
 	 * specified first character in the last name.  THIS INCLUDES person names in child collections 

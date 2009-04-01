@@ -214,7 +214,19 @@ CrudDAO<PersonName>, NameListDAO
 	 * Get a count of person names in the institutional collection with a name
 	 * that starts with the specified first character.
 	 * 
-	 * NOTE: This search includes all items in child collections
+	 * NOTE: This search includes all person names in child collections
+	 * 
+	 * @param collection - institutional collection to return the count for
+	 * 
+	 * @return the count found
+	 */
+	public Long getCount(InstitutionalCollection collection);
+	
+	/**
+	 * Get a count of person names in the institutional collection with a name
+	 * that starts with the specified first character.
+	 * 
+	 * NOTE: This search includes all person names in child collections
 	 * 
 	 * @param lastNameFirstChar - first character of the name
 	 * 
