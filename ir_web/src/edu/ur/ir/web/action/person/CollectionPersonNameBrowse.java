@@ -71,7 +71,7 @@ public class CollectionPersonNameBrowse extends Pager {
 	private InstitutionalCollection institutionalCollection;
 	
 	/** Indicates this is a browse */
-	private String viewType = "browse";
+	private String viewType = "browsePersonName";
 	
 	private int rowEnd;
 	
@@ -98,7 +98,7 @@ public class CollectionPersonNameBrowse extends Pager {
 	 * 
 	 * @return
 	 */
-	public String browseCollectionItems() {
+	public String execute() {
 		
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
 		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
