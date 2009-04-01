@@ -91,7 +91,7 @@
 									</td>
 									<td class="bottomBorder" align="left">
 										<c:if test="${object.type == 'FILE'}">
-										     <c:url var="itemFileDownload" value="/genericItemFileDownload.action">
+										     <c:url var="itemFileDownload" value="/fileDownloadForInstitutionalItem.action">
 										         <c:param value="${item.id}" name="itemId"/>
 										         <c:param value="${object.id}" name="itemFileId"/>
 										     </c:url>
