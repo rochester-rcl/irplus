@@ -1,3 +1,19 @@
+/**  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
 package edu.ur.order;
 
 /**
@@ -28,6 +44,28 @@ public class OrderType {
 	private OrderType(String type)
 	{
 	    this.type = type;	
+	}
+	
+	/**
+	 * Will compare the string values and return the order type
+	 * valid values are asc, ascending for ascending order type 
+	 * and desc, descending for descending order type.
+	 * 
+	 * @param type
+	 * @return the correct order type or a newly created order type or null if
+	 * the order type is not found.
+	 */
+	public static OrderType getOrderType(String type)
+	{
+		if( type.equalsIgnoreCase("asc") || type.equalsIgnoreCase("ascending"))
+		{
+			return ASCENDING_ORDER;
+		}
+		if( type.equalsIgnoreCase("desc") || type.equalsIgnoreCase("descending"))
+		{
+			return DESCENDING_ORDER;
+		}
+		return null;
 	}
 	
 	public String getType() {
