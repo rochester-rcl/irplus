@@ -19,7 +19,6 @@ package edu.ur.ir.institution;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.ir.institution.VersionedInstitutionalItem;
 
 /**
  * Data access interface for dealing with versioned institutional item data
