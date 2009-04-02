@@ -116,7 +116,6 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 		{
 			institutionalItems = institutionalItemService.getRepositoryItemsByChar(rowStart, numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0), sortType);
 			totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0)).intValue();
-			return SUCCESS;
 		}
 		
 		if(rowEnd > totalHits)
