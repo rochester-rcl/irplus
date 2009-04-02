@@ -52,7 +52,7 @@
 				                          (nameAuthority.id == irUser.personNameAuthority.id)}">
 				                 <td class="tdItemFolderLeftBorder"> &nbsp;&nbsp;&nbsp;Added </td>
 				                 <td class="tdItemFolderRightBorder">
-				                     <ir:authorName personName="${name}" displayDates="true"/> [Authoritative Name]
+				                     <ir:authorName personName="${nameAuthority.authoritativeName}" displayDates="true"/> [Authoritative Name]
 		                             
 		                             <c:forEach var="name" items="${nameAuthority.names}">
 				                         <c:if test="${name.id != nameAuthority.authoritativeName.id}">

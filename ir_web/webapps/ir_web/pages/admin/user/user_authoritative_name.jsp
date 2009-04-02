@@ -15,6 +15,7 @@
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="ir" uri="ir-tags"%>
  <br> <br>
 	<!-- Table for files and folders  -->            
 	<table class="itemFolderTable" width="90%" align="center">
@@ -29,7 +30,7 @@
 				<tr>
 				<td class="tdItemContributorLeftBorder"> <a href="javascript:YAHOO.ur.email.removeName(${irUser.id});">Remove</a>
 				</td>
-				<td class="tdItemContributorRightBorder"> <ir:authorName personName="${name}" displayDates="true"/> 
+				<td class="tdItemContributorRightBorder"> <ir:authorName personName="${irUser.personNameAuthority.authoritativeName}" displayDates="true"/> 
 					[Authoritative name]
 				</td>
 				<c:forEach  var="name" items="${irUser.personNameAuthority.names}">
