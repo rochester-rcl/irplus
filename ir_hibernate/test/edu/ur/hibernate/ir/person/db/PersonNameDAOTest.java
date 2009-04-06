@@ -448,6 +448,8 @@ public class PersonNameDAOTest {
 		
 		// test tree based selects
 		ts = tm.getTransaction(td);
+		
+		
 		Long count = personNameDAO.getCount(col1, 'S');
 		assert count == 1l : "count should be 1 but is " + count;
 		List<PersonName> names = personNameDAO.getCollectionPersonNamesByChar(0, 20, col1, 's', OrderType.ASCENDING_ORDER);
@@ -478,10 +480,14 @@ public class PersonNameDAOTest {
        
         
         count = personNameDAO.getCount(col2, 'a', 'z');
-		assert count == 3l : "count should be 1 but is " + count;
+		assert count == 3l : "count should be 3 but is " + count;
         names = personNameDAO.getCollectionPersonNamesBetweenChar(0, 20, col2, 'a', 'z', OrderType.ASCENDING_ORDER);
 		assert names.size() == 3 : "Should contain 3 names but contains " + names.size();
       
+		
+		count = personNameDAO.getCount(col2);
+		assert count == 3l : " Count should be 3 but is " + count;
+		
 		tm.commit(ts);
 		
 		
