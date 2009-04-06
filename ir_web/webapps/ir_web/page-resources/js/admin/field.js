@@ -15,15 +15,15 @@
 */
 
 /**
- * This code is for dealing with adding and removing folders 
- * in the workspace.
+ * This code is for dealing with adding and removing fields
+ * in administration
  */
 YAHOO.namespace("ur.field");
 
-// action to perform when submitting the personal fields.
+// action to perform when submitting the fields.
 var myFieldAction = basePath + 'admin/getFields.action';
 
-// actions for adding and removing folders
+// actions for adding, editing and removing fields
 var updateFieldAction = basePath + 'admin/updateField.action';
 var newFieldAction = basePath + 'admin/createField.action';
 var deleteFieldAction = basePath + 'admin/deleteField.action';
