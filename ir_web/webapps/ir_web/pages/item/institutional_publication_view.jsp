@@ -74,7 +74,7 @@
 				<!-- Begin - Display the Item preview -->
 				
 				<h3>${institutionalItemVersion.item.name}</h3>
-				
+				<h3 class="errorMessage">URL to cite or link to: <a href="${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}">${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}</a></h3>
 				<c:if test="${showPublication}">
 									
 					<c:if test="${institutionalItemVersion.withdrawn}">
@@ -91,8 +91,7 @@
 					
 					<table class="noBorderTable" width="100%">
 						<tr>
-							<td width="100" class="noBorderTabletd">
-							</td>
+							
 							<td align="right">
 								
 								<c:if test="${!institutionalItemVersion.withdrawn  
@@ -139,13 +138,12 @@
 						<c:if test="${!institutionalItemVersion.withdrawn || institutionalItemVersion.withdrawnToken.showMetadata  
 								              || ir:userHasRole('ROLE_ADMIN', '') || institutionalItem.owner == user}">
 						<tr>
-							<td width="100" class="noBorderTabletd">
-							</td>
+							
 							<td align="right">
 	
 								<table class="greyBorderBlueBgTable">
 									<tr>
-									<td width="60%" valign="top" class="greyBorderTableTd">
+									<td width="50%" valign="top" class="greyBorderTableTd">
 										<table class="noPaddingTable" width="100%" align="left">
 										    <tr>
 											    <td><label for="description" class="previewLabel"> Other Titles </label> </td>
