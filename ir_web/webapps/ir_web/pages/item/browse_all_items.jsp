@@ -455,7 +455,7 @@
 		             <!--  end tab 2 -->
 		             
 		             <!--  start 3rd tab -->
-		                <div id="tab3">
+		             <div id="tab3">
 		                  
 				         <c:if test='${viewType == "browsePersonName"}'>
 				         
