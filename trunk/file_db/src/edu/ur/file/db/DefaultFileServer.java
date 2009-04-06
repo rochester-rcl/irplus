@@ -35,14 +35,10 @@ import edu.ur.persistent.CommonPersistent;
  */
 public class DefaultFileServer extends CommonPersistent implements FileServer{
 
-	/**
-	 * Generated serial version id
-	 */
+	/**  Generated serial version id */
 	private static final long serialVersionUID = -307751939970925673L;
 
-	/**
-	 * The set of file databases in the system
-	 */
+	/**  The set of file databases in the system */
 	private Set<DefaultFileDatabase> fileDatabases = new HashSet<DefaultFileDatabase>();
 	
 	/**

@@ -25,6 +25,7 @@
     <!ENTITY repository SYSTEM "admin_repository.xml">
     <!ENTITY insitutional_collection SYSTEM "admin_collection.xml">
     <!ENTITY handle SYSTEM "admin_handle.xml">
+    <!ENTITY file_storage SYSTEM "admin_file_storage.xml">
     ]>
     
 <struts>
@@ -108,6 +109,11 @@
         <!--  Handle Actions                       -->
         <!--  ************************************ -->
         &handle;
+        
+        <!--  ************************************ -->
+        <!--  File Storage Actions                 -->
+        <!--  ************************************ -->
+        &file_storage;
         
         <!--  ************************************ -->
         <!--  Administration Home Page             -->

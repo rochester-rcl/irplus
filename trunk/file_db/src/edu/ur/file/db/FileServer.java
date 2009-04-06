@@ -80,4 +80,19 @@ PersistentVersioned, Serializable, DescriptionAware, NameAware{
 	 * @param id
 	 */
 	public void setId(Long id);
+	
+	/**
+	 * Create a new file database  with the specified
+	 * name and unique folder name.  
+	 * 
+	 * @param displayName name displayed to the user
+	 * 
+	 * @param name of the file database used when creating the 
+	 *        dabase in the file system.
+	 *        
+	 * @param path of the file database
+	 * 
+	 * @return the created file database
+	 */	
+	public DefaultFileDatabase createFileDatabase(String displayName, String name, String path, String description);
 }

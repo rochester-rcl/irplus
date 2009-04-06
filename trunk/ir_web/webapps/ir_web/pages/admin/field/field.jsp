@@ -75,9 +75,7 @@
 
         <br/>
         <br/>
-	    <ur:div id="newFields"></ur:div>
-	      
-
+	    <div id="newFields"></div>
 	        
       </div>
       <!--  end body div -->
