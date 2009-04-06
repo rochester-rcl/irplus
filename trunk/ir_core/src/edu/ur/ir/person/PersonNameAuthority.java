@@ -106,8 +106,8 @@ public class PersonNameAuthority extends BasePersistent{
 	 * @param year
 	 * @return birth date
 	 */
-	public BirthDate addBirthDate(int month, int day, int year) {
-		BirthDate birthDate = new BirthDate(month, day, year);
+	public BirthDate addBirthDate(int year) {
+		BirthDate birthDate = new BirthDate(year);
 		birthDate.setPersonNameAuthority(this);
 		this.birthDate = birthDate;
 		
@@ -122,8 +122,8 @@ public class PersonNameAuthority extends BasePersistent{
 	 * @param year
 	 * @return death date
 	 */
-	public DeathDate addDeathDate(int month, int day, int year) {
-		DeathDate deathDate = new DeathDate(month, day, year);
+	public DeathDate addDeathDate(int year) {
+		DeathDate deathDate = new DeathDate(year);
 		deathDate.setPersonNameAuthority(this);
 		this.deathDate = deathDate;
 		

@@ -71,8 +71,8 @@ public class PersonNameAuthorityDAOTest {
 		name.setSurname("surname");
 		
 		PersonNameAuthority p = new PersonNameAuthority(name);
-		p.addBirthDate(1,1,2005);
-		p.addDeathDate(1, 1, 2105);
+		p.addBirthDate(2005);
+		p.addDeathDate(2105);
 	
 		TransactionStatus ts = tm.getTransaction(td);
 
@@ -107,8 +107,8 @@ public class PersonNameAuthorityDAOTest {
 		name.setSurname("surname");
 		
 		PersonNameAuthority p = new PersonNameAuthority(name);
-		p.addBirthDate(1,1,2005);
-		p.addDeathDate(1, 1, 2105);
+		p.addBirthDate(2005);
+		p.addDeathDate(2105);
 		
 		p.addName(name, true);
 

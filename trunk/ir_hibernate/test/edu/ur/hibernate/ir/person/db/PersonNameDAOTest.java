@@ -132,8 +132,8 @@ public class PersonNameDAOTest {
 		name.addPersonNameTitle("Chef");
 		
 		PersonNameAuthority p = new PersonNameAuthority(name);
-		p.addBirthDate(1,1,2005);
-		p.addDeathDate(1, 1, 2105);
+		p.addBirthDate(2005);
+		p.addDeathDate(2105);
 
         TransactionStatus ts = tm.getTransaction(td);
 		personNameAuthorityDAO.makePersistent(p);
@@ -178,8 +178,8 @@ public class PersonNameDAOTest {
 		name.setSurname("surname1");
 		
 		PersonNameAuthority p = new PersonNameAuthority(name);
-		p.addBirthDate(1,1,2005);
-		p.addDeathDate(1, 1, 2105);
+		p.addBirthDate(2005);
+		p.addDeathDate(2105);
 
         // Start the transaction this is for lazy loading
         TransactionStatus ts = tm.getTransaction(td);
@@ -192,8 +192,8 @@ public class PersonNameDAOTest {
 		name2.setSurname("sur2name");
 		
 		PersonNameAuthority p2 = new PersonNameAuthority(name2);
-		p2.addBirthDate(1,1,2005);
-		p2.addDeathDate(1, 1, 2105);
+		p2.addBirthDate(2005);
+		p2.addDeathDate(2105);
 		
 		personNameAuthorityDAO.makePersistent(p2);
 		p2.addName(name2, true);
@@ -236,8 +236,8 @@ public class PersonNameDAOTest {
 		name.setSurname("surname1");
 		
 		PersonNameAuthority p = new PersonNameAuthority(name);
-		p.addBirthDate(1,1,2005);
-		p.addDeathDate(1, 1, 2105);
+		p.addBirthDate(2005);
+		p.addDeathDate(2105);
 
         // Start the transaction this is for lazy loading
         TransactionStatus ts = tm.getTransaction(td);
@@ -250,8 +250,8 @@ public class PersonNameDAOTest {
 		name2.setSurname("bur2name");
 		
 		PersonNameAuthority p2 = new PersonNameAuthority(name2);
-		p2.addBirthDate(1,1,2005);
-		p2.addDeathDate(1, 1, 2105);
+		p2.addBirthDate(2005);
+		p2.addDeathDate(2105);
 		
 		personNameAuthorityDAO.makePersistent(p2);
 		p2.addName(name2, true);
@@ -262,8 +262,8 @@ public class PersonNameDAOTest {
 		name3.setSurname("bar2name");
 		
 		PersonNameAuthority p3 = new PersonNameAuthority(name3);
-		p3.addBirthDate(1,1,2005);
-		p3.addDeathDate(1, 1, 2105);
+		p3.addBirthDate(2005);
+		p3.addDeathDate(2105);
 		
 		personNameAuthorityDAO.makePersistent(p3);
 		p3.addName(name3, true);
@@ -368,8 +368,8 @@ public class PersonNameDAOTest {
 		name.setSurname("surname1");
 		
 		PersonNameAuthority p = new PersonNameAuthority(name);
-		p.addBirthDate(1,1,2005);
-		p.addDeathDate(1, 1, 2105);
+		p.addBirthDate(2005);
+		p.addDeathDate(2105);
 		personNameAuthorityDAO.makePersistent(p);
 		
 		
@@ -378,8 +378,8 @@ public class PersonNameDAOTest {
 		name2.setSurname("bur2name");
 		
 		PersonNameAuthority p2 = new PersonNameAuthority(name2);
-		p2.addBirthDate(1,1,2005);
-		p2.addDeathDate(1, 1, 2105);
+		p2.addBirthDate(2005);
+		p2.addDeathDate(2105);
 		
 		personNameAuthorityDAO.makePersistent(p2);
 		p2.addName(name2, true);
@@ -390,8 +390,8 @@ public class PersonNameDAOTest {
 		name3.setSurname("bar2name");
 		
 		PersonNameAuthority p3 = new PersonNameAuthority(name3);
-		p3.addBirthDate(1,1,2005);
-		p3.addDeathDate(1, 1, 2105);
+		p3.addBirthDate(2005);
+		p3.addDeathDate(2105);
 		
 		personNameAuthorityDAO.makePersistent(p3);
 		p3.addName(name3, true);

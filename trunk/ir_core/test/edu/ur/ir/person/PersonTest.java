@@ -44,8 +44,8 @@ public class PersonTest {
 		name1.setSurname("surname");
 		
 		PersonNameAuthority p = new PersonNameAuthority();
-		BirthDate bDate = p.addBirthDate(1,1,2005);
-		DeathDate pDate = p.addDeathDate(1, 1, 2105);
+		BirthDate bDate = p.addBirthDate(2005);
+		DeathDate pDate = p.addDeathDate(2105);
 		p.setId(55l);
 		p.setVersion(11);
 		
@@ -161,8 +161,8 @@ public class PersonTest {
 		name1.setSurname("surname");
 
 		PersonNameAuthority p = new PersonNameAuthority();
-		p.addBirthDate(1,1,2005);
-		p.addDeathDate(1,1,2105);
+		p.addBirthDate(2005);
+		p.addDeathDate(2105);
 		p.setVersion(11);
 		
 		p.addName(name1, true);
@@ -177,8 +177,8 @@ public class PersonTest {
 
 		PersonNameAuthority p2 = new PersonNameAuthority();
 		
-		p2.addBirthDate(1,2,2005);
-		p2.addDeathDate(1,2,2105);
+		p2.addBirthDate(2005);
+		p2.addDeathDate(2105);
 		p2.setId(77l);
 		p2.setVersion(12);
 		
@@ -194,8 +194,8 @@ public class PersonTest {
 		
 		PersonNameAuthority p3 = new PersonNameAuthority();
 		
-		p3.addBirthDate(1, 1, 2005);
-		p3.addDeathDate(1, 1, 2105);
+		p3.addBirthDate(2005);
+		p3.addDeathDate(2105);
 		p3.setVersion(44);
 		
 		p3.addName(name3, true);
