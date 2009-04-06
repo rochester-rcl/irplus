@@ -79,8 +79,6 @@
 				</div>
 				<table class="noBorderTable" width="100%">
 					<tr>
-						<td width="100" class="noBorderTabletd">
-						</td>
 						<td align="right">
 							
 							<table class="greyBorderTable">
@@ -115,13 +113,11 @@
 					</tr>
 					
 					<tr>
-						<td width="100" class="noBorderTabletd">
-						</td>
 						<td align="right">
 
 							<table class="greyBorderBlueBgTable">
 								<tr>
-								<td width="60%" valign="top" class="greyBorderTableTd">
+								<td width="50%" valign="top" class="greyBorderTableTd">
 									<table class="noPaddingTable" width="100%" align="left">
 										<tr>
 										<td>	<label for="description" class="previewLabel"> Description </label> </td>
