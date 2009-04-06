@@ -57,7 +57,7 @@ public class RepositoryPersonNameBrowse extends Pager {
 	
 	/** name of the element to sort on 
 	 *   this is for incoming requests */
-	private String sortElement = "name";
+	private String sortElement = "lastName";
 
 	/** Total number of institutional items*/
 	private int totalHits;

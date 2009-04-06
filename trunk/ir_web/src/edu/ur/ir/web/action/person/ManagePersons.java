@@ -96,20 +96,8 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	/** Set of person type ids */
 	private long[] personIds;
 	
-	/** Day person was born  */
-	private int birthDay;
-
-	/** Month person was born  */
-	private int birthMonth;
-
 	/** Year person was born  */
 	private int birthYear;
-
-	/** Day person died  */
-	private int deathDay;
-
-	/** Month person died  */
-	private int deathMonth;
 
 	/** Year person died  */
 	private int deathYear;
@@ -178,8 +166,8 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		}
 
 		personNameAuthority = new PersonNameAuthority(personName);
-		personNameAuthority.addBirthDate(birthMonth, birthDay, birthYear);
-		personNameAuthority.addDeathDate(deathMonth, deathDay, deathYear);
+		personNameAuthority.addBirthDate(birthYear);
+		personNameAuthority.addDeathDate(deathYear);
 		personService.save(personNameAuthority);
 		
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
@@ -221,13 +209,9 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		log.debug("updateing person = " + personNameAuthority);
 		
 		BirthDate bd = personNameAuthority.getBirthDate();
-		bd.setDay(birthDay);
-		bd.setMonth(birthMonth);
 		bd.setYear(birthYear);
 		
 		DeathDate dd = personNameAuthority.getDeathDate();
-		dd.setDay(deathDay);
-		dd.setMonth(deathMonth);
 		dd.setYear(deathYear);
 
 		IrUser user = userService.getUserByPersonNameAuthority(id);
@@ -619,44 +603,12 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		this.personNameId = personNameId;
 	}
 
-	public int getBirthDay() {
-		return birthDay;
-	}
-
-	public void setBirthDay(int birthDay) {
-		this.birthDay = birthDay;
-	}
-
-	public int getBirthMonth() {
-		return birthMonth;
-	}
-
-	public void setBirthMonth(int birthMonth) {
-		this.birthMonth = birthMonth;
-	}
-
 	public int getBirthYear() {
 		return birthYear;
 	}
 
 	public void setBirthYear(int birthYear) {
 		this.birthYear = birthYear;
-	}
-
-	public int getDeathDay() {
-		return deathDay;
-	}
-
-	public void setDeathDay(int deathDay) {
-		this.deathDay = deathDay;
-	}
-
-	public int getDeathMonth() {
-		return deathMonth;
-	}
-
-	public void setDeathMonth(int deathMonth) {
-		this.deathMonth = deathMonth;
 	}
 
 	public int getDeathYear() {

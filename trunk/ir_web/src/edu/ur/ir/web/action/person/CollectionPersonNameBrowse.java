@@ -27,6 +27,12 @@ import edu.ur.ir.person.PersonNameService;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 
+/**
+ * Helps with browsing person names in a given collection.
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public class CollectionPersonNameBrowse extends Pager {
 
 	/** Eclipse generated id */
@@ -59,7 +65,7 @@ public class CollectionPersonNameBrowse extends Pager {
 	
 	/** name of the element to sort on 
 	 *   this is for incoming requests */
-	private String sortElement = "name";
+	private String sortElement = "lastName";
 
 	/** Total number of institutional items*/
 	private int totalHits;
