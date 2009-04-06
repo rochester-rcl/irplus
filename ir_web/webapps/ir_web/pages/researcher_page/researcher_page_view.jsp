@@ -90,7 +90,7 @@
 				 <input type="hidden" id="researcher_id" value="${researcher.id}"/>
 				  <c:if test="${researcher != null && (!researcher.public)}">
 				      	<br/>
-	                	<h3 class="errorMessage">The researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName} is hidden.</h3>
+	                	<h3 class="errorMessage">The researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName} is private.</h3>
 	                    <br/>
 	                    <br/>
                   </c:if>
@@ -138,38 +138,43 @@
 	                            </div>
 	                            <div> 
 					               <p>
-					                All work in: <a href""> IR Plus </a>
+					                <c:if test="${researcher.user.personNameAuthority != null}">
+					                    <c:url var="contributorUrl" value="/viewContributorPage.action">
+									        <c:param name="personNameId" value="${researcher.user.personNameAuthority.authoritativeName.id}"/>
+									    </c:url>
+					                    All work in: <a href="${contributorUrl}"> IR Plus </a>
+					                </c:if>
 								   </p>
 									
 								   <p> <strong> Researcher Information </strong>  <br/><br/>
 								      <c:if test="${!ir:isStringEmpty(researcher.campusLocation)}">
-		                              <strong>Title:</strong>${researcher.title} <br/>
+		                              <strong>Title:</strong><br/><br/>${researcher.title} <br/><br/>
 		                              </c:if>
 		                              <c:if test="${!ur:isEmpty(researcher.departments)}">
-		                                  <strong>Department(s):</strong><br/>
+		                                  <strong>Department(s):</strong><br/><br/>
 		                                  <c:forEach items="${researcher.departments}" var="department">
 		                                      ${department.name}<br/>
 		                                  </c:forEach>
 		                                  <br/>
 		                              </c:if>
 		                              <c:if test="${!ur:isEmpty(researcher.fields)}">
-		                                  <strong>Field(s):</strong><br/>
+		                                  <strong>Field(s):</strong><br/><br/>
 		                                  <c:forEach items="${researcher.fields}" var="field">
-		                                      ${field.name}<br/>
+		                                      ${field.name}
 		                                  </c:forEach>
-		                                  <br/>
+		                                  <br/><br/>
 		                              </c:if>
 		                              <c:if test="${!ir:isStringEmpty(researcher.campusLocation)}">
-		                              <strong>Location:</strong> ${researcher.campusLocation} <br/>
+		                              <strong>Location:</strong> <br/><br/>${researcher.campusLocation} <br/><br/>
 		                              </c:if>
 		                              <c:if test="${!ir:isStringEmpty(researcher.phoneNumber)}">
-		                              <strong>Phone:</strong> ${researcher.phoneNumber} <br/>
+		                              <strong>Phone:</strong><br/><br/> ${researcher.phoneNumber} <br/><br/>
 		                              </c:if>
 		                              <c:if test="${!ir:isStringEmpty(researcher.email)}">
-		                              <strong>Email:</strong> ${researcher.email} <br/>
+		                              <strong>Email:</strong><br/><br/> ${researcher.email} <br/><br/>
 		                              </c:if>
 		                              <c:if test="${!ir:isStringEmpty(researcher.fax)}">
-		                           	  <strong>Fax:</strong> ${researcher.fax} 
+		                           	  <strong>Fax:</strong> <br/><br/>${researcher.fax} <br/><br/>
 		                           	  </c:if>
 		                           </p>
 		                           

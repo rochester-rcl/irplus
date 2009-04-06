@@ -39,28 +39,10 @@
 		<!-- A versioned entity. -->
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
-			
-		<property name="day" column="day" type="int"
-			access="field" />
-			
-		<property name="month" column="month" type="int"
-			access="field" />
 
 		<property name="year" column="year" type="int"
 			access="field" />
 
-		<property name="hours" column="hours" type="int"
-			access="field" />
-
-		<property name="minutes" column="minutes" type="int"
-			access="field" />
-
-		<property name="seconds" column="seconds" type="int"
-			access="field" />
-
-		<property name="fractionOfSecond" column="fraction_seconds" type="int"
-			access="field" />
-			
 		<!--  Person -->
 		<many-to-one class="PersonNameAuthority"
 		    optimistic-lock="false"

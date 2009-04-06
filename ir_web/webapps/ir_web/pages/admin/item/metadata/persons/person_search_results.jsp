@@ -39,8 +39,8 @@
 	                <urstb:td>Family Name</urstb:td>
  	                <urstb:td>Initials</urstb:td>
  	                <urstb:td>Numeration</urstb:td>
-	                <urstb:td>Birth Date</urstb:td>
-	                <urstb:td>Death Date</urstb:td>
+	                <urstb:td>Birth Year</urstb:td>
+	                <urstb:td>Death Year</urstb:td>
 	                <urstb:td>Edit</urstb:td>
 	                </urstb:tr>
 	            </urstb:thead>
@@ -80,13 +80,13 @@
 	                             ${personNameAuthority.authoritativeName.numeration}
 	                        </urstb:td>
 	                        <urstb:td>
-								<c:if test="${personNameAuthority.birthDate.month != 0 || personNameAuthority.birthDate.day != 0 || personNameAuthority.birthDate.year != 0}">
-	                  				 ${personNameAuthority.birthDate.month}/${personNameAuthority.birthDate.day}/${personNameAuthority.birthDate.year}
+								<c:if test="${personNameAuthority.birthDate.year != 0}">
+	                  				 ${personNameAuthority.birthDate.year}
 	                			</c:if>
 	                        </urstb:td>	                        
 	                        <urstb:td>
-				                <c:if test="${personNameAuthority.deathDate.month != 0 || personNameAuthority.deathDate.day != 0 || personNameAuthority.deathDate.year != 0}">
-				                   ${personNameAuthority.deathDate.month}/ ${personNameAuthority.deathDate.day}/ ${personNameAuthority.deathDate.year}
+				                <c:if test="${personNameAuthority.deathDate.year != 0}">
+				                    ${personNameAuthority.deathDate.year}
 				                </c:if>
 	                        </urstb:td>
 	                        <urstb:td>
@@ -98,11 +98,7 @@
 			                   												  '${personNameAuthority.authoritativeName.familyName}',
 			                   												  '${personNameAuthority.authoritativeName.initials}',
 			                   												  '${personNameAuthority.authoritativeName.numeration}',
-			                   												  ${personNameAuthority.birthDate.month},
-			                   												  ${personNameAuthority.birthDate.day},
 			                   												  ${personNameAuthority.birthDate.year},
-			                   												  ${personNameAuthority.deathDate.month},
-			                   												  ${personNameAuthority.deathDate.day},
 			                   												  ${personNameAuthority.deathDate.year});"> Edit </a>
 	                    	</urstb:td>
 	                    </urstb:tr>

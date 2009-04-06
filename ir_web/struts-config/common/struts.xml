@@ -337,7 +337,12 @@
          <action name="viewContributorPage" 
                 class="edu.ur.ir.web.action.item.ViewContributorPage">
          	<result name="success">/pages/item/contributor_page_view.jsp</result>
-         </action>        
+         </action> 
+         
+          <action name="viewByPersonNameContributorPage" 
+                class="edu.ur.ir.web.action.item.ViewByPersonContributorPage">
+         	<result name="success">/pages/item/contributor_page_view.jsp</result>
+         </action>       
                  
     </package>
          

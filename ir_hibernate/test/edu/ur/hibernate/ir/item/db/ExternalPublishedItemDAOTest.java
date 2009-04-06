@@ -56,7 +56,6 @@ public class ExternalPublishedItemDAOTest {
 	/**
 	 * Test external published item data persistance
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void baseExternalPublishedItemDAOTest() throws Exception{
 

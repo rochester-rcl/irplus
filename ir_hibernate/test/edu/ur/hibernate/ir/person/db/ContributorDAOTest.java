@@ -95,8 +95,8 @@ public class ContributorDAOTest {
 		name.setSurname("surname");
 		
 		PersonNameAuthority p = new PersonNameAuthority(name);
-		p.addBirthDate(1,1,2005);
-		p.addDeathDate(1, 1, 2105);
+		p.addBirthDate(2005);
+		p.addDeathDate(2105);
 		
 		personNameAuthorityDAO.makePersistent(p);
 		

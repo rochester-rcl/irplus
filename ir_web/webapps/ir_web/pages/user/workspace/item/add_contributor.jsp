@@ -262,22 +262,14 @@
 				          			 value="" size="45"/> </td>
 							</tr>
 							<tr>       
-					            <td align="left" class="label">Birth Date:</td>
+					            <td align="left" class="label">Birth Year:</td>
 					            <td align="left" class="label">
-					            Month:<input  type="text" id="person_birthdate_month" name="birthMonth" size="2" maxlength ="2"/>
-				          
-				          		Day:<input  type="text" id="person_birthdate_day" name="birthDay" size="2" maxlength ="2"/>
-				          
 				          		Year:<input  type="text" id="person_birthdate_year" name="birthYear" size="4" maxlength ="4"/> </td>
 							</tr>
 							<tr>       
-					            <td align="left" class="label">Death Date:</td>
+					            <td align="left" class="label">Death Year:</td>
 							    <td align="left" class="label">
 
-					            Month:<input type="text" id="person_deathdate_month" name="deathMonth" size="2" maxlength ="2"/>
-				          
-				          		Day:<input type="text" id="person_deathdate_day" name="deathDay" size="2" maxlength ="2"/>
-				          
 				          		Year:<input type="text" id="person_deathdate_year" name="deathYear" size="4" maxlength ="4"/>
 				          		</td>
 							</tr>

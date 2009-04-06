@@ -400,8 +400,8 @@ public class InstitutionalItemVersionDAOTest {
 		name1.setSurname("surname1");
 
 		PersonNameAuthority p = new PersonNameAuthority(name);
-		p.addBirthDate(1,1,2005);
-		p.addDeathDate(1, 1, 2105);
+		p.addBirthDate(2005);
+		p.addDeathDate(2105);
 		
 		p.addName(name, true);
 		p.addName(name1, false);

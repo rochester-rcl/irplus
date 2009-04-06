@@ -16,15 +16,19 @@
 
 package edu.ur.ir.person;
 
-import edu.ur.ir.BasicDate;
+import edu.ur.persistent.BasePersistent;
+
 
 /**
- * Represents the birth date 
+ * Represents the birth year - year is only stored
+ * as this is the majority of the information for a given
+ * author.  Storing a full date could also pose a security risk.
  * 
  * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
-public class BirthDate extends BasicDate{
+public class BirthDate extends BasePersistent{
 
 	/** Eclipse generated id */
 	private static final long serialVersionUID = 841348115525533292L;
@@ -32,38 +36,74 @@ public class BirthDate extends BasicDate{
 	/** Person */
 	private PersonNameAuthority personNameAuthority;
 	
-	/**
-	 * Default constructor
-	 */
-	public BirthDate() {
-		super();
-	}
+	/** year this person was born */
+	private int year;
 	
+	/**
+	 *  Package protected constructor
+	 */
+	BirthDate(){}
+
 	/**
 	 * Constructor to create birth Date
 	 * 
-	 * @param month month of year
-	 * @param day day of the month
 	 * @param year year
 	 */
-	public BirthDate(int month, int day, int year){
-		super(month, day, year);
+	public BirthDate( int year){
+		setYear(year);
+	}
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode()
+	{
+		int value = 0;
+		value += year;
+		return value;
+	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer("[ id = ");
+		sb.append(id);
+		sb.append(" death year  = ");
+		sb.append(year);
+		sb.append("]");
+		
+		return sb.toString();
 	}
 
 	/**
-	 * Constructor to create date with time
-	 * 
-	 * @param month month of year
-	 * @param day day of the month
-	 * @param year year
-	 * @param hrs hour in the day
-	 * @param mins minute in the hour
-	 * @param secs seconds
-	 * @param fSec Fraction of second
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public BirthDate(int month, int day, int year, int hrs, int mins, int secs, int fSec){
-		super(month, day, year, hrs, mins, secs, fSec);
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof BirthDate)) return false;
+
+		final BirthDate other = (BirthDate) o;
 		
+		if( other == null )
+		{
+			return false;
+		}
+		else
+		{
+		    return year == other.getYear();
+		}
+	}
+
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
 	}
 
 	/**

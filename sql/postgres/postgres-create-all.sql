@@ -359,13 +359,7 @@ CREATE SCHEMA person AUTHORIZATION ir_plus;
 CREATE TABLE person.birth_date (
   birth_date_id bigint NOT NULL,
   version integer,
-  day integer,
-  month integer,
   year integer,
-  hours integer,
-  minutes integer,
-  seconds integer,
-  fraction_seconds integer,
   person_name_authority_id BIGINT,
   PRIMARY KEY (birth_date_id)
   
@@ -384,13 +378,7 @@ ALTER TABLE person.birth_date_seq OWNER TO ir_plus;
 CREATE TABLE person.death_date (
   death_date_id bigint NOT NULL,
   version integer,
-  day integer,
-  month integer,
   year integer,
-  hours integer,
-  minutes integer,
-  seconds integer,
-  fraction_seconds integer,
   person_name_authority_id BIGINT,
   PRIMARY KEY (death_date_id)
   

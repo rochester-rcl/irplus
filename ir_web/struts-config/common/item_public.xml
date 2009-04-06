@@ -34,6 +34,10 @@
             <result name="input">/pages/item/no_access_file_download_error.jsp</result>
         </action>
 
+
+       <!--  ***************************************************** -->
+       <!--  Public Browse Item actions    (Repository / Collection) -->
+       <!--  ****************************************************** -->
         <action name="startSearchRepositoryItems" 
              class="edu.ur.ir.web.action.institution.RepositoryInstitutionalItemSearch">
              <result name="success">/pages/item/browse_all_items.jsp</result>
@@ -83,3 +87,18 @@
             <result name="success">/pages/item/browse_collection_items.jsp</result>
         </action>
         
+       <!--  ***************************************************** -->
+       <!--  Public Person Name actions    (Repository / Collection) -->
+       <!--  ****************************************************** -->
+ 
+        <action name="browsePersonNames" 
+            class="edu.ur.ir.web.action.person.RepositoryPersonNameBrowse">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/item/browse_all_items.jsp</result>
+        </action>
+  
+        <action name="browseCollectionPersonNames" 
+            class="edu.ur.ir.web.action.person.CollectionPersonNameBrowse">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/item/browse_collection_items.jsp</result>
+        </action>

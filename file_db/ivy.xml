@@ -43,7 +43,7 @@
         <!-- test ng files for testing -->
 	    <dependency org="org.testng" name="testng" rev="5.8" transitive="false">
 	        <artifact name="testng" type="jar"
- 	        url="http://mirrors.ibiblio.org/pub/mirrors/maven2/org/testng/testng/5.8/testng-5.8-jdk15.jar"/> 
+ 	        url="http://repo1.maven.org/maven2/org/testng/testng/5.8/testng-5.8-jdk15.jar"/> 
         </dependency>
 
          <!-- log 4j files -->

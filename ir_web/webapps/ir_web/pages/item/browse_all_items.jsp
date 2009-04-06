@@ -102,19 +102,19 @@
 		        <div id="all-items-tabs" class="yui-navset">
 		            <ul class="yui-nav">
 		               <c:if test='${viewType == "browse"}'>
-		                    <li class="selected"><a href="${browseRepositoryItems}"><em>Browse Items</em></a></li>
+		                    <li class="selected"><a href="${browseRepositoryItems}"><em>Browse Publications</em></a></li>
 		                    <li><a href="${searchRepositoryItems}"><em>Search</em></a></li>
-		                    <li><a href="${browsePersonNames}"><em>Browse Contributors</em></a></li>
+		                    <li><a href="${browsePersonNames}"><em>Browse Authors/Contributors</em></a></li>
 		               </c:if>
 		               <c:if test='${viewType == "search"}'>
-		                    <li><a href="${browseRepositoryItems}"><em>Browse Items</em></a></li>
+		                    <li><a href="${browseRepositoryItems}"><em>Browse Publications</em></a></li>
 		                    <li class="selected"><a href="${searchRepositoryItems}"><em>Search</em></a></li>
-		                    <li><a href="${browsePersonNames}"><em>Browse Contributors</em></a></li>
+		                    <li><a href="${browsePersonNames}"><em>Browse Authors/Contributors</em></a></li>
 		               </c:if>
 		                <c:if test='${viewType == "browsePersonName"}'>
-		                    <li><a href="${browseRepositoryItems}"><em>Browse Items</em></a></li>
+		                    <li><a href="${browseRepositoryItems}"><em>Browse Publications</em></a></li>
 		                    <li><a href="${searchRepositoryItems}"><em>Search</em></a></li>
-		                    <li class="selected"><a href="${searchPersonNames}"><em>Browse Contributors</em></a></li>
+		                    <li class="selected"><a href="${searchPersonNames}"><em>Browse Authors/Contributors</em></a></li>
 		               </c:if>
 		            </ul>
 		
@@ -214,7 +214,7 @@
 						                        <urstb:td>
 						                             <c:forEach var="itemContributor" items="${institutionalItem.versionedInstitutionalItem.currentVersion.item.contributors}">
 									                    <c:url var="contributorUrl" value="/viewContributorPage.action">
-														    <c:param name="contributorId" value="${itemContributor.contributor.id}"/>
+														    <c:param name="personNameId" value="${itemContributor.contributor.personName.id}"/>
 														</c:url>						                             
 						                                 <a href="${contributorUrl}"><ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/><br/> 
 						                             </c:forEach>
@@ -432,7 +432,7 @@
 						                        <urstb:td>
 						                             <c:forEach var="itemContributor" items="${institutionalItem.versionedInstitutionalItem.currentVersion.item.contributors}">
 									                    <c:url var="contributorUrl" value="/viewContributorPage.action">
-														    <c:param name="contributorId" value="${itemContributor.contributor.id}"/>
+														    <c:param name="personNameId" value="${itemContributor.contributor.personName.id}"/>
 														</c:url>						                             
 						                                 <a href="${contributorUrl}"> <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/></a> - ${itemContributor.contributor.contributorType.name} <br/> 
 						                             </c:forEach>
@@ -474,8 +474,45 @@
 					            <urstb:thead>
 					                <urstb:tr>
 					                    <urstb:td>Id</urstb:td>
-					                    <urstb:td>Last Name</urstb:td>
-					                    <urstb:td>First Name</urstb:td>
+					                    
+					                    <!--  set up the url's for sorting by last name -->
+					                     <c:url var="sortLastNameAscendingUrl" value="/browsePersonNames.action">
+										     <c:param name="rowStart" value="${rowStart}"/>
+											 <c:param name="startPageNumber" value="${startPageNumber}"/>
+											 <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											 <c:param name="sortElement" value="lastName"/>		
+											 <c:param name="sortType" value="asc"/>
+											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+										</c:url>
+					                     
+					                    <c:url var="sortLastNameDescendingUrl" value="/browsePersonNames.action">
+										    <c:param name="rowStart" value="${rowStart}"/>
+											<c:param name="startPageNumber" value="${startPageNumber}"/>
+											<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											<c:param name="sortElement" value="lastName"/>		
+											<c:param name="sortType" value="desc"/>
+											<c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+										</c:url>
+					                    
+					                    <c:set var="lastNameSort" value="none"/>
+					                    <c:if test='${sortElement == "lastName"}'>
+					                        <c:set var="lastNameSort" value="${sortType}"/>
+					                    </c:if>
+					                    <urstb:tdHeadSort  height="33"
+					                        useHref="true"
+					                        hrefVar="href"
+                                            currentSortAction="${lastNameSort}"
+                                            ascendingSortAction="${sortLastNameAscendingUrl}"
+                                            descendingSortAction="${sortLastNameDescendingUrl}">
+                                            <a href="${href}">Last Name</a>                                              
+                                            <urstb:thImgSort
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+					                     <urstb:td>First Name</urstb:td>
+					                     <urstb:td>Middle Name</urstb:td>
+					                     <urstb:td>Initials</urstb:td>
+					                     <urstb:td>Birth Year</urstb:td>
+					                     <urstb:td>Death Year</urstb:td>
 						                </urstb:tr>
 						            </urstb:thead>
 						            <urstb:tbody
@@ -492,10 +529,29 @@
 							                        ${personName.id}
 						                        </urstb:td>
 						                        <urstb:td>
-						                             ${personName.surname}
+						                            <c:url var="contributorUrl" value="/viewContributorPage.action">
+														    <c:param name="personNameId" value="${personName.id}"/>
+												    </c:url>	
+						                             <a href="${contributorUrl}">${personName.surname}</a>
 						                        </urstb:td>
 						                        <urstb:td>
 						                             ${personName.forename}
+						                        </urstb:td>
+						                        <urstb:td>
+						                             ${personName.middleName}
+						                        </urstb:td>
+						                        <urstb:td>
+						                             ${personName.initials}
+						                        </urstb:td>
+						                        <urstb:td>
+						                             <c:if test="${personName.personNameAuthority.birthDate.year != 0}">
+						                             ${personName.personNameAuthority.birthDate.year }
+						                             </c:if>
+						                        </urstb:td>
+						                        <urstb:td>
+						                             <c:if test="${personName.personNameAuthority.deathDate.year != 0}">
+						                             ${personName.personNameAuthority.deathDate.year }
+						                             </c:if>
 						                        </urstb:td>
 						                    </urstb:tr>
 						            </urstb:tbody>
