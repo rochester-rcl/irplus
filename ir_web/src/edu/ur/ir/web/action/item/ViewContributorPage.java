@@ -30,8 +30,9 @@ import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.person.Contributor;
-import edu.ur.ir.person.ContributorService;
 import edu.ur.ir.person.PersonName;
+import edu.ur.ir.person.PersonNameAuthority;
+import edu.ur.ir.person.PersonService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.user.IrUser;
@@ -49,11 +50,11 @@ public class ViewContributorPage extends ActionSupport  {
 	private static final long serialVersionUID = -3059332380151731902L;
 
 	/** Id of contributor */
-	private Long contributorId;
+	private Long personNameId;
 	
-	/** Service class for contributor */
-	private ContributorService contributorService;
-	
+	/** Service for dealing with person information */
+	private PersonService personService;
+
 	/** Service class for institutional Item */
 	private InstitutionalItemService institutionalItemService;
 	
@@ -90,8 +91,8 @@ public class ViewContributorPage extends ActionSupport  {
 	/** Contribution type for Maximum downloaded item */
 	private String mostDownloadedItemContributorType ;
 	
-	/** Contributor */
-	private Contributor contributor;
+	/**  Name for a person that was selected for viewing*/
+	private PersonName personName;
 	
 	/**
 	 * View the contributor page.
@@ -100,10 +101,11 @@ public class ViewContributorPage extends ActionSupport  {
 	 */
 	public String execute()
 	{
-		contributor = contributorService.getContributor(contributorId, false);
-		Set<PersonName> names = contributor.getPersonName().getPersonNameAuthority().getNames();
+		personName = personService.getName(personNameId, false);
+		PersonNameAuthority authority = personName.getPersonNameAuthority();
+		Set<PersonName> names = authority.getNames();
 
-		IrUser user = userService.getUserByPersonNameAuthority(contributor.getPersonName().getPersonNameAuthority().getId());
+		IrUser user = userService.getUserByPersonNameAuthority(authority.getId());
 		
 		if (user != null && user.getResearcher() != null && user.getResearcher().isPublic()) {
 			researcher = user.getResearcher();
@@ -118,7 +120,7 @@ public class ViewContributorPage extends ActionSupport  {
 			// Find the contributor type
 			ContributorPublication cp = new ContributorPublication(itemVersion);
 			for(ItemContributor c :itemVersion.getItem().getContributors()) {
-				if (c.getContributor().getPersonName().getPersonNameAuthority().equals(contributor.getPersonName().getPersonNameAuthority())) {
+				if (c.getContributor().getPersonName().getPersonNameAuthority().equals(authority)) {
 					cp.setContributor(c.getContributor());
 					break;
 				}
@@ -161,7 +163,7 @@ public class ViewContributorPage extends ActionSupport  {
 			    while(contribIterator.hasNext() && !done)
 			    {
 			    	 ItemContributor c = contribIterator.next();
-			    	 if (c.getContributor().getPersonName().getPersonNameAuthority().equals(contributor.getPersonName().getPersonNameAuthority())) {
+			    	 if (c.getContributor().getPersonName().getPersonNameAuthority().equals(authority)) {
 			    		    mostDownloadedItemVersion = version;
 						    mostDownloadedItemContributorType = c.getContributor().getContributorType().getName();
 						    done = true;
@@ -225,9 +227,25 @@ public class ViewContributorPage extends ActionSupport  {
 	}
 	
 	
-	public void setContributorService(ContributorService contributorService) {
-		this.contributorService = contributorService;
+	public Long getPersonNameId() {
+		return personNameId;
 	}
+
+
+	public void setPersonNameId(Long personNameId) {
+		this.personNameId = personNameId;
+	}
+
+
+	public PersonService getPersonService() {
+		return personService;
+	}
+
+
+	public void setPersonService(PersonService personService) {
+		this.personService = personService;
+	}
+
 
 
 	public void setInstitutionalItemService(
@@ -236,9 +254,6 @@ public class ViewContributorPage extends ActionSupport  {
 	}
 
 
-	public void setContributorId(Long contributorId) {
-		this.contributorId = contributorId;
-	}
 
 
 	public void setUserService(UserService userService) {
@@ -296,8 +311,8 @@ public class ViewContributorPage extends ActionSupport  {
 	}
 
 
-	public Contributor getContributor() {
-		return contributor;
+	public PersonName getPersonName() {
+		return personName;
 	}
 
 
