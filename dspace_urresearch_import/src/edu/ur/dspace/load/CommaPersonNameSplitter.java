@@ -85,12 +85,12 @@ public class CommaPersonNameSplitter implements AuthorNameSplitter {
 		if (size >= 3) {
 			int birthYear = getBirthYear(fullNameParts[2]);
 			if (birthYear > 0) {
-				nameAuthority.addBirthDate(0, 0, birthYear);
+				nameAuthority.addBirthDate(birthYear);
 			}
 
 			int deathYear = getDeathYear(fullNameParts[2]);
 			if (deathYear > 0) {
-				nameAuthority.addDeathDate(0, 0, deathYear);
+				nameAuthority.addDeathDate(deathYear);
 			}
 		}
 
@@ -124,12 +124,12 @@ public class CommaPersonNameSplitter implements AuthorNameSplitter {
 		
 		int birthYear = getBirthYear(fullNameParts[3]);
 		if (birthYear > 0) {
-			nameAuthority.addBirthDate(0, 0, birthYear);
+			nameAuthority.addBirthDate(birthYear);
 		}
 
 		int deathYear = getDeathYear(fullNameParts[3]);
 		if (deathYear > 0) {
-			nameAuthority.addDeathDate(0, 0, deathYear);
+			nameAuthority.addDeathDate(deathYear);
 		}
 
 		return nameAuthority;
