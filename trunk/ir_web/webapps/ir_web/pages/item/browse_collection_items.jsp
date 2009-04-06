@@ -52,6 +52,10 @@
              <c:param name="collectionId" value="${institutionalCollection.id}"/>
          </c:url>
          
+         <c:url var="browseCollectionPersonNames" value="/browseCollectionPersonNames.action">
+             <c:param name="collectionId" value="${institutionalCollection.id}"/>
+         </c:url>
+         
          <c:url var="searchCollectionItems" value="/startSearchCollectionItems.action">
              <c:param name="collectionId" value="${institutionalCollection.id}"/>
          </c:url>
@@ -59,6 +63,10 @@
     
           function handleBrowseClick(e) {  
                window.location='${browseCollectionItems}';
+          }
+
+          function handleBrowseNamesClick(e) { 
+              window.location='${browseCollectionPersonNames}';
           }
           
           function handleSearchClick(e)
@@ -74,6 +82,9 @@
 	            
 	            var tab1 = myTabs.getTab(1);
 	            tab1.addListener('click', handleSearchClick);
+
+	            var tab2 = myTabs.getTab(2);
+	            tab2.addListener('click', handleBrowseNamesClick);
           }
           
           // initialize the code once the dom is ready
@@ -111,12 +122,19 @@
 		        <div id="all-items-tabs" class="yui-navset">
 		            <ul class="yui-nav">
 		               <c:if test='${viewType == "browse"}'>
-		                    <li class="selected"><a href="${browseCollectionItems}"><em>Browse</em></a></li>
+		                    <li class="selected"><a href="${browseCollectionItems}"><em>Browse Publications</em></a></li>
 		                    <li><a href="${searchCollectionItems}"><em>Search</em></a></li>
+		                    <li><a href="${browseCollectionPersonNames}"><em>Browse Authors/Contributors</em></a></li>
 		               </c:if>
 		               <c:if test='${viewType == "search"}'>
-		                    <li><a href="${browseCollectionItems}"><em>Browse</em></a></li>
+		                    <li><a href="${browseCollectionItems}"><em>Browse Publications</em></a></li>
 		                    <li class="selected"><a href="${searchCollectionItems}"><em>Search</em></a></li>
+		                    <li><a href="${browseCollectionPersonNames}"><em>Browse Authors/Contributors</em></a></li>
+		               </c:if>
+		               <c:if test='${viewType == "browsePersonName"}'>
+		                    <li><a href="${browseRepositoryItems}"><em>Browse Publications</em></a></li>
+		                    <li><a href="${searchRepositoryItems}"><em>Search</em></a></li>
+		                    <li class="selected"><a href="${browseCollectionPersonNames}"><em>Browse Authors/Contributors</em></a></li>
 		               </c:if>
 		            </ul>
 		
@@ -130,10 +148,10 @@
 				         <div class="center">
 				              <c:import url="browse_collection_items_alpha_list.jsp"/>
 				         </div>
-				         
-				         <br/>
-				         <br/>
-				         
+				
+				         <c:if test="${totalHits > 0}">
+				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
+				         </c:if>  
 				         <c:import url="browse_collection_items_pager.jsp"/>
 						
 						
@@ -448,6 +466,123 @@
 						</c:if>
 					 </div>
 		             <!--  end tab 2 -->
+		             		             <!--  start 3rd tab -->
+		             <div id="tab3">
+		                  
+				         <c:if test='${viewType == "browsePersonName"}'>
+				         
+				         <div class="center">
+				              <c:import url="browse_collection_person_names_alpha_list.jsp"/>
+				         </div>
+				    	 <c:if test="${totalHits > 0}">
+				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
+				         </c:if>  
+				         <c:import url="browse_collection_person_names_pager.jsp"/>
+						
+						
+						<div class="dataTable">
+							             
+					        <urstb:table width="100%">
+					            <urstb:thead>
+					                <urstb:tr>
+					                    <urstb:td>Id</urstb:td>
+					                    
+					                    <!--  set up the url's for sorting by last name -->
+					                     <c:url var="sortLastNameAscendingUrl" value="/browseCollectionPersonNames.action">
+										     <c:param name="rowStart" value="${rowStart}"/>
+											 <c:param name="startPageNumber" value="${startPageNumber}"/>
+											 <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											 <c:param name="sortElement" value="lastName"/>		
+											 <c:param name="sortType" value="asc"/>
+											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+										</c:url>
+					                     
+					                    <c:url var="sortLastNameDescendingUrl" value="/browseCollectionPersonNames.action">
+										    <c:param name="rowStart" value="${rowStart}"/>
+											<c:param name="startPageNumber" value="${startPageNumber}"/>
+											<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											<c:param name="sortElement" value="lastName"/>		
+											<c:param name="sortType" value="desc"/>
+											<c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+										</c:url>
+					                    
+					                    <c:set var="lastNameSort" value="none"/>
+					                    <c:if test='${sortElement == "lastName"}'>
+					                        <c:set var="lastNameSort" value="${sortType}"/>
+					                    </c:if>
+					                    <urstb:tdHeadSort  height="33"
+					                        useHref="true"
+					                        hrefVar="href"
+                                            currentSortAction="${lastNameSort}"
+                                            ascendingSortAction="${sortLastNameAscendingUrl}"
+                                            descendingSortAction="${sortLastNameDescendingUrl}">
+                                            <a href="${href}">Last Name</a>                                              
+                                            <urstb:thImgSort
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+					                     <urstb:td>First Name</urstb:td>
+					                     <urstb:td>Middle Name</urstb:td>
+					                     <urstb:td>Initials</urstb:td>
+					                     <urstb:td>Birth Year</urstb:td>
+					                     <urstb:td>Death Year</urstb:td>
+						                </urstb:tr>
+						            </urstb:thead>
+						            <urstb:tbody
+						                var="personName" 
+						                oddRowClass="odd"
+						                evenRowClass="even"
+						                currentRowClassVar="rowClass"
+						                collection="${personNames}">
+						                    <urstb:tr 
+						                        cssClass="${rowClass}"
+						                        onMouseOver="this.className='highlight'"
+						                        onMouseOut="this.className='${rowClass}'">
+						                        <urstb:td>
+							                        ${personName.id}
+						                        </urstb:td>
+						                        <urstb:td>
+						                            <c:url var="contributorUrl" value="/viewContributorPage.action">
+														    <c:param name="personNameId" value="${personName.id}"/>
+												    </c:url>	
+						                             <a href="${contributorUrl}">${personName.surname}</a>
+						                        </urstb:td>
+						                        <urstb:td>
+						                             ${personName.forename}
+						                        </urstb:td>
+						                        <urstb:td>
+						                             ${personName.middleName}
+						                        </urstb:td>
+						                        <urstb:td>
+						                             ${personName.initials}
+						                        </urstb:td>
+						                        <urstb:td>
+						                             <c:if test="${personName.personNameAuthority.birthDate.year != 0}">
+						                             ${personName.personNameAuthority.birthDate.year }
+						                             </c:if>
+						                        </urstb:td>
+						                        <urstb:td>
+						                             <c:if test="${personName.personNameAuthority.deathDate.year != 0}">
+						                             ${personName.personNameAuthority.deathDate.year }
+						                             </c:if>
+						                        </urstb:td>
+						                    </urstb:tr>
+						            </urstb:tbody>
+						        </urstb:table>
+						    </div>	
+                         
+					        <c:import url="browse_collection_person_names_pager.jsp"/>
+					        
+					         <br/>
+				             <br/>
+				             
+					        <div class="center">
+				                 <c:import url="browse_collection_person_names_alpha_list.jsp"/>
+				            </div>
+				         
+				        
+					        </c:if>
+			        </div>
+		            <!--  end tab  3-->
 		             
 		          </div>
 		          <!--  end content -->
