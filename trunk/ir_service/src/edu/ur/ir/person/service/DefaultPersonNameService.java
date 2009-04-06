@@ -141,10 +141,9 @@ public class DefaultPersonNameService implements PersonNameService{
 		this.personNameDAO = personNameDAO;
 	}
 
-	@Override
+	
 	public Long getCount(InstitutionalCollection collection) {
-		// TODO Auto-generated method stub
-		return null;
+		return personNameDAO.getCount(collection);
 	}
 
 
