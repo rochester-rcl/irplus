@@ -30,5 +30,8 @@
             <interceptor-ref name="crudStack" />
             <result name="view">/pages/admin/file_storage/file_server.jsp</result>
             <result name="getAll">/pages/admin/file_storage/file_servers_table.jsp</result>
+            <result name="added">/pages/admin/file_storage/server_form.jsp</result>
+            <result name="get">/pages/admin/file_storage/server_form.jsp</result>
+            <result name="deleted">/pages/admin/file_storage/file_server_deleted.jsp</result>
         </action>
         

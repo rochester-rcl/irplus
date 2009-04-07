@@ -12,6 +12,7 @@
 	                <urstb:td>Id</urstb:td>
                     <urstb:td>Name</urstb:td>
                     <urstb:td>Description</urstb:td>
+                    <urstb:td>Edit</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>
 	            <urstb:tbody
@@ -34,7 +35,10 @@
 			                   <a href="${viewFileServer}">${fileServer.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="">${fileServer.description}</a>
+			                   ${fileServer.description}
+	                        </urstb:td>
+	                        <urstb:td>
+			                   <a href="javascript:YAHOO.ur.file.server.edit(${fileServer.id})">Edit</a>/<a href="javascript:YAHOO.ur.file.server.delete(${fileServer.id})">Delete</a>
 	                        </urstb:td>
 	                    </urstb:tr>
 	        </urstb:tbody>

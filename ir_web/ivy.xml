@@ -155,9 +155,9 @@
         </dependency>
         
         <!--  yui download -->
-	    <dependency org="yui" name="yui" rev="2.6.0" transitive="false">
+	    <dependency org="yui" name="yui" rev="2.7.0" transitive="false">
 	        <artifact name="yui" type="zip"
- 	        url="http://easynews.dl.sourceforge.net/sourceforge/yui/yui_2.6.0.zip"/> 
+ 	        url="http://yuilibrary.com/downloads/yui2/yui_2.7.0b.zip"/> 
         </dependency>
 
         

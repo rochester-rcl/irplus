@@ -63,6 +63,9 @@ YAHOO.ur.file.server =
             callback, null);
     }, 
     
+    /**
+     *  clear out the file server form data
+     */
     clearFileServerForm : function()
     {
         var errorDiv = document.getElementById('error_div');
@@ -71,26 +74,19 @@ YAHOO.ur.file.server =
 	    document.getElementById('newFileServerFormName').value = "";
 	    document.getElementById('newFileServerFormDescription').value = "";
 	    document.getElementById('newFileServerFormId').value = "";
-	    document.addFileServerForm.newFileServer.value = "true";
+	    document.addFileServerForm.newFileServerVal.value = "true";
     }, 
     
+ 
     /**
-     * Set all department id's form
+     * Create a file server dialog box for editing a file server
      */
-    setCheckboxes : function()
-    {
-        checked = document.myFileServers.checkAllSetting.checked;
-        var fileServerIds = document.getElementsByName('fileServerIds');
-        urUtil.setCheckboxes(FileServerIds, checked);
-    },
-    
-    
     createNewFileServerDialog : function()
     {
         // Define various event handlers for Dialog
 	    var handleSubmit = function() 
 	    {
-            this.submit();
+	    	this.submit();
 	    };
 	
 	    // handle a cancel of the adding FileServer dialog
@@ -108,7 +104,7 @@ YAHOO.ur.file.server =
 	        {
                 //get the response from adding a FileServer
 	            var response = o.responseText;
-	            var fileServerForm = document.getElementById('addFileServerForm');
+	            var fileServerForm = document.getElementById('newFileServerDialogFields');
 	    
 	            // update the form FileServers with the response.  This updates
 	            // the form, if there was an issue, update the form with
@@ -126,11 +122,12 @@ YAHOO.ur.file.server =
 	            }
 	            else
 	            {
+	            	YAHOO.ur.file.server.getFileServers();
 	                // we can clear the form if the FileServer was added
 	                YAHOO.ur.file.server.newFileServerDialog.hide();
 	                YAHOO.ur.file.server.clearFileServerForm();
 	            }
-	            myFileServerTable.submitForm(myFileServerAction);
+	           
 	        }
 	    };
 	
@@ -162,14 +159,15 @@ YAHOO.ur.file.server =
         // override the submit function
         YAHOO.ur.file.server.newFileServerDialog.submit = function()
         {
-        	YAHOO.util.Connect.setForm('newFileServerForm');
+        	YAHOO.util.Connect.setForm('addFileServerForm');
 	        if( YAHOO.ur.file.server.newFileServerDialog.validate() )
 	        {
 	            //based on what we need to do (update or create a 
 	            // new FileServer) based on the action.
                var action = newFileServerAction;
-	           if( document.newFileServerForm.newFileServer.value != 'true')
+	           if( document.addFileServerForm.newFileServerVal.value != 'true')
 	           {
+	        	   
 	               action = updateFileServerAction;
 	           }
 
@@ -182,10 +180,10 @@ YAHOO.ur.file.server =
  	    // Validate the entries in the form to require that both first and last name are entered
 	    YAHOO.ur.file.server.newFileServerDialog.validate = function()
         {
-	        var name = document.getElementById('newFileServerForm_name').value;
+	        var name = document.getElementById('newFileServerFormName').value;
 		    if (name == "" || name == null) 
 		    {
-		        alert('A FileServer name must be entered');
+		        alert('A File Server name must be entered');
 			    return false;
 		    } 
 		    else 
@@ -203,16 +201,16 @@ YAHOO.ur.file.server =
 	    YAHOO.ur.file.server.newFileServerDialog.render();
 
         // listener for showing the dialog when clicked.
-	    YAHOO.util.Event.addListener("showFileServer", "click", 
+	    YAHOO.util.Event.addListener("showNewFileServer", "click", 
 	        YAHOO.ur.file.server.newFileServerDialog.showDialog, 
 	        YAHOO.ur.file.server.newFileServerDialog, true);
 	},
     
  
     /**
-     * function to edit FileServer information
+     * function to edit File Server information
      */
-    editFileServer : function(id)
+    edit : function(id)
     {	    
 	    /*
          * This call back updates the html when a editing a FileServer
@@ -225,9 +223,9 @@ YAHOO.ur.file.server =
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
 	            {     
-                    var divToUpdate = document.getElementById('newFileServerDialogFileServers');
+                    var divToUpdate = document.getElementById('newFileServerDialogFields');
                     divToUpdate.innerHTML = o.responseText; 
-                   	document.newFileServerForm.newFileServer.value = "false";
+                    document.addFileServerForm.newFileServerVal.value = "false";
 	                YAHOO.ur.file.server.newFileServerDialog.showDialog();
                 }
             },
@@ -239,7 +237,7 @@ YAHOO.ur.file.server =
         };
         
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getFileServerAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+            getFileServerAction + '?fileServerId=' + id +  '&bustcache='+new Date().getTime(), 
             callback, null);
      },
     
@@ -248,7 +246,7 @@ YAHOO.ur.file.server =
      */
     clearDeleteFileServerForm : function()
     {
-        var FileServerError = document.getElementById('deleteFileServer');
+        var FileServerError = document.getElementById('newDeleteFileServerError');
         FileServerError.innerHTML = "";
     },
     
@@ -260,13 +258,8 @@ YAHOO.ur.file.server =
     	// Define various event handlers for Dialog
 	    var handleSubmit = function() 
 	    {
-	        YAHOO.util.Connect.setForm('myFileServers');
-	    
-	        //delete the FileServer
-            var cObj = YAHOO.util.Connect.asyncRequest('post',
-            deleteFileServerAction, callback);
+	    	this.submit();
 	    };
-	
 		
 	    // handle a cancel of deleting FileServer dialog
 	    var handleCancel = function() {
@@ -281,31 +274,31 @@ YAHOO.ur.file.server =
 	        {
 	            //get the response from adding a FileServer
 	            var response = eval("("+o.responseText+")");
-	    
 	            //if the FileServer was not deleted then show the user the error message.
 	            // received from the server
-	            if( response.FileServerDeleted == "false" )
+	            if( response.fileServerDeleted == "false" )
 	            {
-	                var deleteFileServerError = document.getElementById('form_deleteFileServerError');
+	                var deleteFileServerError = document.getElementById('deleteFileServerError');
                     deleteFileServerError.innerHTML = '<p id="newDeleteFileServerError">' 
                     + response.message + '</p>';
                     YAHOO.ur.file.server.deleteFileServerDialog.showDialog();
 	            }
 	            else
 	            {
+	            	document.getElementById('deleteFileServerId').value = "";
+	            	YAHOO.ur.file.server.getFileServers();
 	                // we can clear the form if the FileServers were deleted
 	                YAHOO.ur.file.server.deleteFileServerDialog.hide();
 	                YAHOO.ur.file.server.clearDeleteFileServerForm();
 	            }
-	            // reload the table
-	            myFileServerTable.submitForm(myFileServerAction);
+	           
 	        }
 	    };
 	
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('FileServer submission failed ' + o.status);
+	        alert('File Server delete submission failed ' + o.status);
 	    };
 
 	    // Instantiate the Dialog
@@ -330,20 +323,31 @@ YAHOO.ur.file.server =
 	    {
 	        YAHOO.ur.file.server.deleteFileServerDialog.show();
 	        YAHOO.ur.file.server.deleteFileServerDialog.center();
-	    }
+	    };
+	    
+        // override the submit function
+	    YAHOO.ur.file.server.deleteFileServerDialog.submit = function()
+        {
+        	YAHOO.util.Connect.setForm('deleteFileServer');
+        	var cObj = YAHOO.util.Connect.asyncRequest('post',
+            		deleteFileServerAction, callback);
+          
+        };
 			
 	    // Render the Dialog
 	    YAHOO.ur.file.server.deleteFileServerDialog.render();
-
-        // listener for showing the dialog when clicked.
-	    YAHOO.util.Event.addListener("showDeleteFileServer", "click", 
-	        YAHOO.ur.file.server.deleteFileServerDialog.showDialog, 
-	        YAHOO.ur.file.server.deleteFileServerDialog, true);
     }, 
+    
+   delete : function(id)
+   {
+    	document.getElementById('deleteFileServerId').value = id;
+    	YAHOO.ur.file.server.deleteFileServerDialog.showDialog();
+   }, 
+   
     
     init : function()
     {
-        YAHOO.ur.file.server.getFileServers(0,1,1,'asc');
+        YAHOO.ur.file.server.getFileServers();
         YAHOO.ur.file.server.createNewFileServerDialog();
         YAHOO.ur.file.server.createDeleteFileServerDialog();
     }
