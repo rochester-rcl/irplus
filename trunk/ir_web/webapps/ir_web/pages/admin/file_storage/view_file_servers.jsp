@@ -82,11 +82,6 @@
                 <button id="showNewFileServer" class="ur_button" 
  		        onmouseover="this.className='ur_buttonover';"
  		        onmouseout="this.className='ur_button';">New File Server</button> 
-
-	            <button id="showDeleteFileServer" class="ur_button" 
- 		        onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';">Delete File Server</button>
-                
                 <br/>
                 <br/>
                 <div id="fileServers"></div>
@@ -100,8 +95,8 @@
         <!-- end doc -->
   
        <div id="newFileServerDialog"  class="hidden">
-           <div cssClass="hd">File Server Information</div>
-           <div cssClass="bd">
+           <div class="hd">File Server Information</div>
+           <div class="bd">
                <form name="addFileServerForm" id="addFileServerForm" method="post" action="admin/createField.action">
 	              <div id="newFileServerDialogFields">
 	                  <c:import url="server_form.jsp"/>
@@ -110,12 +105,13 @@
           </div>
       </div>
 	         
-      <div id="deleteFieldDialog" class="hidden">
-          <div cssClass="hd">Delete fields</div>
-		  <div cssClass="bd">
-		    <form id="deleteField" method="post"  action="admin/deleteField.action">
+      <div id="deleteFileServerDialog" class="hidden">
+          <div class="hd">Delete File Server</div>
+		  <div class="bd">
+		    <form id="deleteFileServer" method="post"  action="admin/deleteFileServer.action">
+		       <input type="hidden" id="deleteFileServerId" name="fileServerId" value=""/>
 		       <ur:div id="deleteFieldError" cssClass="errorMessage"></ur:div>
-			   <p>Are you sure you wish to delete the selected field(s)?</p>
+			   <p>Are you sure you wish to delete the selected file server?</p>
 		    </form>
 		</div>
       </div>

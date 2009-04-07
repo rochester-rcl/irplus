@@ -21,15 +21,12 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 
 		<!--  represents a successful submission -->
-		<input type="hidden" id="newFileServerFormSuccess" 
-		       value="${added}"/>
+		<input type="hidden" id="newFileServerFormSuccess"   value="${added}"/>
 		       
 		<!--  if editing an id must be passed -->     
-	    <input type="hidden" id="newFileServerFormId"
-		        name="id" value="${field.id}"/>
+	    <input type="hidden" id="newFileServerFormId" name="fileServerId" value="${fileServer.id}"/>
 		               
-	    <input type="hidden" id="newFileServerFormNew"
-		        name="newFileServer" value="true"/>
+	    <input type="hidden" id="newFileServerFormNew" name="newFileServerVal" value="true"/>
 		        
 		<div id="error_div">            
 	        <!--  get the error messages from fieldErrors -->
@@ -44,14 +41,14 @@
 	            <td align="left" class="label">Name:*</td>
 	            <td align="left" class="input"><input type="text" 
 			    id="newFileServerFormName" 
-			    name="fileServer.name" 
+			    name="name" 
 			    size="45"
 			    value="${fileServer.name}"/> </td>
 			</tr>
 			<tr>
 			    <td align="left" class="label">Description:</td>
-			    <td align="left" colspan="2" class="input"> <textarea name="fileServer.description" 
-	                id="newFileServerDescription" cols="42" rows="4">${fileServer.description}</textarea>
+			    <td align="left" colspan="2" class="input"> <textarea name="description" 
+	                id="newFileServerFormDescription" cols="42" rows="4">${fileServer.description}</textarea>
 	            </td>
 			</tr>
 	    </table>
