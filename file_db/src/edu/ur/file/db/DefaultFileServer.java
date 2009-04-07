@@ -55,16 +55,6 @@ public class DefaultFileServer extends CommonPersistent implements FileServer{
 	
 	
 	/**
-	 * Set the description of the file server.
-	 * 
-	 * @see edu.ur.persistent.CommonPersistent#setDescription(java.lang.String)
-	 */
-	public void setDescription(String description)
-	{
-		this.description = description;
-	}
-	
-	/**
 	 * Get an un modifiable set of the set of 
 	 * file databases managed by this
 	 * server.

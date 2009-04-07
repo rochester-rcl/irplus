@@ -66,6 +66,13 @@ PersistentVersioned, Serializable, DescriptionAware, NameAware{
 	 * @return true if the file database is deleted.
 	 */
 	public boolean deleteDatabase(String name);
+	
+	/**
+	 * Set the name of the file server.
+	 * 
+	 * @param name - to give the file server.
+	 */
+	public void setName(String name);
 		
 	/**
 	 * Set the description of the file database
