@@ -24,9 +24,9 @@
 	<!-- uncomment this to automatically have the YUI libraries unzipped  
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
-     --> 
+     -->
  	<property name="yui.unzip" value="true"/>
-    
+     
 	
     <!-- Use the build.properties file for user specific settings -->
     <property file="build.properties"/>
@@ -256,7 +256,7 @@
 	<!-- unzip the YUI files  -->
 	<target name="prep-yui"  if="yui.unzip" description="--> unzips the yui libraries">
 		<mkdir dir="${basedir}/yui-unzip"/>
-		<unzip dest="${basedir}/yui-unzip" src="${lib.dir}/yui-2.6.0.zip"/>
+		<unzip dest="${basedir}/yui-unzip" src="${lib.dir}/yui-2.7.0.zip"/>
 	</target>
 	
 	<!-- copy the YUI files  -->
