@@ -25,31 +25,34 @@
 		<input type="hidden" id="newFileServerFormSuccess"   value="${added}"/>
 		       
 		<!--  if editing an id must be passed -->     
+	    <input type="hidden" id="newFileDatabaseFormId" name="fileDatabaseId" value="${fileDatabase.id}"/>
+		
+		<!--  if editing an id must be passed -->     
 	    <input type="hidden" id="newFileServerFormId" name="fileServerId" value="${fileServer.id}"/>
 		               
-	    <input type="hidden" id="newFileServerFormNew" name="newFileServerVal" value="true"/>
+	    <input type="hidden" id="newFileDatabaseFormNew" name="newFileDatabaseVal" value="true"/>
 		        
 		<div id="error_div">            
 	        <!--  get the error messages from fieldErrors -->
 		   <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-		    key="fileServer.name"/></p>
+		    key="fileDatabase.name"/></p>
 		    <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-		    key="fileServerAlreadyExists"/></p>  
+		    key="fileDatabaseAlreadyExists"/></p>  
 		</div>
 		
 	    <table class="formTable">    
 		    <tr>       
 	            <td align="left" class="label">Name:*</td>
 	            <td align="left" class="input"><input type="text" 
-			    id="newFileServerFormName" 
+			    id="newFileDatabaseFormName" 
 			    name="name" 
 			    size="45"
-			    value="<c:out value='${fileServer.name}'/>"/> </td>
+			    value="<c:out value='${fileDatabase.name}'/>"/> </td>
 			</tr>
 			<tr>
 			    <td align="left" class="label">Description:</td>
 			    <td align="left" colspan="2" class="input"> <textarea name="description" 
-	                id="newFileServerFormDescription" cols="42" rows="4"><c:out value='${fileServer.description}'/></textarea>
+	                id="newFileDatabaeFormDescription" cols="42" rows="4"><c:out value='${fileDatabase.description}'/></textarea>
 	            </td>
 			</tr>
 	    </table>
