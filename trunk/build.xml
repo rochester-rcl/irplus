@@ -102,7 +102,7 @@
     	<ant dir="dspace_urresearch_export" target="${target}" inheritAll="false"/>
     </target>
 	
-	<target name="do-urresearch-import" depends="do-urresearch-export-import"
+	<target name="do-urresearch-import" depends="do-urresearch-export-import, do-ir-service"
 		     description="-->runs the described target for import">
 	    	<ant dir="dspace_urresearch_import" target="${target}" inheritAll="false"/>
 	</target>
