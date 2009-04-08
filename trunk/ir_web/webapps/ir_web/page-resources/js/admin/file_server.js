@@ -246,8 +246,11 @@ YAHOO.ur.file.server =
      */
     clearDeleteFileServerForm : function()
     {
-        var FileServerError = document.getElementById('newDeleteFileServerError');
-        FileServerError.innerHTML = "";
+        var fileServerError = document.getElementById('newDeleteFileServerError');
+        if( fileServerError != null)
+        {
+            fileServerError.innerHTML = "";
+        }
     },
     
     /**
@@ -338,7 +341,7 @@ YAHOO.ur.file.server =
 	    YAHOO.ur.file.server.deleteFileServerDialog.render();
     }, 
     
-   delete : function(id)
+   deleteFileServer : function(id)
    {
     	document.getElementById('deleteFileServerId').value = id;
     	YAHOO.ur.file.server.deleteFileServerDialog.showDialog();
