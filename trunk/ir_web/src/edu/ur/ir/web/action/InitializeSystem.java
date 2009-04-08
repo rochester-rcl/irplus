@@ -113,7 +113,7 @@ public class InitializeSystem extends ActionSupport implements Preparable, Valid
 		log.debug("Initalizing system with name " + repositoryName + 
 				" fileLocation " + fileLocation);
 		
-		String fileServerName = repositoryName.trim().replace(' ', '_') + "file_server";
+		String fileServerName = repositoryName.trim().replace(' ', '_') + "_file_server";
 		
 		// create the file server
 		FileServer fileServer = fileServerService.createFileServer(fileServerName);
