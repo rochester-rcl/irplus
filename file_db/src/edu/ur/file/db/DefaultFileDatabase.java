@@ -190,6 +190,7 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 			}
 		}
 
+		// add the folder to this file database
 		folder.setFileDatabase(this);
 		
 		// set the folder as it's own root.
@@ -236,7 +237,7 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 	}
 	
 	/**
-	 * Write the string representation of teh 
+	 * Write the string representation of the 
 	 * file database.
 	 *  
 	 * @see java.lang.Object#toString()
@@ -280,7 +281,7 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 	 * must also include the prefix i.e. C:/ (for windows) or / (for unix).
 	 * 
 	 * 
-	 * This converts the paths to the correct path immediately / for unix and \
+	 * This converts the paths to the correct path immediately / for *NIX and \
 	 * for windows.
 	 * 
 	 * @param path
@@ -289,7 +290,7 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 
 		path = FilenameUtils.separatorsToSystem(path.trim());
 
-		// add the end seperator
+		// add the end separator
 		if (path.charAt(path.length() - 1) != IOUtils.DIR_SEPARATOR) {
 			path = path + IOUtils.DIR_SEPARATOR;
 		}
@@ -334,7 +335,7 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 	/**
 	 * Unmodifiable Set of root folders for this file database.
 	 * 
-	 * @return
+	 * @return the set of root folders
 	 */
 	public Set<TreeFolderInfo> getRootFolders() {
 		return Collections.unmodifiableSet(rootFolders);
@@ -406,7 +407,7 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 	/**
 	 * Get the name
 	 * 
-	 * @return name of the folder
+	 * @return name of the file database
 	 */
 	public String getName() {
 		return name;
@@ -462,9 +463,9 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 	 * @param currentFileFolder
 	 * @return true if the folder is changed.
 	 */
-	public boolean setCurrentFileStore(String uniqueFolderName) {
+	public boolean setCurrentFileStore(String folderName) {
 		
-		TreeFolderInfo folder = findFolder(uniqueFolderName);
+		TreeFolderInfo folder = findFolder(folderName);
 		boolean changed = false;
 		
 		if( folder != null)

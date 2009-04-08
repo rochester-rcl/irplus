@@ -21,6 +21,7 @@ import edu.ur.persistent.PersistentVersioned;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.io.File;
+import java.util.Set;
 
 
 /**
@@ -28,7 +29,7 @@ import java.io.File;
  * has no knowledge of how the file database stores files.  This interface
  * is only for basic file storage. 
  * 
- * It is expected that if a file database has versioning capabilites, this
+ * It is expected that if a file database has versioning capabilities, this
  * can still be handled with this interface using the uniqueFileName and FileInfo
  * object.
  * 
@@ -70,7 +71,7 @@ Serializable {
 	public boolean removeFile(String uniqueFileName);
 		
 	/**
-	 * Remove a file using it's uniqe id.
+	 * Remove a file using it's unique id.
 	 * 
 	 * @param id - id of the file
 	 * @return true if the fileinfo has been removed from the system.
@@ -146,6 +147,23 @@ Serializable {
 	 * @return - the found folder information or null if not found.
 	 */
 	public FolderInfo getFolder(String uniqueName);
+	
+	/**
+	 * Set the default folder to store all the files.
+	 * 
+	 * @param folderName
+	 * @return true if the file store is changed
+	 */
+	public boolean setCurrentFileStore(String folderName);
+	
+	/**
+	 * Get the set of root folders for the file database FolderInfo
+	 * objects.
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Set getRootFolders();
 	
 	
 	

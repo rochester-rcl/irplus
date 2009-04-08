@@ -1,110 +1,83 @@
-/**  
-   Copyright 2008 University of Rochester
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-*/  
-
 package edu.ur.ir.web.action.file.storage;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-
-import edu.ur.file.db.FileServerService;
+import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileServer;
+import edu.ur.file.db.FileServerService;
+import edu.ur.file.db.FolderInfo;
 
 /**
- * Class for managing file server information.
+ * Class for managing file database information.
  * 
  * @author Nathan Sarr
  *
  */
-public class ManageFileServers extends ActionSupport implements Preparable{
+public class ManageFileDatabase extends ActionSupport implements Preparable{
 
-	/** eclipse generated id */
-	private static final long serialVersionUID = -2322171837033103309L;
 	
+	/** Eclipse generated id  */
+	private static final long serialVersionUID = -1712815183938029916L;
+
 	/**  Logger for managing content types*/
-	private static final Logger log = Logger.getLogger(ManageFileServers.class);
+	private static final Logger log = Logger.getLogger(ManageFileDatabase.class);
 	
 	/** Service for dealing with file servers */
 	private FileServerService fileServerService;
 	
-	/** list of file servers */
-	private List<FileServer> fileServers;
-	
 	/** id of a specific file server */
 	private Long fileServerId;
 	
-	/** name of the file server */
+	/** name for the database  */
 	private String name;
+	
+	/** Path for the database */
+	private String path;
+	
+	/** id of the file database */
+	private Long fileDatabaseId;
 
 	/** description of the file server */
 	private String description;
 	
 	/** File Server for file access */
 	private FileServer fileServer;
+	
+	/** File database  */
+	private FileDatabase fileDatabase;
 
 	/** Message that can be displayed to the user. */
 	private String message;
 	
-	/**  Indicates the file server has been added*/
+	/**  Indicates the file database has been added*/
 	private boolean added = false;
 	
-	/**  Indicates the file server has been deleted*/
+	/**  Indicates the file database has been deleted*/
 	private boolean deleted = false;
 	
 
-
-
 	/**
-	 * Load the file servers.
+	 * View a specific file database.
 	 * 
-	 * @see com.opensymphony.xwork2.ActionSupport#execute()
+	 * @return view if the database exists
 	 */
-	public String execute()
+	public String view()
 	{
-		log.debug("execute called");
-		return SUCCESS;
+		return "view";
 	}
 	
 	/**
-	 * View all file servers.
-	 * 
-	 * @return Success
-	 */
-	@SuppressWarnings("unchecked")
-	public String getAll()
-	{
-		fileServers = fileServerService.getAllFileServers();
-		return "getAll";
-	}
-	
-	/**
-	 * View a specific file server.
+	 * View a specific file database for a file server.
 	 * 
 	 * @return Success
 	 */
 	public String get()
 	{
-		if( fileServerId != null )
-		{
-		    fileServer = fileServerService.getFileServer(fileServerId, false);
-		}
 		return "get";
 	}
 	
@@ -113,35 +86,24 @@ public class ManageFileServers extends ActionSupport implements Preparable{
 	 * 
 	 * @return Success
 	 */
+	@SuppressWarnings("unchecked")
 	public String delete()
 	{
-		if( fileServerId != null )
+		if( fileDatabase != null)
 		{
 			deleted = true;
-		    fileServer = fileServerService.getFileServer(fileServerId, false);
+		   
+			Set<FolderInfo> folders = (Set<FolderInfo>)fileDatabase.getRootFolders();
 		    
-		    // only delete if no file databases - otherwise user could delete
-		    // all of their files - which could be very bad
-		    if( fileServer.getFileDatabases() == null || fileServer.getFileDatabases().size() == 0)
+			// only delete if there are no folders - otherwise a user could delete all of 
+			// their files
+		    if(folders == null || folders.size() == 0)
 		    {
-		        fileServerService.deleteFileServer(fileServer);
+		        fileServer.deleteDatabase(fileDatabase.getName());
+		        fileServerService.saveFileServer(fileServer); 
 		    }
 		}
 		return "deleted";
-	}
-	
-	/**
-	 * View a specific file server.
-	 * 
-	 * @return Success
-	 */
-	public String view()
-	{
-		if( fileServerId != null )
-		{
-		    fileServer = fileServerService.getFileServer(fileServerId, false);
-		}
-		return "view";
 	}
 	
 	/**
@@ -151,9 +113,11 @@ public class ManageFileServers extends ActionSupport implements Preparable{
 	 */
 	public String create()
 	{
-		log.debug("creating a file server = " + name);
+		
+		log.debug("creating a file database = " + name);
 		added = false;
 		FileServer other = fileServerService.getFileServer(name);
+		
 		if( other == null)
 		{
 		    fileServer = fileServerService.createFileServer(name);
@@ -199,7 +163,6 @@ public class ManageFileServers extends ActionSupport implements Preparable{
         return "added";
 	}
 	
-	
 	public FileServerService getFileServerService() {
 		return fileServerService;
 	}
@@ -207,14 +170,6 @@ public class ManageFileServers extends ActionSupport implements Preparable{
 
 	public void setFileServerService(FileServerService fileServerService) {
 		this.fileServerService = fileServerService;
-	}
-	
-	public List<FileServer> getFileServers() {
-		return fileServers;
-	}
-
-	public void setFileServers(List<FileServer> fileServers) {
-		this.fileServers = fileServers;
 	}
 	
 	public Long getFileServerId() {
@@ -253,6 +208,10 @@ public class ManageFileServers extends ActionSupport implements Preparable{
 		if( fileServerId != null)
 		{
 			fileServer = fileServerService.getFileServer(fileServerId, false);
+			if(fileDatabaseId != null)
+			{
+				fileDatabase = fileServer.getFileDatabase(fileDatabaseId);
+			}
 		}
 	}
 	
@@ -278,6 +237,30 @@ public class ManageFileServers extends ActionSupport implements Preparable{
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+	
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+	
+	public Long getFileDatabaseId() {
+		return fileDatabaseId;
+	}
+
+	public void setFileDatabaseId(Long fileDatabaseId) {
+		this.fileDatabaseId = fileDatabaseId;
+	}
+	
+	public FileDatabase getFileDatabase() {
+		return fileDatabase;
+	}
+
+	public void setFileDatabase(FileDatabase fileDatabase) {
+		this.fileDatabase = fileDatabase;
 	}
 
 	
