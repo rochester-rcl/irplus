@@ -35,3 +35,9 @@
             <result name="deleted">/pages/admin/file_storage/file_server_deleted.jsp</result>
         </action>
         
+        <action name="viewFileDatabase" 
+            class="edu.ur.ir.web.action.file.storage.ManageFileDatabase">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/admin/file_storage/file_database.jsp</result>
+        </action>
+        

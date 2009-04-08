@@ -27,7 +27,7 @@
 <html>
 <head>
         
-   <title>View File Server</title>
+   <title>View File Database</title>
    <c:import url="/inc/meta-frag.jsp"/>
         
    <!-- Core + Skin CSS -->
@@ -77,9 +77,12 @@
             
             <!--  this is the body region of the page -->
             <div id="bd">
-                <h3><a href="<c:url value="/admin/viewFileStorage.action"/>">All File Servers </a> > ${fileServer.name}</h3>
+                <c:url var="viewFileServer" value="/admin/viewFileServer.action">
+	                <c:param name="fileServerId" value="${fileDatabase.fileServer.id}"/>
+	            </c:url>
+                <h3><a href="<c:url value="/admin/viewFileStorage.action"/>">All File Servers </a> > <a href="${viewFileServer}">${fileDatabase.fileServer.name}</a> > ${fileDatabase.name}</h3>
                 
-                <h3>File Databases</h3>
+                <h3>Root Folders</h3>
                 <div class="dataTable">
 	                   <urstb:table width="100%">
 	                   <urstb:thead>
@@ -88,15 +91,14 @@
                                <urstb:td>Name</urstb:td>
                                <urstb:td>Path</urstb:td>
                                <urstb:td>Description</urstb:td>
-                               <urstb:td>Edit</urstb:td>
 	                       </urstb:tr>
 	                   </urstb:thead>
 	                   <urstb:tbody
-	                       var="fileDatabase" 
+	                       var="folderInfo" 
 	                       oddRowClass="odd"
 	                       evenRowClass="even"
 	                       currentRowClassVar="rowClass"
-	                       collection="${fileServer.fileDatabases}">
+	                       collection="${fileDatabase.rootFolders}">
 	                       
 	                       <urstb:tr 
 	                            cssClass="${rowClass}"
@@ -104,24 +106,17 @@
 	                            onMouseOut="this.className='${rowClass}'">
 	                            
 	                            <urstb:td>
-		                            ${fileDatabase.id}
+		                            ${folderInfo.id}
 	                            </urstb:td>
 	                            <urstb:td>
-	                                 <c:url var="fileDatabaseUrl" value="/admin/viewFileDatabase.action">
-	                                     <c:param name="fileServerId" value="${fileServer.id}"/>
-	                                     <c:param name="fileDatabaseId" value="${fileDatabase.id}"/>
-	                                 </c:url>
-			                         <a href="${fileDatabaseUrl}">${fileDatabase.name}</a>
+			                         <a href="">${folderInfo.name}</a>
 	                            </urstb:td>
 	                            <urstb:td>
-			                        ${fileDatabase.fullPath}
+			                        ${folderInfo.fullPath}
 	                            </urstb:td>
 	                            <urstb:td>
-			                       ${fileDatabase.description}
+			                        ${folderInfo.description}
 	                            </urstb:td>
-	                            <urstb:td>
-			                       <a href="">Edit</a>&nbsp;/&nbsp;<a href="">Delete</a>
-	                           </urstb:td>
 	                        </urstb:tr>
 	                   </urstb:tbody>
 	               </urstb:table>
@@ -135,28 +130,7 @@
         
         </div>
         <!-- end doc -->
-
-       <div id="newFileDatabaseDialog"  class="hidden">
-           <div class="hd">File Database Information</div>
-           <div class="bd">
-               <form name="addFileDatabaseForm" id="addFileDatabaseForm" method="post" action="admin/createField.action">
-	              <div id="newFileDatabaseDialogFields">
-	                  <c:import url="file_database_form.jsp"/>
-	              </div>
-	           </form>
-          </div>
-      </div>
-	         
-      <div id="deleteFileDatabaseDialog" class="hidden">
-          <div class="hd">Delete File Server</div>
-		  <div class="bd">
-		    <form id="deleteFileDatabase" method="post"  action="admin/deleteFileDatabase.action">
-		       <input type="hidden" id="deleteFileDatabaseId" name="fileDatqabaseId" value=""/>
-		       <ur:div id="deleteFieldError" cssClass="errorMessage"></ur:div>
-			   <p>Are you sure you wish to delete the selected file database?</p>
-		    </form>
-		</div>
-      </div>  
+  
    
     </body>
 </html>

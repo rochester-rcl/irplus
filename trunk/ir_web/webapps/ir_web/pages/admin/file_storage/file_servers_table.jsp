@@ -38,7 +38,7 @@
 			                   ${fileServer.description}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.file.server.edit(${fileServer.id})">Edit</a>/<a href="javascript:YAHOO.ur.file.server.deleteFileServer(${fileServer.id})">Delete</a>
+			                   <a href="javascript:YAHOO.ur.file.server.edit(${fileServer.id})">Edit</a>&nbsp;/&nbsp;<a href="javascript:YAHOO.ur.file.server.deleteFileServer(${fileServer.id})">Delete</a>
 	                        </urstb:td>
 	                    </urstb:tr>
 	        </urstb:tbody>
