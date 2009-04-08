@@ -85,6 +85,7 @@
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExtentTypes.action"/>"><fmt:message key="menu.viewExtentTypes" /></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewReviewPendingItems.action"/>">Review Pending Publications</a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewHandleNameAuthorities.action"/>">Handle Name Authorities</a></li>
+				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFileStorage.action"/>">File Storage</a></li>
 
                             </ul>
                         </div>
