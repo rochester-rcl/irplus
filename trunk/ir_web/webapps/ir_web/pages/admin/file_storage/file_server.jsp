@@ -101,6 +101,7 @@
            <div class="hd">File Database Information</div>
            <div class="bd">
                <form name="addFileDatabaseForm" id="addFileDatabaseForm" method="post">
+                  <input type="hidden" id="fileServerId" name="fileServerId" value="${fileServer.id}"/>
 	              <div id="newFileDatabaseDialogFields">
 	                  <c:import url="file_database_form.jsp"/>
 	              </div>
