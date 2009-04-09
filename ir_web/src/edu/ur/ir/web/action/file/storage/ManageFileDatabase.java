@@ -76,9 +76,9 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 	 * 
 	 * @return Success
 	 */
-	public String get()
+	public String getAll()
 	{
-		return "get";
+		return "getAll";
 	}
 	
 	/**
@@ -114,55 +114,25 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 	public String create()
 	{
 		
-		log.debug("creating a file database = " + name);
+		log.debug("creating a file database = " + name + " path = " + path);
 		added = false;
-		FileServer other = fileServerService.getFileServer(name);
-		
+		FileDatabase other = fileServerService.getDatabaseByName(fileServerId, name);
 		if( other == null)
 		{
-		    fileServer = fileServerService.createFileServer(name);
-		    fileServer.setDescription(description);
+		    fileDatabase = fileServer.createFileDatabase(name, name, path, description);
 		    fileServerService.saveFileServer(fileServer);
 		    added = true;
 		}
 		else
 		{
-			message = getText("fileServerNameError", 
+			message = getText("fileDatabaseNameError", 
 					new String[]{fileServer.getName()});
-			addFieldError("fileServerAlreadyExists", message);
+			addFieldError("fileDatabaseAlreadyExists", message);
 		}
         return "added";
 	}
 	
-	/**
-	 * Update the file server with new information.
-	 * 
-	 * @return
-	 */
-	public String update()
-	{
-		log.debug("updateing file server id = " + fileServer.getId());
-		added = false;
 
-		FileServer other = fileServerService.getFileServer(name);
-		
-		if( other == null || other.getId().equals(fileServer.getId()))
-		{
-			fileServer.setName(name);
-			fileServer.setDescription(description);
-			fileServerService.saveFileServer(fileServer);
-			added = true;
-		}
-		else
-		{
-			message = getText("fileServerNameError", 
-					new String[]{fileServer.getName()});
-			
-			addFieldError("fileServerAlreadyExists", message);
-		}
-        return "added";
-	}
-	
 	public FileServerService getFileServerService() {
 		return fileServerService;
 	}

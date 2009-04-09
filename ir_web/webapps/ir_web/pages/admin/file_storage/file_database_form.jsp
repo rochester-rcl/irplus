@@ -22,7 +22,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 		<!--  represents a successful submission -->
-		<input type="hidden" id="newFileServerFormSuccess"   value="${added}"/>
+		<input type="hidden" id="newFileDatabaseFormSuccess"   value="${added}"/>
 		       
 		<!--  if editing an id must be passed -->     
 	    <input type="hidden" id="newFileDatabaseFormId" name="fileDatabaseId" value="${fileDatabase.id}"/>
@@ -60,7 +60,7 @@
 			<tr>
 			    <td align="left" class="label">Description:</td>
 			    <td align="left" colspan="2" class="input"> <textarea name="description" 
-	                id="newFileDatabaeFormDescription" cols="42" rows="4"><c:out value='${fileDatabase.description}'/></textarea>
+	                id="newFileDatabaseFormDescription" cols="42" rows="4"><c:out value='${fileDatabase.description}'/></textarea>
 	            </td>
 			</tr>
 	    </table>
