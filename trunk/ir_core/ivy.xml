@@ -147,7 +147,7 @@
             <artifact name="checkstyle" type="jar"/>
         </dependency>
         
-         <!--  emma code coverage files  -->
+        <!--  emma code coverage files  -->
         <dependency org="emma" name="emma" rev="2.0.5312">
             <artifact name="emma" type="jar"/>
         </dependency>

@@ -103,8 +103,27 @@
 
 	
     <!-- this target runs the tests - the default is NOT to run the tests -->
-	<target name="test" depends="test-build" if="run.tests" description="-->Run the tests">
+	<target name="test" depends="test-build, emma" if="run.tests" description="-->Run the tests">
 		<echo message="running tests" />
+		
+		<!-- this loads <emma> and <emmajava> custom tasks: -->
+		<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+		
+		<!-- emma code coverage -->
+		<emma enabled="${emma.enabled}" verbosity="verbose">
+		    <instr instrpath="${build.dir}" mode="overwrite" metadatafile="${coverage.dir}/metadata.emma">
+
+		        <!-- note that coverage filters can be set through nested <filter>
+		        elements as well: many of EMMA setting are 'mergeable' in the
+		        sense that they can be specified multiple times and the result
+		        is a union of all such values. Here we are not merging several
+		        filters together but merely demonstrating that it is possible:
+		        -->
+		        <filter value="${emma.filter}" />
+		    </instr>
+		</emma>
+		
+		
 		 <!-- run the tests -->
 		<taskdef resource="testngtasks" classpathref="test.libraries"  classpath="testng-5.8.jar"/>
 		<testng classpathref="test.libraries"
@@ -114,7 +133,32 @@
 			    dumpCommand="true">
 
 			<xmlfileset dir="${testng.config}" includes="testng.xml"/>
+		    <!-- set emma coverage -->
+		    <jvmarg value="-Demma.coverage.out.file=${coverage.dir}/coverage.emma" />
+		    <jvmarg value="-Demma.coverage.out.merge=false" />
 		</testng>
+		
+		<!-- if enabled, generate coverage report(s): -->
+		<emma enabled="${emma.enabled}">
+		    <report sourcepath="${src}" sort="+block,+name,+method,+class" metrics="method:70,block:80,line:80,class:100">
+		        <!-- collect all EMMA data dumps (metadata and runtime)
+		        [this can be done via nested <fileset> fileset elements
+		        or <file> elements pointing to a single file]:
+		        -->
+		       <fileset dir="${coverage.dir}">
+		           <include name="*.emma" />
+		       </fileset>
+
+		        <!-- for every type of report desired, configure a nested
+		        element; various report parameters
+		        can be inherited from the parent <report>
+		        and individually overridden for each report type:
+		        -->
+		        <txt outfile="${coverage.dir}/coverage.txt" depth="package" columns="class,method,block,line,name" />
+		        <xml outfile="${coverage.dir}/coverage.xml" depth="package" />
+		        <html outfile="${coverage.dir}/coverage.html" depth="method" columns="name,class,method,block,line" />
+		    </report>
+		</emma>
 	</target>
 
     <!-- generate the documentation -->
