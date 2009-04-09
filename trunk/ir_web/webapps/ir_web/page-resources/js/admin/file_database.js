@@ -14,8 +14,7 @@
    limitations under the License.
 */
 /**
- * This code is for dealing with adding and removing folders 
- * in the workspace.
+ * This code is for dealing with adding, editing and managing file databases
  */
 YAHOO.namespace("ur.file.database");
 
@@ -69,6 +68,7 @@ YAHOO.ur.file.database =
         errorDiv.innerHTML = "";
 	
 	    document.getElementById('newFileDatabaseFormName').value = "";
+	    document.getElementById('newFileDatabaseFormPath').value = "";
 	    document.getElementById('newFileDatabaseFormDescription').value = "";
 	    document.getElementById('newFileDatabaseFormId').value = "";
 	    document.addFileDatabaseForm.newFileDatabaseVal.value = "true";
