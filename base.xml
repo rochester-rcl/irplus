@@ -125,6 +125,20 @@
 
 	<!--production properties file location -->
 	<property name="properties.config.production" value="../properties/production"/>
+	
+    <!--   =================================
+           EMMA code coverage settings
+           =================================
+    -->
+	<!-- output directory used for EMMA coverage reports: -->
+
+	<property name="coverage.dir" value="${report.dir}/emma-coverage" />
+
+	<!-- path element used by EMMA taskdef below: -->
+	<path id="emma.lib">
+	    <pathelement location="${lib.dir}/emma-2.0.5312.jar" />
+	    <pathelement location="${lib.dir}/emma_ant-2.0.5312.jar" />
+	</path>
 
 
     <target name="download-ivy" unless="skip.download">
@@ -240,6 +254,11 @@
 	</target>
 	
 	<target name="checkstyle" depends="checkstyle-report"/>
+	
+
+
+
+
 	
 
 </project>
