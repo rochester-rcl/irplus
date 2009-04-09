@@ -14,8 +14,7 @@
    limitations under the License.
 */
 /**
- * This code is for dealing with adding and removing folders 
- * in the workspace.
+ * This code is for dealing with adding and removing file servers
  */
 YAHOO.namespace("ur.file.server");
 
@@ -177,7 +176,7 @@ YAHOO.ur.file.server =
         	
         };
     
- 	    // Validate the entries in the form to require that both first and last name are entered
+ 	    // Validate the entries in the form to require server name is entered
 	    YAHOO.ur.file.server.newFileServerDialog.validate = function()
         {
 	        var name = document.getElementById('newFileServerFormName').value;

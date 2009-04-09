@@ -97,7 +97,7 @@
        <div id="newFileServerDialog"  class="hidden">
            <div class="hd">File Server Information</div>
            <div class="bd">
-               <form name="addFileServerForm" id="addFileServerForm" method="post" action="admin/createField.action">
+               <form name="addFileServerForm" id="addFileServerForm" method="post">
 	              <div id="newFileServerDialogFields">
 	                  <c:import url="server_form.jsp"/>
 	              </div>
@@ -110,7 +110,7 @@
 		  <div class="bd">
 		    <form id="deleteFileServer" method="post"  action="admin/deleteFileServer.action">
 		       <input type="hidden" id="deleteFileServerId" name="fileServerId" value=""/>
-		       <ur:div id="deleteFieldError" cssClass="errorMessage"></ur:div>
+		       <div id="deleteFileServerError" cssClass="errorMessage"></div>
 			   <p>Are you sure you wish to delete the selected file server?</p>
 		    </form>
 		</div>

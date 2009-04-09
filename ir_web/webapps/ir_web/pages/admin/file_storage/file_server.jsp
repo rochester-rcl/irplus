@@ -49,6 +49,8 @@
     <ur:js src="page-resources/js/util/ur_util.js"/>
     <ur:js src="page-resources/js/menu/main_menu.js"/>  
 	<ur:js src="pages/js/ur_table.js"/>
+	<ur:js src="page-resources/js/admin/file_database.js"/>
+	
     
     
     <!--  Style for dialog boxes -->
@@ -78,9 +80,14 @@
             <!--  this is the body region of the page -->
             <div id="bd">
                 <h3><a href="<c:url value="/admin/viewFileStorage.action"/>">All File Servers </a> > ${fileServer.name}</h3>
-                
+               
+                <button id="showNewFileDatabase" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">New File Database</button> 
+                <br/>
                 <h3>File Databases</h3>
-                <div class="dataTable">
+                <div id="fileDatabases">
+                    <div class="dataTable">
 	                   <urstb:table width="100%">
 	                   <urstb:thead>
 	                       <urstb:tr>
@@ -125,6 +132,7 @@
 	                        </urstb:tr>
 	                   </urstb:tbody>
 	               </urstb:table>
+                </div>
             </div>
             	
           </div>
@@ -139,7 +147,7 @@
        <div id="newFileDatabaseDialog"  class="hidden">
            <div class="hd">File Database Information</div>
            <div class="bd">
-               <form name="addFileDatabaseForm" id="addFileDatabaseForm" method="post" action="admin/createField.action">
+               <form name="addFileDatabaseForm" id="addFileDatabaseForm" method="post">
 	              <div id="newFileDatabaseDialogFields">
 	                  <c:import url="file_database_form.jsp"/>
 	              </div>
@@ -148,15 +156,15 @@
       </div>
 	         
       <div id="deleteFileDatabaseDialog" class="hidden">
-          <div class="hd">Delete File Server</div>
+          <div class="hd">Delete File Database</div>
 		  <div class="bd">
 		    <form id="deleteFileDatabase" method="post"  action="admin/deleteFileDatabase.action">
-		       <input type="hidden" id="deleteFileDatabaseId" name="fileDatqabaseId" value=""/>
-		       <ur:div id="deleteFieldError" cssClass="errorMessage"></ur:div>
+		       <input type="hidden" id="deleteFileDatabaseId" name="fileDatabaseId" value=""/>
+		       <ur:div id="deleteFileDatabaseError" cssClass="errorMessage"></ur:div>
 			   <p>Are you sure you wish to delete the selected file database?</p>
 		    </form>
 		</div>
-      </div>  
+      </div> 
    
     </body>
 </html>
