@@ -49,6 +49,14 @@
 			    size="45"
 			    value="<c:out value='${fileDatabase.name}'/>"/> </td>
 			</tr>
+			<tr>       
+	            <td align="left" class="label">Path:*</td>
+	            <td align="left" class="input"><input type="text" 
+			    id="newFileDatabaseFormPath" 
+			    name="path" 
+			    size="45"
+			    value="<c:out value='${fileDatabase.path}'/>"/> </td>
+			</tr>
 			<tr>
 			    <td align="left" class="label">Description:</td>
 			    <td align="left" colspan="2" class="input"> <textarea name="description" 
