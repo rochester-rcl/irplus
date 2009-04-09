@@ -54,8 +54,9 @@ YAHOO.ur.file.database =
 	        }
         };
         
+        var fileServerId = document.getElementById("fileServerId").value;
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            myFileDatabaseAction + '?bustcache='+new Date().getTime(),  
+            myFileDatabaseAction + '?fileServerId=' + fileServerId +'&bustcache='+new Date().getTime(),  
             callback, null);
     }, 
     

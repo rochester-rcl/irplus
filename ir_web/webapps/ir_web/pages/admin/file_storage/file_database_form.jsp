@@ -27,9 +27,6 @@
 		<!--  if editing an id must be passed -->     
 	    <input type="hidden" id="newFileDatabaseFormId" name="fileDatabaseId" value="${fileDatabase.id}"/>
 		
-		<!--  if editing an id must be passed -->     
-	    <input type="hidden" id="newFileServerFormId" name="fileServerId" value="${fileServer.id}"/>
-		               
 	    <input type="hidden" id="newFileDatabaseFormNew" name="newFileDatabaseVal" value="true"/>
 		        
 		<div id="error_div">            
