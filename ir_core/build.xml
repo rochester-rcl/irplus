@@ -122,28 +122,12 @@
     </target>
 
 	
-	<!-- this loads <emma> and <emmajava> custom tasks: -->
-	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
-	
-	<!--  CODE COVERAGE initialization. -->
-	<target name="emma" description="turns on EMMA's instrumentation/reporting">
-		<!-- Remove the old libraries -->
-		<delete dir="${coverage.dir}"/>
-		
-		<!-- make the new dir -->
-		<mkdir dir="${coverage.dir}"/>
-	    
-		<property name="emma.enabled" value="true" />
-
-	    <!-- this property, if overriden via -Demma.filter=<list of filter specs>
-	    on ANT's command line, will set the coverage filter; by default,
-	    all classes found in 'run.classpath' pathref will be instrumented:
-	    -->
-	    <property name="emma.filter" value="" />
-	</target>
-
+	<!-- run the tests -->
 	<target name="test" depends="test-build, emma" if="run.tests" description="-->Run the tests">
 		<echo message="running tests" />
+		
+		<!-- this loads <emma> and <emmajava> custom tasks: -->
+		<taskdef resource="emma_ant.properties" classpathref="emma.lib" />		
 		
 		<!-- emma code coverage -->
 		<emma enabled="${emma.enabled}" verbosity="verbose">
