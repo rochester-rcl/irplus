@@ -17,16 +17,12 @@
 package edu.ur.ir.index;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
 
 import org.apache.log4j.Logger;
-import org.pdfbox.cos.COSDocument;
-import org.pdfbox.pdfparser.PDFParser;
 import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.util.PDFTextStripper;
 
@@ -77,16 +73,14 @@ public class DefaultPdfTextExtractor implements FileTextExtractor{
 		{
 			return text;
 		}
-		COSDocument cosDoc  = null;
 		PDDocument pdDoc = null;
 		try
 		{
-			cosDoc = parseDocument(f);
+			pdDoc = PDDocument.load(f);
 			
 			// don't do anything with decripted docs
-			if( !cosDoc.isEncrypted())
+			if( !pdDoc.isEncrypted())
 			{
-			    pdDoc = new PDDocument(cosDoc);
 			    PDFTextStripper stripper = new PDFTextStripper();
 			    String myText = stripper.getText(pdDoc);
 			    
@@ -116,7 +110,6 @@ public class DefaultPdfTextExtractor implements FileTextExtractor{
 		finally
 		{
 			closePDDocument(pdDoc);
-			closeCOSDocument(cosDoc);
 		}
 		
 		return text;
@@ -146,41 +139,6 @@ public class DefaultPdfTextExtractor implements FileTextExtractor{
 				!isFileTooLarge(f);
 	}  
 	
-	/**
-	 * Parse the pdf document.
-	 * 
-	 * @param f - file containing the pdf.
-	 * @throws IOException 
-	 */
-	private COSDocument parseDocument(File f) throws IOException
-	{
-		FileInputStream inputStream = new FileInputStream(f);
-		PDFParser parser = new PDFParser(inputStream);
-		parser.parse();
-		return parser.getDocument();
-	}
-	
-	/**
-	 * Close the COS document
-	 * 
-	 * @param cosDoc
-	 */
-	private void closeCOSDocument(COSDocument cosDoc)
-	{
-		if( cosDoc != null )
-		{
-			try
-			{
-				cosDoc.close();
-				cosDoc = null;
-			}
-			catch(Exception e)
-			{
-				log.error("could not colse COSDocument", e);
-				cosDoc = null;
-			}
-		}
-	}
 	
 	/**
 	 * Close the PD document

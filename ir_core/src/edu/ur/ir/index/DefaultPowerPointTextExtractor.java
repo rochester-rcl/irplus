@@ -16,7 +16,6 @@
 
 package edu.ur.ir.index;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -101,7 +100,6 @@ public class DefaultPowerPointTextExtractor implements FileTextExtractor{
 		try
 		{
 			inputStream = new FileInputStream(f);
-			BufferedInputStream bufferedStream = new BufferedInputStream(inputStream);
 			HSLFSlideShow powerPointDocument = new HSLFSlideShow(inputStream);
 			PowerPointExtractor pptExtractor = new PowerPointExtractor(powerPointDocument);
 			
