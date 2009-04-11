@@ -45,7 +45,7 @@
         <action name="*FileDatabase"
             method="{1}"
             class="edu.ur.ir.web.action.file.storage.ManageFileDatabase">
-            <interceptor-ref name="crudtack" />
+            <interceptor-ref name="crudStack" />
             <result name="view">/pages/admin/file_storage/file_database.jsp</result>
             <result name="added">/pages/admin/file_storage/file_database_form.jsp</result>
             <result name="getAll">/pages/admin/file_storage/file_database_table.jsp</result>
