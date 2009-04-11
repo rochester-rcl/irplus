@@ -28,6 +28,9 @@
  	<property name="yui.unzip" value="true"/>
      
 	
+	<!-- always disable emma -->
+	<property name="emma.enabled" value="false" />
+	
     <!-- Use the build.properties file for user specific settings -->
     <property file="build.properties"/>
 
@@ -105,7 +108,7 @@
 
     <!-- Set the location where the libraries this project is dependent -->
     <path id="libraries">
-	  <fileset dir="${lib.dir}" includes="*.jar"/>
+	  <fileset dir="${lib.dir}" includes="*.jar" excludes="emma*"/>
     </path>
 
     <!-- Copy non java resources -->
@@ -195,6 +198,7 @@
 	
 	<fileset id="web.libs" dir="${lib.dir}">
 		<exclude name="checkstyle*"/>
+		<exclude name="emma*"/>
 		<exclude name="google-collect*"/>
 		<exclude name="testng*"/>
 		<exclude name="yui*"/>
