@@ -60,7 +60,7 @@
     <!-- This is the path for testing -->
 	<path id="test.libraries">
 		<path refid="libraries"/>
-		<pathelement location="${build.dir}/classes"/>
+		<pathelement location="${test.build.dir}/classes"/>
 		
 	    <!-- common spring configuration files -->
 		<pathelement location="${spring.config.common.config}"/>
@@ -87,7 +87,7 @@
 	</target>
 
 	<!-- compile the java source files -->
-    <target name="build" depends="retrieve, copy-resources" xmlns:ext="http://edu.ur/d1/ext">
+    <target name="build" depends="clean, retrieve, copy-resources" xmlns:ext="http://edu.ur/d1/ext">
         <mkdir dir="${build.dir}/classes"/>
         <ext:javac srcdir="${src.dir}"
 			 destdir="${build.dir}/classes"
@@ -97,6 +97,7 @@
 	<!-- clean up the build directories -->
     <target name="clean" description="-->Clean the project">
         <delete dir="${build.dir}"/>
+    	<delete dir="${test.build.dir}"/>
         <delete dir="${report.dir}"/>
         <delete dir="${dist.dir}"/>
     </target>
@@ -111,8 +112,15 @@
     <!-- build the test class files of the project -->
     <target name="test-build" depends="build" description="-->Compile the test classes"
     xmlns:ext="http://edu.ur/d1/ext">
-        <ext:javac srcdir="${test.dir}"
-			 destdir="${build.dir}/classes"
+       	<mkdir dir="${test.build.dir}/classes"/>
+        	
+        <!-- copy the src build classes over --> 	
+        <copy todir="${test.build.dir}/classes">
+            <fileset dir="${build.dir}/classes"/>
+        </copy>
+        
+    	<ext:javac srcdir="${test.dir}"
+			 destdir="${test.build.dir}/classes"
 			 classpathref="libraries"/>
     </target>
 
@@ -126,7 +134,7 @@
 		
 		<!-- emma code coverage -->
 		<emma enabled="${emma.enabled}" verbosity="verbose">
-		    <instr instrpath="${build.dir}" mode="overwrite" metadatafile="${coverage.dir}/metadata.emma">
+		    <instr instrpath="${test.build.dir}" mode="overwrite" metadatafile="${coverage.dir}/metadata.emma">
 
 		        <!-- note that coverage filters can be set through nested <filter>
 		        elements as well: many of EMMA setting are 'mergeable' in the
