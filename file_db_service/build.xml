@@ -142,7 +142,7 @@
 		        is a union of all such values. Here we are not merging several
 		        filters together but merely demonstrating that it is possible:
 		        -->
-		        <filter value="${emma.filter}" />
+		    	<filter excludes="*Test*" />
 		    </instr>
 		</emma>
 		
