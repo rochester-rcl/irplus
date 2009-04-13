@@ -112,9 +112,10 @@
       <div id="deleteFileDatabaseDialog" class="hidden">
           <div class="hd">Delete File Database</div>
 		  <div class="bd">
-		    <form id="deleteFileDatabase" method="post"  action="admin/deleteFileDatabase.action">
+		    <form name="deleteFileDatabase" id="deleteFileDatabase" method="post" >
 		       <input type="hidden" id="deleteFileDatabaseId" name="fileDatabaseId" value=""/>
-		       <ur:div id="deleteFileDatabaseError" cssClass="errorMessage"></ur:div>
+		       <input type="hidden" id="fileServerId" name="fileServerId" value="${fileServer.id}"/>
+		       <div id="deleteFileDatabaseError" class="errorMessage"></div>
 			   <p>Are you sure you wish to delete the selected file database?</p>
 		    </form>
 		</div>
