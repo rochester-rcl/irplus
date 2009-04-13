@@ -28,6 +28,7 @@ public class DuplicateNameException extends Exception
 
     /** Name that was duplicated */
     private String name;
+    
     /** Indicates that a duplicate name has been used when it should not be */
     private static final long serialVersionUID = 8295922423572725111L;
 
