@@ -299,7 +299,7 @@ YAHOO.ur.file.database =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('File Server delete submission failed ' + o.status);
+	        alert('File database delete submission failed ' + o.status);
 	    };
 
 	    // Instantiate the Dialog
