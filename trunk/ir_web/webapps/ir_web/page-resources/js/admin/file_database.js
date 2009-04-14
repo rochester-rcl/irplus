@@ -208,7 +208,7 @@ YAHOO.ur.file.database =
     /**
      * function to edit File Server information
      */
-    edit : function(id)
+    edit : function(fileServerId, fileDatabaseId)
     {	    
 	    /*
          * This call back updates the html when a editing a FileDatabase
@@ -235,7 +235,7 @@ YAHOO.ur.file.database =
         };
         
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getFileDatabaseAction + '?fileServerId=' + id +  '&bustcache='+new Date().getTime(), 
+            getFileDatabaseAction + '?fileServerId=' + fileServerId +  '&fileDatabaseId=' + fileDatabaseId+'&bustcache='+new Date().getTime(), 
             callback, null);
      },
     
