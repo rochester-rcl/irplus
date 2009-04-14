@@ -48,6 +48,7 @@
             <interceptor-ref name="crudStack" />
             <result name="view">/pages/admin/file_storage/file_database.jsp</result>
             <result name="added">/pages/admin/file_storage/file_database_form.jsp</result>
+            <result name="get">/pages/admin/file_storage/file_database_form.jsp</result>
             <result name="getAll">/pages/admin/file_storage/file_database_table.jsp</result>
             <result name="deleted">/pages/admin/file_storage/file_database_deleted.jsp</result>
         </action>
