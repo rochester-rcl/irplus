@@ -20,7 +20,7 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for a Repository.
+	Mapping for a License
 	
 	@author Nathan Sarr
 -->
@@ -44,7 +44,7 @@
 		<property name="name" column="name" type="string"
 			not-null="true" access="field" />
 		
-		<property name="text" column="text" type="string"
+		<property name="text" column="license_text" type="string"
 			not-null="false" access="field" />
 			
 		<property name="dateCreated" column="created_date" type="date" access="field" />	
@@ -55,7 +55,7 @@
 		<!-- user who created the license-->
 		<many-to-one class="edu.ur.ir.user.IrUser" 
 			unique="true" 
-			name="user" 
+			name="creator" 
 			column="user_id" 
 			access="field"
 			not-null="true" 
