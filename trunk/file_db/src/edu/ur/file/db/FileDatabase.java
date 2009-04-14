@@ -125,6 +125,12 @@ Serializable {
 	public String getDescription();
 	
 	/**
+	 * Set the description of the file database.
+	 * 
+	 */
+	public void setDescription(String description);
+	
+	/**
 	 * Get the name of this file database
 	 * 
 	 * @return name of the file database
