@@ -83,7 +83,6 @@ public class HbRepositoryDAO implements RepositoryDAO {
 	 * 
 	 * @see edu.ur.UniqueNameDAO#findByUniqueName(java.lang.String)
 	 */
-	@SuppressWarnings("unchecked")
 	public Repository findByUniqueName(String name) {
 		return (Repository) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getRepositoryByName", name));
