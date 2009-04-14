@@ -34,10 +34,15 @@
 		   <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		    key="fileDatabase.name"/></p>
 		    <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-		    key="fileDatabaseAlreadyExists"/></p>  
+		    key="fileDatabaseAlreadyExists"/></p>
+		    <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		    key="folderLocationAlreadyExists"/></p>  
 		</div>
 		
-	    <table class="formTable">    
+	    <table class="formTable">   
+	        <tr>       
+	            <td align="left" colspan="2" class="label">This will create a folder on the file system with the specified name</td>
+			</tr> 
 		    <tr>       
 	            <td align="left" class="label">Name:*</td>
 	            <td align="left" class="input"><input type="text" 
@@ -46,6 +51,9 @@
 			    size="45"
 			    value="<c:out value='${fileDatabase.name}'/>"/> </td>
 			</tr>
+			 <tr>       
+	            <td align="left" colspan="2" class="label">Path where to create folder(starts with C:\ for windows and / for unix)</td>
+			</tr> 
 			<tr>       
 	            <td align="left" class="label">Path:*</td>
 	            <td align="left" class="input"><input type="text" 
