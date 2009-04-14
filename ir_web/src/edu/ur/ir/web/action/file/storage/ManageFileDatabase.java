@@ -61,6 +61,11 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 	/**  Indicates the file database has been deleted*/
 	private boolean deleted = false;
 	
+	public String get()
+	{
+		return "get";
+	}
+	
 
 	/**
 	 * View a specific file database.
@@ -80,6 +85,23 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 	public String getAll()
 	{
 		return "getAll";
+	}
+	
+	/**
+	 * Delete a specific file server.
+	 * 
+	 * @return Success
+	 */
+	public String update()
+	{
+		log.debug("update called");
+		added = true;
+		if( fileDatabase != null)
+		{
+		   fileDatabase.setDescription(description);
+		   fileServerService.saveFileServer(fileServer); 
+		}
+		return "update";
 	}
 	
 	/**
