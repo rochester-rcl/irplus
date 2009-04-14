@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
@@ -116,7 +117,11 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		    {
 			    pf = userFileSystemService.addSharedInboxFileToFolders(user, 
 							    inboxFile);
-				userWorkspaceIndexService.addToIndex(repository, pf);
+				try {
+					userWorkspaceIndexService.addToIndex(repository, pf);
+				} catch (LocationAlreadyExistsException e) {
+					log.error(e);
+				}
 				userWorkspaceIndexService.deleteFromIndex(inboxFile);
 			}
 		    catch (DuplicateNameException e) 
@@ -142,7 +147,11 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		        try 
 		        {
 				    pf = userFileSystemService.addSharedInboxFileToFolders(destination,  inboxFile);
-					userWorkspaceIndexService.addToIndex(repository , pf);
+					try {
+						userWorkspaceIndexService.addToIndex(repository , pf);
+					} catch (LocationAlreadyExistsException e) {
+						log.error(e);
+					}
 					userWorkspaceIndexService.deleteFromIndex(inboxFile);
 		        } catch (DuplicateNameException e) {
 		            filesNotMoved.add(inboxFile);

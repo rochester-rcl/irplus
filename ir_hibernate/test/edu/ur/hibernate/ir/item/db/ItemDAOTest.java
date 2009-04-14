@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
@@ -210,9 +211,10 @@ public class ItemDAOTest {
 	/**
 	 * Test add a file to an item.
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void addFileItemDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
+	public void addFileItemDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -298,9 +300,10 @@ public class ItemDAOTest {
 	/**
 	 * Test add a primary image file to an item.
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void addPrimaryImageFileItemDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
+	public void addPrimaryImageFileItemDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		

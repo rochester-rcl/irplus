@@ -36,6 +36,7 @@ import edu.ur.file.db.DefaultFileDatabase;
 import edu.ur.file.db.DefaultFileInfo;
 import edu.ur.file.db.DefaultFileServer;
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.TreeFolderInfo;
 import edu.ur.file.db.service.test.helper.ContextHolder;
 import edu.ur.file.db.service.test.helper.PropertiesLoader;
@@ -125,10 +126,11 @@ public class DefaultFileServerServiceTest {
 	 * 
 	 * - Make sure a file database can be created.
 	 * - Makes sure a file database can be found.
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void createFileDatabaseTest() {
+	public void createFileDatabaseTest() throws LocationAlreadyExistsException {
 
         // Start the transaction this is for lazy loading
 		TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -167,10 +169,11 @@ public class DefaultFileServerServiceTest {
 	 * 
 	 * - Make sure a file folder can be created.
 	 * - Makes sure a file folder can be found.
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void createFileFolderTest() {
+	public void createFileFolderTest() throws LocationAlreadyExistsException {
         // Start the transaction this is for lazy loading
 		TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus ts = tm.getTransaction(td);
@@ -209,10 +212,11 @@ public class DefaultFileServerServiceTest {
 	 * 
 	 * - Make sure a file can be created.
 	 * - Makes sure a file can be found.
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void createFileTest() {
+	public void createFileTest() throws LocationAlreadyExistsException {
         // Start the transaction this is for lazy loading
 		TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus ts = tm.getTransaction(td);
@@ -281,10 +285,11 @@ public class DefaultFileServerServiceTest {
 	 * 
 	 * - Make sure an empty file can be created.
 	 * - Makes sure an empty file can be found.
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void createEmptyFileTest() {
+	public void createEmptyFileTest() throws LocationAlreadyExistsException {
 		
         // Start the transaction this is for lazy loading
 		TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -340,10 +345,11 @@ public class DefaultFileServerServiceTest {
 	 * Test creating a folder.
 	 * 
 	 * - Make sure a folder location can be created.
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void createFolderTest() {
+	public void createFolderTest() throws LocationAlreadyExistsException {
         // Start the transaction this is for lazy loading
 		TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus ts = tm.getTransaction(td);
@@ -408,10 +414,11 @@ public class DefaultFileServerServiceTest {
 	 * 
 	 * - Make sure a new root folder is created when the max number of files
 	 * is reached.
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void maxFilesStoreStrategy() {
+	public void maxFilesStoreStrategy() throws LocationAlreadyExistsException {
         // Start the transaction this is for lazy loading
 		TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus ts = tm.getTransaction(td);

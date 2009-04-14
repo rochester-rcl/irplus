@@ -30,6 +30,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.item.GenericItem;
@@ -93,8 +94,9 @@ public class DefaultItemServiceTest {
 	 * Test creating a user
 	 * @throws DuplicateNameException 
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void deleteItemTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void deleteItemTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -202,8 +204,9 @@ public class DefaultItemServiceTest {
 	/**
 	 * Test creating a user
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void deleteUnUsedIrFilesTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void deleteUnUsedIrFilesTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);

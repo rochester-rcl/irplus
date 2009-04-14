@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexService;
@@ -221,7 +222,11 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			Repository repository = 
 				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 
-			userWorkspaceIndexService.updateIndex(repository, personalItem);
+			try {
+				userWorkspaceIndexService.updateIndex(repository, personalItem);
+			} catch (LocationAlreadyExistsException e) {
+				log.error(e);
+			}
 		}
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -285,7 +290,11 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 			Repository repository = 
 				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 
-			userWorkspaceIndexService.updateIndex(repository, personalItem);
+			try {
+				userWorkspaceIndexService.updateIndex(repository, personalItem);
+			} catch (LocationAlreadyExistsException e) {
+				log.error(e);
+			}
 		}		
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);

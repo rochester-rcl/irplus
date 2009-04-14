@@ -30,6 +30,7 @@ import org.testng.annotations.Test;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServerService;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
@@ -103,10 +104,11 @@ public class ResearcherFileDAOTest {
 	/**
 	 * Test researcher file persistence
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void baseResearcherFileDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
+	public void baseResearcherFileDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -202,10 +204,11 @@ public class ResearcherFileDAOTest {
 	/**
 	 * Test - get researcher file in a folder
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void getResearcherFileInAFolderDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
+	public void getResearcherFileInAFolderDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -327,10 +330,11 @@ public class ResearcherFileDAOTest {
 	/**
 	 * Test root researcher file 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void getRootResearcherFilesDAOTest() throws DuplicateNameException, IllegalFileSystemNameException {
+	public void getRootResearcherFilesDAOTest() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		

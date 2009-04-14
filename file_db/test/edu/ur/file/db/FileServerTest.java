@@ -68,9 +68,10 @@ public class FileServerTest {
 	
 	/**
 	 * Test adding and deleting a file Database
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void addFileDatabaseTest()
+	public void addFileDatabaseTest() throws LocationAlreadyExistsException
 	{
 		DefaultFileDatabase fd = fileServer.createFileDatabase("displayName5", "db_5", 
 				properties.getProperty("FileServerTest.server_path"), "description");

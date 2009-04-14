@@ -38,6 +38,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameAuthority;
@@ -111,10 +112,11 @@ public class DefaultNameAuthorityIndexServiceTest {
 	
 	/**
 	 * Test indexing a name
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 * @throws NoNameIndexException 
 	 */
-	public void testIndexName() throws NoIndexFoundException
+	public void testIndexName() throws NoIndexFoundException, LocationAlreadyExistsException
 	{
 		
 		// start a new transaction

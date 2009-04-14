@@ -30,6 +30,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FacetSearchHelper;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
@@ -163,8 +164,9 @@ public class DefaultRepositoryIndexerServiceTest {
 	 * @throws NoIndexFoundException 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws DuplicateContributorException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testIndexItems() throws DuplicateNameException, IllegalFileSystemNameException, NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException
+	public void testIndexItems() throws DuplicateNameException, IllegalFileSystemNameException, NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException, LocationAlreadyExistsException
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);

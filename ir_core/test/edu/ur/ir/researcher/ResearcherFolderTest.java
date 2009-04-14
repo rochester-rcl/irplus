@@ -24,6 +24,7 @@ import org.testng.annotations.Test;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
@@ -348,8 +349,9 @@ public class ResearcherFolderTest {
 	
 	/**
 	 * Test adding children.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddIrFile() throws IllegalFileSystemNameException
+	public void testAddIrFile() throws IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -426,8 +428,9 @@ public class ResearcherFolderTest {
 	
 	/**
 	 * Test adding children.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testMoveResearcherFile() throws IllegalFileSystemNameException
+	public void testMoveResearcherFile() throws IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 

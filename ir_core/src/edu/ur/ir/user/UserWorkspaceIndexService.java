@@ -16,6 +16,7 @@
 
 package edu.ur.ir.user;
 
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.repository.Repository;
 
 
@@ -41,18 +42,20 @@ public interface UserWorkspaceIndexService {
 	
 			
 	/**
-	 * Add the personal file to the index.
+	 * Add the personal file to the index.  This will create an index folder if one does not already exist.
 	 * 
 	 * @param personalFile
+	 * @throws LocationAlreadyExistsException - if the folder location does not already exist  
 	 */
-	public void addToIndex(Repository repository, PersonalFile personalFile);
+	public void addToIndex(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException;
 	
 	/**
-	 * Update the personal file in the index.
+	 * Update the personal file in the index. This will create an index folder if one does not already exist.
 	 * 
 	 * @param personalFile
+	 * @throws LocationAlreadyExistsException - if the folder location does not already exist
 	 */
-	public void updateIndex(Repository repository, PersonalFile personalFile);
+	public void updateIndex(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException;
 	
 	/**
 	 * Delete the personal file in the index.
@@ -63,18 +66,21 @@ public interface UserWorkspaceIndexService {
 	
 
 	/**
-	 * Add the personal folder to the index.
+	 * Add the personal folder to the index.  Will create a folder if one does not already exist
 	 * 
 	 * @param personalFile
+	 * @throws LocationAlreadyExistsException - if the folder already exists
 	 */
-	public void addToIndex(Repository repository, PersonalFolder personalFolder);
+	public void addToIndex(Repository repository, PersonalFolder personalFolder) throws LocationAlreadyExistsException;
 	
 	/**
-	 * Update the personal folder in the index.
+	 * Update the personal folder in the index.  Will create the folder location for the user if one does not already
+	 * exist
 	 * 
 	 * @param personalFile
+	 * @throws LocationAlreadyExistsException - if the folder location already exists when trying to create a new folder.
 	 */
-	public void updateIndex(Repository repository, PersonalFolder personalFolder);
+	public void updateIndex(Repository repository, PersonalFolder personalFolder) throws LocationAlreadyExistsException;
 	
 	/**
 	 * Delete the personal folder from the index.
@@ -84,18 +90,20 @@ public interface UserWorkspaceIndexService {
 	public void deleteFromIndex(PersonalFolder personalFolder);
 	
 	/**
-	 * Add the shared inbox file  to the index.
+	 * Add the shared inbox file  to the index. Will create the location if one already exists
 	 * 
 	 * @param personalFile
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void addToIndex(Repository repository, SharedInboxFile inboxFile);
+	public void addToIndex(Repository repository, SharedInboxFile inboxFile) throws LocationAlreadyExistsException;
 	
 	/**
-	 * Update the shared inbox file  in the index.
+	 * Update the shared inbox file  in the index.Will create the location if one does not already exist
 	 * 
 	 * @param personalFile
+	 * @throws LocationAlreadyExistsException - if the new location already doesn't exist
 	 */
-	public void updateIndex(Repository repository, SharedInboxFile inboxFile);
+	public void updateIndex(Repository repository, SharedInboxFile inboxFile) throws LocationAlreadyExistsException;
 	
 	/**
 	 * Delete the shared inbox file from the index.
@@ -105,11 +113,13 @@ public interface UserWorkspaceIndexService {
 	public void deleteFromIndex(SharedInboxFile inboxFile);
 	
 	/**
-	 * Updates all indexes for all collaborators and the owner who share the specified file.
+	 * Updates all indexes for all collaborators and the owner who share the specified file.  Creates an index folder if 
+	 * one doesn't already exist
 	 *  
 	 * @param personalFile
+	 * @throws LocationAlreadyExistsException - if trying to create a location that already exists
 	 */
-	public void updateAllIndexes(Repository repository, PersonalFile personalFile);
+	public void updateAllIndexes(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException;
 	
 	/**
 	 * Delete the file from all indexes including collaborators.
@@ -126,19 +136,21 @@ public interface UserWorkspaceIndexService {
 	public void deleteFromIndex(PersonalItem personalItem);
 	
 	/**
-	 * Add a personal item to the index.
+	 * Add a personal item to the index.  Creates an index floder if one does not already exist
 	 * 
 	 * @param repository
 	 * @param personalItem
+	 * @throws LocationAlreadyExistsException - if the new location already exists 
 	 */
-	public void addToIndex(Repository repository, PersonalItem personalItem);
+	public void addToIndex(Repository repository, PersonalItem personalItem) throws LocationAlreadyExistsException;
 	
 	/**
-	 * Update the index.
+	 * Update the index.  Creates an index folder if one does not already exist
 	 * 
 	 * @param repository
 	 * @param personalItem
+	 * @throws LocationAlreadyExistsException - if trying to create a location that already exists
 	 */
-	public void updateIndex(Repository repository, PersonalItem personalItem);
+	public void updateIndex(Repository repository, PersonalItem personalItem) throws LocationAlreadyExistsException;
 
 }

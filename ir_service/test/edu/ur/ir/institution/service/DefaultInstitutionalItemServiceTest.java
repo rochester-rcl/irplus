@@ -31,6 +31,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -116,8 +117,9 @@ public class DefaultInstitutionalItemServiceTest {
 	 * 
 	 * @throws DuplicateNameException 
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testInstitutionalItemHistory() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException 
+	public void testInstitutionalItemHistory() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException 
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -166,8 +168,9 @@ public class DefaultInstitutionalItemServiceTest {
 	 * @throws UserHasPublishedDeleteException
 	 * @throws IllegalFileSystemNameException
 	 * @throws UserDeletedPublicationException
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAssignGroupPermissionToItem()  throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, IllegalFileSystemNameException{
+	public void testAssignGroupPermissionToItem()  throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, IllegalFileSystemNameException, LocationAlreadyExistsException{
 
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);

@@ -11,6 +11,7 @@ import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileServer;
 import edu.ur.file.db.FileServerService;
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 
 /**
  * Class for managing file database information.
@@ -89,6 +90,7 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 	@SuppressWarnings("unchecked")
 	public String delete()
 	{
+		log.debug("delete called");
 		if( fileDatabase != null)
 		{
 			deleted = true;
@@ -119,9 +121,16 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 		FileDatabase other = fileServerService.getDatabaseByName(fileServerId, name);
 		if( other == null)
 		{
-		    fileDatabase = fileServer.createFileDatabase(name, name, path, description);
-		    fileServerService.saveFileServer(fileServer);
-		    added = true;
+		    try {
+				fileDatabase = fileServer.createFileDatabase(name, name, path, description);
+				 fileServerService.saveFileServer(fileServer);
+				 added = true;
+			} catch (LocationAlreadyExistsException e) {
+				message = getText("folderLocationAlreadyExists", 
+						new String[]{fileServer.getName()});
+				addFieldError("folderLocationAlreadyExists", message);
+			}
+		   
 		}
 		else
 		{
@@ -175,6 +184,7 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 	}
 
 	public void prepare() throws Exception {
+		log.debug("perpare called fileServerId = " + fileServerId + " fileDatabaseId = " + fileDatabaseId);
 		if( fileServerId != null)
 		{
 			fileServer = fileServerService.getFileServer(fileServerId, false);

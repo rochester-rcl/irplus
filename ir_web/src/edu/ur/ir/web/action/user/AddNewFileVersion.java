@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TemporaryFileCreator;
 import edu.ur.ir.file.TransformedFileType;
@@ -176,7 +177,11 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 					    log.error("Could not create thumbnail", e);
 				    }
 			    }
-			    userWorkspaceIndexService.updateAllIndexes(repository, personalFile);
+			    try {
+					userWorkspaceIndexService.updateAllIndexes(repository, personalFile);
+				} catch (LocationAlreadyExistsException e) {
+					log.error(e);
+				}
 
 			}
 			else

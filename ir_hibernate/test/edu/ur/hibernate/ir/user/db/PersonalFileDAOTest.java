@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServerService;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
@@ -105,10 +106,11 @@ public class PersonalFileDAOTest {
 	/**
 	 * Test personal file persistence
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void basePersonalFileDAOTest() throws DuplicateNameException, IllegalFileSystemNameException {
+	public void basePersonalFileDAOTest() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -197,10 +199,11 @@ public class PersonalFileDAOTest {
 	/**
 	 * Test - get personal file in a folder
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void getPersonalFileInAFolderDAOTest() throws DuplicateNameException, IllegalFileSystemNameException {
+	public void getPersonalFileInAFolderDAOTest() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -292,10 +295,11 @@ public class PersonalFileDAOTest {
 	/**
 	 * Test root personal file 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void getRootPersonalFilesDAOTest() throws DuplicateNameException, IllegalFileSystemNameException {
+	public void getRootPersonalFilesDAOTest() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -370,10 +374,11 @@ public class PersonalFileDAOTest {
 	/**
 	 * Test change owner for personal file 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void changeOwnerTest() throws DuplicateNameException, IllegalFileSystemNameException {
+	public void changeOwnerTest() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		

@@ -30,6 +30,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.file.FileVersion;
@@ -110,9 +111,10 @@ public class FileVersionDAOTest {
 
 	/**
 	 * Test add a file to an Version
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void versionAddFileDAOTest() throws IllegalFileSystemNameException {
+	public void versionAddFileDAOTest() throws IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 
 		// Start the transaction 

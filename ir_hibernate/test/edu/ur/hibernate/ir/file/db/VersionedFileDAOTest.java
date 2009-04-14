@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServerService;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
@@ -116,9 +117,10 @@ public class VersionedFileDAOTest {
 
 	/**
 	 * Test add a file to an irFile
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void versionedFileAddSingleFileDAOTest() throws IllegalFileSystemNameException {
+	public void versionedFileAddSingleFileDAOTest() throws IllegalFileSystemNameException, LocationAlreadyExistsException {
 		cleanDirectory();
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -235,9 +237,10 @@ public class VersionedFileDAOTest {
 	
 	/**
 	 * Test add a file to an irFile
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void versionedFileAddMultiFileDAOTest() throws IllegalFileSystemNameException {
+	public void versionedFileAddMultiFileDAOTest() throws IllegalFileSystemNameException, LocationAlreadyExistsException {
 		cleanDirectory();
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -352,10 +355,11 @@ public class VersionedFileDAOTest {
 
 	/**
 	 * Test - get file system size
+	 * @throws LocationAlreadyExistsException 
 	 * 
      */
 	@Test
-	public void getFileSystemSizeDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
+	public void getFileSystemSizeDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException, LocationAlreadyExistsException {
   		
 		TransactionStatus ts = tm.getTransaction(td);
 		

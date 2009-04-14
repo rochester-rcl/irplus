@@ -53,8 +53,9 @@ public class FileSystemManager implements Serializable{
 	 * 
 	 * @param path
 	 * @return a new Folder info object.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public static TreeFolderInfo createFolder( String folderName, DefaultFileDatabase fd )
+	public static TreeFolderInfo createFolder( String folderName, DefaultFileDatabase fd ) throws LocationAlreadyExistsException
 	{
 		TreeFolderInfo info = null;
 		
@@ -144,8 +145,9 @@ public class FileSystemManager implements Serializable{
 	 * @param parent to add child to
 	 * @param childName name of the child to create.
 	 * @return the child folder created.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	static TreeFolderInfo createChildFolder(TreeFolderInfo parent, String childName)
+	static TreeFolderInfo createChildFolder(TreeFolderInfo parent, String childName) throws LocationAlreadyExistsException
 	{
 		TreeFolderInfo info = null;
 		
@@ -350,20 +352,17 @@ public class FileSystemManager implements Serializable{
 	 * 
 	 * @param path
 	 * @return true if the path is deleted
-	 * 
-	 * @throws Illegal state exception if the folder already 
-	 * exists
-	 * 
+	 * @throws LocationAlreadyExistsException - if the location already exits
 	 * @throws Runtime exception if an IO error occurs.
 	 */
-	static boolean createDirectory(String path)
+	static boolean createDirectory(String path) throws LocationAlreadyExistsException
 	{
 		File f = new File(path);
 		boolean created = false;
 				
 		if( f.exists() )
 		{
-			throw new IllegalStateException("Folder path already " + f.getAbsolutePath() + " exists");
+			throw new LocationAlreadyExistsException("Folder path already " + f.getAbsolutePath() + " exists", f.getAbsolutePath());
 		}
 		try
 		{

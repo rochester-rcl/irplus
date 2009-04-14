@@ -27,6 +27,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TemporaryFileCreator;
@@ -96,8 +97,9 @@ public class DefaultRepositoryServiceTest {
 	
 	/**
 	 * Test finding the repository
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void getRepositoryTest()
+	public void getRepositoryTest() throws LocationAlreadyExistsException
 	{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -122,8 +124,9 @@ public class DefaultRepositoryServiceTest {
 	/**
 	 * Test creating a versioned file
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void createVersionedFileTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void createVersionedFileTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		TransactionStatus ts = tm.getTransaction(td);
 		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
@@ -181,8 +184,9 @@ public class DefaultRepositoryServiceTest {
 	/**
 	 * Test creating a versioned file which is a jpeg
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void createVersionedJpegFileTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void createVersionedJpegFileTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		TransactionStatus ts = tm.getTransaction(td);
 		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
@@ -276,8 +280,9 @@ public class DefaultRepositoryServiceTest {
 	/**
 	 * Test finding the repository
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void addNewVersionTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void addNewVersionTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
         TransactionStatus ts = tm.getTransaction(td);
 		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
@@ -336,8 +341,9 @@ public class DefaultRepositoryServiceTest {
 	/**
 	 * Test locking and unlocking a versioned file
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void lockUnLockVersionedFileTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void lockUnLockVersionedFileTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		TransactionStatus ts = tm.getTransaction(td);
 		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
@@ -423,8 +429,9 @@ public class DefaultRepositoryServiceTest {
 	/**
 	 * Test deleting an ir file.  Make sure the underlying file information
 	 * is also deleted. 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testDeleteIrFile() throws IllegalFileSystemNameException
+	public void testDeleteIrFile() throws IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		TransactionStatus ts = tm.getTransaction(td);
 		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);

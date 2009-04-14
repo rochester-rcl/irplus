@@ -30,6 +30,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
@@ -89,9 +90,10 @@ public class IrFileDAOTest {
 
 	/**
 	 * Test adding a file to an irFile
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void irFileAddFileDAOTest()  throws IllegalFileSystemNameException{
+	public void irFileAddFileDAOTest()  throws IllegalFileSystemNameException, LocationAlreadyExistsException{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
 		

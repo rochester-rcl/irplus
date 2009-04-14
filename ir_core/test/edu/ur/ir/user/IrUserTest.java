@@ -25,6 +25,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
@@ -132,8 +133,9 @@ public class IrUserTest {
 	/**
 	 * Test adding a file to a user.
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddFile() throws DuplicateNameException, IllegalFileSystemNameException
+	public void testAddFile() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -178,8 +180,9 @@ public class IrUserTest {
 	
 	/**
 	 * Test creating a folder for indexing user data 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testCreateIndexFolder()
+	public void testCreateIndexFolder() throws LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 

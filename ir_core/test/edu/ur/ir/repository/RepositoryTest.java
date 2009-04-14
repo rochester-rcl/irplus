@@ -22,6 +22,7 @@ import java.util.Properties;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
@@ -80,8 +81,9 @@ public class RepositoryTest {
 	/**
 	 * Test adding/removing an irCollection from a repository
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddCollection() throws DuplicateNameException
+	public void testAddCollection() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -115,8 +117,9 @@ public class RepositoryTest {
 	/**
 	 * Test adding/removing an irCollection from a repository
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testGetCollectionByName() throws DuplicateNameException
+	public void testGetCollectionByName() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -144,8 +147,9 @@ public class RepositoryTest {
 	 * Test moving a repository from inside the tree to 
 	 * a top level tree. 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testMakeIrCollectionTopLevel() throws DuplicateNameException
+	public void testMakeIrCollectionTopLevel() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 

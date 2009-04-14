@@ -30,6 +30,7 @@ import edu.ur.file.db.DefaultFileDatabaseInfo;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileServer;
 import edu.ur.file.db.FileServerService;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.service.DefaultFileServerService;
 
 import edu.ur.file.db.UniqueNameGenerator;
@@ -107,8 +108,9 @@ public class InitializeSystem extends ActionSupport implements Preparable, Valid
 	 * 
 	 * @return
 	 * @throws NoIndexFoundException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public String save() throws NoIndexFoundException {
+	public String save() throws NoIndexFoundException, LocationAlreadyExistsException {
 		
 		log.debug("Initalizing system with name " + repositoryName + 
 				" fileLocation " + fileLocation);

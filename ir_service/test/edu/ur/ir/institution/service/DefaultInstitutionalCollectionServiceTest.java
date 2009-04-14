@@ -30,6 +30,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -107,8 +108,9 @@ public class DefaultInstitutionalCollectionServiceTest {
 	 * Test moving collections to an existing collection
 	 * 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void moveCollectionToCollectionTest() throws DuplicateNameException
+	public void moveCollectionToCollectionTest() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -189,8 +191,9 @@ public class DefaultInstitutionalCollectionServiceTest {
 	 * Test moving collections to an existing collection
 	 * 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void moveCollectionToRootTest() throws DuplicateNameException
+	public void moveCollectionToRootTest() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -261,9 +264,10 @@ public class DefaultInstitutionalCollectionServiceTest {
 	/**
 	 * Test adding subscribers to collection
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
-	public void collectionSubscriptionTest() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void collectionSubscriptionTest() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -307,7 +311,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 		
 	}
 	
-	public void testSetAllPublicationsWithinCollectionPublic() throws IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, UserDeletedPublicationException{
+	public void testSetAllPublicationsWithinCollectionPublic() throws IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, UserDeletedPublicationException, LocationAlreadyExistsException{
 
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -371,7 +375,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 
 	}
 
-	public void testSetAllPublicationsWithinCollectionPrivate() throws IllegalFileSystemNameException, DuplicateNameException, UserDeletedPublicationException, UserHasPublishedDeleteException{
+	public void testSetAllPublicationsWithinCollectionPrivate() throws IllegalFileSystemNameException, DuplicateNameException, UserDeletedPublicationException, UserHasPublishedDeleteException, LocationAlreadyExistsException{
 
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);

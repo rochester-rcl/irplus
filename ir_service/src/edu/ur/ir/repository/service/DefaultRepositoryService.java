@@ -29,6 +29,7 @@ import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServerService;
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileVersion;
@@ -745,10 +746,11 @@ public class DefaultRepositoryService implements RepositoryService {
 
 	/**
 	 * Create the folder with the specified name.
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 * 
 	 * @see edu.ur.ir.repository.RepositoryService#createFolderInfo(edu.ur.ir.repository.Repository, java.lang.String)
 	 */
-	public FolderInfo createFolderInfo(Repository repository, String folderName) {
+	public FolderInfo createFolderInfo(Repository repository, String folderName) throws LocationAlreadyExistsException {
 		
 		return fileServerService.createFolder(repository.getFileDatabase(), 
 				uniqueNameGenerator.getNextName(), folderName);

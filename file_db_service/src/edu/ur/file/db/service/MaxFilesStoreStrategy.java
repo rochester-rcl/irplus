@@ -23,6 +23,7 @@ import edu.ur.file.db.DefaultDatabaseFileStoreStrategy;
 import edu.ur.file.db.DefaultFileDatabase;
 import edu.ur.file.db.DefaultFileInfo;
 import edu.ur.file.db.FileDatabaseDAO;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.TreeFolderInfo;
 import edu.ur.file.db.TreeFolderInfoDAO;
 import edu.ur.file.db.UniqueNameGenerator;
@@ -78,7 +79,7 @@ public class MaxFilesStoreStrategy implements
 		
 		if( isTooBig(fileDatabase))
 		{
-			createNewDatabaseFolder(fileDatabase);
+		    createNewDatabaseFolder(fileDatabase);
 		}
 		return fileDatabase.addFile(unqiueFileName);
 	}
@@ -110,11 +111,17 @@ public class MaxFilesStoreStrategy implements
 	/**
 	 * Create a new database folder and set it as the current file store
 	 * @param fileDatabase
+	 * @throws LocationAlreadyExistsException - if the location already exists
 	 */
-	private void createNewDatabaseFolder(DefaultFileDatabase fileDatabase)
+	private void createNewDatabaseFolder(DefaultFileDatabase fileDatabase) 
 	{
 		String nextName = uniqueNameGenerator.getNextName();
-		TreeFolderInfo folder = fileDatabase.createRootFolder(nextName, nextName);
+		TreeFolderInfo folder;
+		try {
+			folder = fileDatabase.createRootFolder(nextName, nextName);
+		} catch (LocationAlreadyExistsException e) {
+			throw new IllegalStateException("file database location already exists", e);
+		}
 		folder.setDescription("Created by MaxFilesStoreStrategy - max file reached");
 		fileDatabase.setCurrentFileStore(nextName);
 		treeFolderInfoDAO.makePersistent(folder);

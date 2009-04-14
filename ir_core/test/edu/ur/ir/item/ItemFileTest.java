@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
@@ -48,8 +49,9 @@ public class ItemFileTest {
 	 * Test basic set and get methods
 	 * 
 	 * @param description
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testBasicSets()  throws IllegalFileSystemNameException
+	public void testBasicSets()  throws IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -90,8 +92,9 @@ public class ItemFileTest {
 	
 	/**
 	 * Test equals and hash code methods.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testEquals() throws IllegalFileSystemNameException
+	public void testEquals() throws IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 

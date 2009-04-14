@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.repository.Repository;
@@ -209,7 +210,11 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 			try {
 				existingFolder.reName(folderName);
 				userFileSystemService.makePersonalFolderPersistent(existingFolder);
-				userWorkspaceIndexService.updateIndex(repository, existingFolder);
+				try {
+					userWorkspaceIndexService.updateIndex(repository, existingFolder);
+				} catch (LocationAlreadyExistsException e) {
+					log.error(e);
+				}
 				folderAdded = true;
 			} catch (DuplicateNameException e) {
 				folderAdded = false;
@@ -227,7 +232,11 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		{
 			other.setDescription(folderDescription);
 			userFileSystemService.makePersonalFolderPersistent(other);
-			userWorkspaceIndexService.updateIndex(repository, other);
+			try {
+				userWorkspaceIndexService.updateIndex(repository, other);
+			} catch (LocationAlreadyExistsException e) {
+				log.error(e);
+			}
 			folderAdded = true;
 		} else {
 			folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});

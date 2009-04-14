@@ -28,6 +28,7 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.FileSystem;
@@ -445,7 +446,11 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		for( PersonalFile pf : personalFiles)
 		{
 			log.debug("adding file " + pf);
+			try {
 				userWorkspaceIndexService.addToIndex(repository, pf);
+			} catch (LocationAlreadyExistsException e) {
+				log.error(e);
+			}
 			
 		}
 	}

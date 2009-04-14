@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.cgLib.CgLibHelper;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.repository.Repository;
@@ -362,7 +363,11 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			for (VersionedFile file : versionedFiles) {
 				try {
 					SharedInboxFile sif = inviteUserService.shareFile(invitingUser, invitedUser, file);
-					userWorkspaceIndexService.addToIndex(getRepository(), sif);
+					try {
+						userWorkspaceIndexService.addToIndex(getRepository(), sif);
+					} catch (LocationAlreadyExistsException e) {
+						log.error(e);
+					}
 				} catch (FileSharingException e1) {
 					throw new RuntimeException("This should never happen", e1);
 				}

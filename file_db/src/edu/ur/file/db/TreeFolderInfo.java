@@ -176,8 +176,9 @@ public class TreeFolderInfo extends PreOrderTreeSetNodeBase implements
 	 * unique against all files in the file database management system.
 	 * 
 	 * @return the created TreeFolderInfo
+	 * @throws LocationAlreadyExistsException - if the location already exists 
 	 */
-	public TreeFolderInfo createChild(String displayName, String uniqueName) {
+	public TreeFolderInfo createChild(String displayName, String uniqueName) throws LocationAlreadyExistsException  {
 		TreeFolderInfo child = FileSystemManager.createChildFolder(this,
 				uniqueName);
 		child.setName(uniqueName);
