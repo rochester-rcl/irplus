@@ -33,6 +33,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
@@ -155,9 +156,10 @@ public class FileDownloadInfoDAOTest {
 	 * @throws IllegalFileSystemNameException
 	 * @throws UserHasPublishedDeleteException
 	 * @throws ParseException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void numberOfFileDownloadsForCollectionsTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException {
+	public void numberOfFileDownloadsForCollectionsTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException, LocationAlreadyExistsException {
 
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -327,10 +329,11 @@ public class FileDownloadInfoDAOTest {
 	 * @throws IllegalFileSystemNameException
 	 * @throws UserHasPublishedDeleteException
 	 * @throws ParseException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
 	public void getInstitutionalItemDownloadCountByPersonNameTest() 
-		throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException, DuplicateContributorException {
+		throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException, DuplicateContributorException, LocationAlreadyExistsException {
 
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

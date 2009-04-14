@@ -38,6 +38,7 @@ import edu.ur.file.db.FileServer;
 import edu.ur.file.db.FileServerDAO;
 import edu.ur.file.db.FileServerService;
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.TreeFolderInfo;
 import edu.ur.file.db.TreeFolderInfoDAO;
 
@@ -186,8 +187,9 @@ public class DefaultFileServerService implements FileServerService{
 	 * @param description - description of the file database.
 	 * 
 	 * @return create file database.
+	 * @throws LocationAlreadyExistsException - if the file database location already exists
 	 */
-	public DefaultFileDatabase createFileDatabase(FileDatabaseInfo fileDatabaseInfo) {
+	public DefaultFileDatabase createFileDatabase(FileDatabaseInfo fileDatabaseInfo) throws LocationAlreadyExistsException {
 		DefaultFileDatabaseInfo defaultFileDatabaseInfo = (DefaultFileDatabaseInfo)fileDatabaseInfo;
 		
 		Long fileServerId = defaultFileDatabaseInfo.getFileServerId();
@@ -616,10 +618,11 @@ public class DefaultFileServerService implements FileServerService{
 	/**
 	 * Create a folder with the specified unique name. The display name is set to the same
 	 * as the unique name.
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 * 
 	 * @see edu.ur.file.db.FileServerService#createFolder(edu.ur.file.db.FileDatabase, java.lang.String)
 	 */
-	public FolderInfo createFolder(FileDatabase fileDatabase, String uniqueName) {
+	public FolderInfo createFolder(FileDatabase fileDatabase, String uniqueName) throws LocationAlreadyExistsException {
 		DefaultFileDatabase defaultFileDatabase = (DefaultFileDatabase)fileDatabase;
 		TreeFolderInfo folderInfo = defaultFileDatabase.createRootFolder(uniqueName, uniqueName);
 	    folderInfo.setDisplayName(uniqueName);
@@ -630,10 +633,11 @@ public class DefaultFileServerService implements FileServerService{
 	/**
 	 * Create a folder with the specified unique name. The display name is set to the same
 	 * as the unique name.
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 * 
 	 * @see edu.ur.file.db.FileServerService#createFolder(edu.ur.file.db.FileDatabase, java.lang.String, java.lang.String)
 	 */
-	public FolderInfo createFolder(FileDatabase fileDatabase, String uniqueName, String displayName) {
+	public FolderInfo createFolder(FileDatabase fileDatabase, String uniqueName, String displayName) throws LocationAlreadyExistsException {
 		DefaultFileDatabase defaultFileDatabase = (DefaultFileDatabase)fileDatabase;
 		TreeFolderInfo folderInfo = defaultFileDatabase.createRootFolder(uniqueName, uniqueName);
 	    folderInfo.setDisplayName(displayName);
@@ -643,10 +647,11 @@ public class DefaultFileServerService implements FileServerService{
 	
 	/**
 	 * Create a child folder underneath the specified parent folder
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 * @see edu.ur.file.db.FileServerService#createFolder(edu.ur.file.db.FolderInfo, 
 	 *     java.lang.String)
 	 */
-	public FolderInfo createFolder(FolderInfo parent, String uniqueName) {
+	public FolderInfo createFolder(FolderInfo parent, String uniqueName) throws LocationAlreadyExistsException {
 		TreeFolderInfo parentFolderInfo = (TreeFolderInfo)parent;
 		TreeFolderInfo child = parentFolderInfo.createChild(uniqueName, uniqueName);
 		treeFolderInfoDAO.makePersistent(child);

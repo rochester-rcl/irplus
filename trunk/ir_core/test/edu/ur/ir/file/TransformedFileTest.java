@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
@@ -69,8 +70,9 @@ public class TransformedFileTest {
 	
 	/**
 	 * Test creating a transformed file 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void addTransformedFileToIrFileTest() throws IllegalFileSystemNameException
+	public void addTransformedFileToIrFileTest() throws IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();

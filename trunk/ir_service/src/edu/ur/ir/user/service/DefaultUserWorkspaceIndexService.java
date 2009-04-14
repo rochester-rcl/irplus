@@ -35,6 +35,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.FileVersion;
@@ -264,11 +265,12 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 
 	/**
 	 * Add the personal file to the index.
+	 * @throws LocationAlreadyExistsException 
 	 * @throws NoUserIndexFolderException 
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#addToIndex(java.io.File, edu.ur.ir.user.PersonalFile)
 	 */
-	public void addToIndex(Repository repository, PersonalFile personalFile){
+	public void addToIndex(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException{
 		
 		File personalIndexFolder = this.getPersonalIndexFolder(personalFile.getOwner(), repository);
         
@@ -388,11 +390,12 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 
 	/**
 	 * Update the index with the personal file
+	 * @throws LocationAlreadyExistsException - if folder location already exists
 	 * @throws NoUserIndexFolderException 
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateIndex(java.io.File, edu.ur.ir.user.PersonalFile)
 	 */
-	public void updateIndex(Repository repository, PersonalFile personalFile) {
+	public void updateIndex(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException {
 		deleteFromIndex(personalFile);
 		addToIndex(repository, personalFile);
 	}
@@ -458,11 +461,13 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	}
 
 	/**
-	 * Add the folder to the users index.
+	 * Add the folder to the users index. 
+	 * 
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#addToIndex(java.io.File, edu.ur.ir.user.PersonalFolder)
 	 */
-	public void addToIndex(Repository repository, PersonalFolder personalFolder){
+	public void addToIndex(Repository repository, PersonalFolder personalFolder) throws LocationAlreadyExistsException{
 		File personalIndexFolder = this.getPersonalIndexFolder(personalFolder.getOwner(), repository);
 		
 		Document doc = new Document();
@@ -560,23 +565,28 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	}
 
 	/**
-	 * Update the index with the personal folder.
+	 * Update the index with the personal folder. Will create a folder location for the user if one does not yet exist.
+	 * 
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 * @throws NoIndexFoundException 
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateIndex(java.io.File, edu.ur.ir.user.PersonalFolder)
 	 */
-	public void updateIndex(Repository repository, PersonalFolder personalFolder){
+	public void updateIndex(Repository repository, PersonalFolder personalFolder) throws LocationAlreadyExistsException{
 		deleteFromIndex(personalFolder);
 		addToIndex(repository, personalFolder);
 	}
 
 	
 	/**
-	 * Add a shared inbox file to the index.
+	 * Add a shared inbox file to the index.  Will create a shared folder location if one does not already exists.
+	 * 
+	 * @throws LocationAlreadyExistsException - if the folder location already exists when trying to create a new one
+	 * for the user.
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#addToIndex(java.io.File, edu.ur.ir.user.SharedInboxFile)
 	 */
-	public void addToIndex(Repository repository, SharedInboxFile inboxFile){
+	public void addToIndex(Repository repository, SharedInboxFile inboxFile) throws LocationAlreadyExistsException{
 		File personalIndexFolder = this.getPersonalIndexFolder(inboxFile.getSharedWithUser(), repository);
         Document doc = new Document();
         
@@ -722,11 +732,12 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	}
 
 	/**
-	 * Update the index whith the new shared file.
+	 * Update the index whith the new shared file. Will create a new folder if one does not already exist
+	 * @throws LocationAlreadyExistsException  - if the new location already exists
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateIndex(java.io.File, edu.ur.ir.user.SharedInboxFile)
 	 */
-	public void updateIndex(Repository repository, SharedInboxFile inboxFile){
+	public void updateIndex(Repository repository, SharedInboxFile inboxFile) throws LocationAlreadyExistsException{
 		deleteFromIndex(inboxFile);
 		addToIndex(repository, inboxFile);
 	}
@@ -735,7 +746,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	/* (non-Javadoc)
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateAllIndexes(edu.ur.ir.user.PersonalFile)
 	 */
-	public void updateAllIndexes(Repository repository, PersonalFile personalFile) {
+	public void updateAllIndexes(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException {
 		
         IrUser owner = personalFile.getOwner();
 		PersonalFile ownerFile = userFileSystemService.getPersonalFile(owner, 
@@ -801,11 +812,12 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 
 	/**
 	 * Add the personal item to the index.
+	 * @throws LocationAlreadyExistsException 
 	 * @throws NoUserIndexFolderException 
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#addToIndex(java.io.File, edu.ur.ir.user.PersonalFile)
 	 */
-	public void addToIndex(Repository repository, PersonalItem personalItem)
+	public void addToIndex(Repository repository, PersonalItem personalItem) throws LocationAlreadyExistsException
 	{
 		File personalIndexFolder = getPersonalIndexFolder(personalItem.getOwner(), repository);
 		this.writeDocument(personalIndexFolder.getAbsolutePath(), getDocument(personalItem));
@@ -875,10 +887,11 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	
 	/**
 	 * Update the index for the specified item.
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateIndex(edu.ur.ir.repository.Repository, edu.ur.ir.user.PersonalItem)
 	 */
-	public void updateIndex(Repository repository, PersonalItem personalItem)
+	public void updateIndex(Repository repository, PersonalItem personalItem) throws LocationAlreadyExistsException
 	{
 		deleteFromIndex(personalItem);
 		addToIndex(repository, personalItem);
@@ -892,8 +905,9 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 * @param user - user to get the personal index folder
 	 * @param repository - repository to create the folder in if the user does not have an index folder
 	 * @return the folder 
+	 * @throws LocationAlreadyExistsException - if a new folder is needed and name problem exists
 	 */
-	private File getPersonalIndexFolder(IrUser user, Repository repository)
+	private File getPersonalIndexFolder(IrUser user, Repository repository) throws LocationAlreadyExistsException
 	{
 		if( user.getPersonalIndexFolder() == null )
 		{

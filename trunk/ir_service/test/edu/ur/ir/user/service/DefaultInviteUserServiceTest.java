@@ -33,6 +33,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
@@ -118,7 +119,7 @@ public class DefaultInviteUserServiceTest {
     RoleService roleService= (RoleService) ctx
 	.getBean("roleService");    
 
-	public void InviteUserTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException {
+	public void InviteUserTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException {
 		// determine if we should be sending emails 
 		boolean sendEmail = new Boolean(properties.getProperty("send_emails")).booleanValue();
 
@@ -275,8 +276,9 @@ public class DefaultInviteUserServiceTest {
      * Test scenario - User1 sends invite email to address "a@b.com" for sharing File1.doc. User2 adds new Email "a@b.com".
      * The File1.doc should be shared with User2 after adding new email "a@b.com".
      * @throws UserHasPublishedDeleteException 
+     * @throws LocationAlreadyExistsException 
      */
-	public void newEmailInviteUserTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException {
+	public void newEmailInviteUserTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException {
 
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);

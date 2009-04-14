@@ -36,6 +36,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
@@ -77,8 +78,9 @@ public class DefaultExcelXmlTextExtractorTest {
 	 * Test basic search within a plain text document
 	 * 
 	 * @param description
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testIndexExcelXmlDocument() {
+	public void testIndexExcelXmlDocument() throws LocationAlreadyExistsException {
 
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer",

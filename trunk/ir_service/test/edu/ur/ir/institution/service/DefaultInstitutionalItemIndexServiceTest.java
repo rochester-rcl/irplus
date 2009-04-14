@@ -40,6 +40,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FacetSearchHelper;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
@@ -201,8 +202,9 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	 * @throws DuplicateNameException 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws DuplicateContributorException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testIndexInstitutionalItem() throws NoIndexFoundException, IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException 
+	public void testIndexInstitutionalItem() throws NoIndexFoundException, IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException, LocationAlreadyExistsException 
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -460,8 +462,9 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	 * @throws DuplicateNameException 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws DuplicateContributorException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testDeleteSearchCollectionItemIndex() throws NoIndexFoundException, IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException 
+	public void testDeleteSearchCollectionItemIndex() throws NoIndexFoundException, IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException, LocationAlreadyExistsException 
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -722,8 +725,9 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	 * @throws NoIndexFoundException 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws DuplicateContributorException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testReIndexItemsInCollection() throws DuplicateNameException, IllegalFileSystemNameException, NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException
+	public void testReIndexItemsInCollection() throws DuplicateNameException, IllegalFileSystemNameException, NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException, LocationAlreadyExistsException
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);

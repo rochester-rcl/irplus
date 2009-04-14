@@ -136,8 +136,9 @@ Serializable {
 	 * 
 	 * @param uniqueName
 	 * @return - the created folder.
+	 * @throws LocationAlreadyExistsException - if location already exists
 	 */
-	public FolderInfo createFolder(String uniqueName);
+	public FolderInfo createFolder(String uniqueName) throws LocationAlreadyExistsException;
 	
 	/**
 	 * Get the folder with the specified name

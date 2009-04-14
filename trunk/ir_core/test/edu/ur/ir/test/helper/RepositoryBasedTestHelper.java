@@ -23,6 +23,7 @@ import edu.ur.file.db.DefaultFileDatabaseInfo;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileServer;
 import edu.ur.file.db.FileServerService;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 
@@ -44,13 +45,14 @@ public class RepositoryBasedTestHelper {
      * Creates a repository ready for use in testing.
      * 
      * @return the created repository.
+     * @throws LocationAlreadyExistsException 
      */
     public Repository createRepository(String fileServerName, 
     		String displayName,
     		String folderSystemName, 
     		String repoName, 
     		String fileDatabasePath,
-    		String defaultFolderDispalyName)
+    		String defaultFolderDispalyName) throws LocationAlreadyExistsException
     {
 
 		// create the file server

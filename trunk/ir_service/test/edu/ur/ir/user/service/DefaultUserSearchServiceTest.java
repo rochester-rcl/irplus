@@ -29,6 +29,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.repository.Repository;
@@ -81,9 +82,10 @@ public class DefaultUserSearchServiceTest {
 	 * Test indexing a personal file - which may have multiple versions 
 	 * in it.
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 * @throws NoUserIndexFolderException 
 	 */
-	public void testSearchPersonalFile() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void testSearchPersonalFile() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);

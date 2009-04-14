@@ -30,6 +30,7 @@ import edu.ur.file.db.DefaultFileInfo;
 import edu.ur.file.db.DefaultFileServer;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.TreeFolderInfo;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
@@ -225,8 +226,9 @@ public class ResearcherTest {
 	/**
 	 * Test adding a file to a researcher.
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddFile() throws DuplicateNameException,  IllegalFileSystemNameException
+	public void testAddFile() throws DuplicateNameException,  IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 

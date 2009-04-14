@@ -30,6 +30,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
@@ -139,8 +140,9 @@ public class ResearcherDAOTest {
 	
 	/**
 	 * test adding pictures to the institutional researcherlection
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void addResearcherPictures()  throws IllegalFileSystemNameException
+	public void addResearcherPictures()  throws IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		TransactionStatus ts = tm.getTransaction(td);
 		

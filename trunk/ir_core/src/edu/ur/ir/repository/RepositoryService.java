@@ -22,6 +22,7 @@ import java.util.List;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.IrFile;
@@ -439,8 +440,9 @@ public interface RepositoryService {
 	 * @param folderName - name of folder on the file system.
 	 * 
 	 * @return the created folder.
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 */
-	public FolderInfo createFolderInfo(Repository repository, String folderName);
+	public FolderInfo createFolderInfo(Repository repository, String folderName) throws LocationAlreadyExistsException;
 	
 	/**
 	 * Get folder by name

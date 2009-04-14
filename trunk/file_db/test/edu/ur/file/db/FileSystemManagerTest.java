@@ -56,9 +56,10 @@ public class FileSystemManagerTest {
 
 	/**
 	 * Creating and deleting a folder Info 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void createFolderPathTest()
+	public void createFolderPathTest() throws LocationAlreadyExistsException
 	{
 		String path = properties.getProperty("FilsSystemManagerTest.folder_path");
 		
@@ -73,9 +74,10 @@ public class FileSystemManagerTest {
 	
 	/**
 	 * Test moving a folder. 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void moveFolderTest()
+	public void moveFolderTest() throws LocationAlreadyExistsException
 	{
 	    String startPath = properties.getProperty("FileSystemManagerTest.move.initial");
 	    
@@ -105,9 +107,10 @@ public class FileSystemManagerTest {
 	
 	/**
 	 * Test moving a folder that has children. 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void moveFolderTreeTest()
+	public void moveFolderTreeTest() throws LocationAlreadyExistsException
 	{
 	    String startPath = properties.getProperty("FileSystemManagerTest.move.initial");
 	    
@@ -147,9 +150,10 @@ public class FileSystemManagerTest {
 	
 	/**
 	 * Test moving a folder. 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void moveFolderWithFilesTest()
+	public void moveFolderWithFilesTest() throws LocationAlreadyExistsException
 	{
 		// create a file server with the specified path
 	    String serverPath = properties.getProperty("FileSystemManagerTest.move.initial");
@@ -214,8 +218,9 @@ public class FileSystemManagerTest {
 	
 	/**
 	 * Test adding a file to a folder
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void addFileTest()
+	public void addFileTest() throws LocationAlreadyExistsException
 	{
 		// create a file server with the specified path
 		String folderPath = properties.getProperty("FilsSystemManagerTest.folder_path");
@@ -260,8 +265,9 @@ public class FileSystemManagerTest {
 	
 	/**
 	 * Test deleting a file 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void deleteFileTest()
+	public void deleteFileTest() throws LocationAlreadyExistsException
 	{
 		// where the file will be copied into
 		String folderPath = properties.getProperty("FilsSystemManagerTest.folder_path");
@@ -305,8 +311,9 @@ public class FileSystemManagerTest {
 	
 	/**
 	 * Test deleteing a folder 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void deleteFolderTest()
+	public void deleteFolderTest() throws LocationAlreadyExistsException
 	{
 		// where the file will be copied into
 		String folderPath = properties.getProperty("FileSystemManagerTest.delete_folder");
@@ -331,8 +338,9 @@ public class FileSystemManagerTest {
 	
 	/**
 	 * Test moving a file from one folder into another.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void moveFileTest()
+	public void moveFileTest() throws LocationAlreadyExistsException
 	{
 		String folderPath = properties.getProperty("FileSystemManagerTest.file.move");
 		
@@ -388,8 +396,9 @@ public class FileSystemManagerTest {
 	
 	/**
 	 * Test moving a folder from somewhere inside the folder to a root folder.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void moveFolderToRootTest()
+	public void moveFolderToRootTest() throws LocationAlreadyExistsException
 	{
 		String folderPath = properties.getProperty("FileSystemManagerTest.file.move.root");
 		DefaultFileServer server  = new DefaultFileServer("fileServer");
@@ -464,8 +473,9 @@ public class FileSystemManagerTest {
 	
 	/**
 	 * Test moving a folder from one root folder to another.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void moveFolderToDifferentRootTest()
+	public void moveFolderToDifferentRootTest() throws LocationAlreadyExistsException
 	{
 		String folderPath = properties.getProperty("FileSystemManagerTest.file.move.root");
 		DefaultFileServer server  = new DefaultFileServer("fileServer");

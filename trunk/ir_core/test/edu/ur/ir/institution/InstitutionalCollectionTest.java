@@ -22,6 +22,7 @@ import java.util.Properties;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.item.GenericItem;
@@ -66,8 +67,9 @@ public class InstitutionalCollectionTest {
 	/**
 	 * Test adding children.
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddChildren() throws DuplicateNameException
+	public void testAddChildren() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -217,8 +219,9 @@ public class InstitutionalCollectionTest {
 	/**
 	 * Test removing a collection. 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testRemoveCollections() throws DuplicateNameException
+	public void testRemoveCollections() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -291,8 +294,9 @@ public class InstitutionalCollectionTest {
 	/**
 	 * Test allows items setting
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAllowsItems() throws DuplicateNameException
+	public void testAllowsItems() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -326,8 +330,9 @@ public class InstitutionalCollectionTest {
 	/**
 	 * Test creating items for a collection. 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddingItems() throws DuplicateNameException
+	public void testAddingItems() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -380,8 +385,9 @@ public class InstitutionalCollectionTest {
 	/**
 	 * Test getting an item by name. 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testGetItemsByName() throws DuplicateNameException
+	public void testGetItemsByName() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -420,8 +426,9 @@ public class InstitutionalCollectionTest {
 	/**
 	 * Test moving an institutional collection.
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testMoveInsitutionalCollectionWithinTree() throws DuplicateNameException
+	public void testMoveInsitutionalCollectionWithinTree() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
@@ -564,8 +571,9 @@ public class InstitutionalCollectionTest {
 	/**
 	 * Test moving a personal Collection to the root of the person.
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testMoveInstitutionalCollectionToRoot() throws DuplicateNameException
+	public void testMoveInstitutionalCollectionToRoot() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();

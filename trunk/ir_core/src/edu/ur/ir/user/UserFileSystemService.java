@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.List;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
@@ -443,8 +444,9 @@ public interface UserFileSystemService {
 	 * @param user - user to add a folder for indexing
 	 * @param repository - repository to add the index to.
 	 * @param folderName - name to give the folder in the file system.
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 */
-	public void createIndexFolder(IrUser user, Repository repository, String folderName);
+	public void createIndexFolder(IrUser user, Repository repository, String folderName) throws LocationAlreadyExistsException;
 	
 	/**
 	 * Determine if the irFile is used by any personal files.  This

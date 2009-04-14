@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.repository.Repository;
@@ -45,7 +46,7 @@ public class SharedInboxFileTest {
 	/** Get the properties file  */
 	Properties properties = propertiesLoader.getProperties();
 	
-	public void basicPersonalInboxFileTest() throws FileSharingException, IllegalFileSystemNameException
+	public void basicPersonalInboxFileTest() throws FileSharingException, IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 

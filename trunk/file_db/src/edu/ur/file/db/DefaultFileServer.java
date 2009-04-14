@@ -125,9 +125,10 @@ public class DefaultFileServer extends CommonPersistent implements FileServer{
 	 * @param path of the file database
 	 * 
 	 * @return the created file database
+	 * @throws LocationAlreadyExistsException - if the location already exists
 	 */	
 	public DefaultFileDatabase createFileDatabase(String displayName, String name, 
-			String path, String description) {
+			String path, String description) throws LocationAlreadyExistsException {
 		
 		if( path == null )
 		{

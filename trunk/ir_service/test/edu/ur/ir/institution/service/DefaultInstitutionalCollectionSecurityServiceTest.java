@@ -28,6 +28,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
@@ -92,8 +93,9 @@ public class DefaultInstitutionalCollectionSecurityServiceTest {
 	/**
 	 * Test creating the default groups
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void assignParentPermissionsTest() throws DuplicateNameException
+	public void assignParentPermissionsTest() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

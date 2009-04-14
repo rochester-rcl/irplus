@@ -100,6 +100,7 @@ PersistentVersioned, Serializable, DescriptionAware, NameAware{
 	 * @param path of the file database
 	 * 
 	 * @return the created file database
+	 * @throws LocationAlreadyExistsException  - if the location already exists
 	 */	
-	public DefaultFileDatabase createFileDatabase(String displayName, String name, String path, String description);
+	public DefaultFileDatabase createFileDatabase(String displayName, String name, String path, String description) throws LocationAlreadyExistsException;
 }

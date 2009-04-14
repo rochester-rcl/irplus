@@ -68,8 +68,9 @@ public class FileDatabaseTest {
 	
 	/**
 	 * Test adding a root folder to the file database.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void createRootFolderTest()
+	public void createRootFolderTest() throws LocationAlreadyExistsException
 	{
 		DefaultFileServer fs = new DefaultFileServer();
 		
@@ -121,8 +122,9 @@ public class FileDatabaseTest {
 	
 	/**
 	 * Test adding a file to the file database.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void addFileTest()
+	public void addFileTest() throws LocationAlreadyExistsException
 	{
 		DefaultFileServer fs = new DefaultFileServer();
 		
@@ -156,8 +158,9 @@ public class FileDatabaseTest {
 	
 	/**
 	 * Test creating an emtpy file in the file system.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void createEmptyFileTest()
+	public void createEmptyFileTest() throws LocationAlreadyExistsException
 	{
 		DefaultFileServer fs = new DefaultFileServer();
 		
@@ -190,8 +193,9 @@ public class FileDatabaseTest {
 
 	/**
 	 * Test re-naming the file database.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void databaseReNameTest()
+	public void databaseReNameTest() throws LocationAlreadyExistsException
 	{
 		DefaultFileServer fs = new DefaultFileServer();
 		

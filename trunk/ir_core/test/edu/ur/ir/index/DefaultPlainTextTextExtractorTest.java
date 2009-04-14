@@ -36,6 +36,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
@@ -81,8 +82,9 @@ public class DefaultPlainTextTextExtractorTest {
 	 * Test basic search within a plain text document
 	 * 
 	 * @param description
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testIndexPlainTextDocument()
+	public void testIndexPlainTextDocument() throws LocationAlreadyExistsException
 	{
 		
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();

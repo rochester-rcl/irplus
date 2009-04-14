@@ -54,8 +54,9 @@ public interface FileServerService {
 	 * 
 	 * @param fileDatabaseInfo
 	 * @return - the file database created
+	 * @throws LocationAlreadyExistsException - if the file database location already exists
 	 */
-	public FileDatabase createFileDatabase(FileDatabaseInfo fileDatabaseInfo);
+	public FileDatabase createFileDatabase(FileDatabaseInfo fileDatabaseInfo) throws LocationAlreadyExistsException;
 	
 	/**
 	 * Get the file server by id.
@@ -246,8 +247,9 @@ public interface FileServerService {
 	 * @param uniqueName - unique name for the folder.
 	 * 
 	 * @return - the folder information.
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 */
-	public FolderInfo createFolder(FileDatabase fileDatabase, String uniqueName);
+	public FolderInfo createFolder(FileDatabase fileDatabase, String uniqueName) throws LocationAlreadyExistsException;
 
 	/**
 	 * Create a root level folder in the file database.
@@ -257,9 +259,10 @@ public interface FileServerService {
 	 * @param displayName - display name to give the folder.
 	 * 
 	 * @return - the folder information.
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 */
 	public FolderInfo createFolder(FileDatabase fileDatabase, String uniqueName, 
-			String displayName);
+			String displayName) throws LocationAlreadyExistsException;
 
 	
 	/**
@@ -269,8 +272,9 @@ public interface FileServerService {
 	 * @param uniqueName - unique name to use for the folder name
 	 * 
 	 * @return - the created child folder information.
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 */
-	public FolderInfo createFolder(FolderInfo parent, String uniqueName);
+	public FolderInfo createFolder(FolderInfo parent, String uniqueName) throws LocationAlreadyExistsException;
 	
 	
 	/**

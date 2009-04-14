@@ -54,9 +54,10 @@ public class TreeFolderInfoTest {
 
  	/**
 	 * Setters and Getters test 
+ 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void basicTreeFolderInfoTest() {
+	public void basicTreeFolderInfoTest() throws LocationAlreadyExistsException {
 		
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");
@@ -79,8 +80,9 @@ public class TreeFolderInfoTest {
 	
 	/**
 	 * Test adding a file to the folder.
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddFileInfo()
+	public void testAddFileInfo() throws LocationAlreadyExistsException
 	{
 		// this will create folders so we need to place them in directories
 		String filePath = properties.getProperty("FolderInfoTest.file.test");
@@ -123,9 +125,10 @@ public class TreeFolderInfoTest {
 	
 	/**
 	 * Test adding children functionality
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void testAddChildren()
+	public void testAddChildren() throws LocationAlreadyExistsException
 	{
 		// this will create folders so we need to place them in directories
 		String childrenPath = properties.getProperty("FolderInfoTest.children.path");
@@ -200,8 +203,9 @@ public class TreeFolderInfoTest {
 	
     /**
 	 * Test adding and creating files for a given folder.
+     * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddFiles()
+	public void testAddFiles() throws LocationAlreadyExistsException
 	{
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");
@@ -257,8 +261,9 @@ public class TreeFolderInfoTest {
 	
     /**
 	 * Test finding files recursively
+     * @throws LocationAlreadyExistsException 
 	 */
-	public void testRecursiveFindFiles()
+	public void testRecursiveFindFiles() throws LocationAlreadyExistsException
 	{
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");
@@ -289,8 +294,9 @@ public class TreeFolderInfoTest {
 	
     /**
 	 * Test removing files where it must be done recursively using unique id.
+     * @throws LocationAlreadyExistsException 
 	 */
-	public void testRecursiveRemoveFilesById()
+	public void testRecursiveRemoveFilesById() throws LocationAlreadyExistsException
 	{
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");
@@ -320,8 +326,9 @@ public class TreeFolderInfoTest {
 
     /**
 	 * Test removing files where it must be done recursively using unique name.
+     * @throws LocationAlreadyExistsException 
 	 */
-	public void testRecursiveRemoveFilesByUniqueName()
+	public void testRecursiveRemoveFilesByUniqueName() throws LocationAlreadyExistsException
 	{
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");
@@ -354,9 +361,10 @@ public class TreeFolderInfoTest {
 
     /**
 	 * Test equals method 
+     * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void testEquals() {
+	public void testEquals() throws LocationAlreadyExistsException {
 		
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");
@@ -382,9 +390,10 @@ public class TreeFolderInfoTest {
 
 	/**
 	 * Test the hash code
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void testHashCode() {
+	public void testHashCode() throws LocationAlreadyExistsException {
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");
 		
@@ -408,8 +417,9 @@ public class TreeFolderInfoTest {
 	
 	/**
 	 *  Make sure the root folder is always returned correctly. 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testRoot()
+	public void testRoot() throws LocationAlreadyExistsException
 	{
 		// this will create folders so we need to place them in directories
 		String childrenPath = properties.getProperty("FolderInfoTest.children.path");
@@ -459,9 +469,10 @@ public class TreeFolderInfoTest {
 	
 	/**
 	 * Test removing children functionality
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void testRemoveChildren()
+	public void testRemoveChildren() throws LocationAlreadyExistsException
 	{
 		// this will create folders so we need to place them in directories
 		String childrenPath = properties.getProperty("FolderInfoTest.children.path");
@@ -597,9 +608,10 @@ public class TreeFolderInfoTest {
 	/**
 	 * Make sure when the root folder changes - it is changed
 	 * on all children.
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void testChangeRootFolder()
+	public void testChangeRootFolder() throws LocationAlreadyExistsException
 	{
 		// this will create folders so we need to place them in directories
 		String childrenPath = properties.getProperty("FolderInfoTest.children.path");

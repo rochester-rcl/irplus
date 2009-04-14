@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
@@ -72,8 +73,9 @@ public class IrFileTest{
 	 * Test the basic get and set  methods
 	 * 
 	 * @param description
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testIrFileBasics() throws IllegalFileSystemNameException
+	public void testIrFileBasics() throws IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 

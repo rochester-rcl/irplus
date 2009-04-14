@@ -296,10 +296,11 @@ public class InMemoryDefaultFileServerService implements FileServerService{
 
 	/**
 	 * Creates a default file database in memory.
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 * @see edu.ur.file.db.FileServerService#createFileDatabase(edu.ur.file.db.FileDatabaseInfo)
 	 */
-	public DefaultFileDatabase createFileDatabase(FileDatabaseInfo fileDatabaseInfo) {
+	public DefaultFileDatabase createFileDatabase(FileDatabaseInfo fileDatabaseInfo) throws LocationAlreadyExistsException {
 		DefaultFileDatabaseInfo defaultFileDatabaseInfo = (DefaultFileDatabaseInfo)fileDatabaseInfo;
 		
 		Long fileServerId = defaultFileDatabaseInfo.getFileServerId();

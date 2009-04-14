@@ -27,6 +27,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -98,8 +99,9 @@ public class DefaultReviewableItemServiceTest {
 	 * Test accepting the item review 
 	 * 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void acceptReviewableItemTest() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void acceptReviewableItemTest() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

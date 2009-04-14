@@ -41,6 +41,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.FileCollaborator;
@@ -183,8 +184,9 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 * in it.
 	 * @throws NoIndexFoundException 
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testIndexPersonalFile() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException 
+	public void testIndexPersonalFile() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException 
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -310,8 +312,9 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 *
 	 * @throws NoIndexFoundException 
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testIndexPersonalFolder() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException 
+	public void testIndexPersonalFolder() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException 
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -408,9 +411,10 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 * @throws DuplicateNameException 
 	 * @throws FileSharingException 
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	public void testIndexSharedFileInUserInbox() throws NoIndexFoundException,
-		DuplicateNameException, FileSharingException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException 
+		DuplicateNameException, FileSharingException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException 
 	{
 		// determine if we should be sending emails 
 		boolean sendEmail = new Boolean(properties.getProperty("send_emails")).booleanValue();
@@ -664,8 +668,9 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 *
 	 * @throws NoIndexFoundException 
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testIndexPersonalItem() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException 
+	public void testIndexPersonalItem() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException 
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);

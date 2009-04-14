@@ -31,6 +31,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileInfoDAO;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
@@ -106,9 +107,10 @@ public class TransformedFileDAOTest {
 
 	/**
 	 * Test saving a transformed file
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void basicTransformedFileDAOTest()  throws IllegalFileSystemNameException{
+	public void basicTransformedFileDAOTest()  throws IllegalFileSystemNameException, LocationAlreadyExistsException{
 
 		TransactionStatus ts = tm.getTransaction(td);
 		

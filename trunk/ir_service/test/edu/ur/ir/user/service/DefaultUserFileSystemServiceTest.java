@@ -31,6 +31,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
@@ -100,8 +101,9 @@ public class DefaultUserFileSystemServiceTest {
 		/**
 		 * Test creating a file
 		 * @throws UserHasPublishedDeleteException 
+		 * @throws LocationAlreadyExistsException 
 		 */
-		public void createFileTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException
+		public void createFileTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 		{
 			// Start the transaction 
 			TransactionStatus ts = tm.getTransaction(td);
@@ -162,8 +164,9 @@ public class DefaultUserFileSystemServiceTest {
 		 * Test adding an empty file to they system.
 		 * @throws DuplicateNameException 
 		 * @throws UserHasPublishedDeleteException 
+		 * @throws LocationAlreadyExistsException 
 		*/
-		public void addVersionEmptyFileTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+		public void addVersionEmptyFileTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 		{
 			
 			// Start the transaction 
@@ -210,8 +213,9 @@ public class DefaultUserFileSystemServiceTest {
 		 * Test moving files and folders to an existing folder
 		 * @throws DuplicateNameException 
 		 * @throws UserHasPublishedDeleteException 
+		 * @throws LocationAlreadyExistsException 
 		 */
-		public void moveFileFolderTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+		public void moveFileFolderTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 		{
 			
 			// Start the transaction 
@@ -319,8 +323,9 @@ public class DefaultUserFileSystemServiceTest {
 		 * Test moving files and folders to the root (the User)
 		 * @throws DuplicateNameException 
 		 * @throws UserHasPublishedDeleteException 
+		 * @throws LocationAlreadyExistsException 
 		 */
-		public void moveFileFolderToRootTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+		public void moveFileFolderToRootTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 		{
 			
 			// Start the transaction 
@@ -425,8 +430,9 @@ public class DefaultUserFileSystemServiceTest {
 		/**
 		 * Test adding a folder for indexing data to a user
 		 * @throws UserHasPublishedDeleteException 
+		 * @throws LocationAlreadyExistsException 
 		 */
-		public void createUserIndexFolderTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException
+		public void createUserIndexFolderTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 		{
 			// Start the transaction 
 			TransactionStatus ts = tm.getTransaction(td);
@@ -463,8 +469,9 @@ public class DefaultUserFileSystemServiceTest {
 		 * @throws DuplicateNameException 
 		 * @throws FileSharingException 
 		 * @throws UserHasPublishedDeleteException 
+		 * @throws LocationAlreadyExistsException 
 		 */
-		public void testAddInboxFileTest() throws DuplicateNameException, FileSharingException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+		public void testAddInboxFileTest() throws DuplicateNameException, FileSharingException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 		{
 	
 			// Start the transaction 

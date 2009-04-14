@@ -54,9 +54,10 @@ public class FileInfoTest {
 	
 	/**
 	 * Setters and Getters test 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void basicFileInfoTest() {
+	public void basicFileInfoTest() throws LocationAlreadyExistsException {
 		
 		// this will create folders so we need to place them in directories
 		String folderPath = properties.getProperty("FileInfoTest.base.equals");
@@ -117,9 +118,10 @@ public class FileInfoTest {
 	
 	/**
 	 * Test the hash code.
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void testHashCode()
+	public void testHashCode() throws LocationAlreadyExistsException
 	{
 		
 		// this will create folders so we need to place them in directories
@@ -161,9 +163,10 @@ public class FileInfoTest {
 	
 	/**
 	 * Test the hash code.
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void testEquals()
+	public void testEquals() throws LocationAlreadyExistsException
 	{
 		
 		// this will create folders so we need to place them in directories

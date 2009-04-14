@@ -24,6 +24,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
@@ -122,8 +123,9 @@ public class NewsItemTest {
 	
 	/**
 	 * Make sure we can add the article. 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddArticle()
+	public void testAddArticle() throws LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 

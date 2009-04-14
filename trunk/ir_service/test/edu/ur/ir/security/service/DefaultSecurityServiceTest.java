@@ -31,6 +31,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.repository.Repository;
@@ -103,10 +104,11 @@ public class DefaultSecurityServiceTest {
 	 * @throws ClassNotFoundException 
 	 * @throws DuplicateNameException 
  	 * @throws UserHasPublishedDeleteException 
+ 	 * @throws LocationAlreadyExistsException 
  	 * @throws DuplicateAccessControlEntryException 
 	 */
 	public void aclUserAcessControlEntryTest() throws ClassNotFoundException, DuplicateNameException,
-			IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException{
+			IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException{
 
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -204,9 +206,10 @@ public class DefaultSecurityServiceTest {
      * class
      * @throws DuplicateNameException 
      * @throws UserHasPublishedDeleteException 
+     * @throws LocationAlreadyExistsException 
      * @throws DuplicateAccessControlEntryException 
      */
-    public void aclUserGroupAcessControlEntryTest() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException{
+    public void aclUserGroupAcessControlEntryTest() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException{
 
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);

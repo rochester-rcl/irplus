@@ -27,6 +27,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
@@ -75,9 +76,10 @@ public class RepositoryDAOTest {
 	
 	/**
 	 * Test Repository persistance
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void baseRepositoryDAOTest() {
+	public void baseRepositoryDAOTest() throws LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -112,9 +114,10 @@ public class RepositoryDAOTest {
 	
 	/**
 	 * Test Repository persistance
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void addDefaultNameAuthorityhDAOTest() {
+	public void addDefaultNameAuthorityhDAOTest() throws LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -156,9 +159,10 @@ public class RepositoryDAOTest {
 	
 	/**
 	 * Test adding pictures
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void addPictureRepositoryDAOTest()  throws IllegalFileSystemNameException{
+	public void addPictureRepositoryDAOTest()  throws IllegalFileSystemNameException, LocationAlreadyExistsException{
 
 		TransactionStatus ts = tm.getTransaction(td);
 		

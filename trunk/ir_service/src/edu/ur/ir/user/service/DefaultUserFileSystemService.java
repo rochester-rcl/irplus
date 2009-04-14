@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FolderInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileCollaborator;
@@ -971,8 +972,9 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	 * 
 	 * @param user
 	 * @param repository
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
 	 */
-	public void createIndexFolder(IrUser user, Repository repository, String folderName)
+	public void createIndexFolder(IrUser user, Repository repository, String folderName) throws LocationAlreadyExistsException
 	{
 		if( user.getPersonalIndexFolder() == null )
 		{

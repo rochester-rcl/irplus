@@ -36,6 +36,7 @@ import org.testng.annotations.Test;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServerService;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
@@ -560,10 +561,11 @@ public class PersonalFolderDAOTest {
 	/**
 	 * Test adding files to a folder
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 * 
      */
 	@Test
-	public void personalFolderFileDAOTest() throws DuplicateNameException, IllegalFileSystemNameException {
+	public void personalFolderFileDAOTest() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException {
 		
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -818,9 +820,10 @@ public class PersonalFolderDAOTest {
 
 	/**
 	 * Test - get folder size
+	 * @throws LocationAlreadyExistsException 
      */
 	@Test
-	public void getFolderSizeDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
+	public void getFolderSizeDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException, LocationAlreadyExistsException {
   		
 		TransactionStatus ts = tm.getTransaction(td);
 		

@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.repository.Repository;
@@ -177,7 +178,11 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		Repository repository = 
 			repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
-		userWorkspaceIndexService.addToIndex(repository, personalItem);
+		try {
+			userWorkspaceIndexService.addToIndex(repository, personalItem);
+		} catch (LocationAlreadyExistsException e) {
+			log.error(e);
+		}
 		
 		return SUCCESS;
 	}

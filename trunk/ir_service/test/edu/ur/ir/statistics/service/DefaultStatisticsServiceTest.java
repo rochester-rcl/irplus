@@ -29,6 +29,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -97,9 +98,10 @@ public class DefaultStatisticsServiceTest {
 	 * @throws DuplicateNameException
 	 * @throws IllegalFileSystemNameException
 	 * @throws UserHasPublishedDeleteException
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void numberOfFileDownloadsForAllCollectionsTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException {
+	public void numberOfFileDownloadsForAllCollectionsTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException {
 
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -182,9 +184,10 @@ public class DefaultStatisticsServiceTest {
 	 * @throws DuplicateNameException
 	 * @throws IllegalFileSystemNameException
 	 * @throws UserHasPublishedDeleteException
+	 * @throws LocationAlreadyExistsException 
      */	
 	@Test
-	public void testAddDownloads() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException {
+	public void testAddDownloads() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException {
 
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

@@ -151,8 +151,9 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 	 * @param uniqueName - unique file name to be used to save to the file system
 	 * 
 	 * @return the created TreeFolderInfo
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public TreeFolderInfo createRootFolder(String displayName, String uniqueName) {
+	public TreeFolderInfo createRootFolder(String displayName, String uniqueName) throws LocationAlreadyExistsException {
 		TreeFolderInfo folder = FileSystemManager.createFolder(uniqueName, this);
 		folder.setName(uniqueName);
 		folder.setExists(true);
@@ -677,10 +678,11 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 	
 	/**
 	 * This creates a root folder in the database.
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 * @see edu.ur.file.db.FileDatabase#createFolder(java.lang.String)
 	 */
-	public FolderInfo createFolder(String uniqueName) {
+	public FolderInfo createFolder(String uniqueName) throws LocationAlreadyExistsException {
 		return createRootFolder(null, uniqueName);
 	}
 

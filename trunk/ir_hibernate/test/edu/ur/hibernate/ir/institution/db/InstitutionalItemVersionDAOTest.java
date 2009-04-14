@@ -29,6 +29,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
@@ -125,9 +126,10 @@ public class InstitutionalItemVersionDAOTest {
 	/**
 	 * Test Institutional Item persistence
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void baseInstitutionalItemDAOTest() throws DuplicateNameException {
+	public void baseInstitutionalItemDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -187,9 +189,10 @@ public class InstitutionalItemVersionDAOTest {
 	/**
 	 * Test withdrawing an item
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemWithdrawDAOTest() throws DuplicateNameException {
+	public void institutionalItemWithdrawDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -261,9 +264,10 @@ public class InstitutionalItemVersionDAOTest {
 	/**
 	 * Test reInstating an item
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemReInstateDAOTest() throws DuplicateNameException {
+	public void institutionalItemReInstateDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -354,10 +358,11 @@ public class InstitutionalItemVersionDAOTest {
 	 * @throws IllegalFileSystemNameException
 	 * @throws UserHasPublishedDeleteException
 	 * @throws ParseException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
 	public void getPublicationVersionsByPersonNameTest() 
-		throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException, DuplicateContributorException {
+		throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException, DuplicateContributorException, LocationAlreadyExistsException {
 
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -481,9 +486,10 @@ public class InstitutionalItemVersionDAOTest {
 	 * Test handle infor with institutional item
 	 * 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemHandleInfoDAOTest() throws DuplicateNameException {
+	public void institutionalItemHandleInfoDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

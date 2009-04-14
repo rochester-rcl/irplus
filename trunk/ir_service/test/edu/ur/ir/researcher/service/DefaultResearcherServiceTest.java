@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServerService;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
@@ -95,8 +96,9 @@ public class DefaultResearcherServiceTest {
 		/**
 		 * Test creating a file
 		 * @throws UserHasPublishedDeleteException 
+		 * @throws LocationAlreadyExistsException 
 		 */
-		public void createRootFileTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException 
+		public void createRootFileTest() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException 
 		{
 			// Start the transaction 
 			TransactionStatus ts = tm.getTransaction(td);

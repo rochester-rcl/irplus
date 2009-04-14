@@ -37,6 +37,7 @@ public interface DefaultDatabaseFileStoreStrategy {
 	 * @param uniqueFileName - name to give the file
 	 * 
 	 * @return - the stored file
+	 * @throws LocationAlreadyExistsException - if the location already exists
 	 */
 	public DefaultFileInfo addFile(DefaultFileDatabase fileDatabase, 
 			File f, String unqiueFileName);
@@ -49,6 +50,7 @@ public interface DefaultDatabaseFileStoreStrategy {
 	 * @param uniqueFileName - name to give the empty file
 	 * 
 	 * @return - the stored file
+	 * @throws LocationAlreadyExistsException - if the location already exists
 	 */
 	public DefaultFileInfo addFile(DefaultFileDatabase fileDatabase, 
 			 String unqiueFileName);

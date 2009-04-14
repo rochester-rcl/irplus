@@ -26,6 +26,7 @@ import org.testng.annotations.Test;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -113,8 +114,9 @@ public class ItemTest {
 	/**
 	 * Test getting a file from an item
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testGetFile() throws DuplicateNameException, IllegalFileSystemNameException {
+	public void testGetFile() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -160,8 +162,9 @@ public class ItemTest {
 	/**
 	 * Test getting a primary image file to an item
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddingPrimaryImageFile() throws DuplicateNameException, IllegalFileSystemNameException {
+	public void testAddingPrimaryImageFile() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException {
 
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -271,8 +274,9 @@ public class ItemTest {
 	/**
 	 * Item Clone test
 	 * @throws DuplicateContributorException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void itemCloneTest() throws IllegalFileSystemNameException, DuplicateContributorException {
+	public void itemCloneTest() throws IllegalFileSystemNameException, DuplicateContributorException, LocationAlreadyExistsException {
 
 		
 		GenericItem item = new GenericItem("genericItem");
@@ -393,8 +397,9 @@ public class ItemTest {
 	/**
 	 * Test getting a file from an item
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testItemObjectMove() throws DuplicateNameException, IllegalFileSystemNameException {
+	public void testItemObjectMove() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException {
 		
 		log.debug("HERE IS SOME OUTPUT");
 

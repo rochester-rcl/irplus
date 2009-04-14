@@ -30,6 +30,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
@@ -84,9 +85,10 @@ public class InstitutionalCollectionDAOTest {
 	/**
 	 * Test Institutional Collection persistence
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void baseCollectionDAOTest() throws DuplicateNameException {
+	public void baseCollectionDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -135,9 +137,10 @@ public class InstitutionalCollectionDAOTest {
 	/**
 	 * Test Institutional Collection child persistence
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void addChildrenCollectionDAOTest() throws DuplicateNameException {
+	public void addChildrenCollectionDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -310,9 +313,10 @@ public class InstitutionalCollectionDAOTest {
 	/**
 	 * Test Searching for root institutional Collection
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void searchRootCollectionDAOTest() throws DuplicateNameException {
+	public void searchRootCollectionDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -378,9 +382,10 @@ public class InstitutionalCollectionDAOTest {
 	/**
 	 * test adding pictures to the institutional collection
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	public void addInstitutionalCollectionPictures() throws DuplicateNameException,
-	 	IllegalFileSystemNameException
+	 	IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -471,9 +476,10 @@ public class InstitutionalCollectionDAOTest {
 	/**
 	 * Test Institutional Collection child persistence
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void getCollectionChildrenDAOTest() throws DuplicateNameException {
+	public void getCollectionChildrenDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -535,9 +541,10 @@ public class InstitutionalCollectionDAOTest {
 	 * Test Institutional Collection subscription
 	 * 
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void collectionSubscriptionTest() throws DuplicateNameException {
+	public void collectionSubscriptionTest() throws DuplicateNameException, LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -591,9 +598,10 @@ public class InstitutionalCollectionDAOTest {
 	/**
 	 * Test Institutional Collection link persistence
 	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void collectionLinkDAOTest() throws DuplicateNameException {
+	public void collectionLinkDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

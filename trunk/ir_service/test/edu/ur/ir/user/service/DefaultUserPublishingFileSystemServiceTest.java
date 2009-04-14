@@ -30,6 +30,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.item.ContentType;
@@ -160,8 +161,9 @@ public class DefaultUserPublishingFileSystemServiceTest {
 	/**
 	 * Test creating a personal item with item files
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void createItemWithFiles() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void createItemWithFiles() throws IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -317,8 +319,9 @@ public class DefaultUserPublishingFileSystemServiceTest {
 	/**
 	 * Test moving publications and collections to an existing collection
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void moveItemCollectionTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void moveItemCollectionTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		
 		// Start the transaction 
@@ -466,8 +469,9 @@ public class DefaultUserPublishingFileSystemServiceTest {
 	 * Test moving files and collections to the root (the User)
 	 * @throws DuplicateNameException 
 	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void moveItemCollectionToRootTest() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
+	public void moveItemCollectionToRootTest() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
 	{
 		
 		// Start the transaction 
