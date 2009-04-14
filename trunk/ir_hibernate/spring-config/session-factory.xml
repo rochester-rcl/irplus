@@ -34,6 +34,7 @@
         <property name="mappingResources">
             <set>
                 <value>edu/ur/hibernate/ir/repository/db/Repository.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/repository/db/License.hbm.xml</value>
                 
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollection.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollectionLink.hbm.xml</value>

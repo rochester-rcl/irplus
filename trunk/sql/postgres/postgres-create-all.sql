@@ -1381,20 +1381,6 @@ ALTER TABLE ir_item.item_extent OWNER TO ir_plus;
 CREATE SEQUENCE ir_item.item_extent_seq ;
 ALTER TABLE ir_item.item_extent_seq OWNER TO ir_plus;
 
-
--- ---------------------------------------------
--- Item License
--- ---------------------------------------------
---CREATE TABLE ir_item.item_license
---(
---    item_id BIGINT NOT NULL,
---    license_id BIGINT NOT NULL,
---    PRIMARY KEY (item_id, license_id),
---    FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id),
---    FOREIGN KEY (license_id) REFERENCES ir_repository.license(license_id)
---);
---ALTER TABLE ir_item.item_license OWNER TO ir_plus;
-
 -- ---------------------------------------------
 -- Series
 -- ---------------------------------------------
@@ -1500,6 +1486,27 @@ CREATE SEQUENCE ir_repository.repository_picture_seq;
 ALTER TABLE ir_repository.repository_picture_seq OWNER TO ir_plus;
 
 
+
+-- Create a new table to hold repository license information 
+CREATE TABLE ir_repository.license
+(
+  license_id BIGINT PRIMARY KEY,
+  name TEXT NOT NULL,
+  license_text TEXT,
+  description TEXT,
+  version INTEGER,
+  created_date DATE,
+  user_id BIGINT,
+  FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
+);
+ALTER TABLE ir_repository.license OWNER TO ir_plus;
+
+-- The repository license sequence
+CREATE SEQUENCE ir_repository.license_seq;
+ALTER TABLE ir_repository.license_seq OWNER TO ir_plus;
+
+
+
 -- ---------------------------------------------
 -- Institutional Collection Information
 -- ---------------------------------------------
@@ -1599,28 +1606,6 @@ CREATE TABLE ir_repository.institutional_collection_subscription
   FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id)
 );
 ALTER TABLE ir_repository.institutional_collection_subscription OWNER TO ir_plus;
-
-
--- ---------------------------------------------
--- IR License information
--- ---------------------------------------------
-
-CREATE TABLE ir_repository.license
-(
-    license_id BIGINT PRIMARY KEY,
-    name TEXT NOT NULL,
-    license_version TEXT NOT NULL,
-    ir_file_id BIGINT,
-    description TEXT,
-    version INTEGER,
-    UNIQUE (name, license_version),
-    FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id)
-) ;
-ALTER TABLE ir_repository.license OWNER TO ir_plus;
-
--- The item sequence
-CREATE SEQUENCE ir_repository.license_seq;
-ALTER TABLE ir_repository.license_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------

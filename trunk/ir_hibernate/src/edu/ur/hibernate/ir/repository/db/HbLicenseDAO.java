@@ -66,7 +66,7 @@ public class HbLicenseDAO implements LicenseDAO{
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
 	public void makeTransient(License entity) {
-		hbCrudDAO.makePersistent(entity);
+		hbCrudDAO.makeTransient(entity);
 	}
 
 	/**
