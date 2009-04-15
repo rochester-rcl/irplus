@@ -34,6 +34,7 @@ import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileServer;
 import edu.ur.file.db.FileServerDAO;
 import edu.ur.file.db.DefaultFileServer;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.file.test.helper.ContextHolder;
 import edu.ur.hibernate.file.test.helper.PropertiesLoader;
 
@@ -94,10 +95,11 @@ public class HbFileServerDAOTest {
 	
 	/**
 	 * Test File Database persistance
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void baseFileDatabaseDAOTest() {
+	public void baseFileDatabaseDAOTest() throws LocationAlreadyExistsException {
 		
 		TransactionStatus ts = tm.getTransaction(td);
 		DefaultFileServer fileServer = new DefaultFileServer("serverName");
