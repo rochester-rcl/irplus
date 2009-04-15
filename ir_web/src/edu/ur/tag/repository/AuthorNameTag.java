@@ -31,9 +31,12 @@ public class AuthorNameTag extends SimpleTagSupport{
 		String output = "";
 	    if( personName != null)	
 	    {
-	    	for( PersonNameTitle title: personName.getPersonNameTitles())
+	    	if( personName.getPersonNameTitles() != null )
 	    	{
-	    		output += title.getTitle() + " ";
+	    	    for( PersonNameTitle title: personName.getPersonNameTitles())
+	    	    {
+	    		    output += title.getTitle() + " ";
+	    	    }
 	    	}
 	    	if( personName.getForename() != null)
 	    	{
@@ -61,16 +64,16 @@ public class AuthorNameTag extends SimpleTagSupport{
 	    	
 	    	    if( birthDate != null || deathDate != null)
 	    	    {
-	    		    if( birthDate.getYear() > 0 || deathDate.getYear() > 0 )
+	    		    if( (birthDate != null && birthDate.getYear() > 0) || (deathDate != null && deathDate.getYear() > 0) )
 	    		    {
 	    		        output += "(";
-	    		        if( birthDate.getYear() > 0)
+	    		        if( birthDate != null && birthDate.getYear() > 0)
 	    		        {
 	    			        output += birthDate.getYear();
 	    		        }
 	    		        output += ", ";
 	    		
-	    		        if( deathDate.getYear() > 0 )
+	    		        if( deathDate != null && deathDate.getYear() > 0 )
 	    		        {
 	    			        output += deathDate.getYear();
 	    		        }
