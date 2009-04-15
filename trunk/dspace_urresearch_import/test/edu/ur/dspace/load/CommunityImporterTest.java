@@ -34,7 +34,7 @@ import edu.ur.dspace.model.Link;
 import edu.ur.dspace.test.ContextHolder;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.IllegalFileSystemNameException;
-import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
+import edu.ur.dspace.test.PropertiesLoader;
 
 /**
  * Help testing with community import.
