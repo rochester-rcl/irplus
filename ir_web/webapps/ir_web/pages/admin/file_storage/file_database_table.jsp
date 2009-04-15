@@ -44,7 +44,7 @@
 			        ${fileDatabase.description}
 	            </urstb:td>
 	            <urstb:td>
-			        <a href="javascript:YAHOO.ur.file.database.edit(${fileDatabase.id})">Edit</a>&nbsp;/&nbsp;<a href="javascript:YAHOO.ur.file.database.deleteFileDatabase(${fileDatabase.id})">Delete</a>
+			        <a href="javascript:YAHOO.ur.file.database.edit(${fileServer.id},${fileDatabase.id})">Edit</a>&nbsp;/&nbsp;<a href="javascript:YAHOO.ur.file.database.deleteFileDatabase(${fileDatabase.id})">Delete</a>
 	            </urstb:td>
 	        </urstb:tr>
 	    </urstb:tbody>
