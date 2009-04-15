@@ -37,8 +37,6 @@ import edu.ur.dspace.test.ContextHolder;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
-import edu.ur.ir.item.GenericItem;
-import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 
 
