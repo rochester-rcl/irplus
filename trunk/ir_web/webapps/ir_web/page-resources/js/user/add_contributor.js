@@ -453,11 +453,7 @@ YAHOO.ur.item.contributor = {
 		document.getElementById("person_family_name").value = "";
 		document.getElementById("person_initials").value = "";
 		document.getElementById("person_numeration").value = "";
-		document.getElementById("person_birthdate_month").value = "";
-		document.getElementById("person_birthdate_day").value = "";
 		document.getElementById("person_birthdate_year").value = "";
-		document.getElementById("person_deathdate_day").value = "";	
-		document.getElementById("person_deathdate_month").value = "";
 		document.getElementById("person_deathdate_year").value = "";
 		document.getElementById("person_myName").checked = false;
 		
