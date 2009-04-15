@@ -96,11 +96,7 @@ YAHOO.ur.person = {
 		document.getElementById("person_family_name").value = "";
 		document.getElementById("person_initials").value = "";
 		document.getElementById("person_numeration").value = "";
-		document.getElementById("person_birthdate_month").value = "";
-		document.getElementById("person_birthdate_day").value = "";
 		document.getElementById("person_birthdate_year").value = "";
-		document.getElementById("person_deathdate_day").value = "";	
-		document.getElementById("person_deathdate_month").value = "";
 		document.getElementById("person_deathdate_year").value = "";
 		document.getElementById('newPersonForm_auth_id').value = "";
 		document.getElementById('newPersonForm_id').value = "";
@@ -241,7 +237,7 @@ YAHOO.ur.person = {
 	    
 	    
     // function to edit person type information
-    editPerson : function(id, authNameId, fName, sName, mName,familyName, initials, num, bm, bd, by,  dm, dd, dy)
+    editPerson : function(id, authNameId, fName, sName, mName,familyName, initials, num, by,  dy)
     {
   	    document.getElementById('newPersonForm_id').value = id;
   	    document.getElementById('newPersonForm_auth_id').value = authNameId;
@@ -251,20 +247,9 @@ YAHOO.ur.person = {
 	    document.getElementById('person_family_name').value = familyName;
 	    document.getElementById('person_initials').value = initials;
 	    document.getElementById('person_numeration').value = num;
-	    if (bm != 0) {
-	    	document.getElementById('person_birthdate_month').value = bm;
-	    }
-	    if (bd != 0) {
-	    	document.getElementById('person_birthdate_day').value = bd;
-	    }
+
 	    if (by != 0) {
 	    	document.getElementById('person_birthdate_year').value = by;
-	    }
-	    if (dm != 0) {
-	    	document.getElementById('person_deathdate_month').value = dm;
-	    }
-	    if (dd != 0) {
-	    	document.getElementById('person_deathdate_day').value = dd;
 	    }
 	    if (dy != 0) {
 	    	document.getElementById('person_deathdate_year').value = dy;
