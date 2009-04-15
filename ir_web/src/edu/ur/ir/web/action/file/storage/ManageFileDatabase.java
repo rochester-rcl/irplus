@@ -101,7 +101,7 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 		   fileDatabase.setDescription(description);
 		   fileServerService.saveFileServer(fileServer); 
 		}
-		return "update";
+		return "added";
 	}
 	
 	/**
