@@ -183,7 +183,7 @@
 											<tr>
 												<td>
 												        <c:url var="contributorUrl" value="/viewContributorPage.action">
-														    <c:param name="contributorId" value="${itemContributor.contributor.id}"/>
+														    <c:param name="personNameId" value="${itemContributor.contributor.personName.id}"/>
 														</c:url>						                             
 						                                 <a href="${contributorUrl}"> <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/></a> - ${itemContributor.contributor.contributorType.name}
 												</td>
