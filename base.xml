@@ -27,7 +27,7 @@
     <!-- build directory -->
     <property name="build.dir" value="${basedir}/build"/> 
 	
-    <!-- build directory -->
+    <!-- test build directory -->
     <property name="test.build.dir" value="${basedir}/test-build"/> 
 
     <!-- source directory -->
