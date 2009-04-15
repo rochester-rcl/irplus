@@ -61,24 +61,34 @@ public class AuthorNameTag extends SimpleTagSupport{
 	    	{
 	    	    BirthDate birthDate = personName.getPersonNameAuthority().getBirthDate();
 	    	    DeathDate deathDate = personName.getPersonNameAuthority().getDeathDate();
-	    	
-	    	    if( birthDate != null || deathDate != null)
+	    	    int birthYear = 0;
+	    	    int deathYear = 0;
+	    	    
+	    	    if(birthDate != null)
 	    	    {
-	    		    if( (birthDate != null && birthDate.getYear() > 0) || (deathDate != null && deathDate.getYear() > 0) )
+	    	    	birthYear = birthDate.getYear();
+	    	    }
+	    	    
+	    	    if(deathDate != null)
+	    	    {
+	    	    	deathYear = deathDate.getYear();
+	    	    }
+	    	    
+	    	    
+	    		if( birthYear > 0 || deathYear > 0 )
+	    		{
+	    		    output += "(";
+	    		    if( birthYear > 0)
 	    		    {
-	    		        output += "(";
-	    		        if( birthDate != null && birthDate.getYear() > 0)
-	    		        {
-	    			        output += birthDate.getYear();
-	    		        }
-	    		        output += ", ";
-	    		
-	    		        if( deathDate != null && deathDate.getYear() > 0 )
-	    		        {
-	    			        output += deathDate.getYear();
-	    		        }
-	    		        output += ")";
+	    			    output += birthYear;
 	    		    }
+	    		    output += ", ";
+	    		
+	    		    if(  deathYear > 0 )
+	    		    {
+	    			    output += deathYear;
+	    		    }
+	    		    output += ")";
 	    	    }
 	    	}
 	    }
