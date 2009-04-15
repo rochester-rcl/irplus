@@ -34,6 +34,7 @@ import edu.ur.file.db.FileInfoDAO;
 import edu.ur.file.db.FileServerDAO;
 import edu.ur.file.db.DefaultFileServer;
 import edu.ur.file.db.FileServer;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.TreeFolderInfo;
 import edu.ur.file.db.TreeFolderInfoDAO;
 import edu.ur.file.db.UniqueNameGenerator;
@@ -89,10 +90,11 @@ public class HbFileInfoDAOTest {
 	
 	/**
 	 * Test FileInfo persistance
+	 * @throws LocationAlreadyExistsException 
 	 *
 	 */
 	@Test
-	public void baseFileInfoDAOTest()
+	public void baseFileInfoDAOTest() throws LocationAlreadyExistsException
 	{
 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -201,10 +203,11 @@ public class HbFileInfoDAOTest {
 	
 	/**
 	 * Test FileInfo persistance
+	 * @throws LocationAlreadyExistsException 
 	 *
 	 */
 	@Test
-	public void testFileInfoChecksumDAOTest()
+	public void testFileInfoChecksumDAOTest() throws LocationAlreadyExistsException
 	{
 
 		TransactionStatus ts = tm.getTransaction(td);

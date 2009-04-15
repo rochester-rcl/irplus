@@ -33,6 +33,7 @@ import edu.ur.file.db.FileDatabaseDAO;
 import edu.ur.file.db.FileServer;
 import edu.ur.file.db.DefaultFileServer;
 import edu.ur.file.db.FileServerDAO;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.TreeFolderInfoDAO;
 import edu.ur.file.db.TreeFolderInfo;
 import edu.ur.file.db.UniqueNameGenerator;
@@ -90,10 +91,11 @@ public class HbFileDatabaseDAOTest {
 	
 	/**
 	 * Test File Database persistance
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void baseFileDatabaseDAOTest() {
+	public void baseFileDatabaseDAOTest() throws LocationAlreadyExistsException {
 
 		TransactionStatus ts = tm.getTransaction(td);
 
@@ -165,10 +167,11 @@ public class HbFileDatabaseDAOTest {
 	
 	/**
 	 * Test File Database selects 
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void baseSelectDatabaseDAOTest() {
+	public void baseSelectDatabaseDAOTest() throws LocationAlreadyExistsException {
 		
 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -239,10 +242,11 @@ public class HbFileDatabaseDAOTest {
 	
 	/**
 	 * Test Move folders
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void testMoveSubFolderDatabaseDAOTest() {
+	public void testMoveSubFolderDatabaseDAOTest() throws LocationAlreadyExistsException {
 		
 		TransactionStatus ts = tm.getTransaction(td);
 		

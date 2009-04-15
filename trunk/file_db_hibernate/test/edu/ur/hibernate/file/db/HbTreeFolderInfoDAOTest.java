@@ -34,6 +34,7 @@ import org.testng.annotations.Test;
 import edu.ur.file.db.DefaultFileInfo;
 import edu.ur.file.db.DefaultFileDatabase;
 import edu.ur.file.db.DefaultFileServer;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.TreeFolderInfo;
 import edu.ur.file.db.TreeFolderInfoDAO;
 import edu.ur.file.db.FileServerDAO;
@@ -112,10 +113,11 @@ public class HbTreeFolderInfoDAOTest {
 
 	/**
 	 * Test TreeFolderInfo persistance
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void baseTreeFolderInfoDAOTest() {
+	public void baseTreeFolderInfoDAOTest() throws LocationAlreadyExistsException {
 		
 		TransactionStatus ts = tm.getTransaction(td);
 		DefaultFileServer fileServer = new DefaultFileServer("fileServer");
@@ -188,10 +190,11 @@ public class HbTreeFolderInfoDAOTest {
 
 	/**
 	 * Test TreeFolderInfo persistance with children
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void TreeFolderInfoChildrenDAOTest() {
+	public void TreeFolderInfoChildrenDAOTest() throws LocationAlreadyExistsException {
 		
 		
 		TransactionStatus ts = tm.getTransaction(td);
@@ -539,10 +542,11 @@ public class HbTreeFolderInfoDAOTest {
 
 	/**
 	 * Test adding files to a folder
+	 * @throws LocationAlreadyExistsException 
 	 * 
      */
 	@Test
-	public void TreeFolderInfoFileDAOTest() {
+	public void TreeFolderInfoFileDAOTest() throws LocationAlreadyExistsException {
 		TransactionStatus ts = tm.getTransaction(td);
 		// get a unique name for the folder
 		assert uniqueNameGenerator.getNextName() != null : "Next unique should not be null";
@@ -617,10 +621,11 @@ public class HbTreeFolderInfoDAOTest {
 	
 	/**
 	 * Test TreeFolderInfo persistance with children
+	 * @throws LocationAlreadyExistsException 
 	 * 
 	 */
 	@Test
-	public void TreeFolderChildrenPathDAOTest() {
+	public void TreeFolderChildrenPathDAOTest() throws LocationAlreadyExistsException {
 		
 		TransactionStatus ts = tm.getTransaction(td);
 		
