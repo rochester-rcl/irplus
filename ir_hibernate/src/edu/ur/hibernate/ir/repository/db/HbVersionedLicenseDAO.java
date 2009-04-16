@@ -39,23 +39,38 @@ public class HbVersionedLicenseDAO implements VersionedLicenseDAO{
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
 
+	/**
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
 	@SuppressWarnings("unchecked")
 	public List getAll() {
 		return hbCrudDAO.getAll();
 	}
 
+	/**
+	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
+	 */
 	public VersionedLicense getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
+	/**
+	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
+	 */
 	public void makePersistent(VersionedLicense entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
+	/**
+	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
+	 */
 	public void makeTransient(VersionedLicense entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 
+	/**
+	 * @see edu.ur.dao.CountableDAO#getCount()
+	 */
 	public Long getCount() {
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("versionedLicenseCount"));
 	}

@@ -65,4 +65,48 @@
        </property>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Repository License Version information  -->
+   <!-- ****************************************** --> 
+
+   <bean id="licenseVersionDAOTarget" 
+       class="edu.ur.hibernate.ir.repository.db.HbLicenseVersionDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="licenseVersionDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="licenseVersionDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Repository Versioned License information  -->
+   <!-- ****************************************** --> 
+
+   <bean id="versionedLicenseDAOTarget" 
+       class="edu.ur.hibernate.ir.repository.db.HbVersionedLicenseDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="versionedLicenseDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="versionedLicenseDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
 </beans>
