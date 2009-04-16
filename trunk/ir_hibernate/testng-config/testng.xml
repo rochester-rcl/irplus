@@ -50,6 +50,8 @@
 		     <class name="edu.ur.hibernate.ir.researcher.db.ResearcherLinkDAOTest"/>
 	     	
 	     	 <class name="edu.ur.hibernate.ir.repository.db.RepositoryDAOTest"/>
+	     	 <class name="edu.ur.hibernate.ir.repository.db.LicenseDAOTest"/>
+	     	 <class name="edu.ur.hibernate.ir.repository.db.VersionedLicenseDAOTest"/>
 	     	 
 		     <class name="edu.ur.hibernate.ir.institution.db.InstitutionalCollectionDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.institution.db.InstitutionalItemDAOTest"/>

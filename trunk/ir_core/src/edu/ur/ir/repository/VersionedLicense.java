@@ -27,9 +27,6 @@ public class VersionedLicense extends CommonPersistent {
 	/** The set of versions for this license */
 	private Set<LicenseVersion> versions = new HashSet<LicenseVersion>();
 
-	/** The user who has locked this license */
-	private IrUser lockedBy;
-
 	/** Current version for the set of versions */
 	private LicenseVersion currentVersion;
 
@@ -203,57 +200,6 @@ public class VersionedLicense extends CommonPersistent {
 	 */
 	void setLargestVersion(int largestVersion) {
 		this.maxVersion = largestVersion;
-	}
-
-	/**
-	 * Lock this versioned file.
-	 * 
-	 * @param user
-	 * @return
-	 */
-	public boolean lock(IrUser user) {
-		if (lockedBy == null) {
-			lockedBy = user;
-			return true;
-		} else if (lockedBy.equals(user)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Unlock the versioned file
-	 */
-	public void unLock() {
-		lockedBy = null;
-	}
-
-	/**
-	 * Determine if this versioned file is locked.
-	 * 
-	 * @return true if the versioned file is locked
-	 */
-	public boolean isLocked() {
-		return lockedBy == null;
-	}
-
-	/**
-	 * Return true if the versioned file is locked.
-	 * 
-	 * @return
-	 */
-	public boolean getLocked() {
-		return isLocked();
-	}
-
-	/**
-	 * Return the user who has locked the versioned license or null if no one
-	 * has locked the license.
-	 * 
-	 * @return user who has locked the versioned license
-	 */
-	public IrUser getLockedBy() {
-		return lockedBy;
 	}
 
 	/**

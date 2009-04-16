@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a versioned license
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.repository">
+	<class name="VersionedLicense" schema="ir_repository" table="versioned_license"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="versioned_license_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_repository.versioned_license_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+		
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+		
+		<property name="description" column="description" type="string" access="field" />
+			
+		<property name="maxVersion" 
+		    column="largest_license_version_id" 
+		    type="int"
+			not-null="true" 
+			access="field"/>
+
+		<!--  current version of the item -->
+        <many-to-one name="currentVersion" 
+              class="LicenseVersion"  
+              lazy="false"
+              fetch="join"
+              unique="true" 
+              column="current_version_id" 
+              access="field"/>
+       	
+        <!--  published versions -->
+		<set name="versions" 
+		     inverse="true" 
+		     cascade="all-delete-orphan" 
+		     access="field"
+			 lazy="true"  
+			 order-by="version_number desc" 
+			 fetch="subselect">
+			<key column="versioned_license_id"/>
+			<one-to-many class="LicenseVersion"/>
+		</set>	
+	</class>
+		
+
+</hibernate-mapping>
