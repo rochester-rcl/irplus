@@ -80,10 +80,14 @@ YAHOO.ur.researcher.page = {
 			//get a reusable reference to the root node:
 			var root = tree.getRoot();
 			
+			// this stops the tree from hiding the URL - this is a problem with 
+			// YUI 2.7.X - see http://yuilibrary.com/projects/yui2/ticket/2527720
+			tree.subscribe('clickEvent',function () {return false;});
 			// build tree 
 			YAHOO.ur.researcher.page.buildTree(researcher, root, researcher.id);
 
-			tree.draw(); 
+			
+			tree.render(); 
 			tree.expandAll();
 	
 	},
