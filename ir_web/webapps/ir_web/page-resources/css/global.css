@@ -251,13 +251,13 @@ facet and searching
 .facet_container {
 	float: left;
 	margin-right: 12px;
-	width: 220px;
+	width: 24%;
     border: 1px solid;
 }
 
 .facet_search_selection {
 	background-color: #e3e3e3;
-    width: 200px;
+    width: 91%;
     margin-top: 0px;
     float: left;
     padding: 10px;
@@ -267,7 +267,7 @@ facet and searching
 /* hack for IE 6 fix*/
 * html .facet_search_selection 
 {
-	width: 220px;
+	width: 100%;
 }
 
 .facets
@@ -275,14 +275,14 @@ facet and searching
 	background-color: #FFFFCC;
 	clear: both;
 	float: left;
-    width: 200px;
+    width: 91%;
     padding: 10px;
 }
 
 /* hack for IE 6 fix*/
 * html .facets
 {
-	width: 220px;
+	width: 100%;
 }
 
 .full_text_search_results
@@ -292,7 +292,7 @@ facet and searching
 
 .search_results_table {
 	float: left;
-	width: 700px;
+	width: 74%;
 }
 
 .search_div_pager {
