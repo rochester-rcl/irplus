@@ -1575,7 +1575,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * @return
 	 */
 	public boolean isPubliclyViewable() {
-		return publiclyViewable;
+		return (publiclyViewable && !isEmbargoed());
 	}
 
 	/**
@@ -1587,40 +1587,104 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		this.publiclyViewable = publiclyViewable;
 	}
 
+	/**
+	 * The set of secondary content types - other ways to describe
+	 * the material.
+	 * 
+	 * @return content types
+	 */
 	public Set<ContentType> getSecondaryContentTypes() {
-		return secondaryContentTypes;
+		return Collections.unmodifiableSet(secondaryContentTypes);
 	}
 
+	/**
+	 * Set the secondary content types for this item.
+	 * 
+	 * @param secondaryContentTypes
+	 */
 	public void setSecondaryContentTypes(Set<ContentType> secondaryContentTypes) {
 		this.secondaryContentTypes = secondaryContentTypes;
 	}
 
+	/**
+	 * Get the primary content type for this item.
+	 * 
+	 * @return primary content type.
+	 */
 	public ContentType getPrimaryContentType() {
 		return primaryContentType;
 	}
 
+	/**
+	 * Set the primary content type for this item.
+	 * 
+	 * @param primaryContentType
+	 */
 	public void setPrimaryContentType(ContentType primaryContentType) {
 		this.primaryContentType = primaryContentType;
 	}
 	
+	/**
+	 * Add a secondary content type to this item.
+	 * 
+	 * @param c
+	 */
 	public void addSecondaryContentType(ContentType c) {
 		secondaryContentTypes.add(c);
 	}
 
+	/**
+	 * Get the set of item sponsors.
+	 * 
+	 * @return
+	 */
 	public Set<ItemSponsor> getItemSponsors() {
 		return itemSponsors;
 	}
 
+	/**
+	 * Set the item sponsors.
+	 * 
+	 * @param itemSponsors
+	 */
 	public void setItemSponsors(Set<ItemSponsor> itemSponsors) {
 		this.itemSponsors = itemSponsors;
 	}
 
+	/**
+	 * Get the release date.
+	 * 
+	 * @return
+	 */
 	public Date getReleaseDate() {
 		return releaseDate;
 	}
 
+	/**
+	 * Set the release date.
+	 * 
+	 * @param releaseDate
+	 */
 	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
+	}
+	
+	/**
+	 * Determine if the current date is before the release date or the
+	 * release date is null;
+	 *  it is return true.
+	 * 
+	 * @return true if the item is embargoed.
+	 */
+	public boolean isEmbargoed()
+	{
+		boolean embargoed = false;
+		if( releaseDate != null)
+		{
+		    Date d = new Date();
+		    embargoed = d.before(releaseDate);
+		}
+		return embargoed;
 	}
 
 }
