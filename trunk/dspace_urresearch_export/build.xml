@@ -81,6 +81,12 @@
 			<!-- spring configuration application context for this application -->
 			<fileset dir="${spring.project.config}"/>
 		</copy>
+		
+		<!-- copy the most recent jar files created by the application-->
+		<!-- this overrides the download from ivy -->
+		<copy todir="${lib.dir}">
+			<fileset file="../dspace_urresearch_import_export/dspace_urresearch_import_export/dspace_urresearch_import_export-${project.version}.jar"/>
+		</copy>
 	</target>
 
 	<!-- compile the java source files -->
