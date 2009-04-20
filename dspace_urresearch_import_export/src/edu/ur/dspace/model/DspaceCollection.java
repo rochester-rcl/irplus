@@ -64,6 +64,9 @@ public class DspaceCollection {
 	/** Eperson permissions for this collection */
 	public List<EpersonPermission> epersonPermissions = new LinkedList<EpersonPermission>();
 	
+	/** list of subscriber ids */
+	public List<Long> subscriberUserIds = new LinkedList<Long>();
+	
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer("[ id = ");
