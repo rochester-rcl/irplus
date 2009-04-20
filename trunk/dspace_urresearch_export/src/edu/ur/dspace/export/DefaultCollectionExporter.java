@@ -267,6 +267,22 @@ public class DefaultCollectionExporter implements CollectionExporter{
 			     }
 			     collection.appendChild(epersonPermissions);
 			 }
+			 
+			 // handle subscribers
+			 if( c.subscriberUserIds.size() > 0 )
+			 {
+			     Element subscribers = doc.createElement("subscribers");
+			 
+			     // add the links
+			     for(Long userId: c.subscriberUserIds)
+			     {
+				     Element user = doc.createElement("user_id");
+				     data = doc.createTextNode(userId + "");
+				     user.appendChild(data);
+				     subscribers.appendChild(user);
+			     }
+			     collection.appendChild(subscribers);
+			 }
 			 root.appendChild(collection);
 		 }
 		 serializer.write(root, lsOut);
@@ -308,9 +324,11 @@ public class DefaultCollectionExporter implements CollectionExporter{
 		     
              String groupPermissionsSelect = "select * from resourcepolicy where resource_type_id = 3 and epersongroup_id is not null and resource_id = " + c.id;
              String epersonPermissionsSelect = "select * from resourcepolicy where resource_type_id = 3 and eperson_id is not null and resource_id = " + c.id;
+             String subscribersSelect = "select eperson_id from subscription where  collection_id = " + c.id;
 		 
              c.groupPermissions = jdbcTemplate.query( groupPermissionsSelect, new GroupPermissionMapper());
              c.epersonPermissions = jdbcTemplate.query( epersonPermissionsSelect, new EpersonPermissionMapper());
+		     c.subscriberUserIds = jdbcTemplate.queryForList(subscribersSelect, Long.class);
 		 }
 		 
 		 return collections;
@@ -337,7 +355,29 @@ public class DefaultCollectionExporter implements CollectionExporter{
 	        return collection;
 	    }
 	}
+	
+	/**
+	 * Map the data to a collection
+	 * 
+	 * @author Nathan Sarr
+	 *
+	 */
+	private static final class C implements RowMapper {
 
+	    public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+	    	DspaceCollection collection = new DspaceCollection();
+	    	collection.communityId = new Long(rs.getInt("community_id"));
+	    	collection.id = new Long(rs.getInt("collection_id"));
+	        collection.copyright = rs.getString("copyright_text");
+	        collection.shortDescription = rs.getString("short_description");
+	        collection.name = rs.getString("name");
+	        collection.introductoryText = rs.getString("introductory_text");
+	        collection.sideBarText = rs.getString("side_bar_text");
+	        collection.logoId = rs.getLong("logo_bitstream_id");
+	        return collection;
+	    }
+	}
+	
 	public BitstreamFileLoader getBitstreamFileLoader() {
 		return bitstreamFileLoader;
 	}

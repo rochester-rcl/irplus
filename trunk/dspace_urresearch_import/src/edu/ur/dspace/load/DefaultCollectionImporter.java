@@ -31,6 +31,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -234,6 +235,10 @@ public class DefaultCollectionImporter implements CollectionImporter{
             {
             	getEpersonPermissions(c, child);
             }
+            else if( child.getNodeName().equals("subscribers"))
+            {
+            	getSubscribers(c, child);
+            }
            
             
         }
@@ -279,6 +284,29 @@ public class DefaultCollectionImporter implements CollectionImporter{
         	}
         }
 		return groupPermission;
+	}
+	
+	/**
+	 * Create a list of user ids that have subscribed to the collection
+	 * 
+	 * @param subscribersNode - xml data containing the subscribers
+	 */
+	private void getSubscribers(DspaceCollection c, Node subscribersNode)
+	{
+		List<Long> userIds = new LinkedList<Long>();
+		
+		NodeList children = subscribersNode.getChildNodes();
+		for( int index = 0; index < children.getLength(); index++)
+        {
+        	Node child = children.item(index);
+        	if( child.getNodeName().equals("user_id"))
+        	{
+        		Long userId  = new Long(child.getTextContent());
+        		userIds.add(userId);
+        	}
+        }
+		c.subscriberUserIds = userIds;
+		
 	}
 	
 	/**
@@ -369,6 +397,7 @@ public class DefaultCollectionImporter implements CollectionImporter{
 				    }
 				    loadGroupPermissions(urresearchCollection, c);
 					loadEpersonPermissions(urresearchCollection, c);
+					loadSubscribers(urresearchCollection, c);
 				} catch (DuplicateNameException e1) {
 					log.debug("could not create collection " + c + " in parent " + 
 							parentCollection + " because a collection with the name " + c.name + " already exists ", e1);
@@ -465,6 +494,33 @@ public class DefaultCollectionImporter implements CollectionImporter{
 	}
 	
 	/**
+	 * Load the subscribers.
+	 * 
+	 * @param collection - urresearch system collection to transfer the subscribers to
+	 * @param c - old dspace collection containing old permissions
+	 */
+	private void loadSubscribers(InstitutionalCollection collection, DspaceCollection c)
+	{
+		log.debug("loading eperson permissions for institutional collection " + collection);
+		
+		for(Long userId : c.subscriberUserIds)
+		{
+			// get the user id
+			Long urresearchUserId = getUrResearchUser(userId);
+			if( urresearchUserId != null )
+			{
+			    IrUser user = userService.getUser(urresearchUserId, false);
+			    collection.addSuscriber(user);
+			}
+			else
+			{
+				log.error("user id " + userId + " not found ");
+			}
+		}
+		   
+	}
+	
+	/**
 	 * Get the new urresearch group id based on the dspace group id.
 	 * 
 	 * @param dspacdGroupId - current dspace group id
@@ -488,81 +544,76 @@ public class DefaultCollectionImporter implements CollectionImporter{
 		{
 			log.debug("loading epersonPermission  " + epersonPermission);
 			Long urresearchUserId = getUrResearchUser(epersonPermission.epersonId);
-			
-			
-			if( urresearchUserId == null )
+
+			if (urresearchUserId == null) {
+				log.error("User for eperson id " + epersonPermission.epersonId
+						+ " could not be found");
+			} 
+			else 
 			{
-				throw new IllegalStateException("User for eperson id " +
-						epersonPermission.epersonId + " could not be found" );
+
+				IrUser user = userService.getUser(urresearchUserId, false);
+
+				if (user == null) {
+					throw new IllegalStateException(
+							"Could not find user with id " + urresearchUserId);
+				}
+
+				String userGroupName = user.getUsername() + "_group";
+
+				IrUserGroup userGroup = userGroupService.get(userGroupName);
+
+				if (userGroup == null) {
+					userGroup = new IrUserGroup(userGroupName);
+					userGroup
+							.setDescription("Created as user import permssion from dspace");
+					userGroupService.save(userGroup);
+				}
+
+				if (epersonPermission.action == PermissionConstants.ADD) {
+					institutionalCollectionSecurityService
+							.givePermission(
+									collection,
+									userGroup,
+									InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION);
+				} else if (epersonPermission.action == PermissionConstants.DEFAULT_BITSTREAM_READ) {
+					// no action
+				} else if (epersonPermission.action == PermissionConstants.DEFAULT_ITEM_READ) {
+					// no action
+				} else if (epersonPermission.action == PermissionConstants.DELETE) {
+					institutionalCollectionSecurityService
+							.givePermission(
+									collection,
+									userGroup,
+									InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION);
+				} else if (epersonPermission.action == PermissionConstants.READ) {
+					institutionalCollectionSecurityService
+							.givePermission(
+									collection,
+									userGroup,
+									InstitutionalCollectionSecurityService.VIEW_PERMISSION);
+				} else if (epersonPermission.action == PermissionConstants.REMOVE) {
+					institutionalCollectionSecurityService
+							.givePermission(
+									collection,
+									userGroup,
+									InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION);
+				} else if (epersonPermission.action == PermissionConstants.WORKFLOW_ABORT) {
+					// no action
+				} else if (epersonPermission.action == PermissionConstants.WORKFLOW_STEP_1) {
+					// no action
+				} else if (epersonPermission.action == PermissionConstants.WORKFLOW_STEP_2) {
+					// no action
+				} else if (epersonPermission.action == PermissionConstants.WORKFLOW_STEP_3) {
+					// no action
+				} else if (epersonPermission.action == PermissionConstants.WRITE) {
+					institutionalCollectionSecurityService
+							.givePermission(
+									collection,
+									userGroup,
+									InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION);
+				}
 			}
-			
-			IrUser user = userService.getUser(urresearchUserId, false);
-			
-			if( user == null)
-			{
-				throw new IllegalStateException("Could not find user with id " + urresearchUserId);
-			}
-			
-			String userGroupName = user.getUsername() + "_group";
-			
-			IrUserGroup userGroup = userGroupService.get(userGroupName);
-			
-			if( userGroup == null)
-			{
-			    userGroup = new IrUserGroup(userGroupName);	
-			    userGroup.setDescription("Created as user import permssion from dspace");
-			    userGroupService.save(userGroup);
-			}
-			
-			if( epersonPermission.action == PermissionConstants.ADD)
-		    {
-		        institutionalCollectionSecurityService.givePermission(collection, userGroup, 
-		        		InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION);
-		    }
-		    else if ( epersonPermission.action == PermissionConstants.DEFAULT_BITSTREAM_READ)
-		    {
-		    	// no action
-		    }
-		    else if ( epersonPermission.action == PermissionConstants.DEFAULT_ITEM_READ)
-		    {
-		    	// no action
-		    }
-		    else if ( epersonPermission.action == PermissionConstants.DELETE)
-		    {
-		    	institutionalCollectionSecurityService.givePermission(collection, userGroup, 
-		        		InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION);
-		    }
-		    else if ( epersonPermission.action == PermissionConstants.READ)
-		    {
-		    	institutionalCollectionSecurityService.givePermission(collection, userGroup, 
-		        		InstitutionalCollectionSecurityService.VIEW_PERMISSION);
-		    }
-		    else if ( epersonPermission.action == PermissionConstants.REMOVE)
-		    {
-		    	institutionalCollectionSecurityService.givePermission(collection, userGroup, 
-		        		InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION);
-		    }
-		    else if ( epersonPermission.action == PermissionConstants.WORKFLOW_ABORT)
-		    {
-		    	// no action
-		    }
-		    else if ( epersonPermission.action == PermissionConstants.WORKFLOW_STEP_1)
-		    {
-		    	// no action
-		    }
-		    else if ( epersonPermission.action == PermissionConstants.WORKFLOW_STEP_2)
-		    {
-		    	// no action
-		    }
-		    else if ( epersonPermission.action == PermissionConstants.WORKFLOW_STEP_3)
-		    {
-		    	// no action
-		    }  
-		    else if ( epersonPermission.action == PermissionConstants.WRITE)
-		    {
-		    	institutionalCollectionSecurityService.givePermission(collection, userGroup, 
-		        		InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION);
-		    }
 		}
 	}
 
@@ -574,7 +625,15 @@ public class DefaultCollectionImporter implements CollectionImporter{
 	 */
 	private Long getUrResearchUser(long epersonId)
 	{
-		return jdbcTemplate.queryForLong("select ur_research_user_id from dspace_convert.ir_user where dspace_eperson_id = " + epersonId);
+		try
+		{
+		    return jdbcTemplate.queryForLong("select ur_research_user_id from dspace_convert.ir_user where dspace_eperson_id = " + epersonId);
+	 
+		}
+		catch(EmptyResultDataAccessException erdae)
+		{
+		    return null;	
+		}
 	}
 	
 	/**
