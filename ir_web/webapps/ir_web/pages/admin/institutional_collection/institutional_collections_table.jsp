@@ -128,7 +128,7 @@
 		                        ${institutionalCollection.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.institution.getCollectionById('${institutionalCollection.id}', ${rowStart}, ${startPageNumber}, ${currentPageNumber}, '${sortType}')">${institutionalCollection.name}</a>
+			                   <a href="javascript:YAHOO.ur.institution.getCollectionById('${institutionalCollection.id}', 0, 1, 1, '${sortType}')">${institutionalCollection.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 		                   		${institutionalCollection.path}
