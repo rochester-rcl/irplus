@@ -53,11 +53,12 @@
             <!--  user cannot be null -->
             <c:if test="${user != null}">
                 <c:if test='${ir:userHasRole("ROLE_ADMIN,ROLE_COLLECTION_ADMIN", "OR")}'>
-                   <li class="yuimenubaritem"><a class="yuimenubaritemlabel" href="<c:url value="/admin/adminHome.action"/>"><span class="wrenchImg">&nbsp;</span>Administration</a>
+                   <li class="yuimenubaritem"><a class="yuimenubaritemlabel" href="#administration"><span class="wrenchImg">&nbsp;</span>Administration</a>
                    <div id="administration" class="yuimenu">
                        <div class="bd">                                        
                             <ul>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
+                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepository.action" />" >System Status</a></li>
                                     <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepository.action" />" >Repository</a></li>
                                 </c:if>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewInstitutionalCollections.action" />" >Institutional Collections</a></li>
@@ -93,7 +94,7 @@
                     </li>
                     </c:if>
                     <c:if test='${ir:userHasRole("ROLE_COLLABORATOR,ROLE_AUTHOR,ROLE_RESEARCHER,ROLE_ADMIN", "OR")}'>
-                    <li class="yuimenubaritem"><a class="yuimenubaritemlabel" href="<c:url value="/user/workspace.action"/>"><span class="report_editImg">&nbsp;</span>Workspace</a>
+                    <li class="yuimenubaritem"><a class="yuimenubaritemlabel" href="#workspace"><span class="report_editImg">&nbsp;</span>Workspace</a>
                         <div id="workspace" class="yuimenu">
                             <div class="bd">                                        
                                 <ul>
@@ -109,7 +110,7 @@
                 </c:if>
                 
                 <c:if test="${user != null}">
-                    <li class="yuimenubaritemleft"><a class="yuimenubaritemlabel" href="<c:url value="/home.action"/>"><span class="userImg">&nbsp;</span>Welcome ${user.username}</a>
+                    <li class="yuimenubaritemleft"><a class="yuimenubaritemlabel" href="#welcome"><span class="userImg">&nbsp;</span>Welcome ${user.username}</a>
                         <div id="welcome" class="yuimenu">
                             <div class="bd">                                        
                                 <ul>
