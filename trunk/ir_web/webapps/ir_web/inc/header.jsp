@@ -58,7 +58,7 @@
                        <div class="bd">                                        
                             <ul>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
-                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepository.action" />" >System Status</a></li>
+                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/adminHome.action"/>" >System Status</a></li>
                                     <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepository.action" />" >Repository</a></li>
                                 </c:if>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewInstitutionalCollections.action" />" >Institutional Collections</a></li>
