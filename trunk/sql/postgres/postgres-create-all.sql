@@ -1486,7 +1486,6 @@ CREATE SEQUENCE ir_repository.repository_picture_seq;
 ALTER TABLE ir_repository.repository_picture_seq OWNER TO ir_plus;
 
 
-
 -- Create a new table to hold repository license information 
 CREATE TABLE ir_repository.license
 (
@@ -1506,6 +1505,42 @@ CREATE SEQUENCE ir_repository.license_seq;
 ALTER TABLE ir_repository.license_seq OWNER TO ir_plus;
 
 
+-- ---------------------------------------------
+-- Versioned license
+-- ---------------------------------------------
+CREATE TABLE ir_repository.versioned_license
+(
+    versioned_license_id BIGINT PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT,
+    largest_license_version_id INTEGER NOT NULL,
+    current_version_id BIGINT,
+    version INTEGER
+);
+ALTER TABLE ir_repository.versioned_license OWNER TO ir_plus;
+
+-- The versioned license sequence
+CREATE SEQUENCE ir_repository.versioned_license_seq;
+ALTER TABLE ir_repository.versioned_license_seq OWNER TO ir_plus;
+
+
+
+-- Create a table to hold repository license version information 
+CREATE TABLE ir_repository.license_version
+(
+  license_version_id BIGINT PRIMARY KEY,
+  version_number INT NOT NULL,
+  versioned_license_id BIGINT NOT NULL,
+  license_id BIGINT NOT NULL,
+  version INTEGER,
+  FOREIGN KEY (license_id) REFERENCES ir_repository.license(license_id),
+  FOREIGN KEY (versioned_license_id) REFERENCES ir_repository.versioned_license(versioned_license_id)
+);
+ALTER TABLE ir_repository.license_version OWNER TO ir_plus;
+
+-- The repository license sequence
+CREATE SEQUENCE ir_repository.license_version_seq;
+ALTER TABLE ir_repository.license_version_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Institutional Collection Information
