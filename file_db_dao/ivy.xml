@@ -28,9 +28,6 @@
     <info organisation="file_db_dao" module="file_db_dao"/>
     <dependencies>
 
-        <dependency org="file_db" name="file_db" rev="0.1"/>
-        <dependency org="ur_persistence_util" name="ur_persistence_util" rev="0.1"/>
-
         <!-- commons io files -->
         <dependency org="commons-io" name="commons-io" rev="1.4">
             <artifact name="commons-io" type="jar"/>

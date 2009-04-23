@@ -28,11 +28,6 @@
     <info organisation="file_db_hibernate" module="file_db_hibernate"/>
     <dependencies>
 
-        <dependency org="ur_common_util" name="ur_common_util" rev="0.1" transitive="false"/>
-        <dependency org="ur_persistence_util" name="ur_persistence_util" rev="0.1" transitive="false"/>
-        <dependency org="file_db" name="file_db" rev="0.1" transitive="false"/>
-        <dependency org="file_db_dao" name="file_db_dao" rev="0.1" transitive="false"/>
-
         <!-- commons io files -->
         <dependency org="commons-io" name="commons-io" rev="1.4">
             <artifact name="commons-io" type="jar"/>

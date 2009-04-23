@@ -26,10 +26,6 @@
     <info organisation="file_db" module="file_db"/>
     <dependencies>
 
-        <dependency org="ur_common_util" name="ur_common_util" rev="0.1"/>
-
-        <dependency org="ur_persistence_util" name="ur_persistence_util" rev="0.1"/>
-
         <!-- commons io files -->
         <dependency org="commons-io" name="commons-io" rev="1.4">
             <artifact name="commons-io" type="jar"/>
