@@ -288,6 +288,7 @@ facet and searching
 .full_text_search_results
 {
 	float: left;
+	width: 100%;
 }
 
 .search_results_table {
