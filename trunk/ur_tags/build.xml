@@ -24,7 +24,7 @@
     <property file="build.properties"/>
 
     <!-- project name -->
-    <property name="project.name" value="ut_tags"/> 
+    <property name="project.name" value="ur_tags"/> 
 
     <!-- location of the base build file -->
     <property name="base.build.file" value="../base.xml"/>

@@ -69,6 +69,14 @@
 		<copy todir="${build.dir}/classes">
 		    <fileset dir="${log4j.production.appender}"/>
 		</copy>
+		
+		<!-- copy the most recent jar files created by the application-->
+		<copy todir="${lib.dir}">
+			<fileset file="../ur_common_util/ur_common_util/ur_common_util-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ur_persistence_util/ur_persistence_util/ur_persistence_util-${project.version}.jar"/>
+		</copy>
 	</target>
 
 	<!-- compile the java source files -->
