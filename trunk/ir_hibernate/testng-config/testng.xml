@@ -58,6 +58,7 @@
 		     <class name="edu.ur.hibernate.ir.institution.db.VersionedInstitutionalItemDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.institution.db.InstitutionalItemVersionDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.institution.db.DeletedInstitutionalItemDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.institution.db.InstitutionalCollectionSubscriptionDAOTest"/>
 		    
 		     <class name="edu.ur.hibernate.ir.security.db.IrAclDAOTest"/>
 	         <class name="edu.ur.hibernate.ir.security.db.IrClassTypeDAOTest"/>
