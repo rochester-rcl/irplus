@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.hibernate.SessionFactory;
 
+import edu.ur.dao.UniqueNameDAO;
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.repository.VersionedLicense;
 import edu.ur.ir.repository.VersionedLicenseDAO;
 
@@ -73,6 +75,16 @@ public class HbVersionedLicenseDAO implements VersionedLicenseDAO{
 	 */
 	public Long getCount() {
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("versionedLicenseCount"));
+	}
+
+	
+	/**
+	 * Returns a versioned license with the given unique name
+	 * @see edu.ur.dao.UniqueNameDAO#findByUniqueName(java.lang.String)
+	 */
+	public VersionedLicense findByUniqueName(String name) {
+		return (VersionedLicense) 
+	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getVersionedLicenseByName", name));
 	}
 
 }
