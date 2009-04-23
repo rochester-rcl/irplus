@@ -65,6 +65,8 @@ DROP TABLE ir_repository.institutional_collection_subscription;
 DROP TABLE ir_repository.institutional_collection_picture;
 DROP TABLE ir_repository.institutional_collection;
 DROP TABLE ir_repository.repository;
+DROP TABLE ir_repository.license_version;
+DROP TABLE ir_repository.versioned_license;
 DROP TABLE ir_repository.license;
 
 DROP SEQUENCE ir_repository.institutional_collection_subscription_seq;
@@ -80,6 +82,8 @@ DROP SEQUENCE ir_repository.deleted_institutional_item_seq;
 DROP SEQUENCE ir_repository.institutional_collection_seq;
 DROP SEQUENCE ir_repository.repository_seq;
 DROP SEQUENCE ir_repository.license_seq;
+DROP SEQUENCE ir_repository.license_version_seq;
+DROP SEQUENCE ir_repository.versioned_license_seq;
 
 DROP SCHEMA ir_repository;
 
