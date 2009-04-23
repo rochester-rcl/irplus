@@ -74,6 +74,9 @@ public class VersionedLicenseDAOTest {
 		VersionedLicense other = versionedLicenseDAO.getById(versionedLicense.getId(), false);
 		assert other != null : "Should be able to find other";
 		assert other.equals(versionedLicense) : "Should be equal other = " + other + " license = " + license;
+		
+		other = versionedLicenseDAO.findByUniqueName(versionedLicense.getName());
+		assert other.equals(versionedLicense) : "Should be equal other = " + other + " license = " + license;
 		tm.commit(ts);
 
 		ts = tm.getTransaction(td);

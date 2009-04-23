@@ -35,6 +35,8 @@
             <set>
                 <value>edu/ur/hibernate/ir/repository/db/Repository.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/repository/db/License.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/repository/db/LicenseVersion.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/repository/db/VersionedLicense.hbm.xml</value>
                 
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollection.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollectionSubscription.hbm.xml</value>

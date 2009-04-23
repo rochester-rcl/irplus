@@ -72,6 +72,12 @@
 			<one-to-many class="LicenseVersion"/>
 		</set>	
 	</class>
+	
+	<!-- named query for getting a versioned license-->
+	<query name="getVersionedLicenseByName">
+		from VersionedLicense as VersionedLicense where
+		VersionedLicense.name = ?
+	</query>
 		
 
 </hibernate-mapping>

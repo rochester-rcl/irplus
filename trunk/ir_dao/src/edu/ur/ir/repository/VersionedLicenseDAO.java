@@ -18,6 +18,7 @@
 package edu.ur.ir.repository;
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.dao.UniqueNameDAO;
 
 /**
  * Represents data access for a versioned license.
@@ -25,4 +26,4 @@ import edu.ur.dao.CrudDAO;
  * @author Nathan Sarr
  *
  */
-public interface VersionedLicenseDAO extends CrudDAO<VersionedLicense>, CountableDAO {}
+public interface VersionedLicenseDAO extends CrudDAO<VersionedLicense>, CountableDAO, UniqueNameDAO<VersionedLicense> {}
