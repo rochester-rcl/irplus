@@ -109,17 +109,7 @@
 	
     <!-- this target runs the tests - the default is NOT to run the tests -->
 	<target name="test" depends="test-build" if="run.tests" description="-->Run the tests">
-		<echo message="running tests" />
-		 <!-- run the tests -->
-		<taskdef resource="testngtasks" classpathref="test.libraries"  classpath="testng-5.8.jar"/>
-		<testng classpathref="test.libraries"
-		        outputDir="${test.report.dir}"
-			    haltOnfailure="true"
-			    verbose="2"
-			    dumpCommand="true">
-
-			<xmlfileset dir="${testng.config}" includes="testng.xml"/>
-		</testng>
+		
 	</target>
 
     <!-- generate the documentation -->
