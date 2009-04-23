@@ -75,7 +75,11 @@ YAHOO.ur.folder =
             myPersonalFolderTable.submitForm(myFolderAction);
             YAHOO.ur.folder.insertHiddenParentFolderId();
             var buttonsDiv = document.getElementById("files_folders_buttons");
-            buttonsDiv.style.visibility='visible';
+            
+            if( buttonsDiv != null )
+            {
+                buttonsDiv.style.visibility='visible';
+            }
         }
     },
     
