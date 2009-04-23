@@ -40,6 +40,7 @@ import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionDAO;
 import edu.ur.ir.institution.InstitutionalCollectionLink;
+import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
@@ -573,7 +574,9 @@ public class InstitutionalCollectionDAOTest {
 		
 		tm.commit(ts);
 		
+		// start new transaction
 		ts = tm.getTransaction(td);
+		col = institutionalCollectionDAO.getById(col.getId(), false);
 		col.addSuscriber(user);
 		institutionalCollectionDAO.makePersistent(col);
 		tm.commit(ts);
@@ -582,8 +585,6 @@ public class InstitutionalCollectionDAOTest {
 		InstitutionalCollection otherCollection = institutionalCollectionDAO.getById(col.getId(), false);
 		assert otherCollection.getSubscriptions().size() == 1 : "Should have 1 subscriber";
 		assert otherCollection.hasSubscriber(user) :"Should have subscriber - " + user.getUsername();
-		
-		
 		otherCollection.removeSubscriber(user);
 		institutionalCollectionDAO.makePersistent(otherCollection);
 		tm.commit(ts);
@@ -754,6 +755,84 @@ public class InstitutionalCollectionDAOTest {
 		"other";
 		repoHelper.cleanUpRepository();
 		tm.commit(ts);	
+	}
+	
+	/**
+	 * Test Institutional Collection link persistence
+	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	@Test
+	public void collectionSubscriberDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+
+	    // start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+		
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+
+		//commit the transaction 
+		// create a collection
+		InstitutionalCollection collection = repo.createInstitutionalCollection("colName");
+		collection.setDescription("colDescription");
+
+		institutionalCollectionDAO.makePersistent(collection);
+		
+  		UserManager userManager = new UserManager();
+		IrUser user = userManager.createUser("passowrd", "userName");
+		userDAO.makePersistent(user);
+		
+		tm.commit(ts);
+		
+		
+		// start a new transaction
+		ts = tm.getTransaction(td);
+		collection = institutionalCollectionDAO.getById(collection.getId(), false);
+		assert collection.getSubscriptions().size() == 0 : "Should have 0 subscriptions but has " + collection.getSubscriptions().size();
+		
+		InstitutionalCollectionSubscription subscription = collection.addSuscriber(user);
+		institutionalCollectionDAO.makePersistent(collection);
+		tm.commit(ts);
+		
+		// start a new transaction
+		ts = tm.getTransaction(td);
+		collection = institutionalCollectionDAO.getById(collection.getId(), false);
+		assert collection.getSubscriptions().size() == 1 : "Should have 1 subscriptions but has " + collection.getSubscriptions().size();
+
+		assert subscription.getUser().equals(user) : "Collection subscription user should = " + user 
+		+ " but = " + subscription.getUser();
+		
+		subscription = collection.getSubscription(user);
+		assert subscription.getInstitutionalCollection().equals(collection) : "Collection subscription collection should = " + collection 
+		+ " but = " + subscription.getInstitutionalCollection();
+		
+		assert collection.hasSubscriber(user) : " Collection should have user " + user;
+		
+		// remove the subscriber
+		collection.removeSubscriber(user);
+		institutionalCollectionDAO.makePersistent(collection);
+		tm.commit(ts);
+		
+			
+		
+  	    // start a new transaction
+		ts = tm.getTransaction(td);
+		
+		collection = institutionalCollectionDAO.getById(collection.getId(), false);
+
+		assert !collection.hasSubscriber(user) : " Collection should NOT have user " + user;
+		// delete the institutional collection
+		institutionalCollectionDAO.makeTransient(collection);
+		repoHelper.cleanUpRepository();
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		tm.commit(ts);
+		
+
 	}
 
 }
