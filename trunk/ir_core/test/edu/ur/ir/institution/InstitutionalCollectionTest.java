@@ -28,6 +28,7 @@ import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
+import edu.ur.ir.user.IrUser;
 import edu.ur.ir.repository.Repository;
 
 /**
@@ -758,6 +759,38 @@ public class InstitutionalCollectionTest {
 		
 		
 		assert !collection.getLinks().contains(link3) : "links should not contain link 1";
+	}
+	
+	/**
+	 * Test subscription methods
+	 */
+	public void testSubscriptions()
+	{
+		// create the user for the subscription
+		IrUser user = new IrUser("nate", "password");
+		
+		InstitutionalCollection collection = new InstitutionalCollection();
+		collection.setName("testLinksCollection");
+		
+		assert collection.getSubscriptions().size() == 0 : "Should have 0 subscriptions but has " + collection.getSubscriptions().size();
+		
+		InstitutionalCollectionSubscription subscription = collection.addSuscriber(user);
+		
+		assert collection.getSubscriptions().size() == 1 : "Should have 1 subscriptions but has " + collection.getSubscriptions().size();
+
+		assert subscription.getUser().equals(user) : "Collection subscription user should = " + user 
+		+ " but = " + subscription.getUser();
+		
+		
+		assert subscription.getInstitutionalCollection().equals(collection) : "Collection subscription collection should = " + collection 
+		+ " but = " + subscription.getInstitutionalCollection();
+		
+		assert collection.hasSubscriber(user) : " Collection should have user " + user;
+		
+		collection.removeSubscriber(user);
+		
+		assert !collection.hasSubscriber(user) : " Collection should NOT have user " + user;
+		
 	}
 
 	

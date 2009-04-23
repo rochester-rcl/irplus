@@ -37,6 +37,7 @@
                 <value>edu/ur/hibernate/ir/repository/db/License.hbm.xml</value>
                 
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollection.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollectionSubscription.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollectionLink.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalItem.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemVersion.hbm.xml</value>

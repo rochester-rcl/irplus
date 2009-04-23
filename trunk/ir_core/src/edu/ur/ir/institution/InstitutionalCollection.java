@@ -84,7 +84,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	private Set<InstitutionalItem> items = new HashSet<InstitutionalItem>();
 	
 	/**  Subscriptions to this collection  */
-	private Set<IrUser> subscriptions = new HashSet<IrUser>();
+	private Set<InstitutionalCollectionSubscription> subscriptions = new HashSet<InstitutionalCollectionSubscription>();
 	
 	/** Set of links for a collection */
 	private List<InstitutionalCollectionLink> links = new LinkedList<InstitutionalCollectionLink>();
@@ -729,7 +729,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * Set of subscriptions for this institutional collection
 	 * @return
 	 */
-	public Set<IrUser> getSubscriptions() {
+	public Set<InstitutionalCollectionSubscription> getSubscriptions() {
 		return Collections.unmodifiableSet(subscriptions);
 	}
 
@@ -738,7 +738,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * @param subscriptions
 	 */
 	void setSubscriptions(
-			Set<IrUser> subscriptions) {
+			Set<InstitutionalCollectionSubscription> subscriptions) {
 		this.subscriptions = subscriptions;
 	}
 
@@ -941,15 +941,17 @@ DescriptionAware, NameAware, Comparable, FileSystem
 		return reviewableItem; 
 	}
 	
+
 	/**
-	 * Subscribe a user to this collection
+	 * Subscribe a user to this collection - user is added to the set of subscriptions.
 	 * 
-	 * @param user user subscribing
-	 * @return
+	 * @param user - user to subscribe to this collection
+	 * @return the subscription object created.
 	 */
-	public void addSuscriber(IrUser user) {
-		
-		subscriptions.add(user);
+	public InstitutionalCollectionSubscription addSuscriber(IrUser user) {
+		InstitutionalCollectionSubscription subscription = new InstitutionalCollectionSubscription(this, user); 
+		subscriptions.add(subscription);
+		return subscription;
 	}
 
 	/**
@@ -957,20 +959,57 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * 
 	 * @param subscriber
 	 */
-	public void removeSubscriber(IrUser subscriber) {
+	public void removeSubscriber(InstitutionalCollectionSubscription subscription) {
 		
-		subscriptions.remove(subscriber);
+		subscriptions.remove(subscription);
+	}
+	
+	/**
+	 * Remove subscription
+	 * 
+	 * @param subscriber
+	 */
+	public void removeSubscriber(IrUser user) {
+		InstitutionalCollectionSubscription s = getSubscription(user);
+		if( s != null)
+		{
+			subscriptions.remove(s);
+		}
+	}
+	
+	/**
+	 * Get the institutional collection subscription for the user.
+	 * 
+	 * @param user
+	 * @return the subscription if found otherwise null.
+	 */
+	public InstitutionalCollectionSubscription getSubscription(IrUser user)
+	{
+		for( InstitutionalCollectionSubscription subscription : subscriptions)
+		{
+			if( subscription.getUser().equals(user))
+			{
+				return subscription;
+			}
+		}
+		return null;
 	}
 	
 	/**
 	 * Check if user has subscribed to this collection
 	 * 
 	 * @param user
-	 * @return
+	 * @return true if the user is subscribed to the collection
 	 */
 	public boolean hasSubscriber(IrUser user) {
-		
-		return subscriptions.contains(user);
+		for( InstitutionalCollectionSubscription subscription : subscriptions)
+		{
+			if( subscription.getUser().equals(user))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

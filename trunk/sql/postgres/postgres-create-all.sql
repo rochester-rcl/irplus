@@ -1598,15 +1598,20 @@ ALTER TABLE ir_repository.institutional_collection_picture OWNER TO ir_plus;
 -- collection subscribers
 CREATE TABLE ir_repository.institutional_collection_subscription
 (
+  institutional_collection_subscription_id BIGINT PRIMARY KEY,
   user_id BIGINT NOT NULL,
   institutional_collection_id BIGINT NOT NULL,
-  PRIMARY KEY (institutional_collection_id, user_id),
+  version INTEGER,
+  UNIQUE(institutional_collection_id, user_id),
   FOREIGN KEY (institutional_collection_id) REFERENCES 
      ir_repository.institutional_collection (institutional_collection_id),
   FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id)
 );
 ALTER TABLE ir_repository.institutional_collection_subscription OWNER TO ir_plus;
 
+-- The item sequence
+CREATE SEQUENCE ir_repository.institutional_collection_subscription_seq;
+ALTER TABLE ir_repository.institutional_collection_subscription_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Versioned institutional Item Information

@@ -157,16 +157,16 @@
 		
 		<!--  set of subscribers for this collection -->
 		<set name="subscriptions" 
-		    optimistic-lock="false"
+		     cascade="all-delete-orphan"
+		     optimistic-lock="false"
 		     access="field"
 		     table="institutional_collection_subscription"
 		     schema="ir_repository"
 		     lazy="true"
+		     inverse="true"
 		     fetch="subselect">
             <key column="institutional_collection_id"/>
-            <many-to-many column="user_id"
-                         unique="true"
-                         class="edu.ur.ir.user.IrUser"/>
+            <one-to-many  class="InstitutionalCollectionSubscription"/>
         </set>
         
         <!--  set of links for this collection -->

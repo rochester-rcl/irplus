@@ -67,6 +67,7 @@ DROP TABLE ir_repository.institutional_collection;
 DROP TABLE ir_repository.repository;
 DROP TABLE ir_repository.license;
 
+DROP SEQUENCE ir_repository.institutional_collection_subscription_seq;
 DROP SEQUENCE ir_repository.institutional_collection_link_seq;
 DROP SEQUENCE ir_repository.reinstate_token_seq;
 DROP SEQUENCE ir_repository.withdrawn_token_seq;
