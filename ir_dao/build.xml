@@ -62,6 +62,20 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
+		
+		<!-- copy the most recent jar files created by the application-->
+		<copy todir="${lib.dir}">
+			<fileset file="../file_db/file_db/file_db-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ur_common_util/ur_common_util/ur_common_util-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ur_persistence_util/ur_persistence_util/ur_persistence_util-${project.version}.jar"/>
+		</copy>
+		<copy todir="${lib.dir}">
+			<fileset file="../ir_core/ir_core/ir_core-${project.version}.jar"/>
+		</copy>
 	</target>
 
 	<!-- compile the java source files -->
