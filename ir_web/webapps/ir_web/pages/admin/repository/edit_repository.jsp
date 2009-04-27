@@ -129,7 +129,7 @@
                                   </c:if>
                                   <c:forEach var="fileDatabase" items="${fileDatabases}">
                                       <c:if test="${repository.fileDatabase.id == fileDatabase.id}">
-                                          <option selected="true" value="${fileDatabase.id}">${defaultFileDatabase.name}</option>
+                                          <option selected="true" value="${fileDatabase.id}">${fileDatabase.name}</option>
                                       </c:if>
                                        <c:if test="${repository.fileDatabase.id != fileDatabase.id}">
                                           <option value="${fileDatabase.id}">${fileDatabase.name}</option>
