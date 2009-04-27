@@ -15,8 +15,8 @@
 -->
 
    <table class="baseTable">
-   	   <tr> <td>Number of sub collections for this collection: ${subcollectionCount}</td></tr>
-       <tr> <td>Number of sub collections in this collection and their children : ${allSubcollectionCount}</td></tr>
+   	   <tr> <td>Number of children for this collection: ${subcollectionCount}</td></tr>
+       <tr> <td>Number of children in this collection and their children : ${allSubcollectionCount}</td></tr>
    	   <tr> <td>Number of Publications in this collection : ${institutionalItemsCountForACollection}</td></tr>
        <tr> <td>Number of Publications in this collection and its children : ${institutionalItemCount}</td></tr>
        <tr> <td>Number of file downloads in this collection : ${fileDownloadCountForCollection}</td></tr>
