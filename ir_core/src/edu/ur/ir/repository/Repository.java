@@ -263,7 +263,7 @@ public class Repository extends CommonPersistent {
 	 * 
 	 * @param defaultFileDatabase
 	 */
-	void setFileDatabase(FileDatabase fileDatabase) {
+	public void setFileDatabase(FileDatabase fileDatabase) {
 		this.fileDatabase = fileDatabase;
 	}
 	
