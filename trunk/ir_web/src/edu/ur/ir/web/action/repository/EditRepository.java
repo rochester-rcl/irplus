@@ -145,13 +145,13 @@ Validateable{
 	public String create() throws NoIndexFoundException
 	{
 		FileDatabase fileDatabase = null;
-		if( defaultFileDatabaseId != -1  )
+		if( defaultFileDatabaseId != -1l  )
 		{
 			fileDatabase = fileServerService.getDatabaseById(defaultFileDatabaseId, false);
 		}
+		
 		repository = repositoryService.createRepository(repositoryName, fileDatabase);
 		repository.setInstitutionName(institutionName);
-		
 		
 		
 		try {
@@ -223,7 +223,7 @@ Validateable{
 			throw new IllegalStateException ("repository service is null");
 		}
 		
-		if( handleNameAuthorityId == -1  )
+		if( handleNameAuthorityId == -1l  )
 		{
 			repository.setDefaultHandleNameAuthority(null);
 		}
@@ -239,6 +239,25 @@ Validateable{
 			    repository.setDefaultHandleNameAuthority(authority);
 			}
 		}
+		
+		log.debug("Default file database id = " + defaultFileDatabaseId);
+		if( defaultFileDatabaseId == -1l  )
+		{
+			repository.setFileDatabase(null);
+		}
+		else
+		{
+			FileDatabase repositoryFileDatabase = repository.getFileDatabase();
+			
+			// the handle name authority is being changed
+			if( repositoryFileDatabase == null || 
+				!repositoryFileDatabase.getId().equals(defaultFileDatabaseId) )
+			{
+				FileDatabase fileDatabase = fileServerService.getDatabaseById(defaultFileDatabaseId, false);
+			    repository.setFileDatabase(fileDatabase);
+			}
+		}
+		
 		
 		try {
 			updateNameIndexFolder(repository, nameIndexFolder);
