@@ -282,20 +282,20 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
 
 		
 		// search the document and make sure we can find the stored data
 		try {
 
-			FacetSearchHelper searchHelper = institutionalItemSearchService.executeSearchWithFacets("biology", repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100, 1);
+			FacetSearchHelper searchHelper = institutionalItemSearchService.executeSearchWithFacets("biology", repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100, 1);
 			assert searchHelper.getHitSize() == 1 : "Should have one hit but have " + searchHelper;
 			
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		
-		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
 	
 		tm.commit(ts);
 		
@@ -529,8 +529,8 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
-        institutionalItemIndexService.addItem(institutionalItem2, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+        institutionalItemIndexService.addItem(institutionalItem2, new File(repo.getInstitutionalItemIndexFolder()));
 
 		
 		// search the document and make sure we can find the stored data
@@ -538,7 +538,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 
 			FacetSearchHelper searchHelper = 
 				institutionalItemSearchService.executeSearchWithFacets("biology", 
-						repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100, 1);
+						repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100, 1);
 			assert searchHelper.getHitSize() == 2 : "Should have 2 hits but have " + searchHelper;
 			
 			List<FacetFilter> filters = new LinkedList<FacetFilter>();
@@ -546,14 +546,14 @@ public class DefaultInstitutionalItemSearchServiceTest {
 			filters.add(facetFilter);
 			searchHelper = institutionalItemSearchService.executeSearchWithFacets("biology", 
 					filters, 
-					repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100, 1);
+					repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100, 1);
 			assert searchHelper.getHitSize() == 1 : "size should equal one " + searchHelper;
 			
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		
-		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
 	
 		tm.commit(ts);
 		
@@ -847,9 +847,9 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
-        institutionalItemIndexService.addItem(institutionalItem2, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
-        institutionalItemIndexService.addItem(institutionalItem3, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+        institutionalItemIndexService.addItem(institutionalItem2, new File(repo.getInstitutionalItemIndexFolder()));
+        institutionalItemIndexService.addItem(institutionalItem3, new File(repo.getInstitutionalItemIndexFolder()));
 
 		
 		// search the document and make sure we can find the stored data
@@ -857,21 +857,21 @@ public class DefaultInstitutionalItemSearchServiceTest {
 
 			FacetSearchHelper searchHelper = 
 				institutionalItemSearchService.executeSearchWithFacets("biology", 
-						repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100, 1, collection);
+						repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100, 1, collection);
 			assert searchHelper.getHitSize() == 1 : "Should have 1 hits but have " + searchHelper;
 			
 			List<FacetFilter> filters = new LinkedList<FacetFilter>();
 			FacetFilter facetFilter = new FacetFilter(DefaultInstitutionalItemIndexService.KEY_WORDS, "computer", "Keyword");
 			filters.add(facetFilter);
 			searchHelper = institutionalItemSearchService.executeSearchWithFacets("biology", 
-					repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100, 1, collection2);
+					repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100, 1, collection2);
 			assert searchHelper.getHitSize() == 2 : "size should equal two " + searchHelper;
 			
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		
-		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
 	
 		tm.commit(ts);
 		

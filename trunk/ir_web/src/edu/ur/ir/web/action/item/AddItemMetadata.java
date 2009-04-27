@@ -17,6 +17,7 @@
 package edu.ur.ir.web.action.item;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -675,6 +676,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 				userWorkspaceIndexService.updateIndex(repository, personalItem);
 			} catch (LocationAlreadyExistsException e) {
 				log.error(e);
+			} catch (IOException e) {
+				log.error(e);
 			}
 		}
 		
@@ -683,7 +686,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		if (institutionalItems != null) {
 			Repository repository = 
 				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
+			String indexFolder = repository.getInstitutionalItemIndexFolder();
 			
 			for(InstitutionalItem i : institutionalItems) {
 				institutionalItemIndexService.updateItem(i, new File(indexFolder));

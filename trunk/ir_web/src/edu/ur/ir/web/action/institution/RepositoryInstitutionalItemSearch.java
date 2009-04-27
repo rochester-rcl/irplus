@@ -145,7 +145,7 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 		log.debug("Executing query : " + query);
 
 		searchDataHelper = institutionalItemSearchService.executeSearchWithFacets(query,
-				repository.getInstitutionalItemIndexFolder().getFullPath(), 
+				repository.getInstitutionalItemIndexFolder(), 
 				numberOfHitsToProcessForFacets, 
 				numberOfResultsToCollectForFacets, 
 				numberOfFacetsToShow,
@@ -308,7 +308,7 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 
 		searchDataHelper = institutionalItemSearchService.executeSearchWithFacets(query,
 				filters,
-				repository.getInstitutionalItemIndexFolder().getFullPath(), 
+				repository.getInstitutionalItemIndexFolder(), 
 				numberOfHitsToProcessForFacets, 
 				numberOfResultsToCollectForFacets, 
 				numberOfFacetsToShow,

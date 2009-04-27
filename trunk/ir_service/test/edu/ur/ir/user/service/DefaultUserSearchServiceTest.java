@@ -28,7 +28,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
-import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.SearchResults;
@@ -101,8 +100,6 @@ public class DefaultUserSearchServiceTest {
 		user.setFirstName("firstName");
 		user.setLastName("lastName");
 		userService.makeUserPersistent(user);
-		FolderInfo userIndexFolder = repo.getFileDatabase().createFolder("userIndexFolderIndex");
-		repo.setUserIndexFolder(userIndexFolder);
 		assert user.getId() != null : "User id should not be null";
 		tm.commit(ts);
 		
@@ -110,13 +107,13 @@ public class DefaultUserSearchServiceTest {
 		ts = tm.getTransaction(td);
 		user = userService.getUser(user.getId(), false);
 		
-		File userIndex = new File(userIndexFolder.getFullPath());
+		File userIndex = new File(repo.getUserIndexFolder());
 		userIndexService.addToIndex(user, userIndex);
 		tm.commit(ts);
 		
 	    // Start new transaction - clean up
 		ts = tm.getTransaction(td);
-		SearchResults<IrUser> searchResults = userSearchService.search(new File(userIndexFolder.getFullPath()), "firstName", 0, 10);
+		SearchResults<IrUser> searchResults = userSearchService.search(new File(repo.getUserIndexFolder()), "firstName", 0, 10);
 		List<IrUser> users = searchResults.getObjects();
 		assert users.size() == 1;
 		assert users.contains(user);

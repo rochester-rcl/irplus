@@ -18,6 +18,7 @@
 package edu.ur.ir.user.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,12 +26,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.IllegalFileSystemNameException;
@@ -962,25 +964,42 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	}
 
 	
-	public void addNewVersion(PersonalFile personalFile, File newVersion) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	/**
-	 * Creates an index folder for a user if one does not exist.
+	 * Creates an index folder for a user if one does not exist.  The creates a folder
+	 * with the given name in the top level repository user index location.
 	 * 
-	 * @param user
-	 * @param repository
+	 * @param user - user 
+	 * @param repository 
+	 * @param folderName
 	 * @throws LocationAlreadyExistsException - if the folder location already exists
+	 * @throws IOException 
 	 */
-	public void createIndexFolder(IrUser user, Repository repository, String folderName) throws LocationAlreadyExistsException
+	public void createIndexFolder(IrUser user, Repository repository, String folderName) throws LocationAlreadyExistsException, IOException
 	{
-		if( user.getPersonalIndexFolder() == null )
+		if( user.getPersonalIndexFolder() == null || user.getPersonalIndexFolder().equals(""))
 		{
-			FolderInfo folder = repositoryService.createFolderInfo(repository, 
-					folderName);
-			user.setPersonalIndexFolder(folder);
+			// get the top level folder structure for user index folders
+			String userTopLevelIndexFolder = repository.getUserWorkspaceIndexFolder();
+			// make sure end separator exists
+			if (userTopLevelIndexFolder.charAt(userTopLevelIndexFolder.length() - 1) != IOUtils.DIR_SEPARATOR) 
+		    {
+				userTopLevelIndexFolder = userTopLevelIndexFolder + IOUtils.DIR_SEPARATOR;
+		    }
+			
+			String userFolder = userTopLevelIndexFolder + folderName + IOUtils.DIR_SEPARATOR;
+			
+			File f = new File(userFolder);
+			
+			if( f.exists())
+			{
+				throw new LocationAlreadyExistsException("location already exists", userFolder);
+			}
+			
+			FileUtils.forceMkdir(f);
+			
+			user.setPersonalIndexFolder(userFolder);
 			irUserDAO.makePersistent(user);
 		}
 	}

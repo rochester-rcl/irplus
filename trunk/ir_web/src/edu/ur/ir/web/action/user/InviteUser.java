@@ -17,6 +17,7 @@
 
 package edu.ur.ir.web.action.user;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -366,6 +367,8 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 					try {
 						userWorkspaceIndexService.addToIndex(getRepository(), sif);
 					} catch (LocationAlreadyExistsException e) {
+						log.error(e);
+					} catch (IOException e) {
 						log.error(e);
 					}
 				} catch (FileSharingException e1) {

@@ -147,7 +147,7 @@ public class CollectionInstitutionalItemSearch extends Pager {
 		rowEnd = rowStart + numberOfResultsToShow;
 		
 		searchDataHelper = institutionalItemSearchService.executeSearchWithFacets(query,
-				repository.getInstitutionalItemIndexFolder().getFullPath(), 
+				repository.getInstitutionalItemIndexFolder(), 
 				numberOfHitsToProcessForFacets, 
 				numberOfResultsToCollectForFacets, 
 				numberOfFacetsToShow,
@@ -309,7 +309,7 @@ public class CollectionInstitutionalItemSearch extends Pager {
 
 		searchDataHelper = institutionalItemSearchService.executeSearchWithFacets(query,
 				filters,
-				repository.getInstitutionalItemIndexFolder().getFullPath(), 
+				repository.getInstitutionalItemIndexFolder(), 
 				numberOfHitsToProcessForFacets, 
 				numberOfResultsToCollectForFacets,
 				numberOfFacetsToShow,

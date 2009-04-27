@@ -122,7 +122,7 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 		reviewableItemService.sendItemAcceptanceEmail(reviewableItem);
 
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
+		String indexFolder = repository.getInstitutionalItemIndexFolder();
 		institutionalItemIndexService.addItem(institutionalItem, new File(indexFolder));		
 		
 		return SUCCESS;

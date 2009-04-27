@@ -26,11 +26,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
-import edu.ur.file.db.FolderInfo;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
-import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrRoleDAO;
 import edu.ur.ir.user.IrUser;
@@ -84,6 +81,7 @@ public class IrUserDAOTest {
 		user.setAccountExpired(true);
 		user.setAccountLocked(true);
 		user.setCredentialsExpired(true);
+		user.setPersonalIndexFolder("personalIndexFolder");
 
 		userDAO.makePersistent(user);
         TransactionStatus ts = tm.getTransaction(td);
@@ -93,6 +91,8 @@ public class IrUserDAOTest {
 		assert user.getAccountExpired() : "Account should be set to expired";
 		assert user.getAccountLocked() : "Account should be set to locked";
 		assert user.getCredentialsExpired() : "Credentials should be set to expired";
+		assert user.getPersonalIndexFolder().equals("personalIndexFolder") : 
+			"Personal index folder should equal personalIndexFolder but is " + user.getPersonalIndexFolder();
 
 		//complete the transaction
 		tm.commit(ts);
@@ -234,56 +234,5 @@ public class IrUserDAOTest {
 		
 		assert userDAO.getById(other.getId(), false) == null : "Should not be able to find other";
 	}
-	
-	/**
-	 * Test PersonName persistance
-	 */
-	@Test
-	public void createPersonalIndexFolderTest()throws Exception{
-		TransactionStatus ts = tm.getTransaction(td);
-		
-		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
-		Repository repo = repoHelper.createRepository("localFileServer",
-				"displayName",
-				"file_database", 
-				"my_repository", 
-				properties.getProperty("a_repo_path"),
-				"default_folder");
-
-		// save the repository
-		tm.commit(ts);
-		
-        // create a user and add an indexed folder to the user 
-		ts = tm.getTransaction(td);
-
-		FolderInfo indexFolder = repo.getFileDatabase().createFolder("personalFolder");
-		IrUser user = new IrUser("user", "password");
-		user.setPasswordEncoding("none");
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
-		user.addUserEmail(userEmail, true);
-		user.setPersonalIndexFolder(indexFolder);
-		
-		// create the user
-		userDAO.makePersistent(user);
-
-		tm.commit(ts);
-		
-		
-        // clean up
-		ts = tm.getTransaction(td);
-		FolderInfo info = user.getPersonalIndexFolder();
-		assert  info != null : 
-			"personal index folder should not be null";
-		
-		assert info.equals(indexFolder) : "info " + info + 
-		" should be equal to index folder " + indexFolder;
-		
-		userDAO.makeTransient(userDAO.getById(user.getId(), false));
-		repoHelper.cleanUpRepository();
-		tm.commit(ts);	
-
-
-	}
-	
 
 }

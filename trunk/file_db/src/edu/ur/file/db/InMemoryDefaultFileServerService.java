@@ -419,5 +419,10 @@ public class InMemoryDefaultFileServerService implements FileServerService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public List<FileDatabase> getFileDatabases() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

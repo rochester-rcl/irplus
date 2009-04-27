@@ -646,7 +646,7 @@ public class DefaultItemImporter implements ItemImporter{
 					
 			    }
 			    
-			    institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+			    institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
 			    jdbcTemplate.execute("insert into dspace_convert.item(dspace_item_id, ur_research_institutional_item_id) values (" + i.itemId + "," + institutionalItem.getId() + ")");
 
 		    }

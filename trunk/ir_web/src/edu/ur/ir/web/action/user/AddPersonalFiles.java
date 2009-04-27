@@ -450,6 +450,8 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 				userWorkspaceIndexService.addToIndex(repository, pf);
 			} catch (LocationAlreadyExistsException e) {
 				log.error(e);
+			} catch (IOException e) {
+				log.error(e);
 			}
 			
 		}

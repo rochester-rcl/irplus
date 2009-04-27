@@ -383,7 +383,7 @@ public class DefaultRepositoryIndexerServiceTest {
 
 			FacetSearchHelper searchHelper = 
 				institutionalItemSearchService.executeSearchWithFacets("biology", 
-						repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100, 1);
+						repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100, 1);
 			assert searchHelper.getHitSize() == 2 : "Should have 2 hits but have " + searchHelper;
 			
 			List<FacetFilter> filters = new LinkedList<FacetFilter>();
@@ -391,7 +391,7 @@ public class DefaultRepositoryIndexerServiceTest {
 			filters.add(facetFilter);
 			searchHelper = institutionalItemSearchService.executeSearchWithFacets("biology", 
 					filters, 
-					repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100,1);
+					repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100,1);
 			assert searchHelper.getHitSize() == 1 : "size should equal one " + searchHelper;
 			
 		} catch (Exception e) {

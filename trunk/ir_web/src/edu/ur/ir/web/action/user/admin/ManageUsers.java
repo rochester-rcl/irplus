@@ -289,12 +289,12 @@ public class ManageUsers extends Pager implements Preparable{
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 							false);
 		userIndexService.addToIndex(irUser, 
-							new File( repository.getUserIndexFolder().getFullPath()) );
+							new File( repository.getUserIndexFolder()) );
 		
 		if (irUser.getResearcher() != null) {
 			
 			researcherIndexService.addToIndex(irUser.getResearcher(), 
-					new File(repository.getResearcherIndexFolder().getFullPath()) );
+					new File(repository.getResearcherIndexFolder()) );
 		}
 				    
 		if (emailPassword) {
@@ -377,12 +377,12 @@ public class ManageUsers extends Pager implements Preparable{
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 						false);
 		userIndexService.updateIndex(irUser, 
-						new File( repository.getUserIndexFolder().getFullPath()) );
+						new File( repository.getUserIndexFolder()) );
 		
 		if (irUser.getResearcher() != null) {
 			
 			researcherIndexService.updateIndex(irUser.getResearcher(), 
-					new File(repository.getResearcherIndexFolder().getFullPath()) );
+					new File(repository.getResearcherIndexFolder()) );
 		}
 
 		added = true;
@@ -462,7 +462,7 @@ public class ManageUsers extends Pager implements Preparable{
  				 Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 							false);
 				 userIndexService.deleteFromIndex(u, 
-							new File( repository.getUserIndexFolder().getFullPath()) );
+							new File( repository.getUserIndexFolder()) );
  			}
 		}
 

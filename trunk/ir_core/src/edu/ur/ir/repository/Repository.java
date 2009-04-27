@@ -25,7 +25,6 @@ import org.apache.log4j.Logger;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileDatabase;
-import edu.ur.file.db.FolderInfo;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -51,6 +50,12 @@ public class Repository extends CommonPersistent {
 	/** The institution that this repository belongs to. */
 	private String institutionName;
 	
+	/** indicates that the repository has been initialzed for the first time
+	 * generally only used in main application to determine if file system locations
+	 * need to be created. 
+	 **/
+	private boolean initalized = false;
+	
 	/** 
 	 * Set of pictures for the institution this is to show the pictures
 	 * for the institution.  This is just a set of files so it is up to the 
@@ -69,16 +74,19 @@ public class Repository extends CommonPersistent {
 	private static final long serialVersionUID = 5333030801530312407L;
 	
 	/** Folder containing the name index for names of people in the system*/ 
-	private FolderInfo nameIndexFolder;
+	private String nameIndexFolder;
 	
 	/** Folder containing the index for users in the system*/ 
-	private FolderInfo userIndexFolder;
+	private String userIndexFolder;
 	
 	/** Folder containing the index for institutional items in the repository */
-	private FolderInfo institutionalItemIndexFolder;
+	private String institutionalItemIndexFolder;
 	
 	/** Folder containing the index for researcher in the system*/ 
-	private FolderInfo researcherIndexFolder;
+	private String researcherIndexFolder;
+	
+	/** Folder containing all user workspace indexes*/ 
+	private String userWorkspaceIndexFolder;
 	
 	/** default license for the repository */
 	private VersionedLicense defaultLicense;
@@ -404,7 +412,7 @@ public class Repository extends CommonPersistent {
 	 * 
 	 * @return
 	 */
-	public FolderInfo getNameIndexFolder() {
+	public String getNameIndexFolder() {
 		return nameIndexFolder;
 	}
 
@@ -412,7 +420,7 @@ public class Repository extends CommonPersistent {
 	 * Set the folder containing the person name index information
 	 * @param nameIndexFolder
 	 */
-	public void setNameIndexFolder(FolderInfo nameIndexFolder) {
+	public void setNameIndexFolder(String nameIndexFolder) {
 		this.nameIndexFolder = nameIndexFolder;
 	}
 
@@ -421,7 +429,7 @@ public class Repository extends CommonPersistent {
 	 * 
 	 * @return
 	 */
-	public FolderInfo getUserIndexFolder() {
+	public String getUserIndexFolder() {
 		return userIndexFolder;
 	}
 
@@ -430,7 +438,7 @@ public class Repository extends CommonPersistent {
 	 * 
 	 * @param userIndexFolder
 	 */
-	public void setUserIndexFolder(FolderInfo userIndexFolder) {
+	public void setUserIndexFolder(String userIndexFolder) {
 		this.userIndexFolder = userIndexFolder;
 	}
 
@@ -439,7 +447,7 @@ public class Repository extends CommonPersistent {
 	 * 
 	 * @return
 	 */
-	public FolderInfo getInstitutionalItemIndexFolder() {
+	public String getInstitutionalItemIndexFolder() {
 		return institutionalItemIndexFolder;
 	}
 
@@ -449,15 +457,15 @@ public class Repository extends CommonPersistent {
 	 * @param institutionalItemIndexFolder
 	 */
 	public void setInstitutionalItemIndexFolder(
-			FolderInfo institutionalItemIndexFolder) {
+			String institutionalItemIndexFolder) {
 		this.institutionalItemIndexFolder = institutionalItemIndexFolder;
 	}
 
-	public void setResearcherIndexFolder(FolderInfo researcherIndexFolder) {
+	public void setResearcherIndexFolder(String researcherIndexFolder) {
 		this.researcherIndexFolder = researcherIndexFolder;
 	}
 
-	public FolderInfo getResearcherIndexFolder() {
+	public String getResearcherIndexFolder() {
 		return researcherIndexFolder;
 	}
 	
@@ -480,11 +488,57 @@ public class Repository extends CommonPersistent {
 		this.defaultHandleNameAuthority = defaultHandleNameAuthority;
 	}
 
+	/**
+	 * Get the default license for the repository
+	 * 
+	 * @return
+	 */
 	public VersionedLicense getDefaultLicense() {
 		return defaultLicense;
 	}
 
+	/**
+	 * Set the default license for the repository.
+	 * 
+	 * @param defaultLicense
+	 */
 	public void setDefaultLicense(VersionedLicense defaultLicense) {
 		this.defaultLicense = defaultLicense;
+	}
+
+	/**
+	 * Determine if the system is initialized.
+	 * 
+	 * @return
+	 */
+	public boolean getInitalized() {
+		return initalized;
+	}
+
+	/**
+	 * Set the repository as initialized.
+	 * 
+	 * @param initalized
+	 */
+	public void setInitalized(boolean initalized) {
+		this.initalized = initalized;
+	}
+
+	/**
+	 * Location where all user workspace index folders are stored.
+	 * 
+	 * @return
+	 */
+	public String getUserWorkspaceIndexFolder() {
+		return userWorkspaceIndexFolder;
+	}
+
+	/**
+	 * Set location where all user workspace indexes will be stored.
+	 * 
+	 * @param userWorkspaceIndexFolders
+	 */
+	public void setUserWorkspaceIndexFolder(String userWorkspaceIndexFolder) {
+		this.userWorkspaceIndexFolder = userWorkspaceIndexFolder;
 	}
 }

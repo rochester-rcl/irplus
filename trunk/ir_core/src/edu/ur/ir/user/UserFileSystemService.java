@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import edu.ur.exception.DuplicateNameException;
@@ -408,14 +409,6 @@ public interface UserFileSystemService {
 	 */
 	public List<VersionedFile> getAllVersionedFilesForFolder(PersonalFolder folder);
 	
-	/**
-	 * Add the new version to the list of versions in the personal file.  This uses
-	 * the owner of the personal file as the creator of the new version.
-	 * 
-	 * @param personalFile - personal file to add the new version to.
-	 * @param newVersion - new file version.
-	 */
-	public void addNewVersion(PersonalFile personalFile, File newVersion);
 
 	/**
 	 * Get the personal file for user with specified ir file
@@ -445,8 +438,9 @@ public interface UserFileSystemService {
 	 * @param repository - repository to add the index to.
 	 * @param folderName - name to give the folder in the file system.
 	 * @throws LocationAlreadyExistsException - if the folder location already exists
+	 * @throws IOException - if IO exception occurs when creating the folder
 	 */
-	public void createIndexFolder(IrUser user, Repository repository, String folderName) throws LocationAlreadyExistsException;
+	public void createIndexFolder(IrUser user, Repository repository, String folderName) throws LocationAlreadyExistsException, IOException;
 	
 	/**
 	 * Determine if the irFile is used by any personal files.  This
@@ -482,8 +476,6 @@ public interface UserFileSystemService {
 	 * @return the shared in-box file or null if not found
 	 */
 	public SharedInboxFile getSharedInboxFile(Long id, boolean lock);
-	
-    
  
     
     /**

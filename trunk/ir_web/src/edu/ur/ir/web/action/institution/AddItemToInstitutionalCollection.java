@@ -404,7 +404,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			// only index if the item was added directly to the collection
 			if(directAdd)
 			{
-				String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
+				String indexFolder = repository.getInstitutionalItemIndexFolder();
 				institutionalItemIndexService.addItem(institutionalItem, new File(indexFolder));
 			}
 			

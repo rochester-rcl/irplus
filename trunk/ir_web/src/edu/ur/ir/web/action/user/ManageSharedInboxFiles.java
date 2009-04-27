@@ -17,6 +17,7 @@
 
 package edu.ur.ir.web.action.user;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -121,6 +122,8 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 					userWorkspaceIndexService.addToIndex(repository, pf);
 				} catch (LocationAlreadyExistsException e) {
 					log.error(e);
+				} catch (IOException e) {
+					log.error(e);
 				}
 				userWorkspaceIndexService.deleteFromIndex(inboxFile);
 			}
@@ -150,6 +153,8 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 					try {
 						userWorkspaceIndexService.addToIndex(repository , pf);
 					} catch (LocationAlreadyExistsException e) {
+						log.error(e);
+					} catch (IOException e) {
 						log.error(e);
 					}
 					userWorkspaceIndexService.deleteFromIndex(inboxFile);

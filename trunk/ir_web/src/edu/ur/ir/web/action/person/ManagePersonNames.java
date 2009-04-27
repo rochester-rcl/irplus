@@ -149,14 +149,14 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdA
 			personService.save(personNameAuthority);
 			
 			Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
+			File nameAuthorityFolder = new File(repo.getNameIndexFolder());
 			nameAuthorityIndexService.updateIndex(personNameAuthority, nameAuthorityFolder);
 	
 			IrUser user = userService.getUserByPersonNameAuthority(personId);
 	
 			if (user != null) {
 			    userIndexService.updateIndex(user, 
-						new File( repo.getUserIndexFolder().getFullPath()) );
+						new File( repo.getUserIndexFolder()) );
 			}
 	
 			added = true;
@@ -205,14 +205,14 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdA
 		personService.save(personNameAuthority);
 		
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
+		File nameAuthorityFolder = new File(repo.getNameIndexFolder());
 		nameAuthorityIndexService.updateIndex(personNameAuthority, nameAuthorityFolder);
 		
 		
 
 		if (user != null) {
 		    userIndexService.updateIndex(user, 
-					new File( repo.getUserIndexFolder().getFullPath()) );
+					new File( repo.getUserIndexFolder()) );
 		}			
 
 
@@ -274,12 +274,12 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdA
 						new String[]{personNamesNotDeleted.toString()});
 		    }
 	    	
-			File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
+			File nameAuthorityFolder = new File(repo.getNameIndexFolder());
 			nameAuthorityIndexService.updateIndex(personNameAuthority, nameAuthorityFolder);
 
 			if (user != null) {
 			    userIndexService.updateIndex(user, 
-						new File( repo.getUserIndexFolder().getFullPath()) );
+						new File( repo.getUserIndexFolder()) );
 			}	
 
 		}

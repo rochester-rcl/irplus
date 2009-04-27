@@ -78,7 +78,7 @@ public class UserWorkspaceSearch extends ActionSupport implements UserIdAware {
 			     numResults);
 		}
 		
-		File personalIndexFolder = new File(user.getPersonalIndexFolder().getFullPath());
+		File personalIndexFolder = new File(user.getPersonalIndexFolder());
 		userWorkspaceSearchResults = userWorkspaceSearchService.search(personalIndexFolder, query, offset, numResults);
 		return SUCCESS;
 	}

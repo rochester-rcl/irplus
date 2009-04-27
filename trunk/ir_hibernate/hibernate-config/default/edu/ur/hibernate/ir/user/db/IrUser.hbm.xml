@@ -90,22 +90,16 @@
 			 
 		<property name="isAffiliationApproved" column="affiliation_approved" 
 		     type="boolean" access="field" />	
+		
+		<!-- location where the users personal index information is stored -->
+		<property name="personalIndexFolder" column="personal_index_folder" 
+		     type="string" access="field" />	
 					     	 			 			 		 
 
 		<!-- Default email for this user -->
 		<many-to-one class="edu.ur.ir.user.UserEmail" 
 			name="defaultEmail" column="default_email_id" insert="true"
 			update="true" unique="true"/>
-
-		<!-- folder for indexed user data -->
-		<many-to-one class="edu.ur.file.db.TreeFolderInfo" 
-			name="personalIndexFolder"
-			cascade="save-update" 
-			column="personal_index_folder_id" 
-			insert="true"
-			update="true" 
-			access="field" 
-			unique="true"/>
 
 		<!-- Affiliation of the user with the university -->
 		<many-to-one class="edu.ur.ir.user.Affiliation" 

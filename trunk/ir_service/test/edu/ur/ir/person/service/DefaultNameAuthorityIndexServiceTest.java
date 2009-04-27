@@ -37,7 +37,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
-import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.person.PersonName;
@@ -140,15 +139,14 @@ public class DefaultNameAuthorityIndexServiceTest {
 		PersonNameAuthority personNameAuthority = new PersonNameAuthority(n);
 		personService.save(personNameAuthority);
 		
-		File indexDir = new File(repo.getNameIndexFolder().getFullPath());
+		File indexDir = new File(repo.getNameIndexFolder());
 		nameIndexService.addToIndex(personNameAuthority, indexDir);
 		tm.commit(ts);
 		
 	    // Start new transaction
 		ts = tm.getTransaction(td);
 		
-		FolderInfo folderInfo =  repo.getNameIndexFolder();
-		String indexFolder = folderInfo.getFullPath();
+		String indexFolder = repo.getNameIndexFolder();
 		
 		Directory lucenDirectory;
 		try {

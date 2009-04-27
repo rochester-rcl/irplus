@@ -17,7 +17,10 @@
 
 package edu.ur.ir.repository.service.test.helper;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
+import org.apache.commons.io.FileUtils;
 
 import org.springframework.context.ApplicationContext;
 
@@ -61,6 +64,7 @@ public class RepositoryBasedTestHelper {
      * 
      * @return the created repository.
      * @throws LocationAlreadyExistsException 
+     * @throws IOException 
      */
     public Repository createTestRepositoryDefaultFileServer(Properties properties) throws LocationAlreadyExistsException
     {
@@ -69,7 +73,62 @@ public class RepositoryBasedTestHelper {
     	String fileDatabaseDisplayName =  "displayName";
     	String fileDatabaseUniqueName = "file_database"; 
     	String repoName = "my_repository"; 
-		String fileDatabasePath =properties.getProperty("a_repo_path");
+    	
+    	// location for the default file database
+		String fileDatabasePath = properties.getProperty("a_repo_path");
+		
+		// location to store person name index
+		String nameIndexFolder = properties.getProperty("name_index_folder");
+		
+		// location to store item index folder
+		String itemIndexFolder = properties.getProperty("item_index_folder");
+		
+		// location to store user index folder
+		String userIndexFolder = properties.getProperty("user_index_folder");
+		
+		// location to store user personal workspace index folders
+		String userWorkspaceIndexFolder = properties.getProperty("user_workspace_index_folder");
+		
+		File f = new File(nameIndexFolder);
+		if( !f.exists() )
+		{
+			try {
+				FileUtils.forceMkdir(f);
+			} catch (IOException e) {
+				throw new IllegalStateException(e);
+			}
+		}
+		
+		f = new File(itemIndexFolder);
+		if( !f.exists() )
+		{
+			try {
+				FileUtils.forceMkdir(f);
+			} catch (IOException e) {
+				throw new IllegalStateException(e);
+			}
+		}
+		
+		f = new File(userIndexFolder);
+		if( !f.exists() )
+		{
+			try {
+				FileUtils.forceMkdir(f);
+			} catch (IOException e) {
+				throw new IllegalStateException(e);
+			}
+		}
+		
+		f = new File(userWorkspaceIndexFolder);
+		if( !f.exists() )
+		{
+			try {
+				FileUtils.forceMkdir(f);
+			} catch (IOException e) {
+				throw new IllegalStateException(e);
+			}
+		}
+		
 		String defaultFolderDispalyName = "default_folder";
 
 		// create the file server
@@ -87,10 +146,16 @@ public class RepositoryBasedTestHelper {
 		repository = repositoryService.createRepository(repoName, fileDatabase);
 		
 		// Creating the name index folder
-		repository.setNameIndexFolder(repositoryService.createFolderInfo(repository, "name_index_folder"));
+		repository.setNameIndexFolder(nameIndexFolder);
 		
 		// create the institutional item index folder
-		repository.setInstitutionalItemIndexFolder(repositoryService.createFolderInfo(repository, "institutional_item_index_folder"));
+		repository.setInstitutionalItemIndexFolder(itemIndexFolder);
+		
+		//create the index folder for user information
+		repository.setUserIndexFolder(userIndexFolder);
+		
+		//set the user workspace index folders location
+		repository.setUserWorkspaceIndexFolder(userWorkspaceIndexFolder);
 		
 		repositoryService.saveRepository(repository);
 		

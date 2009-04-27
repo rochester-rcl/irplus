@@ -171,7 +171,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		personService.save(personNameAuthority);
 		
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
+		File nameAuthorityFolder = new File(repo.getNameIndexFolder());
 		nameAuthorityIndexService.addToIndex(personNameAuthority, nameAuthorityFolder);
 		
 		log.debug( " my Name = " + myName + " add to user id = " + addToUserId);
@@ -181,7 +181,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 			user.setPersonNameAuthority(personNameAuthority);
 			userService.makeUserPersistent(user);
 		    userIndexService.updateIndex(user, 
-					new File( repo.getUserIndexFolder().getFullPath()) );			
+					new File( repo.getUserIndexFolder()) );			
 		}
 		
 		added = true;
@@ -230,13 +230,13 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		personService.save(personNameAuthority);
 
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
+		File nameAuthorityFolder = new File(repo.getNameIndexFolder());
 		nameAuthorityIndexService.updateIndex(personNameAuthority, nameAuthorityFolder);
 
 		if (user != null) 
 		{
 			userIndexService.updateIndex(user, 
-				new File( repo.getUserIndexFolder().getFullPath()) );	
+				new File( repo.getUserIndexFolder()) );	
 		}
 
 
@@ -259,7 +259,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		if( personIds != null )
 		{
 			Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			File nameAuthorityFolder = new File(repo.getNameIndexFolder().getFullPath());
+			File nameAuthorityFolder = new File(repo.getNameIndexFolder());
 			
 			// get the user making the change
 			IrUser userMakingChange = userService.getUser(userId, false);
@@ -306,7 +306,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 						user.setPersonNameAuthority(null);
 						userService.makeUserPersistent(user);
 						userIndexService.updateIndex(user, 
-							new File( repo.getUserIndexFolder().getFullPath()) );	
+							new File( repo.getUserIndexFolder()) );	
 					}
 					personService.delete(p);
 				    nameAuthorityIndexService.deleteFromIndex(p, nameAuthorityFolder);

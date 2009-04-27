@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import edu.ur.file.db.FileDatabase;
@@ -416,6 +417,36 @@ public class DefaultRepositoryService implements RepositoryService {
 	 * @see edu.ur.ir.repository.RepositoryService#deleteRepository(edu.ur.ir.repository.Repository)
 	 */
 	public void deleteRepository(Repository repository) {
+		//delete the index folders if they exist
+		if( repository.getInstitutionalItemIndexFolder() != null)
+		{
+			File f = new File(repository.getInstitutionalItemIndexFolder());
+			FileUtils.deleteQuietly(f);
+		}
+		
+		if( repository.getUserIndexFolder() != null)
+		{
+			File f = new File(repository.getUserIndexFolder());
+			FileUtils.deleteQuietly(f);
+		}
+		
+		if( repository.getNameIndexFolder() != null)
+		{
+			File f = new File(repository.getNameIndexFolder());
+			FileUtils.deleteQuietly(f);
+		}
+		
+		if( repository.getResearcherIndexFolder() != null)
+		{
+			File f = new File(repository.getResearcherIndexFolder());
+			FileUtils.deleteQuietly(f);
+		}
+		
+		if( repository.getUserWorkspaceIndexFolder() != null)
+		{
+			File f = new File(repository.getUserWorkspaceIndexFolder());
+			FileUtils.deleteQuietly(f);
+		}
 		repositoryDAO.makeTransient(repository);
 		
 	}

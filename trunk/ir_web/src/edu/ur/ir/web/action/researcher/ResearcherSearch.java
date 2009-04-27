@@ -140,7 +140,7 @@ public class ResearcherSearch extends Pager {
 		log.debug("Executing query : " + query);
 
 		searchDataHelper = researcherSearchService.executeSearchWithFacets(query,
-				repository.getResearcherIndexFolder().getFullPath(), 
+				repository.getResearcherIndexFolder(), 
 				numberOfHitsToProcessForFacets, 
 				numberOfResultsToCollectForFacets, 
 				numberOfFacetsToShow,
@@ -300,7 +300,7 @@ public class ResearcherSearch extends Pager {
 
 		searchDataHelper = researcherSearchService.executeSearchWithFacets(query,
 				filters,
-				repository.getResearcherIndexFolder().getFullPath(), 
+				repository.getResearcherIndexFolder(), 
 				numberOfHitsToProcessForFacets, 
 				numberOfResultsToCollectForFacets, 
 				numberOfFacetsToShow,

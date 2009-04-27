@@ -102,7 +102,7 @@ public class UserSearch extends Pager {
 		
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
-		File userFolder = new File(repo.getUserIndexFolder().getFullPath());
+		File userFolder = new File(repo.getUserIndexFolder());
 
 		rowEnd = rowStart + numberOfResultsToShow;
 	    

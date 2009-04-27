@@ -325,6 +325,7 @@
        <property name="fileTextExtractorService" ref="fileTextExtractorService"/>
        <property name="userFileSystemService" ref="userFileSystemService"/>
        <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="uniqueNameGenerator" ref="uniqueNameGenerator"/>
    </bean>
    
    <bean id="nameAuthorityIndexService" 
