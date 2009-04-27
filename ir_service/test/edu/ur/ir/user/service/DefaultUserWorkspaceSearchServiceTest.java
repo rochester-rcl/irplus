@@ -18,6 +18,7 @@
 package edu.ur.ir.user.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.springframework.context.ApplicationContext;
@@ -27,8 +28,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
-import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.SearchResults;
@@ -81,6 +82,9 @@ public class DefaultUserWorkspaceSearchServiceTest {
 	/** Transaction definition */
 	TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
 	
+	/** unique name generator */
+	UniqueNameGenerator uniqueNameGenerator = (UniqueNameGenerator) ctx.getBean("uniqueNameGenerator");
+	
 	
 	/** Properties file with testing specific information. */
 	PropertiesLoader propertiesLoader = new PropertiesLoader();
@@ -93,9 +97,10 @@ public class DefaultUserWorkspaceSearchServiceTest {
 	 * in it.
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IOException 
 	 * @throws NoUserIndexFolderException 
 	 */
-	public void testSearchPersonalFile() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
+	public void testSearchPersonalFile() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, IOException
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -109,8 +114,8 @@ public class DefaultUserWorkspaceSearchServiceTest {
         // Start the transaction 
 		ts = tm.getTransaction(td);
 		IrUser user = userService.createUser("password", "username", email);
-		FolderInfo personalIndex = repo.getFileDatabase().createFolder("personalFolderIndex");
-		user.setPersonalIndexFolder(personalIndex);
+		String name = uniqueNameGenerator.getNextName();
+		userFileSystemService.createIndexFolder(user, repo, name);
 		assert user.getId() != null : "User id should not be null";
 		tm.commit(ts);
 		
@@ -144,7 +149,7 @@ public class DefaultUserWorkspaceSearchServiceTest {
 			throw new IllegalStateException(e);
 		}
 		
-		File indexFolder = new File(user.getPersonalIndexFolder().getFullPath());
+		File indexFolder = new File(user.getPersonalIndexFolder());
 		userIndexService.addToIndex(repo, personalFile);
 		tm.commit(ts);
 		
@@ -201,8 +206,9 @@ public class DefaultUserWorkspaceSearchServiceTest {
 	 * @throws NoIndexFoundException 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IOException 
 	 */
-	public void testSearchPersonalFolder() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
+	public void testSearchPersonalFolder() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, IOException
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -216,8 +222,8 @@ public class DefaultUserWorkspaceSearchServiceTest {
         // Start the transaction 
 		ts = tm.getTransaction(td);
 		IrUser user = userService.createUser("password", "username", email);
-		FolderInfo personalIndex = repo.getFileDatabase().createFolder("personalFolderIndex");
-		user.setPersonalIndexFolder(personalIndex);
+		String name = uniqueNameGenerator.getNextName();
+		userFileSystemService.createIndexFolder(user, repo, name);
 		assert user.getId() != null : "User id should not be null";
 		tm.commit(ts);
 		
@@ -235,7 +241,7 @@ public class DefaultUserWorkspaceSearchServiceTest {
 			throw new IllegalStateException(e);
 		}
 		
-		File indexFolder = new File(user.getPersonalIndexFolder().getFullPath());
+		File indexFolder = new File(user.getPersonalIndexFolder());
 		userIndexService.addToIndex(repo, personalFolder);
 		tm.commit(ts);
 		

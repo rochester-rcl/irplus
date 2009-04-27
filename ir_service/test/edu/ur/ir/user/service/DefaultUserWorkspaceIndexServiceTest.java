@@ -40,8 +40,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.FileCollaborator;
@@ -110,6 +110,9 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	
 	/** Transaction definition */
 	TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
+	
+	/** unique name generator */
+	UniqueNameGenerator uniqueNameGenerator = (UniqueNameGenerator) ctx.getBean("uniqueNameGenerator");
 	
 	
 	/** Properties file with testing specific information. */
@@ -185,8 +188,9 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 * @throws NoIndexFoundException 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IOException 
 	 */
-	public void testIndexPersonalFile() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException 
+	public void testIndexPersonalFile() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, IOException 
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -200,8 +204,8 @@ public class DefaultUserWorkspaceIndexServiceTest {
         // Start the transaction 
 		ts = tm.getTransaction(td);
 		IrUser user = userService.createUser("password", "username", email);
-		FolderInfo personalIndex = repo.getFileDatabase().createFolder("personalFolderIndex");
-		user.setPersonalIndexFolder(personalIndex);
+		String name = uniqueNameGenerator.getNextName();
+		userFileSystemService.createIndexFolder(user, repo, name);
 		assert user.getId() != null : "User id should not be null";
 		tm.commit(ts);
 		
@@ -247,7 +251,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -276,7 +280,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userWorkspaceIndexService.deleteFromIndex(personalFile);
 		
 		try {
-			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -313,8 +317,9 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 * @throws NoIndexFoundException 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IOException 
 	 */
-	public void testIndexPersonalFolder() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException 
+	public void testIndexPersonalFolder() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, IOException 
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -328,8 +333,8 @@ public class DefaultUserWorkspaceIndexServiceTest {
         // Start the transaction 
 		ts = tm.getTransaction(td);
 		IrUser user = userService.createUser("password", "username", email);
-		FolderInfo personalIndex = repo.getFileDatabase().createFolder("personalFolderIndex");
-		user.setPersonalIndexFolder(personalIndex);
+		String name = uniqueNameGenerator.getNextName();
+		userFileSystemService.createIndexFolder(user, repo, name);
 		assert user.getId() != null : "User id should not be null";
 		tm.commit(ts);
 		
@@ -357,7 +362,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -380,7 +385,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userWorkspaceIndexService.deleteFromIndex(personalFolder);
 		
 		try {
-			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -412,9 +417,10 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 * @throws FileSharingException 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IOException 
 	 */
 	public void testIndexSharedFileInUserInbox() throws NoIndexFoundException,
-		DuplicateNameException, FileSharingException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException 
+		DuplicateNameException, FileSharingException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, IOException 
 	{
 		// determine if we should be sending emails 
 		boolean sendEmail = new Boolean(properties.getProperty("send_emails")).booleanValue();
@@ -491,7 +497,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -513,7 +519,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		// test finding in shared inbox file
 		try {
-			lucenDirectory = FSDirectory.getDirectory(user1.getPersonalIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(user1.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -537,7 +543,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userWorkspaceIndexService.deleteFromAllIndexes(pf);
 		
 		try {
-			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -559,7 +565,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		// test finding in shared inbox file
 		try {
-			lucenDirectory = FSDirectory.getDirectory(user1.getPersonalIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(user1.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -669,8 +675,9 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	 * @throws NoIndexFoundException 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IOException 
 	 */
-	public void testIndexPersonalItem() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException 
+	public void testIndexPersonalItem() throws NoIndexFoundException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, IOException 
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -684,8 +691,8 @@ public class DefaultUserWorkspaceIndexServiceTest {
         // Start the transaction 
 		ts = tm.getTransaction(td);
 		IrUser user = userService.createUser("password", "username", email);
-		FolderInfo personalIndex = repo.getFileDatabase().createFolder("personalFolderIndex");
-		user.setPersonalIndexFolder(personalIndex);
+		String name = uniqueNameGenerator.getNextName();
+		userFileSystemService.createIndexFolder(user, repo, name);
 		assert user.getId() != null : "User id should not be null";
 		tm.commit(ts);
 		
@@ -747,7 +754,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -770,7 +777,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userWorkspaceIndexService.deleteFromIndex(personalItem);
 		
 		try {
-			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}

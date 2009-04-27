@@ -123,7 +123,7 @@ public class NameSearch extends Pager implements  UserIdAware, Preparable  {
 	{
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
-		File nameIndexFolder = new File(repo.getNameIndexFolder().getFullPath());
+		File nameIndexFolder = new File(repo.getNameIndexFolder());
 
 		if ((query == null) || (query.equals(""))) {
 			query = "a";

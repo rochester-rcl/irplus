@@ -24,7 +24,6 @@ import org.testng.annotations.Test;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
-import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.test.helper.PropertiesLoader;
@@ -178,45 +177,7 @@ public class IrUserTest {
 	}
 	
 	
-	/**
-	 * Test creating a folder for indexing user data 
-	 * @throws LocationAlreadyExistsException 
-	 */
-	public void testCreateIndexFolder() throws LocationAlreadyExistsException
-	{
-		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
-		Repository repo = repoHelper.createRepository("localFileServer", 
-				"displayName",
-				"file_database", 
-				"my_repository", 
-				properties.getProperty("a_repo_path"),
-				"default_folder");
-		
-		// create the first file to store in the temporary folder
-		String tempDirectory = properties.getProperty("ir_core_temp_directory");
-		File directory = new File(tempDirectory);
-		
-        // helper to create the file
-		FileUtil testUtil = new FileUtil();
-		testUtil.createDirectory(directory);
 
-		// create a new user
-		IrUser user = new IrUser("username", "password");
-		
-		// get the file database 
-		FileDatabase fd = repo.getFileDatabase();
-		FolderInfo indexFolder = fd.createFolder("personalFolderIndex");
-		
-		user.setPersonalIndexFolder(indexFolder);
-		
-		File f = new File(user.getPersonalIndexFolder().getFullPath());
-		assert f.exists() : " File " + f.getAbsolutePath() + " does not exist";
-		assert f.isDirectory() : " File " + f.getAbsolutePath() + " is not a directory ";
-	
-		
-		repoHelper.cleanUpRepository();
-		
-	}
 	
 	/**
 	 * Test adding a folder to the user as a root

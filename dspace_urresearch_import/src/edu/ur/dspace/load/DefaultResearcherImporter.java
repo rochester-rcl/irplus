@@ -395,7 +395,7 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 			    printResearcher(urResearcher);
 			    researcherService.saveResearcher(urResearcher);
 			    try {
-					researcherIndexService.addToIndex(urResearcher,  new File(repo.getResearcherIndexFolder().getFullPath()) );
+					researcherIndexService.addToIndex(urResearcher,  new File(repo.getResearcherIndexFolder()) );
 				} catch (NoIndexFoundException e) {
 					log.error("Could not index researcher " + urResearcher, e);
 				} 

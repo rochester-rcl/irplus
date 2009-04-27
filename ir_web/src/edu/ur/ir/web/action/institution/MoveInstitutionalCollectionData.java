@@ -207,12 +207,12 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 			
 			if( collectionsToMove.size() > 0 )
 			{
-			    institutionalItemIndexService.reIndexItemsInCollection(destination.getTreeRoot(), new File(repository.getInstitutionalItemIndexFolder().getFullPath()), institutionalItemIndexService.getCollectionBatchSize());
+			    institutionalItemIndexService.reIndexItemsInCollection(destination.getTreeRoot(), new File(repository.getInstitutionalItemIndexFolder()), institutionalItemIndexService.getCollectionBatchSize());
 			}
 			
 			for( InstitutionalItem i : itemsToMove)
 			{
-			    institutionalItemIndexService.updateItem(i, new File(repository.getInstitutionalItemIndexFolder().getFullPath()));
+			    institutionalItemIndexService.updateItem(i, new File(repository.getInstitutionalItemIndexFolder()));
 			}
 		}
 		// moving to root of repository
@@ -231,7 +231,7 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 						collectionsToMove);
 				for(InstitutionalCollection c : collectionsToMove)
 				{
-			        institutionalItemIndexService.reIndexItemsInCollection(c, new File(repository.getInstitutionalItemIndexFolder().getFullPath()), institutionalItemIndexService.getCollectionBatchSize());
+			        institutionalItemIndexService.reIndexItemsInCollection(c, new File(repository.getInstitutionalItemIndexFolder()), institutionalItemIndexService.getCollectionBatchSize());
 				}
 
 			}
@@ -243,7 +243,7 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 		{
 		    if( c.getTreeRoot() == null || destination == null || (!c.getTreeRoot().equals(destination.getTreeRoot())))
 		    {
-			    institutionalItemIndexService.reIndexItemsInCollection(c.getTreeRoot(), new File(repository.getInstitutionalItemIndexFolder().getFullPath()), institutionalItemIndexService.getCollectionBatchSize());
+			    institutionalItemIndexService.reIndexItemsInCollection(c.getTreeRoot(), new File(repository.getInstitutionalItemIndexFolder()), institutionalItemIndexService.getCollectionBatchSize());
 		    }
 		}
 		

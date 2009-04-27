@@ -209,7 +209,7 @@ public class DefaultUserImporter implements UserImporter{
 							false);
 		try {
 			userIndexService.addToIndex(irUser, 
-			    new File( repository.getUserIndexFolder().getFullPath()) );
+			    new File( repository.getUserIndexFolder()) );
 		} catch (NoIndexFoundException e) {
 			log.debug("index does not exist ", e);
 		}

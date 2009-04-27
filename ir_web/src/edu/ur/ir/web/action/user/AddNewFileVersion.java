@@ -18,6 +18,7 @@
 package edu.ur.ir.web.action.user;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
@@ -180,6 +181,8 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 			    try {
 					userWorkspaceIndexService.updateAllIndexes(repository, personalFile);
 				} catch (LocationAlreadyExistsException e) {
+					log.error(e);
+				} catch (IOException e) {
 					log.error(e);
 				}
 

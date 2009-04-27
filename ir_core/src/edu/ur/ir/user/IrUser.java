@@ -27,7 +27,6 @@ import org.springframework.security.userdetails.UserDetails;
 
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.file.db.FolderInfo;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.item.VersionedItem;
@@ -45,6 +44,7 @@ import edu.ur.security.PersistentUser;
  */
 public class IrUser extends BasePersistent implements PersistentUser, UserDetails, Sid{
 	
+	/** Indicates this is a user type for security  */
 	public static final String USER_SID_TYPE = "USER_SID_TYPE";
 		
 	/**  Roles this user currently has */
@@ -114,7 +114,7 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	private Set<PersonalItem> rootPersonalItems = new HashSet<PersonalItem>();
 	
 	/**Personal folder for indexing personal content */
-	private FolderInfo personalIndexFolder;
+	private String personalIndexFolder;
 
 	/**  Affiliation for the user  */
 	private Affiliation affiliation; 
@@ -1231,21 +1231,21 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	}
 
 	/**
-	 * Folder which holds an index of this users information.
+	 * Location of Folder which holds an index of this users workspace information.
 	 * 
 	 * @return the folder which is used to store this users 
 	 * indexed information.
 	 */
-	public FolderInfo getPersonalIndexFolder() {
+	public String getPersonalIndexFolder() {
 		return personalIndexFolder;
 	}
 
 	/**
-	 * Index which is used to store this users personal information.
+	 * Index which is used to store this users personal workspace information.
 	 * 
 	 * @param personalIndexFolder
 	 */
-	public void setPersonalIndexFolder(FolderInfo personalIndexFolder) {
+	public void setPersonalIndexFolder(String personalIndexFolder) {
 		this.personalIndexFolder = personalIndexFolder;
 	}
 

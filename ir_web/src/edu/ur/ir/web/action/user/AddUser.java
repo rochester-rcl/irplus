@@ -216,7 +216,7 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		    	userService.makeUserPersistent(irUser);
 		    	
 				userIndexService.addToIndex(irUser, 
-							new File( repository.getUserIndexFolder().getFullPath()) );
+							new File( repository.getUserIndexFolder()) );
 				
 		    	
 		    	// Automatically logins the newUser after registering with the system
@@ -305,7 +305,7 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 			    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 						false);
 			    userIndexService.addToIndex(irUser, 
-						new File( repository.getUserIndexFolder().getFullPath()) );
+						new File( repository.getUserIndexFolder()) );
 		    	
 		    	
 			} else {
@@ -364,7 +364,7 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 				false);
 	    userIndexService.updateIndex(irUser, 
-				new File( repository.getUserIndexFolder().getFullPath()) );		
+				new File( repository.getUserIndexFolder()) );		
 		
 		return SUCCESS;
 	}

@@ -319,11 +319,11 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
 
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -415,10 +415,10 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
 		
 		try {
-			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -579,11 +579,11 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
 
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -675,7 +675,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		institutionalItemIndexService.deleteItemsForCollection( collection, new File(collection.getRepository().getInstitutionalItemIndexFolder().getFullPath()) );
+		institutionalItemIndexService.deleteItemsForCollection( collection, new File(collection.getRepository().getInstitutionalItemIndexFolder()) );
 		
 		tm.commit(ts);
 		
@@ -683,7 +683,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		ts = tm.getTransaction(td);
 		try {
 			repo = helper.getRepository();
-			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -935,8 +935,8 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
-        institutionalItemIndexService.addItem(institutionalItem2, new File(repo.getInstitutionalItemIndexFolder().getFullPath()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+        institutionalItemIndexService.addItem(institutionalItem2, new File(repo.getInstitutionalItemIndexFolder()));
 
 		
 		// search the document and make sure we can find the stored data across each
@@ -945,11 +945,11 @@ public class DefaultInstitutionalItemIndexServiceTest {
 
 			FacetSearchHelper searchHelper = 
 				institutionalItemSearchService.executeSearchWithFacets("biology", 
-						repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100, 1, collection);
+						repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100, 1, collection);
 			assert searchHelper.getHitSize() == 1 : "Should have 1 hits but have " + searchHelper;
 
 			searchHelper = institutionalItemSearchService.executeSearchWithFacets("biology",  
-					repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100, 1, collection2);
+					repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100, 1, collection2);
 			assert searchHelper.getHitSize() == 1 : "size should equal one " + searchHelper;
 			
 		} catch (Exception e) {
@@ -968,7 +968,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		itemsToMove.add(institutionalItem2);
 		assert institutionalCollectionService.moveCollectionInformation(collection, null, itemsToMove).size() == 0 
 		: "Move did not work correctly";
-		institutionalItemIndexService.reIndexItemsInCollection(collection, new File(repo.getInstitutionalItemIndexFolder().getFullPath()), 40);
+		institutionalItemIndexService.reIndexItemsInCollection(collection, new File(repo.getInstitutionalItemIndexFolder()), 40);
 
 		try{
 			institutionalItem2 = institutionalItemService.getInstitutionalItem(institutionalItem2.getId(), false);
@@ -976,12 +976,12 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			assert collection.getItems().contains(institutionalItem2);
 			assert collection.getItems().contains(institutionalItem);
 			FacetSearchHelper searchHelper = institutionalItemSearchService.executeSearchWithFacets("biology",  
-						repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100, 1, collection2);
+						repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100, 1, collection2);
 				    assert searchHelper.getHitSize() == 0 : "size should equal 0 " + searchHelper;
 				    
 		     searchHelper = 
 			    institutionalItemSearchService.executeSearchWithFacets("biology", 
-					repo.getInstitutionalItemIndexFolder().getFullPath(), 100, 100, 100, 100, 1, collection);
+					repo.getInstitutionalItemIndexFolder(), 100, 100, 100, 100, 1, collection);
 		    assert searchHelper.getHitSize() == 2 : "Should have 2 hits but have " + searchHelper;
 
 		   

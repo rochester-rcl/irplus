@@ -17,6 +17,7 @@
 package edu.ur.ir.web.action.item;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -285,6 +286,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 				userWorkspaceIndexService.updateIndex(repository, personalItem);
 			} catch (LocationAlreadyExistsException e) {
 				log.error(e);
+			} catch (IOException e) {
+				log.error(e);
 			}
 		}
 		
@@ -293,7 +296,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		if (institutionalItems != null) {
 			Repository repository = 
 				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
+			String indexFolder = repository.getInstitutionalItemIndexFolder();
 			
 			for(InstitutionalItem i : institutionalItems) {
 				institutionalItemIndexService.updateItem(i, new File(indexFolder));
@@ -333,7 +336,10 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 				userWorkspaceIndexService.updateIndex(repository, personalItem);
 			} catch (LocationAlreadyExistsException e) {
 				log.error(e);
+			} catch (IOException e) {
+				log.error(e);
 			}
+			
 		}
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -341,7 +347,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		if (institutionalItems != null) {
 			Repository repository = 
 				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
+			String indexFolder = repository.getInstitutionalItemIndexFolder();
 			
 			for(InstitutionalItem i : institutionalItems) {
 				institutionalItemIndexService.updateItem(i, new File(indexFolder));
@@ -468,6 +474,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 				userWorkspaceIndexService.updateIndex(repository, personalItem);
 			} catch (LocationAlreadyExistsException e) {
 				log.error(e);
+			} catch (IOException e) {
+				log.error(e);
 			}
 		}
 		
@@ -476,7 +484,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		if (institutionalItems != null) {
 			Repository repository = 
 				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
+			String indexFolder = repository.getInstitutionalItemIndexFolder();
 			
 			for(InstitutionalItem i : institutionalItems) {
 				institutionalItemIndexService.updateItem(i, new File(indexFolder));
@@ -586,6 +594,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		try {
 			userWorkspaceIndexService.updateIndex(repository, personalItem);
 		} catch (LocationAlreadyExistsException e) {
+			log.error(e);
+		} catch (IOException e) {
 			log.error(e);
 		}
 

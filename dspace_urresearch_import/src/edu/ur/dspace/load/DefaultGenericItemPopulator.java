@@ -765,7 +765,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 				{
 					throw new IllegalStateException("authority id not assigned");
 				}
-				nameAuthorityIndexService.addToIndex(authority, new File(repository.getNameIndexFolder().getFullPath()));
+				nameAuthorityIndexService.addToIndex(authority, new File(repository.getNameIndexFolder()));
 			}
 		}
 		
@@ -805,7 +805,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		{
 			String query  = buildAuthorityNameQuery(name);
 			log.debug("query = " + query);
-			SearchResults<PersonNameAuthority> results = nameAuthoritySearchService.search(new File(repository.getNameIndexFolder().getFullPath()), query, 0, 5);
+			SearchResults<PersonNameAuthority> results = nameAuthoritySearchService.search(new File(repository.getNameIndexFolder()), query, 0, 5);
 	        log.debug("search results size = " + results.getNumberObjects());
 			PersonNameAuthority finalName = name;
 			if( results.getNumberObjects() > 0  )

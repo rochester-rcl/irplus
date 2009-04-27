@@ -16,6 +16,7 @@
 
 package edu.ur.ir.web.action.item;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -181,6 +182,8 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		try {
 			userWorkspaceIndexService.addToIndex(repository, personalItem);
 		} catch (LocationAlreadyExistsException e) {
+			log.error(e);
+		} catch (IOException e) {
 			log.error(e);
 		}
 		

@@ -81,17 +81,7 @@ public class InitializeSystem extends ActionSupport implements Preparable, Valid
 	/**  Name of the repository to create */
 	private String repositoryName;
 	
-	/** Name of the index folder where the person name indexes are stored */
-	public final String NAMES_INDEX_FOLDER = "name_index_folder";
-	
-	/** Name of the index folder where the person name indexes are stored */
-	public final String USER_INDEX_FOLDER = "user_index_folder";
-	
-	/** folder where an index of institutional items will be stored */
-	public final String INSTITUTIONAL_ITEM_INDEX_FOLDER = "institutional_item_index_folder";
 
-	/** folder where an index of researchers will be stored */
-	public final String RESEARCHER_INDEX_FOLDER = "researcher_index_folder";
 
 	/**
 	 * Prepare the ur published object
@@ -143,19 +133,19 @@ public class InitializeSystem extends ActionSupport implements Preparable, Valid
 		repository = repositoryService.createRepository(repositoryName, fileDatabase);
 
 		// Creating the name index folder
-		repository.setNameIndexFolder(repositoryService.createFolderInfo(repository, NAMES_INDEX_FOLDER));
-		repository.setUserIndexFolder(repositoryService.createFolderInfo(repository, USER_INDEX_FOLDER));
-		repository.setInstitutionalItemIndexFolder(repositoryService.createFolderInfo(repository, INSTITUTIONAL_ITEM_INDEX_FOLDER));
-		repository.setResearcherIndexFolder(repositoryService.createFolderInfo(repository, RESEARCHER_INDEX_FOLDER));
-		repositoryService.saveRepository(repository);
+//		repository.setNameIndexFolder(repositoryService.createFolderInfo(repository, NAMES_INDEX_FOLDER));
+//		repository.setUserIndexFolder(repositoryService.createFolderInfo(repository, USER_INDEX_FOLDER));
+//		repository.setInstitutionalItemIndexFolder(repositoryService.createFolderInfo(repository, INSTITUTIONAL_ITEM_INDEX_FOLDER));
+//		repository.setResearcherIndexFolder(repositoryService.createFolderInfo(repository, RESEARCHER_INDEX_FOLDER));
+//		repositoryService.saveRepository(repository);
 		
 		// handle any pre-loaded users
-		List<IrUser> users = userService.getAllUsers();		
-		File userIndexFolder = new File(repository.getUserIndexFolder().getFullPath());
-		for( IrUser user : users)
-		{
-			userIndexService.addToIndex(user, userIndexFolder);
-		}
+//		List<IrUser> users = userService.getAllUsers();		
+//		File userIndexFolder = new File(repository.getUserIndexFolder().getFullPath());
+//		for( IrUser user : users)
+//		{
+//			userIndexService.addToIndex(user, userIndexFolder);
+//		}
 		
 		return SUCCESS;
 	}

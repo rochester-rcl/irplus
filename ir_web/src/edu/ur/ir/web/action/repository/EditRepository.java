@@ -16,6 +16,8 @@
 
 package edu.ur.ir.web.action.repository;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -24,12 +26,21 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.Validateable;
 
+import edu.ur.file.db.FileDatabase;
+import edu.ur.file.db.FileServerService;
+import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.handle.HandleService;
 import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryIndexerService;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserIndexService;
+import edu.ur.ir.user.UserService;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 
 /**
@@ -43,6 +54,16 @@ Validateable{
 	
 	/**  Logger for editing a file database. */
 	private static final Logger log = Logger.getLogger(EditRepository.class);
+	
+	/** 
+	 * Name of the repository
+	 */
+	private String repositoryName;
+	
+	/**
+	 * Name of the institution
+	 */
+	private String institutionName;
 	
 	/**  Generated version id */
 	private static final long serialVersionUID = -6421997690248407461L;
@@ -59,16 +80,45 @@ Validateable{
 	/** id of the name authority to set on the repository */
 	private Long handleNameAuthorityId;
 	
+	/** default id for file databases */
+	private Long defaultFileDatabaseId;
+	
+	/** location of the name index folder  */
+	private String nameIndexFolder;
+	
+	/** location of the institutional item index folder */
+	private String institutionalItemIndexFolder;
+	
+	/** location of the researcher index folder. */
+	private String researcherIndexFolder;
+	
+	/** user index folder */
+	private String userIndexFolder;
+	
+	/** location for user workspace folders  */
+	private String userWorkspaceIndexFolder;
+	
 	/** Service for re-indexing repository information */
 	private RepositoryIndexerService repositoryIndexerService;
 	
 	/** Service for dealing with handle information  */
 	private HandleService handleService;
 	
+	/** Service for file server/database information */
+	private FileServerService fileServerService;
+	
 	/** Set of handle name authorities in the system  */
 	private List<HandleNameAuthority> handleNameAuthorities;
-
-
+	
+	/** List of available file databases  */
+	private List<FileDatabase> fileDatabases;
+	
+	/** Service for dealing with user information  */
+	private UserService userService;
+	
+	/** Service for dealing with user information  */
+	private UserIndexService userIndexService;
+	
 	/** batch size for re-indexing repository information - number of records to process*/
 	private int batchSize = 10;
 	
@@ -80,18 +130,94 @@ Validateable{
 	public void prepare() throws Exception{
 		log.debug("prepare called");
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		
+		log.debug("repository " + repository + " found ");
 		handleNameAuthorities = handleService.getAllNameAuthorities();
+		fileDatabases = fileServerService.getFileDatabases();
 	}
 	
 	/**
-	 * Save the repository
+	 * Create a new repository.
+	 * 
+	 * @return
+	 * @throws NoIndexFoundException 
+	 */
+	public String create() throws NoIndexFoundException
+	{
+		FileDatabase fileDatabase = null;
+		if( defaultFileDatabaseId != -1  )
+		{
+			fileDatabase = fileServerService.getDatabaseById(defaultFileDatabaseId, false);
+		}
+		repository = repositoryService.createRepository(repositoryName, fileDatabase);
+		repository.setInstitutionName(institutionName);
+		
+		
+		
+		try {
+			updateNameIndexFolder(repository, nameIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateUserWorkspaceIndexFolder(repository, userWorkspaceIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateInstitutionalItemIndexFolder(repository, institutionalItemIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateResearcherIndexFolder(repository, researcherIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateUserIndexFolder(repository, userIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		// handle any pre-loaded users
+		List<IrUser> users = userService.getAllUsers();		
+		File userIndexFolder = new File(repository.getUserIndexFolder());
+		for( IrUser user : users)
+		{
+			userIndexService.addToIndex(user, userIndexFolder);
+		}
+		if(!repository.getInitalized())
+		{
+			repository.setInitalized(true);
+		}
+		
+		repositoryService.saveRepository(repository);
+		
+		return SUCCESS;
+		
+	}
+	
+	/**
+	 * Update the repository
 	 * 
 	 * @return
 	 */
-	public String save() {
+	public String update() {
 		if (repository == null) {
 			throw new IllegalStateException("repository is null");
 		}
+		repository.setName(repositoryName);
+		repository.setInstitutionName(institutionName);
 		if(repositoryService == null )
 		{
 			throw new IllegalStateException ("repository service is null");
@@ -105,6 +231,7 @@ Validateable{
 		{
 			HandleNameAuthority repositoryHandleAuthority = repository.getDefaultHandleNameAuthority();
 			
+			// the handle name authority is being changed
 			if( repositoryHandleAuthority == null || 
 				!repositoryHandleAuthority.getId().equals(handleNameAuthorityId) )
 			{
@@ -113,11 +240,48 @@ Validateable{
 			}
 		}
 		
+		try {
+			updateNameIndexFolder(repository, nameIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateUserWorkspaceIndexFolder(repository, userWorkspaceIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateInstitutionalItemIndexFolder(repository, institutionalItemIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateResearcherIndexFolder(repository, researcherIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateUserIndexFolder(repository, userIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		
 		if( log.isDebugEnabled())
 		{
 		    log.debug("Saving repository " + repository);
 		}
+
+			
 		repositoryService.saveRepository(repository);
 		return SUCCESS;
 	}
@@ -238,6 +402,314 @@ Validateable{
 
 	public void setHandleNameAuthorityId(Long handleNameAuthorityId) {
 		this.handleNameAuthorityId = handleNameAuthorityId;
+	}
+
+	public List<FileDatabase> getFileDatabases() {
+		return fileDatabases;
+	}
+
+	public void setFileDatabases(List<FileDatabase> fileDatabases) {
+		this.fileDatabases = fileDatabases;
+	}
+
+	public FileServerService getFileServerService() {
+		return fileServerService;
+	}
+
+	public void setFileServerService(FileServerService fileServerService) {
+		this.fileServerService = fileServerService;
+	}
+
+	public Long getDefaultFileDatabaseId() {
+		return defaultFileDatabaseId;
+	}
+
+	public void setDefaultFileDatabaseId(Long defaultFileDatabaseId) {
+		this.defaultFileDatabaseId = defaultFileDatabaseId;
+	}
+
+	public String getNameIndexFolder() {
+		return nameIndexFolder;
+	}
+
+	public void setNameIndexFolder(String nameIndexFolder) {
+		this.nameIndexFolder = nameIndexFolder;
+	}
+
+	public String getInstitutionalItemIndexFolder() {
+		return institutionalItemIndexFolder;
+	}
+
+	public void setInstitutionalItemIndexFolder(String institutionalItemIndexFolder) {
+		this.institutionalItemIndexFolder = institutionalItemIndexFolder;
+	}
+
+	public String getResearcherIndexFolder() {
+		return researcherIndexFolder;
+	}
+
+	public void setResearcherIndexFolder(String researcherIndexFolder) {
+		this.researcherIndexFolder = researcherIndexFolder;
+	}
+
+	public String getUserIndexFolder() {
+		return userIndexFolder;
+	}
+
+	public void setUserIndexFolder(String userIndexFolder) {
+		this.userIndexFolder = userIndexFolder;
+	}
+	
+	private void updateNameIndexFolder(Repository r, String folder) throws IOException
+	{
+
+		String oldFolder = r.getNameIndexFolder();
+		boolean change = true;
+		if( folder != null)
+		{
+			// add the end seperator
+		    if (folder.charAt(folder.length() - 1) != IOUtils.DIR_SEPARATOR) 
+		    {
+		    	folder = folder + IOUtils.DIR_SEPARATOR;
+		    }
+			File f = new File(folder);
+			if(oldFolder != null)
+			{
+				File oldFolderFile = new File(oldFolder);
+				
+				if( f.getAbsolutePath().equals(oldFolderFile.getAbsolutePath()))
+			    {
+				    change = false;
+			    }
+			}
+			
+			if(change)
+			{
+				FileUtils.forceMkdir(f);
+			    r.setNameIndexFolder(folder);
+			    if( oldFolder != null)
+				{
+				    FileUtils.deleteQuietly(new File(oldFolder));
+				}
+			}
+		}
+		else
+		{
+			if(oldFolder != null)
+			{
+				FileUtils.deleteQuietly(new File(oldFolder));
+			}
+		}
+	}
+	
+	private void updateInstitutionalItemIndexFolder(Repository r, String folder) throws IOException
+	{
+
+		String oldFolder = r.getInstitutionalItemIndexFolder();
+		boolean change = true;
+		if( folder != null)
+		{
+			// add the end seperator
+		    if (folder.charAt(folder.length() - 1) != IOUtils.DIR_SEPARATOR) 
+		    {
+		    	folder = folder + IOUtils.DIR_SEPARATOR;
+		    }
+			File f = new File(folder);
+			if(oldFolder != null)
+			{
+				File oldFolderFile = new File(oldFolder);
+				
+				if( f.getAbsolutePath().equals(oldFolderFile.getAbsolutePath()))
+			    {
+				    change = false;
+			    }
+			}
+			
+			if(change)
+			{
+				FileUtils.forceMkdir(f);
+			    r.setInstitutionalItemIndexFolder(folder);
+			    if( oldFolder != null)
+				{
+				    FileUtils.deleteQuietly(new File(oldFolder));
+				}
+			}
+		}
+		else
+		{
+			if(oldFolder != null)
+			{
+				FileUtils.deleteQuietly(new File(oldFolder));
+			}
+		}
+	}
+	
+	private void updateResearcherIndexFolder(Repository r, String folder) throws IOException
+	{
+
+		String oldFolder = r.getResearcherIndexFolder();
+		boolean change = true;
+		if( folder != null)
+		{
+			// add the end seperator
+		    if (folder.charAt(folder.length() - 1) != IOUtils.DIR_SEPARATOR) 
+		    {
+		    	folder = folder + IOUtils.DIR_SEPARATOR;
+		    }
+			File f = new File(folder);
+			if(oldFolder != null)
+			{
+				File oldFolderFile = new File(oldFolder);
+				
+				if( f.getAbsolutePath().equals(oldFolderFile.getAbsolutePath()))
+			    {
+				    change = false;
+			    }
+			}
+			
+			if(change)
+			{
+				FileUtils.forceMkdir(f);
+			    r.setResearcherIndexFolder(folder);
+			    if( oldFolder != null)
+				{
+				    FileUtils.deleteQuietly(new File(oldFolder));
+				}
+			}
+		}
+		else
+		{
+			if(oldFolder != null)
+			{
+				FileUtils.deleteQuietly(new File(oldFolder));
+			}
+		}
+	}
+	
+	private void updateUserIndexFolder(Repository r, String folder) throws IOException
+	{
+		
+		String oldFolder = r.getUserIndexFolder();
+		boolean change = true;
+		if( folder != null)
+		{
+			// add the end seperator
+		    if (folder.charAt(folder.length() - 1) != IOUtils.DIR_SEPARATOR) 
+		    {
+		    	folder = folder + IOUtils.DIR_SEPARATOR;
+		    }
+			File f = new File(folder);
+			if(oldFolder != null)
+			{
+				File oldFolderFile = new File(oldFolder);
+				
+				if( f.getAbsolutePath().equals(oldFolderFile.getAbsolutePath()))
+			    {
+				    change = false;
+			    }
+			}
+			
+			if(change)
+			{
+				FileUtils.forceMkdir(f);
+			    r.setUserIndexFolder(folder);
+			    if( oldFolder != null)
+				{
+				    FileUtils.deleteQuietly(new File(oldFolder));
+				}
+			}
+		}
+		else
+		{
+			if(oldFolder != null)
+			{
+				FileUtils.deleteQuietly(new File(oldFolder));
+			}
+		}
+	}
+	
+	private void updateUserWorkspaceIndexFolder(Repository r, String folder) throws IOException
+	{
+		
+		log.debug("update user workspace index folder " + folder);
+		String oldFolder = r.getUserWorkspaceIndexFolder();
+		boolean change = true;
+		if( folder != null)
+		{
+			// add the end seperator
+		    if (folder.charAt(folder.length() - 1) != IOUtils.DIR_SEPARATOR) 
+		    {
+		    	folder = folder + IOUtils.DIR_SEPARATOR;
+		    }
+			File f = new File(folder);
+			if(oldFolder != null)
+			{
+				File oldFolderFile = new File(oldFolder);
+				
+				if( f.getAbsolutePath().equals(oldFolderFile.getAbsolutePath()))
+			    {
+				    change = false;
+			    }
+			}
+			
+			if(change)
+			{
+				FileUtils.forceMkdir(f);
+				log.debug("setting user workspace index folder to " + folder);
+			    r.setUserWorkspaceIndexFolder(folder);
+			    if( oldFolder != null)
+				{
+				    FileUtils.deleteQuietly(new File(oldFolder));
+				}
+			}
+		}
+		else
+		{
+			if(oldFolder != null)
+			{
+				FileUtils.deleteQuietly(new File(oldFolder));
+			}
+		}
+	}
+
+	public String getRepositoryName() {
+		return repositoryName;
+	}
+
+	public void setRepositoryName(String repositoryName) {
+		this.repositoryName = repositoryName;
+	}
+
+	public String getInstitutionName() {
+		return institutionName;
+	}
+
+	public void setInstitutionName(String institutionName) {
+		this.institutionName = institutionName;
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	public UserIndexService getUserIndexService() {
+		return userIndexService;
+	}
+
+	public void setUserIndexService(UserIndexService userIndexService) {
+		this.userIndexService = userIndexService;
+	}
+
+	public String getUserWorkspaceIndexFolder() {
+		return userWorkspaceIndexFolder;
+	}
+
+	public void setUserWorkspaceIndexFolder(String userWorkspaceIndexFolder) {
+		this.userWorkspaceIndexFolder = userWorkspaceIndexFolder;
 	}
 
 }

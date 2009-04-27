@@ -179,7 +179,7 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable, UserId
 			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 						false);
 			userIndexService.updateIndex(irUser, 
-					new File( repository.getUserIndexFolder().getFullPath()) );
+					new File( repository.getUserIndexFolder()) );
 			emailVerificationMessage = buffer.toString();
 			added = true;
 		} else {

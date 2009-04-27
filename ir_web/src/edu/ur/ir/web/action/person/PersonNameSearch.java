@@ -98,7 +98,7 @@ public class PersonNameSearch extends Pager  {
 		
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
-		File nameIndexFolder = new File(repo.getNameIndexFolder().getFullPath());
+		File nameIndexFolder = new File(repo.getNameIndexFolder());
 		
 		rowEnd = rowStart + numberOfResultsToShow;
 	    

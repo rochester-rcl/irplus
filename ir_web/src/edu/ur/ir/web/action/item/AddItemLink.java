@@ -17,6 +17,7 @@
 package edu.ur.ir.web.action.item;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -137,6 +138,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 				userWorkspaceIndexService.updateIndex(repository, personalItem);
 			} catch (LocationAlreadyExistsException e) {
 				log.error(e);
+			} catch (IOException e) {
+				log.error(e);
 			}
 		}
 		
@@ -145,7 +148,7 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		if (institutionalItems != null) {
 			Repository repository = 
 				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
+			String indexFolder = repository.getInstitutionalItemIndexFolder();
 			
 			for(InstitutionalItem i : institutionalItems) {
 				institutionalItemIndexService.updateItem(i, new File(indexFolder));
@@ -191,6 +194,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 				userWorkspaceIndexService.updateIndex(repository, personalItem);
 			} catch (LocationAlreadyExistsException e) {
 				log.error(e);
+			} catch (IOException e) {
+				log.error(e);
 			}
 		}
 
@@ -199,7 +204,7 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		if (institutionalItems != null) {
 			Repository repository = 
 				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
+			String indexFolder = repository.getInstitutionalItemIndexFolder();
 			
 			for(InstitutionalItem i : institutionalItems) {
 				institutionalItemIndexService.updateItem(i, new File(indexFolder));

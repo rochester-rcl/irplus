@@ -76,6 +76,13 @@ public interface FileServerService {
 	public Long getFileDatabaseCount();
 	
 	/**
+	 * Get all file databases in the system.
+	 * 
+	 * @return all file databases
+	 */
+	public List<FileDatabase> getFileDatabases();
+	
+	/**
 	 * Get all the file servers in the system.
 	 * 
 	 * @return the file servers.

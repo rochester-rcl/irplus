@@ -760,4 +760,16 @@ public class DefaultFileServerService implements FileServerService{
 		return (TreeFolderInfo) treeFolderInfoDAO.findRootByDisplayName(name, fileDatabaseId);
 	}
 
+	
+	/**
+	 * Return a list of all file databases.
+	 * 
+	 * @see edu.ur.file.db.FileServerService#getFileDatabases()
+	 */
+	@SuppressWarnings("unchecked")
+	public List<FileDatabase> getFileDatabases() {
+		
+		return fileDatabaseDAO.getAll();
+	}
+
 }

@@ -169,7 +169,7 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 				false);
 		researcherIndexService.updateIndex(researcher, 
-				new File(repository.getResearcherIndexFolder().getFullPath()) );
+				new File(repository.getResearcherIndexFolder()) );
 
         return SUCCESS;
 	}

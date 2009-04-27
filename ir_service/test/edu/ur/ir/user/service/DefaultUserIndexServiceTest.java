@@ -37,7 +37,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
-import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.repository.Repository;
@@ -134,8 +133,6 @@ public class DefaultUserIndexServiceTest {
         // Start the transaction 
 		ts = tm.getTransaction(td);
 		IrUser user = userService.createUser("password", "username", email);
-		FolderInfo userIndexFolder = repo.getFileDatabase().createFolder("userIndexFolderIndex");
-		repo.setUserIndexFolder(userIndexFolder);
 		assert user.getId() != null : "User id should not be null";
 		tm.commit(ts);
 		
@@ -143,7 +140,7 @@ public class DefaultUserIndexServiceTest {
 		ts = tm.getTransaction(td);
 		user = userService.getUser(user.getId(), false);
 		
-		File userIndex = new File(userIndexFolder.getFullPath());
+		File userIndex = new File(repo.getUserIndexFolder());
 		userIndexService.addToIndex(user, userIndex);
 		tm.commit(ts);
 		
@@ -153,7 +150,7 @@ public class DefaultUserIndexServiceTest {
 		
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.getDirectory(repo.getUserIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(repo.getUserIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -182,7 +179,7 @@ public class DefaultUserIndexServiceTest {
 		userIndexService.deleteFromIndex(user, userIndex);
 		
 		try {
-			lucenDirectory = FSDirectory.getDirectory(repo.getUserIndexFolder().getFullPath());
+			lucenDirectory = FSDirectory.getDirectory(repo.getUserIndexFolder());
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}

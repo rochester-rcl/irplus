@@ -17,6 +17,8 @@
 
 package edu.ur.ir.web.action.user;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -214,6 +216,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 					userWorkspaceIndexService.updateIndex(repository, existingFolder);
 				} catch (LocationAlreadyExistsException e) {
 					log.error(e);
+				} catch (IOException e) {
+					log.error(e);
 				}
 				folderAdded = true;
 			} catch (DuplicateNameException e) {
@@ -235,6 +239,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 			try {
 				userWorkspaceIndexService.updateIndex(repository, other);
 			} catch (LocationAlreadyExistsException e) {
+				log.error(e);
+			} catch (IOException e) {
 				log.error(e);
 			}
 			folderAdded = true;

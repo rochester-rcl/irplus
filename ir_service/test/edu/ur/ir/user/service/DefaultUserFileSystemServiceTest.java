@@ -18,6 +18,7 @@
 package edu.ur.ir.user.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -30,8 +31,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
@@ -96,6 +97,9 @@ public class DefaultUserFileSystemServiceTest {
 		
 	    VersionedFileDAO versionedFileDAO= (VersionedFileDAO) ctx
 		.getBean("versionedFileDAO");
+	    
+		/** unique name generator */
+		UniqueNameGenerator uniqueNameGenerator = (UniqueNameGenerator) ctx.getBean("uniqueNameGenerator");
 		
 		
 		/**
@@ -431,8 +435,9 @@ public class DefaultUserFileSystemServiceTest {
 		 * Test adding a folder for indexing data to a user
 		 * @throws UserHasPublishedDeleteException 
 		 * @throws LocationAlreadyExistsException 
+		 * @throws IOException 
 		 */
-		public void createUserIndexFolderTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
+		public void createUserIndexFolderTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, IOException
 		{
 			// Start the transaction 
 			TransactionStatus ts = tm.getTransaction(td);
@@ -446,8 +451,9 @@ public class DefaultUserFileSystemServiceTest {
 	        // Start the transaction 
 			ts = tm.getTransaction(td);
 			IrUser user = userService.createUser("password", "username", email);
-			FolderInfo personalIndex = repo.getFileDatabase().createFolder("personalFolderIndex");
-			user.setPersonalIndexFolder(personalIndex);
+
+			String name = uniqueNameGenerator.getNextName();
+			userFileSystemService.createIndexFolder(user, repo, name);
 			assert user.getId() != null : "User id should not be null";
 			tm.commit(ts);
 			

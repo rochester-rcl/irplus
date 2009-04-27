@@ -12,6 +12,7 @@ import edu.ur.file.db.FileServer;
 import edu.ur.file.db.FileServerService;
 import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.file.db.UniqueNameGenerator;
 
 /**
  * Class for managing file database information.
@@ -30,6 +31,9 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 	
 	/** Service for dealing with file servers */
 	private FileServerService fileServerService;
+	
+	/** Unique name generation  */
+	private UniqueNameGenerator uniqueNameGenerator;
 	
 	/** id of a specific file server */
 	private Long fileServerId;
@@ -144,7 +148,9 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 		if( other == null)
 		{
 		    try {
-				fileDatabase = fileServer.createFileDatabase(name, name, path, description);
+				 fileDatabase = fileServer.createFileDatabase(name, name, path, description);
+				 FolderInfo info = fileDatabase.createFolder(uniqueNameGenerator.getNextName());
+				 fileDatabase.setCurrentFileStore(info.getName());
 				 fileServerService.saveFileServer(fileServer);
 				 added = true;
 			} catch (LocationAlreadyExistsException e) {
@@ -263,6 +269,16 @@ public class ManageFileDatabase extends ActionSupport implements Preparable{
 
 	public void setFileDatabase(FileDatabase fileDatabase) {
 		this.fileDatabase = fileDatabase;
+	}
+
+
+	public UniqueNameGenerator getUniqueNameGenerator() {
+		return uniqueNameGenerator;
+	}
+
+
+	public void setUniqueNameGenerator(UniqueNameGenerator uniqueNameGenerator) {
+		this.uniqueNameGenerator = uniqueNameGenerator;
 	}
 
 	

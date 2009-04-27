@@ -134,7 +134,7 @@ public class ApproveAffiliationAction extends Pager {
 						false);
 				
 				researcherIndexService.addToIndex(researcher, 
-						new File(repository.getResearcherIndexFolder().getFullPath()) );
+						new File(repository.getResearcherIndexFolder()) );
 			}
 
 

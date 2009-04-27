@@ -189,7 +189,7 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 		
 		// update index
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		String indexFolder = repository.getInstitutionalItemIndexFolder().getFullPath();
+		String indexFolder = repository.getInstitutionalItemIndexFolder();
 		institutionalItemIndexService.updateItem(institutionalItem, new File(indexFolder));
 
 		return SUCCESS;

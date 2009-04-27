@@ -65,7 +65,7 @@ public class DefaultRepositoryIndexerService implements RepositoryIndexerService
 			
 		    List<InstitutionalItem> items = institutionalItemService.getRepositoryItemsOrderByName(rowStart, rowEnd, repository.getId(), "desc");
 		
-		    institutionalItemIndexService.addItems(items, new File(repository.getInstitutionalItemIndexFolder().getFullPath()), overwriteExistingIndex);
+		    institutionalItemIndexService.addItems(items, new File(repository.getInstitutionalItemIndexFolder()), overwriteExistingIndex);
 		    overwriteExistingIndex = false;
 		    
 		    rowStart = rowEnd;

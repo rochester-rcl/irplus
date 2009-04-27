@@ -50,52 +50,32 @@
 
 		<property name="description" column="description" type="string"
 			not-null="false" />
+		
+		<!-- folder for person name / name authority data -->
+		<property name="nameIndexFolder" column="name_index_folder" type="string"
+			not-null="false" />
+		
+		<!-- folder for indexed user data -->
+		<property name="userIndexFolder" column="user_index_folder" type="string"
+			not-null="false" />
+		
+		<!-- folder for indexed institutional item data -->
+		<property name="institutionalItemIndexFolder" column="institutional_item_index_folder" type="string"
+			not-null="false" />
+			
+		<!-- location where all user workspace indexed data  -->
+		<property name="userWorkspaceIndexFolder" column="user_workspace_index_folder" type="string"
+			not-null="false" />
+			
+		<!-- folder for indexed researcher data -->
+		<property name="researcherIndexFolder" column="researcher_index_folder" type="string"
+			not-null="false" />
 			
 		<!-- Default file database for the repository to files-->
 		<many-to-one class="edu.ur.file.db.DefaultFileDatabase" cascade="save-update"
 			name="fileDatabase" column="file_database_id" insert="true"
 			update="true" unique="true"/>
 	
-		<!-- folder for indexed name data -->
-		<many-to-one class="edu.ur.file.db.TreeFolderInfo" 
-			name="nameIndexFolder"
-			cascade="save-update" 
-			column="name_index_folder_id" 
-			insert="true"
-			update="true" 
-			access="field" 
-			unique="true"/>
-			
-		<!-- folder for indexed name data -->
-		<many-to-one class="edu.ur.file.db.TreeFolderInfo" 
-			name="userIndexFolder"
-			cascade="save-update" 
-			column="user_index_folder_id" 
-			insert="true"
-			update="true" 
-			access="field" 
-			unique="true"/>
-		
-		<!-- folder for indexed institutional item data -->
-		<many-to-one class="edu.ur.file.db.TreeFolderInfo" 
-			name="institutionalItemIndexFolder"
-			cascade="save-update" 
-			column="institutional_item_index_folder_id" 
-			insert="true"
-			update="true" 
-			access="field" 
-			unique="true"/>
-			
-		<!-- folder for indexed researcher data -->
-		<many-to-one class="edu.ur.file.db.TreeFolderInfo" 
-			name="researcherIndexFolder"
-			cascade="save-update" 
-			column="researcher_index_folder_id" 
-			insert="true"
-			update="true" 
-			access="field" 
-			unique="true"/>
-			
 		<!-- Default handle name authority to use for the repository -->
 		<many-to-one class="edu.ur.ir.handle.HandleNameAuthority" 
 			name="defaultHandleNameAuthority"
