@@ -72,15 +72,16 @@
               <b><fmt:message key="edit_repository.edit"/></b>
     
           
-              <ur:basicForm method="post" name="viewRepository"  
+              <form method="post" name="viewRepository"  
                    action="admin/viewRepository.action">
+                   
                   <table class="formTable">
                       <tr>
                           <td class="label">
                               Repository Name:
                           </td>
                           <td class="input" colspan="2">
-                              <ur:textInput name="repository.name" value="${repository.name}"/>
+                              <input size="50" name="repositoryName" value="${repository.name}"/>
                           </td>
                       </tr>
                       <tr>
@@ -88,7 +89,7 @@
                               Institution Name:
                           </td>
                           <td class="input" colspan="2">
-                              <ur:textInput name="repository.institutionName" value="${repository.institutionName}"/>
+                              <input size="50" name="institutionName" value="${repository.institutionName}"/>
                           </td>
                       </tr>
                       <tr>
@@ -116,27 +117,104 @@
                       </tr>
                       <tr>
                           <td class="label">
-                              Description:
+                              Current File Database:
                           </td>
                           <td class="input" colspan="2">
-                              <ur:textArea name="repository.description" 
-                                  cols="60" rows="8">${repository.description}</ur:textArea>
+                              <select name="defaultFileDatabaseId">
+                                  <c:if test="${repository.fileDatabase == null}">
+                                      <option selected="true" value="-1">No File Database</option>
+                                  </c:if>
+                                   <c:if test="${repository.fileDatabase != null}">
+                                      <option value="-1">No File Database</option>
+                                  </c:if>
+                                  <c:forEach var="fileDatabase" items="${fileDatabases}">
+                                      <c:if test="${repository.fileDatabase.id == fileDatabase.id}">
+                                          <option selected="true" value="${fileDatabase.id}">${defaultFileDatabase.name}</option>
+                                      </c:if>
+                                       <c:if test="${repository.fileDatabase.id != fileDatabase.id}">
+                                          <option value="${fileDatabase.id}">${fileDatabase.name}</option>
+                                      </c:if>
+                                  </c:forEach>
+                              </select>
                           </td>
                       </tr>
                       <tr>
+                          <td class="label">
+                              Description:
+                          </td>
+                          <td class="input" colspan="2">
+                              <textarea name="repository.description" 
+                                  cols="60" rows="8">${repository.description}</textarea>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td colspan="3" class="label">
+                              
+                              <h3>The index locations must be valid paths for the file system in use (Windows C:\  Unix / )</h3>
+                          
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="label">
+                              Name Authority Index Folder Location:
+                          </td>
+                          <td class="input" colspan="2">
+                              <input size="80" name="nameIndexFolder" value="${repository.nameIndexFolder}"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="label">
+                              User Index Folder Location:
+                          </td>
+                          <td class="input" colspan="2">
+                              <input size="80" name="userIndexFolder" value="${repository.userIndexFolder}"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="label">
+                             Researcher Index Folder Location:
+                          </td>
+                          <td class="input" colspan="2">
+                              <input size="80" name="researcherIndexFolder" value="${repository.researcherIndexFolder}"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="label">
+                             Institutional Item Index Folder Location:
+                          </td>
+                          <td class="input" colspan="2">
+                              <input size="80" name="institutionalItemIndexFolder" value="${repository.institutionalItemIndexFolder}"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="label">
+                             User Workspace Folder Location:
+                          </td>
+                          <td class="input" colspan="2">
+                              <input size="80" name="userWorkspaceIndexFolder" value="${repository.userWorkspaceIndexFolder}"/>
+                          </td>
+                      </tr>
+                      
+                      <tr>
                           <td class="buttons" colspan="3" >
                              
+                             <c:if test="${repository == null}">
                              <input type="submit" 
-                                 name="action:saveRepository" value="Save"/>
+                                 name="action:createRepository" value="Create"/>
+                             </c:if>
+                             <c:if test="${repository != null}">
+                             <input type="submit" 
+                                 name="action:updateRepository" value="Save"/>
+                             </c:if>
                              
                              <input type="submit" 
                                   name="action:cancelRepository" value="Cancel"/>
                           </td>
                       </tr>
                   </table>
-              </ur:basicForm>
+              </form>
    
-              
+              <c:if test="${repository != null}">
               <c:url var="reIndexItemsUrl" value="/admin/reIndexInstitutionalItems.action"/>
               <a href="${reIndexItemsUrl}">Re-Index Institutional Items</a>
               <br/>
@@ -204,6 +282,7 @@
                        </tbody>  
                    </table>
               </div>
+              </c:if>
            </div>
           <!--  end bd div -->
           

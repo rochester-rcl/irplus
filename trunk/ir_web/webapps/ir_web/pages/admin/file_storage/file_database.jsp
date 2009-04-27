@@ -82,6 +82,11 @@
 	            </c:url>
                 <h3><a href="<c:url value="/admin/viewFileStorage.action"/>">All File Servers </a> > <a href="${viewFileServer}">${fileDatabase.fileServer.name}</a> > ${fileDatabase.name}</h3>
                 
+                <button id="showNewFileDatabaseFolder" class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';">New Root Folder</button> 
+                <br/>
+                
                 <h3>Root Folders</h3>
                 <div class="dataTable">
 	                   <urstb:table width="100%">
