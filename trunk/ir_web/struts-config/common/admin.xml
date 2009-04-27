@@ -127,19 +127,7 @@
             <result name="success" type="redirect">adminHome.action</result>
         </action>
 
-        <!--  ************************************ -->
-        <!--  Initialize the system actions        -->
-        <!--  ************************************ -->
-         <action name="initializeSystem" 
-            method="save"
-            class="edu.ur.ir.web.action.InitializeSystem">
-            <interceptor-ref name="crudStack" />
-            <result name="input">/pages/home.jsp</result>
-            <result name="success" type="redirect">goAdminHome.action</result>
-        </action>
- 
-        
- 
+         
         <!--  ************************************ -->
         <!--  News Actions                         -->
         <!--  ************************************ -->
