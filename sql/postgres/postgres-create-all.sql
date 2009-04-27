@@ -606,13 +606,12 @@ CREATE TABLE ir_user."user"
   force_change_password BOOLEAN,
   person_name_authority_id BIGINT,
   version INTEGER,
-  personal_index_folder_id BIGINT,
+  personal_index_folder TEXT,
   affiliation_id BIGINT,
   department_id BIGINT,
   affiliation_approved BOOLEAN,
   FOREIGN KEY (affiliation_id) REFERENCES ir_user.affiliation (affiliation_id),
   FOREIGN KEY (department_id) REFERENCES ir_user.department (department_id),
-  FOREIGN KEY (personal_index_folder_id) REFERENCES file_system.folder (folder_id),
   FOREIGN KEY (person_name_authority_id) REFERENCES person.person_name_authority (person_name_authority_id),
   UNIQUE (username)
 );
@@ -1451,16 +1450,13 @@ CREATE TABLE ir_repository.repository
   file_database_id BIGINT,
   description TEXT,
   version INTEGER,
-  name_index_folder_id BIGINT,
-  user_index_folder_id BIGINT,
-  institutional_item_index_folder_id BIGINT,
-  researcher_index_folder_id BIGINT,
+  name_index_folder TEXT,
+  user_index_folder TEXT,
+  institutional_item_index_folder TEXT,
+  researcher_index_folder TEXT,
+  user_workspace_index_folder TEXT,
   default_handle_authority_id BIGINT,
   UNIQUE (name),
-  FOREIGN KEY (name_index_folder_id) REFERENCES file_system.folder (folder_id),
-  FOREIGN KEY (user_index_folder_id) REFERENCES file_system.folder (folder_id),
-  FOREIGN KEY (institutional_item_index_folder_id ) REFERENCES file_system.folder (folder_id),
-  FOREIGN KEY (researcher_index_folder_id ) REFERENCES file_system.folder (folder_id),
   FOREIGN KEY (file_database_id) REFERENCES file_system.file_database (file_database_id)
 );
 ALTER TABLE ir_repository.repository OWNER TO ir_plus;
