@@ -30,7 +30,7 @@
            <a href="<c:url value="/home.action"/>"><img align="left" alt="irplus" src="${pageContext.request.contextPath}/page-resources/images/all-images/ir_plus_logo.jpg"/></a>  
        </div>
        <div id="header_links">
-           <a href="">Help</a> | <a href="">Contact Us</a> | <a href="">About</a> | <a href="">Privacy Policy</a>
+           <a href="<c:url value="/help.action"/>">Help</a> | <a href="<c:url value="/contactUs.action"/>">Contact Us</a> | <a href="<c:url value="/about.action"/>">About</a> | <a href="<c:url value="/privacyPolicy.action"/>">Privacy Policy</a>
         
        </div>
    </div>
@@ -58,7 +58,6 @@
                        <div class="bd">                                        
                             <ul>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
-                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/adminHome.action"/>" >System Status</a></li>
                                     <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepository.action" />" >Repository</a></li>
                                 </c:if>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewInstitutionalCollections.action" />" >Institutional Collections</a></li>

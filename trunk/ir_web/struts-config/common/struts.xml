@@ -77,7 +77,27 @@
         <!--  ************************************ -->
         &item_public;
         
-         <!--  Home page actions -->
+        <!-- Help action -->
+        <action name="help">
+            <result type="redirect">/pages/help.jsp</result>
+        </action>
+        
+        <!-- Help action -->
+        <action name="privacyPolicy">
+            <result type="redirect">/pages/privacy_policy.jsp</result>
+        </action>
+        
+        <!-- Help action -->
+        <action name="contactUs">
+            <result type="redirect"> /pages/contact_us.jsp</result>
+        </action>
+        
+        <!-- Help action -->
+        <action name="about">
+            <result type="redirect">/pages/about.jsp</result>
+        </action>
+        
+        <!--  Home page actions -->
         <action name="goHome">
             <result name="success" type="redirect">home.action</result>
         </action>
