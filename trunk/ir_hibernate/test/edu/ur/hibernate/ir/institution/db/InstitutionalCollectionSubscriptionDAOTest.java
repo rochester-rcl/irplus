@@ -60,7 +60,8 @@ public class InstitutionalCollectionSubscriptionDAOTest {
 	
 	
 	/**
-	 * Test Institutional Collection link persistence
+	 * Test Institutional Collection subscription persistence
+	 * 
 	 * @throws DuplicateNameException 
 	 * @throws LocationAlreadyExistsException 
 	 */
@@ -119,6 +120,10 @@ public class InstitutionalCollectionSubscriptionDAOTest {
 		
 		assert subscriptions.size() == 1 : "Should have 1 subscription but has " + subscriptions.size();
 		assert subscriptions.contains(subscription) : " Should contain subscription " + subscription;
+		
+		Long count = institutionalCollectionSubscriptionDAO.getSubscriberCount(collection);
+		assert count == 1l : "Should have 1 subscriber but has " + count;
+		
 		
 		collection.removeSubscriber(user);
 		institutionalCollectionSubscriptionDAO.makeTransient(subscription);

@@ -58,7 +58,13 @@
 	<!--  get the subscriptions for a user -->
 	<query name="getInstitutionalSubscriptionsForUser" >
 	    select subscription from InstitutionalCollectionSubscription subscription
-        where user.id = ?
+        where subscription.user.id = ?
+	</query>  
+	
+	<!--  get the count of subscribers for a collection -->
+	<query name="getInstitutionalCollectionSubscriptionCount" >
+	    select count(*) from InstitutionalCollectionSubscription subscription
+        where subscription.institutionalCollection.id = ?
 	</query>  
 	
 
