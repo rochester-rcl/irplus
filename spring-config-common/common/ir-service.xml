@@ -503,4 +503,12 @@
        <property name="itemIdIdentifier" value="institutionalItemId"/>
        <property name="versionNumberIdentifier" value="versionNumber"/>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Institutional collection subscription service -->
+   <!-- ****************************************** --> 
+   <bean id="institutionalCollectionSubscriptionService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSubscriptionService">
+       <property name="institutionalCollectionSubscriptionDAO" ref="institutionalCollectionSubscriptionDAO"/>
+   </bean>
 </beans>

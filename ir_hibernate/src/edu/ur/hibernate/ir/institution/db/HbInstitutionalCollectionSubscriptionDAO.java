@@ -5,6 +5,8 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO;
 import edu.ur.ir.user.IrUser;
@@ -90,6 +92,12 @@ public class HbInstitutionalCollectionSubscriptionDAO implements InstitutionalCo
 			IrUser user) {
 		return (List<InstitutionalCollectionSubscription>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalSubscriptionsForUser", user.getId());
 
+	}
+
+	@Override
+	public Long getSubscriberCount(
+			InstitutionalCollection institutionalCollection) {
+		return (Long) HbHelper.getUnique( hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalCollectionSubscriptionCount", institutionalCollection.getId()) );
 	}
 
 }
