@@ -138,7 +138,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	 */
 	public String execute()
 	{
-		log.debug("Personal ItemId = " + genericItemId + " user id = " + userId);
+		log.debug("Generic ItemId = " + genericItemId + " user id = " + userId);
 
 		IrUser user = null;
 		if( userId != null )
@@ -150,6 +150,12 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		}
 		
 		log.debug(" owner id = " + item.getOwner().getId());
+		
+	    log.debug("user id = " + userId);
+		log.debug("User == null " + (user == null));
+		log.debug("!item.getOwner().getId().equals(userId) = " + (!item.getOwner().getId().equals(userId)));
+		log.debug("!user.hasRole(IrRole.ADMIN_ROLE) = " + !user.hasRole(IrRole.ADMIN_ROLE) );
+		log.debug("all together = " + (user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) ) ) );
 		
 		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
 		{

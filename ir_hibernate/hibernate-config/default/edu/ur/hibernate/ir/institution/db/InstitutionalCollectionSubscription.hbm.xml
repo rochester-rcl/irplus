@@ -40,6 +40,9 @@
 		<!-- A versioned entity. -->
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
+		
+		<property name="subscriptionStartDate" column="subscription_start_date" type="date"
+			not-null="true" access="field" />
 
 	    <!--  The  institutional collection   -->
         <many-to-one name="institutionalCollection" class="InstitutionalCollection"

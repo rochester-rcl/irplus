@@ -1,5 +1,7 @@
 package edu.ur.ir.institution;
 
+import java.util.Date;
+
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
 
@@ -20,6 +22,9 @@ public class InstitutionalCollectionSubscription extends BasePersistent{
 	/**  The user subscribed */
 	private IrUser user;
 	
+	/** date user started the subscription */
+	private Date subscriptionStartDate;
+	
 	/**
 	 * Package protected constructor
 	 */
@@ -35,6 +40,7 @@ public class InstitutionalCollectionSubscription extends BasePersistent{
 	{
 		setInstitutionalCollection(institutionalCollection);
 		setUser(user);
+		subscriptionStartDate = new Date();
 	}
 
 	/**
@@ -113,6 +119,23 @@ public class InstitutionalCollectionSubscription extends BasePersistent{
 		sb.append(user);
 		sb.append(" ]");
 		return sb.toString();
+	}
+
+	/**
+	 * Date the user started their subscription.
+	 * @return
+	 */
+	public Date getSubscriptionStartDate() {
+		return subscriptionStartDate;
+	}
+
+	/**
+	 * Date the user started their subscription.
+	 * 
+	 * @param subscriptionStartDate
+	 */
+	void setSubscriptionStartDate(Date subscriptionStartDate) {
+		this.subscriptionStartDate = subscriptionStartDate;
 	}
 	
 	

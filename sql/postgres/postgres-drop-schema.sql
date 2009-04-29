@@ -358,3 +358,18 @@ DROP SEQUENCE handle.handle_info_seq;
 
 DROP SCHEMA handle;
 
+-- ---------------------------------------------
+-- Drop quartz tables
+-- ---------------------------------------------
+DROP TABLE qrtz_job_listeners;
+DROP TABLE qrtz_trigger_listeners;
+DROP TABLE qrtz_fired_triggers;
+DROP TABLE QRTZ_PAUSED_TRIGGER_GRPS;
+DROP TABLE QRTZ_SCHEDULER_STATE;
+DROP TABLE QRTZ_LOCKS;
+DROP TABLE qrtz_simple_triggers;
+DROP TABLE qrtz_cron_triggers;
+DROP TABLE QRTZ_BLOB_TRIGGERS;
+DROP TABLE qrtz_triggers;
+DROP TABLE qrtz_job_details;
+DROP TABLE qrtz_calendars;
