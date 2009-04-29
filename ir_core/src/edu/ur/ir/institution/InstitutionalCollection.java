@@ -960,7 +960,6 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * @param subscriber
 	 */
 	public void removeSubscriber(InstitutionalCollectionSubscription subscription) {
-		
 		subscriptions.remove(subscription);
 	}
 	
@@ -971,10 +970,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 */
 	public void removeSubscriber(IrUser user) {
 		InstitutionalCollectionSubscription s = getSubscription(user);
-		if( s != null)
-		{
-			subscriptions.remove(s);
-		}
+		removeSubscriber(s);
 	}
 	
 	/**

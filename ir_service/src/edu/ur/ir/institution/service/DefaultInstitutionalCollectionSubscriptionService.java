@@ -84,4 +84,11 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 		this.institutionalCollectionSubscriptionDAO = institutionalCollectionSubscriptionDAO;
 	}
 
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionService#isSubscribed(edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.user.IrUser)
+	 */
+	public boolean isSubscribed(InstitutionalCollection collection, IrUser user) {
+		return institutionalCollectionSubscriptionDAO.isSubscriberCount(collection, user) == 1l;
+	}
+
 }
