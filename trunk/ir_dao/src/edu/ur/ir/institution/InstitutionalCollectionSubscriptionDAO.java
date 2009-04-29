@@ -46,5 +46,16 @@ CrudDAO<InstitutionalCollectionSubscription>{
 	 * @return - count of subscribers to a given collection
 	 */
 	public Long getSubscriberCount(InstitutionalCollection institutionalCollection);
+	
+	/**
+	 * Returns true if the user is subscribed to the given collection.
+	 * 
+	 * @param institutionalCollection - collection to check and see if the user is subscribed.
+	 * 
+	 * @param user - user to check for
+	 * @return count - number of times user is found in the specified collection 1 = subscribed 
+	 * 0 = not subscribed
+	 */
+	public Long isSubscriberCount(InstitutionalCollection institutionalCollection, IrUser user);
 
 }
