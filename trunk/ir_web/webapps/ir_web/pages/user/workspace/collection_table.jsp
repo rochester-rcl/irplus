@@ -186,7 +186,7 @@
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
 	                            <c:url var="submitPublicationUrl" value="/user/viewAddItemToCollections.action">
-	                                <c:param name="genericItemId" value="${fileSystemObject.id}"/>
+	                                <c:param name="genericItemId" value="${fileSystemObject.versionedItem.currentVersion.item.id}"/>
 	                                <c:param name="parentCollectionId" value="${fileSystemObject.personalCollection.id}"/>
 	                            </c:url>
 	                            <a href="${submitPublicationUrl}">Submit publication</a>
