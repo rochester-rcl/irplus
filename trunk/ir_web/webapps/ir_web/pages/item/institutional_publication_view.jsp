@@ -74,7 +74,9 @@
 				<!-- Begin - Display the Item preview -->
 				
 				<h3>${institutionalItemVersion.item.name}</h3>
+				<c:if test="${institutionalItemVersion.handleInfo != null}">
 				<h3 class="errorMessage">URL to cite or link to: <a href="${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}">${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}</a></h3>
+				</c:if>
 				<c:if test="${showPublication}">
 									
 					<c:if test="${institutionalItemVersion.withdrawn}">
