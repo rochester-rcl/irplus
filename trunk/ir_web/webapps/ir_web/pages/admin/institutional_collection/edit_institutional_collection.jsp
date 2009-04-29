@@ -187,6 +187,7 @@
 	                 <!--  Start forth tab -->
 	                 <div id="tab4">
 	                 	<br>
+	                 	<h3>Total subscribers for this collection: ${ur:collectionSize(collection.subscriptions)}</h3>
 						<div class="dataTable">
 						    <urstb:table width="50%">
 						        <urstb:caption>Subscribers for this collection</urstb:caption>
@@ -207,8 +208,8 @@
 						                    cssClass="${rowClass}"
 						                    onMouseOver="this.className='highlight'"
 						                    onMouseOut="this.className='${rowClass}'">
-						                        <urstb:td>${subscriber.firstName}</urstb:td>
-						                        <urstb:td>${subscriber.lastName}</urstb:td>
+						                        <urstb:td>${subscriber.user.firstName}</urstb:td>
+						                        <urstb:td>${subscriber.user.lastName}</urstb:td>
 						                </urstb:tr>
 						            </urstb:tbody>
 						        </urstb:table>
