@@ -67,4 +67,13 @@ public interface InstitutionalCollectionSubscriptionService
 	 * @return - total number of subscribers for a given collection.
 	 */
 	public Long getSubscriberCount(InstitutionalCollection institutionalCollection);
+	
+	/**
+	 * Returns true if the user is subscribed to the specified collection.
+	 * 
+	 * @param collection - collection to check
+	 * @param user - user to check
+	 * @return - true if the user is subscribed to the specified collection.
+	 */
+	public boolean isSubscribed(InstitutionalCollection collection, IrUser user);
 }
