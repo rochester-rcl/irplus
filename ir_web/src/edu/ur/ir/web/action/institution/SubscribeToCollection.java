@@ -97,7 +97,7 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 			}
 		}
 		
-		isSubscriber = institutionalCollection.hasSubscriber(user);
+		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(institutionalCollection, user);
 		return SUCCESS;
 		
 	}
@@ -117,7 +117,7 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 		institutionalCollection.removeSubscriber(user);
 		institutionalCollectionService.saveCollection(institutionalCollection);
 
-		isSubscriber = institutionalCollection.hasSubscriber(user);
+		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(institutionalCollection, user);
 		return SUCCESS;
 	}
 	
@@ -133,11 +133,12 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 		IrUser user = userService.getUser(userId, false);
 		
 		InstitutionalCollection institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
-		isSubscriber = institutionalCollection.hasSubscriber(user);
+		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(institutionalCollection, user);
 		log.debug("isSubscriber="+isSubscriber);
 		
 		return SUCCESS;
 	}
+	
 	
 	public Long getCollectionId() {
 		return collectionId;
