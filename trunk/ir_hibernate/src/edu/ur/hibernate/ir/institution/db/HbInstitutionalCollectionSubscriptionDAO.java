@@ -94,10 +94,24 @@ public class HbInstitutionalCollectionSubscriptionDAO implements InstitutionalCo
 
 	}
 
-	@Override
+	
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO#getSubscriberCount(edu.ur.ir.institution.InstitutionalCollection)
+	 */
 	public Long getSubscriberCount(
 			InstitutionalCollection institutionalCollection) {
 		return (Long) HbHelper.getUnique( hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalCollectionSubscriptionCount", institutionalCollection.getId()) );
+	}
+
+	
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO#isSubscriberCount(edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.user.IrUser)
+	 */
+	public Long isSubscriberCount(
+			InstitutionalCollection institutionalCollection, IrUser user) {
+		Object[] values = new Object[] {institutionalCollection.getId(), user.getId()};
+		return (Long) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalCollectionSubscriptionCountUser", 
+				values));
 	}
 
 }
