@@ -70,7 +70,8 @@
 		            <ul class="yui-nav">
 		                <li class="selected"><a href="#tab1"><em>User Information</em></a></li>
 		                <li><a href="#tab2"><em>Emails</em></a></li>
-		                <li><a href="#tab3"><em>Publication Names</em></a></li>
+		                <li><a href="#tab3"><em>Subscriptions</em></a></li>
+		                <li><a href="#tab4"><em>Publication Names</em></a></li>
 		            </ul>
 		
 		            <div class="yui-content">
@@ -84,8 +85,8 @@
 	                               onmouseout="this.className='ur_button';"
 	                               >Change Password</button>
 
-	                	  <ur:basicForm id="addUser" name="newUserForm" method="post" 
-			            	  action="user/saveMyAccount.action" onSubmit="return  YAHOO.ur.user.account.formValidation();">
+	                	  <form id="addUser" name="newUserForm" method="post" 
+			            	  action="user/saveMyAccount.action"  onsubmit="return  YAHOO.ur.user.account.formValidation();">
 			              
 			              <input type="hidden" id="user_id" name="userId" value="${irUser.id}"/>
 			               
@@ -153,7 +154,7 @@
 	                      </tr>
 	                      </table>
 			      
-			          </ur:basicForm>
+			          </form>
 			          
 		        </div>
 	            <!--  end first tab -->
@@ -173,14 +174,22 @@
 				      <br/>
 				      <br/>
 				    <input type="hidden" id="editUserForm_id" value="${irUser.id}">
-					<ur:div id="newEmails"></ur:div>
+					<div id="newEmails"></div>
 					<div class="clear">&nbsp;</div>
 					
 				 </div>
 	             <!--  end tab 2 -->
 	             
-				<!--  start third tab -->
+	             <!--  start third tab -->
                	 <div id="tab3">
+               	     <h3>Current Subscriptions</h3>
+			         <div id="current_subscriptions"> <c:import url="/pages/admin/user/user_subscription_table.jsp"/> </div>
+					
+				 </div>
+	             <!--  end tab 3 -->
+	             
+				<!--  start 4th tab -->
+               	 <div id="tab4">
 			          <br/>
 				    
 					              <button class="ur_button" id="showPersonName" 
@@ -196,12 +205,12 @@
 				      <br/>
 				      <br/>
 					
-					<ur:div id="personNames"></ur:div>
+					<div id="personNames"></div>
 					
 					<div class="clear">&nbsp;</div>
 					
 				 </div>
-	             <!--  end tab 3 -->	             
+	             <!--  end 4th 3 -->	             
 	          </div>
 	          <!--  end content -->
 	       </div>
@@ -211,56 +220,56 @@
 	  	<!--  End body div -->
 					
 		
-	     <ur:div id="newEmailDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Email Information</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="addEmail" name="newEmailForm" 
+	     <div id="newEmailDialog" class="hidden">
+	          <div class="hd">Email Information</div>
+		      <div class="bd">
+		          <form id="addEmail" name="newEmailForm" 
 		              method="post" 
 		              action="admin/createEmail.action">
 		             
 		             <!--  if editing an id must be passed -->     
 		   			 <input type="hidden" id="newEmailForm_id"  name="id" value="${irUser.id}"/>
 		              
-		              <ur:div id="newEmailDialogFields">
-	                   <%@ include file="/pages/admin/user/email_form.jsp" %>
-	                  </ur:div>
+		              <div id="newEmailDialogFields">
+		                  <c:import url="/pages/admin/user/email_form.jsp"/>
+	                   
+	                  </div>
 		              
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+		          </form>
+		      </div>
+	      </div>
 	      
-	      <ur:div id="deleteEmailDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Delete Email</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="deleteEmail" name="deleteEmail" method="POST" 
+	      <div id="deleteEmailDialog" class="hidden">
+	          <div class="hd">Delete Email</div>
+		      <div class="bd">
+		          <form id="deleteEmail" name="deleteEmail" method="POST" 
 		              action="admin/deleteEmail.action">
 		              
 		              
-		              <ur:div id="deleteEmailError" cssClass="errorMessage"></ur:div>
+		              <div id="deleteEmailError" class="errorMessage"></div>
 			          <p>Are you sure you wish to delete the selected emails?</p>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+		          </form>
+		      </div>
+	      </div>
 
-	      <ur:div id="change_password_dialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Change password</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="change_password_form" name="changePasswordForm" method="POST" 
+	      <div id="change_password_dialog" class="hidden">
+	          <div class="hd">Change password</div>
+		      <div class="bd">
+		          <form id="change_password_form" name="changePasswordForm" method="POST" 
 		              action="user/changePassword.action">
 			         
 			         <input type="hidden" id="change_password_form_id"  name="userId" value="${irUser.id}"/>
-					  <ur:div id="new_password_dialog_fields">
-	                  	 <%@ include file="/pages/user/login/change_password_form.jsp" %>
-	                  </ur:div>			         
-			          
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+					  <div id="new_password_dialog_fields">
+					     <c:import url="/pages/user/login/change_password_form.jsp"/>
+	                  </div>			         
+		          </form>
+		      </div>
+	      </div>
 
-	     <ur:div id="newPersonNameDialog" cssClass="hidden">
-	         <ur:div cssClass="hd">Name Information</ur:div>
-	         <ur:div cssClass="bd">
-	             <ur:basicForm id="addPersonName" name="newPersonNameForm" 
+	     <div id="newPersonNameDialog" class="hidden">
+	         <div class="hd">Name Information</div>
+	         <div class="bd">
+	             <form id="addPersonName" name="newPersonNameForm" 
 	                       method="post" 
 	                       action="user/createPersonName.action">
 		           	
@@ -278,7 +287,7 @@
 					<input type="hidden" id="newPersonNameForm_myName"
 		                   name="myName" value="true"/>		                   
 		                   	             
-	             <ur:div id="personError" cssClass="errorMessage"></ur:div>
+	             <div id="personError"class="errorMessage"></div>
 		          
 		         <label for="newPersonNameFormFirstName">First Name:</label><input type="text" 
 		              id="newPersonNameFormFirstName" 
@@ -324,38 +333,38 @@
 	             <label for="newPersonNameFormAuthoritative">Authoritative Name</label><input 
 	                   id="newPersonNameFormAuthoritative"
 	                   type="checkbox" name="authoritative" value="true"/>
-	          </ur:basicForm>
-	      </ur:div>
-	  </ur:div>
+	          </form>
+	      </div>
+	  </div>
 	  
-	  <ur:div id="deletePersonNameDialog" cssClass="hidden">
-	      <ur:div cssClass="hd">Delete People</ur:div>
-	      <ur:div cssClass="bd">
-	          <ur:basicForm id="deletePersonName" name="deletePersonName" method="POST" 
+	  <div id="deletePersonNameDialog" class="hidden">
+	      <div class="hd">Delete People</div>
+	      <div class="bd">
+	          <form id="deletePersonName" name="deletePersonName" method="POST" 
 	              action="user/deletePersonName.action">
 	              
 	              
-	              <ur:div id="deletePersonNameError" cssClass="errorMessage"></ur:div>
+	              <div id="deletePersonNameError" class="errorMessage"></div>
 		          <p>Are you sure you wish to delete the selected name(s)?</p>
-	          </ur:basicForm>
-	      </ur:div>
-	  </ur:div>
+	          </form>
+	      </div>
+	  </div>
 	
-	  <ur:div id="deletePersonNameMessageDialog" cssClass="hidden">
-	      <ur:div cssClass="hd">Delete Name</ur:div>
-	      <ur:div cssClass="bd">
-	              <ur:div id="delete_email_error" cssClass="errorMessage"></ur:div>
-	      </ur:div>
-	  </ur:div>
+	  <div id="deletePersonNameMessageDialog" class="hidden">
+	      <div class="hd">Delete Name</div>
+	      <div class="bd">
+	              <div id="delete_email_error" class="errorMessage"></div>
+	      </div>
+	  </div>
 
-     <ur:div id="emailConfirmationDialog" cssClass="hidden">
-          <ur:div cssClass="hd">Email Information</ur:div>
-	      <ur:div cssClass="bd">
-	              <ur:div id="emailConfirmationDialogFields">
-                  </ur:div>
+     <div id="emailConfirmationDialog" class="hidden">
+          <div class="hd">Email Information</div>
+	      <div class="bd">
+	              <div id="emailConfirmationDialogFields">
+                  </div>
 	              
-	      </ur:div>
-      </ur:div>	 
+	      </div>
+      </div>	 
 
             <!--  this is the footer of the page -->
             <c:import url="/inc/footer.jsp"/>
