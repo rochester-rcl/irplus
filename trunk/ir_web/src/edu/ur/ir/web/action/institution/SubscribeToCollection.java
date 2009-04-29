@@ -25,6 +25,7 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
+import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -51,6 +52,9 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 	
 	/** Institutional collection service */
 	private InstitutionalCollectionService institutionalCollectionService;
+	
+	/** Service for dealing with institutional collection subscription service */
+	private InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService;
 	
 	/** User service */
 	private UserService userService;
@@ -93,7 +97,7 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 			}
 		}
 		
-		getUserSubscriptionForThisCollection();
+		isSubscriber = institutionalCollection.hasSubscriber(user);
 		return SUCCESS;
 		
 	}
@@ -113,7 +117,7 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 		institutionalCollection.removeSubscriber(user);
 		institutionalCollectionService.saveCollection(institutionalCollection);
 
-		getUserSubscriptionForThisCollection();
+		isSubscriber = institutionalCollection.hasSubscriber(user);
 		return SUCCESS;
 	}
 	
@@ -166,6 +170,15 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 
 	public void setSubscriber(boolean isSubscriber) {
 		this.isSubscriber = isSubscriber;
+	}
+
+	public InstitutionalCollectionSubscriptionService getInstitutionalCollectionSubscriptionService() {
+		return institutionalCollectionSubscriptionService;
+	}
+
+	public void setInstitutionalCollectionSubscriptionService(
+			InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService) {
+		this.institutionalCollectionSubscriptionService = institutionalCollectionSubscriptionService;
 	}
 
 }

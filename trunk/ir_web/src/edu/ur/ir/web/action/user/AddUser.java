@@ -18,6 +18,7 @@
 package edu.ur.ir.web.action.user;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -26,6 +27,8 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.institution.InstitutionalCollectionSubscription;
+import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.Affiliation;
@@ -113,6 +116,12 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
+	
+	/** Service for dealing with institutional collection subscriptions */
+	private InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService;
+	
+	/** list of subscriptions for the user */
+	private List<InstitutionalCollectionSubscription> subscriptions = new LinkedList<InstitutionalCollectionSubscription>();
 
 	/**
 	 * Execute method to initialize invite information
@@ -349,6 +358,10 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		
 		irUser = userService.getUser(userId, false);
 		
+		if( irUser != null )
+		{
+		    subscriptions = institutionalCollectionSubscriptionService.getAllSubscriptionsForUser(irUser);
+		}
 		return SUCCESS;
 	}
 	
@@ -629,6 +642,24 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
+	}
+
+	public InstitutionalCollectionSubscriptionService getInstitutionalCollectionSubscriptionService() {
+		return institutionalCollectionSubscriptionService;
+	}
+
+	public void setInstitutionalCollectionSubscriptionService(
+			InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService) {
+		this.institutionalCollectionSubscriptionService = institutionalCollectionSubscriptionService;
+	}
+
+	public List<InstitutionalCollectionSubscription> getSubscriptions() {
+		return subscriptions;
+	}
+
+	public void setSubscriptions(
+			List<InstitutionalCollectionSubscription> subscriptions) {
+		this.subscriptions = subscriptions;
 	}
 
 }
