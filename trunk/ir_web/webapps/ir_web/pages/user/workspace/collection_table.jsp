@@ -115,6 +115,7 @@
                     <urstb:td> Version </urstb:td>
                     <urstb:td> Properties </urstb:td>
                     <urstb:td> Submit </urstb:td>
+                    <urstb:td> Current Version Published </urstb:td>
                 </urstb:tr>
             </urstb:thead>
             <urstb:tbody
@@ -191,6 +192,14 @@
 	                            </c:url>
 	                            <a href="${submitPublicationUrl}">Submit publication</a>
                             </c:if>
+                        </urstb:td>
+                        <urstb:td>
+                            <c:if test="${fileSystemObject.versionedItem.currentVersion.item.publishedToSystem}">
+                               Yes
+                           </c:if>
+                           <c:if test="${!fileSystemObject.versionedItem.currentVersion.item.publishedToSystem}">
+                               No
+                           </c:if>
                         </urstb:td>
                  </urstb:tr>
             </urstb:tbody>
