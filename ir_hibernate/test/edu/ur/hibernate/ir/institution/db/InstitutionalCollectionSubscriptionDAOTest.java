@@ -121,9 +121,13 @@ public class InstitutionalCollectionSubscriptionDAOTest {
 		assert subscriptions.size() == 1 : "Should have 1 subscription but has " + subscriptions.size();
 		assert subscriptions.contains(subscription) : " Should contain subscription " + subscription;
 		
+		
 		Long count = institutionalCollectionSubscriptionDAO.getSubscriberCount(collection);
 		assert count == 1l : "Should have 1 subscriber but has " + count;
 		
+		
+		count = institutionalCollectionSubscriptionDAO.isSubscriberCount(collection, user);
+		assert count == 1l : "Should have 1 subscriber but has " + count;
 		
 		collection.removeSubscriber(user);
 		institutionalCollectionSubscriptionDAO.makeTransient(subscription);
