@@ -79,11 +79,10 @@ public class InstitutionalItemVersion extends BasePersistent{
 	InstitutionalItemVersion(GenericItem item,
 			VersionedInstitutionalItem versionedInstitutionalItem, int versionNumber)
 	{
+		this();
 		setItem(item);
 		setVersionedInstitutionalItem(versionedInstitutionalItem);
 		setVersionNumber(versionNumber);
-		dateOfDeposit = new java.sql.Timestamp(new Date().getTime());
-		
 	}
 	
 	/**

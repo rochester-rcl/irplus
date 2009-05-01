@@ -91,4 +91,10 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 		return institutionalCollectionSubscriptionDAO.isSubscriberCount(collection, user) == 1l;
 	}
 
+	
+	public void sendSubribersEmails() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

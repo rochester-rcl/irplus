@@ -76,4 +76,9 @@ public interface InstitutionalCollectionSubscriptionService
 	 * @return - true if the user is subscribed to the specified collection.
 	 */
 	public boolean isSubscribed(InstitutionalCollection collection, IrUser user);
+	
+	/**
+	 * Send all subscribers emails for newly added material
+	 */
+	public void sendSubribersEmails();
 }
