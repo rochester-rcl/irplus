@@ -512,4 +512,28 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public InstitutionalItemVersion getInstitutionalItemByHandleId(Long handleId) {
 		return institutionalItemVersionDAO.getItemVersionByHandleId(handleId);
 	}
+
+	
+	/**
+	 * Get all institutional items that were submitted into the collection between the given
+	 * start and end date.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getItems(edu.ur.ir.institution.InstitutionalCollection, java.util.Date, java.util.Date)
+	 */
+	public List<InstitutionalItem> getItems(InstitutionalCollection collection,
+			Date startDate, Date endDate) {
+		 return institutionalItemDAO.getItems(collection, startDate, endDate);
+	}
+
+	
+	/**
+	 *  Get all institutional items that were submitted into the collection between the given
+	 *  start and end date
+	 *  
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getItems(int, int, edu.ur.ir.institution.InstitutionalCollection, java.util.Date, java.util.Date)
+	 */
+	public List<InstitutionalItem> getItems(int rowStart, int maxResults,
+			InstitutionalCollection collection, Date startDate, Date endDate) {
+		return institutionalItemDAO.getItems(rowStart, maxResults, collection, startDate, endDate);
+	}
 }

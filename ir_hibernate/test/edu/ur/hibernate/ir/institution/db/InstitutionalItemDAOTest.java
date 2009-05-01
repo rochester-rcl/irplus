@@ -16,6 +16,9 @@
 
 package edu.ur.hibernate.ir.institution.db;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 
@@ -44,6 +47,7 @@ import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserEmail;
+import java.text.SimpleDateFormat;
 
 /**
  * Test the persistence methods for an institutional item Information
@@ -88,6 +92,9 @@ public class InstitutionalItemDAOTest {
     
     /** Generic item data access*/
     GenericItemDAO itemDAO = (GenericItemDAO)ctx.getBean("itemDAO");
+    
+    /** Simple date format */
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 
 	
@@ -254,6 +261,7 @@ public class InstitutionalItemDAOTest {
 		items = institutionalItemDAO.getRepositoryItemsByChar(0, 100, repo.getId(), 'h', "asc");
 		assert items.size() == 1 : "Should have one item but have " + items.size();
 		
+		
 		tm.commit(ts);
 
 		//create a new transaction
@@ -408,6 +416,92 @@ public class InstitutionalItemDAOTest {
 		
 		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
 		itemDAO.makeTransient(itemDAO.getById(genericItem2.getId(), false));
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		repoHelper.cleanUpRepository();
+		
+		tm.commit(ts);	
+		
+		assert institutionalItemDAO.getById(institutionalItem.getId(), false) == null : 
+			"Should not be able to find the insitutional item" + institutionalItem;
+	}
+	
+	
+	/**
+	 * Test Institutional item searching
+	 * 
+	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	@Test
+	public void institutionalItemBySubmittedDateDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+
+	    // start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+		
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+
+		//commit the transaction 
+		// create a collection
+		InstitutionalCollection col = repo.createInstitutionalCollection("colName");
+		col.setDescription("colDescription");
+		
+		institutionalCollectionDAO.makePersistent(col);
+		tm.commit(ts);
+		
+		// start a new transaction
+		ts = tm.getTransaction(td);
+		
+		UserEmail userEmail = new UserEmail("email");
+				
+		IrUser user = new IrUser("user", "password");
+		user.setPasswordEncoding("encoding");
+		user.addUserEmail(userEmail, true);
+
+        userDAO.makePersistent(user);
+		col = institutionalCollectionDAO.getById(col.getId(), false);
+		GenericItem genericItem = new GenericItem("genericItem");
+		
+		InstitutionalItem institutionalItem = col.createInstitutionalItem(genericItem);
+		institutionalItemDAO.makePersistent(institutionalItem);
+		
+		GenericItem genericItem2 = new GenericItem("hGenericItem2");
+		InstitutionalItem institutionalItem2 = col.createInstitutionalItem(genericItem2);
+		institutionalItemDAO.makePersistent(institutionalItem2);
+
+		tm.commit(ts);
+
+		ts = tm.getTransaction(td);
+		
+		// get the calendar and subtract one day
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.add(Calendar.DAY_OF_MONTH, -1);
+		Date startDate = calendar.getTime();
+		
+		
+		
+		calendar.add(Calendar.DAY_OF_MONTH, 2);
+		Date endDate = calendar.getTime();
+		
+		
+		List<InstitutionalItem> institutionalItems = institutionalItemDAO.getItems(col, startDate, endDate);
+		assert institutionalItems.size() == 2 : "Should find two items but found " + institutionalItems.size() 
+		+ " for dates " + startDate + " to " + endDate;
+		
+		tm.commit(ts);
+
+		//create a new transaction
+		ts = tm.getTransaction(td);
+		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(col.getId(), false));
+		
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem2.getId(), false));
+
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		repoHelper.cleanUpRepository();
 		

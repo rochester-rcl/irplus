@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -265,6 +266,31 @@ public interface InstitutionalItemService {
 	 * @return Items within the specified collection and its sub collection
 	 */
 	public Long getCountForCollectionAndChildren(InstitutionalCollection collection);
+	
+	/**
+	 * Get subset of all item published between the given start and end dates for the given collection.
+	 *
+	 * @param rowStart - row to start
+	 * @param maxResults - max number of results to fetch
+	 * @param collection - collection to get the items for
+	 * @param startDate - start date
+	 * @param endDate - end date
+	 * 
+	 * @return - the items between the given start and end date 
+	 */
+	public List<InstitutionalItem> getItems(int rowStart,
+			int maxResults, InstitutionalCollection collection, Date startDate, Date endDate);
+	
+	/**
+	 * Get all item published between the given start and end dates for the given collection.
+	 *
+	 * @param collection - collection to get the items for
+	 * @param startDate - start date
+	 * @param endDate - end date
+	 * 
+	 * @return - the items between the given start and end date 
+	 */
+	public List<InstitutionalItem> getItems(InstitutionalCollection collection, Date startDate, Date endDate);
 
 	/**
 	 * Get a count of distinct institutional items in the repository.

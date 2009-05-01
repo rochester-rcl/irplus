@@ -17,6 +17,7 @@
 package edu.ur.hibernate.ir.institution.db;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -577,6 +578,60 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getInstitutionalItemsForGenericItemId(Long itemId)
 	{
 		return (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalItemsForGenericItemId", itemId);
+	}
+
+	
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getItems(int, int, edu.ur.ir.institution.InstitutionalCollection, java.util.Date, java.util.Date)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getItems(final int rowStart, final int maxResults,
+			final InstitutionalCollection collection, final Date startDate, final Date endDate) {
+		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
+		
+		foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			  
+			    q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateRange");
+			   
+			    q.setLong(0, collection.getId());
+			    q.setDate(1, startDate);
+			    q.setDate(2, endDate);
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+        return foundItems;	
+	}
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getItems(edu.ur.ir.institution.InstitutionalCollection, java.util.Date, java.util.Date)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getItems(final InstitutionalCollection collection,
+			final Date startDate, final Date endDate) {
+        List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
+		
+		foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			  
+			    q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateRange");
+			   
+			    q.setLong(0, collection.getId());
+			    q.setDate(1, startDate);
+			    q.setDate(2, endDate);
+	            return q.list();
+		    }
+	    });
+        return foundItems;	
 	}
 
 

@@ -302,4 +302,16 @@
 	    join versionedItem.currentVersion as version
 	    where version.item.id = ?
 	</query>
+	
+	<!--  get institutional items between the given date range where the items
+	     have been accepted into the institutional collection this only looks
+	     at the current version -->
+	<query name="getInstitutionalCollectionItemsByAcceptedDateRange">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as version
+	    where institutionalItem.institutionalCollection.id = ? 
+	    and version.dateOfDeposit between ? and ?
+	    order by version.dateOfDeposit desc
+	</query>
 </hibernate-mapping>
