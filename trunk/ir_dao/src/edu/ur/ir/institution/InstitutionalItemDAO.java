@@ -21,6 +21,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.order.OrderType;
 
 
 /**
@@ -83,7 +84,7 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			final int maxResults, 
 			final Long repositoryId,
 			final char firstChar,
-			final String orderType);
+			final OrderType orderType);
 	
 	/**
 	 * Get a list of items for a specified repository by between the that have titles
@@ -103,7 +104,7 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			final Long repositoryId,
 			final char firstChar,
 			final char lastChar,
-			final String orderType);
+			final OrderType orderType);
 	
 	/**
 	 * Get a list of items for a specified repository by name.
@@ -118,7 +119,7 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	public List<InstitutionalItem> getRepositoryItemsByName(final int rowStart,
 			final int maxResults, 
 			final Long repositoryId, 
-			final String orderType);
+			final OrderType orderType);
 	
 	/**
 	 * Get a list of items for a specified collection by first character of the name
@@ -137,7 +138,7 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			int maxResults, 
 			InstitutionalCollection institutionalCollection,
 			char firstChar,
-			String orderType);
+			OrderType orderType);
 	
 	/**
 	 * Get a list of items for a specified repository by between the that have titles
@@ -159,7 +160,7 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			InstitutionalCollection collection, 
 			char firstChar,
 			char lastChar,
-			String orderType);
+			OrderType orderType);
 	
 	/**
 	 * Get a list of items for a specified collection by name.
@@ -176,7 +177,7 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	public List<InstitutionalItem> getCollectionItemsByName(final int rowStart,
 			int maxResults, 
 			InstitutionalCollection collection, 
-			String orderType);
+			OrderType orderType);
 
 	/**
 	 * Get a count of institutional items in a collection and its children.
@@ -283,18 +284,18 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	public List<InstitutionalItem> getInstitutionalItemsForGenericItemId(Long itemId);
 	
 	/**
-	 * Get subset of all item published between the given start and end dates for the given collection.
+	 * Get subset of all item published ordered by date.
 	 *
 	 * @param rowStart - row to start
 	 * @param maxResults - max number of results to fetch
 	 * @param collection - collection to get the items for
-	 * @param startDate - start date
-	 * @param endDate - end date
+	 * @param orderType - way to order ascending or descending
+
 	 * 
 	 * @return - the items between the given start and end date 
 	 */
-	public List<InstitutionalItem> getItems(int rowStart,
-			int maxResults, InstitutionalCollection collection, Date startDate, Date endDate);
+	public List<InstitutionalItem> getItemsOrderByDate(int rowStart,
+			int maxResults, InstitutionalCollection collection, OrderType orderType);
 	
 	/**
 	 * Get all item published between the given start and end dates for the given collection.

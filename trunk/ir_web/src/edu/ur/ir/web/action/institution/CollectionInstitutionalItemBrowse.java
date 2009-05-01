@@ -25,6 +25,7 @@ import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.web.table.Pager;
+import edu.ur.order.OrderType;
 
 /**
  * Class for browsing items within an institutional colleciton.
@@ -114,18 +115,18 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		{
 		    
 		    institutionalItems = institutionalItemService.getCollectionItemsOrderByName(rowStart, 
-		    		numberOfResultsToShow, institutionalCollection, sortType);
+		    		numberOfResultsToShow, institutionalCollection, OrderType.getOrderType(sortType));
 		    totalHits = institutionalItemService.getCountForCollectionAndChildren(institutionalCollection).intValue();
 		}
 		else if (selectedAlpha.equals("0-9"))
 		{
 			institutionalItems = institutionalItemService.getCollectionItemsBetweenChar(rowStart, numberOfResultsToShow, 
-					institutionalCollection, '0', '9', sortType);
+					institutionalCollection, '0', '9', OrderType.getOrderType(sortType));
 			totalHits = institutionalItemService.getCount(institutionalCollection, '0', '9').intValue();
 		}
 		else
 		{
-			institutionalItems = institutionalItemService.getCollectionItemsByChar(rowStart, numberOfResultsToShow, institutionalCollection, selectedAlpha.charAt(0), sortType);
+			institutionalItems = institutionalItemService.getCollectionItemsByChar(rowStart, numberOfResultsToShow, institutionalCollection, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
 			log.debug("test hits = " + institutionalItemService.getCount(institutionalCollection, selectedAlpha.charAt(0)).intValue());
 			totalHits = institutionalItemService.getCount(institutionalCollection, selectedAlpha.charAt(0)).intValue();
 		}

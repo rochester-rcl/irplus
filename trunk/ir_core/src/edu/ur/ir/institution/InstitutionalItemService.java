@@ -23,6 +23,7 @@ import java.util.Set;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
+import edu.ur.order.OrderType;
 
 
 /**
@@ -113,7 +114,7 @@ public interface InstitutionalItemService {
 			Long repositoryId,
 			char firstChar,
 			char lastChar,
-			String orderType);
+			OrderType orderType);
 	
 
 
@@ -130,7 +131,7 @@ public interface InstitutionalItemService {
 	 * @return List of institutional items
 	 */
 	public List<InstitutionalItem> getRepositoryItemsOrderByName(int rowStart, int rowEnd, Long repositoryId, 
-			String orderType) ;	
+			OrderType orderType) ;	
 
     /**
      * Get the Institutional item version
@@ -201,7 +202,7 @@ public interface InstitutionalItemService {
 			int maxResults, 
 			Long repositoryId,
 			char firstChar,
-			String orderType);
+			OrderType orderType);
 		
 
 	
@@ -218,7 +219,7 @@ public interface InstitutionalItemService {
 	public List<InstitutionalItem> getCollectionItemsOrderByName(int rowStart, 
 			int rowEnd, 
 			InstitutionalCollection collection, 
-			String orderType) ;
+			OrderType orderType) ;
 	
 	/**
 	 * Get a list of items for a specified collection by first character of the name.  
@@ -236,7 +237,7 @@ public interface InstitutionalItemService {
 			int maxResults, 
 			InstitutionalCollection institutionalCollection,
 			char firstChar,
-			String orderType);
+			OrderType orderType);
 	
 	/**
 	 * Get a list of items for a specified collection by titles
@@ -257,7 +258,7 @@ public interface InstitutionalItemService {
 			InstitutionalCollection institutionalCollection,
 			char firstChar,
 			char lastChar,
-			String orderType);
+			OrderType orderType);
 	
 
 	/**
@@ -279,7 +280,7 @@ public interface InstitutionalItemService {
 	 * @return - the items between the given start and end date 
 	 */
 	public List<InstitutionalItem> getItems(int rowStart,
-			int maxResults, InstitutionalCollection collection, Date startDate, Date endDate);
+			int maxResults, InstitutionalCollection collection, OrderType orderType);
 	
 	/**
 	 * Get all item published between the given start and end dates for the given collection.

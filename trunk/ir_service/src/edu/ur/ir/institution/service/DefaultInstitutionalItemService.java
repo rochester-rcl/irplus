@@ -39,6 +39,7 @@ import edu.ur.ir.item.ItemService;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.user.IrUser;
+import edu.ur.order.OrderType;
 
 /**
  * Default service for accessing institutional items.
@@ -200,7 +201,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 * @see edu.ur.ir.institution.InstitutionalItemService#getCollectionItems(int, int, java.lang.Long, java.lang.String, java.lang.String)
 	 */
 	public List<InstitutionalItem> getCollectionItemsOrderByName(int rowStart, int maxResults,
-			InstitutionalCollection collection, String orderType) {
+			InstitutionalCollection collection, OrderType orderType) {
 		return institutionalItemDAO.getCollectionItemsByName(rowStart, maxResults, collection, 
 				 orderType);
 	}
@@ -230,7 +231,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 * @see edu.ur.ir.institution.InstitutionalItemService#getRepositoryItems(int, int, java.lang.Long, java.lang.String, java.lang.String)
 	 */
 	public List<InstitutionalItem> getRepositoryItemsOrderByName(int rowStart, int maxResults,
-			Long repositoryId, String orderType) {
+			Long repositoryId, OrderType orderType) {
 		return institutionalItemDAO.getRepositoryItemsByName(rowStart, maxResults, repositoryId, 
 				orderType);
 	}
@@ -286,7 +287,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 * @see edu.ur.ir.institution.InstitutionalItemService#getRepositoryItemsByChar(int, int, java.lang.Long, char, java.lang.String)
 	 */
 	public List<InstitutionalItem> getRepositoryItemsByChar(int rowStart,
-			int maxResults, Long repositoryId, char firstChar, String orderType) {
+			int maxResults, Long repositoryId, char firstChar, OrderType orderType) {
 		return institutionalItemDAO.getRepositoryItemsByChar(rowStart, maxResults, repositoryId, firstChar, orderType);
 	}
 	
@@ -317,7 +318,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 */
 	public List<InstitutionalItem> getRepositoryItemsBetweenChar(int rowStart,
 			int maxResults, Long repositoryId, char firstChar, char lastChar,
-			String orderType) {
+			OrderType orderType) {
 		return institutionalItemDAO.getRepositoryItemsBetweenChar(rowStart, maxResults, 
 				repositoryId, firstChar, lastChar, orderType);
 	}
@@ -328,7 +329,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 */
 	public List<InstitutionalItem> getCollectionItemsBetweenChar(int rowStart,
 			int maxResults, InstitutionalCollection collection,
-			char firstChar, char lastChar, String orderType) {
+			char firstChar, char lastChar, OrderType orderType) {
 		return institutionalItemDAO.getCollectionItemsBetweenChar(rowStart, maxResults, collection, firstChar, lastChar, orderType);
 	}
 
@@ -338,7 +339,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 */
 	public List<InstitutionalItem> getCollectionItemsByChar(int rowStart,
 			int maxResults, InstitutionalCollection institutionalCollection,
-			char firstChar, String orderType) {
+			char firstChar, OrderType orderType) {
 		return institutionalItemDAO.getCollectionItemsByChar(rowStart, maxResults, institutionalCollection, firstChar, orderType);
 	}
 
@@ -533,7 +534,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 * @see edu.ur.ir.institution.InstitutionalItemService#getItems(int, int, edu.ur.ir.institution.InstitutionalCollection, java.util.Date, java.util.Date)
 	 */
 	public List<InstitutionalItem> getItems(int rowStart, int maxResults,
-			InstitutionalCollection collection, Date startDate, Date endDate) {
-		return institutionalItemDAO.getItems(rowStart, maxResults, collection, startDate, endDate);
+			InstitutionalCollection collection, OrderType orderType) {
+		return institutionalItemDAO.getItemsOrderByDate(rowStart, maxResults, collection, orderType);
 	}
 }

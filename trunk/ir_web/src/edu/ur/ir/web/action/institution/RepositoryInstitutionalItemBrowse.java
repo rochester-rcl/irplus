@@ -26,6 +26,7 @@ import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.repository.Repository;
 
 import edu.ur.ir.web.table.Pager;
+import edu.ur.order.OrderType;
 
 /**
  * Browse for institutional items.
@@ -103,18 +104,18 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 		{
 		    
 		    institutionalItems = institutionalItemService.getRepositoryItemsOrderByName(rowStart, 
-		    		numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, sortType);
+		    		numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, OrderType.getOrderType(sortType));
 		    totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID).intValue();
 		}
 		else if (selectedAlpha.equals("0-9"))
 		{
 			institutionalItems = institutionalItemService.getRepositoryItemsBetweenChar(rowStart, numberOfResultsToShow, 
-					Repository.DEFAULT_REPOSITORY_ID, '0', '9', sortType);
+					Repository.DEFAULT_REPOSITORY_ID, '0', '9', OrderType.getOrderType(sortType));
 			totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, '0', '9').intValue();
 		}
 		else
 		{
-			institutionalItems = institutionalItemService.getRepositoryItemsByChar(rowStart, numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0), sortType);
+			institutionalItems = institutionalItemService.getRepositoryItemsByChar(rowStart, numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
 			totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0)).intValue();
 		}
 		
