@@ -34,6 +34,7 @@ import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemDAO;
+import edu.ur.order.OrderType;
 
 /**
  * Implementation of relational storage for an institutional item.
@@ -171,7 +172,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getRepositoryItemsByName(final int rowStart,
 			final int maxResults, 
 			final Long repositoryId, 
-			final String orderType) 
+			final OrderType orderType) 
 	{
 		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
 			
@@ -180,7 +181,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 			    {
 			        Query q = null;
-				    if( orderType.equals("desc"))
+				    if( orderType.equals(OrderType.DESCENDING_ORDER))
 				    {
 				        q = session.getNamedQuery("getRepositoryItemsByNameOrderDesc");
 				    }
@@ -216,7 +217,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final int maxResults, 
 			final Long repositoryId,
 			final char firstChar,
-			final String orderType) 
+			final OrderType orderType) 
 	{
 		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
 			
@@ -225,7 +226,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 			    {
 			        Query q = null;
-				    if( orderType.equals("desc"))
+				    if( orderType.equals(OrderType.DESCENDING_ORDER))
 				    {
 				        q = session.getNamedQuery("getRepositoryItemsByCharOrderDesc");
 				    }
@@ -263,7 +264,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final Long repositoryId,
 			final char firstChar,
 			final char lastChar,
-			final String orderType)
+			final OrderType orderType)
 	{
 		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
 		
@@ -272,7 +273,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
 		        Query q = null;
-			    if( orderType.equals("desc"))
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
 			    {
 			        q = session.getNamedQuery("getRepositoryItemsByCharRangeOrderDesc");
 			    }
@@ -298,7 +299,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItem> getCollectionItemsByName(final int rowStart, final int maxResults, 
-			final InstitutionalCollection collection, final String orderType)
+			final InstitutionalCollection collection, final OrderType orderType)
 	{
 	
 		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
@@ -308,7 +309,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 			    {
 			        Query q = null;
-				    if( orderType.equals("desc"))
+				    if( orderType.equals(OrderType.DESCENDING_ORDER))
 				    {
 				        q = session.getNamedQuery("getInstitutionalCollectionItemsByNameOrderDesc");
 				    }
@@ -423,7 +424,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final InstitutionalCollection collection, 
 			final char firstChar,
 			final char lastChar, 
-			final String orderType) {
+			final OrderType orderType) {
 		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
 		
 		foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
@@ -431,7 +432,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
 		        Query q = null;
-			    if( orderType.equals("desc"))
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
 			    {
 			        q = session.getNamedQuery("getCollectionItemsByCharRangeOrderDesc");
 			    }
@@ -463,7 +464,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final int maxResults, 
 			final InstitutionalCollection collection,
 			final char firstChar, 
-			final String orderType) {
+			final OrderType orderType) {
 		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
 		
 		foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
@@ -471,7 +472,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
 		        Query q = null;
-			    if( orderType.equals("desc"))
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
 			    {
 			        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharOrderDesc");
 			    }
@@ -585,8 +586,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getItems(int, int, edu.ur.ir.institution.InstitutionalCollection, java.util.Date, java.util.Date)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InstitutionalItem> getItems(final int rowStart, final int maxResults,
-			final InstitutionalCollection collection, final Date startDate, final Date endDate) {
+	public List<InstitutionalItem> getItemsOrderByDate(final int rowStart, final int maxResults,
+			final InstitutionalCollection collection, final OrderType orderType) {
 		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
 		
 		foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
@@ -594,12 +595,18 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
 		        Query q = null;
-			  
-			    q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateRange");
+		        
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateAsc");
+			    }
 			   
 			    q.setLong(0, collection.getId());
-			    q.setDate(1, startDate);
-			    q.setDate(2, endDate);
+			    
 			    q.setFirstResult(rowStart);
 			    q.setMaxResults(maxResults);
 			    q.setFetchSize(maxResults);

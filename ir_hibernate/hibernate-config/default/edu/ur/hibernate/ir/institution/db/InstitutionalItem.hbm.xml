@@ -314,4 +314,26 @@
 	    and version.dateOfDeposit between ? and ?
 	    order by version.dateOfDeposit desc
 	</query>
+	
+		<!--  get institutional items between the given date range where the items
+	     have been accepted into the institutional collection this only looks
+	     at the current version -->
+	<query name="getInstitutionalCollectionItemsByAcceptedDateAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as version
+	    where institutionalItem.institutionalCollection.id = ? 
+	    order by version.dateOfDeposit asc
+	</query>
+	
+			<!--  get institutional items between the given date range where the items
+	     have been accepted into the institutional collection this only looks
+	     at the current version -->
+	<query name="getInstitutionalCollectionItemsByAcceptedDateDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as version
+	    where institutionalItem.institutionalCollection.id = ? 
+	    order by version.dateOfDeposit desc
+	</query>
 </hibernate-mapping>

@@ -47,6 +47,8 @@ import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserEmail;
+import edu.ur.order.OrderType;
+
 import java.text.SimpleDateFormat;
 
 /**
@@ -230,7 +232,7 @@ public class InstitutionalItemDAOTest {
 		assert institutionalItemDAO.getCount() == 2 : " count should equal 2 but equals " + institutionalItemDAO.getCount();
 		assert institutionalItemDAO.getCount(repo.getId()) == 2 : " count should equal 2 but equals " + institutionalItemDAO.getCount(repo.getId());
 		
-		List<InstitutionalItem> items = institutionalItemDAO.getRepositoryItemsByName(0, 100, repo.getId(), "asc");
+		List<InstitutionalItem> items = institutionalItemDAO.getRepositoryItemsByName(0, 100, repo.getId(), OrderType.ASCENDING_ORDER);
 		assert items.size() == 2;
 		
 		assert items.get(0).equals(other) : " item at index 0 should equal " + other + 
@@ -240,7 +242,7 @@ public class InstitutionalItemDAOTest {
 		" \n but equals " + items.get(1);
 		
 		//reverse the sort
-		items = institutionalItemDAO.getRepositoryItemsByName(0, 100, repo.getId(), "desc");
+		items = institutionalItemDAO.getRepositoryItemsByName(0, 100, repo.getId(), OrderType.DESCENDING_ORDER);
 		assert items.size() == 2;
 		
 		assert items.get(0).equals(other2) : " item at index 0 should equal " + other2 + 
@@ -255,10 +257,10 @@ public class InstitutionalItemDAOTest {
 		
 		assert institutionalItemDAO.getCount(repo.getId(), 'H') == 1 : "Count should equal one but equals " + institutionalItemDAO.getCount(repo.getId(), 'A');
 		
-		items = institutionalItemDAO.getRepositoryItemsByChar(0, 100, repo.getId(), 'G', "asc");
+		items = institutionalItemDAO.getRepositoryItemsByChar(0, 100, repo.getId(), 'G', OrderType.ASCENDING_ORDER);
 		assert items.size() == 1 : "Should have one item but have " + items.size();
 		
-		items = institutionalItemDAO.getRepositoryItemsByChar(0, 100, repo.getId(), 'h', "asc");
+		items = institutionalItemDAO.getRepositoryItemsByChar(0, 100, repo.getId(), 'h', OrderType.ASCENDING_ORDER);
 		assert items.size() == 1 : "Should have one item but have " + items.size();
 		
 		
@@ -492,6 +494,9 @@ public class InstitutionalItemDAOTest {
 		List<InstitutionalItem> institutionalItems = institutionalItemDAO.getItems(col, startDate, endDate);
 		assert institutionalItems.size() == 2 : "Should find two items but found " + institutionalItems.size() 
 		+ " for dates " + startDate + " to " + endDate;
+		
+		institutionalItems = institutionalItemDAO.getItemsOrderByDate(0, 1, col, OrderType.DESCENDING_ORDER);
+        assert institutionalItems.size() == 1 : "Should have found 1 item but found " + institutionalItems.size();
 		
 		tm.commit(ts);
 

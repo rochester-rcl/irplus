@@ -27,6 +27,7 @@ import edu.ur.ir.institution.InstitutionalItemIndexService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryIndexerService;
+import edu.ur.order.OrderType;
 
 /**
  * Default implementation of the repository indexer.
@@ -63,7 +64,7 @@ public class DefaultRepositoryIndexerService implements RepositoryIndexerService
 			log.debug("row start = " + rowStart);
 			log.debug("row end = " + rowEnd);
 			
-		    List<InstitutionalItem> items = institutionalItemService.getRepositoryItemsOrderByName(rowStart, rowEnd, repository.getId(), "desc");
+		    List<InstitutionalItem> items = institutionalItemService.getRepositoryItemsOrderByName(rowStart, rowEnd, repository.getId(), OrderType.DESCENDING_ORDER);
 		
 		    institutionalItemIndexService.addItems(items, new File(repository.getInstitutionalItemIndexFolder()), overwriteExistingIndex);
 		    overwriteExistingIndex = false;

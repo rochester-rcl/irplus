@@ -50,6 +50,7 @@ import edu.ur.ir.item.ItemIdentifier;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemTitle;
 import edu.ur.ir.person.PersonName;
+import edu.ur.order.OrderType;
 
 /**
  * Implementation of the Institutional Item index service.  
@@ -794,7 +795,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			log.debug("row start = " + rowStart);
 			log.debug("row end = " + rowEnd);
 			
-			List<InstitutionalItem> items = institutionalItemService.getCollectionItemsOrderByName(rowStart, rowEnd, institutionalCollection, "desc");
+			List<InstitutionalItem> items = institutionalItemService.getCollectionItemsOrderByName(rowStart, rowEnd, institutionalCollection, OrderType.DESCENDING_ORDER);
 		
 			for(InstitutionalItem i : items)
 			{
