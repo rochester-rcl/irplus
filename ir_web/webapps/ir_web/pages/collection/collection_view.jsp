@@ -209,7 +209,11 @@
                        </div>
                    
                        <div class="contentBoxContent">
-                           <p>Recent Submissions Go Here</p>
+                           <p>
+                           <c:forEach var="item" items="${mostRecentSubmissions}">
+                           <a href="">${item.versionedInstitutionalItem.currentVersion.item.name}</a> <br/><br/>
+                           </c:forEach>
+                           </p>
                        </div>
                    </div>
                    

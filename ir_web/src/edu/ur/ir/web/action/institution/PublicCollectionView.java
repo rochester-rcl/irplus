@@ -17,15 +17,20 @@
 package edu.ur.ir.web.action.institution;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalCollectionService;
+import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
+import edu.ur.order.OrderType;
 
 public class PublicCollectionView extends ActionSupport {
 
@@ -55,6 +60,9 @@ public class PublicCollectionView extends ActionSupport {
 	/** Institutional Collection service */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
+	/** Service for dealing with institutional items */
+	private InstitutionalItemService institutionalItemService;
+	
 	/** Download Statistics service */
 	private DownloadStatisticsService downloadStatisticsService;
 	
@@ -75,6 +83,9 @@ public class PublicCollectionView extends ActionSupport {
 
 	/** File download count for this collection */
 	private Long fileDownloadCountForCollectionAndItsChildren; 
+	
+	/**  List of most recent submissions to a collection */
+	private List<InstitutionalItem> mostRecentSubmissions = new LinkedList<InstitutionalItem>();
 
 	public String getNextPicture()
 	{
@@ -93,6 +104,9 @@ public class PublicCollectionView extends ActionSupport {
 		
 		institutionalCollection = 
 			institutionalCollectionService.getCollection(collectionId, false);
+		
+		// get the 10 most recent submissions
+		mostRecentSubmissions = institutionalItemService.getItemsOrderByDate(0, 5, institutionalCollection, OrderType.DESCENDING_ORDER);
 		
 		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
 		
@@ -248,6 +262,24 @@ public class PublicCollectionView extends ActionSupport {
 	public void setDownloadStatisticsService(
 			DownloadStatisticsService downloadStatisticsService) {
 		this.downloadStatisticsService = downloadStatisticsService;
+	}
+
+	public List<InstitutionalItem> getMostRecentSubmissions() {
+		return mostRecentSubmissions;
+	}
+
+	public void setMostRecentSubmissions(
+			List<InstitutionalItem> mostRecentSubmissions) {
+		this.mostRecentSubmissions = mostRecentSubmissions;
+	}
+
+	public InstitutionalItemService getInstitutionalItemService() {
+		return institutionalItemService;
+	}
+
+	public void setInstitutionalItemService(
+			InstitutionalItemService institutionalItemService) {
+		this.institutionalItemService = institutionalItemService;
 	}
 
 }

@@ -533,7 +533,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 *  
 	 * @see edu.ur.ir.institution.InstitutionalItemService#getItems(int, int, edu.ur.ir.institution.InstitutionalCollection, java.util.Date, java.util.Date)
 	 */
-	public List<InstitutionalItem> getItems(int rowStart, int maxResults,
+	public List<InstitutionalItem> getItemsOrderByDate(int rowStart, int maxResults,
 			InstitutionalCollection collection, OrderType orderType) {
 		return institutionalItemDAO.getItemsOrderByDate(rowStart, maxResults, collection, orderType);
 	}
