@@ -274,12 +274,11 @@ public interface InstitutionalItemService {
 	 * @param rowStart - row to start
 	 * @param maxResults - max number of results to fetch
 	 * @param collection - collection to get the items for
-	 * @param startDate - start date
-	 * @param endDate - end date
+     * @param orderType - order (ascending /descending)
 	 * 
 	 * @return - the items between the given start and end date 
 	 */
-	public List<InstitutionalItem> getItems(int rowStart,
+	public List<InstitutionalItem> getItemsOrderByDate(int rowStart,
 			int maxResults, InstitutionalCollection collection, OrderType orderType);
 	
 	/**
