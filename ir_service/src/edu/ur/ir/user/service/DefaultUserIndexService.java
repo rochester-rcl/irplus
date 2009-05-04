@@ -19,6 +19,8 @@ package edu.ur.ir.user.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
@@ -77,6 +79,8 @@ public class DefaultUserIndexService implements UserIndexService{
 	}
 	
 	
+	
+	
 	/**
 	 * Add the user to the index.
 	 * 
@@ -95,91 +99,7 @@ public class DefaultUserIndexService implements UserIndexService{
 			throw new NoIndexFoundException("the folder " + userIndexFolder.getAbsolutePath() + " could not be found");
 		}
 		
-		Document doc = new Document();
-        
-	    doc.add(new Field(USER_ID, 
-			user.getId().toString(), 
-			Field.Store.YES, 
-			Field.Index.UN_TOKENIZED));
-	    
-	    doc.add(new Field(USER_NAME, 
-				user.getUsername(), 
-				Field.Store.YES, 
-				Field.Index.TOKENIZED));
-	    
-	    if( user.getFirstName() != null )
-	    {
-	        doc.add(new Field(USER_FIRST_NAME, 
-				user.getFirstName(), 
-				Field.Store.YES, 
-				Field.Index.TOKENIZED));
-	    }
-	    
-	    if( user.getLastName() != null )
-	    {
-	        doc.add(new Field(USER_LAST_NAME, 
-				user.getLastName(), 
-				Field.Store.YES, 
-				Field.Index.TOKENIZED));
-	    }
-	    
-	    String emails = "";
-	    for( UserEmail email : user.getUserEmails())
-	    {
-	    	if( email != null )
-	    	{
-	    		emails += email.getEmail() + " ";
-	    	}
-	    }
-	    
-	    doc.add(new Field(USER_EMAILS, 
-				emails, 
-				Field.Store.YES, 
-				Field.Index.TOKENIZED));
-	    
-	    if( user.getDepartment() != null )
-	    {
-	    	doc.add(new Field(USER_DEPARTMENTS, 
-					user.getDepartment().getName(), 
-					Field.Store.YES, 
-					Field.Index.TOKENIZED));
-	    }
-
-	    if (user.getPersonNameAuthority() != null) {
-		    StringBuffer names =  new StringBuffer();
-		    
-		    for( PersonName personName : user.getPersonNameAuthority().getNames()) {
-	
-				if( personName.getForename() != null )
-				{
-					names.append(" " + personName.getForename() + " ");
-				}
-
-				if( personName.getMiddleName()!= null )
-				{
-					names.append(personName.getMiddleName() + " ");
-				}
-
-				if( personName.getFamilyName() != null )
-				{
-					names.append(personName.getFamilyName() + " ");
-				}
-
-				if( personName.getSurname() != null )
-				{
-					names.append(personName.getSurname() + " ");
-				}
-				
-				names.append(":");
-			}
-
-		    doc.add(new Field(USER_NAMES, 
-					names.toString(), 
-					Field.Store.YES, 
-					Field.Index.TOKENIZED));
-	    }
-	    
-	    writeDocument(userIndexFolder.getAbsolutePath(), doc);
+	    writeDocument(userIndexFolder.getAbsolutePath(), getDocument(user));
 	}
 
 	
@@ -285,6 +205,149 @@ public class DefaultUserIndexService implements UserIndexService{
 			    }
 		    }
 	    }
+	}
+
+	@Override
+	public void addUsers(List<IrUser> users, File userIndexFolder,
+			boolean overwriteExistingIndex) {
+			
+	    LinkedList<Document> docs = new LinkedList<Document>();
+			
+		for(IrUser user : users)
+		{
+			docs.add(getDocument(user));
+		}
+			
+		IndexWriter writer = null;
+		try {
+			synchronized(this)
+			{
+			    Directory directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
+			    writer = new IndexWriter(directory, analyzer, overwriteExistingIndex);
+			    for(Document d : docs)
+			    {
+			    	writer.addDocument(d);
+			    }
+			    writer.flush();
+			    writer.optimize();
+			}
+		}
+		catch (IOException e) 
+		{
+			log.error(e);
+			throw new RuntimeException(e);
+		}
+		finally 
+		{
+		    if (writer != null) 
+		    {
+			    try 
+			    {
+				    writer.close();
+				} 
+			    catch (Exception e) 
+			    {
+				    log.error(e);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Create a document for the specified user.
+	 * 
+	 * @param user - user to create a document for.
+	 * @return - the created document 
+	 */
+	private Document getDocument(IrUser user)
+	{
+
+		
+		Document doc = new Document();
+        
+	    doc.add(new Field(USER_ID, 
+			user.getId().toString(), 
+			Field.Store.YES, 
+			Field.Index.UN_TOKENIZED));
+	    
+	    doc.add(new Field(USER_NAME, 
+				user.getUsername(), 
+				Field.Store.YES, 
+				Field.Index.TOKENIZED));
+	    
+	    if( user.getFirstName() != null )
+	    {
+	        doc.add(new Field(USER_FIRST_NAME, 
+				user.getFirstName(), 
+				Field.Store.YES, 
+				Field.Index.TOKENIZED));
+	    }
+	    
+	    if( user.getLastName() != null )
+	    {
+	        doc.add(new Field(USER_LAST_NAME, 
+				user.getLastName(), 
+				Field.Store.YES, 
+				Field.Index.TOKENIZED));
+	    }
+	    
+	    String emails = "";
+	    for( UserEmail email : user.getUserEmails())
+	    {
+	    	if( email != null )
+	    	{
+	    		emails += email.getEmail() + " ";
+	    	}
+	    }
+	    
+	    doc.add(new Field(USER_EMAILS, 
+				emails, 
+				Field.Store.YES, 
+				Field.Index.TOKENIZED));
+	    
+	    if( user.getDepartment() != null )
+	    {
+	    	doc.add(new Field(USER_DEPARTMENTS, 
+					user.getDepartment().getName(), 
+					Field.Store.YES, 
+					Field.Index.TOKENIZED));
+	    }
+
+	    if (user.getPersonNameAuthority() != null) {
+		    StringBuffer names =  new StringBuffer();
+		    
+		    for( PersonName personName : user.getPersonNameAuthority().getNames()) {
+	
+				if( personName.getForename() != null )
+				{
+					names.append(" " + personName.getForename() + " ");
+				}
+
+				if( personName.getMiddleName()!= null )
+				{
+					names.append(personName.getMiddleName() + " ");
+				}
+
+				if( personName.getFamilyName() != null )
+				{
+					names.append(personName.getFamilyName() + " ");
+				}
+
+				if( personName.getSurname() != null )
+				{
+					names.append(personName.getSurname() + " ");
+				}
+				
+				names.append(":");
+			}
+
+		    doc.add(new Field(USER_NAMES, 
+					names.toString(), 
+					Field.Store.YES, 
+					Field.Index.TOKENIZED));
+	    }
+	    
+	    return doc;
 	}
 
 }

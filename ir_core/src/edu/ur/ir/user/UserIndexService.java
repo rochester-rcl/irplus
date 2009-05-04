@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.File;
+import java.util.List;
 
 import edu.ur.ir.NoIndexFoundException;
 
@@ -27,6 +28,16 @@ import edu.ur.ir.NoIndexFoundException;
  *
  */
 public interface UserIndexService {
+	
+	/**
+	 * Add a set of items to the index - this is generally used for batch processing of multiple institutional items.
+	 * This can also be used to re-index a set the existing set of items.
+	 * 
+	 * @param items - set of items to add
+	 * @param institutionalItemIndex - index to add it to
+	 * @param overwriteExistingIndex - indicates this should overwrite the current index
+	 */
+	public void addUsers(List<IrUser> users, File userIndexFolder, boolean overwriteExistingIndex);
 	
 	/**
 	 * Add the person name to the index.
