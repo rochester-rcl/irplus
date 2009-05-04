@@ -153,6 +153,7 @@ public class DefaultUserIndexService implements UserIndexService{
 					log.error(e);
 				}
 			}
+			reader = null;
 		}
 		
 	}
@@ -204,6 +205,7 @@ public class DefaultUserIndexService implements UserIndexService{
 				    log.error(e);
 			    }
 		    }
+		    writer = null;
 	    }
 	}
 
@@ -250,6 +252,7 @@ public class DefaultUserIndexService implements UserIndexService{
 				    log.error(e);
 				}
 			}
+		    writer = null;
 		}
 	}
 	
