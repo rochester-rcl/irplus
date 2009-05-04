@@ -15,6 +15,7 @@
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 
@@ -211,7 +212,10 @@
                        <div class="contentBoxContent">
                            <p>
                            <c:forEach var="item" items="${mostRecentSubmissions}">
-                           <a href="">${item.versionedInstitutionalItem.currentVersion.item.name}</a> <br/><br/>
+                               <c:url var="itemView" value="/institutionalPublicationPublicView.action">
+						           <c:param name="institutionalItemId" value="${item.id}"/>
+						       </c:url>
+                               <a href="${itemView}">${item.versionedInstitutionalItem.currentVersion.item.name}</a> <c:if test="${item.versionedInstitutionalItem.currentVersion.item.description != null}">- <ur:maxText numChars="100" text="${item.versionedInstitutionalItem.currentVersion.item.description}"/> </c:if> - (<fmt:formatDate pattern="yyyy-MM-dd" value="${item.versionedInstitutionalItem.currentVersion.dateOfDeposit}"/>) <br/><br/>
                            </c:forEach>
                            </p>
                        </div>
