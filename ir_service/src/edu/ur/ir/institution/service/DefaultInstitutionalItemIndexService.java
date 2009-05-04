@@ -185,6 +185,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 				    log.error(e);
 			    }
 		    }
+		    writer = null;
 	    }
 	}
 	
@@ -233,6 +234,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 					log.error(e);
 				}
 			}
+			reader = null;
 		}
 	}
 	
@@ -284,6 +286,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 					log.error(e);
 				}
 			}
+			reader = null;
 		}
 		
 	}
@@ -543,6 +546,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 				    log.error(e);
 			    }
 		    }
+		    writer = null;
 	    }
 	}
 	
