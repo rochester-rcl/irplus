@@ -144,6 +144,7 @@ Validateable{
 	 */
 	public String create() throws NoIndexFoundException
 	{
+		log.debug("Create called");
 		FileDatabase fileDatabase = null;
 		if( defaultFileDatabaseId != -1l  )
 		{
@@ -189,13 +190,7 @@ Validateable{
 			e1.printStackTrace();
 		}
 		
-		// handle any pre-loaded users
-		List<IrUser> users = userService.getAllUsers();		
-		File userIndexFolder = new File(repository.getUserIndexFolder());
-		for( IrUser user : users)
-		{
-			userIndexService.addToIndex(user, userIndexFolder);
-		}
+	
 		if(!repository.getInitalized())
 		{
 			repository.setInitalized(true);
@@ -213,6 +208,7 @@ Validateable{
 	 * @return
 	 */
 	public String update() {
+		log.debug("update called");
 		if (repository == null) {
 			throw new IllegalStateException("repository is null");
 		}
@@ -292,6 +288,9 @@ Validateable{
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (NoIndexFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		
@@ -479,6 +478,18 @@ Validateable{
 		this.userIndexFolder = userIndexFolder;
 	}
 	
+	private void updateUserIndex() throws NoIndexFoundException
+	{
+		// handle any pre-loaded users
+		List<IrUser> users = userService.getAllUsers();	
+		log.debug("User size = " + users.size());
+		File userIndexFolder = new File(repository.getUserIndexFolder());
+		for( IrUser user : users)
+		{
+			userIndexService.addToIndex(user, userIndexFolder);
+		}
+	}
+	
 	private void updateNameIndexFolder(Repository r, String folder) throws IOException
 	{
 
@@ -605,7 +616,7 @@ Validateable{
 		}
 	}
 	
-	private void updateUserIndexFolder(Repository r, String folder) throws IOException
+	private void updateUserIndexFolder(Repository r, String folder) throws IOException, NoIndexFoundException
 	{
 		
 		String oldFolder = r.getUserIndexFolder();
@@ -636,6 +647,7 @@ Validateable{
 				{
 				    FileUtils.deleteQuietly(new File(oldFolder));
 				}
+			    updateUserIndex();
 			}
 		}
 		else
