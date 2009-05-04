@@ -117,5 +117,11 @@
         <dependency org="emma" name="emma_ant" rev="2.0.5312">
             <artifact name="emma_ant" type="jar"/>
         </dependency>
+        
+        <!--  quartz files  -->
+        <dependency org="org.opensymphony.quartz" name="quartz" rev="1.6.5">
+            <artifact name="quartz" type="jar"/>
+        </dependency>
+        
     </dependencies>
 </ivy-module>
