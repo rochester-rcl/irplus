@@ -161,7 +161,10 @@
         </dependency>
 
         
-        
+         <!--  quartz files  -->
+        <dependency org="org.opensymphony.quartz" name="quartz" rev="1.6.5">
+            <artifact name="quartz" type="jar"/>
+        </dependency>
 
     </dependencies>
 </ivy-module>
