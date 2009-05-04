@@ -143,7 +143,8 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	
 	
 	/**
-	 * Add a set of items to the index - this is generally used for batch processing of multiple institutional items.
+	 * Add a set of items to the index - this is generally used for batch processing of multiple institutional items.  
+	 * This can also be used to re-index a set the existing set of items
 	 * 
 	 * @param items - set of items to add
 	 * @param institutionalItemIndex - index to add it to
