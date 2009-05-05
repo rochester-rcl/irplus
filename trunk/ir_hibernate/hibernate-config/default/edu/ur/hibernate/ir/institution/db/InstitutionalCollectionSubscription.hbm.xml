@@ -70,12 +70,17 @@
         where subscription.institutionalCollection.id = ?
 	</query>  
 	
-		<!--  get the count of subscribers for a collection should return 1 or 0 
+	<!--  get the count of subscribers for a collection should return 1 or 0 
 		      1 indicates subscribed 0 indicates not subscribed -->
 	<query name="getInstitutionalCollectionSubscriptionCountUser" >
 	    select count(*) from InstitutionalCollectionSubscription subscription
         where subscription.institutionalCollection.id = ?
         and subscription.user.id = ?
+	</query>  
+	
+	<!--  get the count of subscribers for a collection -->
+	<query name="getUniqueUserIdsForSubscriptions" >
+	    select distinct(subscription.user.id) from InstitutionalCollectionSubscription subscription
 	</query>  
 	
 

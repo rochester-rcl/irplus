@@ -68,6 +68,8 @@ public class DefaultSubscriptionEmailJob implements Job{
 			  throw new JobExecutionException("Unable to retrieve target bean that is to be used as a job source", e1);
 		  }
 		  
+		  
+		  
 		  try {
 			subscriptionService.sendSubriberEmail(null);
 		  } catch (MessagingException e) {

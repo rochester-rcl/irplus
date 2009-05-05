@@ -80,6 +80,16 @@ public interface InstitutionalCollectionSubscriptionService
 	public boolean isSubscribed(InstitutionalCollection collection, IrUser user);
 	
 	/**
+	 * Get a list of all unique subscriber user id's.  This allows
+	 * one single list of all users who have at least one subscription
+	 * in the system, the user id is not duplicated in this list even
+	 * if they have more than one subscription
+	 * 
+	 * @return list of unique user id's
+	 */
+	public List<Long> getUniqueSubsciberUserIds();
+	
+	/**
 	 * Send a subscriber an email for their subscriptions.
 	 * 
 	 * @throws MessagingException 
