@@ -114,4 +114,13 @@ public class HbInstitutionalCollectionSubscriptionDAO implements InstitutionalCo
 				values));
 	}
 
+	
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO#getUniqueSubsciberUserIds()
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Long> getUniqueSubsciberUserIds() {
+		return (List<Long>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getUniqueUserIdsForSubscriptions");
+	}
+
 }

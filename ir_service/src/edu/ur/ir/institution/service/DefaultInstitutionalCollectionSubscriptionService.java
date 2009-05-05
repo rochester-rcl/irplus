@@ -108,6 +108,9 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	}
 
 	
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionService#sendSubriberEmail(edu.ur.ir.institution.InstitutionalCollectionSubscription)
+	 */
 	public void sendSubriberEmail(InstitutionalCollectionSubscription subscription) throws MessagingException
 	{		
 		log.debug("send subscribers emails");
@@ -126,6 +129,14 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	 */
 	public void setMailSender(JavaMailSender javaMailSender) {
 	    this.mailSender = javaMailSender;
+	}
+
+	
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionService#getUniqueSubsciberUserIds()
+	 */
+	public List<Long> getUniqueSubsciberUserIds() {
+		return institutionalCollectionSubscriptionDAO.getUniqueSubsciberUserIds();
 	}
 
 
