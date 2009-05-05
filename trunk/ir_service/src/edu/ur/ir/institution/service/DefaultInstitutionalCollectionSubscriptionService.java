@@ -18,6 +18,14 @@ package edu.ur.ir.institution.service;
 
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+
+import org.apache.log4j.Logger;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO;
@@ -31,6 +39,14 @@ import edu.ur.ir.user.IrUser;
  *
  */
 public class DefaultInstitutionalCollectionSubscriptionService implements InstitutionalCollectionSubscriptionService{
+
+    /** Java mail sender to send emails */
+    private JavaMailSender mailSender;
+    
+    
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultInstitutionalCollectionSubscriptionService.class);
+    
 
 	/**
 	 * Institutional collection subscription data access object
@@ -92,9 +108,25 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	}
 
 	
-	public void sendSubribersEmails() {
-		// TODO Auto-generated method stub
+	public void sendSubriberEmail(InstitutionalCollectionSubscription subscription) throws MessagingException
+	{		
+		log.debug("send subscribers emails");
+		MimeMessage message = mailSender.createMimeMessage();
 		
+		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
+		mimeMessageHelper.setTo("nsarr@library.rochester.edu");
+		mimeMessageHelper.setText("this is an email");
+		mailSender.send(message);
 	}
+	
+	/**
+	 * Set the mail sender.
+	 * 
+	 * @param mailSender
+	 */
+	public void setMailSender(JavaMailSender javaMailSender) {
+	    this.mailSender = javaMailSender;
+	}
+
 
 }

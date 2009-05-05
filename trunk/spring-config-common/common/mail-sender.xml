@@ -29,6 +29,7 @@
          <property name="host" value="${mail.sender.host}"/>
          <property name="port" value="${mail.sender.port}"/>
     </bean>
+    
 
     <bean id = "userExistMailMessage" class="org.springframework.mail.SimpleMailMessage">
     	<property name="from" value="${mail.sender.from}"/>
