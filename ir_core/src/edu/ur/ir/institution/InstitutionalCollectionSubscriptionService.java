@@ -18,6 +18,8 @@ package edu.ur.ir.institution;
 
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -78,7 +80,9 @@ public interface InstitutionalCollectionSubscriptionService
 	public boolean isSubscribed(InstitutionalCollection collection, IrUser user);
 	
 	/**
-	 * Send all subscribers emails for newly added material
+	 * Send a subscriber an email for their subscriptions.
+	 * 
+	 * @throws MessagingException 
 	 */
-	public void sendSubribersEmails();
+	public void sendSubriberEmail(InstitutionalCollectionSubscription subscription) throws MessagingException;
 }
