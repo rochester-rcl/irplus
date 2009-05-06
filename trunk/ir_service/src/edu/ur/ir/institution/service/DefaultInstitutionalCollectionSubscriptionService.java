@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution.service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +33,6 @@ import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemHandleUrlGenerator;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.user.IrUser;
 
@@ -54,12 +54,13 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalCollectionSubscriptionService.class);
     
 	/**  Used to get the url for a given item */
-	private InstitutionalItemHandleUrlGenerator institutionalItemHandleUrlGenerator;
+	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
 
-	/**
-	 * Institutional collection subscription data access object
-	 */
+	/**  Institutional collection subscription data access object */
 	private InstitutionalCollectionSubscriptionDAO institutionalCollectionSubscriptionDAO;
+	
+	/** format used for formatting dates */
+	private String dateFormat;
 	
 	/**
 	 * 
@@ -121,6 +122,7 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	 */
 	public void sendSubscriberEmail(IrUser user, Date startDate, Date endDate) throws MessagingException
 	{	
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
 		boolean sendEmail = true;
 		StringBuffer emailText = new StringBuffer("test");
 		
@@ -138,7 +140,7 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 			    	for( InstitutionalItem item : items )
 			    	{
 			    		// get the url to the most recent item
-			    		String url = institutionalItemHandleUrlGenerator.getUrl(item.getVersionedInstitutionalItem().getCurrentVersion());
+			    		String url = institutionalItemVersionUrlGenerator.createUrl(item, item.getVersionedInstitutionalItem().getCurrentVersion().getVersionNumber());
 			    		emailText.append(item.getName() + " - " + url + "\n");
 			    	}
 			    	emailText.append("\n\n");
@@ -150,8 +152,11 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 		{
 		    log.debug("send subscribers emails");
 		    MimeMessage message = mailSender.createMimeMessage();
-		
+		    String startDateStr = simpleDateFormat.format(startDate); 
+		    String endDateStr = simpleDateFormat.format(endDate); 
 		    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
+		    String subject = "New Publications for dates: " + startDateStr + " to " + endDateStr;
+		    mimeMessageHelper.setSubject(subject);
 		    mimeMessageHelper.setTo(user.getDefaultEmail().getEmail());
 		    mimeMessageHelper.setText(emailText.toString());
 		    mailSender.send(message);
@@ -186,14 +191,24 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 		this.institutionalItemService = institutionalItemService;
 	}
 
-	public InstitutionalItemHandleUrlGenerator getInstitutionalItemHandleUrlGenerator() {
-		return institutionalItemHandleUrlGenerator;
+	public InstitutionalItemVersionUrlGenerator getInstitutionalItemVersionUrlGenerator() {
+		return institutionalItemVersionUrlGenerator;
 	}
 
-	public void setInstitutionalItemHandleUrlGenerator(
-			InstitutionalItemHandleUrlGenerator institutionalItemHandleUrlGenerator) {
-		this.institutionalItemHandleUrlGenerator = institutionalItemHandleUrlGenerator;
+	public void setInstitutionalItemVersionUrlGenerator(
+			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
 	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
+	
 
 
 }
