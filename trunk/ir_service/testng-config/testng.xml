@@ -28,6 +28,7 @@
 		    <class name="edu.ur.ir.institution.service.DefaultInstitutionalItemSearchServiceTest"/>
 			<class name="edu.ur.ir.institution.service.DefaultReviewableItemServiceTest"/>
 			<class name="edu.ur.ir.institution.service.DefaultInstitutionalItemServiceTest"/>
+			<class name="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSubscriptionServiceTest"/>
 		    
 		    <class name="edu.ur.ir.user.service.DefaultUserServiceTest"/>
 		    <class name="edu.ur.ir.user.service.DefaultUserPublishingFileSystemServiceTest"/>
@@ -50,6 +51,7 @@
 		    <class name="edu.ur.ir.statistics.service.DefaultStatisticsServiceTest"/>
 		    
 		    <class name="edu.ur.ir.handle.service.HandleServiceTest"/>
+		    
 
 		</classes>
 	</test>

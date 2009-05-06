@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -30,6 +31,9 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
+import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.institution.InstitutionalItemHandleUrlGenerator;
+import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -43,10 +47,14 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
     /** Java mail sender to send emails */
     private JavaMailSender mailSender;
     
+    /** Service for dealing with institutional items  */
+    private InstitutionalItemService institutionalItemService;
     
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalCollectionSubscriptionService.class);
     
+	/**  Used to get the url for a given item */
+	private InstitutionalItemHandleUrlGenerator institutionalItemHandleUrlGenerator;
 
 	/**
 	 * Institutional collection subscription data access object
@@ -109,17 +117,47 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 
 	
 	/**
-	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionService#sendSubriberEmail(edu.ur.ir.institution.InstitutionalCollectionSubscription)
+	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionService#sendSubriberEmail(edu.ur.ir.user.IrUser)
 	 */
-	public void sendSubriberEmail(InstitutionalCollectionSubscription subscription) throws MessagingException
-	{		
-		log.debug("send subscribers emails");
-		MimeMessage message = mailSender.createMimeMessage();
+	public void sendSubscriberEmail(IrUser user, Date startDate, Date endDate) throws MessagingException
+	{	
+		boolean sendEmail = true;
+		StringBuffer emailText = new StringBuffer("test");
 		
-		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
-		mimeMessageHelper.setTo("nsarr@library.rochester.edu");
-		mimeMessageHelper.setText("this is an email");
-		mailSender.send(message);
+		List<InstitutionalCollectionSubscription> subscriptions = getAllSubscriptionsForUser(user);
+		if( subscriptions.size() > 0  )
+		{
+			for( InstitutionalCollectionSubscription subscription : subscriptions)
+			{
+				InstitutionalCollection collection = subscription.getInstitutionalCollection();
+			    List<InstitutionalItem> items = institutionalItemService.getItems(collection, startDate, endDate);
+			    if( items.size() > 0 )
+			    {
+			    	sendEmail = true;
+			    	emailText.append("New Publications in Collection: " + collection.getName() + "\n\n");
+			    	for( InstitutionalItem item : items )
+			    	{
+			    		// get the url to the most recent item
+			    		String url = institutionalItemHandleUrlGenerator.getUrl(item.getVersionedInstitutionalItem().getCurrentVersion());
+			    		emailText.append(item.getName() + " - " + url + "\n");
+			    	}
+			    	emailText.append("\n\n");
+			    }
+			}
+		}
+		
+		if( sendEmail )
+		{
+		    log.debug("send subscribers emails");
+		    MimeMessage message = mailSender.createMimeMessage();
+		
+		    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
+		    mimeMessageHelper.setTo(user.getDefaultEmail().getEmail());
+		    mimeMessageHelper.setText(emailText.toString());
+		    mailSender.send(message);
+		}
+		
+		emailText = null;
 	}
 	
 	/**
@@ -137,6 +175,24 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	 */
 	public List<Long> getUniqueSubsciberUserIds() {
 		return institutionalCollectionSubscriptionDAO.getUniqueSubsciberUserIds();
+	}
+
+	public InstitutionalItemService getInstitutionalItemService() {
+		return institutionalItemService;
+	}
+
+	public void setInstitutionalItemService(
+			InstitutionalItemService institutionalItemService) {
+		this.institutionalItemService = institutionalItemService;
+	}
+
+	public InstitutionalItemHandleUrlGenerator getInstitutionalItemHandleUrlGenerator() {
+		return institutionalItemHandleUrlGenerator;
+	}
+
+	public void setInstitutionalItemHandleUrlGenerator(
+			InstitutionalItemHandleUrlGenerator institutionalItemHandleUrlGenerator) {
+		this.institutionalItemHandleUrlGenerator = institutionalItemHandleUrlGenerator;
 	}
 
 

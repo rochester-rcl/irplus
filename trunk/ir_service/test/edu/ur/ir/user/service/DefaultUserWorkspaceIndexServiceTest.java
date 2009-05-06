@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
@@ -91,6 +92,9 @@ import edu.ur.util.FileUtil;
  */
 @Test(groups = { "baseTests" }, enabled = true)
 public class DefaultUserWorkspaceIndexServiceTest {
+	
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultUserWorkspaceIndexServiceTest.class);
 	
 	/** Application context  for loading information*/
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
@@ -424,6 +428,8 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	{
 		// determine if we should be sending emails 
 		boolean sendEmail = new Boolean(properties.getProperty("send_emails")).booleanValue();
+		
+		log.debug("test testIndexSharedFileInUserInbox send email = " + sendEmail);
 
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -436,12 +442,12 @@ public class DefaultUserWorkspaceIndexServiceTest {
         // Start the transaction 
 		ts = tm.getTransaction(td);
 
-		String userEmail1 = properties.getProperty("user_1_email");
+		String userEmail1 = properties.getProperty("user_1_email").trim();
 		UserEmail email = new UserEmail(userEmail1);
 		IrUser user = userService.createUser("password", "username", email);
 		
 		
-		String userEmail2 = properties.getProperty("user_2_email");
+		String userEmail2 = properties.getProperty("user_2_email").trim();
 		UserEmail email1 = new UserEmail(userEmail2);
 		IrUser user1 = userService.createUser("password1", "username1", email1);
 
@@ -605,6 +611,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		if( sendEmail )
 		{
+			log.debug("Sending email to ownerEmail " + ownerEmail);
 			inviteUserService.sendUnshareEmail(ownerEmail, collaboratorEmail, fileName);
 		}
 		
@@ -617,10 +624,11 @@ public class DefaultUserWorkspaceIndexServiceTest {
 
 		// Test InviteInfo persistence
 		ts = tm.getTransaction(td);
+		String strEmail = properties.getProperty("user_1_email").trim();
 		user = userService.getUser(user.getUsername());
 		vf = versionedFileDAO.getById(vf.getId(), false);
 		InviteInfo t = new InviteInfo(user, vf);
-		t.setEmail("sranganathan@library.rochester.edu");
+		t.setEmail(strEmail);
 		t.setToken("token");
 		t.setInviteMessage("inviteMessage");
 		inviteUserService.makeInviteInfoPersistent(t);
@@ -632,7 +640,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 
 		InviteInfo otherToken = inviteInfoDAO.getById(t.getId(), false);
 		
-		assert otherToken.getEmail().equals("sranganathan@library.rochester.edu") : "Email should be equal";
+		assert otherToken.getEmail().equals(strEmail) : "Email should be equal strEmail = " + strEmail + " other email = " + otherToken.getEmail();
 		assert otherToken.getToken().equals("token"): "Token should be equal";
 		assert otherToken.getUser().equals(user) : "User should be equal";
 		assert otherToken.getFiles().contains(vf) :"Versioned file should be equal";

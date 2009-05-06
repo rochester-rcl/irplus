@@ -16,6 +16,7 @@
 
 package edu.ur.ir.repository;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -93,6 +94,9 @@ public class Repository extends CommonPersistent {
 	
  	/**   Default handle name authority to use when assigning handle values  */
 	private HandleNameAuthority defaultHandleNameAuthority;
+	
+	/** last date the email process ran to send subscribers new collection items */
+	private Timestamp lastSubscriptionProcessEmailDate;
 	
 
 	/**
@@ -540,5 +544,22 @@ public class Repository extends CommonPersistent {
 	 */
 	public void setUserWorkspaceIndexFolder(String userWorkspaceIndexFolder) {
 		this.userWorkspaceIndexFolder = userWorkspaceIndexFolder;
+	}
+
+	/**
+	 * Last time the email subscription process ran and sent updates to users.
+	 * @return
+	 */
+	public Timestamp getLastSubscriptionProcessEmailDate() {
+		return lastSubscriptionProcessEmailDate;
+	}
+
+	/**
+	 * Last time the email subscription process ran and sent updates to users.
+	 * 
+	 * @param lastSubscriptionEmailDate
+	 */
+	public void setLastSubscriptionProcessEmailDate(Timestamp lastSubscriptionProcessEmailDate) {
+		this.lastSubscriptionProcessEmailDate = lastSubscriptionProcessEmailDate;
 	}
 }

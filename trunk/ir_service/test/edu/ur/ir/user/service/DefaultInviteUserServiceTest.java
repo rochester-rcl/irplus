@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -74,6 +75,9 @@ public class DefaultInviteUserServiceTest {
 	/** Application context  for loading information*/
 	ApplicationContext ctx = new ClassPathXmlApplicationContext(
 	"applicationContext.xml");
+	
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultInviteUserServiceTest.class);
 
 	/** User data access */
 	UserService userService = (UserService) ctx
@@ -134,12 +138,12 @@ public class DefaultInviteUserServiceTest {
         // Start the transaction 
 		ts = tm.getTransaction(td);
 
-		String userEmail1 = properties.getProperty("user_1_email");
+		String userEmail1 = properties.getProperty("user_1_email").trim();
 		UserEmail email = new UserEmail(userEmail1);
 		IrUser user = userService.createUser("password", "username", email);
 		
 		
-		String userEmail2 = properties.getProperty("user_2_email");
+		String userEmail2 = properties.getProperty("user_2_email").trim();
 		UserEmail email1 = new UserEmail(userEmail2);
 		IrUser user1 = userService.createUser("password1", "username1", email1);
 
@@ -198,8 +202,10 @@ public class DefaultInviteUserServiceTest {
 		assert fCollaborator.getVersionedFile().getOwner().getUsername() != null : "Owner of the versioned file is null " + fCollaborator.getVersionedFile();
 		inviteUserService.unshareFile(fCollaborator);
 		
+		log.debug("Send email for unshare user test = " + sendEmail);
 		if( sendEmail )
 		{
+			log.debug("Sending unshare email to " + ownerEmail + " collaborator email = " + collaboratorEmail);
 			inviteUserService.sendUnshareEmail(ownerEmail, collaboratorEmail, fileName);
 		}
 		
@@ -215,12 +221,13 @@ public class DefaultInviteUserServiceTest {
 	
 		tm.commit(ts);
 
+		String strEmail = properties.getProperty("user_1_email");
 		// Test InviteInfo persistence
 		ts = tm.getTransaction(td);
 		user = userService.getUser(user.getUsername());
 		vf = versionedFileDAO.getById(vf.getId(), false);
 		InviteInfo t = new InviteInfo(user, vf);
-		t.setEmail("sranganathan@library.rochester.edu");
+		t.setEmail(strEmail);
 		t.setToken("token");
 		t.setInviteMessage("inviteMessage");
 		inviteUserService.makeInviteInfoPersistent(t);
@@ -232,7 +239,7 @@ public class DefaultInviteUserServiceTest {
 
 		InviteInfo otherToken = inviteInfoDAO.getById(t.getId(), false);
 		
-		assert otherToken.getEmail().equals("sranganathan@library.rochester.edu") : "Email should be equal";
+		assert otherToken.getEmail().equals(strEmail) : "Email should be equal strEmail = " + strEmail + " other email = " + otherToken.getEmail();
 		assert otherToken.getToken().equals("token"): "Token should be equal";
 		assert otherToken.getUser().equals(user) : "User should be equal";
 		assert otherToken.getFiles().contains(vf) :"Versioned file should be equal";
@@ -242,8 +249,10 @@ public class DefaultInviteUserServiceTest {
 		// Start a transaction 
 		ts = tm.getTransaction(td);
 
+		log.debug("Sending email to existing user");
 		if(sendEmail)
 		{
+			log.debug("Sending email to existing user " + t);
 		    inviteUserService.sendEmailToExistingUser(t);
 		}
 

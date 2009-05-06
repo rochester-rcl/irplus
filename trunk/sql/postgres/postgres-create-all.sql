@@ -1456,6 +1456,7 @@ CREATE TABLE ir_repository.repository
   researcher_index_folder TEXT,
   user_workspace_index_folder TEXT,
   default_handle_authority_id BIGINT,
+  last_email_subscriber_process_sent_date TIMESTAMP WITH TIME ZONE,
   UNIQUE (name),
   FOREIGN KEY (file_database_id) REFERENCES file_system.file_database (file_database_id)
 );
@@ -2953,6 +2954,11 @@ ALTER TABLE ir_statistics.ip_address_ignore OWNER TO ir_plus;
 -- The field sequence
 CREATE SEQUENCE ir_statistics.ip_address_ignore_seq ;
 ALTER TABLE ir_statistics.ip_address_ignore_seq OWNER TO ir_plus;
+
+
+
+
+
 
 -- ---------------------------------------------
 -- Quartz tables

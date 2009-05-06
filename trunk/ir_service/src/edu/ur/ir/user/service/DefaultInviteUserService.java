@@ -185,7 +185,9 @@ public class DefaultInviteUserService implements InviteUserService {
 	 */
 	private void sendEmail(SimpleMailMessage message) {
 		try {
+			log.debug("Before send email");
 			mailSender.send(message);
+			log.debug("after send email");
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			throw new IllegalStateException(e);
@@ -268,6 +270,7 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * @param fileName Name of the unshared file 
 	 */
 	private void sendEmailToUnShare(String from, String to, String fileName) {
+		log.debug("Sending email to unshare to " + to);
 		SimpleMailMessage message = new SimpleMailMessage(unShareMailMessage);
 		message.setTo(to);
 		
