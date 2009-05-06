@@ -247,6 +247,20 @@ public class InviteInfo extends BasePersistent {
 	{
 		return files.remove(file);
 	}
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer("[ invite info id = ");
+		sb.append(id);
+		sb.append("email = ");
+		sb.append(email);
+		sb.append(" token = ");
+		sb.append(token);
+		sb.append(" invite message = ");
+		sb.append(inviteMessage);
+		sb.append("]");
+		return sb.toString();
+	}
 
 
 	

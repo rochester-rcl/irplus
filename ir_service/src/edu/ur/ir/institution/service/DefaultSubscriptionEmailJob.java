@@ -1,7 +1,11 @@
 package edu.ur.ir.institution.service;
 
 
+import java.util.Date;
+import java.util.List;
+
 import javax.mail.MessagingException;
+
 
 import org.apache.log4j.Logger;
 import org.quartz.Job;
@@ -13,6 +17,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
 
 
 /**
@@ -36,45 +44,57 @@ public class DefaultSubscriptionEmailJob implements Job{
 	 * 
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	public void execute(JobExecutionContext arg0) throws JobExecutionException 
+	{
 
-		  JobDetail jobDetail = arg0.getJobDetail();
+        JobDetail jobDetail = arg0.getJobDetail();
+		String beanName = jobDetail.getName();
 		  
-		  String beanName = jobDetail.getName();
+		if (log.isDebugEnabled()) 
+		{
+		    log.info ("Running SpringBeanDelegatingJob - Job Name ["+jobDetail.getName()+"], Group Name ["+jobDetail.getGroup()+"]");
+		    log.info ("Delegating to bean ["+beanName+"]");
+		}
 		  
-		  if (log.isDebugEnabled()) {
-		      log.info ("Running SpringBeanDelegatingJob - Job Name ["+jobDetail.getName()+"], Group Name ["+jobDetail.getGroup()+"]");
-		      log.info ("Delegating to bean ["+beanName+"]");
-		  }
+		ApplicationContext applicationContext = null;
 		  
-		  ApplicationContext applicationContext = null;
+		try 
+		{
+		    applicationContext = (ApplicationContext) arg0.getScheduler().getContext().get(APPLICATION_CONTEXT_KEY);
+		} 
+		catch (SchedulerException e2) 
+		{
+		    throw new JobExecutionException("problem with the Scheduler", e2);
+		}
 		  
-		  try 
-		  {
-		      applicationContext = (ApplicationContext) arg0.getScheduler().getContext().get(APPLICATION_CONTEXT_KEY);
-		  } 
-		  catch (SchedulerException e2) 
-		  {
-		       throw new JobExecutionException("problem with the Scheduler", e2);
-		  }
+		InstitutionalCollectionSubscriptionService subscriptionService = null;
+		UserService userService = null;
+		RepositoryService repositoryService = null;
+		try
+		{
+		    subscriptionService = (InstitutionalCollectionSubscriptionService)applicationContext.getBean("institutionalCollectionSubscriptionService");
+			userService = (UserService)applicationContext.getBean("userService");
+			repositoryService = (RepositoryService) applicationContext.getBean("repositoryService");
+		}
+		catch(BeansException e1)
+		{
+		    throw new JobExecutionException("Unable to retrieve target bean that is to be used as a job source", e1);
+		}
 		  
-		  InstitutionalCollectionSubscriptionService subscriptionService = null;
-		  try
-		  {
-			  subscriptionService = (InstitutionalCollectionSubscriptionService)applicationContext.getBean("institutionalCollectionSubscriptionService");
-		  }
-		  catch(BeansException e1)
-		  {
-			  throw new JobExecutionException("Unable to retrieve target bean that is to be used as a job source", e1);
-		  }
-		  
-		  
-		  
-		  try {
-			subscriptionService.sendSubriberEmail(null);
-		  } catch (MessagingException e) {
-			throw new JobExecutionException("Unable send email ", e);
-		  }
+		List<Long> uniqueSubscriberIds = subscriptionService.getUniqueSubsciberUserIds();
+			
+		for( Long id : uniqueSubscriberIds )
+		{
+		    IrUser user = userService.getUser(id, false);
+			// make the start date today
+			Date startDate = new Date();
+			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+			try {
+				subscriptionService.sendSubscriberEmail(user, startDate, repository.getLastSubscriptionProcessEmailDate());
+			} catch (MessagingException e) {
+				log.error(e);
+			}
+		}
 		 
 		  
 	}

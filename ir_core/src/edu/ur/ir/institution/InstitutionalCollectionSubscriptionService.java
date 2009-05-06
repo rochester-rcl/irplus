@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -90,9 +91,13 @@ public interface InstitutionalCollectionSubscriptionService
 	public List<Long> getUniqueSubsciberUserIds();
 	
 	/**
-	 * Send a subscriber an email for their subscriptions.
+	 * Send a subscriber an email for their subscriptions.  This sends items that
+	 * were added to a all subscribed to collections between the given start and end date
 	 * 
-	 * @throws MessagingException 
+	 * @param user - user who subscribes to institutional collections
+	 * @param startDate - start date for items to be sent
+	 * @param endDate - date range end for items to be sent
+	 * @throws MessagingException
 	 */
-	public void sendSubriberEmail(InstitutionalCollectionSubscription subscription) throws MessagingException;
+	public void sendSubscriberEmail(IrUser user, Date startDate, Date endDate) throws MessagingException;
 }

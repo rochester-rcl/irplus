@@ -58,6 +58,9 @@
 		<!-- folder for indexed user data -->
 		<property name="userIndexFolder" column="user_index_folder" type="string"
 			not-null="false" />
+			
+		<property name="lastSubscriptionProcessEmailDate" column="last_email_subscriber_process_sent_date" type="timestamp" 
+		          access="field" />	
 		
 		<!-- folder for indexed institutional item data -->
 		<property name="institutionalItemIndexFolder" column="institutional_item_index_folder" type="string"

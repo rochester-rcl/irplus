@@ -126,7 +126,8 @@ public class DefaultReviewableItemServiceTest {
         GenericItem item = new GenericItem("itemName");
         itemService.makePersistent(item);
 		
-        UserEmail email = new UserEmail("sranganathan@library.rochester.edu");
+        String strEmail = properties.getProperty("user_1_email");
+        UserEmail email = new UserEmail(strEmail);
 
         IrUser reviewer = userService.createUser("password", "username", email);
         userService.makeUserPersistent(reviewer);

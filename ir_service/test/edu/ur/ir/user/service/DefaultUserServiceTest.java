@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -68,6 +69,9 @@ public class DefaultUserServiceTest {
 	
 	/** Get the properties file  */
 	Properties properties = propertiesLoader.getProperties();
+	
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultUserServiceTest.class);
 	
 	/**
 	 * Test creating a user
@@ -128,6 +132,7 @@ public class DefaultUserServiceTest {
 		// determine if we should be sending emails 
 		boolean sendEmail = new Boolean(properties.getProperty("send_emails")).booleanValue();
 
+		log.debug("Send email for testHandleForgotPassword test = " + sendEmail);
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
 		UserEmail email = new UserEmail("email");
@@ -137,7 +142,9 @@ public class DefaultUserServiceTest {
 		ts = tm.getTransaction(td);
 		String token = userService.savePasswordToken(user);
 		if (sendEmail) {
-			userService.sendEmailForForgotPassword(token, properties.getProperty("user_2_email"));
+			String user_2_email = properties.getProperty("user_2_email").trim();
+			log.debug("Sending email to " + user_2_email);
+			userService.sendEmailForForgotPassword(token, user_2_email);
 		}
 		
 		IrUser otherUser = userService.getUser("username");

@@ -121,11 +121,12 @@ public class DefaultSecurityServiceTest {
         // Start the transaction 
 		ts = tm.getTransaction(td);
 		
-		
-		UserEmail email = new UserEmail("admin@library.rochester.edu");
+		String strEmail1 = properties.getProperty("user_1_email");
+		UserEmail email = new UserEmail(strEmail1);
 		IrUser user = userService.createUser("password", "username", email);
 		
-		UserEmail email1 = new UserEmail("sranganathan@library.rochester.edu");
+		String strEmail2 = properties.getProperty("user_2_email");
+		UserEmail email1 = new UserEmail(strEmail2);
 		IrUser user1 = userService.createUser("password1", "username1", email1);
 
 		// create the first file to store in the temporary folder
@@ -222,11 +223,12 @@ public class DefaultSecurityServiceTest {
         // Start the transaction 
 		ts = tm.getTransaction(td);
 		
-		
-		UserEmail email = new UserEmail("admin@library.rochester.edu");
+		String strEmail1 = properties.getProperty("user_1_email");
+		UserEmail email = new UserEmail(strEmail1);
 		IrUser user = userService.createUser("password", "username", email);
 		
-		UserEmail email1 = new UserEmail("sranganathan@library.rochester.edu");
+		String strEmail2 = properties.getProperty("user_2_email");
+		UserEmail email1 = new UserEmail(strEmail2);
 		IrUser user1 = userService.createUser("password1", "username1", email1);
 		
         IrUserGroup userGroup = new IrUserGroup("myGroup");
