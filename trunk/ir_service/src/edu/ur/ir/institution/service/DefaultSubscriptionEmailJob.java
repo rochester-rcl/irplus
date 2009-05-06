@@ -1,6 +1,7 @@
 package edu.ur.ir.institution.service;
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -82,21 +83,24 @@ public class DefaultSubscriptionEmailJob implements Job{
 		}
 		  
 		List<Long> uniqueSubscriberIds = subscriptionService.getUniqueSubsciberUserIds();
-			
+		
+		// make the start date today
+		Date startDate = new Date();
+		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		for( Long id : uniqueSubscriberIds )
 		{
 		    IrUser user = userService.getUser(id, false);
-			// make the start date today
-			Date startDate = new Date();
-			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+			
+			
 			try {
 				subscriptionService.sendSubscriberEmail(user, startDate, repository.getLastSubscriptionProcessEmailDate());
+				
 			} catch (MessagingException e) {
 				log.error(e);
 			}
 		}
-		 
-		  
+		repository.setLastSubscriptionProcessEmailDate(new Timestamp(startDate.getTime()));
+		repositoryService.saveRepository(repository);
 	}
 
 }
