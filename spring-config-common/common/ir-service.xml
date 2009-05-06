@@ -56,6 +56,8 @@
        <property name="researcherService" ref="researcherService"/>
        <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="institutionalItemService" ref="institutionalItemService"/>
+       <property name="institutionalCollectionSubscriptionService" ref="institutionalCollectionSubscriptionService"/>
+       
    </bean>
    
 
@@ -510,7 +512,10 @@
    <bean id="institutionalCollectionSubscriptionService" 
        class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSubscriptionService">
        <property name="institutionalCollectionSubscriptionDAO" ref="institutionalCollectionSubscriptionDAO"/>
+       <property name="institutionalItemService" ref="institutionalItemService"/>
+       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
        <property name="mailSender" ref="mailSender"/>
+       <property name="dateFormat" value="MM/dd/yyyy"/>
    </bean>
  
    <!-- ****************************************** --> 
@@ -553,9 +558,6 @@
        
         <!--  wait for jobs to finish before shutting down. -->
        <property name="waitForJobsToCompleteOnShutdown" value="true" />
-       
-       
-   
    </bean>
    
    

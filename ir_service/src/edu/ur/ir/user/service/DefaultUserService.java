@@ -36,6 +36,8 @@ import org.springframework.util.StringUtils;
 import edu.ur.dao.CriteriaHelper;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
+import edu.ur.ir.institution.InstitutionalCollectionSubscription;
+import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
@@ -136,6 +138,9 @@ public class DefaultUserService implements UserService {
 	
 	/** Service for dealing with institutional items. */
 	private InstitutionalItemService institutionalItemService;
+	
+	/** service for dealing with subscriptions */
+	private InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService;
 
 	/**
 	 * Get the User email if email id exists in the system.
@@ -284,6 +289,14 @@ public class DefaultUserService implements UserService {
 			user.setResearcher(null);
 			researcherService.deleteResearcher(r);
 		}
+		
+		List<InstitutionalCollectionSubscription> subscriptions = institutionalCollectionSubscriptionService.getAllSubscriptionsForUser(user);
+		
+		for(InstitutionalCollectionSubscription subscription : subscriptions)
+		{
+			institutionalCollectionSubscriptionService.delete(subscription);
+		}
+		
 		
 		//Get all the generic items created by this user so they
 		// can be deleted
@@ -1105,6 +1118,15 @@ public class DefaultUserService implements UserService {
     		int numberOfResultsToShow, String sortElement, String sortType) {
 		return irUserDAO.getUsers(rowStart, 
 	    		numberOfResultsToShow, sortElement, sortType);
+	}
+
+	public InstitutionalCollectionSubscriptionService getInstitutionalCollectionSubscriptionService() {
+		return institutionalCollectionSubscriptionService;
+	}
+
+	public void setInstitutionalCollectionSubscriptionService(
+			InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService) {
+		this.institutionalCollectionSubscriptionService = institutionalCollectionSubscriptionService;
 	}
 
 }
