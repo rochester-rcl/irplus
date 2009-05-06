@@ -29,7 +29,7 @@ public class SchedulerStatusOutToLogTest {
 	
 	
 	/**
-	 * Test sending emails for subscriptions.
+	 * Test looking at the current scheduler status and prints it to a log file
 	 * 
 	 * @throws MessagingException 
 	 * @throws SchedulerException 
