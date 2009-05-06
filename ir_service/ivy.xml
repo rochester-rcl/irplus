@@ -84,7 +84,11 @@
         <dependency org="commons-pool" name="commons-pool" rev="1.3" transitive="false">
             <artifact name="commons-pool" type="jar"/>
         </dependency>
-
+        
+        <!-- commons digester files -->
+        <dependency org="commons-digester" name="commons-digester" rev="1.8.1" transitive="false">
+            <artifact name="commons-digester" type="jar"/>
+        </dependency>
 
         <!-- test ng files for testing -->
 	    <dependency org="org.testng" name="testng" rev="5.8" transitive="false">
