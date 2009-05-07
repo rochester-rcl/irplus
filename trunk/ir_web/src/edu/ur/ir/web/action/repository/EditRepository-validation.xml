@@ -19,6 +19,7 @@
     PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
     "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
 <validators>
+    <!--      -->
     <field name="repositoryName">
         <field-validator type="requiredstring">
             <message key="invalid.repository.name">You must enter a repository name</message>
@@ -34,4 +35,5 @@
             <message key="invalid.repository.name.folder">You must enter a user index folder</message>
         </field-validator>
     </field>
+ 
 </validators>

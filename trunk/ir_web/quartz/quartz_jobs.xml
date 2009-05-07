@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE quartz PUBLIC
+	"-//Quartz Enterprise Job Scheduler//DTD Job Scheduling Data 1.5//EN"
+	"http://www.quartzscheduler.org/dtd/job_scheduling_data_1_5.dtd">
+
+<quartz xmlns="http://www.opensymphony.com/quartz/JobSchedulingData"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://www.quartzscheduler.org/ns/quartz
+                      http://www.opensymphony.com/quartz/xml/job_scheduling_data_1_5.xsd"
+                    version="1.5">
+                    
+    <!--  this job is for sending subscrption emails to users who
+          have subscribed to collections -->
+    <job>
+        <job-detail>
+            <name>SubscriptionEmailer</name>
+            <group>DEFAULT</group>
+            <description>
+                A job that sends institutional collection subscribers emails
+            </description>
+            <job-class>
+                edu.ur.ir.institution.service.DefaultSubscriptionEmailJob
+            </job-class>
+            <volatility>false</volatility>
+            <durability>true</durability>
+            <recover>true</recover>
+        </job-detail>
+    
+    
+        <trigger>
+            <cron>
+                <name>subscriptionTrigger</name>
+                <group>DEFAULT</group>
+                <job-name>SubscriptionEmailer</job-name>
+                <job-group>DEFAULT</job-group>
+                
+                <!--  fire every five minutes every day -->
+                <cron-expression>0 0/5 * * * ?</cron-expression>
+            </cron>
+        </trigger>
+    </job>
+</quartz>
+
