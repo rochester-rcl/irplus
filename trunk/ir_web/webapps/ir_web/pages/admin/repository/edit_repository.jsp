@@ -215,6 +215,9 @@
               </form>
    
               <c:if test="${repository != null}">
+              Last subscription process email date: ${repository.lastSubscriptionProcessEmailDate}
+              <br/>
+              <br/>
               <c:url var="reIndexItemsUrl" value="/admin/reIndexInstitutionalItems.action"/>
               <a href="${reIndexItemsUrl}">Re-Index Institutional Items</a>
               <br/>
