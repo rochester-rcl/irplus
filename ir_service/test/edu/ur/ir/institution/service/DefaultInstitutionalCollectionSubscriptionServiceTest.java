@@ -39,7 +39,6 @@ import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
-import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.repository.Repository;
@@ -106,48 +105,55 @@ public class DefaultInstitutionalCollectionSubscriptionServiceTest {
 	 */
 	public void testSendSubscriptionEmails() throws MessagingException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, DuplicateNameException 
 	{
-		// start a new transaction
-		TransactionStatus ts = tm.getTransaction(td);
+		
+		boolean sendEmails = new Boolean(properties.getProperty("send_emails"));
+		
+		if( sendEmails )
+		{	
+		    // start a new transaction
+		    TransactionStatus ts = tm.getTransaction(td);
 
-		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
-		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		    RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		    Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
 		
-		String userEmail1 = properties.getProperty("user_1_email");
-		UserEmail email = new UserEmail(userEmail1);
-		IrUser user = userService.createUser("password", "username", email);
+		    String userEmail1 = properties.getProperty("user_1_email");
+		    UserEmail email = new UserEmail(userEmail1);
+		    IrUser user = userService.createUser("password", "username", email);
 		
-		// save the repository
-		tm.commit(ts);
+		    // save the repository
+		    tm.commit(ts);
 		
-        // Start the transaction - create collections
-		ts = tm.getTransaction(td);
-		repo = repositoryService.getRepository(repo.getId(), false);
-		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
-		collection.addSuscriber(user);
-		// create a personal item to publish into the repository
-		GenericItem genericItem = new GenericItem("item name");
-		collection.createInstitutionalItem(genericItem);
-		institutionalCollectionService.saveCollection(collection);
-		tm.commit(ts);
+            // Start the transaction - create collections
+		    ts = tm.getTransaction(td);
+		    repo = repositoryService.getRepository(repo.getId(), false);
+		    InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		    collection.addSuscriber(user);
+		    // create a personal item to publish into the repository
+		    GenericItem genericItem = new GenericItem("item name");
+		    collection.createInstitutionalItem(genericItem);
+		    institutionalCollectionService.saveCollection(collection);
+		    tm.commit(ts);
         
 		
-		// start new transaction
-        ts = tm.getTransaction(td);
-		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.add(Calendar.DAY_OF_YEAR, -1);
-		Date yesterday = calendar.getTime();
+		    // start new transaction
+            ts = tm.getTransaction(td);
+		    GregorianCalendar calendar = new GregorianCalendar();
+		    calendar.add(Calendar.DAY_OF_YEAR, -1);
+		    Date yesterday = calendar.getTime();
 		
-		calendar.add(Calendar.DAY_OF_YEAR, +2);
-		Date tomorrow = calendar.getTime();
+		    calendar.add(Calendar.DAY_OF_YEAR, +2);
+		    Date tomorrow = calendar.getTime();
 		
-        subscriptionService.sendSubscriberEmail(user, yesterday, tomorrow);
-        tm.commit(ts);
+		
+            subscriptionService.sendSubscriberEmail(user, yesterday, tomorrow);
+            tm.commit(ts);
      
-	    // Start new transaction
-		ts = tm.getTransaction(td);
- 		userService.deleteUser(userService.getUser(user.getUsername()));
-		helper.cleanUpRepository();
-		tm.commit(ts);	
+	        // Start new transaction
+		    ts = tm.getTransaction(td);
+ 		    userService.deleteUser(userService.getUser(user.getUsername()));
+		    helper.cleanUpRepository();
+		    tm.commit(ts);
+		}
 	}
 
 }
