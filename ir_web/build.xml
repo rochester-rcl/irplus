@@ -24,9 +24,9 @@
 	<!-- uncomment this to automatically have the YUI libraries unzipped  
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
-     -->
+    -->
  	<property name="yui.unzip" value="true"/>
-   
+    
 	
 	<!-- always disable emma -->
 	<property name="emma.enabled" value="false" />
@@ -69,6 +69,9 @@
 
 	<!-- Web Inf conf  -->
 	<property name="webapp.conf.dir" value="${basedir}/web-conf"/>
+	
+	<!-- quartz configuration files  -->
+	<property name="quartz.dir" value="${basedir}/quartz"/>
 	
 	<!-- struts configuration files -->
 	<property name="struts.config.dir.common" value="${basedir}/struts-config/common"/>
@@ -120,6 +123,9 @@
 			
 			<!-- logger configuration-->
 			<fileset dir="${log4j.production.appender}"/>
+			
+			<!-- quartz configuration files -->
+			<fileset dir="${quartz.dir}"/>
 		</copy>
 		
 		<!-- copy the most recent jar files created by the application-->
