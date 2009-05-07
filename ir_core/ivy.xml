@@ -35,6 +35,11 @@
             <artifact name="commons-io" type="jar"/>
         </dependency>
         
+        <!-- javax mail libaries -->
+        <dependency org="javax.mail" name="mail" rev="1.4.1">
+            <artifact name="mail" type="jar"/>
+        </dependency>
+        
         <!-- files for fontbox -->
         <dependency org="pdfbox" name="pdfbox" rev="0.7.4" transitive="false">
             <artifact name="pdfbox" type="jar" />
