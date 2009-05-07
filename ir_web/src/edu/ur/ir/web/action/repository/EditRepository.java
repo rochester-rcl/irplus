@@ -18,6 +18,8 @@ package edu.ur.ir.web.action.repository;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -153,6 +155,8 @@ Validateable{
 		
 		repository = repositoryService.createRepository(repositoryName, fileDatabase);
 		repository.setInstitutionName(institutionName);
+		Timestamp lastEmailDate = new Timestamp(new Date().getTime());
+		repository.setLastSubscriptionProcessEmailDate(lastEmailDate);
 		
 		
 		try {
