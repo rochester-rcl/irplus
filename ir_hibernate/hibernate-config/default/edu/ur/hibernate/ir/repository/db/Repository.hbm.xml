@@ -45,6 +45,9 @@
 		<property name="name" column="name" type="string"
 			not-null="true" access="field" />
 			
+		<property name="suspendSubscriptionEmails" column="suspend_subscription_emails" type="boolean"
+			access="field" />
+			
 		<property name="institutionName" column="institution_name" type="string"
 			not-null="false" access="field" />
 
