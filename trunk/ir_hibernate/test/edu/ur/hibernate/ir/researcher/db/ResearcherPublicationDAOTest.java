@@ -87,7 +87,7 @@ public class ResearcherPublicationDAOTest {
 	public void rootResearcherPublicationDAOTest() {
 
 		TransactionStatus ts = tm.getTransaction(td);
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
 		// create a user who has their own folder
 		IrUser user = new IrUser("user", "password");
@@ -137,7 +137,7 @@ public class ResearcherPublicationDAOTest {
 	@Test
 	public void getRootResearcherPublicationsDAOTest()throws Exception{
 		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
   		
   		UserManager userManager = new UserManager();
 		IrUser user = userManager.createUser("passowrd", "userName");

@@ -122,7 +122,7 @@ public class ResearcherFolderDAOTest {
 	@Test
 	public void baseResearcherFolderDAOTest() throws DuplicateNameException {
   		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own folder
   		UserManager userManager = new UserManager();
@@ -176,7 +176,7 @@ public class ResearcherFolderDAOTest {
 	@Test
 	public void researcherFolderWithChildrenDAOTest() throws DuplicateNameException {
 
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
          // create a user who has their own folder
   		UserManager userManager = new UserManager();
@@ -609,7 +609,7 @@ public class ResearcherFolderDAOTest {
 		// create the file in the file system.
 		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f, "newFile1");
 		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
 		IrUser user = new IrUser("user", "password");
 		user.addUserEmail(userEmail, true);
@@ -686,7 +686,7 @@ public class ResearcherFolderDAOTest {
 		try
 		{
 		TransactionStatus ts = tm.getTransaction(td);
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own folder
   		UserManager userManager = new UserManager();
@@ -754,7 +754,7 @@ public class ResearcherFolderDAOTest {
 	@Test
 	public void baseGetRootResearcherFolderDAOTest() throws DuplicateNameException {
   		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own folder
   		UserManager userManager = new UserManager();
@@ -805,7 +805,7 @@ public class ResearcherFolderDAOTest {
 	@Test
 	public void baseGetFolderInsideFolderDAOTest() throws DuplicateNameException {
   		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own folder
   		UserManager userManager = new UserManager();

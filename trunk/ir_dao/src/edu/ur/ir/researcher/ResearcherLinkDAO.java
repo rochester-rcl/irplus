@@ -35,7 +35,6 @@ public interface ResearcherLinkDAO  extends CrudDAO<ResearcherLink>
      * 
 	 * @return List of root links found.
 	 */	
-	@SuppressWarnings("unchecked")
 	public List<ResearcherLink> getRootResearcherLinks(final Long researcherId);
     
 	/**
@@ -46,7 +45,6 @@ public interface ResearcherLinkDAO  extends CrudDAO<ResearcherLink>
      * 
 	 * @return List of links found.
 	 */
-	@SuppressWarnings("unchecked")
 	public List<ResearcherLink> getSubResearcherLinks(final Long researcherId, final Long parentFolderId);
 
 

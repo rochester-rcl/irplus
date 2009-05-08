@@ -54,7 +54,6 @@ public class IrClassTypePermissionDAOTest {
 	/**
 	 * Test irClassTypePermission persistance
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void baseClassTypePermissionDAOTest() throws Exception{
 

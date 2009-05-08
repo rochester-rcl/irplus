@@ -16,6 +16,10 @@ import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.repository.Repository;
@@ -71,36 +75,44 @@ public class DefaultSubscriptionEmailJob implements Job{
 		InstitutionalCollectionSubscriptionService subscriptionService = null;
 		UserService userService = null;
 		RepositoryService repositoryService = null;
+		PlatformTransactionManager tm = null;
+		TransactionDefinition td = null;
 		try
 		{
 		    subscriptionService = (InstitutionalCollectionSubscriptionService)applicationContext.getBean("institutionalCollectionSubscriptionService");
 			userService = (UserService)applicationContext.getBean("userService");
 			repositoryService = (RepositoryService) applicationContext.getBean("repositoryService");
+			tm = (PlatformTransactionManager) applicationContext.getBean("transactionManager");
+			td = new DefaultTransactionDefinition(
+					TransactionDefinition.PROPAGATION_REQUIRED);
 		}
 		catch(BeansException e1)
 		{
 		    throw new JobExecutionException("Unable to retrieve target bean that is to be used as a job source", e1);
 		}
-		  
+		
+		// start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+
 		List<Long> uniqueSubscriberIds = subscriptionService.getUniqueSubsciberUserIds();
 		
-		// make the start date today
-		Date startDate = new Date();
+		// make the end date today
+		Timestamp endDate = new Timestamp(new Date().getTime());
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		for( Long id : uniqueSubscriberIds )
 		{
 		    IrUser user = userService.getUser(id, false);
 			
-			
-			try {
-				subscriptionService.sendSubscriberEmail(user, startDate, repository.getLastSubscriptionProcessEmailDate());
+				try {
+				subscriptionService.sendSubscriberEmail(user, repository.getLastSubscriptionProcessEmailDate(), endDate );
 				
 			} catch (MessagingException e) {
 				log.error(e);
 			}
 		}
-		repository.setLastSubscriptionProcessEmailDate(new Timestamp(startDate.getTime()));
+		repository.setLastSubscriptionProcessEmailDate(endDate);
 		repositoryService.saveRepository(repository);
+		tm.commit(ts);
 	}
 
 }

@@ -159,7 +159,7 @@ public class IrAclDAOTest {
         //complete the transaction
 		tm.commit(ts);
 		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
 		UserManager userManager = new UserManager();
 		IrUser user = userManager.createUser("password", "userName");
@@ -250,7 +250,7 @@ public class IrAclDAOTest {
         //complete the transaction
 		tm.commit(ts);
 		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		UserManager userManager = new UserManager();
 		IrUser user = userManager.createUser("password", "userName");
 		user.setLastName("familyName");
@@ -260,7 +260,7 @@ public class IrAclDAOTest {
 		// save the user
 		userDAO.makePersistent(user);
 		
-		UserEmail userEmail2 = new UserEmail("blah@library.rochester.edu");
+		UserEmail userEmail2 = new UserEmail("blah@email");
 		IrUser user2 = userManager.createUser("password2", "userName2");
 		user2.setLastName("familyName");
 		user2.setFirstName("forename");
@@ -371,7 +371,7 @@ public class IrAclDAOTest {
         //complete the transaction
 		tm.commit(ts);
 		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		UserManager userManager = new UserManager();
 		IrUser user = userManager.createUser("password", "userName");
 		user.setLastName("familyName");
@@ -381,7 +381,7 @@ public class IrAclDAOTest {
 		// save the user
 		userDAO.makePersistent(user);
 		
-		UserEmail userEmail2 = new UserEmail("blah@library.rochester.edu");
+		UserEmail userEmail2 = new UserEmail("blah@email");
 		IrUser user2 = userManager.createUser("password2", "userName2");
 		user2.setLastName("familyName");
 		user2.setFirstName("forename");

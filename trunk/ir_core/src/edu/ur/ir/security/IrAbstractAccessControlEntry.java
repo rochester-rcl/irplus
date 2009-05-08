@@ -34,6 +34,9 @@ import edu.ur.persistent.BasePersistent;
  */
 public abstract class IrAbstractAccessControlEntry extends BasePersistent implements AccessControlEntry{
 	
+	/** eclipse generated id  */
+	private static final long serialVersionUID = -6271707799007297417L;
+
 	/**  The class type permissions for this sid */
 	protected Set<IrClassTypePermission> irClassTypePermissions = new HashSet<IrClassTypePermission>();
 	

@@ -4,10 +4,8 @@ import java.util.List;
 
 import org.hibernate.SessionFactory;
 
-import edu.ur.dao.UniqueNameDAO;
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
-import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.repository.VersionedLicense;
 import edu.ur.ir.repository.VersionedLicenseDAO;
 

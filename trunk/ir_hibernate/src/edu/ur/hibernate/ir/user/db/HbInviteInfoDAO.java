@@ -60,7 +60,6 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 * 
 	 * @param token
 	 */
-	@SuppressWarnings("unchecked")
 	public InviteInfo findInviteInfoForToken(String token)
 	{
 		return (InviteInfo) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("findInviteInfoForToken", token));

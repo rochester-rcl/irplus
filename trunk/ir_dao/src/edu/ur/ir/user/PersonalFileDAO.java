@@ -29,7 +29,6 @@ import edu.ur.dao.CrudDAO;
  * @author Nathan Sarr
  *
  */
-@SuppressWarnings("unchecked")
 public interface PersonalFileDAO extends CountableDAO, 
 CrudDAO<PersonalFile>
 {

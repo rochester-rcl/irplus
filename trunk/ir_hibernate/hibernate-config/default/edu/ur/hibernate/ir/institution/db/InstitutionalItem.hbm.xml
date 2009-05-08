@@ -311,7 +311,8 @@
 	    join institutionalItem.versionedInstitutionalItem as versionedItem
 	    join versionedItem.currentVersion as version
 	    where institutionalItem.institutionalCollection.id = ? 
-	    and version.dateOfDeposit between ? and ?
+	    and version.dateOfDeposit &gt;= ? 
+	    and version.dateOfDeposit &lt;= ?
 	    order by version.dateOfDeposit desc
 	</query>
 	

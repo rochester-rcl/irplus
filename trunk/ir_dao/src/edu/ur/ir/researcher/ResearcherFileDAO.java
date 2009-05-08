@@ -29,7 +29,6 @@ import edu.ur.dao.CrudDAO;
  * @author Sharmila Ranganathan
  *
  */
-@SuppressWarnings("unchecked")
 public interface ResearcherFileDAO extends CountableDAO, 
 CrudDAO<ResearcherFile>
 {
