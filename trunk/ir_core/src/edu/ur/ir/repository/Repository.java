@@ -98,6 +98,9 @@ public class Repository extends CommonPersistent {
 	/** last date the email process ran to send subscribers new collection items */
 	private Timestamp lastSubscriptionProcessEmailDate;
 	
+	/** indicates that sending emails should be stoped - default is false*/
+	private boolean suspendSubscriptionEmails = false;
+	
 
 	/**
      * Default constructor
@@ -561,5 +564,30 @@ public class Repository extends CommonPersistent {
 	 */
 	public void setLastSubscriptionProcessEmailDate(Timestamp lastSubscriptionProcessEmailDate) {
 		this.lastSubscriptionProcessEmailDate = lastSubscriptionProcessEmailDate;
+	}
+
+	/**
+	 * Indicates if sending subscription emails should be stopped
+	 * @return true if emails should be suspened
+	 */
+	public boolean isSuspendSuscriptionEmails() {
+		return suspendSubscriptionEmails;
+	}
+
+	/**
+	 * Indicates if sending subscription emails should be stopped
+	 * @param suspendSuscriptionEmails
+	 */
+	public void setSuspendSuscriptionEmails(boolean suspendSuscriptionEmails) {
+		this.suspendSubscriptionEmails = suspendSuscriptionEmails;
+	}
+	
+	/**
+	 * Indicates if sending subscription emails should be stopped
+	 * @return
+	 */
+	public boolean getSuspendSuscriptionEmails()
+	{
+		return suspendSubscriptionEmails;
 	}
 }

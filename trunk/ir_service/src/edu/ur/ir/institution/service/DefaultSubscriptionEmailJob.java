@@ -94,7 +94,13 @@ public class DefaultSubscriptionEmailJob implements Job{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		if( repository != null )
+		
+		if( repository != null)
+		{
+			log.debug("repository is suspended subscription emails " + subscriptionService.getUniqueSubsciberUserIds());
+		}
+		
+		if( repository != null && !repository.isSuspendSuscriptionEmails())
 		{
 			List<Long> uniqueSubscriberIds = subscriptionService.getUniqueSubsciberUserIds();
 			
