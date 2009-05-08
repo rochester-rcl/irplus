@@ -27,7 +27,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemObject;

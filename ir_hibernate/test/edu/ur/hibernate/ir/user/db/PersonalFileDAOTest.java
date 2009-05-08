@@ -149,7 +149,7 @@ public class PersonalFileDAOTest {
 		user.setPasswordEncoding("none");
 		VersionedFile versionedFile = new VersionedFile(user, info, "test file");
         
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		
 		user.addUserEmail(userEmail, true);
 		user.setAccountExpired(true);
@@ -242,7 +242,7 @@ public class PersonalFileDAOTest {
 		user.setPasswordEncoding("none");
 		VersionedFile versionedFile = new VersionedFile(user, info, "test file");
         
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		
 		user.addUserEmail(userEmail, true);
 		user.setAccountExpired(true);
@@ -338,7 +338,7 @@ public class PersonalFileDAOTest {
 		user.setPasswordEncoding("none");
 		VersionedFile versionedFile = new VersionedFile(user, info, "test file");
         
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		
 		user.addUserEmail(userEmail, true);
 		user.setAccountExpired(true);
@@ -421,8 +421,10 @@ public class PersonalFileDAOTest {
 		
 		VersionedFile versionedFile = new VersionedFile(user, info, "test file");
         
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
-		UserEmail userEmail1 = new UserEmail("sranganathan@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
+		
+		String email = properties.getProperty("user_1_email");
+		UserEmail userEmail1 = new UserEmail(email);
 		
 		user.addUserEmail(userEmail, true);
 		newOwner.addUserEmail(userEmail1, true);

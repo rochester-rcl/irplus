@@ -17,10 +17,12 @@
 package edu.ur.hibernate.ir.institution.db;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -44,11 +46,18 @@ import edu.ur.order.OrderType;
  */
 public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	
-
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(HbInstitutionalItemDAO.class);
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */
 	private final HbCrudDAO<InstitutionalItem> hbCrudDAO;
+	
+	/** Format for date comparison - this can be needed by certain databases - for
+	 * example postgres - the default set here - however - defferent strings can be
+	 * set using injection
+	 */
+	private String dateFormat = "yyyy-MM-dd HH:mm:ss";
 
 	/**
 	 * Default Constructor
@@ -623,8 +632,10 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getItems(final InstitutionalCollection collection,
 			final Date startDate, final Date endDate) {
         List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
-		
-		foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+		log.debug("Trying dates " + simpleDateFormat.format(startDate) + " and " + simpleDateFormat.format(endDate));
+
+        foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -633,12 +644,20 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			    q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateRange");
 			   
 			    q.setLong(0, collection.getId());
-			    q.setDate(1, startDate);
-			    q.setDate(2, endDate);
+			    q.setString(1, simpleDateFormat.format(startDate));
+			    q.setString(2, simpleDateFormat.format(endDate));
 	            return q.list();
 		    }
 	    });
         return foundItems;	
+	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
 	}
 
 

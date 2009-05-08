@@ -122,17 +122,21 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	 */
 	public void sendSubscriberEmail(IrUser user, Date startDate, Date endDate) throws MessagingException
 	{	
+		log.debug("Send emails for " + startDate + " to " +  endDate);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
-		boolean sendEmail = true;
-		StringBuffer emailText = new StringBuffer("test");
+		boolean sendEmail = false;
+		StringBuffer emailText = new StringBuffer();
 		
 		List<InstitutionalCollectionSubscription> subscriptions = getAllSubscriptionsForUser(user);
+		log.debug("Subscriptions found " + subscriptions.size());
 		if( subscriptions.size() > 0  )
 		{
 			for( InstitutionalCollectionSubscription subscription : subscriptions)
 			{
+				log.debug("Looking at subscription " + subscription);
 				InstitutionalCollection collection = subscription.getInstitutionalCollection();
-			    List<InstitutionalItem> items = institutionalItemService.getItems(collection, startDate, endDate);
+			    List<InstitutionalItem> items = institutionalItemService.getItems(collection, startDate,  endDate);
+			    log.debug("items found = " + items.size());
 			    if( items.size() > 0 )
 			    {
 			    	sendEmail = true;

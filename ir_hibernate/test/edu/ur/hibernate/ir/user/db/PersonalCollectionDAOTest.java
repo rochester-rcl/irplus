@@ -95,7 +95,7 @@ public class PersonalCollectionDAOTest {
 	@Test
 	public void basePersonalFolderDAOTest() throws DuplicateNameException{
   		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own collection
 		IrUser user = new IrUser("passowrd", "userName");
@@ -136,7 +136,7 @@ public class PersonalCollectionDAOTest {
 	@Test
 	public void getAllPersonalFolderDAOTest() throws DuplicateNameException{
   		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own collection
 		IrUser user = new IrUser("passowrd", "userName");
@@ -177,7 +177,7 @@ public class PersonalCollectionDAOTest {
 	 */
 	@Test
 	public void personalCollectionWithChildrenDAOTest() throws DuplicateNameException{
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
          // create a user who has their own collection
  		IrUser user = new IrUser("passowrd", "userName");
@@ -481,7 +481,7 @@ public class PersonalCollectionDAOTest {
      */
 	@Test
 	public void personalCollectionItemDAOTest() throws DuplicateNameException{
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
 		TransactionStatus ts = tm.getTransaction(td);
 		
@@ -550,7 +550,7 @@ public class PersonalCollectionDAOTest {
 	public void moveCollectionsTest() throws DuplicateNameException
 	{
 		TransactionStatus ts = tm.getTransaction(td);
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own collection
   		UserManager userManager = new UserManager();

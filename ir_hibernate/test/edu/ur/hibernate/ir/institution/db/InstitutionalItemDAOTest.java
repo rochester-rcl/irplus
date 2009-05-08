@@ -476,18 +476,20 @@ public class InstitutionalItemDAOTest {
 		InstitutionalItem institutionalItem2 = col.createInstitutionalItem(genericItem2);
 		institutionalItemDAO.makePersistent(institutionalItem2);
 
+
 		tm.commit(ts);
 
 		ts = tm.getTransaction(td);
 		
-		// get the calendar and subtract one day
+		/* get the calendar and subtract one day*/
 		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.add(Calendar.DAY_OF_MONTH, -1);
+		calendar.setTime(institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().getDateOfDeposit());
+		calendar.add(Calendar.SECOND, -1);
 		Date startDate = calendar.getTime();
 		
 		
-		
-		calendar.add(Calendar.DAY_OF_MONTH, 2);
+		calendar.setTime(institutionalItem2.getVersionedInstitutionalItem().getCurrentVersion().getDateOfDeposit());
+		calendar.add(Calendar.SECOND, 1);
 		Date endDate = calendar.getTime();
 		
 		

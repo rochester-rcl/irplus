@@ -16,8 +16,6 @@
 
 package edu.ur.ir.institution;
 
-import org.apache.log4j.Logger;
-
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
 import edu.ur.ir.item.GenericItem;
@@ -36,9 +34,6 @@ public class InstitutionalItem extends BasePersistent implements FileSystem{
 	/** Eclipse generated id */
 	private static final long serialVersionUID = 3451184761322961505L;
 
-	/**  Logger */
-	private static final Logger log = Logger.getLogger(InstitutionalItem.class);
-	
 	/**  collection the item belongs to. */
 	private InstitutionalCollection institutionalCollection;
 	

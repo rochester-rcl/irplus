@@ -130,7 +130,7 @@ public class PersonalFolderDAOTest {
 	@Test
 	public void basePersonalFolderDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
   		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own folder
   		UserManager userManager = new UserManager();
@@ -177,7 +177,7 @@ public class PersonalFolderDAOTest {
 	@Test
 	public void personalFolderWithChildrenDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
 
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
          // create a user who has their own folder
   		UserManager userManager = new UserManager();
@@ -595,7 +595,7 @@ public class PersonalFolderDAOTest {
 		// create the file in the file system.
 		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f, "newFile1");
 		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
 		IrUser user = new IrUser("user", "password");
 		user.addUserEmail(userEmail, true);
@@ -664,7 +664,7 @@ public class PersonalFolderDAOTest {
 		try
 		{
 		TransactionStatus ts = tm.getTransaction(td);
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own folder
   		UserManager userManager = new UserManager();
@@ -722,7 +722,7 @@ public class PersonalFolderDAOTest {
 	@Test
 	public void baseGetRootPersonalFolderDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
   		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own folder
   		UserManager userManager = new UserManager();
@@ -767,7 +767,7 @@ public class PersonalFolderDAOTest {
 	@Test
 	public void baseGetFolderInsideFolderDAOTest() throws DuplicateNameException,  IllegalFileSystemNameException {
   		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 
         // create a user who has their own folder
   		UserManager userManager = new UserManager();
@@ -862,7 +862,7 @@ public class PersonalFolderDAOTest {
 		user.setPasswordEncoding("none");
 		VersionedFile versionedFile = new VersionedFile(user, info, "test file");
         
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		
 		user.addUserEmail(userEmail, true);
 		user.setAccountExpired(true);

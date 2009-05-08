@@ -133,8 +133,6 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultSecurityService.class);
 	
-	private boolean includeDetailsObject = true;
-
 	
     //~ Instance fields ================================================================================================
 
@@ -264,7 +262,8 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
         return new LdapAuthenticationToken(user, password, user.getAuthorities());
     }
 
-    public boolean supports(Class authentication) {
+    @SuppressWarnings("unchecked")
+	public boolean supports(Class authentication) {
         return (LdapAuthenticationToken.class.isAssignableFrom(authentication));
     }
 

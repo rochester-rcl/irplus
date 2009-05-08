@@ -34,7 +34,6 @@ public interface ResearcherPublicationDAO  extends CrudDAO<ResearcherPublication
      * @param researcherId - the id of the researcher
 	 * @return List of root publications found .
 	 */
-	@SuppressWarnings("unchecked")
 	public List<ResearcherPublication> getRootResearcherPublications(final Long researcherId);
    
     
@@ -45,7 +44,7 @@ public interface ResearcherPublicationDAO  extends CrudDAO<ResearcherPublication
      * @param parentFolderId - the id of the parent folder 
      * 
 	 * @return List of publications found.
-	 */	@SuppressWarnings("unchecked")
+	 */
 	public List<ResearcherPublication> getSubResearcherPublications(final Long researcherId, final Long parentFolderId);
 	
 	

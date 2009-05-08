@@ -40,7 +40,10 @@ import edu.ur.simple.type.NameAware;
 public abstract class BaseBasicThumbnailTransformer implements BasicThumbnailTransformer,
 NameAware, DescriptionAware{
 	
-    /** name of the transformer*/
+    /** eclipse generated id */
+	private static final long serialVersionUID = 1425035716125388179L;
+
+	/** name of the transformer*/
     protected String name;
     
     /** description of the transformer */

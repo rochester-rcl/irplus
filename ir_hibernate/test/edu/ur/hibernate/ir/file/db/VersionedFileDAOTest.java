@@ -398,7 +398,7 @@ public class VersionedFileDAOTest {
 		user.setPasswordEncoding("none");
 		VersionedFile versionedFile = new VersionedFile(user, info, "test file");
         
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		
 		user.addUserEmail(userEmail, true);
 		user.setAccountExpired(true);

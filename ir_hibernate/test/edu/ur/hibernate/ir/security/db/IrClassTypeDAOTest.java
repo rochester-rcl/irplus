@@ -43,7 +43,6 @@ public class IrClassTypeDAOTest {
 	/**
 	 * Test irClassType persistance
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void baseClassTypeDAOTest() throws Exception{
 		IrClassType irClassType = new IrClassType(InMemoryRepositoryService.class);

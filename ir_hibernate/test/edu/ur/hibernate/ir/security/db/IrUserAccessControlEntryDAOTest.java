@@ -106,7 +106,7 @@ public class IrUserAccessControlEntryDAOTest {
         //complete the transaction
 		tm.commit(ts);
 	
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		
 		UserManager userManager = new UserManager();
 		IrUser user = userManager.createUser("passowrd", "userName");

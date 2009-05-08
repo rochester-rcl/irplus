@@ -145,7 +145,7 @@ public class ResearcherFileDAOTest {
 		user.setPasswordEncoding("none");
 		IrFile irFile = new IrFile(info, "test file");
         
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		
 		user.addUserEmail(userEmail, true);
 		user.setAccountExpired(true);
@@ -247,7 +247,7 @@ public class ResearcherFileDAOTest {
 		user.setPasswordEncoding("none");
 		IrFile irFile = new IrFile(info, "test file");
         
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		
 		user.addUserEmail(userEmail, true);
 		user.setAccountExpired(true);
@@ -373,7 +373,7 @@ public class ResearcherFileDAOTest {
 		user.setPasswordEncoding("none");
 		IrFile irFile = new IrFile(info, "test file");
         
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
 		
 		user.addUserEmail(userEmail, true);
 		user.setAccountExpired(true);

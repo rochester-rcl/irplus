@@ -73,7 +73,7 @@ public class IrUserDAOTest {
 	@Test
 	public void baseUserDAOTest()throws Exception{
 		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
   		
   		UserManager userManager = new UserManager();
 		IrUser user = userManager.createUser("passowrd", "userName");
@@ -122,7 +122,7 @@ public class IrUserDAOTest {
  		role2.setDescription("roleDescription2");
  		irRoleDAO.makePersistent(role2);
 		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
   		
  		// create the user and test.
 		IrUser user = new IrUser("userName", "passowrd");
@@ -162,7 +162,7 @@ public class IrUserDAOTest {
 	public void userWithNameDAOTest()throws Exception{
 		
 		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
  
 		UserManager userManager = new UserManager();
 		IrUser user = userManager.createUser("passowrd", "userName");
@@ -208,7 +208,7 @@ public class IrUserDAOTest {
 	@Test
 	public void userByTokenTest()throws Exception{
 		
-		UserEmail userEmail = new UserEmail("nathans@library.rochester.edu");
+		UserEmail userEmail = new UserEmail("user@email");
   		
   		UserManager userManager = new UserManager();
 		IrUser user = userManager.createUser("passowrd", "userName");
