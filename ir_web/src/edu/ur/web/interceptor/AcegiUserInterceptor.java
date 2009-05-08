@@ -58,7 +58,6 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 	 * 
 	 * @see com.opensymphony.xwork2.interceptor.AbstractInterceptor#intercept(com.opensymphony.xwork2.ActionInvocation)
 	 */
-	@SuppressWarnings("unchecked")
 	public String intercept(ActionInvocation invocation) throws Exception {
 		
 		IrUser user = null;
