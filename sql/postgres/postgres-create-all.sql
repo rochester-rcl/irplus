@@ -1446,6 +1446,7 @@ CREATE TABLE ir_repository.repository
 (
   repository_id BIGINT PRIMARY KEY,
   name TEXT NOT NULL,
+  suspend_subscription_emails BOOLEAN,
   institution_name TEXT,
   file_database_id BIGINT,
   description TEXT,
@@ -1740,6 +1741,11 @@ ALTER TABLE ir_repository.published_version OWNER TO ir_plus;
 -- The ir file sequence
 CREATE SEQUENCE ir_repository.published_version_seq;
 ALTER TABLE ir_repository.published_version_seq OWNER TO ir_plus;
+
+-- Index on the file Name
+CREATE INDEX published_version_deposit_date_idx ON ir_repository.published_version USING btree 
+(date_of_deposit);
+
 
 -- ---------------------------------------------
 -- Withdrawn token
