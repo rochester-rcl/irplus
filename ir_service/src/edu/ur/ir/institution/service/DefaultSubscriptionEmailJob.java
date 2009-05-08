@@ -93,25 +93,30 @@ public class DefaultSubscriptionEmailJob implements Job{
 		
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
-
-		List<Long> uniqueSubscriberIds = subscriptionService.getUniqueSubsciberUserIds();
-		
-		// make the end date today
-		Timestamp endDate = new Timestamp(new Date().getTime());
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		for( Long id : uniqueSubscriberIds )
+		if( repository != null )
 		{
-		    IrUser user = userService.getUser(id, false);
+			List<Long> uniqueSubscriberIds = subscriptionService.getUniqueSubsciberUserIds();
 			
-				try {
-				subscriptionService.sendSubscriberEmail(user, repository.getLastSubscriptionProcessEmailDate(), endDate );
-				
-			} catch (MessagingException e) {
+			// make the end date today
+			Timestamp endDate = new Timestamp(new Date().getTime());
+		    for( Long id : uniqueSubscriberIds )
+		    {
+		        IrUser user = userService.getUser(id, false);
+			
+				try 
+				{
+				    subscriptionService.sendSubscriberEmail(user, repository.getLastSubscriptionProcessEmailDate(), endDate );
+				} 
+				catch (MessagingException e) 
+				{
 				log.error(e);
-			}
+			    }
+		    }
+		
+		    repository.setLastSubscriptionProcessEmailDate(endDate);
+		    repositoryService.saveRepository(repository);
 		}
-		repository.setLastSubscriptionProcessEmailDate(endDate);
-		repositoryService.saveRepository(repository);
 		tm.commit(ts);
 	}
 
