@@ -147,6 +147,18 @@
                                   cols="60" rows="8">${repository.description}</textarea>
                           </td>
                       </tr>
+                       <tr>
+                          <td class="label">
+                              Suspend Subscription Emails:
+                          </td>
+                          <td class="input" colspan="2">
+                             <input type="checkbox" name="suspendSubscriptions"  value="true" 
+                                     <c:if test="${repository.suspendSuscriptionEmails}">
+                                         checked="true"
+                                     </c:if>
+                                 />
+                          </td>
+                      </tr>
                       <tr>
                           <td colspan="3" class="label">
                               

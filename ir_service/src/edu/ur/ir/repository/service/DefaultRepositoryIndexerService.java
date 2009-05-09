@@ -58,15 +58,18 @@ public class DefaultRepositoryIndexerService implements RepositoryIndexerService
 		
 		log.debug("processing a total of " + numberOfItems);
 		
+		Long repositoryId = repository.getId();
+		File folder = new File(repository.getInstitutionalItemIndexFolder());
+		
 		boolean overwriteExistingIndex = true;
 		while(rowStart < numberOfItems)
 		{
 			log.debug("row start = " + rowStart);
 			log.debug("row end = " + rowEnd);
 			
-		    List<InstitutionalItem> items = institutionalItemService.getRepositoryItemsOrderByName(rowStart, rowEnd, repository.getId(), OrderType.DESCENDING_ORDER);
+		    List<InstitutionalItem> items = institutionalItemService.getRepositoryItemsOrderByName(rowStart, rowEnd, repositoryId, OrderType.DESCENDING_ORDER);
 		
-		    institutionalItemIndexService.addItems(items, new File(repository.getInstitutionalItemIndexFolder()), overwriteExistingIndex);
+		    institutionalItemIndexService.addItems(items, folder, overwriteExistingIndex);
 		    overwriteExistingIndex = false;
 		    
 		    rowStart = rowEnd;

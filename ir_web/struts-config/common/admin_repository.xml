@@ -38,10 +38,9 @@
         </action>
         
         <action name="reIndexInstitutionalItems" 
-            method="reIndexInstitutionalItems"
-            class="edu.ur.ir.web.action.repository.EditRepository">
-            <interceptor-ref name="crudStack"/>
-            <result name="success">/pages/admin/repository/edit_repository.jsp</result>
+            class="edu.ur.ir.web.action.repository.ReIndexInstitutionalItem">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirect">viewRepository.action</result>
         </action>
         
         <action name="cancelRepository" 
