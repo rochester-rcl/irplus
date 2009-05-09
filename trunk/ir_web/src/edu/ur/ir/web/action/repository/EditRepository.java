@@ -124,6 +124,10 @@ Validateable{
 	/** batch size for re-indexing repository information - number of records to process*/
 	private int batchSize = 10;
 	
+	/** indicates that subscriptions should be suspended  */
+	private boolean suspendSubscriptions = false;
+	
+	
 	/**
 	 * Prepare the repository.
 	 * 
@@ -157,6 +161,8 @@ Validateable{
 		repository.setInstitutionName(institutionName);
 		Timestamp lastEmailDate = new Timestamp(new Date().getTime());
 		repository.setLastSubscriptionProcessEmailDate(lastEmailDate);
+		
+		repository.setSuspendSuscriptionEmails(suspendSubscriptions);
 		
 		
 		try {
@@ -222,6 +228,8 @@ Validateable{
 		{
 			throw new IllegalStateException ("repository service is null");
 		}
+		
+		repository.setSuspendSuscriptionEmails(suspendSubscriptions);
 		
 		if( handleNameAuthorityId == -1l  )
 		{
@@ -745,6 +753,14 @@ Validateable{
 
 	public void setUserWorkspaceIndexFolder(String userWorkspaceIndexFolder) {
 		this.userWorkspaceIndexFolder = userWorkspaceIndexFolder;
+	}
+
+	public boolean getSuspendSubscriptions() {
+		return suspendSubscriptions;
+	}
+
+	public void setSuspendSubscriptions(boolean suspendSubscriptions) {
+		this.suspendSubscriptions = suspendSubscriptions;
 	}
 
 }
