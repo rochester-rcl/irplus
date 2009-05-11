@@ -27,7 +27,7 @@ var myEmailAction = basePath + 'user/getEmails.action';
 // actions for adding and removing emails and editing the user information
 var newEmailAction = basePath + 'user/createEmail.action';
 var deleteEmailAction = basePath + 'user/deleteEmail.action';
-var updateEmailAction = basePath + 'user/updateEmail.action';
+var defaultEmailAction = basePath + 'user/setDefaultEmail.action';
 
 
 // Action to change password

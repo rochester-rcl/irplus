@@ -29,6 +29,7 @@ var updateUserAction = basePath + 'admin/updateUser.action';
 var newEmailAction = basePath + 'admin/createEmail.action';
 var deleteEmailAction = basePath + 'admin/deleteEmail.action';
 var updateEmailAction = basePath + 'admin/updateEmail.action';
+var defaultEmailAction = basePath + 'admin/setDefaultEmail.action';
 
 // action to perform for searching names
 var mySearchNameAction =  basePath + 'admin/searchAuthoritativeName.action';
@@ -114,17 +115,6 @@ YAHOO.ur.email = {
     },
 
 
-    /**
-     * Set all email ids in the form
-     */
-    setCheckboxes : function()
-    {
-        checked = document.myEmails.checkAllSetting.checked;
-        var emailIds = document.getElementsByName('emailIds');
-        urUtil.setCheckboxes(emailIds, checked);
-        
-    },
-	
 	/**
 	 *  Function that retireves emails from 
 	 *  the server
@@ -166,7 +156,6 @@ YAHOO.ur.email = {
 	{
 		    document.getElementById('newEmailForm_emailId').value ="";
 		    document.getElementById('newEmailForm_email').value ="";
-		    document.getElementById('newEmailForm_default').checked = false;
 		    document.newEmailForm.newEmail.value = "true";
 	},
 	
@@ -276,11 +265,6 @@ YAHOO.ur.email = {
 		        //based on what we need to do (update or create a 
 		        // new email) based on the action.
 	            var action = newEmailAction;
-		        if( document.newEmailForm.newEmail.value != 'true')
-		        {
-		           action = updateEmailAction;
-		        }
-	
 	            var cObj = YAHOO.util.Connect.asyncRequest('post',
 	            action, callback);
 	        }
@@ -314,26 +298,6 @@ YAHOO.ur.email = {
 		    YAHOO.ur.email.newEmailDialog.showDialog, 
 		    YAHOO.ur.email.newEmailDialog, true);
 	},
-
-    // function to edit email information
-    editEmail : function(uId, eId, email, defaultEId)
-    {
-    	document.newEmailForm.newEmail.value = "false";
-    	document.getElementById('newEmailForm_email').value = email;
-	    document.getElementById('newEmailForm_emailId').value = eId;
-	    document.getElementById('newEmailForm_id').value = uId;
-	    document.getElementById('newEmailForm_oldEmail').value = email;
-	   
-	    if( defaultEId == eId )
-	    {
-	        document.getElementById("newEmailForm_default").checked = true;
-	    }
-	    else
-	    {
-	        document.getElementById("newEmailForm_default").checked = false;
-	    }
-	    YAHOO.ur.email.newEmailDialog.showDialog();
-    },
 
 	/**
 	 * Creates the dialog for showing email information
@@ -462,8 +426,7 @@ YAHOO.ur.email = {
 	
 		// Define various event handlers for Dialog
 		var handleSubmit = function() {
-		    YAHOO.util.Connect.setForm('myEmails');
-		    
+		    YAHOO.util.Connect.setForm('deleteEmail');
 		    //delete the email
 	        var cObj = YAHOO.util.Connect.asyncRequest('post',
 	        deleteEmailAction, callback);
@@ -540,8 +503,51 @@ YAHOO.ur.email = {
 		    YAHOO.ur.email.deleteEmailDialog.showDialog, 
 		    YAHOO.ur.email.deleteEmailDialog, true);
 	},
+	
+	/**
+	 * Handles deleting a single email
+	 */
+	deleteEmail : function(emailId)
+	{
+		document.getElementById('deleteEmailId').value = emailId;
+		YAHOO.ur.email.deleteEmailDialog.showDialog();
+	},
+	
+	/**
+	 * Set an email as default
+	 */
+	defaultEmail : function(emailId, userId)
+	{
+		var callback =
+		{
+		    success: function(o) 
+		    {
+		        // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('newEmails');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
+		    },
+			
+			failure: function(o) 
+			{
+			    alert('Set default email Failure ' + o.status + ' status text ' + o.statusText );
+			}
+		}
 
-	//handles the serarch form submit
+		var userId = document.getElementById('editUserForm_id').value;
+		
+	    var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+	    	defaultEmailAction + '?bustcache='+new Date().getTime() + '&emailId=' + emailId + '&userId=' + userId, 
+	        callback, null);
+	},
+	
+
+	/**
+	 * handles the serarch form submit
+	 */
 	handleSearchFormSubmit : function()
 	{
 
@@ -567,7 +573,7 @@ YAHOO.ur.email = {
 			
 	},
 	
-	/*
+	/**
 	 * This call back updates the html when the names are retrieved
 	 * 
 	 */
@@ -590,7 +596,7 @@ YAHOO.ur.email = {
 		}
 	},
 
-	/*
+	/**
 	 * This call back updates the html when the names are retrieved
 	 * 
 	 */
