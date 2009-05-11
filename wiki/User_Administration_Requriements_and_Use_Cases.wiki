@@ -1,11 +1,35 @@
 #The user administration requirements and use cases 
 
-= Introduction =
+== IR Plus User Administration and Registration Functional Requirements Specification ==
+
+||*Updated By* || *Updated Date* || *Notes* ||
+|| Nathan Sarr || 5/11/2009 || Initial Add from requirements documents ||
 
 This is a list of requirements and use cases for user administration.
 
+General User Information:
 
-= Details =
+The system will categorize users into the following user types.  Users may belong to more than one of these user types.  
+Users in the system Figure (1.1)
+
+|| *User Type* || *General Description* ||
+|| General User ||User who has no login into the system ||
+|| Subscribing User ||A user who can login and subscribe to institutional collections to receive emails when institutional collections are updated – provided user has rights to register with the collection. ||
+|| Collaborating User || A user who can only collaborate on files shared with them ||
+|| Authoring user || A user who has a workspace and can add files to the system.  They also have the ability to invite other users to collaborate on files.  
+|| Researcher || ||
+|| Metadata Expert || ||
+|| Review Collection Submitter || ||
+|| Direct Collection Submitter || ||
+|| Collection Reviewer || ||
+|| Collection Administrator || ||
+|| Administrator || ||
+
+
+
+== Functional Requirements ==
+
+== Use Cases ==
 
 || *Id*                         || 1200  ||
 || *Name*                       || User Registration – external user – not affiliated with university – simple registration – new registration   ||
@@ -22,14 +46,14 @@ This is a list of requirements and use cases for user administration.
     # User enters in required information(FR-2 & FR 24)
     # User selects Not Affiliated option
     # User selects confirm option
-    # User sent verifying email with link to login to system [ Note this is to prevent programs that could generate a whole bunch of accounts]
+    # User sent verifying email with link to login to system - Note this is to prevent programs that could generate a whole bunch of accounts
     # User follows link and logs in
     # User accepts license agreement(see FR-25)
     # User registered with the system
     # User is logged into their account 
 
 *Extensions:*
-    # [step-4]User name already exists in the system
+    # [step-4] User name already exists in the system
         * User is notified the user name already exists
         * User given option to change user name
     # [step-4] User cancels registration
