@@ -19,17 +19,12 @@ package edu.ur.ir.web.action.user.admin;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.dao.CriteriaHelper;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
@@ -39,9 +34,6 @@ import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
-import edu.ur.ir.web.table.PropertyConverter;
-import edu.ur.ir.web.table.TableCollectionInfo;
-import edu.ur.ir.web.table.TableRequestHelper;
 import edu.ur.util.TokenGenerator;
 
 /**
@@ -50,8 +42,7 @@ import edu.ur.util.TokenGenerator;
  * @author Sharmila Ranganathan
  *
  */
-public class ManageEmails extends ActionSupport implements  
-ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable, UserIdAware{
+public class ManageEmails extends ActionSupport implements  Preparable, UserIdAware{
 
 	/** eclipse generated id */
 	private static final long serialVersionUID = 4890200754192783056L;
@@ -59,20 +50,12 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable, UserId
 	/**  Logger  */
 	private static final Logger log = Logger.getLogger(ManageEmails.class);
 
-	/** The request for the system. */
-	private HttpServletRequest request;
-	
+
 	/** user service */
 	private UserService userService;
 	
 	/** Set of emails  */
 	private Collection<UserEmail> emails;
-	
-	/** Set of email ids */
-	private List<Long> emailIds;
-	
-	/** total number of emails */
-	private Integer totalNumberOfEmails;
 	
 	/**  Indicates the email has been added*/
 	private boolean added = false;
@@ -267,25 +250,56 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable, UserId
 	 */
 	public String delete()
 	{
-		log.debug("Delete emails called" + emailIds);
+		log.debug("Delete email called" + emailId);
 		
 		//user making the change
 		IrUser changeMakingUser = userService.getUser(userId, false);
 		
-		if( emailIds != null )
+		if( emailId != null )
 		{
-		    for(Long emailId :emailIds)
-		    {
-			    UserEmail removeEmail = userService.getEmail(emailId, false);
-			    if( !removeEmail.getIrUser().equals(changeMakingUser) && !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
-			    {
-			    	 return "accessDenied";
-			    }
-			    userService.makeEmailTransient(removeEmail);
-		    }
+			UserEmail removeEmail = userService.getEmail(emailId, false);
+			if( !removeEmail.getIrUser().equals(changeMakingUser) && !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
+			{
+			    return "accessDenied";
+			}
+			userService.makeEmailTransient(removeEmail);
+		    
 		}
 		deleted = true;
 		return "deleted";
+	}
+	
+	/**
+	 * Set the email as default.
+	 * 
+	 * @return
+	 */
+	public String setDefault()
+	{
+		log.debug("set default email called" + emailId);
+		
+		//user making the change
+		IrUser changeMakingUser = userService.getUser(userId, false);
+		
+		if( emailId != null )
+		{
+			UserEmail defaultEmail = userService.getEmail(emailId, false);
+			log.debug("change making user = " + changeMakingUser + " default email user = " + defaultEmail.getIrUser());
+			if( !defaultEmail.getIrUser().equals(changeMakingUser) && !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
+			{
+			    return "accessDenied";
+			}
+
+			if( defaultEmail.isVerified())
+			{
+				IrUser user = defaultEmail.getIrUser();
+				user.setDefaultEmail(defaultEmail);
+				userService.makeUserPersistent(user);
+				emails = user.getUserEmails();
+			}
+		    
+		}
+		return "viewEmails";
 	}
 	
 	/**
@@ -309,53 +323,15 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable, UserId
 			}
 		}
 		
-		TableRequestHelper helper = new TableRequestHelper();
-		helper.processTableData(request, this, this);
-		List<CriteriaHelper> criteria = helper.getCriteriaHelpers();
+		IrUser user = userService.getUser(id, false);
+		emails = user.getUserEmails();
 		
-		emails = userService.getEmails(id, criteria, 
-				helper.getRowStart(), helper.getRowEnd());
 		return SUCCESS;
 
 	}
 	
-	/**
-	 * Set the servlet request.
-	 * 
-	 * @see org.apache.struts2.interceptor.ServletRequestAware#setServletRequest(javax.servlet.http.HttpServletRequest)
-	 */
-	public void setServletRequest(HttpServletRequest request) {
-		this.request = request;
-	}
 
-	/**
-	 * Convert the string types to the nessesary types for searching.
-	 * 
-	 * @see edu.ur.ir.web.table.PropertyConverter#convertValue(java.lang.String, java.lang.String)
-	 */
-	public Object convertValue(String property, String value) {
-		Object returnValue = value;
-        if( property.equalsIgnoreCase("id") )
-		{
-			String tempValue = value.toString();
-			returnValue = new Long(tempValue);
-		}
-        
-        return returnValue;
-	}
 
-	/**
-	 * Get the total number of results.
-	 * 
-	 * @see edu.ur.ir.web.table.TableCollectionInfo#getTotalNumberOfResults(java.util.List)
-	 */
-	public int getTotalNumberOfResults(List<CriteriaHelper> criteriaHelpers) {
-		totalNumberOfEmails = userService.getEmailCount(id, criteriaHelpers);
-		log.debug("Total number of results = " + totalNumberOfEmails);
-		return totalNumberOfEmails;
-
-	}
-	
 	/**
 	 * Get the user service 
 	 * 
@@ -393,23 +369,6 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable, UserId
 		this.emails = emails;
 	}
 
-	/**
-	 * Get the number of emails for this user
-	 * 
-	 * @return number of emails
-	 */
-	public Integer getTotalNumberOfEmails() {
-		return totalNumberOfEmails;
-	}
-
-	/**
-	 * Set the number of emails for this user
-	 * 
-	 * @param totalNumberOfEmails number of emails for the user
-	 */
-	public void setTotalNumberOfEmails(Integer totalNumberOfEmails) {
-		this.totalNumberOfEmails = totalNumberOfEmails;
-	}
 
 	/**
 	 * Indicates whether the email is added
@@ -499,24 +458,6 @@ ServletRequestAware,  PropertyConverter, TableCollectionInfo, Preparable, UserId
 	 */
 	public void setIrUser(IrUser irUser) {
 		this.irUser = irUser;
-	}
-	
-	/**
-	 * Get email ids that needs to be deleted
-	 * 
-	 * @return List of email ids
-	 */
-	public List<Long> getEmailIds() {
-		return emailIds;
-	}
-	
-	/**
-	 * Set email ids to be deleted
-	 * 
-	 * @param emailIds List of email ids
-	 */
-	public void setEmailIds(List<Long> emailIds) {
-		this.emailIds = emailIds;
 	}
 	
 	/**

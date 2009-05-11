@@ -532,25 +532,6 @@ public class DefaultUserService implements UserService {
 	}
 
 	/**
-	 * Get a count of emails.
-	 * 
-	 * @see edu.ur.ir.user.UserService#getEmailCount(Long, List)
-	 */
-	public Integer getEmailCount(Long userId, List<CriteriaHelper> criteriaHelpers) {
-		return userEmailDAO.getEmailCount(userId, criteriaHelpers);
-	}
-
-	/**
-	 * Get the list of emails.
-	 * 
-	 * @see edu.ur.ir.user.UserService#getEmails(Long, List, int, int)
-	 */
-	public List<UserEmail> getEmails(Long userId, List<CriteriaHelper> criteriaHelpers,
-			int rowStart, int rowEnd) {
-		return userEmailDAO.getEmails(userId, criteriaHelpers, rowStart, rowEnd);
-	}
-
-	/**
 	 * Get a list of emails with the given set of ids.
 	 * 
 	 * @see edu.ur.ir.user.UserService#getEmails(java.util.List)

@@ -262,32 +262,6 @@ public interface UserService extends UserDetailsService {
 	
 
 	/**
-	 * Get a count of emails.
-     *  
-     * @param userId id of user having this email
-     * @param criteriaHelpers to apply to the selections
-     * 
-     * @return - the number of emails found
-     */
-	public Integer getEmailCount(Long userId, List<CriteriaHelper> criteriaHelpers) ;
-
-	/**
-	 * Get the list of emails. 
-	 * 
-	 * Sort is applied based on the order of sort information in the list (1st to last).
-	 * Starts at the specified row start location and stops at specified row end.
-	 * 
-	 * @param userId id of user having this email
-	 * @param criteria - the criteria of how to sort and filter the information 
-	 * @param rowStart - start position in paged set
-	 * @param rowEnd - end position in paged set
-	 * 
-	 * @return List of emails for the specified information.
-	 */
-	public List<UserEmail> getEmails(Long userId, List<CriteriaHelper> criteriaHelpers,
-			int rowStart, int rowEnd) ;
-
-	/**
 	 * Get a set of emails with the given ids.
 	 * 
 	 * @param emailIds - set of email ids.
