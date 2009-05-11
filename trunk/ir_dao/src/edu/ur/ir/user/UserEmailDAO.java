@@ -19,7 +19,6 @@ package edu.ur.ir.user;
 import java.util.List;
 
 import edu.ur.dao.CountableDAO;
-import edu.ur.dao.CriteriaHelper;
 import edu.ur.dao.CrudDAO;
 
 /**
@@ -37,17 +36,7 @@ public interface UserEmailDAO extends CrudDAO<UserEmail>, CountableDAO {
 	 */
 	public UserEmail getUserByEmail(String email);
 	
-    /**
-     * Get a count of emails 
-     *  
-     * @param userId id of the user
-     * @param filters - list of criteria to apply to the object
-     * 
-     * @return - the number of emails found
-     */
-    public Integer getEmailCount(Long userId, List<CriteriaHelper> criteria);
-    
-	/**
+ 	/**
 	 * Get emails in the given list with the specified ids.  If the list
 	 *  is empty, no emails are returned.
 	 * 
@@ -57,19 +46,6 @@ public interface UserEmailDAO extends CrudDAO<UserEmail>, CountableDAO {
 	 */
 	public List<UserEmail> getEmails(List<Long> emailIds);
 	
-	/**
-	 * Get a list of emails 
-	 * 
-	 * @param userId - id of the user
-	 * @param criteriaHelpers - criteria to base the selection.
- 	 * @param rowStart - start id.
-	 * @param rowEnd - end id.
-	 * 
-	 * @return the list of emails found.
-	 */
-	public List<UserEmail> getEmails(Long userId, List<CriteriaHelper> criteriaHelpers,
-			int rowStart, int rowEnd);
-
 	/**
 	 * Get the user email for the specified token
 	 * 

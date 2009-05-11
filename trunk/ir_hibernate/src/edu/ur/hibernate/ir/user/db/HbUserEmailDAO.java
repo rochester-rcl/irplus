@@ -24,12 +24,9 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
-import edu.ur.dao.CriteriaHelper;
-import edu.ur.hibernate.CriteriaBuilder;
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.user.UserEmail;
@@ -74,26 +71,7 @@ public class HbUserEmailDAO implements UserEmailDAO {
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("userEmailCount"));
 	}
 
-	/**
-	 * Get a count of criteria.
-	 * 
-	 * @see edu.ur.ir.user.UserEmailDAO#getEmailCount(Long, List)
-	 */
-	public Integer getEmailCount(final Long userId, final List<CriteriaHelper> criteriaHelpers) {
-    	Integer count = (Integer) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
-                criteria.createCriteria("irUser").add(Restrictions.idEq(userId));
-                criteriaBuilder.executeWithFiltersOnly(criteria, criteriaHelpers);
-                return criteria.setProjection(Projections.rowCount()).uniqueResult();
-            }
-        });
-    	
-    	return count;
-	}
-	
+
 	/**
 	 * Get the emails.
 	 * 
@@ -116,30 +94,6 @@ public class HbUserEmailDAO implements UserEmailDAO {
 		return foundEmails;
 	}
 
-	/**
-	 * Get the list of emails.
-	 * 
-	 * @see edu.ur.ir.user.UserEmailDAO#getEmails(Long, List, int, int)
-	 */
-	@SuppressWarnings("unchecked")
-	public List<UserEmail> getEmails(final Long userId,final List<CriteriaHelper> criteriaHelpers,
-			final int rowStart, final int rowEnd) {
-		List<UserEmail> emails = 
-			(List<UserEmail>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
-                criteria.createCriteria("irUser").add(Restrictions.idEq(userId));
-                criteriaBuilder.execute(criteria, criteriaHelpers);
-                criteria.setFirstResult(rowStart);
-                criteria.setMaxResults(rowEnd - rowStart);
-                return criteria.list();
-            }
-        });
-
-        return emails;
-	}
 
 	
 	/**
