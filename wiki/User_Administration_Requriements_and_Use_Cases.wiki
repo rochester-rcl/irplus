@@ -1,0 +1,19 @@
+#The user administration requirements and use cases 
+
+= Introduction =
+
+This is a list of requirements and use cases for user administration.
+
+
+= Details =
+
+|| *Id*                         ||   ||
+|| *Name*                       ||   ||
+|| *Primary Actor(s)*           ||   ||
+|| *Scope*                      ||   ||
+|| *Level*                      ||   ||
+|| *Stakeholders and Interests* ||   ||
+|| *Precondition*               ||   ||
+|| *Success Guarantee*          ||   ||
+|| *Main Success Scenario*      ||   ||
+|| *Extensions*                 ||   ||
