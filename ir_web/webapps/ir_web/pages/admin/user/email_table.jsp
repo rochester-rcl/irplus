@@ -26,12 +26,10 @@
 	    <urstb:table width="100%">
 	        <urstb:thead>
 	            <urstb:tr>
-					<urstb:td><ur:checkbox name="checkAllSetting" 
-	                    value="off" 
-	                    onClick="YAHOO.ur.email.setCheckboxes();"/>&nbsp;Email Type</urstb:td>         
 	                <urstb:td>Id</urstb:td>
 	                <urstb:td>Email</urstb:td>
 	                <urstb:td>Status</urstb:td>
+	                <urstb:td>Actions</urstb:td>
 	            </urstb:tr>
 	        </urstb:thead>
 	        <urstb:tbody
@@ -44,25 +42,14 @@
 	                        cssClass="${rowClass}"
 	                        onMouseOver="this.className='highlight'"
 	                        onMouseOut="this.className='${rowClass}'">
-	                        <urstb:td>
-		                        <c:if test="${email.id != email.irUser.defaultEmail.id}">
-	                                <ur:checkbox name="emailIds" value="${email.id}"/>
-	                            </c:if>
-	                            <c:if test="${email.id == email.irUser.defaultEmail.id}">
-	                                <strong>[Default Email]</strong>
-	                            </c:if>
-	                        </urstb:td>
+	                        
 	                        <urstb:td>
 		                         ${email.id}
 	                        </urstb:td>
 	                        <urstb:td>
-		                   		<c:if test="${(email.id != email.irUser.defaultEmail.id) && (email.verified)}">
-	                   		        <a href="javascript:YAHOO.ur.email.editEmail('${email.irUser.id}',
-	                   		            '${email.id}','${email.email}','${email.irUser.defaultEmail.id}');">${email.email}</a>
-	                           	</c:if> 
-	                 	        <c:if test="${(email.id == email.irUser.defaultEmail.id) || !(email.verified)}">
-	                   		        ${email.email}
-	                   	        </c:if> 
+	                   		     ${email.email} <c:if test="${email.id == email.irUser.defaultEmail.id}">
+	                                - <strong>[Default Email]</strong>
+	                            </c:if>
 	                        </urstb:td>
 	                        <urstb:td>
 		                   		<c:if test="${email.verified}">
@@ -71,6 +58,14 @@
 	                   		    <c:if test="${!email.verified}">
 	                       		     Pending verification 
 	                    	     </c:if>
+	                        </urstb:td>
+	                        <urstb:td>
+		                   		<c:if test="${(email.verified) && (email.id != email.irUser.defaultEmail.id) }">
+	                       		    <a href="javascript:YAHOO.ur.email.defaultEmail(${email.id}, ${email.irUser.id})">Set As Default</a> /
+	                    	    </c:if>
+	                    	    <c:if test="${email.id != email.irUser.defaultEmail.id}">
+	                                 <a href="javascript:YAHOO.ur.email.deleteEmail(${email.id})">Delete</a>
+	                            </c:if>
 	                        </urstb:td>
 	                    </urstb:tr>
 	            </urstb:tbody>

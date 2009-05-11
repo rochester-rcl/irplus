@@ -52,11 +52,5 @@
 			    name="email.email" 
 			    value="${email.email}" size="45"/> </td>
 			</tr>
-			<tr>
-			    <td align="left" class="label">Default email:</td>
-			    <td align="left" class="input"> <input type="checkbox"
-			    	 name="defaultEmail" id="newEmailForm_default" value="true">
-	            </td>
-			</tr>
 	    </table>
 	    
