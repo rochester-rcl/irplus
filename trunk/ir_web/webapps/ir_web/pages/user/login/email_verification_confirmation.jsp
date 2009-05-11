@@ -61,6 +61,7 @@
           		 <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="tokenNotExist"/></p>
 			
+			     <p><a href="<c:url value="/home.action"/>">Go To IR Plus Home</a></p>
             </div>
             <!--  end the body tag --> 
 
