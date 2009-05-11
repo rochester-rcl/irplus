@@ -163,14 +163,10 @@
               	 <!--  start second tab -->
                	 <div id="tab2">
 			          <br/>
-					              <button class="ur_button" id="showEmail" 
-	                               onmouseover="this.className='ur_buttonover';"
-	                               onmouseout="this.className='ur_button';"
-	                               >New Email</button>
-					              <button class="ur_button" id="showDeleteEmail" 
-	                               onmouseover="this.className='ur_buttonover';"
-	                               onmouseout="this.className='ur_button';"
-	                               >Delete Email</button>
+					       <button class="ur_button" id="showEmail" 
+	                            onmouseover="this.className='ur_buttonover';"
+	                            onmouseout="this.className='ur_button';"
+	                            >New Email</button>
 				      <br/>
 				      <br/>
 				    <input type="hidden" id="editUserForm_id" value="${irUser.id}">
@@ -192,15 +188,15 @@
                	 <div id="tab4">
 			          <br/>
 				    
-					              <button class="ur_button" id="showPersonName" 
-	                               onmouseover="this.className='ur_buttonover';"
-	                               onmouseout="this.className='ur_button';"
-	                               >New Name</button>
+					      <button class="ur_button" id="showPersonName" 
+	                          onmouseover="this.className='ur_buttonover';"
+	                          onmouseout="this.className='ur_button';"
+	                          >New Name</button>
 				              
-									<button class="ur_button" id="showDeletePersonName" 
-	                               onmouseover="this.className='ur_buttonover';"
-	                               onmouseout="this.className='ur_button';"
-	                               >Delete Name</button>				              
+						  <button class="ur_button" id="showDeletePersonName" 
+	                          onmouseover="this.className='ur_buttonover';"
+	                          onmouseout="this.className='ur_button';"
+	                          >Delete Name</button>				              
 				  
 				      <br/>
 				      <br/>
@@ -232,9 +228,7 @@
 		              
 		              <div id="newEmailDialogFields">
 		                  <c:import url="/pages/admin/user/email_form.jsp"/>
-	                   
 	                  </div>
-		              
 		          </form>
 		      </div>
 	      </div>
@@ -247,7 +241,8 @@
 		              
 		              
 		              <div id="deleteEmailError" class="errorMessage"></div>
-			          <p>Are you sure you wish to delete the selected emails?</p>
+		              <input type="hidden" name="emailId" id="deleteEmailId" value=""/>
+			          <p>Are you sure you wish to delete the email?</p>
 		          </form>
 		      </div>
 	      </div>
