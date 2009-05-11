@@ -17,18 +17,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:if test="${irFile.id > 0}">
-<table width="100%" cellpadding="0" cellspacing="0">
     <c:url var="pictureUrl" value="/downloadRepositoryPicture.action">
         <c:param name="irFileId" value="${irFile.id}"/>
     </c:url>
     
-    <tr>
-        <td colspan="2">
-            <img class="repository_image"  src="${pictureUrl}"/>
-        </td>
-    </tr>
+   <img class="repository_image"  src="${pictureUrl}"/>
 
-</table>
 <table class="buttonTable">
     <tr>
         <td class="leftButton">
