@@ -7,30 +7,40 @@ This is a list of requirements and use cases for user administration.
 
 = Details =
 
-|| *Id*                         || 1200 ||
-|| *Name*                       || User Registration – external user – not affiliated with university – simple registration – new registration  ||
-|| *Primary Actor(s)*           || External User (“Subscribing User”)  ||
-|| *Scope*                      || IR Plus System  ||
-|| *Level*                      || User Goal ||
-|| *Stakeholders and Interests* || Be able subscribe so that they can receive emails about new publications added to collections ||
-|| *Precondition*               || User has never registered with the system  ||
-|| *Success Guarantee*          || User is registered or notified why they could not register with the system.       ||
-|| *Main Success Scenario*      ||  #	User selects register with system
-#	User enters in required information(FR-2 & FR 24)
-#	User selects Not Affiliated option
-#	User selects confirm option
-#	User sent verifying email with link to login to system [ Note this is to prevent programs that could generate a whole bunch of accounts]
-#	User follows link and logs in
-#	User accepts license agreement(see FR-25)
-#	User registered with the system
-#	User is logged into their account 
- ||
-|| *Extensions*                 ||  #	 [step-4]User name already exists in the system
-*	User is notified the user name already exists
-*	User given option to change user name
-#	[step-4] User cancels registration
-*	User not registered
- ||
+*Id:* 1200 
+
+*Name: * User Registration – external user – not affiliated with university – simple registration – new registration  
+
+*Primary Actor(s):* External User (“Subscribing User”)
+
+*Scope:* IR Plus System
+
+*Level:* User Goal 
+
+*Stakeholders and Interests:* Be able subscribe so that they can receive emails about new publications added to collections 
+
+*Precondition:* User has never registered with the system 
+
+*Success Guarantee:* User is registered or notified why they could not register with the system.       
+
+*Main Success Scenario:* 
+ 
+# User selects register with system
+# User enters in required information(FR-2 & FR 24)
+# User selects Not Affiliated option
+# User selects confirm option
+# User sent verifying email with link to login to system [ Note this is to prevent programs that could generate a whole bunch of accounts]
+# User follows link and logs in
+# User accepts license agreement(see FR-25)
+# User registered with the system
+# User is logged into their account 
+
+*Extensions:*
+# [step-4]User name already exists in the system
+  * User is notified the user name already exists
+  * User given option to change user name
+# [step-4] User cancels registration
+  * User not registered
 
 
 || *Id*                         ||   ||
