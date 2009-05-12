@@ -658,7 +658,7 @@ CREATE TABLE ir_user.user_group
     version INTEGER,
     name TEXT NOT NULL,
     description TEXT,
-    UNIQUE(name, group_id)
+    UNIQUE(name)
 );
 ALTER TABLE ir_user.user_group OWNER TO ir_plus;
 
