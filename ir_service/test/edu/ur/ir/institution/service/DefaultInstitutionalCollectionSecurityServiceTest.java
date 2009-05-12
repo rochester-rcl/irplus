@@ -64,7 +64,7 @@ public class DefaultInstitutionalCollectionSecurityServiceTest {
    
     /** Repository security service  */
     InstitutionalCollectionService institutionalCollectionService = 
-    	(InstitutionalCollectionService) ctx.getBean("insitutionalCollectionService");
+    	(InstitutionalCollectionService) ctx.getBean("institutionalCollectionService");
     
     /** user group service  */
     UserGroupService userGroupService = 
@@ -95,7 +95,7 @@ public class DefaultInstitutionalCollectionSecurityServiceTest {
 	 * @throws DuplicateNameException 
 	 * @throws LocationAlreadyExistsException 
 	 */
-	public void assignParentPermissionsTest() throws DuplicateNameException, LocationAlreadyExistsException
+	public void assignParentAdminPermissionsTest() throws DuplicateNameException, LocationAlreadyExistsException
 	{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -141,8 +141,8 @@ public class DefaultInstitutionalCollectionSecurityServiceTest {
 		permissions.add(reviewerPermission);
 		
 		securityService.createPermissions(collection, userGroup, permissions);
-		institutionalCollectionSecurityService.givePermissionsToParentCollections(child);
-		institutionalCollectionSecurityService.givePermissionsToParentCollections(subChild);
+		institutionalCollectionSecurityService.giveAdminPermissionsToParentCollections(child);
+		institutionalCollectionSecurityService.giveAdminPermissionsToParentCollections(subChild);
 		tm.commit(ts);
 		
  	    // Start the transaction 
@@ -189,9 +189,119 @@ public class DefaultInstitutionalCollectionSecurityServiceTest {
 		
 		
 		ts = tm.getTransaction(td);
+		
 		securityService.deleteAcl(collection.getId(), collection.getClass().getName());
 		securityService.deleteAcl(child.getId(), child.getClass().getName());
 		securityService.deleteAcl(subChild.getId(), subChild.getClass().getName());
+		userGroupService.delete(userGroupService.get(userGroup.getId(), false));
+		helper.cleanUpRepository();
+		tm.commit(ts);
+	}
+	
+	/**
+	 * Test creating the default groups
+	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	public void assignChildAdminPermissionsTest() throws DuplicateNameException, LocationAlreadyExistsException
+	{
+		// start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		
+		
+	 
+		// save the repository
+		tm.commit(ts);
+		
+        // Start the transaction 
+		ts = tm.getTransaction(td);
+		repo = repositoryService.getRepository(repo.getId(), false);
+		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		InstitutionalCollection child = collection.createChild("child1");
+		InstitutionalCollection subChild = child.createChild("subChild");
+		institutionalCollectionService.saveCollection(collection);
+		
+		IrUserGroup userGroup = new IrUserGroup("DEFAULT_ADMIN_GROUP");
+		userGroupService.save(userGroup);
+		
+		IrClassTypePermission viewPermission = 
+			institutionalCollectionSecurityService.getClassTypePermission(InstitutionalCollectionSecurityService.VIEW_PERMISSION);
+		
+		assert viewPermission != null : "Should be able to find view permission";
+			
+		IrClassTypePermission adminPermission = 
+			securityService.getPermissionForClass(collection, 
+					InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION.getPermission());
+
+		IrClassTypePermission directSubmitPermission = 
+			securityService.getPermissionForClass(collection, 
+					InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION.getPermission());
+		
+		IrClassTypePermission reviewerPermission = 
+			securityService.getPermissionForClass(collection, 
+					InstitutionalCollectionSecurityService.REVIEWER_PERMISSION.getPermission());
+		
+		HashSet<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		permissions.add(viewPermission);
+		permissions.add(adminPermission);
+		permissions.add(directSubmitPermission);
+		permissions.add(reviewerPermission);
+		
+		securityService.createPermissions(collection, userGroup, permissions);
+		institutionalCollectionSecurityService.giveAdminPermissionsToChildCollections(userGroup, collection);
+		tm.commit(ts);
+		
+ 	    // Start the transaction 
+		ts = tm.getTransaction(td);
+		IrAcl subChildAcl = securityService.getAcl(subChild);
+		
+		collection = institutionalCollectionService.getCollection(collection.getId(), false);
+		userGroup = userGroupService.get("DEFAULT_ADMIN_GROUP");
+		assert userGroup != null : "Should be able to find " +
+		"DEFAULT_ADMIN_GROUP";
+		
+		
+		
+		assert subChildAcl.isGranted(InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION.getPermission(), 
+				userGroup, false) : "Should have admin privileges";
+		
+		assert subChildAcl.isGranted(InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION.getPermission(), 
+				userGroup, false): "Should have direct submit privileges";
+		
+		assert subChildAcl.isGranted(InstitutionalCollectionSecurityService.REVIEWER_PERMISSION.getPermission(), 
+				userGroup, false): "Should have direct reviewer privileges";
+		
+		assert subChildAcl.isGranted(InstitutionalCollectionSecurityService.VIEW_PERMISSION.getPermission(), 
+				userGroup, false): "Should have view privileges";
+	
+		
+		child = institutionalCollectionService.getCollection(child.getId(), false);
+		
+		
+		assert subChildAcl.isGranted(InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION.getPermission(), 
+				userGroup, false) : "Should have admin privileges";
+		
+		assert subChildAcl.isGranted(InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION.getPermission(), 
+				userGroup, false): "Should have direct submit privileges";
+		
+		assert subChildAcl.isGranted(InstitutionalCollectionSecurityService.REVIEWER_PERMISSION.getPermission(), 
+				userGroup, false): "Should have direct reviewer privileges";
+		
+		assert subChildAcl.isGranted(InstitutionalCollectionSecurityService.VIEW_PERMISSION.getPermission(), 
+				userGroup, false): "Should have view privileges";
+		
+		
+		tm.commit(ts);
+
+		
+		ts = tm.getTransaction(td);
+		securityService.deleteAcl(collection.getId(), collection.getClass().getName());
+		securityService.deleteAcl(child.getId(), child.getClass().getName());
+		securityService.deleteAcl(subChild.getId(), subChild.getClass().getName());
+		userGroupService.delete(userGroupService.get(userGroup.getId(), false));
 		helper.cleanUpRepository();
 		tm.commit(ts);
 	}

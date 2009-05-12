@@ -57,19 +57,25 @@ public class DefaultInstitutionalCollectionSecurityService implements Institutio
 	private SecurityService securityService;
 	
 	/**
-	 * Gives permissions to all parent collections.  This makes sure administrators
+	 * Gives permissions to all groups in parent collections that currently have
+	 * administration privileges.  This makes sure administrators
 	 * in parent collections can manage children collections.
 	 * 
-	 * @see edu.ur.ir.institution.InstitutionalCollectionSecurityService#givePermissionsToParentCollections(edu.ur.ir.institution.InstitutionalCollection)
+	 * @see edu.ur.ir.institution.InstitutionalCollectionSecurityService#giveAdminPermissionsToParentCollections(edu.ur.ir.institution.InstitutionalCollection)
 	 */
-	public void givePermissionsToParentCollections(InstitutionalCollection child) {
+	public void giveAdminPermissionsToParentCollections(InstitutionalCollection child) {
 		if(log.isDebugEnabled())
 		{
 			log.debug("givePermissionsToParentCollections called");
 		}
 		List<InstitutionalCollection> parents = institutionalCollectionService.getPath(child);
+		
+		// the child is included in the path so we will remove it leaving only the parent collections
+		// to update
 		parents.remove(child);
 		
+		// create a list of class permissions for an administration
+		// this assumes all of the classes will be institutional collections.
 		IrClassTypePermission viewPermission = 
 			securityService.getPermissionForClass(child, VIEW_PERMISSION.getPermission());
 
@@ -123,6 +129,61 @@ public class DefaultInstitutionalCollectionSecurityService implements Institutio
 		}
 		
 	}
+	
+	/**
+	 * Gives permissions to all child collections for the specified user group.  This makes sure when a group in a parent collection is updated with
+	 * administration permissions all children are updated with the group.  
+	 * This should be called any time administration privileges  are given to a particular group for a particular collection
+	 * 
+	 * @param userGroup - group given admin privileges
+	 * @param parent - parent collection 
+	 */
+	public void giveAdminPermissionsToChildCollections(IrUserGroup userGroup, InstitutionalCollection parent) {
+		if(log.isDebugEnabled())
+		{
+			log.debug("givePermissionsToParentCollections called");
+		}
+		
+		Set<Sid> sids = securityService.getSidsWithPermissionForObject(parent, 
+				InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION.getPermission());
+		
+		if( !sids.contains(userGroup))
+		{
+			throw new IllegalStateException("user group does not have administration privileges on parent");
+		}
+		
+		// create a list of class permissions for an administration
+		// this assumes all of the classes will be institutional collections.
+		IrClassTypePermission viewPermission = 
+			securityService.getPermissionForClass(parent, VIEW_PERMISSION.getPermission());
+
+		IrClassTypePermission adminPermission = 
+			securityService.getPermissionForClass(parent, ADMINISTRATION_PERMISSION.getPermission());
+
+		IrClassTypePermission directSubmitPermission = 
+			securityService.getPermissionForClass(parent, DIRECT_SUBMIT_PERMISSION.getPermission());
+		
+		IrClassTypePermission reviewerPermission = 
+			securityService.getPermissionForClass(parent, REVIEWER_PERMISSION.getPermission());
+		
+		LinkedList<IrClassTypePermission> permissions = new LinkedList<IrClassTypePermission>();
+		permissions.add(viewPermission);
+		permissions.add(adminPermission);
+		permissions.add(directSubmitPermission);
+		permissions.add(reviewerPermission);
+		
+		// get all children including sub children to update with the new permissions
+		List<InstitutionalCollection> collectionsToUpdate = institutionalCollectionService.getAllChildrenForCollection(parent);
+		
+		// for the group permission to all of the child collections
+		for(InstitutionalCollection collection : collectionsToUpdate)
+		{
+			securityService.createPermissions(collection, userGroup, 
+							permissions);
+		}
+	}
+	
+	
 	
 	/**
 	 * Delete the specified acl.
@@ -185,6 +246,17 @@ public class DefaultInstitutionalCollectionSecurityService implements Institutio
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Get the class type permission for the given institutiona collection permission.
+	 * 
+	 * @param collectionPermission - class type permission to get
+	 * @return found IrClassTypePermission.
+	 */
+	public IrClassTypePermission getClassTypePermission(InstitutionalCollectionPermission collectionPermission)
+	{
+		return securityService.getClassTypePermission(InstitutionalCollection.class.getName(), collectionPermission.getPermission());
 	}
 
 	

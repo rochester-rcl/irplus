@@ -156,14 +156,32 @@ public class EditGroupPermissionsOnCollection extends ActionSupport
 		}
 		
 		log.debug("permission ids size = " + permissionIds.length);
+		boolean adminCollectionPrivilegeGiven = false;
+		IrClassTypePermission adminCollectionPermission = 
+			institutionalCollectionSecurityService.getClassTypePermission(InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION);
 		for(Long id : permissionIds)
 		{
 			IrClassTypePermission permission = securityService.getIrClassTypePermissionById(id, false);
+			
+			log.debug("1 Checking admin class type " + adminCollectionPermission + " to " + permission + 
+					" equals = " + permission.equals(adminCollectionPermission) );
+			if(permission.equals(adminCollectionPermission))
+			{
+				adminCollectionPrivilegeGiven = true;
+			}
 			log.debug("adding permission " + permission);
 			entry.addPermission(permission);
 		}
-
+		
 		securityService.save(acl);
+		
+		// give group permissions to all children
+		if(adminCollectionPrivilegeGiven)
+		{
+			log.debug("Calling give to child collections 1");
+			institutionalCollectionSecurityService.giveAdminPermissionsToChildCollections(userGroup, collection);
+		}
+
 		
 		entries = acl.getGroupEntries();
 		userGroups = userGroupService.getAllNameOrder();
@@ -200,14 +218,34 @@ public class EditGroupPermissionsOnCollection extends ActionSupport
 		
 		// add the current permissions assigned
 		log.debug("permission ids size = " + permissionIds.length);
+		boolean adminCollectionPrivilegeGiven = false;
+		IrClassTypePermission adminCollectionPermission = 
+			institutionalCollectionSecurityService.getClassTypePermission(InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION);
+
 		for(Long id : permissionIds)
 		{
 			IrClassTypePermission permission = securityService.getIrClassTypePermissionById(id, false);
 			log.debug("adding permission " + permission);
+			
+			log.debug("2 Checking admin class type " + adminCollectionPermission + " to " + permission + 
+					" equals = " + permission.equals(adminCollectionPermission) );
+
+			if(permission.equals(adminCollectionPermission))
+			{
+				adminCollectionPrivilegeGiven = true;
+			}
 			entry.addPermission(permission);
 		}
-
+		
 		securityService.save(acl);
+		
+		// give group permissions to all children
+		if(adminCollectionPrivilegeGiven)
+		{
+			log.debug("Calling give to child collections 2");
+			institutionalCollectionSecurityService.giveAdminPermissionsToChildCollections(userGroup, collection);
+		}
+
 		
 		entries = acl.getGroupEntries();
 		userGroups = userGroupService.getAllNameOrder();

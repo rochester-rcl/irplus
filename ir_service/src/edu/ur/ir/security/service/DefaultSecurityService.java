@@ -433,6 +433,11 @@ public class DefaultSecurityService implements SecurityService {
 	 */
 	public IrClassTypePermission getClassTypePermission(String className,
 			String permissionName) {
+		if( log.isDebugEnabled())
+		{
+		    log.debug("Tring to find by name and class type name = " + 
+				CgLibHelper.cleanClassName(className) + " permission name = " + permissionName );
+		}
 		return irClassTypePermissionDAO.getClassTypePermissionByNameAndClassType(CgLibHelper.cleanClassName(className), permissionName);
 	}
 

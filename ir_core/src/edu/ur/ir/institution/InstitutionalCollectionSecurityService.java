@@ -61,12 +61,25 @@ public interface InstitutionalCollectionSecurityService {
 	
 	
 	/**
-	 * This gives all administrator groups in parent collections 
-	 * administrator 
+	 * Gives permissions to all groups in parent collections that currently have
+	 * administration privileges.  This makes sure administrators
+	 * in parent collections can manage children collections.  This should be called every time
+	 * a child collection is added
 	 * 
 	 * @param child - child collection to add permissions to all it's parents
 	 */
-	public void givePermissionsToParentCollections(InstitutionalCollection insitutionalCollection);
+	public void giveAdminPermissionsToParentCollections(InstitutionalCollection child);
+	
+	/**
+	 * Gives permissions to all child collections for the specified user group.  This makes sure when a group in a parent collection is updated with
+	 * administration permissions all children are updated with the group.  
+	 * This should be called any time administration privileges  are given to a particular group for a particular collection
+	 * 
+	 * @param userGroup - group given admin privileges
+	 * @param parent - parent collection 
+	 */
+	public void giveAdminPermissionsToChildCollections(IrUserGroup userGroup, InstitutionalCollection parent);
+
 	
 	/**
 	 * Delete the access control list for the specified institutional collection.
@@ -84,6 +97,13 @@ public interface InstitutionalCollectionSecurityService {
 	 */
 	public Set<Sid> getSidsWithPermission(InstitutionalCollection c, InstitutionalCollectionPermission permission);
 	
+	/**
+	 * Get the class type permission for the given institutiona collection permission.
+	 * 
+	 * @param collectionPermission - class type permission to get
+	 * @return found IrClassTypePermission.
+	 */
+	public IrClassTypePermission getClassTypePermission(InstitutionalCollectionPermission collectionPermission);
 	
 	/**
 	 * Determine if the user is granted the specified permission.

@@ -29,6 +29,7 @@
 			<class name="edu.ur.ir.institution.service.DefaultReviewableItemServiceTest"/>
 			<class name="edu.ur.ir.institution.service.DefaultInstitutionalItemServiceTest"/>
 			<class name="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSubscriptionServiceTest"/>
+		    <class name="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSecurityServiceTest"/>
 		    
 		    <class name="edu.ur.ir.user.service.DefaultUserServiceTest"/>
 		    <class name="edu.ur.ir.user.service.DefaultUserPublishingFileSystemServiceTest"/>
