@@ -291,7 +291,7 @@ public class DefaultInstitutionalCollectionService implements
 		    {
 		        for(InstitutionalCollection movedCollection : collectionsToMove)
 		        {
-		     	    institutionalCollectionSecurityService.givePermissionsToParentCollections(movedCollection);
+		     	    institutionalCollectionSecurityService.giveAdminPermissionsToParentCollections(movedCollection);
 		        }
 		    }
 		}
@@ -327,7 +327,7 @@ public class DefaultInstitutionalCollectionService implements
 		    repositoryService.saveRepository(repository);
 		    for(InstitutionalCollection movedCollection : collectionsToMove)
 		    {
-		    	institutionalCollectionSecurityService.givePermissionsToParentCollections(movedCollection);
+		    	institutionalCollectionSecurityService.giveAdminPermissionsToParentCollections(movedCollection);
 		    }
 		}
 		

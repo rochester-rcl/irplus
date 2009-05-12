@@ -156,7 +156,7 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 				{
 				    collection = parent.createChild(collectionName);
 				    institutionalCollectionService.saveCollection(parent);
-				    institutionalCollectionSecurityService.givePermissionsToParentCollections(collection);
+				    institutionalCollectionSecurityService.giveAdminPermissionsToParentCollections(collection);
 				    actionSuccess = true;
 				}
 			} catch (DuplicateNameException e) {
