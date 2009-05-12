@@ -86,6 +86,7 @@
             <interceptor-ref name="crudStack" />
             <result name="input">/pages/admin/user/email.jsp</result>
             <result name="added">/pages/admin/user/email_form.jsp</result>
+            <result name="viewEmails">/pages/admin/user/email_table.jsp</result>
             <result name="deleted">/pages/admin/user/email_deleted.jsp</result>
          </action>
         

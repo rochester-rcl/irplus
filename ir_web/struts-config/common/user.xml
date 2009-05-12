@@ -989,6 +989,7 @@
             <result name="input">/pages/user/login/edit_user.jsp</result>
             <result name="added">/pages/admin/user/email_form.jsp</result>
             <result name="deleted">/pages/admin/user/email_deleted.jsp</result>
+            <result name="viewEmails">/pages/admin/user/email_table.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
         </action>
         
