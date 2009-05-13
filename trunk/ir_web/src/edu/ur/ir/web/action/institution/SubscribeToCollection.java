@@ -113,7 +113,6 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 		log.debug("collectionId="+collectionId);
 		IrUser user = userService.getUser(userId, false);
 		
-		InstitutionalCollection institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
 		institutionalCollection.removeSubscriber(user);
 		institutionalCollectionService.saveCollection(institutionalCollection);
 
@@ -132,7 +131,6 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 		log.debug("collectionId="+collectionId);
 		IrUser user = userService.getUser(userId, false);
 		
-		InstitutionalCollection institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
 		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(institutionalCollection, user);
 		log.debug("isSubscriber="+isSubscriber);
 		
