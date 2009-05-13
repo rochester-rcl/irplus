@@ -56,7 +56,7 @@ YAHOO.ur.public.collection.view =
             {success: handleSuccess, failure: handleFailure}, null);
     },
     
-    subscribe : function() {
+    subscribe : function(userId) {
     	 // action for getting the picture
         var subscribeToCollectionAction =  basePath + 'user/subscribeToCollection.action';
 
@@ -85,12 +85,12 @@ YAHOO.ur.public.collection.view =
 	
 	    //Get the next picture
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            subscribeToCollectionAction + "?collectionId=" + collectionId + "&includeSubCollections=" + document.getElementById('include_sub_collections').checked
+            subscribeToCollectionAction + "?collectionId=" + collectionId + "&subscribeUserId=" + userId + "&includeSubCollections=" + document.getElementById('include_sub_collections').checked
             + '&bustcache='+new Date().getTime(), 
             {success: handleSuccess, failure: handleFailure}, null);
     },
 
-    unsubscribe : function() {
+    unsubscribe : function(userId) {
     	 // action for getting the picture
         var unSubscribeFromCollectionAction =  basePath + 'user/unSubscribeFromCollection.action';
 
@@ -119,12 +119,12 @@ YAHOO.ur.public.collection.view =
 	
 	    //Get the next picture
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            unSubscribeFromCollectionAction + "?collectionId=" + collectionId
+            unSubscribeFromCollectionAction + "?collectionId=" + collectionId + "&subscribeUserId=" + userId
             + '&bustcache='+new Date().getTime(), 
             {success: handleSuccess, failure: handleFailure}, null);
     },
     
-    getUserSubscriptionForThisCollection : function() 
+    getUserSubscriptionForThisCollection : function(userId) 
     {
     	 // action for getting the picture
         var getUserSubscriptionAction =  basePath + 'user/getUserSubscription.action';
@@ -154,7 +154,7 @@ YAHOO.ur.public.collection.view =
 	
 	    //Get the next picture
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getUserSubscriptionAction + "?collectionId=" + collectionId 
+            getUserSubscriptionAction + "?collectionId=" + collectionId + "&subscribeUserId=" + userId
             + '&bustcache='+new Date().getTime(), 
             {success: handleSuccess, failure: handleFailure}, null);    	
     },
@@ -199,9 +199,10 @@ YAHOO.ur.public.collection.view =
     {
         YAHOO.ur.public.collection.view.getCollectionPicture( 0, 'INIT');
         
-        if (document.getElementById("user_id").value != '') 
+        var userId = document.getElementById("user_id").value;
+        if (userId != '') 
         {
-        	YAHOO.ur.public.collection.view.getUserSubscriptionForThisCollection();
+        	YAHOO.ur.public.collection.view.getUserSubscriptionForThisCollection(userId);
         }
         YAHOO.ur.public.collection.view.getStatisticsForThisCollection();
     }

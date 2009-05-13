@@ -26,23 +26,27 @@ import com.opensymphony.xwork2.Preparable;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 
 /**
- * Action to subscribe to collection
+ * Action to subscribe to collection.  This is only for users.
  * 
  * @author Sharmila Ranganathan
  *
  */
-public class SubscribeToCollection extends ActionSupport implements UserIdAware, Preparable {
+public class ManageCollectionSubscription extends ActionSupport implements UserIdAware, Preparable {
 
 	/** Eclipse generated id */
 	private static final long serialVersionUID = 979475905589306686L;
 	
 	/**  Logger. */
-	private static final Logger log = Logger.getLogger(SubscribeToCollection.class);
+	private static final Logger log = Logger.getLogger(ManageCollectionSubscription.class);
+	
+	/** Id of the user to subscribe/unsubscribe */
+	private Long subscribeUserId;
 	
 	/** Id of user logged in */
 	private Long userId;
@@ -62,17 +66,17 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 	/** Indicates whether to subscribe to all its sub collections */
 	private boolean includeSubCollections;
 	
-	/** Indicates whether the user has subscribed to this collcetion */
+	/** Indicates whether the user has subscribed to this collection */
 	private boolean isSubscriber;
 	
 	/** Institutional collection */
-	private InstitutionalCollection institutionalCollection;
+	private InstitutionalCollection collection;
 	
 	/**
 	 * Prepare for action
 	 */
 	public void prepare() {
-		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+		collection = institutionalCollectionService.getCollection(collectionId, false);
 	}
 	
 	/**
@@ -81,15 +85,28 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 	 * @return
 	 */
 	public String subscribe() {
+		
+		
 		log.debug("userId="+userId);
+		log.debug("subscribeUserId="+userId);
 		log.debug("collectionId="+collectionId);
 		IrUser user = userService.getUser(userId, false);
 		
-		institutionalCollection.addSuscriber(user);
-		institutionalCollectionService.saveCollection(institutionalCollection);
+		IrUser subscribeUser = userService.getUser(subscribeUserId, false);
+		
+		if(!subscribeUserId.equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && !user.hasRole(IrRole.COLLECTION_ADMIN_ROLE))
+    	{
+			//destination does not belong to user
+    		log.error("user does not have subscirbe privileges for user = " + user);
+    		return("accessDenied");
+    		
+    	}
+		
+		collection.addSuscriber(subscribeUser);
+		institutionalCollectionService.saveCollection(collection);
 
 		if (includeSubCollections) {
-			List<InstitutionalCollection> subCollections = institutionalCollectionService.getAllChildrenForCollection(institutionalCollection);
+			List<InstitutionalCollection> subCollections = institutionalCollectionService.getAllChildrenForCollection(collection);
 			
 			for (InstitutionalCollection collection : subCollections) {
 				collection.addSuscriber(user);
@@ -97,7 +114,7 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 			}
 		}
 		
-		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(institutionalCollection, user);
+		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(collection, user);
 		return SUCCESS;
 		
 	}
@@ -112,11 +129,20 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 		log.debug("userId="+userId);
 		log.debug("collectionId="+collectionId);
 		IrUser user = userService.getUser(userId, false);
+		IrUser subscribeUser = userService.getUser(subscribeUserId, false);
 		
-		institutionalCollection.removeSubscriber(user);
-		institutionalCollectionService.saveCollection(institutionalCollection);
+		if(!subscribeUserId.equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && !user.hasRole(IrRole.COLLECTION_ADMIN_ROLE))
+    	{
+			//destination does not belong to user
+    		log.error("user does not have subscirbe privileges for user = " + user);
+    		return("accessDenied");
+    		
+    	}
+		
+		collection.removeSubscriber(subscribeUser);
+		institutionalCollectionService.saveCollection(collection);
 
-		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(institutionalCollection, user);
+		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(collection, subscribeUser);
 		return SUCCESS;
 	}
 	
@@ -130,8 +156,17 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 		log.debug("userId="+userId);
 		log.debug("collectionId="+collectionId);
 		IrUser user = userService.getUser(userId, false);
+		IrUser subscribeUser = userService.getUser(subscribeUserId, false);
 		
-		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(institutionalCollection, user);
+		if(!subscribeUserId.equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && !user.hasRole(IrRole.COLLECTION_ADMIN_ROLE))
+    	{
+			//destination does not belong to user
+    		log.error("user does not have subscirbe privileges for user = " + user);
+    		return("accessDenied");
+    		
+    	}
+		
+		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(collection, subscribeUser);
 		log.debug("isSubscriber="+isSubscriber);
 		
 		return SUCCESS;
@@ -178,6 +213,22 @@ public class SubscribeToCollection extends ActionSupport implements UserIdAware,
 	public void setInstitutionalCollectionSubscriptionService(
 			InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService) {
 		this.institutionalCollectionSubscriptionService = institutionalCollectionSubscriptionService;
+	}
+
+	public Long getSubscribeUserId() {
+		return subscribeUserId;
+	}
+
+	public void setSubscribeUserId(Long unsubscribeUserId) {
+		this.subscribeUserId = unsubscribeUserId;
+	}
+
+	public InstitutionalCollection getCollection() {
+		return collection;
+	}
+
+	public void setCollection(InstitutionalCollection collection) {
+		this.collection = collection;
 	}
 
 }
