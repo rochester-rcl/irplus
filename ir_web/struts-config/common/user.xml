@@ -76,6 +76,7 @@
   		<global-results>
         	 <result name="change-password">/pages/user/login/force_change_password.jsp</result>
         	 <result name="registration-error">/pages/user/login/invalid_token.jsp</result>
+        	 <result name="accessDenied">/accessDenied.jsp</result>
         </global-results>
 
         <!--  ************************************ -->
@@ -1058,21 +1059,21 @@
         <!--  This handles adding a department -->
         <action name="subscribeToCollection"
             method="subscribe" 
-            class="edu.ur.ir.web.action.institution.SubscribeToCollection">
+            class="edu.ur.ir.web.action.institution.ManageCollectionSubscription">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/collection/collection_subscription_form.jsp</result>
         </action>
         
         <action name="unSubscribeFromCollection"
             method="unSubscribe" 
-            class="edu.ur.ir.web.action.institution.SubscribeToCollection">
+            class="edu.ur.ir.web.action.institution.ManageCollectionSubscription">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/collection/collection_subscription_form.jsp</result>
         </action>
         
         <action name="getUserSubscription"
             method="getUserSubscriptionForThisCollection" 
-            class="edu.ur.ir.web.action.institution.SubscribeToCollection">
+            class="edu.ur.ir.web.action.institution.ManageCollectionSubscription">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/collection/collection_subscription_form.jsp</result>
         </action>

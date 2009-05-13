@@ -925,6 +925,38 @@ YAHOO.ur.edit.institution.collection = {
             callback);
     },
     
+    /**
+     * Un-subscribes a user from a collection
+     */
+    unsubscribeUser : function(userId, collectionId)
+    {
+        var success = function(o) 
+	    {
+	        var divToUpdate = document.getElementById('collection_subscribers');
+                divToUpdate.innerHTML = o.responseText; 
+ 	    };
+	
+	    // handle form sbumission failure
+	    var failure = function(o) {
+	        alert('failure to unsubscribe user ' + o.status);
+	    };
+	    
+	    	
+	    // Wire up the success and failure handlers
+	    var callback = 
+	    { 
+	        success: success,
+			failure: failure 
+	    };
+	    
+	    // action to perform move
+	    var action =  basePath + 'admin/unSubscribeFromCollection.action?collectionId=' + collectionId + '&subscribeUserId=' + userId;
+            
+        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+            action, 
+            callback);
+    },
+    
     /** 
      * initialize the page
      * this is called once the dom has

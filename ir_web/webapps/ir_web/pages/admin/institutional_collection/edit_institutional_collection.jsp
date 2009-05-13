@@ -187,32 +187,8 @@
 	                 <!--  Start forth tab -->
 	                 <div id="tab4">
 	                 	<br>
-	                 	<h3>Total subscribers for this collection: ${ur:collectionSize(collection.subscriptions)}</h3>
-						<div class="dataTable">
-						    <urstb:table width="50%">
-						        <urstb:caption>Subscribers for this collection</urstb:caption>
-						            <urstb:thead>
-						                <urstb:tr>
-						                    <urstb:td>First Name</urstb:td>
-						                    <urstb:td>Last Name</urstb:td>
-						                </urstb:tr>
-						            </urstb:thead>
-						            <urstb:tbody
-						                var="subscriber" 
-						                oddRowClass="odd"
-						                evenRowClass="even"
-						                currentRowClassVar="rowClass"
-						                collection="${collection.subscriptions}">
-						                
-						                <urstb:tr 
-						                    cssClass="${rowClass}"
-						                    onMouseOver="this.className='highlight'"
-						                    onMouseOut="this.className='${rowClass}'">
-						                        <urstb:td>${subscriber.user.firstName}</urstb:td>
-						                        <urstb:td>${subscriber.user.lastName}</urstb:td>
-						                </urstb:tr>
-						            </urstb:tbody>
-						        </urstb:table>
+	                 	<div id="collection_subscribers">
+						    <c:import url="collection_subscription_table.jsp"/>
 						</div>	                
 	                 
 	                 </div>

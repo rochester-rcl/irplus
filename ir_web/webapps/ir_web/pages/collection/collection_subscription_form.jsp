@@ -28,7 +28,7 @@
 			    <td align="left" class="label" ><button class="ur_button"
                            onmouseover="this.className='ur_buttonover';"
                            onmouseout="this.className='ur_button';"
-                           onclick="javascript:YAHOO.ur.public.collection.view.subscribe();">Subscribe</button> </td>
+                           onclick="javascript:YAHOO.ur.public.collection.view.subscribe(${user.id});">Subscribe</button> </td>
 			</tr>
 		</table>                       
 	 </c:if>
@@ -42,7 +42,7 @@
 			    <td align="left" class="label" ><button class="ur_button"
                            onmouseover="this.className='ur_buttonover';"
                            onmouseout="this.className='ur_button';"
-                           onclick="javascript:YAHOO.ur.public.collection.view.unsubscribe();">UnSubscribe</button> </td>
+                           onclick="javascript:YAHOO.ur.public.collection.view.unsubscribe(${user.id});">UnSubscribe</button> </td>
 			</tr>
 		</table>                       
 	 </c:if>

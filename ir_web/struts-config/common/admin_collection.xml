@@ -346,8 +346,9 @@
             class="edu.ur.ir.web.action.item.ViewReviewableItems">
             <interceptor-ref name="editStack" />
             <result name="success" type="redirect">viewReviewPendingItems.action</result>
-        </action>        
-        
+        </action>   
+   
+   
        <!--  ************************************ 			   -->
        <!--  Institutional collection links -  actions         -->
        <!--  ************************************              -->   
@@ -414,4 +415,16 @@
             class="edu.ur.ir.web.action.institution.ManageCollectionLinks">
             <interceptor-ref name="editStack" />
             <result name="success">/pages/admin/institutional_collection/collection_links_table_frag.jsp</result>
-        </action>                                   
+        </action>             
+        
+  
+       <!--  ************************************ 			   -->
+       <!--  Institutional collection subscription -  actions         -->
+       <!--  ************************************              -->     
+       
+       <action name="unSubscribeFromCollection"
+            method="unSubscribe" 
+            class="edu.ur.ir.web.action.institution.ManageCollectionSubscription">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/admin/institutional_collection/collection_subscription_table.jsp</result>
+        </action>                           
