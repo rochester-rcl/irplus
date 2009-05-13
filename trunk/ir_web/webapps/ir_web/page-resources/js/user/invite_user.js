@@ -199,11 +199,15 @@ YAHOO.ur.invite =
 		    } 
 		    else 
 		    {
-			    if (!urUtil.emailcheck(email)) 
-			    {
-				    alert('Invalid E-mail address');
-				    return false;
-			    }
+		    	var emails = email.split(";");
+		    	for( i = 0; i < emails.length; i++)
+		    	{
+			        if (!urUtil.emailcheck(emails[i])) 
+			        {
+				        alert('Invalid E-mail address ' + emails[i]);
+				        return false;
+			        }
+		    	}
 		    }
 		
 		    if (!urUtil.checkForNoSelections(document.newInviteForm.selectedPermissions))
