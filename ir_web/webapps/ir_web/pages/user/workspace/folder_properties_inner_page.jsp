@@ -30,8 +30,8 @@
             <c:url var="rootFolderUrl" value="/user/workspace.action">
                <c:param name="parentFolderId" value="0"/>
             </c:url>
-            <h2> Folder Properties for : ${personalFolder.name}</h2>
-            <h3> Path: /<span class="folderBtnImg">&nbsp;</span>${user.username}/<span class="folderBtnImg">&nbsp;</span><a href="${rootFolderUrl}">personalFolders</a>/
+            <h3> Folder Properties for : ${personalFolder.name}</h3>
+            <h3> Path: /<span class="folderBtnImg">&nbsp;</span><a href="${rootFolderUrl}">${user.username}</a>/
                  <c:forEach var="folder" items="${folderPath}">
                      <c:url var="folderUrl" value="/user/workspace.action">
                          <c:param name="parentFolderId" value="${folder.id}"/>
