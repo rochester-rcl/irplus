@@ -310,96 +310,102 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		
 		email = email.trim();
 		
-		// Check if user exist in the system
-		IrUser invitedUser = userService.getUserForVerifiedEmail(email);
-
-
+		String[] emails = email.split(";");
 		
-		//check if the user is sharing the file with themselves
-		if (invitingUser.equals(invitedUser)) {
-			inviteErrorMessage = getText("sharingWithYourself");
-			return "added";
-		}		
 		
-		Set<VersionedFile>  versionedFiles = new HashSet<VersionedFile>();
-		for(PersonalFile pf : personalFilesToShare)
+		for(String email : emails)
 		{
-			VersionedFile versionedFile = pf.getVersionedFile();
+			email = email.trim();
+			// Check if user exist in the system
+			IrUser invitedUser = userService.getUserForVerifiedEmail(email);
 			
-			//check if the file is already shared with this user 
-			//AND 
-			//check if email is already sent to this Id for sharing and the user has not created the account yet
-			if ((versionedFile.getCollaborator(invitedUser) == null) && (!versionedFile.getInviteeEmails().contains(email))) {
-				versionedFiles.add(versionedFile);
-			}
-		}
-
-	
-		InviteInfo inviteInfo
-		= new InviteInfo(invitingUser, versionedFiles);
-	
-		inviteInfo.setEmail(email);
-		inviteInfo.setInviteMessage(inviteMessage);
-	    
-		// Create the list of permissions
-		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
-		
-		for(Long id : selectedPermissions)
-		{
-			permissions.add(securityService.getIrClassTypePermissionById(id, false));
-		}			
-
-		
-		/* If user exist in the system then share the file and send email*/
-		if (invitedUser != null) {
+			//check if the user is sharing the file with themselves
+			if (invitingUser.equals(invitedUser)) {
+				inviteErrorMessage += getText("sharingWithYourself") + "\n";
+			}		
 			
-			// If the shared user has no Author or collaborator or researcher or admin role, then assign collaborator role
-			if (!invitedUser.hasRole(IrRole.AUTHOR_ROLE) && !invitedUser.hasRole(IrRole.COLLABORATOR_ROLE) 
-					&& !invitedUser.hasRole(IrRole.RESEARCHER_ROLE) && !invitedUser.hasRole(IrRole.ADMIN_ROLE)) {
+			Set<VersionedFile>  versionedFiles = new HashSet<VersionedFile>();
+			for(PersonalFile pf : personalFilesToShare)
+			{
+				VersionedFile versionedFile = pf.getVersionedFile();
 				
-				invitedUser.addRole(roleService.getRole(IrRole.COLLABORATOR_ROLE));
-				userService.makeUserPersistent(invitedUser);
-			}
-
-			for (VersionedFile file : versionedFiles) {
-				try {
-					SharedInboxFile sif = inviteUserService.shareFile(invitingUser, invitedUser, file);
-					try {
-						userWorkspaceIndexService.addToIndex(getRepository(), sif);
-					} catch (LocationAlreadyExistsException e) {
-						log.error(e);
-					} catch (IOException e) {
-						log.error(e);
-					}
-				} catch (FileSharingException e1) {
-					throw new RuntimeException("This should never happen", e1);
+				//check if the file is already shared with this user 
+				//AND 
+				//check if email is already sent to this Id for sharing and the user has not created the account yet
+				if ((versionedFile.getCollaborator(invitedUser) == null) && (!versionedFile.getInviteeEmails().contains(email))) {
+					versionedFiles.add(versionedFile);
 				}
-				
-				// Create permissions for the file that is being shared
-				securityService.createPermissions(file, invitedUser, permissions);
 			}
 
-			try {
-				inviteUserService.sendEmailToExistingUser(inviteInfo);
-				inviteSent = true;
-			} catch(IllegalStateException e) {
-				inviteErrorMessage = getText("emailNotSent", new String[]{email});
-			}
-				
-		} else {
+		
+			InviteInfo inviteInfo
+			= new InviteInfo(invitingUser, versionedFiles);
+		
+			inviteInfo.setEmail(email);
+			inviteInfo.setInviteMessage(inviteMessage);
+		    
+			// Create the list of permissions
+			Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
 			
-			/* If user does not exist in the system then get a token and send email with the token */
-			inviteInfo.setToken(TokenGenerator.getToken());
-			inviteInfo.setPermissions(permissions);
+			for(Long id : selectedPermissions)
+			{
+				permissions.add(securityService.getIrClassTypePermissionById(id, false));
+			}			
 
-			try {
-				inviteUserService.sendEmailToNotExistingUser(inviteInfo);
-				inviteUserService.makeInviteInfoPersistent(inviteInfo);
-				inviteSent = true;
-			} catch(IllegalStateException e) {
-				inviteErrorMessage = getText("emailIncorrect", new String[]{email});
+			
+			/* If user exist in the system then share the file and send email*/
+			if (invitedUser != null) {
+				
+				// If the shared user has no Author or collaborator or researcher or admin role, then assign collaborator role
+				if (!invitedUser.hasRole(IrRole.AUTHOR_ROLE) && !invitedUser.hasRole(IrRole.COLLABORATOR_ROLE) 
+						&& !invitedUser.hasRole(IrRole.RESEARCHER_ROLE) && !invitedUser.hasRole(IrRole.ADMIN_ROLE)) {
+					
+					invitedUser.addRole(roleService.getRole(IrRole.COLLABORATOR_ROLE));
+					userService.makeUserPersistent(invitedUser);
+				}
+
+				for (VersionedFile file : versionedFiles) {
+					try {
+						SharedInboxFile sif = inviteUserService.shareFile(invitingUser, invitedUser, file);
+						try {
+							userWorkspaceIndexService.addToIndex(getRepository(), sif);
+						} catch (LocationAlreadyExistsException e) {
+							log.error(e);
+						} catch (IOException e) {
+							log.error(e);
+						}
+					} catch (FileSharingException e1) {
+						throw new RuntimeException("This should never happen", e1);
+					}
+					
+					// Create permissions for the file that is being shared
+					securityService.createPermissions(file, invitedUser, permissions);
+				}
+
+				try {
+					inviteUserService.sendEmailToExistingUser(inviteInfo);
+					inviteSent = true;
+				} catch(IllegalStateException e) {
+					inviteErrorMessage += getText("emailNotSent", new String[]{email}) + "\n";
+				}
+					
+			} else {
+				
+				/* If user does not exist in the system then get a token and send email with the token */
+				inviteInfo.setToken(TokenGenerator.getToken());
+				inviteInfo.setPermissions(permissions);
+
+				try {
+					inviteUserService.sendEmailToNotExistingUser(inviteInfo);
+					inviteUserService.makeInviteInfoPersistent(inviteInfo);
+					inviteSent = true;
+				} catch(IllegalStateException e) {
+					inviteErrorMessage += getText("emailIncorrect", new String[]{email}) + "\n";
+				}
 			}
 		}
+		
+
 		
         return "added";
 	}
