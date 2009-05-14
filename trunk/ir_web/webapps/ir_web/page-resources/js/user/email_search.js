@@ -68,7 +68,15 @@ YAHOO.ur.invite.search = {
 	 */ 
 	showInvite : function(email)
 	{
-		document.getElementById('newInviteForm_email').value = email;
+		var currentEmails = urUtil.trim(document.getElementById('newInviteForm_inviteEmail').value);
+		if( currentEmails == null || currentEmails == "")
+		{
+		    document.getElementById('newInviteForm_inviteEmail').value = email;
+		}
+		else
+		{
+			document.getElementById('newInviteForm_inviteEmail').value = currentEmails + ";" + email
+		}
 	    myTabs.set('activeIndex', 0);
 	    
 	}
