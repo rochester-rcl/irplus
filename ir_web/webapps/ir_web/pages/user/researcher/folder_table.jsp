@@ -135,7 +135,7 @@
                         </urstb:td>
                         <urstb:td>
 							 <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFolder'}">
-			                 	<ur:a href="javascript:YAHOO.ur.researcher.folder.getFolderById('${fileSystemObject.id}')"><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText> </ur:a>
+			                 	<a href="javascript:YAHOO.ur.researcher.folder.getFolderById('${fileSystemObject.id}')"><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText> </a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 			                 </c:if>
 			                 
 			                 <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFile'}">
