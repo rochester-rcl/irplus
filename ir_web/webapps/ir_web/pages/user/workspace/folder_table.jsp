@@ -202,7 +202,7 @@
                         </urstb:td>
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                            <a href="javascript:YAHOO.ur.folder.getFolderById('${fileSystemObject.id}')"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a><c:if test="${fileSystemObject.description != ''}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
+	                            <a href="javascript:YAHOO.ur.folder.getFolderById('${fileSystemObject.id}')"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 	                        </c:if>
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
 		                        <c:url var="personalFileDownloadUrl" value="/user/personalFileDownload.action">
