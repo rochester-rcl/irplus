@@ -117,10 +117,14 @@
 								              <tr>
 								              <td colspan="2">  <ur:div id="inviteUserError" cssClass="errorMessage"></ur:div> </td>
 									          </tr>
-									          
 									          <tr> 
-									          <td> <label class="label" for="newUserForm_middle_name">Email</label>  </td>
-									          <td> <input type="text" class="input" name="email" id="newInviteForm_email" value="" size="40"/>  </td>
+									              <td></td>
+									              <td> Separate Emails by semicolons (;) </td>
+									             
+									          </tr>
+									          <tr> 
+									          <td> <label class="label" for="newUserForm_middle_name">Email(s) </label>  </td>
+									          <td> <textarea name="email" id="newInviteForm_inviteMessage" cols="37" rows="5"></textarea></td>
 									          </tr>
 		
 											  <tr>
