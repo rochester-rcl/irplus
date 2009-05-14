@@ -348,7 +348,7 @@
 	  <div id="deletePersonNameMessageDialog" class="hidden">
 	      <div class="hd">Delete Name</div>
 	      <div class="bd">
-	              <div id="delete_email_error" class="errorMessage"></div>
+	              <div id="deletePersonNameMessage" class="errorMessage"></div>
 	      </div>
 	  </div>
 
