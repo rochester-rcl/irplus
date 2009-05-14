@@ -44,7 +44,7 @@ YAHOO.ur.person.names = {
 	 *  Function that retireves person name information
 	 *  based on the given person id.
 	 *
-	 *  The person id used to get the folder.
+	 *  The person id used to get the person
 	 */
 	getPersonNames : function(personId)
 	{
