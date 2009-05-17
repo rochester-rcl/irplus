@@ -644,8 +644,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			    q = session.getNamedQuery("getInstitutionalCollectionItemsByAcceptedDateRange");
 			   
 			    q.setLong(0, collection.getId());
-			    q.setString(1, simpleDateFormat.format(startDate));
-			    q.setString(2, simpleDateFormat.format(endDate));
+			    q.setTimestamp(1, startDate);
+			    q.setTimestamp(2, endDate);
 	            return q.list();
 		    }
 	    });
