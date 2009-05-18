@@ -21,7 +21,7 @@ public interface LicenseService {
 	 * 
 	 * @return created versioned license.
 	 */
-	public VersionedLicense createLicense(IrUser creator, String licenseText, String name);
+	public VersionedLicense createLicense(IrUser creator, String licenseText, String name, String description);
 	
 	/**
 	 * Save the specifed versioned license.

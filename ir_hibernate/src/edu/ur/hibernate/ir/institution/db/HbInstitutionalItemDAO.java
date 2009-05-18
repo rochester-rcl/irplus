@@ -17,7 +17,6 @@
 package edu.ur.hibernate.ir.institution.db;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,12 +52,6 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	 */
 	private final HbCrudDAO<InstitutionalItem> hbCrudDAO;
 	
-	/** Format for date comparison - this can be needed by certain databases - for
-	 * example postgres - the default set here - however - defferent strings can be
-	 * set using injection
-	 */
-	private String dateFormat = "yyyy-MM-dd HH:mm:ss";
-
 	/**
 	 * Default Constructor
 	 */
@@ -632,8 +625,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public List<InstitutionalItem> getItems(final InstitutionalCollection collection,
 			final Date startDate, final Date endDate) {
         List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
-		log.debug("Trying dates " + simpleDateFormat.format(startDate) + " and " + simpleDateFormat.format(endDate));
+		log.debug("Trying dates " + startDate + " and " + endDate);
 
         foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
@@ -652,13 +644,5 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
         return foundItems;	
 	}
 
-	public String getDateFormat() {
-		return dateFormat;
-	}
-
-	public void setDateFormat(String dateFormat) {
-		this.dateFormat = dateFormat;
-	}
-
-
+	
 }

@@ -41,9 +41,10 @@ public class DefaultLicenseService implements LicenseService{
 	 * @see edu.ur.ir.repository.LicenseService#createLicense(edu.ur.ir.user.IrUser, java.lang.String, java.lang.String)
 	 */
 	public VersionedLicense createLicense(IrUser creator, String licenseText,
-			String name) {
+			String name, String description) {
 		
 		VersionedLicense versionedLicense = new VersionedLicense(creator, licenseText, name);
+		versionedLicense.getCurrentVersion().getLicense().setDescription(description);
 		versionedLicenseDAO.makePersistent(versionedLicense);
 		return versionedLicense;
 	}

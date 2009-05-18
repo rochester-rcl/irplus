@@ -195,7 +195,27 @@
             <result name="added">/pages/admin/statistics/ignore_ipaddress_form.jsp</result>
             <result name="deleted">/pages/admin/statistics/ignore_ipaddress_deleted.jsp</result>
             <result name="get">/pages/admin/statistics/ignore_ipaddress_form.jsp</result>
-        </action>       
+        </action>   
+        
+        
+        <!--  ************************************ -->
+        <!--  Repository License Actions           -->
+        <!--  ************************************ -->
+       <action name="viewRepositoryLicenses"
+               method="viewLicenses"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <result name="success">/pages/admin/license/licenses.jsp</result>
+        </action>    
+        
+        <!--  This handles update, save and delete -->
+        <action name="*RepositoryLicense" 
+            method="{1}"
+            class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <interceptor-ref name="crudStack" />
+            <result name="addNew">/pages/admin/license/add_new_license.jsp</result>
+            <result name="cancel" type="redirect">viewRepositoryLicenses.action</result>
+            <result name="success" type="redirect">viewRepositoryLicenses.action</result>
+        </action>
            
     </package>
     
