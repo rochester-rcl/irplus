@@ -26,7 +26,7 @@
 					  
 					  <urstb:td>${subscriber.user.firstName}</urstb:td>
 					  <urstb:td>${subscriber.user.lastName}</urstb:td>
-					  <urstb:td><a href="javascript:YAHOO.ur.edit.institution.collection.unsubscribeUser(${collection.id},${subscriber.user.id})">Unsubscribe</a></urstb:td>
+					  <urstb:td><a href="javascript:YAHOO.ur.edit.institution.collection.unsubscribeUser(${subscriber.user.id},${collection.id})">Unsubscribe</a></urstb:td>
 			</urstb:tr>
 		</urstb:tbody>
 	</urstb:table>
