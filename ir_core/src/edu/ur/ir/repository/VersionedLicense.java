@@ -122,7 +122,7 @@ public class VersionedLicense extends CommonPersistent {
 	 * 
 	 * @return the versions
 	 */
-	public Set<LicenseVersion> getItemVersions() {
+	public Set<LicenseVersion> getVersions() {
 		return Collections.unmodifiableSet(versions);
 	}
 
