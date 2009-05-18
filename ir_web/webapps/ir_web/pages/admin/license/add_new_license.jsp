@@ -65,23 +65,23 @@
  	        <c:url var="addLicenseUrl" value="/admin/addRepositoryLicense.action">
  	        </c:url>
  	        
-	        <form method="post">
+	        <form method="post" class="formTable">
 	            <table>
 	                <tr>
-	                    <td>License Name:</td>
-	                    <td><input type="text" name="name" size="50"/></td>
+	                    <td class="label">License Name:</td>
+	                    <td class="input"><input type="text" name="name" size="50"/></td>
 	                </tr>
 	                 <tr>     
-	                    <td>Description/Revision Notes</td>
-	                    <td><textarea name="description" rows="10" cols="70"></textarea></td>
+	                    <td class="label">Description/Revision Notes</td>
+	                    <td class="input"><textarea name="description" rows="10" cols="70"></textarea></td>
 	                </tr>
 	                <tr>     
-	                    <td>License Text</td>
-	                    <td><textarea name="text" rows="30" cols="70"></textarea></td>
+	                    <td class="label">License Text</td>
+	                    <td class="input"><textarea name="text" rows="30" cols="70"></textarea></td>
 	                </tr>
 	                <tr>
-	                    <td><input type="submit" name="action:saveNewRepositoryLicense" value="Save"/></td>
-	                    <td><input type="submit" name="action:cancelRepositoryLicense" value="Cancel"/></td>
+	                    <td class="label"><input type="submit" name="action:saveNewRepositoryLicense" value="Save"/></td>
+	                    <td class="input"><input type="submit" name="action:cancelRepositoryLicense" value="Cancel"/></td>
 	            </table>
 	            
 	             
