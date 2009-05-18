@@ -560,7 +560,12 @@
        <property name="waitForJobsToCompleteOnShutdown" value="true" />
    </bean>
    
-   
-   
+   <!-- ****************************************** --> 
+   <!-- Repository License Service  -->
+   <!-- ****************************************** --> 
+      <bean id="licenseService" 
+       class="edu.ur.ir.repository.service.DefaultLicenseService">
+       <property name="versionedLicenseDAO" ref="versionedLicenseDAO"/>
+   </bean>
    
 </beans>

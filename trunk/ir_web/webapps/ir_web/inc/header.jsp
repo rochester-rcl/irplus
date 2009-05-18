@@ -65,7 +65,7 @@
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContentTypes.action"/>" ><fmt:message key="menu.viewContentTypes"/></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewLanguageTypes.action"/>" ><fmt:message key="menu.viewLanguageTypes" /></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIdentifierTypes.action"/>"><fmt:message key="menu.viewIdentifierTypes" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewLicenses.action"/>"><fmt:message key="menu.viewLicenses" /></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepositoryLicenses.action"/>"><fmt:message key="menu.viewLicenses" /></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewNewsItems.action"/>"><fmt:message key="menu.viewNewsItem" /></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContributorTypes.action"/>"><fmt:message key="menu.viewContributorTypes" /></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewSponsors.action"/>"><fmt:message key="menu.viewSponsors" /></a></li>
