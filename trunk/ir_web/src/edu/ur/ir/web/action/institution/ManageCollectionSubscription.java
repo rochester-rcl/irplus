@@ -125,12 +125,13 @@ public class ManageCollectionSubscription extends ActionSupport implements UserI
 	 * @return
 	 */
 	public String unSubscribe() {
-
+        log.debug("unsubscribe called");
 		log.debug("userId="+userId);
 		log.debug("collectionId="+collectionId);
 		IrUser user = userService.getUser(userId, false);
 		IrUser subscribeUser = userService.getUser(subscribeUserId, false);
 		
+		log.debug("Found subscribing user " + subscribeUser);
 		if(!subscribeUserId.equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) && !user.hasRole(IrRole.COLLECTION_ADMIN_ROLE))
     	{
 			//destination does not belong to user
@@ -143,6 +144,8 @@ public class ManageCollectionSubscription extends ActionSupport implements UserI
 		institutionalCollectionService.saveCollection(collection);
 
 		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(collection, subscribeUser);
+		log.debug("Is subscriber = " + isSubscriber);
+		
 		return SUCCESS;
 	}
 	

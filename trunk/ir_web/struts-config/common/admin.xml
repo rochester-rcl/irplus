@@ -207,6 +207,18 @@
             <result name="success">/pages/admin/license/licenses.jsp</result>
         </action>    
         
+        <action name="viewVersionedLicense"
+               method="viewVersionedLicense"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <result name="success">/pages/admin/license/view_versioned_license.jsp</result>
+        </action>   
+        
+        <action name="viewLicenseVersion"
+               method="viewLicenseVersion"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <result name="success">/pages/admin/license/view_license_version.jsp</result>
+        </action>     
+        
         <!--  This handles update, save and delete -->
         <action name="*RepositoryLicense" 
             method="{1}"

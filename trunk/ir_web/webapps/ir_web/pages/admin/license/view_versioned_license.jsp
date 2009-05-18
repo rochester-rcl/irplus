@@ -26,7 +26,7 @@
 <html>
 
 <head>
-    <title>Repository Licenses</title>
+    <title>Repository Versioned License</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -58,62 +58,61 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>Repository Licenses</h3>
+        <h3><a href="<c:url value="/admin/viewRepositoryLicenses.action"/>">Repository Licenses</a> > ${versionedLicense.name} </h3>
   
         <div id="bd">
- 	        <c:url var="addLicenseUrl" value="/admin/addRepositoryLicense.action">
+ 	        <c:url var="addNewLicenseVersionUrl" value="/admin/addRepositoryLicense.action">
  	        </c:url>
- 	        <a href="${addLicenseUrl}">Add License</a>
+ 	        <a href="${addLicenseUrl}">Add New Version</a>
  	        <br/>
  	        <br/>
  	        
+ 	        <h3> Versions </h3>
  	        <div class="dataTable">
 	       	<urstb:table width="100%">
 	          <urstb:thead>
 	            <urstb:tr>
 	                <urstb:td>Id</urstb:td>
                     <urstb:td>Name</urstb:td>
-                    <urstb:td>Current Version</urstb:td>
+                    <urstb:td>Version</urstb:td>
                     <urstb:td>Description</urstb:td>
                     <urstb:td>Last Modified Date</urstb:td>
                     <urstb:td>Modified By</urstb:td>
-                    <urstb:td>Actions</urstb:td>
 	            </urstb:tr>
 	          </urstb:thead>
 	            <urstb:tbody
-	                var="license" 
+	                var="licenseVersion" 
 	                oddRowClass="odd"
 	                evenRowClass="even"
 	                currentRowClassVar="rowClass"
-	                collection="${licenses}">
+	                collection="${versionedLicense.versions}">
 	                    <urstb:tr 
 	                        cssClass="${rowClass}"
 	                        onMouseOver="this.className='highlight'"
 	                        onMouseOut="this.className='${rowClass}'">
 	                        <urstb:td>
-		                        ${license.id}
+		                        ${licenseVersion.id}
 	                        </urstb:td>
 	                        <urstb:td>
-	                           <c:url value="viewVersionedLicense.action" var="viewVersionedLicenseUrl">
-	                               <c:param name="versionedLicenseId" value="${license.id}"/>
+	                           <c:url value="viewLicenseVersion.action" var="viewLicenseVersionUrl">
+	                               <c:param name="version" value="${licenseVersion.versionNumber}"/>
+	                               <c:param name="versionedLicenseId" value="${versionedLicense.id}"/>
 	                           </c:url>
-			                   <a href="${viewVersionedLicenseUrl}">${license.name}</a>
+			                   <a href="${viewLicenseVersionUrl}">${licenseVersion.license.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
-	                             ${license.currentVersion.versionNumber}
+	                             ${licenseVersion.versionNumber}
 	                        </urstb:td>
 	                        <urstb:td>
-	                             ${license.currentVersion.license.description}
+	                             ${licenseVersion.license.description}
 	                        </urstb:td>
 	                        <urstb:td>
-	                             ${license.currentVersion.license.dateCreated}
+	                             ${licenseVersion.license.dateCreated}
 	                        </urstb:td>
 	                        <urstb:td>
-	                             ${license.currentVersion.license.creator.firstName}&nbsp;${license.currentVersion.license.creator.lastName}
+	                             ${licenseVersion.license.creator.firstName}&nbsp;${licenseVersion.license.creator.lastName}
 	                        </urstb:td>
-	                        <urstb:td>
-	                             <a href="">New Version</a> / <a href="">Delete</a>
-	                        </urstb:td>
+	                        
 	                    </urstb:tr>
 	            </urstb:tbody>
 	        </urstb:table>
