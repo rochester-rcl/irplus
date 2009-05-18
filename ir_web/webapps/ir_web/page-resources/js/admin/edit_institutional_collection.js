@@ -950,11 +950,12 @@ YAHOO.ur.edit.institution.collection = {
 	    };
 	    
 	    // action to perform move
-	    var action =  basePath + 'admin/unSubscribeFromCollection.action?collectionId=' + collectionId + '&subscribeUserId=' + userId;
+	    var action =  basePath + 'admin/unSubscribeFromCollection.action';
             
-        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+        var transaction = YAHOO.util.Connect.asyncRequest('POST', 
             action, 
-            callback);
+            callback, 
+            'collectionId=' + collectionId + '&subscribeUserId=' + userId);
     },
     
     /** 
