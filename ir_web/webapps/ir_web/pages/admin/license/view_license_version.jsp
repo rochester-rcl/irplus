@@ -58,8 +58,11 @@
     <div id="doc2">
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
-      
-        <h3>New Repository License</h3>
+        <c:url value="viewVersionedLicense.action" var="viewVersionedLicenseUrl">
+	        <c:param name="versionedLicenseId" value="${versionedLicense.id}"/>
+	    </c:url>
+        <h3><a href="<c:url value="/admin/viewRepositoryLicenses.action"/>">Repository Licenses</a> > <a href="${viewVersionedLicenseUrl}">${versionedLicense.name}</a></h3>
+
   
         <div id="bd">
  	        <c:url var="addLicenseUrl" value="/admin/addRepositoryLicense.action">
@@ -69,20 +72,17 @@
 	            <table>
 	                <tr>
 	                    <td class="label">License Name:</td>
-	                    <td class="input"><input type="text" name="name" size="50"/></td>
+	                    <td class="input"><input disabled="disabled" type="text" name="name" size="50" value="${licenseVersion.license.name}"/></td>
 	                </tr>
 	                 <tr>     
 	                    <td class="label">Description/Revision Notes</td>
-	                    <td class="input"><textarea name="description" rows="10" cols="70"></textarea></td>
+	                    <td class="input"><textarea disabled="disabled" name="description" rows="10" cols="70">${licenseVersion.license.description}</textarea></td>
 	                </tr>
 	                <tr>     
 	                    <td class="label">License Text</td>
-	                    <td class="input"><textarea name="text" rows="30" cols="70"></textarea></td>
+	                    <td class="input"><textarea disabled="disabled" name="text" rows="30" cols="70">${licenseVersion.license.text}</textarea></td>
 	                </tr>
-	                <tr>
-	                    <td class="input" colspan="2" align="center"><input type="submit" name="action:saveNewRepositoryLicense" value="Save"/>
-	                    <input type="submit" name="action:viewRepositoryLicenses" value="Cancel"/></td>
-	                </tr>
+	                
 	            </table>
 	            
 	             

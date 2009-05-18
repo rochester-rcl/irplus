@@ -20,9 +20,12 @@ package edu.ur.ir.web.action.repository;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.repository.LicenseService;
+import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.VersionedLicense;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -39,6 +42,9 @@ public class ManageRepositoryLicenses extends ActionSupport implements UserIdAwa
 
 	/** eclipse generated id */
 	private static final long serialVersionUID = -2115322382820478264L;
+	
+	/**  Logger. */
+	private static final Logger log = Logger.getLogger(ManageRepositoryLicenses.class);
 	
 	/** Service for dealing with licenses */
 	private LicenseService licenseService;
@@ -61,6 +67,18 @@ public class ManageRepositoryLicenses extends ActionSupport implements UserIdAwa
 	/** Set of versioned licenses for the repository */
 	private List<VersionedLicense> licenses;
 	
+	/** id for a particular versioned license. */
+	private Long versionedLicenseId;
+	
+	/** a particular version of a versioned license*/
+	private int version;
+	
+	/** License version to view */
+	private LicenseVersion licenseVersion;
+	
+	/** Particular versioned license  */
+	private VersionedLicense versionedLicense;
+	
     /**
      * Save the specified license.
      * 
@@ -70,6 +88,42 @@ public class ManageRepositoryLicenses extends ActionSupport implements UserIdAwa
     {
     	IrUser user = userService.getUser(userId, false);
     	licenseService.createLicense(user, text, name, description);
+    	return SUCCESS;
+    }
+    
+    /**
+     * View a specific versioned license
+     * @return
+     */
+    public String viewVersionedLicense()
+    {
+    	if( versionedLicenseId != null)
+    	{
+    	    versionedLicense = licenseService.get(versionedLicenseId, false);
+    	}
+    	return SUCCESS;
+    }
+    
+    /**
+     * Get a particular version of a versioned license
+     * @return
+     */
+    public String viewLicenseVersion()
+    {
+    	log.debug("view license version");
+    	if( versionedLicenseId != null)
+    	{
+    	    versionedLicense = licenseService.get(versionedLicenseId, false);
+    	    log.debug("versioned license = " + versionedLicense );
+    	    
+    	    log.debug("version = " + version);
+    	    if( versionedLicense != null )
+    	    {
+    	        licenseVersion = versionedLicense.getByVersionNumber(version);
+    	        log.debug("license version = " + licenseVersion );
+    	    }
+    	}
+    	
     	return SUCCESS;
     }
     
@@ -149,6 +203,38 @@ public class ManageRepositoryLicenses extends ActionSupport implements UserIdAwa
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Long getVersionedLicenseId() {
+		return versionedLicenseId;
+	}
+
+	public void setVersionedLicenseId(Long versionedLicenseId) {
+		this.versionedLicenseId = versionedLicenseId;
+	}
+
+	public VersionedLicense getVersionedLicense() {
+		return versionedLicense;
+	}
+
+	public void setVersionedLicense(VersionedLicense versionedLicense) {
+		this.versionedLicense = versionedLicense;
+	}
+
+	public LicenseVersion getLicenseVersion() {
+		return licenseVersion;
+	}
+
+	public void setLicenseVersion(LicenseVersion licenseVersion) {
+		this.licenseVersion = licenseVersion;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 }
