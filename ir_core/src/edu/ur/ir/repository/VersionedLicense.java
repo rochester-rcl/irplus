@@ -148,7 +148,7 @@ public class VersionedLicense extends CommonPersistent {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuffer sb = new StringBuffer("[VersionedItem id = ");
+		StringBuffer sb = new StringBuffer("[VersionedLicense id = ");
 		sb.append(getId());
 		sb.append(" largestVersion = ");
 		sb.append(getLargestVersion());
