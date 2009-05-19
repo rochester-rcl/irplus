@@ -90,7 +90,7 @@ public class Repository extends CommonPersistent {
 	private String userWorkspaceIndexFolder;
 	
 	/** default license for the repository */
-	private VersionedLicense defaultLicense;
+	private LicenseVersion defaultLicense;
 	
  	/**   Default handle name authority to use when assigning handle values  */
 	private HandleNameAuthority defaultHandleNameAuthority;
@@ -500,7 +500,7 @@ public class Repository extends CommonPersistent {
 	 * 
 	 * @return
 	 */
-	public VersionedLicense getDefaultLicense() {
+	public LicenseVersion getDefaultLicense() {
 		return defaultLicense;
 	}
 
@@ -509,7 +509,7 @@ public class Repository extends CommonPersistent {
 	 * 
 	 * @param defaultLicense
 	 */
-	public void setDefaultLicense(VersionedLicense defaultLicense) {
+	public void setDefaultLicense(LicenseVersion defaultLicense) {
 		this.defaultLicense = defaultLicense;
 	}
 

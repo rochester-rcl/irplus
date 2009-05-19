@@ -34,6 +34,8 @@ import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.handle.HandleService;
 import edu.ur.ir.handle.HandleNameAuthority;
+import edu.ur.ir.repository.LicenseService;
+import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryIndexerService;
 import edu.ur.ir.repository.RepositoryService;
@@ -57,14 +59,10 @@ Validateable{
 	/**  Logger for editing a file database. */
 	private static final Logger log = Logger.getLogger(EditRepository.class);
 	
-	/** 
-	 * Name of the repository
-	 */
+	/**  Name of the repository */
 	private String repositoryName;
 	
-	/**
-	 * Name of the institution
-	 */
+	/**  Name of the institution */
 	private String institutionName;
 	
 	/**  Generated version id */
@@ -124,9 +122,17 @@ Validateable{
 	/** batch size for re-indexing repository information - number of records to process*/
 	private int batchSize = 10;
 	
+	/** id of the default versioned license for the repository */
+	private Long defaultLicenseVersionId;
+	
 	/** indicates that subscriptions should be suspended  */
 	private boolean suspendSubscriptions = false;
 	
+	/** Service for dealing with license information  */
+	private LicenseService licenseService;
+	
+	/** Set of licenses */
+	private List<LicenseVersion> licenses;
 	
 	/**
 	 * Prepare the repository.
@@ -140,6 +146,7 @@ Validateable{
 		log.debug("repository " + repository + " found ");
 		handleNameAuthorities = handleService.getAllNameAuthorities();
 		fileDatabases = fileServerService.getFileDatabases();
+		licenses = licenseService.getAllLicenseVersions();
 	}
 	
 	/**
@@ -157,11 +164,23 @@ Validateable{
 			fileDatabase = fileServerService.getDatabaseById(defaultFileDatabaseId, false);
 		}
 		
+		if( handleNameAuthorityId != -1l )
+		{
+		    HandleNameAuthority authority = handleService.getNameAuthority(handleNameAuthorityId, false);
+		    repository.setDefaultHandleNameAuthority(authority);
+		}
+		
+		if( defaultLicenseVersionId  != -1l )
+		{
+			LicenseVersion defaultLicense = licenseService.getLicenseVersion(defaultLicenseVersionId, false);
+			repository.setDefaultLicense(defaultLicense);
+			
+		}
+		
 		repository = repositoryService.createRepository(repositoryName, fileDatabase);
 		repository.setInstitutionName(institutionName);
 		Timestamp lastEmailDate = new Timestamp(new Date().getTime());
 		repository.setLastSubscriptionProcessEmailDate(lastEmailDate);
-		
 		repository.setSuspendSuscriptionEmails(suspendSubscriptions);
 		
 		
@@ -762,5 +781,30 @@ Validateable{
 	public void setSuspendSubscriptions(boolean suspendSubscriptions) {
 		this.suspendSubscriptions = suspendSubscriptions;
 	}
+
+	public Long getDefaultLicenseVersionId() {
+		return defaultLicenseVersionId;
+	}
+
+	public void setDefaultLicenseVersionId(Long defaultLicenseVersionId) {
+		this.defaultLicenseVersionId = defaultLicenseVersionId;
+	}
+
+	public LicenseService getLicenseService() {
+		return licenseService;
+	}
+
+	public void setLicenseService(LicenseService licenseService) {
+		this.licenseService = licenseService;
+	}
+
+	public List<LicenseVersion> getLicenses() {
+		return licenses;
+	}
+
+	public void setLicenses(List<LicenseVersion> licenses) {
+		this.licenses = licenses;
+	}
+
 
 }

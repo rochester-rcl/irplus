@@ -566,6 +566,7 @@
       <bean id="licenseService" 
        class="edu.ur.ir.repository.service.DefaultLicenseService">
        <property name="versionedLicenseDAO" ref="versionedLicenseDAO"/>
+       <property name="licenseVersionDAO" ref="licenseVersionDAO"/>
    </bean>
    
 </beans>

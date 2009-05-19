@@ -1441,49 +1441,6 @@ CREATE SCHEMA ir_repository AUTHORIZATION ir_plus;
 -- Repository Information
 -- ---------------------------------------------
 
--- Create a new table to hold repository information in the system
-CREATE TABLE ir_repository.repository
-(
-  repository_id BIGINT PRIMARY KEY,
-  name TEXT NOT NULL,
-  suspend_subscription_emails BOOLEAN,
-  institution_name TEXT,
-  file_database_id BIGINT,
-  description TEXT,
-  version INTEGER,
-  name_index_folder TEXT,
-  user_index_folder TEXT,
-  institutional_item_index_folder TEXT,
-  researcher_index_folder TEXT,
-  user_workspace_index_folder TEXT,
-  default_handle_authority_id BIGINT,
-  last_email_subscriber_process_sent_date TIMESTAMP WITH TIME ZONE,
-  UNIQUE (name),
-  FOREIGN KEY (file_database_id) REFERENCES file_system.file_database (file_database_id)
-);
-ALTER TABLE ir_repository.repository OWNER TO ir_plus;
-
--- The repository sequence
-CREATE SEQUENCE ir_repository.repository_seq;
-ALTER TABLE ir_repository.repository_seq OWNER TO ir_plus;
-
--- Create a new table to hold repository pictures in the system
-CREATE TABLE ir_repository.repository_picture
-(
-  repository_id BIGINT NOT NULL,
-  ir_file_id BIGINT NOT NULL,
-  PRIMARY KEY (repository_id, ir_file_id),
-  FOREIGN KEY (repository_id) REFERENCES ir_repository.repository (repository_id),
-  FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id)
-
-);
-ALTER TABLE ir_repository.repository_picture OWNER TO ir_plus;
-
--- The repository sequence
-CREATE SEQUENCE ir_repository.repository_picture_seq;
-ALTER TABLE ir_repository.repository_picture_seq OWNER TO ir_plus;
-
-
 -- Create a new table to hold repository license information 
 CREATE TABLE ir_repository.license
 (
@@ -1492,7 +1449,7 @@ CREATE TABLE ir_repository.license
   license_text TEXT,
   description TEXT,
   version INTEGER,
-  created_date DATE,
+  created_date TIMESTAMP WITH TIME ZONE,
   user_id BIGINT,
   FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
 );
@@ -1539,6 +1496,55 @@ ALTER TABLE ir_repository.license_version OWNER TO ir_plus;
 -- The repository license sequence
 CREATE SEQUENCE ir_repository.license_version_seq;
 ALTER TABLE ir_repository.license_version_seq OWNER TO ir_plus;
+
+
+
+-- Create a new table to hold repository information in the system
+CREATE TABLE ir_repository.repository
+(
+  repository_id BIGINT PRIMARY KEY,
+  name TEXT NOT NULL,
+  suspend_subscription_emails BOOLEAN,
+  institution_name TEXT,
+  file_database_id BIGINT,
+  default_license_version_id BIGINT,
+  description TEXT,
+  version INTEGER,
+  name_index_folder TEXT,
+  user_index_folder TEXT,
+  institutional_item_index_folder TEXT,
+  researcher_index_folder TEXT,
+  user_workspace_index_folder TEXT,
+  default_handle_authority_id BIGINT,
+  last_email_subscriber_process_sent_date TIMESTAMP WITH TIME ZONE,
+  UNIQUE (name),
+  FOREIGN KEY (file_database_id) REFERENCES file_system.file_database (file_database_id),
+  FOREIGN KEY (default_license_version_id) REFERENCES ir_repository.license_version (license_version_id)
+);
+ALTER TABLE ir_repository.repository OWNER TO ir_plus;
+
+-- The repository sequence
+CREATE SEQUENCE ir_repository.repository_seq;
+ALTER TABLE ir_repository.repository_seq OWNER TO ir_plus;
+
+-- Create a new table to hold repository pictures in the system
+CREATE TABLE ir_repository.repository_picture
+(
+  repository_id BIGINT NOT NULL,
+  ir_file_id BIGINT NOT NULL,
+  PRIMARY KEY (repository_id, ir_file_id),
+  FOREIGN KEY (repository_id) REFERENCES ir_repository.repository (repository_id),
+  FOREIGN KEY (ir_file_id) REFERENCES ir_file.ir_file (ir_file_id)
+
+);
+ALTER TABLE ir_repository.repository_picture OWNER TO ir_plus;
+
+-- The repository sequence
+CREATE SEQUENCE ir_repository.repository_picture_seq;
+ALTER TABLE ir_repository.repository_picture_seq OWNER TO ir_plus;
+
+
+
 
 -- ---------------------------------------------
 -- Institutional Collection Information
