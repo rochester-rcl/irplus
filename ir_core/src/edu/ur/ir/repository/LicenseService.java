@@ -53,5 +53,22 @@ public interface LicenseService {
 	 * @return the set of versioned licenses
 	 */
 	public List<VersionedLicense> getAll();
+	
+	/**
+	 * Get all license versions 
+	 * 
+	 * @return the list of all license versions across all versiond licenses
+	 */
+	public List<LicenseVersion> getAllLicenseVersions();
+	
+	/**
+	 * Get the specified license version.
+	 * 
+	 * @param id - id of the license version
+	 * @param lock - true to upgrade the lock mode
+	 * 
+	 * @return - the found license version
+	 */
+	public LicenseVersion getLicenseVersion(Long id, boolean lock);
 
 }

@@ -59,16 +59,13 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>New Repository License</h3>
+        <h3><a href="<c:url value="/admin/viewRepositoryLicenses.action"/>">Repository Licenses</a> &gt; New Repository License</h3>
   
         <div id="bd">
- 	        <c:url var="addLicenseUrl" value="/admin/addRepositoryLicense.action">
- 	        </c:url>
- 	        
 	        <form method="post" class="formTable">
 	            <table>
 	                <tr>
-	                    <td class="label">License Name:</td>
+	                    <td class="label"><div class="errorMessage"><ir:printError errors="${fieldErrors}"  key="name"/></div>License Name*:</td>
 	                    <td class="input"><input type="text" name="name" size="50"/></td>
 	                </tr>
 	                 <tr>     
@@ -84,8 +81,6 @@
 	                    <input type="submit" name="action:viewRepositoryLicenses" value="Cancel"/></td>
 	                </tr>
 	            </table>
-	            
-	             
 	        </form>
         </div>
       <!--  end body div -->

@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.ir.repository.License;
 import edu.ur.ir.repository.LicenseService;
 import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.VersionedLicense;
@@ -87,7 +88,54 @@ public class ManageRepositoryLicenses extends ActionSupport implements UserIdAwa
     public String saveNew()
     {
     	IrUser user = userService.getUser(userId, false);
+    	
+    	if( name == null || name.trim().equals(""))
+    	{
+    		String message = getText("licenseNameRequiredError");
+    		this.addFieldError("name", message);
+    		return "saveNewInput";
+    	}
+    	
+
+    	
     	licenseService.createLicense(user, text, name, description);
+    	return SUCCESS;
+    }
+    
+    /**
+     * Add a new license version.
+     * 
+     * @return
+     */
+    public String addNewLicenseVersion()
+    {
+ 
+    	versionedLicense = licenseService.get(versionedLicenseId, false);
+    	return SUCCESS;
+    }
+    
+    /**
+     * Save a new version of a license
+     * @return
+     */
+    public String saveNewVersion()
+    {
+       	versionedLicense = licenseService.get(versionedLicenseId, false);
+    	IrUser user = userService.getUser(userId, false);
+ 
+       	if( name == null || name.trim().equals(""))
+    	{
+    		String message = getText("licenseNameRequiredError");
+    		this.addFieldError("name", message);
+    		return "newVersionInput";
+    	}
+    	
+    	licenseVersion = versionedLicense.addNewVersion(text, user);
+    	versionedLicense.setName(name);
+    	License license = licenseVersion.getLicense();
+    	license.setName(name);
+    	license.setDescription(description);
+    	licenseService.save(versionedLicense);
     	return SUCCESS;
     }
     

@@ -58,12 +58,13 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3><a href="<c:url value="/admin/viewRepositoryLicenses.action"/>">Repository Licenses</a> > ${versionedLicense.name} </h3>
+        <h3><a href="<c:url value="/admin/viewRepositoryLicenses.action"/>">Repository Licenses</a> &gt; ${versionedLicense.name} </h3>
   
         <div id="bd">
- 	        <c:url var="addNewLicenseVersionUrl" value="/admin/addRepositoryLicense.action">
+ 	        <c:url var="addNewLicenseVersionUrl" value="/admin/addNewLicenseVersion.action">
+ 	            <c:param name="versionedLicenseId" value="${versionedLicenseId}"/>
  	        </c:url>
- 	        <a href="${addLicenseUrl}">Add New Version</a>
+ 	        <a href="${addNewLicenseVersionUrl}">Add New Version</a>
  	        <br/>
  	        <br/>
  	        
@@ -107,7 +108,7 @@
 	                             ${licenseVersion.license.description}
 	                        </urstb:td>
 	                        <urstb:td>
-	                             ${licenseVersion.license.dateCreated}
+	                             <fmt:formatDate pattern="MM/dd/yyyy HH:mm:ss" value="${licenseVersion.license.dateCreated}"/>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${licenseVersion.license.creator.firstName}&nbsp;${licenseVersion.license.creator.lastName}

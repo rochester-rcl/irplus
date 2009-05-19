@@ -58,34 +58,40 @@
     <div id="doc2">
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
+        
         <c:url value="viewVersionedLicense.action" var="viewVersionedLicenseUrl">
 	        <c:param name="versionedLicenseId" value="${versionedLicense.id}"/>
 	    </c:url>
         <h3><a href="<c:url value="/admin/viewRepositoryLicenses.action"/>">Repository Licenses</a> &gt; <a href="${viewVersionedLicenseUrl}">${versionedLicense.name}</a></h3>
-
+      
+        <h3>New License Version</h3>
   
         <div id="bd">
- 	        <c:url var="addLicenseUrl" value="/admin/addRepositoryLicense.action">
- 	        </c:url>
  	        
-	        <form method="post" class="formTable">
+	        <form method="post" class="formTable" action="saveNewLicenseVersion.action">
+	            <input type="hidden" name="versionedLicenseId" value="${versionedLicense.id}"/>
 	            <table>
 	                <tr>
-	                    <td class="label">License Name:</td>
-	                    <td class="input"><input disabled="disabled" type="text" name="name" size="50" value="${licenseVersion.license.name}"/></td>
+	                    <td class="label"><div class="errorMessage"><ir:printError errors="${fieldErrors}"  key="name"/></div>License Name*:</td>
+	                    <td class="input"><input type="text" name="name" size="50" value="${versionedLicense.name}"/></td>
 	                </tr>
 	                 <tr>     
 	                    <td class="label">Description/Revision Notes</td>
-	                    <td class="input"><textarea disabled="disabled" name="description" rows="10" cols="70">${licenseVersion.license.description}</textarea></td>
+	                    <td class="input"><textarea name="description" rows="10" cols="70"></textarea></td>
 	                </tr>
 	                <tr>     
 	                    <td class="label">License Text</td>
-	                    <td class="input"><textarea disabled="disabled" name="text" rows="30" cols="70">${licenseVersion.license.text}</textarea></td>
+	                    <td class="input"><textarea name="text" rows="30" cols="70"></textarea></td>
+	                </tr>
+	                <tr>
+	                    <td class="input" colspan="2" align="center">
+	                        <input type="submit" name="action:saveNewLicenseVersion" value="Save"/>
+	                        <input type="submit" name="action:viewVersionedLicense" value="Cancel"/>
+	                    </td>
 	                </tr>
 	                
 	            </table>
-	            
-	             
+	           
 	        </form>
         </div>
       <!--  end body div -->
@@ -95,8 +101,6 @@
   
   </div>
   <!--  End doc div-->
-
-  
  
   
 </body>

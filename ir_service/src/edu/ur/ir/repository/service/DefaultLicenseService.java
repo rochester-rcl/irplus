@@ -19,6 +19,8 @@ limitations under the License.
 import java.util.List;
 
 import edu.ur.ir.repository.LicenseService;
+import edu.ur.ir.repository.LicenseVersion;
+import edu.ur.ir.repository.LicenseVersionDAO;
 import edu.ur.ir.repository.VersionedLicense;
 import edu.ur.ir.repository.VersionedLicenseDAO;
 import edu.ur.ir.user.IrUser;
@@ -33,6 +35,9 @@ public class DefaultLicenseService implements LicenseService{
 	
 	/**Class for versioned license persistence */
 	private VersionedLicenseDAO versionedLicenseDAO;
+	
+	/** Class for license version data access  */
+	private LicenseVersionDAO licenseVersionDAO;
 
 	
 	/**
@@ -66,6 +71,30 @@ public class DefaultLicenseService implements LicenseService{
 	public VersionedLicense get(Long id, boolean lock) {
 		return versionedLicenseDAO.getById(id, lock);
 	}
+	
+	/**
+	 * Get all license versions 
+	 * 
+	 * @return the list of all license versions across all versiond licenses
+	 */
+	@SuppressWarnings("unchecked")
+	public List<LicenseVersion> getAllLicenseVersions()
+	{
+	    return licenseVersionDAO.getAll();	
+	}
+	
+	/**
+	 * Get the specified license version.
+	 * 
+	 * @param id - id of the license version
+	 * @param lock - true to lock 
+	 * 
+	 * @return - the found license version
+	 */
+	public LicenseVersion getLicenseVersion(Long id, boolean lock)
+	{
+		return licenseVersionDAO.getById(id, lock);
+	}
 
 	
 	/**
@@ -94,6 +123,16 @@ public class DefaultLicenseService implements LicenseService{
 
 	public void setVersionedLicenseDAO(VersionedLicenseDAO versionedLicenseDAO) {
 		this.versionedLicenseDAO = versionedLicenseDAO;
+	}
+
+
+	public LicenseVersionDAO getLicenseVersionDAO() {
+		return licenseVersionDAO;
+	}
+
+
+	public void setLicenseVersionDAO(LicenseVersionDAO licenseVersionDAO) {
+		this.licenseVersionDAO = licenseVersionDAO;
 	}
 
 }

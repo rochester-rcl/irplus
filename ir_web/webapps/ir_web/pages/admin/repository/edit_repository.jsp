@@ -138,6 +138,29 @@
                               </select>
                           </td>
                       </tr>
+                       <tr>
+                          <td class="label">
+                              Current License:
+                          </td>
+                          <td class="input" colspan="2">
+                              <select name="defaultLicenseVersionId">
+                                  <c:if test="${repository.defaultLicense == null}">
+                                      <option selected="true" value="-1">No License</option>
+                                  </c:if>
+                                   <c:if test="${repository.defaultLicense != null}">
+                                      <option value="-1">No License</option>
+                                  </c:if>
+                                  <c:forEach var="licenseVersion" items="${licenses}">
+                                      <c:if test="${repository.defaultLicense.id == licenseVersion.id}">
+                                          <option selected="true" value="${llicenseVersion.id}">${licenseVersion.license.name} - version&nbsp;${fileLicense.versionNumber}</option>
+                                      </c:if>
+                                       <c:if test="${repository.defaultLicense.id != licenseVersion.id}">
+                                          <option value="${licenseVersion.id}">${licenseVersion.license.name} - ${licenseVersion.versionNumber}</option>
+                                      </c:if>
+                                  </c:forEach>
+                              </select>
+                          </td>
+                      </tr>
                       <tr>
                           <td class="label">
                               Description:

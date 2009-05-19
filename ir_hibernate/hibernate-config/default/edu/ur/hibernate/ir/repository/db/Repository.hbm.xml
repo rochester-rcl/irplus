@@ -92,6 +92,17 @@
 			access="field" 
 			unique="true"/>
 			
+	
+		<!-- Default license version to use for the repository -->
+		<many-to-one class="LicenseVersion" 
+			name="defaultLicense"
+			cascade="save-update" 
+			column="default_license_version_id" 
+			insert="true"
+			update="true" 
+			access="field" 
+			unique="true"/>
+			
 	    <!--  Top level institutional collections in the repository -->
 		<set name="institutionalCollections" 
 		     optimistic-lock="false"
