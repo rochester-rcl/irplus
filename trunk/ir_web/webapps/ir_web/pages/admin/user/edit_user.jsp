@@ -112,9 +112,20 @@
 	                  	    <c:import url="edit_user_form.jsp"/>
 	                  	</div>
 		         	 </form>    
+	                 <br/>
 					 
-					 <div class="clear">&nbsp;</div>
-					 
+					 <strong>General Information</strong>
+					 <br/>
+					 <br/>
+					 Date Account Created: <fmt:formatDate pattern="MM/dd/yyyy HH:mm:ss" value="${irUser.createdDate}"/>
+					 <br/>
+					 <br/>
+					 Personal Index Folder Location: ${irUser.personalIndexFolder}
+					 <br/>
+					 <br/>
+					 Self Registered: ${irUser.selfRegistered}
+					 <br/>
+					 <br/>
 					 <button id="save_user" class="ur_button" 
                                onmouseover="this.className='ur_buttonover';"
                                onmouseout="this.className='ur_button';"
