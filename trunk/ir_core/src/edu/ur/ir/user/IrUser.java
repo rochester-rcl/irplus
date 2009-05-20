@@ -16,6 +16,7 @@
 
 package edu.ur.ir.user;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.person.PersonNameAuthority;
+import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.security.Sid;
 import edu.ur.persistent.BasePersistent;
@@ -93,7 +95,7 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	private boolean passwordChangeRequired = false;
 
 	/**  Date the account was created.  */
-	private Date createdDate;
+	private Timestamp createdDate;
 	
 	/**  Date the account expires. */
 	private Date expirationDate;
@@ -139,11 +141,15 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	/**  Indicates the user registered themselves  */
 	private boolean selfRegistered = false;
 	
+	/** Set of licenses accepted by the user */
+	private Set<UserRepositoryLicense> acceptedLicenses = new HashSet<UserRepositoryLicense>();
+	
+	
 	/**
 	 * Default Constructor. 
 	 */
 	public IrUser(){
-		this.createdDate = new Date();
+		this.createdDate = new Timestamp( new Date().getTime());
 	}
 	
 	/**
@@ -421,7 +427,7 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 * 
 	 * @param createdDate
 	 */
-	public void setCreatedDate(Date createdDate) {
+	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
 
@@ -1348,6 +1354,48 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 		return USER_SID_TYPE;
 	}
 	
+	/**
+	 * Get the accepted license by the license version.
+	 * 
+	 * @param licenseVersion - the license version that should be accepted
+	 * @return the found user repository license or null if it is not found.
+	 */
+	public UserRepositoryLicense getAcceptedLicense(LicenseVersion licenseVersion)
+	{
+		for(UserRepositoryLicense license: acceptedLicenses )
+		{
+			if( license.getLicenseVersion().equals(licenseVersion))
+			{
+				return license;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Create a new accepted license and return it for this user.  It is added
+	 * to the list of the users accepted license.  If the user already has the
+	 * license version, the existing user repository license is returned rather
+	 * than creating a new one.
+	 * 
+	 * @param licenseVersion - the license version accepted.
+	 * @return the created user repository license.
+	 */
+	public UserRepositoryLicense addAcceptedLicense(LicenseVersion licenseVersion)
+	{
+		UserRepositoryLicense license = getAcceptedLicense(licenseVersion);
+		
+		if( license == null)
+		{
+			license = new UserRepositoryLicense(licenseVersion, this);
+			acceptedLicenses.add(license);
+		}
+		
+		return license;
+		
+	}
+	
     /**
      * Adds a file to the shared file in-box.
      * 
@@ -1540,6 +1588,24 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 
 	public void setSelfRegistered(boolean selfRegistered) {
 		this.selfRegistered = selfRegistered;
+	}
+
+	/**
+	 * Returns the a set of unmodifiable licenses.
+	 * 
+	 * @return the set of licenses
+	 */
+	public Set<UserRepositoryLicense> getAcceptedLicenses() {
+		return Collections.unmodifiableSet(acceptedLicenses);
+	}
+
+	/**
+	 * Set of accepted licenses.
+	 * 
+	 * @param acceptedLicenses
+	 */
+	void setAcceptedLicenses(Set<UserRepositoryLicense> acceptedLicenses) {
+		this.acceptedLicenses = acceptedLicenses;
 	}
 
 

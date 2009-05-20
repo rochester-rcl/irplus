@@ -141,6 +141,17 @@
 			<one-to-many class="edu.ur.ir.user.UserEmail"/>
 		</set>
 		
+	    <!-- licenses this user -->
+		<set name="acceptedLicenses" access="field" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all-delete-orphan"
+			 lazy="true"
+			 fetch="subselect">
+			<key column="user_id" not-null="true" />
+			<one-to-many class="edu.ur.ir.user.UserRepositoryLicense"/>
+		</set>
+		
 	    <!-- Emails for this user -->
 		<set name="sharedInboxFiles" 
 		     optimistic-lock="false" 
