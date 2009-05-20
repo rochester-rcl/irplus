@@ -285,6 +285,24 @@ Validateable{
 			}
 		}
 		
+		log.debug("Default license version id = " + defaultLicenseVersionId);
+		if( defaultLicenseVersionId == -1l  )
+		{
+			repository.setDefaultLicense(null);
+		}
+		else
+		{
+			LicenseVersion defaultLicense = repository.getDefaultLicense();
+			
+			// the handle name authority is being changed
+			if( defaultLicense == null || 
+				!defaultLicense.getId().equals(defaultLicenseVersionId) )
+			{
+				LicenseVersion newDefaultLicense = licenseService.getLicenseVersion(defaultLicenseVersionId, false);
+			    repository.setDefaultLicense(newDefaultLicense);
+			}
+		}
+		
 		
 		try {
 			updateNameIndexFolder(repository, nameIndexFolder);

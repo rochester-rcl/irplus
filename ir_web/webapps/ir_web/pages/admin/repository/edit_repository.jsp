@@ -152,10 +152,10 @@
                                   </c:if>
                                   <c:forEach var="licenseVersion" items="${licenses}">
                                       <c:if test="${repository.defaultLicense.id == licenseVersion.id}">
-                                          <option selected="true" value="${llicenseVersion.id}">${licenseVersion.license.name} - version&nbsp;${fileLicense.versionNumber}</option>
+                                          <option selected="true" value="${llicenseVersion.id}">${licenseVersion.license.name} - [version&nbsp;${licenseVersion.versionNumber}]</option>
                                       </c:if>
                                        <c:if test="${repository.defaultLicense.id != licenseVersion.id}">
-                                          <option value="${licenseVersion.id}">${licenseVersion.license.name} - ${licenseVersion.versionNumber}</option>
+                                          <option value="${licenseVersion.id}">${licenseVersion.license.name} - [version&nbsp;${licenseVersion.versionNumber}]</option>
                                       </c:if>
                                   </c:forEach>
                               </select>
