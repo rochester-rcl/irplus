@@ -596,7 +596,7 @@ CREATE TABLE ir_user."user"
   ldap_user_name TEXT,
   first_name TEXT,
   last_name TEXT,
-  created_date DATE,
+  created_date TIMESTAMP WITH TIME ZONE,
   self_registered BOOLEAN,
   phone_number TEXT,
   account_expired BOOLEAN NOT NULL,
@@ -707,6 +707,8 @@ CREATE TABLE ir_user.user_role
     FOREIGN KEY (role_id) REFERENCES ir_user.role(role_id)
 );
 ALTER TABLE ir_user.user_role OWNER TO ir_plus;
+
+
 
 
 
@@ -1544,7 +1546,25 @@ CREATE SEQUENCE ir_repository.repository_picture_seq;
 ALTER TABLE ir_repository.repository_picture_seq OWNER TO ir_plus;
 
 
+-- this is for users who have accepted the
+-- license.
+-- ---------------------------------------------
+CREATE TABLE ir_repository.user_repository_license
+(
+    user_repository_license_id BIGINT NOT NULL PRIMARY KEY,
+    date_accepted TIMESTAMP WITH TIME ZONE NOT NULL,
+    license_version_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    version INTEGER,
+    UNIQUE(license_version_id, user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (license_version_id) REFERENCES ir_repository.license_version(license_version_id)
+);
 
+ALTER TABLE ir_repository.user_repository_license OWNER TO ir_plus;
+
+CREATE SEQUENCE ir_repository.user_repository_license_seq;
+ALTER TABLE ir_repository.user_repository_license_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Institutional Collection Information
