@@ -109,13 +109,6 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 					personalFolder = thisUser.createRootFolder(folderName);
 					personalFolder.setDescription(folderDescription);
 					userFileSystemService.makePersonalFolderPersistent(personalFolder);
-					 
-					IrUser user = personalFolder.getOwner();
-					if( user.getPersonalIndexFolder() == null )
-					{
-							userFileSystemService.createIndexFolder(user, repository, 
-									user.getUsername() + " Index Folder");
-					}
 					userWorkspaceIndexService.addToIndex(repository, personalFolder);
 					
 			        folderAdded = true;

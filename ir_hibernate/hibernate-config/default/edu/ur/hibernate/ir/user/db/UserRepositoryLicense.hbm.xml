@@ -20,20 +20,19 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for a License
+	Mapping for a user.
 	
 	@author Nathan Sarr
 -->
-<hibernate-mapping package="edu.ur.ir.repository">
-	<class name="License" schema="ir_repository" table="license" lazy="true">
-
-        <cache usage="nonstrict-read-write" />
+<hibernate-mapping package="edu.ur.ir.user">
+	<class name="UserRepositoryLicense" schema="ir_repository" table="user_repository_license"
+		lazy="true">
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="license_id"
+		<id name="id" type="long" column="user_repository_license_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_repository.license_seq</param>
+				<param name="sequence">ir_repository.user_repository_license_seq</param>
 			</generator>
 		</id>
 
@@ -41,33 +40,19 @@
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
 
-		<property name="name" column="name" type="string"
+		<property name="dateAccepted" column="date_accepted" type="timestamp"
 			not-null="true" access="field" />
-		
-		<property name="text" column="license_text" type="string"
-			not-null="false" access="field" />
-			
-		<property name="dateCreated" column="created_date" type="timestamp" access="field" />	
-			
-		<property name="description" column="description" type="string"
-			not-null="false" />
-			
-		<!-- user who created the license-->
-		<many-to-one class="edu.ur.ir.user.IrUser" 
-			unique="true" 
-			name="creator" 
-			column="user_id" 
-			access="field"
-			not-null="true" 
-			insert="true"
-			update="true" />
 
-			
+		<!--  license version for the repository-->
+		<many-to-one class="edu.ur.ir.repository.LicenseVersion" 
+			name="licenseVersion" column="license_version_id" insert="true"
+			update="true" unique="true" access="field"/>			
+						
+		<!--  user who owns the license-->
+		<many-to-one class="IrUser" 
+			name="user" column="user_id" insert="true"
+			update="true" unique="true" access="field"/>			
 	</class>
-	<!--  Get a count of repositories in the system -->
-	<query name="licenseCount">
-	    select count(*) from License
-	</query>
-	
-  
+
+
 </hibernate-mapping>
