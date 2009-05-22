@@ -29,6 +29,7 @@ import edu.ur.file.db.FileDatabase;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.CommonPersistent;
 
 /**
@@ -100,6 +101,12 @@ public class Repository extends CommonPersistent {
 	
 	/** indicates that sending emails should be stoped - default is false*/
 	private boolean suspendSubscriptionEmails = false;
+	
+	/**
+	 * Once a license has been used, it is then retired - so it can no longer be used
+	 * again.
+	 */
+	private Set<RetiredRepositoryLicense> retiredLicenses = new HashSet<RetiredRepositoryLicense>();
 	
 
 	/**
@@ -468,10 +475,19 @@ public class Repository extends CommonPersistent {
 		this.institutionalItemIndexFolder = institutionalItemIndexFolder;
 	}
 
+	/**
+	 * Folder where researcher information will be stored.
+	 * 
+	 * @param researcherIndexFolder
+	 */
 	public void setResearcherIndexFolder(String researcherIndexFolder) {
 		this.researcherIndexFolder = researcherIndexFolder;
 	}
 
+	/**
+	 * Folder where researcher information will be stored.
+	 * @return
+	 */
 	public String getResearcherIndexFolder() {
 		return researcherIndexFolder;
 	}
@@ -503,13 +519,77 @@ public class Repository extends CommonPersistent {
 	public LicenseVersion getDefaultLicense() {
 		return defaultLicense;
 	}
+	
+	/**
+	 * Use this to set the default license.  If there is a current
+	 * default license, it will be retired and the new license will
+	 * take its place.
+	 * 
+	 * @param licenseVersion
+	 * @throws IllegalStateException - if the license has been set on this repository 
+	 * before (it exists in the set of retired licenses)
+	 */
+	public void updateDefaultLicense(IrUser user, LicenseVersion licenseVersion) throws IllegalStateException
+	{
+		// do not update if the license version is the same
+		// as the current license.
+		if( licenseVersion.equals(defaultLicense))
+		{
+			return;
+		}
+		if( licenseVersion == null )
+		{
+			if( defaultLicense != null )
+			{
+				retiredLicenses.add(new RetiredRepositoryLicense(this, defaultLicense, user));
+			}
+			defaultLicense = null;
+		}
+		else
+		{
+		    RetiredRepositoryLicense rrl = getRetiredLicense(licenseVersion);
+		    if( rrl != null)
+		    {
+			    throw new IllegalStateException("Cannot update to a retired license " + rrl );
+		    }
+		    else
+		    {
+		    	if( defaultLicense != null )
+		    	{
+		    	    retiredLicenses.add(new RetiredRepositoryLicense(this, defaultLicense, user));
+		    	}
+		    	defaultLicense = licenseVersion;
+		    }
+		}
+		
+	}
+	
+	/**
+	 * Find the retired license with the specified license version.  Returns
+	 * null if the license version is not found.
+	 * 
+	 * @param licenseVersion - license  version the 
+	 * @return
+	 */
+	public RetiredRepositoryLicense getRetiredLicense(LicenseVersion licenseVersion)
+	{
+		for(RetiredRepositoryLicense retiredLicense : retiredLicenses)
+		{
+			if( licenseVersion.equals(retiredLicense.getLicenseVersion()))
+			{
+				return retiredLicense;
+			}
+		}
+		return null;
+	}
+	
 
 	/**
-	 * Set the default license for the repository.
+	 * Set the default license for the repository. 
 	 * 
 	 * @param defaultLicense
 	 */
-	public void setDefaultLicense(LicenseVersion defaultLicense) {
+	void setDefaultLicense(LicenseVersion defaultLicense) {
 		this.defaultLicense = defaultLicense;
 	}
 
@@ -551,6 +631,7 @@ public class Repository extends CommonPersistent {
 
 	/**
 	 * Last time the email subscription process ran and sent updates to users.
+	 * 
 	 * @return
 	 */
 	public Timestamp getLastSubscriptionProcessEmailDate() {
@@ -568,6 +649,7 @@ public class Repository extends CommonPersistent {
 
 	/**
 	 * Indicates if sending subscription emails should be stopped
+	 * 
 	 * @return true if emails should be suspened
 	 */
 	public boolean isSuspendSuscriptionEmails() {
@@ -576,6 +658,7 @@ public class Repository extends CommonPersistent {
 
 	/**
 	 * Indicates if sending subscription emails should be stopped
+	 * 
 	 * @param suspendSuscriptionEmails
 	 */
 	public void setSuspendSuscriptionEmails(boolean suspendSuscriptionEmails) {
@@ -583,11 +666,30 @@ public class Repository extends CommonPersistent {
 	}
 	
 	/**
-	 * Indicates if sending subscription emails should be stopped
+	 * Indicates if sending subscription emails should be stopped.
+	 * 
 	 * @return
 	 */
 	public boolean getSuspendSuscriptionEmails()
 	{
 		return suspendSubscriptionEmails;
+	}
+
+	/**
+	 * Set of unmodifiable retired licenses.
+	 * 
+	 * @return
+	 */
+	public Set<RetiredRepositoryLicense> getRetiredLicenses() {
+		return Collections.unmodifiableSet(retiredLicenses);
+	}
+
+	/**
+	 * Set the list of retired repository licenses.
+	 * 
+	 * @param retiredLicenses
+	 */
+	public void setRetiredLicenses(Set<RetiredRepositoryLicense> retiredLicenses) {
+		this.retiredLicenses = retiredLicenses;
 	}
 }

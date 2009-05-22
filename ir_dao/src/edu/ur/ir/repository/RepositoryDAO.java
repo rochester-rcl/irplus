@@ -16,6 +16,8 @@
 
 package edu.ur.ir.repository;
 
+import java.util.List;
+
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 import edu.ur.dao.UniqueNameDAO;
@@ -27,4 +29,12 @@ import edu.ur.dao.UniqueNameDAO;
  *
  */
 public interface RepositoryDAO extends CountableDAO, 
-CrudDAO<Repository>, UniqueNameDAO<Repository>{}
+CrudDAO<Repository>, UniqueNameDAO<Repository>
+{
+	/**
+	 * Get available licenses for a repository.
+	 * 
+	 * @return set of license versions.
+	 */
+	public List<LicenseVersion> getAvailableRepositoryLicenses(Long repositoryId);
+}

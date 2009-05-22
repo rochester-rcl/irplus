@@ -296,20 +296,6 @@
 	</query>
 	
 	
-
-
-	<!-- named query for getting the licenses that can be applied to an item
-	<query name="getPossibleLicenses">
-        select license 
-        from License license
-        where license not in
-            ( select license
-              from GenericItem as item
-              join item.licenses as license
-              where item.id = ?)
-	</query>
-	-->
-	
 	<!-- named query for getting the identifier types that can be applied to an item -->
 	<query name="getPossibleIdentifierTypes">
         select identifierType 

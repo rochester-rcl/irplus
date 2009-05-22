@@ -93,6 +93,9 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	/** Message that can be displayed to the user. */
 	private String message;
 	
+	/** Password check value  */
+	private String passwordCheck;
+	
 	/**  Indicates the user has been added*/
 	private boolean added = false;
 	
@@ -123,6 +126,15 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	/** list of subscriptions for the user */
 	private List<InstitutionalCollectionSubscription> subscriptions = new LinkedList<InstitutionalCollectionSubscription>();
 
+	/** Repository information  */
+	private Repository repository;
+	
+	/** indicates the user has accepted the license */
+	private boolean acceptLicense = false;
+	
+	/** id of the license the user has agreed to */
+	private Long licenseId;
+	
 	/**
 	 * Execute method to initialize invite information
 	 */
@@ -272,6 +284,33 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 
 		IrUser myIrUser = 
 			userService.getUser(irUser.getUsername());
+		
+		
+		
+		/* very unlikely but if the license changes while the user was accepting then
+		 * make them re-accept
+		 */
+		if(repository.getDefaultLicense() != null && !repository.getDefaultLicense().getId().equals(licenseId))
+		{
+			addFieldError("licenseChangeError", 
+					"This license has changed please re-accept the new license");
+			return INPUT;
+		}
+		
+		// make sure the user has accepted the license
+		if( !acceptLicense )
+		{
+			addFieldError("licenseError", "You must accept the license to create an account");
+			return INPUT;
+		}
+		
+		// check the passwords
+		if( !irUser.getPassword().equals(this.passwordCheck))
+		{
+			addFieldError("passwordCheck", "The passwords do not match");
+			return INPUT;
+		}
+		
 		if( myIrUser == null)
 		{
 			IrUser emailExist = userService.getUserByEmail(defaultEmail.getEmail());
@@ -288,6 +327,7 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 			    irUser.setAccountLocked(accountLocked);
 			    irUser.setFirstName(firstName);
 			    irUser.setLastName(lastName);
+			    irUser.addAcceptedLicense(repository.getDefaultLicense());
 			    
 			    if (departmentId != 0) {
 			    	Department department = departmentService.getDepartment(departmentId, false); 
@@ -343,7 +383,9 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	 */
 	public void prepare() {
 		log.debug("Prepare user Id =" + userId);
-
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		affiliations = affiliationService.getAllAffiliations();
+		departments = departmentService.getAllDepartments();
 		if (userId != null) {
 			irUser = userService.getUser(userId, false);
 		}
@@ -660,6 +702,38 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	public void setSubscriptions(
 			List<InstitutionalCollectionSubscription> subscriptions) {
 		this.subscriptions = subscriptions;
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
+
+	public boolean getAcceptLicense() {
+		return acceptLicense;
+	}
+
+	public void setAcceptLicense(boolean acceptedLicense) {
+		this.acceptLicense = acceptedLicense;
+	}
+
+	public Long getLicenseId() {
+		return licenseId;
+	}
+
+	public void setLicenseId(Long licenseId) {
+		this.licenseId = licenseId;
+	}
+
+	public String getPasswordCheck() {
+		return passwordCheck;
+	}
+
+	public void setPasswordCheck(String passwordCheck) {
+		this.passwordCheck = passwordCheck;
 	}
 
 }
