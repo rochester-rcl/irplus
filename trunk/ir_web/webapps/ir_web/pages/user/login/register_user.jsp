@@ -48,6 +48,8 @@
         
         function formValidation() {
 
+        	
+        	
         	if (document.getElementById('irUserForm_first_name').value == '') {
         		alert('Please enter first Name.');
         		return false;
@@ -72,7 +74,7 @@
         		alert('Please enter password check.');
         		return false;
         	}
-        	
+
         	if (document.getElementById('irUserForm_password_check').value != document.getElementById('irUserForm_password').value) {
         		alert('The password check does not match with the password.');
         		return false;
@@ -87,6 +89,16 @@
         		alert('Invalid E-mail address.');
         		return false;
         	}
+
+        	
+        	if(urUtil.checkForAtLeastOneSelection(document.getElementById('acceptLicense')) == false )
+        	{
+            	alert('You must agree to the license');
+            	return false;
+        	}
+        	
+        	
+        	
         	return true;
         }
         
@@ -117,6 +129,10 @@
 		                       key="userNameError"/></p>
 		                  <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="emailExistError"/></p>
+		                  <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		                       key="licenseChangeError"/></p>
+		                  <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		                       key="licenseError"/></p>
 			          </td>
 			          </tr>    
    
@@ -197,7 +213,12 @@
 		                <td  align="left" class="input">
            		      	   <select id="irUserForm_affiliation" name="affiliationId" />
 					      		<c:forEach items="${affiliations}" var="affiliation">
-					      			<option value = "${affiliation.id}"> ${affiliation.name}</option>
+					      		    <c:if test="${affiliation.id != affiliationId}">
+					      			    <option value = "${affiliation.id}"> ${affiliation.name}</option>
+					      			</c:if>
+					      			<c:if test="${affiliation.id == affiliationId}">
+					      			    <option selected="selected" value = "${affiliation.id}"> ${affiliation.name}</option>
+					      			</c:if>
 					      		</c:forEach>
 				      	   </select>
 
@@ -212,11 +233,24 @@
            		      	   <select id="irUserForm_department" name="departmentId" />
            		      	   		<option value = "0"> N/A</option>
 					      		<c:forEach items="${departments}" var="department">
-					      			<option value = "${department.id}"> ${department.name}</option>
+					      		    <c:if test="${department.id != departmentId}">
+					      			    <option value = "${department.id}"> ${department.name}</option>
+					      			</c:if>
+					      			<c:if test="${department.id == departmentId}">
+					      			    <option value = "${department.id}" selected="selected"> ${department.name}</option>
+					      			</c:if>
 					      		</c:forEach>
 				      	   </select>
 
 	                      </td>
+                      </tr>
+                      <tr>
+                          <td align="left" class="label">I accept the terms of the License</td>
+                          <td><input id="acceptLicense" name="acceptLicense" value="true" type="checkbox"/></td>
+                      </tr>
+                      <tr>
+                          <td align="left" class="label">License</td>
+                          <td><textarea disabled="disabled" rows="20" cols="60"><c:out value="${repository.defaultLicense.license.text}"/> </textarea></td>
                       </tr>
     
                       <tr>
@@ -226,8 +260,10 @@
  		                               onmouseout="this.className='ur_button';">Create account</button>                      
                       </td>
                       </tr>
+                      
+                      
                       </table>
-		      
+		              <input type="hidden" name="licenseId" value="${repository.defaultLicense.id}"/>
 		          </ur:basicForm>
             </div>
             <!--  end the body tag --> 
