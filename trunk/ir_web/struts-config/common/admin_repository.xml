@@ -27,20 +27,20 @@
             method="create"
             class="edu.ur.ir.web.action.repository.EditRepository">
             <interceptor-ref name="crudStack"/>
-            <result name="success">/pages/admin/repository/edit_repository.jsp</result>
+            <result type="redirectAction" name="success">viewRepository</result>
         </action>
         
         <action name="updateRepository" 
             method="update"
             class="edu.ur.ir.web.action.repository.EditRepository">
             <interceptor-ref name="crudStack"/>
-            <result name="success">/pages/admin/repository/edit_repository.jsp</result>
+            <result type="redirectAction" name="success">viewRepository</result>
         </action>
         
         <action name="reIndexInstitutionalItems" 
             class="edu.ur.ir.web.action.repository.ReIndexInstitutionalItem">
             <interceptor-ref name="editStack"/>
-            <result name="success" type="redirect">viewRepository.action</result>
+            <result name="success" type="redirectAction">viewRepository</result>
         </action>
         
         <action name="cancelRepository" 
