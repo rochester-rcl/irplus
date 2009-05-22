@@ -52,7 +52,7 @@ DROP SCHEMA ir_security;
 ALTER TABLE ir_repository.published_version DROP CONSTRAINT published_version_withdrawn_token_id_fkey;
 ALTER TABLE ir_researcher.researcher_institutional_item DROP CONSTRAINT researcher_institutional_item_institutional_item_id_fkey;
 
-
+DROP TABLE ir_repository.retired_repository_license;
 DROP TABLE ir_repository.user_repository_license;
 DROP TABLE ir_repository.reviewable_item;
 DROP TABLE ir_repository.repository_picture;
@@ -71,7 +71,7 @@ DROP TABLE ir_repository.license_version;
 DROP TABLE ir_repository.versioned_license;
 DROP TABLE ir_repository.license;
 
-
+DROP SEQUENCE ir_repository.retired_repository_license_seq;
 DROP SEQUENCE ir_repository.user_repository_license_seq;
 DROP SEQUENCE ir_repository.institutional_collection_subscription_seq;
 DROP SEQUENCE ir_repository.institutional_collection_link_seq;
