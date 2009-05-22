@@ -88,13 +88,13 @@
          
         <div class="clear">&nbsp;</div>    
          
-        <!--  set up tabs for editing news -->
+        <!--  set up tabs for editing users -->
         <div id="edit-user-tabs" class="yui-navset">
             <ul class="yui-nav">
                 <li class="selected"><a href="#tab1"><em>User Information</em></a></li>
                 <li><a href="#tab2"><em>Emails</em></a></li>
                 <li><a href="#tab3"><em>Authoritative name</em></a></li>
-                <li><a href="#tab3"><em>Accepted Repository Licenses</em></a></li>
+                <li><a href="#tab4"><em>Accepted Repository Licenses</em></a></li>
             </ul>
 
             
