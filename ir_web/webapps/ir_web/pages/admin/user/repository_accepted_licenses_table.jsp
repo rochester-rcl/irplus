@@ -10,7 +10,7 @@
 					                 <urstb:td>License Id</urstb:td>         
 	                                 <urstb:td>Name</urstb:td>
 	                                 <urstb:td>Text</urstb:td>
-	                                 <urstb:td>Date</urstb:td>
+	                                 <urstb:td>Date Accepted</urstb:td>
 	                             </urstb:tr>
 	                         </urstb:thead>
 	                         <urstb:tbody

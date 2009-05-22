@@ -94,6 +94,7 @@
                 <li class="selected"><a href="#tab1"><em>User Information</em></a></li>
                 <li><a href="#tab2"><em>Emails</em></a></li>
                 <li><a href="#tab3"><em>Authoritative name</em></a></li>
+                <li><a href="#tab3"><em>Accepted Repository Licenses</em></a></li>
             </ul>
 
             
@@ -137,18 +138,14 @@
 	                  
               	 <!--  start second tab -->
                	 <div id="tab2">
-         		 
-         		 <br/>
-			                <button id="showEmail" class="ur_button" 
-	 		                               onmouseover="this.className='ur_buttonover';"
-	 		                               onmouseout="this.className='ur_button';">New Email</button> 
+         		     <br/> 
+         		     <button id="showEmail" class="ur_button" 
+	 		                 onmouseover="this.className='ur_buttonover';"
+	 		                 onmouseout="this.className='ur_button';">New Email</button> 
 			      
-				  <br/>
-				  <br/>
-				  <div id="newEmails"></div>
-				  
-				  
-				
+				      <br/>
+				       <br/>
+				       <div id="newEmails"></div>
 				 </div>
 	             <!--  end tab 2 -->
 	             
@@ -188,7 +185,15 @@
                          </tr>
                      </table>
                  </div>
-                 <!--  End third tab -->	             
+                 <!--  End third tab -->
+                 
+                 <!--  start 4th tab -->
+               	 <div id="tab4">
+         		     <h3>Accepted Repository Submission Licenses</h3>
+			         <c:import url="repository_accepted_licenses_table.jsp"/>
+         		     
+				 </div>
+                 	             
 	          </div>
 	          <!--  end content -->
 	       </div>
