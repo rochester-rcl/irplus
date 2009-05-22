@@ -489,4 +489,13 @@ public interface RepositoryService {
 	 * @return sum of versioned files size
 	 */
 	public Long getFileSystemSizeForUser(IrUser user);
+	
+	/**
+	 * Get the set of repository licenses that can still be applied to this 
+	 * repository.
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @return - list of available licenses
+	 */
+	public List<LicenseVersion> getAvailableRepositoryLicenses(Long repositoryId);
 }
