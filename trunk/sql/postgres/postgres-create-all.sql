@@ -1480,7 +1480,9 @@ ALTER TABLE ir_repository.versioned_license OWNER TO ir_plus;
 CREATE SEQUENCE ir_repository.versioned_license_seq;
 ALTER TABLE ir_repository.versioned_license_seq OWNER TO ir_plus;
 
-
+-- ---------------------------------------------
+-- License Version
+-- ---------------------------------------------
 
 -- Create a table to hold repository license version information 
 CREATE TABLE ir_repository.license_version
@@ -1529,6 +1531,10 @@ ALTER TABLE ir_repository.repository OWNER TO ir_plus;
 CREATE SEQUENCE ir_repository.repository_seq;
 ALTER TABLE ir_repository.repository_seq OWNER TO ir_plus;
 
+
+-- ---------------------------------------------
+-- Repository pictures
+-- ---------------------------------------------
 -- Create a new table to hold repository pictures in the system
 CREATE TABLE ir_repository.repository_picture
 (
@@ -1545,7 +1551,7 @@ ALTER TABLE ir_repository.repository_picture OWNER TO ir_plus;
 CREATE SEQUENCE ir_repository.repository_picture_seq;
 ALTER TABLE ir_repository.repository_picture_seq OWNER TO ir_plus;
 
-
+-- ---------------------------------------------
 -- this is for users who have accepted the
 -- license.
 -- ---------------------------------------------
@@ -1565,6 +1571,26 @@ ALTER TABLE ir_repository.user_repository_license OWNER TO ir_plus;
 
 CREATE SEQUENCE ir_repository.user_repository_license_seq;
 ALTER TABLE ir_repository.user_repository_license_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- this is for retired repository licenses
+-- ---------------------------------------------
+CREATE TABLE ir_repository.retired_repository_license
+(
+    retired_repository_license_id BIGINT NOT NULL PRIMARY KEY,
+    date_retired TIMESTAMP WITH TIME ZONE NOT NULL,
+    repository_id BIGINT NOT NULL,
+    retired_by_user_id BIGINT NOT NULL,
+    license_version_id BIGINT NOT NULL,
+    FOREIGN KEY (repository_id) REFERENCES ir_repository.repository(repository_id),
+    FOREIGN KEY (retired_by_user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (license_version_id) REFERENCES ir_repository.license_version(license_version_id)
+);
+
+ALTER TABLE ir_repository.retired_repository_license OWNER TO ir_plus;
+
+CREATE SEQUENCE ir_repository.retired_repository_license_seq;
+ALTER TABLE ir_repository.retired_repository_license_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Institutional Collection Information
