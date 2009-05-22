@@ -42,8 +42,8 @@
 
             
             <c:if test="${user == null}">
-                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="/user/workspace.action"/>"><span class="doorInImg">&nbsp;</span>Login</a>
-                    </li>    
+                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="viewUserRegistration.action"/>"><span class="userImg">&nbsp;</span>Create Account</a></li>    
+                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="/user/workspace.action"/>"><span class="doorInImg">&nbsp;</span>Login</a></li>    
             </c:if>
             <c:if test="${user != null}">
                     <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="/j_spring_security_logout"/>"><span class="logoutImg">&nbsp;</span>Logout</a>
