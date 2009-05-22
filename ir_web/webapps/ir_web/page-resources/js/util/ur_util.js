@@ -100,6 +100,26 @@ urUtil.checkForNoSelections = function(field) {
 	  return false;
 }
 
+//Check if at least 1 checkbox is checked		
+urUtil.checkForAtLeastOneSelection = function(field) {
+	  if( field == null )
+	  {
+	      return false;
+	  }
+	
+	  if ( !field.length && field.checked) {
+	    return true;
+	  }
+	
+	  for (var i = 0; i < field.length; i++) {
+	    if (field[i].checked) {
+			return true;
+	    }
+	  }
+	
+	  return false;
+}
+
 // checks the page for the login page
 // if the login page is found, it means
 // the user has been logged out and we 

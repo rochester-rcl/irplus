@@ -493,7 +493,8 @@ YAHOO.ur.user = {
 	            
 		        //get the response from adding a user
 		        var response = eval("("+o.responseText+")");
-		       
+		        
+		        
 		        //if the user was not deleted then show the user the error message.
 		        // received from the server
 		        if( response.userDeleted == "false" )
