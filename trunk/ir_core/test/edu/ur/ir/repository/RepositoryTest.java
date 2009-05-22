@@ -26,6 +26,7 @@ import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
+import edu.ur.ir.user.IrUser;
 
 
 /**
@@ -199,6 +200,42 @@ public class RepositoryTest {
 		
 		assert c.getTreeRoot().equals(c) : "The root should be equal to itself but equals " + c.getTreeRoot(); 
 		
+		repoHelper.cleanUpRepository();
+	}
+	
+	/**
+	 * Test setting default license.
+	 * @throws LocationAlreadyExistsException 
+	 */
+	public void testUpdateDefaultLicense() throws LocationAlreadyExistsException
+	{
+		IrUser user = new IrUser("name", "password");
+		VersionedLicense versionedLicense = new VersionedLicense(user, "License text", "my license");
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"a_test_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+		
+		LicenseVersion version1 = versionedLicense.getCurrentVersion();
+		repo.updateDefaultLicense(user, version1);
+		assert repo.getDefaultLicense().equals(version1);
+		
+		versionedLicense.addNewVersion("new license Text", user);
+		LicenseVersion version2 = versionedLicense.getCurrentVersion();
+		assert version2.getLicense().getText().equals("new license Text");
+		repo.updateDefaultLicense(user, version2);
+		assert repo.getRetiredLicense(version1) != null : "Should find retired license " + version1;
+		assert repo.getDefaultLicense().equals(version2);
+		assert repo.getRetiredLicense(version2) == null : "Should not find version 2";
+		
+		repo.updateDefaultLicense(user, version2);
+		assert repo.getRetiredLicense(version2) == null : "Should not find version 2";
+
+		
+		// clean up the repository
 		repoHelper.cleanUpRepository();
 	}
 }

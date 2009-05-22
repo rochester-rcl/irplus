@@ -42,6 +42,7 @@ import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -54,7 +55,7 @@ import org.apache.commons.io.IOUtils;
  *
  */
 public class EditRepository extends ActionSupport implements Preparable, 
-Validateable{
+Validateable, UserIdAware{
 	
 	/**  Logger for editing a file database. */
 	private static final Logger log = Logger.getLogger(EditRepository.class);
@@ -134,6 +135,8 @@ Validateable{
 	/** Set of licenses */
 	private List<LicenseVersion> licenses;
 	
+	private Long userId;
+	
 	/**
 	 * Prepare the repository.
 	 * 
@@ -159,6 +162,7 @@ Validateable{
 	{
 		log.debug("Create called");
 		FileDatabase fileDatabase = null;
+		IrUser user = userService.getUser(userId, false);
 		if( defaultFileDatabaseId != -1l  )
 		{
 			fileDatabase = fileServerService.getDatabaseById(defaultFileDatabaseId, false);
@@ -173,7 +177,7 @@ Validateable{
 		if( defaultLicenseVersionId  != -1l )
 		{
 			LicenseVersion defaultLicense = licenseService.getLicenseVersion(defaultLicenseVersionId, false);
-			repository.setDefaultLicense(defaultLicense);
+			repository.updateDefaultLicense(user, defaultLicense);
 			
 		}
 		
@@ -243,6 +247,7 @@ Validateable{
 		}
 		repository.setName(repositoryName);
 		repository.setInstitutionName(institutionName);
+		IrUser user = userService.getUser(userId, false);
 		if(repositoryService == null )
 		{
 			throw new IllegalStateException ("repository service is null");
@@ -288,7 +293,7 @@ Validateable{
 		log.debug("Default license version id = " + defaultLicenseVersionId);
 		if( defaultLicenseVersionId == -1l  )
 		{
-			repository.setDefaultLicense(null);
+			repository.updateDefaultLicense(user, null);
 		}
 		else
 		{
@@ -299,7 +304,7 @@ Validateable{
 				!defaultLicense.getId().equals(defaultLicenseVersionId) )
 			{
 				LicenseVersion newDefaultLicense = licenseService.getLicenseVersion(defaultLicenseVersionId, false);
-			    repository.setDefaultLicense(newDefaultLicense);
+			    repository.updateDefaultLicense(user, newDefaultLicense);
 			}
 		}
 		
@@ -822,6 +827,11 @@ Validateable{
 
 	public void setLicenses(List<LicenseVersion> licenses) {
 		this.licenses = licenses;
+	}
+
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 

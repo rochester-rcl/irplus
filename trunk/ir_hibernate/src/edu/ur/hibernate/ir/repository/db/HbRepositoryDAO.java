@@ -24,6 +24,7 @@ import org.hibernate.criterion.Order;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryDAO;
 
@@ -123,5 +124,16 @@ public class HbRepositoryDAO implements RepositoryDAO {
 	 */
 	public void makeTransient(Repository entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	
+	/**
+	 * Get licenses that can still be added to the repository.
+	 * 
+	 * @see edu.ur.ir.repository.RepositoryDAO#getAvailableRepositoryLicenses()
+	 */
+	@SuppressWarnings("unchecked")
+	public List<LicenseVersion> getAvailableRepositoryLicenses(Long repositoryId) {
+		return (List<LicenseVersion>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAvailableLicensesForRepository", repositoryId);
 	}
 }
