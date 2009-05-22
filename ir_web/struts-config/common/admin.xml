@@ -217,6 +217,20 @@
                method="viewLicenseVersion"
                class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
             <result name="success">/pages/admin/license/view_license_version.jsp</result>
+        </action>   
+        
+        <action name="addNewLicenseVersion"
+               method="addNewLicenseVersion"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+              <result name="success">/pages/admin/license/add_new_license_version.jsp</result>
+        </action>     
+        
+         <action name="saveNewLicenseVersion"
+               method="saveNewVersion"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/admin/license/view_versioned_license.jsp</result>
+            <result name="newVersionInput">/pages/admin/license/add_new_license_version.jsp</result>
         </action>     
         
         <!--  This handles update, save and delete -->
@@ -225,6 +239,7 @@
             class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
             <interceptor-ref name="crudStack" />
             <result name="addNew">/pages/admin/license/add_new_license.jsp</result>
+            <result name="saveNewInput">/pages/admin/license/add_new_license.jsp</result>
             <result name="cancel" type="redirect">viewRepositoryLicenses.action</result>
             <result name="success" type="redirect">viewRepositoryLicenses.action</result>
         </action>
