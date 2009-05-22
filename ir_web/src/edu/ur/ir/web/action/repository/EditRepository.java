@@ -149,7 +149,14 @@ Validateable, UserIdAware{
 		log.debug("repository " + repository + " found ");
 		handleNameAuthorities = handleService.getAllNameAuthorities();
 		fileDatabases = fileServerService.getFileDatabases();
-		licenses = licenseService.getAllLicenseVersions();
+		if( repository != null )
+		{
+		    licenses = repositoryService.getAvailableRepositoryLicenses(repository.getId());
+		}
+		else
+		{
+			licenses = licenseService.getAllLicenseVersions();
+		}
 	}
 	
 	/**

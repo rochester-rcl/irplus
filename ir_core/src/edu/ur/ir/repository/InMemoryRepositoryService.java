@@ -327,5 +327,11 @@ public class InMemoryRepositoryService implements RepositoryService{
 		return false;
 	}
 
+	
+	public List<LicenseVersion> getAvailableRepositoryLicenses(Long repositoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

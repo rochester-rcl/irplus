@@ -45,6 +45,7 @@ import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
+import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryDAO;
 import edu.ur.ir.repository.RepositoryService;
@@ -924,5 +925,15 @@ public class DefaultRepositoryService implements RepositoryService {
 	public FileInfo getTransformByIrFileSystemCode(Long irFileId,
 			String systemCode) {
 		return transformedFileDAO.getTransformedFile(irFileId, systemCode);
+	}
+
+	
+	/**
+	 * Get the available list of licenses that can be attached.
+	 * 
+	 * @see edu.ur.ir.repository.RepositoryService#getAvailableRepositoryLicenses(java.lang.Long)
+	 */
+	public List<LicenseVersion> getAvailableRepositoryLicenses(Long repositoryId) {
+		return repositoryDAO.getAvailableRepositoryLicenses(repositoryId);
 	}
 }
