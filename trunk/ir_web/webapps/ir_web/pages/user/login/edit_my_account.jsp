@@ -17,6 +17,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
 <!--  document type -->
 <c:import url="/inc/doctype-frag.jsp"/>
@@ -72,6 +73,7 @@
 		                <li><a href="#tab2"><em>Emails</em></a></li>
 		                <li><a href="#tab3"><em>Subscriptions</em></a></li>
 		                <li><a href="#tab4"><em>Publication Names</em></a></li>
+		                <li><a href="#tab5"><em>Accepted Repository Submission Licenses</em></a></li>
 		            </ul>
 		
 		            <div class="yui-content">
@@ -206,7 +208,51 @@
 					<div class="clear">&nbsp;</div>
 					
 				 </div>
-	             <!--  end 4th 3 -->	             
+	             <!--  end 4th tab-->
+	             
+	              <!--  start 5th tab -->
+               	 <div id="tab5">
+               	     <h3>Accepted Repository Submission Licenses</h3>
+			         <div class="dataTable">
+	                     <urstb:table width="100%">
+	                         <urstb:thead>
+	                             <urstb:tr>
+					                 <urstb:td>License Id</urstb:td>         
+	                                 <urstb:td>Name</urstb:td>
+	                                 <urstb:td>Text</urstb:td>
+	                                 <urstb:td>Date</urstb:td>
+	                             </urstb:tr>
+	                         </urstb:thead>
+	                         <urstb:tbody
+	                             var="userRepositoryLicense" 
+	                             oddRowClass="odd"
+	                             evenRowClass="even"
+	                             currentRowClassVar="rowClass"
+	                             collection="${irUser.acceptedLicenses}">
+	                             <urstb:tr 
+	                                 cssClass="${rowClass}"
+	                                 onMouseOver="this.className='highlight'"
+	                                 onMouseOut="this.className='${rowClass}'">
+	                                 <urstb:td>
+		                                 ${userRepositoryLicense.id}
+	                                 </urstb:td>
+	                                 <urstb:td>
+		                                  ${userRepositoryLicense.licenseVersion.license.name}
+	                                 </urstb:td>
+	                                 <urstb:td>
+		                   		          ${userRepositoryLicense.licenseVersion.license.text}
+	                                 </urstb:td>
+	                                 <urstb:td>
+		                   		          ${userRepositoryLicense.dateAccepted}
+	                                 </urstb:td>
+	                        
+	                             </urstb:tr>
+	                         </urstb:tbody>
+	                     </urstb:table>
+                     </div>	
+					 <!--  end table div -->
+				 </div>
+	             <!--  end 5th tab -->	             
 	          </div>
 	          <!--  end content -->
 	       </div>
