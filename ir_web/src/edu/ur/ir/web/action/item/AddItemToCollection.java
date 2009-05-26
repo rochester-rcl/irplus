@@ -40,7 +40,7 @@ import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.web.action.UserIdAware;
 
 /**
- * Allows a user to add an item to a user.
+ * Allows a user to add an item to a personal collection.
  * 
  * @author Nathan Sarr
  *
