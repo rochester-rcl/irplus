@@ -70,6 +70,11 @@
             <artifact name="poi-ooxml" type="jar" />
         </dependency>
         
+        <!-- javax mail libaries -->
+        <dependency org="javax.mail" name="mail" rev="1.4.1">
+            <artifact name="mail" type="jar"/>
+        </dependency>
+        
         
         <!-- commons codec files -->
         <dependency org="commons-codec" name="commons-codec" rev="1.3">
