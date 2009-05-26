@@ -195,7 +195,6 @@
                         </urstb:td>
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
-                        
                                 <c:if test="${fileSystemObject.versionedItem.currentVersion.item.publishedToSystem}">
                                    Yes
                                 </c:if>

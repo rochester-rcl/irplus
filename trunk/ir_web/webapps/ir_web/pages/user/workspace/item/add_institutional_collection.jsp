@@ -60,30 +60,25 @@
             <!--  this is the body region of the page -->
             <div id="bd">
             
-            	<div class="clear">&nbsp;</div>
-				
-				<table width="100%">
-                  <tr>
+				<br/>
                                            
-                      <td align="left" >
-                          <button class="ur_button" id="finish_later" 
-                               onmouseover="this.className='ur_buttonover';"
-                               onmouseout="this.className='ur_button';"
-                               onclick="javascript:YAHOO.ur.item.collection.submitPublication();">Submit</button>
-                      </td>
-                      
-                      <td align="right" >
-                          <button class="ur_button" id="goto_next" 
-                               onmouseover="this.className='ur_buttonover';"
-                               onmouseout="this.className='ur_button';"
-                               onclick="javascript:YAHOO.ur.item.collection.cancel();">Cancel</button>
-                      </td>
-                  </tr>
-                </table>
+                <button class="ur_button" id="finish_later" 
+                    onmouseover="this.className='ur_buttonover';"
+                    onmouseout="this.className='ur_button';"
+                    onclick="javascript:YAHOO.ur.item.collection.submitPublication();">Submit</button>
+                
+                <button class="ur_button" id="goto_next" 
+                    onmouseover="this.className='ur_buttonover';"
+                    onmouseout="this.className='ur_button';"
+                    onclick="javascript:YAHOO.ur.item.collection.cancel();">Cancel</button>
+				
+				<br/>
+				
+				<h3>Submit item: ${item.name}</h3>
 				
        	        <div class="yui-g">
 			        <div class="yui-u first">
-			        	<ur:basicForm  id="all_collections_form" name="allCollectionsForm"  
+			        	<form  id="all_collections_form" name="allCollectionsForm"  
 				     		method="POST" action="javascript:YAHOO.ur.item.contributor.handleSearchFormSubmit();">
 			        		
 			        		<input type="hidden" id="all_collections_form_itemId" name="genericItemId" value="${item.id}"/>
@@ -92,24 +87,27 @@
 			        		<input type="hidden" id="all_collections_form_collectionIds" name="selectedCollectionIds" value="${selectedCollectionIds}"/>
 			        		
 		       			    <!--  table of institutional collections  -->
-	                        <ur:div id="all_collections"></ur:div>
+	                        <div id="all_collections"></div>
 	                        <!--  end table of institutional collections div -->
-						</ur:basicForm>	                     
+						</form>	                     
 		       
 		             </div>
 		             <!--  end the first column -->
             
         	        <div class="yui-u">
-		        	      <ur:basicForm id="selected_collections_form" name="selectedCollectionsForm"  method="POST" action="user/getContributors.action">
+        	              Selected Collections
+        	              <br/>
+        	              <br/>
+		        	      <form id="selected_collections_form" name="selectedCollectionsForm"  method="POST" action="user/getContributors.action">
 	                          <input type="hidden" id="selected_collections_form_itemId" name="genericItemId" value="${item.id}"/>
-	                               	</br>
+	                               	
 	                               	<!--  Table of selected institutional collections -->
+	                               	
 	                               	<div id="selected_collections" >
-	                               		
-	                               		<%@ include file="selected_collections_table.jsp" %>
+	                               	    <c:import url="selected_collections_table.jsp"/>
 	                                </div>
 	                  				<!--  end table of selected institutional collections div -->
-	                      </ur:basicForm>
+	                      </form>
 	                          
 	                     
             	    </div>
@@ -119,26 +117,15 @@
                 
                 </div>
                 <!--  end the grid -->
-				
-				<div class="clear">&nbsp;</div>
-				
-				<table width="100%">
-                  <tr>
-                      <td align="left" >
-                          <button class="ur_button" id="finish_later" 
+				<br/>
+	                      <button class="ur_button" id="finish_later" 
                                onmouseover="this.className='ur_buttonover';"
                                onmouseout="this.className='ur_button';"
                                onclick="javascript:YAHOO.ur.item.collection.submitPublication();">Submit</button>
-                      </td>
-                      
-                      <td align="right" >
                           <button class="ur_button" id="goto_next" 
                                onmouseover="this.className='ur_buttonover';"
                                onmouseout="this.className='ur_button';"
                                onclick="javascript:YAHOO.ur.item.collection.cancel();">Cancel</button>
-                      </td>
-                  </tr>
-                </table>
 
             </div>
             <!--  end the body tag --> 

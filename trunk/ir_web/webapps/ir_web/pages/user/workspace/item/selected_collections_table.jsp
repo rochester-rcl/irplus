@@ -19,8 +19,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 
-<div class="clear">&nbsp;</div>    
-<div class="clear">&nbsp;</div>
 
 <input type="hidden" id="selected_collections_form_collectionIds" name="selectedCollectionIds" value="${selectedCollectionIds}"/>
 

@@ -96,9 +96,7 @@
             	alert('You must agree to the license');
             	return false;
         	}
-        	
-        	
-        	
+ 
         	return true;
         }
         
@@ -117,23 +115,23 @@
             <br/>
             Please enter the following information to create an account.
 
-                  <ur:basicForm id="addUser" name="irUserForm" method="post" 
+                  <form id="addUser" name="irUserForm" method="post" 
 		              action="registerNewUser.action" onSubmit="return formValidation();">
 		              
 		              <input type="hidden" name="token" value="${token}"/>
 		               
 					  <table class="formTable">
 					  <tr>
-					  <td colspan="2">
-				          <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+					      <td colspan="2">
+				              <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="userNameError"/></p>
-		                  <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		                      <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="emailExistError"/></p>
-		                  <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		                      <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="licenseChangeError"/></p>
-		                  <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		                      <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="licenseError"/></p>
-			          </td>
+			              </td>
 			          </tr>    
    
 
@@ -264,7 +262,7 @@
                       
                       </table>
 		              <input type="hidden" name="licenseId" value="${repository.defaultLicense.id}"/>
-		          </ur:basicForm>
+		          </form>
             </div>
             <!--  end the body tag --> 
 
