@@ -29,6 +29,7 @@ import com.opensymphony.xwork2.Preparable;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
+import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.Affiliation;
@@ -285,12 +286,11 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		IrUser myIrUser = 
 			userService.getUser(irUser.getUsername());
 		
-		
-		
+		LicenseVersion license = repository.getDefaultLicense();
 		/* very unlikely but if the license changes while the user was accepting then
 		 * make them re-accept
 		 */
-		if(repository.getDefaultLicense() != null && !repository.getDefaultLicense().getId().equals(licenseId))
+		if(license  != null && !license.getId().equals(licenseId))
 		{
 			addFieldError("licenseChangeError", 
 					"This license has changed please re-accept the new license");
@@ -327,7 +327,7 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 			    irUser.setAccountLocked(accountLocked);
 			    irUser.setFirstName(firstName);
 			    irUser.setLastName(lastName);
-			    irUser.addAcceptedLicense(repository.getDefaultLicense());
+			    irUser.addAcceptedLicense(license);
 			    
 			    if (departmentId != 0) {
 			    	Department department = departmentService.getDepartment(departmentId, false); 
