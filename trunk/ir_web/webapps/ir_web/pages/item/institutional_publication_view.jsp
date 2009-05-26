@@ -201,6 +201,15 @@
 													${institutionalItemVersion.item.owner.firstName} &nbsp; ${institutionalItemVersion.item.owner.lastName}
 												</td>
 											</tr>
+											<tr>
+											<td class="previewLabel">Date Submitted /Accessioned   </td>
+											</tr>
+											
+											<tr>
+												<td>
+													${institutionalItemVersion.dateOfDeposit}
+												</td>
+											</tr>
 	
 											<tr>
 												<td class="previewLabel"> 
