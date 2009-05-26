@@ -30,9 +30,9 @@ public class LicenseVersion extends BasePersistent{
 	/**
 	 * Package protected constructor
 	 * 
-	 * @param item
-	 * @param versionedItem
-	 * @param versionNumber
+	 * @param license - license to be wrapped in this version
+	 * @param versionedLicense - parent versioned license
+	 * @param versionNumber - version number for the series of versioned licenses.
 	 */
 	LicenseVersion(License license, VersionedLicense versionedLicense, int versionNumber)
 	{
