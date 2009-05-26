@@ -157,9 +157,20 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		log.debug("!user.hasRole(IrRole.ADMIN_ROLE) = " + !user.hasRole(IrRole.ADMIN_ROLE) );
 		log.debug("all together = " + (user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) ) ) );
 		
+		// make sure user has permissions to submit the publication
 		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
 		{
 			return "accessDenied";
+		}
+		
+		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+
+		log.debug("checking user has license = " + user.getAcceptedLicense(repository.getDefaultLicense()));
+		//make the user accept the license if the user does not have
+		//the most current license.
+		if( user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+		{
+			return "acceptLicense";
 		}
 		
 		return SUCCESS;
@@ -316,8 +327,6 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		selectedCollectionsPermission = getSubmitPermissionForCollections(collections, user, item);
 		
 		return SUCCESS;
-	
-
 	}
 
 	/**
@@ -329,6 +338,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 
 		boolean directAdd = false;
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		
 		item = itemService.getGenericItem(genericItemId, false);
 		HandleInfo info = null;
 		
@@ -339,15 +349,12 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		}
 		if (genericItemId != null) {
 			item = itemService.getGenericItem(genericItemId, false);
-			
-
 		}
 		
 		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
 		{
 			return "accessDenied";
 		}
-
 		
 		log.debug("Institutional Collection selectedCollectionIds: "+ selectedCollectionIds);
 		
@@ -358,6 +365,23 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		boolean isItemPublished = item.isPublishedToSystem();
 		
 		Collection<InstitutionalCollection> collections = institutionalCollectionService.getCollections(collectionIds);
+		
+		// if no collections selected then we don't care
+		if( collections.size() <= 0 )
+		{
+			return SUCCESS;
+		}
+		else
+		{
+			//user should have never made it this far but just in case
+			//make the user accept the license if the user does not have
+			//the most current license.
+			if( user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+			{
+				return "acceptLicense";
+			}
+		}
+
 		
 		for(InstitutionalCollection institutionalCollection: collections) {
 			
@@ -372,10 +396,6 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 				} else {
 					privateCollections.add(institutionalCollection);
 				}
-				
-				
-				
-				
                 directAdd = true;
 			}
 			
@@ -420,15 +440,12 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			}
 		}
 		
-		
 		/*
 		 * Assign group permission only when the item is being submitted for the first time and
 		 * If one of the collection(s) are private collection
 		 */
 		if (!publicCollectionExist && !isItemPublished && privateCollections.size() > 0) {
-			
 			institutionalItemService.setItemPrivatePermissions(item, privateCollections);
-			
 		}
 
 		return SUCCESS;
