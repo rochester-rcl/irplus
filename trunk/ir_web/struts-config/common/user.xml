@@ -777,15 +777,29 @@
             <result name="added">/pages/user/workspace/item/person_added.jsp</result>
         </action>        
 
-		<!--  This handles creating new person -->
+        <!--  ************************************ -->
+        <!--  Submission into institutional collections     -->
+        <!--  ************************************ -->
+        
+        <!-- if user has not already accepted the license, make them -->
+        <action name="acceptRepositoryLicense" 
+            class="edu.ur.ir.web.action.user.AcceptRepositoryLicense">
+            <interceptor-ref name="editStack" />
+            <result name="input">/pages/user/workspace/item/accept_license.jsp</result>
+            <result name="success" type="redirectAction">viewAddItemToCollections?genericItemId=${genericItemId}</result>
+        </action> 
+
+		<!--  This allows a user to view the institutional collections an item can 
+		      be submitted to -->
         <action name="viewAddItemToCollections" 
             class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
             <interceptor-ref name="editStack" />
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/item/add_institutional_collection.jsp</result>
+            <result name="acceptLicense">/pages/user/workspace/item/accept_license.jsp</result>
         </action> 
         
-		<!--  This handles creating new person -->
+		<!--  This handles getting the institutional collections for a user to view -->
         <action name="getInstitutionalCollections" 
             method="getCollectionsTable"
             class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
@@ -794,7 +808,7 @@
             <result name="success">/pages/user/workspace/item/institutional_collections_table.jsp</result>
         </action>   
 
-		<!--  This handles creating new person -->
+		<!--  allows an item to be added to institutional collections -->
         <action name="addInstitutionalCollection" 
             method="addInstitutionalCollection"
             class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
@@ -803,7 +817,7 @@
             <result name="success">/pages/user/workspace/item/selected_collections_table.jsp</result>
         </action>             
 
-		<!--  This handles creating new person -->
+		<!--  allows removing an item from submission to an institutional collection -->
         <action name="removeInstitutionalCollection" 
             method="removeInstitutionalCollection"
             class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
@@ -819,8 +833,12 @@
             <interceptor-ref name="crudStack" />
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">workspace.action?parentCollectionId=${parentCollectionId}&amp;showCollectionTab=true</result>
+            <result name="acceptLicense">/pages/user/workspace/item/accept_license.jsp</result>
         </action>     
         
+        <!--  ************************************ -->
+        <!--  Publication versioning     -->
+        <!--  ************************************ -->
 		<!--  This created new publication version for user to edit -->
         <action name="createPublicationVersionForEdit" 
             method="createPublicationVersion"
