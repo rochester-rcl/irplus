@@ -24,11 +24,14 @@ import java.util.Collections;
 
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
 
 /**
- * This represents a particular item version that has been published.
+ * This represents a particular item version that has been published. 
+ * Withdrawn is true if there is a withdrawn token that is not equal to
+ * null.
  * 
  * @author Nathan Sarr
  *
@@ -62,19 +65,35 @@ public class InstitutionalItemVersion extends BasePersistent{
 	/** handle information for the item  */
 	private HandleInfo handleInfo;
 	
-
-
-
+	/** repository license attached to this item */
+	private InstitutionalItemRepositoryLicense repositoryLicense;
+	
+	/**
+	 * Default constructor
+	 */
 	InstitutionalItemVersion(){
 		dateOfDeposit = new java.sql.Timestamp(new Date().getTime());
 	}
 	
 	/**
+	 * Attaches the specified repository license to this institutional item.
+	 * 
+	 * @param licenseVersion
+	 * @return the created institutional item repository license
+	 */
+	public InstitutionalItemRepositoryLicense addRepositoryLicense(LicenseVersion licenseVersion)
+	{
+		InstitutionalItemRepositoryLicense license = new InstitutionalItemRepositoryLicense(this, licenseVersion);
+	    this.repositoryLicense = license;
+		return license;
+	}
+	
+	/**
 	 * Represents a institutional item version.
 	 * 
-	 * @param item
-	 * @param versionedInstitutionalItem
-	 * @param versionNumber
+	 * @param item - generic item to add to this version
+	 * @param versionedInstitutionalItem - versioned institutional item parent
+	 * @param versionNumber - the version number for this version
 	 */
 	InstitutionalItemVersion(GenericItem item,
 			VersionedInstitutionalItem versionedInstitutionalItem, int versionNumber)
@@ -208,62 +227,148 @@ public class InstitutionalItemVersion extends BasePersistent{
 		return value;
 	}
 
+	/**
+	 * Version number of this institutional item version.
+	 * 
+	 * @return version number
+	 */
 	public int getVersionNumber() {
 		return versionNumber;
 	}
 
+	/**
+	 * Set the version number.
+	 * @param versionNumber
+	 */
 	public void setVersionNumber(int versionNumber) {
 		this.versionNumber = versionNumber;
 	}
 
+	/**
+	 * Get the versioned institutional item
+	 * 
+	 * @return the parent versioned institutional item.
+	 */
 	public VersionedInstitutionalItem getVersionedInstitutionalItem() {
 		return versionedInstitutionalItem;
 	}
 
+	/**
+	 * Set the parent versioned institutional item.
+	 * 
+	 * @param versionedInstitutionalItem
+	 */
 	public void setVersionedInstitutionalItem(
 			VersionedInstitutionalItem versionedInstitutionalItem) {
 		this.versionedInstitutionalItem = versionedInstitutionalItem;
 	}
 
+	/**
+	 * Get the generic item for this institutional item version.
+	 * 
+	 * @return
+	 */
 	public GenericItem getItem() {
 		return item;
 	}
 
+	/**
+	 * Set the item for this insitutional item version.
+	 * 
+	 * @param item
+	 */
 	public void setItem(GenericItem item) {
 		this.item = item;
 	}
 
+	/**
+	 * Get the withdrawn token for this institutional item version.
+	 * 
+	 * @return
+	 */
 	public WithdrawnToken getWithdrawnToken() {
 		return withdrawnToken;
 	}
 
+	/**
+	 * Set the withdrawn token for this institutinal item.
+	 * 
+	 * @param withdrawnToken
+	 */
 	public void setWithdrawnToken(WithdrawnToken withdrawnToken) {
 		this.withdrawnToken = withdrawnToken;
 	}
 
+	/**
+	 * History for withdraw of this item version.
+	 * 
+	 * @return
+	 */
 	public Set<WithdrawnToken> getWithdrawHistory() {
 		return Collections.unmodifiableSet(withdrawHistory);
 	}
 
+	/**
+	 * Set the withdraw history of this item version.
+	 * 
+	 * @param withdrawHistory
+	 */
 	void setWithdrawHistory(Set<WithdrawnToken> withdrawHistory) {
 		this.withdrawHistory = withdrawHistory;
 	}
 
+	/**
+	 * Re instate history of this version of the item.
+	 * 
+	 * @return
+	 */
 	public Set<ReinstateToken> getReinstateHistory() {
 		return Collections.unmodifiableSet(reinstateHistory);
 	}
 
+	/**
+	 * Set the re-instate history of this item.
+	 * 
+	 * @param reInstateHistory
+	 */
 	void setReinstateHistory(Set<ReinstateToken> reInstateHistory) {
 		this.reinstateHistory = reInstateHistory;
 	}
 	
 	
+	/**
+	 * Get the handle information for this item.
+	 * 
+	 * @return
+	 */
 	public HandleInfo getHandleInfo() {
 		return handleInfo;
 	}
 
+	/**
+	 * Set the handle info for this item version.
+	 * 
+	 * @param handleInfo
+	 */
 	public void setHandleInfo(HandleInfo handleInfo) {
 		this.handleInfo = handleInfo;
+	}
+
+	/**
+	 * Get the repository license for this institutional item version.
+	 * 
+	 * @return
+	 */
+	public InstitutionalItemRepositoryLicense getRepositoryLicense() {
+		return repositoryLicense;
+	}
+
+	/**
+	 * @param repositoryLicense
+	 */
+	void setRepositoryLicense(
+			InstitutionalItemRepositoryLicense repositoryLicense) {
+		this.repositoryLicense = repositoryLicense;
 	}
 	
 
