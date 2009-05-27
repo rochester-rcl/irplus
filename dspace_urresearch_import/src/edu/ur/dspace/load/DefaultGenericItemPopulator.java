@@ -18,7 +18,6 @@ package edu.ur.dspace.load;
 
 import java.io.File;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -122,6 +121,10 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	
 	/**  Logger */
 	private static final Logger log = Logger.getLogger(DefaultGenericItemPopulator.class);
+	
+	
+	/** Helper for dspace dates */
+	private DspaceDateHelper dspaceDateHelper = new DspaceDateHelper();
 	
 	/**
 	 * Data source for accessing the database.
@@ -363,7 +366,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			log.debug("First available date = " + dspaceDate);
 		    try {
 		    	firstAvailableDate = new FirstAvailableDate();
-			    GregorianCalendar calendar = parseDate(dspaceDate);
+			    GregorianCalendar calendar = dspaceDateHelper.parseDate(dspaceDate);
 			    if( calendar != null )
 			    {
 			        firstAvailableDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
@@ -379,7 +382,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	}
 	
 	/**
-	 * First avaliable date for dspace data - returns null if no available date exists or the parsing 
+	 * Creation date for dspace data - returns null if no available date exists or the parsing 
 	 * of the date failed.
 	 * 
 	 * @param dspaceItem
@@ -396,7 +399,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			log.debug("creation date = " + dspaceDate);
 		    try {
 		    	originalItemCreationDate = new OriginalItemCreationDate();
-			    GregorianCalendar calendar = parseDate(dspaceDate);
+			    GregorianCalendar calendar = dspaceDateHelper.parseDate(dspaceDate);
 			    if( calendar != null )
 			    {
 			    	originalItemCreationDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
@@ -658,7 +661,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		{
 		    try {
 		    	publishedDate = new PublishedDate();
-			    GregorianCalendar calendar = parseDate(dspaceDate);
+			    GregorianCalendar calendar = dspaceDateHelper.parseDate(dspaceDate);
 			    if( calendar != null )
 			    {
 			        publishedDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
@@ -871,38 +874,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	   return queryString.toString();
 	}
 	
-	/**
-	 *  Handles a date in the format yyyy-MM-ddTHH:MM:SSZ
-	 *  
-	 * @param dspaceDate
-	 * @return
-	 * @throws ParseException 
-	 */
-	private GregorianCalendar parseDate(String dspaceDate) throws ParseException
-	{
-		GregorianCalendar gregorianCalendar = null;
-		
-		log.debug("Tring to parse date " + dspaceDate);
-		// split on the name
-		String[] dateParts = dspaceDate.split("T");
-		
-		log.debug( " dateParts.length = " + dateParts.length); 
-	
-		if( dateParts.length >= 2 )
-		{
-		     String yearMonthDay = dateParts[0];
-		    //remove the Z
-		    String hourMinuteSecond = dateParts[1].substring(0, dateParts[1].length() -1);
-		
-		    String dateAndTime = yearMonthDay + " " +  hourMinuteSecond;
-		    log.debug("parsing date " + dateAndTime);
-		    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		    gregorianCalendar = new GregorianCalendar();
-		    gregorianCalendar.setTime(simpleDateFormat.parse(dateAndTime));
-		}
-		
-		return gregorianCalendar;
-	}
+
 	
 	
 	
@@ -1023,6 +995,14 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 
 	public void setSponsorService(SponsorService sponsorService) {
 		this.sponsorService = sponsorService;
+	}
+
+	public DspaceDateHelper getDspaceDateHelper() {
+		return dspaceDateHelper;
+	}
+
+	public void setDspaceDateHelper(DspaceDateHelper dspaceDateHelper) {
+		this.dspaceDateHelper = dspaceDateHelper;
 	}
 	
 }

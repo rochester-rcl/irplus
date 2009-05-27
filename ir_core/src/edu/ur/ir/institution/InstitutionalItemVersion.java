@@ -78,14 +78,29 @@ public class InstitutionalItemVersion extends BasePersistent{
 	/**
 	 * Attaches the specified repository license to this institutional item.
 	 * 
-	 * @param licenseVersion
+	 * @param licenseVersion - version of the license to attach
+	 * @param grantedBy - user who granted the license
+	 * @param dateGranted - date the license was granted
 	 * @return the created institutional item repository license
 	 */
-	public InstitutionalItemRepositoryLicense addRepositoryLicense(LicenseVersion licenseVersion)
+	public InstitutionalItemRepositoryLicense addRepositoryLicense(LicenseVersion licenseVersion, IrUser grantedBy, Timestamp dateGranted)
 	{
-		InstitutionalItemRepositoryLicense license = new InstitutionalItemRepositoryLicense(this, licenseVersion);
+		InstitutionalItemRepositoryLicense license = new InstitutionalItemRepositoryLicense(this, licenseVersion, grantedBy, dateGranted);
 	    this.repositoryLicense = license;
 		return license;
+	}
+	
+	/**
+	 * Attaches the specified repository license to this institutional item.  Uses the date
+	 * of deposit as the time of license acceptance.
+	 * 
+	 * @param licenseVersion - version of the license to attach
+	 * @param grantedBy - user who granted the license
+	 * @return the created institutional item repository license
+	 */
+	public InstitutionalItemRepositoryLicense addRepositoryLicense(LicenseVersion licenseVersion, IrUser grantedBy)
+	{
+		return this.addRepositoryLicense(licenseVersion, grantedBy, dateOfDeposit);
 	}
 	
 	/**
@@ -209,14 +224,13 @@ public class InstitutionalItemVersion extends BasePersistent{
 		    ( getItem() == null && other.getItem() != null ) ) return false;
 
 		if( ( versionedInstitutionalItem != null && !versionedInstitutionalItem.equals(other.getVersionedInstitutionalItem()) ) ||
-			    ( versionedInstitutionalItem == null && other.getVersionedInstitutionalItem() != null ) ) return false;
+			( versionedInstitutionalItem == null && other.getVersionedInstitutionalItem() != null ) ) return false;
 
 		return true;
 	}
 	
 	/**
-	 * Hash code is based on the path and name of
-	 * the collection.
+	 * Hash code is based on the path item and versioned institutional item.
 	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -224,6 +238,7 @@ public class InstitutionalItemVersion extends BasePersistent{
 	{
 		int value = 0;
 		value += getItem() == null? 0 : getItem().hashCode();
+		value += versionedInstitutionalItem == null? 0 : versionedInstitutionalItem.hashCode();
 		return value;
 	}
 

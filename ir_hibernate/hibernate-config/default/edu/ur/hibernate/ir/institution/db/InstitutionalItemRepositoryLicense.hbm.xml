@@ -20,57 +20,64 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for a withdrawn token
+	Mapping for an institutional item repository license
 	
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.institution">
-	<class name="ReinstateToken" schema="ir_repository" table="reinstate_token"
+	<class name="InstitutionalItemRepositoryLicense" schema="ir_repository" table="institutional_item_repository_license"
 		lazy="true">
 	
 		<!-- Common id property. -->
-		<id name="id" type="long" column="reinstate_token_id"
+		<id name="id" type="long" column="institutional_item_repository_license_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_repository.reinstate_token_seq</param>
+				<param name="sequence">ir_repository.institutional_item_repository_license_seq</param>
 			</generator>
 		</id>
 
 		<!-- A versioned entity. -->
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
-
-	
-		<property name="date" column="date_reinstated" type="timestamp" 
-		          access="field" 
-		          not-null="false"/>		     
-
-		<property name="reason" column="reinstate_reason" type="string" 
+		
+		<!--  date the license was granted -->
+	    <property name="dateGranted" column="date_granted" type="timestamp" 
 		          access="field" 
 		          not-null="false"/>	
 
-                   
-        <!--  The versioned institutional item -->
-		<many-to-one class="InstitutionalItemVersion" 
+ 		 <!--  The versioned institutional item -->
+		<many-to-one class="InstitutionalItemVersion"
 		    optimistic-lock="false"
+		    not-null="true"
 			unique="true" 
+			cascade="save-update"
 			name="institutionalItemVersion" 
 			column="institutional_item_version_id" 
 			access="field" 
 			insert="true"
 			update="true"/>
-		
-		<!--  The versioned institutional item -->
+                
+        <!--  The versioned institutional item -->
+		<many-to-one class="edu.ur.ir.repository.LicenseVersion" 
+		    optimistic-lock="false"
+			unique="true" 
+			name="licenseVersion" 
+			column="license_version_id" 
+			cascade="save-update"
+			access="field" 
+			insert="true"
+			update="true"/>
+	
+	    <!--  User who granted the license -->
 		<many-to-one class="edu.ur.ir.user.IrUser" 
 		    optimistic-lock="false"
 			unique="true" 
-			name="user" 
-			column="user_id" 
+			name="grantedByUser" 
+			column="granted_by_user_id" 
 			access="field" 
 			insert="true"
 			update="true"/>
  
 	</class>
-	
     
 </hibernate-mapping>

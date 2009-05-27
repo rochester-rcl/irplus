@@ -56,6 +56,8 @@ import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonNameAuthorityDAO;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.VersionedLicense;
+import edu.ur.ir.repository.VersionedLicenseDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserEmail;
@@ -122,6 +124,10 @@ public class InstitutionalItemVersionDAOTest {
 	/** used to store handle name authority data */
 	HandleInfoDAO handleInfoDAO = (HandleInfoDAO) ctx
 	.getBean("handleInfoDAO");
+	
+    /** user data access  */
+    VersionedLicenseDAO versionedLicenseDAO= (VersionedLicenseDAO) ctx.getBean("versionedLicenseDAO");
+
 	
 	/**
 	 * Test Institutional Item persistence
@@ -483,7 +489,7 @@ public class InstitutionalItemVersionDAOTest {
 	}
 	
 	/**
-	 * Test handle infor with institutional item
+	 * Test handle information with institutional item
 	 * 
 	 * @throws DuplicateNameException 
 	 * @throws LocationAlreadyExistsException 
@@ -558,6 +564,81 @@ public class InstitutionalItemVersionDAOTest {
 		repoHelper.cleanUpRepository();
 		handleInfoDAO.makeTransient(handleInfoDAO.getById(handleInfo.getId(), false));
 		handleNameAuthorityDAO.makeTransient(handleNameAuthorityDAO.getById(handleNameAuthority.getId(), false));
+		tm.commit(ts);	
+		
+		assert institutionalItemDAO.getById(institutionalItem.getId(), false) == null : 
+			"Should not be able to find the insitutional item" + institutionalItem;
+	}
+	
+	/**
+	 * Test setting the repository license for the institutional item version
+	 * 
+	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	@Test
+	public void institutionalItemRepositoryLicenseDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+
+	    // start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+		
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+
+		//commit the transaction 
+		// create a collection
+		InstitutionalCollection col = repo.createInstitutionalCollection("colName");
+		col.setDescription("colDescription");
+		institutionalCollectionDAO.makePersistent(col);
+		
+	    UserEmail userEmail = new UserEmail("email");
+    	
+		// create a user add them to license
+		IrUser user = new IrUser("user", "password");
+		user.setPasswordEncoding("encoding");
+		user.addUserEmail(userEmail, true);
+		userDAO.makePersistent(user);
+		
+		VersionedLicense versionedLicense = new VersionedLicense(user, "this is license text", "Main License");
+		versionedLicenseDAO.makePersistent(versionedLicense);
+
+		tm.commit(ts);
+		
+		// start a new transaction
+		ts = tm.getTransaction(td);
+		
+        user = userDAO.getById(user.getId(), false);
+     	col = institutionalCollectionDAO.getById(col.getId(), false);
+		GenericItem genericItem = new GenericItem("genericItem");
+		
+		InstitutionalItem institutionalItem = col.createInstitutionalItem(genericItem);
+		
+		InstitutionalItemVersion institutionalItemVersion = 
+			institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(institutionalItem.getVersionedInstitutionalItem().getLargestVersion());
+
+		versionedLicense = versionedLicenseDAO.getById(versionedLicense.getId(), false);
+
+		institutionalItemVersion.addRepositoryLicense(versionedLicense.getCurrentVersion(), user);
+		institutionalItemDAO.makePersistent(institutionalItem);
+		tm.commit(ts);
+
+		ts = tm.getTransaction(td);
+		InstitutionalItemVersion other = institutionalItemVersionDAO.getById(institutionalItemVersion.getId(), false);
+		assert other.equals(institutionalItemVersion) : "Should be able to find item " + institutionalItemVersion;
+		assert other.getRepositoryLicense() != null : "Should have repository license but is null";
+		tm.commit(ts);
+
+		//create a new transaction
+		ts = tm.getTransaction(td);
+		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(col.getId(), false));
+		versionedLicenseDAO.makeTransient(versionedLicenseDAO.getById(versionedLicense.getId(), false));
+		repoHelper.cleanUpRepository();
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		tm.commit(ts);	
 		
 		assert institutionalItemDAO.getById(institutionalItem.getId(), false) == null : 

@@ -61,7 +61,7 @@
               lazy="false"
               fetch="join"
               unique="true" 
-              column="current_published_version_id" 
+              column="current_institutional_item_version_id" 
               access="field"/>
        	
         <!--  published versions -->
