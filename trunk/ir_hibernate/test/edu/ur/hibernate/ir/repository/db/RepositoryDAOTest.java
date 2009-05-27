@@ -79,7 +79,6 @@ public class RepositoryDAOTest {
 
     /** user data access  */
     VersionedLicenseDAO versionedLicenseDAO= (VersionedLicenseDAO) ctx.getBean("versionedLicenseDAO");
-
 	
 	/** Platform transaction manager  */
 	PlatformTransactionManager tm = (PlatformTransactionManager)ctx.getBean("transactionManager");

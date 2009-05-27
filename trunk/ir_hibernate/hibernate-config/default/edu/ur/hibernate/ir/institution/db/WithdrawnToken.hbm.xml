@@ -59,7 +59,7 @@
 			unique="true" 
 			cascade="save-update"
 			name="institutionalItemVersion" 
-			column="published_version_id" 
+			column="institutional_item_version_id" 
 			access="field" 
 			insert="true"
 			update="true"/>

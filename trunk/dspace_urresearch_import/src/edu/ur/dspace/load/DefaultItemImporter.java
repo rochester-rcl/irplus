@@ -19,9 +19,14 @@ package edu.ur.dspace.load;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +49,7 @@ import org.w3c.dom.ls.LSParser;
 import edu.ur.dspace.model.BitstreamFileInfo;
 import edu.ur.dspace.model.DspaceItem;
 import edu.ur.dspace.model.DspaceItemMetadata;
+import edu.ur.dspace.model.DspaceMetadataLabel;
 import edu.ur.dspace.model.EpersonPermission;
 import edu.ur.dspace.model.GroupPermission;
 import edu.ur.dspace.model.PermissionConstants;
@@ -69,8 +75,11 @@ import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemFileSecurityService;
 import edu.ur.ir.item.ItemSecurityService;
+import edu.ur.ir.repository.LicenseService;
+import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.repository.VersionedLicense;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.UserGroupService;
@@ -129,9 +138,12 @@ public class DefaultItemImporter implements ItemImporter{
 	
 	/** Creates urls for the institutional items */
 	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
-
-
-
+	
+	/** Help process dspace dates */
+	private DspaceDateHelper dspaceDateHelper = new DspaceDateHelper();
+	
+	/** Service for dealing with licenses */
+	private LicenseService licenseService;
 
 	/**
 	 * Data source for accessing the database.
@@ -157,8 +169,6 @@ public class DefaultItemImporter implements ItemImporter{
 		 } catch (ParserConfigurationException e) {
 			throw new IllegalStateException(e);
 		 }
-		 
-		 
 
 		 DOMImplementation impl = builder.getDOMImplementation();
 		 DOMImplementationLS domLs = (DOMImplementationLS)impl.getFeature("LS" , "3.0");
@@ -540,9 +550,12 @@ public class DefaultItemImporter implements ItemImporter{
 	
 	/**
 	 * Load a single file 
-	 * @param i
-	 * @param zipFile
-	 * @param repo
+	 * 
+	 * @param i - dspace item
+	 * @param zipFile - zip file containing the files
+	 * @param repo - repository to load the item into
+	 * @param publicOnly - if true will only load public items.
+	 * 
 	 * @throws NoIndexFoundException
 	 * @throws IOException
 	 */
@@ -551,7 +564,13 @@ public class DefaultItemImporter implements ItemImporter{
 		log.debug("loading dspace item " + i);
 		GenericItem genericItem = genericItemPopulator.createGenericItem(repo, i);
 		List<InstitutionalCollection> urResearchCollections = getCollections(i);
+		IrUser repositoryLicenseCreationUser = userService.getUser("admin");
+		LicenseVersion license = null;
 		
+		if( repositoryLicenseCreationUser == null )
+		{
+			throw new IllegalStateException("could not find the admin user");
+		}
 		log.debug("Found " + urResearchCollections.size() + " collections for item");
 		
 		if( urResearchCollections.size() == 0 )
@@ -563,7 +582,6 @@ public class DefaultItemImporter implements ItemImporter{
 			LinkedList<ItemFileBitstreamInfo> itemFileBitstreamInfos = new LinkedList<ItemFileBitstreamInfo>(); 
 			for(BitstreamFileInfo bfi : i.files)
 			{
-				
 				if( publicOnly && !PermissionConstants.hasAnonymousRead(bfi.groupPermissions) )
 				{
 					log.debug("Only loading public files and " + bfi + " is not pblic ");
@@ -578,38 +596,77 @@ public class DefaultItemImporter implements ItemImporter{
 								bfi.originalFileName = bfi.originalFileName.replace(FileSystem.INVALID_CHARACTERS[index],'_');
 							}
 						}
-					    irFile = repositoryService.createIrFile(repo, f, bfi.originalFileName, "imported dspace item file");
-					    ItemFile itemFile = genericItem.addFile(irFile);
-					    itemFileBitstreamInfos.add(new ItemFileBitstreamInfo(itemFile, bfi));
-					    if( defaultThumbnailTransformer.canTransform(irFile.getFileInfo().getExtension()))
-					    {
-						    try 
-						    {
-							    ThumbnailHelper.thumbnailFile(irFile, repo, defaultThumbnailTransformer, 
-									temporaryFileCreator, repositoryService, "thumbnail of item");
-							    genericItem.addPrimaryImageFile(itemFile);
-						    } 
-						    catch (Exception e) 
-						    {
-						        log.debug("Could not thubmnail file " + irFile, e);
-						    }
+				    	
+				    	// handle license files for dspace
+				    	if( bfi.originalFileName.trim().equals("license.txt"))
+				    	{
+				    		license = getLicense(f, repositoryLicenseCreationUser);
+				    	}
+				    	else
+				    	{
+				    		// normal file processing
+					        irFile = repositoryService.createIrFile(repo, f, bfi.originalFileName, "imported dspace item file");
+					        ItemFile itemFile = genericItem.addFile(irFile);
+					        itemFileBitstreamInfos.add(new ItemFileBitstreamInfo(itemFile, bfi));
+					        if( defaultThumbnailTransformer.canTransform(irFile.getFileInfo().getExtension()))
+					        {
+						        try 
+						        {
+							        ThumbnailHelper.thumbnailFile(irFile, repo, defaultThumbnailTransformer, 
+									    temporaryFileCreator, repositoryService, "thumbnail of item");
+							        genericItem.addPrimaryImageFile(itemFile);
+						        } 
+						        catch (Exception e) 
+						        {
+						            log.debug("Could not thubmnail file " + irFile, e);
+						        }
 						
-					    }
+					        }
+				    	}
 				    } catch (IllegalFileSystemNameException e) {
 					    log.debug("Could not add file " + irFile, e);
 				    }
 				    
 				}
 			}
+			
+			// create institutional items in the collections
 		    for(InstitutionalCollection ic : urResearchCollections)
 		    {
 			    InstitutionalItem institutionalItem = ic.createInstitutionalItem(genericItem);
+			    
+			    
 			    
 			    // this must be done as it creates the id for the institutional item which
 			    // is used in the handle url.
 			    institutionalItemService.saveInstitutionalItem(institutionalItem);
 			    
+			    // get the current version
+				InstitutionalItemVersion version = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
+
+				// process the date/time of deposit
+				Timestamp dateOfDeposit = null;
+			    String dateAccessioned = i.getSingleDataForLabel(DspaceMetadataLabel.ACCESSION_DATE);
+			    if( dateAccessioned != null)
+			    {
+			    	log.debug("Processing date accessioned " + dateAccessioned);
+			    	try {
+						GregorianCalendar calendar = dspaceDateHelper.parseDate(dateAccessioned);
+						dateOfDeposit = new Timestamp(calendar.getTime().getTime());
+						version.setDateOfDeposit(dateOfDeposit);
+					} catch (ParseException e) {
+						log.error("Could not parse date accessioned " + dateAccessioned, e);
+					}
+			    }
+				
+				if( license != null )
+			    {
+			    	version.addRepositoryLicense(license, genericItem.getOwner(), dateOfDeposit);
+			    }
+				
 			    String handle = i.getHandle();
+			    
+
 			    
 			    if( handle != null )
 			    {
@@ -632,11 +689,11 @@ public class DefaultItemImporter implements ItemImporter{
 						}
 						
 						
-						InstitutionalItemVersion version = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
 						String url = this.institutionalItemVersionUrlGenerator.createUrl(institutionalItem, version.getVersionNumber());
 					    
 						HandleInfo handleInfo = new HandleInfo(localName, url, authority);
 						version.setHandleInfo(handleInfo);
+						
 						institutionalItemService.saveInstitutionalItem(institutionalItem);
 					}
 					else
@@ -1006,6 +1063,95 @@ public class DefaultItemImporter implements ItemImporter{
 		    }  
 		}
 	}
+	
+	
+	/**
+	 * Get the license for the item.
+	 * 
+	 * @return the found license or null if license not found
+	 * @throws IOException 
+	 */
+	private LicenseVersion getLicense(File f, IrUser user) throws IOException
+	{
+		LicenseVersion license = null;
+		LineNumberReader lineNumberReader = null;
+		FileReader reader = null;
+		StringBuffer licenseBuffer = null;
+		try
+		{
+		    reader = new FileReader(f);
+		    lineNumberReader = new LineNumberReader(reader);
+		    licenseBuffer = new StringBuffer();
+		
+	        String lineText = lineNumberReader.readLine();
+	        boolean textRead = false;
+		    while(lineText != null)
+		    {
+			    textRead = true;
+			    if( lineNumberReader.getLineNumber() != 1 )
+				{
+			    	licenseBuffer.append(lineText + "\n");
+				   
+				}
+			    lineText = lineNumberReader.readLine();
+		    }
+			
+		    if( textRead )
+		    {
+		    	List<LicenseVersion> licenses = licenseService.getAllLicenseVersions();
+		    	
+		    	if( licenses.size() <= 0 )
+		    	{
+		    		VersionedLicense versionedLicense  = licenseService.createLicense(user, licenseBuffer.toString(), "Initial License", "Initial license from dspace import");
+		    	    license = versionedLicense.getCurrentVersion();
+		    	}
+		    	else
+		    	{
+		    		for(LicenseVersion licenseVersion : licenses)
+		    		{
+		    			if( licenseVersion.getLicense().getText().equals(licenseBuffer.toString()))
+		    			{
+		    				log.debug("match found for license");
+		    				{
+		    					license = licenseVersion;
+		    				}
+		    			}
+		    		}
+		    	}
+		    }
+		    
+		}
+		catch(Exception e)
+		{
+			licenseBuffer = null;
+			if( lineNumberReader != null)
+			{
+				lineNumberReader.close();
+				lineNumberReader = null;
+			}
+			if( reader != null )
+			{
+				reader.close();
+				reader = null;
+			}
+		}
+		finally
+		{
+			licenseBuffer = null;
+			if( lineNumberReader != null)
+			{
+				lineNumberReader.close();
+				lineNumberReader = null;
+			}
+			if( reader != null )
+			{
+				reader.close();
+				reader = null;
+			}
+		}
+		
+		return license;
+	}
 
 	/**
 	 * Get the urresearch user id for the current dspace eperson id.  The takes the old dspace eperson id
@@ -1156,6 +1302,14 @@ public class DefaultItemImporter implements ItemImporter{
 	public void setInstitutionalItemVersionUrlGenerator(
 			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
 		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
+	}
+
+	public LicenseService getLicenseService() {
+		return licenseService;
+	}
+
+	public void setLicenseService(LicenseService licenseService) {
+		this.licenseService = licenseService;
 	}
 
 }

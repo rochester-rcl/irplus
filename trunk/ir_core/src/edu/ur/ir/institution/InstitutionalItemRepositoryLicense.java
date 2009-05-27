@@ -1,13 +1,13 @@
 package edu.ur.ir.institution;
 
+import java.sql.Timestamp;
+
 import edu.ur.ir.repository.LicenseVersion;
+import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
 
 /**
- * License attached to an institutional item.  The license is
- * always dated the same date as submitted date - the user
- * who submitted the publication(item) is the one who accepted the license.
- * This information can be found in the generic item and institutional item version.
+ * License attached to an institutional item.  
  * 
  * @author Nathan Sarr
  *
@@ -23,6 +23,16 @@ public class InstitutionalItemRepositoryLicense extends BasePersistent{
 	/** version of the license */
 	private LicenseVersion licenseVersion;
 	
+	/** date the license was granted for the item  */
+	private Timestamp dateGranted;
+	
+	/** User who granted the license */
+	private IrUser grantedByUser;
+	
+	
+	/** database version number */
+	private int version;
+	
     /**
      * Package protected constructor
      */
@@ -35,10 +45,13 @@ public class InstitutionalItemRepositoryLicense extends BasePersistent{
      * @param institutionalItemVersion - institutional item version this license is attached to
      * @param licenseVersion - repository license attached.
      */
-    InstitutionalItemRepositoryLicense(InstitutionalItemVersion institutionalItemVersion, LicenseVersion licenseVersion)
+    InstitutionalItemRepositoryLicense(InstitutionalItemVersion institutionalItemVersion, 
+    		LicenseVersion licenseVersion, IrUser grantedByUser, Timestamp dateGranted)
     {
     	setInstitutionalItemVersion(institutionalItemVersion);
     	setLicenseVersion(licenseVersion);
+    	setGrantedByUser(grantedByUser);
+    	setDateGranted(dateGranted);
     }
 
 	/**
@@ -76,6 +89,80 @@ public class InstitutionalItemRepositoryLicense extends BasePersistent{
 	 */
 	void setLicenseVersion(LicenseVersion licenseVersion) {
 		this.licenseVersion = licenseVersion;
+	}
+	
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof InstitutionalItemRepositoryLicense)) return false;
+
+		final InstitutionalItemRepositoryLicense other = (InstitutionalItemRepositoryLicense) o;
+		
+		if( ( getInstitutionalItemVersion() != null && !getInstitutionalItemVersion().equals(other.getInstitutionalItemVersion()) ) ||
+		    ( getInstitutionalItemVersion() == null && other.getInstitutionalItemVersion() != null ) ) return false;
+
+		if( ( getLicenseVersion() != null && !getLicenseVersion().equals(other.getLicenseVersion()) ) ||
+			( getLicenseVersion() == null && other.getLicenseVersion() != null ) ) return false;
+		
+		if( ( getGrantedByUser() != null && !getGrantedByUser().equals(other.getGrantedByUser()) ) ||
+			( getGrantedByUser() == null && other.getGrantedByUser() != null ) ) return false;
+
+		return true;
+	}
+	
+	/**
+	 * Hash code is based on the path and name of
+	 * the collection.
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode()
+	{
+		int value = 0;
+		value += getInstitutionalItemVersion() == null? 0 : getInstitutionalItemVersion().hashCode();
+		value += getLicenseVersion() == null? 0 : getLicenseVersion().hashCode();
+		value += getGrantedByUser() == null? 0 : getGrantedByUser().hashCode();
+		return value;
+	}
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer("[ id = ");
+		sb.append(id);
+		sb.append(" institutional item version = ");
+		sb.append(institutionalItemVersion);
+		sb.append(" license version = ");
+		sb.append(licenseVersion);
+		sb.append( " granted by = ");
+		sb.append(grantedByUser);
+		sb.append( " date granted = ");
+		sb.append( dateGranted );
+		sb.append("]");
+		return sb.toString();
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
+	public Timestamp getDateGranted() {
+		return dateGranted;
+	}
+
+	void setDateGranted(Timestamp dateGranted) {
+		this.dateGranted = dateGranted;
+	}
+
+	public IrUser getGrantedByUser() {
+		return grantedByUser;
+	}
+
+	void setGrantedByUser(IrUser grantedByUser) {
+		this.grantedByUser = grantedByUser;
 	}
 	
 

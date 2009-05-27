@@ -29,6 +29,15 @@ import edu.ur.ir.repository.Repository;
  */
 public interface GenericItemPopulator {
 	
+	/**
+	 * Creates a generic item in the specified repository.
+	 * 
+	 * @param repository - repository to place the generic item in
+	 * @param dspaceItem - dspace item to ingest.
+	 * @return created generic item.
+	 * 
+	 * @throws NoIndexFoundException
+	 */
 	public GenericItem createGenericItem(Repository repository, DspaceItem dspaceItem) throws NoIndexFoundException;
 
 }
