@@ -37,7 +37,7 @@ public class DSpaceCommunityExporter {
 		String zipFileName = args[0];
 		
 		// path where the xml file will be created
-		String xmlFilePath = args[1];
+		String filePath = args[1];
 		
 		/** get the application context */
 		ApplicationContext ctx  = new ClassPathXmlApplicationContext(
@@ -45,7 +45,7 @@ public class DSpaceCommunityExporter {
 
 		
 		CommunityExporter communityExporter = (CommunityExporter)ctx.getBean("communityExporter");
-		communityExporter.exportCommunities(zipFileName, xmlFilePath);
+		communityExporter.exportCommunities(filePath + zipFileName, filePath);
 		
 		
 		

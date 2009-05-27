@@ -35,14 +35,15 @@ public class DspaceResearcherExporter {
 		String zipFileName = args[0];
 		
 		// path where the xml file will be created
-		String xmlFilePath = args[1];
+		String filePath = args[1];
 		
 		/** get the application context */
 		ApplicationContext ctx  = new ClassPathXmlApplicationContext(
 		"applicationContext.xml");
 		
 		ResearcherExporter researcherExporter = (ResearcherExporter)ctx.getBean("researcherExporter");
-		researcherExporter.exportResearchers(zipFileName, xmlFilePath);
+		System.out.println("Writing file to " + filePath + zipFileName);
+		researcherExporter.exportResearchers(filePath + zipFileName,filePath);
 				
 	}
 

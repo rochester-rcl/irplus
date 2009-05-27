@@ -35,7 +35,7 @@ public class DSpaceCollectionExporter {
 		String zipFileName = args[0];
 		
 		// path to place the created xml file
-		String xmlFilePath = args[1];
+		String filePath = args[1];
 		
 		/** get the application context */
 		ApplicationContext ctx  = new ClassPathXmlApplicationContext(
@@ -43,7 +43,7 @@ public class DSpaceCollectionExporter {
 
 		
 		CollectionExporter collectionExporter = (CollectionExporter)ctx.getBean("collectionExporter");
-		collectionExporter.exportCollections(zipFileName, xmlFilePath);
+		collectionExporter.exportCollections(filePath + zipFileName, filePath);
 	}
 
 }

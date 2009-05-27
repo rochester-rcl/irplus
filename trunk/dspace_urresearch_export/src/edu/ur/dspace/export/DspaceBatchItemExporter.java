@@ -36,13 +36,13 @@ public class DspaceBatchItemExporter {
 		String zipFileName = args[0];
 		
 	     
-		// path where the xml file will be created
-		String xmlFilePath = args[1];
+		// path where the xml and zip files will be created
+		String filePath = args[1];
 		
 		// batch size
 		int batchSize = new Integer(args[2]).intValue();
 		
-		System.out.println("zip file name = " + zipFileName + " xmlFilePath = " + xmlFilePath + " batchSize = " + batchSize);
+		System.out.println("zip file name = " + zipFileName + " filePath = " + filePath + " batchSize = " + batchSize);
 		
 		/** get the application context */
 		ApplicationContext ctx  = new ClassPathXmlApplicationContext(
@@ -67,9 +67,9 @@ public class DspaceBatchItemExporter {
 		
 		while(!done)
 		{
-			String newZipFileName = zipFileName +"_" + counter + ".zip";
-			System.out.println("Processing records start = " + start + " stop = " + stop );
-			itemExporter.exportItems(newZipFileName, xmlFilePath, itemExporter.getItems(start, stop));
+			String newZipFileName = filePath + zipFileName +"_" + counter + ".zip";
+			System.out.println("Processing records start = " + start + " stop = " + stop + " to file " + newZipFileName);
+			itemExporter.exportItems(newZipFileName, filePath, itemExporter.getItems(start, stop));
 			
 			if(stop > maxItemId )
 			{
