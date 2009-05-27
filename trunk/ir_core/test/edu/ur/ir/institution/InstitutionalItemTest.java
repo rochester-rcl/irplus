@@ -94,9 +94,10 @@ public class InstitutionalItemTest {
 			"Item should equal ";
 		
 		
-		// add another version
+		// add another version to the versioned item.
 		versionedItem.addNewVersion(genericItem2);
 		
+		// add a new version to the institutional item
 		institutionalItem.addNewVersion(versionedItem.getCurrentVersion().getItem());
 
 		Set<InstitutionalItemVersion> institutionalItemVersions = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions();
