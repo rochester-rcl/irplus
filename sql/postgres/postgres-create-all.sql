@@ -1709,7 +1709,7 @@ CREATE TABLE ir_repository.versioned_institutional_item
     lower_case_name TEXT NOT NULL,
     name_first_char CHAR NOT NULL,
     largest_item_version_id INTEGER NOT NULL,
-    current_published_version_id bigint,
+    current_institutional_item_version_id BIGINT,
     version INTEGER
 );
 ALTER TABLE ir_repository.versioned_institutional_item OWNER TO ir_plus;
@@ -1770,14 +1770,16 @@ CREATE SEQUENCE ir_repository.deleted_institutional_item_seq;
 ALTER TABLE ir_repository.deleted_institutional_item_seq OWNER TO ir_plus;
 
 
+
 -- ---------------------------------------------
--- Published Versions
+-- Institutional item version
 -- ---------------------------------------------
-CREATE TABLE ir_repository.published_version
+CREATE TABLE ir_repository.institutional_item_version
 (
-    published_version_id BIGINT PRIMARY KEY,
+    institutional_item_version_id BIGINT PRIMARY KEY,
     item_id BIGINT NOT NULL,
     versioned_institutional_item_id BIGINT NOT NULL,
+    institutional_item_repository_license_id BIGINT,
     withdrawn_token_id BIGINT,
     version_number int,
     handle_info_id BIGINT,
@@ -1788,32 +1790,54 @@ CREATE TABLE ir_repository.published_version
     FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id),
     FOREIGN KEY (handle_info_id) REFERENCES handle.handle_info(handle_id)
 );
-ALTER TABLE ir_repository.published_version OWNER TO ir_plus;
+ALTER TABLE ir_repository.institutional_item_version OWNER TO ir_plus;
 
 -- The ir file sequence
-CREATE SEQUENCE ir_repository.published_version_seq;
-ALTER TABLE ir_repository.published_version_seq OWNER TO ir_plus;
+CREATE SEQUENCE ir_repository.institutional_item_version_seq;
+ALTER TABLE ir_repository.institutional_item_version_seq OWNER TO ir_plus;
 
 -- Index on the file Name
-CREATE INDEX published_version_deposit_date_idx ON ir_repository.published_version USING btree 
+CREATE INDEX institutional_item_version_deposit_date_idx ON ir_repository.institutional_item_version USING btree 
 (date_of_deposit);
 
 
+-- ---------------------------------------------
+-- Institutional Item repository License
+-- ---------------------------------------------
+CREATE TABLE ir_repository.institutional_item_repository_license
+(
+    institutional_item_repository_license_id BIGINT PRIMARY KEY,
+    institutional_item_version_id BIGINT NOT NULL,
+    license_version_id BIGINT NOT NULL,
+    date_granted TIMESTAMP WITH TIME ZONE NOT NULL,
+    granted_by_user_id BIGINT NOT NULL,
+    version INTEGER,
+    FOREIGN KEY (granted_by_user_id) REFERENCES ir_user.user (user_id),
+    FOREIGN KEY (license_version_id) REFERENCES ir_repository.license_version(license_version_id),
+    FOREIGN KEY (institutional_item_version_id) 
+       REFERENCES ir_repository.institutional_item_version (institutional_item_version_id)
+);
+
+ALTER TABLE ir_repository.institutional_item_repository_license OWNER TO ir_plus;
+
+-- The institutional item repository license sequence
+CREATE SEQUENCE ir_repository.institutional_item_repository_license_seq;
+ALTER TABLE ir_repository.institutional_item_repository_license_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 -- Withdrawn token
 -- ---------------------------------------------
 CREATE TABLE ir_repository.withdrawn_token
 (
     withdrawn_token_id BIGINT PRIMARY KEY,
-    published_version_id BIGINT NOT NULL,
+    institutional_item_version_id BIGINT NOT NULL,
     date_withdrawn DATE,
     show_metadata BOOLEAN,
     withdrawn_reason text,
     user_id BIGINT NOT NULL,
     version INTEGER,
     FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
-    FOREIGN KEY (published_version_id) 
-       REFERENCES ir_repository.published_version (published_version_id)
+    FOREIGN KEY (institutional_item_version_id) 
+       REFERENCES ir_repository.institutional_item_version (institutional_item_version_id)
 );
 ALTER TABLE ir_repository.withdrawn_token OWNER TO ir_plus;
 
@@ -1827,14 +1851,14 @@ ALTER TABLE ir_repository.withdrawn_token_seq OWNER TO ir_plus;
 CREATE TABLE ir_repository.reinstate_token
 (
     reinstate_token_id BIGINT PRIMARY KEY,
-    published_version_id BIGINT NOT NULL,
+    institutional_item_version_id BIGINT NOT NULL,
     date_reinstated DATE,
     reinstate_reason text,
     user_id BIGINT NOT NULL,
     version INTEGER,
     FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
-    FOREIGN KEY (published_version_id) 
-       REFERENCES ir_repository.published_version (published_version_id)
+    FOREIGN KEY (institutional_item_version_id) 
+       REFERENCES ir_repository.institutional_item_version (institutional_item_version_id)
 );
 ALTER TABLE ir_repository.reinstate_token OWNER TO ir_plus;
 
@@ -1845,10 +1869,10 @@ ALTER TABLE ir_repository.reinstate_token_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
--- Add a contstraint back on the published_version
+-- Add a contstraint back on the institutional_item_version
 -- table
 -- ---------------------------------------------
-ALTER TABLE ir_repository.published_version ADD CONSTRAINT published_version_withdrawn_token_id_fkey FOREIGN KEY 
+ALTER TABLE ir_repository.institutional_item_version ADD CONSTRAINT institutional_item_version_withdrawn_token_id_fkey FOREIGN KEY 
 (withdrawn_token_id)  REFERENCES ir_repository.withdrawn_token(withdrawn_token_id);
 
 

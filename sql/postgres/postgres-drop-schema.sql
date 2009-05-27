@@ -49,7 +49,7 @@ DROP SCHEMA ir_security;
 -- Drop ir_repository information
 -- ---------------------------------------------
 
-ALTER TABLE ir_repository.published_version DROP CONSTRAINT published_version_withdrawn_token_id_fkey;
+ALTER TABLE ir_repository.institutional_item_version DROP CONSTRAINT institutional_item_version_withdrawn_token_id_fkey;
 ALTER TABLE ir_researcher.researcher_institutional_item DROP CONSTRAINT researcher_institutional_item_institutional_item_id_fkey;
 
 DROP TABLE ir_repository.retired_repository_license;
@@ -58,7 +58,8 @@ DROP TABLE ir_repository.reviewable_item;
 DROP TABLE ir_repository.repository_picture;
 DROP TABLE ir_repository.withdrawn_token;
 DROP TABLE ir_repository.reinstate_token;
-DROP TABLE ir_repository.published_version;
+DROP TABLE ir_repository.institutional_item_repository_license;
+DROP TABLE ir_repository.institutional_item_version;
 DROP TABLE ir_repository.institutional_item;
 DROP TABLE ir_repository.deleted_institutional_item;
 DROP TABLE ir_repository.versioned_institutional_item;
@@ -71,6 +72,7 @@ DROP TABLE ir_repository.license_version;
 DROP TABLE ir_repository.versioned_license;
 DROP TABLE ir_repository.license;
 
+DROP SEQUENCE ir_repository.institutional_item_repository_license_seq;
 DROP SEQUENCE ir_repository.retired_repository_license_seq;
 DROP SEQUENCE ir_repository.user_repository_license_seq;
 DROP SEQUENCE ir_repository.institutional_collection_subscription_seq;
@@ -80,7 +82,7 @@ DROP SEQUENCE ir_repository.withdrawn_token_seq;
 DROP SEQUENCE ir_repository.versioned_institutional_item_seq;
 DROP SEQUENCE ir_repository.reviewable_item_seq;
 DROP SEQUENCE ir_repository.repository_picture_seq;
-DROP SEQUENCE ir_repository.published_version_seq;
+DROP SEQUENCE ir_repository.institutional_item_version_seq;
 DROP SEQUENCE ir_repository.institutional_item_seq;
 DROP SEQUENCE ir_repository.deleted_institutional_item_seq;
 DROP SEQUENCE ir_repository.institutional_collection_seq;
@@ -176,7 +178,6 @@ DROP TABLE ir_item.series;
 DROP TABLE ir_item.item_sponsor;
 DROP TABLE ir_item.item_title;
 DROP TABLE ir_item.item_link;
---DROP TABLE ir_item.item_license;
 DROP TABLE ir_item.item_version;
 DROP TABLE ir_item.versioned_item;
 DROP TABLE ir_item.item_file;
