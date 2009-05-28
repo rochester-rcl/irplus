@@ -166,9 +166,10 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 
 		log.debug("checking user has license = " + user.getAcceptedLicense(repository.getDefaultLicense()));
+		
 		//make the user accept the license if the user does not have
 		//the most current license.
-		if( user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+		if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
 		{
 			return "acceptLicense";
 		}
@@ -376,7 +377,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			//user should have never made it this far but just in case
 			//make the user accept the license if the user does not have
 			//the most current license.
-			if( user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+			if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
 			{
 				return "acceptLicense";
 			}
