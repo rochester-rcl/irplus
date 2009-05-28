@@ -102,3 +102,15 @@
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_collection_items.jsp</result>
         </action>
+        
+       <!--  ***************************************************** -->
+       <!--  Public Person Name actions    (Repository / Collection) -->
+       <!--  ****************************************************** -->
+ 
+        <action name="viewItemRepositoryLicense" 
+               method="viewLicenseVersion"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/item/view_item_repository_license.jsp</result>
+        </action>
+        
