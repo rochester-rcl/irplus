@@ -113,11 +113,11 @@
                         <div id="tab1">
 	                    <!--  table of files and folders -->
 	                    <div id="newPersonalFolders" >
-	                          <ur:basicForm  id="folders" name="myFolders">
+	                          <form  id="folders" name="myFolders">
 	                              <input type="hidden" id="myFolders_parentFolderId" 
 	                                   name="parentFolderId" 
 	                                   value="${parentFolderId}"/>
-	                          </ur:basicForm>
+	                          </form>
 	                      </div>
 	                    <!--  end personal files and folders div -->
 	                  </div>
@@ -127,14 +127,14 @@
 	                  <!--  start second tab -->
 	                  <div id="tab2">
 	                      <div id="newPersonalCollections">
-	                      <ur:basicForm id="collections" name="myCollections">
+	                      <form id="collections" name="myCollections">
 	                          <input type="hidden" id="myCollections_parentCollectionId" 
 	                               name="parentCollectionId" 
 	                               value="${parentCollectionId}"/>
 	                               <input type="hidden" id="myCollections_showCollection" 
 	                               name="showCollectionTab" 
 	                               value="${showCollectionTab}"/>
-	                      </ur:basicForm>
+	                      </form>
 	                      </div>
 	                 </div>                
 	                 <!--  end second tab -->
@@ -218,7 +218,7 @@
 	<div id="newFolderDialog" class="hidden">
 	    <div class="hd">Folder Information</div>
 		<div class="bd">
-		    <ur:basicForm id="addFolder" name="newFolderForm" 
+		    <form id="addFolder" name="newFolderForm" 
 		        method="post" action="user/addPersonalFolder.action">
 		              
 		        <input type="hidden" id="newFolderForm_parentFolderId"
@@ -228,7 +228,7 @@
               	    <c:import url="personal_folder_form.jsp"/>
               	</div>
 
-		     </ur:basicForm>
+		     </form>
 		 </div>
 		 <!-- end dialog body -->
 	 </div>
@@ -238,7 +238,7 @@
 	<div id="newCollectionDialog" class="hidden">
 	    <div class="hd">Please enter collection name</div>
 		<div class="bd">
-		    <ur:basicForm name="newCollectionForm" method="post">
+		    <form name="newCollectionForm" method="post">
 		                  
 		    <input type="hidden" id="newCollectionForm_parentCollectionId" 
 		        name="parentCollectionId" value="${parentCollectionId}"/>
@@ -247,7 +247,7 @@
               	    <c:import url="personal_collection_form.jsp"/>
               	</div>
               			              
-		    </ur:basicForm>
+		    </form>
 		</div>
 	</div>
 	<!--  end the collection dialog -->  
@@ -259,7 +259,7 @@
 			<div class="clear">&nbsp;</div>
 		 	<div id="file_ownership_error_div" class="errorMessage">
 		    </div>
-            <ur:basicForm name="newItemForm" method="post" >
+            <form name="newItemForm" method="post" >
                 <input type="hidden" id="newItemForm_parentCollectionId" name="parentCollectionId" />
 		        <table align="left" class="formTable">
 				<tr>
@@ -269,7 +269,7 @@
 				    </td>
 		        </tr>
 		        </table>
-		    </ur:basicForm>
+		    </form>
 		</div>
 	</div>
 	<!--  end the collection dialog -->  
@@ -278,7 +278,7 @@
     <div id="singleFileUploadDialog" class="hidden">
 	    <div class="hd">File Upload</div>
 		<div class="bd">
-		    <ur:basicForm id="singleFileUploadForm" name="singleFileUploadForm" 
+		    <form id="singleFileUploadForm" name="singleFileUploadForm" 
 		                 method="post" enctype="multipart/form-data"
 		                 action="user/singleFileUpload.action">
 		              
@@ -287,7 +287,7 @@
 		         <div id="upload_form_fields">
 		                     <c:import url="single_file_upload_frag.jsp"/>
 		         </div>
-		    </ur:basicForm>
+		    </form>
 		</div>
 	</div>
 	<!--  end file upload dialog -->   
@@ -326,14 +326,14 @@
 	    <div class="hd">New Version Upload</div>
 		<div class="bd">
 		           
-		<ur:basicForm id="versionedFileUploadForm" name="versionedFileUploadForm" 
+		<form id="versionedFileUploadForm" name="versionedFileUploadForm" 
 		    method="post" enctype="multipart/form-data"
 		    action="user/singleFileUpload.action">
 		                 
 		    <div id="version_upload_form_fields">
 		        <c:import url="upload_new_file_version.jsp"/>
 		    </div>
-		</ur:basicForm>
+		</form>
 		</div>
 	</div>
 	<!--  end file upload dialog -->  
@@ -351,13 +351,13 @@
 	     <div class="hd">Invite?</div>
 		 <div class="bd">
 
- 		     <ur:basicForm id="invite_files_form" name="inviteFilesForm" 
+ 		     <form id="invite_files_form" name="inviteFilesForm" 
 		         method="post" enctype="multipart/form-data"
 		        action="user/viewInviteUser.action">		          
 			    <div id="invite_form_fields">
 			        <c:import url="invite_files_confirmation.jsp"/>
 			    </div>
-		    </ur:basicForm>
+		    </form>
 		              
          </div>
 	 </div>
@@ -367,13 +367,13 @@
 	 <div id="newPublicationVersionConfirmation" class="hidden">
 	     <div class="hd">Create new version?</div>
 		 <div class="bd">
-		     <ur:basicForm id="new_version_form" name="newVersionForm" 
+		     <form id="new_version_form" name="newVersionForm" 
 		         method="post" enctype="multipart/form-data">		
 		         
 		         <input type="hidden" name="personalItemId"/>
 		         <input type="hidden" name="parentCollectionId"/>
 		                   
-		     </ur:basicForm>		          
+		     </form>		          
 		     <p>This publication version is published to Institutional Collection. 
 		        To publish to more collections choose 'Submit publication' link.
 		        <div class="clear">&nbsp;</div>
@@ -388,14 +388,14 @@
 	 <div id="renameFileDialog" class="hidden">
 	     <div class="hd">Rename file</div>
 		 <div class="bd">
-		     <ur:basicForm id="rename_form" name="renameForm" 
+		     <form id="rename_form" name="renameForm" 
 		         method="post" enctype="multipart/form-data">		
 		         <p align="left">
 	              	<div id="renameFileDialogFields">
 	              	    <c:import url="rename_file_form.jsp"/>
 	              	</div>		             
 		         </p>
-		     </ur:basicForm>		          
+		     </form>		          
 		 </div>
 	 </div>
 	 <!--  end rename file dialog -->
