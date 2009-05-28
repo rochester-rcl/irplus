@@ -107,6 +107,7 @@
         <property name="temporaryFileCreator" ref="temporaryFileCreator"/>
         <property name="handleService" ref="handleService"/>
         <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+        <property name="licenseService" ref="licenseService"/>
    </bean>
    
    <!--  Class to import user groups -->
