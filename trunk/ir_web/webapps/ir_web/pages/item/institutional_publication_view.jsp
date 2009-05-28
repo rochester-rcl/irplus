@@ -202,6 +202,21 @@
 												</td>
 											</tr>
 											<tr>
+											<td class="previewLabel">License Grantor / Date Granted:  </td>
+											</tr>
+											
+											<tr>
+												<td>
+												    <c:url var="viewLicense" value="viewItemRepositoryLicense.action">
+												        <c:param name="versionedLicenseId" value="${institutionalItemVersion.repositoryLicense.licenseVersion.versionedLicense.id}"/>
+												        <c:param name="version" value="${institutionalItemVersion.repositoryLicense.licenseVersion.versionNumber}"/>
+												    </c:url>
+													${institutionalItemVersion.repositoryLicense.grantedByUser.firstName} &nbsp; 
+													${institutionalItemVersion.repositoryLicense.grantedByUser.lastName} 
+													/ ${institutionalItemVersion.repositoryLicense.dateGranted} ( <a href="${viewLicense}">View License</a> )
+												</td>
+											</tr>
+											<tr>
 											<td class="previewLabel">Date Submitted /Accessioned   </td>
 											</tr>
 											
