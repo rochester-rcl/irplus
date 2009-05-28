@@ -187,7 +187,7 @@ YAHOO.ur.personal.collection =
 			{
 			    success: function(o) 
 			    {
-			        // check for the timeout - forward user to login page if timout
+			        // check for the timeout - forward user to login page if timeout
 	                // occured
 	                if( !urUtil.checkTimeOut(o.responseText) )
 	                {       		 			    
