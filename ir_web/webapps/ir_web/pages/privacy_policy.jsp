@@ -60,7 +60,38 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-               <h3>IR Plus Privacy Policy</h3> 
+               <h3>Privacy Policy</h3> 
+               
+               University of Rochester Libraries is committed to preserving your privacy. 
+               The personal information we receive through UR Research, such as names, 
+               emails and phone numbers, is used solely for the purposes of the 
+               functioning and assessment of the system.
+               <br><br>
+               This system collects personal information from:
+               <ol>
+
+	               <li>users involved in the submission of UR Research content and metadata
+	               <li>users who subscribe to the UR Research alerting service
+	               <li>users who locate and download content from UR Research (i.e., 
+	                user IP address)
+
+               </ol>
+               Personal information collected by UR Research will not be used for any 
+               commercial or philanthropic purpose not directly connected with and 
+               approved by the University of Rochester.
+               <br><br>
+               We do not disclose information about your individual visits to 
+               our site, or personal information that you provide us, such as 
+               your name, address, telephone number, etc. to any outside parties 
+               except when (i) the law requires it, or (ii) that disclosure is 
+               necessary to protect the rights and property of UR Research users.
+               <br><br>
+
+               Any DUR Research records used in publicly accessible forum, such as 
+               demonstrations, presentations, or research papers, will be 
+               scrubbed of specific references to real people and personal information.
+               <br><br>
+
                
             </div>
             <!--  end the body tag --> 
