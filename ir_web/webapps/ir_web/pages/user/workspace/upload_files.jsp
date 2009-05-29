@@ -31,15 +31,16 @@
     <c:import url="/inc/meta-frag.jsp"/>
     
     <!-- Core + Skin CSS -->
+    <ur:styleSheet href="page-resources/yui/assets/skins/sam/skin.css"/>
     <ur:styleSheet href="page-resources/yui/reset-fonts-grids/reset-fonts-grids.css"/>
     <ur:styleSheet href="page-resources/css/base-ur.css"/>
-    <ur:styleSheet href="page-resources/yui/menu/assets/skins/sam/menu.css"/>
         
     <ur:styleSheet href="page-resources/css/main_menu.css"/>
     <ur:styleSheet href="page-resources/css/global.css"/>
     <ur:styleSheet href="page-resources/css/tables.css"/>
     
-    <ur:js src="page-resources/yui/yahoo-dom-event/yahoo-dom-event.js"/>    
+    <ur:js src="page-resources/yui/utilities/utilities.js"/>
+    <ur:js src="page-resources/yui/button/button-min.js"/>
     <ur:js src="page-resources/yui/container/container-min.js"/>
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
     
@@ -59,7 +60,7 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>Upload file(s) to: <c:if test="${folderId > 0}">${personalFolder.fullPath}</c:if><c:if test="${folderId <=0 }">${user.username}</c:if></h3>
+        <h3>Upload file(s) to Folder: <c:if test="${folderId > 0}">${personalFolder.fullPath}</c:if><c:if test="${folderId <=0 }">${user.username}</c:if></h3>
   
         <div id="bd">  
             <c:url var="myFoldersUrl" value="/user/workspace.action"/>
@@ -81,8 +82,9 @@
 	            <input type="hidden" value="${folderId}" name="parentFolderId"/>
 	        </form>
             
-	        <ur:basicForm id="fileInfo" name="newFiles" enctype="multipart/form-data" 
-	            action="user/uploadFiles.action">
+            <c:url var="fileUpload" value="/user/uploadFiles.action"/>
+	        <form method="post" id="fileInfo" name="newFiles" enctype="multipart/form-data" 
+	            action="${fileUpload}">
 	           <input type="hidden" id="file_upload_table_id" value="1"/>
 	
 	          <button type="button" class="ur_button" 
@@ -90,9 +92,10 @@
  		          onmouseout="this.className='ur_button';"
  		          onclick="javascript:YAHOO.ur.file.upload.addFileSets(1, false)">Add Another</button>
 	          
-	          <input type="submit" class="ur_button" 
+	          <button type="button" class="ur_button" 
 	              onmouseover="this.className='ur_buttonover';"
- 		          onmouseout="this.className='ur_button';"  value="Upload Files"/>
+ 		          onmouseout="this.className='ur_button';"
+ 		          onclick="javascript:YAHOO.ur.file.upload.submitFilesForm()">Upload Files</button>
 	          
 	          <button type="button" class="ur_button" 
 	                 onmouseover="this.className='ur_buttonover';"
@@ -113,16 +116,17 @@
  		           onmouseout="this.className='ur_button';"
  		           onclick="javascript:YAHOO.ur.file.upload.addFileSets(1, false)">Add Another</button>
 
-	           <input type="submit" class="ur_button" 
-	               onmouseover="this.className='ur_buttonover';"
- 		           onmouseout="this.className='ur_button';"  value="Upload Files"/>
+	           <button type="button" class="ur_button" 
+	              onmouseover="this.className='ur_buttonover';"
+ 		          onmouseout="this.className='ur_button';"
+ 		          onclick="javascript:YAHOO.ur.file.upload.submitFilesForm()">Upload Files</button>
 	           
 	           <button type="button" class="ur_button" 
 	               onmouseover="this.className='ur_buttonover';"
  		           onmouseout="this.className='ur_button';"
  		           onclick="javascript:document.cancelAddFilesForm.submit();">Cancel</button>
 	        
-	         </ur:basicForm>
+	         </form>
              <!--  end body div -->
       </div>
       <!--  end body div -->
@@ -132,5 +136,14 @@
   
   </div>
   <!--  End doc div-->
+  
+         <!--  wait div -->
+	 <div id="wait_dialog_box" class="hidden">
+	    <div class="hd">Processing...</div>
+		<div class="bd">
+		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
+		    <p><img src="${wait}"></img></p>
+		</div>
+	 </div>       
 </body>
 </html>
