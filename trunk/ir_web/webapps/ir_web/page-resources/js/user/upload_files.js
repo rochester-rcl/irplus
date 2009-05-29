@@ -24,6 +24,14 @@ YAHOO.namespace("ur.file.upload");
 
 YAHOO.ur.file.upload = 
 {
+	/**
+	 * Submit the files form
+	 */
+    submitFilesForm : function()
+    {
+	    document.newFiles.submit();
+	    YAHOO.ur.file.upload.waitDialog.showDialog();
+    },
  
     /**
      * Add a file set for files to be uploaded
@@ -132,6 +140,34 @@ YAHOO.ur.file.upload =
         var child = document.getElementById(tableId);
         table_div.removeChild(child);
     },
+    
+    /**
+    * Dialog to handle waiting display
+    */
+   createWaitDialog : function()
+   {
+        var handleClose = function()
+        {
+        	YAHOO.ur.file.upload.waitDialog.close();
+        };
+         
+	     // Instantiate the Dialog
+        YAHOO.ur.file.upload.waitDialog = 
+	         new YAHOO.widget.Dialog("wait_dialog_box", 
+									     { width: "600px",
+										   visible: false,
+										   modal: true,
+										   close: false
+										  } );
+										
+        YAHOO.ur.file.upload.waitDialog.showDialog = function()
+		 {
+        	  YAHOO.ur.file.upload.waitDialog.center();
+        	  YAHOO.ur.file.upload.waitDialog.show();
+		 };
+		 
+		 YAHOO.ur.file.upload.waitDialog.render();
+   },
         
     
     init : function() 
@@ -140,6 +176,7 @@ YAHOO.ur.file.upload =
         // create the first file set once the page is 
         // loaded.
         YAHOO.ur.file.upload.addFileSets(1, true);
+        YAHOO.ur.file.upload.createWaitDialog();
     }
 };
 
