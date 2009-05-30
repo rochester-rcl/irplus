@@ -11,6 +11,7 @@
                     
     <!--  this job is for sending subscrption emails to users who
           have subscribed to collections -->
+    <!--  
     <job>
         <job-detail>
             <name>SubscriptionEmailer</name>
@@ -33,11 +34,10 @@
                 <group>DEFAULT</group>
                 <job-name>SubscriptionEmailer</job-name>
                 <job-group>DEFAULT</job-group>
-                
-                <!--  fire every two minutes every day -->
                 <cron-expression>0 0/5 * * * ?</cron-expression>
             </cron>
         </trigger>
     </job>
+    -->
 </quartz>
 
