@@ -214,7 +214,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 			VersionedFile vf = repositoryService.getVersionedFile(versionedFileId, false);
 			
 			for(ItemFile itemFile:item.getItemFiles()) {
-					if (vf.getName().equals(itemFile.getIrFile().getName())) {
+					if (vf.getNameWithExtension().equals(itemFile.getIrFile().getNameWithExtension())) {
 						fileAdded = false;
 						message = getText("fileNameExistInItemError", 
 								new String[]{vf.getName()});;

@@ -28,8 +28,10 @@ import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
 import edu.ur.order.AscendingOrderComparator;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -82,6 +84,9 @@ public class ViewPersonalPublication extends ActionSupport implements UserIdAwar
 	
 	/** Id of institutional item being edited */
 	private Long institutionalItemId;
+	
+	/** Service for accessing user information */
+	private UserService userService;
 
 	
 	/**
@@ -94,10 +99,12 @@ public class ViewPersonalPublication extends ActionSupport implements UserIdAwar
 			item = itemService.getGenericItem(genericItemId, false);
 		}
 
-		IrUser user = item.getOwner();
+		IrUser owner = item.getOwner();
 		
-		// make sure the user is the owner.
-		if( userId == null || !user.getId().equals(userId))
+		IrUser accessingUser = userService.getUser(userId, false);
+		
+		// make sure the user is the owner or administrator.
+		if( userId == null || (!owner.getId().equals(userId) && !accessingUser.hasRole(IrRole.ADMIN_ROLE)) )
 		{
 			return "accessDenied";
 		}
@@ -215,6 +222,14 @@ public class ViewPersonalPublication extends ActionSupport implements UserIdAwar
 	public void setUserId(Long userId)
 	{
 		this.userId = userId;
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 
 
