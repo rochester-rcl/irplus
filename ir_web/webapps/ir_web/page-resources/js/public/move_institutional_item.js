@@ -77,7 +77,7 @@ YAHOO.ur.institutional.item.move =
 	            else
 	            {
 	                var itemId = document.getElementById('item_ids').value;
-	                var viewInstitutionalItemAction = basePath + '/user/institutionalPublicationPublicView.action'
+	                var viewInstitutionalItemAction = basePath + 'user/institutionalPublicationPublicView.action'
 	        
 	                viewInstitutionalItemAction = viewInstitutionalItemAction +
 	                 '?institutionalItemId=' + itemId + '&bustcache='+new Date().getTime();
@@ -129,6 +129,8 @@ YAHOO.ur.institutional.item.move =
 	    // Render the Dialog
 	    YAHOO.ur.institutional.item.move.moveErrorDialog.render();
     }, 
+    
+
     
     init : function()
     {
