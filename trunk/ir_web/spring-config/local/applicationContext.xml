@@ -85,11 +85,17 @@
 	<import resource="ir-researcher-hibernate.xml"/>
 	<import resource="ir-statistics-hibernate.xml"/>	
 	<import resource="ir-handle-hibernate.xml"/> 
+	
    <!-- ****************************************** --> 
-   <!-- User Service  -->
+   <!-- Major services  -->
    <!-- ****************************************** --> 
    <import resource="ir-service.xml"/>
    
+   
+   <!-- ****************************************** --> 
+   <!-- Quartz scheduling service -->
+   <!-- ****************************************** --> 
+   <import resource="ir-quartz.xml"/>
    
    <!-- ****************************************** --> 
    <!-- Spring Security                             -->
