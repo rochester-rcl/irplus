@@ -15,6 +15,8 @@
 */
 
 /**
+ * To use this file - you must also first include wait_dialog.js
+ * 
  * This code is for dealing with moving collections and items
  * in the workspace.
  */
@@ -55,6 +57,7 @@ YAHOO.ur.institutional.item.move =
     
     moveCollection : function()
     {
+    	YAHOO.ur.util.wait.waitDialog.showDialog();
     	// handle a successful return
 	    var handleSuccess = function(o) 
 	    {
@@ -69,6 +72,7 @@ YAHOO.ur.institutional.item.move =
 	  
 	            if( success != 'true' )
 	            {
+	            	YAHOO.ur.util.wait.waitDialog.close();
 	                var errorMessage = document.getElementById('move_error').innerHTML;
 	                document.getElementById('default_error_dialog_content').innerHTML= errorMessage;
 	                YAHOO.ur.institutional.item.move.moveErrorDialog.center();
