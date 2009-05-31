@@ -379,7 +379,7 @@ YAHOO.ur.edit.institution.collection = {
 			if (YAHOO.ur.edit.institution.collection.editPermissionDialog.validate()) {
 	    
 			    // action for updating the collection permission
-		        var updateCollectionAction =  basePath + '/admin/editInstitutionalCollectionViewPermission.action';
+		        var updateCollectionAction =  basePath + 'admin/editInstitutionalCollectionViewPermission.action';
 	
 	            YAHOO.util.Connect.setForm('editPermissionCollectionForm');
 			
@@ -475,7 +475,7 @@ YAHOO.ur.edit.institution.collection = {
     {
     
         // action for getting the picture
-        var getCollectionAction =  basePath + '/admin/getCollection.action';
+        var getCollectionAction =  basePath + 'admin/getCollection.action';
 
         // Success action on getting the picture
         var handleSuccess = function(o) 
