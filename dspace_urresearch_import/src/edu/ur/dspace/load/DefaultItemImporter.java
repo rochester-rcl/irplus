@@ -26,6 +26,7 @@ import java.io.LineNumberReader;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -549,7 +550,7 @@ public class DefaultItemImporter implements ItemImporter{
 	
 	
 	/**
-	 * Load a single file 
+	 * Load a single dspace item
 	 * 
 	 * @param i - dspace item
 	 * @param zipFile - zip file containing the files
@@ -565,7 +566,7 @@ public class DefaultItemImporter implements ItemImporter{
 		GenericItem genericItem = genericItemPopulator.createGenericItem(repo, i);
 		List<InstitutionalCollection> urResearchCollections = getCollections(i);
 		IrUser repositoryLicenseCreationUser = userService.getUser("admin");
-		LicenseVersion license = null;
+		LicenseInfo licenseInfo = null;
 		
 		if( repositoryLicenseCreationUser == null )
 		{
@@ -600,7 +601,8 @@ public class DefaultItemImporter implements ItemImporter{
 				    	// handle license files for dspace
 				    	if( bfi.originalFileName.trim().equals("license.txt"))
 				    	{
-				    		license = getLicense(f, repositoryLicenseCreationUser);
+				    		log.debug("getting license");
+				    		licenseInfo = getLicense(f, repositoryLicenseCreationUser);
 				    	}
 				    	else
 				    	{
@@ -652,16 +654,41 @@ public class DefaultItemImporter implements ItemImporter{
 			    	log.debug("Processing date accessioned " + dateAccessioned);
 			    	try {
 						GregorianCalendar calendar = dspaceDateHelper.parseDate(dateAccessioned);
-						dateOfDeposit = new Timestamp(calendar.getTime().getTime());
-						version.setDateOfDeposit(dateOfDeposit);
+						if( calendar != null && calendar.getTime() != null)
+						{
+						    dateOfDeposit = new Timestamp(calendar.getTime().getTime());
+						    version.setDateOfDeposit(dateOfDeposit);
+						}
+						else
+						{
+							log.error("deposit date could not be found for item with id = " + i.itemId );
+						}
 					} catch (ParseException e) {
 						log.error("Could not parse date accessioned " + dateAccessioned, e);
 					}
 			    }
 				
-				if( license != null )
+				if( licenseInfo != null  && licenseInfo.getLicenseVersion() != null )
 			    {
-			    	version.addRepositoryLicense(license, genericItem.getOwner(), dateOfDeposit);
+					Timestamp grantedDate = null;
+					
+				    try {
+				    	GregorianCalendar calendar = dspaceDateHelper.parseDate(licenseInfo.getGrantedDate());
+				    
+						if( calendar != null && calendar.getTime() != null)
+						{
+				    	    grantedDate = new Timestamp(calendar.getTime().getTime());
+						}
+					} catch (ParseException e) {
+						log.error("could not parse granted date" , e);
+					}
+					
+					if( grantedDate == null )
+					{
+						grantedDate = new Timestamp( new Date().getTime());
+					}
+					
+			    	version.addRepositoryLicense(licenseInfo.getLicenseVersion(), genericItem.getOwner(), grantedDate);
 			    }
 				
 			    String handle = i.getHandle();
@@ -1071,12 +1098,13 @@ public class DefaultItemImporter implements ItemImporter{
 	 * @return the found license or null if license not found
 	 * @throws IOException 
 	 */
-	private LicenseVersion getLicense(File f, IrUser user) throws IOException
+	private LicenseInfo getLicense(File f, IrUser user) throws IOException
 	{
 		LicenseVersion license = null;
 		LineNumberReader lineNumberReader = null;
 		FileReader reader = null;
 		StringBuffer licenseBuffer = null;
+		String grantedDate = null;
 		try
 		{
 		    reader = new FileReader(f);
@@ -1093,28 +1121,52 @@ public class DefaultItemImporter implements ItemImporter{
 			    	licenseBuffer.append(lineText + "\n");
 				   
 				}
+			    else
+				{
+					int onIndex = lineText.lastIndexOf("on ");
+					int zIndex = lineText.lastIndexOf("Z");
+					if( onIndex != -1  && zIndex != -1 )
+					{
+					    grantedDate = lineText.substring(onIndex + 3, zIndex + 1);
+					   
+					}
+				}
 			    lineText = lineNumberReader.readLine();
 		    }
 			
+		    log.debug(" read text = " + textRead);
 		    if( textRead )
 		    {
 		    	List<LicenseVersion> licenses = licenseService.getAllLicenseVersions();
 		    	
 		    	if( licenses.size() <= 0 )
 		    	{
+		    		log.debug("license size is less than or equal to 0 - adding new license");
 		    		VersionedLicense versionedLicense  = licenseService.createLicense(user, licenseBuffer.toString(), "Initial License", "Initial license from dspace import");
-		    	    license = versionedLicense.getCurrentVersion();
+		    	    licenseService.save(versionedLicense);
+		    		license = versionedLicense.getCurrentVersion();
 		    	}
 		    	else
 		    	{
+		    		boolean matchFound = false;
+		    		log.debug(" licenses size = " + licenses.size());
 		    		for(LicenseVersion licenseVersion : licenses)
 		    		{
 		    			if( licenseVersion.getLicense().getText().equals(licenseBuffer.toString()))
 		    			{
 		    				log.debug("match found for license");
-		    				{
-		    					license = licenseVersion;
-		    				}
+		    				license = licenseVersion;
+		    				matchFound = true;
+		    			}
+		    		}
+		    		
+		    		if( !matchFound )
+		    		{
+		    			log.debug("different license adding new license ");
+		    			{
+				    		VersionedLicense versionedLicense  = licenseService.createLicense(user, licenseBuffer.toString(), "Initial License", "Initial license from dspace import");
+				    	    licenseService.save(versionedLicense);
+				    		license = versionedLicense.getCurrentVersion();
 		    			}
 		    		}
 		    	}
@@ -1123,6 +1175,7 @@ public class DefaultItemImporter implements ItemImporter{
 		}
 		catch(Exception e)
 		{
+			log.error("error occured :", e);
 			licenseBuffer = null;
 			if( lineNumberReader != null)
 			{
@@ -1150,7 +1203,7 @@ public class DefaultItemImporter implements ItemImporter{
 			}
 		}
 		
-		return license;
+		return new LicenseInfo(grantedDate, license);
 	}
 
 	/**
@@ -1284,6 +1337,33 @@ public class DefaultItemImporter implements ItemImporter{
 			return bitstreamFileInfo;
 		}
 
+	}
+	
+	/**
+	 * Class to help hold license information from license processing.
+	 * 
+	 * @author nathans
+	 *
+	 */
+	class LicenseInfo
+	{
+		private String grantedDate;
+		private LicenseVersion licenseVersion;
+		
+		LicenseInfo(String grantedDate, LicenseVersion licenseVersion)
+		{
+			this.grantedDate = grantedDate;
+			this.licenseVersion = licenseVersion;
+		}
+
+		public String getGrantedDate() {
+			return grantedDate;
+		}
+
+		public LicenseVersion getLicenseVersion() {
+			return licenseVersion;
+		}
+		
 	}
 
 

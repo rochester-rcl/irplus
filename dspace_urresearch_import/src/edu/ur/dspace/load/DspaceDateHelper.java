@@ -37,14 +37,20 @@ public class DspaceDateHelper {
 	/**
 	 *  Handles a date in the format yyyy-MM-ddTHH:mm:ssZ
 	 *  
-	 * @param dspaceDate
+	 * @param dspaceDate - dspace date to parse
+	 * 
 	 * @return gregorian calendar with the given date and time does not include time zone
+	 * if the dspaceDate is null, returns a null gregorian Calendar
 	 * @throws ParseException 
 	 */
 	public GregorianCalendar parseDate(String dspaceDate) throws ParseException
 	{
 		GregorianCalendar gregorianCalendar = null;
 		
+		if(dspaceDate == null)
+		{
+			return gregorianCalendar;
+		}
 		log.debug("Tring to parse date " + dspaceDate);
 		// split on the name
 		String[] dateParts = dspaceDate.split("T");
