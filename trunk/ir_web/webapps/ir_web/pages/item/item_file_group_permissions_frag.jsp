@@ -22,7 +22,7 @@
 	<table width="95%">
 	<tr>
 	<td>
-		User Groups For File : ${itemFile.irFile.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		User Groups For File : ${itemFile.irFile.nameWithExtension} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		 
 		<c:url var="viewItemFileGroupsUrl" value="/admin/viewGroupsForItemFile.action">
 			                         <c:param name="itemId" value="${item.id}"/>
