@@ -720,11 +720,7 @@ YAHOO.ur.folder =
      */
     createWaitDialog : function()
     {
-         var handleClose = function()
-         {
-             YAHOO.ur.folder.waitDialog.close();
-         };
-          
+  
 	     // Instantiate the Dialog
 	     YAHOO.ur.folder.waitDialog = 
 	         new YAHOO.widget.Dialog("wait_dialog_box", 

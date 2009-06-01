@@ -20,10 +20,6 @@ YAHOO.ur.util.wait =
      */
     createWaitDialog : function()
     {
-         var handleClose = function()
-         {
-         	YAHOO.ur.util.wait.waitDialog.close();
-         };
           
  	     // Instantiate the Dialog
          YAHOO.ur.util.wait.waitDialog = 

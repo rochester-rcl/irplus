@@ -72,7 +72,7 @@ YAHOO.ur.institutional.item.move =
 	  
 	            if( success != 'true' )
 	            {
-	            	YAHOO.ur.util.wait.waitDialog.close();
+	            	YAHOO.ur.folder.waitDialog.hide();
 	                var errorMessage = document.getElementById('move_error').innerHTML;
 	                document.getElementById('default_error_dialog_content').innerHTML= errorMessage;
 	                YAHOO.ur.institutional.item.move.moveErrorDialog.center();

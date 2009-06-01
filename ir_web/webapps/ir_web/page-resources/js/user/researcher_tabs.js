@@ -15,7 +15,9 @@
 */
 
  YAHOO.namespace("ur.researcher.tabs");
- 
+
+ /* define global variable for tabs */
+ var myTabs;
 
 /**
  * sponsor namespace
@@ -46,6 +48,16 @@ YAHOO.ur.researcher.tabs = {
 	         myTabs.set(activeIndex, 3);
 	     }
 	    
-	 }
-	 
+	 },
+
+     /**
+      * initialize the tabs
+      */
+     init : function()
+     {
+          myTabs = new YAHOO.widget.TabView("researcher-properties-tabs");
+     }
 }
+
+//initialize the code once the dom is ready
+YAHOO.util.Event.onDOMReady( YAHOO.ur.researcher.tabs.init);
