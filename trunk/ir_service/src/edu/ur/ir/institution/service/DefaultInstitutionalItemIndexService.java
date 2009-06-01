@@ -789,18 +789,20 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	{
 		log.debug("re-indexing collection " + institutionalCollection);
 		int rowStart = 0;
-		int rowEnd = batchSize;
 		
 		int numberOfItems = institutionalItemService.getCountForCollectionAndChildren(institutionalCollection).intValue();
 		
 		log.debug("processing a total of " + numberOfItems);
 		
-		while(rowStart < numberOfItems)
+		// add one batch size to the items to make sure all items are
+		// processed.
+		while(rowStart <= (numberOfItems + batchSize))
 		{
 			log.debug("row start = " + rowStart);
-			log.debug("row end = " + rowEnd);
-			
-			List<InstitutionalItem> items = institutionalItemService.getCollectionItemsOrderByName(rowStart, rowEnd, institutionalCollection, OrderType.DESCENDING_ORDER);
+			log.debug("batch size = " +  batchSize);
+			// notice the minus one because we are starting at 0
+			log.debug("processing " + rowStart + " to " + (rowStart + batchSize - 1) );
+			List<InstitutionalItem> items = institutionalItemService.getCollectionItemsOrderByName(rowStart, batchSize, institutionalCollection, OrderType.DESCENDING_ORDER);
 		
 			for(InstitutionalItem i : items)
 			{
@@ -808,8 +810,8 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 				updateItem(i, institutionalItemIndex);
 			}
 		    
-		    rowStart = rowEnd;
-		    rowEnd = rowEnd + batchSize;
+		    rowStart = rowStart + batchSize;
+		    
 		}
 	}
 

@@ -47,7 +47,10 @@ public class DefaultReIndexUserService implements ReIndexUserService{
 		log.debug("processing a total of " + numberOfUsers);
 		
 		boolean overwriteExistingIndex = true;
-		while(rowStart < numberOfUsers)
+		
+		// increase number of users by batch size to make sure 
+		// all users are processed 
+		while(rowStart <= (numberOfUsers + batchSize))
 		{
 			log.debug("row start = " + rowStart);
 			log.debug("batch size = " +  batchSize);
