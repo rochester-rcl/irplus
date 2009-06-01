@@ -253,6 +253,7 @@ public class DefaultUserIndexService implements UserIndexService{
 				}
 			}
 		    writer = null;
+		    docs = null;
 		}
 	}
 	
@@ -352,5 +353,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	    
 	    return doc;
 	}
+
+	
 
 }

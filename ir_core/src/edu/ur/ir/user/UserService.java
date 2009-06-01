@@ -21,8 +21,7 @@ import java.util.Set;
 
 import org.springframework.security.userdetails.UserDetailsService;
 
-import edu.ur.dao.CriteriaHelper;
-
+import edu.ur.order.OrderType;
 
 /**
  * Service interface for accessing user based information.
@@ -37,30 +36,6 @@ public interface UserService extends UserDetailsService {
 	 */
 	public Long getUserCount();
 	
-	/**
-	 * Get the list of users. 
-	 * 
-	 * Sort is applied based on the order of sort information in the list (1st to last).
-	 * Starts at the specified row start location and stops at specified row end.
-	 * 
-	 * @param criteria - the criteria of how to sort and filter the information 
-	 * @param rowStart - start position in paged set
-	 * @param rowEnd - end position in paged set
-	 * 
-	 * @return List of users for the specified information.
-	 */
-	public List<IrUser> getUsers( final List<CriteriaHelper> criteriaHelpers,
-			final int rowStart, final int rowEnd);
-
-    /**
-     * Get a count of users based on the given criteria.
-     *  
-     * @param criteria to apply to the selections
-     * 
-     * @return - the number of users found
-     */
-    public Integer getUserCount(final List<CriteriaHelper> criteriaHelpers);
-
 	/**
 	 * Get all users in the system in user name order.
 	 * 
@@ -399,7 +374,7 @@ public interface UserService extends UserDetailsService {
 	 * @return List of institutional items
 	 */
 	public List<IrUser> getUsers(int rowStart, 
-    		int numberOfResultsToShow, String sortElement, String sortType);
+    		int numberOfResultsToShow, String sortElement, OrderType orderType);
 }
 
 
