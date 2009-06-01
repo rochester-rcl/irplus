@@ -81,20 +81,20 @@
     <!--  end doc tag -->
 	          
 	<!-- Dialog box for uploading a file -->
-    <ur:div id="versionedFileUploadDialog" cssClass="hidden">
-	    <ur:div cssClass="hd">New Version Upload</ur:div>
-		<ur:div cssClass="bd">
+    <div id="versionedFileUploadDialog" class="hidden">
+	    <div class="hd">New Version Upload</div>
+		<div class="bd">
 		           
-		<ur:basicForm id="versionedFileUploadForm" name="versionedFileUploadForm" 
+		<form id="versionedFileUploadForm" name="versionedFileUploadForm" 
 		    method="post" enctype="multipart/form-data"
 		    action="user/singleFileUpload.action">
 		                 
 		    <div id="version_upload_form_fields">
 		        <c:import url="/pages/user/workspace/upload_new_file_version.jsp"/>
 		    </div>
-		</ur:basicForm>
-		</ur:div>
-	</ur:div>
+		</form>
+		</div>
+	</div>
 	<!--  end file upload dialog -->  
 	          
 	<div id="error_dialog_box" class="hidden">
@@ -110,13 +110,13 @@
 	     <div class="hd">Invite?</div>
 		 <div class="bd">
 
- 		     <ur:basicForm id="invite_files_form" name="inviteFilesForm" 
+ 		     <form id="invite_files_form" name="inviteFilesForm" 
 		         method="post" enctype="multipart/form-data"
 		        action="user/viewInviteUser.action">		          
 			    <div id="invite_form_fields">
 			        <c:import url="/pages/user/workspace/invite_files_confirmation.jsp"/>
 			    </div>
-		    </ur:basicForm>
+		    </form>
 		              
          </div>
 	 </div>
@@ -126,11 +126,11 @@
 	 <div id="newPublicationVersionConfirmation" class="hidden">
 	     <div class="hd">Create new version?</div>
 		 <div class="bd">
-		     <ur:basicForm id="new_version_form" name="newVersionForm" 
+		     <form id="new_version_form" name="newVersionForm" 
 		         method="post" enctype="multipart/form-data">		
 		         
 		         <input type="hidden" name="itemId"/>          
-		     </ur:basicForm>		          
+		     </form>		          
 		     <p>This publication version is published to Institutional Collection. 
 		        To publish to more collections choose 'Submit publication' link.
 		        <div class="clear">&nbsp;</div>
@@ -145,7 +145,7 @@
 	 <div id="renameFileDialog" class="hidden">
 	     <div class="hd">Rename file</div>
 		 <div class="bd">
-		     <ur:basicForm id="rename_form" name="renameForm" 
+		     <form id="rename_form" name="renameForm" 
 		         method="post" enctype="multipart/form-data">		
 		         <p>
 
@@ -153,7 +153,7 @@
 	              	    <c:import url="/pages/user/workspace/rename_file_form.jsp"/>
 	              	<div>		             
 		         </p>
-		     </ur:basicForm>		          
+		     </form>		          
 		 </div>
 	 </div>
 	 <!--  end rename file dialog -->
@@ -162,7 +162,7 @@
 	 <div id="changeOwnerDialog" class="hidden">
 	     <div class="hd">Change owner</div>
 		 <div class="bd">
-		     <ur:basicForm id="owner_form" name="changeOwnerForm" 
+		     <form id="owner_form" name="changeOwnerForm" 
 		         method="post" enctype="multipart/form-data">
 		         
 		        <input type="hidden" name="personalFileId" value="${personalFileId}"/>        		
@@ -173,7 +173,7 @@
 						<option value="${collaborator.collaborator.id}"> ${collaborator.collaborator.firstName} ${collaborator.collaborator.lastName} </option>
 					</c:forEach>
 				</select>
-		     </ur:basicForm>		          
+		     </form>		          
 		 </div>
 	 </div>
 	 <!--  Change owner dialog -->
