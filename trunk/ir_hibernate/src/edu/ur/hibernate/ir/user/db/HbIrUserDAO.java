@@ -27,17 +27,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.security.userdetails.UsernameNotFoundException;
 
-import edu.ur.dao.CriteriaHelper;
-import edu.ur.hibernate.CriteriaBuilder;
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
+import edu.ur.order.OrderType;
 
 /**
  * Persistence for a user.
@@ -146,26 +144,6 @@ public class HbIrUserDAO implements IrUserDAO {
 
 	
 	/**
-	 * Get a count of criteria.
-	 * 
-	 * @see edu.ur.ir.user.IrUserDAO#getUserCount(java.util.List)
-	 */
-	public Integer getUserCount(final List<CriteriaHelper> criteriaHelpers) {
-    	Integer count = (Integer) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
-                criteriaBuilder.executeWithFiltersOnly(criteria, criteriaHelpers);
-                return criteria.setProjection(Projections.rowCount()).uniqueResult();
-            }
-        });
-    	
-    	return count;
-	}
-
-	
-	/**
 	 * Get the users.
 	 * 
 	 * @see edu.ur.ir.user.IrUserDAO#getUsers(java.util.List)
@@ -187,30 +165,7 @@ public class HbIrUserDAO implements IrUserDAO {
 		return foundUsers;
 	}
 
-	/**
-	 * Get the list of users.
-	 * 
-	 * @see edu.ur.ir.user.IrUserDAO#getUsers(java.util.List, int, int)
-	 */
-	@SuppressWarnings("unchecked")
-	public List<IrUser> getUsers(final List<CriteriaHelper> criteriaHelpers,
-			final int rowStart, final int rowEnd) {
-		List<IrUser> users = 
-			(List<IrUser>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
-                criteriaBuilder.execute(criteria, criteriaHelpers);
-                criteria.setFirstResult(rowStart);
-                criteria.setMaxResults(rowEnd - rowStart);
-                return criteria.list();
-            }
-        });
 
-        return users;
-	}
-	
 	/**
 	 * Load the ir user found by the token.  
 	 * 
@@ -315,7 +270,7 @@ public class HbIrUserDAO implements IrUserDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<IrUser> getUsers(final int rowStart, 
-    		final int numberOfResultsToShow, final String sortElement, final String sortType) {
+    		final int numberOfResultsToShow, final String sortElement, final OrderType orderType) {
 		
 		List<IrUser> users = new LinkedList<IrUser>();
 		
@@ -324,18 +279,18 @@ public class HbIrUserDAO implements IrUserDAO {
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
 		        Query q = null;
-			    if( sortElement.equalsIgnoreCase("lastName") && sortType.equals("asc"))
+			    if( sortElement.equalsIgnoreCase("lastName") && orderType.equals(OrderType.ASCENDING_ORDER))
 			    {
 			        q = session.getNamedQuery("getUsersByLastNameOrderAsc");
-			    } else if ( sortElement.equalsIgnoreCase("lastName") && sortType.equals("desc")){
+			    } else if ( sortElement.equalsIgnoreCase("lastName") && orderType.equals(OrderType.DESCENDING_ORDER)){
 			        q = session.getNamedQuery("getUsersByLastNameOrderDesc");
-			    } else if ( sortElement.equalsIgnoreCase("username") && sortType.equals("asc")){
+			    } else if ( sortElement.equalsIgnoreCase("username") && orderType.equals(OrderType.ASCENDING_ORDER)){
 			        q = session.getNamedQuery("getUsersByUserNameOrderAsc");
-			    } else if ( sortElement.equalsIgnoreCase("username") && sortType.equals("desc")){
+			    } else if ( sortElement.equalsIgnoreCase("username") && orderType.equals(OrderType.DESCENDING_ORDER)){
 			        q = session.getNamedQuery("getUsersByUserNameOrderDesc");
-			    } else if ( sortElement.equalsIgnoreCase("email") && sortType.equals("asc")){
+			    } else if ( sortElement.equalsIgnoreCase("email") && orderType.equals(OrderType.ASCENDING_ORDER)){
 			        q = session.getNamedQuery("getUsersByEmailOrderAsc");
-			    } else if ( sortElement.equalsIgnoreCase("email") && sortType.equals("desc")){
+			    } else if ( sortElement.equalsIgnoreCase("email") && orderType.equals(OrderType.DESCENDING_ORDER)){
 			        q = session.getNamedQuery("getUsersByEmailOrderDesc");
 			    }
 			    

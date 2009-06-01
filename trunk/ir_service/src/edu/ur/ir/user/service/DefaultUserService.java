@@ -33,7 +33,6 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
 import org.springframework.security.providers.encoding.MessageDigestPasswordEncoder;
 import org.springframework.util.StringUtils;
 
-import edu.ur.dao.CriteriaHelper;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
@@ -63,6 +62,7 @@ import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.order.OrderType;
 import edu.ur.util.TokenGenerator;
 
 /**
@@ -502,25 +502,6 @@ public class DefaultUserService implements UserService {
 		this.repositoryService = repositoryService;
 	}
 	
-
-	/**
-	 * Get a count of users.
-	 * 
-	 * @see edu.ur.ir.user.UserService#getUserCount(java.util.List)
-	 */
-	public Integer getUserCount(List<CriteriaHelper> criteriaHelpers) {
-		return irUserDAO.getUserCount(criteriaHelpers);
-	}
-
-	/**
-	 * Get the list of users.
-	 * 
-	 * @see edu.ur.ir.user.UserService#getUsers(java.util.List, int, int)
-	 */
-	public List<IrUser> getUsers(List<CriteriaHelper> criteriaHelpers,
-			int rowStart, int rowEnd) {
-		return irUserDAO.getUsers(criteriaHelpers, rowStart, rowEnd);
-	}
 
 	/**
 	 * Get a list of users with the given set of ids.
@@ -1096,9 +1077,9 @@ public class DefaultUserService implements UserService {
 	 * @see edu.ur.ir.user.UserService#getUsers(int, int, String, String)
 	 */
 	public List<IrUser> getUsers(int rowStart, 
-    		int numberOfResultsToShow, String sortElement, String sortType) {
+    		int numberOfResultsToShow, String sortElement, OrderType orderType) {
 		return irUserDAO.getUsers(rowStart, 
-	    		numberOfResultsToShow, sortElement, sortType);
+	    		numberOfResultsToShow, sortElement, orderType);
 	}
 
 	public InstitutionalCollectionSubscriptionService getInstitutionalCollectionSubscriptionService() {

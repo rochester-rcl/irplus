@@ -52,7 +52,6 @@ public class DefaultRepositoryIndexerService implements RepositoryIndexerService
 	public void reIndexInstitutionalItems(Repository repository, int batchSize)  {
 		log.debug("re-indexing repository " + repository);
 		int rowStart = 0;
-		int rowEnd = batchSize;
 		
 		int numberOfItems = institutionalItemService.getCount(repository.getId()).intValue();
 		
@@ -62,18 +61,21 @@ public class DefaultRepositoryIndexerService implements RepositoryIndexerService
 		File folder = new File(repository.getInstitutionalItemIndexFolder());
 		
 		boolean overwriteExistingIndex = true;
-		while(rowStart < numberOfItems)
+		while(rowStart <= numberOfItems)
 		{
 			log.debug("row start = " + rowStart);
-			log.debug("row end = " + rowEnd);
+			log.debug("batch size = " +  batchSize);
 			
-		    List<InstitutionalItem> items = institutionalItemService.getRepositoryItemsOrderByName(rowStart, rowEnd, repositoryId, OrderType.DESCENDING_ORDER);
+			// notice the minus one because we are starting at 0
+			log.debug("processing " + rowStart + " to " + (rowStart + batchSize - 1) );
+			
+		    List<InstitutionalItem> items = institutionalItemService.getRepositoryItemsOrderByName(rowStart, batchSize, repositoryId, OrderType.DESCENDING_ORDER);
 		
+
 		    institutionalItemIndexService.addItems(items, folder, overwriteExistingIndex);
 		    overwriteExistingIndex = false;
 		    
-		    rowStart = rowEnd;
-		    rowEnd = rowEnd + batchSize;
+		    rowStart = rowStart + batchSize;
 		}
 	}
 

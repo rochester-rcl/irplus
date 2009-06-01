@@ -22,11 +22,11 @@ import org.springframework.security.userdetails.UserDetailsService;
 
 
 import edu.ur.dao.CountableDAO;
-import edu.ur.dao.CriteriaHelper;
 import edu.ur.dao.CrudDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.UniqueNameDAO;
 import edu.ur.ir.user.IrUser;
+import edu.ur.order.OrderType;
 
 /**
  * User persistence.
@@ -37,14 +37,7 @@ import edu.ur.ir.user.IrUser;
 public interface IrUserDAO extends CountableDAO, 
 CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
 {
-    /**
-     * Get a count of users 
-     *  
-     * @param filters - list of criteria to apply to the object
-     * 
-     * @return - the number of users found
-     */
-    public Integer getUserCount(List<CriteriaHelper> criteria);
+ 
     
 	/**
 	 * Get users in the given list with the specified ids.  If the list
@@ -56,18 +49,6 @@ CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
 	 */
 	public List<IrUser> getUsers(List<Long> userIds);
 	
-	/**
-	 * Get a list of users 
-	 * 
-	 * @param criteriaHelpers - criteria to base the selection.
- 	 * @param rowStart - start id.
-	 * @param rowEnd - end id.
-	 * 
-	 * @return the list of users found.
-	 */
-	public List<IrUser> getUsers(List<CriteriaHelper> criteriaHelpers,
-			int rowStart, int rowEnd);
-
 	/**
 	 * Load the ir user found by the token.  
 	 * 
@@ -128,10 +109,10 @@ CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
 	 * @param rowStart - Start row to fetch the data from
 	 * @param numberOfResultsToShow - maximum number of results to fetch
 	 * @param sortElement - column to sort on 
-	 * @param sortType - The order to sort by (ascending/descending)
+	 * @param orderType - The order to sort by (ascending/descending)
 	 * 
 	 * @return List of institutional items
 	 */
 	public List<IrUser> getUsers(final int rowStart, 
-    		final int numberOfResultsToShow, final String sortElement, final String sortType);
+    		final int numberOfResultsToShow, final String sortElement, final OrderType orderType);
 }
