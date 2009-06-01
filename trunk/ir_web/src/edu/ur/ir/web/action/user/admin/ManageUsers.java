@@ -47,6 +47,7 @@ import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.table.Pager;
+import edu.ur.order.OrderType;
 
 /**
  * Class for managing user information.
@@ -512,11 +513,12 @@ public class ManageUsers extends Pager implements Preparable{
 	public String viewUsers()
 	{
 		log.debug("RowStart = " + rowStart
-	    		+ "   numberOfResultsToShow=" + numberOfResultsToShow + "   sortElement="  + sortElement + "   sortType =" + sortType);
+	    		+ "   numberOfResultsToShow=" + numberOfResultsToShow + "   sortElement="  + sortElement + "   orderType =" + sortType);
 		rowEnd = rowStart + numberOfResultsToShow;
 	    
+		OrderType orderType = OrderType.getOrderType(sortType);
 	    users = userService.getUsers(rowStart, 
-	    		numberOfResultsToShow, sortElement, sortType);
+	    		numberOfResultsToShow, sortElement, orderType);
 	    totalHits = userService.getUserCount().intValue();
 		
 		if(rowEnd > totalHits)
