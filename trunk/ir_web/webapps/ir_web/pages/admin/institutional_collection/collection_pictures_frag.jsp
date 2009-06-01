@@ -16,6 +16,8 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="ur" uri="ur-tags"%>
+
 
 <h3>Primary Picture</h3>
 <c:if test="${collection.primaryPicture != null }">
@@ -52,7 +54,7 @@ There is currently no primary picture.
 
 
 <h3>Pictures</h3>
-<c:if test="${numberOfCollectionPictures > 0}">
+<c:if test="${!ur:isEmpty(collection.pictures)}">
 <table class="simpleTable">
 	<thead>
 		<tr>
@@ -91,6 +93,6 @@ There is currently no primary picture.
 	</tbody>
 </table>
 </c:if>
-<c:if test="${numberOfCollectionPictures <= 0}">
+<c:if test="${ur:isEmpty(collection.pictures)}">
     There are currently no institutional pictures.
 </c:if>

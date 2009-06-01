@@ -48,7 +48,7 @@ public class DeleteInstitutionalCollectionPicture extends ActionSupport implemen
 	private InstitutionalCollectionService institutionalCollectionService;
 	
 	/** Institutional collection */
-	private InstitutionalCollection institutionalCollection;
+	private InstitutionalCollection collection;
 	
 	/** News item  to remove the picture from*/
 	private NewsItem newsItem;
@@ -60,9 +60,7 @@ public class DeleteInstitutionalCollectionPicture extends ActionSupport implemen
 	private boolean primaryCollectionPicture;
 	
 	/** picture to remove*/
-	private Long pictureId;
-	
-	
+	private Long pictureId;		
 	
 	/**
 	 * Load the news service.
@@ -70,7 +68,7 @@ public class DeleteInstitutionalCollectionPicture extends ActionSupport implemen
 	 * @see com.opensymphony.xwork2.Preparable#prepare()
 	 */
 	public void prepare() throws Exception {
-		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+		collection = institutionalCollectionService.getCollection(collectionId, false);
 	}
 	
 	/**
@@ -91,8 +89,8 @@ public class DeleteInstitutionalCollectionPicture extends ActionSupport implemen
 			{
 			   log.debug("delete primary picture");
 			}
-			IrFile primaryPicture = institutionalCollection.getPrimaryPicture();
-			institutionalCollection.setPrimaryPicture(null);
+			IrFile primaryPicture = collection.getPrimaryPicture();
+			collection.setPrimaryPicture(null);
 			repositoryService.deleteIrFile(primaryPicture);
 		}
 		else
@@ -102,13 +100,13 @@ public class DeleteInstitutionalCollectionPicture extends ActionSupport implemen
 			   log.debug("delete regular picture");
 			}
 			IrFile picture = repositoryService.getIrFile(pictureId, false);
-			if(institutionalCollection.removePicture(picture) )
+			if(collection.removePicture(picture) )
 			{
 				repositoryService.deleteIrFile(picture);
 			}
 		}
 		
-		institutionalCollectionService.saveCollection(institutionalCollection);
+		institutionalCollectionService.saveCollection(collection);
 		return SUCCESS;
 	}
 
@@ -177,14 +175,10 @@ public class DeleteInstitutionalCollectionPicture extends ActionSupport implemen
 		this.repositoryService = repositoryService;
 	}
 
-	public InstitutionalCollection getInstitutionalCollection() {
-		return institutionalCollection;
+	public InstitutionalCollection getCollection() {
+		return collection;
 	}
 
-	public void setInstitutionalCollection(
-			InstitutionalCollection institutionalCollection) {
-		this.institutionalCollection = institutionalCollection;
-	}
 
 	public Long getCollectionId() {
 		return collectionId;
@@ -194,9 +188,6 @@ public class DeleteInstitutionalCollectionPicture extends ActionSupport implemen
 		this.collectionId = collectionId;
 	}
 	
-	public int getNumberOfCollectionPictures() {
-		return institutionalCollection.getPictures().size();
-	}
 
 	public InstitutionalCollectionService getInstitutionalCollectionService() {
 		return institutionalCollectionService;
