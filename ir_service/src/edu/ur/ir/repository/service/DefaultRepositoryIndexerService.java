@@ -61,7 +61,9 @@ public class DefaultRepositoryIndexerService implements RepositoryIndexerService
 		File folder = new File(repository.getInstitutionalItemIndexFolder());
 		
 		boolean overwriteExistingIndex = true;
-		while(rowStart <= numberOfItems)
+		// boost the size of number of items one extra batchSize to make sure all items are 
+		// processed
+		while(rowStart <= (numberOfItems + batchSize))
 		{
 			log.debug("row start = " + rowStart);
 			log.debug("batch size = " +  batchSize);
@@ -70,8 +72,7 @@ public class DefaultRepositoryIndexerService implements RepositoryIndexerService
 			log.debug("processing " + rowStart + " to " + (rowStart + batchSize - 1) );
 			
 		    List<InstitutionalItem> items = institutionalItemService.getRepositoryItemsOrderByName(rowStart, batchSize, repositoryId, OrderType.DESCENDING_ORDER);
-		
-
+	
 		    institutionalItemIndexService.addItems(items, folder, overwriteExistingIndex);
 		    overwriteExistingIndex = false;
 		    
