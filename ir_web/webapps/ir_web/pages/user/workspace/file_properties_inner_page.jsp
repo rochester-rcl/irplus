@@ -21,12 +21,12 @@
 
 
             <!-- This is only to top level properties information -->
-             <ur:basicForm  id="file_properties_form" name="filePropertiesForm" 
+             <form  id="file_properties_form" name="filePropertiesForm" 
                  action="user/viewPersonalFile.action">
      
 	             <input type="hidden" id="personalFileId" 
 	             name="personalFileId"  value="${personalFile.id}"/>
-	         </ur:basicForm>
+	         </form>
 	        
             <c:url var="rootFolderUrl" value="/user/workspace.action">
                <c:param name="parentFolderId" value="0"/>
