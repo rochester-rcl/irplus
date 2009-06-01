@@ -116,10 +116,10 @@
 												             <c:param value="${object.id}" name="itemFileId"/>
 												         </c:url>
 													     <a href="${itemFileDownload}">
-	
+	                                                     ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${ir:fileDownloadCount(object.irFile)})
 													</c:if>
 													
-												    ${object.irFile.nameWithExtension} </a> (No. of downloads : ${ir:fileDownloadCount(object.irFile)})
+												   
 											    </c:if>
 											    
 											    <c:if test="${object.type == 'URL'}">
