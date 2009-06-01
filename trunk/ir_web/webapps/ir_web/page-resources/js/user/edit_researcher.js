@@ -26,25 +26,28 @@ YAHOO.namespace("ur.edit.researcher");
 YAHOO.ur.edit.researcher = 
 {
 	/*
-	 * update the institutional collection
+	 * update the researcher information
 	 */
 	updatePersonalInfo : function() 
 	{
 	
+	    YAHOO.ur.util.wait.waitDialog.showDialog(); 
 	    var callback = 
 	    {
+	    		 
 	        success : function(o) 
 	        {
 		        // check for the timeout - forward user to login page if timout
                 // occured
                 if( !urUtil.checkTimeOut(o.responseText) )
-                {       		    
-	                alert('Saved');
+                {   
+                	YAHOO.ur.util.wait.waitDialog.hide(); 
 	            } 
 	        },
 	    
 	        failure : function(o) 
 		    {
+	        	YAHOO.ur.util.wait.waitDialog.hide();
 		        alert('Could not save researcher info ' 
 		            + o.status + ' status text ' + o.statusText );
 		    }

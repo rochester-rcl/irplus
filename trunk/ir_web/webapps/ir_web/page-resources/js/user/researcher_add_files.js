@@ -183,8 +183,6 @@ YAHOO.ur.researcher.files = {
 	
 	    YAHOO.ur.researcher.files.getPersonalFolder();
 	    YAHOO.ur.researcher.files.getResearcherFolders();
-	    YAHOO.ur.researcher.files.createFileErrorDialog();
-	    
 	}
 }
 // initialize the code once the dom is ready

@@ -48,6 +48,7 @@
         
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
+ 	<ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
  	<ur:js src="pages/js/ur_table.js"/>
  	
@@ -62,10 +63,6 @@
  		#treeDiv { background: #fff; padding:1em; margin-top:1em; }
     </style>
     
-    <script type="text/javascript">
-    	var myTabs = new YAHOO.widget.TabView("researcher-properties-tabs");
-    </script>
-
   </head>
     
   <body class="yui-skin-sam">
@@ -118,6 +115,7 @@
                      
                      <!--  first tab -->
                      <div id="tab1">
+                        
                          <form id="base_researcher_information" name="researcherInformation" method="post" 
                              action="javascript:YAHOO.ur.edit.researcher.updatePersonalInfo();">
                              
@@ -292,9 +290,10 @@
 		                 </div>
 		                 <!--  end the grid -->
 
-                   		<button class="ur_button" id="update_researcher_information" type="submit"
+                   		<button class="ur_button" id="update_researcher_information" 
                				onmouseover="this.className='ur_buttonover';"
              				onmouseout="this.className='ur_button';"
+                 		    type="submit"
                				>Save</button>
                             
                        </form>
@@ -582,5 +581,14 @@
 	     </div>
 	     <!-- End prompt to delete researcher personal link -->  
 
+
+    <!--  wait div -->
+ 	<div id="wait_dialog_box" class="hidden">
+ 	    <div class="hd">Processing...</div>
+ 		<div class="bd">
+ 		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
+ 		    <p><img src="${wait}"></img></p>
+ 		</div>
+	</div>       
     </body>
 </html>
