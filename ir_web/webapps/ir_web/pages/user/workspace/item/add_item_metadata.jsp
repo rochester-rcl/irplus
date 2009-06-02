@@ -79,7 +79,7 @@
             <div id="bd">
 
                 <div class="clear">&nbsp;</div>
-				<p><strong> Creating Publication :  </strong> <span class="noBorderTableGreyLabel">${personalItem.fullPath}${item.name} </span> </p>
+				<p><strong> Creating Publication :  </strong> <span class="noBorderTableGreyLabel"><c:out value='${personalItem.fullPath}'/><c:out value='${item.name}'/> </span> </p>
 
 				<table width="735"  align="center"  height="48" >
                   	<tr>                                           
@@ -202,38 +202,39 @@
                   </td>
               </tr>
             </table>
-			                
-		<ur:div id="newSeriesDialog" cssClass="hidden">
-                <ur:div cssClass="hd">Series Information</ur:div>
-                <ur:div cssClass="bd">
-                    <ur:basicForm id="addSeries" name="newSeriesForm" 
+			     
+	           
+		<div id="newSeriesDialog" class="hidden">
+                <div class="hd">Series Information</div>
+                <div class="bd">
+                    <form id="addSeries" name="newSeriesForm" 
 		                    method="post" 
-		                    action="user/addSeries.action">
-	                  <ur:div id="newSeriesDialogFields">
+		                    action="<c:url value="/user/addSeries.action"/> ">
+	                  <div id="newSeriesDialogFields">
 	                      <c:import url="series_form.jsp"/>
-	                  </ur:div>
-	                </ur:basicForm>
-                </ur:div>
-        </ur:div>
+	                  </div>
+	                </form>
+                </div>
+        </div>
  
- 		<ur:div id="newSponsorDialog" cssClass="hidden">
-                <ur:div cssClass="hd">Sponsor Information</ur:div>
-                <ur:div cssClass="bd">
-                    <ur:basicForm id="addSponsor" name="newSponsorForm" 
+ 		<div id="newSponsorDialog" class="hidden">
+                <div class="hd">Sponsor Information</div>
+                <div class="bd">
+                    <form id="addSponsor" name="newSponsorForm" 
 		                    method="post" 
-		                    action="user/addSponsor.action">
-	                  <ur:div id="newSponsorDialogFields">
+		                    action="<c:url value="/user/addSponsor.action"/>">
+	                  <div id="newSponsorDialogFields">
 	                       <c:import url="/pages/admin/item/metadata/sponsors/sponsor_form.jsp"/>
-	                  </ur:div>
-	                </ur:basicForm>
-                </ur:div>
-         </ur:div>
+	                  </div>
+	                </form>
+                </div>
+         </div>
 
-        <ur:div id="newIdentifierTypeDialog" cssClass="hidden">
-            <ur:div cssClass="hd">Identifier Type Information</ur:div>
-	        <ur:div cssClass="bd">
-	            <ur:basicForm id="addIdentifierType" name="newIdentifierType" method="POST" 
-	                  action="user/addIdentifierType.action">
+        <div id="newIdentifierTypeDialog" class="hidden">
+            <div class="hd">Identifier Type Information</div>
+	        <div class="bd">
+	            <form id="addIdentifierType" name="newIdentifierType" method="POST" 
+	                  action="<c:url value="/user/addIdentifierType.action"/>">
 	              
 	                <input type="hidden" id="newIdentifierTypeForm_id"
 	                    name="id" value=""/>
@@ -241,7 +242,7 @@
 	                <input type="hidden" id="newIdentifierType_new"
 	                    name="newIdentifierType" value="true"/>
 	              
-	                <ur:div id="identifierTypeError" cssClass="errorMessage"></ur:div>
+	                <div id="identifierTypeError"class="errorMessage"></div>
 
 				<table class="formTable">    
 				    <tr>
@@ -256,15 +257,15 @@
 				                  name="identifierType.description" cols="42" rows="4"></textarea></td>
 			         </tr>
 			     </table>
-	            </ur:basicForm>
-	        </ur:div>
-         </ur:div>
+	            </form>
+	        </div>
+         </div>
          
-        <ur:div id="newExtentTypeDialog" cssClass="hidden">
-            <ur:div cssClass="hd">Extent Type Information</ur:div>
-	        <ur:div cssClass="bd">
-	            <ur:basicForm id="addExtentType" name="newExtentType" method="POST" 
-	                  action="user/addExtentType.action">
+        <div id="newExtentTypeDialog" class="hidden">
+            <div class="hd">Extent Type Information</div>
+	        <div class="bd">
+	            <form id="addExtentType" name="newExtentType" method="POST" 
+	                  action="<c:url value="/user/addExtentType.action"/>">
 	              
 	                <input type="hidden" id="newExtentTypeForm_id"
 	                    name="id" value=""/>
@@ -272,7 +273,7 @@
 	                <input type="hidden" id="newExtentType_new"
 	                    name="newExtentType" value="true"/>
 	              
-	                <ur:div id="extentTypeError" cssClass="errorMessage"></ur:div>
+	                <div id="extentTypeError" class="errorMessage"></div>
 
 				<table class="formTable">    
 				    <tr>
@@ -287,22 +288,22 @@
 				                  name="extentType.description" cols="42" rows="4"></textarea></td>
 			         </tr>
 			     </table>
-	            </ur:basicForm>
-	        </ur:div>
-         </ur:div>         
+	            </form>
+	        </div>
+         </div>         
       
-	        <ur:div id="newPublisherDialog" cssClass="hidden">
-                <ur:div cssClass="hd">Publisher Information</ur:div>
-                <ur:div cssClass="bd">
-                    <ur:basicForm id="addPublisher" name="newPublisherForm" 
+	        <div id="newPublisherDialog" class="hidden">
+                <div class="hd">Publisher Information</div>
+                <div class="bd">
+                    <form id="addPublisher" name="newPublisherForm" 
 		                    method="post" 
-		                    action="user/addPublisher.action">
-	                  <ur:div id="newPublisherDialogFields">
+		                    action="<c:url value="/user/addPublisher.action"/>">
+	                  <div id="newPublisherDialogFields">
 	                       <c:import url="/pages/admin/item/metadata/publishers/publisher_form.jsp"/>
-	                  </ur:div>
-	                </ur:basicForm>
-                </ur:div>
-            </ur:div>
+	                  </div>
+	                </form>
+                </div>
+            </div>
             	
 	    </div>
 	    <!--  end the body tag --> 
