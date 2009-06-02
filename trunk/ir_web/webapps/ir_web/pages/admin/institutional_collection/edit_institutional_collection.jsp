@@ -166,11 +166,13 @@
 	                 
 	                 <!--  Start third tab -->
 	                 <div id="tab3">
-	                     <br/>
-                         <br/>
-                         <div id="edit_view_permission" align="right">
+	                     
+                          <br/>
+                         <div id="edit_view_permission" align="left">
                             <c:import url="collection_permission_frag.jsp"/>
                          </div>
+                          <br/>
+                          
                          
                          <c:url var="addGroupsUrl" value="/admin/addGroupsToCollection.action">
                              <c:param name="collectionId" value="${collection.id}"/>
