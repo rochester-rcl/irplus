@@ -26,7 +26,17 @@
 		   		<strong>Private.</strong>
 	       </c:if>
 	       
+	       &nbsp;
  	       <button class="ur_button" type="button"
 	               onmouseover="this.className='ur_buttonover';"
 	               onmouseout="this.className='ur_button';"
-	               onclick="javascript:YAHOO.ur.edit.institution.collection.showPermissionDialog();">Change Permission</button> 
+	               onclick="javascript:YAHOO.ur.edit.institution.collection.showPermissionDialog();">Make
+	               <c:if test="${collection.publiclyViewable}">
+		              Private
+	               </c:if> 
+	       
+	       
+	              <c:if test="${!collection.publiclyViewable}">
+		   		      Public
+	               </c:if>
+	      </button> 
