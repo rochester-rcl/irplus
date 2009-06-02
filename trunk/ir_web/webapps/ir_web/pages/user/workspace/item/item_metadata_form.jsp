@@ -49,7 +49,7 @@
 		  <tr>
 	      <td>
 	          <input type="text" 
-	              id="itemForm_title" name="itemName" value="${item.name}" size="103"/> 
+	              id="itemForm_title" name="itemName" value="<c:out value='${item.name}' escapeXml="true" />" size="103"/> 
  	           &nbsp;&nbsp;&nbsp;
  	           <input type="button" class="ur_button" id="itemForm_add_title" value="Add Sub title" onclick="javascript:YAHOO.ur.item.metadata.addSubTitleRow();"/>
 	      </td>
@@ -65,7 +65,7 @@
 				
 							<tr>
 						      <td>
-						      	   <input type="text" id="itemForm_title" name="subTitles" value="${title.title}" size="103"/>
+						      	   <input type="text" id="itemForm_title" name="subTitles" value="<c:out value='${title.title}'/>" size="103"/>
 						      </td>
 						      <td>   
 						      	  &nbsp;&nbsp;&nbsp; <input type="button" class="ur_button" id="itemForm_remove" value="Remove SubTitle" onclick="javascript:YAHOO.ur.item.metadata.removeSubTitle('title_table_${rowCounter.count}');"/>
@@ -77,7 +77,17 @@
                </div> 
 	      </td>
 	      </tr>
-
+          <tr>
+			<td class="rowBorder"> 
+	            <label  for="itemForm_abstract">Abstract</label>
+	        </td>
+	      </tr>
+	
+	      <tr>
+	        <td> <textarea 
+	              id="itemForm_abstract" name="itemAbstract" rows="10" cols="100"><c:out value='${item.itemAbstract}'/></textarea>
+	        </td>
+	      </tr>
 		  <tr>
 		  <td class="rowBorder">
 	          <label for="itemForm_title" >Description</label>
@@ -86,7 +96,7 @@
 	
 		  <tr>
 	      <td>
-	          <textarea id="itemForm_desc" name="itemDescription" rows="5" cols="100">${item.description}</textarea> 
+	          <textarea id="itemForm_desc" name="itemDescription" rows="5" cols="100"><c:out value="${item.description}"/></textarea> 
 	      </td>
 	      </tr>  
 
@@ -98,7 +108,7 @@
 	
 		  <tr>
 	      <td>
-	           ${item.owner.firstName} ${item.owner.lastName}
+	           ${item.owner.firstName}&nbsp;${item.owner.lastName}
 	      </td>
 	      </tr>  
 
@@ -251,22 +261,12 @@
 	      </tr>
 	
 	      <tr>
-	      <td> <textarea id="itemForm_keywords" name="keywords" rows="5" cols="100"/>${item.itemKeywords}</textarea>	
+	      <td> <textarea id="itemForm_keywords" name="keywords" rows="5" cols="100"/><c:out value='${item.itemKeywords}'/></textarea>	
 	      			
 	      </td>
 	      </tr>
 	      
-		  <tr>
-			<td class="rowBorder"> 
-	            <label  for="itemForm_abstract">Abstract</label>
-	        </td>
-	      </tr>
-	
-	      <tr>
-	        <td> <textarea 
-	              id="itemForm_abstract" name="itemAbstract" rows="10" cols="100">${item.itemAbstract}</textarea>
-	        </td>
-	      </tr>
+		  
 	        
 	      <tr>
 	        <td class="rowBorder">
