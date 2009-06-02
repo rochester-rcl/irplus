@@ -12,9 +12,9 @@ public interface ErrorEmailService {
 	/**
 	 * Send the error to the specified toAddress.
 	 * 
-	 * @param toAddress - email address to send the error to
 	 * @param error - error string to send.
+	 * 
 	 */
-	public void sendError(String toAddress, String error);
+	public void sendError(String error);
 
 }
