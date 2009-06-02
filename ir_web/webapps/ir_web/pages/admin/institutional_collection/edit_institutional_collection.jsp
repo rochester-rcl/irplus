@@ -90,7 +90,10 @@
                         </c:url>
                         <a href="${pathCollectionUrl}">${collection.name}</a> >
                     </c:forEach>
-                    ${collection.name}
+                    <c:url var="previewCollectionUrl" value="/viewInstitutionalCollection.action">
+                        <c:param name="collectionId" value="${collection.id}"/>
+                    </c:url>
+                    ${collection.name}&nbsp;<a href="${previewCollectionUrl}">(View Collection)</a>
                 </h3>
             </div>
             
