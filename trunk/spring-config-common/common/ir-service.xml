@@ -523,7 +523,6 @@
    <!-- ****************************************** --> 
    <bean id="errorEmailService" 
        class="edu.ur.ir.util.service.DefaultErrorEmailService">
-       <property name="userService" ref="userService"/>
        <property name="mailSender" ref="mailSender"/>
        <property name="subject" value="An IR Plus Error Has Occured"/>
        <property name="toAddress" value="${email.error.address}"/>
