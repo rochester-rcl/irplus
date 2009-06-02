@@ -33,7 +33,9 @@ import edu.ur.ir.web.action.user.ChangePassword;
 import edu.ur.ir.web.action.user.EmailVerification;
 
 /**
- * Will populate the session with needed user information.
+ * Will populate the session with needed user information.  This
+ * class also helps out with checking to see if the user is 
+ * creating their account.
  * 
  * Places the user in the request with the value <code>user</code>.
  * 
@@ -41,12 +43,10 @@ import edu.ur.ir.web.action.user.EmailVerification;
  */
 public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsStatics{
 
-	/**
-	 * Eclipse generated serial id
-	 */
+	/**  Eclipse generated serial id */
 	private static final long serialVersionUID = 4890726152082586505L;
 
-	/**  Logger for add personal collection action */
+	/**  Logger for acegi user interceptor */
 	private static final Logger log = Logger.getLogger(AcegiUserInterceptor.class);
 	
 	/** Service for dealing with users */
