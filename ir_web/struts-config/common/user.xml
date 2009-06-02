@@ -32,13 +32,16 @@
            
            <interceptors>
              <interceptor name="user" class="edu.ur.web.interceptor.AcegiUserInterceptor"/>
+             <interceptor name="emailError" class="edu.ur.web.interceptor.EmailErrorInterceptor"/>
              
              <interceptor-stack name="default">
+                <interceptor-ref name="emailError"/>
                 <interceptor-ref name="defaultStack"/>
                 <interceptor-ref name="user"/>
              </interceptor-stack>
         
              <interceptor-stack name="editStack">
+                 <interceptor-ref name="emailError"/>
                  <interceptor-ref name="servletConfig"/>
                  <interceptor-ref name="staticParams"/>
                  <interceptor-ref name="params"/>
@@ -51,6 +54,7 @@
              
              <!-- U of R file upload stack -->
             <interceptor-stack name="urUploadStack">
+                <interceptor-ref name="emailError"/>
                 <interceptor-ref name="fileUploadStack"/>
                 <interceptor-ref name="basicStack"/>
                 <interceptor-ref name="user"/>
@@ -58,6 +62,7 @@
           
              
              <interceptor-stack name="crudStack">
+                 <interceptor-ref name="emailError"/>
                  <interceptor-ref name="servletConfig"/>
                  <interceptor-ref name="staticParams"/>
                  <interceptor-ref name="params"/>
