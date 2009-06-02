@@ -33,13 +33,16 @@
         </result-types>
         <interceptors>
              <interceptor name="user" class="edu.ur.web.interceptor.AcegiUserInterceptor"/>
+             <interceptor name="emailError" class="edu.ur.web.interceptor.EmailErrorInterceptor"/>
 
              <interceptor-stack name="default">
+                <interceptor-ref name="emailError"/>
                 <interceptor-ref name="defaultStack"/>
                 <interceptor-ref name="user"/>
              </interceptor-stack>
         
              <interceptor-stack name="editStack">
+                 <interceptor-ref name="emailError"/>
                  <interceptor-ref name="servletConfig"/>
                  <interceptor-ref name="staticParams"/>
                  <interceptor-ref name="params"/>
@@ -50,6 +53,7 @@
              </interceptor-stack>
              
              <interceptor-stack name="crudStack">
+                 <interceptor-ref name="emailError"/>
                  <interceptor-ref name="servletConfig"/>
                  <interceptor-ref name="staticParams"/>
                  <interceptor-ref name="params"/>
@@ -70,6 +74,7 @@
         <global-results>
         	 <result name="change-password">/pages/user/login/force_change_password.jsp</result>
         	 <result name="registration-error">/pages/user/login/invalid_token.jsp</result>
+        	 <result name="handleError">/pages/error.jsp</result>
         </global-results>
         
         <!--  ************************************ -->
