@@ -331,12 +331,12 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 			failure = true;
 		}
 		
-		if( irUser.getLdapUserName() != null )
+		if( irUser.getLdapUserName() != null  && !irUser.getLdapUserName().trim().equals(""))
 		{
 			log.debug("creating LDAP authentication token");
 	
 			// don't hit ldap unless a user has entered a username and password
-			if( netIdPassword != null && netIdPassword.length() > 0 )
+			if( netIdPassword != null && !netIdPassword.trim().equals("")  )
 			{
 			    AbstractAuthenticationToken authRequest = new LdapAuthenticationToken(irUser.getLdapUserName(), this.netIdPassword);
 			    try
