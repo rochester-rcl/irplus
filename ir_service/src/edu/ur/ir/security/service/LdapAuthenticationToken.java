@@ -21,7 +21,7 @@ import org.springframework.security.GrantedAuthority;
 import org.springframework.security.providers.AbstractAuthenticationToken;
 
 /**
- * NOTE: Based on AbstractAuthenticationToken in spring security.
+ * NOTE: Based on UserAuthenticationToken in spring security.
  * 
  * This represents an Ldap authentication token.
  * 
