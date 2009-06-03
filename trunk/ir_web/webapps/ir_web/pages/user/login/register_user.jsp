@@ -65,8 +65,8 @@
         		return false;
         	}
 
-        	if (document.getElementById('irUserForm_password').value == '') {
-        		alert('Please enter password.');
+        	if (document.getElementById('irUserForm_password').value == '' ||document.getElementById('irUserForm_password').value.length < 8 ) {
+        		alert('Please enter password at least 8 characters long.');
         		return false;
         	}
 
@@ -80,7 +80,7 @@
         		return false;
         	}
 
-        	if (document.getElementById('irUserForm_email').value == '') {
+         	if (document.getElementById('irUserForm_email').value == '') {
         		alert('Please enter E-mail address.');
         		return false;
         	}
@@ -96,7 +96,20 @@
             	alert('You must agree to the license');
             	return false;
         	}
- 
+
+        	alert('check 1');
+        	
+        	if ( document.getElementById('irUserForm_ldapUserName').value != '') {
+        		alert('check 2');
+        		alert(document.getElementById('irUserForm_ldapPassword').value == null);
+        		alert( document.getElementById('irUserForm_ldapPassword').value == '');
+            	if( document.getElementById('irUserForm_ldapPassword').value == null || document.getElementById('irUserForm_ldapPassword').value == '')
+            	{
+        		    alert('You must enter your Net ID Password for verification or clear out the Net Id field');
+        		    return false;
+            	}
+        	}
+           
         	return true;
         }
         
@@ -131,6 +144,12 @@
 		                       key="licenseChangeError"/></p>
 		                      <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="licenseError"/></p>
+		                      <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		                       key="enterPassword"/></p>
+		                       <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		                       key="netIdPasswordFail"/></p>
+		                       <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		                       key="netIdPasswordEmpty"/></p>
 			              </td>
 			          </tr>    
    
@@ -158,23 +177,23 @@
 				      </tr align="left" class="label">
 			          
 			          <tr> 
-			          <td align="left" class="label">
+			              <td align="left" class="label">
 				          User Name:*
-					  </td>
-					  <td align="left" class="input">
+					      </td>
+					      <td align="left" class="input">
 					  		<input type="text" 
 				              id="irUserForm_name" name="irUser.username" value="${irUser.username}" size="40"/>
-				     </td>
+				         </td>
 				     </tr>
 
 				     <tr>
-						<td align="left" class="label"> 				          
-				          Password:*
-					  </td>
-					  <td align="left" class="input">
-					  <input type="password" 
+				         <td align="left" class="label"> 				          
+				              Password:*
+					     </td>
+					     <td align="left" class="input">
+					      <input type="password" 
 				              id="irUserForm_password" name="irUser.password" value="" size="40"/>
-				      </td>
+				          </td>
 				      </tr>
 
 				      <tr>
@@ -185,6 +204,8 @@
 				              id="irUserForm_password_check" name="passwordCheck" value="" size="40"/>
 				             </td>
 	                  </tr>
+	            
+	                  
 					  <tr>
 						<td align="left" class="label"> 
 			                E-mail:*
@@ -242,6 +263,30 @@
 
 	                      </td>
                       </tr>
+                            <tr>
+	                       <td align="left" class="label" colspan="2">				  
+				              <h3>Net ID Usage - Net Id is NOT required to use this system.  <br/><br/>This allows you to use both your Net ID / Net ID Password or the local user name / password above.  You must supply your Net ID password for verification purposes only.</h3>
+				              <p class="errorMessage">If you do not want to also be able use you net id - leave both the Net ID and Net ID Password fields blank - instead you will only be able to log in using your local account user name and password entered above.</p>
+				          </td>
+				      </tr>
+	                  <tr> 
+			              <td align="left" class="label">
+				              Net ID:
+					      </td>
+					      <td align="left" class="input">
+					  		<input type="text" 
+				              id="irUserForm_ldapUserName" name="irUser.ldapUserName" value="${irUser.ldapUserName}" size="40"/>
+				         </td>
+				     </tr>
+				     <tr>
+				         <td align="left" class="label"> 				          
+				              Net ID Password:
+					     </td>
+					     <td align="left" class="input">
+					      <input type="password" 
+				              id="irUserForm_ldapPassword" name="netIdPassword" value="" size="40"/>
+				          </td>
+				      </tr>
                       <tr>
                           <td align="left" class="label">I accept the terms of the License</td>
                           <td><input id="acceptLicense" name="acceptLicense" value="true" type="checkbox"/></td>

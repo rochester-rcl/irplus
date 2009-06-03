@@ -22,6 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.security.BadCredentialsException;
+import org.springframework.security.providers.AbstractAuthenticationToken;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -32,6 +34,8 @@ import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.security.service.LdapAuthenticationToken;
+import edu.ur.ir.security.service.UrLdapAuthenticationProvider;
 import edu.ur.ir.user.Affiliation;
 import edu.ur.ir.user.AffiliationService;
 import edu.ur.ir.user.Department;
@@ -135,6 +139,12 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	
 	/** id of the license the user has agreed to */
 	private Long licenseId;
+	
+	/** Set the net id password */
+	private String netIdPassword;
+	
+	/** Authentication provider for ldap */
+	private UrLdapAuthenticationProvider urLdapAuthenticationProvider;
 	
 	/**
 	 * Execute method to initialize invite information
@@ -272,7 +282,6 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		return returnStatus;
 	}
 
-	
 	/**
 	 * Register with the system
 	 *  
@@ -281,12 +290,23 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	public String registerUser() throws NoIndexFoundException
 	{
 		log.debug("creating a user = " + irUser.getUsername());
-		String returnStatus = SUCCESS;
-
+		affiliations = affiliationService.getAllAffiliations();
+		departments = departmentService.getAllDepartments();
+		
 		IrUser myIrUser = 
 			userService.getUser(irUser.getUsername());
 		
 		LicenseVersion license = repository.getDefaultLicense();
+		
+		boolean failure = false;
+		
+		
+		if(irUser.getPassword() == null || irUser.getPassword().length() < 8)
+		{
+			failure = true;
+			addFieldError("enterPassword", "The password must be at least 8 characters long");
+		}
+		
 		/* very unlikely but if the license changes while the user was accepting then
 		 * make them re-accept
 		 */
@@ -294,88 +314,115 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		{
 			addFieldError("licenseChangeError", 
 					"This license has changed please re-accept the new license");
-			return INPUT;
+			failure = true;
 		}
 		
 		// make sure the user has accepted the license
 		if( !acceptLicense )
 		{
 			addFieldError("licenseError", "You must accept the license to create an account");
-			return INPUT;
+			failure = true;
 		}
 		
 		// check the passwords
 		if( !irUser.getPassword().equals(this.passwordCheck))
 		{
 			addFieldError("passwordCheck", "The passwords do not match");
-			return INPUT;
+			failure = true;
 		}
 		
-		if( myIrUser == null)
+		if( irUser.getLdapUserName() != null )
 		{
-			IrUser emailExist = userService.getUserByEmail(defaultEmail.getEmail());
-			
-			if (emailExist == null) {
-				String firstName = irUser.getFirstName();
-				String lastName = irUser.getLastName();
-				
-				defaultEmail.setVerified(false);
-				defaultEmail.setToken(TokenGenerator.getToken());
-				
-				irUser = userService.createUser(irUser.getPassword(), irUser.getUsername(), 
-			    		defaultEmail);
-			    irUser.setAccountLocked(accountLocked);
-			    irUser.setFirstName(firstName);
-			    irUser.setLastName(lastName);
-			    irUser.addAcceptedLicense(license);
-			    
-			    if (departmentId != 0) {
-			    	Department department = departmentService.getDepartment(departmentId, false); 
-			    	irUser.setDepartment(department);
+			log.debug("creating LDAP authentication token");
+	
+			// don't hit ldap unless a user has entered a username and password
+			if( netIdPassword != null && netIdPassword.length() > 0 )
+			{
+			    AbstractAuthenticationToken authRequest = new LdapAuthenticationToken(irUser.getLdapUserName(), this.netIdPassword);
+			    try
+			    {
+			        urLdapAuthenticationProvider.authenticate(authRequest);
 			    }
-
-		    	IrRole role = roleService.getRole("ROLE_USER");
-		    	irUser.addRole(role);
-		    	
-		    	Affiliation affiliation = affiliationService.getAffiliation(affiliationId, false); 
-		    	irUser.setAffiliation(affiliation);
-
-		    	irUser.setAffiliationApproved(!affiliation.isNeedsApproval());
-		    	
-		    	userService.makeUserPersistent(irUser);
-		    	
-		    	if (affiliation.isNeedsApproval()) {
-		    		userService.sendAffiliationVerificationEmailForUser(irUser);
-		    		userService.sendPendingAffiliationEmailForUser(irUser);
-		    	}
-
-		    	userService.sendAccountVerificationEmailForUser(defaultEmail.getToken(), defaultEmail.getEmail(), irUser.getUsername());
-		    	
-			    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
-						false);
-			    userIndexService.addToIndex(irUser, 
-						new File( repository.getUserIndexFolder()) );
-		    	
-		    	
-			} else {
-				addFieldError("emailExistError", 
-						"This Email already exists in the system. Email: " + defaultEmail.getEmail());
-				returnStatus = INPUT;	
-				affiliations = affiliationService.getAllAffiliations();
-				departments = departmentService.getAllDepartments();
-			}
+			    catch(BadCredentialsException bce)
+			    {
+			    	 failure = true;
+			    	 addFieldError("netIdPasswordFail", "The net id could not be verified - bad credentials");
+			    }
+		     }
+			 else
+			 {
+			      failure = true;
+				  addFieldError("netIdPasswordEmpty", "The net id password must be entered for net id user name verification");
+			 }
 		}
-		else
+		if( myIrUser != null )
 		{
 			addFieldError("userNameError", 
 					"The user name already exists. User name : " + irUser.getUsername());
-			returnStatus = INPUT;
-			affiliations = affiliationService.getAllAffiliations();
-			departments = departmentService.getAllDepartments();
+			failure = true;
 		}
 		
+		IrUser emailExist = userService.getUserByEmail(defaultEmail.getEmail());
+		if (emailExist != null) 
+		{
+			addFieldError("emailExistError", 
+					"This Email already exists in the system. Email: " + defaultEmail.getEmail());
+			failure = true;
+		}
 		
-		return returnStatus;
+		if( failure )
+		{
+			return INPUT;
+		}
+		
+
+		String firstName = irUser.getFirstName();
+		String lastName = irUser.getLastName();
+				
+		defaultEmail.setVerified(false);
+		defaultEmail.setToken(TokenGenerator.getToken());
+				
+		irUser = userService.createUser(irUser.getPassword(), irUser.getUsername(), 
+			    		defaultEmail);
+		irUser.setAccountLocked(accountLocked);
+		irUser.setFirstName(firstName);
+		irUser.setLastName(lastName);
+		
+		if( license != null )
+		{
+		    irUser.addAcceptedLicense(license);
+		}
+			    
+		if (departmentId != 0) {
+		    Department department = departmentService.getDepartment(departmentId, false); 
+			irUser.setDepartment(department);
+		}
+
+		IrRole role = roleService.getRole("ROLE_USER");
+		irUser.addRole(role);
+		    	
+		Affiliation affiliation = affiliationService.getAffiliation(affiliationId, false); 
+		irUser.setAffiliation(affiliation);
+
+		irUser.setAffiliationApproved(!affiliation.isNeedsApproval());
+		    	
+		userService.makeUserPersistent(irUser);
+		    	
+		if (affiliation.isNeedsApproval()) {
+		    userService.sendAffiliationVerificationEmailForUser(irUser);
+		    userService.sendPendingAffiliationEmailForUser(irUser);
+		}
+
+		userService.sendAccountVerificationEmailForUser(defaultEmail.getToken(), defaultEmail.getEmail(), irUser.getUsername());
+		
+		// add the user to the user index
+		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
+						false);
+		
+		userIndexService.addToIndex(irUser, 
+						new File( repository.getUserIndexFolder()) );
+		
+		return SUCCESS;
 	}
 
 	/** 
@@ -735,5 +782,16 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	public void setPasswordCheck(String passwordCheck) {
 		this.passwordCheck = passwordCheck;
 	}
+
+	public UrLdapAuthenticationProvider getUrLdapAuthenticationProvider() {
+		return urLdapAuthenticationProvider;
+	}
+
+	public void setUrLdapAuthenticationProvider(
+			UrLdapAuthenticationProvider urLdapAuthenticationProvider) {
+		this.urLdapAuthenticationProvider = urLdapAuthenticationProvider;
+	}
+
+
 
 }

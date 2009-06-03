@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
+
 /**
  * Class to write data out to the stream
  * 
@@ -31,6 +33,9 @@ import java.io.OutputStream;
  */
 public class ResponseBufferedOutputWriter {
 	
+	/**  Logger for class */
+	private static final Logger log = Logger.getLogger(ResponseBufferedOutputWriter.class);
+	
 	/**
 	 * Writes the input stream to the given output stream.  Both streams are wrpaped
 	 * in buffered streams.
@@ -38,15 +43,17 @@ public class ResponseBufferedOutputWriter {
 	 * @param is - input stream to read from.
 	 * @param os - output stream to write to.
 	 * @param bufferSize - size of buffer to create.
+	 * @throws Exception 
 	 * @throws IOException 
 	 * 
 	 * @throws Exception
 	 */
-	public static void writeStream(InputStream is, OutputStream os, int bufferSize) throws IOException 
+	public void writeStream(InputStream is, OutputStream os, int bufferSize) throws Exception
 	{
+
         BufferedInputStream input = new BufferedInputStream(is);
         BufferedOutputStream output = new BufferedOutputStream(os);
-        
+        Exception originalException = null;
         byte[] buffer = new byte[bufferSize];
 
         try
@@ -62,12 +69,44 @@ public class ResponseBufferedOutputWriter {
                 }
             }
         }
+        catch(Exception e)
+        {
+        	originalException = e;
+        }
         finally
         {
-        	buffer = null;
-            output.flush();
-            input.close();
-            output.close();
+			try {
+				if( output != null)
+				{
+				    output.flush();
+				}
+			} catch (Exception e) {
+				log.error(e);
+			}
+			try {
+				if( input != null)
+				{
+				    input.close();
+				}
+			} catch (Exception e) {
+				log.error(e);
+			}
+			try {
+				if( output != null)
+				{
+				    output.close();
+				}
+			} catch (Exception e) {
+				log.error(e);
+			}
+			buffer = null;
+			output = null;
+			input = null;
+        }
+        
+        if( originalException != null)
+        {
+        	throw(originalException);
         }
 	}
 

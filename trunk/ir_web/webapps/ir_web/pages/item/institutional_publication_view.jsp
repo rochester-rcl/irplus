@@ -63,20 +63,22 @@
             
             <!--  this is the body region of the page -->
             <div id="bd">
-				<h3><a href="home.action">irplus</a> >
-                                <c:forEach var="collection" items="${path}">
+				<h3><a href="home.action">irplus</a> &gt;
+                  <c:forEach var="collection" items="${path}">
                                     <c:url var="pathCollectionUrl" value="/viewInstitutionalCollection.action">
                                          <c:param name="collectionId" value="${collection.id}"/>
                                     </c:url>
-                                    <a href="${pathCollectionUrl}">${collection.name}</a> >
+                                    <a href="${pathCollectionUrl}">${collection.name}</a> &gt;
                                 </c:forEach>
                 </h3>
 				<!-- Begin - Display the Item preview -->
 				
 				<h3>${institutionalItemVersion.item.name}</h3>
+				
 				<c:if test="${institutionalItemVersion.handleInfo != null}">
-				<h3 class="errorMessage">URL to cite or link to: <a href="${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}">${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}</a></h3>
+				    <h3 class="errorMessage">URL to cite or link to: <a href="${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}">${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}</a></h3>
 				</c:if>
+				
 				<c:if test="${showPublication}">
 									
 					<c:if test="${institutionalItemVersion.withdrawn}">
@@ -90,346 +92,35 @@
 						    Date Withdrawn: ${institutionalItemVersion.withdrawnToken.date}
 						</p>
 					</c:if>
-					
-					<table class="noBorderTable" width="100%">
-						<tr>
-							
-							<td align="right">
 								
-								<c:if test="${!institutionalItemVersion.withdrawn  
-								              || ir:userHasRole('ROLE_ADMIN', '') || institutionalItem.owner == user}">
-								<table class="greyBorderTable">
-									<c:forEach items="${itemObjects}" var="object">
-									<tr>
-										<td width="10" class="noBorderTabletd">
-											
-										</td>
-										<td class="bottomBorder" align="left">
-										   
-										
-											    <c:if test="${object.type == 'FILE'}">
-											    	<ir:fileTypeImg cssClass="tableImg" irFile="${object.irFile}"/>
-											    	
-											    	<c:if test="${object.public || institutionalItem.owner == user || ir:hasPermission('ITEM_FILE_READ',object) }">
-												        <c:url var="itemFileDownload" value="/fileDownloadForInstitutionalItem.action">
-												            <c:param value="${institutionalItemVersion.item.id}" name="itemId"/>
-												             <c:param value="${object.id}" name="itemFileId"/>
-												         </c:url>
-													     <a href="${itemFileDownload}">
-	                                                     ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${ir:fileDownloadCount(object.irFile)})
-													</c:if>
-													
-												   
-											    </c:if>
-											    
-											    <c:if test="${object.type == 'URL'}">
-											        <img  alt="" class="tableImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>
-	    										    <ur:maxText numChars="40" text="${object.name}"></ur:maxText>
-											     </c:if>
-											
-										</td>
-										<td class="bottomBorder" align="left">
-											${object.description}
-										</td>
-									</tr>
-									</c:forEach>
-								</table>
-								</c:if>
-							</td>
-						</tr>
-						<c:if test="${!institutionalItemVersion.withdrawn || institutionalItemVersion.withdrawnToken.showMetadata  
-								              || ir:userHasRole('ROLE_ADMIN', '') || institutionalItem.owner == user}">
-						<tr>
-							
-							<td align="right">
-	
-								<table class="greyBorderBlueBgTable">
-									<tr>
-									<td width="50%" valign="top" class="greyBorderTableTd">
-										<table class="noPaddingTable" width="100%" align="left">
-										    <tr>
-											    <td><label for="description" class="previewLabel"> Other Titles </label> </td>
-											</tr> 
-											<tr>
-											    <td>
-											        <c:forEach items="${institutionalItemVersion.item.subTitles}" var="otherTitle">
-											            ${otherTitle.title}<br/>
-											        </c:forEach>
-											    </td>
-											</tr>
-											<tr>
-											    <td><label for="description" class="previewLabel"> Description </label> </td>
-											</tr> 
-										
-											<tr>
-											    <td>${institutionalItemVersion.item.description}</td>
-											</tr>
-	
-											<tr>
-											    <td><label for="abstract" class="previewLabel"> Abstract </label></td>
-											</tr> 
-										
-											<tr>
-											    <td>${institutionalItemVersion.item.itemAbstract}</td>
-											</tr>
-										</table>
-									</td>
-									
-									<td valign="top" class="greyBorderTableTd">
-										<table width="100%">
-											<tr>
-											<td class="previewLabel">Contributor:  </td>
-											</tr>
-											
-											<c:forEach items="${institutionalItemVersion.item.contributors}" var="itemContributor">
-											<tr>
-												<td>
-												        <c:url var="contributorUrl" value="/viewContributorPage.action">
-														    <c:param name="personNameId" value="${itemContributor.contributor.personName.id}"/>
-														</c:url>						                             
-						                                 <a href="${contributorUrl}"> <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/></a> - ${itemContributor.contributor.contributorType.name}
-												</td>
-											</tr>
-											</c:forEach>
-	
-											<tr>
-											<td class="previewLabel">Submitter:  </td>
-											</tr>
-											
-											<tr>
-												<td>
-													${institutionalItemVersion.item.owner.firstName} &nbsp; ${institutionalItemVersion.item.owner.lastName}
-												</td>
-											</tr>
-											<tr>
-											<td class="previewLabel">License Grantor / Date Granted:  </td>
-											</tr>
-											
-											<tr>
-												<td>
-												    <c:url var="viewLicense" value="viewItemRepositoryLicense.action">
-												        <c:param name="versionedLicenseId" value="${institutionalItemVersion.repositoryLicense.licenseVersion.versionedLicense.id}"/>
-												        <c:param name="version" value="${institutionalItemVersion.repositoryLicense.licenseVersion.versionNumber}"/>
-												    </c:url>
-													${institutionalItemVersion.repositoryLicense.grantedByUser.firstName} &nbsp; 
-													${institutionalItemVersion.repositoryLicense.grantedByUser.lastName} 
-													/ ${institutionalItemVersion.repositoryLicense.dateGranted} ( <a href="${viewLicense}">View License</a> )
-												</td>
-											</tr>
-											<tr>
-											<td class="previewLabel">Date Submitted /Accessioned   </td>
-											</tr>
-											
-											<tr>
-												<td>
-													${institutionalItemVersion.dateOfDeposit}
-												</td>
-											</tr>
-	
-											<tr>
-												<td class="previewLabel"> 
-													Primary Item Type:
-												</td>
-											</tr>
-											<tr>
-												<td > 
-													${institutionalItemVersion.item.primaryContentType.name}
-												</td>											
-											</tr>
-	
-											<tr>
-												<td class="previewLabel">
-													<c:if  test="${institutionalItemVersion.item.secondaryContentTypes != null}">
-														Secondary Item Type(s): 
-													</c:if>
-	 
-												</td>
-											</tr>
-	
-											<c:forEach items="${institutionalItemVersion.item.secondaryContentTypes}" var="contentType">
-											<tr>
-												<td>
-													${contentType.name} 
-												</td>
-											</tr>
-											</c:forEach>
-
-																	
-											<tr>
-											<td class="previewLabel"> Series/Report Number:</td>
-											</tr>
-											
-											<c:forEach items="${institutionalItemVersion.item.itemReports}" var="itemReport">
-											<tr>
-												<td>
-													${itemReport.series.name} &nbsp; ${itemReport.reportNumber}
-												</td>
-											</tr>
-											</c:forEach>										
-	
-											<tr>
-											<td class="previewLabel"> Identifiers: </td>
-											</tr>
-											
-											<c:forEach items="${institutionalItemVersion.item.itemIdentifiers}" var="itemIdentifier">
-											<tr>
-												<td>
-													${itemIdentifier.identifierType.name}: &nbsp; ${itemIdentifier.value}
-												</td>
-											</tr>
-											</c:forEach>										
-	
-											<tr>
-											<td class="previewLabel"> Language:</td>
-											</tr>
-											
-											<tr>
-												<td>
-													${institutionalItemVersion.item.languageType.name}
-												</td>
-											</tr>
-	
-											<tr>
-											<td class="previewLabel"> Subject Keywords: </td>
-											</tr>
-											
-											<tr>
-												<td >
-													${institutionalItemVersion.item.itemKeywords}
-												</td>
-											</tr>
-											
-											<tr>
-											<td class="previewLabel"> Sponsor:</td>
-											</tr>
-	
-											<c:forEach items="${institutionalItemVersion.item.itemSponsors}" var="itemSponsor">
-												<tr>
-													<td>
-														${itemSponsor.sponsor.name} - ${itemSponsor.description}
-													</td>						
-												</tr>
-											</c:forEach>										
-	
-											<tr>
-											<td class="previewLabel"> Date this publication was first presented to the public:</td>
-											</tr>
-											
-											<tr>
-											<td>
-												<c:if test="${institutionalItemVersion.item.firstAvailableDate.month != 0}">
-													Month: ${institutionalItemVersion.item.firstAvailableDate.month} &nbsp;&nbsp;
-												</c:if>
-	
-												<c:if test="${institutionalItemVersion.item.firstAvailableDate.day != 0}">
-													Day: ${institutionalItemVersion.item.firstAvailableDate.day} &nbsp;&nbsp;
-												</c:if>
-	
-												<c:if test="${institutionalItemVersion.item.firstAvailableDate.year != 0}">
-													Year: ${institutionalItemVersion.item.firstAvailableDate.year} &nbsp;&nbsp;
-												</c:if>
-											</td>
-											</tr>
-											
-											<tr>
-											<td class="previewLabel"> Date this publication was originally created:</td>
-											</tr>
-	
-											<tr>
-											<td>
-												<c:if test="${institutionalItemVersion.item.originalItemCreationDate.month != 0}">
-													Month: ${institutionalItemVersion.item.originalItemCreationDate.month} &nbsp;&nbsp;
-												</c:if>
-	
-												<c:if test="${institutionalItemVersion.item.originalItemCreationDate.day != 0}">
-													Day: ${institutionalItemVersion.item.originalItemCreationDate.day} &nbsp;&nbsp;
-												</c:if>
-	
-												<c:if test="${institutionalItemVersion.item.originalItemCreationDate.year != 0}">
-													Year: ${institutionalItemVersion.item.originalItemCreationDate.year} &nbsp;&nbsp;
-												</c:if>
-											</td>
-											</tr>
-
-											<tr>
-											<td class="previewLabel"> Date this publication was made available to public:</td>
-											</tr>
-	
-											<tr>
-											<td>
-													${institutionalItemVersion.item.releaseDate} &nbsp;&nbsp;
-											</td>
-											</tr>
-	
-											<c:if test="${institutionalItemVersion.item.externalPublishedItem != null}">
-												<tr>
-												<td class="previewLabel"> Previously published/distributed information:</td>
-												</tr>
-												
-												<tr>
-												<td> Published Date:
-													<c:if test="${institutionalItemVersion.item.externalPublishedItem.publishedDate.month != 0}">
-														Month: ${institutionalItemVersion.item.externalPublishedItem.publishedDate.month} &nbsp;&nbsp;
-													</c:if>
-		
-													<c:if test="${institutionalItemVersion.item.externalPublishedItem.publishedDate.day != 0}">
-														Day: ${institutionalItemVersion.item.externalPublishedItem.publishedDate.day} &nbsp;&nbsp;
-													</c:if>
-		
-													<c:if test="${institutionalItemVersion.item.externalPublishedItem.publishedDate.year != 0}">
-														Year: ${institutionalItemVersion.item.externalPublishedItem.publishedDate.year} &nbsp;&nbsp;
-													</c:if>
-												</td>
-												</tr>
-	
-												<tr>
-												<td> Publisher: ${institutionalItemVersion.item.externalPublishedItem.publisher.name}
-												</td>
-												</tr>											
-	
-												<tr>
-												<td> Citation: ${institutionalItemVersion.item.externalPublishedItem.citation}
-												</td>
-												</tr>											
-	
-											</c:if>
-										</table>
-									</td>
-									
-									</tr>
-								</table>
-							</td>
-						</tr>
+					<c:if test="${!institutionalItemVersion.withdrawn  || ir:userHasRole('ROLE_ADMIN', '') || institutionalItem.owner == user}">
+					    <c:import url="item_files_frag.jsp">
+					      <c:param name="isPreview" value="false"/>
+					    </c:import>
 					</c:if>
-						
-					</table>
+				
+					<c:if test="${!institutionalItemVersion.withdrawn || institutionalItemVersion.withdrawnToken.showMetadata  
+								              || ir:userHasRole('ROLE_ADMIN', '') || institutionalItem.owner == user}">
+	                     <c:import url="item_metadata_frag.jsp"/>
+				    </c:if>
 					<!-- End - Display the Item preview -->
 				
 	
-				<table class="formTable" width="100%"> 
-					<tr> 
+                    <!-- if statements for the buttons the forms are below this in a separate statements 
+                         this is due to formatting in IE 6 -->
 					<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
-						<td>
+					    
+						<!--  only allow editing if this is the current largest version -->
 						<c:if test="${institutionalItemVersion.versionNumber == institutionalItem.versionedInstitutionalItem.largestVersion}">
-							  
-					           <ur:basicForm name="editForm" 
-					              method="post" action="/user/viewEditItem.action">
-									
-									<input type="hidden" name="institutionalItemId" value="${institutionalItem.id}"/>
-									<input type="hidden" name="genericItemId" value="${institutionalItemVersion.item.id}"/>
-				
-									<button class="ur_button" type="submit"
+							     <button class="ur_button" 
 						                       onmouseover="this.className='ur_buttonover';"
 					 		                   onmouseout="this.className='ur_button';"
-						                       id="edit_publication">Edit Publication</button>    
-					            </ur:basicForm>  			                        	        
-							
+						 		               onclick="javascript:document.editForm.submit();"
+						                       id="edit_publication">Edit Publication</button> 
 						</c:if>
-						</td>
 				    </c:if>
 				    
 				    <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
-						<td>  
 							<c:if test="${!institutionalItemVersion.withdrawn}">
 								<button class="ur_button" 
 					                       onmouseover="this.className='ur_buttonover';"
@@ -442,86 +133,117 @@
 				 		                   onmouseout="this.className='ur_button';"
 					                       id="reinstate_publication">Reinstate Publication</button>     	        
 							</c:if>					
-		 				</td> 
 		 	        </c:if>
+		 	        
 		 	        <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
-		 				<td>
-				           <ur:basicForm name="movePublicationForm" 
-				              method="post" action="/admin/viewMoveInstitutionalItemLocations.action">
+		 				<button class="ur_button" 
+				                       onmouseover="this.className='ur_buttonover';"
+			 		                   onmouseout="this.className='ur_button';"
+			 		                   onclick="javascript:document.movePublicationForm.submit();"
+				                       id="move_publication">Move Publication</button>
+		 		   </c:if>
+		 		   
+		 		   <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
+						  <button class="ur_button" 
+					                       onmouseover="this.className='ur_buttonover';"
+				 		                   onmouseout="this.className='ur_button';"
+				 		                   onclick="javascript:document.permissionForm.submit();"
+					                       id="manage_permissions">Manage Permissions</button>  
+				   </c:if>
+				   <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
+						
+						<button class="ur_button" type="submit" 
+					                       onmouseover="this.className='ur_buttonover';"
+				 		                   onmouseout="this.className='ur_button';"
+				 		                   onclick="javascript:document.newVersionForm.submit();"
+					                       id="new_version">Add New Version</button>
+				 </c:if>
+				 <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">	
+					    <button class="ur_button" 
+					            onmouseover="this.className='ur_buttonover';"
+				 		        onmouseout="this.className='ur_button';"
+					            id="delete_item">Delete</button>    
+						
+			    </c:if>   
+				
+				<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN,ROLE_RESEARCHER', 'OR')}">
+						  <button class="ur_button" type="submit" 
+					                       onmouseover="this.className='ur_buttonover';"
+				 		                   onmouseout="this.className='ur_button';"
+				 		                   onclick="javascript:document.addToResearcherPageForm.submit();"
+					                       id="add_researcher_page">Add to My Researcher page</button>    
+				</c:if>
+					
+					
+					
+				
+					
+				<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
+					    
+						<!--  only allow editing if this is the current largest version -->
+						<c:if test="${institutionalItemVersion.versionNumber == institutionalItem.versionedInstitutionalItem.largestVersion}">
+							    
+					           <form name="editForm" 
+					              method="post" action="<c:url value="/user/viewEditItem.action"/>">
+									
+									<input type="hidden" name="institutionalItemId" value="${institutionalItem.id}"/>
+									<input type="hidden" name="genericItemId" value="${institutionalItemVersion.item.id}"/>
+					                
+					            </form>  			                        	        
+							
+						</c:if>
+						
+				    </c:if>
+				    
+				   
+		 	        <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
+		 				
+				           <form name="movePublicationForm" 
+				              method="post" action="<c:url value="/admin/viewMoveInstitutionalItemLocations.action"/>">
 								
 								<input type="hidden" id="move_items_destination_id" name="destinationId" value="${institutionalItem.institutionalCollection.id}"/>
 								<input type="hidden" id="move_items_item_ids" name="itemIds" value="${institutionalItemId}"/>
-					 				
-		 						<button class="ur_button" type="submit" 
-				                       onmouseover="this.className='ur_buttonover';"
-			 		                   onmouseout="this.className='ur_button';"
-				                       id="move_publication">Move Publication</button>
-				            </ur:basicForm>  
-		 				</td>
+				            </form>  
+		 				
 		 		   </c:if>
 		 		   <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
-						<td>  
-				           <ur:basicForm name="permissionForm" 
-				              method="post" action="/admin/viewInstitutionalItemPermissions.action">
+						
+				           <form name="permissionForm" 
+				              method="post" action="<c:url value="/admin/viewInstitutionalItemPermissions.action"/>">
 								
 								<input type="hidden" id="permissions_item_id" name="institutionalItemId" value="${institutionalItem.id}"/>
-			
-								<button class="ur_button" type="submit" 
-					                       onmouseover="this.className='ur_buttonover';"
-				 		                   onmouseout="this.className='ur_button';"
-					                       id="manage_permissions">Manage Permissions</button>    
-				            </ur:basicForm>  			                        	        
-						</td>
+
+				            </form>  			                        	        
 				   </c:if>
 				   <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
-						<td>  
-				           <ur:basicForm name="newVersionForm" 
-				              method="post" action="/user/viewAddInstitutionalItemVersion.action">
+						
+				           <form name="newVersionForm" 
+				              method="post" action="<c:url value="/user/viewAddInstitutionalItemVersion.action"/>">
 								
 								<input type="hidden" id="institutional_item_id" name="institutionalItemId" value="${institutionalItem.id}"/>
-			
-								<button class="ur_button" type="submit" 
-					                       onmouseover="this.className='ur_buttonover';"
-				 		                   onmouseout="this.className='ur_button';"
-					                       id="new_version">Add New Version</button>    
-				            </ur:basicForm>  			                        	        
-						</td>
+				            </form>  			                        	        
+						
 				 </c:if>
 				 <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">	
-						<td>  
-				           <ur:basicForm name="deleteForm" method="post" action="/admin/deleteInstitutionalItem.action">
+						 
+				           <form name="deleteForm" method="post" action="<c:url value="/admin/deleteInstitutionalItem.action"/>">
 								<input type="hidden" id="institutional_item_id" name="institutionalItemId" value="${institutionalItem.id}"/>
-				            </ur:basicForm>  			                        	        
-			
-								<button class="ur_button" 
-					                       onmouseover="this.className='ur_buttonover';"
-				 		                   onmouseout="this.className='ur_button';"
-					                       id="delete_item">Delete</button>    
-						</td>	
+				            </form>  			                        	        
 			      </c:if>   
-				</tr> 
-				 
+				
 					<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN,ROLE_RESEARCHER', 'OR')}">
-						<tr> <td colspan="5" align="center">  
-				           <ur:basicForm name="addToResearcherPageForm" 
-				              method="post" action="/user/viewResearcherInstitutionalItem.action">
+						
+				           <form name="addToResearcherPageForm" 
+				              method="post" action="<c:url value="/user/viewResearcherInstitutionalItem.action"/>">
 								
 								<input type="hidden" id="institutional_item_id" name="institutionalItemId" value="${institutionalItem.id}"/>
 								<input type="hidden" id="researcher_id" name="researcherId" value="${user.researcher.id}"/>
-								
-								<button class="ur_button" type="submit" 
-					                       onmouseover="this.className='ur_buttonover';"
-				 		                   onmouseout="this.className='ur_button';"
-					                       id="add_researcher_page">Add to My Researcher page</button>    
-				            </ur:basicForm>  			                        	        
-						</td>	</tr>								
+				            </form>  			                        	        
+										
 					</c:if>
-				 
-	            </table>           
-	
-	
-       	       	<div class="clear">&nbsp;</div>
+					
 			</c:if>
+			<!--  end if for show publication -->
 				
 			<c:if test="${!showPublication}">
 				<h3> <div class="errorMessage"> ${message} </div> </h3>
@@ -603,9 +325,9 @@
 	      <div id="withdrawDialog" class="hidden">
 	          <div class="hd">Withdraw Publication</div>
 		      <div class="bd">
-		          <ur:basicForm id="withdraw_publication" name="withdrawPublicationForm" 
+		          <form id="withdraw_publication" name="withdrawPublicationForm" 
 		              method="post" 
-		              action="user/withdrawPublication.action">
+		              action=<c:url value="/user/withdrawPublication.action"/>">
 		                   
   				      <input type="hidden" id="institutional_item_id"
 		                   name="institutionalItemId" value="${institutionalItemId}"/>		                   
@@ -638,16 +360,16 @@
 				          
 			           </table>
 			          
-		          </ur:basicForm>
+		          </form>
 		      </div>
 	      </div>
 	      
 	      <div id="reinstateDialog" class="hidden">
 	          <div class="hd">Reinstate Publication</div>
 		      <div class="bd">
-		          <ur:basicForm id="reinstate_publication" name="reinstatePublicationForm" 
+		          <form id="reinstate_publication" name="reinstatePublicationForm" 
 		              method="post" 
-		              action="user/reinstatePublication.action">
+		              action="<c:url value="/user/reinstatePublication.action"/>">
 		                   
   				      <input type="hidden" id="institutional_item_id"
 		                   name="institutionalItemId" value="${institutionalItemId}"/>		                   
@@ -672,7 +394,7 @@
 				          
 			           </table>
 			          
-		          </ur:basicForm>
+		          </form>
 		      </div>
 	      </div>
 
