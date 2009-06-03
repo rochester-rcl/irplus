@@ -19,7 +19,6 @@ package edu.ur.ir.web.action.user.admin;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -101,9 +100,6 @@ public class ManageUsers extends Pager implements Preparable{
 	
 	/** id of the user */
 	private Long id;
-	
-	/** Set of user type ids */
-	private long[] userIds;
 	
 	/** indicates if the user is an admin */
 	private boolean adminRole = false;
@@ -425,46 +421,35 @@ public class ManageUsers extends Pager implements Preparable{
 	{
 		log.debug("Delete users called");
 		
-		message = "The following users could not be deleted because they have published into the system :";
+		message = "The following user could not be deleted because they have published into the system :";
 		
 		deleted = true;
-		if( userIds != null ) {
-			List<Long> myIds = new LinkedList<Long>();
+		if( id != null ) 
+		{
 
-			for (int index = 0; index < userIds.length; index++) {
-		    	myIds.add(userIds[index]);
-		    }
-			
-		    List<IrUser> users = userService.getUsers(myIds); 
-		    
-		    for( IrUser user : users)
-		    {
- 			    try 
- 			    {
-					userService.deleteUser(user);
-				} 
- 			    catch (UserHasPublishedDeleteException e) 
- 			    {
- 			    	message = message + " " + user.getUsername() + ", ";
- 			    	deleted = false;
-					log.error("user has published", e);
-					
-				} 
- 			    catch (UserDeletedPublicationException e) 
- 			    {
- 			    	message = message + " " + user.getUsername() + ", ";
- 			    	deleted = false;
-					log.error("user has published", e);
-				}
-		    }
- 			
- 			for( IrUser u : users)
+            IrUser user = userService.getUser(id, false);
+ 			try 
  			{
- 				 Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
-							false);
-				 userIndexService.deleteFromIndex(u, 
+			    userService.deleteUser(user);
+			} 
+ 			catch (UserHasPublishedDeleteException e) 
+ 			{
+ 			    message = message + " " + user.getUsername() + ", ";
+ 			    deleted = false;
+				log.error("user has published", e);
+					
+			} 
+ 			catch (UserDeletedPublicationException e) 
+ 			{
+ 			    message = message + " " + user.getUsername() + ", ";
+ 			    deleted = false;
+				log.error("user has published", e);
+			}
+ 			
+ 			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+ 		
+			userIndexService.deleteFromIndex(user, 
 							new File( repository.getUserIndexFolder()) );
- 			}
 		}
 
 		
@@ -580,14 +565,6 @@ public class ManageUsers extends Pager implements Preparable{
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public long[] getUserIds() {
-		return userIds;
-	}
-
-	public void setUserIds(long[] userIds) {
-		this.userIds = userIds;
 	}
 
 	public boolean getDeleted() {

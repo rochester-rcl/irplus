@@ -81,23 +81,20 @@
 					     <button id="showUser" class="ur_button" 
 			 		         onmouseover="this.className='ur_buttonover';"
 			 		         onmouseout="this.className='ur_button';">New User</button> 
-				             
-				         <button id="showDeleteUser" class="ur_button" 
-			 		         onmouseover="this.className='ur_buttonover';"
-			 		         onmouseout="this.className='ur_button';">Delete</button>
-				      <ur:div id="newUsers"></ur:div>
+				         
+				      <div id="newUsers"></div>
 				</div>
 
 	            <div id="tab2">
-	            	<ur:basicForm method="post" id="user_search_form" name="userSearchForm" action="javascript:YAHOO.ur.user.searchUser(0,1,1);" >
+	            	<form method="post" id="user_search_form" name="userSearchForm" action="javascript:YAHOO.ur.user.searchUser(0,1,1);" >
 	            		
 	            		<br/>
-						Search User : <input type="input" name="query" size="50"/>
+						Search User : <input type="input" id="userSearchQuery" name="query" size="50"/>
 						<button id="search_user" class="ur_button" type="button"
 		                       onmouseover="this.className='ur_buttonover';"
 		                       onmouseout="this.className='ur_button';"
 		                       onclick="javascript:YAHOO.ur.user.searchUser(0,1,1);">Search</button>
-					</ur:basicForm>
+					</form>
 					<br/>
 	                <br/>
 					<div id="search_results_div"></div>
@@ -111,55 +108,57 @@
 	  <!--  this is the footer of the page -->
       <c:import url="/inc/footer.jsp"/>
    
-   	      <ur:div id="newUserDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">User Information</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="addUser" name="newUserForm" method="post" 
+   	      <div id="newUserDialog" class="hidden">
+	          <div class="hd">User Information</div>
+		      <div class="bd">
+		          <form id="addUser" name="newUserForm" method="post" 
 		              action="admin/createUser.action">
 	                
-	                  <ur:div id="newUserDialogFields">
+	                  <div id="newUserDialogFields">
 	                       <c:import url="/pages/admin/user/add_user_form.jsp"/>
-	                  </ur:div>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+	                  </div>
+		          </form>
+		      </div>
+	      </div>
 
-	      <ur:div id="changePasswordDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Change Password</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="changePassword" name="changePasswordForm" method="post" 
-		              action="admin/changePassword.action">
+	      <div id="changePasswordDialog" class="hidden">
+	          <div class="hd">Change Password</div>
+		      <div class="bd">
+		          
+		          <form id="changePassword" name="changePasswordForm" method="post" 
+		              action="<c:url value="/admin/changePassword.action"/>">
 	                
-	                  <ur:div id="changePasswordDialogFields">
+	                  <div id="changePasswordDialogFields">
 	                      <c:import url="/pages/admin/user/change_password_form.jsp"/>
-	                  </ur:div>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+	                  </div>
+		          </form>
+		      </div>
+	      </div>
 
 
-	      <ur:div id="deleteUserDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Delete Users</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="deleteUser" name="deleteUser" method="POST" 
-		              action="admin/deleteUser.action">
-		              <ur:div id="deleteUserError" cssClass="errorMessage"></ur:div>
-			          <p>Are you sure you wish to delete the selected users?</p>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+	      <div id="deleteUserDialog" class="hidden">
+	          <div class="hd">Delete Users</div>
+		      <div class="bd">
+		          <form id="deleteUser" name="deleteUser" method="POST" 
+		              action="<c:url value="/admin/deleteUser.action"/>">
+		              <div id="deleteUserError" class="errorMessage"></div>
+		              <input id="deleteUserId" type="hidden" name="id" value=""/>
+			          <p>Are you sure you wish to delete the selected user?</p>
+		          </form>
+		      </div>
+	      </div>
 	      
-	       <ur:div id="loginAsUserDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Login as user</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="loginAsUser" name="loginAsUserForm" method="POST" 
-		              action="admin/loginAsUser.action">
+	       <div id="loginAsUserDialog" class="hidden">
+	          <div class="hd">Login as user</div>
+		      <div class="bd">
+		          <form id="loginAsUser" name="loginAsUserForm" method="POST" 
+		              action="<c:url value="/admin/loginAsUser.action"/>">
 		              
 		              <input type="hidden" id="loginAsUserForm_id" name="id">
 			          <p>Are you sure you want to login as the selected user?</p>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+		          </form>
+		      <div>
+	      </div>
 	      
 	      	          
 	     <div id="error_dialog_box" class="hidden">

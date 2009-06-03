@@ -457,6 +457,15 @@ YAHOO.ur.user = {
 	},
 	
 	/**
+	 * Delete user function - sets the user id and shows the dialog
+	 */
+	deleteUser : function (userId)
+	{
+		document.getElementById('deleteUserId').value = userId;
+		YAHOO.ur.user.deleteUserDialog.showDialog();
+	},
+	
+	/**
 	 * Creates a YUI new user modal dialog for when a user wants to create 
 	 * a new user
 	 *
@@ -467,7 +476,7 @@ YAHOO.ur.user = {
 		// Define various event handlers for Dialog
 		var handleSubmit = function() 
 		{
-		    YAHOO.util.Connect.setForm('myUsers');
+		    YAHOO.util.Connect.setForm('deleteUser');
 		    
 		    //delete the user
 	        var cObj = YAHOO.util.Connect.asyncRequest('post',
@@ -506,6 +515,11 @@ YAHOO.ur.user = {
 		       
 		        // reload the table
 		        YAHOO.ur.user.getUsers(0,1,1,'lastName','asc');
+		        // reload search - if query exists
+		        if( document.getElementById('userSearchQuery').value != null && document.getElementById('userSearchQuery').value != '')
+		        {
+		        	YAHOO.ur.user.searchUser(0,1,1);
+		        }
 		    }
 		};
 		
@@ -539,14 +553,10 @@ YAHOO.ur.user = {
 				
 		// Render the Dialog
 		YAHOO.ur.user.deleteUserDialog.render();
-	
-	    // listener for showing the dialog when clicked.
-		YAHOO.util.Event.addListener("showDeleteUser", "click", 
-		    YAHOO.ur.user.deleteUserDialog.showDialog, 
-		    YAHOO.ur.user.deleteUserDialog, true);
+
 	},
 	
-	/*
+	/**
 	 * Creates dialog for a user to login as another user 
 	 */
 	createLoginAsUserDialog : function() 

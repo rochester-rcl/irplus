@@ -28,7 +28,7 @@
 <c:import url="search_all_users_pager.jsp"/>
 
 <div class="dataTable">
-	<ur:basicForm method="post" id="user_search_results" name="userSearchResults" >
+	<form method="post" id="user_search_results" name="userSearchResults" >
 	             
 	    <urstb:table width="100%">
 	        <urstb:thead>
@@ -39,7 +39,8 @@
 	                <urstb:td>First Name</urstb:td>
 					<urstb:td>Email</urstb:td>	
 					<urstb:td>Change password</urstb:td>
-	                <urstb:td>Login as this user</urstb:td>
+	                <urstb:td>Login as user</urstb:td>
+	                <urstb:td>Delete</urstb:td>
 	                </urstb:tr>
 	            </urstb:thead>
 	            <urstb:tbody
@@ -75,12 +76,15 @@
 		                   		<a href="javascript:YAHOO.ur.user.changePassword('${user.id}');">Change password</a> 
 	                        </urstb:td>
 	                        <urstb:td>
-	                        	<a href="javascript:YAHOO.ur.user.loginAsUser('${user.id}');">Login as this user</a>
+	                        	<a href="javascript:YAHOO.ur.user.loginAsUser('${user.id}');">Login as user</a>
+	                    	</urstb:td>
+	                    	<urstb:td>
+	                        	<a href="javascript:YAHOO.ur.user.deleteUser('${user.id}')">Delete</a>
 	                    	</urstb:td>
 	                    </urstb:tr>
 	            </urstb:tbody>
 	        </urstb:table>
-		</ur:basicForm>
+		</form>
 </div>	
 
 <c:import url="search_all_users_pager.jsp"/>
