@@ -54,7 +54,7 @@
             <artifact name="poi" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-contrib" rev="3.5-beta4" >
+        <dependency org="org.apache.poi" name="poi-contrib" rev="3.5-beta5" >
             <artifact name="poi-contrib" type="jar" />
         </dependency>
         
@@ -62,11 +62,11 @@
             <artifact name="openxml4j" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-scratchpad" rev="3.5-beta4" >
+        <dependency org="org.apache.poi" name="poi-scratchpad" rev="3.5-beta5" >
             <artifact name="poi-scratchpad" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-ooxml" rev="3.5-beta4" >
+        <dependency org="org.apache.poi" name="poi-ooxml" rev="3.5-beta5" >
             <artifact name="poi-ooxml" type="jar" />
         </dependency>
         

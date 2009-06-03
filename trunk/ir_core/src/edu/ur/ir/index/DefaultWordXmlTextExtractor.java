@@ -26,7 +26,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
-import org.openxml4j.opc.Package;
+import org.apache.poi.openxml4j.opc.Package;
 
 
 public class DefaultWordXmlTextExtractor implements FileTextExtractor{

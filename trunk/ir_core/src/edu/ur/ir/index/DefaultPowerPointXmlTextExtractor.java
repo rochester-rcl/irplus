@@ -26,7 +26,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.xslf.XSLFSlideShow;
 import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
-import org.openxml4j.opc.Package;
+import org.apache.poi.openxml4j.opc.Package;
 
 public class DefaultPowerPointXmlTextExtractor implements FileTextExtractor{
 
