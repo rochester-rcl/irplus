@@ -30,6 +30,7 @@ import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.item.ItemSecurityService;
 import edu.ur.ir.user.IrRole;
@@ -61,6 +62,9 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	
 	/** Institutional Item being viewed */
 	private InstitutionalItem institutionalItem; 
+	
+	/** Generic item for the institutional item version */
+	private GenericItem item;
 	
 	/** Service for dealing with user file system. */
 	private InstitutionalItemService institutionalItemService;
@@ -108,6 +112,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	        	showPublication = false;
 	        	return SUCCESS;
 			}
+
 		} else if (institutionalItemId != null) {
 			institutionalItem = institutionalItemService.getInstitutionalItem(institutionalItemId, false);
 		
@@ -174,6 +179,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
     	showPublication = true;
     	
 		itemObjects = institutionalItemVersion.getItem().getItemObjects();
+		item = institutionalItemVersion.getItem();
 		
 		path = institutionalCollectionService.getPath(institutionalItem.getInstitutionalCollection());
 		
@@ -280,5 +286,9 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 
 	public void setInstitutionalItemVersionId(long institutionalItemVersionId) {
 		this.institutionalItemVersionId = institutionalItemVersionId;
+	}
+
+	public GenericItem getItem() {
+		return item;
 	}
 }

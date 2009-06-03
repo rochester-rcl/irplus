@@ -47,7 +47,7 @@ public class WebIoUtils {
 	/**  Service for dealing with mime information  */
 	private MimeTypeService mimeTypeService;
 	
-	/**  Logger for file upload */
+	/**  Logger for class */
 	private static final Logger log = Logger.getLogger(WebIoUtils.class);
 	
 	
@@ -155,23 +155,28 @@ public class WebIoUtils {
 	 * Write the stream to the response.
 	 * 
 	 * @param path location of file
+	 * @throws Exception 
 	 * @throws Exception
 	 */
-	private void writeStream(File f, HttpServletResponse response, int bufferSize) 
+	private void writeStream(File f, HttpServletResponse response, int bufferSize) throws Exception 
 	{
 		InputStream is = null;
 		OutputStream os = null;
+		Exception originalException = null;
 	
 		try
 		{
 	        //Write the file to the response output stream.
             is = new FileInputStream(f);
             os = response.getOutputStream();
-            ResponseBufferedOutputWriter.writeStream(is,os, bufferSize);
+            ResponseBufferedOutputWriter bufferedWriter= new ResponseBufferedOutputWriter();
+            bufferedWriter.writeStream(is, os, bufferSize);
+           
 		}
-        catch(IOException ioe)
+        catch(Exception e)
         {
-        	log.error(ioe);
+        	log.error(e);
+        	originalException = e;
         }
         finally
         {
@@ -179,6 +184,7 @@ public class WebIoUtils {
             {
         	    try {
 					is.close();
+					is = null;
 				} catch (IOException e) {
 					log.error(e);
 				}
@@ -188,16 +194,23 @@ public class WebIoUtils {
             {
         	    try {
 					os.flush();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					log.error(e);
 				}
         	    try {
 					os.close();
-				} catch (IOException e) {
+					os = null;
+				} catch (Exception e) {
 					log.error(e);
 				}
             }
+            
+            if( originalException != null)
+            {
+            	throw(originalException);
+            }
         }
+       
 	}
 
 	public MimeTypeService getMimeTypeService() {
