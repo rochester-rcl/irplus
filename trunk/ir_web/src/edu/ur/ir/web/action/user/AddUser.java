@@ -144,7 +144,7 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	private String netIdPassword;
 	
 	/** Authentication provider for ldap */
-	private UrLdapAuthenticationProvider urLdapAuthenticationProvider;
+	private UrLdapAuthenticationProvider ldapAuthProvider;
 	
 	/**
 	 * Execute method to initialize invite information
@@ -341,7 +341,7 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 			    AbstractAuthenticationToken authRequest = new LdapAuthenticationToken(irUser.getLdapUserName(), this.netIdPassword);
 			    try
 			    {
-			        urLdapAuthenticationProvider.authenticate(authRequest);
+			        ldapAuthProvider.authenticate(authRequest);
 			    }
 			    catch(BadCredentialsException bce)
 			    {
@@ -783,13 +783,17 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		this.passwordCheck = passwordCheck;
 	}
 
-	public UrLdapAuthenticationProvider getUrLdapAuthenticationProvider() {
-		return urLdapAuthenticationProvider;
+	public UrLdapAuthenticationProvider getLdapAuthProvider() {
+		return ldapAuthProvider;
 	}
 
-	public void setUrLdapAuthenticationProvider(
+	public void setLdapAuthProvider(
 			UrLdapAuthenticationProvider urLdapAuthenticationProvider) {
-		this.urLdapAuthenticationProvider = urLdapAuthenticationProvider;
+		this.ldapAuthProvider = urLdapAuthenticationProvider;
+	}
+
+	public void setNetIdPassword(String netIdPassword) {
+		this.netIdPassword = netIdPassword;
 	}
 
 
