@@ -410,7 +410,7 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 		        Query q = null;
 			    if(orderType.equals(OrderType.DESCENDING_ORDER))
 			    {
-			        q = session.getNamedQuery("etPersonNameByCharRangeOrderDesc");
+			        q = session.getNamedQuery("getPersonNameByCharRangeOrderDesc");
 			    }
 		 	    else
 			    {
