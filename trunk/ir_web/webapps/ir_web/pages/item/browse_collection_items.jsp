@@ -494,7 +494,8 @@
 											 <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 											 <c:param name="sortElement" value="lastName"/>		
 											 <c:param name="sortType" value="asc"/>
-											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>
+											 <c:param name="collectionId" value="${institutionalCollection.id}"/>			
 										</c:url>
 					                     
 					                    <c:url var="sortLastNameDescendingUrl" value="/browseCollectionPersonNames.action">
@@ -503,7 +504,8 @@
 											<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 											<c:param name="sortElement" value="lastName"/>		
 											<c:param name="sortType" value="desc"/>
-											<c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+											<c:param name="selectedAlpha" value="${selectedAlpha}"/>
+											 <c:param name="collectionId" value="${institutionalCollection.id}"/>			
 										</c:url>
 					                    
 					                    <c:set var="lastNameSort" value="none"/>
