@@ -48,11 +48,7 @@ YAHOO.ur.researcher.files = {
 		
 	    var cObj = YAHOO.util.Connect.asyncRequest('post',
 	           changeFileVersionAction + '?researcherFileId=' + researcherFileId + '&fileVersionId=' + object.value, null);
-
-	           
-	           
 	},
-	
 
 		
 	/*
@@ -60,9 +56,7 @@ YAHOO.ur.researcher.files = {
 	 */
 	viewResearcherFolders : function()
 	{
-	
 	    document.myResearcherFolders.action = researcherFolderAction;
-	    
 	    document.myResearcherFolders.submit();
 	},
 	 

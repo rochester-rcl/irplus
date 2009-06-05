@@ -157,7 +157,7 @@ YAHOO.ur.content.type = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
-		    alert('content type submission failed ' + o.status);
+		    alert('content type submission failed ' + o.status + ' status text ' + o.statusText );
 		};
 	
 		// Instantiate the Dialog
@@ -336,7 +336,7 @@ YAHOO.ur.content.type = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('content type submission failed ' + o.status);
+		    alert('content type submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

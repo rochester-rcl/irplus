@@ -106,7 +106,7 @@ YAHOO.ur.affiliation.approval = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('Affiliation approval submission failed ' + o.status);
+		    alert('Affiliation approval submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

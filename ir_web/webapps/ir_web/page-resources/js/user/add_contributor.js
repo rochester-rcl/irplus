@@ -188,7 +188,7 @@ YAHOO.ur.item.contributor = {
 
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('content type submission failed ' + o.status);
+		    alert('add name failed ' + o.status);
 		};
 
 		// Wire up the success and failure handlers
@@ -232,7 +232,7 @@ YAHOO.ur.item.contributor = {
 		
 		failure: function(o) 
 		{
-		    alert('Get name Failure ' + o.status + ' status text ' + o.statusText );
+		    alert('get contributor callback Failure ' + o.status + ' status text ' + o.statusText );
 		}
 	},
 	
@@ -522,7 +522,7 @@ YAHOO.ur.item.contributor = {
 		// handle form sbumission failure
 		var handleNewPersonFormFailure = function(o) 
 		{
-		    alert('person submission failed ' + o.status);
+		    alert('person person name form failure ' + o.status);
 		};
 	
 		var handleNewPersonNameForUserFormSuccess = function(o) 
@@ -615,9 +615,6 @@ YAHOO.ur.item.contributor = {
 		YAHOO.util.Event.addListener("new_person", "click", 
 		    YAHOO.ur.item.contributor.newPersonDialog.showDialog, 
 		    YAHOO.ur.item.contributor.newPersonDialog, true);
-		    
-	    
-	
 	},
 	
 	

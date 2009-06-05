@@ -68,7 +68,7 @@ YAHOO.ur.group.collection = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure ' + o.status);
+	        alert(' createAddGroupPermissionsDialog failure ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -137,7 +137,7 @@ YAHOO.ur.group.collection = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure ' + o.status);
+	        alert(' editPermissionsForGroup failure ' + o.status + ' status text ' + o.statusText);
 	    };
 	    
         var transaction = YAHOO.util.Connect.asyncRequest('POST', 

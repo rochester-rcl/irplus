@@ -1268,7 +1268,7 @@ YAHOO.ur.folder =
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert("Submision failed due to a network issue : " + o.status);
+	        alert("Submision failed due to a network issue : " + o.status + " status text " + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

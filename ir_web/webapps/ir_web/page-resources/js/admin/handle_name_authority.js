@@ -152,7 +152,7 @@ YAHOO.ur.handle.authority = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('New Handle name authority form submission failed ' + o.status);
+		    alert('New Handle name authority form submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -241,7 +241,7 @@ YAHOO.ur.handle.authority = {
 	
 	        failure: function(o) 
 	        {
-	            alert('Get handle name authority failed ' + o.status + ' status text ' + o.statusText );
+	            alert('Edit handle name authority failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -325,7 +325,7 @@ YAHOO.ur.handle.authority = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('content type submission failed ' + o.status);
+		    alert('delete name authority submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

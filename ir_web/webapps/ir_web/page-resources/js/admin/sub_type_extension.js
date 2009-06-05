@@ -55,7 +55,7 @@ YAHOO.ur.subTypeExtension =
 	
 	        failure: function(o) 
 	        {
-	            alert('Get top media type Failure ' + o.status + ' status text ' + o.statusText );
+	            alert('Get sub type extension Failure ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -150,7 +150,7 @@ YAHOO.ur.subTypeExtension =
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('sub type Submission failed ' + o.status);
+	        alert('sub type extension Submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -308,7 +308,7 @@ YAHOO.ur.subTypeExtension =
 	
 	    // handle form Submission failure
 	    var handleFailure = function(o) {
-	        alert('sub type Submission failed ' + o.status);
+	        alert('delete sub type Submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

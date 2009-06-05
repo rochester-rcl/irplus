@@ -238,7 +238,7 @@ YAHOO.ur.user = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
-		    alert('user submission failed ' + o.status);
+		    alert('user submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -366,7 +366,7 @@ YAHOO.ur.user = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('Change password submission failed ' + o.status);
+		    alert('Change password submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -525,7 +525,7 @@ YAHOO.ur.user = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('user submission failed ' + o.status);
+		    alert('delete user submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

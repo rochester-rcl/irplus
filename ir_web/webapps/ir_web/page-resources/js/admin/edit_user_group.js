@@ -92,7 +92,7 @@ YAHOO.ur.usergroup.edit = {
 	
 	        failure: function(o) 
 	        {
-	            alert('Users search Failure ' + o.status + ' status text ' + o.statusText );
+	            alert('add member Failure ' + o.status + ' status text ' + o.statusText );
 	        }
         }
     
@@ -124,7 +124,7 @@ YAHOO.ur.usergroup.edit = {
 	
 	        failure: function(o) 
 	        {
-	            alert('Users search Failure ' + o.status + ' status text ' + o.statusText );
+	            alert('remove member Failure ' + o.status + ' status text ' + o.statusText );
 	        }
         }
     
@@ -202,7 +202,7 @@ YAHOO.ur.usergroup.edit = {
 	
 	        failure: function(o) 
 	        {
-	            alert('Users search Failure ' + o.status + ' status text ' + o.statusText );
+	            alert('add admin Failure ' + o.status + ' status text ' + o.statusText );
 	        }
         }
     
@@ -235,7 +235,7 @@ YAHOO.ur.usergroup.edit = {
 	
 	        failure: function(o) 
 	        {
-	            alert('Admin search Failure ' + o.status + ' status text ' + o.statusText );
+	            alert('remove Failure ' + o.status + ' status text ' + o.statusText );
 	        }
         }
     

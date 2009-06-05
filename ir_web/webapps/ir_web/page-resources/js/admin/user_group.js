@@ -147,7 +147,7 @@ YAHOO.ur.usergroup =
 	    // handle form sbumission failure
 	    var handleFailure = function(o)
 	    {
-	        alert('user group submission failed ' + o.status);
+	        alert('user group submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -275,7 +275,7 @@ YAHOO.ur.usergroup =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('content type submission failed ' + o.status);
+	        alert('delete user group type submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

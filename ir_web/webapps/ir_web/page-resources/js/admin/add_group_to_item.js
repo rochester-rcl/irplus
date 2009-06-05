@@ -136,7 +136,7 @@ YAHOO.ur.group.item = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure ' + o.status);
+	        alert('editPermissionsForGroup failure ' + o.status + ' status text ' + o.statusText);
 	    };
 	    
         var transaction = YAHOO.util.Connect.asyncRequest('POST', 
@@ -166,7 +166,7 @@ YAHOO.ur.group.item = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure ' + o.status);
+	        alert('addGroupsToItemFile failure ' + o.status + ' status text ' + o.statusText);
 	    };
 	    
         var transaction = YAHOO.util.Connect.asyncRequest('POST', 

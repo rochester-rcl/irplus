@@ -84,7 +84,7 @@ YAHOO.ur.edit.news =
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('Picture upload submission failed ' + o.status);
+	        alert('new picture upload submission failed ' + o.status  + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

@@ -138,7 +138,7 @@ YAHOO.ur.news =
 	
 	    // handle form sbumission failure
 	    var handleFailure = function(o) {
-	        alert('News Item submission failed ' + o.status);
+	        alert('News Item submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -277,7 +277,7 @@ YAHOO.ur.news =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('news item submission failed ' + o.status);
+	        alert('delete news item submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

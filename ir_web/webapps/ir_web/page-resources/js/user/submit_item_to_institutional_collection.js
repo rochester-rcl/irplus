@@ -88,7 +88,7 @@ YAHOO.ur.item.collection = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('Adding the collection failed ' + o.status);
+		    alert('Adding the collection to publication failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 	
@@ -126,7 +126,7 @@ YAHOO.ur.item.collection = {
 		// handle form submission failure
 		var handleFailure = function(o) 
 		{
-		    alert('Collection removal failed ' + o.status);
+		    alert('removeCollectionFromPublication failed ' + ' status text ' + o.statusText );
 		};
 	
 		// Wire up the success and failure handlers
@@ -148,7 +148,6 @@ YAHOO.ur.item.collection = {
 	{
 		document.allCollectionsForm.action = submitPublicationAction;
 		document.allCollectionsForm.submit();	
-		
 	},
 	
 	/**

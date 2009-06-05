@@ -78,7 +78,7 @@ YAHOO.ur.edit.institution.collection = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('Picture upload submission failed ' + o.status);
+	        alert('Picture upload submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -355,7 +355,7 @@ YAHOO.ur.edit.institution.collection = {
 	    // handle form sbumission failure
 	    var failure = function(o) 
 	    {
-	        alert("Save collection failed "  + o.status);
+	        alert("Save collection failed "  + o.status + ' status text ' + o.statusText);
 	    };
 	    
 	    // Wire up the success and failure handlers
@@ -545,7 +545,7 @@ YAHOO.ur.edit.institution.collection = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure ' + o.status);
+	        alert('remove group failure ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -632,7 +632,7 @@ YAHOO.ur.edit.institution.collection = {
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert("Link submission failed due to a network issue: " + o.status);
+	        alert("Link submission failed due to a network issue: " + o.status  + " status text " + o.statusText);
 	    };
 
  	    // Instantiate the Dialog

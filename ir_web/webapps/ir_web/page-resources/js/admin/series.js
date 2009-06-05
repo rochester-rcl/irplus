@@ -160,7 +160,7 @@ YAHOO.ur.series = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
-		    alert('series submission failed ' + o.status);
+		    alert('series submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -257,7 +257,7 @@ YAHOO.ur.series = {
 	
 	        failure: function(o) 
 	        {
-	            alert('Get series failed ' + o.status + ' status text ' + o.statusText );
+	            alert('edit series failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -339,7 +339,7 @@ YAHOO.ur.series = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('series submission failed ' + o.status);
+		    alert('delete series submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

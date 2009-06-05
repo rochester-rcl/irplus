@@ -151,7 +151,7 @@ YAHOO.ur.department = {
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('department submission failed ' + o.status);
+	        alert('department submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -316,7 +316,7 @@ YAHOO.ur.department = {
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('department submission failed ' + o.status);
+	        alert('department submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

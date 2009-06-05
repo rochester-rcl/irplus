@@ -64,7 +64,7 @@ YAHOO.ur.shared.file.inbox =
         // success when getting the file properties
         var handleFailure = function(o) 
         {
-	        alert('Get Shared inbox files failed:  ' + o.status);
+	        alert('Get Shared inbox files failed:  ' + o.status + ' status text ' + o.statusText);
         };
    
         // Wire up the success and failure handlers
@@ -106,7 +106,7 @@ YAHOO.ur.shared.file.inbox =
         // success when getting the file properties
         var handleFailure = function(o) 
         {
-	        alert('Get Shared inbox files failed:  ' + o.status);
+	        alert('Get Shared inbox files count failed:  ' + o.status + ' status text ' + o.statusText);
         };
    
         // Wire up the success and failure handlers

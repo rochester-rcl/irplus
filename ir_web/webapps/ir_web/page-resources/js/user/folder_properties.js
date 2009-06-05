@@ -46,7 +46,7 @@ YAHOO.ur.folder.properties =
             
             failure : function(o)
             {
-                alert( "failure to get properties");
+                alert( "failure to get properties "  + o.status + " status text " + o.statusText);
             }
         };
             

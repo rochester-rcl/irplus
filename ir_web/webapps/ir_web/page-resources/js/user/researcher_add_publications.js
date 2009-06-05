@@ -98,7 +98,7 @@ YAHOO.ur.researcher.publications = {
 			
 			failure: function(o) 
 			{
-			    alert('Get personal folder Failure ' + o.status + ' status text ' + o.statusText );
+			    alert('Get personal collection Failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 	
@@ -144,7 +144,7 @@ YAHOO.ur.researcher.publications = {
 			
 			failure: function(o) 
 			{
-			    alert('Get selected files Failure ' + o.status + ' status text ' + o.statusText );
+			    alert('Get researcher folders Failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 	

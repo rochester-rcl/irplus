@@ -158,7 +158,7 @@ YAHOO.ur.sponsor = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
-		    alert('sponsor submission failed ' + o.status);
+		    alert('sponsor submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -249,7 +249,7 @@ YAHOO.ur.sponsor = {
 	
 	        failure: function(o) 
 	        {
-	            alert('Get sponsor failed ' + o.status + ' status text ' + o.statusText );
+	            alert('edit sponsor failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -334,7 +334,7 @@ YAHOO.ur.sponsor = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('sponsor submission failed ' + o.status);
+		    alert('delete sponsor submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

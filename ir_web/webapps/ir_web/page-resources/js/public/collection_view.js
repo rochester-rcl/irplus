@@ -43,8 +43,11 @@ YAHOO.ur.public.collection.view =
         // Faiure action on getting a picture
         var handleFailure = function(o) 
 	    {
-	        alert('Could not get picture ' 
-	            + o.status + ' status text ' + o.statusText );
+        	if( o.status != 0 )
+	        {
+	            alert('Could not get picture ' 
+	                + o.status + ' status text ' + o.statusText );
+	        }
 	    };
 	
 	    //Get the next picture
@@ -79,7 +82,7 @@ YAHOO.ur.public.collection.view =
         // Faiure action on getting a picture
         var handleFailure = function(o) 
 	    {
-	        alert('Could not get picture ' 
+	        alert('Could not subscribe ' 
 	            + o.status + ' status text ' + o.statusText );
 	    };
 	
@@ -113,7 +116,7 @@ YAHOO.ur.public.collection.view =
         // Faiure action on getting a picture
         var handleFailure = function(o) 
 	    {
-	        alert('Could not get picture ' 
+	        alert('Could not unsubscribe ' 
 	            + o.status + ' status text ' + o.statusText );
 	    };
 	
@@ -148,7 +151,7 @@ YAHOO.ur.public.collection.view =
         // Faiure action on getting a picture
         var handleFailure = function(o) 
 	    {
-	        alert('Could not get picture ' 
+	        alert('Could not get user subscription ' 
 	            + o.status + ' status text ' + o.statusText );
 	    };
 	
@@ -184,8 +187,11 @@ YAHOO.ur.public.collection.view =
         // Faiure action on getting a statistics
         var handleFailure = function(o) 
 	    {
-	        alert('Could not get picture ' 
-	            + o.status + ' status text ' + o.statusText );
+        	if( o.status != 0 )
+	        {
+	            alert('Could not get stats ' 
+	                + o.status + ' status text ' + o.statusText );
+	        }
 	    };
 	
 	    //Get the statistics
