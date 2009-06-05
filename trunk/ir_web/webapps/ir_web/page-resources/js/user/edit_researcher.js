@@ -48,7 +48,7 @@ YAHOO.ur.edit.researcher =
 	        failure : function(o) 
 		    {
 	        	YAHOO.ur.util.wait.waitDialog.hide();
-		        alert('Could not save researcher info ' 
+		        alert('Could not save researcher personal info ' 
 		            + o.status + ' status text ' + o.statusText );
 		    }
 	    }
@@ -771,7 +771,7 @@ YAHOO.ur.edit.researcher =
 			
 			failure: function(o) 
 			{
-			    alert('Get researcher information failure ' + o.status + ' status text ' + o.statusText );
+			    alert('saveResearcherAndGetField failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 
@@ -830,7 +830,7 @@ YAHOO.ur.edit.researcher =
 			
 			failure: function(o) 
 			{
-			    alert('Get Extent Failure ' + o.status + ' status text ' + o.statusText );
+			    alert('Get getDepartments Failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 	       
@@ -860,7 +860,7 @@ YAHOO.ur.edit.researcher =
 			
 			failure: function(o) 
 			{
-			    alert('Get researcher information failure ' + o.status + ' status text ' + o.statusText );
+			    alert('saveResearcherAndGetDepartment failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 

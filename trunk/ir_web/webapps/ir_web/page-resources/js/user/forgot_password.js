@@ -101,7 +101,7 @@ YAHOO.ur.login =
 	    // handle form sbumission failure
 	    var handleFailure = function(o)
 	    {
-	        alert('Email submission failed ' + o.status);
+	        alert('Email submission failed '  + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

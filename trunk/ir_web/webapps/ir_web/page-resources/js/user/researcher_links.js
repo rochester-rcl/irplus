@@ -77,7 +77,7 @@ YAHOO.ur.researcher.link = {
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert("Link submission failed due to a network issue: " + o.status);
+	        alert("Link submission failed due to a network issue: " + o.status  +  " status text " + o.statusText);
 	    };
 
  	    // Instantiate the Dialog
@@ -180,7 +180,7 @@ YAHOO.ur.researcher.link = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure to get link ' + o.status);
+	        alert('failure to edit link ' + o.status  +  ' status text ' + o.statusText);
 	    };
 	    
 	    	
@@ -239,7 +239,7 @@ YAHOO.ur.researcher.link = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure ' + o.status);
+	        alert('delete link failure ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -301,7 +301,7 @@ YAHOO.ur.researcher.link = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure to get links ' + o.status);
+	        alert('failure to view links '  + o.status + ' status text ' + o.statusText);
 	    };
 	    
 	    	
@@ -338,7 +338,7 @@ YAHOO.ur.researcher.link = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure to get links ' + o.status);
+	        alert('failure to  move link up '  + o.status + ' status text ' + o.statusText);
 	    };
 	    
 	    	
@@ -375,7 +375,7 @@ YAHOO.ur.researcher.link = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure to get links ' + o.status);
+	        alert('failure to move links down ' + o.status + ' status text ' + o.statusText);
 	    };
 	    
 	    	

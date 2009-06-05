@@ -168,7 +168,7 @@ YAHOO.ur.institution = {
 	
 	
 	    var handleFailure = function(o) {
-	        alert("New collection submission failed due to a network issue " + o.status);
+	        alert("New collection submission failed  " + o.status + " status text " + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

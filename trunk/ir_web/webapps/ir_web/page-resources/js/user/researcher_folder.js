@@ -350,7 +350,7 @@ YAHOO.ur.researcher.folder = {
 		// handle form sbumission failure
 		var handleFailure = function(o) 
 		{
-		    alert("The submission failed due to a network issue: " + o.status);
+		    alert("Create new link failed : " + o.status  + " status text " + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -466,7 +466,7 @@ YAHOO.ur.researcher.folder = {
 		    },
 		   
 		    failure : function(o) {
-			    alert('Get file properties failed ' + o.status);
+			    alert('Get folder by id failed ' + o.status);
 		    }
 		}	
 	    

@@ -132,7 +132,7 @@ YAHOO.ur.file.database =
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('file database submission failed ' + o.status);
+	        alert('file database submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -230,7 +230,7 @@ YAHOO.ur.file.database =
 	
 	        failure: function(o) 
 	        {
-	            alert('Get FileDatabase failed ' + o.status + ' status text ' + o.statusText );
+	            alert('Edit FileDatabase failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -299,7 +299,7 @@ YAHOO.ur.file.database =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('File database delete submission failed ' + o.status);
+	        alert('File database delete submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

@@ -133,7 +133,7 @@ YAHOO.ur.file.server =
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('file server submission failed ' + o.status);
+	        alert('file server submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -231,7 +231,7 @@ YAHOO.ur.file.server =
 	
 	        failure: function(o) 
 	        {
-	            alert('Get FileServer failed ' + o.status + ' status text ' + o.statusText );
+	            alert('Edit FileServer failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -300,7 +300,7 @@ YAHOO.ur.file.server =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('File Server delete submission failed ' + o.status);
+	        alert('File Server delete submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

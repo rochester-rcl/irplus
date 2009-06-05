@@ -48,10 +48,7 @@ var itemPreviewAction = basePath + 'user/previewPublication.action';
 var moveFileDownAction = basePath + 'user/moveFileDown.action';
 var moveFileUpAction = basePath + 'user/moveFileUp.action';
 
-
-
 YAHOO.ur.item = {
-	
 	
 	/*
 	 * This call back updates the html when a folder is
@@ -153,7 +150,7 @@ YAHOO.ur.item = {
 		
 		failure: function(o) 
 		{
-		    alert('Get selected files Failure ' + o.status + ' status text ' + o.statusText );
+		    alert('updateFilesAndFoldersCallback Failure ' + o.status + ' status text ' + o.statusText );
 		}
 	},
 	
@@ -278,7 +275,6 @@ YAHOO.ur.item = {
 	
 	/**
 	 * Function to add folder
-	 *
 	 */
 	addFolder : function(folderId)
 	{
@@ -309,7 +305,7 @@ YAHOO.ur.item = {
 			
 			failure: function(o) 
 			{
-			    alert('Add file Failure ' + o.status + ' status text ' + o.statusText );
+			    alert('Add folder Failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 			

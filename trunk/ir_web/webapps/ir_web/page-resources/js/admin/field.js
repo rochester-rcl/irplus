@@ -142,7 +142,7 @@ YAHOO.ur.field =
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('field submission failed ' + o.status);
+	        alert('field submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -239,7 +239,7 @@ YAHOO.ur.field =
 	
 	        failure: function(o) 
 	        {
-	            alert('Get field failed ' + o.status + ' status text ' + o.statusText );
+	            alert('edit field failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -310,7 +310,7 @@ YAHOO.ur.field =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('field submission failed ' + o.status);
+	        alert('delete field submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

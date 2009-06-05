@@ -367,7 +367,7 @@ YAHOO.ur.email = {
 		
 			failure : function(o) 
 			{
-		    	alert('user update failed ' + o.status);
+		    	alert('user update failed ' + o.status  + ' status text ' + o.statusText);
 			}
 		}
 	
@@ -469,7 +469,7 @@ YAHOO.ur.email = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('Email deletion failed ' + o.status);
+		    alert('Email deletion failed ' + o.status  + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -616,7 +616,7 @@ YAHOO.ur.email = {
 		
 		failure: function(o) 
 		{
-		    alert('Get name Failure ' + o.status + ' status text ' + o.statusText );
+		    alert('getUserAuthoritativeName Failure ' + o.status + ' status text ' + o.statusText );
 		}
 	    
 

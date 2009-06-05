@@ -152,7 +152,7 @@ YAHOO.ur.affiliation = {
 
 	    // handle form sbumission failure
 	    var handleFailure = function(o) {
-	        alert('affiliation submission failed ' + o.status);
+	        alert('affiliation submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -345,7 +345,7 @@ YAHOO.ur.affiliation = {
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('affiliation submission failed ' + o.status);
+	        alert('affiliation submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

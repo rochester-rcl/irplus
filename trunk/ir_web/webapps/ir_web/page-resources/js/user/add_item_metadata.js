@@ -169,7 +169,7 @@ YAHOO.ur.item.metadata = {
 			
 			failure: function(o) 
 			{
-			    alert('Get publication metadata failure ' + o.status + ' status text ' + o.statusText );
+			    alert('saveItemTypeAndUpdateSecondaryTypes failure ' + o.status + ' status text ' + o.statusText );
 			}
 		};
 		
@@ -203,7 +203,7 @@ YAHOO.ur.item.metadata = {
 			
 			failure: function(o) 
 			{
-			    alert('Get publication metadata failure ' + o.status + ' status text ' + o.statusText );
+			    alert('saveItemMetadataAndGetSeries failure ' + o.status + ' status text ' + o.statusText );
 			}
 		};
 		
@@ -490,7 +490,7 @@ YAHOO.ur.item.metadata = {
 			
 			failure: function(o) 
 			{
-			    alert('Get publication metadata failure ' + o.status + ' status text ' + o.statusText );
+			    alert('saveItemMetadataAndGetIdentifier failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 
@@ -606,8 +606,6 @@ YAHOO.ur.item.metadata = {
 		YAHOO.util.Event.addListener("show_identifier_type", "click", 
 		    YAHOO.ur.item.metadata.identifierTypeDialog.showDialog, 
 		    YAHOO.ur.item.metadata.identifierTypeDialog, true);
-		    
-	 
 	},
 
 
@@ -619,7 +617,6 @@ YAHOO.ur.item.metadata = {
 	        var table_div = document.getElementById("extent_forms");
 	        var child = document.getElementById(tableId);
 	        table_div.removeChild(child); 
-	        
 	},
 	 
 	/**
@@ -628,10 +625,8 @@ YAHOO.ur.item.metadata = {
 	 */
 	getExtents :function()
 	{
-
 		var callback =
 		{
-		
 		    success: function(o) 
 		    {
 			    // check for the timeout - forward user to login page if timout
@@ -701,7 +696,7 @@ YAHOO.ur.item.metadata = {
 			
 			failure: function(o) 
 			{
-			    alert('Get publication metadata failure ' + o.status + ' status text ' + o.statusText );
+			    alert('saveItemMetadataAndGetExtent failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 
@@ -817,8 +812,6 @@ YAHOO.ur.item.metadata = {
 		YAHOO.util.Event.addListener("show_extent_type", "click", 
 		    YAHOO.ur.item.metadata.extentTypeDialog.showDialog, 
 		    YAHOO.ur.item.metadata.extentTypeDialog, true);
-		    
-	 
 	},
 
 	/*
@@ -829,7 +822,6 @@ YAHOO.ur.item.metadata = {
 	        var table_div = document.getElementById("sponsor_forms");
 	        var child = document.getElementById(tableId);
 	        table_div.removeChild(child); 
-	        
 	},
 	 
 	/**
@@ -838,10 +830,8 @@ YAHOO.ur.item.metadata = {
 	 */
 	getSponsors :function()
 	{
-
 		var callback =
 		{
-		
 		    success: function(o) 
 		    {
 			    // check for the timeout - forward user to login page if timout
@@ -911,7 +901,7 @@ YAHOO.ur.item.metadata = {
 			
 			failure: function(o) 
 			{
-			    alert('Get publication metadata failure ' + o.status + ' status text ' + o.statusText );
+			    alert('saveItemMetadataAndGetSponsor failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 	
@@ -1062,7 +1052,7 @@ YAHOO.ur.item.metadata = {
 			
 			failure: function(o) 
 			{
-			    alert('Get publication metadata failure ' + o.status + ' status text ' + o.statusText );
+			    alert('saveItemMetadataAndGetPublisher failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 		

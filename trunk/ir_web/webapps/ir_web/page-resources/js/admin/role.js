@@ -148,7 +148,7 @@ YAHOO.ur.role = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('role submission failed ' + o.status);
+		    alert('role submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -298,7 +298,7 @@ YAHOO.ur.role = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('role submission failed ' + o.status);
+		    alert('delete role submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

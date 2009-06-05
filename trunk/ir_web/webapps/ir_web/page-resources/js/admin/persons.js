@@ -165,7 +165,7 @@ YAHOO.ur.person = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
-		    alert('person submission failed ' + o.status);
+		    alert('person submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -337,7 +337,7 @@ YAHOO.ur.person = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('delete person submission failed ' + o.status);
+		    alert('delete person submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		
@@ -423,7 +423,7 @@ YAHOO.ur.person = {
 			
 			failure: function(o) 
 			{
-			    alert('Get person search results ' + o.status + ' status text ' + o.statusText );
+			    alert('Get person search results  failure ' + o.status + ' status text ' + o.statusText );
 			}
 		}
 		YAHOO.util.Connect.setForm('personSearchForm');

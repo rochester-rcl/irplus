@@ -152,7 +152,7 @@ YAHOO.ur.language.type = {
 	
 	    // handle form sbumission failure
 	    var handleFailure = function(o) {
-	        alert('language type submission failed ' + o.status);
+	        alert('language type submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -245,7 +245,7 @@ YAHOO.ur.language.type = {
 	
 	        failure: function(o) 
 	        {
-	            alert('Get language type failed ' + o.status + ' status text ' + o.statusText );
+	            alert('Edit language type failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -316,7 +316,7 @@ YAHOO.ur.language.type = {
 	
 	    // handle form submission failure
 	    var handleFailure = function(o) {
-	        alert('language type submission failed ' + o.status);
+	        alert('delete language type submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

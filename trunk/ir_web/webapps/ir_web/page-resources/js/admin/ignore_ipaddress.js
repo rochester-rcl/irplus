@@ -165,7 +165,7 @@ YAHOO.ur.ignore.ipaddress = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
-		    alert('ip address submission failed ' + o.status);
+		    alert('ip address submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -270,7 +270,7 @@ YAHOO.ur.ignore.ipaddress = {
 	
 	        failure: function(o) 
 	        {
-	            alert('Get ip address failed ' + o.status + ' status text ' + o.statusText );
+	            alert('Edit ip address failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -354,7 +354,7 @@ YAHOO.ur.ignore.ipaddress = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('ip address submission failed ' + o.status);
+		    alert('ip address submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

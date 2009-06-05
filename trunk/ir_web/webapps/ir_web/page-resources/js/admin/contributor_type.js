@@ -148,7 +148,7 @@ YAHOO.ur.contributor.type = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
-		    alert('contributor type submission failed ' + o.status);
+		    alert('contributor type submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -323,7 +323,7 @@ YAHOO.ur.contributor.type = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('contributor type submission failed ' + o.status);
+		    alert('contributor type submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

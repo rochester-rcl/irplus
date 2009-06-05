@@ -388,7 +388,7 @@ YAHOO.ur.file.properties =
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert("Submision failed due to a network issue : " + o.status);
+	        alert("rename file dialog failed  : " + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

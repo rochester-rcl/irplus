@@ -166,7 +166,7 @@ YAHOO.ur.person.names = {
 		// handle form submission failure
 		var handleNewPersonNameFormFailure = function(o) 
 		{
-		    alert('person name submission failed ' + o.status);
+		    alert('person name submission failed ' + o.status  + ' status text ' + o.statusText);
 		};
 	
 		// Adds new person to a user
@@ -200,7 +200,7 @@ YAHOO.ur.person.names = {
 		
 		// handle form sbumission failure
 		var handleNewPersonForUserFormFailure = function(o) {
-		    alert('person submission failed ' + o.status);
+		    alert('person submission failed ' + o.status  + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -372,7 +372,7 @@ YAHOO.ur.person.names = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('delete person submission failed ' + o.status);
+		    alert('delete person submission failed ' + o.status  + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

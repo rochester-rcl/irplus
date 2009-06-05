@@ -159,7 +159,7 @@ YAHOO.ur.publisher = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
-		    alert('publisher submission failed ' + o.status);
+		    alert('publisher submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
@@ -251,7 +251,7 @@ YAHOO.ur.publisher = {
 	
 	        failure: function(o) 
 	        {
-	            alert('Get publisher failed ' + o.status + ' status text ' + o.statusText );
+	            alert('edit publisher failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -336,7 +336,7 @@ YAHOO.ur.publisher = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('publisher submission failed ' + o.status);
+		    alert('delete publisher submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

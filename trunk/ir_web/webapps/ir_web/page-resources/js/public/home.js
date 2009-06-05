@@ -52,6 +52,7 @@ YAHOO.ur.public.home =
         //Faiure action on getting a picture
         var handleFailure = function(o) 
 	    {
+        	// supress if user tries to move away from the picture before loading
 	        if( o.status != 0 )
 	        {
 	            alert('Could not get picture ' 

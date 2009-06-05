@@ -153,7 +153,7 @@ YAHOO.ur.topMediaType = {
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('top media type submission failed ' + o.status);
+	        alert('top media type submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -319,7 +319,7 @@ YAHOO.ur.topMediaType = {
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('top media type submission failed ' + o.status);
+	        alert('delete top media type failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

@@ -178,7 +178,7 @@ YAHOO.ur.invite =
 	    var handleFailure = function(o) 
 	    {
 	    	YAHOO.ur.invite.waitDialog.hide();
-	        alert('Invite user failed ' + o.status);
+	        alert('Invite user failed '  + o.status + ' status text ' + o.statusText);
 	    };
   
  	    // Validate the entries in the form to require that both first and last name are entered

@@ -44,7 +44,7 @@ YAHOO.ur.shared.file.move =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('Get destinations failure ' + o.status);
+	        alert('Get destinations failure '  + o.status + ' status text ' + o.statusText);
 	    };
 
 	    YAHOO.util.Connect.setForm('viewChildContentsForMove');
@@ -91,7 +91,7 @@ YAHOO.ur.shared.file.move =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('Move failure ' + o.status);
+	        alert('Move failure '  + o.status + ' status text ' + o.statusText);
 	    };
 
 

@@ -206,7 +206,7 @@ YAHOO.ur.personal.collection =
 				
 				failure: function(o) 
 				{
-				    alert('Add file Failure ' + o.status + ' status text ' + o.statusText );
+				    alert('Add file to item Failure ' + o.status + ' status text ' + o.statusText );
 				}
 			}
 			
@@ -346,7 +346,7 @@ YAHOO.ur.personal.collection =
 	
 	    var handleFailure = function(o) 
 	    {
-	        alert('New collection Submission failed ' + o.status);
+	        alert('New collection Submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

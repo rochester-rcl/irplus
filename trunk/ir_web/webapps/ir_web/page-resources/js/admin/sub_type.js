@@ -63,7 +63,7 @@ YAHOO.ur.subType =
 	
 	        failure: function(o) 
 	        {
-	            alert('Get top media type Failure ' + o.status + ' status text ' + o.statusText );
+	            alert('Get sub type Failure ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -158,7 +158,7 @@ YAHOO.ur.subType =
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('sub type Submission failed ' + o.status);
+	        alert('sub type Submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -327,7 +327,7 @@ YAHOO.ur.subType =
 	    // handle form Submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('sub type Submission failed ' + o.status);
+	        alert('delete sub type Submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

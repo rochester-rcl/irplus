@@ -86,7 +86,7 @@ YAHOO.ur.institution.item.permission = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure ' + o.status);
+	        alert('remove group failure ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -172,7 +172,7 @@ YAHOO.ur.institution.item.permission = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
-	        alert('failure ' + o.status);
+	        alert('remove item failure ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

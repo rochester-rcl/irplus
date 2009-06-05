@@ -143,7 +143,7 @@ YAHOO.ur.identifier.type =
 	
 	    // handle form sbumission failure
 	    var handleFailure = function(o) {
-	        alert('identifier type submission failed ' + o.status);
+	        alert('identifier type submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -237,7 +237,7 @@ YAHOO.ur.identifier.type =
 	
 	        failure: function(o) 
 	        {
-	            alert('Get identifier type failed ' + o.status + ' status text ' + o.statusText );
+	            alert('Edit identifier type failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -310,7 +310,7 @@ YAHOO.ur.identifier.type =
 	
 	    // handle form submission failure
 	    var handleFailure = function(o) {
-	        alert('identifier type submission failed ' + o.status);
+	        alert('delete identifier type submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog

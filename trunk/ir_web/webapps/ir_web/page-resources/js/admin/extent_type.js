@@ -145,7 +145,7 @@ YAHOO.ur.extent.type =
 	
 	    // handle form sbumission failure
 	    var handleFailure = function(o) {
-	        alert('extent type submission failed ' + o.status);
+	        alert('extent type submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
@@ -245,7 +245,7 @@ YAHOO.ur.extent.type =
 	
 	        failure: function(o) 
 	        {
-	            alert('Get extent types failed ' + o.status + ' status text ' + o.statusText );
+	            alert('edit extent types failed ' + o.status + ' status text ' + o.statusText );
 	        }
         };
         
@@ -317,7 +317,7 @@ YAHOO.ur.extent.type =
 	
 	    // handle form submission failure
 	    var handleFailure = function(o) {
-	        alert('extent type submission failed ' + o.status);
+	        alert('delete extent type submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
 	    // Instantiate the Dialog
