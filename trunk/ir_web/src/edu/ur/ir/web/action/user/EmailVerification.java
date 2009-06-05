@@ -29,7 +29,7 @@ import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 
 /**
- * Action toverify email address
+ * Action to verify email address
  * 
  * @author Sharmila Ranganathan
  *

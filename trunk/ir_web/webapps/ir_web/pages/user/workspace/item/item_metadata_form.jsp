@@ -18,7 +18,6 @@
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="ur" uri="ur-tags"%>
 			
 	<c:if test="${ThumbnailFilesCount > 0}">
 		<strong> Primary File: </strong> 
@@ -124,7 +123,7 @@
 	           <c:if test="${item.thesis}">
 	           		checked
 	           	</c:if>  	
-	           	>	Thesis</thesis>
+	           	/>	Thesis
 	           
 	      </td>
 	      </tr>  
@@ -316,13 +315,13 @@
 	            <button type="button" id="show_available_calendar"><img alt="Calendar" 
 				                       src="${pageContext.request.contextPath}/page-resources/images/all-images/calendar.gif"/></button>
 	    		
-	    		<ur:div id="containerDialog3">
-					<ur:div cssClass="hd">Calendar</ur:div>
+	    		<div id="containerDialog3">
+					<div class="hd">Calendar</div>
 	
-					<ur:div  cssClass="bd">
-						 <ur:div id="cal3Container"></ur:div> 
-					</ur:div >
-				</ur:div >	
+					<div  class="bd">
+						 <div id="cal3Container"></div> 
+					</div >
+				</div >	
 	      </td>
 	      </tr> 
 	      
@@ -349,13 +348,13 @@
 	    		<button type="button" id="show_release_calendar" title="Show Calendar"><img alt="Calendar" 
 				                       src="${pageContext.request.contextPath}/page-resources/images/all-images/calendar.gif"/></button>
 	    		
-	    		<ur:div id="containerDialog2">
-					<ur:div cssClass="hd">Calendar</ur:div>
+	    		<div id="containerDialog2">
+					<div class="hd">Calendar</div>
 	
-					<ur:div  cssClass="bd">
-						 <ur:div id="cal2Container"></ur:div> 
-					</ur:div >
-				</ur:div >	              
+					<div  class="bd">
+						 <div id="cal2Container"></div> 
+					</div >
+				</div >	              
 	      </td>
 	      </tr> 	      
 
@@ -382,13 +381,13 @@
 	    		<button type="button" id="show_createdDate_calendar" title="Show Calendar"><img alt="Calendar" 
 				                       src="${pageContext.request.contextPath}/page-resources/images/all-images/calendar.gif"/></button>
 	    		
-	    		<ur:div id="containerDialog4">
-					<ur:div cssClass="hd">Calendar</ur:div>
+	    		<div id="containerDialog4">
+					<div class="hd">Calendar</div>
 	
-					<ur:div  cssClass="bd">
-						 <ur:div id="cal4Container"></ur:div> 
-					</ur:div >
-				</ur:div >	              
+					<div class="bd">
+						 <div id="cal4Container"></div> 
+					</div >
+				</div >	              
 	      </td>
 	      </tr> 	      
 	      	      
@@ -457,13 +456,13 @@
 		        		<button type="button" id="show" title="Show Calendar"><img alt="Calendar" 
 				                       src="${pageContext.request.contextPath}/page-resources/images/all-images/calendar.gif"/></button>
 		        		
-		        		<ur:div id="containerDialog">
-      						<ur:div cssClass="hd">Calendar</ur:div>
+		        		<div id="containerDialog">
+      						<div class="hd">Calendar</div>
 
-    						<ur:div  cssClass="bd">
-      							 <ur:div id="cal1Container"></ur:div> 
-      						</ur:div >
-   						</ur:div >
+    						<div  class="bd">
+      							 <div id="cal1Container"></div> 
+      						</div>
+   						</div>
 			        		
 				        </td>
 			          </tr>

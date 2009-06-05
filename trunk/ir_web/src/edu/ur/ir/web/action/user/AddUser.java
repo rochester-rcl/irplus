@@ -342,11 +342,21 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 			    try
 			    {
 			        ldapAuthProvider.authenticate(authRequest);
+					IrUser ldapUser = userService.getUserByLdapUserName(irUser.getLdapUserName());
+					// we have an interesting problem
+					// user has authenticated correctly - but the user name already exists in the 
+					// system - 
+					if( ldapUser != null )
+					{
+						failure = true;
+				    	addFieldError("netIdAlreadyExists", "The net id user name already exists - you may already have an account please contact the admistrator");
+					}
+
 			    }
 			    catch(BadCredentialsException bce)
 			    {
 			    	 failure = true;
-			    	 addFieldError("netIdPasswordFail", "The net id could not be verified - bad credentials");
+			    	 addFieldError("netIdPasswordFail", "The net id credentials could not be verified");
 			    }
 		     }
 			 else
@@ -376,8 +386,13 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		}
 		
 
+		// we do not use the created ir user but instead
+		// will be creating a new user.  So the information is copied over
+		// to save it.
 		String firstName = irUser.getFirstName();
 		String lastName = irUser.getLastName();
+		String ldapUserName = irUser.getLastName();
+		
 				
 		defaultEmail.setVerified(false);
 		defaultEmail.setToken(TokenGenerator.getToken());
@@ -387,6 +402,7 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		irUser.setAccountLocked(accountLocked);
 		irUser.setFirstName(firstName);
 		irUser.setLastName(lastName);
+		irUser.setLdapUserName(ldapUserName);
 		
 		if( license != null )
 		{

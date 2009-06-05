@@ -782,6 +782,47 @@
             <result name="added">/pages/user/workspace/item/person_added.jsp</result>
         </action>        
 
+
+		<!--  This handles creating new series -->
+        <action name="createSeries" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManageSeries">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/series/series_form.jsp</result>
+        </action>   
+        
+        <!--  This handles creating new sponsor -->
+        <action name="createSponsor" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManageSponsors">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/sponsors/sponsor_form.jsp</result>
+        </action>     
+        
+        <!--  This handles creating new  identifier type -->
+        <action name="createIdentifierType" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManageIdentifierTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/identifier_types/identifier_type_added.jsp</result>
+        </action>      
+        
+        <!--  This handles creating new extent type -->
+        <action name="createExtentType" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManageExtentTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/extent_types/extent_type_added.jsp</result>
+        </action>    
+        
+         <!--  This handles creating new extent type -->
+        <action name="createPublisher" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManagePublishers">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/publishers/publisher_form.jsp</result>
+        </action>                          
+
         <!--  ************************************ -->
         <!--  Submission into institutional collections     -->
         <!--  ************************************ -->

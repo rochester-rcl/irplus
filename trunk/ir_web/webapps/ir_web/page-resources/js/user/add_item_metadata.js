@@ -37,8 +37,8 @@ var saveItemTypeAndUpdateSecondaryTypesAction = basePath + 'user/saveContentType
 var saveMetadataAndShowAddFilesAction = basePath + 'user/saveMetadataAndShowAddFiles.action';
 var saveMetadataAndViewContributorsAction = basePath + 'user/saveMetadataAndViewContributors.action';
 var saveMetadataAndPreviewAction = basePath + 'user/saveMetadataAndPreview.action';
-var saveReviewItemMetadataAction = basePath + 'admin/saveItemMetadata.action';
-var cancelReviewItemMetadataAction = basePath + 'admin/reviewItem.action';
+var saveReviewItemMetadataAction = basePath + 'user/saveItemMetadata.action';
+var cancelReviewItemMetadataAction = basePath + 'user/reviewItem.action';
 
 // Action to get the series
 var seriesAction = basePath + 'user/getSeries.action';
@@ -53,11 +53,11 @@ var extentAction = basePath + 'user/getExtents.action';
 var sponsorAction = basePath + 'user/getSponsors.action';
 
 // Actions to create new series /identifier / sponsor / publisher
-var newSeriesAction = basePath + 'admin/createSeries.action';
-var newSponsorAction = basePath + 'admin/createSponsor.action';
-var newIdentifierTypeAction = basePath + 'admin/createIdentifierType.action';
-var newExtentTypeAction = basePath + 'admin/createExtentType.action';
-var newPublisherAction = basePath + 'admin/createPublisher.action';
+var newSeriesAction = basePath + 'user/createSeries.action';
+var newSponsorAction = basePath + 'user/createSponsor.action';
+var newIdentifierTypeAction = basePath + 'user/createIdentifierType.action';
+var newExtentTypeAction = basePath + 'user/createExtentType.action';
+var newPublisherAction = basePath + 'user/createPublisher.action';
 
 YAHOO.ur.item.metadata = {
 	
@@ -370,7 +370,7 @@ YAHOO.ur.item.metadata = {
 	    {
 		    YAHOO.util.Connect.setForm('newSeriesForm');
 		    
-		    	    
+		    alert('Series action = ' + newSeriesAction);
 		    if( YAHOO.ur.item.metadata.newSeriesDialog.validate() )
 		    {
 	            var cObj = YAHOO.util.Connect.asyncRequest('post',
@@ -382,7 +382,7 @@ YAHOO.ur.item.metadata = {
 		YAHOO.ur.item.metadata.newSeriesDialog.validate = function() {
 		    var name = document.getElementById('newSeriesForm_name').value;
 			if (name == "" || name == null) {
-			    alert('A Content type name must be entered');
+			    alert('A series name must be entered');
 				return false;
 			} else {
 				return true;

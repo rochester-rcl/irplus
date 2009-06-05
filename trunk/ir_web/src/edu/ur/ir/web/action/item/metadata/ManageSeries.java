@@ -24,6 +24,10 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.SeriesService;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -32,7 +36,7 @@ import edu.ur.ir.web.table.Pager;
  * @author Sharmila Ranganathan
  *
  */
-public class ManageSeries extends Pager implements Preparable{
+public class ManageSeries extends Pager implements Preparable, UserIdAware{
 	
 	/** generated version id. */
 	private static final long serialVersionUID = -8370650961037267346L;
@@ -61,6 +65,9 @@ public class ManageSeries extends Pager implements Preparable{
 	/** id of the series  */
 	private Long id;
 	
+	/** id of user making changes */
+	private Long userId;
+	
 	/** Set of series ids */
 	private long[] seriesIds;
 
@@ -73,6 +80,9 @@ public class ManageSeries extends Pager implements Preparable{
 	
 	/** Row End */
 	private int rowEnd;
+	
+	/** Service for managing user data  */
+	private UserService userService;
 	
 	/** Default constructor */
 	public ManageSeries() 
@@ -88,10 +98,18 @@ public class ManageSeries extends Pager implements Preparable{
 	 */
 	public String create()
 	{
+		IrUser user = userService.getUser(userId, false);
+		
+		if( user == null || (!user.hasRole(IrRole.AUTHOR_ROLE) && !user.hasRole(IrRole.AUTHOR_ROLE)) )
+		{
+		     return "accessDenied";	
+		}
+		
 		log.debug("creating a series = " + series.getName());
 		added = false;
 		Series other = seriesService.getSeries(series.getName());
-		if( other == null)
+				
+		if( other == null || !other.equals(series) )
 		{
 		    seriesService.saveSeries(series);
 		    added = true;
@@ -99,7 +117,7 @@ public class ManageSeries extends Pager implements Preparable{
 		else
 		{
 			message = getText("seriesAlreadyExists", 
-					new String[]{series.getName()});
+					new String[]{series.getName() + " - " + series.getNumber()});
 			addFieldError("seriesAlreadyExists", message);
 		}
         return "added";
@@ -293,6 +311,19 @@ public class ManageSeries extends Pager implements Preparable{
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 
 }
