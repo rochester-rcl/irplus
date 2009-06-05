@@ -18,7 +18,6 @@
 
 <c:forEach items="${alphaList}" var="alpha">
     <c:if test="${alpha != selectedAlpha}">
-				             
 	    <c:url var="alphaUrl" value="/browseCollectionItems.action">
 		    <c:param name="rowStart" value="0"/>
 			<c:param name="startPageNumber" value="1"/>

@@ -28,7 +28,7 @@
 			<c:param name="selectedAlpha" value="${alpha}"/>
 			<c:param name="collectionId" value="${institutionalCollection.id}"/>																	
 		</c:url>
-		<a href="${alphaUrl}"><strong>${alpha}</strong></a>
+		<a href="${alphaNameUrl}"><strong>${alpha}</strong></a>
     </c:if>
 	
 	<c:if test="${alpha == selectedAlpha}">
