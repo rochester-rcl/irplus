@@ -24,6 +24,10 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.item.SponsorService;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -32,7 +36,7 @@ import edu.ur.ir.web.table.Pager;
  * @author Sharmila Ranganathan
  *
  */
-public class ManageSponsors extends Pager implements Preparable{
+public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 	
 	/** generated version id. */
 	private static final long serialVersionUID = -8370650961037267346L;
@@ -74,6 +78,12 @@ public class ManageSponsors extends Pager implements Preparable{
 	/** Row End */
 	private int rowEnd;
 	
+	/** User id who is making the changes */
+	private Long userId;
+	
+	/** Service for checking user information */
+	private UserService userService;
+	
 	/** Default constructor */
 	public ManageSponsors()
 	{
@@ -89,6 +99,13 @@ public class ManageSponsors extends Pager implements Preparable{
 	public String create()
 	{
 		log.debug("creating a sponsor = " + sponsor.getName());
+	
+		IrUser user = userService.getUser(userId, false);
+		if( user == null || (!user.hasRole(IrRole.AUTHOR_ROLE) && !user.hasRole(IrRole.AUTHOR_ROLE)) )
+		{
+		    return "accessDenied";	
+		}
+		
 		added = false;
 		Sponsor other = sponsorService.getSponsor(sponsor.getName());
 		if( other == null)
@@ -293,6 +310,19 @@ public class ManageSponsors extends Pager implements Preparable{
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;	
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userSerice) {
+		this.userService = userSerice;
 	}
 
 }

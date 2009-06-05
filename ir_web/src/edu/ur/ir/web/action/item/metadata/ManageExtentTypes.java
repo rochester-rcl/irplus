@@ -24,6 +24,10 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.ExtentTypeService;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -32,7 +36,7 @@ import edu.ur.ir.web.table.Pager;
  * @author Sharmila Ranganathan
  *
  */
-public class ManageExtentTypes extends Pager implements Preparable{
+public class ManageExtentTypes extends Pager implements Preparable, UserIdAware{
 	
 	
 	/** Eclipse generated id */
@@ -74,6 +78,12 @@ public class ManageExtentTypes extends Pager implements Preparable{
 	/** Row End */
 	private int rowEnd;
 	
+	/** User id who is making the changes */
+	private Long userId;
+	
+	/** Service for checking user information */
+	private UserService userService;
+	
 	/** Default constructor */
 	public ManageExtentTypes()
 	{
@@ -89,6 +99,11 @@ public class ManageExtentTypes extends Pager implements Preparable{
 	public String create()
 	{
 		log.debug("creating a extent type = " + extentType.getName());
+		IrUser user = userService.getUser(userId, false);
+		if( user == null || (!user.hasRole(IrRole.AUTHOR_ROLE) && !user.hasRole(IrRole.AUTHOR_ROLE)) )
+		{
+		    return "accessDenied";	
+		}
 		added = false;
 		ExtentType myExtentType = 
 			extentTypeService.getExtentType(extentType.getName());
@@ -298,6 +313,18 @@ public class ManageExtentTypes extends Pager implements Preparable{
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }
