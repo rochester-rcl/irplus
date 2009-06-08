@@ -78,9 +78,7 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	/**  Service for dealing with user file systems */
 	private UserFileSystemService userFileSystemService;
 	
-	/** the name the user wants to give the files */
-	private String[] userFileName;
-	
+
 	/** description of the file  */
 	private String[] userFileDescription;
 	
@@ -146,14 +144,11 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		{
 			for( int index = 0; index < file.length; index++)
 			{
-				String theFileName = userFileName[index];
-	
-				if(userFileName[index] == null || userFileName[index].trim().equals(""))
-				{
-					theFileName = FilenameUtils.getName(fileFileName[index]);
-				}
 				
-				FileUploadInfo fileUploadInfo = new FileUploadInfo(theFileName, userFileName[index],
+				
+				String theFileName = FilenameUtils.getName(fileFileName[index]);
+				
+				FileUploadInfo fileUploadInfo = new FileUploadInfo(theFileName, 
 						userFileDescription[index]);
 				filesNotAdded.add(fileUploadInfo);
 			}
@@ -170,14 +165,12 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 			
 			for( int index = 0; index < file.length; index++)
 			{
-				String theFileName = userFileName[index];
-				PersonalFile pf = null;
-				if(userFileName[index] == null || userFileName[index].trim().equals(""))
-				{
-					theFileName = FilenameUtils.getName(fileFileName[index]);
-				}
 				
-				FileUploadInfo fileUploadInfo = new FileUploadInfo(theFileName, userFileName[index],
+				PersonalFile pf = null;
+				
+				String theFileName = FilenameUtils.getName(fileFileName[index]);
+				
+				FileUploadInfo fileUploadInfo = new FileUploadInfo(theFileName, 
 						userFileDescription[index]);
 				
 				// make sure we have a name if not do not upload!
@@ -285,14 +278,6 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 
 	public Long getUserId() {
 		return userId;
-	}
-
-	public String[] getUserFileName() {
-		return userFileName;
-	}
-
-	public void setUserFileName(String[] userFileName) {
-		this.userFileName = userFileName;
 	}
 
 	public UserService getUserService() {
