@@ -37,10 +37,10 @@
 			<tr >
 				<td class="tdItemSelectLeftBorder" >
 					<c:if test="${collectionPermission.permission == 'DIRECT_SUBMIT'}">
-		            	 <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/arrow_right.gif"/>Direct
+		            	 <span class="addBtnImg">&nbsp;</span>Direct
 	                </c:if>
 					<c:if test="${collectionPermission.permission == 'REVIEW_SUBMIT'}">
-		                 <img class="tableImg" alt="" src="${pageContext.request.contextPath}/page-resources/images/all-images/user_edit.jpg"/>Review
+		                 <span class="groupAddBtnImg">&nbsp;</span>Review
 	                </c:if>
 				</td>
 				
