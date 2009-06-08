@@ -49,11 +49,6 @@
              type="file"></td>
     </tr>
     <tr>
-        <td class="label">Display Name(optional):</td>
-        <td align="left" class="input"><input id="user_file_name" 
-            name="userFileName" value="${filesNotAdded[0].userFileName}" size="50" type="text"/></td>
-    </tr>
-    <tr>
         <td class="label">File Description:</td>
         <td align="left" class="input"><textarea id="user_file_description" 
             name="userFileDescription" cols="47" rows="2">${filesNotAdded[0].description}</textarea></td>

@@ -793,23 +793,33 @@ YAHOO.ur.folder =
 	            // the error messages.
 	            uploadForm.innerHTML = o.responseText;
 	         
-	            // determine if the add/edit was a success
-	            var success = document.getElementById("file_added").value;
-	            var parentFolderId = document.getElementById("file_upload_parent_folder_id").value;
-	            //if the content type was not added then show the user the error message.
-	            // received from the server
-	            if( success == "false" )
-	            {
-	                YAHOO.ur.folder.waitDialog.hide();
-                    YAHOO.ur.folder.singleFileUploadDialog.showDialog();
-	            }
-	            else
-	            {
-	                // we can clear the upload form and get the pictures
+	            try{
+	                // determine if the add/edit was a success
+	                var success = document.getElementById("file_added").value;
+	                var parentFolderId = document.getElementById("file_upload_parent_folder_id").value;
+	                //if the content type was not added then show the user the error message.
+	                // received from the server
+	                if( success == "false" )
+	                {
+	                    YAHOO.ur.folder.waitDialog.hide();
+                        YAHOO.ur.folder.singleFileUploadDialog.showDialog();
+	                }
+	                else
+	                {
+	                    // we can clear the upload form and get the pictures
 	           
-	                YAHOO.ur.folder.clearSingleFileUploadForm();
-	                myPersonalFolderTable.submitForm(myFolderAction);  
-	                YAHOO.ur.folder.waitDialog.hide(); 
+	                    YAHOO.ur.folder.clearSingleFileUploadForm();
+	                    myPersonalFolderTable.submitForm(myFolderAction);  
+	                    YAHOO.ur.folder.waitDialog.hide(); 
+	                }
+	            }
+	            catch(err)
+	            {
+	            	  YAHOO.ur.folder.waitDialog.hide();
+	            	  txt="There was an error on this page.\n\n";
+	            	  txt+="Error description: " + err + "\n\n";
+	            	  txt+="Click OK to continue.\n\n";
+	            	  alert(txt);
 	            }
 	        }
 	    };
@@ -876,7 +886,6 @@ YAHOO.ur.folder =
     clearSingleFileUploadForm : function()
     {
 	    document.getElementById('single_file_upload').value = "";
-	    document.getElementById('user_file_name').value = "";
 	    document.getElementById('user_file_description').value = "";
 	
         var div = document.getElementById('single_file_upload_error');
