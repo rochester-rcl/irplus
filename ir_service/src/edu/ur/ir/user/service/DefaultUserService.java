@@ -309,7 +309,7 @@ public class DefaultUserService implements UserService {
 		// Delete  items
 		for( GenericItem item: items)
 		{
-			// If item is not published, then delete the item
+			// If item is not published, then throw an exception - this user cannot be deleted
 			if (item.isPublishedToSystem()) {
 				throw new UserHasPublishedDeleteException(user);
 			}
@@ -328,6 +328,7 @@ public class DefaultUserService implements UserService {
 		for( PersonalItem pi : personalItems )
 		{
 			user.removeRootPersonalItem(pi);
+			userPublishingFileSystemService.deletePersonalItem(pi);
 		}
 		
 		//delete all the personal collections for the user
@@ -337,6 +338,7 @@ public class DefaultUserService implements UserService {
 		for( PersonalCollection pc : personalCollections )
 		{
 			user.removeRootPersonalCollection(pc);
+			userPublishingFileSystemService.deletePersonalCollection(pc);
 		}
 		
 		
