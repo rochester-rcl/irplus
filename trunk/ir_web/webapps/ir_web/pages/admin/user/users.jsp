@@ -157,7 +157,7 @@
 		              <input type="hidden" id="loginAsUserForm_id" name="id">
 			          <p>Are you sure you want to login as the selected user?</p>
 		          </form>
-		      <div>
+		      </div>
 	      </div>
 	      
 	      	          

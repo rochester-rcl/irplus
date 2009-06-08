@@ -44,7 +44,10 @@
 				<c:forEach items="${item.contributors}" var="itemContributor">
 				<tr>
 				    <td>
-					    <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/> - ${itemContributor.contributor.contributorType.name}
+				        <c:url var="contributorUrl" value="/viewContributorPage.action">
+						    <c:param name="personNameId" value="${itemContributor.contributor.personName.id}"/>
+						</c:url>						                             
+						<a href="${contributorUrl}"> <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/></a> - ${itemContributor.contributor.contributorType.name}
 					</td>
 					</tr>
 				</c:forEach>
