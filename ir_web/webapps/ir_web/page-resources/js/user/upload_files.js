@@ -67,31 +67,21 @@ YAHOO.ur.file.upload =
 
             var tableRow2 = table.insertRow(rowCount);
             var tableCell2 = tableRow2.insertCell(0);	        
-	        
-	        var text2 = document.createTextNode('File Name');
-	        tableCell2.appendChild(text2);
-
-            var tableCell3 = tableRow2.insertCell(1);
+          
 	        var text3 = document.createTextNode('Description');
-	        tableCell3.appendChild(text3);
-	      
+	        tableCell2.appendChild(text3);
+	        tableCell2.colSpan='2';
+	        
 	        rowCount += 1;
 	        var tableRow3 = table.insertRow(rowCount); 
-	        var tableCell4 = tableRow3.insertCell(0); 
 	        
-	        var nameInput = document.createElement('input');
-	        nameInput.size = 40;
-	        nameInput.type = 'text';
-	        nameInput.name = 'userFileName';
-	        
-	        tableCell4.appendChild(nameInput);
-	        
-	        tableCell5 = tableRow3.insertCell(1);
+	        tableCell5 = tableRow3.insertCell(0);
 
 	        var descriptionInput = document.createElement('textarea');
 	        descriptionInput.rows = 1;
 	        descriptionInput.cols = 50;
 	        descriptionInput.name = 'userFileDescription';
+	        tableCell2.colSpan='2';
 	        
 	        tableCell5.appendChild(descriptionInput);
 	        

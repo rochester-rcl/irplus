@@ -31,14 +31,11 @@ public class FileUploadInfo {
 	/** description given by the user  */
 	private String description;
 	
-	/** Name the user wants to give to the file  */
-	private String userFileName;
-	
-	public FileUploadInfo(String fileName, String userFileName, String description)
+	public FileUploadInfo(String fileName, String description)
 	{
 		this.fileName = fileName;
 		this.description = description;
-		this.userFileName = userFileName;
+		
 	}
 
 	
@@ -46,7 +43,6 @@ public class FileUploadInfo {
 	{
 		StringBuffer sb = new StringBuffer("[");
 		sb.append("fileName = " + fileName);
-		sb.append("userFileName = " + userFileName);
 		sb.append("description = " + description);
 		sb.append("]");
 		return sb.toString();
@@ -62,9 +58,5 @@ public class FileUploadInfo {
 		return description;
 	}
 
-
-	public String getUserFileName() {
-		return userFileName;
-	}
 
 }
