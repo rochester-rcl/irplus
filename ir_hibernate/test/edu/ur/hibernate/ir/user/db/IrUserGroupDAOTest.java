@@ -114,6 +114,10 @@ public class IrUserGroupDAOTest {
  		ts = tm.getTransaction(td);
  		group = irGroupDAO.getById(group.getId(), false);
  		assert group.getUsers().contains(user) : "Group should contain user " + user;
+ 		
+ 		List<IrUserGroup> groups = irGroupDAO.getUserGroupsForUser(user.getId());
+ 		assert groups.size() == 1 : "Should contain 1 group but contains " + groups.size();
+ 		assert groups.contains(group) : " select should contain group " + group;
         irGroupDAO.makeTransient(group);
         userDAO.makeTransient(userDAO.getById(user.getId(), false));
         tm.commit(ts);

@@ -205,13 +205,6 @@
 		</list>
 	
 		
-		<!--  Licenses for the item 	
-		<set name="licenses" schema="ir_item" access="field" table="item_license">
-		    <key column="item_id"/>
-		    <many-to-many column="license_id" class="License"/>
-		</set>
-		-->
-		 
 		<!--  identifiers for this Item -->	
 		<set name="itemIdentifiers" 
 		    schema="ir_item" 

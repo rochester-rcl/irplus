@@ -98,6 +98,15 @@ public interface UserGroupService {
 	 * @param entity
 	 */
 	public void delete(IrUserGroup entity);
+	
+	/**
+	 * Get all user groups for a given user.
+	 * 
+	 * @param userId - id of the user to get the groups for
+	 * @return - list of groups the user is in.
+	 * 
+	 */
+	public List<IrUserGroup> getUserGroupsForUser(Long userId);
 
 
 }

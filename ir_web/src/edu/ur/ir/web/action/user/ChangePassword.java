@@ -93,7 +93,7 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 		userService.makeUserPersistent(userToChangePassword);
 		
 		// Automatically logins the user after changing the password
-    	userService.authenticateUser(userToChangePassword, password, userToChangePassword.getRoles());
+    	//userService.authenticateUser(userToChangePassword, password, userToChangePassword.getRoles());
     	
 		return SUCCESS;
 	}
@@ -115,9 +115,6 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 		
 		userService.updatePassword(password, userToChangePassword); 
 
-		// Automatically logins the user after changing the password
-    	userService.authenticateUser(userToChangePassword, password, userToChangePassword.getRoles());
-    	
 		return SUCCESS;
 	}
 
