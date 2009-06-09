@@ -104,47 +104,51 @@
 				          </tr>    
 	
 				          <tr>
-				          <td>
-					          User Name:
-						  </td>
-						  <td> ${irUser.username}
-					     </td>
+				              <td> User Name: </td>
+						      <td> ${irUser.username}</td>
 					     </tr>
 	
 						  <tr>
-						  <td>
-					          First Name:
-				          </td>
-				          <td>
-					          <input type="text" class="input"
+						      <td> First Name:  </td>
+				              <td>
+					              <input type="text" class="input"
 					              id="newUserForm_first_name" name="irUser.firstName" value="${irUser.firstName}" size="40"/> 
 					              
-				          </td>
+				              </td>
 				          </tr>    
 	
 						  <tr>
-						  <td>
-				
-					          Last Name:
-					      </td>
-					      <td>
+						      <td>  Last Name: </td>
+					          <td>
 					      		<input type="text" class="input"  
 					              id="newUserForm_last_name" name="irUser.lastName" value="${irUser.lastName}" size="40"/>
-					      </td>
+					          </td>
 					      </tr>
-	
-	
 				          <tr>
-				            <td>
-				              Phone Number:
-			                </td>
-			                <td>
-			               		<input type="text" class="input"  
-				              id="newUserForm_phone_number" name="irUser.phoneNumber" value="${irUser.phoneNumber}" size="40"/>
+				              <td> Phone Number: </td>
+			                  <td>
+			               		    <input type="text" class="input"  
+				                  id="newUserForm_phone_number" name="irUser.phoneNumber" value="${irUser.phoneNumber}" size="40"/>
 		                      </td>
 	                      </tr>
 	                      
-	                      
+	                      <tr>
+		                      <td align="left" class="label">Department(s):</td>
+                              <td align="left" class="input"> 
+      	                          <select multiple="multiple" id="editUserForm_department" name="departmentIds" />
+      	   		
+	      		               <c:forEach items="${departments}" var="department">
+	      			             <option value = "${department.id}"
+	      			             <c:forEach items="${irUser.departments}" var="userDepartment">
+	      			                 <c:if test="${department.id == userDepartment.id}">
+	      				             selected
+	      			                 </c:if>
+	      			             </c:forEach>
+	      			             > ${department.name}</option>
+	      		                </c:forEach>
+      	                        </select>
+      	                    </td> 
+	                      </tr>              
 	                      <tr>
 	                      <td colspan="2" align="center">
 								<button class="ur_button"  type="submit"

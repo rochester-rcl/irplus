@@ -782,63 +782,6 @@ YAHOO.ur.edit.researcher =
 	        callback);
 	},
 
-	/*
-	 * Removes the Department
-	 */
-	removeDepartment : function(tableId)
-	{
-	        var table_div = document.getElementById("department_form");
-	        var child = document.getElementById(tableId);
-	        table_div.removeChild(child); 
-	        
-	},
-		
-	/**
-	 *  Function that retrieves departments from 
-	 *  the server
-	 */
-	getDepartments :function()
-	{
-	   // action to get repository pictures
-	   var getDepartmentsAction = 
-	       basePath + 'user/getAllDepartments.action';
-	       
-		var callback =
-		{
-		
-		    success: function(o) 
-		    {
-			    // check for the timeout - forward user to login page if timout
-	            // occured
-	            if( !urUtil.checkTimeOut(o.responseText) )
-	            {       		    
-		            var divToUpdate = document.getElementById('department_form');
-		            var newDepartment = o.responseText;
-		        
-		            // id to give to the table
-		    	    document.getElementById("department_table_id").value = parseInt(document.getElementById("department_table_id").value) + 1; 
-		        
-		            // Replace the table id with the latest Id
-		            newDepartment = newDepartment.replace("department_table_i","department_table_" + document.getElementById("department_table_id").value, "gm");
-		        
-		            var newDiv = document.getElementById('new_department');
-		            newDiv.innerHTML = newDepartment;
-		            divToUpdate.appendChild(document.getElementById('department_table_'+document.getElementById("department_table_id").value));
-		            newDiv.innerHTML = "";
-		        }
-		    },
-			
-			failure: function(o) 
-			{
-			    alert('Get getDepartments Failure ' + o.status + ' status text ' + o.statusText );
-			}
-		}
-	       
-	    var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-	        getDepartmentsAction + '?bustcache='+new Date().getTime(), 
-	        callback, null);
-	},
-	
 	/**
 	 * Save researcher and update the screen with latest department
 	 *
@@ -852,7 +795,7 @@ YAHOO.ur.edit.researcher =
 			    // check for the timeout - forward user to login page if timout
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
-	            {       		    
+	            {    
 		            var divToUpdate = document.getElementById('department_form');
 		            divToUpdate.innerHTML = o.responseText; 
 		        }

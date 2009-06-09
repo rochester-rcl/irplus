@@ -21,30 +21,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 
-<c:if test="${researcherDepartmentsCount == 0}">
-    <c:import url="researcher_department.jsp"/>
-</c:if>
 
-	<c:forEach items="${researcher.departments}" var="researcherDepartment" varStatus="rowCounter">
-    
-   	<table id="department_table_${rowCounter.count}">
-
-		<tr>
-	      <td > 
-	      	   <select id="researcherForm_department" name="departmentIds" />
-	      		<c:forEach items="${departments}" var="department">
-	      			<option value = "${department.id}" 
-		      			<c:if test="${department.name == researcherDepartment.name}">
-		      				selected
-		      			</c:if>
-		      		><ur:maxText numChars="40" showEllipsis="true" text="${department.name}"/></option>
+      	    <select multiple="multiple" name="departmentIds" />
+	      	    <c:forEach items="${departments}" var="department">
+	      		    <option value = "${department.id}"
+	      			    <c:forEach items="${researcher.user.departments}" var="userDepartment">
+	      			        <c:if test="${department.id == userDepartment.id}">
+	      				        selected
+	      			        </c:if>
+	      			    </c:forEach>
+	      			    > ${department.name}</option>
 	      		</c:forEach>
-	      	   </select>
-	      </td>
-	      <td>   
-	      	   <input type="button" class="ur_button" id="researcherForm_remove" value="Remove" onclick="javascript:YAHOO.ur.edit.researcher.removeDepartment('department_table_${rowCounter.count}');"/>
-	      </td>
-	    </tr>
-	</table>
-	</c:forEach> 
+      	    </select>
+          
+	
+	
 

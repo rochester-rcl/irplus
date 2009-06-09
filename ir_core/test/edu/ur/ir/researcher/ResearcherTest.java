@@ -125,7 +125,7 @@ public class ResearcherTest {
 		IrFile irFile =  new IrFile(fileInfo, "testFile");
 
 		Researcher researcher = new Researcher(user);
-		researcher.addDepartment(d);
+		researcher.getUser().addDepartment(d);
 		researcher.addField(field);
 		researcher.setTitle("Stent");
 		researcher.setPrimaryPicture(irFile);
@@ -136,7 +136,7 @@ public class ResearcherTest {
 		researcher.setResearchInterest("researchInterest");
 		researcher.setTeachingInterest("teachingInterest");
 		
-		assert researcher.getDepartments().contains(d) : "Researcher department should equal science";
+		assert researcher.getUser().getDepartments().contains(d) : "Researcher department should equal science";
 		assert researcher.getTitle().equals("Stent") : "Researcher title should equal Stent";		
 		assert researcher.getFields().contains(field) : "Researcher field should equal field";
 		assert researcher.getPrimaryPicture().equals(irFile) : "Researcher picture should be equal " + irFile.toString();
@@ -164,11 +164,6 @@ public class ResearcherTest {
 		user2.setLastName("familyName2");
 		user2.setFirstName("forename3");
 		
-		Department d = new Department("MyDept");
-		
-		Department d1 = new Department("MyDept1");
-		
-		
 		Field field1 = new Field();
 		field1.setName("field1");
 		
@@ -176,18 +171,12 @@ public class ResearcherTest {
 		field2.setName("field2");
 		
 		Researcher researcher1 = new Researcher(user1);
-		researcher1.addDepartment(d);
-		researcher1.addField(field1);
 		researcher1.setTitle("Stent1");
 		
 		Researcher researcher2 = new Researcher(user2);
-		researcher2.addDepartment(d1);
-		researcher2.addField(field2);
 		researcher2.setTitle("Stent2");
 
 		Researcher researcher3 = new Researcher(user1);
-		researcher3.addDepartment(d);
-		researcher3.addField(field1);
 		researcher3.setTitle("Stent1");
 
 		assert researcher1.equals(researcher3) : "researcher1 should equal researcher3";

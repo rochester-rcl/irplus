@@ -86,17 +86,17 @@
 	</tr>              
 
 	<tr>
-		 <td align="left" class="label">   Department:
-		   <input type="hidden" id="editUserForm_department_name" value="${irUser.department.name}"/>
-		 </td>
+		 <td align="left" class="label">Department(s):</td>
          <td align="left" class="input"> 
-      	   <select id="editUserForm_department" name="departmentId" />
+      	   <select multiple="multiple" id="editUserForm_department" name="departmentIds" />
       	   		<option value = "0"> N/A</option>
 	      		<c:forEach items="${departments}" var="department">
 	      			<option value = "${department.id}"
-	      			<c:if test="${department.id == irUser.department.id}">
-	      				selected
-	      			</c:if>
+	      			<c:forEach items="${irUser.departments}" var="userDepartment">
+	      			    <c:if test="${department.id == userDepartment.id}">
+	      				    selected
+	      			    </c:if>
+	      			</c:forEach>
 	      			> ${department.name}</option>
 	      		</c:forEach>
       	   </select>
