@@ -22,7 +22,7 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 
 
-      	    <select multiple="multiple" name="departmentIds" />
+      	    <select size="10" multiple="multiple" name="departmentIds" />
 	      	    <c:forEach items="${departments}" var="department">
 	      		    <option value = "${department.id}"
 	      			    <c:forEach items="${researcher.user.departments}" var="userDepartment">
