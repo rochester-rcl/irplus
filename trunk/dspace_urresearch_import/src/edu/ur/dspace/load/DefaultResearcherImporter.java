@@ -352,7 +352,7 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 						department = new Department(r.department);
 						departmentService.makeDepartmentPersistent(department);
 					}
-					urResearcher.addDepartment(department);
+					urResearcher.getUser().addDepartment(department);
 				}
 				jdbcTemplate.execute("insert into dspace_convert.researcher(dspace_researcher_id, ur_research_researcher_id) values (" + r.researcherId + "," + urResearcher.getId() + ")");
 			    if( r.logoFileName != null && !r.logoFileName.trim().equals(""))
