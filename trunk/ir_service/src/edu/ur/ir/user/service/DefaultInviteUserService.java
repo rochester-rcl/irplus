@@ -306,9 +306,6 @@ public class DefaultInviteUserService implements InviteUserService {
 				
 				invitedUser.addRole(roleService.getRole(IrRole.COLLABORATOR_ROLE));
 				userService.makeUserPersistent(invitedUser);
-
-				// Create new authentication object with updated user default email 
-				userService.authenticateUser(invitedUser, invitedUser.getPassword(), invitedUser.getRoles());
 			}
 			
 			// Add the email to the invited user
@@ -360,7 +357,6 @@ public class DefaultInviteUserService implements InviteUserService {
 				
 				invitedUser.addRole(roleService.getRole(IrRole.COLLABORATOR_ROLE));
 				userService.makeUserPersistent(invitedUser);
-				userService.authenticateUser(invitedUser, invitedUser.getPassword(), invitedUser.getRoles());
 			}			
 		}
 		

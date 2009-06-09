@@ -168,7 +168,7 @@
 				Please verify the affiliation : "%AFFILIATION%"  for user: "%USERNAME%" 
 				
 				You can login into the system using the below link:
-				%BASE_WEB_APP_PATH%home.action
+				%BASE_WEB_APP_PATH%admin/viewPendingApproval.action
 				
 				]]>
 			</value>
@@ -257,7 +257,7 @@
     			<![CDATA[
     			Dear %FIRSTNAME% %LASTNAME%,
     			
-    			Publication - " %ITEMNAME% " is accepted for submission.
+    			Publication - " %ITEMNAME% " has been accepted for submission.
     			
     			Congratulations!
     			]]>
@@ -274,7 +274,7 @@
     			<![CDATA[
     			Dear %FIRSTNAME% %LASTNAME%,
     			
-    			Publication - " %ITEMNAME% " was not accepted for submission.
+    			Publication - " %ITEMNAME% " was not accepted.
     			
     			Reason for rejection: %REASON%
 

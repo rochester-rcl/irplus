@@ -26,10 +26,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.Authentication;
-import org.springframework.security.context.SecurityContext;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.security.providers.encoding.MessageDigestPasswordEncoder;
 import org.springframework.util.StringUtils;
 
@@ -50,6 +46,7 @@ import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
+import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
@@ -59,6 +56,7 @@ import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserEmailDAO;
 import edu.ur.ir.user.UserFileSystemService;
+import edu.ur.ir.user.UserGroupService;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
@@ -141,6 +139,9 @@ public class DefaultUserService implements UserService {
 	
 	/** service for dealing with subscriptions */
 	private InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService;
+	
+	/** Service for dealing with user group information */
+	private UserGroupService userGroupService;
 
 	/**
 	 * Get the User email if email id exists in the system.
@@ -283,21 +284,6 @@ public class DefaultUserService implements UserService {
 	public boolean deleteUser(IrUser user) throws UserHasPublishedDeleteException, UserDeletedPublicationException
 	{
 		
-		if( user.getResearcher() != null)
-		{
-			Researcher r = user.getResearcher();
-			user.setResearcher(null);
-			researcherService.deleteResearcher(r);
-		}
-		
-		List<InstitutionalCollectionSubscription> subscriptions = institutionalCollectionSubscriptionService.getAllSubscriptionsForUser(user);
-		
-		for(InstitutionalCollectionSubscription subscription : subscriptions)
-		{
-			institutionalCollectionSubscriptionService.delete(subscription);
-		}
-		
-		
 		//Get all the generic items created by this user so they
 		// can be deleted
 		// Get all items owned by this user
@@ -315,6 +301,30 @@ public class DefaultUserService implements UserService {
 			}
 		}
 		
+		if( user.getResearcher() != null)
+		{
+			Researcher r = user.getResearcher();
+			user.setResearcher(null);
+			researcherService.deleteResearcher(r);
+		}
+		
+		List<InstitutionalCollectionSubscription> subscriptions = institutionalCollectionSubscriptionService.getAllSubscriptionsForUser(user);
+		
+		for(InstitutionalCollectionSubscription subscription : subscriptions)
+		{
+			institutionalCollectionSubscriptionService.delete(subscription);
+		}
+		
+
+		//remove the user from all groups
+	    List<IrUserGroup> groups = userGroupService.getUserGroupsForUser(user.getId());
+	    for(IrUserGroup group : groups)
+	    {
+	    	group.removeUser(user);
+	    	userGroupService.save(group);
+	    }
+	    
+ 	
 		Long countOfDeletedItems = institutionalItemService.getDeletedInstitutionalItemCountForUser(user.getId());
 		
 		if (countOfDeletedItems != 0 ) {
@@ -532,25 +542,6 @@ public class DefaultUserService implements UserService {
 		return userEmailDAO.getById(emailId, lock);
 	}
 	
-	
-
-	/**
-	 * Creates authentication object and places it in security context. 
-	 * This is used to automatically login the user after they register with the system
-	 * 
-	 * @see edu.ur.ir.user.UserService#authenticateUser(Object, Object, Set<IrRole>)
-	 */
-	public void authenticateUser(Object principal, Object credentials, Set<IrRole> authorities) {
-		
-		// creates authentication object
-        Authentication auth = new UsernamePasswordAuthenticationToken(principal, credentials, authorities.toArray(new IrRole[0]));
-        
-        // Places the authentication object in security context
-        SecurityContext ctx = SecurityContextHolder.getContext() ;
-        ctx.setAuthentication(auth);
-        SecurityContextHolder.setContext(ctx);
-    }
-
 	/**
 	 * Generates password token and send email to the user
 	 * 
@@ -1091,6 +1082,14 @@ public class DefaultUserService implements UserService {
 	public void setInstitutionalCollectionSubscriptionService(
 			InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService) {
 		this.institutionalCollectionSubscriptionService = institutionalCollectionSubscriptionService;
+	}
+
+	public UserGroupService getUserGroupService() {
+		return userGroupService;
+	}
+
+	public void setUserGroupService(UserGroupService userGroupService) {
+		this.userGroupService = userGroupService;
 	}
 
 }

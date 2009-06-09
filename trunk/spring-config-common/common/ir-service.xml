@@ -57,7 +57,7 @@
        <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="institutionalItemService" ref="institutionalItemService"/>
        <property name="institutionalCollectionSubscriptionService" ref="institutionalCollectionSubscriptionService"/>
-       
+       <property name="userGroupService" ref="userGroupService"/>
    </bean>
    
 

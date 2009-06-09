@@ -24,6 +24,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.security.BadCredentialsException;
 import org.springframework.security.providers.AbstractAuthenticationToken;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.providers.ldap.LdapAuthenticator;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -143,6 +145,9 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	/** Set the net id password */
 	private String netIdPassword;
 	
+	/** Authenticator for ldap username/password */
+	private LdapAuthenticator authenticator;
+	
 	/** Authentication provider for ldap */
 	private UrLdapAuthenticationProvider ldapAuthProvider;
 	
@@ -248,10 +253,6 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 				userIndexService.addToIndex(irUser, 
 							new File( repository.getUserIndexFolder()) );
 				
-		    	
-		    	// Automatically logins the newUser after registering with the system
-		    	userService.authenticateUser(irUser, irUser.getPassword(), irUser.getRoles());
-		    	
 		    	if (affiliation.isNeedsApproval()) {
 		    		userService.sendAffiliationVerificationEmailForUser(irUser);
 		    		userService.sendPendingAffiliationEmailForUser(irUser);
@@ -336,16 +337,17 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 			// don't hit ldap unless a user has entered a username and password
 			if( netIdPassword != null && !netIdPassword.trim().equals("")  )
 			{
-			    AbstractAuthenticationToken authRequest = new LdapAuthenticationToken(irUser.getLdapUserName(), this.netIdPassword);
 			    try
 			    {
-			        ldapAuthProvider.authenticate(authRequest);
-					IrUser ldapUser = userService.getUserByLdapUserName(irUser.getLdapUserName());
+			        authenticator.authenticate(new UsernamePasswordAuthenticationToken(irUser.getLdapUserName(), this.netIdPassword));
+			        IrUser ldapUser = userService.getUserByLdapUserName(irUser.getLdapUserName());
 					// we have an interesting problem
 					// user has authenticated correctly - but the user name already exists in the 
 					// system - 
 					if( ldapUser != null )
 					{
+						AbstractAuthenticationToken authRequest = new LdapAuthenticationToken(irUser.getLdapUserName(), this.netIdPassword);
+						ldapAuthProvider.authenticate(authRequest);
 						failure = true;
 				    	addFieldError("netIdAlreadyExists", "The net id user name already exists - you may already have an account please contact the admistrator");
 					}
@@ -382,56 +384,14 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		{
 			return INPUT;
 		}
-		
-
-		// we do not use the created ir user but instead
-		// will be creating a new user.  So the information is copied over
-		// to save it.
-		String firstName = irUser.getFirstName();
-		String lastName = irUser.getLastName();
-		String ldapUserName = irUser.getLastName();
-		
-				
-		defaultEmail.setVerified(false);
-		defaultEmail.setToken(TokenGenerator.getToken());
-				
-		irUser = userService.createUser(irUser.getPassword(), irUser.getUsername(), 
-			    		defaultEmail);
-		irUser.setAccountLocked(accountLocked);
-		irUser.setFirstName(firstName);
-		irUser.setLastName(lastName);
-		irUser.setLdapUserName(ldapUserName);
-		
-		if( license != null )
+		else
 		{
-		    irUser.addAcceptedLicense(license);
+			createAccount(license);
 		}
+
 			    
 		this.updateUserDepartments();
 
-		IrRole role = roleService.getRole("ROLE_USER");
-		irUser.addRole(role);
-		    	
-		Affiliation affiliation = affiliationService.getAffiliation(affiliationId, false); 
-		irUser.setAffiliation(affiliation);
-
-		irUser.setAffiliationApproved(!affiliation.isNeedsApproval());
-		    	
-		userService.makeUserPersistent(irUser);
-		    	
-		if (affiliation.isNeedsApproval()) {
-		    userService.sendAffiliationVerificationEmailForUser(irUser);
-		    userService.sendPendingAffiliationEmailForUser(irUser);
-		}
-
-		userService.sendAccountVerificationEmailForUser(defaultEmail.getToken(), defaultEmail.getEmail(), irUser.getUsername());
-		
-		// add the user to the user index
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
-						false);
-		
-		userIndexService.addToIndex(irUser, 
-						new File( repository.getUserIndexFolder()) );
 		
 		return SUCCESS;
 	}
@@ -817,6 +777,66 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	    	    irUser.addDepartment(department);
 	    	}
 	    }
+	}
+
+	public LdapAuthenticator getAuthenticator() {
+		return authenticator;
+	}
+
+	public void setAuthenticator(LdapAuthenticator authenticator) {
+		this.authenticator = authenticator;
+	}
+	
+	private void createAccount(LicenseVersion license) throws NoIndexFoundException
+	{
+		// we do not use the created ir user but instead
+		// will be creating a new user.  So the information is copied over
+		// to save it.
+		String firstName = irUser.getFirstName();
+		String lastName = irUser.getLastName();
+		String ldapUserName = irUser.getLastName();
+		
+				
+		defaultEmail.setVerified(false);
+		defaultEmail.setToken(TokenGenerator.getToken());
+				
+		irUser = userService.createUser(irUser.getPassword(), irUser.getUsername(), 
+			    		defaultEmail);
+		irUser.setAccountLocked(accountLocked);
+		irUser.setFirstName(firstName);
+		irUser.setLastName(lastName);
+		irUser.setLdapUserName(ldapUserName);
+		
+		if( license != null )
+		{
+		    irUser.addAcceptedLicense(license);
+		}
+			    
+		updateUserDepartments();
+
+		IrRole role = roleService.getRole("ROLE_USER");
+		irUser.addRole(role);
+		    	
+		Affiliation affiliation = affiliationService.getAffiliation(affiliationId, false); 
+		irUser.setAffiliation(affiliation);
+
+		irUser.setAffiliationApproved(!affiliation.isNeedsApproval());
+		    	
+		userService.makeUserPersistent(irUser);
+		    	
+		if (affiliation.isNeedsApproval()) {
+		    userService.sendAffiliationVerificationEmailForUser(irUser);
+		    userService.sendPendingAffiliationEmailForUser(irUser);
+		}
+
+		userService.sendAccountVerificationEmailForUser(defaultEmail.getToken(), defaultEmail.getEmail(), irUser.getUsername());
+		
+		// add the user to the user index
+		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
+						false);
+		
+		userIndexService.addToIndex(irUser, 
+						new File( repository.getUserIndexFolder()) );
 	}
 
 

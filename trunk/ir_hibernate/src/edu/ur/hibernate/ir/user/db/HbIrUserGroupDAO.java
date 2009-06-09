@@ -144,4 +144,16 @@ public class HbIrUserGroupDAO implements IrUserGroupDAO{
         return userGroups;
 	}
 
+	
+	/**
+	 * Get the user groups for the specified user.
+	 * 
+	 * @see edu.ur.ir.user.IrUserGroupDAO#getUserGroupsForUser(java.lang.Long)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUserGroup> getUserGroupsForUser(Long userId) {
+		return (List<IrUserGroup>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("getGroupsForUser", userId);
+	}
+	
+
 }

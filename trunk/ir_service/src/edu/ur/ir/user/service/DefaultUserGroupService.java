@@ -130,9 +130,24 @@ public class DefaultUserGroupService implements UserGroupService {
 		this.irUserGroupDAO = irUserGroupDAO;
 	}
 
+	/**
+	 * Get the list of user groups ordered by name.
+	 * 
+	 * @see edu.ur.ir.user.UserGroupService#getUserGroupsOrderByName(int, int, java.lang.String)
+	 */
 	public List<IrUserGroup> getUserGroupsOrderByName(final int rowStart, 
     		final int numberOfResultsToShow, final String sortType) {
 		return irUserGroupDAO.getUserGroups(rowStart, numberOfResultsToShow, sortType);
+	}
+
+	
+	/**
+	 * Get all groups for user.
+	 * 
+	 * @see edu.ur.ir.user.UserGroupService#getUserGroupsForUser(java.lang.Long)
+	 */
+	public List<IrUserGroup> getUserGroupsForUser(Long userId) {
+		return irUserGroupDAO.getUserGroupsForUser(userId);
 	}
 
 }

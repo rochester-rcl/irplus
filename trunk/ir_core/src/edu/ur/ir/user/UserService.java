@@ -17,7 +17,6 @@
 package edu.ur.ir.user;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.security.userdetails.UserDetailsService;
 
@@ -157,17 +156,6 @@ public interface UserService extends UserDetailsService {
 	 * @return the found user or null if the ldap user name is not found
 	 */
 	public IrUser getUserByLdapUserName(String ldapUserName);
-	
-	/**
-	 * Creates authentication object and places it in security context.
-	 * This is used to automatically login the user after they register with the system
-	 * 
-	 * @param principal user details
-	 * @param credentials credential details
-	 * @param authorities authorities for the user
-	 */
-	public void authenticateUser(Object principal, Object credentials, Set<IrRole> authorities); 
-	
 	
 	/**
 	 * Get the User having this email

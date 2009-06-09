@@ -31,6 +31,7 @@ import edu.ur.ir.person.PersonService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.ResearcherIndexService;
+import edu.ur.ir.security.AuthenticateUserOverrideService;
 import edu.ur.ir.user.Affiliation;
 import edu.ur.ir.user.AffiliationService;
 import edu.ur.ir.user.Department;
@@ -177,6 +178,9 @@ public class ManageUsers extends Pager implements Preparable{
 	
 	/** message sent to the user */
 	private String message;
+	
+	/** Service to allow an administrator to login as a different user */
+	private AuthenticateUserOverrideService authenticateUserOverrideService;
 	
 
 
@@ -481,12 +485,10 @@ public class ManageUsers extends Pager implements Preparable{
 	 * 
 	 * @return Success 
 	 */
-	public String loginAsUser() {
-		
+	public String loginAsUser() 
+	{
 		irUser = userService.getUser(id, false);
-		
-		userService.authenticateUser(irUser, irUser.getPassword(), irUser.getRoles());
-				
+		authenticateUserOverrideService.authenticateUser(irUser);
 		return SUCCESS;
 	}
 	
@@ -1007,6 +1009,15 @@ public class ManageUsers extends Pager implements Preparable{
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public AuthenticateUserOverrideService getAuthenticateUserOverrideService() {
+		return authenticateUserOverrideService;
+	}
+
+	public void setAuthenticateUserOverrideService(
+			AuthenticateUserOverrideService authenticateUserOverrideService) {
+		this.authenticateUserOverrideService = authenticateUserOverrideService;
 	}
 
 

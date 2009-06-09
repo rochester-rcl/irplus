@@ -69,12 +69,6 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 				email.setToken(null);
 				userService.makeUserPersistent(user);
 				
-				// If the verified email is default then update the User in session with new user object
-				if (email.getId().equals(user.getDefaultEmail().getId())) {
-					// Create new authentication object with updated user default email 
-					userService.authenticateUser(user, user.getPassword(), user.getRoles());
-				}
-
 				try {
 					// Share files -  If there are any invitations sent to this email address 
 					inviteUserService.sharePendingFilesForEmail(userId, email.getEmail());

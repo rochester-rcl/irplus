@@ -46,6 +46,14 @@ CrudDAO<IrUserGroup>, NameListDAO, UniqueNameDAO<IrUserGroup>
 	 */
 	public List<IrUserGroup> getUserGroups(final int rowStart, 
     		final int numberOfResultsToShow, final String sortType);
+	
+	/**
+	 * Get all the user groups for a given user.
+	 * 
+	 * @param userId - id of the user to get the groups for
+	 * @return - list of groups the user is in.
+	 */
+	public List<IrUserGroup> getUserGroupsForUser(Long userId);
 
 }
 

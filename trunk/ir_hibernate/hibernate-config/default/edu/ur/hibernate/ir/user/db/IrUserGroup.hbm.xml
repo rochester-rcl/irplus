@@ -71,18 +71,24 @@
 
 	 </class>
 		
-	<!--  Get a count of users in the system -->
+	<!--  Get a count of groups in the system -->
 	<query name="groupCount">
 	    select count(*) from IrUserGroup
 	</query>
 	
-	<!-- named query for getting all users ordered by names -->
+	<!-- named query for getting all groups ordered by names -->
     <query name="getAllGroupNameAsc">from IrUserGroup order by name </query>
     
-    <!-- named query for getting a user -->
+    <!-- named query for getting a group -->
 	<query name="getGroupByName">
 		from IrUserGroup as IrUserGroup where
 		IrUserGroup.name = ?
+	</query>
+	
+	<query name="getGroupsForUser">
+	    select userGroup from IrUserGroup userGroup
+	    join userGroup.users as user
+	    where user.id = ?
 	</query>
 
     <!-- named query for getting a user group order by name asc -->
