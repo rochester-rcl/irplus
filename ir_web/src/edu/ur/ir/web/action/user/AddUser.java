@@ -120,7 +120,7 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	private List<Department> departments;
 
 	/** Id of the department selected */
-	private Long departmentId;
+	private Long[] departmentIds;
 	
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
@@ -226,10 +226,8 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 			    irUser.setFirstName(firstName);
 			    irUser.setLastName(lastName);
 			    
-			    if (departmentId != 0) {
-			    	Department department = departmentService.getDepartment(departmentId, false); 
-			    	irUser.setDepartment(department);
-			    }
+			    this.updateUserDepartments();
+			    
 
 		    	IrRole role = roleService.getRole("ROLE_USER");
 		    	irUser.addRole(role);
@@ -409,10 +407,7 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		    irUser.addAcceptedLicense(license);
 		}
 			    
-		if (departmentId != 0) {
-		    Department department = departmentService.getDepartment(departmentId, false); 
-			irUser.setDepartment(department);
-		}
+		this.updateUserDepartments();
 
 		IrRole role = roleService.getRole("ROLE_USER");
 		irUser.addRole(role);
@@ -477,7 +472,8 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 	 */
 	public String saveMyAccount() throws NoIndexFoundException
 	{
-		
+	    irUser.removeAllDepartments();
+		updateUserDepartments();
 		userService.makeUserPersistent(irUser);
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 				false);
@@ -717,12 +713,12 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 		this.departments = departments;
 	}
 
-	public Long getDepartmentId() {
-		return departmentId;
+	public Long[] getDepartmentIds() {
+		return departmentIds;
 	}
 
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
+	public void setDepartmentIds(Long[] departmentIds) {
+		this.departmentIds = departmentIds;
 	}
 
 	public Long getUserId() {
@@ -810,6 +806,17 @@ public class AddUser extends ActionSupport implements UserIdAware, Preparable {
 
 	public void setNetIdPassword(String netIdPassword) {
 		this.netIdPassword = netIdPassword;
+	}
+	
+	private void updateUserDepartments()
+	{
+		if (departmentIds != null && departmentIds.length > 0) {
+	    	for( int index = 0; index < departmentIds.length; index++)
+	    	{
+	    	    Department department = departmentService.getDepartment(departmentIds[index], false); 
+	    	    irUser.addDepartment(department);
+	    	}
+	    }
 	}
 
 
