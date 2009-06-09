@@ -141,7 +141,7 @@ public class ManageUsers extends Pager implements Preparable{
 	private List<Department> departments;
 
 	/** Id of the department selected */
-	private Long departmentId;
+	private Long departmentIds[];
 
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
@@ -275,7 +275,7 @@ public class ManageUsers extends Pager implements Preparable{
 		irUser.setLastName(lastName);
 		irUser.setLdapUserName(ldapUserName);
 
-		setDepartment();
+		setDepartments();
 		updateAffilation();
 		updateRoles();
 				    
@@ -362,7 +362,7 @@ public class ManageUsers extends Pager implements Preparable{
 		irUser.setCredentialsExpired(credentialsExpired);
 		irUser.setAccountLocked(accountLocked);
 				
-		setDepartment();
+		setDepartments();
 			    	
 		//update the affilation for the user
 		updateAffilation();
@@ -737,12 +737,12 @@ public class ManageUsers extends Pager implements Preparable{
 		this.departments = departments;
 	}
 
-	public Long getDepartmentId() {
-		return departmentId;
+	public Long[] getDepartmentId() {
+		return departmentIds;
 	}
 
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
+	public void setDepartmentIds(Long[] departmentIds) {
+		this.departmentIds = departmentIds;
 	}
 
 	public boolean isAdminRole() {
@@ -886,12 +886,18 @@ public class ManageUsers extends Pager implements Preparable{
 
 	}
 	
-	private void setDepartment()
+	private void setDepartments()
 	{
-		if (departmentId != 0) {
-	    	Department department = departmentService.getDepartment(departmentId, false); 
-	    	irUser.setDepartment(department);
-	    }	
+		irUser.removeAllDepartments();
+		
+		if( departmentIds != null && departmentIds.length > 0)
+		{
+			for( int index = 0; index < departmentIds.length; index++)
+			{
+			    Department department = departmentService.getDepartment(departmentIds[index], false); 
+			    irUser.addDepartment(department);
+			}
+		}
 	}
 
 	public boolean isCollectionAdminRole() {

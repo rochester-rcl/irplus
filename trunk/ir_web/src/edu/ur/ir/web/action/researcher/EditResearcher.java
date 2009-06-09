@@ -111,9 +111,6 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	/** Id of selected fields */
 	private Long[] fieldIds;
 
-	/** Number of departments for researcher */
-	private int researcherDepartmentsCount;
-	
 	/** Id of selected departments */
 	private Long[] departmentIds;
 
@@ -142,7 +139,7 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		}
 		
 		researcher.removeAllFields();
-		researcher.removeAllDepartments();
+		user.removeAllDepartments();
 		researcherService.saveResearcher(researcher);
 		
 		// Adds the selected fields
@@ -160,12 +157,15 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 			for (int i =0; i < departmentIds.length; i++ ) {
 				if (departmentIds[i] != 0) {
 					Department d = departmentService.getDepartment(departmentIds[i], false);
-					researcher.addDepartment(d);
+					user.addDepartment(d);
 				}
 			}
 		}
 		
+		userService.makeUserPersistent(user);
 		researcherService.saveResearcher(researcher);
+		departments= departmentService.getAllDepartmentsNameOrder();
+		
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 				false);
 		researcherIndexService.updateIndex(researcher, 
@@ -229,7 +229,7 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 			researcherJSONObject = researcher.toJSONObject();
 		}
 		
-		getDepartmentsInformation();
+		departments = departmentService.getAllDepartmentsNameOrder();
 		getFieldsInformation();
 		
 		
@@ -264,42 +264,6 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		
 		return SUCCESS;
 		
-	}
-	
-	/**
-	 * Get all departments
-	 * 
-	 * @return
-	 */
-	public String getAllDepartments() {
-		
-		departments = departmentService.getAllDepartmentsNameOrder();
-		return SUCCESS;
-	}
-
-	/**
-	 * Get departments information
-	 * 
-	 * @return
-	 */
-	public String getDepartmentsInformation() {
-		if (userId != null) {
-			IrUser user = userService.getUser(userId, false);
-			researcher = user.getResearcher();
-			
-			log.debug( "user " + user + " has role " + user.hasRole(IrRole.RESEARCHER_ROLE) );
-			if( !user.hasRole(IrRole.RESEARCHER_ROLE))
-			{
-				return "accessDenied";
-			}
-		}
-		else
-		{
-			return "accessDenied";
-		}
-		researcherDepartmentsCount = researcher.getDepartments().size();
-		departments= departmentService.getAllDepartmentsNameOrder();
-		return SUCCESS;
 	}
 	
 	/**
@@ -499,10 +463,6 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 
 	public void setFieldIds(Long[] fieldIds) {
 		this.fieldIds = fieldIds;
-	}
-
-	public int getResearcherDepartmentsCount() {
-		return researcherDepartmentsCount;
 	}
 
 	public void setDepartmentIds(Long[] departmentIds) {
