@@ -629,6 +629,20 @@ CREATE INDEX user_name_idx ON ir_user."user" USING btree (username);
 CREATE SEQUENCE ir_user.user_seq ;
 ALTER TABLE ir_user.user_seq OWNER TO ir_plus;
 
+-- ---------------------------------------------
+-- Users department table
+-- ---------------------------------------------
+
+CREATE TABLE ir_user.user_department
+(
+    user_id BIGINT NOT NULL, 
+    department_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, department_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (department_id) REFERENCES ir_user.department(department_id)
+);
+ALTER TABLE ir_user.user_department OWNER TO ir_plus;
+
 
 -- ---------------------------------------------
 -- Role table
@@ -2774,19 +2788,7 @@ ALTER TABLE ir_researcher.researcher OWNER TO ir_plus;
 CREATE SEQUENCE ir_researcher.researcher_seq ;
 ALTER TABLE ir_researcher.researcher_seq OWNER TO ir_plus;
 
--- ---------------------------------------------
--- Researcher department table
--- ---------------------------------------------
 
-CREATE TABLE ir_researcher.researcher_department
-(
-    researcher_id BIGINT NOT NULL, 
-    department_id BIGINT NOT NULL,
-    PRIMARY KEY (researcher_id, department_id),
-    FOREIGN KEY (researcher_id) REFERENCES ir_researcher.researcher(researcher_id),
-    FOREIGN KEY (department_id) REFERENCES ir_user.department(department_id)
-);
-ALTER TABLE ir_researcher.researcher_department OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Researcher field table

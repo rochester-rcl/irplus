@@ -30,7 +30,6 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.item.GenericItem;
-import edu.ur.ir.user.Department;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.AscendingOrderComparator;
 import edu.ur.persistent.BasePersistent;
@@ -90,9 +89,6 @@ public class Researcher extends BasePersistent{
 
 	/** Field the researcher is in. */
 	private Set<Field> fields = new HashSet<Field>();
-
-	/** Departments of the researcher */
-	private Set<Department> departments = new HashSet<Department>();
 
 	/** Root folders of the researcher */
 	private Set<ResearcherFolder> rootFolders  = new HashSet<ResearcherFolder>();
@@ -447,23 +443,7 @@ public class Researcher extends BasePersistent{
 		return researcherLink;
 	}
 	
-	/**
-	 * The researchers department
-	 * 
-	 * @return
-	 */
-	public Set<Department> getDepartments() {
-		return departments;
-	}
 
-	/**
-	 * Set the researchers department.
-	 * 
-	 * @param department
-	 */
-	public void setDepartments(Set<Department> departments) {
-		this.departments = departments;
-	}
 
 	/**
 	 * Get the researcher's fields
@@ -509,8 +489,6 @@ public class Researcher extends BasePersistent{
 		sb.append(id);
 		sb.append(" title = ");
 		sb.append(title);
-		sb.append(" department = ");
-		sb.append(departments);
 		sb.append(" field = ");
 		sb.append(fields);
 		sb.append("]");
@@ -1141,33 +1119,7 @@ public class Researcher extends BasePersistent{
 		fields.clear();
 	}
 
-	/**
-	 * Add a department to this researcher.
-	 * 
-	 * @param department
-	 * 
-	 */
-	public void addDepartment(Department department)
-	{
-		departments.add(department);
-	}
-	
-	/**
-	 * Remove a department from this researcher.
-	 * 
-	 * @param department
-	 * @return true if the department is removed.
-	 */
-	public boolean removeDepartment(Department department)
-	{
-		return departments.remove(department);
-	}
 
-	/**
-	 * Remove all departments
-	 */
-	public void removeAllDepartments() {
-		departments.clear();
-	}
+	
 
 }

@@ -86,7 +86,7 @@
                 class="edu.ur.ir.web.action.researcher.EditResearcher">
                 <interceptor-ref name="crudStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">getDepartmentsInformation.action</result>
+            <result name="success">/pages/user/researcher/department_list.jsp</result>
         </action>                          
                 
         <action name="setResearcherPagePermission" class="edu.ur.ir.web.action.researcher.EditResearcher"

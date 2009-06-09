@@ -176,7 +176,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	    }
 	    
 	    StringBuffer departmentNames = new StringBuffer();
-    	for (Department d : researcher.getDepartments()) {
+    	for (Department d : researcher.getUser().getDepartments()) {
 	    	departmentNames.append(d.getName());
 	    	departmentNames.append(SEPERATOR);
     	}

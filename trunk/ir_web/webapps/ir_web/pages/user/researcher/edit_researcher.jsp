@@ -142,9 +142,8 @@
 	                                </tr>
 	                                <tr>
 	                                    <td class="label">
-	                                        <strong>Department</strong> 
-	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="researcherForm_add_department" value="Add" onclick="javascript:YAHOO.ur.edit.researcher.getDepartments();"/>
-	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="show_department" value="New Department"/>
+	                                        <strong>Department(s)</strong> 
+	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="show_department" value="Create New Department"/>
 	                                    </td>
 	                               </tr>
 	                               <tr>
@@ -336,14 +335,14 @@
 
 	                      <!--  table of files and folders -->
 	                      <div id="newResearcherFolders" >
-	                          <ur:basicForm  id="folders" name="myFolders">
+	                          <form  id="folders" name="myFolders">
 	                              <input type="hidden" id="myFolders_parentFolderId" 
 	                                   name="parentFolderId" 
 	                                   value="${parentFolderId}"/>
 	                              <input type="hidden" id="myFolders_showFoldersTab" 
 	                                   name="showFoldersTab" 
 	                                   value="${showFoldersTab}"/>	                                   
-	                          </ur:basicForm>
+	                          </form>
 	                      </div>
 	                      <!--  end personal files and folders div -->	                  
 
@@ -406,10 +405,10 @@
         <!-- end doc -->
         
         <!-- Dialog box for uploading pictures -->
-        <ur:div id="uploadResearcherPictureDialog" cssClass="hidden">
-	        <ur:div cssClass="hd">Picture Upload</ur:div>
-		    <ur:div cssClass="bd">
-		        <ur:basicForm id="addResearcherPicture" name="pictureUploadForm" 
+        <div id="uploadResearcherPictureDialog" class="hidden">
+	        <div class="hd">Picture Upload</div>
+		    <div class="bd">
+		        <form id="addResearcherPicture" name="pictureUploadForm" 
 		            method="post" enctype="multipart/form-data"
 		            action="user/uploadResearcherPicture.action">
 		              
@@ -417,9 +416,9 @@
 		            <div id="upload_form_fields">
 		                <c:import url="/pages/user/researcher/researcher_upload_form_frag.jsp"/>
 		             </div>
-		        </ur:basicForm>
-		    </ur:div>
-	     </ur:div>
+		        </form>
+		    </div>
+	     </div>
 	     <!--  end upload picture dialog -->
 
 	     <!--  generic error dialog -->   	     
@@ -432,36 +431,36 @@
 	     </div>
 	     <!-- End generic error dialog -->   	     
   
-	  <ur:div id="newDepartmentDialog" cssClass="hidden">
-	      <ur:div cssClass="hd">Department Information</ur:div>
-	      <ur:div cssClass="bd">
-	          <ur:basicForm id="addDepartment" name="newDepartmentForm" 
+	  <div id="newDepartmentDialog" class="hidden">
+	      <div class="hd">Department Information</div>
+	      <div class="bd">
+	          <form id="addDepartment" name="newDepartmentForm" 
 			                    method="post" 
 			                    action="user/addDepartment.action">
-		          <ur:div id="newDepartmentDialogFields">
-		                       <%@ include file="/pages/admin/department/department_form.jsp" %>
-		          </ur:div>
-		      </ur:basicForm>
-	      </ur:div>
-	  </ur:div>	  
+		          <div id="newDepartmentDialogFields">
+		              <c:import url="/pages/admin/department/department_form.jsp"/>
+		          </div>
+		      </form>
+	      </div>
+	  </div>	  
 	  
-	  <ur:div id="newFieldDialog" cssClass="hidden">
-	      <ur:div cssClass="hd">Field Information</ur:div>
-	      <ur:div cssClass="bd">
-	          <ur:basicForm id="addField" name="newFieldForm" 
+	  <div id="newFieldDialog" class="hidden">
+	      <div class="hd">Field Information</div>
+	      <div class="bd">
+	          <form id="addField" name="newFieldForm" 
 			                    method="post" 
 			                    action="user/addField.action">
-		          <ur:div id="newFieldDialogFields">
-		                       <%@ include file="/pages/admin/field/field_form.jsp" %>
-		          </ur:div>
-		      </ur:basicForm>
-	      </ur:div>
-  	  </ur:div>
+		          <div id="newFieldDialogFields">
+		              <c:import url="/pages/admin/field/field_form.jsp"/>
+		          </div>
+		      </form>
+	      </div>
+  	  </div>
   
         <div id="newFolderDialog" class="hidden">
             <div class="hd">Folder Information</div>
             <div class="bd">
-                  <ur:basicForm id="addFolder" name="newFolderForm" 
+                  <form id="addFolder" name="newFolderForm" 
                   method="post" action="user/addResearcherFolder.action">
               
                    <input type="hidden" id="newFolderForm_parentFolderId"
@@ -488,7 +487,7 @@
 	                      <td align="left" class="input" colspan="2" ><textarea cols="42" rows="4" name="folderDescription"></textarea></td>
 	                  </tr>
 	              </table>
-                 </ur:basicForm>
+                 </form>
            </div>
            <!-- end dialog body -->
        </div>
@@ -506,7 +505,7 @@
         <div id="newLinkDialog" class="hidden">
             <div class="hd">Link Information</div>
             <div class="bd">
-                  <ur:basicForm id="addLink" name="newLinkForm" 
+                  <form id="addLink" name="newLinkForm" 
                   method="post" action="user/addResearcherLink.action">
               
                    <input type="hidden" id="newLinkForm_parentFolderId"
@@ -537,7 +536,7 @@
 	                      <td align="left" class="input"> <input id="link_url" size="45" type="text" name="linkUrl" value="http://"/></td>
 	                  </tr>
 	              </table>
-                 </ur:basicForm>
+                 </form>
            </div>
            <!-- end dialog body -->
        </div>
@@ -556,7 +555,7 @@
 		             <input type="hidden" id="researcherId" name="researcherId" value="${researcher.id}"/>
 
               	    <div id="researcher_personal_link_fields">
-               		    <%@ include file="add_researcher_personal_link_form.jsp" %>
+              	        <c:import url="add_researcher_personal_link_form.jsp"/>
               	    </div>
 
 		         </form>

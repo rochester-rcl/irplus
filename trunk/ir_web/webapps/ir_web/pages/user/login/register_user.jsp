@@ -239,26 +239,24 @@
 	                      </td>
                       </tr>
                       
+                     <tr>
+		                 <td align="left" class="label">Department(s):</td>
+                         <td align="left" class="input"> 
+      	                     <select multiple="multiple" id="editUserForm_department" name="departmentIds" />
+      	   		
+	      		             <c:forEach items="${departments}" var="department">
+	      			             <option value = "${department.id}"
+	      			             <c:forEach items="${irUser.departments}" var="userDepartment">
+	      			                 <c:if test="${department.id == userDepartment.id}">
+	      				             selected
+	      			                 </c:if>
+	      			             </c:forEach>
+	      			             > ${department.name}</option>
+	      		             </c:forEach>
+      	                     </select>
+      	                 </td> 
+	                  </tr>              
                       <tr>
-			            <td align="left" class="label">
-			              Department:
-		                </td>
-		                <td align="left" class="input">
-           		      	   <select id="irUserForm_department" name="departmentId" />
-           		      	   		<option value = "0"> N/A</option>
-					      		<c:forEach items="${departments}" var="department">
-					      		    <c:if test="${department.id != departmentId}">
-					      			    <option value = "${department.id}"> ${department.name}</option>
-					      			</c:if>
-					      			<c:if test="${department.id == departmentId}">
-					      			    <option value = "${department.id}" selected="selected"> ${department.name}</option>
-					      			</c:if>
-					      		</c:forEach>
-				      	   </select>
-
-	                      </td>
-                      </tr>
-                            <tr>
 	                       <td align="left" class="label" colspan="2">				  
 				              <h3> Net Id is NOT required to use this system.  <br/><br/>This allows you to use both your Net ID / Net ID Password or the local user name / password above.  You must supply your Net ID password for verification purposes only.</h3>
 				              <p class="errorMessage">If you do not want to also be able use you net id - leave both the Net ID and Net ID Password fields blank - instead you will only be able to log in using your local account user name and password entered above.</p>

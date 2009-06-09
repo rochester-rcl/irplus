@@ -89,16 +89,7 @@
 			insert="true"
 			update="true" />
 
-		<!-- Departments for the researcher -->
-		<set name="departments" 
-		     optimistic-lock="false"
-		     table="ir_researcher.researcher_department" 
-		     access="field" 
-		     lazy="true"
-		     fetch="subselect">
-			<key column="researcher_id" />
-			<many-to-many column="department_id" class="edu.ur.ir.user.Department"/>
-		</set>		
+
 			
 		<!-- Fields for the researcher -->
 		<set name="fields" 

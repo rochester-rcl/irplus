@@ -34,6 +34,7 @@ import org.apache.lucene.store.FSDirectory;
 
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.person.PersonName;
+import edu.ur.ir.user.Department;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserIndexService;
@@ -53,6 +54,9 @@ public class DefaultUserIndexService implements UserIndexService{
 	public static final String USER_EMAILS = "user_emails";
 	public static final String USER_DEPARTMENTS = "user_departments";
 	public static final String USER_NAMES = "user_names";
+	
+	/** separator used for multi-set data */
+	public static final String SEPERATOR = "|";
 	
 	/** Analyzer for dealing with text indexing */
 	private Analyzer analyzer;
@@ -309,12 +313,23 @@ public class DefaultUserIndexService implements UserIndexService{
 				Field.Store.YES, 
 				Field.Index.TOKENIZED));
 	    
-	    if( user.getDepartment() != null )
+	    if( user.getDepartments() != null )
 	    {
-	    	doc.add(new Field(USER_DEPARTMENTS, 
-					user.getDepartment().getName(), 
+	    	StringBuffer departmentNames = new StringBuffer();
+	    	for(Department d : user.getDepartments())
+	    	{
+	    		departmentNames.append(d.getName());
+		    	departmentNames.append(SEPERATOR);
+	    	}
+	    	
+	    	String names = departmentNames.toString();
+		    if( names != null && !names.trim().equals(""))
+		    {
+	    	    doc.add(new Field(USER_DEPARTMENTS, 
+	    	    		names, 
 					Field.Store.YES, 
 					Field.Index.TOKENIZED));
+		    }
 	    }
 
 	    if (user.getPersonNameAuthority() != null) {

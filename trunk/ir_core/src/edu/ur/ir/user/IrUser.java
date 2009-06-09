@@ -121,8 +121,8 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	/**  Affiliation for the user  */
 	private Affiliation affiliation; 
 	
-	/**  Department for the user  */
-	private Department department; 
+	/** Departments of the user */
+	private Set<Department> departments = new HashSet<Department>();
 	
 	/**  Indicates whether the affiliation is approved */
 	private boolean isAffiliationApproved;
@@ -1169,6 +1169,17 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 		}
 		return null;
 	}
+	
+	/**
+	 * Add a department to this researcher.
+	 * 
+	 * @param department
+	 * 
+	 */
+	public void addDepartment(Department department)
+	{
+		departments.add(department);
+	}
 
 
 	/**
@@ -1328,22 +1339,41 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	}
 
 	/**
-	 * Get the department of the user.
+	 * The users departments
 	 * 
-	 * @return department of the user
+	 * @return an unmodifiable set of departments
 	 */
-	public Department getDepartment() {
-		return department;
+	public Set<Department> getDepartments() {
+		return Collections.unmodifiableSet(departments);
 	}
 
 	/**
-	 * Set the department of the user.
+	 * Set the researchers department.
 	 * 
 	 * @param department
 	 */
-	public void setDepartment(Department department) {
-		this.department = department;
+	void setDepartments(Set<Department> departments) {
+		this.departments = departments;
 	}
+	
+	/**
+	 * Remove a department from this researcher.
+	 * 
+	 * @param department
+	 * @return true if the department is removed.
+	 */
+	public boolean removeDepartment(Department department)
+	{
+		return departments.remove(department);
+	}
+
+	/**
+	 * Remove all departments
+	 */
+	public void removeAllDepartments() {
+		departments.clear();
+	}
+
 	
 	/**
 	 * Get the sid type.  This is for security.

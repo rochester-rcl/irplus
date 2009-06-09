@@ -150,9 +150,9 @@
 								      <c:if test="${!ir:isStringEmpty(researcher.campusLocation)}">
 		                              <strong>Title:</strong><br/><br/>${researcher.title} <br/><br/>
 		                              </c:if>
-		                              <c:if test="${!ur:isEmpty(researcher.departments)}">
+		                              <c:if test="${!ur:isEmpty(researcher.user.departments)}">
 		                                  <strong>Department(s):</strong><br/><br/>
-		                                  <c:forEach items="${researcher.departments}" var="department">
+		                                  <c:forEach items="${researcher.user.departments}" var="department">
 		                                      ${department.name}<br/>
 		                                  </c:forEach>
 		                                  <br/>
