@@ -257,9 +257,8 @@
       	                 </td> 
 	                  </tr>              
                       <tr>
-	                       <td align="left" class="label" colspan="2">				  
-				              <h3> Net Id is NOT required to use this system.  <br/><br/>This allows you to use both your Net ID / Net ID Password or the local user name / password above.  You must supply your Net ID password for verification purposes only.</h3>
-				              <p class="errorMessage">If you do not want to also be able use you net id - leave both the Net ID and Net ID Password fields blank - instead you will only be able to log in using your local account user name and password entered above.</p>
+	                       <td align="left" class="label" colspan="2">		
+	                          If you wish, you may use your Net ID  and password to login to IR Plus.  <strong>Net ID is NOT required to use this system.</strong>		  
 				          </td>
 				      </tr>
 	                  <tr> 
