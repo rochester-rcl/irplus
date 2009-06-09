@@ -1402,11 +1402,11 @@ ALTER TABLE ir_item.item_extent_seq OWNER TO ir_plus;
 CREATE TABLE ir_item.series(
   series_id bigint NOT NULL,
   version integer,
-  name text,
-  description text,
+  name text NOT NULL,
   number text,
+  description text,
   PRIMARY KEY (series_id),
-  UNIQUE (number)
+  UNIQUE (name, number)
 ) ;
 ALTER TABLE ir_item.series OWNER TO ir_plus;
 
