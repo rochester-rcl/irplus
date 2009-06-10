@@ -90,15 +90,17 @@ public class DefaultRtfTextExtractor implements FileTextExtractor {
 		    	text = myText;
 		    }
 		}
-		catch(Exception e)
-		{
-			log.error("could not get text for rich text document " + f.getAbsolutePath(), e);
-		}
 		catch(OutOfMemoryError oome)
 		{
 			text = "";
 			log.error("could not extract text", oome);
 		}
+		catch(Exception e)
+		{
+			text = "";
+			log.error("could not get text for rich text document " + f.getAbsolutePath(), e);
+		}
+		
 		finally
 		{
 			closeInputStream(inputStream);

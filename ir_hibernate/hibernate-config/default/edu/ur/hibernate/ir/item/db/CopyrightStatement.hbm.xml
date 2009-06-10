@@ -25,16 +25,16 @@
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.item">
-	<class name="ContentType" schema="ir_item" table="content_type"
+	<class name="CopyrightStatement" schema="ir_item" table="copyright_statement"
 		lazy="true">
 
         <cache usage="nonstrict-read-write" />
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="content_type_id"
+		<id name="id" type="long" column="copyright_statement_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_item.content_type_seq</param>
+				<param name="sequence">ir_item.copyright_statement_seq</param>
 			</generator>
 		</id>
 
@@ -48,35 +48,30 @@
 		<property name="description" column="description" type="string"
 			not-null="false" />
 		
-		<property name="uniqueSystemCode" column="unique_system_code" type="string" access="field" />
+		<property name="text" column="copyright_text" type="string"
+			not-null="false" />
 		
 			
 	 </class>
 		
-	<!--  Get a count of item content types in the system -->
-	<query name="contentTypeCount">
-	    select count(*) from ContentType
+	<!--  Get a count of copyright statements in the system -->
+	<query name="copyrightStatementCount">
+	    select count(*) from CopyrightStatement
 	</query>
 	
-    <!-- named query for getting a content type-->
-	<query name="getContentTypeByName">
-		from ContentType as ContentType where
-		ContentType.name = ?
+    <!-- named query for getting a copyright statement-->
+	<query name="getCopyrightStatmentByName">
+		from CopyrightStatement as copyrightStatement where
+		copyrightStatement.name = ?
 	</query>
 	
-	<!-- named query for getting a content type -->
-	<query name="getContentTypeByUniqueSystemCode">
-		from ContentType as ContentType where
-		ContentType.uniqueSystemCode = ?
+	<!-- named query for getting a copyright statement order by name asc -->
+	<query name="getCopyrightStatementByNameAsc">
+		from CopyrightStatement as copyrightStatement order by copyrightStatement.name asc
 	</query>
 	
-	<!-- named query for getting a content type order by name asc -->
-	<query name="getContentTypesOrderByNameAsc">
-		from ContentType as contentType order by contentType.name asc
-	</query>
-	
-	<!-- named query for getting a content types order by name desc -->
-	<query name="getContentTypesOrderByNameDesc">
-		from ContentType as contentType order by contentType.name desc
+	<!-- named query for getting copyright statements order by name desc -->
+	<query name="getCopyrightStatementOrderByNameDesc">
+		from CopyrightStatement as copyrightStatement order by copyrightStatement.name desc
 	</query>	
 </hibernate-mapping>

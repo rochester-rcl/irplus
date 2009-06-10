@@ -101,16 +101,18 @@ public class DefaultPlainTextExtractor implements FileTextExtractor{
 					text = sb.toString();
 				}
 			}
+			catch(OutOfMemoryError oome)
+			{
+				text = null;
+				log.error("could not extract text", oome);
+			}
 			catch(Exception e)
 			{
+				text = null;
 				log.error("could not create document", e);
 				// can't do much
 			}
-			catch(OutOfMemoryError oome)
-			{
-				text = "";
-				log.error("could not extract text", oome);
-			}
+			
 			finally
 			{
 				if( reader != null )

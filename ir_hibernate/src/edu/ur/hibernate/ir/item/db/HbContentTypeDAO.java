@@ -23,8 +23,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Order;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -72,15 +70,13 @@ public class HbContentTypeDAO implements ContentTypeDAO {
 	}
 
 	/**
-	 * Get all content types in name order.
+	 * Get all content types by name ascending order.
 	 * 
 	 * @see edu.ur.NameListDAO#getAllNameOrder()
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ContentType> getAllNameOrder() {
-		DetachedCriteria dc = DetachedCriteria.forClass(ContentType.class);
-    	dc.addOrder(Order.asc("name"));
-    	return (List<ContentType>) hbCrudDAO.getHibernateTemplate().findByCriteria(dc);
+    	return (List<ContentType>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getContentTypesOrderByNameAsc");
 	}
 
 	/**

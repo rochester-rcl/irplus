@@ -97,15 +97,15 @@ public class DefaultPdfTextExtractor implements FileTextExtractor{
 			}
 			
 		}
+		catch(OutOfMemoryError oome)
+		{
+			text = null;
+			log.error("could not extract text", oome);
+		}
 		catch(Exception e)
 		{
 			log.error("could create lucene document", e);
-			
-		}
-		catch(OutOfMemoryError oome)
-		{
-			text = "";
-			log.error("could not extract text", oome);
+			text = null;
 		}
 		finally
 		{

@@ -125,7 +125,8 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	/** Indicates that this item can be viewed by the public. */
 	private boolean publiclyViewable = true;
 	
-
+	/** Copyright statement for the item */
+	private ItemCopyrightStatement itemCopyrightStatement;
 	
 	/**
 	 * Default constructor; 
@@ -1669,9 +1670,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	}
 	
 	/**
-	 * Determine if the current date is before the release date or the
-	 * release date is null;
-	 *  it is return true.
+	 * Determine if the current date is before the release date if it is returns true.
 	 * 
 	 * @return true if the item is embargoed.
 	 */
@@ -1685,5 +1684,26 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		}
 		return embargoed;
 	}
+
+	/**
+	 * Copyright statement for the item.
+	 * 
+	 * @return the item copyright
+	 */
+	public ItemCopyrightStatement getItemCopyrightStatement() {
+		return itemCopyrightStatement;
+	}
+
+	/**
+	 * Copyright statement for the item.
+	 * 
+	 * @param itemCopyrightStatement
+	 */
+	public void setItemCopyrightStatement(
+			ItemCopyrightStatement itemCopyrightStatement) {
+		this.itemCopyrightStatement = itemCopyrightStatement;
+	}
+
+
 
 }

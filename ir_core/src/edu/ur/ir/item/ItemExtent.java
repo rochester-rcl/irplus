@@ -32,7 +32,7 @@ public class ItemExtent extends BasePersistent{
 	/**  The extent type   */
 	private ExtentType extentType;
 	
-	/**   value  */
+	/**   value  of the extent*/
 	private String value;
 	
 	/**  The item this extent type belongs to. */
@@ -42,7 +42,7 @@ public class ItemExtent extends BasePersistent{
 	 *  Constructor
 	 *  
 	 */
-	ItemExtent() {  }
+	ItemExtent() {}
 	
 	/**
 	 *  Constructor

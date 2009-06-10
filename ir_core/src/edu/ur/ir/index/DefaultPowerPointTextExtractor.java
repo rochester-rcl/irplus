@@ -109,15 +109,17 @@ public class DefaultPowerPointTextExtractor implements FileTextExtractor{
 		    	text = myText;
 		    }
 		}
-		catch(Exception e)
-		{
-			log.error("could not get text for power point document " + f.getAbsolutePath(), e);
-		}
 		catch(OutOfMemoryError oome)
 		{
-			text = "";
+			text = null;
 			log.error("could not extract text", oome);
 		}
+		catch(Exception e)
+		{
+			text = null;
+			log.error("could not get text for power point document " + f.getAbsolutePath(), e);
+		}
+		
 		finally
 		{
 			closeInputStream(inputStream);
