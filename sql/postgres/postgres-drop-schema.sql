@@ -99,7 +99,6 @@ DROP SCHEMA ir_repository;
 -- Drop researcher information
 -- ---------------------------------------------
 DROP TABLE ir_researcher.researcher_field;
-DROP TABLE ir_researcher.researcher_department;
 DROP TABLE ir_researcher.researcher_personal_link;
 DROP TABLE ir_researcher.researcher_picture;
 DROP TABLE ir_researcher.researcher_file;
@@ -125,6 +124,7 @@ DROP SCHEMA ir_researcher;
 -- ---------------------------------------------
 -- Drop user information
 -- ---------------------------------------------
+DROP TABLE ir_user.user_department;
 DROP TABLE ir_user.invite_permissions;
 DROP TABLE ir_user.invite_files;
 DROP TABLE ir_user.personal_item;
@@ -191,10 +191,13 @@ DROP TABLE ir_item.identifier_type;
 DROP TABLE ir_item.extent_type;
 DROP TABLE ir_item.language_type;
 DROP TABLE ir_item.content_type;
+DROP TABLE ir_item.copyright_statement;
+
 DROP TABLE ir_item.published_date;
 DROP TABLE ir_item.original_item_creation_date;
 DROP TABLE ir_item.first_available_date;
 
+DROP SEQUENCE ir_item.copyright_statement_seq;
 DROP SEQUENCE ir_item.item_sponsor_seq;
 DROP SEQUENCE ir_item.item_contributor_seq;
 DROP SEQUENCE ir_item.item_seq;

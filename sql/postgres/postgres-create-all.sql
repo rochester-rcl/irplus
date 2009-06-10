@@ -914,7 +914,7 @@ CREATE TABLE ir_item.content_type
 (
     content_type_id BIGINT PRIMARY KEY,
     version INTEGER,
-    name TEXT,
+    name TEXT NOT NULL,
     description TEXT,
     unique_system_code TEXT,
     UNIQUE(name)
@@ -924,6 +924,24 @@ ALTER TABLE ir_item.content_type OWNER TO ir_plus;
 -- The content type sequence
 CREATE SEQUENCE ir_item.content_type_seq;
 ALTER TABLE ir_item.content_type_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Content Type table
+-- ---------------------------------------------
+CREATE TABLE ir_item.copyright_statement
+(
+    copyright_statement_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    description TEXT,
+    copyright_text TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE ir_item.copyright_statement OWNER TO ir_plus;
+
+-- The content type sequence
+CREATE SEQUENCE ir_item.copyright_statement_seq;
+ALTER TABLE ir_item.copyright_statement_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
