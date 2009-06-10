@@ -73,7 +73,7 @@ public class ContentTypeDAOTest {
         assert contentTypeDAO.getAllNameOrder().size() == 1 : "One content type should be found";
          
         ContentType itemContentTypeByName =  contentTypeDAO.findByUniqueName(ct.getName());
-        assert itemContentTypeByName.equals(ct) : "Contributor should be found";
+        assert itemContentTypeByName.equals(ct) : "Content type should be found";
          
         contentTypeDAO.makeTransient(other);
         assert  contentTypeDAO.getById(other.getId(), false) == null : "Should no longer be able to find content type";

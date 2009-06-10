@@ -73,6 +73,7 @@
                 <value>edu/ur/hibernate/ir/item/db/ItemExtent.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/ItemContributor.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/ItemSponsor.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/CopyrightStatement.hbm.xml</value>
                 
                 <value>edu/ur/hibernate/ir/person/db/PersonNameAuthority.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/person/db/PersonName.hbm.xml</value>
@@ -90,7 +91,6 @@
                 <value>edu/ur/hibernate/ir/researcher/db/ResearcherLink.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/researcher/db/ResearcherPersonalLink.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/researcher/db/ResearcherInstitutionalItem.hbm.xml</value>
-                
                
                 <value>edu/ur/hibernate/ir/user/db/IrUserGroup.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/IrUser.hbm.xml</value>
