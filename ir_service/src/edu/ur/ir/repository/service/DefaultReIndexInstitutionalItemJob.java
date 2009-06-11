@@ -46,7 +46,7 @@ public class DefaultReIndexInstitutionalItemJob implements StatefulJob {
 		
 		if( batchSize <= 0 )
 		{
-			batchSize = 10;
+			batchSize = 1;
 		}
 		  
 		ApplicationContext applicationContext = null;

@@ -20,7 +20,7 @@ public class ReIndexInstitutionalItem extends ActionSupport{
 	private Scheduler quartzScheduler;
 	
 	/** Default Batch Size */
-	private int batchSize = 10;
+	private int batchSize = 1;
 
 	/** eclipse generated id */
 	private static final long serialVersionUID = 673513182573887635L;

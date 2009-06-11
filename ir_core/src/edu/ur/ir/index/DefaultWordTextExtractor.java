@@ -89,8 +89,6 @@ public class DefaultWordTextExtractor implements FileTextExtractor{
 			{
 			    text = myText;
 			}
-		  
-			
 		}
 		catch(OutOfMemoryError oome)
 		{

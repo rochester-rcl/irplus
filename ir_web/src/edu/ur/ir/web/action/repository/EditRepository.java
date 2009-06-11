@@ -377,13 +377,6 @@ Validateable, UserIdAware{
 		return SUCCESS;
 	}
 	
-	public String reIndexInstitutionalItems()
-	{
-		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		repositoryIndexerService.reIndexInstitutionalItems(repository, batchSize);
-		return SUCCESS;
-	}
-	
 	/**
 	 * Cancel called
 	 * 
