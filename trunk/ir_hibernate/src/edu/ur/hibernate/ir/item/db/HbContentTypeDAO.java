@@ -85,7 +85,7 @@ public class HbContentTypeDAO implements ContentTypeDAO {
 	 * @see edu.ur.NameListDAO#getAllOrderByName(int, int)
 	 */
 	public List<ContentType> getAllOrderByName(int startRecord, int numRecords) {
-		return hbCrudDAO.getByQuery("getAllContentTypeNameAsc", startRecord, numRecords);
+		return hbCrudDAO.getByQuery("getContentTypesOrderByNameAsc", startRecord, numRecords);
 	}
 
 	/**
