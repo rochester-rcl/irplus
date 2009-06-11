@@ -103,6 +103,7 @@
 	       <input type="hidden" id="folder_sort_type" name="sortType" value="${sortType}"/>
 	       <input type="hidden" id="folder_sort_element" name="sortElement" value="${sortElement}"/>
        
+        <c:url var="downArrow" value="/page-resources/images/all-images/bullet_arrow_down.gif" />
         <urstb:table width="100%">
             <urstb:thead>
                 <urstb:tr>
@@ -119,7 +120,6 @@
                             sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
                             sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
                     
-                    <urstb:td>Id</urstb:td>
                     
                     <urstb:tdHeadSort
                        height="33"
@@ -170,11 +170,13 @@
 	                          where id  is the id of the folder 
 	                          clicking on a link creates a popup menu-->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                             <button type="button" class="table_button" 
+	                             <button type="button"  class="ur_button" 
+	                                onmouseover="this.className='ur_buttonover';"
+ 		                            onmouseout="this.className='ur_button';"
 	                                onclick="javascript:YAHOO.ur.folder.buildFolderMenu(${fileSystemObject.id}, 
 	                                this,'folder_'+ ${fileSystemObject.id}, 
 	                                'folder_menu_' + ${fileSystemObject.id},
-	                                '${ur:escapeSingleQuote(fileSystemObject.name)}');"><span class="folderBtnImg">&nbsp;</span><span class="blueDownBtnImg">&nbsp;</span></button>
+	                                '${ur:escapeSingleQuote(fileSystemObject.name)}');"><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
 	                            <div id="folder_${fileSystemObject.id}"></div>
 	                         </c:if>
 	                     
@@ -182,7 +184,9 @@
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
 	                                	                        
 	                             <!--  build the menu on click -->
-	                             <button type="button" class="table_button"
+	                             <button type="button" class="ur_button"
+	                                 onmouseover="this.className='ur_buttonover';"
+ 		                             onmouseout="this.className='ur_button';"
 	                                 onclick="javascript:YAHOO.ur.folder.buildFileMenu(this, 'file_'+ ${fileSystemObject.id}, 
 	                                 'file_menu_' + ${fileSystemObject.id}, 
 	                                 ${fileSystemObject.id}, 
@@ -193,12 +197,9 @@
 	                                 ${ir:canBreakLock(user,fileSystemObject.versionedFile)},
 	                                 ${ir:canShareFile(user,fileSystemObject.versionedFile)}, 
 	                                 ${ir:canEditFile(user,fileSystemObject.versionedFile)},
-	                                 '${ur:escapeSingleQuote(fileSystemObject.name)}', '${ur:escapeSingleQuote(fileSystemObject.versionedFile.name)}' );"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><span class="blueDownBtnImg">&nbsp;</span></button>
+	                                 '${ur:escapeSingleQuote(fileSystemObject.name)}', '${ur:escapeSingleQuote(fileSystemObject.versionedFile.name)}' );"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
 	                             <div id="file_${fileSystemObject.id}"></div>
 	                         </c:if>
-                        </urstb:td>
-                        <urstb:td>
-                            ${fileSystemObject.id}
                         </urstb:td>
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">

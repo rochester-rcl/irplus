@@ -92,6 +92,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         
         // do not let the user access the file unless they are the user 
         // who the file has been shared with.
+        log.debug( "shared inbox file shared with user id = " + sharedInboxFile.getSharedWithUser().getId() + " user Id = " + userId);
         if(!sharedInboxFile.getSharedWithUser().getId().equals(userId))
         {
         	return "accessDenied";

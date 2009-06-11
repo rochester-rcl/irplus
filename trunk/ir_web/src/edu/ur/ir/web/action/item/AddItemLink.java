@@ -17,15 +17,14 @@
 package edu.ur.ir.web.action.item;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexService;
@@ -38,8 +37,8 @@ import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
-import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.action.user.PersonalWorkspaceSchedulingIndexHelper;
 
 /**
  * Action to add a link to the item.
@@ -82,9 +81,6 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	/** File system service for files */
 	private RepositoryService repositoryService;
 	
-	/** User index service for indexing items */
-	private UserWorkspaceIndexService userWorkspaceIndexService;
-	
 	/** User Publishing File System Service */
 	private UserPublishingFileSystemService userPublishingFileSystemService;
 	
@@ -93,6 +89,9 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
+	
+	/** Quartz scheduler instance to schedule jobs  */
+	private Scheduler quartzScheduler;
 
 	/**
 	 * Prepare for action
@@ -131,16 +130,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-
-			try {
-				userWorkspaceIndexService.updateIndex(repository, personalItem);
-			} catch (LocationAlreadyExistsException e) {
-				log.error(e);
-			} catch (IOException e) {
-				log.error(e);
-			}
+			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
 		}
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -187,16 +178,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-
-			try {
-				userWorkspaceIndexService.updateIndex(repository, personalItem);
-			} catch (LocationAlreadyExistsException e) {
-				log.error(e);
-			} catch (IOException e) {
-				log.error(e);
-			}
+			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
 		}
 
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -275,11 +258,6 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		this.repositoryService = repositoryService;
 	}
 
-	public void setUserWorkspaceIndexService(
-			UserWorkspaceIndexService userWorkspaceIndexService) {
-		this.userWorkspaceIndexService = userWorkspaceIndexService;
-	}
-
 	public void setUserPublishingFileSystemService(
 			UserPublishingFileSystemService userPublishingFileSystemService) {
 		this.userPublishingFileSystemService = userPublishingFileSystemService;
@@ -298,5 +276,13 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public Scheduler getQuartzScheduler() {
+		return quartzScheduler;
+	}
+
+	public void setQuartzScheduler(Scheduler quartzScheduler) {
+		this.quartzScheduler = quartzScheduler;
 	}
 }

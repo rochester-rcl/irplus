@@ -66,7 +66,7 @@ public interface UserWorkspaceIndexService {
 	 * 
 	 * @param personalFile
 	 */
-	public void deleteFromIndex(PersonalFile personalFile);
+	public void deleteFileFromIndex(IrUser user, Long personalFileId );
 	
 
 	/**
@@ -93,7 +93,7 @@ public interface UserWorkspaceIndexService {
 	 * 
 	 * @param personalFile
 	 */
-	public void deleteFromIndex(PersonalFolder personalFolder);
+	public void deleteFolderFromIndex(IrUser user, Long personalFolderId);
 	
 	/**
 	 * Add the shared inbox file  to the index. Will create the location if one already exists
@@ -118,7 +118,7 @@ public interface UserWorkspaceIndexService {
 	 * 
 	 * @param personalFile
 	 */
-	public void deleteFromIndex(SharedInboxFile inboxFile);
+	public void deleteInboxFileFromIndex(IrUser user, Long sharedInboxFileId);
 	
 	/**
 	 * Updates all indexes for all collaborators and the owner who share the specified file.  Creates an index folder if 
@@ -142,7 +142,7 @@ public interface UserWorkspaceIndexService {
 	 * 
 	 * @param personalItem
 	 */
-	public void deleteFromIndex(PersonalItem personalItem);
+	public void deleteItemFromIndex(IrUser user, Long personalItemId);
 	
 	/**
 	 * Add a personal item to the index.  Creates an index floder if one does not already exist

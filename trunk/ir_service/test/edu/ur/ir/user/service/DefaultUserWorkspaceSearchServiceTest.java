@@ -177,7 +177,7 @@ public class DefaultUserWorkspaceSearchServiceTest {
 		searchResults.getTotalHits() 
 			+ " for finding file_version_creator " + currentVersion.getVersionCreator().getUsername();
 			
-		userIndexService.deleteFromIndex(personalFile);
+		userIndexService.deleteFileFromIndex(personalFile.getOwner(), personalFile.getId());
 		
 
 		searchResults = 
@@ -257,7 +257,7 @@ public class DefaultUserWorkspaceSearchServiceTest {
 			+ " for finding personal folder name " + personalFolder.getName();
 			
 			
-		userIndexService.deleteFromIndex(personalFolder);
+		userIndexService.deleteFolderFromIndex(personalFolder.getOwner(), personalFolder.getId());
 		
 
 		searchResults = userSearchService.search(indexFolder, personalFolder.getName(), 0, 1); 

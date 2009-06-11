@@ -206,9 +206,9 @@ ul.basicNav {
 /* styling for buttons when they have been rolled over*/
 .table_button
 {
-    border: 0px;
+    border: 1px solid;
     background:transparent;
-    width: 6em;
+    width: 50px;
     cursor:pointer;
     cursor:hand;
 }
