@@ -35,6 +35,7 @@
 		     <class name="edu.ur.hibernate.ir.item.db.ExtentTypeDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.db.ItemExtentDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.db.ItemSponsorDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.CopyrightStatementDAOTest"/>
 		     
 		     <class name="edu.ur.hibernate.ir.news.db.NewsItemDAOTest"/>
 		     
