@@ -38,7 +38,7 @@ public class DefaultExcelXmlTextExtractor implements FileTextExtractor{
 	private static final Logger log = Logger.getLogger(DefaultExcelXmlTextExtractor.class);
 
 	/**Maximum size of file this extractor will try to extract*/
-	private long maxFileExtractSizeInBytes = 6000000l;
+	private long maxFileExtractSizeInBytes = 1000000l;
 	
 	/**
 	 * Default constructor
