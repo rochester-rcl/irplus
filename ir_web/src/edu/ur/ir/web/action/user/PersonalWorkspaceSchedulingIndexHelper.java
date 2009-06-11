@@ -47,7 +47,7 @@ public class PersonalWorkspaceSchedulingIndexHelper {
 		
 		log.debug("setting up quartz job to index files");
 		//create the job detail
-		JobDetail jobDetail = new JobDetail("indexNewPersonalFoldersJob", Scheduler.DEFAULT_GROUP, 
+		JobDetail jobDetail = new JobDetail("indexPersonalFoldersJobFireNow" + pf.getId(), Scheduler.DEFAULT_GROUP, 
 				edu.ur.ir.user.service.DefaultUserNewFileSystemObjectsIndexJob.class);
 		
 		jobDetail.getJobDataMap().put("folderIds", folderIds);
@@ -93,7 +93,7 @@ public class PersonalWorkspaceSchedulingIndexHelper {
 		
 		log.debug("setting up quartz job to index files");
 		//create the job detail
-		JobDetail jobDetail = new JobDetail("indexNewPersonalFilesJob", Scheduler.DEFAULT_GROUP, 
+		JobDetail jobDetail = new JobDetail("indexNewPersonalFilesJobFireNow" + lastId, Scheduler.DEFAULT_GROUP, 
 				edu.ur.ir.user.service.DefaultUserNewFileSystemObjectsIndexJob.class);
 		
 		jobDetail.getJobDataMap().put("fileIds", fileIds);
@@ -159,7 +159,7 @@ public class PersonalWorkspaceSchedulingIndexHelper {
 		
 		log.debug("setting up quartz job to index files");
 		//create the job detail
-		JobDetail jobDetail = new JobDetail("indexNewSharedInboxFileJob", Scheduler.DEFAULT_GROUP, 
+		JobDetail jobDetail = new JobDetail("indexNewSharedInboxFileJob" + lastId, Scheduler.DEFAULT_GROUP, 
 				edu.ur.ir.user.service.DefaultUserNewFileSystemObjectsIndexJob.class);
 		
 		jobDetail.getJobDataMap().put("sharedFileInboxIds", sharedFileInboxIds);
@@ -193,7 +193,7 @@ public class PersonalWorkspaceSchedulingIndexHelper {
 		
 		log.debug("setting up quartz job to index files");
 		//create the job detail
-		JobDetail jobDetail = new JobDetail("indexNewPersonalFoldersJob", Scheduler.DEFAULT_GROUP, 
+		JobDetail jobDetail = new JobDetail("indexNewPersonalItemsJob" + pi.getId(), Scheduler.DEFAULT_GROUP, 
 				edu.ur.ir.user.service.DefaultUserNewFileSystemObjectsIndexJob.class);
 		
 		jobDetail.getJobDataMap().put("itemIds", itemIds);
