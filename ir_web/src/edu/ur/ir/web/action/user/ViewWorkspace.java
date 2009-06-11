@@ -25,8 +25,6 @@ import org.quartz.Scheduler;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.ir.repository.Repository;
-import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrRole;
@@ -80,9 +78,6 @@ UserIdAware {
 	/** User index service for indexing files */
 	private UserWorkspaceIndexService userWorkspaceIndexService;
 	
-	/** Repository service for placing information in the repository */
-	private RepositoryService repositoryService;
-	
 	/** Service for dealing with user file systems */
 	private UserFileSystemService userFileSystemService;
 
@@ -121,16 +116,11 @@ UserIdAware {
 			user.hasRole(IrRole.RESEARCHER_ROLE) ||
 			user.hasRole(IrRole.COLLECTION_ADMIN_ROLE))
 		{
+			// if the user has shared files - add them for the first time to their index
 		    if (token != null) {
-			    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
-					    false);
 			    Set<SharedInboxFile> inboxFiles = inviteUserService.shareFileForUserWithToken(userId, token);
-
 				PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
 				schedulingHelper.scheduleIndexingNew(quartzScheduler, inboxFiles, user);
-				
-
-			   
 		    }
 		    return SUCCESS;
 		}
@@ -139,9 +129,6 @@ UserIdAware {
 			// this is a basic user who does not have a workspace account
 			return "basic_view";
 		}
-		
-		
-		
 	}
 	
 	/**
@@ -274,14 +261,6 @@ UserIdAware {
 	public void setUserWorkspaceIndexService(
 			UserWorkspaceIndexService userWorkspaceIndexService) {
 		this.userWorkspaceIndexService = userWorkspaceIndexService;
-	}
-
-	public RepositoryService getRepositoryService() {
-		return repositoryService;
-	}
-
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
 	}
 
 	public UserFileSystemService getUserFileSystemService() {

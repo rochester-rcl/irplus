@@ -77,33 +77,33 @@ public class FileTypeImgTag extends CommonSimpleTag implements HtmlImage{
 	    	{
 	    		if(extension.equalsIgnoreCase("pdf"))
 	    		{
-	    			output = "<span class=\"pdfFileImg\">&nbsp;</span>";
+	    			output = "<span class=\"pdfFileImg\"></span>";
 	    		}
 	    		if( extension.equalsIgnoreCase("png") || extension.equalsIgnoreCase("jpg") 
 	    			|| extension.equalsIgnoreCase("gif") || extension.equalsIgnoreCase("tiff") 
 	    			|| extension.equalsIgnoreCase("tif") || extension.equalsIgnoreCase("bmp"))
 	    		{
-	    			output = "<span class=\"imgFileImg\">&nbsp;</span>";
+	    			output = "<span class=\"imgFileImg\"></span>";
 	    		}
 	    		if(extension.equalsIgnoreCase("doc") || extension.equalsIgnoreCase("docx"))
 		    	{
-	    			output = "<span class=\"wordFileImg\">&nbsp;</span>";
+	    			output = "<span class=\"wordFileImg\"></span>";
 		    	}
 	    		if(extension.equalsIgnoreCase("xls") || extension.equalsIgnoreCase("xlsx"))
 		    	{
-	    			output = "<span class=\"excelFileImg\">&nbsp;</span>";
+	    			output = "<span class=\"excelFileImg\"></span>";
 		    	}
 	    		if(extension.equalsIgnoreCase("txt"))
 		    	{
-	    			output = "<span class=\"textFileImg\">&nbsp;</span>";
+	    			output = "<span class=\"textFileImg\"></span>";
 		    	}
 	    		if(extension.equalsIgnoreCase("zip"))
 		    	{
-	    			output = "<span class=\"compressedFileImg\">&nbsp;</span>";
+	    			output = "<span class=\"compressedFileImg\"></span>";
 		    	}
 	    		if(extension.equalsIgnoreCase("ppt") || extension.equalsIgnoreCase("pptx"))
 		    	{
-	    			output = "<span class=\"powerPointFileImg\">&nbsp;</span>";
+	    			output = "<span class=\"powerPointFileImg\"></span>";
 		    	}
 	    	}
 	    	

@@ -436,14 +436,16 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		// Check if personal file exist. Sometimes the file may be still in Shared file inbox.
 		// In that case, there is no need to delete from index
 		if (pf != null) {
-			userWorkspaceIndexService.deleteFromIndex(pf);
+			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+			schedulingHelper.scheduleIndexingDelete(quartzScheduler, pf);
 		}
 		else
 		{
 			SharedInboxFile sif = user.getSharedInboxFile(fileCollaborator.getVersionedFile());
 			if( sif != null )
 			{
-				userWorkspaceIndexService.deleteFromIndex(sif);
+				PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+				schedulingHelper.scheduleIndexingDelete(quartzScheduler, sif);
 			}
 		}
 		
@@ -848,6 +850,14 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 
 	public void setRoleService(RoleService roleService) {
 		this.roleService = roleService;
+	}
+
+	public Scheduler getQuartzScheduler() {
+		return quartzScheduler;
+	}
+
+	public void setQuartzScheduler(Scheduler quartzScheduler) {
+		this.quartzScheduler = quartzScheduler;
 	}
 
 }

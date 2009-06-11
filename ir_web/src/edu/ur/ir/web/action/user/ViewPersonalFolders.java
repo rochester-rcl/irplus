@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Validateable;
@@ -104,6 +105,9 @@ public class ViewPersonalFolders extends ActionSupport implements
 	
 	/**  Logger for vierw workspace action */
 	private static final Logger log = Logger.getLogger(ViewPersonalFolders.class);
+	
+	/** Quartz scheduler instance to schedule jobs  */
+	private Scheduler quartzScheduler;
 
 	/**
 	 * Get folder table
@@ -157,7 +161,9 @@ public class ViewPersonalFolders extends ActionSupport implements
 			    	deleteFileFromIndex(aFile, user);
 			    }
 			    
-			    userWorkspaceIndexService.deleteFromIndex(pf);
+			    PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+				schedulingHelper.scheduleIndexingDelete(quartzScheduler, pf);
+			   
 			    userFileSystemService.deletePersonalFolder(pf);
 		    }
 		}
@@ -195,7 +201,8 @@ public class ViewPersonalFolders extends ActionSupport implements
     	}
     	else
     	{
-    		userWorkspaceIndexService.deleteFromIndex(aFile);
+    		PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+			schedulingHelper.scheduleIndexingDelete(quartzScheduler, aFile);
     	}
 	}
 	
@@ -382,6 +389,14 @@ public class ViewPersonalFolders extends ActionSupport implements
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public Scheduler getQuartzScheduler() {
+		return quartzScheduler;
+	}
+
+	public void setQuartzScheduler(Scheduler quartzScheduler) {
+		this.quartzScheduler = quartzScheduler;
 	}
 	
 

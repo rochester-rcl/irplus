@@ -124,7 +124,7 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 				
 				PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
 				schedulingHelper.scheduleIndexingNew(quartzScheduler, pf);
-				userWorkspaceIndexService.deleteFromIndex(inboxFile);
+				schedulingHelper.scheduleIndexingDelete(quartzScheduler, inboxFile);
 			}
 		    catch (DuplicateNameException e) 
 		    {
@@ -151,7 +151,7 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 				    pf = userFileSystemService.addSharedInboxFileToFolders(destination,  inboxFile);
 				    PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
 					schedulingHelper.scheduleIndexingNew(quartzScheduler, pf);
-					userWorkspaceIndexService.deleteFromIndex(inboxFile);
+					schedulingHelper.scheduleIndexingDelete(quartzScheduler, inboxFile);
 		        } catch (DuplicateNameException e) {
 		            filesNotMoved.add(inboxFile);
 				}

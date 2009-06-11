@@ -17,15 +17,14 @@
 package edu.ur.ir.web.action.item;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexService;
@@ -47,8 +46,8 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
-import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.action.user.PersonalWorkspaceSchedulingIndexHelper;
 
 /**
  * Action to allow a user to add files to an item.
@@ -127,14 +126,15 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	/** File system service for files */
 	private RepositoryService repositoryService;
 	
-	/** User index service for indexing items */
-	private UserWorkspaceIndexService userWorkspaceIndexService;
-
 	/** Institutional item index service for indexing files */
 	private InstitutionalItemIndexService institutionalItemIndexService;
 
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
+	
+	/** Quartz scheduler instance to schedule jobs  */
+	private Scheduler quartzScheduler;
+
 
 	/**
 	 * Execute method
@@ -220,16 +220,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-
-			try {
-				userWorkspaceIndexService.updateIndex(repository, personalItem);
-			} catch (LocationAlreadyExistsException e) {
-				log.error(e);
-			} catch (IOException e) {
-				log.error(e);
-			}
+			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
 		}
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -249,8 +241,6 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	
 	/**
 	 * Adds the selected files to the item and saves the item
-	 * 
-	 * 
 	 */
 	public String addNameToItem() throws NoIndexFoundException {
 		if (userId != null) {
@@ -290,16 +280,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-
-			try {
-				userWorkspaceIndexService.updateIndex(repository, personalItem);
-			} catch (LocationAlreadyExistsException e) {
-				log.error(e);
-			} catch (IOException e) {
-				log.error(e);
-			}
+			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
 		}		
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -597,11 +579,6 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		this.repositoryService = repositoryService;
 	}
 
-	public void setUserWorkspaceIndexService(
-			UserWorkspaceIndexService userWorkspaceIndexService) {
-		this.userWorkspaceIndexService = userWorkspaceIndexService;
-	}
-
 	public void setInstitutionalItemIndexService(
 			InstitutionalItemIndexService institutionalItemIndexService) {
 		this.institutionalItemIndexService = institutionalItemIndexService;
@@ -610,6 +587,14 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
+	}
+
+	public Scheduler getQuartzScheduler() {
+		return quartzScheduler;
+	}
+
+	public void setQuartzScheduler(Scheduler quartzScheduler) {
+		this.quartzScheduler = quartzScheduler;
 	}
 
 

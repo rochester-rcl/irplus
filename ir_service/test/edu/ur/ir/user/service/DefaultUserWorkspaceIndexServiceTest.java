@@ -281,7 +281,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		userWorkspaceIndexService.deleteFromIndex(personalFile);
+		userWorkspaceIndexService.deleteFileFromIndex(personalFile.getOwner(), personalFile.getId());
 		
 		try {
 			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
@@ -386,7 +386,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		userWorkspaceIndexService.deleteFromIndex(personalFolder);
+		userWorkspaceIndexService.deleteFolderFromIndex(personalFolder.getOwner(), personalFolder.getId());
 		
 		try {
 			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
@@ -782,7 +782,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		userWorkspaceIndexService.deleteFromIndex(personalItem);
+		userWorkspaceIndexService.deleteItemFromIndex(personalItem.getOwner(), personalItem.getId());
 		
 		try {
 			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());

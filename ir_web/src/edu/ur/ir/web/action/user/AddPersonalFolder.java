@@ -17,7 +17,6 @@
 
 package edu.ur.ir.web.action.user;
 
-import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.quartz.Scheduler;
@@ -25,10 +24,8 @@ import org.quartz.Scheduler;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
-import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFolder;
@@ -173,8 +170,7 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	public String update() throws NoIndexFoundException
 	{
 		
-		Repository repository = 
-			repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+	
 		log.debug("updating a personal folder parent folderId = " + parentFolderId);
 		folderAdded = false;
 
@@ -206,13 +202,10 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 			try {
 				existingFolder.reName(folderName);
 				userFileSystemService.makePersonalFolderPersistent(existingFolder);
-				try {
-					userWorkspaceIndexService.updateIndex(repository, existingFolder);
-				} catch (LocationAlreadyExistsException e) {
-					log.error(e);
-				} catch (IOException e) {
-					log.error(e);
-				}
+				
+				PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+				schedulingHelper.scheduleIndexingUpdate(quartzScheduler, existingFolder);
+				
 				folderAdded = true;
 			} catch (DuplicateNameException e) {
 				folderAdded = false;
@@ -230,13 +223,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		{
 			other.setDescription(folderDescription);
 			userFileSystemService.makePersonalFolderPersistent(other);
-			try {
-				userWorkspaceIndexService.updateIndex(repository, other);
-			} catch (LocationAlreadyExistsException e) {
-				log.error(e);
-			} catch (IOException e) {
-				log.error(e);
-			}
+			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, other);
 			folderAdded = true;
 		} else {
 			folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
