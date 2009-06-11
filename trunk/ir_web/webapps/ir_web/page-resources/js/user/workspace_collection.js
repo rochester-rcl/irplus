@@ -58,6 +58,7 @@ YAHOO.ur.personal.collection =
     {
         document.getElementById('collection_sort_type').value = sortType;
         document.getElementById('collection_sort_element').value = sortElement;
+        YAHOO.ur.personal.collection.destroyMenus();
         myPersonalCollectionsTable.submitForm(myCollectionAction);
     },
 
@@ -85,6 +86,7 @@ YAHOO.ur.personal.collection =
     getCollectionById : function(collectionId)
     {
         document.getElementById('myCollections_parentCollectionId').value = collectionId;
+        YAHOO.ur.personal.collection.destroyMenus();
         myPersonalCollectionsTable.submitForm(myCollectionAction);
         YAHOO.ur.personal.collection.insertHiddenParentCollectionId();
         YAHOO.ur.shared.file.inbox.getSharedFilesCount();
@@ -99,6 +101,7 @@ YAHOO.ur.personal.collection =
     getCollectionByIdWithoutLoadingSharedInboxFiles : function(collectionId)
     {
         document.getElementById('myCollections_parentCollectionId').value = collectionId;
+        YAHOO.ur.personal.collection.destroyMenus();
         myPersonalCollectionsTable.submitForm(myCollectionAction);
         YAHOO.ur.personal.collection.insertHiddenParentCollectionId();
     },
@@ -340,6 +343,7 @@ YAHOO.ur.personal.collection =
 	                YAHOO.ur.personal.collection.clearCollectionForm();
 	            }
 
+	            YAHOO.ur.personal.collection.destroyMenus();
 	            myPersonalCollectionsTable.submitForm(myCollectionAction);
 	        }
 	    };
@@ -694,6 +698,7 @@ YAHOO.ur.personal.collection =
         // Define various event handlers for Dialog
 	    var handleSubmit = function() 
 	    {
+	    	YAHOO.ur.personal.collection.destroyMenus();
 		    myPersonalCollectionsTable.submitForm(deleteCollectionAction);
 		    this.hide();
 	    };
