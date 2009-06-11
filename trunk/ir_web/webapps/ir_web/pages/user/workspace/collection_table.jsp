@@ -86,7 +86,7 @@
            <!--  values set for sorting -->
 	       <input type="hidden" id="collection_sort_type" name="sortType" value="${sortType}"/>
 	       <input type="hidden" id="collection_sort_element" name="sortElement" value="${sortElement}"/>
-
+        <c:url var="downArrow" value="/page-resources/images/all-images/bullet_arrow_down.gif" />
         <urstb:table width="100%">
             <urstb:thead>
                 <urstb:tr>
@@ -103,7 +103,7 @@
                        <u>Type</u><urstb:thImgSort
                             sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
                             sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
-                    <urstb:td> Id </urstb:td>
+                    
                     <urstb:tdHeadSort
                        height="33"
                        currentSortAction="${collectionNameSort}"
@@ -138,22 +138,19 @@
                         </urstb:td>
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
-	                            <button type="button" class="table_button" 
+	                            <button type="button" class="ur_button" 
 	                                onclick="javascript:YAHOO.ur.personal.collection.buildCollectionMenu(this, 'collection_'+ ${fileSystemObject.id}, 
 	                                 'collection_menu_' + ${fileSystemObject.id}, 
-	                                 ${fileSystemObject.id} );"> <span class="worldBtnImg">&nbsp;</span><span class="blueDownBtnImg">&nbsp;</span></button>
+	                                 ${fileSystemObject.id} );"> <span class="worldBtnImg">&nbsp;</span><img src="${downArrow}"/></button>
 	                            <div id="collection_${fileSystemObject.id}"></div>
 	                         </c:if>
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
-	                             <button type="button" class="table_button" 
+	                             <button type="button" class="ur_button" 
 	                                onclick="javascript:YAHOO.ur.personal.collection.buildItemMenu(this, 'item_'+ ${fileSystemObject.id}, 
 	                                 'item_menu_' + ${fileSystemObject.id}, 
-	                                 ${fileSystemObject.id} );"> <span class="packageBtnImg">&nbsp;</span><span class="blueDownBtnImg">&nbsp;</span></button>
+	                                 ${fileSystemObject.id} );"> <span class="packageBtnImg">&nbsp;</span><img src="${downArrow}"/></button>
 	                             <div id="item_${fileSystemObject.id}"></div>
 	                         </c:if>
-                        </urstb:td>
-                        <urstb:td>
-                             ${fileSystemObject.id}
                         </urstb:td>
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
