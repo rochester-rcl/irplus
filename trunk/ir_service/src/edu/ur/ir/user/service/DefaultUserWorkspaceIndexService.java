@@ -411,7 +411,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateIndex(java.io.File, edu.ur.ir.user.PersonalFile)
 	 */
 	public void updateIndex(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException, IOException {
-		deleteFromIndex(personalFile);
+		deleteFileFromIndex(personalFile.getOwner(), personalFile.getId());
 		addToIndex(repository, personalFile);
 	}
 
@@ -420,14 +420,14 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#deleteFromIndex(edu.ur.ir.user.PersonalFile)
 	 */
-	public void deleteFromIndex(PersonalFile personalFile) {
+	public void deleteFileFromIndex(IrUser user, Long personalFileId ) {
 		
-		String info = personalFile.getOwner().getPersonalIndexFolder();
+		String info = user.getPersonalIndexFolder();
 		File personalIndexFolder = null;
 		
 		// if the user does not have an index folder
 		// don't need to do anything.
-		if( info == null )
+		if( info == null || personalFileId == null )
 		{
 			return;
 		}
@@ -450,7 +450,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			{
 				writer = getWriter(directory);
 			}
-			Term term = new Term(PERSONAL_FILE_ID, NumberTools.longToString(personalFile.getId()));
+			Term term = new Term(PERSONAL_FILE_ID, NumberTools.longToString(personalFileId));
 			writer.deleteDocuments(term);
 			
 		} catch (IOException e) {
@@ -526,16 +526,16 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#deleteFromIndex(edu.ur.ir.user.PersonalFolder)
 	 */
-	public void deleteFromIndex(PersonalFolder personalFolder) {
+	public void deleteFolderFromIndex(IrUser user, Long personalFolderId) {
 		
 		// if the user does not have an index folder
 		// don't need to do anything.
-		String info = personalFolder.getOwner().getPersonalIndexFolder();
+		String info = user.getPersonalIndexFolder();
 		File personalIndexFolder = null;
 		
 		// if the user does not have an index folder
 		// don't need to do anything.
-		if( info == null )
+		if( info == null || personalFolderId == null)
 		{
 			return;
 		}
@@ -558,7 +558,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			{
 				writer = getWriter(directory);
 			}
-			Term term = new Term(PERSONAL_FOLDER_ID, NumberTools.longToString(personalFolder.getId()));
+			Term term = new Term(PERSONAL_FOLDER_ID, NumberTools.longToString(personalFolderId));
 			writer.deleteDocuments(term);
 			writer.close();
 		} catch (IOException e) {
@@ -595,7 +595,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateIndex(java.io.File, edu.ur.ir.user.PersonalFolder)
 	 */
 	public void updateIndex(Repository repository, PersonalFolder personalFolder) throws LocationAlreadyExistsException, IOException{
-		deleteFromIndex(personalFolder);
+		deleteFolderFromIndex(personalFolder.getOwner(), personalFolder.getId());
 		addToIndex(repository, personalFolder);
 	}
 
@@ -696,16 +696,16 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#deleteFromIndex(java.io.File, edu.ur.ir.user.SharedInboxFile)
 	 */
-	public void deleteFromIndex(SharedInboxFile inboxFile) {
+	public void deleteInboxFileFromIndex(IrUser user, Long sharedInboxFileId) {
 		
 		// if the user does not have an index folder
 		// don't need to do anything.
-		String info = inboxFile.getSharedWithUser().getPersonalIndexFolder();
+		String info = user.getPersonalIndexFolder();
 		File personalIndexFolder = null;
 		
 		// if the user does not have an index folder
 		// don't need to do anything.
-		if( info == null )
+		if( info == null || sharedInboxFileId == null)
 		{
 			return;
 		}
@@ -729,7 +729,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				writer = getWriter(directory);
 			}
 			
-			Term term = new Term(SHARED_INBOX_FILE_ID, NumberTools.longToString(inboxFile.getId()));
+			Term term = new Term(SHARED_INBOX_FILE_ID, NumberTools.longToString(sharedInboxFileId));
 			writer.deleteDocuments(term);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -768,7 +768,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateIndex(java.io.File, edu.ur.ir.user.SharedInboxFile)
 	 */
 	public void updateIndex(Repository repository, SharedInboxFile inboxFile) throws LocationAlreadyExistsException, IOException{
-		deleteFromIndex(inboxFile);
+		deleteInboxFileFromIndex(inboxFile.getSharedWithUser(), inboxFile.getId());
 		addToIndex(repository, inboxFile);
 	}
 
@@ -815,7 +815,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
         IrUser owner = personalFile.getOwner();
 		PersonalFile ownerFile = userFileSystemService.getPersonalFile(owner, 
 		    		personalFile.getVersionedFile().getCurrentVersion().getIrFile());
-		deleteFromIndex(ownerFile);
+		deleteFileFromIndex(ownerFile.getOwner(), ownerFile.getId());
     	
     	//add the new version to all users
     	Set<FileCollaborator> collaborators = personalFile.getVersionedFile().getCollaborators();
@@ -826,14 +826,14 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
     	    	 
     	    if( collaboratorFile != null )
     	    {
-    	    	deleteFromIndex(collaboratorFile);
+    	    	deleteFileFromIndex(collaboratorFile.getOwner(), collaboratorFile.getId());
 			}
     	    else
     	    {
     	        SharedInboxFile sharedInboxFile = collaborator.getCollaborator().getSharedInboxFile(personalFile.getVersionedFile());
     	    	if( sharedInboxFile != null)
     	    	{
-    	    		deleteFromIndex(sharedInboxFile);
+    	    		deleteInboxFileFromIndex(sharedInboxFile.getSharedWithUser(), sharedInboxFile.getId());
     	    	}
     	    }
     	}
@@ -859,16 +859,16 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 * 
 	 * @see edu.ur.ir.user.UserWorkspaceIndexService#deleteFromIndex(edu.ur.ir.user.PersonalItem)
 	 */
-	public void deleteFromIndex(PersonalItem personalItem)
+	public void deleteItemFromIndex(IrUser user, Long personalItemId)
 	{
 		// if the user does not have an index folder
 		// don't need to do anything.
-		String info = personalItem.getOwner().getPersonalIndexFolder();
+		String info =  user.getPersonalIndexFolder();
 		File personalIndexFolder = null;
 		
 		// if the user does not have an index folder
 		// don't need to do anything.
-		if( info == null )
+		if( info == null || personalItemId == null)
 		{
 			return;
 		}
@@ -892,7 +892,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				writer = getWriter(directory);
 			}
 			
-			Term term = new Term(PERSONAL_ITEM_ID, NumberTools.longToString(personalItem.getId()));
+			Term term = new Term(PERSONAL_ITEM_ID, NumberTools.longToString(personalItemId));
 			writer.deleteDocuments(term);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -929,7 +929,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 */
 	public void updateIndex(Repository repository, PersonalItem personalItem) throws LocationAlreadyExistsException, IOException
 	{
-		deleteFromIndex(personalItem);
+		deleteItemFromIndex(personalItem.getOwner(), personalItem.getId());
 		addToIndex(repository, personalItem);
 	}
 
