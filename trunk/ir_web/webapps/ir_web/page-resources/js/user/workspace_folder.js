@@ -72,6 +72,7 @@ YAHOO.ur.folder =
         if( currentState != currentFolder )
         {
             document.getElementById('myFolders_parentFolderId').value = folderId;
+            YAHOO.ur.folder.destroyFolderMenus();
             myPersonalFolderTable.submitForm(myFolderAction);
             YAHOO.ur.folder.insertHiddenParentFolderId();
             var buttonsDiv = document.getElementById("files_folders_buttons");
@@ -107,6 +108,7 @@ YAHOO.ur.folder =
     {
         document.getElementById('folder_sort_type').value = sortType;
         document.getElementById('folder_sort_element').value = sortElement;
+        YAHOO.ur.folder.destroyFolderMenus();
         myPersonalFolderTable.submitForm(myFolderAction);
     },
     
@@ -223,7 +225,7 @@ YAHOO.ur.folder =
 	                YAHOO.ur.folder.newFolderDialog.hide();
 	                YAHOO.ur.folder.clearFolderForm();
 	            }
-	        
+	            YAHOO.ur.folder.destroyFolderMenus();
 	            myPersonalFolderTable.submitForm(myFolderAction);
 	        }
 	    };
@@ -809,6 +811,7 @@ YAHOO.ur.folder =
 	                    // we can clear the upload form and get the pictures
 	           
 	                    YAHOO.ur.folder.clearSingleFileUploadForm();
+	                    YAHOO.ur.folder.destroyFolderMenus();
 	                    myPersonalFolderTable.submitForm(myFolderAction);  
 	                    YAHOO.ur.folder.waitDialog.hide(); 
 	                }
@@ -1265,9 +1268,10 @@ YAHOO.ur.folder =
 	            }
 	            else
 	            {
-	                 // we can clear the form if the file was renamed
-	                 YAHOO.ur.folder.renameFileDialog.hide();
+	                // we can clear the form if the file was renamed
+	                YAHOO.ur.folder.renameFileDialog.hide();
 	                YAHOO.ur.folder.clearFileRenameForm();
+	                YAHOO.ur.folder.destroyFolderMenus();
 	                myPersonalFolderTable.submitForm(myFolderAction);
 	            }
 	        }
