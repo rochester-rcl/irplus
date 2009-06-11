@@ -123,6 +123,7 @@ public class DefaultPowerPointTextExtractor implements FileTextExtractor{
 		finally
 		{
 			closeInputStream(inputStream);
+			inputStream = null;
 		}
 		return text;
 

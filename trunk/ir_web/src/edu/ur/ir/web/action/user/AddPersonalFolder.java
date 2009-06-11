@@ -20,6 +20,7 @@ package edu.ur.ir.web.action.user;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -82,6 +83,9 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
+	
+	/** Quartz scheduler instance to schedule jobs  */
+	private Scheduler quartzScheduler;
 
 	
 	/**
@@ -90,9 +94,6 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	public String add() throws Exception
 	{
 		log.debug("creating a personal folder parent folderId = " + parentFolderId);
-		
-		Repository repository = 
-			repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		IrUser thisUser = userService.getUser(userId, true);
 
 		
@@ -109,7 +110,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 					personalFolder = thisUser.createRootFolder(folderName);
 					personalFolder.setDescription(folderDescription);
 					userFileSystemService.makePersonalFolderPersistent(personalFolder);
-					userWorkspaceIndexService.addToIndex(repository, personalFolder);
+					PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+					schedulingHelper.scheduleIndexingNew(quartzScheduler, personalFolder);
 					
 			        folderAdded = true;
 				 } catch (DuplicateNameException e) {
@@ -142,9 +144,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 			    PersonalFolder personalFolder = folder.createChild(folderName);
 			    personalFolder.setDescription(folderDescription);
 			    userFileSystemService.makePersonalFolderPersistent(folder);
-			  
-			    userWorkspaceIndexService.addToIndex(repository, personalFolder);
-				
+			    PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+				schedulingHelper.scheduleIndexingNew(quartzScheduler, personalFolder);
 			    folderAdded = true;
 			}
 			catch(DuplicateNameException e)
@@ -407,5 +408,13 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
+	}
+
+	public Scheduler getQuartzScheduler() {
+		return quartzScheduler;
+	}
+
+	public void setQuartzScheduler(Scheduler quartzScheduler) {
+		this.quartzScheduler = quartzScheduler;
 	}
 }

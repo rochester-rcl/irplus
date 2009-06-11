@@ -17,7 +17,6 @@
 
 package edu.ur.ir.web.action.user;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -25,11 +24,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
@@ -107,6 +106,10 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 	
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
+	
+	/** Quartz scheduler instance to schedule jobs  */
+	private Scheduler quartzScheduler;
+
 
 	
 	private void moveToUser(Repository repository)
@@ -118,13 +121,9 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		    {
 			    pf = userFileSystemService.addSharedInboxFileToFolders(user, 
 							    inboxFile);
-				try {
-					userWorkspaceIndexService.addToIndex(repository, pf);
-				} catch (LocationAlreadyExistsException e) {
-					log.error(e);
-				} catch (IOException e) {
-					log.error(e);
-				}
+				
+				PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+				schedulingHelper.scheduleIndexingNew(quartzScheduler, pf);
 				userWorkspaceIndexService.deleteFromIndex(inboxFile);
 			}
 		    catch (DuplicateNameException e) 
@@ -150,13 +149,8 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		        try 
 		        {
 				    pf = userFileSystemService.addSharedInboxFileToFolders(destination,  inboxFile);
-					try {
-						userWorkspaceIndexService.addToIndex(repository , pf);
-					} catch (LocationAlreadyExistsException e) {
-						log.error(e);
-					} catch (IOException e) {
-						log.error(e);
-					}
+				    PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+					schedulingHelper.scheduleIndexingNew(quartzScheduler, pf);
 					userWorkspaceIndexService.deleteFromIndex(inboxFile);
 		        } catch (DuplicateNameException e) {
 		            filesNotMoved.add(inboxFile);
@@ -438,6 +432,14 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 
 	public void setInviteUserService(InviteUserService inviteUserService) {
 		this.inviteUserService = inviteUserService;
+	}
+
+	public Scheduler getQuartzScheduler() {
+		return quartzScheduler;
+	}
+
+	public void setQuartzScheduler(Scheduler quartzScheduler) {
+		this.quartzScheduler = quartzScheduler;
 	}
 
 }

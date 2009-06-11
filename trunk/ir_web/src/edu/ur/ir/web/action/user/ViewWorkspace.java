@@ -20,6 +20,7 @@ package edu.ur.ir.web.action.user;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -88,6 +89,10 @@ UserIdAware {
 	/** Service for dealing with roles */
 	private RoleService roleService;
 	
+	/** Quartz scheduler instance to schedule jobs  */
+	private Scheduler quartzScheduler;
+
+	
 	/**
 	 * Prepare the repository.
 	 * 
@@ -121,10 +126,11 @@ UserIdAware {
 					    false);
 			    Set<SharedInboxFile> inboxFiles = inviteUserService.shareFileForUserWithToken(userId, token);
 
-			    for(SharedInboxFile sif : inboxFiles)
-			    {
-				    userWorkspaceIndexService.addToIndex(repository, sif);
-			    }
+				PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+				schedulingHelper.scheduleIndexingNew(quartzScheduler, inboxFiles, user);
+				
+
+			   
 		    }
 		    return SUCCESS;
 		}
@@ -292,6 +298,14 @@ UserIdAware {
 
 	public void setRoleService(RoleService roleService) {
 		this.roleService = roleService;
+	}
+
+	public Scheduler getQuartzScheduler() {
+		return quartzScheduler;
+	}
+
+	public void setQuartzScheduler(Scheduler quartzScheduler) {
+		this.quartzScheduler = quartzScheduler;
 	}
 
 }

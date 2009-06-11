@@ -28,11 +28,13 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumberTools;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.LockObtainFailedException;
 
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
@@ -365,16 +367,19 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	{
 		log.debug("write document to directory " + directoryPath );
 		IndexWriter writer = null;
+		Directory directory = null;
 		try {
-			
-			synchronized(this)
+			directory = FSDirectory.getDirectory(directoryPath);
+			writer = getWriter(directory);
+			while(writer == null )
 			{
-			    Directory directory = FSDirectory.getDirectory(directoryPath);
-			    writer = new IndexWriter(directory, analyzer);
-			    writer.addDocument(document);
-			    writer.flush();
-			    writer.optimize();
+				writer = getWriter(directory);
 			}
+		
+			writer.addDocument(document);
+			writer.flush();
+			writer.optimize();
+			
 		} catch (IOException e) {
 			log.error(e);
 			throw new RuntimeException(e);
@@ -383,6 +388,13 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		    if (writer != null) {
 			    try {
 				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    if (directory != null) {
+			    try {
+			    	directory.close();
 			    } catch (Exception e) {
 				    log.error(e);
 			    }
@@ -429,32 +441,35 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		}
 		
 		Directory directory = null;
-		IndexReader reader = null;
+		IndexWriter writer = null;
 		try {
-			synchronized(this)
+			
+			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
+			writer = getWriter(directory);
+			while( writer == null )
 			{
-			    directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			    if( IndexReader.isLocked(directory) )
-			    { 
-				    throw new RuntimeException("Users index directory " + personalIndexFolder.getAbsolutePath() +
-						" is locked ");
-			    }
-			    else
-			    {
-				    reader = IndexReader.open(directory);
-				    Term term = new Term(PERSONAL_FILE_ID, NumberTools.longToString(personalFile.getId()));
-			        reader.deleteDocuments(term);
-			    }
+				writer = getWriter(directory);
 			}
+			Term term = new Term(PERSONAL_FILE_ID, NumberTools.longToString(personalFile.getId()));
+			writer.deleteDocuments(term);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		finally
 		{
-			if( reader != null)
+			if( writer != null)
 			{
 				try {
-					reader.close();
+					writer.close();
+				} catch (IOException e) {
+					log.error(e);
+				}
+			}
+			if( directory != null)
+			{
+				try {
+					directory.close();
 				} catch (IOException e) {
 					log.error(e);
 				}
@@ -534,33 +549,35 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		}
 		
 		Directory directory = null;
-		IndexReader reader = null;
+		IndexWriter writer = null;
 		try {
-			synchronized(this)
+			
+			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
+			writer = getWriter(directory);
+			while( writer == null )
 			{
-			    directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			    if( IndexReader.isLocked(directory) )
-			    {
-				    throw new RuntimeException("Users workspace index directory " + personalIndexFolder.getAbsolutePath() +
-						" is locked ");
-			    }
-			    else
-			    {
-				    reader = IndexReader.open(directory);
-				    Term term = new Term(PERSONAL_FOLDER_ID, NumberTools.longToString(personalFolder.getId()));
-			        reader.deleteDocuments(term);
-			        reader.close();
-			    }
+				writer = getWriter(directory);
 			}
+			Term term = new Term(PERSONAL_FOLDER_ID, NumberTools.longToString(personalFolder.getId()));
+			writer.deleteDocuments(term);
+			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		finally
 		{
-			if( reader != null)
+			if( writer != null)
 			{
 				try {
-					reader.close();
+					writer.close();
+				} catch (IOException e) {
+					log.error(e);
+				}
+			}
+			if( directory != null)
+			{
+				try {
+					directory.close();
 				} catch (IOException e) {
 					log.error(e);
 				}
@@ -702,34 +719,40 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		}
 		
 		Directory directory = null;
-		IndexReader reader = null;
+		IndexWriter writer = null;
 		try {
-			synchronized(this)
+			
+			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
+			writer = getWriter(directory);
+			while( writer == null)
 			{
-			    directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			    if( IndexReader.isLocked(directory) )
-			    {
-				    throw new RuntimeException("Users workspace index directory " + personalIndexFolder.getAbsolutePath() +
-						" is locked ");
-			    }
-			    else
-			    {
-				    reader = IndexReader.open(directory);
-				    Term term = new Term(SHARED_INBOX_FILE_ID, NumberTools.longToString(inboxFile.getId()));
-			        reader.deleteDocuments(term);
-			        reader.close();
-			    }
+				writer = getWriter(directory);
 			}
+			
+			Term term = new Term(SHARED_INBOX_FILE_ID, NumberTools.longToString(inboxFile.getId()));
+			writer.deleteDocuments(term);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		finally
 		{
-			if( reader != null)
+			if( writer != null)
 			{
 				try {
-					reader.close();
+					writer.close();
+					
 				} catch (IOException e) {
+					log.error(e);
+				}
+			}
+			
+			if( directory != null )
+			{
+				try
+				{
+					directory.close();
+				}
+				catch (IOException e) {
 					log.error(e);
 				}
 			}
@@ -859,33 +882,37 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		}
 		
 		Directory directory = null;
-		IndexReader reader = null;
+		IndexWriter writer = null;
 		try {
-			synchronized(this)
+			
+			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
+			writer = getWriter(directory);
+			while( writer == null )
 			{
-			    directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			    if( IndexReader.isLocked(directory) )
-			    {
-				    throw new RuntimeException("Users workspace index directory " + personalIndexFolder.getAbsolutePath() +
-						" is locked ");
-			    }
-			    else
-			    {
-				    reader = IndexReader.open(directory);
-				    Term term = new Term(PERSONAL_ITEM_ID, NumberTools.longToString(personalItem.getId()));
-			        reader.deleteDocuments(term);
-			        reader.close();
-			    }
+				writer = getWriter(directory);
 			}
+			
+			Term term = new Term(PERSONAL_ITEM_ID, NumberTools.longToString(personalItem.getId()));
+			writer.deleteDocuments(term);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		finally
 		{
-			if( reader != null)
+			if( writer != null)
 			{
 				try {
-					reader.close();
+					writer.close();
+					writer = null;
+				} catch (IOException e) {
+					log.error(e);
+				}
+			}
+			if( directory != null)
+			{
+				try {
+					directory.close();
+					writer = null;
 				} catch (IOException e) {
 					log.error(e);
 				}
@@ -1408,6 +1435,28 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 
 	public void setUniqueNameGenerator(UniqueNameGenerator uniqueNameGenerator) {
 		this.uniqueNameGenerator = uniqueNameGenerator;
+	}
+	
+	/**
+	 * All methods should use this to obtain a writer on the directory.  This will return 
+	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
+	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
+	 * users index at once.
+	 * 
+	 * @param directory
+	 * @return
+	 * @throws CorruptIndexException
+	 * @throws LockObtainFailedException
+	 * @throws IOException
+	 */
+	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	{
+		IndexWriter writer = null;
+		if( !IndexReader.isLocked(directory) )
+	    {
+			writer = new IndexWriter(directory, analyzer);
+	    }
+		return writer;
 	}
 
 

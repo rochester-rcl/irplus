@@ -104,6 +104,7 @@ public class DefaultRtfTextExtractor implements FileTextExtractor {
 		finally
 		{
 			closeInputStream(inputStream);
+			editorKit = null;
 		}
 		
 		return text;

@@ -16,17 +16,15 @@
 
 package edu.ur.ir.web.action.item;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
-import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -36,8 +34,8 @@ import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
-import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.action.user.PersonalWorkspaceSchedulingIndexHelper;
 
 /**
  * Allows a user to add an item to a personal collection.
@@ -95,8 +93,9 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 	/** Indicates whether user has chosen files for which user is not the owner */
 	private boolean hasOwnFiles = true;
 	
-	/** User index service for indexing item */
-	private UserWorkspaceIndexService userWorkspaceIndexService;
+	/** Quartz scheduler instance to schedule jobs  */
+	private Scheduler quartzScheduler;
+
 	
 	/**
 	 * Create the item for the specified collection.
@@ -174,17 +173,8 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		
 		// save personal item
 		userPublishingFileSystemService.makePersonalItemPersistent(personalItem);
-
-		Repository repository = 
-			repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		
-		try {
-			userWorkspaceIndexService.addToIndex(repository, personalItem);
-		} catch (LocationAlreadyExistsException e) {
-			log.error(e);
-		} catch (IOException e) {
-			log.error(e);
-		}
+		PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+		schedulingHelper.scheduleIndexingNew(quartzScheduler, personalItem);
 		
 		return SUCCESS;
 	}
@@ -405,9 +395,13 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		this.hasOwnFiles = hasOwnFiles;
 	}
 
-	public void setUserWorkspaceIndexService(
-			UserWorkspaceIndexService userWorkspaceIndexService) {
-		this.userWorkspaceIndexService = userWorkspaceIndexService;
+
+	public Scheduler getQuartzScheduler() {
+		return quartzScheduler;
+	}
+
+	public void setQuartzScheduler(Scheduler quartzScheduler) {
+		this.quartzScheduler = quartzScheduler;
 	}
 
 

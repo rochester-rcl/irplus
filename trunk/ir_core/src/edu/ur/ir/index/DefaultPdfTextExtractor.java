@@ -110,6 +110,7 @@ public class DefaultPdfTextExtractor implements FileTextExtractor{
 		finally
 		{
 			closePDDocument(pdDoc);
+			pdDoc = null;
 		}
 		
 		return text;

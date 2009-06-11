@@ -28,7 +28,6 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.FileInfo;
-import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.FileSystem;
@@ -48,6 +47,7 @@ import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.util.FileUploadInfo;
 
 import org.apache.commons.io.FilenameUtils;
+import org.quartz.Scheduler;
 
 /**
  * Add personal files to the specified folder.
@@ -77,7 +77,6 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	
 	/**  Service for dealing with user file systems */
 	private UserFileSystemService userFileSystemService;
-	
 
 	/** description of the file  */
 	private String[] userFileDescription;
@@ -108,6 +107,9 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 
 	/** Files not added due to illegal file names */
 	LinkedList<FileUploadInfo> illegalFileNames = new LinkedList<FileUploadInfo>();
+	
+	/** Quartz scheduler instance to schedule jobs  */
+	private Scheduler quartzScheduler;
 
 	/**
 	 * Set the user id.
@@ -237,8 +239,10 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 				    }
 				}
 			}
-			// index the added files
-			indexFilesForUser(user, repository, addedFiles);
+			
+			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+			schedulingHelper.scheduleIndexingNew(quartzScheduler, user, addedFiles);
+		
 		}
 		
 		if( this.getAllFilesAdded() )
@@ -412,36 +416,6 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		this.userFileSystemService = userFileSystemService;
 	}
 	
-	/**
-	 * Index the personal file information.
-	 * 
-	 * @param user
-	 * @param repository
-	 * @param personalFiles
-	 */
-	private void indexFilesForUser(IrUser user, Repository repository, 
-			LinkedList<PersonalFile> personalFiles)
-	{
-		if( log.isDebugEnabled())
-		{
-		    log.debug("indexing new files for user");
-		    log.debug("personalFiles size = " + personalFiles.size());
-		}
-		
-		for( PersonalFile pf : personalFiles)
-		{
-			log.debug("adding file " + pf);
-			try {
-				userWorkspaceIndexService.addToIndex(repository, pf);
-			} catch (LocationAlreadyExistsException e) {
-				log.error(e);
-			} catch (IOException e) {
-				log.error(e);
-			}
-			
-		}
-	}
-
 	public UserWorkspaceIndexService getUserWorkspaceIndexService() {
 		return userWorkspaceIndexService;
 	}
@@ -485,6 +459,16 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	public String getIllegalFileNameCharacters()
 	{
 		return illegalFileNameCharacters;
+	}
+
+
+	public Scheduler getQuartzScheduler() {
+		return quartzScheduler;
+	}
+
+
+	public void setQuartzScheduler(Scheduler quartzScheduler) {
+		this.quartzScheduler = quartzScheduler;
 	}
 
 }

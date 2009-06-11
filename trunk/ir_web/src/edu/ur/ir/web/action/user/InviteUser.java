@@ -17,7 +17,6 @@
 
 package edu.ur.ir.web.action.user;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -26,14 +25,13 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
+import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.cgLib.CgLibHelper;
-import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
-import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
@@ -147,6 +145,9 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
+	
+	/** Quartz scheduler instance to schedule jobs  */
+	private Scheduler quartzScheduler;
 
 
 	/**
@@ -367,13 +368,8 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 				for (VersionedFile file : versionedFiles) {
 					try {
 						SharedInboxFile sif = inviteUserService.shareFile(invitingUser, invitedUser, file);
-						try {
-							userWorkspaceIndexService.addToIndex(getRepository(), sif);
-						} catch (LocationAlreadyExistsException e) {
-							log.error(e);
-						} catch (IOException e) {
-							log.error(e);
-						}
+						PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
+						schedulingHelper.scheduleIndexingNew(quartzScheduler, sif);
 					} catch (FileSharingException e1) {
 						throw new RuntimeException("This should never happen", e1);
 					}
@@ -837,14 +833,6 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		this.repositoryService = repositoryService;
 	}
 
-	private Repository getRepository()
-	{
-    		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
-					false);
-    		return repository;
-
-	}
-	
 	public UserWorkspaceIndexService getUserWorkspaceIndexService() {
 		return userWorkspaceIndexService;
 	}
@@ -861,8 +849,5 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	public void setRoleService(RoleService roleService) {
 		this.roleService = roleService;
 	}
-
-
-	
 
 }
