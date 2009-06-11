@@ -73,6 +73,8 @@
                 <value>edu/ur/hibernate/ir/item/db/ItemExtent.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/ItemContributor.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/ItemSponsor.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/CopyrightStatement.hbm.xml</value>
+                
                 
                 <value>edu/ur/hibernate/ir/person/db/PersonNameAuthority.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/person/db/PersonName.hbm.xml</value>
