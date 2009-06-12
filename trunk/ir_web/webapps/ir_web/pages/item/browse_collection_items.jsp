@@ -267,6 +267,9 @@
 	               	        
 						<form method="GET" action="${searchCollectionItems}">
 						    Search: <input type="text" name="query" size="50"/>
+						    <button type="submit" class="ur_button" 
+		                               onmouseover="this.className='ur_buttonover';"
+	 		                           onmouseout="this.className='ur_button';">Search</button>
 						    <input type="hidden" name="collectionId" value="${institutionalCollection.id}"/>
 						</form>
 						<br/>
@@ -396,7 +399,9 @@
 						    <div class="search_div_pager">
 						        <c:import url="search_collection_items_pager.jsp"/>
 						    </div>
-						    <h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: ${searchDataHelper.userQuery} </h3>               
+						    
+						    <c:if test="${searchDataHelper.hitSize > 0}">
+						    <h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: ${searchDataHelper.userQuery} in collection</h3>               
 						   
 						    <div class="dataTable">
 							                 
@@ -453,6 +458,11 @@
 						            </urstb:tbody>
 						        </urstb:table>
 						    </div>
+						    </c:if>
+						    
+						      <c:if test="${searchDataHelper.hitSize <= 0}">
+						           <h3> No results found in collection for search: ${searchDataHelper.userQuery} </h3>
+						       </c:if>
 						        <!--  bottom pager -->	
 						        <div class="search_div_pager">
 						            <c:import url="search_all_items_pager.jsp"/>

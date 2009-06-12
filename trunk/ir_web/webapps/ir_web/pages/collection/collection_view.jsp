@@ -107,7 +107,12 @@
                        <div class="contentBoxContent">
                            <c:url var="searchCollectionItems" value="/searchCollectionItems.action"/>
                            <form method="GET" action="${searchCollectionItems}">
-                                <p>Search: <input type="text" name="query" size="50"/></p>
+                                <p>Search: <input type="text" name="query" size="50"/>
+                                <br/>
+                                <br/>
+                                <button type="submit" class="ur_button" 
+		                               onmouseover="this.className='ur_buttonover';"
+	 		                           onmouseout="this.className='ur_button';">Search</button></p>
                                 <input type="hidden" name="collectionId" value="${institutionalCollection.id}"/>
                            </form>
                            
