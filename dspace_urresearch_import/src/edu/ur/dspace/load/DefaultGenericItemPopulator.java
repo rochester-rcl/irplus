@@ -371,7 +371,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			    if( calendar != null )
 			    {
 			        firstAvailableDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-			        firstAvailableDate.setMonth(calendar.get(Calendar.MONTH));
+			        firstAvailableDate.setMonth(calendar.get(Calendar.MONTH) + 1);
 			        firstAvailableDate.setYear(calendar.get(Calendar.YEAR));
 			    }
 			    
@@ -395,22 +395,40 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		OriginalItemCreationDate originalItemCreationDate = null;
 		String dspaceDate = dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.CREATION_DATE);
 		
+		
 		if(dspaceDate != null && !dspaceDate.trim().equals(""))
 		{
+			dspaceDate = dspaceDate.trim();
 			log.debug("creation date = " + dspaceDate);
-		    try {
-		    	originalItemCreationDate = new OriginalItemCreationDate();
-			    GregorianCalendar calendar = dspaceDateHelper.parseDate(dspaceDate);
-			    if( calendar != null )
-			    {
-			    	originalItemCreationDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-			    	originalItemCreationDate.setMonth(calendar.get(Calendar.MONTH));
-			    	originalItemCreationDate.setYear(calendar.get(Calendar.YEAR));
-			    }
+			if( dspaceDate.length() > 4 )
+			{
+		        try {
+		    	    originalItemCreationDate = new OriginalItemCreationDate();
+			        GregorianCalendar calendar = dspaceDateHelper.parseDate(dspaceDate);
+			        if( calendar != null )
+			        {
+			    	    originalItemCreationDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+			    	    originalItemCreationDate.setMonth(calendar.get(Calendar.MONTH) + 1);
+			    	    originalItemCreationDate.setYear(calendar.get(Calendar.YEAR));
+			        }
 			    
-		    } catch (ParseException e) {
-			    log.debug("Could not parse creation date " + dspaceDate);
-		    }
+		        } catch (ParseException e) {
+			        log.error("Could not parse creation date " + dspaceDate);
+		        }
+			}
+			// assume year
+			else if( dspaceDate.length() == 4 )
+			{
+				originalItemCreationDate = new OriginalItemCreationDate();
+				try
+				{
+				    originalItemCreationDate.setYear( new Integer(dspaceDate));
+				}
+				catch(NumberFormatException nfe)
+				{
+					 log.error("Could not parse creation year " + dspaceDate);
+				}
+			}
 		}
 		return originalItemCreationDate;
 	}
@@ -661,15 +679,83 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		
 		if(dspaceDate != null && !dspaceDate.trim().equals(""))
 		{
+			dspaceDate = dspaceDate.trim();
 		    try {
-		    	publishedDate = new PublishedDate();
-			    GregorianCalendar calendar = dspaceDateHelper.parseDate(dspaceDate);
-			    if( calendar != null )
-			    {
-			        publishedDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-			        publishedDate.setMonth(calendar.get(Calendar.MONTH));
-			        publishedDate.setYear(calendar.get(Calendar.YEAR));
-			    }
+		    	// assume year only ex. 1999
+		    	if( dspaceDate.length() == 4 )
+		    	{
+		    		 publishedDate = new PublishedDate();
+		    		 try
+		    		 {
+		    		     publishedDate.setYear(new Integer(dspaceDate));
+		    		 }
+		    		 catch(NumberFormatException nfe)
+		    		 {
+		    			 publishedDate = null;
+		    			 log.error("could not create year for date " + dspaceDate, nfe);
+		    		 }
+		    	}
+		    	// assume year and month ex. 1985-03
+		    	else if( dspaceDate.length() == 7 )
+		    	{
+		    		String[] dateParts = dspaceDate.split("-");
+		    		if(dateParts.length == 2)
+		    		{
+		    			publishedDate = new PublishedDate();
+			    		 try
+			    		 {
+			    		     publishedDate.setYear(new Integer(dateParts[0]));
+			    		     publishedDate.setMonth(new Integer(dateParts[1]));
+			    		 }
+			    		 catch(NumberFormatException nfe)
+			    		 {
+			    			 publishedDate = null;
+			    			 log.error("could not create year for date " + dspaceDate, nfe);
+			    		 }
+		    		}
+		    		else
+		    		{
+		    			 publishedDate = null;
+		    			log.error(" could not do 7 digit split on - for dspace date " + dspaceDate);
+		    		}
+		    	}
+		    	
+		    	// assume year month day ex. 1985-03-01
+		    	else if( dspaceDate.length() == 10 )
+		    	{
+		    		String[] dateParts = dspaceDate.split("-");
+		    		if(dateParts.length == 3)
+		    		{
+		    			publishedDate = new PublishedDate();
+			    		 try
+			    		 {
+			    		     publishedDate.setYear(new Integer(dateParts[0]));
+			    		     publishedDate.setMonth(new Integer(dateParts[1]));
+			    		     publishedDate.setMonth(new Integer(dateParts[2]));
+			    		 }
+			    		 catch(NumberFormatException nfe)
+			    		 {
+			    			 publishedDate = null;
+			    			 log.error("could not create year for date " + dspaceDate, nfe);
+			    		 }
+		    		}
+		    		else
+		    		{
+		    			 publishedDate = null;
+		    			log.error(" could not do 10 digit split on - for dspace date " + dspaceDate);
+		    		}
+		    	}
+		    	else
+		    	{
+		    	    publishedDate = new PublishedDate();
+			        GregorianCalendar calendar = dspaceDateHelper.parseDate(dspaceDate);
+			        if( calendar != null )
+			        {
+			            publishedDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+			            publishedDate.setMonth(calendar.get(Calendar.MONTH)  + 1);
+			            publishedDate.setYear(calendar.get(Calendar.YEAR));
+			        }
+		    	}
 			    
 		    } catch (ParseException e) {
 			    log.debug("Could not parse available date " + dspaceDate);
