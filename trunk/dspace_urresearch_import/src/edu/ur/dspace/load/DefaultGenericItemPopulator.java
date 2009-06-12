@@ -322,17 +322,18 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	    log.debug("citation = " + citation);
 	    PublishedDate publishedDate = getPublishedDate(dspaceItem);
 	    log.debug("Published date = " + publishedDate);
-	    if( publishedDate != null || publisher != null || citation != null && !citation.trim().equals(""))
+	    if( publishedDate != null || publisher != null || (citation != null &&!citation.trim().equals("")) )
 	    {
 	    	ExternalPublishedItem externalPublishedItem = genericItem.getExternalPublishedItem();
 			if( externalPublishedItem == null )
 			{
 				externalPublishedItem = new ExternalPublishedItem();
+				genericItem.setExternalPublishedItem(externalPublishedItem);
 			}
 			
 			if( publisher != null)
 		    {
-				externalPublishedItem.setPublishedDate(publishedDate);
+				externalPublishedItem.setPublisher(publisher);
 		    }
 			
 			if( publishedDate != null)
@@ -437,6 +438,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		    {
 			    log.debug("No publisher found creating publisher " + publisherName);
 			    publisher = new Publisher(publisherName);
+			    publisherService.savePublisher(publisher);
 		    }
 		}
 		
