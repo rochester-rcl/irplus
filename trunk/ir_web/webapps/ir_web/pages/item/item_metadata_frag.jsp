@@ -144,8 +144,8 @@
 				        </tr>
 				    </c:forEach>
 				</c:if>
-				<c:if test="${item.firstAvailableDate.month != 0 && 
-				              item.firstAvailableDate.day != 0 && 
+				<c:if test="${item.firstAvailableDate.month != 0 || 
+				              item.firstAvailableDate.day != 0 || 
 				              item.firstAvailableDate.year != 0}">
 				    <tr>
 				        <td class="previewLabel"> Date this publication was first presented to the public:</td>
@@ -167,8 +167,8 @@
 				    </tr>
 				</c:if>
 				
-				<c:if test="${item.originalItemCreationDate.month != 0 &&
-				              item.originalItemCreationDate.day != 0 &&
+				<c:if test="${item.originalItemCreationDate.month != 0 ||
+				              item.originalItemCreationDate.day != 0 ||
 				              item.originalItemCreationDate.year != 0}">						
 				<tr>
 				    <td class="previewLabel"> Date this publication was originally created:</td>
@@ -192,7 +192,7 @@
 				
 				<c:if test="${item.releaseDate != null}">					
 				<tr>
-				    <td class="previewLabel"> Date this publication was made available to public:</td>
+				    <td class="previewLabel"> Date this publication can be made available to public from this system:</td>
 				</tr>
 				<tr>
 				    <td>
@@ -204,8 +204,8 @@
 				<c:if test="${item.externalPublishedItem != null}">
 				
 					
-				<c:if test="${item.externalPublishedItem.publishedDate.month != 0 &&
-				              item.externalPublishedItem.publishedDate.day != 0 &&
+				<c:if test="${item.externalPublishedItem.publishedDate.month != 0 ||
+				              item.externalPublishedItem.publishedDate.day != 0 ||
 				              item.externalPublishedItem.publishedDate.year != 0}">
 				     <tr>
 				        <td class="previewLabel">Previously Published Date:</td>
