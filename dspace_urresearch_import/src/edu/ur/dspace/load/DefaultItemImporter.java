@@ -546,6 +546,7 @@ public class DefaultItemImporter implements ItemImporter{
 				log.debug("*********************** Done Loading Loading ****************************\n\n");
 			}
 		}
+		updateHandleSequence();
 	}
 	
 	
@@ -742,6 +743,20 @@ public class DefaultItemImporter implements ItemImporter{
 		    	loadEpersonPermissions(ifbi.itemFile, ifbi.bitstreamFileInfo);
 		    	jdbcTemplate.execute("insert into dspace_convert.item_file(dspace_bitstream_id, ur_research_institutional_item_file_id) values (" + ifbi.itemFile.getId() + "," + ifbi.bitstreamFileInfo.bitstreamId + ")");
 		    }
+		}
+	}
+	
+	/**
+	 * Gets the current highest handle sequence and updates it to the new value
+	 */
+	public void updateHandleSequence()
+	{
+		Long maxHandleValue = jdbcTemplate.queryForLong("select max(handle_id) from handle.handle_info");
+		
+		if( maxHandleValue >= 1 )
+		{
+		    jdbcTemplate.execute(" ALTER SEQUENCE handle.unique_handle_name_seq INCREMENT BY " + maxHandleValue);
+	
 		}
 	}
 
