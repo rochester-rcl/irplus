@@ -202,33 +202,49 @@
 				</c:if>
 										
 				<c:if test="${item.externalPublishedItem != null}">
-				<tr>
-				    <td class="previewLabel"> Previously published/distributed information:</td>
-				</tr>
-											
-				<tr>
-				    <td> Published Date:
-					<c:if test="${item.externalPublishedItem.publishedDate.month != 0}">
-					    Month: ${item.externalPublishedItem.publishedDate.month} &nbsp;&nbsp;
-					</c:if>
+				
+					
+				<c:if test="${item.externalPublishedItem.publishedDate.month != 0 &&
+				              item.externalPublishedItem.publishedDate.day != 0 &&
+				              item.externalPublishedItem.publishedDate.year != 0}">
+				     <tr>
+				        <td class="previewLabel">Previously Published Date:</td>
+				    </tr>						
+				    <tr>
+				        <td> 
+					    <c:if test="${item.externalPublishedItem.publishedDate.month != 0}">
+					        Month: ${item.externalPublishedItem.publishedDate.month} &nbsp;&nbsp;
+					    </c:if>
 	
-					<c:if test="${item.externalPublishedItem.publishedDate.day != 0}">
-					    Day: ${item.externalPublishedItem.publishedDate.day} &nbsp;&nbsp;
-					</c:if>
+					    <c:if test="${item.externalPublishedItem.publishedDate.day != 0}">
+					        Day: ${item.externalPublishedItem.publishedDate.day} &nbsp;&nbsp;
+					    </c:if>
 	
-					<c:if test="${item.externalPublishedItem.publishedDate.year != 0}">
-					    Year: ${item.externalPublishedItem.publishedDate.year} &nbsp;&nbsp;
-					</c:if>
-				    </td>
+					    <c:if test="${item.externalPublishedItem.publishedDate.year != 0}">
+					        Year: ${item.externalPublishedItem.publishedDate.year} &nbsp;&nbsp;
+					    </c:if>
+				        </td>
+				    </tr>
+				</c:if>
+
+                <c:if test="${item.externalPublishedItem.publisher != null}">
+                <tr>
+				    <td class="previewLabel">Previously Published By:</td>
 				</tr>
-
+						
 				<tr>
-				    <td> Publisher: ${item.externalPublishedItem.publisher.name} </td>
-				</tr>											
+				    <td>${item.externalPublishedItem.publisher.name} </td>
+				</tr>	
+				</c:if>										
 
+                <c:if test="${item.externalPublishedItem.citation != null}">
+                 <tr>
+				    <td class="previewLabel">Citation:</td>
+				</tr>
 				<tr>
-				    <td> Citation: ${item.externalPublishedItem.citation} </td>
+				    <td>${item.externalPublishedItem.citation} </td>
 			    </tr>
+			    </c:if>
 			    					
 			    </c:if>
 			    <tr>	
