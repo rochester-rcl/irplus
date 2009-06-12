@@ -245,6 +245,9 @@
 	               	     <c:url var="searchRepositoryItems" value="/searchRepositoryItems.action"/>
 						<form method="GET" action="${searchRepositoryItems}">
 						    Search: <input type="text" name="query" size="50"/>
+						    <button type="submit" class="ur_button" 
+		                               onmouseover="this.className='ur_buttonover';"
+	 		                           onmouseout="this.className='ur_button';">Search</button>
 						</form>
 						<br/>
 						
@@ -384,7 +387,7 @@
 						    </div>
 						    <c:if test="${searchDataHelper.hitSize > 0}">
 						    	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: ${searchDataHelper.userQuery} </h3>               
-						    </c:if>
+						    
 						    <div class="dataTable">
 							
 					        <urstb:table>
@@ -441,6 +444,12 @@
 						            </urstb:tbody>
 						        </urstb:table>
 						    </div>
+						    </c:if>
+						    
+						    
+						       <c:if test="${searchDataHelper.hitSize <= 0}">
+						           <h3> No results found  for search: ${searchDataHelper.userQuery} </h3>
+						       </c:if>
 						        <!--  bottom pager -->	
 						        <div class="search_div_pager">
 						            <c:import url="search_all_items_pager.jsp"/>
