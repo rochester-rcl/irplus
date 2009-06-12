@@ -202,16 +202,31 @@ ul.basicNav {
     cursor:hand;
 }
 
-
 /* styling for buttons when they have been rolled over*/
 .table_button
 {
-    border: 1px solid;
-    background:transparent;
-    width: 50px;
+	margin: 0px;
+    border: 1px solid #B9C0C2;
+    background: url(../images/all-images/button_background.gif);
+    height: 28px;
+    font-family: Verdana;
+    color: #454545;
     cursor:pointer;
     cursor:hand;
 }
+
+/* styling for buttons when they have been rolled over*/
+.ur_buttonover
+{
+    border: 1px solid #B9C0C2;
+    background: url(../images/all-images/button_highlight.gif);
+    height: 28px;
+    font-family: Verdana;
+    color: #454545;
+    cursor:pointer;
+    cursor:hand;
+}
+
 
 /* used for placing images on a button */
 .buttonImg {
