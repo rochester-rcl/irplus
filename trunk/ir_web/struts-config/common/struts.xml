@@ -174,33 +174,27 @@
         </action>
         
         <action name="viewAddUser"
-            class="edu.ur.ir.web.action.user.AddUser">
+            class="edu.ur.ir.web.action.user.RegisterUser">
             <interceptor-ref name="editStack" />
-            <result name="success">/pages/user/login/add_user.jsp</result>
+            <result name="success">/pages/user/login/register_user.jsp</result>
         </action>     
         
-        <action name="createNewUser" method="createUser"
-            class="edu.ur.ir.web.action.user.AddUser">
-            <interceptor-ref name="crudStack" />
-            <result name="input">/pages/user/login/add_user.jsp</result>
-            <result name="success" type="redirect">/user/workspace.action?token=${token}</result>
-        </action>
-
-        <!--  ************************************ -->
+         <!--  ************************************ -->
         <!--   User Registration - actions                  -->
         <!--  ************************************ -->
 
         <action name="viewUserRegistration" method="viewUserRegistration" 
-            class="edu.ur.ir.web.action.user.AddUser">
+            class="edu.ur.ir.web.action.user.RegisterUser">
             <interceptor-ref name="editStack" />
             <result name="success">/pages/user/login/register_user.jsp</result>
         </action>     
 
         <action name="registerNewUser" method="registerUser"
-            class="edu.ur.ir.web.action.user.AddUser">
+            class="edu.ur.ir.web.action.user.RegisterUser">
             <interceptor-ref name="crudStack" />
             <result name="input">/pages/user/login/register_user.jsp</result>
             <result name="success">/pages/user/login/registeration_confirmation.jsp</result>
+            <result name="successInvite" type="redirect">/user/workspace.action?token=${token}</result>
         </action>
                  
         <!--  ************************************ -->

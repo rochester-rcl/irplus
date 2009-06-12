@@ -315,7 +315,9 @@
             <result name="success">/pages/user/workspace/shared_file_inbox_table_frag.jsp</result>
         </action>  
               
-        <action name="inboxFileDownload" class="edu.ur.ir.web.action.user.DownloadSharedInboxFile">
+        <action name="inboxFileDownload" 
+            class="edu.ur.ir.web.action.user.DownloadSharedInboxFile">
+            <interceptor-ref name="editStack"/>
             <result name="success" type="no-op"/>
             <result name="accessDenied">/accessDenied.jsp</result>
         </action>               
@@ -1018,13 +1020,13 @@
         <!--  ************************************ -->
 
        <action name="myAccount" method="viewEditAccount" 
-            class="edu.ur.ir.web.action.user.AddUser">
+            class="edu.ur.ir.web.action.user.UpdateUserAccount">
        	 <interceptor-ref name="editStack"/>
             <result name="success">/pages/user/login/edit_my_account.jsp</result>
         </action>
         
        <action name="saveMyAccount" method="saveMyAccount" 
-            class="edu.ur.ir.web.action.user.AddUser">
+            class="edu.ur.ir.web.action.user.UpdateUserAccount">
        	 <interceptor-ref name="crudStack"/>
             <result name="success">/pages/user/login/edit_my_account.jsp</result>
         </action>  
