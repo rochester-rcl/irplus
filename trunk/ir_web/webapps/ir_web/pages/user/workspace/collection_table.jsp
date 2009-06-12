@@ -78,7 +78,7 @@
 	</form>
 	
     <c:url var="myFoldersUrl" value="/user/workspace.action"/>
-	<ur:basicForm method="post" id="collections" name="myCollections" >
+	<form method="post" id="collections" name="myCollections" >
 	    
            <input type="hidden" id="myCollections_parentCollectionId" 
                name="parentCollectionId" value="${parentCollectionId}"/>
@@ -91,7 +91,7 @@
             <urstb:thead>
                 <urstb:tr>
                     <urstb:td>
-                        <ur:checkbox name="checkAllSetting" 
+                        <input type="checkbox" name="checkAllSetting" 
 	                    value="off" 
 	                    onClick="YAHOO.ur.personal.collection.setCheckboxes();"/>
                     </urstb:td>
@@ -130,26 +130,32 @@
                         onMouseOut="this.className='${rowClass}'">
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
-	                            <ur:checkbox name="collectionIds" id="collection_checkbox_${fileSystemObject.id}"  value="${fileSystemObject.id}"/>
+	                            <input type="checkbox" name="collectionIds" id="collection_checkbox_${fileSystemObject.id}"  value="${fileSystemObject.id}"/>
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
-	                            <ur:checkbox name="itemIds" id="item_checkbox_${fileSystemObject.id}"value="${fileSystemObject.id}"/>
+	                            <input type="checkbox" name="itemIds" id="item_checkbox_${fileSystemObject.id}"value="${fileSystemObject.id}"/>
 	                         </c:if>
                         </urstb:td>
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
-	                            <button type="button" class="ur_button" 
+                                <div id="collection_${fileSystemObject.id}">
+	                            <button type="button" class="table_button" 
+	                                 onmouseover="this.className='table_buttonover';"
+ 		                             onmouseout="this.className='table_button';"
 	                                onclick="javascript:YAHOO.ur.personal.collection.buildCollectionMenu(this, 'collection_'+ ${fileSystemObject.id}, 
 	                                 'collection_menu_' + ${fileSystemObject.id}, 
 	                                 ${fileSystemObject.id} );"> <span class="worldBtnImg">&nbsp;</span><img src="${downArrow}"/></button>
-	                            <div id="collection_${fileSystemObject.id}"></div>
+	                            </div>
 	                         </c:if>
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
-	                             <button type="button" class="ur_button" 
+	                             <div id="item_${fileSystemObject.id}">
+	                             <button type="button" class="table_button"
+	                                onmouseover="this.className='table_buttonover';"
+ 		                            onmouseout="this.className='ur_button';" 
 	                                onclick="javascript:YAHOO.ur.personal.collection.buildItemMenu(this, 'item_'+ ${fileSystemObject.id}, 
 	                                 'item_menu_' + ${fileSystemObject.id}, 
 	                                 ${fileSystemObject.id} );"> <span class="packageBtnImg">&nbsp;</span><img src="${downArrow}"/></button>
-	                             <div id="item_${fileSystemObject.id}"></div>
+	                             </div>
 	                         </c:if>
                         </urstb:td>
                         <urstb:td>
@@ -205,7 +211,7 @@
         </urstb:table>
 	    <input type="hidden" id="move_items_collections_destination_id" name="destinationCollectionId" value=""/>
 	    
-    </ur:basicForm>
+    </form>
 </div>
 </c:if>
 <c:if test='${!ir:userHasRole("ROLE_AUTHOR", "OR")}'>

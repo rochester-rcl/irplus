@@ -90,7 +90,7 @@
 	
     <c:url var="myFoldersUrl" value="/user/workspace.action"/>
        
-	<ur:basicForm method="post" id="folders" name="myFolders" action="${myFoldersUrl}">
+	<form method="post" id="folders" name="myFolders" action="${myFoldersUrl}">
 	 
 	    
 	       <!-- Begin - To create new Publication with selected files, item name is set in this form and submitted -->
@@ -107,7 +107,7 @@
         <urstb:table width="100%">
             <urstb:thead>
                 <urstb:tr>
-                    <urstb:td><ur:checkbox name="checkAllSetting" 
+                    <urstb:td><input type="checkbox" name="checkAllSetting" 
 	                    value="off" 
 	                    onClick="YAHOO.ur.folder.setCheckboxes()"/>
 	                </urstb:td>
@@ -152,7 +152,7 @@
 	                          folders get an id of the folder_checkbox_{id} 
 	                          where id  is the id of the folder -->
 	                     <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                        <ur:checkbox name="folderIds" id="folder_checkbox_${fileSystemObject.id}" 
+	                        <input type="checkbox" name="folderIds" id="folder_checkbox_${fileSystemObject.id}" 
 	                            value="${fileSystemObject.id}"/>
 	                     </c:if>
 	                     
@@ -160,7 +160,7 @@
 	                          folders get an id of the folder_checkbox_{id} 
 	                          where id  is the id of the folder -->
 	                     <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
-	                         <ur:checkbox name="fileIds" id="file_checkbox_${fileSystemObject.id}" 
+	                         <input type="checkbox" name="fileIds" id="file_checkbox_${fileSystemObject.id}" 
 	                             value="${fileSystemObject.id}"/>
 	                     </c:if>
                         </urstb:td>
@@ -170,23 +170,24 @@
 	                          where id  is the id of the folder 
 	                          clicking on a link creates a popup menu-->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                             <button type="button"  class="ur_button" 
-	                                onmouseover="this.className='ur_buttonover';"
+	                            <div id="folder_${fileSystemObject.id}">
+	                             <button type="button"  class="table_button" 
+	                                onmouseover="this.className='table_buttonover';"
  		                            onmouseout="this.className='ur_button';"
 	                                onclick="javascript:YAHOO.ur.folder.buildFolderMenu(${fileSystemObject.id}, 
 	                                this,'folder_'+ ${fileSystemObject.id}, 
 	                                'folder_menu_' + ${fileSystemObject.id},
 	                                '${ur:escapeSingleQuote(fileSystemObject.name)}');"><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
-	                            <div id="folder_${fileSystemObject.id}"></div>
+	                            </div>
 	                         </c:if>
 	                     
 	                         <!-- clicking on a link creates a popup menu-->
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
-	                                	                        
+	                            <div id="file_${fileSystemObject.id}">    	                        
 	                             <!--  build the menu on click -->
-	                             <button type="button" class="ur_button"
-	                                 onmouseover="this.className='ur_buttonover';"
- 		                             onmouseout="this.className='ur_button';"
+	                             <button type="button" class="table_button"
+	                                 onmouseover="this.className='table_buttonover';"
+ 		                             onmouseout="this.className='table_button';"
 	                                 onclick="javascript:YAHOO.ur.folder.buildFileMenu(this, 'file_'+ ${fileSystemObject.id}, 
 	                                 'file_menu_' + ${fileSystemObject.id}, 
 	                                 ${fileSystemObject.id}, 
@@ -198,7 +199,7 @@
 	                                 ${ir:canShareFile(user,fileSystemObject.versionedFile)}, 
 	                                 ${ir:canEditFile(user,fileSystemObject.versionedFile)},
 	                                 '${ur:escapeSingleQuote(fileSystemObject.name)}', '${ur:escapeSingleQuote(fileSystemObject.versionedFile.name)}' );"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/><img src="${downArrow}"/></button>
-	                             <div id="file_${fileSystemObject.id}"></div>
+	                             </div>
 	                         </c:if>
                         </urstb:td>
                         <urstb:td>
@@ -278,5 +279,5 @@
             </urstb:tbody>
         </urstb:table>
 	    <input type="hidden" id="move_files_folders_destination_id" name="destinationFolderId" value=""/>
-    </ur:basicForm>
+    </form>
 </div>
