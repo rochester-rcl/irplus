@@ -125,7 +125,6 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		affiliations = affiliationService.getAllAffiliations();
 		departments = departmentService.getAllDepartments();
-		irUser = userService.getUser(userId, false);
 	}
 
 	/**
@@ -134,6 +133,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	 * @return
 	 */
 	public String viewEditAccount() {
+		irUser = userService.getUser(userId, false);
 		subscriptions = institutionalCollectionSubscriptionService.getAllSubscriptionsForUser(irUser);
 		return SUCCESS;
 	}
@@ -145,6 +145,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	 */
 	public String saveMyAccount() throws NoIndexFoundException
 	{
+		irUser = userService.getUser(userId, false);
 	    irUser.removeAllDepartments();
 		updateUserDepartments();
 		userService.makeUserPersistent(irUser);

@@ -100,13 +100,17 @@ public class CollectionPersonNameBrowse extends Pager {
 	}
 
 	/**
-	 * Browse researcher
+	 * Browse people within the collection
 	 * 
 	 * @return
 	 */
 	public String execute() {
 		
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+		if( institutionalCollection == null )
+		{
+			return "collectionNotFound";
+		}
 		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
 		log.debug("selected Alpha = " + selectedAlpha);
 		rowEnd = rowStart + numberOfResultsToShow;
