@@ -238,6 +238,18 @@ insert into
 ir_item.identifier_type ( identifier_type_id, version, name, description, unique_system_code) 
 values (nextval('ir_item.identifier_type_seq'), 0, 'Handle', null, 'HANDLE');
 
+insert into 
+ir_item.identifier_type ( identifier_type_id, version, name, description, unique_system_code) 
+values (nextval('ir_item.identifier_type_seq'), 0, 'LC Call No.', null, 'LC_CALL_NO');
+
+insert into 
+ir_item.identifier_type ( identifier_type_id, version, name, description, unique_system_code) 
+values (nextval('ir_item.identifier_type_seq'), 0, 'SML Accession No.', null, 'SML_ACCESSION_NO');
+
+insert into 
+ir_item.identifier_type ( identifier_type_id, version, name, description, unique_system_code) 
+values (nextval('ir_item.identifier_type_seq'), 0, 'Publisher No.', null, 'PUBLISHER_NO');
+
 
 
 -- ---------------------------------------------
@@ -4936,3 +4948,25 @@ insert into ir_user.department( department_id,
 name, description, version)
 select nextval('ir_user.department_seq'), 'Woodwinds, Brass, & Percussion', 
 '', 0;
+
+-- ---------------------------------------------
+-- Default Extne types
+-- ---------------------------------------------
+
+insert into 
+ir_item.extent_type ( extent_type_id, version, name, description) 
+values (nextval('ir_item.extent_type_seq'), 0, 'Volumes', null);
+
+insert into 
+ir_item.extent_type ( extent_type_id, version, name, description) 
+values (nextval('ir_item.extent_type_seq'), 0, 'Dimensions', null);
+
+insert into 
+ir_item.extent_type ( extent_type_id, version, name, description) 
+values (nextval('ir_item.extent_type_seq'), 0, 'Number of Pages', null);
+
+insert into 
+ir_item.extent_type ( extent_type_id, version, name, description) 
+values (nextval('ir_item.extent_type_seq'), 0, 'Lenght in Time', null);
+
+
