@@ -85,6 +85,7 @@
             class="edu.ur.ir.web.action.institution.CollectionInstitutionalItemBrowse">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_collection_items.jsp</result>
+            <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
         </action>
         
        <!--  ***************************************************** -->
@@ -101,6 +102,7 @@
             class="edu.ur.ir.web.action.person.CollectionPersonNameBrowse">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/item/browse_collection_items.jsp</result>
+            <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
         </action>
         
        <!--  ***************************************************** -->
