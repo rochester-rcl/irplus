@@ -22,7 +22,6 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.SocketException;
 
 import org.apache.log4j.Logger;
 
@@ -70,15 +69,19 @@ public class ResponseBufferedOutputWriter {
                 }
             }
         }
-        // this occurs when a user selects cancel
-        // on a download
-        catch(SocketException se)
-        {
-        	log.error(se);
-        }
+      
         catch(Exception e)
         {
-        	originalException = e;
+        	// this will only happen in a tomcat contanier - it is when
+        	// the user selects cancel on the download window.
+        	if( e.getClass().getName().equals("ClientAbortException"))
+        	{
+        		log.error("client abort exception - this should be ok ",e);
+        	}
+        	else
+        	{
+        		originalException = e;
+        	}
         }
         finally
         {
