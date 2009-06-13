@@ -107,6 +107,10 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 	public String browseCollectionItems() {
 		
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+		if( institutionalCollection == null )
+		{
+			return "collectionNotFound";
+		}
 		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
 		log.debug("selected Alpha = " + selectedAlpha);
 		rowEnd = rowStart + numberOfResultsToShow;
