@@ -533,10 +533,6 @@ public class Repository extends CommonPersistent {
 	{
 		// do not update if the license version is the same
 		// as the current license.
-		if( licenseVersion.equals(defaultLicense))
-		{
-			return;
-		}
 		if( licenseVersion == null )
 		{
 			if( defaultLicense != null )
@@ -544,6 +540,10 @@ public class Repository extends CommonPersistent {
 				retiredLicenses.add(new RetiredRepositoryLicense(this, defaultLicense, user));
 			}
 			defaultLicense = null;
+		}
+		else if( licenseVersion.equals(defaultLicense))
+		{
+			return;
 		}
 		else
 		{
