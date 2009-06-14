@@ -40,6 +40,11 @@
         <dependency org="org.apache.tomcat" name="servlet-api" rev="6.0.14" transitive="false">
             <artifact name="servlet-api" type="jar"/>
         </dependency>
+        
+         <!-- el api files -->
+        <dependency org="org.apache.tomcat" name="el-api" rev="6.0.14" transitive="false">
+            <artifact name="el-api" type="jar"/>
+        </dependency>
 
         <!-- log 4j files -->
         <dependency org="log4j" name="log4j" rev="1.2.14">
