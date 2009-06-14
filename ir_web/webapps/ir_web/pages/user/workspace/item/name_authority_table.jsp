@@ -24,10 +24,9 @@
 <c:if test="${totalHits > 0}">
 	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 	<c:import url="search_contributor_pager.jsp"/>
-</c:if>	    	
 
 
-<ur:basicForm method="post" id="names" name="myNames" 
+<form method="post" id="names" name="myNames" 
      action="javascript:YAHOO.ur.item.contributor.getNames(0)">
 
 	 <input type="hidden" id="names_query" name="query" value="${query}"/>
@@ -79,10 +78,12 @@
 		</tbody>
 	</table>	
 
-</ur:basicForm>
+</form>
 
-<c:if test="${totalHits > 0}">
 	<c:import url="search_contributor_pager.jsp"/>
-</c:if>	    	
+</c:if>	 
+<c:if test="${totalHits <= 0}">
+    <h3> No results found for search</h3>
+</c:if>   	
 
 				

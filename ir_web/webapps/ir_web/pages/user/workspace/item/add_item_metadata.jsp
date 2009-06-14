@@ -23,7 +23,7 @@
 
 <html>
     <head>
-        <title>Welcome</title>
+        <title>Adding Information to Publication: ${item.name}</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!--  css styles from yahoo -->
@@ -79,7 +79,7 @@
             <div id="bd">
 
                 <div class="clear">&nbsp;</div>
-				<p><strong> Creating Publication :  </strong> <span class="noBorderTableGreyLabel"><c:out value='${personalItem.fullPath}'/><c:out value='${item.name}'/> </span> </p>
+				<p><strong> Adding Information to Publication :  </strong> <span class="noBorderTableGreyLabel"><c:out value='${personalItem.fullPath}'/><c:out value='${item.name}'/> </span> </p>
 
 				<table width="735"  align="center"  height="48" >
                   	<tr>                                           
