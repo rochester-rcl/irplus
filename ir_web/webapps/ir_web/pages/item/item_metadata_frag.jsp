@@ -144,9 +144,9 @@
 				        </tr>
 				    </c:forEach>
 				</c:if>
-				<c:if test="${item.firstAvailableDate.month != 0 || 
+				<c:if test="${ item.firstAvailableDate != null && (item.firstAvailableDate.month != 0 || 
 				              item.firstAvailableDate.day != 0 || 
-				              item.firstAvailableDate.year != 0}">
+				              item.firstAvailableDate.year != 0) }">
 				    <tr>
 				        <td class="previewLabel"> Date this publication was first presented to the public:</td>
 				    </tr>
@@ -167,9 +167,9 @@
 				    </tr>
 				</c:if>
 				
-				<c:if test="${item.originalItemCreationDate.month != 0 ||
+				<c:if test="${ item.originalItemCreationDate != null && (item.originalItemCreationDate.month != 0 ||
 				              item.originalItemCreationDate.day != 0 ||
-				              item.originalItemCreationDate.year != 0}">						
+				              item.originalItemCreationDate.year != 0)}">						
 				<tr>
 				    <td class="previewLabel"> Date this publication was originally created:</td>
 				</tr>
@@ -204,9 +204,9 @@
 				<c:if test="${item.externalPublishedItem != null}">
 				
 					
-				<c:if test="${item.externalPublishedItem.publishedDate.month != 0 ||
+				<c:if test="${item.externalPublishedItem != null && (item.externalPublishedItem.publishedDate.month != 0 ||
 				              item.externalPublishedItem.publishedDate.day != 0 ||
-				              item.externalPublishedItem.publishedDate.year != 0}">
+				              item.externalPublishedItem.publishedDate.year != 0)}">
 				     <tr>
 				        <td class="previewLabel">Previously Published Date:</td>
 				    </tr>						
