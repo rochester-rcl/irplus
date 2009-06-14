@@ -244,7 +244,7 @@
 	               	    <br/>
 	               	     <c:url var="searchRepositoryItems" value="/searchRepositoryItems.action"/>
 						<form method="GET" action="${searchRepositoryItems}">
-						    Search: <input type="text" name="query" size="50"/>
+						    Search: <input type="text" name="query" size="50"/><br/><br/>
 						    <button type="submit" class="ur_button" 
 		                               onmouseover="this.className='ur_buttonover';"
 	 		                           onmouseout="this.className='ur_button';">Search</button>
