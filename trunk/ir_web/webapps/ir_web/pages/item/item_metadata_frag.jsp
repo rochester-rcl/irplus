@@ -208,7 +208,7 @@
 				              item.externalPublishedItem.publishedDate.day != 0 ||
 				              item.externalPublishedItem.publishedDate.year != 0)}">
 				     <tr>
-				        <td class="previewLabel">Previously Published Date:</td>
+				        <td class="previewLabel">Original Publication Date:</td>
 				    </tr>						
 				    <tr>
 				        <td> 
