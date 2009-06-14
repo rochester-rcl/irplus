@@ -36,7 +36,6 @@ public class CaptionTag extends CommonBaseHtmlTag {
 	/** align the caption tag - use styles instead */
 	private String align;
 
-	@SuppressWarnings("unchecked")
 	public void doTag() throws JspException {
 
 		JspFragment body = getJspBody();

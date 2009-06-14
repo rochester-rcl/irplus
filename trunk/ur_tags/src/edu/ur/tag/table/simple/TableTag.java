@@ -78,7 +78,6 @@ public class TableTag extends CommonBaseHtmlTag implements HtmlTable {
 	private int rowCount;
 
 
-	@SuppressWarnings("unchecked")
 	public void doTag() throws JspException {
 		log.debug("do tag called");
 

@@ -69,7 +69,6 @@ public class TableHeadTag extends CommonBaseHtmlTag {
 	/** specifies width of the table cells */
 	protected String width;
 
-	@SuppressWarnings("unchecked")
 	public void doTag() throws JspException {
 		JspFragment body = getJspBody();
 		PageContext pageContext = (PageContext) getJspContext();

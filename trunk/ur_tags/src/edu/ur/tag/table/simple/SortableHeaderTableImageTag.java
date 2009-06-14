@@ -43,7 +43,6 @@ public class SortableHeaderTableImageTag extends ImageTag{
 	/** descending sort alt text  */
 	protected String sortDescendingAltText;
 	
-	@SuppressWarnings("unchecked")
 	public void doTag() throws JspException {
 		PageContext pageContext = (PageContext) getJspContext();
 		JspWriter o = pageContext.getOut();
