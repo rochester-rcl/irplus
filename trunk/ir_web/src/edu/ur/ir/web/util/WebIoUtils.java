@@ -47,6 +47,9 @@ public class WebIoUtils {
 	/**  Service for dealing with mime information  */
 	private MimeTypeService mimeTypeService;
 	
+	/** response writer. */
+	private ResponseBufferedOutputWriter responseOutputWriter;
+	
 	/**  Logger for class */
 	private static final Logger log = Logger.getLogger(WebIoUtils.class);
 	
@@ -163,14 +166,13 @@ public class WebIoUtils {
 		InputStream is = null;
 		OutputStream os = null;
 		Exception originalException = null;
-	
+		
 		try
 		{
 	        //Write the file to the response output stream.
             is = new FileInputStream(f);
             os = response.getOutputStream();
-            ResponseBufferedOutputWriter bufferedWriter= new ResponseBufferedOutputWriter();
-            bufferedWriter.writeStream(is, os, bufferSize);
+            responseOutputWriter.writeStream(is, os, bufferSize);
            
 		}
         catch(Exception e)
@@ -219,6 +221,15 @@ public class WebIoUtils {
 
 	public void setMimeTypeService(MimeTypeService mimeTypeService) {
 		this.mimeTypeService = mimeTypeService;
+	}
+
+	public ResponseBufferedOutputWriter getResponseOutputWriter() {
+		return responseOutputWriter;
+	}
+
+	public void setResponseOutputWriter(
+			ResponseBufferedOutputWriter responseOutputWriter) {
+		this.responseOutputWriter = responseOutputWriter;
 	}
 
 }

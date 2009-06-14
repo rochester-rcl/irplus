@@ -19,9 +19,14 @@
     "http://www.springframework.org/dtd/spring-beans.dtd">
     
 <beans>
+
+
    <!-- I/O utils for the web application -->
+   <bean id="responseOutputWriter" class="edu.ur.ir.web.action.ResponseBufferedOutputWriter"/>
+  
    <bean id="webIoUtils" class="edu.ur.ir.web.util.WebIoUtils">
        <property name="mimeTypeService" ref="mimeTypeService"/>
+       <property name="responseOutputWriter" ref="responseOutputWriter"/>
    </bean>
    
    <!-- File utils for the web application -->
