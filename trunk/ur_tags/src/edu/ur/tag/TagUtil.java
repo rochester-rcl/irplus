@@ -17,8 +17,11 @@
 
 package edu.ur.tag;
 
+
+import javax.servlet.ServletRequest;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.el.ELException;
+import javax.el.ELException;
+import javax.el.ELResolver;
 
 
 /**
@@ -100,10 +103,9 @@ public class TagUtil {
 	 */
 	public static String getPageContextPath(PageContext pc) throws ELException
 	{
-		String contextPath = (String) pc.getExpressionEvaluator().evaluate("${pageContext.request.contextPath}", 
-				String.class, pc.getVariableResolver(), 
-				new DefaultFunctionMapper());
-		
+		ELResolver resolver = pc.getELContext().getELResolver();
+		ServletRequest request = pc.getRequest();
+		String contextPath = (String) resolver.getValue(pc.getELContext(), request, "contextPath");
 		return contextPath;
 	}
 	

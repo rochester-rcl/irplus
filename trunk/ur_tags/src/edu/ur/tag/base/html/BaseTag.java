@@ -34,7 +34,6 @@ import edu.ur.tag.TagUtil;
 public class BaseTag extends SimpleTagSupport{
 	
 	/** default on mouse over action */
-	@SuppressWarnings("unchecked")
 	public void doTag() throws JspException {
 		PageContext pageContext = (PageContext) getJspContext();
 		JspWriter o = pageContext.getOut();
