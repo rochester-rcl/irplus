@@ -23,7 +23,7 @@
 <!--  images used by the page -->
 <html>
     <head>
-        <title>Welcome</title>
+        <title>Add Contributor: ${item.name}</title>
         <c:import url="/inc/meta-frag.jsp"/>
 
 	    <ur:styleSheet href="page-resources/yui/reset-fonts-grids/reset-fonts-grids.css"/>
@@ -44,6 +44,7 @@
         <!-- Source File -->
         <ur:js src="pages/js/base_path.js"/>
         <ur:js src="page-resources/js/util/ur_util.js"/>
+        <ur:js src="page-resources/js/util/wait_dialog.js" />
         <ur:js src="page-resources/js/menu/main_menu.js"/>
   		<ur:js src="page-resources/js/user/add_contributor.js"/>
     </head>
@@ -59,7 +60,7 @@
             <div id="bd">
             
             	<div class="clear">&nbsp;</div>
-				<p><strong> Creating Publication :  </strong> <span class="noBorderTableGreyLabel">${personalItem.fullPath}${item.name} </span> </p>
+				<p><strong> Add Contributors to Publication :  </strong> <span class="noBorderTableGreyLabel">${personalItem.fullPath}${item.name} </span> </p>
 				
 				<table width="735"  align="center"  height="48" >
                   	<tr>
@@ -106,34 +107,34 @@
                   </tr>
                 </table>
                 
-				<div class="clear">&nbsp;</div>                               
+				<br/>                               
                      
                      
                 <table width="100%">
                     <tr>
                         <td align="left" width="50%">          
-				<ur:basicForm  id="search_form" name="searchForm"  
-				     method="POST" action="javascript:YAHOO.ur.item.contributor.handleSearchFormSubmit();">
-	             	First Search For Name 
-	             	<input type="text" id="search_query" name="query" size="30"/>
-	             	<input type="hidden" id="search_itemId" name="genericItemId" value="${item.id}"/>
-	             	<input type="hidden" id="search_pcId" name="parentCollectionId" value="${parentCollectionId}"/>
-	             	<input type="hidden" id="search_iItemId" name="institutionalItemId" value="${institutionalItemId}"/>
-	             	<button id="search_button" class="ur_button" 
-		 		            onmouseover="this.className='ur_buttonover';"
-		 		            onmouseout="this.className='ur_button';">Search</button>
+				            <form  id="search_form" name="searchForm"  
+				               method="POST" action="javascript:YAHOO.ur.item.contributor.handleSearchFormSubmit();">
+	             	           First Search For Name 
+	             	            <input type="text" id="search_query" name="query" size="30"/>
+	             	            <input type="hidden" id="search_itemId" name="genericItemId" value="${item.id}"/>
+	             	            <input type="hidden" id="search_pcId" name="parentCollectionId" value="${parentCollectionId}"/>
+	             	            <input type="hidden" id="search_iItemId" name="institutionalItemId" value="${institutionalItemId}"/>
+	             	            <button id="search_button" class="ur_button" 
+		 		                    onmouseover="this.className='ur_buttonover';"
+		 		                    onmouseout="this.className='ur_button';">Search</button>
 	             	                         
-				</ur:basicForm>	 
+				            </form>	 
 				        </td>
 				  
 				        <td>
-				        if you can't find the name then
+				            if you can't find the name then
 				
-				<button class="ur_button" id="new_person" 
+				            <button class="ur_button" id="new_person" 
                                onmouseover="this.className='ur_buttonover';"
                                onmouseout="this.className='ur_button';"
                                >Add New Person</button>                    
-			             </td>
+			            </td>
 			         </tr>
 			     </table>
 				
@@ -142,43 +143,37 @@
 			        <div class="yui-u first">
 			        
 		       			 <!--  table of names -->
-	                      <ur:div id="newNames">
-								<ur:basicForm method="post" id="names" name="myNames">
+	                      <div id="newNames">
+								<form method="post" id="names" name="myNames">
 								
 									 <input type="hidden" id="names_query" name="query" value="${query}"/>
 									 <input type="hidden" id="names_itemId" name="genericItemId" value="${item.id}"/>
 							
-								</ur:basicForm>	                      
-	                      </ur:div>
+								</form>	                      
+	                      </div>
 	                      <!--  end table of names div -->
 		       
 		             </div>
 		             <!--  end the first column -->
             
         	        <div class="yui-u">
-	        	      <ur:basicForm id="contributors_form" name="contributors_form"  method="POST" action="user/getContributors.action">
+	        	      <form id="contributors_form" name="contributors_form"  method="POST" action="user/getContributors.action">
                               
                           <input type="hidden" id="contributors_form_itemId" name="genericItemId" value="${item.id}"/>
                           <input type="hidden" id="contributors_form_parent_collection_id" name="parentCollectionId" value="${parentCollectionId}"/>
                           <input type="hidden" id="contributors_form_inst_item_id" name="institutionalItemId" value="${institutionalItemId}"/>
 	                    	
-	                    	<div class="clear">&nbsp;</div>
-							<div class="clear">&nbsp;</div>
-	                       	
-	                       	<!--  Table of selected names -->
-	                       	<div id="item_contributors" >
-	                        </div>
-                  				<!--  end table of selected names div -->
-                      </ur:basicForm>
+	                      <!--  Table of selected names -->
+	                      <div id="item_contributors" >
+	                      </div>
+                  		  <!--  end table of selected names div -->
+                      </form>
             	    </div>
                 	<!--  end the second column -->
-                
-                
-                
                 </div>
                 <!--  end the grid -->
 				
-				<div class="clear">&nbsp;</div>
+				<br/>
 				
 				<table width="100%" >
                   <tr>
@@ -203,155 +198,6 @@
                   </tr>
                 </table>
 
-	      <ur:div id="newPersonDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Person Information</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="add_person" name="newPersonForm" 
-		              method="post" 
-		              action="user/addNewPerson.action">
-		              
-   	             	 <input type="hidden" id="person_id"
-		                   name="personId" value="${user.personNameAuthority.id}"/>
-		
-  				     <input type="hidden" id="user_id"
-		                   name="addToUserId" value="${user.id}"/>		                   
-		              
-		              <ur:div id="personError" cssClass="errorMessage"></ur:div>
-			          
-			           <table class="formTable">    
-						    <tr>       
-					            <td align="left" class="label">First Name:*</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_first_name" 
-							          name="personName.forename" 
-							          value="" size="45"/> </td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">Last Name:*</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_last_name" 
-				         			 name="personName.surname" 
-				         			 value="" size="45"/> </td>
-							</tr>
-							<tr>       
-					            <td align="left" class="label">Middle Name:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_middle_name" 
-				          			name="personName.middleName" 
-				          			value="" size="45"/> </td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">Family Name:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_family_name" 
-				          			name="personName.familyName" 
-				          			value="" size="45"/> </td>
-							</tr>
-						    <tr>       
-					            <td align="left" class="label">Initials:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_initials" 
-				          			name="personName.initials" 
-				          			value="" size="45"/> </td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">Numeration:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_numeration" 
-				         			 name="personName.numeration" 
-				          			 value="" size="45"/> </td>
-							</tr>
-							<tr>       
-					            <td align="left" class="label">Birth Year:</td>
-					            <td align="left" class="label">
-				          		Year:<input  type="text" id="person_birthdate_year" name="birthYear" size="4" maxlength ="4"/> </td>
-							</tr>
-							<tr>       
-					            <td align="left" class="label">Death Year:</td>
-							    <td align="left" class="label">
-
-				          		Year:<input type="text" id="person_deathdate_year" name="deathYear" size="4" maxlength ="4"/>
-				          		</td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">My Name:</td>
-					            <td align="left" class="input"><input type="checkbox" 
-							          id="person_myName" name="myName" value="true"/>	
-								 </td>
-							</tr>
-				          
-			           </table>
-			          
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
-
-
-	         <ur:div id="newPersonNameDialog" cssClass="hidden">
-	             <ur:div cssClass="hd">Name Information</ur:div>
-		         <ur:div cssClass="bd">
-		             <ur:basicForm id="addPersonName" name="newPersonNameForm" 
-		                       method="post" 
-		                       action="user/addNewPersonName.action">
-		              
-		             <input type="hidden" id="newPersonNameForm_personId"
-		                   name="personId" />
-		              
-		             <ur:div id="personNameError" cssClass="errorMessage"></ur:div>
-			          
-			           <table class="formTable">    
-						    <tr>       
-					            <td align="left" class="label">First Name:*</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="newPersonNameFormFirstName" 
-			              			name="personName.forename" 
-			              			value="" size="45"/> </td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">Last Name:*</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="newPersonNameFormLastName" 
-			             			 name="personName.surname"
-				         			 value="" size="45"/> </td>
-							</tr>
-							<tr>       
-					            <td align="left" class="label">Middle Name:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="newPersonNameFormMiddleName" 
-			              			name="personName.middleName" 
-				          			value="" size="45"/> </td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">Family Name:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="newPersonNameFormFamilyName" 
-			          			   name="personName.familyName"  
-				          			value="" size="45"/> </td>
-							</tr>
-						    <tr>       
-					            <td align="left" class="label">Initials:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="newPersonNameFormInitials" 
-			             			name="personName.initials"
-				          			value="" size="45"/> </td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">Numeration:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="newPersonNameFormNumeration" 
-			              			name="personName.numeration" 
-				          			 value="" size="45"/> </td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">Authoritative Name:</td>
-					            <td align="left" class="input"><input type="checkbox"
-							    id="newPersonNameFormAuthoritative"
-		                   			 name="authoritative" value="true" size="45"/> </td>
-							</tr>	
-						</table>		          
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
                 
             </div>
             <!--  end the body tag --> 
@@ -361,6 +207,165 @@
         
         </div>
         <!-- end doc -->
+        
+        <div id="newPersonDialog" class="hidden">
+	        <div class="hd">Person Information</div>
+		    <div class="bd">
+		        <form id="add_person" name="newPersonForm" 
+		              method="post" 
+		              action="user/addNewPerson.action">
+		              
+   	            <input type="hidden" id="person_id"
+		                   name="personId" value="${user.personNameAuthority.id}"/>
+		
+  				<input type="hidden" id="user_id"
+		                   name="addToUserId" value="${user.id}"/>		                   
+		              
+		        <div id="personError" class="errorMessage"></div>
+			          
+			    <table class="formTable">    
+				    <tr>       
+					    <td align="left" class="label">First Name:*</td>
+					    <td align="left" class="input"><input type="text" 
+							id="person_first_name" 
+							          name="personName.forename" 
+							          value="" size="45"/> </td>
+					</tr>
+					<tr>
+					    <td align="left" class="label">Last Name:*</td>
+					    <td align="left" class="input"><input type="text" 
+							    id="person_last_name" 
+				         			 name="personName.surname" 
+				         			 value="" size="45"/> </td>
+					</tr>
+					<tr>       
+					    <td align="left" class="label">Middle Name:</td>
+					    <td align="left" class="input"><input type="text" 
+							    id="person_middle_name" 
+				          			name="personName.middleName" 
+				          			value="" size="45"/> </td>
+					</tr>
+					<tr>
+					    <td align="left" class="label">Family Name:</td>
+					    <td align="left" class="input"><input type="text" 
+							    id="person_family_name" 
+				          			name="personName.familyName" 
+				          			value="" size="45"/> </td>
+					</tr>
+					<tr>       
+					    <td align="left" class="label">Initials:</td>
+					    <td align="left" class="input"><input type="text" 
+							    id="person_initials" 
+				          			name="personName.initials" 
+				          			value="" size="45"/> </td>
+					</tr>
+					<tr>
+					    <td align="left" class="label">Numeration:</td>
+					    <td align="left" class="input"><input type="text" 
+							    id="person_numeration" 
+				         			 name="personName.numeration" 
+				          			 value="" size="45"/> </td>
+					</tr>
+					<tr>       
+					    <td align="left" class="label">Birth Year:</td>
+					    <td align="left" class="label">
+				          		Year:<input  type="text" id="person_birthdate_year" name="birthYear" size="4" maxlength ="4"/> </td>
+					</tr>
+					<tr>       
+					    <td align="left" class="label">Death Year:</td>
+						<td align="left" class="label">
+
+				          	Year:<input type="text" id="person_deathdate_year" name="deathYear" size="4" maxlength ="4"/>
+				       	</td>
+					</tr>
+					<tr>
+					    <td align="left" class="label">My Name:</td>
+					    <td align="left" class="input"><input type="checkbox" 
+							          id="person_myName" name="myName" value="true"/>	
+						</td>
+					</tr>
+			    </table>
+		        </form>
+		        </div>
+	        </div>
+
+
+	        <div id="newPersonNameDialog" class="hidden">
+	            <div class="hd">Name Information</div>
+		        <div class="bd">
+		            <form id="addPersonName" name="newPersonNameForm" 
+		                       method="post" 
+		                       action="user/addNewPersonName.action">
+		              
+		            <input type="hidden" id="newPersonNameForm_personId"
+		                   name="personId" />
+		              
+		            <div id="personNameError" class="errorMessage"></div>
+			          
+			        <table class="formTable">    
+					    <tr>       
+					        <td align="left" class="label">First Name:*</td>
+					        <td align="left" class="input"><input type="text" 
+							    id="newPersonNameFormFirstName" 
+			              			name="personName.forename" 
+			              			value="" size="45"/> </td>
+						</tr>
+						<tr>
+						    <td align="left" class="label">Last Name:*</td>
+					        <td align="left" class="input"><input type="text" 
+							    id="newPersonNameFormLastName" 
+			             			 name="personName.surname"
+				         			 value="" size="45"/> </td>
+						</tr>
+						<tr>       
+					        <td align="left" class="label">Middle Name:</td>
+					        <td align="left" class="input"><input type="text" 
+							    id="newPersonNameFormMiddleName" 
+			              			name="personName.middleName" 
+				          			value="" size="45"/> </td>
+						</tr>
+						<tr>
+						    <td align="left" class="label">Family Name:</td>
+					        <td align="left" class="input"><input type="text" 
+							    id="newPersonNameFormFamilyName" 
+			          			   name="personName.familyName"  
+				          			value="" size="45"/> </td>
+						</tr>
+						<tr>       
+					        <td align="left" class="label">Initials:</td>
+					        <td align="left" class="input"><input type="text" 
+							    id="newPersonNameFormInitials" 
+			             			name="personName.initials"
+				          			value="" size="45"/> </td>
+						</tr>
+						<tr>
+						    <td align="left" class="label">Numeration:</td>
+					        <td align="left" class="input"><input type="text" 
+							    id="newPersonNameFormNumeration" 
+			              			name="personName.numeration" 
+				          			 value="" size="45"/> </td>
+						</tr>
+						<tr>
+						    <td align="left" class="label">Authoritative Name:</td>
+					        <td align="left" class="input"><input type="checkbox"
+							    id="newPersonNameFormAuthoritative"
+		                   			 name="authoritative" value="true" size="45"/> </td>
+					    </tr>	
+				    </table>		          
+		        </form>
+		    </div>
+	    </div>
+        
+        
+        <!--  wait div -->
+	    <div id="wait_dialog_box" class="hidden">
+	        <div class="hd">Processing...</div>
+		    <div class="bd">
+		        <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
+		        <p><img src="${wait}"></img></p>
+		    </div>
+	    </div>
+	       
     </body>
 </html>
 
