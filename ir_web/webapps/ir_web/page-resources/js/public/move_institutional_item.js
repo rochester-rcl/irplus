@@ -72,7 +72,7 @@ YAHOO.ur.institutional.item.move =
 	  
 	            if( success != 'true' )
 	            {
-	            	YAHOO.ur.folder.waitDialog.hide();
+	            	YAHOO.ur.util.wait.waitDialog.hide();
 	                var errorMessage = document.getElementById('move_error').innerHTML;
 	                document.getElementById('default_error_dialog_content').innerHTML= errorMessage;
 	                YAHOO.ur.institutional.item.move.moveErrorDialog.center();
@@ -80,6 +80,7 @@ YAHOO.ur.institutional.item.move =
  	            }
 	            else
 	            {
+	            	YAHOO.ur.util.wait.waitDialog.hide();
 	                var itemId = document.getElementById('item_ids').value;
 	                var viewInstitutionalItemAction = basePath + 'user/institutionalPublicationPublicView.action'
 	        

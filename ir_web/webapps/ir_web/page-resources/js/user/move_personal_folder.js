@@ -55,11 +55,13 @@ YAHOO.ur.folder.move =
     
     moveFolder : function()
     {
+    	YAHOO.ur.util.wait.waitDialog.showDialog();
     	// handle a successful return
 	    var handleSuccess = function(o) 
 	    {
-			// check for the timeout - forward user to login page if timout
-	        // occured
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {       	    
 	            var response = o.responseText;
@@ -90,6 +92,7 @@ YAHOO.ur.folder.move =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        alert('Move failure '  + o.status + ' status text ' + o.statusText);
 	    };
 
