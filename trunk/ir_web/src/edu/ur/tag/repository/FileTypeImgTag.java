@@ -17,10 +17,11 @@
 
 package edu.ur.tag.repository;
 
+import javax.el.ELException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.el.ELException;
+
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.VersionedFile;
@@ -63,7 +64,7 @@ public class FileTypeImgTag extends CommonSimpleTag implements HtmlImage{
 	    	src = "page-resources/images/all-images/";
 	    	alt = "";
 
-	    	String output = "<span class=\"whiteFileImg\">&nbsp;</span>";
+	    	String output = "<span class=\"whiteFileImg\"></span>";
 	    	
 	    	if (versionedFile != null) {
 	    		extension = versionedFile.getExtension();
@@ -196,12 +197,14 @@ public class FileTypeImgTag extends CommonSimpleTag implements HtmlImage{
 		
     	if(!TagUtil.isEmpty(src)) 
     	{ 
-			    try {
-					sb.append("src=\"" + TagUtil.fixRelativePath(src,context) + "\" ");
-				} catch (ELException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			    
+			try {
+				sb.append("src=\"" + TagUtil.fixRelativePath(src,context) + "\" ");
+			} catch (ELException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				
 		}
     	
     	if(!TagUtil.isEmpty(border)) { sb.append("border=\"" + border + "\" "); }  
