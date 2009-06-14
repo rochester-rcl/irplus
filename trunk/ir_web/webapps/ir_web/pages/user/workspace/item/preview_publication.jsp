@@ -23,7 +23,7 @@
 
 <html>
     <head>
-        <title>Welcome</title>
+        <title>Preview Publication: ${item.name}</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!--  css styles from yahoo -->
