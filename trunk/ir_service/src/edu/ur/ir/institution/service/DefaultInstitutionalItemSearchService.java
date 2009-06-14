@@ -291,15 +291,24 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	{
 		for(FacetResult f : facets )
 		{
-			QueryParser subQueryParser = new QueryParser(f.getField(), analyzer);
-			subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
+		    int count = 0;
+		
+			String searchString = SearchHelper.prepareFacetSearchString(f.getFacetName(), false);
+			if( !searchString.trim().equals(""))
+			{
+			    QueryParser subQueryParser = new QueryParser(f.getField(), analyzer);
+					    subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
+			    Query subQuery = subQueryParser.parse(searchString);
 			
-			Query subQuery = subQueryParser.parse(SearchHelper.prepareFacetSearchString(f.getFacetName(), false));
+			    QueryWrapperFilter subQueryWrapper = new QueryWrapperFilter(subQuery);
+			    BitSet subQueryBits = subQueryWrapper.bits(reader);
 			
-			QueryWrapperFilter subQueryWrapper = new QueryWrapperFilter(subQuery);
-			BitSet subQueryBits = subQueryWrapper.bits(reader);
-			
-			int count = getFacetHitCount(mainQueryBits, subQueryBits);
+			    count = getFacetHitCount(mainQueryBits, subQueryBits);
+		    }
+			else
+			{
+				log.error("bad search string " + searchString);
+			}
 			f.setHits(count);
 		}
 	}
