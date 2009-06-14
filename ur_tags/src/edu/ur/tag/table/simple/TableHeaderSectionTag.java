@@ -45,7 +45,6 @@ public class TableHeaderSectionTag extends CommonBaseHtmlTag {
 	/** vertical alignment */
 	private String valign;
 
-	@SuppressWarnings("unchecked")
 	public void doTag() throws JspException {
 
 		JspFragment body = getJspBody();

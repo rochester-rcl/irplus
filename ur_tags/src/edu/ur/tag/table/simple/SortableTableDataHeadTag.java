@@ -50,7 +50,6 @@ public class SortableTableDataHeadTag extends TableDataTag {
 
 
 	/** default on mouse over action */
-	@SuppressWarnings("unchecked")
 	public void doTag() throws JspException {
 		JspFragment body = getJspBody();
 		PageContext pageContext = (PageContext) getJspContext();
