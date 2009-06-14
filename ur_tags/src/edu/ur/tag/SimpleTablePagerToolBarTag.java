@@ -19,11 +19,11 @@ package edu.ur.tag;
 
 import java.io.IOException;
 
+import javax.el.ELException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 public class SimpleTablePagerToolBarTag extends SimpleTagSupport {

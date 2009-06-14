@@ -17,10 +17,10 @@
 
 package edu.ur.tag.base.html;
 
+import javax.el.ELException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.el.ELException;
 
 import edu.ur.tag.TagUtil;
 import edu.ur.tag.base.CommonBaseHtmlTag;
@@ -60,7 +60,6 @@ public class ImageTag extends CommonBaseHtmlTag{
 	/**   sets the width of an image*/
 	protected String width;
 	
-	@SuppressWarnings("unchecked")
 	public void doTag() throws JspException {
 		PageContext pageContext = (PageContext) getJspContext();
 		JspWriter o = pageContext.getOut();
