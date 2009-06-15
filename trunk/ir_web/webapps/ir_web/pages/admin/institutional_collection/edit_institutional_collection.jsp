@@ -43,12 +43,15 @@
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
     <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
 
+
+ 	<ur:js src="pages/js/base_path.js"/>
+ 	<ur:js src="page-resources/js/util/ur_util.js"/>
+ 	<ur:js src="page-resources/js/util/wait_dialog.js" />
+ 	<ur:js src="page-resources/js/menu/main_menu.js"/>
+
  	<ur:js src="page-resources/js/admin/edit_institutional_collection.js"/>
  	<ur:js src="page-resources/js/admin/add_group_to_collection.js"/>
  	
- 	<ur:js src="pages/js/base_path.js"/>
- 	<ur:js src="page-resources/js/util/ur_util.js"/>
- 	<ur:js src="page-resources/js/menu/main_menu.js"/>
  	
  	
     
@@ -353,7 +356,16 @@
 			     
 		     </div>
 	     </div>
-	     <!-- End permissions for a collection -->   	 
+	     <!-- End permissions for a collection -->   	
+	     
+	     <!--  wait div -->
+	     <div id="wait_dialog_box" class="hidden">
+	        <div class="hd">Processing...</div>
+		    <div class="bd">
+		        <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
+		        <p><img src="${wait}"></img></p>
+		    </div>
+	    </div>    
 
     </body>
 </html>
