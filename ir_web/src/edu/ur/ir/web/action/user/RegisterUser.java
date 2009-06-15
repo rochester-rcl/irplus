@@ -674,7 +674,9 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 			log.debug("found token ");
 			inviteInfo = inviteUserService.findInviteInfoByToken(token);
             log.debug(" checking emails inviteInfo email = " + inviteInfo.getEmail() + " default email = " + defaultEmail.getEmail());
-			if (!inviteInfo.getEmail().equals(defaultEmail.getEmail())) {
+			
+            
+            if (!inviteInfo.getEmail().equals(defaultEmail.getEmail())) {
 				log.debug("NOT EQUAL adding default email " + defaultEmail );
 				String emailToken = TokenGenerator.getToken();
 
@@ -696,6 +698,10 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 			
 			returnVal = "successInvite";
 		} 
+		else
+		{
+			userService.sendAccountVerificationEmailForUser(defaultEmail.getToken(), defaultEmail.getEmail(), irUser.getUsername());
+		}
 		
 		// add the user to the user index
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
