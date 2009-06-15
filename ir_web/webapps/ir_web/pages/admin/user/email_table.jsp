@@ -60,11 +60,14 @@
 	                    	     </c:if>
 	                        </urstb:td>
 	                        <urstb:td>
-		                   		<c:if test="${(email.verified) && (email.id != email.irUser.defaultEmail.id) }">
+		                   		<c:if test="${email.verified && (email.id != email.irUser.defaultEmail.id) }">
 	                       		    <a href="javascript:YAHOO.ur.email.defaultEmail(${email.id}, ${email.irUser.id})">Set As Default</a> /
 	                    	    </c:if>
 	                    	    <c:if test="${email.id != email.irUser.defaultEmail.id}">
 	                                 <a href="javascript:YAHOO.ur.email.deleteEmail(${email.id})">Delete</a>
+	                            </c:if>
+	                            <c:if test="${!email.verified && ir:userHasRole('ROLE_ADMIN', '')}">
+	                                  <a href="javascript:YAHOO.ur.email.setVerified(${email.id})">Set As Verified</a>
 	                            </c:if>
 	                        </urstb:td>
 	                    </urstb:tr>
