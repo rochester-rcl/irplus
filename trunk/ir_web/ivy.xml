@@ -120,6 +120,11 @@
             <artifact name="jstl" type="jar"/>
         </dependency>
         
+         <!-- el api files -->
+        <dependency org="org.apache.tomcat" name="el-api" rev="6.0.14" transitive="false">
+            <artifact name="el-api" type="jar"/>
+        </dependency>
+        
         <!--  struts 2 files and dependencies -->
         <dependency org="org.apache.struts" name="struts2-core" rev="2.1.6" transitive="false">
             <artifact name="struts2-core" type="jar"/>
