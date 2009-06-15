@@ -28,9 +28,12 @@ YAHOO.ur.edit.institution.collection = {
      */
     createPictureUploadDialog : function()
     {
+    	 
 	    // Define various event handlers for Dialog
 	    var submit = function() 
 	    {
+	    	YAHOO.ur.edit.institution.collection.uploadCollectionPictureDialog.hide();
+	    	YAHOO.ur.util.wait.waitDialog.showDialog();
 	        this.submit();
 	    };
 	
@@ -44,6 +47,7 @@ YAHOO.ur.edit.institution.collection = {
 	    var success = function(o) 
 	    {
 	    
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	    	// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -69,7 +73,7 @@ YAHOO.ur.edit.institution.collection = {
 	            else
 	            {
 	                // we can clear the upload form and get the pictures
-	                YAHOO.ur.edit.institution.collection.uploadCollectionPictureDialog.hide();
+	                
 	                YAHOO.ur.edit.institution.collection.clearUploadPictureForm();
 	                YAHOO.ur.edit.institution.collection.getCollectionPictures(collectionId);
 	            } 
@@ -78,6 +82,7 @@ YAHOO.ur.edit.institution.collection = {
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        alert('Picture upload submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
@@ -162,6 +167,7 @@ YAHOO.ur.edit.institution.collection = {
      */
     deletePicture : function(collectionId, irFileId, primaryPicture)
     {
+    	YAHOO.ur.util.wait.waitDialog.showDialog();
        // action to get repository pictures
        var deletePictureAction = 
            basePath + 'admin/deleteInstitutionalCollectionPicture.action';
@@ -169,6 +175,7 @@ YAHOO.ur.edit.institution.collection = {
        // Success action on getting the picture
        var getPicturesSuccess = function(o) 
        {
+    	    YAHOO.ur.util.wait.waitDialog.hide();
            	// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -181,6 +188,7 @@ YAHOO.ur.edit.institution.collection = {
        // Faiure action on getting a picture
        var getPicturesFailure = function(o) 
 	   {
+    	   YAHOO.ur.util.wait.waitDialog.hide();
 	        alert('Could not delete picture for collection ' 
 	            + o.status + ' status text ' + o.statusText );
 	   };
@@ -316,7 +324,9 @@ YAHOO.ur.edit.institution.collection = {
     /*
      * update the institutional collection
      */
-    updateCollection : function() {
+    updateCollection : function() 
+    {
+    	YAHOO.ur.util.wait.waitDialog.showDialog();
  
         // action to perform when updating a collection
         var updateCollection = basePath + 'admin/updateInstitutionalCollection.action';
@@ -326,6 +336,7 @@ YAHOO.ur.edit.institution.collection = {
 	    // handle a successful return
 	    var success = function(o) 
 	    { 
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	    	// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -355,6 +366,7 @@ YAHOO.ur.edit.institution.collection = {
 	    // handle form sbumission failure
 	    var failure = function(o) 
 	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        alert("Save collection failed "  + o.status + ' status text ' + o.statusText);
 	    };
 	    
@@ -513,6 +525,8 @@ YAHOO.ur.edit.institution.collection = {
 	    // Define various event handlers for Dialog
 	    var submit = function() 
 	    {
+	    	YAHOO.ur.edit.institution.collection.removeGroupConfirmDialog.hide();
+	    	YAHOO.ur.util.wait.waitDialog.showDialog();
 	        // action to perform for searching names
             var action =  basePath + 'admin/removeGroupFromCollection.action';
             
@@ -533,18 +547,20 @@ YAHOO.ur.edit.institution.collection = {
 	
 	    var success = function(o) 
 	    {
-	    	// check for the timeout - forward user to login page if timout
-	        // occured
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+	    	// check for the timeout - forward user to login page if timeout
+	        // occurred
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
 	            var divToUpdate = document.getElementById('current_collection_groups_div');
                 divToUpdate.innerHTML = o.responseText; 
-                YAHOO.ur.edit.institution.collection.removeGroupConfirmDialog.hide();
+                
             }
 	    };
 	
 	    // handle form sbumission failure
 	    var failure = function(o) {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        alert('remove group failure ' + o.status + ' status text ' + o.statusText);
 	    };
 
@@ -592,6 +608,8 @@ YAHOO.ur.edit.institution.collection = {
  	    // Define various event handlers for Dialog
 	    var handleSubmit = function() 
 	    {
+	    	YAHOO.ur.edit.institution.collection.newLinkDialog.hide();
+	    	YAHOO.ur.util.wait.waitDialog.showDialog();
             this.submit();
 	    };
 		
@@ -605,6 +623,7 @@ YAHOO.ur.edit.institution.collection = {
 	    // handle a successful return
 	    var handleSuccess = function(o) 
 	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	    	// received from the server
 	        var response = o.responseText;
 	        
@@ -632,6 +651,7 @@ YAHOO.ur.edit.institution.collection = {
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        alert("Link submission failed due to a network issue: " + o.status  + " status text " + o.statusText);
 	    };
 
