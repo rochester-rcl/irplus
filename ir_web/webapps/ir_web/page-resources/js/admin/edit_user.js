@@ -343,11 +343,13 @@ YAHOO.ur.email = {
 	 */
 	saveEditUser : function()
 	{
+		YAHOO.ur.util.wait.waitDialog.showDialog();
 
 		var callback = 
 		{
 			success: function(o)
 			{
+			    YAHOO.ur.util.wait.waitDialog.hide();
 			    // check for the timeout - forward user to login page if timout
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
@@ -360,13 +362,13 @@ YAHOO.ur.email = {
 			        // the form, if there was an issue, update the form with
 			        // the error messages.
 			        userForm.innerHTML = o.responseText;
-			        alert("Saved");
 			    }
 		    
 			},
 		
 			failure : function(o) 
 			{
+				YAHOO.ur.util.wait.waitDialog.hide();
 		    	alert('user update failed ' + o.status  + ' status text ' + o.statusText);
 			}
 		}
