@@ -220,11 +220,9 @@ YAHOO.ur.item.metadata = {
 	 */
 	removeSeries : function(tableId)
 	{
-	  
-	        var table_div = document.getElementById("series_forms");
-	        var child = document.getElementById(tableId);
-	        table_div.removeChild(child); 
-	        
+	    var table_div = document.getElementById("series_forms");
+	    var child = document.getElementById(tableId);
+	    table_div.removeChild(child); 
 	},
 	
 	
@@ -370,7 +368,6 @@ YAHOO.ur.item.metadata = {
 	    {
 		    YAHOO.util.Connect.setForm('newSeriesForm');
 		    
-		    alert('Series action = ' + newSeriesAction);
 		    if( YAHOO.ur.item.metadata.newSeriesDialog.validate() )
 		    {
 	            var cObj = YAHOO.util.Connect.asyncRequest('post',
