@@ -26,11 +26,13 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.LockObtainFailedException;
 
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.person.PersonName;
@@ -83,8 +85,6 @@ public class DefaultUserIndexService implements UserIndexService{
 	}
 	
 	
-	
-	
 	/**
 	 * Add the user to the index.
 	 * 
@@ -126,38 +126,42 @@ public class DefaultUserIndexService implements UserIndexService{
 		}
 		
 		Directory directory = null;
-		IndexReader reader = null;
+		IndexWriter writer = null;
 		try {
-			synchronized(this)
+			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
+			writer = getWriter(directory);
+			
+			while( writer == null)
 			{
-			    directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
-			    if( IndexReader.isLocked(directory) )
-			    {
-				    throw new RuntimeException("Users index directory " + userIndexFolder.getAbsolutePath() +
-						" is locked ");
-			    }
-			    else
-			    {
-				    reader = IndexReader.open(directory);
-				    Term term = new Term(USER_ID, user.getId().toString());
-			        reader.deleteDocuments(term);
-			        reader.close();
-			    }
+				writer = getWriter(directory);
 			}
+			Term term = new Term(USER_ID, user.getId().toString());
+			writer.deleteDocuments(term);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		finally
 		{
-			if( reader != null)
+			if( writer != null)
 			{
 				try {
-					reader.close();
+					writer.close();
+					writer = null;
 				} catch (IOException e) {
 					log.error(e);
 				}
 			}
-			reader = null;
+			if( directory != null)
+			{
+				try {
+					directory.close();
+					directory = null;
+				} catch (IOException e) {
+					log.error(e);
+				}
+			}
+			writer = null;
 		}
 		
 	}
@@ -188,15 +192,19 @@ public class DefaultUserIndexService implements UserIndexService{
 	{
 		log.debug("write document to directory " + directoryPath );
 		IndexWriter writer = null;
+		Directory directory = null;
 		try {
-			synchronized(this)
+			directory = FSDirectory.getDirectory(directoryPath);
+			writer = getWriter(directory);
+			while( writer == null)
 			{
-			    Directory directory = FSDirectory.getDirectory(directoryPath);
-			    writer = new IndexWriter(directory, analyzer);
-			    writer.addDocument(document);
-			    writer.flush();
-			    writer.optimize();
+				writer = getWriter(directory);
 			}
+			    
+			writer.addDocument(document);
+			writer.flush();
+			writer.optimize();
+			
 		} catch (IOException e) {
 			log.error(e);
 			throw new RuntimeException(e);
@@ -205,11 +213,21 @@ public class DefaultUserIndexService implements UserIndexService{
 		    if (writer != null) {
 			    try {
 				    writer.close();
+				    writer = null;
 			    } catch (Exception e) {
 				    log.error(e);
 			    }
 		    }
-		    writer = null;
+		   
+		    if( directory != null)
+			{
+				try {
+					directory.close();
+					directory = null;
+				} catch (IOException e) {
+					log.error(e);
+				}
+			}
 	    }
 	}
 
@@ -225,18 +243,23 @@ public class DefaultUserIndexService implements UserIndexService{
 		}
 			
 		IndexWriter writer = null;
+		Directory directory = null;
 		try {
-			synchronized(this)
+			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
+			writer = getWriter(directory);
+			while( writer == null)
 			{
-			    Directory directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
-			    writer = new IndexWriter(directory, analyzer, overwriteExistingIndex);
-			    for(Document d : docs)
-			    {
-			    	writer.addDocument(d);
-			    }
-			    writer.flush();
-			    writer.optimize();
+				writer = getWriter(directory);
 			}
+			    
+			 
+			for(Document d : docs)
+			{
+			    writer.addDocument(d);
+			}
+			writer.flush();
+			writer.optimize();
+			
 		}
 		catch (IOException e) 
 		{
@@ -250,10 +273,20 @@ public class DefaultUserIndexService implements UserIndexService{
 			    try 
 			    {
 				    writer.close();
+				    writer = null;
 				} 
 			    catch (Exception e) 
 			    {
 				    log.error(e);
+				}
+			}
+		    if( directory != null)
+			{
+				try {
+					directory.close();
+					directory = null;
+				} catch (IOException e) {
+					log.error(e);
 				}
 			}
 		    writer = null;
@@ -368,6 +401,29 @@ public class DefaultUserIndexService implements UserIndexService{
 	    
 	    return doc;
 	}
+	
+	/**
+	 * All methods should use this to obtain a writer on the directory.  This will return 
+	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
+	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
+	 * users index at once.
+	 * 
+	 * @param directory
+	 * @return
+	 * @throws CorruptIndexException
+	 * @throws LockObtainFailedException
+	 * @throws IOException
+	 */
+	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	{
+		IndexWriter writer = null;
+		if( !IndexReader.isLocked(directory) )
+	    {
+			writer = new IndexWriter(directory, analyzer);
+	    }
+		return writer;
+	}
+
 
 	
 

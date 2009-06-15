@@ -462,6 +462,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			{
 				try {
 					writer.close();
+					writer = null;
 				} catch (IOException e) {
 					log.error(e);
 				}
@@ -470,6 +471,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			{
 				try {
 					directory.close();
+					directory = null;
 				} catch (IOException e) {
 					log.error(e);
 				}
@@ -570,6 +572,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			{
 				try {
 					writer.close();
+					writer = null;
 				} catch (IOException e) {
 					log.error(e);
 				}
@@ -578,6 +581,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			{
 				try {
 					directory.close();
+					directory = null;
 				} catch (IOException e) {
 					log.error(e);
 				}
@@ -740,7 +744,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			{
 				try {
 					writer.close();
-					
+					writer = null;
 				} catch (IOException e) {
 					log.error(e);
 				}
@@ -751,6 +755,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				try
 				{
 					directory.close();
+					directory = null;
 				}
 				catch (IOException e) {
 					log.error(e);
@@ -912,7 +917,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			{
 				try {
 					directory.close();
-					writer = null;
+					directory = null;
 				} catch (IOException e) {
 					log.error(e);
 				}

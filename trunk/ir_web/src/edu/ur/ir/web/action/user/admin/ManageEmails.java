@@ -93,8 +93,6 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	/** Message about email verification */
 	private String emailVerificationMessage;
 	
-
-
 	/**
 	 * Prepares for the action
 	 * 
@@ -112,8 +110,9 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		{
 			email = userService.getEmail(emailId, false);
 		}
-		
 	}
+	
+	
 	/**
 	 * Create a new email.
 	 * 
@@ -126,8 +125,6 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		IrUser otherUser = userService.getUserByEmail(email.getEmail());
 		StringBuffer buffer = new StringBuffer();
 		
-
-		
 		if (otherUser == null) {
 			//user making the change
 			IrUser changeMakingUser = userService.getUser(userId, false);
@@ -135,12 +132,9 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 			// if they are not an administrator and trying to change
 			// an account that does not belong to them then deny
 			// access 
-			if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
+			if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE) && !changeMakingUser.equals(irUser))
 			{
-				if( !changeMakingUser.equals(irUser))
-				{
-				    return "accessDenied";
-				}
+				return "accessDenied";
 			}
 			
 			String emailToken = TokenGenerator.getToken();
@@ -195,12 +189,9 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 			// if they are not an administrator and trying to change
 			// an account that does not belong to them then deny
 			// access 
-			if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
+			if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE) && !changeMakingUser.equals(irUser))
 			{
-				if( !changeMakingUser.equals(irUser))
-				{
-				    return "accessDenied";
-				}
+				return "accessDenied";
 			}
 
 			if (!email.getEmail().equals(oldEmail)) {
@@ -241,6 +232,61 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 					"This Email already exists in the system. Email: " + email.getEmail());
 		}
 	    return "added";
+	}
+	
+	/**
+	 * Method to change the verification of an email - setting it to unverified will
+	 * cause the user to get a new email to verify.
+	 * 
+	 * @return
+	 */
+	public String setVerified()
+	{
+		log.debug("verifing email with id = " + emailId);
+
+		//user making the change
+		IrUser changeMakingUser = userService.getUser(userId, false);
+		
+		// if they are not an administrator then can only change verification
+		// through following email
+		if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
+		{
+			 return "accessDenied";
+		}
+
+		UserEmail userEmail = userService.getEmail(emailId, false);
+		userEmail.setVerified(true);
+		userService.makeUserEmailPersistent(userEmail);
+		emails = userEmail.getIrUser().getUserEmails();
+		return "viewEmails";
+	}
+	
+	/**
+	 * Method to change the verification of an email - setting it to unverified will
+	 * cause the user to get a new email to verify.
+	 * 
+	 * @return
+	 */
+	public String requestNewVerification()
+	{
+		log.debug("verifing email with id = " + emailId);
+
+		//user making the change
+		IrUser changeMakingUser = userService.getUser(userId, false);
+		
+		// if they are not an administrator or owner trying to change
+		// an account that does not belong to them then deny
+		// access 
+		if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE) && !changeMakingUser.equals(irUser))
+		{
+			return "accessDenied";
+		}
+
+		UserEmail userEmail = userService.getEmail(emailId, false);
+		userEmail.setVerified(false);
+	    userService.sendAccountVerificationEmailForUser(email.getToken(), email.getEmail(), irUser.getUsername());
+
+		return "added";
 	}
 	
 	/**
@@ -315,12 +361,9 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		// if they are not an administrator and trying to view
 		// an account that does not belong to them then deny
 		// access 
-		if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE))
+		if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE) && !changeMakingUser.getId().equals(id))
 		{
-			if( !changeMakingUser.getId().equals(id))
-			{
-			    return "accessDenied";
-			}
+			return "accessDenied";
 		}
 		
 		IrUser user = userService.getUser(id, false);
@@ -523,6 +566,7 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+
 }
 
 

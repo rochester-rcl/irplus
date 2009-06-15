@@ -65,6 +65,7 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 		final Authentication auth = ctx.getAuthentication();
 		final Object action = invocation.getAction();
        
+		log.debug("auth = " + auth);
 		if( auth != null)
 		{
 			 if(auth.getPrincipal() instanceof UserDetails)

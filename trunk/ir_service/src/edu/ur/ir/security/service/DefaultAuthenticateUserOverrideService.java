@@ -1,6 +1,7 @@
 package edu.ur.ir.security.service;
 
 
+import org.apache.log4j.Logger;
 import org.springframework.security.Authentication;
 import org.springframework.security.context.SecurityContext;
 import org.springframework.security.context.SecurityContextHolder;
@@ -22,16 +23,20 @@ import edu.ur.ir.user.IrUser;
 public class DefaultAuthenticateUserOverrideService implements AuthenticateUserOverrideService{
 	
 
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultAuthenticateUserOverrideService.class);
+	
 	/**
 	 * Authenticate the user and places them in the context.
 	 * 
 	 * @see edu.ur.ir.security.AuthenticateUserOverrideService#authenticateUser(edu.ur.ir.user.IrUser)
 	 */
-	public void authenticateUser(IrUser user) {
+	public void authenticateUser(IrUser user) 
+	{
+		log.debug("Authenticating user " + user);
 		
-
 		// creates authentication object
-        Authentication auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getRoles().toArray(new IrRole[0]));
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getRoles().toArray(new IrRole[0]));
         
         // Places the authentication object in security context
         SecurityContext ctx = SecurityContextHolder.getContext() ;

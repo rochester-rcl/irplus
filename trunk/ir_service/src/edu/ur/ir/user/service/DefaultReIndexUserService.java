@@ -65,6 +65,16 @@ public class DefaultReIndexUserService implements ReIndexUserService{
 		    rowStart = rowStart + batchSize;
 		}
 	}
+	
+	/**
+	 * Allows this class to be run from the command line.
+	 * 
+	 * @param args
+	 */
+	public static void main(String [] args)
+	{
+		
+	}
 
 	public UserService getUserService() {
 		return userService;

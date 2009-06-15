@@ -487,8 +487,13 @@ public class ManageUsers extends Pager implements Preparable{
 	 */
 	public String loginAsUser() 
 	{
+		log.debug("user id = " + id);
 		irUser = userService.getUser(id, false);
-		authenticateUserOverrideService.authenticateUser(irUser);
+		log.debug("User = " + irUser);
+		if( irUser != null )
+		{
+		    authenticateUserOverrideService.authenticateUser(irUser);
+		}
 		return SUCCESS;
 	}
 	

@@ -537,4 +537,11 @@
        <property name="licenseVersionDAO" ref="licenseVersionDAO"/>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Authentication override service  -->
+   <!-- ****************************************** --> 
+      <bean id="authenticateUserOverrideService" 
+       class="edu.ur.ir.security.service.DefaultAuthenticateUserOverrideService"/>
+      
+   
 </beans>
