@@ -50,6 +50,7 @@
  	
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
+ 	<ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     
     <ur:js src="pages/js/ur_table.js"/>
@@ -202,52 +203,56 @@
 	     </div>
 	  	<!--  End body div -->
 	      
-       
-	     <div id="newEmailDialog" class="hidden">
-	          <div class="hd">Email Information</div>
-		      <div class="bd">
-		          <form id="addEmail" name="newEmailForm" 
-		              method="post"  action="admin/createEmail.action">
-	                 
-	                 <!--  if editing an id must be passed -->     
-		   			 <input type="hidden" id="newEmailForm_id"  name="id" value="${irUser.id}"/>
-	   			 
-		              <div id="newEmailDialogFields">
-		                  <c:import url="/pages/admin/user/email_form.jsp"/>
-	                  </div>
-		              
-		          </form>
-		      </div>
-	      </div>
-	      
-	      <div id="deleteEmailDialog" class="hidden">
-	          <div class="hd">Delete Email</div>
-		      <div class="bd">
-		          <form id="deleteEmail" name="deleteEmail" method="POST" 
-		              action="admin/deleteEmail.action">
-		              
-		              <input type="hidden" name="emailId" id="deleteEmailId" value=""/>
-		              <div id="deleteEmailError" class="errorMessage"></div>
-			          <p>Are you sure you wish to delete the selected emails?</p>
-		          </form>
-		      </div>
-	      </div>
-
-	     <div id="emailConfirmationDialog" class="hidden">
-	          <div class="hd">Email Information</div>
-		      <div class="bd">
-		              <div id="emailConfirmationDialogFields">
-	                  </div>
-		              
-		      </div>
-	      </div>	      
-	
 	  <!--  this is the footer of the page -->
       <c:import url="/inc/footer.jsp"/>
    
    
    </div>  
-   <!--  end doc div -->    
+   <!--  end doc div -->   
+	<div id="newEmailDialog" class="hidden">
+	      <div class="hd">Email Information</div>
+		  <div class="bd">
+		      <form id="addEmail" name="newEmailForm" 
+		              method="post"  action="admin/createEmail.action">
+	                 
+	            <!--  if editing an id must be passed -->     
+		   		<input type="hidden" id="newEmailForm_id"  name="id" value="${irUser.id}"/>
+	   			 
+		        <div id="newEmailDialogFields">
+		            <c:import url="/pages/admin/user/email_form.jsp"/>
+	            </div>
+		    </form>
+	    </div>
+	</div>
+	      
+    <div id="deleteEmailDialog" class="hidden">
+	    <div class="hd">Delete Email</div>
+		<div class="bd">
+		    <form id="deleteEmail" name="deleteEmail" method="POST" 
+		              action="admin/deleteEmail.action">
+		              
+		        <input type="hidden" name="emailId" id="deleteEmailId" value=""/>
+		        <div id="deleteEmailError" class="errorMessage"></div>
+			    <p>Are you sure you wish to delete the selected emails?</p>
+		    </form>
+	    </div>
+	</div>
+
+    <div id="emailConfirmationDialog" class="hidden">
+	    <div class="hd">Email Information</div>
+		<div class="bd">
+		    <div id="emailConfirmationDialogFields"> </div>
+	    </div>
+	</div>	      
+    
+    <!--  wait div -->
+	<div id="wait_dialog_box" class="hidden">
+	    <div class="hd">Processing...</div>
+		<div class="bd">
+		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
+		    <p><img src="${wait}"></img></p>
+		</div>
+	</div>    
 
 
 </body>
