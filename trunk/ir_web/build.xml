@@ -253,6 +253,7 @@
 		<exclude name="yui*"/>
 		<exclude name="servlet-api*"/>
 		<exclude name="jsp-api*"/>
+		<exclude name="el-api*"/>
     </fileset>
 	
     <!-- Copy needed files to the web-inf directory
