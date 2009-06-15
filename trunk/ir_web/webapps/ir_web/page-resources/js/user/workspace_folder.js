@@ -56,7 +56,7 @@ var myPersonalFolderTable = new YAHOO.ur.table.Table('myFolders', 'newPersonalFo
 var folderMenuArray = new Array();
 
 // If there is no bookmarked state, assign the default state:
-var personalFolderState = personalFolderState || "0";
+var personalFolderState = "0";
 
 
 YAHOO.ur.folder = 
@@ -72,15 +72,9 @@ YAHOO.ur.folder =
         if( currentState != currentFolder )
         {
             document.getElementById('myFolders_parentFolderId').value = folderId;
-            YAHOO.ur.folder.destroyFolderMenus();
-            myPersonalFolderTable.submitForm(myFolderAction);
+            var folderId = document.getElementById("myFolders_parentFolderId").value;
+            YAHOO.ur.folder.getFolderById(folderId); 
             YAHOO.ur.folder.insertHiddenParentFolderId();
-            var buttonsDiv = document.getElementById("files_folders_buttons");
-            
-            if( buttonsDiv != null )
-            {
-                buttonsDiv.style.visibility='visible';
-            }
         }
     },
     
@@ -108,8 +102,9 @@ YAHOO.ur.folder =
     {
         document.getElementById('folder_sort_type').value = sortType;
         document.getElementById('folder_sort_element').value = sortElement;
-        YAHOO.ur.folder.destroyFolderMenus();
-        myPersonalFolderTable.submitForm(myFolderAction);
+        var folderId = document.getElementById("myFolders_parentFolderId").value;
+        YAHOO.ur.util.wait.waitDialog.showDialog();
+        YAHOO.ur.folder.getFolderById(folderId); 
     },
     
     /**
@@ -120,7 +115,45 @@ YAHOO.ur.folder =
      */
     getFolderById : function(folderId)
     {
-        //destroy the folder menus
+    	
+		// handle a successful return
+	    var handleSuccess = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            var response = o.responseText;
+	            document.getElementById('newPersonalFolders').innerHTML = response;
+	            YAHOO.ur.folder.insertHiddenParentFolderId();
+	            
+	            // this is for capturing history
+	            // it may fail if this is not an A grade browser so we need to
+	            // catch the error.
+	            // this will store the folder Id in the URL
+	            try 
+	            {
+	                YAHOO.util.History.navigate( "personalFolderModule", folderId );
+	            } 
+	            catch ( e ) 
+	            {
+	                // history failed
+	            }
+	            
+	            YAHOO.ur.shared.file.inbox.getSharedFilesCount();
+	            YAHOO.ur.util.wait.waitDialog.hide();
+	        }
+	    };
+	
+	    // handle form submission failure
+	    var handleFailure = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+	        alert('delete files folders failure '  + o.status + ' status text ' + o.statusText);
+	    };
+
+	    //destroy the folder menus
         YAHOO.ur.folder.destroyFolderMenus();
     
         // set the state for the folder id
@@ -128,24 +161,11 @@ YAHOO.ur.folder =
  
         //set the folder id
         document.getElementById('myFolders_parentFolderId').value = folderId;
-        myPersonalFolderTable.submitForm(myFolderAction);
-        YAHOO.ur.folder.insertHiddenParentFolderId();
-        
-        // this is for capturing history
-        // it may fail if this is not an A grade browser so we need to
-        // catch the error.
-        // this will store the folder Id in the URL
-        try 
-        {
-            YAHOO.util.History.navigate( "personalFolderModule", folderId );
-        } 
-        catch ( e ) 
-        {
-            // history failed
-        }
-        
-        YAHOO.ur.shared.file.inbox.getSharedFilesCount();
-        
+	    
+	    YAHOO.util.Connect.setForm('myFolders');
+    
+        YAHOO.util.Connect.asyncRequest('POST', myFolderAction,
+          {success: handleSuccess, failure: handleFailure});
     },
     
     /**
@@ -225,15 +245,16 @@ YAHOO.ur.folder =
 	                YAHOO.ur.folder.newFolderDialog.hide();
 	                YAHOO.ur.folder.clearFolderForm();
 	            }
-	            YAHOO.ur.folder.destroyFolderMenus();
-	            myPersonalFolderTable.submitForm(myFolderAction);
+	            var folderId = document.getElementById("myFolders_parentFolderId").value;
+                YAHOO.ur.folder.getFolderById(folderId); 
 	        }
 	    };
 	
 	    // handle form sbumission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert("Workspace submission failed due to a network issue: " + o.status);
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+	        alert("Create folder failed due to a network issue: " + o.status);
 	    };
 
 	    // Instantiate the Dialog
@@ -251,6 +272,8 @@ YAHOO.ur.folder =
 	    // override the submit
 	    YAHOO.ur.folder.newFolderDialog.submit = function()
 	    {
+	    	YAHOO.ur.folder.newFolderDialog.hide();
+	    	YAHOO.ur.util.wait.waitDialog.showDialog();
 	    	YAHOO.ur.folder.destroyFolderMenus();
 	        YAHOO.util.Connect.setForm('newFolderForm');
 	    
@@ -309,7 +332,7 @@ YAHOO.ur.folder =
         {
             success: function(o) 
             {
-			    // check for the timeout - forward user to login page if timout
+ 			    // check for the timeout - forward user to login page if timout
 	            // occured
 	            if( !urUtil.checkTimeOut(o.responseText) )
 	            {       		             
@@ -335,6 +358,37 @@ YAHOO.ur.folder =
 	},
 	
 	/**
+	 * Delete the files and folders by submitting the form.
+	 */
+	deleteFilesFolders : function()
+	{
+		// handle a successful return
+	    var handleSuccess = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            var response = o.responseText;
+	            document.getElementById('newPersonalFolders').innerHTML = response;
+	        }
+	    };
+	
+	    // handle form submission failure
+	    var handleFailure = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+	        alert('delete files folders failure '  + o.status + ' status text ' + o.statusText);
+	    };
+
+	    YAHOO.util.Connect.setForm('myFolders');
+    
+        YAHOO.util.Connect.asyncRequest('POST', deleteFolderAction,
+          {success: handleSuccess, failure: handleFailure});
+	},
+	
+	/**
 	 * Dialog to confirm delete of folders and files
 	 */
 	createFolderDeleteConfirmDialog : function() 
@@ -342,9 +396,10 @@ YAHOO.ur.folder =
         // Define various event handlers for Dialog
 	    var handleYes = function() 
 	    {
-	        YAHOO.ur.folder.destroyFolderMenus();
-		    myPersonalFolderTable.submitForm(deleteFolderAction);
+	    	YAHOO.ur.util.wait.waitDialog.showDialog();
+        	YAHOO.ur.folder.destroyFolderMenus();
 		    this.hide();
+		    YAHOO.ur.folder.deleteFilesFolders();
 	    };
 	    
 	    var handleNo = function() 
@@ -634,7 +689,6 @@ YAHOO.ur.folder =
 	    
 	            if( response.lockStatus == 'LOCK_OBTAINED')
 	            {
-	                YAHOO.ur.folder.destroyFolderMenus();
 	                //allow user to download the file
 	                window.location = basePath + 'user/personalFileDownload.action' + '?personalFileId=' +response.personalFileId ;
 	                var folderId = document.getElementById("myFolders_parentFolderId").value;
@@ -643,7 +697,6 @@ YAHOO.ur.folder =
 	            else if( response.lockStatus == 'LOCKED_BY_USER')
 	            {
 	                alert('Folder already locked by ' + response.lockUsername);
-	                YAHOO.ur.folder.destroyFolderMenus();
 	                var folderId = document.getElementById("myFolders_parentFolderId").value;
 	                YAHOO.ur.folder.getFolderById(folderId); 
 	            }
@@ -673,6 +726,7 @@ YAHOO.ur.folder =
      */
     unLockFile : function(fileId, userId)
     {
+    	
         var callback =
         {
             success: function(o) 
@@ -692,7 +746,6 @@ YAHOO.ur.folder =
 	    
 	            if( response.unLockStatus == 'UN_LOCKED_BY_USER')
 	            {
-	                YAHOO.ur.folder.destroyFolderMenus();
 	                var folderId = document.getElementById("myFolders_parentFolderId").value;
 	                YAHOO.ur.folder.getFolderById(folderId); 
 	            }
@@ -715,31 +768,7 @@ YAHOO.ur.folder =
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
         unLockFileAction + '?personalFileId=' + fileId + '&userId=' + userId + 
         '&bustcache='+new Date().getTime(), callback, null);
-    },
-    
-    /**
-     * Dialog to handle waiting display
-     */
-    createWaitDialog : function()
-    {
-  
-	     // Instantiate the Dialog
-	     YAHOO.ur.folder.waitDialog = 
-	         new YAHOO.widget.Dialog("wait_dialog_box", 
-									     { width: "600px",
-										   visible: false,
-										   modal: true,
-										   close: false
-										  } );
-										
-		 YAHOO.ur.folder.waitDialog.showDialog = function()
-		 {
-		      YAHOO.ur.folder.waitDialog.center();
-	          YAHOO.ur.folder.waitDialog.show();
-		 };
-		 
-	     YAHOO.ur.folder.waitDialog.render();
-    },
+    }, 
     
     /**
      * Function to upload a single file
@@ -756,8 +785,7 @@ YAHOO.ur.folder =
 	        if( YAHOO.ur.folder.singleFileUploadDialog.validate() )
 	        {
 	            YAHOO.ur.folder.singleFileUploadDialog.hide();
-	            
-	            YAHOO.ur.folder.waitDialog.showDialog();
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 	            
 	            //based on what we need to do (update or create a 
 	            // new news item) based on the action.
@@ -803,7 +831,7 @@ YAHOO.ur.folder =
 	                // received from the server
 	                if( success == "false" )
 	                {
-	                    YAHOO.ur.folder.waitDialog.hide();
+	        	    	YAHOO.ur.util.wait.waitDialog.hide();
                         YAHOO.ur.folder.singleFileUploadDialog.showDialog();
 	                }
 	                else
@@ -811,14 +839,14 @@ YAHOO.ur.folder =
 	                    // we can clear the upload form and get the pictures
 	           
 	                    YAHOO.ur.folder.clearSingleFileUploadForm();
-	                    YAHOO.ur.folder.destroyFolderMenus();
-	                    myPersonalFolderTable.submitForm(myFolderAction);  
-	                    YAHOO.ur.folder.waitDialog.hide(); 
+	                    var folderId = document.getElementById("myFolders_parentFolderId").value;
+		                YAHOO.ur.folder.getFolderById(folderId); 
+	        	    	YAHOO.ur.util.wait.waitDialog.hide();
 	                }
 	            }
 	            catch(err)
 	            {
-	            	  YAHOO.ur.folder.waitDialog.hide();
+	    	    	  YAHOO.ur.util.wait.waitDialog.hide();
 	            	  txt="There was an error on this page.\n\n";
 	            	  txt+="Error description: " + err + "\n\n";
 	            	  txt+="Click OK to continue.\n\n";
@@ -830,7 +858,7 @@ YAHOO.ur.folder =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        YAHOO.ur.folder.waitDialog.hide();
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        alert('Single file upload submission failed ' + o.status);
 	    };
 
@@ -953,7 +981,7 @@ YAHOO.ur.folder =
 	        if( YAHOO.ur.folder.versionedFileUploadDialog.validate() )
 	        {
 	            YAHOO.ur.folder.versionedFileUploadDialog.hide()
-	            YAHOO.ur.folder.waitDialog.showDialog();
+	            	    	YAHOO.ur.util.wait.waitDialog.showDialog();
 	            //based on what we need to do (update or create a 
 	            // new news item) based on the action.
                 var cObj = YAHOO.util.Connect.asyncRequest('post',
@@ -994,7 +1022,7 @@ YAHOO.ur.folder =
 	            // received from the server
 	            if( success == "false" )
 	            {
-	                YAHOO.ur.folder.waitDialog.hide();
+	    	    	YAHOO.ur.util.wait.waitDialog.hide();
                     YAHOO.ur.folder.versionedFileUploadDialog.show();
 	            }
 	            else
@@ -1010,7 +1038,7 @@ YAHOO.ur.folder =
 	                    var folderId = document.getElementById("myFolders_parentFolderId").value;
 	                    YAHOO.ur.folder.getFolderById(folderId); 
 	                }
-	                YAHOO.ur.folder.waitDialog.hide();
+	    	    	YAHOO.ur.util.wait.waitDialog.hide();
 	            }
 	        }
 	    };
@@ -1271,8 +1299,8 @@ YAHOO.ur.folder =
 	                // we can clear the form if the file was renamed
 	                YAHOO.ur.folder.renameFileDialog.hide();
 	                YAHOO.ur.folder.clearFileRenameForm();
-	                YAHOO.ur.folder.destroyFolderMenus();
-	                myPersonalFolderTable.submitForm(myFolderAction);
+	                var folderId = document.getElementById("myFolders_parentFolderId").value;
+	                YAHOO.ur.folder.getFolderById(folderId); 
 	            }
 	        }
 
@@ -1427,14 +1455,12 @@ YAHOO.ur.folder =
         YAHOO.ur.folder.createFolderDeleteConfirmDialog();
         YAHOO.ur.folder.singleFileUpload();
         YAHOO.ur.folder.versionedFileUpload();
-        YAHOO.ur.folder.createWaitDialog();
         YAHOO.ur.folder.createInviteErrorDialog();
         YAHOO.ur.folder.createFileRenameDialog();
         
         // register the history system
         YAHOO.util.History.register("personalFolderModule", personalFolderState, 
         YAHOO.ur.folder.personalFolderStateChangeHandler);
-
     }
 };
 
