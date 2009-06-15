@@ -30,6 +30,7 @@ var newEmailAction = basePath + 'admin/createEmail.action';
 var deleteEmailAction = basePath + 'admin/deleteEmail.action';
 var updateEmailAction = basePath + 'admin/updateEmail.action';
 var defaultEmailAction = basePath + 'admin/setDefaultEmail.action';
+var verifyEmailAction = basePath + 'admin/setVerifiedEmail.action';
 
 // action to perform for searching names
 var mySearchNameAction =  basePath + 'admin/searchAuthoritativeName.action';
@@ -544,6 +545,34 @@ YAHOO.ur.email = {
 	    var transaction = YAHOO.util.Connect.asyncRequest('GET', 
 	    	defaultEmailAction + '?bustcache='+new Date().getTime() + '&emailId=' + emailId + '&userId=' + userId, 
 	        callback, null);
+	},
+	
+	/**
+	 * Set an email as verified
+	 */
+	setVerified : function(emailId)
+	{
+		var callback =
+		{
+		    success: function(o) 
+		    {
+		        // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+		            var divToUpdate = document.getElementById('newEmails');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
+		    },
+			
+			failure: function(o) 
+			{
+			    alert('verify email Failure ' + o.status + ' status text ' + o.statusText );
+			}
+		}
+
+		var transaction = YAHOO.util.Connect.asyncRequest('POST', 
+	    	verifyEmailAction, callback, 'emailId=' + emailId);
 	},
 	
 
