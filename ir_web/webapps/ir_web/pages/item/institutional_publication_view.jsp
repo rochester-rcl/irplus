@@ -79,8 +79,10 @@
 				    <h3 class="errorMessage">URL to cite or link to: <a href="${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}">${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}</a></h3>
 				</c:if>
 				
-				<c:if test="${showPublication}">
-									
+				<c:if test="${showPublication }">
+				    <c:if test="${institutionalItemVersion.item.embargoed}">
+				        <div class="errorMessage"> <h3>This publication is still under embargo</h3> </div>
+				    </c:if>
 					<c:if test="${institutionalItemVersion.withdrawn}">
 						<div class="errorMessage"> <h3> This publication is withdrawn. </h3> </div>
 						<p class="errorMessage">
@@ -173,26 +175,18 @@
 				 		                   onclick="javascript:document.addToResearcherPageForm.submit();"
 					                       id="add_researcher_page">Add to My Researcher page</button>    
 				</c:if>
-					
-					
-					
 				
 					
 				<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
 					    
 						<!--  only allow editing if this is the current largest version -->
 						<c:if test="${institutionalItemVersion.versionNumber == institutionalItem.versionedInstitutionalItem.largestVersion}">
-							    
 					           <form name="editForm" 
 					              method="post" action="<c:url value="/user/viewEditItem.action"/>">
-									
 									<input type="hidden" name="institutionalItemId" value="${institutionalItem.id}"/>
 									<input type="hidden" name="genericItemId" value="${institutionalItemVersion.item.id}"/>
-					                
 					            </form>  			                        	        
-							
 						</c:if>
-						
 				    </c:if>
 				    
 				   
@@ -245,8 +239,8 @@
 			</c:if>
 			<!--  end if for show publication -->
 				
-			<c:if test="${!showPublication}">
-				<h3> <div class="errorMessage"> ${message} </div> </h3>
+			<c:if test="${!showPublication && !ir:userHasRole('ROLE_ADMIN', '')}">
+				 <div class="errorMessage"> <h3>${message}</h3></div> 
 			</c:if>
 				
 			  <!-- *************************  All versions Start *************************  -->
@@ -327,7 +321,7 @@
 		      <div class="bd">
 		          <form id="withdraw_publication" name="withdrawPublicationForm" 
 		              method="post" 
-		              action=<c:url value="/user/withdrawPublication.action"/>">
+		              action="<c:url value="/user/withdrawPublication.action"/>">
 		                   
   				      <input type="hidden" id="institutional_item_id"
 		                   name="institutionalItemId" value="${institutionalItemId}"/>		                   
