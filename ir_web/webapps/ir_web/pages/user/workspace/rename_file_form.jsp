@@ -29,4 +29,23 @@
 		   value="${fileRenamed}"/>
 
 <input type="hidden" name="personalFileId"  value="${personalFileId}"/>
-New File Name: <input type="text" name="newFileName" size="25" value="${newFileName}"/>          
+<table class="formTable">
+    <tr>
+        <td>
+            New File Name: 
+        </td>
+        <td>
+            <input type="text" name="newFileName" size="25" value="${newFileName}"/> 
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Description: 
+        </td>
+        <td>
+            <input type="text" name="fileDescription" size="25" value="${fileDescription}"/>   
+        </td>
+    </tr>
+</table>
+
+       
