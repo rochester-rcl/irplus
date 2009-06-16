@@ -255,7 +255,7 @@
 	          
 	<!--  new publication dialog -->
 	<div id="newItemDialog" class="hidden">
-	    <div class="hd">Please enter publication name</div>
+	    <div class="hd">Enter Publication title</div>
 		<div class="bd" >
 			<div class="clear">&nbsp;</div>
 		 	<div id="file_ownership_error_div" class="errorMessage">
