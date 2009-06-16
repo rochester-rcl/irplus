@@ -20,9 +20,21 @@
 
 <table class="greyBorderBlueBgTable">
     <tr>
-        <c:if test="${!ir:isStringEmpty(item.itemAbstract) || !ir:isStringEmpty(item.description)}">
+        <c:if test="${!ir:isStringEmpty(item.itemAbstract) || !ir:isStringEmpty(item.description) || !ur:isEmpty(item.subTitles)}">
 	    <td width="60%" valign="top" class="greyBorderTableTd">
 		    <table class="noPaddingTable" width="100%" align="left">
+		       <c:if test="${!ur:isEmpty(item.subTitles)}">
+		            <tr>
+					    <td><label for="description" class="previewLabel"> Other Titles </label> </td>
+					</tr> 
+					<tr>
+					    <td>
+						    <c:forEach items="${item.subTitles}" var="otherTitle">
+							    ${otherTitle.title}<br/>
+							</c:forEach>
+						</td>
+					</tr>
+			    </c:if>
 		        <c:if test="${!ir:isStringEmpty(item.description)}">
 			        <tr>
 				        <td>	<label for="description" class="previewLabel"> Description </label> </td>
@@ -45,18 +57,7 @@
 		</c:if>
 		<td valign="top" class="greyBorderTableTd">
 		    <table width="100%">
-		        <c:if test="${!ur:isEmpty(institutionalItemVersion.item.subTitles)}">
-		            <tr>
-					    <td><label for="description" class="previewLabel"> Other Titles </label> </td>
-					</tr> 
-					<tr>
-					    <td>
-						    <c:forEach items="${institutionalItemVersion.item.subTitles}" var="otherTitle">
-							    ${otherTitle.title}<br/>
-							</c:forEach>
-						</td>
-					</tr>
-			    </c:if>
+		        
 		        <c:if test="${!ur:isEmpty(item.contributors)}">
 			        <tr> 
 			            <td class="previewLabel">Contributor(s):</td>
@@ -192,7 +193,7 @@
 				
 				<c:if test="${item.releaseDate != null}">					
 				<tr>
-				    <td class="previewLabel"> Date this publication can be made available to public from this system:</td>
+				    <td class="previewLabel"> Date will be made available to public:</td>
 				</tr>
 				<tr>
 				    <td>
