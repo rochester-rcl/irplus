@@ -294,7 +294,8 @@ public class VersionedFileTest {
 		vif.reName("fileName4.doc");
 		assert vif.getNameWithExtension().equals("fileName4.doc") : "Name with extension should be fileName4.doc but is: " +  vif.getNameWithExtension();
 		assert vif.getName().equals("fileName4") : "Name should be fileName4 but is : " + vif.getName();
-
+        assert vif.getCurrentVersion().getIrFile().getName().equals("fileName4") : "Name with extension should be fileName4 but is: " +  vif.getCurrentVersion().getIrFile().getName();
+        assert vif.getCurrentVersion().getIrFile().getFileInfo().getExtension().equals("doc") : "extension should be .doc but is: " +  vif.getCurrentVersion().getIrFile().getFileInfo().getExtension();
 		
 		repoHelper.cleanUpRepository();
 	}
