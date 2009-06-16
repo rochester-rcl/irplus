@@ -17,7 +17,6 @@
 package edu.ur.ir.web.action.institution;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -102,18 +101,24 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	public String execute(){
 		log.debug("Institutional ItemId = " + institutionalItemId);
 
-		if (institutionalItemVersionId != null) {
+		// load a specific version - already specified in the request
+		if (institutionalItemVersionId != null) 
+		{
 			institutionalItemVersion = institutionalItemService.getInstitutionalItemVersion(institutionalItemVersionId, false);
 			institutionalItem = institutionalItemService.getInstitutionalItemByVersionId(institutionalItemVersionId);
 			
-			if (institutionalItemVersion == null) {
+			if (institutionalItemVersion == null) 
+			{
 	        	log.debug("Institutional Item Version does not exist for InstitutionalItemVersionId :" + institutionalItemVersionId);
 	        	message = "The publication doesnot exist!";
 	        	showPublication = false;
 	        	return SUCCESS;
 			}
 
-		} else if (institutionalItemId != null) {
+		} 
+		// item and version seperated in request
+		else if (institutionalItemId != null) 
+		{
 			institutionalItem = institutionalItemService.getInstitutionalItem(institutionalItemId, false);
 		
 			if (institutionalItem != null) {
@@ -125,7 +130,9 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 				{
 					institutionalItemVersion =  institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(versionNumber);
 				}
-			} else {
+			} 
+			else 
+			{
 				
 				DeletedInstitutionalItem deleteInfo =  institutionalItemService.getDeleteInfoForInstitutionalItem(institutionalItemId);
 				
@@ -140,19 +147,32 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	        	showPublication = false;
 	        	return SUCCESS;
 			}
-		} else {
+		} 
+		else 
+		{
         	log.debug("institutional Item id is null");
         	showPublication = false;
         	message = "The publication doesnot exist!";
         	return SUCCESS;
 		}
 
-		if (institutionalItemVersion.getItem().getReleaseDate() == null || institutionalItemVersion.getItem().getReleaseDate().compareTo(new Date()) <= 0) {
-			if (!institutionalItemVersion.getItem().isPubliclyViewable()) {
-	            if (userId != null) {
-	            	IrUser user = userService.getUser(userId, false);
-	            	
-	            	if (!user.hasRole(IrRole.ADMIN_ROLE)) {
+		path = institutionalCollectionService.getPath(institutionalItem.getInstitutionalCollection());
+		
+		IrUser user = null;
+		if (userId != null) 
+        {
+         	user = userService.getUser(userId, false);
+        }
+		
+		if (!institutionalItemVersion.getItem().isEmbargoed()) 
+		{
+			if (!institutionalItemVersion.getItem().isPubliclyViewable()) 
+			{
+	            if (user != null) 
+	            {
+	            	if (!user.hasRole(IrRole.ADMIN_ROLE)) 
+	            	{
+	            		// check user permissions if they are not an administrator
 	            	    if (itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) <= 0
 	            			&& itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) <= 0)  {
 	            		
@@ -162,26 +182,47 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	            	    	return SUCCESS;
 	            	    }
 	            	}
-	            } else {
-                	log.debug("User is null. File is private.");
+	            } 
+	            else 
+	            {
+                	log.debug("User is null. Publication is private.");
                 	showPublication = false;
                 	message = "You do not have access to this publication!";
                 	return SUCCESS;
 	            }
 			}
-		} else {
+		} 
+		else 
+		{
 			log.debug("The publication is available for public from date:" + institutionalItemVersion.getItem().getReleaseDate());
-        	showPublication = false;
-        	message = "The publication is available for view from date : " + institutionalItemVersion.getItem().getReleaseDate();
-        	return SUCCESS;
+			if (user != null) 
+            {
+            	if (!user.hasRole(IrRole.ADMIN_ROLE)) 
+            	{
+            		// check user permissions if they are not an administrator - view privileges override embargo date
+            	    if (itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) <= 0
+            			&& itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) <= 0)  {
+            		
+            	    	log.debug("User has no Read / edit metadata permission for this item and it is embargoed");
+            	    	message = "The publication will be available to view starting on date : " + institutionalItemVersion.getItem().getReleaseDate();
+            	    	showPublication = false;
+            	    	return SUCCESS;
+            	    }
+            	}
+            } 
+			else 
+            {
+				log.debug("User has no Read / edit metadata permission for this item and it is embargoed");
+    	    	message = "The publication will be available to view starting on date : " + institutionalItemVersion.getItem().getReleaseDate();
+    	    	showPublication = false;
+    	    	return SUCCESS;
+            }
 		}
 
     	showPublication = true;
     	
 		itemObjects = institutionalItemVersion.getItem().getItemObjects();
 		item = institutionalItemVersion.getItem();
-		
-		path = institutionalCollectionService.getPath(institutionalItem.getInstitutionalCollection());
 		
 		// Sort item objects by order
 		Collections.sort(itemObjects,   new AscendingOrderComparator());
