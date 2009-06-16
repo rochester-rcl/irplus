@@ -352,11 +352,11 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 * @param name of the file including the extension
 	 * @return the found file
 	 */
-	public PersonalFile getFile(String name)
+	public PersonalFile getFile(String nameWithExtension)
 	{
 		for(PersonalFile pf : files)
 		{
-			if( pf.getVersionedFile().getNameWithExtension().equalsIgnoreCase(name))
+			if( pf.getVersionedFile().getNameWithExtension().equalsIgnoreCase(nameWithExtension))
 			{
 				return pf;
 			}
