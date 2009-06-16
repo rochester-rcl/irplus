@@ -632,7 +632,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		// to save it.
 		String firstName = irUser.getFirstName();
 		String lastName = irUser.getLastName();
-		String ldapUserName = irUser.getLastName();
+		String ldapUserName = irUser.getLdapUserName();
 		
 				
 		defaultEmail.setVerified(false);
