@@ -71,10 +71,7 @@
            <!--  this is the header of the page -->
            <c:import url="/inc/header.jsp"/>
        
-       
            <h3>Repository Administration - <fmt:message key="edit_repository.edit"/></h3>
-           
-
            
            <div id="bd">
               
@@ -239,8 +236,13 @@
                            Last subscription process email date: ${repository.lastSubscriptionProcessEmailDate}
                            <br/>
                            <br/>
+                           
                            <c:url var="reIndexItemsUrl" value="/admin/reIndexInstitutionalItems.action"/>
-                               <a href="${reIndexItemsUrl}">Re-Index Institutional Items</a>
+                           <a href="${reIndexItemsUrl}">Re-Index Institutional Items</a>
+                           
+                           <br/>
+                           <br/>
+                           <a href="<c:url value="/admin/reIndexUsers.action"/>">Re-Index Users</a>
                            <br/>
                            <br/>
                        </c:if>
@@ -355,18 +357,19 @@
      </div>
      <!--  End doc div-->
   
-  	 <ur:div id="deletePictureDialog">
-	             <ur:div cssClass="hd">Delete Repository Picture</ur:div>
-		         <ur:div cssClass="bd">
-		             <ur:basicForm id="delete_repository_picture" 
-		                  name="deleteRepositoryPicture" method="POST" 
-		                  action="admin/deleteRepositoryPicture.action">
-		              <input type="hidden" id="picture_id" name="irFilePictureId" value=""/>
+     
+  	 <div id="deletePictureDialog">
+	     <div class="hd">Delete Repository Picture</div>
+		 <div class="bd">
+		     <form id="delete_repository_picture" 
+		           name="deleteRepositoryPicture" method="POST" 
+		           action="<c:url value="/admin/deleteRepositoryPicture.action"/>">
+		         <input type="hidden" id="picture_id" name="irFilePictureId" value=""/>
 		              
-		              <ur:div id="deletePictureError" cssClass="errorMessage"></ur:div>
-			          <p>Are you sure you wish to delete the selected picture?</p>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+		         <div id="deletePictureError" cssClass="errorMessage"></div>
+			     <p>Are you sure you wish to delete the selected picture?</p>
+		     </form>
+		 </div>
+	 </div>
 </body>
 </html>
