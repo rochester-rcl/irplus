@@ -1684,6 +1684,16 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		}
 		return embargoed;
 	}
+	
+	/**
+	 * Determine if the current date is before the release date if it is returns true.
+	 * 
+	 * @return true if the item is embargoed.
+	 */
+	public boolean getEmbargoed()
+	{
+		return isEmbargoed();
+	}
 
 	/**
 	 * Copyright statement for the item.
