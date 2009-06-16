@@ -340,6 +340,12 @@
        <property name="analyzer" ref="defaultTextAnalyzer"/>
    </bean>
    
+    <bean id="reIndexUserService" 
+       class="edu.ur.ir.user.service.DefaultReIndexUserService">
+       <property name="userIndexService" ref="userIndexService"/>
+       <property name="userService" ref="userService"/>
+   </bean>
+   
    <bean id="institutionalItemIndexService" 
        class="edu.ur.ir.institution.service.DefaultInstitutionalItemIndexService">
        <property name="collectionBatchSize" value="10"/>

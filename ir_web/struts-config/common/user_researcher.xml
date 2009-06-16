@@ -25,7 +25,6 @@
             <result name="view">/pages/user/researcher/edit_researcher.jsp</result>
         </action>
         
-        
         <action name="uploadResearcherPicture"
             class="edu.ur.ir.web.action.researcher.UploadResearcherImage"
             method="addNewPicture">
@@ -381,3 +380,17 @@
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">viewResearcher.action?showFoldersTab=true</result>
         </action>         
+        
+        <!--  move the selected researcher objects -->
+        <action name="moveResearcherFileSystemObjects" class="edu.ur.ir.web.action.researcher.MoveResearcherFileSystemObjects">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/move_folders_response.jsp</result>
+        </action>
+        
+        <action name="viewMoveResearcherFolderLocations"
+            class="edu.ur.ir.web.action.researcher.MoveResearcherFileSystemObjects"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/researcher/move.jsp</result>
+        </action>

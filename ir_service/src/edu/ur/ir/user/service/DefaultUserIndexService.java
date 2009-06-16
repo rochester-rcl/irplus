@@ -129,8 +129,6 @@ public class DefaultUserIndexService implements UserIndexService{
 		IndexWriter writer = null;
 		try {
 			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
-			writer = getWriter(directory);
-			
 			while( writer == null)
 			{
 				writer = getWriter(directory);
@@ -195,7 +193,6 @@ public class DefaultUserIndexService implements UserIndexService{
 		Directory directory = null;
 		try {
 			directory = FSDirectory.getDirectory(directoryPath);
-			writer = getWriter(directory);
 			while( writer == null)
 			{
 				writer = getWriter(directory);
@@ -249,11 +246,19 @@ public class DefaultUserIndexService implements UserIndexService{
 		Directory directory = null;
 		try {
 			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
-			writer = getWriter(directory);
+			
 			while( writer == null)
 			{
-				writer = getWriter(directory);
+				if(overwriteExistingIndex)
+				{
+				    writer = getWriterOverwriteExisting(directory);
+				}
+				else
+				{
+					writer = getWriter(directory);
+				}
 			}
+			
 			    
 			 
 			for(Document d : docs)
@@ -423,6 +428,28 @@ public class DefaultUserIndexService implements UserIndexService{
 		if( !IndexReader.isLocked(directory) )
 	    {
 			writer = new IndexWriter(directory, analyzer);
+	    }
+		return writer;
+	}
+	
+	/**
+	 * All methods should use this to obtain a writer on the directory.  This will return 
+	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
+	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
+	 * users index at once.
+	 * 
+	 * @param directory
+	 * @return
+	 * @throws CorruptIndexException
+	 * @throws LockObtainFailedException
+	 * @throws IOException
+	 */
+	private synchronized IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	{
+		IndexWriter writer = null;
+		if( !IndexReader.isLocked(directory) )
+	    {
+			writer = new IndexWriter(directory, analyzer, true);
 	    }
 		return writer;
 	}
