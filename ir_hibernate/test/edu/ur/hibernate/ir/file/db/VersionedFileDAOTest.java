@@ -338,6 +338,15 @@ public class VersionedFileDAOTest {
 		tm.commit(ts);
 		
 		
+		// Test rename
+		// Start the transaction
+		ts = tm.getTransaction(td);
+		otherVf = versionedIrFileDAO.getById(vif.getId(),false);
+        otherVf.reName("fileName4.doc");
+        versionedIrFileDAO.makePersistent(otherVf);
+		tm.commit(ts);
+		
+		
 		/*
 		 * Test versioned file and delete versioned file and user
 		 */
@@ -345,6 +354,13 @@ public class VersionedFileDAOTest {
 		ts = tm.getTransaction(td);
 		VersionedFile other = versionedIrFileDAO.getById(vif.getId(), false);
 		assert other != null : "Other should not be null";
+
+		// make sure name changes where saved
+		assert other.getNameWithExtension().equals("fileName4.doc") : "Name with extension should be fileName4.doc but is: " +  other.getNameWithExtension();
+		assert other.getName().equals("fileName4") : "Name should be fileName4 but is : " + other.getName();
+        assert other.getCurrentVersion().getIrFile().getName().equals("fileName4") : "Name with extension should be fileName4 but is: " +  other.getCurrentVersion().getIrFile().getName();
+        assert other.getCurrentVersion().getIrFile().getFileInfo().getExtension().equals("doc") : "extension should be .doc but is: " +  other.getCurrentVersion().getIrFile().getFileInfo().getExtension();
+		
 		versionedIrFileDAO.makeTransient(other);
 		fileDAO.makeTransient(fileDAO.getById(irFileId1, false));
 		fileDAO.makeTransient(fileDAO.getById(irFileId2, false));
