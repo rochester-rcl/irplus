@@ -17,7 +17,6 @@
 
 package edu.ur.ir.web.action.user;
 
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -26,7 +25,6 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileCollaborator;
-import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
@@ -37,6 +35,7 @@ import edu.ur.ir.web.action.UserIdAware;
  * Action to rename personal file
  * 
  * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
 public class RenamePersonalFile extends ActionSupport implements UserIdAware{
@@ -56,6 +55,9 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 	/** New file name */
 	private String newFileName;
 	
+	/** description of the file */
+	private String fileDescription;
+	
 	/**  Logger for action */
 	private static final Logger log = Logger.getLogger(RenamePersonalFile.class);
 	
@@ -72,7 +74,7 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 	 */
 	public String rename() {
 		
-		log.debug("Rename Personal file::" + personalFileId);
+		log.debug("Rename Personal file::" + personalFileId + " file name = " + newFileName);
 		
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
 		
@@ -81,74 +83,64 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 		{
 			return "accessDenied";
 		}
-		
-
-		boolean hasIllegalCharacter = false;
-		try {
-			personalFile.getVersionedFile().setName(newFileName);
-		} catch (IllegalFileSystemNameException e) {
-			renameMessage = getText("illegalNameError", new String[]{e.getName(), String.valueOf(e.getIllegalCharacters())});
-			addFieldError("illegalNameError", renameMessage);
-			hasIllegalCharacter = true;
-		}
-
-		// Check for duplicate names in collaborators file system
-		if (!hasIllegalCharacter) {
+	
+		// Check the owner's file system
+		PersonalFile ownerPf  = userFileSystemService.getPersonalFile(personalFile.getVersionedFile().getOwner(), personalFile.getVersionedFile());
+		ownerPf.getVersionedFile().setDescription(fileDescription);
+		if( !personalFile.getVersionedFile().getNameWithExtension().equals(newFileName))
+		{
 			Set<FileCollaborator> collaborators = personalFile.getVersionedFile().getCollaborators();
 			StringBuffer buffer = new StringBuffer();
 			String conflictingUserNames = null;
-	
-			// Check the owner's file system
-			PersonalFile ownerPf  = userFileSystemService.getPersonalFile(personalFile.getVersionedFile().getOwner(), personalFile.getVersionedFile());
 			
-			// Can be null when owner deletes the file from the system
-			if (ownerPf != null) {
-				if (checkFileNameExist(ownerPf.getVersionedFile().getOwner(), ownerPf.getPersonalFolder(), personalFile.getVersionedFile())) {
-					buffer.append(" ");
-					buffer.append(ownerPf.getOwner().getFirstName());
-					buffer.append(" ");
-					buffer.append(ownerPf.getOwner().getLastName());
-					buffer.append(",");
-		
-				}
-			}
-			// Check collaborator's file system
-			for (FileCollaborator collaborator: collaborators) {
-				PersonalFile pf  = userFileSystemService.getPersonalFile(collaborator.getCollaborator(), collaborator.getVersionedFile());
+		    // Can be null when owner deletes the file from the system
+		    if (ownerPf != null) {
+			    if (checkFileNameExist(ownerPf.getVersionedFile().getOwner(), ownerPf.getPersonalFolder(), newFileName)) {
+				    buffer.append(" ");
+				    buffer.append(ownerPf.getOwner().getFirstName());
+				    buffer.append(" ");
+				    buffer.append(ownerPf.getOwner().getLastName());
+				    buffer.append(",");
+			    }
+		    }
+		    // Check collaborator's file system
+		    for (FileCollaborator collaborator: collaborators) {
+			    PersonalFile pf  = userFileSystemService.getPersonalFile(collaborator.getCollaborator(), collaborator.getVersionedFile());
 				
-				// Can be null when the file is in shared file inbox
-				if (pf != null) {
-					if (checkFileNameExist(collaborator.getCollaborator(), pf.getPersonalFolder(), personalFile.getVersionedFile())) {
-						buffer.append(" ");
-						buffer.append(collaborator.getCollaborator().getFirstName());
-						buffer.append(" ");
-						buffer.append(collaborator.getCollaborator().getLastName());
-						buffer.append(",");
-	
-					}
-				}
-			}
+			    // Can be null when the file is in shared file inbox
+			    if (pf != null) {
+				    if (checkFileNameExist(collaborator.getCollaborator(), pf.getPersonalFolder(), newFileName)) {
+					    buffer.append(" ");
+					    buffer.append(collaborator.getCollaborator().getFirstName());
+					    buffer.append(" ");
+					    buffer.append(collaborator.getCollaborator().getLastName());
+					    buffer.append(",");
+				    }
+	    	    }
+		    }
 			
-	
-			if (buffer.length() == 0) {
-				try {
-					personalFile.getVersionedFile().getCurrentVersion().getIrFile().setName(newFileName);
-				} catch (IllegalFileSystemNameException e) {
-					// This is already caught in setting VersionedFile 
-					log.error("Illegal file name exception - " + e.getName());
-				}
-				userFileSystemService.makePersonalFilePersistent(personalFile);
-				fileRenamed = true;
+		    if (buffer.length() == 0) {
+			    try {
+				    personalFile.getVersionedFile().reName(newFileName);
+			    } catch (IllegalFileSystemNameException e) {
+				    renameMessage = getText("illegalNameError", new String[]{e.getName(), String.valueOf(e.getIllegalCharacters())});
+				    addFieldError("illegalNameError", renameMessage);
+			    }
+			    userFileSystemService.makePersonalFilePersistent(personalFile);
+			    fileRenamed = true;
 				
-			} else {
-				conflictingUserNames = buffer.toString();
-				conflictingUserNames = conflictingUserNames.substring(0, conflictingUserNames.length() - 1);
-			}
-			
-			
-			renameMessage = getText("renameFileMessage", new String[]{conflictingUserNames});
-			addFieldError("renameFileMessage", renameMessage);
-
+		    } else {
+		    	conflictingUserNames = buffer.toString();
+			    conflictingUserNames = conflictingUserNames.substring(0, conflictingUserNames.length() - 1);
+			    renameMessage = getText("renameFileMessage", new String[]{conflictingUserNames});
+			    addFieldError("renameFileMessage", renameMessage);
+			    
+		    }
+		}
+		else
+		{
+			// assume description change
+			userFileSystemService.makePersonalFilePersistent(personalFile);
 		}
 		
 		return SUCCESS;
@@ -157,28 +149,15 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 	/*
 	 * Checks if user has new file name in the specified folder
 	 */
-	private boolean checkFileNameExist(IrUser user, PersonalFolder personalFolder, VersionedFile vf) {
-		
-		boolean fileNameExist = false;
-		
-		List<PersonalFile> filesInFolder =  null;
-		if (personalFolder == null) {
-			filesInFolder = userFileSystemService
-				.getPersonalFilesInFolder(user.getId(), null);
-		} else {
-			filesInFolder = userFileSystemService
-			.getPersonalFilesInFolder(user.getId(), personalFolder.getId());
-			
+	private boolean checkFileNameExist(IrUser user, PersonalFolder personalFolder, String nameWithExtension) {
+		if (personalFolder == null) 
+		{
+			return user.getRootFile(nameWithExtension) != null;
+		} 
+		else 
+		{
+			return personalFolder.getFile(nameWithExtension) != null;
 		}
-		
-		for (PersonalFile f : filesInFolder) {
-			if ((f.getVersionedFile().getName().equalsIgnoreCase(newFileName)) && (!f.getVersionedFile().getId().equals(vf.getId()))) {
-				fileNameExist = true;
-				break;
-			}
-		}
-		return fileNameExist;
-
 	}
 
 	/**
@@ -188,7 +167,8 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 	 */
 	public String get() {
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
-		newFileName = personalFile.getVersionedFile().getName();
+		newFileName = personalFile.getVersionedFile().getNameWithExtension();
+		fileDescription = personalFile.getVersionedFile().getDescription();
 		return "get";
 	}
 	/**
@@ -284,6 +264,14 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 	
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public String getFileDescription() {
+		return fileDescription;
+	}
+
+	public void setFileDescription(String fileDescription) {
+		this.fileDescription = fileDescription;
 	}
 
 }
