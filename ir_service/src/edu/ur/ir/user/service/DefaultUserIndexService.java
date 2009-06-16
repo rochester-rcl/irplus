@@ -231,7 +231,10 @@ public class DefaultUserIndexService implements UserIndexService{
 	    }
 	}
 
-	@Override
+	/**
+	 * Add users to the index
+	 * @see edu.ur.ir.user.UserIndexService#addUsers(java.util.List, java.io.File, boolean)
+	 */
 	public void addUsers(List<IrUser> users, File userIndexFolder,
 			boolean overwriteExistingIndex) {
 			
