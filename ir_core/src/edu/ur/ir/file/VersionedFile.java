@@ -653,11 +653,11 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	}
 	
 	/**
-	 * Get the name.
+	 * set the name - package protected.
 	 * 
 	 * @param name
 	 */
-	public void setName(String name) throws IllegalFileSystemNameException 
+	void setName(String name) throws IllegalFileSystemNameException 
 	{
 		if( name == null )
 		{
