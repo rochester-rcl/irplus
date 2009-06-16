@@ -22,7 +22,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+
 
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.FileSystem;
@@ -234,8 +236,8 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 
 		final VersionedFile other = (VersionedFile) o;
 
-		if( ( name != null && !name.equals(other.getName()) ) ||
-			( name == null && other.getName() != null ) ) return false;
+		if( ( getNameWithExtension() != null && !getNameWithExtension().equals(other.getNameWithExtension()) ) ||
+			( getNameWithExtension() == null && other.getNameWithExtension() != null ) ) return false;
 		
 		if( ( id != null && !id.equals(other.getId()) ) ||
 			( id == null && other.getId() != null ) ) return false;
@@ -655,7 +657,12 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	 * 
 	 * @param name
 	 */
-	public void setName(String name) throws IllegalFileSystemNameException {
+	public void setName(String name) throws IllegalFileSystemNameException 
+	{
+		if( name == null )
+		{
+			throw new IllegalStateException("versioned file name cannot be null");
+		}
 		
 		for(int i = 0; i < FileSystem.INVALID_CHARACTERS.length; i++) {
 			if (name.contains(Character.toString(FileSystem.INVALID_CHARACTERS[i]))) {
@@ -664,5 +671,31 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 		}
 
 		this.name = name;
+	}
+	
+	/**
+	 * Rename the file - assumes that the last "." with following characters are the extension.  Will
+	 * update the name of the versioned file and the current name of the underlying current version
+	 * name and extension.
+	 * 
+	 * @param nameWithExtension - full name with extension.
+	 * @throws IllegalFileSystemNameException 
+	 */
+	public void reName(String nameWithExtension) throws IllegalFileSystemNameException
+	{
+		FileVersion currentVersion = getCurrentVersion();
+		IrFile file = currentVersion.getIrFile();
+		String baseName = FilenameUtils.getBaseName(nameWithExtension);
+		setName(baseName);
+		file.setName(baseName);
+		
+		String extension = FilenameUtils.getExtension(nameWithExtension);
+		if( extension.equals(""))
+		{
+			extension = null;
+		}
+		
+		setExtension(extension);
+		file.getFileInfo().setExtension(extension);
 	}
 }
