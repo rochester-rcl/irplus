@@ -37,8 +37,16 @@
             <result type="redirectAction" name="success">viewRepository</result>
         </action>
         
+        <!--  re-index all the items in the repository -->
         <action name="reIndexInstitutionalItems" 
             class="edu.ur.ir.web.action.repository.ReIndexInstitutionalItem">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
+        <!--  re-index all the users in the repository -->
+        <action name="reIndexUsers" 
+            class="edu.ur.ir.web.action.user.ReIndexUsers">
             <interceptor-ref name="editStack"/>
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
