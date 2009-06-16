@@ -225,5 +225,79 @@ public class VersionedFileTest {
 		repoHelper.cleanUpRepository();
 	}
 	
+	/**
+	 * Test renaming a file with an extension.
+	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
+	 */
+	public void testReName() throws LocationAlreadyExistsException, IllegalFileSystemNameException
+	{
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+		
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_core_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		// create the first file to store in the temporary folder
+		File f = testUtil.creatFile(directory, "testFile",
+				"Hello  - versionedIrFile This is text in a file"); 
+		
+        // create the first file to store in the temporary folder
+		File f2 = testUtil.creatFile(directory, "testFile2", 
+				"Hello  - versionedIrFile This is text in a file 2"); 
+
+		// get the file database 
+		FileDatabase fd = repo.getFileDatabase();
+		
+		// create a new file info container
+		FileInfo fileInfo1 = fd.addFile(f, "newFile1");
+		fileInfo1.setDisplayName("displayName1");
+		
+		// create a second file info container
+		FileInfo fileInfo2 = fd.addFile(f2, "newFile2");
+		fileInfo2.setDisplayName("displayName2");
+		
+		// create a new user
+		IrUser user = new IrUser("username", "password");
+		
+	
+		VersionedFile vif = new VersionedFile(user, fileInfo1, "displayName1");
+		assert vif.getCurrentVersion().getIrFile().getFileInfo().equals(fileInfo1): "File info 1 " + fileInfo1 + " should equal "; 
+		assert vif.getCurrentVersion().getVersionNumber() == 1: " File versions should be equal";
+
+	
+		// add a new version to the file
+		FileVersion version = vif.addNewVersion(fileInfo2, user);
+		assert version.equals(vif.getCurrentVersion()): 
+			"Version should be the new version but is " + vif.getCurrentVersion();
+		
+		// make sure the version number has changed
+		assert vif.getLargestVersion() == vif.getCurrentVersion().getVersionNumber(): "Largest version should equal 2";
+		
+		// switch the current version - user wants the older version to be the current version
+		// create a new version with the same file information
+		assert vif.changeCurrentIrVersion(1): "New version should be changed";
+		assert vif.getCurrentVersion().getIrFile().getFileInfo().equals(fileInfo1) : "Current file should be found " +
+		" current = " + vif.getCurrentVersion() + "fileInfo1 = " + fileInfo1;
+		
+		// rename the most current version with a new file name and extension
+		vif.reName("fileName4.doc");
+		assert vif.getNameWithExtension().equals("fileName4.doc") : "Name with extension should be fileName4.doc but is: " +  vif.getNameWithExtension();
+		assert vif.getName().equals("fileName4") : "Name should be fileName4 but is : " + vif.getName();
+
+		
+		repoHelper.cleanUpRepository();
+	}
+	
 
 }
