@@ -28,7 +28,6 @@
             <urstb:td>Name</urstb:td>
             <urstb:td>URL</urstb:td>
             <urstb:td>Description</urstb:td>
-            <urstb:td>Order</urstb:td>
             <urstb:td>Remove</urstb:td>
         </urstb:tr>
     </urstb:thead>
@@ -85,9 +84,6 @@
                         </urstb:td>
                         <urstb:td>
                             ${link.description}   
-                        </urstb:td>
-                        <urstb:td>
-                            ${link.order}   
                         </urstb:td>
                         <urstb:td>
                              <span class="deleteBtnImg">&nbsp;</span>  <a href="javascript:YAHOO.ur.researcher.link.removeLink('${link.id}');"> Remove </a>

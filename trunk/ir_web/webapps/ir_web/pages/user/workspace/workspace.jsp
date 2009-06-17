@@ -178,22 +178,17 @@
 	                 <!--  Start 4th -->
 	                 <div id="tab4">
 	                      <br/>
-	                     <table>
-	                        <tr>
-	                            <td>
+	                    
 	                            <button class="ur_button"
 	                                    onmouseover="this.className='ur_buttonover';"
  		                                onmouseout="this.className='ur_button';"
  		                                onclick="javascript:YAHOO.ur.shared.file.inbox.moveSharedFiles();"> <span class="pageWhiteGoBtnImg">&nbsp;</span>Move To My Files</button>
-	                            </td>
-	                            <td>
+	                           
 	                            <button class="ur_button"
 	                                    onmouseover="this.className='ur_buttonover';"
  		                                onmouseout="this.className='ur_button';"
  		                                onclick="javascript:YAHOO.ur.shared.file.inbox.deleteInboxFileConfirmDialog.showDialog();"> <span class="deleteBtnImg">&nbsp;</span>Delete</button>
-	                            </td>
-	                        </tr>
-	                      </table>
+	                     
 	         
 	                     <!--  location where shared inbox content will be placed -->
 	                     <div id="shared_folder_inbox">

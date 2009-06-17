@@ -69,6 +69,11 @@
             
             <h3> Add publications to Researcher </h3>
             
+            <button class="ur_button" 
+                    onmouseover="this.className='ur_buttonover';"
+                    onmouseout="this.className='ur_button';"
+                    onclick="javascript:YAHOO.ur.researcher.publications.viewResearcherFolders();">Back to Folders</button>
+            
             <!--  this is the body region of the page -->
             <div id="bd">
             
@@ -77,7 +82,7 @@
 		       			 <!--  table of personal publications and collections -->
 	                      <div id="newPersonalCollections" >
 	                          
-	                          <ur:basicForm  id="collections" name="myPersonalCollections"  method="POST" action="user/getPersonalCollectionsAndItems.action">
+	                          <form  id="collections" name="myPersonalCollections"  method="POST" action="user/getPersonalCollectionsAndItems.action">
 	                             <input type="hidden" id="myCollections_parentCollectionId" 
 	                                   name="parentCollectionId" 
 	                                   value="${parentCollectionId}"/>
@@ -88,7 +93,7 @@
 	                                   name="parentFolderId" 
 	                                   value="${parentFolderId}"/>
 	                             
-	                          </ur:basicForm>
+	                          </form>
 	                      </div>
 	                      <!--  end personal files and folders div -->
 		       
@@ -98,11 +103,11 @@
         	        <div class="yui-u">
         	        	<!--  Table of selected files -->
                     	<div id="newResearcherFolders" >
-	                          <ur:basicForm  id="files" name="myResearcherFolders"  method="POST" action="user/getResearcherFolders.action">
+	                          <form  id="files" name="myResearcherFolders"  method="POST" action="user/getResearcherFolders.action">
 	                              <input type="hidden" id="myResearcherFolders_parentFolderId" 
 	                                   name="parentFolderId" 
 	                                   value="${parentFolderId}"/>
-	                          </ur:basicForm>
+	                          </form>
 	                      </div>
 	                      <!--  end table of selected files div -->
             	    </div>
@@ -113,22 +118,23 @@
                 </div>
                 <!--  end the grid -->
 				
-				<div class="clear">&nbsp;</div>
+				<br/>
 				
-				<table width="100%">
-                  <tr>
-                      <td align="left" >
-                          <button class="ur_button" 
-                               onmouseover="this.className='ur_buttonover';"
-                               onmouseout="this.className='ur_button';"
-                               onclick="javascript:YAHOO.ur.researcher.publications.viewResearcherFolders();">Back to Folders</button>
-                      </td>
-                      
-                     
-                  </tr>
-                </table>
-                
+                <button class="ur_button" 
+                        onmouseover="this.className='ur_buttonover';"
+                        onmouseout="this.className='ur_button';"
+                        onclick="javascript:YAHOO.ur.researcher.publications.viewResearcherFolders();">Back to Folders</button>
+   
+            </div>
+            <!--  end the body tag --> 
 
+            <!--  this is the footer of the page -->
+            <c:import url="/inc/footer.jsp"/>
+      
+         </div>
+        <!-- end doc -->
+        
+        
 	      <!--  Add file error dialog -->
 	      <div id="publicationErrorDialog" class="hidden">
 	          <div class="hd">Cannot add publication</div>
@@ -138,15 +144,6 @@
 	      </div>
 	      <!--  end Add file error  dialog -->  
       
-                      
-            </div>
-            <!--  end the body tag --> 
-
-            <!--  this is the footer of the page -->
-            <c:import url="/inc/footer.jsp"/>
-      
-         </div>
-        <!-- end doc -->
     
     </body>
 </html>
