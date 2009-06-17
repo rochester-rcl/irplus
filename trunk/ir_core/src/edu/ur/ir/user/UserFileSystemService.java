@@ -36,7 +36,7 @@ import edu.ur.ir.repository.Repository;
  */
 public interface UserFileSystemService {
 	
-	/** Default id for the root folder of all users*/
+	/** Default id for the root folder for each users*/
 	public static final long ROOT_FOLDER_ID = 0L;
 
 	

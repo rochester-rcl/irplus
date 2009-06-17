@@ -239,7 +239,7 @@ public class Researcher extends BasePersistent{
 	 * 
 	 * @param file - to add as a root file
 	 */
-	public void addRootFile(ResearcherFile file) throws DuplicateNameException
+	public void addRootFile(ResearcherFile file) 
 	{
 		// file already part of this 
 		if(!rootFiles.contains(file))

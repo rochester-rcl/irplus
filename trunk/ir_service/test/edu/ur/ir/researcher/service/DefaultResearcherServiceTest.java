@@ -40,6 +40,7 @@ import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
 import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.researcher.Researcher;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherService;
@@ -69,6 +70,10 @@ public class DefaultResearcherServiceTest {
 		/** User file systemdata access */
 		ResearcherService researcherService = 
 			(ResearcherService) ctx.getBean("researcherService");
+		
+		/** User file systemdata access */
+		ResearcherFileSystemService researcherFileSystemService = 
+			(ResearcherFileSystemService) ctx.getBean("researcherFileSystemService");
 		
 		/** Item services */
 		ItemService itemService = (ItemService) ctx.getBean("itemService");
@@ -196,7 +201,7 @@ public class DefaultResearcherServiceTest {
 			ts = tm.getTransaction(td);
 			try
 			{
-			    researcherService.createNewRootFolder(researcher, "folderName");
+			    researcherFileSystemService.createNewRootFolder(researcher, "folderName");
 			}
 			catch(Exception e)
 			{
@@ -243,7 +248,7 @@ public class DefaultResearcherServiceTest {
 			// new transaction
 			ts = tm.getTransaction(td);
 			
-			ResearcherPublication p = researcherService.createRootPublication(researcher, item, 1);
+			ResearcherPublication p = researcherFileSystemService.createRootPublication(researcher, item, 1);
 			
 			tm.commit(ts);
 			

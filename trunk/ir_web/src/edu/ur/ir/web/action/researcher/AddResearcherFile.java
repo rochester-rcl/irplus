@@ -34,6 +34,7 @@ import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherFile;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherInstitutionalItem;
 import edu.ur.ir.researcher.ResearcherLink;
@@ -62,6 +63,9 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 	
 	/** Service for item.  */
 	private ResearcherService researcherService;
+	
+	/** Service for dealing with researcher file system */
+	private ResearcherFileSystemService researcherFileSystemService;
 	
 	/** File system service for user */
 	private UserFileSystemService userFileSystemService;
@@ -182,8 +186,8 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 				
 		if (parentFolderId != null && parentFolderId > 0) {
 			
-			ResearcherFolder parentFolder = researcherService.getResearcherFolder(parentFolderId, false);
-			researcherService.addFileToResearcher(parentFolder, vf.getCurrentVersion().getIrFile(), vf.getLargestVersion());
+			ResearcherFolder parentFolder = researcherFileSystemService.getResearcherFolder(parentFolderId, false);
+			researcherFileSystemService.addFileToResearcher(parentFolder, vf.getCurrentVersion().getIrFile(), vf.getLargestVersion());
 		} else {
 			researcher.createRootFile(vf.getCurrentVersion().getIrFile(), vf.getLargestVersion());
 			researcherService.saveResearcher(researcher);
@@ -204,23 +208,23 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 		}
 		if(parentFolderId != null && parentFolderId > 0)
 		{
-			ResearcherFolder reseacherFolder = researcherService.getResearcherFolder(parentFolderId, false);
+			ResearcherFolder reseacherFolder = researcherFileSystemService.getResearcherFolder(parentFolderId, false);
 			if(!reseacherFolder.getResearcher().getId().equals(researcher.getId()))
 			{
 				return "accessDenied";
 			}
-			researcherFolderPath = researcherService.getResearcherFolderPath(parentFolderId);
+			researcherFolderPath = researcherFileSystemService.getResearcherFolderPath(parentFolderId);
 		}
 		
-		Collection<ResearcherFolder> myResearcherFolders = researcherService.getFoldersForResearcher(researcher.getId(), parentFolderId);
+		Collection<ResearcherFolder> myResearcherFolders = researcherFileSystemService.getFoldersForResearcher(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherFile> myResearcherFiles = researcherService.getResearcherFiles(researcher.getId(), parentFolderId);
+		Collection<ResearcherFile> myResearcherFiles = researcherFileSystemService.getResearcherFiles(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherPublication> myResearcherPublications = researcherService.getResearcherPublications(researcher.getId(), parentFolderId);
+		Collection<ResearcherPublication> myResearcherPublications = researcherFileSystemService.getResearcherPublications(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherLink> myResearcherLinks = researcherService.getResearcherLinks(researcher.getId(), parentFolderId);
+		Collection<ResearcherLink> myResearcherLinks = researcherFileSystemService.getResearcherLinks(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherService.getResearcherInstitutionalItems(researcher.getId(), parentFolderId);
+		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherFileSystemService.getResearcherInstitutionalItems(researcher.getId(), parentFolderId);
 		
 		Collection<FileSystem> researcherFileSystem = new LinkedList<FileSystem>();
 
@@ -286,7 +290,7 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 			return "accessDenied";
 		}
 		
-		ResearcherFile researcherFile = researcherService.getResearcherFile(researcherFileId, false);
+		ResearcherFile researcherFile = researcherFileSystemService.getResearcherFile(researcherFileId, false);
 		// researchers can only access their own information
 		if(!researcherFile.getResearcher().getUser().getId().equals(userId))
 		{
@@ -297,7 +301,7 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 		researcherFile.setIrFile(fileVersion.getIrFile());
 		researcherFile.setVersionNumber(fileVersion.getVersionNumber());
 
-		researcherService.saveResearcherFile(researcherFile);
+		researcherFileSystemService.saveResearcherFile(researcherFile);
 		
 		return SUCCESS;
 	}
@@ -548,6 +552,15 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 
 	public void setUserId(Long userId) {
 		this.userId = userId;	
+	}
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 
 }

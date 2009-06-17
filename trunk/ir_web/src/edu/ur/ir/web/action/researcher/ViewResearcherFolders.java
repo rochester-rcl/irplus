@@ -28,6 +28,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherFile;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherInstitutionalItem;
 import edu.ur.ir.researcher.ResearcherLink;
@@ -59,6 +60,9 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 	
 	/**  Researcher information data access  */
 	private ResearcherService researcherService;
+	
+	/** Service for dealing with researcher file system information */
+	private ResearcherFileSystemService researcherFileSystemService;
 
     /** A collection of folders and files for a user in a given location of
         ther personal directory.*/
@@ -151,14 +155,14 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 		    for(int index = 0; index < folderIds.length; index++)
 		    {
 			    log.debug("Deleting folder with id " + folderIds[index]);
-			    ResearcherFolder pf = researcherService.getResearcherFolder(folderIds[index], false);
+			    ResearcherFolder pf = researcherFileSystemService.getResearcherFolder(folderIds[index], false);
 			    
 			    if( !pf.getResearcher().getUser().getId().equals(userId))
 			    {
 			    	return "accessDenied";
 			    }
 
-			    researcherService.deleteFolder(pf);
+			    researcherFileSystemService.deleteFolder(pf);
 		    }
 		}
 		
@@ -167,14 +171,14 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 			for(int index = 0; index < fileIds.length; index++)
 			{
 				log.debug("Deleting file with id " + fileIds[index]);
-				ResearcherFile rf = researcherService.getResearcherFile( fileIds[index], false);
+				ResearcherFile rf = researcherFileSystemService.getResearcherFile( fileIds[index], false);
 				
 				if( !rf.getResearcher().getUser().getId().equals(userId))
 				{
 					return "accessDenied";
 				}
 				
-				researcherService.deleteFile(rf);
+				researcherFileSystemService.deleteFile(rf);
 			}
 		}
 		
@@ -183,12 +187,12 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 			for(int index = 0; index < publicationIds.length; index++)
 			{
 				log.debug("Deleting publication with id " + publicationIds[index]);
-				ResearcherPublication rp = researcherService.getResearcherPublication( publicationIds[index], false);
+				ResearcherPublication rp = researcherFileSystemService.getResearcherPublication( publicationIds[index], false);
 				if( !rp.getResearcher().getUser().getId().equals(userId))
 				{
 					return "accessDenied";
 				}
-				researcherService.deletePublication(rp);
+				researcherFileSystemService.deletePublication(rp);
 			}
 		}
 		
@@ -197,12 +201,12 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 			for(int index = 0; index < institutionalItemIds.length; index++)
 			{
 				log.debug("Deleting Institutional Item with id " + institutionalItemIds[index]);
-				ResearcherInstitutionalItem ri = researcherService.getResearcherInstitutionalItem(institutionalItemIds[index], false);
+				ResearcherInstitutionalItem ri = researcherFileSystemService.getResearcherInstitutionalItem(institutionalItemIds[index], false);
 				if( !ri.getResearcher().getUser().getId().equals(userId))
 				{
 					return "accessDenied";
 				}
-				researcherService.deleteInstitutionalItem(ri);
+				researcherFileSystemService.deleteInstitutionalItem(ri);
 			}
 		}		
 		
@@ -211,12 +215,12 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 			for(int index = 0; index < linkIds.length; index++)
 			{
 				log.debug("Deleting link with id " + linkIds[index]);
-				ResearcherLink rl = researcherService.getResearcherLink( linkIds[index], false);
+				ResearcherLink rl = researcherFileSystemService.getResearcherLink( linkIds[index], false);
 				if( !rl.getResearcher().getUser().getId().equals(userId))
 				{
 					return "accessDenied";
 				}
-				researcherService.deleteLink(rl);
+				researcherFileSystemService.deleteLink(rl);
 			}
 		}
 		
@@ -233,21 +237,21 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 		
 		if(parentFolderId != null && parentFolderId > 0)
 		{
-		    folderPath = researcherService.getResearcherFolderPath(parentFolderId);
+		    folderPath = researcherFileSystemService.getResearcherFolderPath(parentFolderId);
 		}
 		
 		log.debug("Folder Path ::" + folderPath);
 		log.debug("Parent Folder Id ::" + parentFolderId);
 		
-		Collection<ResearcherFolder> myResearcherFolders = researcherService.getFoldersForResearcher(researcherId, parentFolderId);
+		Collection<ResearcherFolder> myResearcherFolders = researcherFileSystemService.getFoldersForResearcher(researcherId, parentFolderId);
 		
-		Collection<ResearcherFile> myResearcherFiles = researcherService.getResearcherFiles(researcherId, parentFolderId);
+		Collection<ResearcherFile> myResearcherFiles = researcherFileSystemService.getResearcherFiles(researcherId, parentFolderId);
 		
-		Collection<ResearcherPublication> myResearcherPublications = researcherService.getResearcherPublications(researcherId, parentFolderId);
+		Collection<ResearcherPublication> myResearcherPublications = researcherFileSystemService.getResearcherPublications(researcherId, parentFolderId);
 
-		Collection<ResearcherLink> myResearcherLinks = researcherService.getResearcherLinks(researcherId, parentFolderId);
+		Collection<ResearcherLink> myResearcherLinks = researcherFileSystemService.getResearcherLinks(researcherId, parentFolderId);
 
-		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherService.getResearcherInstitutionalItems(researcherId, parentFolderId);
+		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherFileSystemService.getResearcherInstitutionalItems(researcherId, parentFolderId);
 
 	    fileSystem = new LinkedList<FileSystem>();
 
@@ -433,6 +437,15 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 
 

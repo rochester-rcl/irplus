@@ -74,6 +74,7 @@ public class ResponseBufferedOutputWriter {
         {
         	// this will only happen in a tomcat contanier - it is when
         	// the user selects cancel on the download window.
+        	log.error("Exception name is : " +  e.getClass().getName());
         	if( e.getClass().getName().equals("ClientAbortException"))
         	{
         		log.error("client abort exception - this should be ok ",e);

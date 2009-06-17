@@ -47,7 +47,7 @@ import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorDAO;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.repository.RepositoryService;
-import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
@@ -93,9 +93,9 @@ public class DefaultItemService implements ItemService {
 	/**  repository service  */
 	private RepositoryService repositoryService;
 	
-	/** Researcher service */
-	private ResearcherService researcherService;
-
+	/** Services for dealing with researcher file system information */
+	private ResearcherFileSystemService researcherFileSystemService;
+	
 	/** Security service */
 	private SecurityService securityService;
 	
@@ -154,7 +154,7 @@ public class DefaultItemService implements ItemService {
 		for(ItemVersion itemVersion : itemVersions)
 		{
 			// Check if GenericItem is used by researcher page or published to Institutional Collection*/
-			if ((researcherService.getResearcherPublicationCount(itemVersion.getItem()) == 0)
+			if ((researcherFileSystemService.getResearcherPublicationCount(itemVersion.getItem()) == 0)
 					&& (!itemVersion.getItem().isPublishedToSystem())) 
 			{
 				itemsToDelete.add(itemVersion.getItem());
@@ -240,7 +240,7 @@ public class DefaultItemService implements ItemService {
 			//Check if this IrFile is being used by any Item or PersonalFile.
 			//If yes, then do not add the IrFile and FileInfo to the list to be deleted.
 			if ( (userFileSystemService.getPersonalFileCount(irFile) == 0) && (getItemFileCount(irFile) == 0)
-					&& (researcherService.getResearcherFileCount(irFile) == 0)) {
+					&& (researcherFileSystemService.getResearcherFileCount(irFile) == 0)) {
 				log.debug("Adding Ir file " + irFile);
 				files.add(irFile);
 				fileInfos.add(irFile.getFileInfo());
@@ -300,7 +300,7 @@ public class DefaultItemService implements ItemService {
 			//If yes, then do not add the IrFile and FileInfo to the list to be deleted.
 			Long itemFileCount = getItemFileCount(irFile);
 			Long fileSystemFileCount = userFileSystemService.getPersonalFileCount(irFile);
-			Long researcherFileCount = researcherService.getResearcherFileCount(irFile);
+			Long researcherFileCount = researcherFileSystemService.getResearcherFileCount(irFile);
 			
 			if (itemFileCount == 1l && fileSystemFileCount == 0
 						&& researcherFileCount == 0) {
@@ -523,14 +523,6 @@ public class DefaultItemService implements ItemService {
 		externalPublishedItemDAO.makeTransient(externalPublishedItem);
 	}
 
-	public ResearcherService getResearcherService() {
-		return researcherService;
-	}
-
-	public void setResearcherService(ResearcherService researcherService) {
-		this.researcherService = researcherService;
-	}
-	
 	/**
 	 * Get the count of item version using this generic item
 	 * 
@@ -559,5 +551,14 @@ public class DefaultItemService implements ItemService {
 
 	public void setReviewableItemService(ReviewableItemService reviewableItemService) {
 		this.reviewableItemService = reviewableItemService;
+	}
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 }

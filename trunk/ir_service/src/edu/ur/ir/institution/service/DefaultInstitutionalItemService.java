@@ -37,7 +37,7 @@ import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemSecurityService;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.person.PersonName;
-import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -64,8 +64,8 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	/** Item security service */
 	private ItemSecurityService itemSecurityService;
 	
-	/** Researcher service */
-	private ResearcherService researcherService;
+	/** Service for dealing with researcher file system */
+	private ResearcherFileSystemService researcherFileSystemService;
 	
 	/** Reviewable item service */
 	private ReviewableItemService reviewableItemService;
@@ -88,7 +88,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		}
 		
 		// Delete ResearcherInstitutionalItem referring to this institutional item
-		researcherService.deleteResearcherInstitutionalItem(institutionalItem);
+		researcherFileSystemService.deleteResearcherInstitutionalItem(institutionalItem);
 		
 		addDeleteHistory(institutionalItem, deletingUser);
 		 
@@ -104,7 +104,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			 // published in another item
 			 Long countForUsers = itemService.getItemVersionCount(genericItem);
 			 Long countInstitutionalItems = institutionalItemDAO.getCountByGenericItem(genericItem.getId());
-			 Long countResearcherPublications = researcherService.getResearcherPublicationCount(genericItem);
+			 Long countResearcherPublications = researcherFileSystemService.getResearcherPublicationCount(genericItem);
 			 
 			 if( countForUsers == 0l && countInstitutionalItems == 0l && countResearcherPublications == 0l)
 			 {
@@ -466,10 +466,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		this.itemSecurityService = itemSecurityService;
 	}
 
-	public void setResearcherService(ResearcherService researcherService) {
-		this.researcherService = researcherService;
-	}
-
 	public void setReviewableItemService(ReviewableItemService reviewableItemService) {
 		this.reviewableItemService = reviewableItemService;
 	}
@@ -536,5 +532,14 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public List<InstitutionalItem> getItemsOrderByDate(int rowStart, int maxResults,
 			InstitutionalCollection collection, OrderType orderType) {
 		return institutionalItemDAO.getItemsOrderByDate(rowStart, maxResults, collection, orderType);
+	}
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 }

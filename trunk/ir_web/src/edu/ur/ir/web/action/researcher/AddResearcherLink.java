@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.researcher.Researcher;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherService;
@@ -37,8 +38,11 @@ import edu.ur.ir.web.action.UserIdAware;
 public class AddResearcherLink extends ActionSupport implements UserIdAware{
 	
 
-	/** User file system service. */
+	/** Researcher service. */
 	private ResearcherService researcherService;
+	
+	/** Service for dealing with researcher file system information */
+	private ResearcherFileSystemService researcherFileSystemService;
 	
 	/** the name of the folder to add */
 	private String linkName;
@@ -93,13 +97,13 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 			 if( researcher.getRootLink(linkName) == null )
 		     {
 				 ResearcherLink researcherLink = researcher.createRootLink(linkUrl, linkName, linkDescription);
-				 researcherService.saveResearcherLink(researcherLink);
+				 researcherFileSystemService.saveResearcherLink(researcherLink);
 				 added = true;
 	         } 
 		}
 		else
 		{
-			ResearcherFolder folder = researcherService.getResearcherFolder(parentFolderId, true);
+			ResearcherFolder folder = researcherFileSystemService.getResearcherFolder(parentFolderId, true);
 			
 			if(!folder.getResearcher().getId().equals(researcher.getId()))
 			{
@@ -111,7 +115,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 			if( researcherLink == null )
 		    {
 			    researcherLink = folder.createLink(linkName, linkUrl, linkDescription);
-			    researcherService.saveResearcherFolder(folder);
+			    researcherFileSystemService.saveResearcherFolder(folder);
 			    added = true;
 
 			}
@@ -153,7 +157,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 		}
 		else
 		{
-			other = researcherService.getResearcherLink(linkName, parentFolderId);
+			other = researcherFileSystemService.getResearcherLink(linkName, parentFolderId);
 			if( !other.getResearcher().getId().equals(researcher.getId()))
 			{
 				return "accessDenied";
@@ -163,7 +167,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 		// name has been changed and does not conflict
 		if( other == null)
 		{
-			ResearcherLink existingLink = researcherService.getResearcherLink(updateLinkId, true);
+			ResearcherLink existingLink = researcherFileSystemService.getResearcherLink(updateLinkId, true);
 			if( !existingLink.getResearcher().getId().equals(researcher.getId()))
 			{
 				return "accessDenied";
@@ -171,7 +175,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 			existingLink.setName(linkName);
 			existingLink.setDescription(linkDescription);
 			existingLink.setLink(linkUrl);
-			researcherService.saveResearcherLink(existingLink);
+			researcherFileSystemService.saveResearcherLink(existingLink);
 			added = true;
 		}
 		// name has not been changed
@@ -179,7 +183,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 		{
 			other.setDescription(linkDescription);
 			other.setLink(linkUrl);
-			researcherService.saveResearcherLink(other);
+			researcherFileSystemService.saveResearcherLink(other);
 			added = true;
 		}
 
@@ -298,5 +302,14 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 	
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 }

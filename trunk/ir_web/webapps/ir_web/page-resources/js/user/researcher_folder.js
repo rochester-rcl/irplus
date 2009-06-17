@@ -489,6 +489,28 @@ YAHOO.ur.researcher.folder = {
 	    myResearcherFolderTable.submitForm(myFolderAction);
 	},
 	
+	/**
+     * Allow researcher information to be moved
+     */
+    moveResearcherData : function()
+    {
+        if (!urUtil.checkForNoSelections(document.myFolders.folderIds) &&
+	        !urUtil.checkForNoSelections(document.myFolders.fileIds) &&
+	        !urUtil.checkForNoSelections(document.myFolders.publicationIds)&&
+	        !urUtil.checkForNoSelections(document.myFolders.linkIds)&&
+	        !urUtil.checkForNoSelections(document.myFolders.institutionalItemIds)
+	        )
+		{
+			 alert('Please select at least one checkbox of item you wish to move.');
+	    } 
+	    else
+	    {
+            var viewMoveAction = basePath + 'user/viewMoveResearcherLocations.action';
+            document.myFolders.action = viewMoveAction;
+            document.myFolders.submit();
+        }
+    },
+	
 	// initialize the page
 	// this is called once the dom has
 	// been created
@@ -505,6 +527,8 @@ YAHOO.ur.researcher.folder = {
 	    YAHOO.ur.researcher.folder.createNewLinkDialog();
 	    YAHOO.ur.researcher.folder.createFolderDeleteConfirmDialog();
 	}
+	
+ 
 }
 
 // initialize the code once the dom is ready

@@ -30,7 +30,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherFile;
-import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.web.util.WebIoUtils;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -43,6 +43,8 @@ import edu.ur.ir.web.action.UserIdAware;
 public class DownloadResearcherFile extends ActionSupport 
 implements ServletResponseAware, ServletRequestAware, UserIdAware
 {
+	/** Service for dealing with researcher file system information */
+	private ResearcherFileSystemService researcherFileSystemService;
 
 	/** Eclipse generated id. */
 	private static final long serialVersionUID = 5430030320610916010L;
@@ -53,9 +55,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	/**  File to download */
 	private Long researcherFileId;
 
-	/** file system managagment services */
-	private ResearcherService researcherService;
-	
+
 	/**  Servlet response to write to */
 	private HttpServletResponse response;
 	
@@ -80,7 +80,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         	return "notFound";
         }
         
-        ResearcherFile researcherFile = researcherService.getResearcherFile(researcherFileId, false);
+        ResearcherFile researcherFile = researcherFileSystemService.getResearcherFile(researcherFileId, false);
         Researcher researcher = researcherFile.getResearcher();
         
         if( researcher.isPublic()  || researcher.getUser().getId().equals(userId))
@@ -122,15 +122,6 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	}
 
 	/**
-	 * Get the user file system service.
-	 * 
-	 * @return
-	 */
-	public ResearcherService getResearcherService() {
-		return researcherService;
-	}
-	
-	/**
 	 * Get the user id.
 	 * 
 	 * @param userId
@@ -140,21 +131,9 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 		this.userId = userId;
 	}
 
-
-	/**
-	 * Set the user file system service.
-	 * 
-	 * @param researcherService
-	 */
-	public void setResearcherService(ResearcherService researcherService) {
-		this.researcherService = researcherService;
-	}
-
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
 	}
-
-
 
 	public WebIoUtils getWebIoUtils() {
 		return webIoUtils;
@@ -163,6 +142,17 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 
 	public void setWebIoUtils(WebIoUtils webIoUtils) {
 		this.webIoUtils = webIoUtils;
+	}
+
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 
 }
