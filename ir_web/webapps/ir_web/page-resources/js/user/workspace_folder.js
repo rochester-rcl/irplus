@@ -37,7 +37,6 @@ var getFileNameAction = basePath + 'user/getFile.action';
 
 // actions for moving folders
 var myAvailableFolderMoveAction = basePath + 'user/availablePersonalFoldersMove.action';
-var folderMoveAction = basePath + 'user/movePersonalFileSystemObjects.action';
 
 // actions for inviting users
 var inviteUserAction = basePath + 'user/viewInviteUser.action';

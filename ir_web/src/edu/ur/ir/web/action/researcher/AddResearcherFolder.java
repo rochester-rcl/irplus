@@ -23,6 +23,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.researcher.Researcher;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -35,8 +36,11 @@ import edu.ur.ir.web.action.UserIdAware;
  */
 public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 	
-	/** User file system service. */
+	/** Researcher service. */
 	private ResearcherService researcherService;
+	
+	/** Service for dealing with researcher file system information */
+	private ResearcherFileSystemService researcherFileSystemService;
 	
 	/** the name of the folder to add */
 	private String folderName;
@@ -92,7 +96,7 @@ public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 				 try {
 					researcherFolder = researcher.createRootFolder(folderName);
 					researcherFolder.setDescription(folderDescription);
-					researcherService.saveResearcherFolder(researcherFolder);
+					researcherFileSystemService.saveResearcherFolder(researcherFolder);
 					added = true;
 				 } catch (DuplicateNameException e) {
 					throw new RuntimeException("Fix this save error");
@@ -101,7 +105,7 @@ public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 		}
 		else
 		{
-			ResearcherFolder folder = researcherService.getResearcherFolder(parentFolderId, true);
+			ResearcherFolder folder = researcherFileSystemService.getResearcherFolder(parentFolderId, true);
 			if( !folder.getResearcher().getUser().getId().equals(userId))
 			{
 				return "accessDenied";
@@ -111,7 +115,7 @@ public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 			{
 			    ResearcherFolder researcherFolder = folder.createChild(folderName);
 			    researcherFolder.setDescription(folderDescription);
-			    researcherService.saveResearcherFolder(folder);
+			    researcherFileSystemService.saveResearcherFolder(folder);
 			    added = true;
 			}
 			catch(DuplicateNameException e)
@@ -147,24 +151,24 @@ public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 		// with a folder already in the folder system.
 		if( parentFolderId == null || parentFolderId == 0)
 		{
-			other = researcherService.getRootResearcherFolder(folderName, researcherId);
+			other = researcherFileSystemService.getRootResearcherFolder(folderName, researcherId);
 		}
 		else
 		{
-			other = researcherService.getResearcherFolder(folderName, parentFolderId);
+			other = researcherFileSystemService.getResearcherFolder(folderName, parentFolderId);
 		}
 		
 		// name has been changed and does not conflict
 		if( other == null)
 		{
-			ResearcherFolder existingFolder = researcherService.getResearcherFolder(updateFolderId, true);
+			ResearcherFolder existingFolder = researcherFileSystemService.getResearcherFolder(updateFolderId, true);
 			if( !existingFolder.getResearcher().getUser().getId().equals(userId))
 			{
 				return "accessDenied";
 			}
 			existingFolder.setName(folderName);
 			existingFolder.setDescription(folderDescription);
-			researcherService.saveResearcherFolder(existingFolder);
+			researcherFileSystemService.saveResearcherFolder(existingFolder);
 			added = true;
 		}
 		// name has not been changed
@@ -175,7 +179,7 @@ public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 				return "accessDenied";
 			}
 			other.setDescription(folderDescription);
-			researcherService.saveResearcherFolder(other);
+			researcherFileSystemService.saveResearcherFolder(other);
 			added = true;
 		}
 
@@ -288,5 +292,14 @@ public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 	
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 }

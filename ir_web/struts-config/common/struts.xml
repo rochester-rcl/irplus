@@ -194,7 +194,7 @@
             <interceptor-ref name="crudStack" />
             <result name="input">/pages/user/login/register_user.jsp</result>
             <result name="success">/pages/user/login/registeration_confirmation.jsp</result>
-            <result name="successInvite" type="redirect">/user/workspace.action?token=${token}</result>
+            <result name="successInvite">/pages/user/login/invite_confirmation.jsp</result>
         </action>
                  
         <!--  ************************************ -->

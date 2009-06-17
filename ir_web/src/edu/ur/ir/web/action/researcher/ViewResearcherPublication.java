@@ -11,9 +11,9 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.researcher.Researcher;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.researcher.ResearcherPublication;
 
-import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.order.AscendingOrderComparator;
 
@@ -31,11 +31,10 @@ public class ViewResearcherPublication extends ActionSupport implements UserIdAw
 	private Long researcherPublicationId;
 
 	/** Logger for add files to item action */
-	private static final Logger log = Logger
-			.getLogger(ViewResearcherPublication.class);
+	private static final Logger log = Logger.getLogger(ViewResearcherPublication.class);
 
-	/** Service for item. */
-	private ResearcherService researcherService;
+	/** Service for dealing with researcher file system information */
+	private ResearcherFileSystemService researcherFileSystemService;
 
 	/** Id of the personal item to add the files */
 	private Long researcherId;
@@ -59,7 +58,7 @@ public class ViewResearcherPublication extends ActionSupport implements UserIdAw
 	public String execute() 
 	{
         log.debug("execute called");
-        ResearcherPublication publication = researcherService.getResearcherPublication(researcherPublicationId, false);
+        ResearcherPublication publication = researcherFileSystemService.getResearcherPublication(researcherPublicationId, false);
         researcher = publication.getResearcher();
         
 		if( researcher.isPublic() || researcher.getUser().getId().equals(userId))
@@ -155,25 +154,6 @@ public class ViewResearcherPublication extends ActionSupport implements UserIdAw
 		this.researcher = researcher;
 	}
 
-	/**
-	 * Get researcher service
-	 * 
-	 * @return
-	 */
-	public ResearcherService getResearcherService() {
-		return researcherService;
-	}
-
-	/**
-	 * Set researcher service
-	 * 
-	 * @param researcherService
-	 */
-	public void setResearcherService(ResearcherService researcherService) {
-		this.researcherService = researcherService;
-	}
-
-
 	public Long getResearcherId() {
 		return researcherId;
 	}
@@ -188,6 +168,15 @@ public class ViewResearcherPublication extends ActionSupport implements UserIdAw
 	
 	public void setResearcherPublicationId(Long researcherPublicationId) {
 		this.researcherPublicationId = researcherPublicationId;
+	}
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 
 }

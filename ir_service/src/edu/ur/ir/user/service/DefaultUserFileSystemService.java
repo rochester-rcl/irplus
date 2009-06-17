@@ -723,7 +723,8 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	}
 	
 	/**
-	 * Move the folders.
+	 * Move the folders into the root location of the user.
+	 * 
 	 * @throws DuplicateNameException 
 	 * 
 	 * @see edu.ur.ir.user.UserFileSystemService#moveFolderSystemInformation(edu.ur.ir.user.IrUser, java.util.List, java.util.List)

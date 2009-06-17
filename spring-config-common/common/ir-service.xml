@@ -123,7 +123,7 @@
        <property name="repositoryService" ref="repositoryService"/>
        <property name="itemDAO" ref="itemDAO"/>
        <property name="externalPublishedItemDAO" ref="externalPublishedItemDAO"/>
-       <property name="researcherService" ref="researcherService"/>
+       <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
        <property name="securityService" ref="securityService"/>
        <property name="reviewableItemService" ref="reviewableItemService"/>
    </bean>
@@ -158,7 +158,7 @@
        <property name="versionedFileUnLockStrategy" ref="versionedFileUnLockStrategy"/>
        <property name="itemService" ref="itemService"/>
        <property name="fileVersionDAO" ref="fileVersionDAO"/>
-       <property name="researcherService" ref="researcherService"/>
+       <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
    </bean>
 
     <!--  Service for helping with item file security --> 
@@ -182,7 +182,7 @@
        <property name="institutionalItemVersionDAO" ref="institutionalItemVersionDAO"/>
        <property name="deletedInstitutionalItemDAO" ref="deletedInstitutionalItemDAO"/>
        <property name="itemSecurityService" ref="itemSecurityService"/>
-       <property name="researcherService" ref="researcherService"/>
+       <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
        <property name="reviewableItemService" ref="reviewableItemService"/>
    </bean>
 
@@ -435,6 +435,14 @@
    <bean id="researcherService" 
        class="edu.ur.ir.researcher.service.DefaultResearcherService">
        <property name="researcherDAO" ref="researcherDAO"/>
+       <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Researcher File System service -->
+   <!-- ****************************************** --> 
+   <bean id="researcherFileSystemService" 
+       class="edu.ur.ir.researcher.service.DefaultResearcherFileSystemService">
        <property name="researcherFolderDAO" ref="researcherFolderDAO"/>
        <property name="researcherFileDAO" ref="researcherFileDAO"/>
        <property name="researcherPublicationDAO" ref="researcherPublicationDAO"/>

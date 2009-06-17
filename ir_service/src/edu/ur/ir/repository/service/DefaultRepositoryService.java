@@ -51,7 +51,7 @@ import edu.ur.ir.repository.RepositoryDAO;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.repository.VersionedFileLockStrategy;
 import edu.ur.ir.repository.VersionedFileUnLockStrategy;
-import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.user.IrUser;
 
 
@@ -85,8 +85,8 @@ public class DefaultRepositoryService implements RepositoryService {
 	/**  Item service  */
 	private ItemService itemService;
 	
-	/**  Researcher service  */
-	private ResearcherService researcherService;
+	/** Services for dealing with researcher file system information */
+	private ResearcherFileSystemService researcherFileSystemService;
 	
 	/**  Data access for a repository  */
 	private RepositoryDAO repositoryDAO;
@@ -232,7 +232,7 @@ public class DefaultRepositoryService implements RepositoryService {
 			 
 			//Check if this IrFile is being used by any Item or researcher.
 			//If yes, then do not add the IrFile and FileInfo to the list to be deleted.
-			if ((itemService.getItemFileCount(irFile) == 0) && (researcherService.getResearcherFileCount(irFile) == 0)) {
+			if ((itemService.getItemFileCount(irFile) == 0) && (researcherFileSystemService.getResearcherFileCount(irFile) == 0)) {
 				log.debug("Adding Ir file " + irFile);
 				files.add(irFile);
 				fileInfos.add(irFile.getFileInfo());
@@ -897,14 +897,6 @@ public class DefaultRepositoryService implements RepositoryService {
 		this.fileVersionDAO = fileVersionDAO;
 	}
 
-	public ResearcherService getResearcherService() {
-		return researcherService;
-	}
-
-	public void setResearcherService(ResearcherService researcherService) {
-		this.researcherService = researcherService;
-	}
-
 	/**
 	 * Get the sum of versioned file size for a user
 	 * 
@@ -935,5 +927,14 @@ public class DefaultRepositoryService implements RepositoryService {
 	 */
 	public List<LicenseVersion> getAvailableRepositoryLicenses(Long repositoryId) {
 		return repositoryDAO.getAvailableRepositoryLicenses(repositoryId);
+	}
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 }

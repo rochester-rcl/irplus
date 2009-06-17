@@ -814,6 +814,8 @@ YAHOO.ur.edit.researcher =
 	        callback);
 	},
 	
+
+	
 	// initialize the page
 	// this is called once the dom has
 	// been created

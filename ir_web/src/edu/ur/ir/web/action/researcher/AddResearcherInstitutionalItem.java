@@ -32,6 +32,7 @@ import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherFile;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherInstitutionalItem;
 import edu.ur.ir.researcher.ResearcherLink;
@@ -57,6 +58,9 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 	
 	/** Service for item.  */
 	private ResearcherService researcherService;
+	
+	/** Service for dealing with researcher file system information */
+	private ResearcherFileSystemService researcherFileSystemService;
 	
 	/** File system service for user */
 	private ItemService itemService;
@@ -138,12 +142,12 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 		if (parentFolderId != null && parentFolderId > 0) 
 		{
 			
-			ResearcherFolder parentFolder = researcherService.getResearcherFolder(parentFolderId, false);
+			ResearcherFolder parentFolder = researcherFileSystemService.getResearcherFolder(parentFolderId, false);
 			if( !parentFolder.getResearcher().getId().equals(researcher.getId()))
 			{
 				return "accessDenied";
 			}
-			researcherService.createInstitutionalItem(parentFolder, item);
+			researcherFileSystemService.createInstitutionalItem(parentFolder, item);
 		} 
 		else 
 		{
@@ -166,27 +170,27 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 		
 		if(parentFolderId != null && parentFolderId > 0)
 		{
-			ResearcherFolder folder = researcherService.getResearcherFolder(parentFolderId, false);
+			ResearcherFolder folder = researcherFileSystemService.getResearcherFolder(parentFolderId, false);
 			if( !folder.getResearcher().getId().equals(researcher.getId()))
 			{
 				return "accessDenied";
 			}
-			researcherFolderPath = researcherService.getResearcherFolderPath(parentFolderId);
+			researcherFolderPath = researcherFileSystemService.getResearcherFolderPath(parentFolderId);
 		}
 		
 		log.debug("Folder Path ::" + researcherFolderPath);
 		
 		log.debug("**** Parent Folder Id ::" + parentFolderId);
 		
-		Collection<ResearcherFolder> myResearcherFolders = researcherService.getFoldersForResearcher(researcherId, parentFolderId);
+		Collection<ResearcherFolder> myResearcherFolders = researcherFileSystemService.getFoldersForResearcher(researcherId, parentFolderId);
 		
-		Collection<ResearcherFile> myResearcherFiles = researcherService.getResearcherFiles(researcherId, parentFolderId);
+		Collection<ResearcherFile> myResearcherFiles = researcherFileSystemService.getResearcherFiles(researcherId, parentFolderId);
 
-		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherService.getResearcherInstitutionalItems(researcherId, parentFolderId);
+		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherFileSystemService.getResearcherInstitutionalItems(researcherId, parentFolderId);
 		
-		Collection<ResearcherLink> myResearcherLinks = researcherService.getResearcherLinks(researcherId, parentFolderId);
+		Collection<ResearcherLink> myResearcherLinks = researcherFileSystemService.getResearcherLinks(researcherId, parentFolderId);
 		
-		Collection<ResearcherPublication> myResearcherPublications = researcherService.getResearcherPublications(researcherId, parentFolderId);
+		Collection<ResearcherPublication> myResearcherPublications = researcherFileSystemService.getResearcherPublications(researcherId, parentFolderId);
 		
 		researcherFileSystem = new LinkedList<FileSystem>();
 		
@@ -403,5 +407,14 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 }

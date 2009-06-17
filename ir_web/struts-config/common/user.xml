@@ -202,11 +202,7 @@
         </action> 
 
         
-        <!--  moves the selected files and folders to a given location -->
-        <action name="movePersonalFileSystemObjects" class="edu.ur.ir.web.action.user.MoveFilesAndFolders">
-            <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/workspace/move_folders_response.jsp</result>
-        </action>
+ 
         
         <!--  lock a file so that no other user can upload changes -->
         <action name="lockVersionedFile" class="edu.ur.ir.web.action.user.LockVersionedFile" >
@@ -236,7 +232,7 @@
             <result name="accessDenied">/access_denied_js.jsp</result>
             <result name="success" type="no-op"/>
         </action>  
-                
+        
         <action name="viewMovePersonalFolderLocations"
             class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
             method="viewLocations">

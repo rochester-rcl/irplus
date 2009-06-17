@@ -33,6 +33,7 @@ import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherFile;
+import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherInstitutionalItem;
 import edu.ur.ir.researcher.ResearcherLink;
@@ -68,6 +69,9 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 	
 	/** Service for item.  */
 	private ResearcherService researcherService;
+	
+	/** Service for dealing with researcher file system information */
+	private ResearcherFileSystemService researcherFileSystemService;
 	
 	/** File system service for user */
 	private ItemService itemService;
@@ -195,13 +199,13 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 		
 		if (parentFolderId != null && parentFolderId > 0) {
 			
-			ResearcherFolder parentFolder = researcherService.getResearcherFolder(parentFolderId, false);
+			ResearcherFolder parentFolder = researcherFileSystemService.getResearcherFolder(parentFolderId, false);
 			if(!parentFolder.getResearcher().getId().equals(researcher.getId()))
 			{
 				return "accessDenied";
 			}
 			
-			researcherService.createPublication(parentFolder, vi.getCurrentVersion().getItem(), vi.getLargestVersion());
+			researcherFileSystemService.createPublication(parentFolder, vi.getCurrentVersion().getItem(), vi.getLargestVersion());
 		} else {
 			ItemVersion currentVersion = vi.getCurrentVersion();
 			researcher.createRootPublication(currentVersion.getItem(), currentVersion.getVersionNumber());
@@ -223,27 +227,27 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 		}
 		if(parentFolderId != null && parentFolderId > 0)
 		{
-			ResearcherFolder folder = researcherService.getResearcherFolder(parentFolderId, false);
+			ResearcherFolder folder = researcherFileSystemService.getResearcherFolder(parentFolderId, false);
 			if(!folder.getResearcher().getId().equals(researcher.getId()))
 			{
 				return "accessDenied";
 			}
-			researcherFolderPath = researcherService.getResearcherFolderPath(parentFolderId);
+			researcherFolderPath = researcherFileSystemService.getResearcherFolderPath(parentFolderId);
 		}
 		
 		log.debug("Folder Path ::" + researcherFolderPath);
 		
 		log.debug("**** Parent Folder Id ::" + parentFolderId);
 		
-		Collection<ResearcherFolder> myResearcherFolders = researcherService.getFoldersForResearcher(researcher.getId(), parentFolderId);
+		Collection<ResearcherFolder> myResearcherFolders = researcherFileSystemService.getFoldersForResearcher(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherFile> myResearcherFiles = researcherService.getResearcherFiles(researcher.getId(), parentFolderId);
+		Collection<ResearcherFile> myResearcherFiles = researcherFileSystemService.getResearcherFiles(researcher.getId(), parentFolderId);
 
-		Collection<ResearcherPublication> myResearcherPublications = researcherService.getResearcherPublications(researcher.getId(), parentFolderId);
+		Collection<ResearcherPublication> myResearcherPublications = researcherFileSystemService.getResearcherPublications(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherLink> myResearcherLinks = researcherService.getResearcherLinks(researcher.getId(), parentFolderId);
+		Collection<ResearcherLink> myResearcherLinks = researcherFileSystemService.getResearcherLinks(researcher.getId(), parentFolderId);
 		
-		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherService.getResearcherInstitutionalItems(researcher.getId(), parentFolderId);
+		Collection<ResearcherInstitutionalItem> myResearcherInstitutionalItems = researcherFileSystemService.getResearcherInstitutionalItems(researcher.getId(), parentFolderId);
 		
 		researcherFileSystem = new LinkedList<FileSystem>();
 		
@@ -301,7 +305,7 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 		{
 			return "accessDenied";
 		}
-		ResearcherPublication researcherPublication = researcherService.getResearcherPublication(publicationId, false);
+		ResearcherPublication researcherPublication = researcherFileSystemService.getResearcherPublication(publicationId, false);
 		researcherPublication.setPublication(itemVersion.getItem());
 		researcherPublication.setVersionNumber(itemVersion.getVersionNumber());
 		researcherService.saveResearcher(researcherPublication.getResearcher());
@@ -543,6 +547,15 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 	
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	public ResearcherFileSystemService getResearcherFileSystemService() {
+		return researcherFileSystemService;
+	}
+
+	public void setResearcherFileSystemService(
+			ResearcherFileSystemService researcherFileSystemService) {
+		this.researcherFileSystemService = researcherFileSystemService;
 	}
 
 }
