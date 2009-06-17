@@ -76,8 +76,8 @@
             	
        	        <div class="yui-g">
 			        <div class="yui-u first">
-						<div class="clear">&nbsp;</div>
-						<div class="clear">&nbsp;</div>
+						<br/>
+						<br/>
 
 
 						<!-- Table for files and folders  -->            
@@ -107,7 +107,7 @@
         	        <div class="yui-u">
         	        	<!--  Table of selected files -->
                     	<div id="newResearcherFolders" >
-	                          <ur:basicForm  id="files" name="myResearcherFolders"  method="POST" action="user/getResearcherFileSystemTable.action">
+	                          <form  id="files" name="myResearcherFolders"  method="POST" action="user/getResearcherFileSystemTable.action">
 	                              <input type="hidden" id="myResearcherFolders_researcherId" 
 	                                   name="researcherId" 
 	                                   value="${researcherId}"/>
@@ -117,7 +117,7 @@
 	                              <input type="hidden" id="myResearcherFolders_institutionalItemId" 
 	                                   name="institutionalItemId" 
 	                                   value="${institutionalItemId}"/>
-	                          </ur:basicForm>
+	                          </form>
 	                      </div>
 	                      <!--  end table of selected files div -->
             	    </div>

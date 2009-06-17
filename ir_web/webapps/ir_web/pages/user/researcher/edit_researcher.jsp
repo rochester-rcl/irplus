@@ -325,11 +325,16 @@
 	                                  onmouseover="this.className='ur_buttonover';"
  		                              onmouseout="this.className='ur_button';"
  		                              onclick="javascript:YAHOO.ur.edit.researcher.viewAddPublications();"><span class="packageAddBtnImg">&nbsp;</span>Add Publication</button>
+	                               
+	                                  <button class="ur_button"
+	                                  onmouseover="this.className='ur_buttonover';"
+ 		                              onmouseout="this.className='ur_button';"
+ 		                              onclick="javascript:YAHOO.ur.researcher.folder.moveResearcherData()"> <span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button>
 	                              
 	                                  <button class="ur_button" id="showDeleteFolder"
 	                                  onmouseover="this.className='ur_buttonover';"
  		                              onmouseout="this.className='ur_button';"><span class="deleteBtnImg">&nbsp;</span>Delete</button>
-	                             
+   
 	                      </div>
 	                      
 
@@ -352,16 +357,12 @@
 	                 <!--  Start third tab -->
 	                 <div id="tab3">
 	                    <br/>
-	                    <table>
-	                        <tr>
-	                            <td>
- 		                              <button class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';"
- 		                               id="showUploadPicture">Upload Picture</button> 
-	                            </td>
-	                         </tr>
-	                    </table>
+	                   
+ 		                <button class="ur_button" 
+ 		                        onmouseover="this.className='ur_buttonover';"
+ 		                        onmouseout="this.className='ur_button';"
+ 		                        id="showUploadPicture">Upload Picture</button> 
+	                    
 	                    <div id="deletePictureDiv"></div>
 	                   
 	                   	<div id="researcher_pictures">

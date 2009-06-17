@@ -21,7 +21,7 @@
 
 <div class="dataTable">
 
-	<ur:basicForm method="post" id="folders" name="myFolders" >
+	<form method="post" id="folders" name="myFolders" >
 	   <h3>Path: /<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.folder.getFolderById('0')">My Research</ur:a>/
            <c:forEach var="folder" items="${folderPath}">
                <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.folder.getFolderById('${folder.id}')">${folder.name}</ur:a>/
@@ -38,7 +38,7 @@
         <urstb:table width="100%">
             <urstb:thead>
                 <urstb:tr>
-                    <urstb:td><ur:checkbox name="checkAllSetting" 
+                    <urstb:td><input type="checkbox" name="checkAllSetting" 
 	                    value="off" 
 	                    onClick="YAHOO.ur.researcher.folder.setCheckboxes();"/>
 	                </urstb:td>
@@ -51,8 +51,6 @@
                        <u>Type</u><urstb:thImgSort
                             sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
                             sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
-                    
-                    <urstb:td>Id</urstb:td>
                     
                     <urstb:tdHeadSort
                        height="33"
@@ -78,28 +76,28 @@
                         onMouseOut="this.className='${rowClass}'">
                         <urstb:td>
 							<c:if test="${fileSystemObject.fileSystemType.type == 'researcherFolder'}">
-			                        <ur:checkbox name="folderIds" id="folder_checkbox_${fileSystemObject.id}" 
+			                        <input type="checkbox" name="folderIds" id="folder_checkbox_${fileSystemObject.id}" 
 			                            value="${fileSystemObject.id}"/>
 		                     </c:if>
 			                     
 		  
 		                     <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFile'}">
-		                         <ur:checkbox name="fileIds" id="file_checkbox_${fileSystemObject.id}" 
+		                         <input type="checkbox"  name="fileIds" id="file_checkbox_${fileSystemObject.id}" 
 		                             value="${fileSystemObject.id}"/>
 		                     </c:if>	
 		                     
 		                     <c:if test="${fileSystemObject.fileSystemType.type == 'researcherPublication'}">
-		                         <ur:checkbox name="publicationIds" id="publication_checkbox_${fileSystemObject.id}" 
+		                         <input type="checkbox"  name="publicationIds" id="publication_checkbox_${fileSystemObject.id}" 
 		                             value="${fileSystemObject.id}"/>
 		                     </c:if>
 		                     
 		                     <c:if test="${fileSystemObject.fileSystemType.type == 'researcherLink'}">
-		                         <ur:checkbox name="linkIds" id="link_checkbox_${fileSystemObject.id}" 
+		                         <input type="checkbox"  name="linkIds" id="link_checkbox_${fileSystemObject.id}" 
 		                             value="${fileSystemObject.id}"/>
 		                     </c:if>
 		                     
 		                     <c:if test="${fileSystemObject.fileSystemType.type == 'researcherInstitutionalItem'}">
-		                         <ur:checkbox name="institutionalItemIds" id="item_checkbox_${fileSystemObject.id}" 
+		                         <input type="checkbox"  name="institutionalItemIds" id="item_checkbox_${fileSystemObject.id}" 
 		                             value="${fileSystemObject.id}"/>
 		                     </c:if>		                     
                         </urstb:td>                    
@@ -130,9 +128,7 @@
 		                	 </c:if>	               
 	                         
                         </urstb:td>  
-                        <urstb:td>
-                            ${fileSystemObject.id}
-                        </urstb:td>
+                      
                         <urstb:td>
 							 <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFolder'}">
 			                 	<a href="javascript:YAHOO.ur.researcher.folder.getFolderById('${fileSystemObject.id}')"><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText> </a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
@@ -142,19 +138,19 @@
 			                    <c:url var="researcherFileDownloadUrl" value="/user/researcherFileDownload.action">
 			                            <c:param name="researcherFileId" value="${fileSystemObject.id}"/>
 			                        </c:url>
-		                        <a href="${researcherFileDownloadUrl}"><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText></a> [v${fileSystemObject.versionNumber}]
+		                        <a href="${researcherFileDownloadUrl}"><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText></a> [v${fileSystemObject.versionNumber}]<c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 			                 </c:if>
 	
 							<c:if test="${fileSystemObject.fileSystemType.type == 'researcherPublication'}">
-		                    	<ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText>[v${fileSystemObject.versionNumber}]
+		                    	<ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText>[v${fileSystemObject.versionNumber}] <c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 		                	</c:if>		  
 		                	
 		                	<c:if test="${fileSystemObject.fileSystemType.type == 'researcherLink'}">
-		                    	 <a href="${fileSystemObject.link}" target="_blank"> <ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText> </a>
+		                    	 <a href="${fileSystemObject.link}" target="_blank"><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 		                	</c:if>	 
 		                		
 							<c:if test="${fileSystemObject.fileSystemType.type == 'researcherInstitutionalItem'}">
-		                    	<ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText>
+		                    	<ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 		                	</c:if>	
 	                	</urstb:td>
 	                	<urstb:td>
@@ -170,5 +166,5 @@
             </urstb:tbody>
         </urstb:table>
                                       
-   </ur:basicForm>       
+   </form>       
 </div>

@@ -69,24 +69,27 @@
             <c:import url="/inc/header.jsp"/>
 
             <h3> Add files to Researcher </h3>
-
+                <button class="ur_button" 
+                        onmouseover="this.className='ur_buttonover';"
+                        onmouseout="this.className='ur_button';"
+                        onclick="javascript:YAHOO.ur.researcher.files.viewResearcherFolders();">Back to Folders</button>
             <!--  this is the body region of the page -->
             <div id="bd">
             
-            	<div class="clear">&nbsp;</div>
+            	<br/>
 				
        	        <div class="yui-g">
 			        <div class="yui-u first">
 		       			 <!--  table of files and folders -->
 	                      <div id="newPersonalFolders" >
-	                          <ur:basicForm  id="folders" name="myPersonalFolders"  method="POST" action="user/getPersonalFilesFolders.action">
+	                          <form  id="folders" name="myPersonalFolders"  method="POST" action="user/getPersonalFilesFolders.action">
 	                              <input type="hidden" id="myFolders_parentPersonalFolderId" 
 	                                   name="parentPersonalFolderId" 
 	                                   value="${parentPersonalFolderId}"/>
 	                              <input type="hidden" id="myFolders_parentFolderId" 
 	                                   name="parentFolderId" 
 	                                   value="${parentFolderId}"/>
-	                          </ur:basicForm>
+	                          </form>
 	                      </div>
 	                      <!--  end personal files and folders div -->
 		       
@@ -96,41 +99,38 @@
         	        <div class="yui-u">
         	        	<!--  Table of selected files -->
                     	<div id="newResearcherFolders" >
-	                          <ur:basicForm  id="files" name="myResearcherFolders"  method="POST" action="user/getResearcherFileSystem.action">
+	                          <form  id="files" name="myResearcherFolders"  method="POST" action="user/getResearcherFileSystem.action">
 	                              <input type="hidden" id="myResearcherFolders_researcherId" 
 	                                   name="researcherId" 
 	                                   value="${researcherId}"/>
 	                              <input type="hidden" id="myResearcherFolders_parentFolderId" 
 	                                   name="parentFolderId" 
 	                                   value="${parentFolderId}"/>
-	                          </ur:basicForm>
+	                          </form>
 	                      </div>
 	                      <!--  end table of selected files div -->
             	    </div>
                 	<!--  end the second column -->
                 
-                
-                
                 </div>
                 <!--  end the grid -->
-				
-				<div class="clear">&nbsp;</div>
-				
-				<table width="100%">
-                  <tr>
-                      <td align="left" >
-                          <button class="ur_button" 
-                               onmouseover="this.className='ur_buttonover';"
-                               onmouseout="this.className='ur_button';"
-                               onclick="javascript:YAHOO.ur.researcher.files.viewResearcherFolders();">Back to Folders</button>
-                      </td>
-                      
-                     
-                  </tr>
-                </table>
-                
+				 
+				 <br/>
+                <button class="ur_button" 
+                        onmouseover="this.className='ur_buttonover';"
+                        onmouseout="this.className='ur_button';"
+                        onclick="javascript:YAHOO.ur.researcher.files.viewResearcherFolders();">Back to Folders</button>
+    
+            </div>
+            <!--  end the body tag --> 
 
-	      <!--  Add file error dialog -->
+            <!--  this is the footer of the page -->
+            <c:import url="/inc/footer.jsp"/>
+   
+        </div>
+        <!-- end doc -->
+        
+        <!--  Add file error dialog -->
 	      <div id="fileErrorDialog" class="hidden">
 	          <div class="hd">Cannot add file</div>
 	          <div class="bd">
@@ -139,17 +139,6 @@
 	      </div>
 	      <!--  end Add file error  dialog -->  
       
-                      
-            </div>
-            <!--  end the body tag --> 
-
-            <!--  this is the footer of the page -->
-            <c:import url="/inc/footer.jsp"/>
-      
-                
-   
-        </div>
-        <!-- end doc -->
     
     </body>
 </html>

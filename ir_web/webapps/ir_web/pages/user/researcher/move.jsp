@@ -27,7 +27,7 @@
 <html>
 <head>
 
-    <title>Move Personal Folders and Files</title>
+    <title>Move Researcher Information</title>
     <c:import url="/inc/meta-frag.jsp" />
 
     <!-- Core + Skin CSS -->
@@ -53,7 +53,6 @@
     <ur:js src="pages/js/base_path.js" />
     <ur:js src="page-resources/js/util/ur_util.js" />
     <ur:js src="page-resources/js/util/wait_dialog.js" />
-    <ur:js src="page-resources/js/user/move_personal_folder.js" />
 </head>
 
 <body class="yui-skin-sam">
@@ -61,11 +60,11 @@
     <div id="doc2"><!--  this is the header of the page --> 
         <c:import url="/inc/header.jsp" /> 
 
-        <h3>Move Personal Folder Information</h3>
+        <h3>Move Researcher Information</h3>
 
         <!--  this is the body regin of the page -->
         <div id="bd">
-            <div id="move_folder_frag">
+            <div id="move_researcher_object_frag">
                 <c:import url="move_folder_frag.jsp"/>
             </div>
 
