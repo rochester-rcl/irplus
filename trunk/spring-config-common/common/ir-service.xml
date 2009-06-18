@@ -443,6 +443,7 @@
    <!-- ****************************************** --> 
    <bean id="researcherFileSystemService" 
        class="edu.ur.ir.researcher.service.DefaultResearcherFileSystemService">
+       <property name="researcherDAO" ref="researcherDAO"/>
        <property name="researcherFolderDAO" ref="researcherFolderDAO"/>
        <property name="researcherFileDAO" ref="researcherFileDAO"/>
        <property name="researcherPublicationDAO" ref="researcherPublicationDAO"/>
