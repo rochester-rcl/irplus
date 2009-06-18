@@ -144,18 +144,52 @@ public class FileWebUtilFunctions {
 		
 		return canMove;
 	}
+	
+	/**
+	 * Determine if the contents can be moved into the specified researcher folder location.  This is true 
+	 * if the destination is not equal to the current destination.  A researcher folder cannot be 
+	 * moved into itself;
+	 * 
+	 * @param objectsToMove - set of information to be moved
+	 * @param destination - destination  to move to
+	 * @return true if the set of information can be moved into the specified location
+	 */
+	public static boolean canMoveToResearcherFolder(Collection<FileSystem> objectsToMove, FileSystem destination)
+	{
+		// can only move into a researcher folder
+		if( !destination.getFileSystemType().equals(FileSystemType.RESEARCHER_FOLDER))
+	    {
+		    return false;	
+		}
+		
+				
+		boolean canMove = true;
+		
+		for(FileSystem fileSystemObject : objectsToMove)
+		{
+			if( fileSystemObject.getFileSystemType().equals(FileSystemType.RESEARCHER_FOLDER))
+			{
+			    if( fileSystemObject.getId().equals(destination.getId()))
+			    {
+			    	canMove = false;
+			    }
+			}
+		}
+		
+		return canMove;
+	}
 
 	/**
 	 * Determine if the destination  is one of the file that has to be moved
 	 * 
 	 * @param objectsToMove - set of information to be moved
-	 * @param destination - destination  to move to
+	 * @param object - current object 
 	 * @return true if the destination file is one of the files to be moved
 	 */
-	public static boolean isFileToBeMoved(Collection<FileSystem> objectsToMove, FileSystem destination)
+	public static boolean isFileToBeMoved(Collection<FileSystem> objectsToMove, FileSystem object)
 	{
 		
-		if( !destination.getFileSystemType().equals(FileSystemType.PERSONAL_FILE))
+		if( !object.getFileSystemType().equals(FileSystemType.PERSONAL_FILE))
 	    {
 		    return false;	
 		}
@@ -167,7 +201,7 @@ public class FileWebUtilFunctions {
 		{
 			if( fileSystemObject.getFileSystemType().equals(FileSystemType.PERSONAL_FILE))
 			{
-			    if( fileSystemObject.getId().equals(destination.getId()))
+			    if( fileSystemObject.getId().equals(object.getId()))
 			    {
 			    	isFileToMove = true;
 			    }
@@ -176,6 +210,36 @@ public class FileWebUtilFunctions {
 		
 		return isFileToMove;
 	}
+	
+	
+	/**
+	 * Determine if the destination  is one of the researcher objects to be moved
+	 * 
+	 * @param objectsToMove - set of information to be moved
+	 * @param object - object to move
+	 * @return true if the destination file is one of the files to be moved
+	 */
+	public static boolean isResearcherObjectToBeMoved(Collection<FileSystem> objectsToMove, FileSystem object)
+	{
+		if( object.getFileSystemType().equals(FileSystemType.RESEARCHER_FOLDER))
+	    {
+		    return false;	
+		}
+				
+		boolean isFileToMove = false;
+		
+		for(FileSystem fileSystemObject : objectsToMove)
+		{
+			if( fileSystemObject.getFileSystemType().equals(object.getFileSystemType()) && 
+				fileSystemObject.getId().equals(object.getId())	)
+			{
+			    	isFileToMove = true;
+			}
+		}
+		
+		return isFileToMove;
+	}
+
 	
 	
 	/**

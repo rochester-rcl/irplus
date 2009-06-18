@@ -466,6 +466,26 @@
 			boolean isFileToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
 		</function-signature>
 	</function>
+	
+	<function>
+		<name>canMoveToResearcherFolder</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canMoveToResearcherFolder(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isResearcherObjectToBeMoved</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isResearcherObjectToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
 
 	<function>
 		<name>canMoveToPersonalCollection</name>

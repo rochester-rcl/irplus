@@ -65,7 +65,7 @@
         <!--  this is the body regin of the page -->
         <div id="bd">
             <div id="move_researcher_object_frag">
-                <c:import url="move_folder_frag.jsp"/>
+                <c:import url="move_researcher_info_frag.jsp"/>
             </div>
 
             <!--  end the body tag --> <!--  this is the footer of the page --> 
