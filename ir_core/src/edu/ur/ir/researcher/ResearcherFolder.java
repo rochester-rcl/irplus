@@ -50,6 +50,7 @@ import edu.ur.tree.PreOrderTreeSetNodeBase;
  * 
  *  
  * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
 @SuppressWarnings("unchecked")
@@ -100,9 +101,9 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 * This is the conceptual path to the folder.
 	 * The base path plus the root of the tree 
 	 * down to itself.
-	 * For example if you have a owner named owner and
+	 * For example if you have a parent A
 	 * the following sub folders  
-	 * A, B, C and D and A is a parent of B and 
+	 *  B, C and D and A is a parent of B and 
 	 * B is a parent of C and C is a parent of D Then the
 	 * paths are as follows:
 	 * 
@@ -150,7 +151,7 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 		setTreeRoot(this);
 		setResearcher(researcher);
 		setName(folderName);
-		setPath( PATH_SEPERATOR);
+		setPath(PATH_SEPERATOR);
 	}
 	
 	/**
@@ -320,20 +321,16 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 */
 	public void addResearcherFile(ResearcherFile rf) 
 	{
-		if(files.contains(rf))
+		if(!files.contains(rf))
 		{
-			return;
+			if( rf.getParentFolder() != null )
+			{
+				rf.getParentFolder().removeResearcherFile(rf);
+			}
+			
+			rf.setParentFolder(this);
+			files.add(rf);
 		}
-
-		if( rf.getParentFolder() != null)
-		{
-		    rf.getParentFolder().removeResearcherFile(rf);
-		}
-		
-		rf.setResearcher(this.getResearcher());
-		rf.setParentFolder(this);
-		files.add(rf);
-        
 	}
 	
 	/**
@@ -837,7 +834,7 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 			c.updatePaths(getFullPath());
 		}
 	}
-	
+	 
 	/**
 	 * Compares two researcher folders by name.
 	 * 
@@ -892,23 +889,44 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 * 
 	 * @param researcher
 	 */	
-	public void setResearcher(Researcher researcher) {
+	void setResearcher(Researcher researcher) {
 		this.researcher = researcher;
 	}
 
+	/**
+	 * Get the set of publications for the researcher - this
+	 * is an unmodifiable set.
+	 * 
+	 * @return
+	 */
 	public Set<ResearcherPublication> getPublications() {
-		return publications;
+		return Collections.unmodifiableSet(publications);
 	}
 
-	public void setPublications(Set<ResearcherPublication> publications) {
+	/**
+	 * Set the publications for the researcher folder.
+	 * 
+	 * @param publications
+	 */
+	void setPublications(Set<ResearcherPublication> publications) {
 		this.publications = publications;
 	}
 
+	/**
+	 * Get the researcher links in this folder - this is an unmodifiable set.
+	 * 
+	 * @return set of reseracher links
+	 */
 	public Set<ResearcherLink> getLinks() {
-		return links;
+		return Collections.unmodifiableSet(links);
 	}
 
-	public void setLinks(Set<ResearcherLink> links) {
+	/**
+	 * Set the links for the researcher folder.
+	 * 
+	 * @param links
+	 */
+	void setLinks(Set<ResearcherLink> links) {
 		this.links = links;
 	}
 	
@@ -920,6 +938,12 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 */
 	public void addPublication(ResearcherPublication rp) {
 		if (!publications.contains(rp)) {
+			if( rp.getParentFolder() != null )
+			{
+				rp.getParentFolder().removeResearcherPublication(rp);
+			}
+			
+			rp.setParentFolder(this);
 			publications.add(rp);
 		}
 	}
@@ -932,6 +956,12 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 */
 	public void addInstitutionalItem(ResearcherInstitutionalItem ri) {
 		if (!institutionalItems.contains(ri)) {
+			if( ri.getParentFolder() != null )
+			{
+				ri.getParentFolder().removeResearcherInstitutionalItem(ri);
+			}
+			
+			ri.setParentFolder(this);
 			institutionalItems.add(ri);
 		}
 	}
@@ -944,6 +974,11 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 */
 	public void addLink(ResearcherLink rl) {
 		if (!links.contains(rl)) {
+			if( rl.getParentFolder() != null )
+			{
+				rl.getParentFolder().removeResearcherLink(rl);
+			}
+			rl.setParentFolder(this);
 			links.add(rl);
 		}
 	}
@@ -1020,11 +1055,21 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 		return jsonObj;
 	}
 
+	/**
+	 * Returns an unmodifiable set of institutional items.
+	 * 
+	 * @return set of institutional items for this researcher.
+	 */
 	public Set<ResearcherInstitutionalItem> getInstitutionalItems() {
-		return institutionalItems;
+		return Collections.unmodifiableSet(institutionalItems);
 	}
 
-	public void setInstitutionalItems(
+	/**
+	 * Set the set of institutional items.
+	 * 
+	 * @param institutionalItems
+	 */
+	void setInstitutionalItems(
 			Set<ResearcherInstitutionalItem> institutionalItems) {
 		this.institutionalItems = institutionalItems;
 	}

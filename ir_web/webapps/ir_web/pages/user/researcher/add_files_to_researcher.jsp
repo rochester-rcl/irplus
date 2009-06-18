@@ -99,7 +99,8 @@
         	        <div class="yui-u">
         	        	<!--  Table of selected files -->
                     	<div id="newResearcherFolders" >
-	                          <form  id="files" name="myResearcherFolders"  method="POST" action="user/getResearcherFileSystem.action">
+                    	      
+	                          <form  id="files" name="myResearcherFolders"  method="POST" action="<c:url value="/user/getResearcherFileSystem.action"/>">
 	                              <input type="hidden" id="myResearcherFolders_researcherId" 
 	                                   name="researcherId" 
 	                                   value="${researcherId}"/>

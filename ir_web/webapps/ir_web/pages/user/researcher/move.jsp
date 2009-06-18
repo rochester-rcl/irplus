@@ -53,6 +53,7 @@
     <ur:js src="pages/js/base_path.js" />
     <ur:js src="page-resources/js/util/ur_util.js" />
     <ur:js src="page-resources/js/util/wait_dialog.js" />
+    <ur:js src="page-resources/js/user/move_researcher_info.js" />
 </head>
 
 <body class="yui-skin-sam">

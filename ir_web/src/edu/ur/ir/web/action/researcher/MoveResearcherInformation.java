@@ -52,6 +52,9 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 	/** id of the user  */
 	private Long userId;
 	
+	/** id of the researcher */
+	private Long researcherId;
+	
 	/** set of folder ids to move */
 	private Long[] folderIds = {};
 	
@@ -126,7 +129,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 	
 		IrUser user = userService.getUser(userId, false);
 		researcher = user.getResearcher();
-	    Long researcherId = researcher.getId();
+	    researcherId = researcher.getId();
 		
 		if( researcher == null || !researcher.getUser().getId().equals(userId) || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE) )
 		{
@@ -169,7 +172,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		publicationsToMove = researcherFileSystemService.getResearcherPublications(researcherId, listPublicationIds);
 		
 		
-		// publications to move
+		// items to move
 		List<Long> listItemIds = new LinkedList<Long>();
 		for( Long id : itemIds)
 		{
@@ -234,7 +237,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		log.debug("move files and folders called");
 		IrUser user = userService.getUser(userId, false);
 		researcher = user.getResearcher();
-		Long researcherId = researcher.getId();
+		researcherId = researcher.getId();
 		
 		
 		if( researcher == null || !researcher.getUser().getId().equals(userId) || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE) )
@@ -269,7 +272,32 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		// that do not belong to them
 		filesToMove = researcherFileSystemService.getFiles(researcherId, listFileIds);
 		
-
+		//links to move
+		List<Long> listLinkIds = new LinkedList<Long>();
+		for( Long id : linkIds)
+		{
+			listLinkIds.add(id);
+		}
+		linksToMove = researcherFileSystemService.getResearcherLinks(researcherId, listLinkIds);
+		
+		
+		// publications to move
+		List<Long> listPublicationIds = new LinkedList<Long>();
+		for( Long id : publicationIds)
+		{
+		    listPublicationIds.add(id);
+		}
+		publicationsToMove = researcherFileSystemService.getResearcherPublications(researcherId, listPublicationIds);
+		
+		
+		// items to move
+		List<Long> listItemIds = new LinkedList<Long>();
+		for( Long id : itemIds)
+		{
+			listPublicationIds.add(id);
+		}
+		itemsToMove = researcherFileSystemService.getResearcherInstitutionalItems(researcherId, listItemIds);
+		
 		log.debug( "destination id = " + destinationId);
 		if( !destinationId.equals(UserFileSystemService.ROOT_FOLDER_ID))
 		{
@@ -421,7 +449,6 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		this.researcherService = researcherService;
 	}
 
-	
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
@@ -436,6 +463,14 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	public Long getResearcherId() {
+		return researcherId;
+	}
+
+	public void setResearcherId(Long researcherId) {
+		this.researcherId = researcherId;
 	}
 	
 }
