@@ -113,8 +113,8 @@ public class ResearcherFile extends BasePersistent implements FileSystem{
 		if( !(o instanceof ResearcherFile ) ) return false;
 		final ResearcherFile other = (ResearcherFile)o;
 		
-		if( (other.getName() != null && !other.getName().equals(getName())) ||
-			(other.getName() == null && getName() != null )	) return false;
+		if( (other.getNameWithExtension() != null && !other.getNameWithExtension().equals(getNameWithExtension())) ||
+			(other.getNameWithExtension() == null && getNameWithExtension() != null )	) return false;
 
 		if( (other.getParentFolder() != null && !other.getParentFolder().equals(getParentFolder())) ||
 			(other.getParentFolder() == null && getParentFolder() != null )	) return false;
