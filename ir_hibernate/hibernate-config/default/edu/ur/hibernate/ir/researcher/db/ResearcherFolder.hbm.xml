@@ -110,7 +110,8 @@
 
 		<!--  Children institutional items - cannot cascade the delete orphan because child
 			institutional Item can be promoted to root institutional Item -->
-		<set name="institutionalItems" inverse="true" 
+		<set name="institutionalItems" 
+		    inverse="true" 
 		    optimistic-lock="false"
 		    cascade="all" 
 		    access="field" 
