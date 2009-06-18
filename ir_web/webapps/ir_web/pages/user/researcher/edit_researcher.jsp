@@ -43,8 +43,6 @@
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
  	<ur:js src="page-resources/yui/button/button-min.js"/>
     <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
- 	<ur:js src="page-resources/yui/treeview/treeview-min.js"/> 
-    <ur:js src="page-resources/yui/json/json-min.js"/>
         
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
