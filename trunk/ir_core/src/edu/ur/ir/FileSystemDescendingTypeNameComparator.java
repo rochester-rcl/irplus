@@ -19,6 +19,8 @@ package edu.ur.ir;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import edu.ur.order.DescendingOrderComparator;
+
 /**
  * Sort according type then name decending
  * @author Nathan Sarr
@@ -28,16 +30,18 @@ public class FileSystemDescendingTypeNameComparator implements Comparator<FileSy
 	
 	/** eclipse generated id */
 	private static final long serialVersionUID = -852137103828556951L;
+	
+	private DescendingOrderComparator descendingComparator = new DescendingOrderComparator();
 
 	public int compare(FileSystem arg0, FileSystem arg1) {
-		int value =  arg1.getFileSystemType().getType().compareToIgnoreCase(arg0.getFileSystemType().getType());
-	    if ( value == 0 )
+		
+	    if ( arg1.getFileSystemType().equals(arg0.getFileSystemType()) )
 	    {
-	    	return arg0.getName().compareToIgnoreCase(arg1.getName());
+	    	return arg1.getName().compareToIgnoreCase(arg0.getName());
 	    }
 	    else
 	    {
-	    	return value;
+	        return descendingComparator.compare(arg0.getFileSystemType(), arg1.getFileSystemType());	
 	    }
 	    
 	}
