@@ -120,7 +120,6 @@ public class Researcher extends BasePersistent{
 	public Researcher(IrUser user) {
 		this.user = user;
 		this.isPublic = false;
-		
 	}
 	
 	/**
@@ -526,18 +525,38 @@ public class Researcher extends BasePersistent{
     	return hash;
     }
 
+	/**
+	 * Get the pictures for the researcher.  Returns an unmodifiable set.
+	 * 
+	 * @return - unmodifiable set of pictures
+	 */
 	public Set<IrFile> getPictures() {
-		return pictures;
+		return Collections.unmodifiableSet(pictures);
 	}
 
-	public void setPictures(Set<IrFile> pictures) {
+	/**
+	 * Set the pictures for the researcher
+	 * 
+	 * @param pictures
+	 */
+	void setPictures(Set<IrFile> pictures) {
 		this.pictures = pictures;
 	}
 
+	/**
+	 * Get the primary picture for the researcher.
+	 * 
+	 * @return - primary picture for the researcher.
+	 */
 	public IrFile getPrimaryPicture() {
 		return primaryPicture;
 	}
 
+	/**
+	 * Set the primary picture for the researcher.
+	 * 
+	 * @param primaryPicture
+	 */
 	public void setPrimaryPicture(IrFile primaryPicture) {
 		this.primaryPicture = primaryPicture;
 	}    
@@ -549,7 +568,10 @@ public class Researcher extends BasePersistent{
 	 */
 	public void addPicture(IrFile file)
 	{
-		pictures.add(file);
+		if( !pictures.contains(file))
+		{
+		    pictures.add(file);
+		}
 	}
 	
 	/**
@@ -637,99 +659,221 @@ public class Researcher extends BasePersistent{
 	}
 
 	
+	/**
+	 * Get the researchers teaching interests.
+	 * 
+	 * @return
+	 */
 	public String getTeachingInterest() {
 		return teachingInterest;
 	}
 
+	/**
+	 * Set the researcher teaching instrests.
+	 * 
+	 * @param teachingInterest
+	 */
 	public void setTeachingInterest(String teachingInterest) {
 		this.teachingInterest = teachingInterest;
 	}
 
+	/**
+	 * Get the researcher interests.
+	 * 
+	 * @return - researcher insterests.
+	 */
 	public String getResearchInterest() {
 		return researchInterest;
 	}
 
+	/**
+	 * Set the researcher interests.
+	 * 
+	 * @param researchInterest
+	 */
 	public void setResearchInterest(String researchInterest) {
 		this.researchInterest = researchInterest;
 	}
 
+	/**
+	 * Get the user who owns this researcher.
+	 * 
+	 * @return
+	 */
 	public IrUser getUser() {
 		return user;
 	}
 
+	/**
+	 * Set the user who owns this researcher object.
+	 * 
+	 * @param user
+	 */
 	public void setUser(IrUser user) {
 		this.user = user;
 	}
 
+	/**
+	 * Get the campus location for the researcher.
+	 * 
+	 * @return campus location for the researcher.
+	 */
 	public String getCampusLocation() {
 		return campusLocation;
 	}
 
+	/**
+	 * Set the campus location for the researcher.
+	 * 
+	 * @param campusLocation
+	 */
 	public void setCampusLocation(String campusLocation) {
 		this.campusLocation = campusLocation;
 	}
 
+	/**
+	 * Get the phone number for a researcher.
+	 * 
+	 * @return phone number for the researcher.
+	 */
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
+	/**
+	 * Set the phone number for a researcher.
+	 * 
+	 * @param phoneNumber
+	 */
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
+	/**
+	 * Get the email for a researcher.
+	 * 
+	 * @return email for the researcher.
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+	 * Set the email for a researcher.
+	 * 
+	 * @param email for the researcher.
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+	/**
+	 * Get the fax number for a researcher.
+	 * 
+	 * @return fax number for the researcher.
+	 */
 	public String getFax() {
 		return fax;
 	}
 
+	/**
+	 * Set the fax number for a researcher.
+	 * 
+	 * @param fax
+	 */
 	public void setFax(String fax) {
 		this.fax = fax;
 	}
 
+	/**
+	 * Determine if the researche rpage is public.
+	 * 
+	 * @return
+	 */
 	public boolean isPublic() {
 		return isPublic;
 	}
 
+	/**
+	 * Determines if the researcher page is public.
+	 * 
+	 * @param isPublic - if true the researcher page is public
+	 */
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}
 
+	/**
+	 * Get the root folders for the researcher.  This is an
+	 * unmodifiable set.
+	 * 
+	 * @return set of root folders.
+	 */
 	public Set<ResearcherFolder> getRootFolders() {
-		return rootFolders;
+		return Collections.unmodifiableSet(rootFolders);
 	}
 
-	public void setRootFolders(Set<ResearcherFolder> rootFolders) {
+	/**
+	 * Set the root folders for a researcher.
+	 * 
+	 * @param rootFolders
+	 */
+	void setRootFolders(Set<ResearcherFolder> rootFolders) {
 		this.rootFolders = rootFolders;
 	}
 
+	/**
+	 * Get the root files for a researcher.  This is
+	 * an unmodifiable set.
+	 * 
+	 * @return
+	 */
 	public Set<ResearcherFile> getRootFiles() {
-		return rootFiles;
+		return Collections.unmodifiableSet(rootFiles);
 	}
 
-	public void setRootFiles(Set<ResearcherFile> rootFiles) {
+	/**
+	 * Se tthe root files.
+	 * 
+	 * @param rootFiles
+	 */
+	void setRootFiles(Set<ResearcherFile> rootFiles) {
 		this.rootFiles = rootFiles;
 	}
 
+	/**
+	 * Return the set of root publications.  This is an unmodifiable set.
+	 * 
+	 * @return unmodifiable set of root publications
+	 */
 	public Set<ResearcherPublication> getRootPublications() {
-		return rootPublications;
+		return Collections.unmodifiableSet(rootPublications);
 	}
 
-	public void setRootPublications(Set<ResearcherPublication> rootPublications) {
+	/**
+	 * Set the root publications.
+	 * 
+	 * @param rootPublications
+	 */
+	void setRootPublications(Set<ResearcherPublication> rootPublications) {
 		this.rootPublications = rootPublications;
 	}
 
+	/**
+	 * Get the root links for the researcher - this is an unmodifiable set.
+	 * 
+	 * @return set of root links
+	 */
 	public Set<ResearcherLink> getRootLinks() {
-		return rootLinks;
+		return Collections.unmodifiableSet(rootLinks);
 	}
 
-	public void setRootLinks(Set<ResearcherLink> rootLinks) {
+	/**
+	 * Set the root links for the researcher
+	 * 
+	 * @param rootLinks
+	 */
+	void setRootLinks(Set<ResearcherLink> rootLinks) {
 		this.rootLinks = rootLinks;
 	}
 	
@@ -1057,19 +1201,39 @@ public class Researcher extends BasePersistent{
 		return jsonObj;
 	}
 
+	/**
+	 * Get the root institutional items for the researcher.  This is 
+	 * an unmodifiable set.
+	 * 
+	 * @return set of root insitutional items.
+	 */
 	public Set<ResearcherInstitutionalItem> getRootInstitutionalItems() {
-		return rootInstitutionalItems;
+		return Collections.unmodifiableSet(rootInstitutionalItems);
 	}
 
-	public void setRootInstitutionalItems(
+	/**
+	 * Set the root insitutional items 
+	 * @param rootInstitutionalItems
+	 */
+	void setRootInstitutionalItems(
 			Set<ResearcherInstitutionalItem> rootInstitutionalItems) {
 		this.rootInstitutionalItems = rootInstitutionalItems;
 	}
 
+	/**
+	 * Get the keywords for the researcher.
+	 * 
+	 * @return
+	 */
 	public String getKeywords() {
 		return keywords;
 	}
 
+	/**
+	 * Set the key words for this researcher.
+	 * 
+	 * @param keywords
+	 */
 	public void setKeywords(String keywords) {
 		this.keywords = keywords;
 	}

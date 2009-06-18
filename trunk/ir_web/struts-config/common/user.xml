@@ -241,7 +241,6 @@
             <result name="success">/pages/user/workspace/move_folder.jsp</result>
         </action>
         
-        
         <action name="getMovePersonalFolderDestinations"
             class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
             method="viewLocations">
@@ -250,7 +249,6 @@
             <result name="success">/pages/user/workspace/move_folder_frag.jsp</result>
         </action>
         
-        
         <action name="movePersonalFolderInformation"
             class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
             method="move">
@@ -258,8 +256,6 @@
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/workspace/move_folder_frag.jsp</result>
         </action>
-
-
         
         <!--  ************************************ -->
         <!--  shared inbox actions     -->

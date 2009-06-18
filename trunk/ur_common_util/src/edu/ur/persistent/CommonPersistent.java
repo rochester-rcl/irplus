@@ -29,15 +29,20 @@ public abstract class CommonPersistent extends BasePersistent
         implements DescriptionAware, NameAware
 {
 
-    /**
-     * Name for the object.
-     */
+    /** eclipse generated serial id */
+	private static final long serialVersionUID = -2896794034127562638L;
+
+	/**  Name for the object. */
     protected String name;
-    /**
-     * Generic description.
-     */
+    
+    /**  Generic description. */
     protected String description;
 
+    /**
+     * Get the description 
+     * 
+     * @see edu.ur.simple.type.DescriptionAware#getDescription()
+     */
     public String getDescription()
     {
         return description;

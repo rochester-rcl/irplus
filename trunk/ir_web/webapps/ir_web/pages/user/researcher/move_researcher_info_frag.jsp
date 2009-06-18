@@ -19,8 +19,9 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
  
-    <c:url var="cancelUrl" value="/user/workspace.action">
+    <c:url var="cancelUrl" value="/user/getResearcherFileSystem.action">
         <c:param name="parentFolderId" value="${parentFolderId}"/>
+        <c:param name="researcherId" value="${researcherId}"/>
     </c:url>
     
     <button class="ur_button"
@@ -36,9 +37,9 @@
 		
 		
 		        <div id="destination_path">
-		            Move To Location: /<ur:a href="javascript:YAHOO.ur.folder.move.getMoveFolder('0');">My Files</ur:a>/
+		            Move To Location: /<ur:a href="javascript:YAHOO.ur.researcher.filesystem.move.getMoveFolder('0');">My Files</ur:a>/
 		            <c:forEach var="folder" items="${destinationPath}">
-			            <ur:a href="javascript:YAHOO.ur.folder.move.getMoveFolder('${folder.id}')">${folder.name}</ur:a>/
+			            <ur:a href="javascript:YAHOO.ur.researcher.filesystem.move.getMoveFolder('${folder.id}')">${folder.name}</ur:a>/
                     </c:forEach>
                 </div>
             
@@ -89,7 +90,7 @@
 		    <td width="100px" valign="top" align="center">
 		
 		        <button class="ur_button" id="move_button"
-			            onclick="javascript:YAHOO.ur.folder.move.moveFolder();"
+			            onclick="javascript:YAHOO.ur.researcher.filesystem.move.moveFolder();"
 			            onmouseover="this.className='ur_buttonover';"
 			            onmouseout="this.className='ur_button';"
 			            >Move<span class="pageWhiteGoBtnImg">&nbsp;</span>
@@ -97,9 +98,10 @@
 		   </td>
 		   <td width="400px" align="left" valign="top">
 		       <form name="viewChildContentsForMove"
-	              id="move_folder_form"><input type="hidden"
-	              id="destination_id" name="destinationId" value="${destinationId}" />
+	              id="move_folder_form">
+	              <input type="hidden" id="destination_id" name="destinationId" value="${destinationId}" />
 	              <input type="hidden" name="parentFolderId" value="${parentFolderId}" /> 
+	              <input type="hidden" id="researcher_id"  name="researcherId" value="${researcherId}" /> 
 	
 	               <c:forEach items="${foldersToMove}" var="folder">
 	                   <input type="hidden" value="${folder.id}" name="folderIds" />
@@ -137,7 +139,7 @@
 			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFolder'}">
 			           	       <c:if test="${ir:canMoveToResearcherFolder(foldersToMove, fileSystemObject)}">
 						            <td><span class="folderBtnImg"></span><a
-							            href="javascript:YAHOO.ur.folder.move.getMoveFolder(${fileSystemObject.id});">${fileSystemObject.name}</a></td>
+							            href="javascript:YAHOO.ur.researcher.filesystem.move.getMoveFolder(${fileSystemObject.id});">${fileSystemObject.name}</a></td>
 					           </c:if>
 					           <c:if test="${!ir:canMoveToResearcherFolder(foldersToMove, fileSystemObject)}">
 					               <td class="errorMessage"><span class="folderBtnImg"></span>${fileSystemObject.name} [Moving]</td>

@@ -29,7 +29,10 @@ public abstract class BasePersistent implements LongPersistentId,
         PersistentVersioned, Serializable
 {
 
-    /**
+    /** Eclipse generated id */
+	private static final long serialVersionUID = -2154864965249341364L;
+
+	/**
      *  The id of the object
      */
     protected Long id;

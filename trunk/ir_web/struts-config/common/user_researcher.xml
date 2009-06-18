@@ -406,3 +406,19 @@
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/move.jsp</result>
         </action>
+        
+         <action name="getMoveResearcherFolderDestinations"
+            class="edu.ur.ir.web.action.researcher.MoveResearcherInformation"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/move_researcher_info_frag.jsp</result>
+        </action>
+        
+        <action name="moveResearcherInformation"
+            class="edu.ur.ir.web.action.researcher.MoveResearcherInformation"
+            method="move">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/move_researcher_info_frag.jsp</result>
+        </action>

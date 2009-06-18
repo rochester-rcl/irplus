@@ -222,7 +222,6 @@ public abstract class PreOrderTreeSetNodeBase implements PreOrderTreeSetNode
      * children.
      *
      */
-    @SuppressWarnings("unchecked")
     protected void makeRoomInTree(PreOrderTreeSetNodeBase child)
     {
 
