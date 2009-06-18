@@ -177,7 +177,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		}
 		itemsToMove = researcherFileSystemService.getResearcherInstitutionalItems(researcherId, listItemIds);
 		
-		if( !destinationId.equals(UserFileSystemService.ROOT_FOLDER_ID))
+		if( !destinationId.equals(ResearcherFileSystemService.USE_RESEARCHER_AS_ROOT))
 		{
 		    destination = 
 		    	researcherFileSystemService.getResearcherFolder(destinationId, false);

@@ -52,7 +52,7 @@
 		        <table class="simpleTable" width="400px">
 			        <thead>
 				        <tr>
-					        <th>Folders &amp; Files to Move</th>
+					        <th>Researcher Objects To Move</th>
 				        </tr>
 			        </thead>
 			        <tbody>
@@ -64,7 +64,23 @@
 
 				        <c:forEach items="${filesToMove}" var="file">
 					        <tr>
-						        <td><ir:fileTypeImg cssClass="tableImg" versionedFile="${file.versionedFile}"/>${file.name}</td>
+						        <td><ir:fileTypeImg cssClass="tableImg" irFile="${file.irFile}"/>${file.name}</td>
+					        </tr>
+				        </c:forEach>
+				        <c:forEach items="${itemsToMove}" var="item">
+					        <tr>
+						        <td><span class="packageBtnImg">&nbsp;</span>${item.name}</td>
+					        </tr>
+				        </c:forEach>
+				        <c:forEach items="${publicationsToMove}" var="publication">
+					        <tr>
+						        <td><span class="packageBtnImg">&nbsp;</span>${publication.name}</td>
+					        </tr>
+				        </c:forEach>
+				        <c:forEach items="${linksToMove}" var="link">
+					        <tr>
+						        <td><img  alt="" 
+			                       src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>${link.name}</td>
 					        </tr>
 				        </c:forEach>
 			        </tbody>
@@ -92,6 +108,18 @@
                    <c:forEach items="${filesToMove}" var="file">
 	                   <input type="hidden" value="${file.id}" name="fileIds" />
                    </c:forEach>
+                   
+                   <c:forEach items="${itemsToMove}" var="item">
+	                   <input type="hidden" value="${item.id}" name="itemIds" />
+                   </c:forEach>
+                   
+                   <c:forEach items="${linksToMove}" var="link">
+	                   <input type="hidden" value="${link.id}" name="linkIds" />
+                   </c:forEach>
+                   
+                   <c:forEach items="${publicationsToMove}" var="publication">
+	                   <input type="hidden" value="${publication.id}" name="publicationIds" />
+                   </c:forEach>
     
 	               <!-- set to indicate a success full move -->
 	               <input type="hidden" id="action_success" value="${actionSuccess}" name="actionSuccess"/>
@@ -106,24 +134,50 @@
 		           <c:forEach items="${currentDestinationContents}"
 			              var="fileSystemObject">
 			           <tr>
-			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-					           <c:if test="${ir:canMoveToFolder(foldersToMove, fileSystemObject)}">
+			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFolder'}">
+			           	       <c:if test="${ir:canMoveToResearcherFolder(foldersToMove, fileSystemObject)}">
 						            <td><span class="folderBtnImg"></span><a
 							            href="javascript:YAHOO.ur.folder.move.getMoveFolder(${fileSystemObject.id});">${fileSystemObject.name}</a></td>
 					           </c:if>
-					           <c:if test="${!ir:canMoveToFolder(foldersToMove, fileSystemObject)}">
-						
-						           <td class="errorMessage"><span class="folderBtnImg"></span>${fileSystemObject.name} [Moving]</td>
+					           <c:if test="${!ir:canMoveToResearcherFolder(foldersToMove, fileSystemObject)}">
+					               <td class="errorMessage"><span class="folderBtnImg"></span>${fileSystemObject.name} [Moving]</td>
 					           </c:if>
 					       </c:if>
-			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
-			           	   		<c:if test="${!ir:isFileToBeMoved(filesToMove, fileSystemObject)}">
-						            <td><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/>${fileSystemObject.name}</td>
-						        </c:if>
-			           	   		<c:if test="${ir:isFileToBeMoved(filesToMove, fileSystemObject)}">
-						            <td class="errorMessage"><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/>${fileSystemObject.name}[Moving]</td>
-						        </c:if>
-					       </c:if>					       
+			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'researcherFile'}">
+			           	       <c:if test="${!ir:isResearcherObjectToBeMoved(filesToMove, fileSystemObject)}">
+						           <td><ir:fileTypeImg cssClass="tableImg" irFile="${fileSystemObject.irFile}"/>${fileSystemObject.name}</td>
+					           </c:if>
+					           <c:if test="${ir:isResearcherObjectToBeMoved(filesToMove, fileSystemObject)}">
+						           <td class="errorMessage"><ir:fileTypeImg cssClass="tableImg" irFile="${fileSystemObject.irFile}"/>${fileSystemObject.name}[Moving]</td>
+					           </c:if>
+					       </c:if>
+					       <c:if test="${fileSystemObject.fileSystemType.type == 'researcherPublication'}">
+			           	       <c:if test="${!ir:isResearcherObjectToBeMoved(publicationsToMove, fileSystemObject)}">
+						            <td><span class="packageBtnImg">&nbsp;</span>${fileSystemObject.name}</td>
+                               </c:if>
+			           	       <c:if test="${ir:isResearcherObjectToBeMoved(publicationsToMove, fileSystemObject)}">
+						            <td class="errorMessage"><span class="packageBtnImg">&nbsp;</span>${fileSystemObject.name}[Moving]</td>
+                               </c:if>
+					       </c:if>
+					       <c:if test="${fileSystemObject.fileSystemType.type == 'researcherLink'}">
+			           	       <c:if test="${!ir:isResearcherObjectToBeMoved(linksToMove, fileSystemObject)}">
+						            <td><img  alt="" 
+			                           src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>${fileSystemObject.name}</td>
+					           </c:if>
+			           	       <c:if test="${ir:isResearcherObjectToBeMoved(linksToMove, fileSystemObject)}">
+						            <td class="errorMessage"><img  alt="" 
+			                           src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>${fileSystemObject.name}[Moving]</td>
+					           </c:if>
+
+					       </c:if>
+					       <c:if test="${fileSystemObject.fileSystemType.type == 'researcherInstitutionalItem'}">
+			           	       <c:if test="${!ir:isResearcherObjectToBeMoved(itemsToMove, fileSystemObject)}">
+						            <td><span class="packageBtnImg">&nbsp;</span> ${fileSystemObject.name}</td>
+						       </c:if>
+			           	       <c:if test="${ir:isResearcherObjectToBeMoved(itemsToMove, fileSystemObject)}">
+						            <td class="errorMessage"><span class="packageBtnImg">&nbsp;</span> ${fileSystemObject.name} [Moving]</td>
+						       </c:if>
+					       </c:if>							       
 			           </tr>
 		           </c:forEach>
 	               </tbody>
