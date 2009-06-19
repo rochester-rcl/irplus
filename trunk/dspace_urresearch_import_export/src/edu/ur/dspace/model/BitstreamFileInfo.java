@@ -45,6 +45,9 @@ public class BitstreamFileInfo {
 	/** id of the bitstream */
 	public Long bitstreamId;
 	
+	/** Description of the bitstream file */
+	public String description;
+	
 	/** original name of the file when uploaded*/
 	public String originalFileName;
 	
@@ -70,6 +73,8 @@ public class BitstreamFileInfo {
 		sb.append(originalFileName);
 		sb.append(" new file name = ");
 		sb.append(newFileName);
+		sb.append(" description = ");
+		sb.append(description);
 		sb.append("]");
 		return sb.toString();
 	}

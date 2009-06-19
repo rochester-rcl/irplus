@@ -356,27 +356,7 @@ public class DefaultCollectionExporter implements CollectionExporter{
 	    }
 	}
 	
-	/**
-	 * Map the data to a collection
-	 * 
-	 * @author Nathan Sarr
-	 *
-	 */
-	private static final class C implements RowMapper {
 
-	    public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-	    	DspaceCollection collection = new DspaceCollection();
-	    	collection.communityId = new Long(rs.getInt("community_id"));
-	    	collection.id = new Long(rs.getInt("collection_id"));
-	        collection.copyright = rs.getString("copyright_text");
-	        collection.shortDescription = rs.getString("short_description");
-	        collection.name = rs.getString("name");
-	        collection.introductoryText = rs.getString("introductory_text");
-	        collection.sideBarText = rs.getString("side_bar_text");
-	        collection.logoId = rs.getLong("logo_bitstream_id");
-	        return collection;
-	    }
-	}
 	
 	public BitstreamFileLoader getBitstreamFileLoader() {
 		return bitstreamFileLoader;

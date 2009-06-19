@@ -164,6 +164,7 @@ public class DefaultBitstreamFileLoader implements BitstreamFileLoader {
 	       info.storeNumber = rs.getInt("store_number");
 	       info.internal_id = rs.getString("internal_id");
 	       info.originalFileName = rs.getString("name");
+	       info.description = rs.getString("description");
            return info;
 	   }
 	}

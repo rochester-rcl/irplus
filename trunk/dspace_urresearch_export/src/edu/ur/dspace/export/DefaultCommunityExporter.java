@@ -312,7 +312,6 @@ public class DefaultCommunityExporter implements CommunityExporter{
 	 * 
 	 * @see edu.ur.dspace.export.CommunityExporter#exportCommunities(java.lang.String)
 	 */
-	@SuppressWarnings("unchecked")
 	public void  exportCommunities(String zipFileName, String xmlFilePath) throws IOException {
 		 
         List<Community> communities = this.getCommunities();
