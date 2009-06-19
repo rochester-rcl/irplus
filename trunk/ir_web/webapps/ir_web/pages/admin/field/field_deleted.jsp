@@ -1,4 +1,4 @@
-<jsp:directive.page contentType="application/javascript"/>
+<jsp:directive.page contentType="application/javascript; charset=UTF-8"/>
 
 
 /*   Copyright 2008 University of Rochester
