@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html;UTF-8" pageEncoding="UTF-8" %>
+
 <!--  
    Copyright 2008 University of Rochester
 
@@ -50,6 +52,8 @@
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="pages/js/ur_table.js"/>
     <ur:js src="page-resources/js/public/institutional_publication_view.js"/>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
  	    
  	</head>

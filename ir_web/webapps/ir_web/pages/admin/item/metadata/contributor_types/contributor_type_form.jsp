@@ -1,3 +1,6 @@
+<jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
+
+
 <!--  
    Copyright 2008 University of Rochester
 
@@ -18,6 +21,7 @@
       this form will return with error messages in it if there
       is an issue.
  -->
+<jsp:directive.taglib prefix="ir" uri="ir-tags"/>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 
 <input type="hidden" id="newContributorTypeForm_id" name="id" value="${contributorType.id}"/>
