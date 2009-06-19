@@ -253,6 +253,15 @@
        <property name="personNameAuthorityDAO" ref="personNameAuthorityDAO"/>
        <property name="personNameDAO" ref="personNameDAO"/>
    </bean>
+   
+      
+   <!-- ****************************************** --> 
+   <!-- Service to manage copyright statement data -->
+   <!-- ****************************************** --> 
+   <bean id="copyrightStatementService" 
+       class="edu.ur.ir.item.service.DefaultCopyrightStatementService">
+       <property name="copyrightStatementDAO" ref="copyrightStatementDAO"/>
+   </bean>
 
    <!-- ****************************************** --> 
    <!-- Service to manage ACL						-->
@@ -546,7 +555,7 @@
    <!-- ****************************************** --> 
    <!-- Repository License Service  -->
    <!-- ****************************************** --> 
-      <bean id="licenseService" 
+    <bean id="licenseService" 
        class="edu.ur.ir.repository.service.DefaultLicenseService">
        <property name="versionedLicenseDAO" ref="versionedLicenseDAO"/>
        <property name="licenseVersionDAO" ref="licenseVersionDAO"/>
