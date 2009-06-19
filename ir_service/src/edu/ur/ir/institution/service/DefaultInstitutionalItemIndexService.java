@@ -29,11 +29,13 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumberTools;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.LockObtainFailedException;
 
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.FileTextExtractor;
@@ -161,18 +163,28 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		}
 		
 		IndexWriter writer = null;
+		Directory directory = null;
 		try {
-			synchronized(this)
+			directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
+			while(writer == null )
 			{
-			    Directory directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
-			    writer = new IndexWriter(directory, analyzer, overwriteExistingIndex);
-			    for(Document d : docs)
-			    {
-			    	writer.addDocument(d);
-			    }
-			    writer.flush();
-			    writer.optimize();
+				if( overwriteExistingIndex )
+				{
+				    writer = getWriterOverwriteExisting(directory);
+				}
+				else
+				{
+					writer = getWriter(directory);
+				}
 			}
+			    
+			for(Document d : docs)
+			{
+				writer.addDocument(d);
+			}
+			writer.flush();
+			writer.optimize();
+			
 		} catch (IOException e) {
 			log.error(e);
 			throw new RuntimeException(e);
@@ -186,6 +198,18 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			    }
 		    }
 		    writer = null;
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		    
 	    }
 	}
 	
@@ -196,7 +220,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	public void deleteItemsForCollection(InstitutionalCollection institutionalCollection, File institutionalItemIndex)
 	{
 		Directory directory = null;
-		IndexReader reader = null;
+		IndexWriter writer = null;
 		
 	    // if the index is empty or does not exist then do nothing
 	    if( institutionalItemIndex == null || institutionalItemIndex.list() == null || 
@@ -206,36 +230,40 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	    }
 	    
 		try {
-			synchronized(this)
+			directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
+			while(writer == null )
 			{
-			    directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
-			    if( IndexReader.isLocked(directory) )
-			    {
-				    throw new RuntimeException("Repository index directory " + institutionalItemIndex.getAbsolutePath() +
-					    	" is locked ");
-			    }
-			    else
-			    {
-				    reader = IndexReader.open(directory);
-				    Term term = new Term(COLLECTION_ID, NumberTools.longToString(institutionalCollection.getId()));
-			        reader.deleteDocuments(term);
-			     }
+			    writer =  getWriter(directory);
 			}
-		} catch (IOException e) {
+			Term term = new Term(COLLECTION_ID, NumberTools.longToString(institutionalCollection.getId()));
+			writer.deleteDocuments(term);
+		} 
+		catch (IOException e) 
+		{
 	        throw new RuntimeException(e);
 		}
-		finally
-		{
-			if( reader != null)
-			{
-				try {
-					reader.close();
-				} catch (IOException e) {
-					log.error(e);
-				}
-			}
-			reader = null;
-		}
+		finally {
+		    if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		    
+	    }
 	}
 	
 	
@@ -247,7 +275,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	public void deleteItem(InstitutionalItem institutionalItem, File institutionalItemIndex) {
 
 		Directory directory = null;
-		IndexReader reader = null;
+		IndexWriter writer = null;
 		
 	    // if the index is empty or does not exist then do nothing
 	    if( institutionalItemIndex == null || institutionalItemIndex.list() == null || 
@@ -256,38 +284,46 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	    	return;
 	    }
 	    
-		try {
-			synchronized(this)
+		try 
+		{
+			directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
+			while(writer == null )
 			{
-			    directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
-			    if( IndexReader.isLocked(directory) )
-			    {
-				    throw new RuntimeException("Repository index directory " + institutionalItemIndex.getAbsolutePath() +
-					    	" is locked ");
-			    }
-			    else
-			    {
-				    reader = IndexReader.open(directory);
-				    Term term = new Term(ID, NumberTools.longToString(institutionalItem.getId()));
-			        reader.deleteDocuments(term);
-			     }
+				writer = getWriter(directory);
 			}
-		} catch (IOException e) {
+			
+			Term term = new Term(ID, NumberTools.longToString(institutionalItem.getId()));
+			writer.deleteDocuments(term);
+			  
+		} 
+        catch (IOException e) 
+        {
 			log.error(e);
 	        throw new RuntimeException(e);
 		}
-		finally
-		{
-			if( reader != null)
-			{
-				try {
-					reader.close();
-				} catch (IOException e) {
-					log.error(e);
-				}
-			}
-			reader = null;
-		}
+        finally 
+        {
+		    if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		    
+	    }
 		
 	}
 
@@ -525,20 +561,25 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	private void writeDocument(String directoryPath, Document document)
 	{
 		IndexWriter writer = null;
-		try {
-			synchronized(this)
+		Directory directory = null;
+		try 
+		{
+		    directory = FSDirectory.getDirectory(directoryPath);
+		    while(writer == null )
 			{
-			    Directory directory = FSDirectory.getDirectory(directoryPath);
-			    writer = new IndexWriter(directory, analyzer);
-			    writer.addDocument(document);
-			    writer.flush();
-			    writer.optimize();
+				writer = getWriter(directory);
 			}
-		} catch (IOException e) {
+		    writer.addDocument(document);
+			writer.flush();
+			writer.optimize();
+		} 
+		catch (IOException e) 
+		{
 			log.error(e);
 			throw new RuntimeException(e);
 		}
-	    finally {
+		finally 
+        {
 		    if (writer != null) {
 			    try {
 				    writer.close();
@@ -547,6 +588,18 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			    }
 		    }
 		    writer = null;
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		    
 	    }
 	}
 	
@@ -830,6 +883,50 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 
 	public void setCollectionBatchSize(int collectionBatchSize) {
 		this.collectionBatchSize = collectionBatchSize;
+	}
+	
+	/**
+	 * All methods should use this to obtain a writer on the directory.  This will return 
+	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
+	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
+	 * users index at once.
+	 * 
+	 * @param directory
+	 * @return
+	 * @throws CorruptIndexException
+	 * @throws LockObtainFailedException
+	 * @throws IOException
+	 */
+	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	{
+		IndexWriter writer = null;
+		if( !IndexReader.isLocked(directory) )
+	    {
+			writer = new IndexWriter(directory, analyzer);
+	    }
+		return writer;
+	}
+	
+	/**
+	 * All methods should use this to obtain a writer on the directory.  This will return 
+	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
+	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
+	 * users index at once.
+	 * 
+	 * @param directory
+	 * @return
+	 * @throws CorruptIndexException
+	 * @throws LockObtainFailedException
+	 * @throws IOException
+	 */
+	private synchronized IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	{
+		IndexWriter writer = null;
+		if( !IndexReader.isLocked(directory) )
+	    {
+			writer = new IndexWriter(directory, analyzer, true);
+	    }
+		return writer;
 	}
 	
 

@@ -370,7 +370,6 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		Directory directory = null;
 		try {
 			directory = FSDirectory.getDirectory(directoryPath);
-			writer = getWriter(directory);
 			while(writer == null )
 			{
 				writer = getWriter(directory);
@@ -445,7 +444,6 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		try {
 			
 			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			writer = getWriter(directory);
 			while( writer == null )
 			{
 				writer = getWriter(directory);
@@ -555,7 +553,6 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		try {
 			
 			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			writer = getWriter(directory);
 			while( writer == null )
 			{
 				writer = getWriter(directory);
@@ -727,7 +724,6 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		try {
 			
 			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			writer = getWriter(directory);
 			while( writer == null)
 			{
 				writer = getWriter(directory);
@@ -891,7 +887,6 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		try {
 			
 			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			writer = getWriter(directory);
 			while( writer == null )
 			{
 				writer = getWriter(directory);
