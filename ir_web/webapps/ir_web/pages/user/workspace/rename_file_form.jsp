@@ -35,7 +35,7 @@
             New File Name: 
         </td>
         <td>
-            <input type="text" name="newFileName" size="25" value="${newFileName}"/> 
+            <input type="text" name="newFileName" size="60" value="${newFileName}"/> 
         </td>
     </tr>
     <tr>
@@ -43,7 +43,7 @@
             Description: 
         </td>
         <td>
-            <input type="text" name="fileDescription" size="25" value="${fileDescription}"/>   
+            <input type="text" name="fileDescription" size="60" value="${fileDescription}"/>   
         </td>
     </tr>
 </table>
