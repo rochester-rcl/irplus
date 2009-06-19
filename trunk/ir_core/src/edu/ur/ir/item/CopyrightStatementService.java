@@ -2,6 +2,8 @@ package edu.ur.ir.item;
 
 import java.util.List;
 
+import edu.ur.order.OrderType;
+
 /**
  * Service for getting and updating copyright statements.
  * 
@@ -22,8 +24,8 @@ public interface CopyrightStatementService {
 	 * 
 	 * @return List of content types.
 	 */
-	public List<CopyrightStatement> getCopyrightStatementsOrderByName(final int rowStart, 
-    		final int numberOfResultsToShow, final String sortType);
+	public List<CopyrightStatement> getCopyrightStatementsOrderByName(int rowStart, 
+    		int numberOfResultsToShow, OrderType orderType);
 
     /**
      * Get a count of copyright statements 
@@ -33,18 +35,12 @@ public interface CopyrightStatementService {
     public Long getCount();
     
     /**
-     * Delete a copyright statement with the specified name.
+     * Delete the copyright statement
      * 
-     * @param id
+     * @param copyrightStatement 
      */
-    public boolean delete(Long id);
+    public void delete(CopyrightStatement copyrightSatement);
     
-    /** 
-     * Delete the copyright statement with the specified name.
-     * 
-     * @param name
-     */
-    public boolean delete(String name);
     
     /**
      * Get a copyright statement by name.
@@ -77,11 +73,6 @@ public interface CopyrightStatementService {
 	 */
 	public List<CopyrightStatement> getAll();
 	
-	/**
-	 * Get all copyright statements by name asc order.
-	 * 
-	 * @return copyright statement by name order
-	 */
-	public List<CopyrightStatement> getAllByNameOrder();
+	
 
 }
