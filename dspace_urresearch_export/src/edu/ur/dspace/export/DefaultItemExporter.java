@@ -336,6 +336,11 @@ public class DefaultItemExporter implements ItemExporter{
 			 originalFileName.appendChild(data);
 			 fileElement.appendChild(originalFileName);
 			 
+			 Element description = doc.createElement("description");
+			 data = doc.createTextNode(file.description);
+			 description.appendChild(data);
+			 fileElement.appendChild(description);
+			 
 			 Element newFileName = doc.createElement("new_file_name");
 			 
 			 if( file.extension != null )

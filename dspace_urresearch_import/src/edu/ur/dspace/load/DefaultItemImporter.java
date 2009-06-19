@@ -321,6 +321,10 @@ public class DefaultItemImporter implements ItemImporter{
 	        {
 	           file.newFileName = child.getTextContent();
 	        }
+	        else if (child.getNodeName().equals("description"))
+	        {
+	           file.description = child.getTextContent();
+	        }
 	        else if( child.getNodeName().equals("group_permissions"))
             {
             	getGroupPermissions(file, child);
@@ -610,6 +614,7 @@ public class DefaultItemImporter implements ItemImporter{
 				    		// normal file processing
 					        irFile = repositoryService.createIrFile(repo, f, bfi.originalFileName, "imported dspace item file");
 					        ItemFile itemFile = genericItem.addFile(irFile);
+					        itemFile.setDescription(bfi.description);
 					        itemFileBitstreamInfos.add(new ItemFileBitstreamInfo(itemFile, bfi));
 					        if( defaultThumbnailTransformer.canTransform(irFile.getFileInfo().getExtension()))
 					        {

@@ -456,7 +456,6 @@ public class DefaultResearcherExporter implements ResearcherExporter {
 	 * 
 	 * @see edu.ur.dspace.export.CommunityExporter#exportCommunities(java.lang.String)
 	 */
-	@SuppressWarnings("unchecked")
 	public void  exportResearchers(String zipFileName, String xmlFilePath) throws IOException {
 		 
         List<DspaceResearcher> researchers = this.getResearchers();
