@@ -48,8 +48,8 @@ public class OrderType {
 	
 	/**
 	 * Will compare the string values and return the order type
-	 * valid values are asc, ascending for ascending order type 
-	 * and desc, descending for descending order type.
+	 * valid values are "asc", "ascending" for ascending order type 
+	 * and "desc", "descending" for descending order type.
 	 * 
 	 * @param type
 	 * @return the correct order type or a newly created order type or null if
@@ -68,6 +68,11 @@ public class OrderType {
 		return null;
 	}
 	
+	/**
+	 * Get the type as a string.
+	 * 
+	 * @return
+	 */
 	public String getType() {
 		return type;
 	}
