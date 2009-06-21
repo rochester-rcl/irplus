@@ -15,7 +15,7 @@
 */  
 
 
-package edu.ur.ir;
+package edu.ur.ir.index;
 
 import edu.ur.persistent.CommonPersistent;
 
@@ -30,6 +30,21 @@ public class IndexProcessingType extends CommonPersistent{
 
 	/** eclipse generated id */
 	private static final long serialVersionUID = -3381958914958584659L;
+	
+	/**
+	 * Package protected constructor.
+	 */
+	IndexProcessingType(){}
+	
+	/**
+	 * Default constructor.
+	 * 
+	 * @param name
+	 */
+	public IndexProcessingType(String name)
+	{
+		setName(name);
+	}
 	
 	/**
 	 * @see java.lang.Object#hashCode()

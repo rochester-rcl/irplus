@@ -15,9 +15,10 @@
 */  
 
 
-package edu.ur.ir;
+package edu.ur.ir.index;
 
 import java.util.List;
+
 
 /**
  * Interface to deal with index processing types.
@@ -52,9 +53,9 @@ public interface IndexProcessingTypeService {
     /**
      * Get an index processing type by id
      * 
-     * @param id - unique id of the copyright statement.
+     * @param id - unique id of the index processing type.
      * @param lock - upgrade the lock on the data
-     * @return - the found copyright statement or null if the copyright statement is not found.
+     * @return - the found index processing type or null if the index processing type is not found.
      */
     public IndexProcessingType get(Long id, boolean lock);
     

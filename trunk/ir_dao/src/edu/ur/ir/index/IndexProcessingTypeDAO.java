@@ -1,4 +1,4 @@
-<!--  
+/**  
    Copyright 2008 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,23 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
--->   
+*/  
 
-<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
 
-<suite name="ir hibernate test single">
-	<test name="Test Single">
-		<classes>
-              <class name="edu.ur.hibernate.ir.index.db.IndexProcessingTypeDAOTest"/>
-		</classes>
-	</test>
-</suite>
+package edu.ur.ir.index;
+
+import edu.ur.dao.CountableDAO;
+import edu.ur.dao.CrudDAO;
+import edu.ur.dao.UniqueNameDAO;
+import edu.ur.ir.index.IndexProcessingType;
+
+/**
+ * Interface for storing index processing types.
+ * 
+ * @author Nathan Sarr
+ *
+ */
+public interface IndexProcessingTypeDAO extends CountableDAO, 
+CrudDAO<IndexProcessingType>, UniqueNameDAO<IndexProcessingType>{
+
+}

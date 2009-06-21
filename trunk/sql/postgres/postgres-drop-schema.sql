@@ -366,6 +366,16 @@ DROP SEQUENCE handle.handle_info_seq;
 
 DROP SCHEMA handle;
 
+
+-- ---------------------------------------------
+-- Drop index processing tables
+-- ---------------------------------------------
+DROP TABLE ir_index.index_processing_type;
+
+DROP SEQUENCE ir_index.index_processing_type_seq;
+
+DROP SCHEMA ir_index;
+
 -- ---------------------------------------------
 -- Drop quartz tables
 -- ---------------------------------------------
