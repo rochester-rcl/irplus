@@ -18,6 +18,36 @@
 -- **********************************************
 -- ----------------------------------------------
 
+
+
+-- **********************************************
+       
+-- Index SCHEMA     
+
+-- **********************************************
+-- ----------------------------------------------
+
+CREATE SCHEMA ir_index AUTHORIZATION ir_plus;
+
+-- ---------------------------------------------
+-- index processing type table
+-- ---------------------------------------------
+CREATE TABLE ir_index.index_processing_type
+(
+    index_processing_type_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    description TEXT,
+    unique_system_code TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE ir_index.index_processing_type OWNER TO ir_plus;
+
+-- The content type sequence
+CREATE SEQUENCE ir_index.index_processing_type_seq;
+ALTER TABLE ir_index.index_processing_type_seq OWNER TO ir_plus;
+
+
 -- **********************************************
        
 -- Handle SCHEMA     

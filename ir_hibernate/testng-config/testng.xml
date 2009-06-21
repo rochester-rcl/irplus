@@ -20,6 +20,8 @@
 
 	<test name="IR Hibernate Testing - All">
 		<classes>
+		     <class name="edu.ur.hibernate.ir.index.db.IndexProcessingTypeDAOTest"/>
+		
 		     <class name="edu.ur.hibernate.ir.item.db.ItemVersionDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.db.VersionedItemDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.db.PublisherDAOTest"/>
