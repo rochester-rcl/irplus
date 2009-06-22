@@ -4950,7 +4950,7 @@ select nextval('ir_user.department_seq'), 'Woodwinds, Brass, & Percussion',
 '', 0;
 
 -- ---------------------------------------------
--- Default Extne types
+-- Default Extent types
 -- ---------------------------------------------
 
 insert into 
@@ -4969,4 +4969,19 @@ insert into
 ir_item.extent_type ( extent_type_id, version, name, description) 
 values (nextval('ir_item.extent_type_seq'), 0, 'Lenght in Time', null);
 
+-- ---------------------------------------------
+-- Default processing types
+-- ---------------------------------------------
+
+insert into 
+ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
+values (nextval('ir_index.index_processing_type_seq'), 0, 'INSERT', 'A record is to be inserted into the index');
+
+insert into 
+ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
+values (nextval('ir_index.index_processing_type_seq'), 0, 'UPDATE', 'A record is to be updated in the index');
+
+insert into 
+ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
+values (nextval('ir_index.index_processing_type_seq'), 0, 'DELETE', 'A record is to be deleted from the index');
 
