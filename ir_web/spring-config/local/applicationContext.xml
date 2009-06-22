@@ -112,4 +112,9 @@
    <!-- ****************************************** --> 
    <import resource="news-service.xml"/>   
    
+    <!-- ****************************************** --> 
+    <!-- Index processing persistence classes -->
+    <!-- ****************************************** --> 
+    <import resource="ir-index-hibernate.xml"/>
+   
 </beans>
