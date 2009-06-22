@@ -58,10 +58,17 @@
 	    select count(*) from InstitutionalItemIndexProcessingRecord
 	</query>
 	
-	<query name="getInstitutionalItemIndexProcessingRecordByIdDate">
+	<query name="getInstitutionalItemIndexProcessingRecordOrderByIdDate">
 	   select institutionalItemIndexProcessingRecord 
 	   from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord 	   
 	   order by institutionalItemIndexProcessingRecord.institutionalItemId, institutionalItemIndexProcessingRecord.updatedDate desc
+	</query>
+	
+	<query name="instItemProcessingRecByItemIdProcessingType">
+	   select institutionalItemIndexProcessingRecord 
+	   from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord 	   
+	   where institutionalItemIndexProcessingRecord.institutionalItemId = ?
+	   and institutionalItemIndexProcessingRecord.indexProcessingType.id = ?
 	</query>
 
 
