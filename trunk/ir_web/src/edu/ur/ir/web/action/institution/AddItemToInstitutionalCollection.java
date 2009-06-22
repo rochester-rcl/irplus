@@ -16,7 +16,6 @@
 
 package edu.ur.ir.web.action.institution;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -28,11 +27,13 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
@@ -109,9 +110,12 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	/** Service for dealing with item . */
 	private ItemService itemService;
 	
-	/** Service for indexing institutional items */
-	private InstitutionalItemIndexService institutionalItemIndexService;
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
 
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
+	
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
 	
@@ -431,8 +435,8 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			// only index if the item was added directly to the collection
 			if(directAdd)
 			{
-				String indexFolder = repository.getInstitutionalItemIndexFolder();
-				institutionalItemIndexService.addItem(institutionalItem, new File(indexFolder));
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				institutionalItemIndexProcessingRecordService.save(item.getId(), processingType);
 			}
 			
 			if( info != null)
@@ -671,15 +675,6 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		this.selectedCollectionIds = selectedCollectionIds;
 	}
 
-	public InstitutionalItemIndexService getInstitutionalItemIndexService() {
-		return institutionalItemIndexService;
-	}
-
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
-	}
-
 	public Long getGenericItemId() {
 		return genericItemId;
 	}
@@ -747,6 +742,24 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	public void setInstitutionalItemVersionUrlGenerator(
 			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
 		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
+	}
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }

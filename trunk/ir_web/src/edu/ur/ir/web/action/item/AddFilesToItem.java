@@ -16,7 +16,6 @@
 
 package edu.ur.ir.web.action.item;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,15 +33,16 @@ import edu.ur.ir.FileSystem;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.VersionedFile;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.item.ItemService;
-import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
@@ -140,8 +140,11 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	/** Id of institutional item being edited */
 	private Long institutionalItemId;
 	
-	/** Institutional item index service for indexing files */
-	private InstitutionalItemIndexService institutionalItemIndexService;
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/** service for user data */
 	private UserService userService;
@@ -285,12 +288,10 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
 
 		if (institutionalItems != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder();
-			
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+
 			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexService.updateItem(i, new File(indexFolder));
+				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
 
@@ -327,12 +328,10 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
 
 		if (institutionalItems != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder();
-			
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+
 			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexService.updateItem(i, new File(indexFolder));
+				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
 
@@ -456,12 +455,10 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
 
 		if (institutionalItems != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder();
-			
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+
 			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexService.updateItem(i, new File(indexFolder));
+				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
 
@@ -877,10 +874,6 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		this.institutionalItemService = institutionalItemService;
 	}
 
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
-	}
 	
 	public void setUserService(UserService userService)
 	{
@@ -893,6 +886,24 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 
 	public void setQuartzScheduler(Scheduler quartzScheduler) {
 		this.quartzScheduler = quartzScheduler;
+	}
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 
