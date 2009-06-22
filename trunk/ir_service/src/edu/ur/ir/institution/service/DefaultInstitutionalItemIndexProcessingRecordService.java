@@ -1,6 +1,4 @@
 package edu.ur.ir.institution.service;
-
-import java.util.List;
 /**  
 Copyright 2008 University of Rochester
 
@@ -17,9 +15,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */  
 
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
+import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.order.OrderType;
 
 /**
  * Implementation of the institutional item index processing record service.
@@ -32,6 +41,15 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	
 	/** Data access for institutional item processing records */
 	private InstitutionalItemIndexProcessingRecordDAO processingRecordDAO;
+	
+	/** Service for dealing with institutional items */
+	private InstitutionalItemService institutionalItemService;
+	
+	/** batch size for processing collection items */
+	private int collectionItemBatchSize = 100;
+	
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemIndexProcessingRecordService.class);
 
 	/**
 	 * Delete the processing record.
@@ -97,6 +115,95 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	public void setProcessingRecordDAO(
 			InstitutionalItemIndexProcessingRecordDAO processingRecordDAO) {
 		this.processingRecordDAO = processingRecordDAO;
+	}
+
+	
+	/**
+	 * Get the item index processing record by item id processing type.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#get(java.lang.Long, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public InstitutionalItemIndexProcessingRecord get(Long itemId,
+			IndexProcessingType processingType) {
+		return processingRecordDAO.get(itemId, processingType);
+	}
+	
+	
+	/**
+	 * Add all items within the collection to be processed.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#processItemsInCollection(edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public void processItemsInCollection( InstitutionalCollection institutionalCollection,
+			IndexProcessingType processingType)
+	{
+		log.debug("re-indexing collection " + institutionalCollection);
+		int rowStart = 0;
+		
+		int numberOfItems = institutionalItemService.getCountForCollectionAndChildren(institutionalCollection).intValue();
+		
+		log.debug("processing a total of " + numberOfItems);
+		
+		// add one batch size to the items to make sure all items are
+		// processed.
+		while(rowStart <= (numberOfItems + collectionItemBatchSize))
+		{
+			log.debug("row start = " + rowStart);
+			log.debug("batch size = " +  collectionItemBatchSize);
+			// notice the minus one because we are starting at 0
+			log.debug("processing " + rowStart + " to " + (rowStart + collectionItemBatchSize - 1) );
+			List<InstitutionalItem> items = institutionalItemService.getCollectionItemsOrderByName(rowStart, collectionItemBatchSize, institutionalCollection, OrderType.DESCENDING_ORDER);
+		
+			for(InstitutionalItem i : items)
+			{
+				log.debug("re-indexing item " + i);
+				save(i.getId(), processingType);
+			}
+		    rowStart = rowStart + collectionItemBatchSize;
+		    
+		}
+	}
+
+	
+	/**
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#save(java.lang.Long, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public InstitutionalItemIndexProcessingRecord save(Long itemId,
+			IndexProcessingType processingType) {
+		
+		InstitutionalItemIndexProcessingRecord record = null;
+		record = this.get(itemId, processingType);
+		
+		if( record != null)
+		{
+		    record.setUpdatedDate( new Timestamp(new Date().getTime()) );
+		}
+		else
+		{
+			record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
+		}
+		save(record);
+		
+		return record;
+		
+	}
+
+	public InstitutionalItemService getInstitutionalItemService() {
+		return institutionalItemService;
+	}
+
+	public void setInstitutionalItemService(
+			InstitutionalItemService institutionalItemService) {
+		this.institutionalItemService = institutionalItemService;
+	}
+
+	public int getCollectionItemBatchSize() {
+		return collectionItemBatchSize;
+	}
+
+	public void setCollectionItemBatchSize(int collectionItemBatchSize) {
+		this.collectionItemBatchSize = collectionItemBatchSize;
 	}
 
 }

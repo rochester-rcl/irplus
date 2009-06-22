@@ -52,7 +52,6 @@ import edu.ur.ir.item.ItemIdentifier;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemTitle;
 import edu.ur.ir.person.PersonName;
-import edu.ur.order.OrderType;
 
 /**
  * Implementation of the Institutional Item index service.  
@@ -830,44 +829,6 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	}
 	
 	
-	/**
-	 * Re-index all items in the collection
-	 * @throws NoIndexFoundException 
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#reIndexItemsInCollection(edu.ur.ir.institution.InstitutionalCollection, java.io.File)
-	 */
-	public void reIndexItemsInCollection(
-			InstitutionalCollection institutionalCollection,
-			File institutionalItemIndex, int batchSize) throws NoIndexFoundException 
-	{
-		log.debug("re-indexing collection " + institutionalCollection);
-		int rowStart = 0;
-		
-		int numberOfItems = institutionalItemService.getCountForCollectionAndChildren(institutionalCollection).intValue();
-		
-		log.debug("processing a total of " + numberOfItems);
-		
-		// add one batch size to the items to make sure all items are
-		// processed.
-		while(rowStart <= (numberOfItems + batchSize))
-		{
-			log.debug("row start = " + rowStart);
-			log.debug("batch size = " +  batchSize);
-			// notice the minus one because we are starting at 0
-			log.debug("processing " + rowStart + " to " + (rowStart + batchSize - 1) );
-			List<InstitutionalItem> items = institutionalItemService.getCollectionItemsOrderByName(rowStart, batchSize, institutionalCollection, OrderType.DESCENDING_ORDER);
-		
-			for(InstitutionalItem i : items)
-			{
-				log.debug("re-indexing item " + i);
-				updateItem(i, institutionalItemIndex);
-			}
-		    
-		    rowStart = rowStart + batchSize;
-		    
-		}
-	}
-
 	public InstitutionalItemService getInstitutionalItemService() {
 		return institutionalItemService;
 	}
