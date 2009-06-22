@@ -33,7 +33,7 @@
         </property>
         <property name="mappingResources">
             <set>
-                 <value>edu/ur/hibernate/ir/index/db/IndexProcessingType.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/index/db/IndexProcessingType.hbm.xml</value>
             
                 <value>edu/ur/hibernate/ir/repository/db/Repository.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/repository/db/License.hbm.xml</value>

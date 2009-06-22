@@ -31,6 +31,8 @@
         </property>
         <property name="mappingResources">
             <set>
+                <value>edu/ur/hibernate/ir/index/db/IndexProcessingType.hbm.xml</value>
+            
                 <value>edu/ur/hibernate/ir/repository/db/Repository.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/repository/db/License.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/repository/db/LicenseVersion.hbm.xml</value>
@@ -48,6 +50,7 @@
                 <value>edu/ur/hibernate/ir/institution/db/ReInstateToken.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/DeletedInstitutionalItem.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemRepositoryLicense.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemIndexProcessingRecord.hbm.xml</value>
                 
                 
                 <value>edu/ur/hibernate/ir/item/db/GenericItem.hbm.xml</value>
