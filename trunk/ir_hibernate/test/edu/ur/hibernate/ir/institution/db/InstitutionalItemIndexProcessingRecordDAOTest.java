@@ -92,6 +92,13 @@ public class InstitutionalItemIndexProcessingRecordDAOTest {
         assert records.size() == 1 : "Should have at 1 record but has " + records.size();
         assert records.contains(other) : "records should contain other";
         
+        InstitutionalItemIndexProcessingRecord recordByItemIdProcessingType = 
+        	institutionalItemIndexProcessingRecordDAO.get(33l, indexProcessingType);
+        
+        assert recordByItemIdProcessingType !=  null : " Should find record with id 33l and processing type " + indexProcessingType;
+        assert recordByItemIdProcessingType.equals(other) : " Other " + other + " should equal " + recordByItemIdProcessingType;
+        
+        
         institutionalItemIndexProcessingRecordDAO.makeTransient(other);
         indexProcessingTypeDAO.makeTransient(indexProcessingTypeDAO.getById(other.getId(), false));
         assert institutionalItemIndexProcessingRecordDAO.getById(other.getId(), false) == null : "Should no longer be able to find index processing record";
