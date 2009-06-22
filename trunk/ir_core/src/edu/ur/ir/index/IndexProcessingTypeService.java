@@ -28,6 +28,15 @@ import java.util.List;
  */
 public interface IndexProcessingTypeService {
 	
+	/**  default insert processing type */
+	public static final String INSERT = "INSERT";
+	
+	/** default update processing type */
+	public static final String UPDATE = "UPDATE";
+	
+	/** default delete processing type */
+	public static final String DELETE = "DELETE";
+	
     /**
      * Get a count of index processing types
      *  
