@@ -75,11 +75,5 @@ public interface InstitutionalItemIndexService {
 	public void deleteItemsForCollection(InstitutionalCollection institutionalCollection, File institutionalItemIndex);
 
 
-	/**
-	 * Re-Index all items in a given collection, this re-indexes all items in sub collections.
-	 * 
-	 * @param institutionalCollection
-	 * @param institutionalItemIndex
-	 */
-	public void reIndexItemsInCollection(InstitutionalCollection institutionalCollection, File institutionalItemIndex, int batchSize) throws NoIndexFoundException;
+
 }

@@ -18,6 +18,8 @@ package edu.ur.ir.institution;
 
 import java.util.List;
 
+import edu.ur.ir.index.IndexProcessingType;
+
 /**
  * 
  * Service for dealing with institutional item index processing records.
@@ -26,7 +28,6 @@ import java.util.List;
  *
  */
 public interface InstitutionalItemIndexProcessingRecordService {
-	
 	
 	/**
 	 * Get all institutional item index processing records ordered by item id then processing date.
@@ -71,5 +72,35 @@ public interface InstitutionalItemIndexProcessingRecordService {
 	 * @return List of all index processing types
 	 */
 	public List<InstitutionalItemIndexProcessingRecord> getAll();
+	
+	/**
+	 * Get the processing record by item id and processing type.
+	 * 
+	 * @param itemId - id of the item
+	 * @param processingType - processing type.
+	 * 
+	 * @return - the index processing record if found otherwise null
+	 */
+	public InstitutionalItemIndexProcessingRecord get(Long itemId, IndexProcessingType processingType);
+	
 
+    /**
+     * Determines if there is already an existing processing record for the item id, processing type and
+     * creates a new one if one does not exist otherwise does an update.
+     * 
+     * @param itemId - id of the item
+     * @param processingType - type of processing
+     * @return the record that was updated or created.
+     */
+    public InstitutionalItemIndexProcessingRecord save(Long itemId, IndexProcessingType processingType);
+    
+    /**
+     * Add all items within the given collection including child collections to the index.
+     * 
+     * @param institutionalCollection
+     * @param processingType
+     */
+    public void processItemsInCollection(
+			InstitutionalCollection institutionalCollection,
+			IndexProcessingType processingType);
 }
