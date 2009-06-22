@@ -44,6 +44,28 @@
        </property>
    </bean>
    
+   
+   <!-- ****************************************** --> 
+   <!-- InstitutionalItemProcessingRecord information  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="institutionalItemIndexProcessingRecordDAOTarget" 
+       class="edu.ur.hibernate.ir.institution.db.HbInstitutionalItemIndexProcessingRecordDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="institutionalItemIndexProcessingRecordDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="institutionalItemIndexProcessingRecordDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
       
    <!-- ****************************************** --> 
    <!-- Institutional Collection Subscription information  -->
