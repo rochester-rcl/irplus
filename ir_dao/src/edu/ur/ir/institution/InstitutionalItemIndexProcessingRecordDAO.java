@@ -20,6 +20,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.index.IndexProcessingType;
 
 /**
  * Data access for institutional item index processing record.
@@ -36,5 +37,15 @@ public interface InstitutionalItemIndexProcessingRecordDAO
 	 * @return all institutional item index processing records or an empty list if none found
 	 */
 	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate();
+	
+	/**
+	 * Get the processing record by item id and processing type.
+	 * 
+	 * @param itemId - id of the item
+	 * @param processingType - processing type.
+	 * 
+	 * @return - the index processing record if found otherwise null
+	 */
+	public InstitutionalItemIndexProcessingRecord get(Long itemId, IndexProcessingType processingType);
 
 }
