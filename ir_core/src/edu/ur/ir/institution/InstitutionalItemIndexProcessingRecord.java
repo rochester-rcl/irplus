@@ -137,6 +137,8 @@ public class InstitutionalItemIndexProcessingRecord extends BasePersistent{
 		sb.append(indexProcessingType);
 		sb.append(" institutionalItemId = ");
 		sb.append(institutionalItemId);
+		sb.append(" updated date = ");
+		sb.append(updatedDate);
 		sb.append("]");
 		return sb.toString();
 	}

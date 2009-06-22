@@ -71,7 +71,9 @@ DROP TABLE ir_repository.repository;
 DROP TABLE ir_repository.license_version;
 DROP TABLE ir_repository.versioned_license;
 DROP TABLE ir_repository.license;
+DROP TABLE ir_repository.institutional_item_index_processing_record;
 
+DROP SEQUENCE ir_repository.institutional_item_index_processing_record_seq;
 DROP SEQUENCE ir_repository.institutional_item_repository_license_seq;
 DROP SEQUENCE ir_repository.retired_repository_license_seq;
 DROP SEQUENCE ir_repository.user_repository_license_seq;

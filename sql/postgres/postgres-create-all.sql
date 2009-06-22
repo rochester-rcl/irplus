@@ -1502,7 +1502,7 @@ ALTER TABLE ir_item.item_series_report_number_seq OWNER TO ir_plus;
 CREATE SCHEMA ir_repository AUTHORIZATION ir_plus;
 
 -- ---------------------------------------------
--- Repository Information
+-- License Information
 -- ---------------------------------------------
 
 -- Create a new table to hold repository license information 
@@ -1522,6 +1522,28 @@ ALTER TABLE ir_repository.license OWNER TO ir_plus;
 -- The repository license sequence
 CREATE SEQUENCE ir_repository.license_seq;
 ALTER TABLE ir_repository.license_seq OWNER TO ir_plus;
+
+
+
+-- ---------------------------------------------
+-- item index process record Information
+-- ---------------------------------------------
+
+CREATE TABLE ir_repository.institutional_item_index_processing_record
+(
+  institutional_item_index_processing_record_id BIGINT PRIMARY KEY,
+  institutional_item_id BIGINT NOT NULL,
+  updated_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  index_processing_type_id BIGINT NOT NULL,
+  FOREIGN KEY (index_processing_type_id)
+      REFERENCES ir_index.index_processing_type (index_processing_type_id)
+);
+ALTER TABLE ir_repository.institutional_item_index_processing_record OWNER TO ir_plus;
+
+-- The repository license sequence
+CREATE SEQUENCE ir_repository.institutional_item_index_processing_record_seq;
+ALTER TABLE ir_repository.institutional_item_index_processing_record_seq OWNER TO ir_plus;
+
 
 
 -- ---------------------------------------------
