@@ -26,11 +26,13 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumberTools;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.LockObtainFailedException;
 
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.researcher.Researcher;
@@ -263,38 +265,41 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		}
 		
 		Directory directory = null;
-		IndexReader reader = null;
+		IndexWriter writer = null;
 		try {
-			synchronized(this)
+			directory = FSDirectory.getDirectory(researcherIndexFolder.getAbsolutePath());
+			while( writer == null)
 			{
-			    directory = FSDirectory.getDirectory(researcherIndexFolder.getAbsolutePath());
-			    if( IndexReader.isLocked(directory) )
-			    {
-				    throw new RuntimeException("Researchers index directory " + researcherIndexFolder.getAbsolutePath() +
-						" is locked ");
-			    }
-			    else
-			    {
-				    reader = IndexReader.open(directory);
-				    Term term = new Term(ID, NumberTools.longToString(researcher.getId()));
-			        reader.deleteDocuments(term);
-			        reader.close();
-			    }
+				writer = getWriter(directory);
 			}
+			Term term = new Term(ID, NumberTools.longToString(researcher.getId()));
+			writer.deleteDocuments(term);
+			writer.flush();
+			writer.optimize();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		finally
-		{
-			if( reader != null)
+		finally {
+		    if (writer != null) {
+			    try {
+				    writer.close();
+				    writer = null;
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		   
+		    if( directory != null)
 			{
 				try {
-					reader.close();
+					directory.close();
+					directory = null;
 				} catch (IOException e) {
 					log.error(e);
 				}
 			}
-		}
+	    }
 		
 	}
 
@@ -323,29 +328,66 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	private void writeDocument(String directoryPath, Document document)
 	{
 		log.debug("write document to directory " + directoryPath );
+		Directory directory = null;
 		IndexWriter writer = null;
 		try {
-			synchronized(this)
+			directory = FSDirectory.getDirectory(directoryPath);
+			while( writer == null)
 			{
-			    Directory directory = FSDirectory.getDirectory(directoryPath);
-			    writer = new IndexWriter(directory, analyzer);
-			    writer.addDocument(document);
-			    writer.flush();
-			    writer.optimize();
+				writer = getWriter(directory);
 			}
+			writer.addDocument(document);
+			writer.flush();
+			writer.optimize();
+			
 		} catch (IOException e) {
 			log.error(e);
 			throw new RuntimeException(e);
 		}
-	    finally {
-		    if (writer != null) {
-			    try {
-				    writer.close();
-			    } catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
+		finally
+		{
+			if( writer != null)
+			{
+				try {
+					writer.close();
+					writer = null;
+				} catch (IOException e) {
+					log.error(e);
+				}
+			}
+			if( directory != null)
+			{
+				try {
+					directory.close();
+					directory = null;
+				} catch (IOException e) {
+					log.error(e);
+				}
+			}
+			writer = null;
+		}
+	}
+	
+	/**
+	 * All methods should use this to obtain a writer on the directory.  This will return 
+	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
+	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
+	 * users index at once.
+	 * 
+	 * @param directory
+	 * @return
+	 * @throws CorruptIndexException
+	 * @throws LockObtainFailedException
+	 * @throws IOException
+	 */
+	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	{
+		IndexWriter writer = null;
+		if( !IndexReader.isLocked(directory) )
+	    {
+			writer = new IndexWriter(directory, analyzer);
 	    }
+		return writer;
 	}
 
 }
