@@ -1535,6 +1535,7 @@ CREATE TABLE ir_repository.institutional_item_index_processing_record
   institutional_item_id BIGINT NOT NULL,
   updated_date TIMESTAMP WITH TIME ZONE NOT NULL,
   index_processing_type_id BIGINT NOT NULL,
+  UNIQUE(institutional_item_id, index_processing_type_id),
   FOREIGN KEY (index_processing_type_id)
       REFERENCES ir_index.index_processing_type (index_processing_type_id)
 );
@@ -1545,7 +1546,7 @@ CREATE SEQUENCE ir_repository.institutional_item_index_processing_record_seq;
 ALTER TABLE ir_repository.institutional_item_index_processing_record_seq OWNER TO ir_plus;
 
 
-
+CREATE INDEX index_processing_record_item_idx ON ir_repository.institutional_item_index_processing_record(institutional_item_id);
 -- ---------------------------------------------
 -- Versioned license
 -- ---------------------------------------------
