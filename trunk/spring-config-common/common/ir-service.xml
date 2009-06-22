@@ -566,6 +566,14 @@
    <!-- ****************************************** --> 
       <bean id="authenticateUserOverrideService" 
        class="edu.ur.ir.security.service.DefaultAuthenticateUserOverrideService"/>
+   
       
+   <!-- ****************************************** --> 
+   <!-- Institutional item index processing records service -->
+   <!-- ****************************************** --> 
+   <bean id="institutionalItemIndexProcessingRecordService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalItemIndexProcessingRecordService">
+       <property name="processingRecordDAO" ref="institutionalItemIndexProcessingRecordServiceDAO"/>
+   </bean>
    
 </beans>
