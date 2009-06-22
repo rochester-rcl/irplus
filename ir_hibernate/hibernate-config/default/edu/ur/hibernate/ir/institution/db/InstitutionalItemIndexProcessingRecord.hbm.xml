@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a institutional item index processing record.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.institution">
+	<class name="InstitutionalItemIndexProcessingRecord" schema="ir_repository" table="institutional_item_index_processing_record"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="institutional_item_index_processing_record_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_repository.institutional_item_index_processing_record_seq</param>
+			</generator>
+		</id>
+		
+		<property name="institutionalItemId" column="institutional_item_id" type="long"
+			not-null="true" access="field" />
+
+		<property name="updatedDate" column="updated_date" type="timestamp" 
+		          access="field" 
+		          not-null="true"/>	
+
+		<!--  The user deleting the institutional item -->
+		<many-to-one class="edu.ur.ir.index.IndexProcessingType" 
+			unique="true" 
+			name="indexProcessingType" 
+			column="index_processing_type_id" 
+			access="field" 
+			insert="true"
+			not-null="true"/>	
+	
+	</class>
+		
+	<query name="institutionalItemIndexProcessingRecordCount">
+	    select count(*) from InstitutionalItemIndexProcessingRecord
+	</query>
+	
+	<query name="getInstitutionalItemIndexProcessingRecordByIdDate">
+	   select institutionalItemIndexProcessingRecord 
+	   from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord 	   
+	   order by institutionalItemIndexProcessingRecord.institutionalItemId, institutionalItemIndexProcessingRecord.updatedDate desc
+	</query>
+
+
+</hibernate-mapping>
