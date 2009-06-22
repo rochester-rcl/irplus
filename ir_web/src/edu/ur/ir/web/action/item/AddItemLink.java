@@ -16,7 +16,6 @@
 
 package edu.ur.ir.web.action.item;
 
-import java.io.File;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -26,14 +25,14 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemService;
-import edu.ur.ir.repository.Repository;
-import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
@@ -78,14 +77,14 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	/** Service for item */
 	private ItemService itemService;
 	
-	/** File system service for files */
-	private RepositoryService repositoryService;
-	
 	/** User Publishing File System Service */
 	private UserPublishingFileSystemService userPublishingFileSystemService;
 	
-	/** Institutional item index service for indexing files */
-	private InstitutionalItemIndexService institutionalItemIndexService;
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
@@ -137,12 +136,10 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
 
 		if (institutionalItems != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder();
-			
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+
 			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexService.updateItem(i, new File(indexFolder));
+				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
 
@@ -185,12 +182,10 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
 
 		if (institutionalItems != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder();
-			
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+
 			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexService.updateItem(i, new File(indexFolder));
+				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
 
@@ -254,18 +249,9 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		this.genericItemId = genericItemId;
 	}
 
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
-	}
-
 	public void setUserPublishingFileSystemService(
 			UserPublishingFileSystemService userPublishingFileSystemService) {
 		this.userPublishingFileSystemService = userPublishingFileSystemService;
-	}
-
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
 	}
 
 	public void setInstitutionalItemService(
@@ -284,5 +270,23 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 
 	public void setQuartzScheduler(Scheduler quartzScheduler) {
 		this.quartzScheduler = quartzScheduler;
+	}
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 }

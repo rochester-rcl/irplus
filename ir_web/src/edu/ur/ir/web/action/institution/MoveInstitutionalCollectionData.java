@@ -16,7 +16,6 @@
 
 package edu.ur.ir.web.action.institution;
 
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,9 +25,11 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.repository.Repository;
@@ -63,8 +64,11 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 	/** Institutional Collection service */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
-	/** indexing for institutional items */
-	private InstitutionalItemIndexService institutionalItemIndexService;
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/** Repository service for dealing with institutional repository information */
 	private RepositoryService repositoryService;
@@ -207,12 +211,15 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 			
 			if( collectionsToMove.size() > 0 )
 			{
-			    institutionalItemIndexService.reIndexItemsInCollection(destination.getTreeRoot(), new File(repository.getInstitutionalItemIndexFolder()), institutionalItemIndexService.getCollectionBatchSize());
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				institutionalItemIndexProcessingRecordService.processItemsInCollection( destination.getTreeRoot(), processingType);
 			}
 			
 			for( InstitutionalItem i : itemsToMove)
 			{
-			    institutionalItemIndexService.updateItem(i, new File(repository.getInstitutionalItemIndexFolder()));
+				// set item to be updated in index
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
 		// moving to root of repository
@@ -231,7 +238,8 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 						collectionsToMove);
 				for(InstitutionalCollection c : collectionsToMove)
 				{
-			        institutionalItemIndexService.reIndexItemsInCollection(c, new File(repository.getInstitutionalItemIndexFolder()), institutionalItemIndexService.getCollectionBatchSize());
+					IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+					institutionalItemIndexProcessingRecordService.processItemsInCollection( c, processingType);
 				}
 
 			}
@@ -243,7 +251,8 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 		{
 		    if( c.getTreeRoot() == null || destination == null || (!c.getTreeRoot().equals(destination.getTreeRoot())))
 		    {
-			    institutionalItemIndexService.reIndexItemsInCollection(c.getTreeRoot(), new File(repository.getInstitutionalItemIndexFolder()), institutionalItemIndexService.getCollectionBatchSize());
+			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				institutionalItemIndexProcessingRecordService.processItemsInCollection( c.getTreeRoot(), processingType);
 		    }
 		}
 		
@@ -358,13 +367,22 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 		this.institutionalItemService = institutionalItemService;
 	}
 
-	public InstitutionalItemIndexService getInstitutionalItemIndexService() {
-		return institutionalItemIndexService;
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
 	}
 
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 

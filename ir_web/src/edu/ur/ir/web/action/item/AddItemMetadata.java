@@ -16,7 +16,6 @@
 
 package edu.ur.ir.web.action.item;
 
-import java.io.File;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -30,8 +29,10 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeService;
@@ -55,8 +56,6 @@ import edu.ur.ir.item.Series;
 import edu.ur.ir.item.SeriesService;
 import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.item.SponsorService;
-import edu.ur.ir.repository.Repository;
-import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
@@ -98,9 +97,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	/** Service for loading identifier type data.  */
 	private IdentifierTypeService identifierTypeService;
 	
-	/** File system service for files */
-	private RepositoryService repositoryService;
-
 	/** Service for loading extent type data.  */
 	private ExtentTypeService extentTypeService;
 
@@ -284,8 +280,11 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	/** Indicates whether the publication is a thesis */
 	private boolean thesis;
 	
-	/** Institutional item index service for indexing files */
-	private InstitutionalItemIndexService institutionalItemIndexService;
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
@@ -675,12 +674,10 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
 
 		if (institutionalItems != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder();
-			
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+
 			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexService.updateItem(i, new File(indexFolder));
+				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
 
@@ -1495,15 +1492,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		this.createdYear = createdYear;
 	}
 
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
-	}
-
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
-	}
-
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
@@ -1516,8 +1504,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-
-
 	
 	public void setUserId(Long userId) {
 		this.userId = userId;
@@ -1529,5 +1515,23 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 
 	public void setQuartzScheduler(Scheduler quartzScheduler) {
 		this.quartzScheduler = quartzScheduler;
+	}
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 }

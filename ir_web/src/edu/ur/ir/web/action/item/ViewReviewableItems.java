@@ -16,20 +16,19 @@
 
 package edu.ur.ir.web.action.item;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.ReviewableItem;
 import edu.ur.ir.institution.ReviewableItemService;
 import edu.ur.ir.item.ItemObject;
-import edu.ur.ir.repository.Repository;
-import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -50,14 +49,14 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 	/** Service to access Reviewable item */
 	private ReviewableItemService reviewableItemService;
 	
-	/** Service to access institutional item index */
-	private InstitutionalItemIndexService institutionalItemIndexService;
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(ViewReviewableItems.class);
-	
-	/** Service to access institutional item */
-	private RepositoryService repositoryService;
 	
 	/** User id */
 	private Long userId;
@@ -121,9 +120,8 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 		
 		reviewableItemService.sendItemAcceptanceEmail(reviewableItem);
 
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		String indexFolder = repository.getInstitutionalItemIndexFolder();
-		institutionalItemIndexService.addItem(institutionalItem, new File(indexFolder));		
+		IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+		institutionalItemIndexProcessingRecordService.save(institutionalItem.getId(), processingType);
 		
 		return SUCCESS;
 	}
@@ -192,13 +190,22 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 		this.reason = reason;
 	}
 
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
 	}
 
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }

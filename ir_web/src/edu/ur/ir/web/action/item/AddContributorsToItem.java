@@ -16,7 +16,6 @@
 
 package edu.ur.ir.web.action.item;
 
-import java.io.File;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -26,8 +25,10 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.DuplicateContributorException;
 import edu.ur.ir.item.GenericItem;
@@ -39,8 +40,6 @@ import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.ContributorTypeService;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonService;
-import edu.ur.ir.repository.Repository;
-import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
@@ -123,11 +122,11 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	/** Service for dealing with contributors */
 	private ContributorService contributorService;
 	
-	/** File system service for files */
-	private RepositoryService repositoryService;
-	
-	/** Institutional item index service for indexing files */
-	private InstitutionalItemIndexService institutionalItemIndexService;
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
@@ -227,12 +226,10 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
 
 		if (institutionalItems != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder();
-			
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+
 			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexService.updateItem(i, new File(indexFolder));
+				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
 
@@ -287,12 +284,10 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
 
 		if (institutionalItems != null) {
-			Repository repository = 
-				repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			String indexFolder = repository.getInstitutionalItemIndexFolder();
 			
 			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexService.updateItem(i, new File(indexFolder));
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
 
@@ -575,15 +570,6 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		this.contributorService = contributorService;
 	}
 
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
-	}
-
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
-	}
-
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
@@ -595,6 +581,24 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 
 	public void setQuartzScheduler(Scheduler quartzScheduler) {
 		this.quartzScheduler = quartzScheduler;
+	}
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 

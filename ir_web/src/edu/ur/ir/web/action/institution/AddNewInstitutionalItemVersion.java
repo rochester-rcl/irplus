@@ -16,7 +16,6 @@
 
 package edu.ur.ir.web.action.institution;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,15 +26,15 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.item.ItemVersion;
-import edu.ur.ir.repository.Repository;
-import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
@@ -87,11 +86,11 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 	/** Item service */
 	private InstitutionalItemService institutionalItemService;
 	
-	/**  Repository information data access  */
-	private RepositoryService repositoryService;
-	
-	/** Service for indexing institutional items */
-	private InstitutionalItemIndexService institutionalItemIndexService;
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/** Institutional item to which version has to be added */
 	private InstitutionalItem institutionalItem;
@@ -187,11 +186,9 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 		}
 		
 		
-		// update index
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		String indexFolder = repository.getInstitutionalItemIndexFolder();
-		institutionalItemIndexService.updateItem(institutionalItem, new File(indexFolder));
-
+		// set item to be updated in index
+		IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+		institutionalItemIndexProcessingRecordService.save(institutionalItem.getId(), processingType);
 		return SUCCESS;
 	}
 
@@ -265,17 +262,26 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 		this.institutionalItemService = institutionalItemService;
 	}
 
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
-	}
-
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
-	}
-
 	public InstitutionalItem getInstitutionalItem() {
 		return institutionalItem;
+	}
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 
