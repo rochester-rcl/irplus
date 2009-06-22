@@ -23,6 +23,7 @@ import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
 
@@ -63,7 +64,7 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	 */
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate() {
-		return (List<InstitutionalItemIndexProcessingRecord>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalItemIndexProcessingRecordByIdDate");
+		return (List<InstitutionalItemIndexProcessingRecord>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalItemIndexProcessingRecordOrderByIdDate");
 	}
 
 	/**
@@ -109,6 +110,18 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	 */
 	public Long getCount() {
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemIndexProcessingRecordCount"));
+	}
+
+	/**
+	 * Get the institutional item processing record by item id and processing type.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#get(java.lang.Long, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public InstitutionalItemIndexProcessingRecord get(Long itemId,
+			IndexProcessingType processingType) {
+		
+		Object[] values = {itemId, processingType.getId()};
+		return (InstitutionalItemIndexProcessingRecord) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("instItemProcessingRecByItemIdProcessingType", values));
 	}
 
 }
