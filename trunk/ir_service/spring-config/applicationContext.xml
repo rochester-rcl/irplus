@@ -112,5 +112,10 @@
     <!-- Handle persistence classes -->
     <!-- ****************************************** --> 
     <import resource="ir-handle-hibernate.xml"/>
+    
+    <!-- ****************************************** --> 
+    <!-- Index processing persistence classes -->
+    <!-- ****************************************** --> 
+    <import resource="ir-index-hibernate.xml"/>
    
 </beans>
