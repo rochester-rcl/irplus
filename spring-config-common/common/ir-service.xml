@@ -578,4 +578,12 @@
        <property name="collectionItemBatchSize" value="100"/>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- index processing type service -->
+   <!-- ****************************************** --> 
+   <bean id="indexProcessingTypeService" 
+       class="edu.ur.ir.index.service.DefaultIndexProcessingTypeService">
+       <property name="indexProcessingTypeDAO" ref="indexProcessingTypeDAO"/>
+   </bean>
+   
 </beans>
