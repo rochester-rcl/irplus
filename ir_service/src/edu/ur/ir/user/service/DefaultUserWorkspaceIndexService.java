@@ -309,13 +309,13 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	    String nameWithExtension = mostRecentVersion.getVersionedFile().getNameWithExtension() + "";
 	    String creator = mostRecentVersion.getVersionCreator().getUsername() + "";
 	    String text = getDocumentBodyText(mostRecentVersion) + "";
-	    String collaboratos = "";
+	    String collaborators = "";
 	    
 	    Set<FileCollaborator> collabs = personalFile.getVersionedFile().getCollaborators();
 	    
 	    for(FileCollaborator collaborator : collabs)
 	    {
-	    	collaboratos = collaboratos + 
+	    	collaborators = collaborators + 
 	    	collaborator.getCollaborator().getFirstName() + " " +
 	    	collaborator.getCollaborator().getLastName() + " " + 
 	    	collaborator.getCollaborator().getUsername() + " ";
@@ -345,6 +345,9 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			 	    text, 
 				    Field.Store.NO, 
 				    Field.Index.ANALYZED));
+		
+		// null out the text as this could hold a huge amount of information
+		text = null;
 		
 		doc.add(new Field(VERSIONED_FILE_ID, 
 				NumberTools.longToString(personalFile.getVersionedFile().getId()), 
