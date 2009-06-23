@@ -27,9 +27,9 @@ import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.testng.annotations.BeforeMethod;
@@ -116,7 +116,7 @@ public class DefaultPowerPointTextExtractorTest {
 				.getText(new File(info.getFullPath()));
 
 		Document doc = new Document();
-		doc.add(new Field("body", text, Field.Store.NO, Field.Index.TOKENIZED));
+		doc.add(new Field("body", text, Field.Store.NO, Field.Index.ANALYZED));
 		assert doc != null : "Document should be created";
 
 		// create the lucene directory in memory
@@ -130,7 +130,10 @@ public class DefaultPowerPointTextExtractorTest {
 		// store the document
 		IndexWriter writer = null;
 		try {
-			writer = new IndexWriter(dir, new StandardWithISOLatin1AccentFilter(), true);
+			writer = new IndexWriter(dir, 
+					new StandardWithISOLatin1AccentFilter(), 
+					true,
+					IndexWriter.MaxFieldLength.LIMITED);
 			writer.addDocument(doc);
 			writer.optimize();
 			writer.close();
@@ -182,8 +185,8 @@ public class DefaultPowerPointTextExtractorTest {
 		QueryParser parser = new QueryParser(field, new StandardWithISOLatin1AccentFilter());
 		Query q1 = parser.parse(queryString);
 
-		Hits hits = searcher.search(q1);
-		int hitCount = hits.length();
+		TopDocs hits = searcher.search(q1, 1000);
+		int hitCount = hits.totalHits;
 
 		searcher.close();
 

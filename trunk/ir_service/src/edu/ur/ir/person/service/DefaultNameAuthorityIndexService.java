@@ -85,9 +85,9 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		IndexWriter writer = null;
 		try {
 			Directory directory = FSDirectory.getDirectory(directoryPath);
-			writer = new IndexWriter(directory, analyzer);
+			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 			writer.addDocument(document);
-			writer.flush();
+			writer.commit();
 			writer.optimize();
 		} catch (IOException e) {
 			log.error(e);
@@ -122,7 +122,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		doc.add(new Field(PERSON_NAME_AUTHORITY_ID, 
 				personNameAuthority.getId().toString(), 
 				Field.Store.YES, 
-				Field.Index.UN_TOKENIZED));
+				Field.Index.NOT_ANALYZED));
 		
 		StringBuffer name =  new StringBuffer();
 		Set<PersonName> names = personNameAuthority.getNames();
@@ -156,7 +156,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		doc.add(new Field(NAMES, 
 				names.toString(), 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 
 		writeDocument(nameAuthorityFolder.getAbsolutePath(),	doc);
 
@@ -181,7 +181,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		
 		try {
 			directory = FSDirectory.getDirectory(nameAuthorityIndexFolder);
-			if( IndexReader.isLocked(directory) )
+			if( IndexWriter.isLocked(directory) )
 			{
 				throw new RuntimeException("Users index directory " + nameAuthorityIndexFolder.getAbsolutePath() +
 						" is locked ");

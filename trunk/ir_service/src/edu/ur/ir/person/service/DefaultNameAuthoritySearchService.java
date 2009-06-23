@@ -27,9 +27,9 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TopDocs;
 
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.SearchHelper;
@@ -113,19 +113,20 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			
 			Query luceneQuery = parser.parse(query);
-			Hits hits = searcher.search(luceneQuery);
-			nameSearchResults.setTotalHits(hits.length());
+			TopDocs hits = searcher.search(luceneQuery, 1000);
+			nameSearchResults.setTotalHits(hits.totalHits);
 			
-			log.debug( " No. of hits = " + hits.length() + " offset="+ offset + "  numResults=" + numResults);
+			log.debug( " No. of hits = " + hits.totalHits + " offset="+ offset + "  numResults=" + numResults);
 			int position = offset;
 			int addedResults = 0;
-			while( hits.length() > position  && (addedResults < numResults))
+			while( hits.totalHits > position  && (addedResults < numResults))
 			{
 				if( log.isDebugEnabled())
 				{
 					log.debug( " adding document at position " + position);
 				}
-				Document d = hits.doc(position);
+				Document d = searcher.doc(hits.scoreDocs[position].doc);
+				
 				
 				personNameAurhorities.add(getPersonNameAuthority(d));
 				position += 1;

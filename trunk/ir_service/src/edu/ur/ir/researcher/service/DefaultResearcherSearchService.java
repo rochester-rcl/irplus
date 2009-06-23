@@ -19,7 +19,6 @@ package edu.ur.ir.researcher.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,11 +37,14 @@ import org.apache.lucene.misc.ChainedFilter;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.DocIdSet;
 import org.apache.lucene.search.Filter;
-import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.util.OpenBitSet;
+import org.apache.lucene.util.OpenBitSetDISI;
 
 import edu.ur.ir.FacetSearchHelper;
 import edu.ur.ir.SearchHelper;
@@ -64,6 +66,9 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 	
 	/**  Logger for editing a file database. */
 	private static final Logger log = Logger.getLogger(DefaultResearcherSearchService.class);
+	
+	/** max number of hits to retrieve */
+	private int maxNumberOfMainQueryHits = 10000;
 	
 	
 	/** fields to search in the index*/
@@ -113,14 +118,21 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		{
 			log.debug("main query = " + executedQuery );
 		}
-		Hits hits = searcher.search(mainQuery);
+		
+		TopDocs hits = searcher.search(mainQuery, maxNumberOfMainQueryHits);
 		
 		// determine the set of data we should use to determine facets
-		HashMap<String, HashMap<String, FacetResult>> possibleFacets = this.generateFacetSearches(hits, numberOfHitsToProcessForFacets, numberOfResultsToCollectForFacets);
+		HashMap<String, HashMap<String, FacetResult>> possibleFacets = this.generateFacetSearches(hits, 
+				numberOfHitsToProcessForFacets, 
+				numberOfResultsToCollectForFacets,
+				searcher);
 
 		QueryWrapperFilter mainQueryWrapper = new QueryWrapperFilter(mainQuery);
 		log.debug("executeSearchWithFacets 1 query = " + mainQuery);
-		BitSet mainQueryBits = mainQueryWrapper.bits(reader);
+		
+	    // get the bitset for main query
+		DocIdSet mainQueryBits = mainQueryWrapper.getDocIdSet(reader);
+		
 
 		// process the data and determine the facets
         FacetSearchHelper helper = this.processPossibleFacets(possibleFacets, 
@@ -131,13 +143,21 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
         		numberOfIdsToCollect, 
         		idsToCollectStartPosition,
         		numberOfFactsToShow,
-        		mainQueryString);
+        		mainQueryString, 
+        		searcher);
 		helper.setExecutedQuery(executedQuery);
         searcher.close();
         return helper;
 	}
 	
-	private int getFacetHitCount(BitSet baseBitSet, BitSet filterBitSet)
+	/**
+	 * Get the number of hits for a given facet using the bitsets.
+	 * 
+	 * @param baseBitSet - original query bitset
+	 * @param filterBitSet - filtered bit set
+	 * @return the count for the number of hits
+	 */
+	private long getFacetHitCount(OpenBitSet baseBitSet, OpenBitSet filterBitSet)
 	{
 		filterBitSet.and(baseBitSet);
 		return filterBitSet.cardinality();
@@ -153,7 +173,10 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 	 * @throws CorruptIndexException
 	 * @throws IOException
 	 */
-	private HashMap<String, HashMap<String, FacetResult>> generateFacetSearches(Hits hits, int numberOfHitsToProcess, int numberOfResultsToCollect) throws CorruptIndexException, IOException
+	private HashMap<String, HashMap<String, FacetResult>> generateFacetSearches(TopDocs hits, 
+			int numberOfHitsToProcess, 
+			int numberOfResultsToCollect,
+			IndexSearcher searcher) throws CorruptIndexException, IOException
 	{
 		
 		HashMap<String, HashMap<String, FacetResult>> facets = new HashMap<String, HashMap<String, FacetResult>>();
@@ -165,7 +188,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		facets.put(FIELD_MAP, fieldsMap);
 		facets.put(KEYWORD_MAP, keywordsMap);
 		
-		int length = hits.length();
+		int length = hits.totalHits;
 		
 		if (length <= numberOfHitsToProcess)
 		{
@@ -174,7 +197,8 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		
 		for( int index = 0; index < numberOfHitsToProcess; index++)
 		{
-			Document doc = hits.doc(index);
+			Document doc = searcher.doc(hits.scoreDocs[index].doc);
+			
 			String departments = doc.get(DefaultResearcherIndexService.DEPARTMENT);
 			
 			String fields = doc.get(DefaultResearcherIndexService.FIELD);
@@ -195,7 +219,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 			    	FacetResult f = departmentsMap.get(department);
 					if( f == null )
 					{
-						f = new FacetResult(1, DefaultResearcherIndexService.DEPARTMENT, department);
+						f = new FacetResult(1l, DefaultResearcherIndexService.DEPARTMENT, department);
 						departmentsMap.put(department, f);
 					}
 			    }
@@ -210,7 +234,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 			    	FacetResult f = fieldsMap.get(field);
 			    	if( f == null )
 			    	{
-						f = new FacetResult(1, DefaultResearcherIndexService.FIELD, field);
+						f = new FacetResult(1l, DefaultResearcherIndexService.FIELD, field);
 						fieldsMap.put(field, f);
 			    	}
 			    }
@@ -225,7 +249,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 			    	FacetResult f = keywordsMap.get(keyword);
 			    	if( f == null )
 			    	{
-			    		f = new FacetResult(1, DefaultResearcherIndexService.KEY_WORDS, keyword);
+			    		f = new FacetResult(1l, DefaultResearcherIndexService.KEY_WORDS, keyword);
 			    		keywordsMap.put(keyword, f);
 			    	}
 			    }
@@ -246,7 +270,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 	 */
 	private void processFacetCategory(Collection<FacetResult> facets, 
 			IndexReader reader, 
-			BitSet mainQueryBits) 
+			DocIdSet mainQueryBits) 
 	   throws ParseException, IOException
 	{
 		for(FacetResult f : facets )
@@ -257,9 +281,12 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 			Query subQuery = subQueryParser.parse(SearchHelper.prepareFacetSearchString(f.getFacetName(), false));
 			
 			QueryWrapperFilter subQueryWrapper = new QueryWrapperFilter(subQuery);
-			BitSet subQueryBits = subQueryWrapper.bits(reader);
+		    DocIdSet subQueryBits = subQueryWrapper.getDocIdSet(reader);
+		
+		    OpenBitSetDISI mainQuerybitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
+		    OpenBitSetDISI subQuerybitSet = new OpenBitSetDISI(subQueryBits.iterator(), maxNumberOfMainQueryHits);
 			
-			int count = getFacetHitCount(mainQueryBits, subQueryBits);
+			long count = getFacetHitCount(mainQuerybitSet, subQuerybitSet);
 			f.setHits(count);
 		}
 	}
@@ -313,8 +340,10 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		QueryWrapperFilter mainQueryWrapper = new QueryWrapperFilter(mainQuery);
 		
 	    // get the bitset for main query
-	    BitSet mainQueryBits = mainQueryWrapper.bits(reader);
-		Hits hits = null;
+		DocIdSet mainQueryBits = mainQueryWrapper.getDocIdSet(reader);
+	    
+	    
+		TopDocs hits = null;
 		
 		if( filters.size() > 0 )
 		{
@@ -327,19 +356,26 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		    }
 		    
 		    // apply the facets and include them in the main query bit set
-		    mainQueryBits.and(filter.bits(reader));
-		    hits = searcher.search(mainQuery, filter);
+			DocIdSet filterQueryBits = filter.getDocIdSet(reader);
+			 
+			// apply the facets and include them in the main query bit set
+		    OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
+		    OpenBitSetDISI filterBitSet = new OpenBitSetDISI(filterQueryBits.iterator(), maxNumberOfMainQueryHits);
+		    mainQueryBitSet.and(filterBitSet);
+		    
+		    hits = searcher.search(mainQuery, filter, maxNumberOfMainQueryHits);
 		    log.debug(" executeSearchWithFacets 2 = mainQuery = " + executedQuery + " filter = " + filter);	    
 		}
 		else
 		{
-			hits = searcher.search(mainQuery);
+			hits = searcher.search(mainQuery, maxNumberOfMainQueryHits);
 		    log.debug(" executeSearchWithFacets 3 = mainQuery = " + mainQuery);	    
 
 		}
 		
 		// determine the set of data we should use to determine facets
-		HashMap<String, HashMap<String, FacetResult>> possibleFacets = this.generateFacetSearches(hits, numberOfHitsToProcessForFacets, numberOfResultsToCollectForFacets);
+		HashMap<String, HashMap<String, FacetResult>> possibleFacets = this.generateFacetSearches(hits, 
+				numberOfHitsToProcessForFacets, numberOfResultsToCollectForFacets, searcher);
 
 
 		FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
@@ -350,7 +386,8 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
         		numberOfIdsToCollect, 
         		idsToCollectStartPosition,
         		numberOfFactsToShow,
-        		mainQueryString);
+        		mainQueryString,
+        		searcher);
 		
         helper.setExecutedQuery(executedQuery);
         helper.setFacetTrail(filters);
@@ -407,14 +444,15 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 	 */
 	private FacetSearchHelper processPossibleFacets(HashMap<String, HashMap<String, FacetResult>> possibleFacets, 
 			IndexReader reader, 
-			BitSet mainQueryBits, 
+			DocIdSet mainQueryBits, 
 			HashMap<String, 
 			Collection<FacetResult>> facetResults, 
-			Hits hits,
+			TopDocs hits,
 			int numberOfIdsToCollect, 
 			int idsToCollectStartPosition,
 			int numberOfFacetsToShow,
-			String mainQueryString ) throws ParseException, IOException
+			String mainQueryString,
+			IndexSearcher searcher) throws ParseException, IOException
 	{
 		FacetResultHitComparator facetResultHitComparator = new FacetResultHitComparator();
 		// get the authors and create a facet for each author
@@ -502,17 +540,18 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		int endPosition = idsToCollectStartPosition + numberOfIdsToCollect;
 		
 		// make sure that the end position is set up correctly
-	    if(hits.length() < endPosition )
+	    if(hits.totalHits < endPosition )
 	    {
-	    	endPosition = hits.length();
+	    	endPosition = hits.totalHits;
 	    }
 
 	    
 	    for( int index = idsToCollectStartPosition; index < endPosition; index ++ )
 	    {
-	    	ids.add(NumberTools.stringToLong(hits.doc(index).get(DefaultResearcherIndexService.ID)));
+	    	Document doc = searcher.doc(hits.scoreDocs[index].doc);
+	    	ids.add(NumberTools.stringToLong(doc.get(DefaultResearcherIndexService.ID)));
 	    }
-        FacetSearchHelper helper = new FacetSearchHelper(ids, hits.length(), facetResults, mainQueryString);
+        FacetSearchHelper helper = new FacetSearchHelper(ids, hits.totalHits, facetResults, mainQueryString);
         return helper;
 	}
 	
@@ -549,6 +588,14 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		log.debug("problem with main query " + mainQuery);
 		return (mainQuery == null || mainQuery.trim().equals("") || mainQuery.trim().equals("*"));
 		
+	}
+
+	public int getMaxNumberOfMainQueryHits() {
+		return maxNumberOfMainQueryHits;
+	}
+
+	public void setMaxNumberOfMainQueryHits(int maxNumberOfMainQueryHits) {
+		this.maxNumberOfMainQueryHits = maxNumberOfMainQueryHits;
 	}
 
 	

@@ -26,9 +26,9 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TopDocs;
 
 import edu.ur.ir.SearchHelper;
 import edu.ur.ir.SearchResults;
@@ -82,19 +82,20 @@ public class DefaultUserSearchService implements UserSearchService{
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			
 			Query luceneQuery = parser.parse(query);
-			Hits hits = searcher.search(luceneQuery);
-			searchResults.setTotalHits(hits.length());
+			TopDocs hits = searcher.search(luceneQuery, 1000);
+			searchResults.setTotalHits(hits.totalHits);
 			
 			int position = offset;
 			int addedResults = 0;
-			while( hits.length() > position  && (addedResults < numResults))
+			while( hits.totalHits > position  && (addedResults < numResults))
 			{
 				if( log.isDebugEnabled())
 				{
 					log.debug( " adding document at position " + position);
 					
 				}
-				Document d = hits.doc(position);
+				
+				Document d = searcher.doc(hits.scoreDocs[position].doc);
 				Long userId = new Long(d.get(DefaultUserIndexService.USER_ID));
 				log.debug( "user id = " + userId);
 				IrUser user = userService.getUser(userId, false);
