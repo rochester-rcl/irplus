@@ -100,8 +100,13 @@
    <!-- ****************************************** --> 
    <import resource="news-service.xml"/>
    
+    <!-- ****************************************** --> 
+    <!-- Index processing persistence classes -->
+    <!-- ****************************************** --> 
+    <import resource="ir-index-hibernate.xml"/>
+   
    <!-- ****************************************** --> 
-   <!-- DSpace import Security                             -->
+   <!-- DSpace import                            -->
    <!-- ****************************************** --> 
    <import resource="dspace-import.xml"/>
 
