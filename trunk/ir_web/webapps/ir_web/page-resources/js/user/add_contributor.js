@@ -103,21 +103,6 @@ YAHOO.ur.item.contributor = {
 
 	/**
 	 *  Function that searches the names
-	 * 
-	 */
-	getNames : function()
-	{
-		
-		var formObject = document.getElementById('names');
-		YAHOO.util.Connect.setForm(formObject);
-		
-	    var transaction = YAHOO.util.Connect.asyncRequest('post', 
-	        mySearchNameAction, 
-	        YAHOO.ur.item.contributor.getNameCallback);
-	},
-		
-	/**
-	 *  Function that searches the names
 	 *  and returns from start row and end row 
 	 */
 	getNamesForPager : function(rowStart, startPageNumber, currentPageNumber)
@@ -143,13 +128,16 @@ YAHOO.ur.item.contributor = {
 			YAHOO.util.Connect.setForm(formObject);
 			    
 		    if( YAHOO.ur.item.contributor.validate() )
-		    {
+		    {		    	
 		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 		        var cObj = YAHOO.util.Connect.asyncRequest('POST',
 		        mySearchNameAction, YAHOO.ur.item.contributor.getNameCallback);
 		    }
 	},
 	
+	/**
+     * Validate the search
+     */
 	validate : function() 
 	{
 	    	var name = document.getElementById('search_query').value;
@@ -169,9 +157,9 @@ YAHOO.ur.item.contributor = {
 	 */
 	addName : function(personNameId) 
 	{ 
-		YAHOO.ur.util.wait.waitDialog.showDialog();
 		var handleSuccess = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -182,7 +170,11 @@ YAHOO.ur.item.contributor = {
 		        // received from the server
 		        if( response.nameAdded == "true" )
 		        {
-				    YAHOO.ur.item.contributor.getNames();
+		        	// if there is a search query then execute search
+		        	var name = document.getElementById('search_query').value;
+		        	if (name != "" && name != null) {
+				        YAHOO.ur.item.contributor.handleSearchFormSubmit();
+					}
 				    YAHOO.ur.item.contributor.getContributors();
 		        }
 		        else
@@ -194,9 +186,11 @@ YAHOO.ur.item.contributor = {
 
 		// handle form submission failure
 		var handleFailure = function(o) {
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('add name failed ' + o.status);
 		};
 
+		YAHOO.ur.util.wait.waitDialog.showDialog();
 		// Wire up the success and failure handlers
 		var callback = { success: handleSuccess,  failure: handleFailure };
 		YAHOO.util.Connect.setForm('myNames');
@@ -217,7 +211,11 @@ YAHOO.ur.item.contributor = {
 	    var cObj = YAHOO.util.Connect.asyncRequest('post',
 	           removeContributorAction + '?contributorId=' + contributorId, YAHOO.ur.item.contributor.getContributorCallback);
 	           
-		YAHOO.ur.item.contributor.getNames();
+	    // if there is a search query then execute search
+    	var name = document.getElementById('search_query').value;
+     	if (name != "" && name != null) {
+	        YAHOO.ur.item.contributor.handleSearchFormSubmit();
+		}
 	},
 	
 		
@@ -226,8 +224,10 @@ YAHOO.ur.item.contributor = {
 	 */
 	getContributorCallback : 
 	{
+		
 	    success: function(o) 
 	    {
+		    YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -239,6 +239,7 @@ YAHOO.ur.item.contributor = {
 		
 		failure: function(o) 
 		{
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('get contributor callback Failure ' + o.status + ' status text ' + o.statusText );
 		}
 	},
@@ -251,6 +252,7 @@ YAHOO.ur.item.contributor = {
 	 */
 	getContributors : function()
 	{
+		YAHOO.ur.util.wait.waitDialog.showDialog();
 		YAHOO.util.Connect.setForm('contributors_form');
 	    var transaction = YAHOO.util.Connect.asyncRequest('POST', 
 	        getContributorsAction , 
@@ -263,7 +265,7 @@ YAHOO.ur.item.contributor = {
 	 *
 	 */
 	addContributorType : function(object, contributorId) {
-		
+		YAHOO.ur.util.wait.waitDialog.showDialog();
 		YAHOO.util.Connect.setForm('contributors_form');
 		
 	    var cObj = YAHOO.util.Connect.asyncRequest('post',
@@ -278,7 +280,7 @@ YAHOO.ur.item.contributor = {
 	 */
 	moveUp : function(contributorId) 
 	{
-	
+		YAHOO.ur.util.wait.waitDialog.showDialog();
 		YAHOO.util.Connect.setForm('contributors_form');
 		
 	    var cObj = YAHOO.util.Connect.asyncRequest('post',
@@ -292,7 +294,7 @@ YAHOO.ur.item.contributor = {
 	 */
 	moveDown : function(contributorId) 
 	{
-	
+		YAHOO.ur.util.wait.waitDialog.showDialog();
 		YAHOO.util.Connect.setForm('contributors_form');
 		
 	    var cObj = YAHOO.util.Connect.asyncRequest('post',
@@ -361,6 +363,7 @@ YAHOO.ur.item.contributor = {
 		
 		var handleSuccess = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -381,7 +384,12 @@ YAHOO.ur.item.contributor = {
 		            // we can clear the form if the person type was added
 		            YAHOO.ur.item.contributor.clearPersonNameForm();
 		            YAHOO.ur.item.contributor.newPersonNameDialog.hide();
-	        	    YAHOO.ur.item.contributor.getNames();
+		            // if there is a search query then execute search
+		        	var name = document.getElementById('search_query').value;
+		        	if (name != "" && name != null) {
+				        YAHOO.ur.item.contributor.handleSearchFormSubmit();
+					}
+	        	    
 		        }
 		    }
 		};
@@ -389,6 +397,7 @@ YAHOO.ur.item.contributor = {
 		// handle form sbumission failure
 		var handleFailure = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('person name submission failed ' + o.status);
 		};
 	
@@ -418,6 +427,7 @@ YAHOO.ur.item.contributor = {
 		    	    
 		    if( YAHOO.ur.item.contributor.newPersonNameDialog.validate() )
 		    {
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 	            var cObj = YAHOO.util.Connect.asyncRequest('post',
 	            newPersonNameAction, callback);
 	        } 
