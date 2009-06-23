@@ -108,24 +108,27 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 		    	InstitutionalItem i = institutionalItemService.getInstitutionalItem(record.getInstitutionalItemId(), false);
 		    	if( i != null)
 		    	{
-		            if( record.getIndexProcessingType().equals(IndexProcessingTypeService.DELETE))
+		            if( record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.DELETE))
 		            {
 		        	    log.debug("deleting item  " + i);
 		        	    institutionalItemIndexService.deleteItem(i, f);
+		        	    processingRecordService.delete(record);
 		            }
-		            else if(record.getIndexProcessingType().equals(IndexProcessingTypeService.UPDATE))
+		            else if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.UPDATE))
 		            {
 		            	log.debug("updating item  " + i);
 		            	try {
 							institutionalItemIndexService.updateItem(i, f);
+							processingRecordService.delete(record);
 						} catch (NoIndexFoundException e) {
 							log.error(e);
 						}
 		            }
-		            else if(record.getIndexProcessingType().equals(IndexProcessingTypeService.INSERT))
+		            else if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.INSERT))
 				    {
 		            	try {
 							institutionalItemIndexService.addItem(i, f);
+							processingRecordService.delete(record);
 						} catch (NoIndexFoundException e) {
 							log.error(e);
 						}     	
