@@ -27,7 +27,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
@@ -131,7 +130,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	    doc.add(new Field(ID, 
 	    	NumberTools.longToString(researcher.getId()), 
 			Field.Store.YES, 
-			Field.Index.UN_TOKENIZED));
+			Field.Index.NOT_ANALYZED));
 	    
 	    String title = researcher.getTitle();
 	    if( title != null && !title.trim().equals(""))
@@ -140,7 +139,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	    	doc.add(new Field(TITLE, 
 				title, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 	    }
 	    
 	    //keywords for the researcher
@@ -150,7 +149,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	    	doc.add(new Field(KEY_WORDS, 
 	    		keywords, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 	    }
 	    
 	    if( researcher.getUser().getFirstName() != null )
@@ -158,7 +157,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	        doc.add(new Field(FIRST_NAME, 
 				researcher.getUser().getFirstName(), 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 	    }
 	    
 	    if( researcher.getUser().getLastName() != null )
@@ -166,7 +165,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	        doc.add(new Field(LAST_NAME, 
 				researcher.getUser().getLastName(), 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 	    }
 	    
 	    if( researcher.getEmail() != null )
@@ -174,7 +173,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	    	doc.add(new Field(EMAIL, 
 				researcher.getEmail(), 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 	    }
 	    
 	    StringBuffer departmentNames = new StringBuffer();
@@ -189,7 +188,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	    	doc.add(new Field(DEPARTMENT, 
 					names, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 	    }
 
 	    String fields = researcher.getAllFieldNames();
@@ -198,7 +197,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		    doc.add(new Field(FIELD, 
 		    		fields, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 	    }
 
 		if(researcher.getResearchInterest() != null && !researcher.getResearchInterest().equals(""))
@@ -206,7 +205,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 			doc.add(new Field(RESEARCH_INTEREST, 
 					researcher.getResearchInterest(), 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 
 		if(researcher.getTeachingInterest() != null && !researcher.getTeachingInterest().equals(""))
@@ -214,7 +213,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 			doc.add(new Field(TEACHING_INTEREST, 
 					researcher.getTeachingInterest(), 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 
 	    writeDocument(researcherIndexFolder.getAbsolutePath(), doc);
@@ -274,7 +273,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 			}
 			Term term = new Term(ID, NumberTools.longToString(researcher.getId()));
 			writer.deleteDocuments(term);
-			writer.flush();
+			writer.commit();
 			writer.optimize();
 			
 		} catch (IOException e) {
@@ -337,7 +336,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 				writer = getWriter(directory);
 			}
 			writer.addDocument(document);
-			writer.flush();
+			writer.commit();
 			writer.optimize();
 			
 		} catch (IOException e) {
@@ -383,9 +382,9 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexReader.isLocked(directory) )
+		if( !IndexWriter.isLocked(directory) )
 	    {
-			writer = new IndexWriter(directory, analyzer);
+			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 	    }
 		return writer;
 	}

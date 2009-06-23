@@ -30,7 +30,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
@@ -181,7 +180,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			{
 				writer.addDocument(d);
 			}
-			writer.flush();
+			writer.commit();
 			writer.optimize();
 			
 		} catch (IOException e) {
@@ -354,7 +353,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		doc.add(new Field(ID, 
 				NumberTools.longToString(institutionalItem.getId()), 
 				Field.Store.YES, 
-				Field.Index.UN_TOKENIZED));
+				Field.Index.NOT_ANALYZED));
 		
 		
 		String name = genericItem.getName();
@@ -363,7 +362,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			doc.add(new Field(NAME, 
 					name, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		}
 		
 		String description = genericItem.getDescription();
@@ -372,7 +371,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			doc.add(new Field(DESCRIPTION, 
 					description, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		}
 		
 		String collectionName = institutionalItem.getInstitutionalCollection().getName();
@@ -382,37 +381,37 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		doc.add(new Field(COLLECTION_NAME, 
 				collectionName, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED ));
 		
 		String collectionId =  NumberTools.longToString(institutionalItem.getInstitutionalCollection().getId());
 		doc.add(new Field(COLLECTION_ID, 
 				collectionId, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED ));
 		
 		String repositoryId = NumberTools.longToString(institutionalItem.getInstitutionalCollection().getRepository().getId());
 		doc.add(new Field(REPOSITORY_ID, 
 				repositoryId, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED ));
 		
 		String rootCollectionId = NumberTools.longToString(institutionalItem.getInstitutionalCollection().getTreeRoot().getId());
 		doc.add(new Field(COLLECTION_ROOT_ID, 
 				rootCollectionId, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED ));
 		
 		String collectionLeftValue = NumberTools.longToString(institutionalItem.getInstitutionalCollection().getLeftValue());		
 		doc.add(new Field(COLLECTION_LEFT_VALUE, 
 				collectionLeftValue, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED ));
 		
 		String collectionRightValue = NumberTools.longToString(institutionalItem.getInstitutionalCollection().getRightValue());		
 		doc.add(new Field(COLLECTION_RIGHT_VALUE, 
 				collectionRightValue, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED ));
 		
 		// get the contributors
 		String contributorString = getContributorNames(genericItem);
@@ -421,7 +420,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			doc.add(new Field(CONTRIBUTOR_NAMES, 
 					contributorString, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		}
 		
 		// get the contributors
@@ -431,7 +430,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			doc.add(new Field(LINK_NAMES, 
 					linksString, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		}
 		
 		
@@ -446,7 +445,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			    doc.add(new Field(FILE_TEXT, 
 					fileText, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		    }
 		    
 		    fileText = null;
@@ -465,7 +464,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			doc.add(new Field(LANGUAGE, 
 					language, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		}
 		
 		// index the identifiers
@@ -475,7 +474,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			doc.add(new Field(IDENTIFIERS, 
 					identifiers, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		}
 		
 		//index the item abstract
@@ -485,7 +484,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			doc.add(new Field(ABSTRACT, 
 					itemAbstract, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		}
 		
 		//keywords for the item
@@ -496,7 +495,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			doc.add(new Field(KEY_WORDS, 
 					keywords, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		}
 		
 		//subtitles for the item
@@ -506,7 +505,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			doc.add(new Field(SUB_TITLES, 
 					subTitles, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		}	
 
 		// Types for item
@@ -516,7 +515,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			doc.add(new Field(CONTENT_TYPES, 
 					contentTypes, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED ));
 		}	
 		
 		//publisher information
@@ -530,7 +529,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 					doc.add(new Field(PUBLISHER, 
 							publisherName, 
 							Field.Store.YES, 
-							Field.Index.TOKENIZED));
+							Field.Index.ANALYZED ));
 				}
 			}
 	
@@ -541,7 +540,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 				doc.add(new Field(CITATION, 
 						citation, 
 						Field.Store.NO, 
-						Field.Index.TOKENIZED));
+						Field.Index.ANALYZED ));
 			}
 		}
 		
@@ -577,7 +576,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 				writer = getWriter(directory);
 			}
 		    writer.addDocument(document);
-			writer.flush();
+			writer.commit();
 			writer.optimize();
 		} 
 		catch (IOException e) 
@@ -866,9 +865,9 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexReader.isLocked(directory) )
+		if( !IndexWriter.isLocked(directory) )
 	    {
-			writer = new IndexWriter(directory, analyzer);
+			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 	    }
 		return writer;
 	}
@@ -888,9 +887,9 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	private synchronized IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexReader.isLocked(directory) )
+		if( !IndexWriter.isLocked(directory) )
 	    {
-			writer = new IndexWriter(directory, analyzer, true);
+			writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 	    }
 		return writer;
 	}

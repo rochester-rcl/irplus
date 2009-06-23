@@ -16,13 +16,18 @@
 
 package edu.ur.ir.web.action.institution;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.institution.InstitutionalItemIndexService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -53,6 +58,12 @@ public class DeleteInstitutionalItem extends ActionSupport implements UserIdAwar
 	/** User id */
 	private Long userId;
 	
+	/** institutional item index service */
+	private InstitutionalItemIndexService institutionalItemIndexService;
+	
+	/** Repository service */
+	private RepositoryService repositoryService;
+	
 	/**
 	 * Prepare for action
 	 */
@@ -64,6 +75,10 @@ public class DeleteInstitutionalItem extends ActionSupport implements UserIdAwar
 			InstitutionalItem institutionalItem = institutionalItemService.getInstitutionalItem(institutionalItemId, false);
 			
 			institutionalItemService.deleteInstitutionalItem(institutionalItem, user);
+			
+			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+			File f = new File(repository.getInstitutionalItemIndexFolder());
+			institutionalItemIndexService.deleteItem(institutionalItem, f);
 		}		
 		return SUCCESS;		
 	}
@@ -96,6 +111,23 @@ public class DeleteInstitutionalItem extends ActionSupport implements UserIdAwar
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	public InstitutionalItemIndexService getInstitutionalItemIndexService() {
+		return institutionalItemIndexService;
+	}
+
+	public void setInstitutionalItemIndexService(
+			InstitutionalItemIndexService institutionalItemIndexService) {
+		this.institutionalItemIndexService = institutionalItemIndexService;
+	}
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
 	}
 
 }

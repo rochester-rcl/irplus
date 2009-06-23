@@ -28,9 +28,9 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.springframework.context.ApplicationContext;
@@ -178,8 +178,8 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		IndexSearcher searcher = new IndexSearcher(dir);
 		QueryParser parser = new QueryParser(field, new StandardAnalyzer());
 		Query q1 = parser.parse(queryString);
-		Hits hits = searcher.search(q1);
-		int hitCount = hits.length();
+		TopDocs hits = searcher.search(q1, 1000);
+		int hitCount = hits.totalHits;
 
 		searcher.close();
 

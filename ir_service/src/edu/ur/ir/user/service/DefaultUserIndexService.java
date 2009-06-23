@@ -27,7 +27,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
@@ -199,7 +198,7 @@ public class DefaultUserIndexService implements UserIndexService{
 			}
 			    
 			writer.addDocument(document);
-			writer.flush();
+			writer.commit();
 			writer.optimize();
 			
 		} catch (IOException e) {
@@ -265,7 +264,7 @@ public class DefaultUserIndexService implements UserIndexService{
 			{
 			    writer.addDocument(d);
 			}
-			writer.flush();
+			writer.commit();
 			writer.optimize();
 			
 		}
@@ -317,19 +316,19 @@ public class DefaultUserIndexService implements UserIndexService{
 	    doc.add(new Field(USER_ID, 
 			user.getId().toString(), 
 			Field.Store.YES, 
-			Field.Index.UN_TOKENIZED));
+			Field.Index.NOT_ANALYZED));
 	    
 	    doc.add(new Field(USER_NAME, 
 				user.getUsername(), 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 	    
 	    if( user.getFirstName() != null )
 	    {
 	        doc.add(new Field(USER_FIRST_NAME, 
 				user.getFirstName(), 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 	    }
 	    
 	    if( user.getLastName() != null )
@@ -337,7 +336,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	        doc.add(new Field(USER_LAST_NAME, 
 				user.getLastName(), 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 	    }
 	    
 	    String emails = "";
@@ -352,7 +351,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	    doc.add(new Field(USER_EMAILS, 
 				emails, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 	    
 	    if( user.getDepartments() != null )
 	    {
@@ -369,7 +368,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	    	    doc.add(new Field(USER_DEPARTMENTS, 
 	    	    		names, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		    }
 	    }
 
@@ -404,7 +403,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		    doc.add(new Field(USER_NAMES, 
 					names.toString(), 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 	    }
 	    
 	    return doc;
@@ -425,9 +424,9 @@ public class DefaultUserIndexService implements UserIndexService{
 	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexReader.isLocked(directory) )
+		if( !IndexWriter.isLocked(directory) )
 	    {
-			writer = new IndexWriter(directory, analyzer);
+			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 	    }
 		return writer;
 	}
@@ -447,9 +446,9 @@ public class DefaultUserIndexService implements UserIndexService{
 	private synchronized IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexReader.isLocked(directory) )
+		if( !IndexWriter.isLocked(directory) )
 	    {
-			writer = new IndexWriter(directory, analyzer, true);
+			writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 	    }
 		return writer;
 	}

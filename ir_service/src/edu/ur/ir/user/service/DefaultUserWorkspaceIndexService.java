@@ -29,7 +29,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
@@ -283,24 +282,24 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	    doc.add(new Field(PERSONAL_FILE_ID, 
 	    		NumberTools.longToString(personalFile.getId()), 
 			Field.Store.YES, 
-			Field.Index.UN_TOKENIZED));
+			Field.Index.NOT_ANALYZED));
 	    
 	    String fileDescription = "" + personalFile.getVersionedFile().getDescription();
 	    
 	    doc.add( new Field(FILE_DESCRIPTION,
 	        fileDescription,
 	        Field.Store.NO,
-	        Field.Index.TOKENIZED) );
+	        Field.Index.ANALYZED) );
 	    
 	    doc.add(new Field(TYPE, 
 				personalFile.getFileSystemType().getType(), 
 				Field.Store.YES,
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 	   
 	    doc.add(new Field(VERSIONED_FILE_ID, 
 	    		NumberTools.longToString(personalFile.getVersionedFile().getId()), 
 		 	    Field.Store.YES, 
-			    Field.Index.TOKENIZED));
+			    Field.Index.ANALYZED));
 
 	    FileVersion mostRecentVersion = personalFile.getVersionedFile().getCurrentVersion();
 
@@ -325,32 +324,32 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		doc.add(new Field(BASE_VERSIONED_FILE_NAME, 
 					name, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 			
 		doc.add(new Field(VERSIONED_FILE_NAME_EXTENSION, 
 					extension, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 			
 		doc.add(new Field(FULL_VERSIONED_FILE_NAME, 
 				nameWithExtension, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 					
 		doc.add(new Field(FILE_VERSION_CREATOR,
 				creator, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 		    
 		doc.add(new Field(FILE_BODY_TEXT, 
 			 	    text, 
 				    Field.Store.NO, 
-				    Field.Index.TOKENIZED));
+				    Field.Index.ANALYZED));
 		
 		doc.add(new Field(VERSIONED_FILE_ID, 
 				NumberTools.longToString(personalFile.getVersionedFile().getId()), 
 		 	    Field.Store.YES, 
-			    Field.Index.UN_TOKENIZED));
+			    Field.Index.NOT_ANALYZED));
 			
         
         writeDocument(personalIndexFolder.getAbsolutePath(),  doc);
@@ -376,7 +375,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			}
 		
 			writer.addDocument(document);
-			writer.flush();
+			writer.commit();
 			writer.optimize();
 			
 		} catch (IOException e) {
@@ -493,7 +492,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		doc.add(new Field(PERSONAL_FOLDER_NAME, 
 				personalFolder.getName(), 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 		
 		String description = "";
 		if( personalFolder.getDescription() != null )
@@ -504,17 +503,17 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		doc.add(new Field(PERSONAL_FOLDER_DESCRIPTION, 
 				description, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 		
 		doc.add(new Field(PERSONAL_FOLDER_ID, 
 				NumberTools.longToString(personalFolder.getId()), 
 				Field.Store.YES, 
-				Field.Index.UN_TOKENIZED));
+				Field.Index.NOT_ANALYZED));
 		
 		doc.add(new Field(TYPE, 
 				personalFolder.getFileSystemType().getType(), 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 		
 		writeDocument(personalIndexFolder.getAbsolutePath(), 
 				doc);
@@ -617,24 +616,24 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
         doc.add(new Field(SHARED_INBOX_FILE_ID,
         		NumberTools.longToString(inboxFile.getId()), 
 			Field.Store.YES, 
-			Field.Index.UN_TOKENIZED));
+			Field.Index.NOT_ANALYZED));
         
 	    String fileDescription = "" + inboxFile.getVersionedFile().getDescription();
 	    
 	    doc.add( new Field(FILE_DESCRIPTION,
 	        fileDescription,
 	        Field.Store.NO,
-	        Field.Index.TOKENIZED) );
+	        Field.Index.ANALYZED) );
 	    
 	    doc.add(new Field(TYPE, 
 	    		inboxFile.getFileSystemType().getType(), 
 				Field.Store.YES,
-				Field.Index.UN_TOKENIZED));
+				Field.Index.NOT_ANALYZED));
 	   
 	    doc.add(new Field(VERSIONED_FILE_ID, 
 	    		inboxFile.getVersionedFile().getId().toString(), 
 		 	    Field.Store.YES, 
-			    Field.Index.UN_TOKENIZED));
+			    Field.Index.NOT_ANALYZED));
 
 	    FileVersion mostRecentVersion = inboxFile.getVersionedFile().getCurrentVersion();
 
@@ -659,32 +658,32 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		doc.add(new Field(BASE_VERSIONED_FILE_NAME, 
 					name, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 			
 		doc.add(new Field(VERSIONED_FILE_NAME_EXTENSION, 
 					extension, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 			
 		doc.add(new Field(FULL_VERSIONED_FILE_NAME, 
 				nameWithExtension, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 					
 		doc.add(new Field(FILE_VERSION_CREATOR,
 				creator, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 		    
 		doc.add(new Field(FILE_BODY_TEXT, 
 			 	    text, 
 				    Field.Store.NO, 
-				    Field.Index.TOKENIZED));
+				    Field.Index.ANALYZED));
 		
 		doc.add(new Field(VERSIONED_FILE_ID, 
 				inboxFile.getVersionedFile().getId().toString(), 
 		 	    Field.Store.YES, 
-			    Field.Index.UN_TOKENIZED));
+			    Field.Index.NOT_ANALYZED));
 		
         
         writeDocument(personalIndexFolder.getAbsolutePath(), 
@@ -978,7 +977,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		doc.add(new Field(PERSONAL_ITEM_ID, 
 				NumberTools.longToString(personalItem.getId()), 
 				Field.Store.YES, 
-				Field.Index.UN_TOKENIZED));
+				Field.Index.NOT_ANALYZED));
 		
 		
 		String name = genericItem.getName();
@@ -987,7 +986,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_NAME, 
 					name, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		String description = genericItem.getDescription();
@@ -996,7 +995,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_DESCRIPTION, 
 					description, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		if( personalItem.getPersonalCollection() != null)
@@ -1006,26 +1005,26 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		    doc.add(new Field(PERSONAL_ITEM_COLLECTION_NAME, 
 				collectionName, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 		
 		    String collectionId =  NumberTools.longToString(personalItem.getPersonalCollection().getId());
 		    doc.add(new Field(PERSONAL_ITEM_COLLECTION_ID, 
 				collectionId, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 		
 		
 		    String collectionLeftValue = NumberTools.longToString(personalItem.getPersonalCollection().getLeftValue());		
 		    doc.add(new Field(PERSONAL_ITEM_COLLECTION_LEFT_VALUE, 
 				collectionLeftValue, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 		
 		    String collectionRightValue = NumberTools.longToString(personalItem.getPersonalCollection().getRightValue());		
 		    doc.add(new Field(PERSONAL_ITEM_COLLECTION_RIGHT_VALUE, 
 				collectionRightValue, 
 				Field.Store.YES, 
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 		}
 		// get the contributors
 		String contributorString = getContributorNames(genericItem);
@@ -1034,7 +1033,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_CONTRIBUTOR_NAMES, 
 					contributorString, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		// get the contributors
@@ -1044,7 +1043,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_LINK_NAMES, 
 					linksString, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		// get the text for the files
@@ -1054,7 +1053,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_FILE_NAME, 
 					fileNames, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		//index the language
@@ -1068,7 +1067,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_LANGUAGE, 
 					language, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		//index the submitter
@@ -1077,7 +1076,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_SUBMITTER, 
 					genericItem.getOwner().getFirstName() + " " + genericItem.getOwner().getLastName(), 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 
 		// index the series
@@ -1087,7 +1086,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_SERIES, 
 					series, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 
 		// index the extent
@@ -1097,7 +1096,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_EXTENTS, 
 					extents, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		// index the sponsors
@@ -1107,7 +1106,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_SPONSORS, 
 					sponsors, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		// index the identifiers
@@ -1117,7 +1116,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_IDENTIFIERS, 
 					identifiers, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		//index the item abstract
@@ -1127,7 +1126,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_ABSTRACT, 
 					itemAbstract, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		//keywords for the item
@@ -1138,7 +1137,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_KEY_WORDS, 
 					keywords, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 		
 		//subtitles for the item
@@ -1148,7 +1147,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_SUB_TITLES, 
 					subTitles, 
 					Field.Store.NO, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}	
 		
 		// Types for item
@@ -1158,13 +1157,13 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			doc.add(new Field(PERSONAL_ITEM_CONTENT_TYPE, 
 					contentTypes, 
 					Field.Store.YES, 
-					Field.Index.TOKENIZED));
+					Field.Index.ANALYZED));
 		}
 	
 		doc.add(new Field(TYPE, 
 				personalItem.getFileSystemType().getType(), 
 				Field.Store.YES,
-				Field.Index.TOKENIZED));
+				Field.Index.ANALYZED));
 		
 		//publisher information
 		if( genericItem.getExternalPublishedItem() != null  )
@@ -1177,7 +1176,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 					doc.add(new Field(PERSONAL_ITEM_PUBLISHER, 
 							publisherName, 
 							Field.Store.YES, 
-							Field.Index.TOKENIZED));
+							Field.Index.ANALYZED));
 				}
 			}
 	
@@ -1188,7 +1187,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				doc.add(new Field(PERSONAL_ITEM_CITATION, 
 						citation, 
 						Field.Store.NO, 
-						Field.Index.TOKENIZED));
+						Field.Index.ANALYZED));
 			}
 		}
 		
@@ -1452,9 +1451,9 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexReader.isLocked(directory) )
+		if( !IndexWriter.isLocked(directory) )
 	    {
-			writer = new IndexWriter(directory, analyzer);
+			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 	    }
 		return writer;
 	}

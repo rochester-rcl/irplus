@@ -25,7 +25,7 @@ package edu.ur.ir.search;
 public class FacetResult {
 	
 	/** Number of hits for that facet */
-	private Integer hits;
+	private Long hits;
 	
 	/** type of facet for example Author, Language, Subject etc.*/
 	private String field;
@@ -40,7 +40,7 @@ public class FacetResult {
 	 * @param facetName - name of the facet.
 	 * @param originalQuery - original query executed.
 	 */
-	public FacetResult(int hits, String field, String facetName)
+	public FacetResult(Long hits, String field, String facetName)
 	{
 		this.hits = hits;
 		this.facetName = facetName;
@@ -52,7 +52,7 @@ public class FacetResult {
 	 * 
 	 * @return
 	 */
-	public int getHits() {
+	public Long getHits() {
 		return hits;
 	}
 
@@ -120,7 +120,7 @@ public class FacetResult {
 		return true;
 	}
 
-	public void setHits(Integer hits) {
+	public void setHits(Long hits) {
 		this.hits = hits;
 	}
 
