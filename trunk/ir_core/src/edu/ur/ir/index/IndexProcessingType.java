@@ -61,7 +61,7 @@ public class IndexProcessingType extends CommonPersistent{
 	 */
 	public String toString()
 	{
-		StringBuffer sb = new StringBuffer("[Extent type id = ");
+		StringBuffer sb = new StringBuffer("[Index processing type id = ");
 		sb.append(id);
 		sb.append(" name = ");
 		sb.append(name);
