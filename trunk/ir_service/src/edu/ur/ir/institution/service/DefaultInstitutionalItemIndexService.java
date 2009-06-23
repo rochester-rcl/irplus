@@ -434,14 +434,22 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 					Field.Index.TOKENIZED));
 		}
 		
-		// get the text for the files
-		String fileText = getDocumentBodyText(genericItem);
-		if(!fileText.trim().equals(""))
+		
+		
+		Set<ItemFile> files = genericItem.getItemFiles();
+		for(ItemFile itemFile : files)
 		{
-			doc.add(new Field(FILE_TEXT, 
+			// get the text for the files
+			String fileText = getDocumentBodyText(itemFile);
+		    if(!fileText.trim().equals(""))
+		    {
+			    doc.add(new Field(FILE_TEXT, 
 					fileText, 
 					Field.Store.NO, 
 					Field.Index.TOKENIZED));
+		    }
+		    
+		    fileText = null;
 		}
 		
 		//index the language
@@ -740,26 +748,23 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * @param version
 	 * @return text for the document.
 	 */
-	private String getDocumentBodyText(GenericItem genericItem)
+	private String getDocumentBodyText(ItemFile itemFile)
 	{
 		
 		StringBuffer sb = new StringBuffer();
-		Set<ItemFile> files = genericItem.getItemFiles();
-		for(ItemFile itemFile : files)
+		String extension = itemFile.getIrFile().getFileInfo().getExtension();
+		FileTextExtractor extractor = fileTextExtractorService.getFileTextExtractor(extension);
+		if( extractor != null)
 		{
-			String extension = itemFile.getIrFile().getFileInfo().getExtension();
-			FileTextExtractor extractor = fileTextExtractorService.getFileTextExtractor(extension);
-			if( extractor != null)
-			{
-				log.debug("Extractor found for extension " + extension);
-				File f = new File(itemFile.getIrFile().getFileInfo().getFullPath());
-				sb.append(" " + extractor.getText(f) + " ");
-			}
-			else
-			{
-				log.debug("No extractor found for extension " + extension);
-			}
+		    log.debug("Extractor found for extension " + extension);
+			File f = new File(itemFile.getIrFile().getFileInfo().getFullPath());
+			sb.append(" " + extractor.getText(f) + " ");
 		}
+		else
+		{
+			log.debug("No extractor found for extension " + extension);
+		}
+		
 		return sb.toString();
 	}
 	
