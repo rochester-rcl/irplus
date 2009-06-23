@@ -142,7 +142,7 @@
         </dependency>
         
         <!-- lucene files -->
-        <dependency org="org.apache.lucene" name="lucene-core" rev="2.3.2">
+        <dependency org="org.apache.lucene" name="lucene-core" rev="2.4.1">
             <artifact name="lucene-core" type="jar"/>
         </dependency>
         
