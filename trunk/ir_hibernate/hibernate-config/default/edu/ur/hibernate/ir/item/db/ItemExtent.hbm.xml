@@ -67,4 +67,10 @@
 		and ItemExtent.value = ?
 	</query>
 	
+		<!--  get the count of the number of items that use a specific extent type -->
+	<query name="extentTypeItemCount">
+        select count(distinct itemExtent.item.id) from ItemExtent as itemExtent
+		where itemExtent.extentType.id = ?
+	</query>
+	
 </hibernate-mapping>

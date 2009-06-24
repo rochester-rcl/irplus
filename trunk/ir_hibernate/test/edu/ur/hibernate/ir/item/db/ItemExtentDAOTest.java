@@ -61,41 +61,95 @@ public class ItemExtentDAOTest {
 			TransactionDefinition.PROPAGATION_REQUIRED);
 	
 	/**
-	 * Test Contributor type persistence
+	 * Test item extent type persistence
 	 */
 	@Test
 	public void baseItemExtentDAOTest() throws Exception{
-
-		ExtentType identType = new ExtentType();
-		identType.setName("identTypeName");
- 		identType.setDescription("identTypeDescription");
- 		extentTypeDAO.makePersistent(identType);
-
 		TransactionStatus ts = tm.getTransaction(td);
+
+		ExtentType extentType = new ExtentType();
+		extentType.setName("extentTypeName");
+ 		extentType.setDescription("extentTypeDescription");
+ 		extentTypeDAO.makePersistent(extentType);
+
 		GenericItem item = new GenericItem("item2");
 		itemDAO.makePersistent(item);
 		
+		ItemExtent itemExtent = item.addItemExtent(extentType, "333-44-7856");
+		itemExtentDAO.makePersistent(itemExtent);
         //commit the transaction 
 		tm.commit(ts);
 		
+        // Start the transaction 
+		ts = tm.getTransaction(td);
+		assert itemExtentDAO.getById(itemExtent.getId(), false).equals(itemExtent) : "item extent should be found";
+		item.removeItemExtent(itemExtent);
+		itemExtentDAO.makeTransient(itemExtentDAO.getById(itemExtent.getId(), false));
+        extentTypeDAO.makeTransient(extentTypeDAO.getById(extentType.getId(), false));
+        
+		// delete the item
+		itemDAO.makeTransient(itemDAO.getById(item.getId(), false));
+        tm.commit(ts);
 
-		ItemExtent itemExtent = item.addItemExtent(identType, "333-44-7856");
+	}
+	
+	/**
+	 * Test Contributor type persistence
+	 */
+	@Test
+	public void countItemExtentDAOTest() throws Exception{
+
+		TransactionStatus ts = tm.getTransaction(td);
+		ExtentType extentType = new ExtentType();
+		extentType.setName("extentTypeName");
+ 		extentType.setDescription("extentTypeDescription");
+ 		extentTypeDAO.makePersistent(extentType);
+ 		
+ 		ExtentType extentType2 = new ExtentType();
+		extentType2.setName("extentTypeName2");
+ 		extentType2.setDescription("extentTypeDescription2");
+ 		extentTypeDAO.makePersistent(extentType2);
+
+		
+		GenericItem item = new GenericItem("item");
+		GenericItem item2 = new GenericItem("item2");
+		itemDAO.makePersistent(item);
+		itemDAO.makePersistent(item2);
+       
+		
+
+		ItemExtent itemExtent = item.addItemExtent(extentType, "333-44-7856");
+		ItemExtent itemExtent2 = item2.addItemExtent(extentType, "333-44-7856");
+		ItemExtent itemExtent3 = item.addItemExtent(extentType2, "333-44-7856");
+
 		itemExtentDAO.makePersistent(itemExtent);
+		itemExtentDAO.makePersistent(itemExtent2);
+		itemExtentDAO.makePersistent(itemExtent3);
+		 //commit the transaction 
+		tm.commit(ts);
 		
         // Start the transaction 
 		ts = tm.getTransaction(td);
 
-		assert itemExtentDAO.getById(itemExtent.getId(), false).equals(itemExtent) : "item extent should be found";
-		item.removeItemExtent(itemExtent);
+		long count = itemExtentDAO.getItemCount(extentType);
+		assert count == 2l : "Should find two but found " + count;
+		
+		long count2 = itemExtentDAO.getItemCount(extentType2);
+		assert count2 == 1l : "Cound should be one but found " + count;
         
         tm.commit(ts);
-        
-        itemExtentDAO.makeTransient(itemExtent);
-        assert itemExtentDAO.getById(itemExtent.getId(), false) == null : "Should not find the item extent"; 
-        
-        extentTypeDAO.makeTransient(extentTypeDAO.getById(identType.getId(), false));
-        
+
+		ts = tm.getTransaction(td);
+
 		// delete the item
 		itemDAO.makeTransient(itemDAO.getById(item.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(item2.getId(), false));
+        
+        extentTypeDAO.makeTransient(extentTypeDAO.getById(extentType.getId(), false));
+        extentTypeDAO.makeTransient(extentTypeDAO.getById(extentType2.getId(), false));
+        
+
+        tm.commit(ts);
+
 	}
 }

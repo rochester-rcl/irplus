@@ -306,7 +306,6 @@
         from GenericItem genericItem
         where genericItem.owner.id = ?
 	</query>
-
-	
+		
 	
 </hibernate-mapping>
