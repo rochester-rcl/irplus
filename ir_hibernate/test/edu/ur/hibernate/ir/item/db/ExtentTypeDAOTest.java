@@ -42,7 +42,7 @@ public class ExtentTypeDAOTest {
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 
-	ExtentTypeDAO extentType = (ExtentTypeDAO) ctx
+	ExtentTypeDAO extentTypeDAO = (ExtentTypeDAO) ctx
 	.getBean("extentTypeDAO");
 
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx.getBean("transactionManager");
@@ -50,36 +50,37 @@ public class ExtentTypeDAOTest {
 
 	
 	/**
-	 * Test extent type persistance
+	 * Test extent type persistence
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	public void baseExtentTypeDAOTest() throws Exception{
 		
-		ExtentType identType = new ExtentType();
-		identType.setName("identTypeName");
- 		identType.setDescription("identTypeDescription");
+		ExtentType extentType = new ExtentType();
+		extentType.setName("extentTypeName");
+ 		extentType.setDescription("extentTypeDescription");
 
         // Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
- 		 extentType.makePersistent(identType);
+ 		extentTypeDAO.makePersistent(extentType);
  		tm.commit(ts);
  		
  		ts = tm.getTransaction(td);
- 		 ExtentType other = extentType.getById(identType.getId(), false);
-         assert other.equals(identType) : "Idententifier types should be equal";
+ 		ExtentType other = extentTypeDAO.getById(extentType.getId(), false);
+        assert other.equals(extentType) : "Idententifier types should be equal";
          
-         List<ExtentType> itemExtentTypes =  extentType.getAllOrderByName(0, 1);
-         assert itemExtentTypes.size() == 1 : "One extent type should be found";
+        List<ExtentType> itemExtentTypes =  extentTypeDAO.getAllOrderByName(0, 1);
+        assert itemExtentTypes.size() == 1 : "One extent type should be found";
          
-         assert extentType.getAllNameOrder().size() == 1 : "One extent type should be found";
+        assert extentTypeDAO.getAllNameOrder().size() == 1 : "One extent type should be found";
          
-         ExtentType itemExtentTypeByName =  extentType.findByUniqueName(identType.getName());
-         assert itemExtentTypeByName.equals(identType) : "Extent types should be found";
+        ExtentType itemExtentTypeByName =  extentTypeDAO.findByUniqueName(extentType.getName());
+        assert itemExtentTypeByName.equals(extentType) : "Extent types should be found";
          
-         extentType.makeTransient(other);
-         assert  extentType.getById(other.getId(), false) == null : 
+        extentTypeDAO.makeTransient(other);
+        assert  extentTypeDAO.getById(other.getId(), false) == null : 
         	 "Should no longer be able to find extent type";
-         tm.commit(ts);
+        tm.commit(ts);
 	}
+
 }

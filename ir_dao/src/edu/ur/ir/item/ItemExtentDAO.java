@@ -37,4 +37,12 @@ public interface ItemExtentDAO extends CountableDAO, CrudDAO<ItemExtent>
 	 * @return the item extent found.
 	 */
 	public ItemExtent getByTypeValue(Long extentType, String value);
+	
+	/**
+	 * Get the number of items that use the given extent type.
+	 * 
+	 * @param extentType - the extent type to check for
+	 * @return - the number of 
+	 */
+	public Long getItemCount(ExtentType extentType);
 }
