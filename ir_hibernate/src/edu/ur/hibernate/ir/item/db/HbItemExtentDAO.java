@@ -22,6 +22,7 @@ import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.ItemExtent;
 import edu.ur.ir.item.ItemExtentDAO;
 
@@ -75,21 +76,49 @@ public class HbItemExtentDAO implements ItemExtentDAO{
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemExtentCount"));
 	}
 
+	/**
+	 * Get the item extent by id.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
+	 */
 	public ItemExtent getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
+	/**
+	 * Save the item extent.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
+	 */
 	public void makePersistent(ItemExtent entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
+	/**
+	 * Delete the item extent.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
+	 */
 	public void makeTransient(ItemExtent entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List getAll() {
+	/**
+	 * Get all of the item extents
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<ItemExtent> getAll() {
 		return hbCrudDAO.getAll();
+	}
+
+	/**
+	 * Get the count of items that use specified extent type.
+	 * 
+	 * @see edu.ur.ir.item.ItemExtentDAO#getItemCount(edu.ur.ir.item.ExtentType)
+	 */
+	public Long getItemCount(ExtentType extentType) {
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("extentTypeItemCount", extentType.getId()));
 	}
 
 }
