@@ -82,7 +82,7 @@ public class AuthorNameTag extends SimpleTagSupport{
 	    		    {
 	    			    output += birthYear;
 	    		    }
-	    		    output += ", ";
+	    		    output += " - ";
 	    		
 	    		    if(  deathYear > 0 )
 	    		    {
