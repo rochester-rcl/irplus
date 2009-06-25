@@ -20,7 +20,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 
-<h1>Primary Picture</h1>
+<h3>Primary Picture</h3>
 <c:if test="${newsItem.primaryPicture != null }">
 	<table class="simpleTable">
 		<thead>
@@ -58,7 +58,7 @@
 </c:if>
 
 
-<h1>Pictures</h1>
+<h3>Pictures</h3>
 <c:if test="${numberOfNewsPictures > 0}">
 <table class="simpleTable">
 	<thead>

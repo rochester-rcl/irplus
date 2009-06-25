@@ -50,7 +50,7 @@
     <ur:js src="page-resources/yui/button/button-min.js"/>
     <ur:js src="page-resources/yui/container/container-min.js"/>
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
- 	<ur:js src="page-resources/yui/editor/editor-beta-min.js"/>
+ 	<ur:js src="page-resources/yui/editor/editor-min.js"/>
     <ur:js src="page-resources/yui/tabview/tabview-min.js"/>
  	
  	<ur:js src="pages/js/base_path.js"/>
@@ -67,7 +67,7 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h1>Edit News</h1>
+        <h3>Edit News</h3>
     
         <div id="bd">
             <!--  set up tabs for editing news -->
@@ -144,17 +144,11 @@
 	                  
 	               <!--  start second tab -->
 	               <div id="tab2">
-	                   <br/>
-	                      <table>
-	                          <tr>
-	                              <td>
- 		                              <button class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';"
+	                  
+ 		              <button class="ur_button" 
+ 		                      onmouseover="this.className='ur_buttonover';"
+ 		                      onmouseout="this.className='ur_button';"
  		                               id="showUploadPicture">Upload Picture</button> 
-	                              </td>
-	                          </tr>
-	                      </table>
 	                      <br/>
 	                     
 
@@ -182,34 +176,35 @@
   <!--  End  doc div-->
 
   <!-- Dialog box for delete confirmation -->
-  <ur:div id="deletePictureDialog" >
-      <ur:div cssClass="hd">Delete Picture</ur:div>
-	  <ur:div cssClass="bd">
-	      <ur:basicForm id="deleteNewsPictureForm" name="pictureUploadForm" 
-		                              method="post"  action="admin/deleteNewsPicture.action">
+  <div id="deletePictureDialog" >
+      <div class="hd">Delete Picture</div>
+	  <div class="bd">
+	     <c:url var="deleteUrl" value="/admin/deleteNewsPicture.action"/>
+	      <form id="deleteNewsPictureForm" name="pictureUploadForm" 
+		                              method="post"  action="${deleteUrl}">
 		      <input type="hidden" id="delete_news_item_id" name="newsItemId" value=""/>
 		      <input type="hidden" id="delete_picture_id" name="pictureId" value=""/>
 		      <input type="hidden" id="delete_primary_news_picture" name="primaryNewsPicture" value=""/>
 		      <p>Do you want to delete the selected picture?</p>
-		  </ur:basicForm>
-	   </ur:div>
-   </ur:div>
+		  </form>
+	   </div>
+   </div>
         
         <!-- Dialog box for uploading pictures -->
-        <ur:div id="uploadNewsPictureDialog" >
-	            <ur:div cssClass="hd">Picture Upload</ur:div>
-		        <ur:div cssClass="bd">
-		            <ur:basicForm id="addNewsPicture" name="pictureUploadForm" 
+        <div id="uploadNewsPictureDialog" >
+	            <div class="hd">Picture Upload</div>
+		        <div class="bd">
+		            <c:url var="uploadUrl" value="/admin/uploadNewsPicture.action"/>
+		            <form id="addNewsPicture" name="pictureUploadForm" 
 		                 method="post" enctype="multipart/form-data"
-		                 action="admin/uploadNewsPicture.action">
-		              
+		                 action="${uploadUrl}">
 		                 <input type="hidden" id="news_item_id" name="newsItemId" value="${newsItem.id}"/>
 		                 <div id="upload_form_fields">
 		                 <c:import url="/pages/admin/news/news_upload_form_frag.jsp"/>
 		                 </div>
-		             </ur:basicForm>
-		         </ur:div>
-	     </ur:div>
+		             </form>
+		         </div>
+	     </div>
 	     <!--  end upload picture dialog -->
 </body>
 </html>
