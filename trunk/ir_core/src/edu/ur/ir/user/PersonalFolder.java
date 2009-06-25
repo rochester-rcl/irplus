@@ -279,7 +279,7 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 */
 	public PersonalFile addVersionedFile(VersionedFile vf) throws DuplicateNameException
 	{
-		 if( !isVaildPersonalFileSystemName(name))
+		 if( !isVaildPersonalFileSystemName(vf.getNameWithExtension()))
 		 {
 			 throw new DuplicateNameException("A file or folder with the name " + vf.getNameWithExtension() +
 						" already exists in this folder", vf.getNameWithExtension());
