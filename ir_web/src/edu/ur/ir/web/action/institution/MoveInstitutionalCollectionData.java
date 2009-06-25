@@ -218,7 +218,7 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 			for( InstitutionalItem i : itemsToMove)
 			{
 				// set item to be updated in index
-				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE); 
 				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
@@ -238,20 +238,20 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 						collectionsToMove);
 				for(InstitutionalCollection c : collectionsToMove)
 				{
-					IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+					IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE); 
 					institutionalItemIndexProcessingRecordService.processItemsInCollection( c, processingType);
 				}
 
 			}
 		}
 		
-		// re-index only those collections
+		// re-index only those items in collections
 		// where the tree root is different
 		for(InstitutionalCollection c : oldRoots)
 		{
 		    if( c.getTreeRoot() == null || destination == null || (!c.getTreeRoot().equals(destination.getTreeRoot())))
 		    {
-			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE); 
 				institutionalItemIndexProcessingRecordService.processItemsInCollection( c.getTreeRoot(), processingType);
 		    }
 		}

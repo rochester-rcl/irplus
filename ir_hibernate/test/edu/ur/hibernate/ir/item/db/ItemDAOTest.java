@@ -479,6 +479,7 @@ public class ItemDAOTest {
 		
 		p = personNameAuthorityDAO.getById(p.getId(), false);
 		personNameAuthorityDAO.makeTransient(p);
+		itemDAO.makeTransient(item);
 		tm.commit(ts);
 	}
 	
@@ -490,14 +491,12 @@ public class ItemDAOTest {
 	@Test
 	public void addItemIdentifierDAOTest() throws Exception{
 
-		
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
 		IdentifierType identifierType = new IdentifierType();
 		identifierType.setName("identTypeName");
  		identifierType.setDescription("identTypeDescription");
  		identifierTypeDAO.makePersistent(identifierType);
-		
-        // Start the transaction 
-        TransactionStatus ts = tm.getTransaction(td);
  
 		GenericItem item = new GenericItem("item1");
 
@@ -534,11 +533,14 @@ public class ItemDAOTest {
 		item = itemDAO.getById(item.getId(), false);
 		assert item.getItemIdentifiers().size() == 0 : "Should not have any item identifiers";
 		//complete the transaction
+		
+		identifierTypeDAO.makeTransient(identifierType);
+		itemDAO.makeTransient(item);
 		tm.commit(ts);
 		
 	
 		
-		identifierTypeDAO.makeTransient(identifierType);
+		
 	}
 	
 	
@@ -573,9 +575,9 @@ public class ItemDAOTest {
 		assert other.getLinks().size() == 2 : "Size should be 2 but is " + other.getLinks().size();
 		assert other.getLinks().contains(itemLink1) : "Link one should be in the set";
 		assert other.getLinks().contains(itemLink2) : "Link two should be in the set";
-
-		tm.commit(ts);
 		itemDAO.makeTransient(other);
+		tm.commit(ts);
+		
 	}
 	
    

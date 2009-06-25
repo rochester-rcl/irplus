@@ -140,25 +140,33 @@ public class DefaultUserIndexService implements UserIndexService{
 		}
 		finally
 		{
-			if( writer != null)
-			{
-				try {
-					writer.close();
-					writer = null;
-				} catch (IOException e) {
-					log.error(e);
-				}
+			if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
 			}
-			if( directory != null)
-			{
-				try {
-					directory.close();
-					directory = null;
-				} catch (IOException e) {
-					log.error(e);
-				}
-			}
-			writer = null;
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
 		}
 		
 	}
@@ -206,24 +214,33 @@ public class DefaultUserIndexService implements UserIndexService{
 			throw new RuntimeException(e);
 		}
 	    finally {
-		    if (writer != null) {
+	    	if (writer != null) {
 			    try {
 				    writer.close();
-				    writer = null;
 			    } catch (Exception e) {
 				    log.error(e);
 			    }
 		    }
-		   
-		    if( directory != null)
-			{
-				try {
-					directory.close();
-					directory = null;
-				} catch (IOException e) {
-					log.error(e);
-				}
+		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
 			}
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
 	    }
 	}
 
@@ -275,28 +292,33 @@ public class DefaultUserIndexService implements UserIndexService{
 		}
 		finally 
 		{
-		    if (writer != null) 
-		    {
-			    try 
-			    {
+			if (writer != null) {
+			    try {
 				    writer.close();
-				    writer = null;
-				} 
-			    catch (Exception e) 
-			    {
+			    } catch (Exception e) {
 				    log.error(e);
-				}
-			}
-		    if( directory != null)
-			{
-				try {
-					directory.close();
-					directory = null;
-				} catch (IOException e) {
-					log.error(e);
-				}
-			}
+			    }
+		    }
 		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
 		    docs = null;
 		}
 	}

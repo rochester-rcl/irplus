@@ -542,4 +542,15 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			ResearcherFileSystemService researcherFileSystemService) {
 		this.researcherFileSystemService = researcherFileSystemService;
 	}
+
+
+	/**
+	 * Get the list of institutional item ids in the collection.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getCollectionItemsIds(int, int, edu.ur.ir.institution.InstitutionalCollection, edu.ur.order.OrderType)
+	 */
+	public List<Long> getCollectionItemsIds(int rowStart, int maxResults,
+			InstitutionalCollection collection, OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsIds(rowStart, maxResults, collection, orderType);
+	}
 }

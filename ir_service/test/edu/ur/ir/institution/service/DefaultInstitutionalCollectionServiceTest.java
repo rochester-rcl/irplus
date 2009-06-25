@@ -75,7 +75,7 @@ public class DefaultInstitutionalCollectionServiceTest {
     InstitutionalCollectionService institutionalCollectionService = 
     	(InstitutionalCollectionService) ctx.getBean("institutionalCollectionService");
 
-    /** INstitutional Item service  */
+    /** Institutional Item service  */
     InstitutionalItemService institutionalItemService = 
     	(InstitutionalItemService) ctx.getBean("institutionalItemService");
     

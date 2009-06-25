@@ -15,15 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */  
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
-import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
@@ -47,6 +45,9 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	
 	/** batch size for processing collection items */
 	private int collectionItemBatchSize = 100;
+	
+	/** Service for dealing with processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemIndexProcessingRecordService.class);
@@ -144,6 +145,8 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 		
 		log.debug("processing a total of " + numberOfItems);
 		
+		
+		
 		// add one batch size to the items to make sure all items are
 		// processed.
 		while(rowStart <= (numberOfItems + collectionItemBatchSize))
@@ -152,12 +155,12 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 			log.debug("batch size = " +  collectionItemBatchSize);
 			// notice the minus one because we are starting at 0
 			log.debug("processing " + rowStart + " to " + (rowStart + collectionItemBatchSize - 1) );
-			List<InstitutionalItem> items = institutionalItemService.getCollectionItemsOrderByName(rowStart, collectionItemBatchSize, institutionalCollection, OrderType.DESCENDING_ORDER);
+			List<Long> itemIds = institutionalItemService.getCollectionItemsIds(rowStart, collectionItemBatchSize, institutionalCollection, OrderType.DESCENDING_ORDER);
 		
-			for(InstitutionalItem i : items)
+			for(Long i : itemIds)
 			{
 				log.debug("re-indexing item " + i);
-				save(i.getId(), processingType);
+				save(i, processingType);
 			}
 		    rowStart = rowStart + collectionItemBatchSize;
 		    
@@ -172,18 +175,100 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	public InstitutionalItemIndexProcessingRecord save(Long itemId,
 			IndexProcessingType processingType) {
 		
+		
 		InstitutionalItemIndexProcessingRecord record = null;
+		IndexProcessingType noFileChangeProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE);
+		IndexProcessingType updateProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE);
+		IndexProcessingType deleteProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE);
+		IndexProcessingType insertProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.INSERT);
+		
+		
 		record = this.get(itemId, processingType);
+		
 		
 		if( record != null)
 		{
-		    record.setUpdatedDate( new Timestamp(new Date().getTime()) );
+		    // do nothing record is already set to be processed
 		}
 		else
 		{
-			record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
+			if( processingType.equals(noFileChangeProcessingType))
+			{
+				// check to see if there is an update, insert or delete record
+				if( get(itemId, updateProcessingType) != null || get(itemId, insertProcessingType) != null || get(itemId, deleteProcessingType) != null )
+				{
+					// do nothing record already set to be updated/inserted/deleted with it's files
+				}
+				else
+				{
+					record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
+					save(record);
+				}
+			}
+			else if(processingType.equals(updateProcessingType))
+			{
+				// only update if there is no insert or delete processing type records
+				if( get(itemId, insertProcessingType) == null &&  get(itemId, deleteProcessingType) == null)
+				{
+					record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
+					// update record overrides a no file processing type record
+				    InstitutionalItemIndexProcessingRecord noChangeProcessing = this.get(itemId, noFileChangeProcessingType);
+				    if( noChangeProcessing != null )
+				    {
+					    delete(noChangeProcessing);
+				    }
+				    record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
+				    save(record);
+				}
+				else
+				{
+					// do nothing already set to be inserted
+				}
+
+			}
+			else if(processingType.equals(deleteProcessingType))
+			{
+				// deleting item - so all other processing types do not need to occur
+				InstitutionalItemIndexProcessingRecord noChangeProcessing = this.get(itemId, noFileChangeProcessingType);
+				if( noChangeProcessing != null )
+				{
+					delete(noChangeProcessing);
+				}
+				
+				InstitutionalItemIndexProcessingRecord updateProcessing = this.get(itemId, updateProcessingType);
+				if( updateProcessing != null )
+				{
+					delete(updateProcessing);
+				}
+				
+				InstitutionalItemIndexProcessingRecord insertProcessing = this.get(itemId, insertProcessingType);
+				if( insertProcessing != null )
+				{
+					delete(insertProcessing);
+				}
+				record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
+				save(record);
+
+			}
+			else if(processingType.equals(insertProcessingType))
+			{
+				// there should never be an update, delete or no file change record existing for an insert
+				if( get(itemId, updateProcessingType) == null &&  get(itemId, deleteProcessingType) == null && get(itemId, noFileChangeProcessingType) == null)
+				{
+				    record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
+				    save(record);
+				}
+				else
+				{
+					throw new IllegalStateException(" Insert entered with existing processing type record already existing item id = " + itemId);
+				}
+			}
+			else
+			{
+				log.error("Could not identify processing type " + processingType);
+			}
 		}
-		save(record);
+		
 		
 		return record;
 		
@@ -204,6 +289,15 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 
 	public void setCollectionItemBatchSize(int collectionItemBatchSize) {
 		this.collectionItemBatchSize = collectionItemBatchSize;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }
