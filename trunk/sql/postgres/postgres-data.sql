@@ -4981,6 +4981,13 @@ insert into
 ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
 values (nextval('ir_index.index_processing_type_seq'), 0, 'UPDATE', 'A record is to be updated in the index');
 
+
+insert into 
+ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
+values (nextval('ir_index.index_processing_type_seq'), 0, 'UPDATE_NO_FILE_CHANGE', 'A record is to be updated in the 
+index but the files have not changed in the record');
+
+
 insert into 
 ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
 values (nextval('ir_index.index_processing_type_seq'), 0, 'DELETE', 'A record is to be deleted from the index');
