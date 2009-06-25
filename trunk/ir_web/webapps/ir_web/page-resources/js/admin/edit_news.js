@@ -286,8 +286,9 @@ YAHOO.ur.edit.news =
 
         //Now let's load the SimpleEditor..
         var myEditor = new YAHOO.widget.Editor('msgpost', myConfig);
+        
         myEditor.render();
-            
+        
         YAHOO.ur.edit.news.createPictureDeleteConfirmDialog();
         YAHOO.ur.edit.news.createPictureUploadDialog();
     }
