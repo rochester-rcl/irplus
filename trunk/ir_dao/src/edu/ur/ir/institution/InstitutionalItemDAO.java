@@ -163,7 +163,7 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			OrderType orderType);
 	
 	/**
-	 * Get a list of items for a specified collection by name.
+	 * Get a list of items for a specified collection ordered by name.
 	 * 
 	 * NOTE: This search includes all items in child collections
 	 * 
@@ -175,6 +175,23 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	 * @return List of institutional items
 	 */
 	public List<InstitutionalItem> getCollectionItemsByName(final int rowStart,
+			int maxResults, 
+			InstitutionalCollection collection, 
+			OrderType orderType);
+	
+	/**
+	 * Get a list of item ids for a specified collection ordered by id.
+	 * 
+	 * NOTE: This search includes all items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param collectionId - id of the collection to get item ids
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<Long> getCollectionItemsIds(final int rowStart,
 			int maxResults, 
 			InstitutionalCollection collection, 
 			OrderType orderType);

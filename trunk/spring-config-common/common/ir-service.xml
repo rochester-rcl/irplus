@@ -574,6 +574,7 @@
    <bean id="institutionalItemIndexProcessingRecordService" 
        class="edu.ur.ir.institution.service.DefaultInstitutionalItemIndexProcessingRecordService">
        <property name="processingRecordDAO" ref="institutionalItemIndexProcessingRecordDAO"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
        <property name="institutionalItemService" ref="institutionalItemService"/>
        <property name="collectionItemBatchSize" value="100"/>
    </bean>

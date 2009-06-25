@@ -185,6 +185,7 @@ public class InstitutionalItemVersionDAOTest {
 		ts = tm.getTransaction(td);
 		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(col.getId(), false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
 		repoHelper.cleanUpRepository();
 		tm.commit(ts);	
 		
@@ -259,6 +260,7 @@ public class InstitutionalItemVersionDAOTest {
 		
 		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(col.getId(), false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
 		repoHelper.cleanUpRepository();
 		
 		tm.commit(ts);	
@@ -348,8 +350,8 @@ public class InstitutionalItemVersionDAOTest {
 		
 		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(col.getId(), false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
 		repoHelper.cleanUpRepository();
-		
 		tm.commit(ts);	
 		
 		
@@ -564,6 +566,7 @@ public class InstitutionalItemVersionDAOTest {
 		repoHelper.cleanUpRepository();
 		handleInfoDAO.makeTransient(handleInfoDAO.getById(handleInfo.getId(), false));
 		handleNameAuthorityDAO.makeTransient(handleNameAuthorityDAO.getById(handleNameAuthority.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
 		tm.commit(ts);	
 		
 		assert institutionalItemDAO.getById(institutionalItem.getId(), false) == null : 
@@ -639,6 +642,7 @@ public class InstitutionalItemVersionDAOTest {
 		versionedLicenseDAO.makeTransient(versionedLicenseDAO.getById(versionedLicense.getId(), false));
 		repoHelper.cleanUpRepository();
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
 		tm.commit(ts);	
 		
 		assert institutionalItemDAO.getById(institutionalItem.getId(), false) == null : 

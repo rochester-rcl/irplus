@@ -88,7 +88,7 @@ public class DefaultIndexProcessingTypeService implements IndexProcessingTypeSer
 	 * @see edu.ur.ir.index.IndexProcessingTypeService#save(edu.ur.ir.index.IndexProcessingType)
 	 */
 	public void save(IndexProcessingType entity) {
-		indexProcessingTypeDAO.makeTransient(entity);
+		indexProcessingTypeDAO.makePersistent(entity);
 	}
 
 	public IndexProcessingTypeDAO getIndexProcessingTypeDAO() {

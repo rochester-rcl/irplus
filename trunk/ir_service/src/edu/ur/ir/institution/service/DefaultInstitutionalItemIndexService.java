@@ -30,8 +30,12 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
@@ -157,7 +161,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		
 		for(InstitutionalItem item : items)
 		{
-			docs.add(getDocument(item));
+			docs.add(getDocument(item, true));
 		}
 		
 		IndexWriter writer = null;
@@ -183,11 +187,13 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			writer.commit();
 			writer.optimize();
 			
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			log.error(e);
-			throw new RuntimeException(e);
 		}
 	    finally {
+	    	
 		    if (writer != null) {
 			    try {
 				    writer.close();
@@ -196,6 +202,14 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			    }
 		    }
 		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    
 		    if( directory != null )
 		    {
 		    	try
@@ -238,10 +252,12 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		} 
 		catch (IOException e) 
 		{
-	        throw new RuntimeException(e);
+	       log.error(e);
 		}
 		finally {
+			
 		    if (writer != null) {
+		    	
 			    try {
 				    writer.close();
 			    } catch (Exception e) {
@@ -249,6 +265,13 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			    }
 		    }
 		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
 		    if( directory != null )
 		    {
 		    	try
@@ -297,11 +320,10 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
         catch (IOException e) 
         {
 			log.error(e);
-	        throw new RuntimeException(e);
 		}
         finally 
         {
-		    if (writer != null) {
+   	        if (writer != null) {
 			    try {
 				    writer.close();
 			    } catch (Exception e) {
@@ -309,6 +331,14 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			    }
 		    }
 		    writer = null;
+		    try 
+        	{
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
 		    if( directory != null )
 		    {
 		    	try
@@ -324,6 +354,84 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	    }
 		
 	}
+	
+	/**
+	 * Return all fields with the specified name.
+	 * 
+	 * @param institutionalItemId
+	 * @param name - name of the fields to return
+	 * @param institutionalItemIndex
+	 * @return
+	 */
+	private Field[] getFields(Long institutionalItemId, String name, File institutionalItemIndex)
+	{
+		Directory directory = null;
+		IndexReader reader = null;
+		
+		Field[] fields = {};
+		
+	    // if the index is empty or does not exist then do nothing
+	    if( institutionalItemIndex == null || institutionalItemIndex.list() == null || 
+	    		institutionalItemIndex.list().length == 0)
+	    {
+	    	return fields;
+	    }
+	    
+	    try 
+		{
+	    	IndexSearcher searcher = new IndexSearcher(institutionalItemIndex.getAbsolutePath());
+	 	    reader = searcher.getIndexReader();
+			Term term = new Term(ID, NumberTools.longToString(institutionalItemId));
+			TermQuery termQuery = new TermQuery(term);
+			
+			TopDocs docs = searcher.search(termQuery, 100);
+			if( docs.totalHits > 1)
+			{
+				throw new IllegalStateException("index contains more than one record with uniqe id found " + docs.totalHits);
+			}
+			else if( docs.totalHits == 1)
+			{
+				Document doc = searcher.doc(docs.scoreDocs[0].doc);
+				fields = doc.getFields(name);
+			}
+			else if( docs.totalHits == 0 )
+			{
+				log.debug("index record for item id " + institutionalItemId + " not found");
+			}
+			  
+		} 
+        catch (IOException e) 
+        {
+			log.error(e);
+		}
+        finally 
+        {
+   	        if (reader != null) {
+			    try {
+				    reader.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    reader = null;
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		    
+	    }
+        
+        return fields;
+		
+	}
 
 	
 	/**
@@ -335,7 +443,26 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		if (institutionalItemIndex == null) {
 			throw new NoIndexFoundException("Institutional item index folder not found ");
 		} 
-		writeDocument(institutionalItemIndex.getAbsolutePath(),	getDocument(institutionalItem));
+		writeDocument(institutionalItemIndex.getAbsolutePath(),	getDocument(institutionalItem, true ));
+	}
+	
+	/**
+	 * Add an institutional item to the index.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#addItem(edu.ur.ir.institution.InstitutionalItem, java.io.File)
+	 */
+	private void addItem(InstitutionalItem institutionalItem, File institutionalItemIndex, Field[] fileTextFields) throws NoIndexFoundException {
+		if (institutionalItemIndex == null) {
+			throw new NoIndexFoundException("Institutional item index folder not found ");
+		} 
+		Document d = getDocument(institutionalItem, false);
+		log.debug("Fields Size = " + fileTextFields.length);
+	    for( Field f : fileTextFields)
+	    {
+	    	log.debug("Adding field " + f);
+	    	d.add(f);
+	    }
+		writeDocument(institutionalItemIndex.getAbsolutePath(),	d);
 	}
 	
 	
@@ -345,7 +472,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * @param institutionalItem
 	 * @return - the created document
 	 */
-	private Document getDocument(InstitutionalItem institutionalItem)
+	private Document getDocument(InstitutionalItem institutionalItem, boolean addFileTextFields)
 	{
 		GenericItem genericItem = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().getItem();
 		
@@ -434,21 +561,23 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		}
 		
 		
-		
-		Set<ItemFile> files = genericItem.getItemFiles();
-		for(ItemFile itemFile : files)
+		if( addFileTextFields )
 		{
-			// get the text for the files
-			String fileText = getDocumentBodyText(itemFile);
-		    if(!fileText.trim().equals(""))
+		    Set<ItemFile> files = genericItem.getItemFiles();
+		    for(ItemFile itemFile : files)
 		    {
-			    doc.add(new Field(FILE_TEXT, 
-					fileText, 
-					Field.Store.NO, 
-					Field.Index.ANALYZED ));
-		    }
+			    // get the text for the files
+			    String fileText = getDocumentBodyText(itemFile);
+		        if(!fileText.trim().equals(""))
+		        {
+			        doc.add(new Field(FILE_TEXT, 
+					    fileText, 
+					    Field.Store.COMPRESS, 
+					    Field.Index.ANALYZED ));
+		        }
 		    
-		    fileText = null;
+		        fileText = null;
+		    }
 		}
 		
 		//index the language
@@ -553,9 +682,19 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#updateItem(edu.ur.ir.institution.InstitutionalItem, java.io.File)
 	 */
-	public void updateItem(InstitutionalItem institutionalItem, File institutionalItemIndex) throws NoIndexFoundException{
-		deleteItem(institutionalItem, institutionalItemIndex);
-		addItem(institutionalItem, institutionalItemIndex);
+	public void updateItem(InstitutionalItem institutionalItem, File institutionalItemIndex, boolean filesChanged) throws NoIndexFoundException{
+		
+		if( !filesChanged )
+		{
+			Field[] fileTextFields = this.getFields(institutionalItem.getId(), FILE_TEXT, institutionalItemIndex);
+			deleteItem(institutionalItem, institutionalItemIndex);
+			addItem(institutionalItem, institutionalItemIndex, fileTextFields);
+		}
+		else
+		{
+			deleteItem(institutionalItem, institutionalItemIndex);
+		    addItem(institutionalItem, institutionalItemIndex);
+		}
 	}
 	
 	/**
@@ -582,7 +721,6 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		catch (IOException e) 
 		{
 			log.error(e);
-			throw new RuntimeException(e);
 		}
 		finally 
         {
@@ -594,6 +732,14 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			    }
 		    }
 		    writer = null;
+		    try 
+		    {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
 		    if( directory != null )
 		    {
 		    	try

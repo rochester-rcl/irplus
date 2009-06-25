@@ -210,14 +210,29 @@ public interface InstitutionalItemService {
 	 * Get the list of items for the specified collection.  This includes items in sub collections
 	 * 
 	 * @param rowStart - Start row to fetch the data from
-	 * @param rowEnd -  End row to get data
+	 * @param rowEnd -  maximum number of results to return
 	 * @param collectionId - id of the collection to get items 
 	 * @param orderType - The order to sort by (ascending/descending)
 	 * 
 	 * @return List of institutional items
 	 */
 	public List<InstitutionalItem> getCollectionItemsOrderByName(int rowStart, 
-			int rowEnd, 
+			int maxResults, 
+			InstitutionalCollection collection, 
+			OrderType orderType) ;
+	
+	/**
+	 * Get the list of item ids for the specified collection.  This includes items in sub collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param rowEnd -  maximum number of results to return
+	 * @param collectionId - id of the collection to get items 
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<Long> getCollectionItemsIds(int rowStart, 
+			int maxResults, 
 			InstitutionalCollection collection, 
 			OrderType orderType) ;
 	

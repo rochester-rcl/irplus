@@ -22,6 +22,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -59,6 +60,9 @@ import java.text.SimpleDateFormat;
  */
 @Test(groups = { "baseTests" }, enabled = true)
 public class InstitutionalItemDAOTest {
+	
+	/**  Logger for add files to item action */
+	private static final Logger log = Logger.getLogger(InstitutionalItemDAOTest.class);
 	
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
@@ -405,8 +409,19 @@ public class InstitutionalItemDAOTest {
 		tm.commit(ts);
 
 		ts = tm.getTransaction(td);
-		assert institutionalItemDAO.getCountForCollectionAndChildren(col) == 2 :
-			"Should be equal to 2";
+		Long count = institutionalItemDAO.getCountForCollectionAndChildren(col);
+		assert count == 2l :
+			"Should be equal to 2 but is " + count;
+		
+		List<Long> itemIds = institutionalItemDAO.getCollectionItemsIds(0, 100, col, OrderType.DESCENDING_ORDER);
+		
+		assert itemIds.size() == 2 : "Size should be two but is " + itemIds.size();
+		assert itemIds.contains(institutionalItem.getId()) : "Should contain " + genericItem.getId();
+		
+		itemIds = institutionalItemDAO.getCollectionItemsIds(0, 100, col, OrderType.ASCENDING_ORDER);
+		assert itemIds.size() == 2 : "Size should be two but is " + itemIds.size();
+		
+		assert itemIds.contains(institutionalItem.getId()) : "Should contain " + genericItem.getId();
 		tm.commit(ts);
 
 		//create a new transaction

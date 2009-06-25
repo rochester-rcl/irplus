@@ -25,11 +25,12 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.LockObtainFailedException;
 
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.person.NameAuthorityIndexService;
@@ -83,25 +84,53 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	private void writeDocument(String directoryPath, Document document)
 	{
 		IndexWriter writer = null;
+		Directory directory = null;
 		try {
-			Directory directory = FSDirectory.getDirectory(directoryPath);
-			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+			directory = FSDirectory.getDirectory(directoryPath);
+			while( writer == null )
+			{
+				writer = getWriter(directory);
+			}
 			writer.addDocument(document);
 			writer.commit();
 			writer.optimize();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			log.error(e);
-			throw new RuntimeException(e);
 		}
-	    finally {
-		    if (writer != null) {
-			    try {
-				    writer.close();
-			    } catch (Exception e) {
-				    log.error(e);
+		finally {
+		    	
+			    if (writer != null) {
+				    try {
+					    writer.close();
+				    } catch (Exception e) {
+					    log.error(e);
+				    }
 			    }
+			    writer = null;
+			    try {
+					IndexWriter.unlock(directory);
+				} 
+		    	catch (IOException e1)
+		    	{
+					log.error(e1);
+				}
+			    
+			    if( directory != null )
+			    {
+			    	try
+			    	{
+			    		directory.close();
+			    	}
+			    	catch (Exception e) {
+					    log.error(e);
+				    }
+			    }
+			    directory = null;
+			    
 		    }
-	    }
+	  
 	}
 
 	/**
@@ -177,35 +206,50 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		} 
 
 		Directory directory = null;
-		IndexReader reader = null;
+		IndexWriter writer = null;
 		
 		try {
 			directory = FSDirectory.getDirectory(nameAuthorityIndexFolder);
-			if( IndexWriter.isLocked(directory) )
+			while( writer == null )
 			{
-				throw new RuntimeException("Users index directory " + nameAuthorityIndexFolder.getAbsolutePath() +
-						" is locked ");
+				writer = getWriter(directory);
 			}
-			else
-			{
-				reader = IndexReader.open(directory);
-				Term term = new Term(PERSON_NAME_AUTHORITY_ID, personNameAuthority.getId().toString());
-			    reader.deleteDocuments(term);
-			    reader.close();
-			}
+			Term term = new Term(PERSON_NAME_AUTHORITY_ID, personNameAuthority.getId().toString());
+			writer.deleteDocuments(term);
+			writer.close();
+			
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 		finally
 		{
-			if( reader != null)
-			{
-				try {
-					reader.close();
-				} catch (IOException e) {
-					log.error(e);
-				}
+			if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
 			}
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
 		}
 	}
 
@@ -216,6 +260,27 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		deleteFromIndex(personNameAuthority, nameAuthorityIndexFolder);
 		addToIndex(personNameAuthority, nameAuthorityIndexFolder);
 	}
-
+	
+	/**
+	 * All methods should use this to obtain a writer on the directory.  This will return 
+	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
+	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
+	 * users index at once.
+	 * 
+	 * @param directory
+	 * @return
+	 * @throws CorruptIndexException
+	 * @throws LockObtainFailedException
+	 * @throws IOException
+	 */
+	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	{
+		IndexWriter writer = null;
+		if( !IndexWriter.isLocked(directory) )
+	    {
+			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+	    }
+		return writer;
+	}
 
 }

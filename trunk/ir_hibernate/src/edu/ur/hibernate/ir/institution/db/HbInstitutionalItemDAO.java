@@ -645,4 +645,42 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	}
 
 	
+	/**
+	 * Get the list of collection items by id.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getCollectionItemsById(int, int, edu.ur.ir.institution.InstitutionalCollection, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Long> getCollectionItemsIds(final int rowStart, final int maxResults,
+			final InstitutionalCollection collection, final OrderType orderType) {
+		List<Long> foundIds = new LinkedList<Long>();
+		
+		foundIds = (List<Long>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getInstitutionalCollectionItemIdsOrderDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getInstitutionalCollectionItemIdsOrderAsc");
+			    }
+			    
+			    q.setLong(0, collection.getLeftValue());
+			    q.setLong(1, collection.getRightValue());
+			    q.setLong(2, collection.getTreeRoot().getId());
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+	
+    return foundIds;	
+	}
+
+	
 }

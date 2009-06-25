@@ -190,7 +190,7 @@
 	
 	
 	<!-- ********************************************************* -->
-	<!-- count of all institutional items in the system for a collection -->
+	<!--get institutional collection items by name ordered -->
 	<!-- ********************************************************* -->
 
 	<query name="getInstitutionalCollectionItemsByNameOrderAsc">
@@ -205,6 +205,24 @@
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
 	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName desc
+	</query>
+	
+   <!-- ********************************************************* -->
+	<!-- institutional item ids  -->
+	<!-- ********************************************************* -->
+
+	<query name="getInstitutionalCollectionItemIdsOrderAsc">
+	    select institutionalItem.id from InstitutionalItem as institutionalItem    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    order by institutionalItem.id asc
+	</query>
+		
+    <query name="getInstitutionalCollectionItemIdsOrderDesc">
+	    select institutionalItem.id from InstitutionalItem as institutionalItem    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    order by institutionalItem.id desc
 	</query>
 	
     <!-- ********************************************************* -->

@@ -124,7 +124,7 @@ public class ResearcherPublicationDAOTest {
 		
 		ts = tm.getTransaction(td);
 		researcherPublicationDAO.makeTransient(other);
-		itemDAO.makeTransient(otherGenericItem);
+		itemDAO.makeTransient(itemDAO.getById(otherGenericItem.getId(), false));
 		researcherDAO.makeTransient(researcherDAO.getById(researcher.getId(), false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 	    tm.commit(ts);
@@ -177,8 +177,10 @@ public class ResearcherPublicationDAOTest {
 		
 		
 		ts = tm.getTransaction(td);
+		
 		researcherDAO.makeTransient(researcherDAO.getById(researcher.getId(), false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
 		tm.commit(ts);
 		
 		assert userDAO.getById(user.getId(), false) == null : "Should not be able to find other";

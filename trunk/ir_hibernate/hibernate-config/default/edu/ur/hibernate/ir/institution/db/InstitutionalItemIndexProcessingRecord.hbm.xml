@@ -45,6 +45,7 @@
 
 		<!--  The user deleting the institutional item -->
 		<many-to-one class="edu.ur.ir.index.IndexProcessingType" 
+		    lazy="false"
 			unique="true" 
 			name="indexProcessingType" 
 			column="index_processing_type_id" 
