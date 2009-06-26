@@ -185,7 +185,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 				writer.addDocument(d);
 			}
 			writer.commit();
-			writer.optimize();
+			
 			
 		} 
 		catch (IOException e) 
@@ -716,7 +716,6 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			}
 		    writer.addDocument(document);
 			writer.commit();
-			writer.optimize();
 		} 
 		catch (IOException e) 
 		{
@@ -1038,6 +1037,61 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 	    }
 		return writer;
+	}
+
+
+	/**
+	 * Optimize the index.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#optimize(java.io.File)
+	 */
+	public void optimize(File institutionalItemIndex) {
+		IndexWriter writer = null;
+		Directory directory = null;
+		try 
+		{
+		    directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
+		    while(writer == null )
+			{
+				writer = getWriter(directory);
+			}
+			writer.optimize();
+		} 
+		catch (IOException e) 
+		{
+			log.error(e);
+		}
+		finally 
+        {
+		    if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try 
+		    {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		    
+	    }
 	}
 	
 

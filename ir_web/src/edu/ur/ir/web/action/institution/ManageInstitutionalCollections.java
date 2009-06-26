@@ -150,7 +150,9 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 			    log.debug("Deleting collection with id " + collectionIds[index]);
 			    InstitutionalCollection collection = 
 			    	institutionalCollectionService.getCollection(collectionIds[index], false);
-			    institutionalItemIndexService.deleteItemsForCollection(collection, new File(collection.getRepository().getInstitutionalItemIndexFolder()));
+			    File f = new File(collection.getRepository().getInstitutionalItemIndexFolder());
+			    institutionalItemIndexService.deleteItemsForCollection(collection, f);
+			    institutionalItemIndexService.optimize(f);
 			    institutionalCollectionService.deleteCollection(collection, user);
 		    }
 		}

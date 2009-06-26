@@ -79,6 +79,7 @@ public class DeleteInstitutionalItem extends ActionSupport implements UserIdAwar
 			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 			File f = new File(repository.getInstitutionalItemIndexFolder());
 			institutionalItemIndexService.deleteItem(institutionalItem, f);
+			institutionalItemIndexService.optimize(f);
 		}		
 		return SUCCESS;		
 	}
