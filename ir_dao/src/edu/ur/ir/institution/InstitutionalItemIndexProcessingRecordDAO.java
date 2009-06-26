@@ -48,4 +48,14 @@ public interface InstitutionalItemIndexProcessingRecordDAO
 	 */
 	public InstitutionalItemIndexProcessingRecord get(Long itemId, IndexProcessingType processingType);
 
+	
+	/**
+	 * Insert all items within the specified collection to be processed.
+	 * 
+	 * @param - institutional collection
+	 * @param processingType - processing type.
+	 * 
+	 * @return - number of records created.
+	 */
+	public Long insertAllItemsForCollection(InstitutionalCollection institutionalCollection, IndexProcessingType processingType);
 }

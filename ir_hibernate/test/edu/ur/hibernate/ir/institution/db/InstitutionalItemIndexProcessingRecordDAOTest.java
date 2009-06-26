@@ -19,6 +19,7 @@ package edu.ur.hibernate.ir.institution.db;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -27,11 +28,25 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
+import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
+import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
+import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeDAO;
+import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalCollectionDAO;
+import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.institution.InstitutionalItemDAO;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
+import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.GenericItemDAO;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.IrUserDAO;
+import edu.ur.ir.user.UserEmail;
 
 
 /**
@@ -60,6 +75,26 @@ public class InstitutionalItemIndexProcessingRecordDAOTest {
 	
     TransactionDefinition td = new DefaultTransactionDefinition(
 	TransactionDefinition.PROPAGATION_REQUIRED);
+    
+	/** Properties file with testing specific information. */
+	PropertiesLoader propertiesLoader = new PropertiesLoader();
+	
+	/** Get the properties file  */
+	Properties properties = propertiesLoader.getProperties();
+	
+	/** Institution collection data access.  */
+	InstitutionalCollectionDAO institutionalCollectionDAO = (InstitutionalCollectionDAO) ctx
+	.getBean("institutionalCollectionDAO");
+	
+	/** User service */
+	 IrUserDAO userDAO= (IrUserDAO) ctx.getBean("irUserDAO");
+	 
+	/** Institution item data access.  */
+	InstitutionalItemDAO institutionalItemDAO = (InstitutionalItemDAO) ctx
+		.getBean("institutionalItemDAO");
+		
+	/** Generic item data access*/
+	GenericItemDAO itemDAO = (GenericItemDAO)ctx.getBean("itemDAO");
 	
 	/**
 	 * Test Institutional item processing record persistence
@@ -67,10 +102,11 @@ public class InstitutionalItemIndexProcessingRecordDAOTest {
 	@Test
 	public void baseInstitutionalItemIndexProcessingRecordTest()
 	{
-		IndexProcessingType indexProcessingType = new IndexProcessingType("ipName");
- 		indexProcessingType.setDescription("description");
+
          
         TransactionStatus ts = tm.getTransaction(td);
+		IndexProcessingType indexProcessingType = new IndexProcessingType("ipName");
+ 		indexProcessingType.setDescription("description");
  		indexProcessingTypeDAO.makePersistent(indexProcessingType);
  		
  		InstitutionalItemIndexProcessingRecord itemIndexProcessingRecord = 
@@ -100,10 +136,99 @@ public class InstitutionalItemIndexProcessingRecordDAOTest {
         
         
         institutionalItemIndexProcessingRecordDAO.makeTransient(other);
-        indexProcessingTypeDAO.makeTransient(indexProcessingTypeDAO.getById(other.getId(), false));
+        indexProcessingTypeDAO.makeTransient(indexProcessingTypeDAO.getById(indexProcessingType.getId(), false));
         assert institutionalItemIndexProcessingRecordDAO.getById(other.getId(), false) == null : "Should no longer be able to find index processing record";
 	    tm.commit(ts);
 
+	}
+	
+	@Test
+	public void insertCollectionRecordsProcessingRecordTest() throws LocationAlreadyExistsException, DuplicateNameException
+	{
+	    // start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+		
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+
+		//commit the transaction 
+		// create a collection
+		InstitutionalCollection col = repo.createInstitutionalCollection("colName");
+		col.setDescription("colDescription");
+		
+		institutionalCollectionDAO.makePersistent(col);
+		tm.commit(ts);
+		
+		// start a new transaction
+		ts = tm.getTransaction(td);
+		
+		UserEmail userEmail = new UserEmail("email");
+				
+		IrUser user = new IrUser("user", "password");
+		user.setPasswordEncoding("encoding");
+		user.addUserEmail(userEmail, true);
+
+        userDAO.makePersistent(user);
+		col = institutionalCollectionDAO.getById(col.getId(), false);
+		GenericItem genericItem = new GenericItem("genericItem");
+		
+		InstitutionalItem institutionalItem = col.createInstitutionalItem(genericItem);
+		institutionalItemDAO.makePersistent(institutionalItem);
+		
+		GenericItem genericItem2 = new GenericItem("genericItem2");
+		InstitutionalItem institutionalItem2 = col.createInstitutionalItem(genericItem2);
+		institutionalItemDAO.makePersistent(institutionalItem2);
+
+		// create the index processing type
+		IndexProcessingType indexProcessingType = new IndexProcessingType("ipName");
+ 		indexProcessingType.setDescription("description");
+ 		indexProcessingTypeDAO.makePersistent(indexProcessingType);
+		
+ 		
+ 		
+ 		tm.commit(ts);
+
+		ts = tm.getTransaction(td);
+		Long count = institutionalItemIndexProcessingRecordDAO.insertAllItemsForCollection(col, indexProcessingType);
+
+		assert count == 2l : "two records should be inserted but found " + count;
+		
+		indexProcessingType = indexProcessingTypeDAO.findByUniqueName("ipName");
+		InstitutionalItemIndexProcessingRecord rec1 = 
+			institutionalItemIndexProcessingRecordDAO.get(institutionalItem.getId(), indexProcessingType);
+
+		assert rec1 != null : "Record one should not be null";
+		
+		InstitutionalItemIndexProcessingRecord rec2 = 
+			institutionalItemIndexProcessingRecordDAO.get(institutionalItem2.getId(), indexProcessingType);
+
+		assert rec2 != null : "Record two should not be null ";
+		tm.commit(ts);
+
+		//create a new transaction
+		ts = tm.getTransaction(td);
+		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(col.getId(), false));
+		
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
+		itemDAO.makeTransient(itemDAO.getById(genericItem2.getId(), false));
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		
+        institutionalItemIndexProcessingRecordDAO.makeTransient(institutionalItemIndexProcessingRecordDAO.getById(rec1.getId(),false));
+        institutionalItemIndexProcessingRecordDAO.makeTransient(institutionalItemIndexProcessingRecordDAO.getById(rec2.getId(),false));
+        indexProcessingTypeDAO.makeTransient(indexProcessingTypeDAO.getById(indexProcessingType .getId(), false));
+
+		
+		
+		repoHelper.cleanUpRepository();
+		
+		tm.commit(ts);	
+		
+	
 	}
 
 }

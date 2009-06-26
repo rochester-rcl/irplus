@@ -139,11 +139,11 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		QueryWrapperFilter mainQueryWrapper = new QueryWrapperFilter(mainQuery);
 		log.debug("executeSearchWithFacets 1 query = " + mainQuery);
 		DocIdSet mainQueryBits = mainQueryWrapper.getDocIdSet(reader);
-		
+		OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
 		// process the data and determine the facets
         FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
         		reader, 
-        		mainQueryBits, 
+        		mainQueryBitSet, 
         		facetResults, 
         		topDocs, 
         		numberOfIdsToCollect, 
@@ -156,6 +156,13 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
         return helper;
 	}
 	
+	/**
+	 * Determine the number of hits based on the overall number of results the main search returned.
+	 * 
+	 * @param baseBitSet
+	 * @param filterBitSet
+	 * @return
+	 */
 	private long getFacetHitCount(OpenBitSet baseBitSet, OpenBitSet filterBitSet)
 	{
 		filterBitSet.and(baseBitSet);
@@ -301,7 +308,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	 */
 	private void processFacetCategory(Collection<FacetResult> facets, 
 			IndexReader reader, 
-			DocIdSet mainQueryBits,
+			OpenBitSetDISI mainQueryBitSet,
 			IndexSearcher searcher) 
 	   throws ParseException, IOException
 	{
@@ -319,10 +326,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			    QueryWrapperFilter subQueryWrapper = new QueryWrapperFilter(subQuery);
 			    DocIdSet subQueryBits = subQueryWrapper.getDocIdSet(reader);
 			
-			    OpenBitSetDISI mainQuerybitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
 			    OpenBitSetDISI subQuerybitSet = new OpenBitSetDISI(subQueryBits.iterator(), maxNumberOfMainQueryHits);
 
-			    count = getFacetHitCount(mainQuerybitSet, subQuerybitSet);
+			    count = getFacetHitCount(mainQueryBitSet, subQuerybitSet);
 		    }
 			else
 			{
@@ -382,7 +388,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		
 	    // get the bitset for main query
 		DocIdSet mainQueryBits = mainQueryWrapper.getDocIdSet(reader);
-	   
+		OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
 		TopDocs hits = null;
 		
 		if( filters.size() > 0 )
@@ -398,11 +404,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		    // apply the facets and include them in the main query bit set
 		    DocIdSet filterQueryBits = filter.getDocIdSet(reader);
 		    
-		    OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
+		    
 		    OpenBitSetDISI filterBitSet = new OpenBitSetDISI(filterQueryBits.iterator(), maxNumberOfMainQueryHits);
 		    mainQueryBitSet.and(filterBitSet);
-		    
-		    
 		    
 		    hits = searcher.search(mainQuery, filter, maxNumberOfMainQueryHits);
 		    log.debug(" executeSearchWithFacets 2 = mainQuery = " + executedQuery + " filter = " + filter);	    
@@ -420,7 +424,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 
         FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
         		reader, 
-        		mainQueryBits, 
+        		mainQueryBitSet, 
         		facetResults, 
         		hits, 
         		numberOfIdsToCollect, 
@@ -480,18 +484,16 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		TopDocs hits = null;
 		
 		List<Filter> luceneFilters = new LinkedList<Filter>();
-		luceneFilters.addAll(0, getCollectionFilters(collection));
-		
+	
 		if( filters.size() > 0 )
 		{
 		    // create a filter that will match the main query plus all other filters
 			luceneFilters.addAll(getSubQueryFilters(filters, searcher));		
-			
-			// add filters for the collection first
-			luceneFilters.addAll(0, getCollectionFilters(collection));
 		}
+		// add filters for the collection first
+		luceneFilters.addAll(0, getCollectionFilters(collection));
 		
-		 Filter filter = new ChainedFilter(luceneFilters.toArray(new Filter[luceneFilters.size()]), ChainedFilter.AND);
+		Filter filter = new ChainedFilter(luceneFilters.toArray(new Filter[luceneFilters.size()]), ChainedFilter.AND);
 		   
 		if(log.isDebugEnabled())
 		{
@@ -516,7 +518,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 
         FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
         		reader, 
-        		mainQueryBits, 
+        		mainQueryBitSet, 
         		facetResults, 
         		hits, 
         		numberOfIdsToCollect, 
@@ -579,7 +581,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	 */
 	private FacetSearchHelper processPossibleFacets(HashMap<String, HashMap<String, FacetResult>> possibleFacets, 
 			IndexReader reader, 
-			DocIdSet mainQueryBits, 
+			OpenBitSetDISI mainQueryBits, 
 			HashMap<String, 
 			Collection<FacetResult>> facetResults, 
 			TopDocs hits,
@@ -775,7 +777,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	
 	private boolean isInvalidQuery(String mainQuery)
 	{
-		log.debug("problem with main query " + mainQuery);
+		log.debug("check to see if problem with main query " + mainQuery);
 		return (mainQuery == null || mainQuery.trim().equals("") || mainQuery.trim().equals("*"));
 		
 	}
@@ -825,7 +827,6 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			
 		// get the bitset for main query
 		DocIdSet mainQueryBits =  mainQueryWrapper.getDocIdSet(reader);
-		TopDocs hits = null;
 		
 		// get the filter query doc id set
 		DocIdSet filterQueryBits = chainedFilter.getDocIdSet(reader);
@@ -837,7 +838,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		 
 		log.debug(" executeSearchWithFacets 5 = mainQuery = " + mainQuery + " filter = " + chainedFilter);	    
 		 
-		 
+		TopDocs hits = null;
 		hits = searcher.search(mainQuery, chainedFilter, maxNumberOfMainQueryHits);
 		
 		// determine the set of data we should use to determine facets
@@ -847,9 +848,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 				searcher);
 
 		// process the data and determine the facets
-        FacetSearchHelper helper = this.processPossibleFacets(possibleFacets, 
+        FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
         		reader, 
-        		mainQueryBits, 
+        		mainQueryBitSet, 
         		facetResults, 
         		hits, 
         		numberOfIdsToCollect, 
@@ -864,6 +865,13 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	}
 	
 	
+	/**
+	 * Set up the filters for collections - this is for searching within collections.
+	 * 
+	 * @param collection - to search within
+	 * @return - created filter
+	 * @throws ParseException
+	 */
 	private List<Filter> getCollectionFilters(InstitutionalCollection collection) throws ParseException
 	{
 		List<Filter> filters = new LinkedList<Filter>();

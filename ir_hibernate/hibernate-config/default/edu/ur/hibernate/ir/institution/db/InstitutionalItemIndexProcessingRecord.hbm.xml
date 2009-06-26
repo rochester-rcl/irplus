@@ -39,7 +39,9 @@
 		<property name="institutionalItemId" column="institutional_item_id" type="long"
 			not-null="true" access="field" />
 
-		<property name="updatedDate" column="updated_date" type="timestamp" 
+		<property name="updatedDate" 
+		          column="updated_date" 
+		          type="timestamp" 
 		          access="field" 
 		          not-null="true"/>	
 
@@ -70,6 +72,21 @@
 	   from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord 	   
 	   where institutionalItemIndexProcessingRecord.institutionalItemId = ?
 	   and institutionalItemIndexProcessingRecord.indexProcessingType.id = ?
+	</query>
+	
+	<!--  this retrieves all items within the collection including all child items in child
+	      collections - this also does not re-insert any items that are already inserted based
+	      on the given processing type -->
+	<query name="insertAllItemsForCollection">
+	    insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where institutionalItem.institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalItem.institutionalCollection.treeRoot.id = :treeRootId 
+	    and indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	        from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
 	</query>
 
 
