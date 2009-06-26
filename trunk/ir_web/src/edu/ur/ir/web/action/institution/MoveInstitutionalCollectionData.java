@@ -179,6 +179,7 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 		collectionsToMove = institutionalCollectionService.getCollections(listCollectionIds);
 		
         // add the old tree roots they will need to be re-indexed
+		// because their left and right values will be changed.
         LinkedList<InstitutionalCollection> oldRoots = new LinkedList<InstitutionalCollection>();
         for(InstitutionalCollection c : collectionsToMove)
         {

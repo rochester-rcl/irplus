@@ -26,7 +26,6 @@ import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
-import edu.ur.order.OrderType;
 
 /**
  * Implementation of the institutional item index processing record service.
@@ -42,9 +41,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	
 	/** Service for dealing with institutional items */
 	private InstitutionalItemService institutionalItemService;
-	
-	/** batch size for processing collection items */
-	private int collectionItemBatchSize = 100;
 	
 	/** Service for dealing with processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
@@ -138,33 +134,8 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	public void processItemsInCollection( InstitutionalCollection institutionalCollection,
 			IndexProcessingType processingType)
 	{
-		log.debug("re-indexing collection " + institutionalCollection);
-		int rowStart = 0;
-		
-		int numberOfItems = institutionalItemService.getCountForCollectionAndChildren(institutionalCollection).intValue();
-		
-		log.debug("processing a total of " + numberOfItems);
-		
-		
-		
-		// add one batch size to the items to make sure all items are
-		// processed.
-		while(rowStart <= (numberOfItems + collectionItemBatchSize))
-		{
-			log.debug("row start = " + rowStart);
-			log.debug("batch size = " +  collectionItemBatchSize);
-			// notice the minus one because we are starting at 0
-			log.debug("processing " + rowStart + " to " + (rowStart + collectionItemBatchSize - 1) );
-			List<Long> itemIds = institutionalItemService.getCollectionItemsIds(rowStart, collectionItemBatchSize, institutionalCollection, OrderType.DESCENDING_ORDER);
-		
-			for(Long i : itemIds)
-			{
-				log.debug("re-indexing item " + i);
-				save(i, processingType);
-			}
-		    rowStart = rowStart + collectionItemBatchSize;
-		    
-		}
+		log.debug("seting collection items for re-indexing  collection = " + institutionalCollection);
+	    processingRecordDAO.insertAllItemsForCollection(institutionalCollection, processingType);
 	}
 
 	
@@ -281,14 +252,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
-	}
-
-	public int getCollectionItemBatchSize() {
-		return collectionItemBatchSize;
-	}
-
-	public void setCollectionItemBatchSize(int collectionItemBatchSize) {
-		this.collectionItemBatchSize = collectionItemBatchSize;
 	}
 
 	public IndexProcessingTypeService getIndexProcessingTypeService() {

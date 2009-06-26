@@ -16,14 +16,20 @@ limitations under the License.
 
 package edu.ur.hibernate.ir.institution.db;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.orm.hibernate3.HibernateCallback;
 
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
 
@@ -122,6 +128,34 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 		
 		Object[] values = {itemId, processingType.getId()};
 		return (InstitutionalItemIndexProcessingRecord) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("instItemProcessingRecByItemIdProcessingType", values));
+	}
+
+	
+	/**
+	 * Insert all items for collection.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForCollection(edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForCollection(
+			final InstitutionalCollection institutionalCollection,
+			final IndexProcessingType processingType) {
+		
+		
+		return (Long) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session session)
+                    throws HibernateException, SQLException {
+		      
+		        Query q = session.getNamedQuery("insertAllItemsForCollection");
+		       
+		        q.setParameter("leftValue", institutionalCollection.getLeftValue());
+		        q.setParameter("rightValue", institutionalCollection.getRightValue());
+			    q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
+			    q.setParameter("processingTypeId", processingType.getId());
+			    return new Long(q.executeUpdate());
+            }
+		});
+		
+		
 	}
 
 }

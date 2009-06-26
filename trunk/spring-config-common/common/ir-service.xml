@@ -576,7 +576,6 @@
        <property name="processingRecordDAO" ref="institutionalItemIndexProcessingRecordDAO"/>
        <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
        <property name="institutionalItemService" ref="institutionalItemService"/>
-       <property name="collectionItemBatchSize" value="100"/>
    </bean>
    
    <!-- ****************************************** --> 
