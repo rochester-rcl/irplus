@@ -550,6 +550,7 @@ public class DefaultItemImporter implements ItemImporter{
 				log.debug("*********************** Done Loading Loading ****************************\n\n");
 			}
 		}
+		institutionalItemIndexService.optimize(new File(repo.getInstitutionalItemIndexFolder()));
 		updateHandleSequence();
 	}
 	
