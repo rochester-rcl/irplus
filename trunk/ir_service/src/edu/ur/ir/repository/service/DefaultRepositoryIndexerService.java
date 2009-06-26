@@ -78,6 +78,7 @@ public class DefaultRepositoryIndexerService implements RepositoryIndexerService
 		    
 		    rowStart = rowStart + batchSize;
 		}
+		institutionalItemIndexService.optimize(folder);
 	}
 
 	public InstitutionalItemService getInstitutionalItemService() {

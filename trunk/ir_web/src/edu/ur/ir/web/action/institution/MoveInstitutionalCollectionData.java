@@ -211,7 +211,7 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 			
 			if( collectionsToMove.size() > 0 )
 			{
-				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE); 
 				institutionalItemIndexProcessingRecordService.processItemsInCollection( destination.getTreeRoot(), processingType);
 			}
 			
