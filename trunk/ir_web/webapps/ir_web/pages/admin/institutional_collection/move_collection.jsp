@@ -55,6 +55,7 @@
     <!--  base path information -->
     <ur:js src="pages/js/base_path.js" />
     <ur:js src="page-resources/js/util/ur_util.js" />
+    <ur:js src="page-resources/js/util/wait_dialog.js" />
     <ur:js src="page-resources/js/admin/move_institutional_collection.js" />
 </head>
 
@@ -71,19 +72,30 @@
                 <c:import url="/pages/admin/institutional_collection/move_collection_frag.jsp"/>
             </div>
 
-            <!--  generic error dialog -->   	     
-            <div id="error_dialog_box" class="hidden">
-                <div class="hd">Error</div>
-	            <div class="bd">
-	                <div id="default_error_dialog_content"></div>
-	            </div>
-            </div>
-            <!-- End generic error dialog -->
+ 
 
             <!--  end the body tag --> <!--  this is the footer of the page --> 
             <c:import url="/inc/footer.jsp" />
         </div>
     </div>
     <!-- end doc -->
+    
+    <!--  generic error dialog -->   	     
+    <div id="error_dialog_box" class="hidden">
+        <div class="hd">Error</div>
+	    <div class="bd">
+	        <div id="default_error_dialog_content"></div>
+	    </div>
+    </div>
+    <!-- End generic error dialog -->
+    
+    <!--  wait div -->
+	<div id="wait_dialog_box" class="hidden">
+	    <div class="hd">Processing...</div>
+		<div class="bd">
+		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
+		    <p><img src="${wait}"></img></p>
+		</div>
+	</div>   
 </body>
 </html>
