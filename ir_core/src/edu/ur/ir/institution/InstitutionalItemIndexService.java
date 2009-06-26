@@ -81,5 +81,11 @@ public interface InstitutionalItemIndexService {
 	public void deleteItemsForCollection(InstitutionalCollection institutionalCollection, File institutionalItemIndex);
 
 
+	/**
+	 * Optimize the index.
+	 * 
+	 * @param institutionalItemIndex
+	 */
+	public void optimize(File institutionalItemIndex);
 
 }
