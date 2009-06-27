@@ -30,7 +30,6 @@ import java.util.StringTokenizer;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.LoadFirstFieldSelector;
 import org.apache.lucene.document.MapFieldSelector;
 import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
@@ -749,11 +748,13 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	    {
 	    	endPosition = hits.totalHits;
 	    }
-
 	    
+	    
+	    String[] fieldsToLoad = { DefaultInstitutionalItemIndexService.ID };
+    	MapFieldSelector fieldSelector= new MapFieldSelector(fieldsToLoad);
 	    for( int index = idsToCollectStartPosition; index < endPosition; index ++ )
 	    {
-	    	Document doc = searcher.doc(hits.scoreDocs[index].doc, new LoadFirstFieldSelector());
+	    	Document doc = searcher.doc(hits.scoreDocs[index].doc,fieldSelector);
 	    	ids.add(NumberTools.stringToLong(doc.get(DefaultInstitutionalItemIndexService.ID)));
 	    }
         FacetSearchHelper helper = new FacetSearchHelper(ids, hits.totalHits, facetResults, mainQueryString);
