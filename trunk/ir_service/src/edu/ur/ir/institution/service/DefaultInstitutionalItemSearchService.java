@@ -30,6 +30,8 @@ import java.util.StringTokenizer;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.LoadFirstFieldSelector;
+import org.apache.lucene.document.MapFieldSelector;
 import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
@@ -184,7 +186,16 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			int numberOfResultsToCollect,
 			IndexSearcher searcher) throws CorruptIndexException, IOException
 	{
+		String[] fieldsToLoad = {
+				DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES,
+				DefaultInstitutionalItemIndexService.LANGUAGE,
+				DefaultInstitutionalItemIndexService.KEY_WORDS,
+				DefaultInstitutionalItemIndexService.CONTENT_TYPES,
+				DefaultInstitutionalItemIndexService.COLLECTION_NAME,
+				DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES
+		};
 		
+		MapFieldSelector fieldSelector= new MapFieldSelector(fieldsToLoad);
 		HashMap<String, HashMap<String, FacetResult>> facets = new HashMap<String, HashMap<String, FacetResult>>();
 		HashMap<String, FacetResult> authorsMap = new HashMap<String, FacetResult>();
 		HashMap<String, FacetResult> languagesMap = new HashMap<String, FacetResult>();
@@ -208,7 +219,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		for( int index = 0; index < numberOfHitsToProcess; index++)
 		{
 			
-			Document doc = searcher.doc(topDocs.scoreDocs[index].doc);
+			Document doc = searcher.doc(topDocs.scoreDocs[index].doc, fieldSelector);
 			String names = doc.get(DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES);
 			
 			String language = doc.get(DefaultInstitutionalItemIndexService.LANGUAGE);
@@ -292,6 +303,8 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			    }
 				
 			}
+			
+			doc = null;
 		}
 		return facets;
 	}
@@ -740,7 +753,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	    
 	    for( int index = idsToCollectStartPosition; index < endPosition; index ++ )
 	    {
-	    	Document doc = searcher.doc(hits.scoreDocs[index].doc);
+	    	Document doc = searcher.doc(hits.scoreDocs[index].doc, new LoadFirstFieldSelector());
 	    	ids.add(NumberTools.stringToLong(doc.get(DefaultInstitutionalItemIndexService.ID)));
 	    }
         FacetSearchHelper helper = new FacetSearchHelper(ids, hits.totalHits, facetResults, mainQueryString);
