@@ -4,11 +4,11 @@ import java.util.List;
 
 
 import org.apache.log4j.Logger;
-import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
+import org.quartz.StatefulJob;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -39,7 +39,7 @@ import edu.ur.ir.user.UserWorkspaceIndexService;
  * @author Nathan Sarr
  *
  */
-public class DefaultUserNewFileSystemObjectsIndexJob implements Job{
+public class DefaultUserNewFileSystemObjectsIndexJob implements StatefulJob{
 	
 	/** Application context from spring  */
 	public static final String APPLICATION_CONTEXT_KEY = "applicationContext";
