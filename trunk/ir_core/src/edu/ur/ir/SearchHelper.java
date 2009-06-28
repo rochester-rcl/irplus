@@ -27,22 +27,21 @@ import java.util.StringTokenizer;
  */
 public class SearchHelper {
 	
+	public static int MIN_STRING_WILD_CARD_ADD = 3;
 	
 	/**
 	 * Prepares a string for searching - this removes problamatic characters.
 	 * 
 	 * @param value - value to test
-	 * @param wildCardTearms - escape wild card terms for example * and ?
+	 * @param wildCardTearms - after string is fixed will append * at the end of each term
 	 * @return
 	 */
 	public static String prepareMainSearchString(String value, boolean wildCardTerms)
 	{
 		int count = count(value, "\"");
-		
 		// unbalanced quotes or no quotes
 		if( count == 0 || ((count % 2) != 0) )
 		{
-			
 			return fixMainSearchStringSegment(value, wildCardTerms);
 		}
 		else
@@ -98,8 +97,11 @@ public class SearchHelper {
 		if( wildCardTerms &&
 			!newValue.contains("."))
 		{
-			
+		
+			// split values on white space
 			String[] values = newValue.split("\\s");
+			
+			// the string is a series of string values
 			if( values.length > 0 )
 			{
 			    String tempValue = "";
@@ -109,7 +111,9 @@ public class SearchHelper {
 			    	// if one already exists
 			    	// do not apply * to any string less than 3 characters - otherwise two many clauses exception
 				    if( v.lastIndexOf('"') != (v.length() -1)
-					    && v.lastIndexOf('*') != (v.length() -1 )&& !containsSpecialCharacter(v) &&  v.length() >= 3)
+					    && !stringHasEndingStar(v)
+					    && !containsSpecialCharacter(v)
+					    &&  v.length() >= MIN_STRING_WILD_CARD_ADD )
 				    {
 					        tempValue = tempValue + " " + v + "*"; 
 				    }
@@ -121,14 +125,31 @@ public class SearchHelper {
 			    newValue = tempValue.trim();
 			   
 			}
-			else if( newValue.length() > 0 && newValue.lastIndexOf('*') != (newValue.length() -1 ) && !containsSpecialCharacter(newValue) )
+			// single string value
+			else if( newValue.length() > 0 
+					&& !stringHasEndingStar(newValue) 
+					&& !containsSpecialCharacter(newValue) )
 			{
-				newValue = newValue + "*";
+				if( newValue.length() >= MIN_STRING_WILD_CARD_ADD  )
+				{
+				    newValue = newValue + "*";
+				}
 			}
 		}
 		
 		
 		return newValue;
+	}
+	
+	/**
+	 * Determine if the string has an ending * wild card value.
+	 * 
+	 * @param value - value to check
+	 * @return - true if the string has an ending star
+	 */
+	private static boolean stringHasEndingStar(String value)
+	{
+		return value.lastIndexOf('*') == (value.length() -1 );
 	}
 	
 	/**
@@ -258,7 +279,9 @@ public class SearchHelper {
 	
 	
 	/**
-	 * Prepares a string for searching - this removes problamatic characters.
+	 * Prepares a string for searching - this removes problematic characters only including 
+	 * escaping quotes. If quotes need to be applied they should be applied following the 
+	 * call to this method.
 	 * 
 	 * @param value
 	 * @return
@@ -346,7 +369,8 @@ public class SearchHelper {
 	
 	public static void main(String[] args)
 	{
-		System.out.println(SearchHelper.prepareFacetSearchString(args[0], false));
+		String value = "\"this is a test\" hello nate \"more stuff \"";
+		System.out.println(SearchHelper.prepareMainSearchString(value, true));
 	}
 
 }

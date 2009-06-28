@@ -112,7 +112,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
-		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, false);
+		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, true);
 		Query mainQuery = parser.parse(executedQuery);
 		if( log.isDebugEnabled() )
 		{
@@ -277,8 +277,14 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		{
 			QueryParser subQueryParser = new QueryParser(f.getField(), analyzer);
 			subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
+			String fixedQuery = SearchHelper.prepareFacetSearchString(f.getFacetName(), false);
+			fixedQuery = "\"" + fixedQuery + "\"";
+			Query subQuery = subQueryParser.parse(fixedQuery);
 			
-			Query subQuery = subQueryParser.parse(SearchHelper.prepareFacetSearchString(f.getFacetName(), false));
+			if(log.isDebugEnabled())
+			{
+				log.debug("Fiexed query in process Facet Category = " + fixedQuery);
+			}
 			
 			QueryWrapperFilter subQueryWrapper = new QueryWrapperFilter(subQuery);
 		    DocIdSet subQueryBits = subQueryWrapper.getDocIdSet(reader);
@@ -327,7 +333,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
-		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, false);
+		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, true);
 		
 		if( log.isDebugEnabled() )
 		{
@@ -415,10 +421,12 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 			}
 		    QueryParser subQueryParser = new QueryParser(filter.getField(), analyzer);
 		    subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
-		    Query subQuery = subQueryParser.parse(SearchHelper.prepareFacetSearchString(filter.getQuery(), false));
+		    String fixedQuery = SearchHelper.prepareFacetSearchString(filter.getQuery(), false);
+		    fixedQuery = "\"" + fixedQuery + "\"";
+		    Query subQuery = subQueryParser.parse(fixedQuery);
 		    if(log.isDebugEnabled())
 			{
-				log.debug("sub query is " + subQuery);
+				log.debug("sub query ing getSubQueryFilters is " + fixedQuery);
 			}
 		    luceneFilters.add(new QueryWrapperFilter(subQuery));
 		}
