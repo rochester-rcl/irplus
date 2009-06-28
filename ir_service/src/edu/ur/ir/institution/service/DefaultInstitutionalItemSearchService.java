@@ -121,7 +121,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
-		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, false);
+		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, true);
 		Query mainQuery = parser.parse(executedQuery);
 		if( log.isDebugEnabled() )
 		{
@@ -329,13 +329,20 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		    long count = 0;
 		
 			String searchString = SearchHelper.prepareFacetSearchString(f.getFacetName(), false);
+			
 			if( !searchString.trim().equals(""))
 			{
+				// add quotes around the search string
+				searchString = "\"" + searchString + "\"";
+				
 			    QueryParser subQueryParser = new QueryParser(f.getField(), analyzer);
 					    subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			    Query subQuery = subQueryParser.parse(searchString);
 			
 			    QueryWrapperFilter subQueryWrapper = new QueryWrapperFilter(subQuery);
+			    
+			    log.debug("Fixed query in process facet catagory 2 = " + searchString);
+			    
 			    DocIdSet subQueryBits = subQueryWrapper.getDocIdSet(reader);
 			
 			    OpenBitSetDISI subQuerybitSet = new OpenBitSetDISI(subQueryBits.iterator(), maxNumberOfMainQueryHits);
@@ -386,7 +393,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
-		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, false);
+		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, true);
 		
 		if( log.isDebugEnabled() )
 		{
@@ -481,7 +488,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
-		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, false);
+		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, true);
 		Query mainQuery = parser.parse(executedQuery);
 
 		if( log.isDebugEnabled() )
@@ -558,16 +565,19 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		
 		for(FacetFilter filter : filters)
 		{	
+			
 			if(log.isDebugEnabled())
 			{
 				log.debug("adding filter for field " + filter.getField() + " and query " + filter.getQuery());
 			}
 		    QueryParser subQueryParser = new QueryParser(filter.getField(), analyzer);
 		    subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
+		    String fixedQuery = SearchHelper.prepareFacetSearchString(filter.getQuery(), false);
+		    fixedQuery = "\"" + fixedQuery +"\"";
 		    Query subQuery = subQueryParser.parse(SearchHelper.prepareFacetSearchString(filter.getQuery(), false));
 		    if(log.isDebugEnabled())
 			{
-				log.debug("sub query is " + subQuery);
+				log.debug("fixed query in get sub query filters 1 is " + fixedQuery);
 			}
 		    luceneFilters.add(new QueryWrapperFilter(subQuery));
 		}
@@ -827,10 +837,13 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
-		String executedQuery  = SearchHelper.prepareMainSearchString(mainQueryString, false);
-		
-		
+		String executedQuery  = SearchHelper.prepareMainSearchString(mainQueryString, true);
 		Query mainQuery = parser.parse(executedQuery);
+		
+		if(log.isDebugEnabled())
+		{
+			log.debug("Executed query = " + executedQuery);
+		}
 
         Filter[] aFilters = this.getCollectionFilters(collection).toArray(new Filter[2]);
  		
