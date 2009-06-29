@@ -41,7 +41,7 @@
         <dependency org="ur_tags" name="ur_tags" rev="0.1" />
         
         <!-- hibernate ehcache files -->
-        <dependency org="org.hibernate" name="hibernate-ehcache" rev="3.3.1.GA" transitive="false">
+        <dependency org="org.hibernate" name="hibernate-ehcache" rev="3.3.2.GA" transitive="false">
             <artifact name="hibernate-ehcache" type="jar"/>
         </dependency>
 

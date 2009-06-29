@@ -41,6 +41,7 @@
         </dependency>
         
         <!-- files for fontbox -->
+        <!--  
         <dependency org="pdfbox" name="pdfbox" rev="0.7.4" transitive="false">
             <artifact name="pdfbox" type="jar" />
         </dependency>
@@ -48,13 +49,14 @@
         <dependency org="org.fontbox" name="fontbox" rev="0.2.0" transitive="false">
             <artifact name="fontbox" type="jar" />
         </dependency>
+        -->
         
         <!--  POI dependencies -->
-        <dependency org="org.apache.poi" name="poi" rev="3.5-beta4" >
+        <dependency org="org.apache.poi" name="poi" rev="3.5-beta5" >
             <artifact name="poi" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-contrib" rev="3.5-beta5" >
+        <dependency org="org.apache.poi" name="poi-contrib" rev="3.5-beta6" >
             <artifact name="poi-contrib" type="jar" />
         </dependency>
         
@@ -62,11 +64,11 @@
             <artifact name="openxml4j" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-scratchpad" rev="3.5-beta5" >
+        <dependency org="org.apache.poi" name="poi-scratchpad" rev="3.5-beta6" >
             <artifact name="poi-scratchpad" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-ooxml" rev="3.5-beta5" >
+        <dependency org="org.apache.poi" name="poi-ooxml" rev="3.5-beta6" >
             <artifact name="poi-ooxml" type="jar" />
         </dependency>
         
