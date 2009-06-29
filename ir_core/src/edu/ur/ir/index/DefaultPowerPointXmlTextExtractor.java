@@ -26,7 +26,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.xslf.XSLFSlideShow;
 import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
-import org.apache.poi.openxml4j.opc.Package;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 
 public class DefaultPowerPointXmlTextExtractor implements FileTextExtractor{
 
@@ -69,7 +69,7 @@ public class DefaultPowerPointXmlTextExtractor implements FileTextExtractor{
 			return text;
 		}
 		
-		Package p = null;
+		OPCPackage p = null;
 		try
 		{
 			p = XSLFSlideShow.openPackage(f.getAbsolutePath());

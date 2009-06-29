@@ -26,7 +26,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
-import org.apache.poi.openxml4j.opc.Package;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 
 
 public class DefaultWordXmlTextExtractor implements FileTextExtractor{
@@ -71,7 +71,7 @@ public class DefaultWordXmlTextExtractor implements FileTextExtractor{
 			return text;
 		}
 		
-		Package p = null;
+		OPCPackage p = null;
 		try
 		{
 			p = XWPFDocument.openPackage(f.getAbsolutePath());

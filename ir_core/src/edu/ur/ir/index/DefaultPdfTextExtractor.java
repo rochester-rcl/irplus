@@ -23,8 +23,8 @@ import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
 
 import org.apache.log4j.Logger;
-import org.pdfbox.pdmodel.PDDocument;
-import org.pdfbox.util.PDFTextStripper;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.util.PDFTextStripper;
 
 /**
  * @author Nathan Sarr
@@ -104,7 +104,7 @@ public class DefaultPdfTextExtractor implements FileTextExtractor{
 		}
 		catch(Exception e)
 		{
-			log.error("could create lucene document", e);
+			log.error("could not extract text with other error", e);
 			text = null;
 		}
 		finally
