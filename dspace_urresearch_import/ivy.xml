@@ -41,7 +41,7 @@
         <dependency org="dspace_urresearch_import_export" name="dspace_urresearch_import_export" rev="0.1" />
         
         <!-- hibernate ehcache files -->
-        <dependency org="org.hibernate" name="hibernate-ehcache" rev="3.3.1.GA" transitive="false">
+        <dependency org="org.hibernate" name="hibernate-ehcache" rev="3.3.2.GA" transitive="false">
             <artifact name="hibernate-ehcache" type="jar"/>
         </dependency>
 
@@ -63,7 +63,7 @@
         </dependency>
         
          <!-- lucene files -->
-        <dependency org="org.apache.lucene" name="lucene-misc" rev="2.3.2">
+        <dependency org="org.apache.lucene" name="lucene-misc" rev="2.4.1">
             <artifact name="lucene-misc" type="jar"/>
         </dependency>
 

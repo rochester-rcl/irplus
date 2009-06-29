@@ -38,7 +38,7 @@
         </dependency>
         
         <!-- hiberante files -->
-        <dependency org="org.hibernate" name="hibernate-core" rev="3.3.1.GA" transitive="false">
+        <dependency org="org.hibernate" name="hibernate-core" rev="3.3.2.GA" transitive="false">
             <artifact name="hibernate-core" type="jar"/>
         </dependency>
         
