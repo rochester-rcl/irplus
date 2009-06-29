@@ -52,7 +52,7 @@
         -->
         
         <!--  POI dependencies -->
-        <dependency org="org.apache.poi" name="poi" rev="3.5-beta5" >
+        <dependency org="org.apache.poi" name="poi" rev="3.5-beta6" >
             <artifact name="poi" type="jar" />
         </dependency>
         
@@ -144,7 +144,7 @@
         </dependency>
         
         <!-- lucene files -->
-        <dependency org="org.apache.lucene" name="lucene-core" rev="2.4.1">
+        <dependency org="org.apache.lucene" name="lucene-core" rev="2.4.1" transitive="false">
             <artifact name="lucene-core" type="jar"/>
         </dependency>
         
