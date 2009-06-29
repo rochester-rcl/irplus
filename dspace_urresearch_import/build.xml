@@ -148,6 +148,12 @@
 		<copy todir="${lib.dir}">
 			<fileset file="../dspace_urresearch_import_export/dspace_urresearch_import_export/dspace_urresearch_import_export-${project.version}.jar"/>
 		</copy>
+		
+		<!-- copy the pdf libraries down from local this will be done
+			until stable releases are released -->
+		<copy todir="${lib.dir}">
+		    <fileset dir="${pdfbox.lib.dir}"/>
+        </copy>
 	</target>
 
 	<!-- compile the java source files -->
