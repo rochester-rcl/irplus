@@ -26,7 +26,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xssf.extractor.XSSFExcelExtractor;
-import org.apache.poi.openxml4j.opc.Package;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 
 
 public class DefaultExcelXmlTextExtractor implements FileTextExtractor{
@@ -70,7 +70,7 @@ public class DefaultExcelXmlTextExtractor implements FileTextExtractor{
 			return text;
 		}
 		
-		Package p = null;
+		OPCPackage p = null;
 		try
 		{
 	
