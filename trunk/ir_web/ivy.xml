@@ -58,12 +58,12 @@
 
         
         <!-- javax mail libaries -->
-        <dependency org="javax.mail" name="mail" rev="1.4.1">
+        <dependency org="javax.mail" name="mail" rev="1.4.1" transitive="false">
             <artifact name="mail" type="jar"/>
         </dependency>
         
          <!-- lucene files -->
-        <dependency org="org.apache.lucene" name="lucene-misc" rev="2.4.1">
+        <dependency org="org.apache.lucene" name="lucene-misc" rev="2.4.1" transitive="false">
             <artifact name="lucene-misc" type="jar"/>
         </dependency>
 
