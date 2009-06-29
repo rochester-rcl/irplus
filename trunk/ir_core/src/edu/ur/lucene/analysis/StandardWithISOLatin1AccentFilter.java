@@ -60,17 +60,6 @@ public class StandardWithISOLatin1AccentFilter extends Analyzer {
 	   */
 	  private boolean replaceInvalidAcronym = true;
 
-	  private static boolean defaultReplaceInvalidAcronym;
-
-	  // Default to false (fixed the bug), unless the system prop is set
-	  static {
-	    final String v = System.getProperty("org.apache.lucene.analysis.standard.StandardAnalyzer.replaceInvalidAcronym");
-	    if (v == null || v.equals("true"))
-	      defaultReplaceInvalidAcronym = true;
-	    else
-	      defaultReplaceInvalidAcronym = false;
-	  }
-
 	  /** An array containing some common English words that are usually not
 	  useful for searching. */
 	  public static final String[] STOP_WORDS = StopAnalyzer.ENGLISH_STOP_WORDS;
@@ -157,8 +146,6 @@ public class StandardWithISOLatin1AccentFilter extends Analyzer {
 	      streams.tokenStream.reset(reader);
 	    }
 	    streams.tokenStream.setMaxTokenLength(maxTokenLength);
-	    
-	    streams.tokenStream.setReplaceInvalidAcronym(replaceInvalidAcronym);
 
 	    return streams.filteredTokenStream;
 	  }
