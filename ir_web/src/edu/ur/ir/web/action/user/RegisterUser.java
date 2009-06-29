@@ -139,7 +139,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	private String netIdPassword;
 	
 	/** Authenticator for ldap username/password */
-	private LdapAuthenticator authenticator;
+	private LdapAuthenticator ldapAuthenticator;
 	
 	/** Authentication provider for ldap */
 	private UrLdapAuthenticationProvider ldapAuthProvider;
@@ -230,7 +230,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 			{
 			    try
 			    {
-			        authenticator.authenticate(new UsernamePasswordAuthenticationToken(irUser.getLdapUserName(), this.netIdPassword));
+			        ldapAuthenticator.authenticate(new UsernamePasswordAuthenticationToken(irUser.getLdapUserName(), this.netIdPassword));
 			        IrUser ldapUser = userService.getUserByLdapUserName(irUser.getLdapUserName());
 					// we have an interesting problem
 					// user has authenticated correctly - but the user name already exists in the 
@@ -616,12 +616,12 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	    }
 	}
 
-	public LdapAuthenticator getAuthenticator() {
-		return authenticator;
+	public LdapAuthenticator getLdapAuthenticator() {
+		return ldapAuthenticator;
 	}
 
-	public void setAuthenticator(LdapAuthenticator authenticator) {
-		this.authenticator = authenticator;
+	public void setLdapAuthenticator(LdapAuthenticator authenticator) {
+		this.ldapAuthenticator = authenticator;
 	}
 	
 	private String createAccount(LicenseVersion license) throws NoIndexFoundException, FileSharingException
@@ -644,6 +644,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		irUser.setFirstName(firstName);
 		irUser.setLastName(lastName);
 		irUser.setLdapUserName(ldapUserName);
+		irUser.setSelfRegistered(true);
 		
 		if( license != null )
 		{
