@@ -103,15 +103,16 @@
           <constructor-arg index="2" ref="contextSource" />
     </bean> 
     
+    <!--  authenticator for LDAP -->
+    <bean id="ldapAuthenticator" class="org.springframework.security.providers.ldap.authenticator.BindAuthenticator">
+       <constructor-arg ref="contextSource"/>
+       <property name="userSearch" ref="userSearch"/>
+    </bean>
+    
     <!-- used for connecting to an ldap provider -->
     <bean id="ldapAuthProvider"
         class="edu.ur.ir.security.service.UrLdapAuthenticationProvider">
-       <constructor-arg>
-           <bean class="org.springframework.security.providers.ldap.authenticator.BindAuthenticator">
-               <constructor-arg ref="contextSource"/>
-                <property name="userSearch" ref="userSearch"/>
-           </bean>
-       </constructor-arg>
+       <constructor-arg ref="ldapAuthenticator"/>
        <property name="userDetailsContextMapper" ref="ldapUserService"/>
     </bean>
              
