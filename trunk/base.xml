@@ -24,6 +24,9 @@
 	<property name="run.tests" value="true"/>
 	
 	
+	<!-- pdf box jar directory -->
+	<property name="pdfbox.lib.dir" value="../pdfbox-jars"/> 
+	
     <!-- build directory -->
     <property name="build.dir" value="${basedir}/build"/> 
 	
