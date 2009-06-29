@@ -122,10 +122,10 @@
 		</copy>
 		
 		<!-- copy the pdf libraries down from local this will be done
-			until stable releases are released -->
+		     until stable releases are released -->
 		<copy todir="${lib.dir}">
-		    <fileset dir="${pdfbox.lib.dir}"/>
-        </copy>
+			<fileset dir="${pdfbox.lib.dir}" includes="**/*.jar"/>
+		</copy>
 	</target>
 
 	<!-- compile the java source files -->
