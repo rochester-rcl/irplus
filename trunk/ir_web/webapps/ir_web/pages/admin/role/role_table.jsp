@@ -29,13 +29,12 @@
 </c:if>
 
 <div class="dataTable">
-	<ur:basicForm method="post" id="roles" name="myRoles" >
+	<form method="post" id="roles" name="myRoles" >
 	             
 	    <urstb:table width="100%">
 	        <urstb:thead>
 	            <urstb:tr>
-					<urstb:td><ur:checkbox name="checkAllSetting" 
-								value="off" onClick="YAHOO.ur.role.setCheckboxes();"/></urstb:td>         
+					        
 	                <urstb:td>Id</urstb:td>
              
 	                <urstb:tdHeadSort  height="33"
@@ -60,9 +59,6 @@
 	                        onMouseOver="this.className='highlight'"
 	                        onMouseOut="this.className='${rowClass}'">
 	                        <urstb:td>
-		                        <ur:checkbox name="roleIds" value="${role.id}"/>
-	                        </urstb:td>
-	                        <urstb:td>
 		                        ${role.id}
 	                        </urstb:td>
 	                        <urstb:td>
@@ -75,7 +71,7 @@
 	                    </urstb:tr>
 	            </urstb:tbody>
 	        </urstb:table>
-		</ur:basicForm>
+		</form>
 </div>	
 
 <c:if test="${totalHits > 0}">
