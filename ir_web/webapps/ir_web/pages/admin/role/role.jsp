@@ -66,31 +66,20 @@
     <h3>Roles</h3>
   
     <div id="bd">        
-      
-      <table>
-	        <tr>
-				<td>
-	                <button id="showRole" class="ur_button" 
-	                               onmouseover="this.className='ur_buttonover';"
-	                               onmouseout="this.className='ur_button';">New Role</button> 
-                </td>
-                <td>
-                    <button id="showDeleteRole" class="ur_button" 
-	                               onmouseover="this.className='ur_buttonover';"
-	                               onmouseout="this.className='ur_button';">Delete</button>
-                </td>	        
-
-	        </tr>
-	    </table>
-	    
-	    <ur:div id="newRoles"></ur:div>
-	      
-	    <ur:div id="newRoleDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Role Information</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="addRole" name="newRoleForm" 
+ 	    <div id="newRoles"></div>
+	</div>
+	  
+	  <!--  this is the footer of the page -->
+      <c:import url="/inc/footer.jsp"/>
+   
+   
+   </div>      
+	    <div id="newRoleDialog"class="hidden">
+	          <div class="hd">Role Information</div>
+		      <div class="bd">
+		          <form id="addRole" name="newRoleForm" 
 		              method="post" 
-		              action="user/addRole.action">
+		              action="<c:url value="/user/addRole.action"/>">
 		              
 		              <input type="hidden" id="newRoleForm_id"
 		               name="id" value=""/>
@@ -98,7 +87,7 @@
 		              <input type="hidden" id="newRoleForm_new"
 		               name="newRole" value="true"/>
 		              
-		              <ur:div id="roleError" cssClass="errorMessage"></ur:div>
+		              <div id="roleError" class="errorMessage"></div>
 
 				 		<table class="formTable">    
 						    <tr>       
@@ -116,31 +105,22 @@
 							</tr>
 					    </table>
 				    			          
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+		          </form>
+		      </div>
+	      </div>
 	      
-	      <ur:div id="deleteRoleDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Delete Roles</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="deleteRole" name="deleteRole" method="POST" 
-		              action="user/deleteRole.action">
+	      <div id="deleteRoleDialog" class="hidden">
+	          <div class="hd">Delete Roles</div>
+		      <div class="bd">
+		          <form id="deleteRole" name="deleteRole" method="POST" 
+		              action="<c:url value="/user/deleteRole.action"/>">
 		              
 		              
-		              <ur:div id="deleteRoleError" cssClass="errorMessage"></ur:div>
+		              <div id="deleteRoleError" class="errorMessage"></div>
 			          <p>Are you sure you wish to delete the selected roles?</p>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
-	      
-	      
-	  </div>
-	  
-	  <!--  this is the footer of the page -->
-      <c:import url="/inc/footer.jsp"/>
-   
-   
-   </div>      
+		          </form>
+		      </div>
+	      </div>
 
 
 </body>
