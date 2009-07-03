@@ -77,7 +77,7 @@
 	   
 	    <br/>
 	    <br/> 
-	    <ur:div id="newContributorTypes"> </ur:div>
+	    <div id="newContributorTypes"> </div>
       </div>
       <!--  end body div -->
   
@@ -87,29 +87,29 @@
   </div>
   <!--  End  doc div-->
   
-    <ur:div id="newContributorTypeDialog" cssClass="hidden">
-        <ur:div cssClass="hd">Contributor Type Information</ur:div>
-	    <ur:div cssClass="bd">
-		    <ur:basicForm id="addContributorType" name="newContributorType" method="post" 
-		              action="user/addContributorType.action">
+    <div id="newContributorTypeDialog" class="hidden">
+        <div class="hd">Contributor Type Information</div>
+	    <div class="bd">
+		    <form id="addContributorType" name="newContributorType" method="post" 
+		              action="<c:url value="/user/addContributorType.action"/>">
 		              
                 <div id="contributorTypeDialogFields">
                     <c:import url="contributor_type_form.jsp"/>
                 </div>
-	        </ur:basicForm>
-        </ur:div>
-    </ur:div>
+	        </form>
+        </div>
+    </div>
 	      
-    <ur:div id="deleteContributorTypeDialog" cssClass="hidden">
-	    <ur:div cssClass="hd">Delete Contributor Types</ur:div>
-		<ur:div cssClass="bd">
-		    <ur:basicForm id="deleteContributorType" name="deleteContributorType" method="POST" 
-		              action="user/deleteContributorType.action">
-		        <ur:div id="deleteContributorTypeError" cssClass="errorMessage"></ur:div>
+    <div id="deleteContributorTypeDialog" class="hidden">
+	    <div class="hd">Delete Contributor Types</div>
+		<div class="bd">
+		    <form id="deleteContributorType" name="deleteContributorType" method="POST" 
+		              action="<c:url value="/admin/deleteContributorType.action"/>">
+		        <div id="deleteContributorTypeError" class="errorMessage"></div>
 			          <p>Are you sure you wish to delete the selected contributor types?</p>
-		    </ur:basicForm>
-		</ur:div>
-     </ur:div>
+		    </form>
+		</div>
+     </div>
 
 </body>
 </html>
