@@ -58,7 +58,7 @@
             <artifact name="log4j" type="jar"/>
         </dependency>
         
-        <dependency org="checkstyle" name="checkstyle" rev="5.0">
+        <dependency org="checkstyle" name="checkstyle" rev="5.0" transitive="false">
             <artifact name="checkstyle" type="jar"/>
         </dependency>
     </dependencies>

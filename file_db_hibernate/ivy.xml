@@ -39,6 +39,11 @@
         <dependency org="commons-pool" name="commons-pool" rev="1.5.1" transitive="false">
             <artifact name="commons-pool" type="jar"/>
         </dependency>
+        
+        <!-- commons logging -->
+        <dependency org="commons-logging" name="commons-logging" rev="1.1.1" transitive="false">
+            <artifact name="commons-logging" type="jar"/>
+        </dependency>
 
 
         <!-- hibernate files -->
