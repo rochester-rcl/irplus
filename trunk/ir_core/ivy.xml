@@ -26,7 +26,7 @@
     <info organisation="ir_core" module="ir_core"/>
     <dependencies>
 
-        <dependency org="file_db_service" name="file_db_service" rev="0.1" />
+        <dependency org="file_db" name="file_db" rev="0.1" />
       
         <!-- javax mail libaries -->
         <dependency org="javax.mail" name="mail" rev="1.4.1" transitive="false">
@@ -119,6 +119,11 @@
         <!-- lucene files -->
         <dependency org="org.apache.lucene" name="lucene-core" rev="2.4.1" transitive="false">
             <artifact name="lucene-core" type="jar"/>
+        </dependency>
+        
+        <!-- dom4j files -->
+        <dependency org="dom4j" name="dom4j" rev="1.6.1" transitive="false">
+            <artifact name="dom4j" type="jar"/>
         </dependency>
         
     </dependencies>
