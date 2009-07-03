@@ -38,7 +38,7 @@
 		</ur:firstPage>
 				
 		<ur:previousPage>
-			<&nbsp;<a href="javascript:YAHOO.ur.contributor.type.getContributorTypes(${rowStart}, ${prevousPageStartPageNumber}, ${currentPageNumber - 1}, '${sortType}');">Previous</a> &nbsp;&nbsp;
+			&nbsp;<a href="javascript:YAHOO.ur.contributor.type.getContributorTypes(${rowStart}, ${prevousPageStartPageNumber}, ${currentPageNumber - 1}, '${sortType}');">Previous</a> &nbsp;&nbsp;
 			<ur:morePrevious>
 				&nbsp;<a href="javascript:YAHOO.ur.contributor.type.getContributorTypes(${rowStart}, ${startPageNumberForPreviousSet}, ${startPageNumberForPreviousSet}, '${sortType}');">....</a> &nbsp;&nbsp;			
   		    </ur:morePrevious>		      

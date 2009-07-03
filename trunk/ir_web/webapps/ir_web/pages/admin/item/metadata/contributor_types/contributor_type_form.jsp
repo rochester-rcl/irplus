@@ -21,14 +21,11 @@
       this form will return with error messages in it if there
       is an issue.
  -->
-<jsp:directive.taglib prefix="ir" uri="ir-tags"/>
-<%@ taglib prefix="ir" uri="ir-tags"%>
-
 <input type="hidden" id="newContributorTypeForm_id" name="id" value="${contributorType.id}"/>
 		               
 <input type="hidden" id="newContributorType_new" name="newContributorType" value="true"/>
 		              
-<ur:div id="contributorTypeError" cssClass="errorMessage"></ur:div>
+<div id="contributorTypeError" class="errorMessage"></div>
 <table class="formTable">    
     <tr>       
 	    <td align="left" class="label">Name:*</td>
