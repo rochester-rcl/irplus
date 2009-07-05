@@ -38,6 +38,30 @@
             <result name="get">/pages/admin/item/metadata/content_types/content_type_form.jsp</result>
         </action>
         
+        <!--  ************************************ -->
+        <!--  Copyright Statement Actions          -->
+        <!--  ************************************ -->
+        <action name="viewCopyrightStatements">
+            <result name="success">/pages/admin/item/metadata/copyright_statements/copyright_statement.jsp</result>
+        </action>
+        
+        <action name="getCopyrightStatements" 
+            class="edu.ur.ir.web.action.item.metadata.ManageCopyrightStatements"
+            method="viewCopyrightStatements">
+            <result name="success">/pages/admin/item/metadata/copyright_statements/copyright_statement_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*CopyrightStatement" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.ManageCopyrightStatements">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/copyright_statements/copyright_statement.jsp</result>
+            <result name="added">/pages/admin/item/metadata/copyright_statements/copyright_statement_form.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/copyright_statements/copyright_statement_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/copyright_statements/copyright_statement_form.jsp</result>
+        </action>
+        
                 
         <!--  ************************************ -->
         <!--  Language type Actions                -->
