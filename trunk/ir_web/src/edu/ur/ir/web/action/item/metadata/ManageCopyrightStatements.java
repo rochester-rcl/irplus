@@ -1,3 +1,20 @@
+/**  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
+
 package edu.ur.ir.web.action.item.metadata;
 
 import java.util.Collection;
@@ -11,6 +28,12 @@ import edu.ur.ir.item.CopyrightStatementService;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 
+/**
+ * Action to deal with copyright statements.
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public class ManageCopyrightStatements extends Pager implements Preparable {
 	
 	/** generated version id. */
@@ -88,7 +111,7 @@ public class ManageCopyrightStatements extends Pager implements Preparable {
 	 */
 	public String update()
 	{
-		log.debug("updateing copyright statement id = " + copyrightStatement.getId());
+		log.debug("updating copyright statement = " + copyrightStatement);
 		added = false;
 
 		CopyrightStatement other = copyrightStatementService.get(copyrightStatement.getName());
@@ -127,9 +150,9 @@ public class ManageCopyrightStatements extends Pager implements Preparable {
 	public String delete()
 	{
 		log.debug("Delete copyright statements called");
-		if( id != null )
+		if( copyrightStatement != null)
 		{
-		   
+		    copyrightStatementService.delete(copyrightStatement);
 		}
 		deleted = true;
 		return "deleted";
