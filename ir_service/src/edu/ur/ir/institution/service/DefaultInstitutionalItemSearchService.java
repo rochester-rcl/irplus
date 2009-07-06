@@ -275,7 +275,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			if( subjects != null && subjectsMap.size() < numberOfResultsToCollect)
 			{
 			    StringTokenizer tokenizer = new StringTokenizer(subjects, DefaultInstitutionalItemIndexService.SEPERATOR);
-			    while(tokenizer.hasMoreElements() && languagesMap.size() < numberOfResultsToCollect)
+			    while(tokenizer.hasMoreElements() && subjectsMap.size() < numberOfResultsToCollect)
 			    {
 			    	String subject = tokenizer.nextToken().trim();
 			    	FacetResult f = subjectsMap.get(subject);
