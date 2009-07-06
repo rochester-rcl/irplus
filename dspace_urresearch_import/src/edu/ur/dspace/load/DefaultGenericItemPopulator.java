@@ -802,7 +802,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			log.debug("keyword list = " + keywordList);
 			if( iter.hasNext())
 			{
-				keywordList = keywordList + ", ";
+				keywordList = keywordList + GenericItem.KEYWORD_SEPARATOR;
 			}
 		}
 		
