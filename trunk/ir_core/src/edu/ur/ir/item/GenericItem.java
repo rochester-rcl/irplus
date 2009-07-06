@@ -46,6 +46,9 @@ import edu.ur.persistent.CommonPersistent;
  */
 public class GenericItem extends CommonPersistent implements Cloneable {
 	
+	
+	public static final String KEYWORD_SEPARATOR = ";";
+	
 	/**  Logger */
 	protected static final Logger log = Logger.getLogger(GenericItem.class);
 	
@@ -95,7 +98,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	/**  The abstract for the item */
 	protected String itemAbstract;
 	
-	/**  The subject keywords for the item */
+	/**  The subject keywords for the item - semicolon (;) separated */
 	protected String itemKeywords;
 	
 	/**  Indicates the item has been publicly published */

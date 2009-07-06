@@ -919,7 +919,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		{
 			return keywords;
 		}
-		StringTokenizer tokenizer = new StringTokenizer(subjectValues, ",");
+		StringTokenizer tokenizer = new StringTokenizer(subjectValues, GenericItem.KEYWORD_SEPARATOR);
 		boolean first = true;
 		while(tokenizer.hasMoreElements())
 		{
