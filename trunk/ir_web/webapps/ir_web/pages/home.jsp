@@ -84,11 +84,11 @@
                 <!--  create the first column -->
                 <div class="yui-g">
                 <div class="yui-u first">
-                    
+                   
                    <div class="contentContainer">
+                   
                        <div class="contentBoxTitle">
-                           <c:url var="browseRepositoryItems" value="/browseRepositoryItems.action"/>
-                           <p><a href="${browseRepositoryItems}">Browse/Search</a></p>
+                           <p>Browse/Search</p>
                        </div>
                    
                        <div class="contentBoxContent">
@@ -100,8 +100,13 @@
                                     <button type="submit" class="ur_button" 
 		                               onmouseover="this.className='ur_buttonover';"
 	 		                           onmouseout="this.className='ur_button';">Search</button>
+	 		                           
+	 		                     <br/>
+	 		                     <br/>
+	 		                      <c:url var="browseRepositoryItems" value="/browseRepositoryItems.action"/>
+	 		                     <a href="${browseRepositoryItems}"><strong>Browse All/Search</strong></a>
                                 </p>
-                                
+                               
                            </form>
                            
                        </div>
@@ -115,7 +120,45 @@
                         </div>
                     </div>
 
+                   
+                    
+                </div>
+                <!--  end the first column -->
+            
+                <!--  Start the second column -->
+                <div class="yui-u">
+                     <div class="contentContainer">
+                        <div class="contentBoxTitle">
+                            <p>Images</p>
+                        </div>
+                   
+                        <div class="contentBoxContentPicture">
+                            <div id="repository_picture" >
+                            </div>
+                        </div>
+                    </div>
+                    
                    <div class="contentContainer">
+                        <div class="contentBoxTitle">
+                            <p>Researchers</p>
+                        </div>
+                        <div class="contentBoxContent">
+                            <div id="researcher_picture" >
+                            </div>
+                        </div>
+                    </div>
+                    
+                   
+                    
+                    <div class="contentContainer">
+                        <div class="contentBoxTitle">
+                            <p>News</p>
+                        </div>
+                        <div id="news_items" class="contentBoxContent">
+                        </div>
+                    </div>
+                    
+                    <div class="contentContainer">
                        <div class="contentBoxTitle">
                            <p>Statistics </p>
                        </div>
@@ -125,52 +168,6 @@
                        		</div>
                       </div>
                    </div>
-                    
-                </div>
-                <!--  end the first column -->
-            
-                <!--  Start the second column -->
-                <div class="yui-u">
-                    <div class="contentContainer">
-                        <div class="contentBoxTitle">
-                            <p>What is irplus?</p>
-                        </div>
-                        <div class="contentBoxContent">
-                            <div id="ur_research_description" >
-                            <p>A university-based, long-term, digital repository for the management,
-                             dissemination and stewardship of digital materials. </p>
-                            </div>
-                        </div>
-                    </div>
-                   <div class="contentContainer">
-                        <div class="contentBoxTitle">
-                        	<c:url var="browseResearchers" value="/viewResearcherBrowse.action"/>
-                            <p><a href="${browseResearchers}">Researchers</a></p>
-                        </div>
-                        <div class="contentBoxContent">
-                            <div id="researcher_picture" >
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="contentContainer">
-                        <div class="contentBoxTitle">
-                            <p>Pictures - See pictures of our campus!</p>
-                        </div>
-                   
-                        <div class="contentBoxContentPicture">
-                            <div id="repository_picture" >
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="contentContainer">
-                        <div class="contentBoxTitle">
-                            <p>News</p>
-                        </div>
-                        <div id="news_items" class="contentBoxContent">
-                        </div>
-                    </div>
                 </div>
                 <!--  end the second column -->
                 
