@@ -344,12 +344,12 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			+ " for finding " + DefaultInstitutionalItemIndexService.CITATION + " " 
 			+ "abstract";
 			
-			hits = executeQuery(DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES,
+			hits = executeQuery(DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES_ANALYZED,
 					"familyName", 
 					lucenDirectory);
 			
 			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES + " " 
+			+ " for finding " + DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES_ANALYZED + " " 
 			+ "familyName";
 			
 			hits = executeQuery(DefaultInstitutionalItemIndexService.FILE_TEXT,
@@ -368,20 +368,20 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			+ " for finding " + DefaultInstitutionalItemIndexService.IDENTIFIERS + " " 
 			+ "identifier";
 			
-			hits = executeQuery(DefaultInstitutionalItemIndexService.KEY_WORDS,
+			hits = executeQuery(DefaultInstitutionalItemIndexService.KEY_WORDS_ANALYZED,
 					"biology", 
 					lucenDirectory);
 			
 			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultInstitutionalItemIndexService.KEY_WORDS + " " 
+			+ " for finding " + DefaultInstitutionalItemIndexService.KEY_WORDS_ANALYZED + " " 
 			+ "biology";
 			
-			hits = executeQuery(DefaultInstitutionalItemIndexService.LANGUAGE,
+			hits = executeQuery(DefaultInstitutionalItemIndexService.LANGUAGE_ANALYZED,
 					"language", 
 					lucenDirectory);
 			
 			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultInstitutionalItemIndexService.LANGUAGE + " " 
+			+ " for finding " + DefaultInstitutionalItemIndexService.LANGUAGE_ANALYZED + " " 
 			+ "language";
 			
 			hits = executeQuery(DefaultInstitutionalItemIndexService.LINK_NAMES,
@@ -392,12 +392,12 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			+ " for finding " + DefaultInstitutionalItemIndexService.LINK_NAMES + " " 
 			+ "msnbc";
 			
-			hits = executeQuery(DefaultInstitutionalItemIndexService.PUBLISHER,
+			hits = executeQuery(DefaultInstitutionalItemIndexService.PUBLISHER_ANALYZED,
 					"publisher", 
 					lucenDirectory);
 			
 			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultInstitutionalItemIndexService.PUBLISHER + " " 
+			+ " for finding " + DefaultInstitutionalItemIndexService.PUBLISHER_ANALYZED + " " 
 			+ "publisher";
 			
 			hits = executeQuery(DefaultInstitutionalItemIndexService.SUB_TITLES,
@@ -604,12 +604,12 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			+ " for finding " + DefaultInstitutionalItemIndexService.CITATION + " " 
 			+ "abstract";
 			
-			hits = executeQuery(DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES,
+			hits = executeQuery(DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES_ANALYZED,
 					"familyName", 
 					lucenDirectory);
 			
 			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES + " " 
+			+ " for finding " + DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES_ANALYZED + " " 
 			+ "familyName";
 			
 			hits = executeQuery(DefaultInstitutionalItemIndexService.FILE_TEXT,
@@ -628,20 +628,20 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			+ " for finding " + DefaultInstitutionalItemIndexService.IDENTIFIERS + " " 
 			+ "identifier";
 			
-			hits = executeQuery(DefaultInstitutionalItemIndexService.KEY_WORDS,
+			hits = executeQuery(DefaultInstitutionalItemIndexService.KEY_WORDS_ANALYZED,
 					"biology", 
 					lucenDirectory);
 			
 			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultInstitutionalItemIndexService.KEY_WORDS + " " 
+			+ " for finding " + DefaultInstitutionalItemIndexService.KEY_WORDS_ANALYZED + " " 
 			+ "biology";
 			
-			hits = executeQuery(DefaultInstitutionalItemIndexService.LANGUAGE,
+			hits = executeQuery(DefaultInstitutionalItemIndexService.LANGUAGE_ANALYZED,
 					"language", 
 					lucenDirectory);
 			
 			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultInstitutionalItemIndexService.LANGUAGE + ": " 
+			+ " for finding " + DefaultInstitutionalItemIndexService.LANGUAGE_ANALYZED + ": " 
 			+ "language";
 			
 			hits = executeQuery(DefaultInstitutionalItemIndexService.LINK_NAMES,
@@ -652,12 +652,12 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			+ " for finding " + DefaultInstitutionalItemIndexService.LINK_NAMES + " " 
 			+ "msnbc";
 			
-			hits = executeQuery(DefaultInstitutionalItemIndexService.PUBLISHER,
+			hits = executeQuery(DefaultInstitutionalItemIndexService.PUBLISHER_ANALYZED,
 					"publisher", 
 					lucenDirectory);
 			
 			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultInstitutionalItemIndexService.PUBLISHER + " " 
+			+ " for finding " + DefaultInstitutionalItemIndexService.PUBLISHER_ANALYZED + " " 
 			+ "publisher";
 			
 			hits = executeQuery(DefaultInstitutionalItemIndexService.SUB_TITLES,

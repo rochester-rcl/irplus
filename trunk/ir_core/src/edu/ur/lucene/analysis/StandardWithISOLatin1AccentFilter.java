@@ -49,7 +49,8 @@ import java.util.Set;
  */
 
 public class StandardWithISOLatin1AccentFilter extends Analyzer {
-	  private Set stopSet;
+	  @SuppressWarnings("unchecked")
+	private Set stopSet;
 
 	  /**
 	   * Specifies whether deprecated acronyms should be replaced with HOST type.
@@ -70,7 +71,8 @@ public class StandardWithISOLatin1AccentFilter extends Analyzer {
 	  }
 
 	  /** Builds an analyzer with the given stop words. */
-	  public StandardWithISOLatin1AccentFilter(Set stopWords) {
+	  @SuppressWarnings("unchecked")
+	public StandardWithISOLatin1AccentFilter(Set stopWords) {
 	    stopSet = stopWords;
 	  }
 

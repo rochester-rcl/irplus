@@ -88,6 +88,19 @@
 	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
 	        from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
 	</query>
+	
+   <!--  this retrieves all items within the collection including all child items in child
+	      collections - this also does not re-insert any items that are already inserted based
+	      on the given processing type -->
+	<query name="insertAllItemsForRepository">
+	    insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	        from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
+	</query>
 
 
 </hibernate-mapping>

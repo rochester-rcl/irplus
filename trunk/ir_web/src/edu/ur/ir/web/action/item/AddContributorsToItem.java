@@ -226,7 +226,7 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
 
 		if (institutionalItems != null) {
-			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE); 
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
 
 			for(InstitutionalItem i : institutionalItems) {
 				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);

@@ -30,12 +30,8 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
@@ -53,6 +49,7 @@ import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemIdentifier;
 import edu.ur.ir.item.ItemLink;
+import edu.ur.ir.item.ItemSponsor;
 import edu.ur.ir.item.ItemTitle;
 import edu.ur.ir.person.PersonName;
 
@@ -79,7 +76,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	/** separator used for multi-set data */
 	public static final String SEPERATOR = "|";
 	
-	/** This is used to remove all seperator characters for indexed values if needed */
+	/** This is used to remove all separator characters for indexed values if needed */
 	public static final String ESCAPED_SEPERATOR = "\\|";
 	
 	/** id of the item */
@@ -97,11 +94,17 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	/** text in the files of an item */
 	public static final String FILE_TEXT = "file_text";
 	
-	/** names of the contributors */
+	/** names of the contributors - NOT analyzed*/
 	public static final String CONTRIBUTOR_NAMES = "contributor_names";
 	
-	/** language the item is in  */
+	/** names of the contributors - been analyzed by analyzer*/
+	public static final String CONTRIBUTOR_NAMES_ANALYZED = "contributor_names_analyzed";
+	
+	/** language the item is in - NOT analyzed*/
 	public static final String LANGUAGE = "language";
+	
+	/** language the item is in - been analyzed by analyzer*/ 
+	public static final String LANGUAGE_ANALYZED = "language_analyzed";
 	
 	/** identifiers for the item  */
 	public static final String IDENTIFIERS = "identifiers";
@@ -109,23 +112,44 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	/** abstract for the item */
 	public static final String ABSTRACT = "abstract";
 	
-	/** key words for the item */
+	/** key words for the item - NOT analyzed*/
 	public static final String KEY_WORDS = "keywords";
+	
+	/** key words for the item - been analyzed by analyzer*/
+	public static final String KEY_WORDS_ANALYZED = "keywords_analyzed";
 	
 	/** sub titles for the item  */
 	public static final String SUB_TITLES = "sub_titles";
 	
-	/** publisher of the item  */
+	/** publisher of the item  - NOT analyzed*/
 	public static final String PUBLISHER = "publisher";
+	
+	/** publisher of the item  - been analyzed by analyzer*/
+	public static final String PUBLISHER_ANALYZED = "publisher_analyzed";
+	
+	/** sponsors of the item  - NOT analyzed*/
+	public static final String SPONSORS = "sponsors";
+	
+	/** sponsors of the item  - been analyzed by analyzer*/
+	public static final String SPONSORS_ANALYZED = "sponsors_analyzed";
+	
+	/** sponsors of the item  - been analyzed by analyzer*/
+	public static final String SPONSORS_DESCRIPTION = "sponsors_description";
 	
 	/** citation if the item has been published */
 	public static final String CITATION = "citation";
 	
-	/** Type of this item  */
+	/** Type of this item  - NOT analyzed*/
 	public static final String CONTENT_TYPES = "content_type";
+	
+	/** Type of this item  - been analyzed by analyzer*/
+	public static final String CONTENT_TYPES_ANALYZED = "content_type_analyzed";
 	
 	/** name of the collection the item is in */
 	public static final String COLLECTION_NAME = "collection_name";
+	
+	/** name of the collection the item is in - been analyzed by analyzer*/
+	public static final String COLLECTION_NAME_ANALYZED = "collection_name_analyzed";
 	
 	/** collection this item is in */
 	public static final String COLLECTION_ID = "collection_id";
@@ -356,85 +380,6 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	}
 	
 	/**
-	 * Return all fields with the specified name.
-	 * 
-	 * @param institutionalItemId
-	 * @param name - name of the fields to return
-	 * @param institutionalItemIndex
-	 * @return
-	 */
-	private Field[] getFields(Long institutionalItemId, String name, File institutionalItemIndex)
-	{
-		Directory directory = null;
-		IndexReader reader = null;
-		
-		Field[] fields = {};
-		
-	    // if the index is empty or does not exist then do nothing
-	    if( institutionalItemIndex == null || institutionalItemIndex.list() == null || 
-	    		institutionalItemIndex.list().length == 0)
-	    {
-	    	return fields;
-	    }
-	    
-	    try 
-		{
-	    	IndexSearcher searcher = new IndexSearcher(institutionalItemIndex.getAbsolutePath());
-	 	    reader = searcher.getIndexReader();
-			Term term = new Term(ID, NumberTools.longToString(institutionalItemId));
-			TermQuery termQuery = new TermQuery(term);
-			
-			TopDocs docs = searcher.search(termQuery, 100);
-			if( docs.totalHits > 1)
-			{
-				throw new IllegalStateException("index contains more than one record with uniqe id found " + docs.totalHits);
-			}
-			else if( docs.totalHits == 1)
-			{
-				Document doc = searcher.doc(docs.scoreDocs[0].doc);
-				fields = doc.getFields(name);
-			}
-			else if( docs.totalHits == 0 )
-			{
-				log.debug("index record for item id " + institutionalItemId + " not found");
-			}
-			  
-		} 
-        catch (IOException e) 
-        {
-			log.error(e);
-		}
-        finally 
-        {
-   	        if (reader != null) {
-			    try {
-				    reader.close();
-			    } catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    reader = null;
-		    
-		    if( directory != null )
-		    {
-		    	try
-		    	{
-		    		directory.close();
-		    	}
-		    	catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    directory = null;
-		    
-	    }
-        
-        return fields;
-		
-	}
-
-	
-	/**
 	 * Add an institutional item to the index.
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#addItem(edu.ur.ir.institution.InstitutionalItem, java.io.File)
@@ -445,26 +390,6 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		} 
 		writeDocument(institutionalItemIndex.getAbsolutePath(),	getDocument(institutionalItem, true ));
 	}
-	
-	/**
-	 * Add an institutional item to the index.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#addItem(edu.ur.ir.institution.InstitutionalItem, java.io.File)
-	 */
-	private void addItem(InstitutionalItem institutionalItem, File institutionalItemIndex, Field[] fileTextFields) throws NoIndexFoundException {
-		if (institutionalItemIndex == null) {
-			throw new NoIndexFoundException("Institutional item index folder not found ");
-		} 
-		Document d = getDocument(institutionalItem, false);
-		log.debug("Fields Size = " + fileTextFields.length);
-	    for( Field f : fileTextFields)
-	    {
-	    	log.debug("Adding field " + f);
-	    	d.add(f);
-	    }
-		writeDocument(institutionalItemIndex.getAbsolutePath(),	d);
-	}
-	
 	
 	/**
 	 * Create a document for the institutional item.
@@ -503,12 +428,18 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		
 		String collectionName = institutionalItem.getInstitutionalCollection().getName();
 		
-		//remove separator from name in index
-		collectionName = collectionName.replaceAll(ESCAPED_SEPERATOR, " ");
+		
 		doc.add(new Field(COLLECTION_NAME, 
 				collectionName, 
 				Field.Store.YES, 
-				Field.Index.ANALYZED ));
+				Field.Index.NOT_ANALYZED ));
+		
+		//remove separator from name in index
+		collectionName = collectionName.replaceAll(ESCAPED_SEPERATOR, " ");
+		doc.add(new Field(COLLECTION_NAME_ANALYZED, 
+				collectionName, 
+				Field.Store.YES, 
+				Field.Index.ANALYZED ));;
 		
 		String collectionId =  NumberTools.longToString(institutionalItem.getInstitutionalCollection().getId());
 		doc.add(new Field(COLLECTION_ID, 
@@ -544,12 +475,22 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		String contributorString = getContributorNames(genericItem);
 		if(!contributorString.trim().equals(""))
 		{
-			doc.add(new Field(CONTRIBUTOR_NAMES, 
+			doc.add(new Field(CONTRIBUTOR_NAMES_ANALYZED, 
 					contributorString, 
 					Field.Store.YES, 
 					Field.Index.ANALYZED ));
 		}
 		
+		// this allows for exact matches when faceted searching occurs
+		List<String> contributors = getNotAnalyzedContributorNames(genericItem);
+		for( String value : contributors )
+		{
+		    doc.add(new Field(CONTRIBUTOR_NAMES, 
+				value, 
+				Field.Store.YES, 
+				Field.Index.NOT_ANALYZED ));
+		}
+				
 		// get the contributors
 		String linksString = getLinkNames(genericItem);
 		if(!linksString.trim().equals(""))
@@ -572,7 +513,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		        {
 			        doc.add(new Field(FILE_TEXT, 
 					    fileText, 
-					    Field.Store.COMPRESS, 
+					    Field.Store.NO, 
 					    Field.Index.ANALYZED ));
 		        }
 		    
@@ -589,8 +530,14 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		
 		if(language != null && !language.trim().equals(""))
 		{
-			language = language.replaceAll(ESCAPED_SEPERATOR, " ");
 			doc.add(new Field(LANGUAGE, 
+					language, 
+					Field.Store.YES, 
+					Field.Index.NOT_ANALYZED ));
+			
+			language = language.replaceAll(ESCAPED_SEPERATOR, " ");
+			
+			doc.add(new Field(LANGUAGE_ANALYZED, 
 					language, 
 					Field.Store.YES, 
 					Field.Index.ANALYZED ));
@@ -602,7 +549,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		{
 			doc.add(new Field(IDENTIFIERS, 
 					identifiers, 
-					Field.Store.YES, 
+					Field.Store.NO, 
 					Field.Index.ANALYZED ));
 		}
 		
@@ -621,10 +568,19 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		
 		if(keywords != null && !keywords.equals(""))
 		{
-			doc.add(new Field(KEY_WORDS, 
+			doc.add(new Field(KEY_WORDS_ANALYZED, 
 					keywords, 
 					Field.Store.YES, 
 					Field.Index.ANALYZED ));
+		}
+		
+		List<String> keywordValues = getNotAnalyzedSubjects(genericItem.getItemKeywords());
+		for( String value : keywordValues)
+		{
+			doc.add(new Field(KEY_WORDS, 
+					value, 
+					Field.Store.YES, 
+					Field.Index.NOT_ANALYZED ));
 		}
 		
 		//subtitles for the item
@@ -641,11 +597,52 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		String contentTypes = getContentTypes(genericItem);
 		if(contentTypes != null && !contentTypes.equals(""))
 		{
-			doc.add(new Field(CONTENT_TYPES, 
+			
+			
+			doc.add(new Field(CONTENT_TYPES_ANALYZED, 
 					contentTypes, 
 					Field.Store.YES, 
 					Field.Index.ANALYZED ));
 		}	
+		
+		List<String> contentValues = getNotAnalyzedContentTypes(genericItem);
+		for(String value : contentValues)
+		{
+			doc.add(new Field(CONTENT_TYPES, 
+					value, 
+					Field.Store.YES, 
+					Field.Index.NOT_ANALYZED ));
+		}
+		
+		String sponsors = getSponsors(genericItem);
+		if( sponsors != null && !sponsors.equals(""))
+		{
+			doc.add(new Field(SPONSORS_ANALYZED, 
+					contentTypes, 
+					Field.Store.YES, 
+					Field.Index.ANALYZED ));
+		}
+		
+		List<String> sponsorValues = getNotAnalyzedSponsors(genericItem);
+		for(String value : sponsorValues)
+		{
+			doc.add(new Field(SPONSORS, 
+					value, 
+					Field.Store.YES, 
+					Field.Index.NOT_ANALYZED ));
+		}
+		
+		String sponsorDescriptions = getSponsorDescriptions(genericItem);
+		if( sponsorDescriptions != null && !sponsorDescriptions.equals(""))
+		{
+			
+			doc.add(new Field(SPONSORS_DESCRIPTION, 
+					sponsorDescriptions, 
+					Field.Store.NO, 
+					Field.Index.ANALYZED ));
+		}
+		
+		
 		
 		//publisher information
 		if( genericItem.getExternalPublishedItem() != null  )
@@ -656,6 +653,11 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 				if( publisherName != null && !publisherName.equals(""))
 				{
 					doc.add(new Field(PUBLISHER, 
+							publisherName, 
+							Field.Store.YES, 
+							Field.Index.NOT_ANALYZED ));
+					
+					doc.add(new Field(PUBLISHER_ANALYZED, 
 							publisherName, 
 							Field.Store.YES, 
 							Field.Index.ANALYZED ));
@@ -683,18 +685,8 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#updateItem(edu.ur.ir.institution.InstitutionalItem, java.io.File)
 	 */
 	public void updateItem(InstitutionalItem institutionalItem, File institutionalItemIndex, boolean filesChanged) throws NoIndexFoundException{
-		
-		if( !filesChanged )
-		{
-			Field[] fileTextFields = this.getFields(institutionalItem.getId(), FILE_TEXT, institutionalItemIndex);
-			deleteItem(institutionalItem, institutionalItemIndex);
-			addItem(institutionalItem, institutionalItemIndex, fileTextFields);
-		}
-		else
-		{
-			deleteItem(institutionalItem, institutionalItemIndex);
-		    addItem(institutionalItem, institutionalItemIndex);
-		}
+		deleteItem(institutionalItem, institutionalItemIndex);
+		addItem(institutionalItem, institutionalItemIndex);
 	}
 	
 	/**
@@ -794,6 +786,46 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		
 		return sb.toString();
 	}
+	
+	/**
+	 * Get the contributor names.
+	 * 
+	 * @param item
+	 * @return
+	 */
+	private List<String> getNotAnalyzedContributorNames(GenericItem genericItem)
+	{
+		LinkedList<String> values = new LinkedList<String>();
+		List<ItemContributor> contributors = genericItem.getContributors();
+		
+		for(ItemContributor c : contributors)
+		{
+			StringBuffer sb = new StringBuffer();
+			PersonName personName = c.getContributor().getPersonName();
+			if( personName.getForename() != null )
+			{
+				sb.append(personName.getForename() + " ");
+			}
+
+			if( personName.getMiddleName()!= null )
+			{
+				sb.append(personName.getMiddleName() + " ");
+			}
+
+			if( personName.getFamilyName() != null )
+			{
+				sb.append(personName.getFamilyName() + " ");
+			}
+
+			if( personName.getSurname() != null )
+			{
+				sb.append(personName.getSurname());
+			}
+			values.add(sb.toString());
+		}
+		
+		return values;
+	}
 
 	/**
 	 * Get the content types.
@@ -825,6 +857,27 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		
 		
 		return sb.toString();
+	}
+	
+	
+	/**
+	 * Get each content type listed as a single string value
+	 * 
+	 * @param genericItem
+	 * @return
+	 */
+	private List<String> getNotAnalyzedContentTypes(GenericItem genericItem)
+	{
+		LinkedList<String> contents = new LinkedList<String>();
+		Set<ContentType> types = genericItem.getSecondaryContentTypes();
+		if (types != null && types.size() > 0) {
+			
+			for(ContentType c : types)
+			{
+				contents.add(c.getName());
+			}
+		}
+		return contents;
 	}
 	
 	/**
@@ -861,6 +914,62 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		{
 			sb.append(" " + identifier.getIdentifierType().getName() + " ");
 			sb.append(" " + identifier.getValue() + " ");
+			sb.append(SEPERATOR);
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Get the sponsors
+	 * 
+	 * @param item
+	 * @return
+	 */
+	private String getSponsors(GenericItem genericItem)
+	{
+		StringBuffer sb = new StringBuffer();
+		Set<ItemSponsor> sponsors = genericItem.getItemSponsors();
+		
+		for(ItemSponsor sponsor : sponsors)
+		{
+			sb.append(" " + sponsor.getSponsor().getName() + " ");
+			sb.append(SEPERATOR);
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Get the sponsors as a list of strings
+	 * 
+	 * @param item
+	 * @return
+	 */
+	private List<String> getNotAnalyzedSponsors(GenericItem genericItem)
+	{
+		LinkedList<String> values = new LinkedList<String>();
+		Set<ItemSponsor> sponsors = genericItem.getItemSponsors();
+		
+		for(ItemSponsor sponsor : sponsors)
+		{
+			values.add(sponsor.getSponsor().getName());
+		}
+		return values;
+	}
+	
+	/**
+	 * Get the sponsor descriptions
+	 * 
+	 * @param item
+	 * @return
+	 */
+	private String getSponsorDescriptions(GenericItem genericItem)
+	{
+		StringBuffer sb = new StringBuffer();
+		Set<ItemSponsor> sponsors = genericItem.getItemSponsors();
+		
+		for(ItemSponsor sponsor : sponsors)
+		{
+			sb.append(" " + sponsor.getDescription() + " ");
 			sb.append(SEPERATOR);
 		}
 		return sb.toString();
@@ -936,6 +1045,30 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		}
 		
 		return keywords;
+	}
+	
+	/**
+	 * Get the list of subjects as keywords 
+	 * 
+	 * @param subjectValues
+	 * @return
+	 */
+	private List<String> getNotAnalyzedSubjects(String subjectValues)
+	{
+		LinkedList<String> values = new LinkedList<String>();
+		
+		if( subjectValues == null || subjectValues.trim().equals(""))
+		{
+			return values;
+		}
+		StringTokenizer tokenizer = new StringTokenizer(subjectValues, GenericItem.KEYWORD_SEPARATOR);
+		while(tokenizer.hasMoreElements())
+		{
+			String nextValue = tokenizer.nextToken().toLowerCase().trim();
+			values.add(nextValue);
+		}
+		
+		return values;
 	}
 	
 	

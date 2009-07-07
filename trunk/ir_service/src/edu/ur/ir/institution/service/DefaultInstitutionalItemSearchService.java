@@ -25,10 +25,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.MapFieldSelector;
 import org.apache.lucene.document.NumberTools;
@@ -72,7 +72,11 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	/** max number of hits to retrieve */
 	private int maxNumberOfMainQueryHits = 10000;
 	
+	/** Key word analyzer */
+	private KeywordAnalyzer keywordAnalyzer = new KeywordAnalyzer();
 	
+	
+
 	/** fields to search in the index*/
 	private static final String[] fields = 
 	{DefaultInstitutionalItemIndexService.ABSTRACT, 
@@ -80,17 +84,21 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	 DefaultInstitutionalItemIndexService.DESCRIPTION,
 	 DefaultInstitutionalItemIndexService.LINK_NAMES,
 	 DefaultInstitutionalItemIndexService.FILE_TEXT,
-	 DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES,
-	 DefaultInstitutionalItemIndexService.LANGUAGE,
+	 DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES_ANALYZED,
+	 DefaultInstitutionalItemIndexService.LANGUAGE_ANALYZED,
 	 DefaultInstitutionalItemIndexService.IDENTIFIERS,
-	 DefaultInstitutionalItemIndexService.KEY_WORDS,
+	 DefaultInstitutionalItemIndexService.KEY_WORDS_ANALYZED,
+	 DefaultInstitutionalItemIndexService.SPONSORS_ANALYZED,
+	 DefaultInstitutionalItemIndexService.SPONSORS_DESCRIPTION,
 	 DefaultInstitutionalItemIndexService.SUB_TITLES,
-	 DefaultInstitutionalItemIndexService.PUBLISHER,
+	 DefaultInstitutionalItemIndexService.PUBLISHER_ANALYZED,
 	 DefaultInstitutionalItemIndexService.CITATION,
-	 DefaultInstitutionalItemIndexService.CONTENT_TYPES,
+	 DefaultInstitutionalItemIndexService.CONTENT_TYPES_ANALYZED,
 	 DefaultInstitutionalItemIndexService.COLLECTION_LEFT_VALUE,
 	 DefaultInstitutionalItemIndexService.COLLECTION_RIGHT_VALUE,
 	 DefaultInstitutionalItemIndexService.COLLECTION_NAME};
+	
+	
 	
 	
 	/**
@@ -114,7 +122,10 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		
 		IndexSearcher searcher = new IndexSearcher(indexFolder);
 		IndexReader reader = searcher.getIndexReader();
-		QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
+		
+
+		
+		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
 		
@@ -141,6 +152,8 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		log.debug("executeSearchWithFacets 1 query = " + mainQuery);
 		DocIdSet mainQueryBits = mainQueryWrapper.getDocIdSet(reader);
 		OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
+		
+		
 		// process the data and determine the facets
         FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
         		reader, 
@@ -219,18 +232,14 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		{
 			
 			Document doc = searcher.doc(topDocs.scoreDocs[index].doc, fieldSelector);
-			String names = doc.get(DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES);
+			String[] names = doc.getValues(DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES);
 			
 			String language = doc.get(DefaultInstitutionalItemIndexService.LANGUAGE);
 			
-			if( language != null )
-			{
-				language = language.trim();
-			}
 			
-			String subjects = doc.get(DefaultInstitutionalItemIndexService.KEY_WORDS);
+			String[] subjects = doc.getValues(DefaultInstitutionalItemIndexService.KEY_WORDS);
 			
-			String formats = doc.get(DefaultInstitutionalItemIndexService.CONTENT_TYPES);
+			String[] formats = doc.getValues(DefaultInstitutionalItemIndexService.CONTENT_TYPES);
 			
 			String collection = doc.get(DefaultInstitutionalItemIndexService.COLLECTION_NAME);
 			
@@ -245,25 +254,26 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 				}
 			}
 			
-	
-			
-			if( names != null && authorsMap.size() < numberOfResultsToCollect)
+			if( authorsMap.size() < numberOfResultsToCollect)
 			{
-			    StringTokenizer tokenizer = new StringTokenizer(names, DefaultInstitutionalItemIndexService.SEPERATOR);
-			    while(tokenizer.hasMoreElements() && authorsMap.size() < numberOfResultsToCollect)
+				int count = 0;
+			    while(count < names.length  && authorsMap.size() < numberOfResultsToCollect)
 			    {
-			    	String nextName = tokenizer.nextToken().trim();
-			    	FacetResult f = authorsMap.get(nextName);
+			    	
+			    	FacetResult f = authorsMap.get(names[count]);
 			    	if( f== null )
 			    	{
-			    		f = new FacetResult(1l, DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES, nextName);
-			    		authorsMap.put(nextName, f);
+			    		f = new FacetResult(1l, DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES, names[count]);
+			    		authorsMap.put(names[count], f);
 			    	}
+			    	
+			    	count = count + 1;
 			    }
 			}
 			
 			if( language != null && languagesMap.size() < numberOfResultsToCollect )
 			{
+				language = language.trim();
 				FacetResult f = languagesMap.get(language);
 				if( f == null )
 				{
@@ -272,33 +282,33 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 				}
 			}
 			
-			if( subjects != null && subjectsMap.size() < numberOfResultsToCollect)
+			if( subjectsMap.size() < numberOfResultsToCollect)
 			{
-			    StringTokenizer tokenizer = new StringTokenizer(subjects, DefaultInstitutionalItemIndexService.SEPERATOR);
-			    while(tokenizer.hasMoreElements() && subjectsMap.size() < numberOfResultsToCollect)
+				int count = 0;
+			    while(count < subjects.length && subjectsMap.size() < numberOfResultsToCollect)
 			    {
-			    	String subject = tokenizer.nextToken().trim();
-			    	FacetResult f = subjectsMap.get(subject);
+			    	FacetResult f = subjectsMap.get(subjects[count]);
 			    	if( f == null )
 			    	{
-			    		f = new FacetResult(1l, DefaultInstitutionalItemIndexService.KEY_WORDS, subject);
-			    		subjectsMap.put(subject, f);
+			    		f = new FacetResult(1l, DefaultInstitutionalItemIndexService.KEY_WORDS, subjects[count]);
+			    		subjectsMap.put(subjects[count], f);
 			    	}
+			    	count = count + 1;
 			    }
 			}
 			
-			if( formats != null && formatsMap.size() < numberOfResultsToCollect)
+			if( formatsMap.size() < numberOfResultsToCollect)
 			{
-			    StringTokenizer tokenizer = new StringTokenizer(formats, DefaultInstitutionalItemIndexService.SEPERATOR);
-			    while(tokenizer.hasMoreElements() && formatsMap.size() < numberOfResultsToCollect)
+				int count = 0;
+			    while(count < formats.length  && formatsMap.size() < numberOfResultsToCollect)
 			    {
-			    	String nextFormat = tokenizer.nextToken().trim();
-			    	FacetResult f = formatsMap.get(nextFormat);
+			    	FacetResult f = formatsMap.get(formats[count]);
 			    	if( f== null )
 			    	{
-			    		f = new FacetResult(1l, DefaultInstitutionalItemIndexService.CONTENT_TYPES, nextFormat);
-			    		formatsMap.put(nextFormat, f);
+			    		f = new FacetResult(1l, DefaultInstitutionalItemIndexService.CONTENT_TYPES, formats[count]);
+			    		formatsMap.put(formats[count], f);
 			    	}
+			    	count = count + 1;
 			    }
 				
 			}
@@ -328,20 +338,17 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		{
 		    long count = 0;
 		
-			String searchString = SearchHelper.prepareFacetSearchString(f.getFacetName(), false);
+			String searchString = f.getFacetName();
 			
 			if( !searchString.trim().equals(""))
 			{
-				// add quotes around the search string
-				searchString = "\"" + searchString + "\"";
-				
-			    QueryParser subQueryParser = new QueryParser(f.getField(), analyzer);
-					    subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
+				QueryParser subQueryParser = new QueryParser(f.getField(), keywordAnalyzer);
+				searchString = "\"" + searchString +"\"";
 			    Query subQuery = subQueryParser.parse(searchString);
-			
+			    
 			    QueryWrapperFilter subQueryWrapper = new QueryWrapperFilter(subQuery);
 			    
-			    log.debug("Fixed query in process facet catagory 2 = " + searchString);
+			    log.debug("Fixed query in process facet catagory 2 = " + subQuery + " subQueryWrapper = " + subQueryWrapper);
 			    
 			    DocIdSet subQueryBits = subQueryWrapper.getDocIdSet(reader);
 			
@@ -387,7 +394,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		
 		IndexSearcher searcher = new IndexSearcher(indexFolder);
 		IndexReader reader = searcher.getIndexReader();
-		QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
+		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
@@ -482,7 +489,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		
 		IndexSearcher searcher = new IndexSearcher(indexFolder);
 		IndexReader reader = searcher.getIndexReader();
-		QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
+		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
@@ -570,14 +577,15 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			{
 				log.debug("adding filter for field " + filter.getField() + " and query " + filter.getQuery());
 			}
-		    QueryParser subQueryParser = new QueryParser(filter.getField(), analyzer);
-		    subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
-		    String fixedQuery = SearchHelper.prepareFacetSearchString(filter.getQuery(), false);
+
+			String fixedQuery = filter.getQuery();
+		    QueryParser subQueryParser = new QueryParser(filter.getField(), keywordAnalyzer);
 		    fixedQuery = "\"" + fixedQuery +"\"";
-		    Query subQuery = subQueryParser.parse(SearchHelper.prepareFacetSearchString(filter.getQuery(), false));
+		    Query subQuery = subQueryParser.parse(fixedQuery);
+		   
 		    if(log.isDebugEnabled())
 			{
-				log.debug("fixed query in get sub query filters 1 is " + fixedQuery);
+				log.debug("fixed query in get sub query filters 1 is " + subQuery);
 			}
 		    luceneFilters.add(new QueryWrapperFilter(subQuery));
 		}
@@ -625,7 +633,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		// final holder of facets
 		LinkedList<FacetResult> finalAuthorFacets;
 		
-		if( authorFacets.size() < numberOfFacetsToShow )
+		if( authorFacets.size() <= numberOfFacetsToShow )
 		{
 			finalAuthorFacets = authorFacets;
 		}
@@ -651,7 +659,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		// final holder of facets
 		LinkedList<FacetResult> finalSubjectFacets;
 		
-		if( subjectFacets.size() < numberOfFacetsToShow )
+		if( subjectFacets.size() <= numberOfFacetsToShow )
 		{
 			finalSubjectFacets = subjectFacets;
 		}
@@ -678,7 +686,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		// final holder of facets
 		LinkedList<FacetResult> finalLanguageFacets;
 		
-		if( languageFacets.size() < numberOfFacetsToShow )
+		if( languageFacets.size() <= numberOfFacetsToShow )
 		{
 			finalLanguageFacets = languageFacets;
 		}
@@ -706,7 +714,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		// final holder of facets
 		LinkedList<FacetResult> finalFormatFacets;
 		
-		if( formatFacets.size() < numberOfFacetsToShow )
+		if( formatFacets.size() <= numberOfFacetsToShow )
 		{
 			finalFormatFacets = formatFacets;
 		}
@@ -733,7 +741,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		// final holder of facets
 		LinkedList<FacetResult> finalCollectionFacets;
 		
-		if( collectionFacets.size() < numberOfFacetsToShow )
+		if( collectionFacets.size() <= numberOfFacetsToShow )
 		{
 			finalCollectionFacets = collectionFacets;
 		}
@@ -830,7 +838,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		
 		IndexSearcher searcher = new IndexSearcher(indexFolder);
 		IndexReader reader = searcher.getIndexReader();
-		QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
+		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
 		
@@ -934,6 +942,18 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	 */
 	public void setMaxNumberOfMainQueryHits(int maxNumberOfMainQueryHits) {
 		this.maxNumberOfMainQueryHits = maxNumberOfMainQueryHits;
+	}
+	
+	private HashMap<String,Float> getBoostedFields()
+	{
+		// values to boost on searching
+		HashMap<String,Float> boosts = new HashMap<String,Float>();
+		boosts.put(DefaultInstitutionalItemIndexService.NAME, 3f);
+		boosts.put(DefaultInstitutionalItemIndexService.SUB_TITLES, 3f);
+		boosts.put(DefaultInstitutionalItemIndexService.CONTRIBUTOR_NAMES_ANALYZED, 4f);
+		boosts.put(DefaultInstitutionalItemIndexService.KEY_WORDS_ANALYZED, 3f);
+		
+		return boosts;
 	}
 
 	

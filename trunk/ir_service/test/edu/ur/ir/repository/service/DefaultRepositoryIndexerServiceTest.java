@@ -349,7 +349,7 @@ public class DefaultRepositoryIndexerServiceTest {
         genericItem2.addReport(series2, "report 3456");
         genericItem2.addSubTitle("generic 2");
         genericItem2.setItemAbstract("words go here");
-        genericItem2.setItemKeywords("biology, science, computer");
+        genericItem2.setItemKeywords("biology; science; computer");
         genericItem2.setDescription("description");
         genericItem2.setPrimaryContentType(contentType2);
         genericItem2.setLanguageType(languageType2);

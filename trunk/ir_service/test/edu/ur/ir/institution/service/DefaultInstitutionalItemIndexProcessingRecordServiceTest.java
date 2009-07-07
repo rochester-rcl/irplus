@@ -50,8 +50,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordServiceTest {
 		
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
-		IndexProcessingType noFileChangeProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE);
-		indexProcessingTypeService.save(noFileChangeProcessingType);
 		
 		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
 		indexProcessingTypeService.save(updateProcessingType);
@@ -77,12 +75,10 @@ public class DefaultInstitutionalItemIndexProcessingRecordServiceTest {
 		ts = tm.getTransaction(td);
 		assert  recordProcessingService.get(1l, insertProcessingType) != null : "Should find inser record  after tyring update " + insertProcessingRecord;
 		assert  recordProcessingService.get(1l, updateProcessingType) == null : "Should not find update record " + update;
-		InstitutionalItemIndexProcessingRecord noFileChangeProcessingRecord = recordProcessingService.save(1l, noFileChangeProcessingType);
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
 		assert  recordProcessingService.get(1l, insertProcessingType) != null : "Should find record  after tyring no file change " + insertProcessingRecord;
-		assert  recordProcessingService.get(1l, noFileChangeProcessingType) == null : "Should not find update not file change record " + noFileChangeProcessingRecord ;
 		InstitutionalItemIndexProcessingRecord deleteProcessingRecord = recordProcessingService.save(1l, deleteProcessingType);
 		tm.commit(ts);
 		 
@@ -93,7 +89,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordServiceTest {
 
 		recordProcessingService.delete(recordProcessingService.get(deleteProcessingRecord.getId(), false));
 
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE));
 		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
 		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
@@ -112,8 +107,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordServiceTest {
 		
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
-		IndexProcessingType noFileChangeProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE);
-		indexProcessingTypeService.save(noFileChangeProcessingType);
 		
 		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
 		indexProcessingTypeService.save(updateProcessingType);
@@ -134,13 +127,11 @@ public class DefaultInstitutionalItemIndexProcessingRecordServiceTest {
 		
 		ts = tm.getTransaction(td);
 		assert  recordProcessingService.get(1l, updateProcessingType) != null : "Should find record " + updateProcessingRecord;
-		InstitutionalItemIndexProcessingRecord noFileChangeProcessingRecord = recordProcessingService.save(1l, noFileChangeProcessingType);
 		tm.commit(ts);
 		
 	
 		ts = tm.getTransaction(td);
 		assert  recordProcessingService.get(1l, updateProcessingType) != null : "Should find record  after tyring no file change " + updateProcessingRecord;
-		assert  recordProcessingService.get(1l, noFileChangeProcessingType) == null : "Should not find update not file change record " + noFileChangeProcessingRecord ;
 		InstitutionalItemIndexProcessingRecord deleteProcessingRecord = recordProcessingService.save(1l, deleteProcessingType);
 		tm.commit(ts);
 		 
@@ -151,7 +142,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordServiceTest {
 
 		recordProcessingService.delete(recordProcessingService.get(deleteProcessingRecord.getId(), false));
 
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE));
 		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
 		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
@@ -162,65 +152,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordServiceTest {
 
 	}
 	
-	/**
-	 * Test update record insert 
-	 * 
-	 */
-	public void noFileChangeUpdateRecordTest()
-	{
-		
-		// start a new transaction
-		TransactionStatus ts = tm.getTransaction(td);
-		IndexProcessingType noFileChangeProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE);
-		indexProcessingTypeService.save(noFileChangeProcessingType);
-		
-		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
-		indexProcessingTypeService.save(updateProcessingType);
-		
-		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
-		indexProcessingTypeService.save(deleteProcessingType);
-		
-		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
-		indexProcessingTypeService.save(insertProcessingType);
-		
-		
-		tm.commit(ts);
-		
-		ts = tm.getTransaction(td);
-		InstitutionalItemIndexProcessingRecord noFilechangeRecord = recordProcessingService.save(1l, noFileChangeProcessingType);
-		tm.commit(ts);
-		 
-		
-		ts = tm.getTransaction(td);
-		assert  recordProcessingService.get(1l, noFileChangeProcessingType) != null : "Should find record " + noFilechangeRecord;
-		InstitutionalItemIndexProcessingRecord updateProcessingRecord = recordProcessingService.save(1l, updateProcessingType);
-		tm.commit(ts);
-		
-	
-		ts = tm.getTransaction(td);
-		assert  recordProcessingService.get(1l, updateProcessingType) != null : "Should find record  after tyring no file change " + updateProcessingRecord;
-		assert  recordProcessingService.get(1l, noFileChangeProcessingType) == null : "Should not find no file update change record " + noFilechangeRecord ;
-		InstitutionalItemIndexProcessingRecord deleteProcessingRecord = recordProcessingService.save(1l, deleteProcessingType);
-		tm.commit(ts);
-		 
-		 
-		ts = tm.getTransaction(td);
-		assert recordProcessingService.get(1l, updateProcessingType) == null : " Should not be able to find record " + updateProcessingRecord;
-		assert recordProcessingService.get(1l, deleteProcessingType) != null : "Should find record " + deleteProcessingRecord;
-
-		recordProcessingService.delete(recordProcessingService.get(deleteProcessingRecord.getId(), false));
-
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE));
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
-		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
-
-
-		tm.commit(ts);
-		 
-
-	}
-
 	
 }
 

@@ -103,4 +103,11 @@ public interface InstitutionalItemIndexProcessingRecordService {
     public void processItemsInCollection(
 			InstitutionalCollection institutionalCollection,
 			IndexProcessingType processingType);
+    
+    /**
+     * Add all items within the repository to be processed.
+     * 
+     * @param processingType
+     */
+    public void processItemsInRepository(IndexProcessingType processingType);
 }
