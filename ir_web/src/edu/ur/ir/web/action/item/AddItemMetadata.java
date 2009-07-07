@@ -674,7 +674,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
 
 		if (institutionalItems != null) {
-			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE); 
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
 
 			for(InstitutionalItem i : institutionalItems) {
 				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);

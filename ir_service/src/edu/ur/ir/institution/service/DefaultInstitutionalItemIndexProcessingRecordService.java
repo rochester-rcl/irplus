@@ -137,6 +137,17 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 		log.debug("seting collection items for re-indexing  collection = " + institutionalCollection);
 	    processingRecordDAO.insertAllItemsForCollection(institutionalCollection, processingType);
 	}
+	
+	/**
+	 * Add all items within the repository to be processed.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#processItemsInCollection(edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public void processItemsInRepository( IndexProcessingType processingType)
+	{
+		log.debug("seting collection items for re-indexing  repository processing type = " + processingType);
+	    processingRecordDAO.insertAllItemsForRepository(processingType);
+	}
 
 	
 	/**
@@ -148,7 +159,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 		
 		
 		InstitutionalItemIndexProcessingRecord record = null;
-		IndexProcessingType noFileChangeProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE);
 		IndexProcessingType updateProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE);
 		IndexProcessingType deleteProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE);
 		IndexProcessingType insertProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.INSERT);
@@ -163,31 +173,14 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 		}
 		else
 		{
-			if( processingType.equals(noFileChangeProcessingType))
-			{
-				// check to see if there is an update, insert or delete record
-				if( get(itemId, updateProcessingType) != null || get(itemId, insertProcessingType) != null || get(itemId, deleteProcessingType) != null )
-				{
-					// do nothing record already set to be updated/inserted/deleted with it's files
-				}
-				else
-				{
-					record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
-					save(record);
-				}
-			}
-			else if(processingType.equals(updateProcessingType))
+			
+			if(processingType.equals(updateProcessingType))
 			{
 				// only update if there is no insert or delete processing type records
 				if( get(itemId, insertProcessingType) == null &&  get(itemId, deleteProcessingType) == null)
 				{
 					record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
 					// update record overrides a no file processing type record
-				    InstitutionalItemIndexProcessingRecord noChangeProcessing = this.get(itemId, noFileChangeProcessingType);
-				    if( noChangeProcessing != null )
-				    {
-					    delete(noChangeProcessing);
-				    }
 				    record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
 				    save(record);
 				}
@@ -200,12 +193,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 			else if(processingType.equals(deleteProcessingType))
 			{
 				// deleting item - so all other processing types do not need to occur
-				InstitutionalItemIndexProcessingRecord noChangeProcessing = this.get(itemId, noFileChangeProcessingType);
-				if( noChangeProcessing != null )
-				{
-					delete(noChangeProcessing);
-				}
-				
 				InstitutionalItemIndexProcessingRecord updateProcessing = this.get(itemId, updateProcessingType);
 				if( updateProcessing != null )
 				{
@@ -224,7 +211,7 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 			else if(processingType.equals(insertProcessingType))
 			{
 				// there should never be an update, delete or no file change record existing for an insert
-				if( get(itemId, updateProcessingType) == null &&  get(itemId, deleteProcessingType) == null && get(itemId, noFileChangeProcessingType) == null)
+				if( get(itemId, updateProcessingType) == null &&  get(itemId, deleteProcessingType) == null )
 				{
 				    record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
 				    save(record);

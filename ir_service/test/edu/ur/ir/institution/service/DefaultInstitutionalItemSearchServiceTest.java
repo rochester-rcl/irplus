@@ -504,7 +504,10 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem2.addReport(series2, "report 3456");
         genericItem2.addSubTitle("generic 2");
         genericItem2.setItemAbstract("words go here");
-        genericItem2.setItemKeywords("biology, science, computer");
+        
+        String keywords = "biology" + GenericItem.KEYWORD_SEPARATOR + "sicence" + GenericItem.KEYWORD_SEPARATOR
+        + "computer" + GenericItem.KEYWORD_SEPARATOR;
+        genericItem2.setItemKeywords(keywords);
         genericItem2.setDescription("description");
         genericItem2.setPrimaryContentType(contentType2);
         genericItem2.setLanguageType(languageType2);
@@ -542,7 +545,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 			assert searchHelper.getHitSize() == 2 : "Should have 2 hits but have " + searchHelper;
 			
 			List<FacetFilter> filters = new LinkedList<FacetFilter>();
-			FacetFilter facetFilter = new FacetFilter(DefaultInstitutionalItemIndexService.KEY_WORDS, "computer", "Keyword");
+			FacetFilter facetFilter = new FacetFilter(DefaultInstitutionalItemIndexService.KEY_WORDS, "computer", "keyword");
 			filters.add(facetFilter);
 			searchHelper = institutionalItemSearchService.executeSearchWithFacets("biology", 
 					filters, 

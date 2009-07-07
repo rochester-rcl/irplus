@@ -212,14 +212,14 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 			
 			if( collectionsToMove.size() > 0 )
 			{
-				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE); 
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
 				institutionalItemIndexProcessingRecordService.processItemsInCollection( destination.getTreeRoot(), processingType);
 			}
 			
 			for( InstitutionalItem i : itemsToMove)
 			{
 				// set item to be updated in index
-				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE); 
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
 				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
@@ -239,7 +239,7 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 						collectionsToMove);
 				for(InstitutionalCollection c : collectionsToMove)
 				{
-					IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE); 
+					IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
 					institutionalItemIndexProcessingRecordService.processItemsInCollection( c, processingType);
 				}
 
@@ -252,7 +252,7 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 		{
 		    if( c.getTreeRoot() == null || destination == null || (!c.getTreeRoot().equals(destination.getTreeRoot())))
 		    {
-			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE); 
+			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
 				institutionalItemIndexProcessingRecordService.processItemsInCollection( c.getTreeRoot(), processingType);
 		    }
 		}

@@ -154,8 +154,22 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 			    return new Long(q.executeUpdate());
             }
 		});
-		
-		
+	}
+	
+	/**
+	 * Insert all items for a repository
+	 * 
+	 */
+	public Long insertAllItemsForRepository(final IndexProcessingType processingType) {
+		return (Long) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session session)
+                    throws HibernateException, SQLException {
+		      
+		        Query q = session.getNamedQuery("insertAllItemsForRepository");
+			    q.setParameter("processingTypeId", processingType.getId());
+			    return new Long(q.executeUpdate());
+            }
+		});
 	}
 
 }

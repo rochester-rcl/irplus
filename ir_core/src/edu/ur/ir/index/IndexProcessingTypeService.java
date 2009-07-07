@@ -34,9 +34,6 @@ public interface IndexProcessingTypeService {
 	/** default update processing type */
 	public static final String UPDATE = "UPDATE";
 	
-	/** default update processing type no files have been changed*/
-	public static final String UPDATE_NO_FILE_CHANGE = "UPDATE_NO_FILE_CHANGE";
-	
 	/** default delete processing type */
 	public static final String DELETE = "DELETE";
 	

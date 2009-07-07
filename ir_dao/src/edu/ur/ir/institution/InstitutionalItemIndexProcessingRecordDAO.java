@@ -58,4 +58,13 @@ public interface InstitutionalItemIndexProcessingRecordDAO
 	 * @return - number of records created.
 	 */
 	public Long insertAllItemsForCollection(InstitutionalCollection institutionalCollection, IndexProcessingType processingType);
+	
+	/**
+	 * Insert all items for the repository
+	 * 
+	 * @param processingType - processing type.
+	 * 
+	 * @return - number of records created for processing
+	 */
+	public Long insertAllItemsForRepository(IndexProcessingType processingType);
 }

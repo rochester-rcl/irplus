@@ -130,16 +130,6 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 						log.error(e);
 					}
 		        }
-		        else if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.UPDATE_NO_FILE_CHANGE))
-		        {
-		            log.debug("updating item  " + i);
-		            try {
-						institutionalItemIndexService.updateItem(i, f, false);
-						processingRecordService.delete(record);
-					} catch (NoIndexFoundException e) {
-						log.error(e);
-					}
-		        }
 		        else if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.INSERT))
 				{
 		        	try {
