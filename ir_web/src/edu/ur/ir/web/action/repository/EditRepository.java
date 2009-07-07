@@ -37,7 +37,6 @@ import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.repository.LicenseService;
 import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.Repository;
-import edu.ur.ir.repository.RepositoryIndexerService;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserIndexService;
@@ -99,8 +98,7 @@ Validateable, UserIdAware{
 	/** location for user workspace folders  */
 	private String userWorkspaceIndexFolder;
 	
-	/** Service for re-indexing repository information */
-	private RepositoryIndexerService repositoryIndexerService;
+
 	
 	/** Service for dealing with handle information  */
 	private HandleService handleService;
@@ -432,15 +430,6 @@ Validateable, UserIdAware{
 
 	public void setIrFilePictureId(Long irFilePictureId) {
 		this.irFilePictureId = irFilePictureId;
-	}
-
-	public RepositoryIndexerService getRepositoryIndexerService() {
-		return repositoryIndexerService;
-	}
-
-	public void setRepositoryIndexerService(
-			RepositoryIndexerService repositoryIndexerService) {
-		this.repositoryIndexerService = repositoryIndexerService;
 	}
 
 	public int getBatchSize() {
