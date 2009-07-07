@@ -22,6 +22,9 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 
 <c:if test="${!ur:isEmpty(researchers)}">
+
+    <c:url var="browseResearchers" value="/viewResearcherBrowse.action"/>
+    <p><strong><a href="${browseResearchers}">Browse All/Search</a></strong></p>
 	<c:forEach var="researcher" items="${researchers}" varStatus="status">
         <c:url var="researcherUrl" value="/viewResearcherPage.action">
              <c:param name="researcherId" value="${researcher.id}"/>

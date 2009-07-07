@@ -65,6 +65,8 @@
             <div id="bd">
                <h3>About IR Plus</h3> 
                
+               <p>A university-based, long-term, digital repository for the management,
+                  dissemination and stewardship of digital materials. </p>
             </div>
             <!--  end the body tag --> 
 
