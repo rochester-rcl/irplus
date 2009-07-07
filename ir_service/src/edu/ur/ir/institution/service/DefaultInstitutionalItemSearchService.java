@@ -115,6 +115,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			int idsToCollectStartPosition ) 
 	        throws CorruptIndexException, IOException, ParseException 
 	{
+		log.debug("orginal query 4 = " + mainQueryString);
 		if( searchDirectoryIsEmpty(indexFolder) || isInvalidQuery(mainQueryString))
 		{
 			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
@@ -132,7 +133,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
-		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, true);
+		// the search helper MUST BE SET TO FALSE if diacritic based searches are to work
+		// putting a * following a diacritic does not work
+		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, false);
 		Query mainQuery = parser.parse(executedQuery);
 		if( log.isDebugEnabled() )
 		{
@@ -386,7 +389,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			int idsToCollectStartPosition)
 			throws CorruptIndexException, IOException, ParseException {
 
-		
+		log.debug("orginal query 3 = " + mainQueryString);
 		if( searchDirectoryIsEmpty(indexFolder) || isInvalidQuery(mainQueryString))
 		{
 			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
@@ -400,7 +403,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
-		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, true);
+		// the search helper MUST BE SET TO FALSE if diacritic based searches are to work
+		// putting a * following a diacritic does not work
+		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, false);
 		
 		if( log.isDebugEnabled() )
 		{
@@ -482,6 +487,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			InstitutionalCollection collection)
 			throws CorruptIndexException, IOException, ParseException {
 
+		log.debug("orginal query 2 = " + mainQueryString);
 		if( searchDirectoryIsEmpty(indexFolder) || isInvalidQuery(mainQueryString))
 		{
 			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
@@ -495,7 +501,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
-		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, true);
+		// the search helper MUST BE SET TO FALSE if diacritic based searches are to work
+		// putting a * following a diacritic does not work
+		String executedQuery = SearchHelper.prepareMainSearchString(mainQueryString, false);
 		Query mainQuery = parser.parse(executedQuery);
 
 		if( log.isDebugEnabled() )
@@ -829,6 +837,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			InstitutionalCollection collection) throws CorruptIndexException,
 			IOException, ParseException 
 	{
+		log.debug("orginal query 1= " + mainQueryString);
 		log.debug("execute search with facets for a collection");
 		if( searchDirectoryIsEmpty(indexFolder) || isInvalidQuery(mainQueryString))
 		{
@@ -845,7 +854,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
-		String executedQuery  = SearchHelper.prepareMainSearchString(mainQueryString, true);
+		// the search helper MUST BE SET TO FALSE if diacritic based searches are to work
+		// putting a * following a diacritic does not work
+		String executedQuery  = SearchHelper.prepareMainSearchString(mainQueryString, false);
 		Query mainQuery = parser.parse(executedQuery);
 		
 		if(log.isDebugEnabled())
