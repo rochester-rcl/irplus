@@ -21,7 +21,6 @@
 	<test name="UR IR Service Testing">
 		<classes>
 		    <class name="edu.ur.ir.repository.service.DefaultRepositoryServiceTest"/>
-		    <class name="edu.ur.ir.repository.service.DefaultRepositoryIndexerServiceTest"/>
 		    
 			<class name="edu.ur.ir.institution.service.DefaultInstitutionalCollectionServiceTest"/>
 		    <class name="edu.ur.ir.institution.service.DefaultInstitutionalItemIndexServiceTest"/>
