@@ -258,7 +258,7 @@
 	
 	      <tr>
 	      <td class="rowBorder">				  
-	          <label  for="itemForm_keywords">Subject Keywords (comma separated)</label>
+	          <label  for="itemForm_keywords">Subject Keywords - semicolon(;) separated</label>
 	      </td>
 	      </tr>
 	
