@@ -69,28 +69,24 @@
       
         <h3>Edit Person Names</h3>
   
-        <div id="bd">    
-	        <table>
-	            <tr>
-					<td>
-		                <button id="showPersonName" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New Person Name</button> 
-	                </td>
-	                <td>
-	                    <button id="showDeletePersonName" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button>
-	                </td>		            
-
-	             </tr>
-	         </table>
-	         <ur:div id="personNames"></ur:div>
+        <div id="bd">
+            <br/>    
+		    <button id="showPersonName" class="ur_button" 
+ 		            onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';">New Person Name</button> 
+	            
+	        <button id="showDeletePersonName" class="ur_button" 
+ 		            onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';">Delete</button>
+	        <br/>
+	        <br/>
+	         
+	         <div id="personNames"></div>
 	      
-	         <ur:div id="newPersonNameDialog" cssClass="hidden">
-	             <ur:div cssClass="hd">Name Information</ur:div>
-		         <ur:div cssClass="bd">
-		             <ur:basicForm id="addPersonName" name="newPersonNameForm" 
+	         <div id="newPersonNameDialog" class="hidden">
+	             <div class="hd">Name Information</div>
+		         <div class="bd">
+		             <form id="addPersonName" name="newPersonNameForm" 
 		                       method="post" 
 		                       action="user/createPersonName.action">
 		              
@@ -103,7 +99,7 @@
 		             <input type="hidden" id="newPersonNameForm_new"
 		                   name="newPersonName" value="true"/>
 		              
-		             <ur:div id="personError" cssClass="errorMessage"></ur:div>
+		             <div id="personError" class="errorMessage"></div>
 
 			           <table class="formTable">    
 						    <tr>       
@@ -155,29 +151,29 @@
 		                   			 name="authoritative" value="true" size="45"/> </td>
 							</tr>	
 						</table>		          
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+		          </form>
+		      </div>
+	      </div>
 	      
-	      <ur:div id="deletePersonNameDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Delete People</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="deletePersonName" name="deletePersonName" method="POST" 
+	      <div id="deletePersonNameDialog" class="hidden">
+	          <div class="hd">Delete People</div>
+		      <div class="bd">
+		          <form id="deletePersonName" name="deletePersonName" method="post" 
 		              action="user/deletePersonName.action">
 		              
 		              
-		              <ur:div id="deletePersonNameError" cssClass="errorMessage"></ur:div>
+		              <div id="deletePersonNameError" class="errorMessage"></div>
 			          <p>Are you sure you wish to delete the selected people?</p>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+		          </form>
+		      </div>
+	      </div>
 
-	      <ur:div id="deletePersonNameMessageDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Delete Name</ur:div>
-		      <ur:div cssClass="bd">
-		              <ur:div id="deletePersonNameMessage" cssClass="errorMessage"></ur:div>
-		      </ur:div>
-	      </ur:div>
+	      <div id="deletePersonNameMessageDialog" class="hidden">
+	          <div class="hd">Delete Name</div>
+		      <div class="bd">
+		              <div id="deletePersonNameMessage" class="errorMessage"></div>
+		      </div>
+	      </div>
 	      
 
       </div>

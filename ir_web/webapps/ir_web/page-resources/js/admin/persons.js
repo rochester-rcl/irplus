@@ -28,6 +28,7 @@ var mySearchPersonAction = basePath + 'admin/searchPerson.action';
 var newPersonAction = basePath + 'user/createPerson.action';
 var deletePersonAction = basePath + 'user/deletePerson.action';
 var updatePersonAction = basePath + 'user/updatePerson.action';
+var getPersonAction = basePath + 'user/getPerson.action';
 
 // object to hold the specified person type data.
 var myPersonTable = new YAHOO.ur.table.Table('myPersons', 'newPersons');
@@ -38,6 +39,40 @@ var myPersonTable = new YAHOO.ur.table.Table('myPersons', 'newPersons');
  * person namespace
  */
 YAHOO.ur.person = {
+		
+	/**
+	 * function to edit field information
+	 */
+	get : function(id)
+	{	    
+	    /*
+	     * This call back updates the html when a editing a field
+	     */
+	    var callback =
+	    {
+	        success: function(o) 
+	        {
+	        	// check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {     
+	                var divToUpdate = document.getElementById('new_person_fields');
+	                divToUpdate.innerHTML = o.responseText; 
+	               	document.newPersonForm.newPerson.value = "false";
+	               	YAHOO.ur.person.newPersonDialog.showDialog();
+	            }
+	        },
+		
+	        failure: function(o) 
+	        {
+	            alert('edit person id failed ' + o.status + ' status text ' + o.statusText );
+	        }
+	    };
+	        
+	    var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+	    	getPersonAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
+	        callback, null);
+	},		
 
 
 	/**
@@ -142,8 +177,17 @@ YAHOO.ur.person = {
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
-		        //get the response from adding a person type
-		        var response = eval("("+o.responseText+")");
+	        	//get the response from adding a field
+	            var response = o.responseText;
+	            var personForm = document.getElementById('new_person_fields');
+	    
+	            // update the form fields with the response.  This updates
+	            // the form, if there was an issue, update the form with
+	            // the error messages.
+	            personForm.innerHTML = o.responseText;
+	    
+	            // determine if the add/edit was a success
+	            var success = document.getElementById("name_added").value;
 		    
 		        //if the person type was not added then show the user the error message.
 		        // received from the server
@@ -235,28 +279,6 @@ YAHOO.ur.person = {
 		    YAHOO.ur.person.newPersonDialog, true);
 	},
 	    
-	    
-    // function to edit person type information
-    editPerson : function(id, authNameId, fName, sName, mName,familyName, initials, num, by,  dy)
-    {
-  	    document.getElementById('newPersonForm_id').value = id;
-  	    document.getElementById('newPersonForm_auth_id').value = authNameId;
-    	document.getElementById('person_first_name').value = fName;
-	    document.getElementById('person_last_name').value = sName;
-	    document.getElementById('person_middle_name').value = mName;
-	    document.getElementById('person_family_name').value = familyName;
-	    document.getElementById('person_initials').value = initials;
-	    document.getElementById('person_numeration').value = num;
-
-	    if (by != 0) {
-	    	document.getElementById('person_birthdate_year').value = by;
-	    }
-	    if (dy != 0) {
-	    	document.getElementById('person_deathdate_year').value = dy;
-	    }
-	    document.newPersonForm.newPerson.value = "false";
-	    YAHOO.ur.person.newPersonDialog.showDialog();
-    },
 
 	 /** 
 	  * clear out any form data messages or input

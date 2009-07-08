@@ -78,33 +78,31 @@
 	        <div class="yui-content">
 	            <div id="tab1">
  
-				    <table>
-				        <tr>
-							<td>
-				                <button id="showPerson" class="ur_button" 
+				    <br/>
+				    
+				    <button id="showPerson" class="ur_button" 
 				                               onmouseover="this.className='ur_buttonover';"
 				                               onmouseout="this.className='ur_button';">New Person</button> 
-			                </td>
-			                <td>
-			                    <button id="showDeletePerson" class="ur_button" 
+			        
+                    <button id="showDeletePerson" class="ur_button" 
 				                               onmouseover="this.className='ur_buttonover';"
 				                               onmouseout="this.className='ur_button';">Delete</button>
-			                </td>	            
-				          </tr>
-				      </table>
 
-				      <ur:div id="newPersons"></ur:div>
+                     <br/>
+                     <br/>
+				     <div id="newPersons"></div>
 				</div>
 
 	            <div id="tab2">
-	            	<ur:basicForm method="post" id="person_search_form" name="personSearchForm" action="javascript:YAHOO.ur.person.searchPerson(0,1,1);">
+	            	<form method="post" id="person_search_form" name="personSearchForm" 
+	            	action="javascript:YAHOO.ur.person.searchPerson(0,1,1);">
 	            		<br>
 						Search Person : <input type="input" name="query" size="50"/>
 						<button id="search_person" class="ur_button" type="button"
 		                       onmouseover="this.className='ur_buttonover';"
 		                       onmouseout="this.className='ur_button';"
 		                       onclick="javascript:YAHOO.ur.person.searchPerson(0,1,1);">Search</button>
-					</ur:basicForm>
+					</form>
 					
 					<div id="search_results_div"></div>
 				</div>
@@ -114,104 +112,38 @@
       </div>
       <!--  end body div -->		
 			      
-	      <ur:div id="newPersonDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Person Information</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="addPerson" name="newPersonForm" 
+	      <div id="newPersonDialog" class="hidden">
+	          <div class="hd">Person Information</div>
+		      <div class="bd">
+		          <form id="addPerson" name="newPersonForm" 
 		              method="post" 
 		              action="user/createPerson.action">
-		              
-		              <input type="hidden" id="newPersonForm_id"
-		               name="id" value=""/>
-		               
-		              <input type="hidden" id="newPersonForm_auth_id"
-		               name="personNameId" value=""/>
-		               
-		              <input type="hidden" id="new_person"
-		               name="newPerson" value="true"/>
-		              
-		              <ur:div id="personError" cssClass="errorMessage"></ur:div>
-			          
-			           <table class="formTable">    
-						    <tr>       
-					            <td align="left" class="label">First Name:*</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_first_name" 
-							          name="personName.forename" 
-							          value="" size="45"/> </td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">Last Name:*</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_last_name" 
-				         			 name="personName.surname" 
-				         			 value="" size="45"/> </td>
-							</tr>
-							<tr>       
-					            <td align="left" class="label">Middle Name:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_middle_name" 
-				          			name="personName.middleName" 
-				          			value="" size="45"/> </td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">Family Name:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_family_name" 
-				          			name="personName.familyName" 
-				          			value="" size="45"/> </td>
-							</tr>
-						    <tr>       
-					            <td align="left" class="label">Initials:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_initials" 
-				          			name="personName.initials" 
-				          			value="" size="45"/> </td>
-							</tr>
-							<tr>
-							    <td align="left" class="label">Numeration:</td>
-					            <td align="left" class="input"><input type="text" 
-							    id="person_numeration" 
-				         			 name="personName.numeration" 
-				          			 value="" size="45"/> </td>
-							</tr>
-							<tr>       
-					            <td align="left" class="label">Birth Year:</td>
-					            <td align="left" class="label">
-				          		Year:<input  type="text" id="person_birthdate_year" name="birthYear" size="4" maxlength ="4"/> </td>
-							</tr>
-							<tr>       
-					            <td align="left" class="label">Death Year:</td>
-							    <td align="left" class="label">
-				          		Year:<input type="text" id="person_deathdate_year" name="deathYear" size="4" maxlength ="4"/>
-				          		</td>
-							</tr>
-				          
-			           </table>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+		              <div id="new_person_fields">
+		                  <c:import url="person_form_frag.jsp"/>    
+		              </div>
+		          </form>
+		      </div>
+	      </div>
 	      
-	      <ur:div id="deletePersonDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Delete People</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="deletePerson" name="deletePerson" method="POST" 
+	      <div id="deletePersonDialog" class="hidden">
+	          <div class="hd">Delete People</div>
+		      <div class="bd">
+		          <form id="deletePerson" name="deletePerson" method="post" 
 		              action="user/deletePerson.action">
 		              
-		              
-		              <ur:div id="deletePersonError" cssClass="errorMessage"> </ur:div>
+		              <div id="deletePersonError" class="errorMessage"> </div>
 			          <p>Are you sure you wish to delete the selected people?</p>
 			          
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+		          </form>
+		      </div>
+	      </div>
  
- 	      <ur:div id="deletePersonMessageDialog" cssClass="hidden">
-	          <ur:div cssClass="hd">Delete People</ur:div>
-		      <ur:div cssClass="bd">
-		              <ur:div id="deletePersonMessage" cssClass="errorMessage"></ur:div>
-		      </ur:div>
-	      </ur:div>
+ 	      <div id="deletePersonMessageDialog" class="hidden">
+	          <div class="hd">Delete People</div>
+		      <div class="bd">
+		              <div id="deletePersonMessage" class="errorMessage"></div>
+		      </div>
+	      </div>
       
 
   

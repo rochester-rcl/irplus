@@ -1062,7 +1062,8 @@
             class="edu.ur.ir.web.action.person.ManagePersons">
             <interceptor-ref name="crudStack" />
             <result name="input">/pages/admin/item/metadata/persons/persons.jsp</result>
-            <result name="added">/pages/admin/item/metadata/persons/person_added.jsp</result>
+            <result name="added">/pages/admin/item/metadata/persons/person_form_frag.jsp</result>
+            <result name="get">/pages/admin/item/metadata/persons/person_form_frag.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/persons/person_deleted.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
         </action>
