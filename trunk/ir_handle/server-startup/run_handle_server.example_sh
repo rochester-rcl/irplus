@@ -1,0 +1,15 @@
+#set the classpath by adding all files
+# in the /ir/hs/bin directory
+# MAKE sure the ir_plus properties file has been set
+# an error log vile should be written to /ir/hs/srv_1/error.log
+# check for any errors after starting
+
+for line in /ir/hs/bin/*.*
+do
+
+CLASSPATH="$CLASSPATH:$line"
+
+done
+
+
+java -classpath $CLASSPATH net.handle.server.Main /ir/hs/srv_1

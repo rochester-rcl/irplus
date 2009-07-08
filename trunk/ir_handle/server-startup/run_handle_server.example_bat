@@ -1,3 +1,9 @@
+rem -----------------------------------------------------------------
+rem WINDOWS Start up script for handle server using ir plus system
+rem
+rem MAKE SURE the library values set are correct DO NOT FORGET
+rem to copy the properties file into the bin directory
+rem -----------------------------------------------------------------
 @echo off
 set HS_BIN_DIR=C:\hs\bin
 
@@ -55,4 +61,4 @@ set CLASSPATH= %HS_BIN_DIR%\antlr-2.7.7.jar;^
 %HS_BIN_DIR%\xmlbeans-2.3.0.jar;
 
 echo CLASSPATH = %CLASSPATH%
-java -cp %CLASSPATH% net.handle.server.Main hs\srv_1 
+java -cp %CLASSPATH% net.handle.server.Main C:\hs\srv_1 
