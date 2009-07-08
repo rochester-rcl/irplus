@@ -503,19 +503,8 @@
 	   <property name="personNameDAO" ref="personNameDAO"/>
    </bean>
    
-   
    <!-- ****************************************** --> 
-   <!-- Handle service                             -->
-   <!-- ****************************************** --> 
-   <bean id="handleService" 
-       class="edu.ur.ir.handle.service.DefaultHandleService">
-	   <property name="handleInfoDAO" ref="handleInfoDAO"/>
-	   <property name="handleNameAuthorityDAO" ref="handleNameAuthorityDAO"/>
-   </bean>
-   
-   
-   <!-- ****************************************** --> 
-   <!-- Handle url service                             -->
+   <!-- Item url service                             -->
    <!-- ****************************************** --> 
    <bean id="institutionalItemVersionUrlGenerator" class="edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator">
        <property name="baseWebPath" value="${base.web.path}"/>
