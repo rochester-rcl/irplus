@@ -114,6 +114,11 @@
     <import resource="ir-handle-hibernate.xml"/>
     
     <!-- ****************************************** --> 
+    <!-- Handle service classes -->
+    <!-- ****************************************** --> 
+    <import resource="ir-handle-service.xml"/>
+    
+    <!-- ****************************************** --> 
     <!-- Index processing persistence classes -->
     <!-- ****************************************** --> 
     <import resource="ir-index-hibernate.xml"/>
