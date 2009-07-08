@@ -93,7 +93,7 @@
                    
                        <div class="contentBoxContent">
                            <c:url var="searchRepositoryItems" value="/searchRepositoryItems.action"/>
-                           <form method="GET" action="${searchRepositoryItems}">
+                           <form method="get" action="${searchRepositoryItems}">
                                 <p>Search: <input type="text" name="query" size="50"/>
                                  <br/>
                                  <br/>
