@@ -54,63 +54,14 @@
     <import resource="transaction-manager.xml"/>
 
     <!-- ****************************************** --> 
-    <!-- Email Sender 		 -->
-    <!-- ****************************************** --> 
-    <import resource="mail-sender.xml"/>   
-    
-    <!-- ****************************************** --> 
-    <!-- Ir core resources	 -->
-    <!-- ****************************************** --> 
-    <import resource="ir-core.xml"/> 
-
-    <!-- ****************************************** --> 
-    <!-- Folder Info  -->
-    <!-- File Database  -->
-    <!-- File Server  -->
-    <!-- File Information  -->
-    <!-- Checksum Algorithm Information  -->
-    <!-- Top media type  -->
-    <!-- Top sub type  -->
-    <!-- sub type extension-->
-    <!-- ****************************************** --> 
-    <import resource="file-db-hibernate.xml"/>
-    
- 
-    <import resource="ir-file-hibernate.xml"/>
-    <import resource="ir-item-hibernate.xml"/>
-    <import resource="ir-person-hibernate.xml"/>
-    <import resource="ir-repository-hibernate.xml"/>
-    <import resource="ir-institution-hibernate.xml"/>
-    <import resource="ir-security-hibernate.xml"/>
-    <import resource="ir-user-hibernate.xml"/>
-    <import resource="ir-news-hibernate.xml"/>
-    <import resource="ir-researcher-hibernate.xml"/>
-    <import resource="ir-statistics-hibernate.xml"/>
-    
-    
-   <!-- ****************************************** --> 
-   <!-- Institutional Repository services  -->
-   <!-- ****************************************** --> 
-   <import resource="ir-service.xml"/>
-  
-   <!-- ****************************************** --> 
-   <!-- File Service  -->
-   <!-- ****************************************** --> 
-   <import resource="file-db-service.xml"/>
-   
-   <!-- ****************************************** --> 
-   <!-- News Service  -->
-   <!-- ****************************************** --> 
-   <import resource="news-service.xml"/>
-   
-   <!-- ****************************************** --> 
-   <!-- Spring Security                             -->
-   <!-- ****************************************** --> 
-   <import resource="acegi-security.xml"/>
-   
-    <!-- ****************************************** --> 
     <!-- Handle persistence classes -->
     <!-- ****************************************** --> 
     <import resource="ir-handle-hibernate.xml"/>
+    
+    <!-- ****************************************** --> 
+    <!-- Handle service classes -->
+    <!-- ****************************************** --> 
+    <import resource="ir-handle-service.xml"/>
+    
    
 </beans>
