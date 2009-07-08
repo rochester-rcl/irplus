@@ -113,7 +113,6 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
     
     /** service for dealing with contributors*/
     private ContributorService contributorService;
-    
  
 	/** User's name */
     private boolean myName;
@@ -200,7 +199,45 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	}
 	
 	/**
-	 * Method to update an existing person type.
+	 * Loads a person for viewing and editing.
+	 * 
+	 * @return view for edit screen 
+	 */
+	public String get()
+	{   
+
+		IrUser user = userService.getUserByPersonNameAuthority(id);
+
+		// get the user making the change
+		IrUser userMakingChange = userService.getUser(userId, false);
+		// user making change to a name that does not belong to them.
+    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE))
+    	{
+    		if(user == null || !user.equals(userMakingChange))
+    		{
+    			return "accessDenied";
+    		}
+    	}
+		
+		personNameAuthority = personService.getAuthority(id, false);
+		
+		BirthDate bd = personNameAuthority.getBirthDate();
+		bd.setYear(birthYear);
+		
+		DeathDate dd = personNameAuthority.getDeathDate();
+		dd.setYear(deathYear);
+
+
+		if (personNameId != null) {
+			personName = personService.getName(personNameId, false);
+		} else {
+			personName = personNameAuthority.getAuthoritativeName();
+		}
+		return "get";
+	}
+	
+	/**
+	 * Method to update an existing person type
 	 * 
 	 * @return
 	 */
@@ -208,11 +245,29 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	{
 		log.debug("updateing person = " + personNameAuthority);
 		
+	
 		BirthDate bd = personNameAuthority.getBirthDate();
-		bd.setYear(birthYear);
+		if(bd == null)
+		{
+			bd = new BirthDate(birthYear);
+			personNameAuthority.setBirthDate(bd);
+		}
+		else
+		{
+			bd.setYear(birthYear);
+		}
 		
 		DeathDate dd = personNameAuthority.getDeathDate();
-		dd.setYear(deathYear);
+		
+		if( dd == null )
+		{
+		    dd = new DeathDate(deathYear);
+		    personNameAuthority.setDeathDate(dd);
+		}
+		else
+		{
+		    dd.setYear(deathYear);
+		}
 
 		IrUser user = userService.getUserByPersonNameAuthority(id);
 		
