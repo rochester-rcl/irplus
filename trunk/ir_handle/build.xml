@@ -73,6 +73,12 @@
 	        <fileset dir="${spring.project.config}"/>
 	        <fileset dir="${properties.config.local}"/>
 		</copy>
+		
+		<!-- copy the pdf libraries down from local this will be done
+		until stable releases are released -->
+		<copy todir="${lib.dir}">
+			<fileset dir="${pdfbox.lib.dir}" includes="**/*.jar"/>
+		</copy>
 	   
 	</target>
 
