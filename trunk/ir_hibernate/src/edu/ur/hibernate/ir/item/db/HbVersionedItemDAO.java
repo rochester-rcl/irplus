@@ -88,14 +88,6 @@ public class HbVersionedItemDAO implements VersionedItemDAO{
     	return (List<VersionedItem>) hbCrudDAO.getHibernateTemplate().findByCriteria(dc);
 	}
 
-	public List<VersionedItem> getAllOrderByName(int startRecord, int numRecords) {
-		return (List<VersionedItem>)hbCrudDAO.getByQuery("getAllVersionedItemNameAsc", startRecord, numRecords);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<VersionedItem> findByName(String name) {
-		return (List<VersionedItem>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getVersionedItemByName", name);
-	}
 
 	@SuppressWarnings("unchecked")
 	public List<VersionedItem> getAllVersionedItemsForUser(IrUser user) {

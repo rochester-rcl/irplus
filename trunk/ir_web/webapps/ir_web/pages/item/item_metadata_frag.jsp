@@ -33,7 +33,7 @@
 					<tr>
 					    <td>
 						    <c:forEach items="${item.subTitles}" var="otherTitle">
-							    ${otherTitle.title}<br/>
+							    ${otherTitle.fullTitle}<br/>
 							</c:forEach>
 						</td>
 					</tr>

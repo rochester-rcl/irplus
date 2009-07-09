@@ -22,15 +22,24 @@ import edu.ur.persistent.BasePersistent;
  * Represents a sub titles for item
  *   
  * @author Sharmila Ranganathan
- *
+ * @author Nathan Sarr
  */
 public class ItemTitle extends BasePersistent  {
 
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = 7213668037628436533L;
+	
+	/** leading articles for the title  */
+	private String leadingArticles;
 
 	/** Item title  */
 	private String title;
+	
+	/** lower case version of the title */
+	private String lowerCaseTitle;
+	
+	/** first character of the name of this titles name  */
+	private char titleFirstChar;
 	
 	/** The item this title belongs to. */
 	private GenericItem item;
@@ -46,10 +55,11 @@ public class ItemTitle extends BasePersistent  {
 	 * 
 	 * @param linkVersion
 	 */
-	ItemTitle(GenericItem item, String title)
+	ItemTitle(GenericItem item, String title, String leadingArticles)
 	{
 		setItem(item);
 		setTitle(title);
+		setLeadingArticles(leadingArticles);
 	}
 	
 	/**
@@ -78,6 +88,7 @@ public class ItemTitle extends BasePersistent  {
 	{
 		int value = 0;
 		value += title == null ? 0 : title.hashCode();
+		value += leadingArticles == null ? 0 : leadingArticles.hashCode();
 		value += item == null ? 0 : item.hashCode();
 		return value;
 	}
@@ -113,6 +124,9 @@ public class ItemTitle extends BasePersistent  {
 		if( ( title != null && !title.equals(other.getTitle()) ) ||
 			( title == null && other.getTitle() != null ) ) return false;
 		
+		if( ( leadingArticles != null && !leadingArticles.equals(other.getLeadingArticles()) ) ||
+			( leadingArticles == null && other.getLeadingArticles() != null ) ) return false;
+		
 		if( ( item != null && !item.equals(other.getTitle())) ||
 			( item == null && other.getTitle() != null ) ) return false;
 
@@ -135,6 +149,55 @@ public class ItemTitle extends BasePersistent  {
 	 */
 	public void setTitle(String title) {
 		this.title = title;
+		if(title.length() > 0)
+		{
+		    this.titleFirstChar = Character.toLowerCase(title.charAt(0));
+		}
+		lowerCaseTitle = title.toLowerCase();
 	}
+
+	/**
+	 * The leading articles for the item title - example A, an, d', de, the, ye
+	 * 
+	 * @return
+	 */
+	public String getLeadingArticles() {
+		return leadingArticles;
+	}
+	
+	/**
+	 * Return the entire title including the articles
+	 * @return
+	 */
+	public String getFullTitle()
+	{
+		if( leadingArticles != null )
+		{
+			return  leadingArticles + " " + title;
+		}
+		else
+		{
+			return title;
+		}
+	}
+
+	/**
+	 * The leading articles for the item title - example A, an, d', de, the, ye
+	 * 
+	 * @param leadingArticles
+	 */
+	public void setLeadingArticles(String leadingArticles) {
+		this.leadingArticles = leadingArticles;
+	}
+
+	public String getLowerCaseTitle() {
+		return lowerCaseTitle;
+	}
+
+	public char getTitleFirstChar() {
+		return titleFirstChar;
+	}
+
+
 
 }

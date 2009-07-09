@@ -281,7 +281,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
  		languageTypeService.save(languageType);
  		
 		// create a personal item to publish into the repository
-		PersonalItem item = userPublishingFileSystemService.createRootPersonalItem(user, "personalItem");
+		PersonalItem item = userPublishingFileSystemService.createRootPersonalItem(user, "articles ",  "personalItem");
 		GenericItem genericItem = item.getVersionedItem().getCurrentVersion().getItem();
 		genericItem.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem.addContributor(c);
@@ -290,7 +290,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
         genericItem.createLink("msnbc", "http://www.msnbc.com");
         genericItem.addOriginalItemCreationDate(9, 8, 2001);
         genericItem.addReport(series, "report 3456");
-        genericItem.addSubTitle("the sub title");
+        genericItem.addSubTitle("the sub title", "The articles");
         genericItem.setItemAbstract("abstract");
         genericItem.setItemKeywords("biology, keyword");
         genericItem.setDescription("description");
@@ -542,7 +542,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
  		languageTypeService.save(languageType);
  		
 		// create a personal item to publish into the repository
-		PersonalItem item = userPublishingFileSystemService.createRootPersonalItem(user, "personalItem");
+		PersonalItem item = userPublishingFileSystemService.createRootPersonalItem(user, "articles", "personalItem");
 		GenericItem genericItem = item.getVersionedItem().getCurrentVersion().getItem();
 		genericItem.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem.addContributor(c);
@@ -551,7 +551,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
         genericItem.createLink("msnbc", "http://www.msnbc.com");
         genericItem.addOriginalItemCreationDate(9, 8, 2001);
         genericItem.addReport(series, "report 3456");
-        genericItem.addSubTitle("the sub title");
+        genericItem.addSubTitle("the sub title", "The Articles");
         genericItem.setItemAbstract("abstract");
         genericItem.setItemKeywords("biology, keyword");
         genericItem.setDescription("description");

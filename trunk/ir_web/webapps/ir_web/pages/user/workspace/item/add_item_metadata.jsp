@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>Adding Information to Publication: ${item.name}</title>
+        <title>Adding Information to Publication: ${item.fullName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!--  css styles from yahoo -->
@@ -53,7 +53,10 @@
 			#cal3Container {border:none;padding:1em} 
 			#containerDialog3 .bd:after {content:".";display:block;clear:left;height:0;visibility:hidden;} 
 			
-
+            .td_for_title_article
+            {
+                margin:0px 4px 0px 0px;
+            }
 	    </style>
 	    
         <!-- Dependencies --> 
@@ -82,7 +85,7 @@
             <div id="bd">
 
                 <div class="clear">&nbsp;</div>
-				<p><strong> Adding Information to Publication :  </strong> <span class="noBorderTableGreyLabel"><c:out value='${personalItem.fullPath}'/><c:out value='${item.name}'/> </span> </p>
+				<p><strong> Adding Information to Publication :  </strong> <span class="noBorderTableGreyLabel"><c:out value='${personalItem.fullPath}'/><c:out value='${item.fullName}'/> </span> </p>
 
 				<table width="735"  align="center"  height="48" >
                   	<tr>                                           

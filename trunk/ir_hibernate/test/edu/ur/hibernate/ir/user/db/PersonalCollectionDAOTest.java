@@ -500,7 +500,7 @@ public class PersonalCollectionDAOTest {
 		
 		ts = tm.getTransaction(td);
 		GenericItem genericItem = new GenericItem("aItem");
-		VersionedItem versionedItem = new VersionedItem(user, genericItem, "myItem");
+		VersionedItem versionedItem = new VersionedItem(user, genericItem);
 		PersonalItem personalItem = personalCollection.addVersionedItem(versionedItem);
 		personalCollectionDAO.makePersistent(personalCollection);
 		tm.commit(ts);

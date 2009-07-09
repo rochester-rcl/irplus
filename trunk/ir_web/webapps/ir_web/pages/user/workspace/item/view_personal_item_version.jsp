@@ -70,7 +70,7 @@
 				<h3> <a href="${viewPersonalItemPropertiesUrl}">  Back to properties </a></h3> 
 				
 	
-					<label for="preview" class="noBorderTableLabel">${item.name}   </label>
+					<label for="preview" class="noBorderTableLabel">${item.fullName}   </label>
 				    <c:import url="/pages/item/item_files_frag.jsp">
 				         <c:param name="isPreview" value="true"/>
 				    </c:import>

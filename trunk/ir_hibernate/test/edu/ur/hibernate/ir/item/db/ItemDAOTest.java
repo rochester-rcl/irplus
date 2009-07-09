@@ -167,7 +167,7 @@ public class ItemDAOTest {
 		
 		ts = tm.getTransaction(td);
 
-		GenericItem item = new GenericItem("item1");
+		GenericItem item = new GenericItem("the", "item1");
 		
 		item.setPrimaryContentType(contentTypeDAO.getById(ct.getId(), false));
 		item.setLanguageType(languageTypeDAO.getById(lt.getId(), false));
@@ -188,6 +188,8 @@ public class ItemDAOTest {
 		assert other.equals(item) : "GenericItem should be equal";
 		assert other.getPrimaryContentType().equals(ct) : "Content types should be equal";
 		assert other.getLanguageType().equals(lt) : "Langauge types should be equal";
+		assert item.getName().equals("item1") : " should equal item1 but equal " + item.getName();
+		assert item.getLeadingNameArticles().equals("the") : " should equal the but equals " + item.getLeadingNameArticles();
 		
 		// delete the ir collection
 		itemDAO.makeTransient(other);

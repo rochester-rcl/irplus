@@ -1421,14 +1421,22 @@ YAHOO.ur.item.metadata = {
 	        mycurrent_cell1 = document.createElement("td");
 	        mycurrent_cell1.setAttribute("width", "80%");
 	
-	        // creates a Text Node
-	        currenttext = document.createElement("input");
-	        currenttext.setAttribute("type", "text");
-	        currenttext.setAttribute("name", "subTitles");
-	        currenttext.setAttribute("size", "103");
+	        // creates a text node for the sub title articles
+	        currenttext1 = document.createElement("input");
+	        currenttext1.setAttribute("class", "td_for_title_article");
+	        currenttext1.setAttribute("type", "text");
+	        currenttext1.setAttribute("name", "subTitleArticles");
+	        currenttext1.setAttribute("size", "15");
+	        
+	        // creates a Text Node for sub title 
+	        currenttext2 = document.createElement("input");
+	        currenttext2.setAttribute("type", "text");
+	        currenttext2.setAttribute("name", "subTitles");
+	        currenttext2.setAttribute("size", "90");
 	        
 	        // appends the Text Node we created into the cell <td>
-	        mycurrent_cell1.appendChild(currenttext);
+	        mycurrent_cell1.appendChild(currenttext1);
+	        mycurrent_cell1.appendChild(currenttext2);
 	        // appends the cell <td> into the row <tr>
 	        mycurrent_row.appendChild(mycurrent_cell1);
 	

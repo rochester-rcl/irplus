@@ -330,7 +330,7 @@ public class DefaultItemServiceTest {
 		// Start the transaction 
 		ts = tm.getTransaction(td);
 		
-		PersonalItem personalItem = userPublishingFileSystemService.createPersonalItem(collection, user, "itemName");
+		PersonalItem personalItem = userPublishingFileSystemService.createPersonalItem(collection, user, "articles", "itemName");
 		userPublishingFileSystemService.makePersonalItemPersistent(personalItem);
 		
 		tm.commit(ts);

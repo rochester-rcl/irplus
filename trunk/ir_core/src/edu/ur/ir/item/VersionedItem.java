@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import edu.ur.ir.user.IrUser;
-import edu.ur.persistent.CommonPersistent;
+import edu.ur.persistent.BasePersistent;
 
 /**
  * Represents an item in the repository that can have 
@@ -34,7 +34,7 @@ import edu.ur.persistent.CommonPersistent;
  * @author Nathan Sarr
  *
  */
-public class VersionedItem extends CommonPersistent{
+public class VersionedItem extends BasePersistent{
 
 	/** Eclipse generated id  */
 	private static final long serialVersionUID = -7504273735834708996L;
@@ -77,13 +77,12 @@ public class VersionedItem extends CommonPersistent{
 	 * 
 	 * @param irFile
 	 */
-	public VersionedItem(IrUser owner, GenericItem item, String name)
+	public VersionedItem(IrUser owner, GenericItem item)
 	{
 		setMaxVersion(INITIAL_FILE_VERSION);
 		setOwner(owner);
 		item.setOwner(owner);
 		ItemVersion version = new ItemVersion(item, this, maxVersion);
-		setName(name);
 		currentVersion = version;
 		versions.add(version);
 	}
@@ -186,8 +185,8 @@ public class VersionedItem extends CommonPersistent{
 	public int hashCode()
 	{
 		int value = 0;
-		value += name == null ? 0 : name.hashCode();
 		value += owner == null ? 0 : owner.hashCode();
+		value += id == null ? 0 : id.hashCode();
 		return value;
 	}
 	
@@ -200,8 +199,6 @@ public class VersionedItem extends CommonPersistent{
 		sb.append(getId());
 		sb.append( " largestVersion = ");
 		sb.append(getLargestVersion());
-		sb.append( " name = ");
-		sb.append(name);
 		sb.append("]");
 		
 		return sb.toString();
@@ -220,9 +217,6 @@ public class VersionedItem extends CommonPersistent{
 		if( (owner == null && other.getOwner() != null ) ||
 		    (owner != null && !owner.equals(other.getOwner())) ) return false;
 
-		if( (name == null && other.getName() != null ) || 
-			(name != null && !name.equals(other.getName()))) return false;
-		
 		// normally we do not want to use an id - however, it would have to be this or
 		// some other globally unique id.
 		if( ( id != null && !id.equals(other.getId()) ) ||

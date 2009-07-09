@@ -253,20 +253,20 @@
 	          
 	<!--  new publication dialog -->
 	<div id="newItemDialog" class="hidden">
-	    <div class="hd">Enter Publication title</div>
-		<div class="bd" >
-			<div class="clear">&nbsp;</div>
-		 	<div id="file_ownership_error_div" class="errorMessage">
-		    </div>
-            <form name="newItemForm" method="post" >
+	    <div class="hd">New Publication</div>
+		<div class="bd">
+		 	<div id="file_ownership_error_div" class="errorMessage"></div>
+            <form name="newItemForm" method="post">
                 <input type="hidden" id="newItemForm_parentCollectionId" name="parentCollectionId" />
-		        <table align="left" class="formTable">
-				<tr>
-				    <td> Publication Title: </td>
-		            <td>
-					    <input type="text" class="input" name="itemName" size="50" id ="newItemForm_itemName" value="${itemName}"/>		                          
-				    </td>
-		        </tr>
+		        <table class="formTable">
+				    <tr>
+				        <td>Articles(A, an, The, ...)</td>
+				        <td>Title</td>
+				    </tr>
+				    <tr>                                           
+				        <td><input type="text" class="input" name="itemArticles" size="15" id ="newItemForm_itemArticles" value="${itemArticles}"/></td>
+				        <td><input type="text" class="input" name="itemName" size="60" id ="newItemForm_itemName" value="${itemName}"/></td>
+				    </tr>
 		        </table>
 		    </form>
 		</div>

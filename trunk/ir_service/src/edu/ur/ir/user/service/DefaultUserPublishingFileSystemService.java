@@ -213,10 +213,10 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 	 * 
 	 * @see edu.ur.ir.user.UserPublishingFileSystemService#createPersonalItem(edu.ur.ir.user.PersonalCollection, edu.ur.ir.user.IrUser, java.lang.String)
 	 */
-	public PersonalItem createPersonalItem(PersonalCollection parentCollection, IrUser owner, String name) {
-		GenericItem genericItem = new GenericItem(name);
+	public PersonalItem createPersonalItem(PersonalCollection parentCollection, IrUser owner, String nameArticles, String name) {
+		GenericItem genericItem = new GenericItem(nameArticles, name);
 		genericItem.setOwner(owner);
-		VersionedItem versionedItem = new VersionedItem(owner, genericItem, name);
+		VersionedItem versionedItem = new VersionedItem(owner, genericItem);
 		PersonalItem personalItem = parentCollection.addVersionedItem(versionedItem);
 		personalItemDAO.makePersistent(personalItem);
 		return personalItem;
@@ -244,10 +244,10 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 	 * 
 	 * @see edu.ur.ir.user.UserPublishingFileSystemService#createRootPersonalItem(edu.ur.ir.user.IrUser, java.lang.String)
 	 */
-	public PersonalItem createRootPersonalItem(IrUser owner, String name) {
-		GenericItem genericItem = new GenericItem(name);
+	public PersonalItem createRootPersonalItem(IrUser owner, String nameArticles, String name) {
+		GenericItem genericItem = new GenericItem(nameArticles, name);
 		genericItem.setOwner(owner);
-		VersionedItem versionedItem = new VersionedItem(owner, genericItem, name);
+		VersionedItem versionedItem = new VersionedItem(owner, genericItem);
 		PersonalItem personalItem = owner.createRootPersonalItem(versionedItem);
 		personalItemDAO.makePersistent(personalItem);
 		return personalItem;

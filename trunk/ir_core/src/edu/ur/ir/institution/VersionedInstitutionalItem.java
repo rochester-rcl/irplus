@@ -20,17 +20,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 import edu.ur.ir.item.GenericItem;
-import edu.ur.persistent.CommonPersistent;
+import edu.ur.persistent.BasePersistent;
 
 /**
  * Represents a publication that can have  
  * multiple versions.  The current version is the version
- * with the largest version number.
+ * with the largest version number.  The name and name data
+ * is DUPLICATED in this class for database performance and
+ * to remove the need to traverse down to the current versioned item
+ * for name information.
+ * 
+ * THIS MEANS editing the name data must be updated through this class
+ * when editing the most recent version of the item.
+ * 
  * 
  * @author Sharmila Ranganathan
- *
+ * @author Nathan Sarr
  */
-public class VersionedInstitutionalItem extends CommonPersistent {
+public class VersionedInstitutionalItem extends BasePersistent {
 
 	/**  Eclipse generated id. */
 	private static final long serialVersionUID = -4235230376169888073L;
@@ -47,12 +54,7 @@ public class VersionedInstitutionalItem extends CommonPersistent {
 	/**  The current highest publication version number */
 	private int maxVersion = INITIAL_ITEM_VERSION;
 	
-	/** first character of the name of this versioned item  */
-	private char nameFirstChar;
-	
-	/** lower case value of the name  this is for database performance */
-	private String lowerCaseName;
-	
+
 	
 	/**
 	 * Package protected versioned publication constructor.
@@ -66,7 +68,6 @@ public class VersionedInstitutionalItem extends CommonPersistent {
 	 */
 	public VersionedInstitutionalItem(GenericItem item)
 	{
-		
 		addNewVersion(item);
 	}
 	
@@ -78,14 +79,13 @@ public class VersionedInstitutionalItem extends CommonPersistent {
 	 */
 	public InstitutionalItemVersion addNewVersion(GenericItem item)
 	{
-			setName(item.getName());
-			item.setPublishedToSystem(true);
-		    maxVersion = maxVersion + 1;
-			InstitutionalItemVersion institutionalItemVersion = new InstitutionalItemVersion(item, this, maxVersion);
-			institutionalItemVersions.add(institutionalItemVersion);
-			currentVersion = institutionalItemVersion;
-			
-			return institutionalItemVersion;
+		// do not include the articles in the lower case name
+		item.setPublishedToSystem(true);
+		maxVersion = maxVersion + 1;
+		InstitutionalItemVersion institutionalItemVersion = new InstitutionalItemVersion(item, this, maxVersion);
+		institutionalItemVersions.add(institutionalItemVersion);
+		currentVersion = institutionalItemVersion;
+		return institutionalItemVersion;
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class VersionedInstitutionalItem extends CommonPersistent {
 	public int hashCode()
 	{
 		int value = 0;
-		value += name == null? 0 : name.hashCode();
+		value += id == null? 0 : id.hashCode();
 		return value;
 	}
 	
@@ -154,8 +154,6 @@ public class VersionedInstitutionalItem extends CommonPersistent {
 		if( ( id != null && !id.equals(other.getId()) ) ||
 			( id == null && other.getId() != null ) ) return false;
 		
-		if( ( name != null && !name.equals(other.getName()) ) ||
-			( name == null && other.getName() != null ) ) return false;
 		return true;
 	}
 	
@@ -175,26 +173,6 @@ public class VersionedInstitutionalItem extends CommonPersistent {
 	 */
 	void setLargestVersion(int largestVersion) {
 		this.maxVersion = largestVersion;
-	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-		
-		if(name.length() > 0)
-		{
-		    this.nameFirstChar = Character.toLowerCase(name.charAt(0));
-		}
-		
-		lowerCaseName = name.toLowerCase();
-	}
-
-	public char getNameFirstChar() {
-		return nameFirstChar;
-	}
-
-	public String getLowerCaseName() {
-		return lowerCaseName;
 	}
 
 }

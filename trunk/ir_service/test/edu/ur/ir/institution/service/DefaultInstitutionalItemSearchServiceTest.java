@@ -248,7 +248,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
  		languageTypeService.save(languageType);
  		
 		// create a personal item to publish into the repository
-		PersonalItem item = userPublishingFileSystemService.createRootPersonalItem(user, "personalItem");
+		PersonalItem item = userPublishingFileSystemService.createRootPersonalItem(user, "articles", "personalItem");
 		GenericItem genericItem = item.getVersionedItem().getCurrentVersion().getItem();
 		genericItem.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem.addContributor(c);
@@ -257,7 +257,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem.createLink("msnbc", "http://www.msnbc.com");
         genericItem.addOriginalItemCreationDate(9, 8, 2001);
         genericItem.addReport(series, "report 3456");
-        genericItem.addSubTitle("the sub title");
+        genericItem.addSubTitle("the sub title", "The articles");
         genericItem.setItemAbstract("abstract");
         genericItem.setItemKeywords("biology, keyword");
         genericItem.setDescription("description");
@@ -407,7 +407,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
  		languageTypeService.save(languageType);
  		
 		// create a personal item to publish into the repository
-		PersonalItem item = userPublishingFileSystemService.createRootPersonalItem(user, "personalItem");
+		PersonalItem item = userPublishingFileSystemService.createRootPersonalItem(user, "articles", "personalItem");
 		GenericItem genericItem = item.getVersionedItem().getCurrentVersion().getItem();
 		genericItem.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem.addContributor(c);
@@ -416,7 +416,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem.createLink("msnbc", "http://www.msnbc.com");
         genericItem.addOriginalItemCreationDate(9, 8, 2001);
         genericItem.addReport(series, "report 3456");
-        genericItem.addSubTitle("the sub title");
+        genericItem.addSubTitle("the sub title", null);
         genericItem.setItemAbstract("abstract");
         genericItem.setItemKeywords("biology, keyword");
         genericItem.setDescription("description");
@@ -493,7 +493,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
  		
 		// create a personal item to publish into the repository
 		PersonalItem item2 = userPublishingFileSystemService.createRootPersonalItem(user, 
-				"myItem");
+				"articles", "myItem");
 		GenericItem genericItem2 = item2.getVersionedItem().getCurrentVersion().getItem();
 		genericItem2.addFile(pf2.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem2.addContributor(c2);
@@ -502,7 +502,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem2.createLink("hotmail", "http://www.hotmail.com");
         genericItem2.addOriginalItemCreationDate(9, 8, 2001);
         genericItem2.addReport(series2, "report 3456");
-        genericItem2.addSubTitle("generic 2");
+        genericItem2.addSubTitle("generic 2", "The articles");
         genericItem2.setItemAbstract("words go here");
         
         String keywords = "biology" + GenericItem.KEYWORD_SEPARATOR + "sicence" + GenericItem.KEYWORD_SEPARATOR
@@ -680,7 +680,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
  		languageTypeService.save(languageType);
  		
 		// create a personal item to publish into the repository
-		PersonalItem item = userPublishingFileSystemService.createRootPersonalItem(user, "personalItem");
+		PersonalItem item = userPublishingFileSystemService.createRootPersonalItem(user, "artciles",  "personalItem");
 		GenericItem genericItem = item.getVersionedItem().getCurrentVersion().getItem();
 		genericItem.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem.addContributor(c);
@@ -689,7 +689,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem.createLink("msnbc", "http://www.msnbc.com");
         genericItem.addOriginalItemCreationDate(9, 8, 2001);
         genericItem.addReport(series, "report 3456");
-        genericItem.addSubTitle("the sub title");
+        genericItem.addSubTitle("the sub title", null);
         genericItem.setItemAbstract("abstract");
         genericItem.setItemKeywords("biology, keyword");
         genericItem.setDescription("description");
@@ -766,7 +766,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
  		
 		// create a personal item to publish into the repository
 		PersonalItem item2 = userPublishingFileSystemService.createRootPersonalItem(user, 
-				"myItem");
+				"articles", "myItem");
 		GenericItem genericItem2 = item2.getVersionedItem().getCurrentVersion().getItem();
 		genericItem2.addFile(pf2.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem2.addContributor(c2);
@@ -775,7 +775,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem2.createLink("hotmail", "http://www.hotmail.com");
         genericItem2.addOriginalItemCreationDate(9, 8, 2001);
         genericItem2.addReport(series2, "report 3456");
-        genericItem2.addSubTitle("generic 2");
+        genericItem2.addSubTitle("generic 2", "The articles");
         genericItem2.setItemAbstract("words go here");
         genericItem2.setItemKeywords("biology, science, computer");
         genericItem2.setDescription("description");
@@ -813,7 +813,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		
 		// create a personal item to publish into the repository
 		PersonalItem item3 = userPublishingFileSystemService.createRootPersonalItem(user, 
-				"myItem");
+				"articles", "myItem");
 		GenericItem genericItem3 = item3.getVersionedItem().getCurrentVersion().getItem();
 		genericItem3.addFile(pf3.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem3.addContributor(c2);
@@ -822,7 +822,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem3.createLink("hotmail", "http://www.hotmail.com");
         genericItem3.addOriginalItemCreationDate(9, 8, 2001);
         genericItem3.addReport(series2, "report 3456");
-        genericItem3.addSubTitle("generic 2");
+        genericItem3.addSubTitle("generic 2", "The articles");
         genericItem3.setItemAbstract("words go here");
         genericItem3.setItemKeywords("biology, science, computer");
         genericItem3.setDescription("description");

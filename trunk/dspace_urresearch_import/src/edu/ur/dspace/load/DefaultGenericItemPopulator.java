@@ -77,6 +77,9 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	/**  Service for dealing with institutional collections */
 	private UserService userService;
 	
+	/** Utility for dealing with leading titles */
+	private LeadingTitleArticleUtil titleUtil = new LeadingTitleArticleUtil();
+	
 	/** template for accessing the database */
 	private JdbcTemplate jdbcTemplate;
 	
@@ -157,7 +160,9 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			throw new IllegalStateException("Title for item " + dspaceItem + " is null " );
 		}
 		
-		GenericItem genericItem = new GenericItem(title);
+		String name = titleUtil.getName(title);
+		String leadingArticles = titleUtil.getLeadingArticle(title);
+		GenericItem genericItem = new GenericItem(leadingArticles, name);
 		
 		IrUser submitter = userService.getUser(urresearchUserId, false);
 		log.debug("Submitter found = " + submitter);
@@ -778,8 +783,14 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	
 		for(String title : otherTitles)
 		{
-			log.debug("adding title " + title);
-		    genericItem.addSubTitle(title);
+			String name = titleUtil.getName(title);
+			String articles = titleUtil.getLeadingArticle(title);
+			if( articles.equals(""))
+			{
+				articles = null;
+			}
+			log.debug("adding title " + name + " and articles " + articles);
+		    genericItem.addSubTitle(name, articles);
 		}
 	}
 	

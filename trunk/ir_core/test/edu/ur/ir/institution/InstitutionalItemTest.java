@@ -82,7 +82,7 @@ public class InstitutionalItemTest {
 		
 		// create the owner of the personal item
 		IrUser user = new IrUser("nate", "password");
-		VersionedItem versionedItem = new VersionedItem(user, genericItem, "versionedItem");
+		VersionedItem versionedItem = new VersionedItem(user, genericItem);
 		
 		InstitutionalItem institutionalItem = institutionalCollection.createInstitutionalItem(genericItem);
 		InstitutionalItemVersion institutionalItemVersion = 

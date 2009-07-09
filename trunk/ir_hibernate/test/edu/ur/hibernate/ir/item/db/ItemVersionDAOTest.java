@@ -77,7 +77,7 @@ public class ItemVersionDAOTest {
 		IrUser user = new IrUser("user", "password");
 		user.setPasswordEncoding("encoding");
 		user.addUserEmail(userEmail, true);
-		VersionedItem versionedItem = new VersionedItem(user, item, "myItem");
+		VersionedItem versionedItem = new VersionedItem(user, item);
 		ItemVersion itemVersion = versionedItem.getCurrentVersion();
 	    userDAO.makePersistent(user);
 	    itemVersionDAO.makePersistent(itemVersion);

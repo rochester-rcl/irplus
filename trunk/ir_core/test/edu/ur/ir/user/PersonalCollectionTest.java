@@ -266,7 +266,7 @@ public class PersonalCollectionTest {
 		GenericItem genericItem = new GenericItem("myItem");
 		// create the owner of the folders
 		IrUser u = new IrUser("nate", "password");
-		VersionedItem versionedItem = new VersionedItem(u, genericItem, "myVersionedItem");
+		VersionedItem versionedItem = new VersionedItem(u, genericItem);
 		
 		// create the root collection
 		PersonalCollection personalCollection1 = new PersonalCollection(u, "personalCollection1");
@@ -279,7 +279,7 @@ public class PersonalCollectionTest {
 		assert personalCollection1.getPersonalItem(44l).equals(personalItem) : "Should be able to "
 			+ " find personal item " + personalItem;
 		
-		assert personalCollection1.getPersonalItem(versionedItem.getName()).equals(personalItem) : "Should be able to "
+		assert personalCollection1.getPersonalItem(versionedItem.getCurrentVersion().getItem().getName()).equals(personalItem) : "Should be able to "
 			+ " find personal item " + personalItem;
 	
 	}

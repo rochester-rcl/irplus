@@ -144,7 +144,7 @@ public interface UserPublishingFileSystemService {
 	 * 
 	 * @return - create the personal item.
 	 */
-	public PersonalItem createPersonalItem(PersonalCollection personalCollection, IrUser owner, String name);
+	public PersonalItem createPersonalItem(PersonalCollection personalCollection, IrUser owner, String nameArticles, String name);
 
 	/**
 	 * Create the root personal item.
@@ -154,7 +154,7 @@ public interface UserPublishingFileSystemService {
 	 * 
 	 * @return the created personal item.
 	 */
-	public PersonalItem createRootPersonalItem(IrUser owner, String name);
+	public PersonalItem createRootPersonalItem(IrUser owner, String nameArticles, String name);
 
 	/**
 	 * Get the personal collections for the specified user.

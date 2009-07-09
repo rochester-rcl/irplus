@@ -100,7 +100,7 @@ public class PersonalItemDAOTest {
 
 		ts = tm.getTransaction(td);
 		GenericItem genericItem = new GenericItem("aItem");
-		VersionedItem versionedItem = new VersionedItem(user, genericItem, "myItem");
+		VersionedItem versionedItem = new VersionedItem(user, genericItem);
 		PersonalItem personalItem = new PersonalItem(user, versionedItem);
 		personalItemDAO.makePersistent(personalItem);
 		tm.commit(ts);
@@ -143,7 +143,7 @@ public class PersonalItemDAOTest {
 		ts = tm.getTransaction(td);
 		GenericItem genericItem = new GenericItem("aItem");
 		GenericItem genericItem2 = new GenericItem("aSecondItem");
-		VersionedItem versionedItem = new VersionedItem(user, genericItem, "myItem");
+		VersionedItem versionedItem = new VersionedItem(user, genericItem);
 		versionedItem.addNewVersion(genericItem2);
 		PersonalItem personalItem = new PersonalItem(user, versionedItem);
 		personalItemDAO.makePersistent(personalItem);
@@ -194,7 +194,7 @@ public class PersonalItemDAOTest {
         
 		IrUser other = userDAO.getById(user.getId(), false);
 		GenericItem genericItem = new GenericItem("aItem");
-		VersionedItem versionedItem = new VersionedItem(user, genericItem, "myItem");
+		VersionedItem versionedItem = new VersionedItem(user, genericItem);
 		PersonalItem personalItem = other.createRootPersonalItem(versionedItem);
 
 		//complete the transaction

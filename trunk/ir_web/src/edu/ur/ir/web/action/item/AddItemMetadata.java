@@ -159,6 +159,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 
 	/** List sub titles for the item */
 	private String[] subTitles;
+	private String[] subTitleArticles;
 
 	/** Number of reports for the item */
 	private int reportsCount;
@@ -204,6 +205,9 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	
 	/** Item name */
 	private String itemName;
+	
+	/** item name articles  */
+	private String itemNameArticles;
 	
 	/** Description fot the item */
 	private String itemDescription;
@@ -500,6 +504,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 
 		// Sets the item metadata
 		item.setName(itemName);
+		item.setLeadingNameArticles(itemNameArticles);
 		item.setDescription(itemDescription);
 		item.setItemAbstract(itemAbstract);
 		item.setItemKeywords(keywords);
@@ -589,11 +594,11 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			}
 		}
 		
-		// Add subtitles
+		// Add subtitles and articles
 		if (subTitles != null) {
 			for (int i =0; i < subTitles.length; i++ ) {
 				if (subTitles[i] != null) {
-					item.addSubTitle(subTitles[i]);
+					item.addSubTitle(subTitles[i], subTitleArticles[i]);
 				}
 			}
 		}
@@ -1533,5 +1538,21 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	public String getItemNameArticles() {
+		return itemNameArticles;
+	}
+
+	public void setItemNameArticles(String itemArticles) {
+		this.itemNameArticles = itemArticles;
+	}
+
+	public String[] getSubTitleArticles() {
+		return subTitleArticles;
+	}
+
+	public void setSubTitleArticles(String[] subTitleArticles) {
+		this.subTitleArticles = subTitleArticles;
 	}
 }

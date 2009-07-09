@@ -66,7 +66,7 @@ public class VersionedItemDAOTest {
 		user.setPasswordEncoding("encoding");
 		user.addUserEmail(userEmail, true);
 
-	    VersionedItem versionedItem = new VersionedItem(user, item, "myItem");
+	    VersionedItem versionedItem = new VersionedItem(user, item);
 
 	    TransactionStatus ts = tm.getTransaction(td);
 		userDAO.makePersistent(user);

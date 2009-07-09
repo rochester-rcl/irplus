@@ -83,7 +83,6 @@
     <import resource="ir-news-hibernate.xml"/>
     <import resource="ir-researcher-hibernate.xml"/>
     <import resource="ir-statistics-hibernate.xml"/>
-    <import resource="ir-handle-hibernate.xml"/>
     
    <!-- ****************************************** --> 
    <!-- Institutional Repository services  -->
@@ -109,6 +108,17 @@
    <!-- DSpace import                            -->
    <!-- ****************************************** --> 
    <import resource="dspace-import.xml"/>
+   
+    <!-- ****************************************** --> 
+    <!-- Handle persistence classes -->
+    <!-- ****************************************** --> 
+    <import resource="ir-handle-hibernate.xml"/>
+    
+    <!-- ****************************************** --> 
+    <!-- Handle service classes -->
+    <!-- ****************************************** --> 
+    <import resource="ir-handle-service.xml"/>
+  
 
   
 </beans>
