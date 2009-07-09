@@ -65,6 +65,37 @@
             <div id="bd">
                <h3>IR Plus Contact Us</h3> 
                
+               <form  method="post" 
+		              action="<c:url value="/contactUs.action"/>">
+		              <table class="formTable">    
+		                  <tr>       
+	                          <td align="left" class="label">
+	                              Name:*
+	                          </td>
+	                          <td align="left" class="input">
+	                              <input type="text" name="name"  value="${name}" size="82"/> 
+	                          </td>
+			              </tr>
+			              <tr>       
+	                          <td align="left" class="label">
+	                              Email Address:*
+	                          </td>
+	                          <td align="left" class="input">
+	                              <input type="text" name="name"  value="${email}" size="82"/> 
+	                          </td>
+			              </tr>
+			              <tr>
+			                  <td align="left" class="label">
+			                      Message:
+			                  </td>
+			                  <td align="left" colspan="2" class="input"> 
+			                      <textarea name="Message" 
+	                               cols="80" rows="20">${message}</textarea>
+	                          </td>
+			              </tr>
+	                  </table>
+               </form>
+               
             </div>
             <!--  end the body tag --> 
 
