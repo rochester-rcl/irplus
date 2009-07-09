@@ -869,6 +869,13 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	private List<String> getNotAnalyzedContentTypes(GenericItem genericItem)
 	{
 		LinkedList<String> contents = new LinkedList<String>();
+		
+		ContentType primaryContentType = genericItem.getPrimaryContentType();
+		
+		if (primaryContentType != null ) {
+			contents.add(primaryContentType.getName());
+		}
+		
 		Set<ContentType> types = genericItem.getSecondaryContentTypes();
 		if (types != null && types.size() > 0) {
 			
