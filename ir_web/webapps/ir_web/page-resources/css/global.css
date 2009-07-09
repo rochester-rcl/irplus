@@ -19,6 +19,11 @@
    main components on each of the pages
 */
 
+.powered_by
+{
+	padding-top:5px;
+}
+
 #header
 {
 	width : 100%;
