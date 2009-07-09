@@ -8,7 +8,8 @@ package edu.ur.dspace.load;
  */
 public class LeadingTitleArticleUtil {
 	
-	public String[] leadingArticles =  { "a", "an", "de", "the", "ye", "d’" };
+	public String[] leadingArticles =  { "a", "an", "de", "the", "ye", "d’", 
+			"la", "le", "les", "die", "der", "das", "ein", "un", "une", "el" };
 	
 	/**
 	 * Return the name without the leading articles.  Returns
