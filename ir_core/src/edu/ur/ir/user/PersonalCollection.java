@@ -310,7 +310,8 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * Find a  personal item based on the name.  If
 	 * no item is found a null object is returned.
 	 * 
-	 * @param name of the personal item.
+	 * @param name of the personal item. This is the full name including the articles
+	 * 
 	 * @return the found personal item.
 	 */
 	public PersonalItem getPersonalItem(String name)
@@ -326,7 +327,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 		while( iter.hasNext() && !found)
 		{
 			PersonalItem personalItem = iter.next();
-			if( personalItem.getVersionedItem().getName().equals(name))
+			if( personalItem.getVersionedItem().getCurrentVersion().getItem().getFullName().equals(name))
 			{
 				item = personalItem;
 				found = true;

@@ -128,7 +128,7 @@ public class InstitutionalItem extends BasePersistent implements FileSystem{
 	public String getFullPath()
 	{
 		String path = getPath();
-		String name = versionedInstitutionalItem.getName();
+		String name = versionedInstitutionalItem.getCurrentVersion().getItem().getFullName();
 		
 		path = path + name;
 
@@ -189,11 +189,11 @@ public class InstitutionalItem extends BasePersistent implements FileSystem{
 	}
 
 	public String getDescription() {
-		return versionedInstitutionalItem.getDescription();
+		return versionedInstitutionalItem.getCurrentVersion().getItem().getDescription();
 	}
 
 	public String getName() {
-		return versionedInstitutionalItem.getName();
+		return versionedInstitutionalItem.getCurrentVersion().getItem().getFullName();
 	}
 
 	public VersionedInstitutionalItem getVersionedInstitutionalItem() {

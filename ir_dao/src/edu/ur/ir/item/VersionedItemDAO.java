@@ -20,8 +20,6 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.NameListDAO;
-import edu.ur.dao.NonUniqueNameDAO;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -31,7 +29,7 @@ import edu.ur.ir.user.IrUser;
  *
  */
 public interface VersionedItemDAO extends CountableDAO, 
-CrudDAO<VersionedItem>, NameListDAO, NonUniqueNameDAO<VersionedItem>
+CrudDAO<VersionedItem>
 {
 	/**
 	 * Get all versioned items owned by the user.

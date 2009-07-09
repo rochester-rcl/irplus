@@ -28,7 +28,7 @@
 
 <html>
     <head>
-        <title>Viewing Institutional Publication: ${institutionalItemVersion.item.name}</title>
+        <title>Viewing Institutional Publication: ${institutionalItemVersion.item.fullName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
                 
     <!-- Core + Skin CSS -->
@@ -77,7 +77,7 @@
                 </h3>
 				<!-- Begin - Display the Item preview -->
 				
-				<h3>${institutionalItemVersion.item.name}</h3>
+				<h3>${institutionalItemVersion.item.fullName}</h3>
 				
 				<c:if test="${institutionalItemVersion.handleInfo != null}">
 				    <h3 class="errorMessage">URL to cite or link to: <a href="${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}">${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}</a></h3>
@@ -286,7 +286,7 @@
                               </c:if>
                               
                           </td>
-                          <td class="${rowType}">${version.item.name}
+                          <td class="${rowType}">${version.item.fullName}
                           	<c:if test="${version.withdrawn}">
                           		<div class="errorMessage">(withdrawn on ${version.withdrawnToken.date})</div>
                           	</c:if>

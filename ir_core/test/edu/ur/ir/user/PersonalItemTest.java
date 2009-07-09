@@ -44,7 +44,7 @@ public class PersonalItemTest {
 		
 		// create the owner of the personal item
 		IrUser user = new IrUser("nate", "password");
-		VersionedItem versionedItem = new VersionedItem(user, genericItem, "versionedItem");
+		VersionedItem versionedItem = new VersionedItem(user, genericItem);
 		assert versionedItem != null : "Versioned item should not be null";
 
 		PersonalItem personalItem = new PersonalItem(user, versionedItem);

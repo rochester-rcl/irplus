@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>Preview Publication: ${item.name}</title>
+        <title>Preview Publication: ${item.fullName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!--  css styles from yahoo -->
@@ -63,7 +63,7 @@
             <div id="bd">
 
                 <div class="clear">&nbsp;</div>
-				<p><strong> Preview Publication :  </strong> <span class="noBorderTableGreyLabel">${personalItem.fullPath}${item.name} </span> </p>
+				<p><strong> Preview Publication :  </strong> <span class="noBorderTableGreyLabel">${personalItem.fullPath}${item.fullName} </span> </p>
 
 				<table width="735"  align="center"  height="48" >
                   	<tr>                                           

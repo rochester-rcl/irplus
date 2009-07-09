@@ -136,7 +136,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		
 		// Start the transaction
 		ts = tm.getTransaction(td);
-		PersonalItem personalItem = userPublishingFileSystemService.createRootPersonalItem(user, "rootCollection");
+		PersonalItem personalItem = userPublishingFileSystemService.createRootPersonalItem(user, "articles", "rootCollection");
 		tm.commit(ts);
 		// save the root personal item
 		
@@ -144,8 +144,9 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		ts = tm.getTransaction(td);
 		PersonalItem other = userPublishingFileSystemService.getPersonalItem(personalItem.getId(), false);
 		assert other != null : "Should be able to find the persona file in the database";
-		assert other.equals(personalItem) : " other " + other + " should equal the personal item " + 
-		personalItem;
+		assert other.equals(personalItem) : " other " + other + " should equal the personal item " + personalItem; 
+		assert other.getVersionedItem().getCurrentVersion().getItem().getLeadingNameArticles().equals("articles") : "Should equal articles but equals " + other.getVersionedItem().getCurrentVersion().getItem().getLeadingNameArticles();
+		
 		user.removeRootPersonalItem(other);
 		tm.commit(ts);
 		
@@ -197,7 +198,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		
 		// new transaction
 		ts = tm.getTransaction(td);
-		PersonalItem personalItem = userPublishingFileSystemService.createRootPersonalItem(user, "rootCollection");
+		PersonalItem personalItem = userPublishingFileSystemService.createRootPersonalItem(user, "articles", "rootCollection");
 		GenericItem item1 = personalItem.getVersionedItem().getCurrentVersion().getItem();
 		item1.addFile(irFile1);
 		userPublishingFileSystemService.makePersonalItemPersistent(personalItem);
@@ -255,7 +256,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		
 		// new transaction
 		ts = tm.getTransaction(td);
-		PersonalItem personalItem = userPublishingFileSystemService.createRootPersonalItem(user, "rootCollection");
+		PersonalItem personalItem = userPublishingFileSystemService.createRootPersonalItem(user, "articles", "rootCollection");
 		GenericItem item1 = personalItem.getVersionedItem().getCurrentVersion().getItem();
 		item1.setName("item1");
 		item1.setPrimaryContentType(contentType);
@@ -383,7 +384,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		
 		try
 		{
-		    it = userPublishingFileSystemService.createPersonalItem(myCollection, user, "item1");
+		    it = userPublishingFileSystemService.createPersonalItem(myCollection, user, "articles", "item1");
 		}
 		catch(Exception e)
 		{
@@ -433,7 +434,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		+ " in children of " +
 		theDestination ;
 		
-		assert newChild.getPersonalItem(it.getName()) != null : "Item " + it.getName() 
+		assert newChild.getPersonalItem(it.getName()) != null : "Item: " + it.getName() 
 		+ "was not found ";
 		
 		// move the item now to the collection above
@@ -529,7 +530,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		PersonalItem it = null;
 		try
 		{
-		    it = userPublishingFileSystemService.createPersonalItem(myCollection, user, "item1");
+		    it = userPublishingFileSystemService.createPersonalItem(myCollection, user, "articles", "item1");
 		}
 		catch(Exception e)
 		{

@@ -168,6 +168,7 @@ YAHOO.ur.personal.collection =
 	    	    if (formName == 'myFolders') 
 	    	    {
 	    	 	    document.myFolders.itemName.value = document.newItemForm.itemName.value;
+	    	 	    document.myFolders.itemArticles.value = document.newItemForm.itemArticles.value;
 	    	 	    document.myFolders.action = addItemAction;
 	         	    document.myFolders.submit();
 	    	    } 
@@ -268,6 +269,7 @@ YAHOO.ur.personal.collection =
 	        ownershipError.innerHTML = "";
         
             document.getElementById('newItemForm_itemName').value="";
+            document.getElementById('newItemForm_itemArticles').value="";
             document.getElementById('newItemForm_parentCollectionId').value="";
 
             document.myFolders.checkAllSetting.checked = false;

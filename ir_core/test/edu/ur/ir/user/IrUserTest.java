@@ -237,7 +237,7 @@ public class IrUserTest {
 		user.setUsername("aUser");
 		
 		GenericItem item = new GenericItem("myItem");
-	    VersionedItem versionedItem = new VersionedItem(user, item, "myItem");
+	    VersionedItem versionedItem = new VersionedItem(user, item);
 	    
 		PersonalItem personalItem = user.createRootPersonalItem(versionedItem);
 		personalItem.setId(35l);

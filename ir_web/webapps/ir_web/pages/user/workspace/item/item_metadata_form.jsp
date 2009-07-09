@@ -43,15 +43,17 @@
 	<table class="itemMetadataTable" width="100%">
 	
 		  <tr>
-		  <td class="rowBorder">
-	          <label for="itemForm_title" >Title</label>
-	      </td>
+		      <td class="rowBorder">
+	              <strong>Articles (A, The, ...)</strong>&nbsp;<strong>Title</strong>
+	          </td>
 	      </tr>    
 	
 		  <tr>
-	      <td>
+		  <td>
+		  <input type="text" 
+	              id="itemForm_articles" name="itemNameArticles" value="<c:out value='${item.leadingNameArticles}' />" size="15"/> 
 	          <input type="text" 
-	              id="itemForm_title" name="itemName" value="<c:out value='${item.name}' escapeXml="true" />" size="103"/> 
+	              id="itemForm_name" name="itemName" value="<c:out value='${item.name}'/>" size="90"/> 
  	           &nbsp;&nbsp;&nbsp;
  	           <input type="button" class="ur_button" id="itemForm_add_title" value="Add Sub title" onclick="javascript:YAHOO.ur.item.metadata.addSubTitleRow();"/>
 	      </td>
@@ -66,8 +68,9 @@
 				       	<table id="title_table_${rowCounter.count}" class="noPaddingTable" >
 				
 							<tr>
+							 
 						      <td>
-						      	   <input type="text" id="itemForm_title" name="subTitles" value="<c:out value='${title.title}'/>" size="103"/>
+						      	   <input type="text" id="itemForm_titleArticles" name="subTitleArticles" value="<c:out value='${title.leadingArticles}'/>" size="15"/>&nbsp;<input type="text" id="itemForm_title" name="subTitles" value="<c:out value='${title.title}'/>" size="90"/>
 						      </td>
 						      <td>   
 						      	  &nbsp;&nbsp;&nbsp; <input type="button" class="ur_button" id="itemForm_remove" value="Remove SubTitle" onclick="javascript:YAHOO.ur.item.metadata.removeSubTitle('title_table_${rowCounter.count}');"/>

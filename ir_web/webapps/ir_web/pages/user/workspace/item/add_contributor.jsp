@@ -26,7 +26,7 @@
 <!--  images used by the page -->
 <html>
     <head>
-        <title>Add Contributor: ${item.name}</title>
+        <title>Add Contributor: ${item.fullName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
 
 	    <ur:styleSheet href="page-resources/yui/reset-fonts-grids/reset-fonts-grids.css"/>
@@ -63,7 +63,7 @@
             <div id="bd">
             
             	<div class="clear">&nbsp;</div>
-				<p><strong> Add Contributors to Publication :  </strong> <span class="noBorderTableGreyLabel">${personalItem.fullPath}${item.name} </span> </p>
+				<p><strong> Add Contributors to Publication :  </strong> <span class="noBorderTableGreyLabel">${personalItem.fullPath}${item.fullName} </span> </p>
 				
 				<table width="735"  align="center"  height="48" >
                   	<tr>

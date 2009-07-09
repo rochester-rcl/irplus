@@ -58,7 +58,7 @@ public class VersionedInstitutionalItemTest {
 		GenericItem item2 = new GenericItem("myNewerItem");
 	    
 		IrUser user = new IrUser("username", "password");
-		VersionedItem vi = new VersionedItem(user, item, "myItem");
+		VersionedItem vi = new VersionedItem(user, item);
 	   
 	    VersionedInstitutionalItem vii = new VersionedInstitutionalItem(item);
     

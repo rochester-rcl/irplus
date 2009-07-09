@@ -39,7 +39,7 @@ public class ItemVersionTest {
 		GenericItem item3 = new GenericItem("myNewestItem");
 	    
 		IrUser user = new IrUser("username", "password");
-		VersionedItem vi = new VersionedItem(user, item, "myItem");
+		VersionedItem vi = new VersionedItem(user, item);
 		ItemVersion v1 = vi.getCurrentVersion();
 	    ItemVersion v2 = vi.addNewVersion(item2);
 	    ItemVersion v3 = vi.addNewVersion(item3);

@@ -88,7 +88,7 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 		
 		SearchResults<PersonNameAuthority> nameSearchResults = new SearchResults<PersonNameAuthority>();
 		nameSearchResults.setOriginalQuery(query);
-		query = SearchHelper.prepareMainSearchString(query, true);
+		query = SearchHelper.prepareMainSearchString(query, false);
 		List<PersonNameAuthority> personNameAurhorities = new LinkedList<PersonNameAuthority>();
 		
 		if( log.isDebugEnabled())

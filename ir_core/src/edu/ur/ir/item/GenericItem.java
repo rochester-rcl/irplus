@@ -46,84 +46,93 @@ import edu.ur.persistent.CommonPersistent;
  */
 public class GenericItem extends CommonPersistent implements Cloneable {
 	
-	
+	/** Separator that should be used for keywords */
 	public static final String KEYWORD_SEPARATOR = ";";
+
+    /** leading articles for the name */
+    private String leadingNameArticles;
+    
+	/** first character of the name of this item's name  */
+	private char nameFirstChar;
 	
+	/** lower case value of the name  this is for database performance */
+	private String lowerCaseName;
+    
 	/**  Logger */
-	protected static final Logger log = Logger.getLogger(GenericItem.class);
+	private static final Logger log = Logger.getLogger(GenericItem.class);
 	
 	/**  Files associated with this item. */
-	protected Set<ItemFile> itemFiles = new HashSet<ItemFile>();
+	private Set<ItemFile> itemFiles = new HashSet<ItemFile>();
 	
 	/**    Primary image file - this is the primary image file for the generic item*/
 	private ItemFile primaryImageFile;
 	
 	/**  Set of links for information about this item. */
-	protected Set<ItemLink> links = new HashSet<ItemLink>();
+	private Set<ItemLink> links = new HashSet<ItemLink>();
 	
 	/** Generated id */
-	protected static final long serialVersionUID = -1438304568529011205L;
+	private static final long serialVersionUID = -1438304568529011205L;
 	
 	/** The first time the publication was shown or presented to the public */
-	protected FirstAvailableDate firstAvailableDate;
+	private FirstAvailableDate firstAvailableDate;
 	
 	/** Date this publication can be made available to the public. This is to allow
 	 * an item to be embargoed until sometime in the future  */
-	protected Date releaseDate;
+	private Date releaseDate;
 	
 	/** Original date this item was created */
-	protected OriginalItemCreationDate originalItemCreationDate;
+	private OriginalItemCreationDate originalItemCreationDate;
 	
 	/**  People who have contributed to this item. */
-	protected List<ItemContributor> contributors = new LinkedList<ItemContributor>();
+	private List<ItemContributor> contributors = new LinkedList<ItemContributor>();
 	
 	/**  The content type for this item. For example Book, Music piece, etc. */
-	protected ContentType primaryContentType;
+	private ContentType primaryContentType;
 	
 	/**  The secondary content type for this item. For example Book, Music piece, etc. */
-	protected Set<ContentType> secondaryContentTypes = new HashSet<ContentType>();
+	private Set<ContentType> secondaryContentTypes = new HashSet<ContentType>();
 	
 	/**  Language used by this item. */
-	protected LanguageType languageType;
+	private LanguageType languageType;
 	
 	/**  Set of licenses applicable to this item. */
-	protected Set<License> licenses = new HashSet<License>();
+	private Set<License> licenses = new HashSet<License>();
 	
 	/**  Set of identifiers for the item. */
-	protected Set<ItemIdentifier> itemIdentifiers = new HashSet<ItemIdentifier>();
+	private Set<ItemIdentifier> itemIdentifiers = new HashSet<ItemIdentifier>();
 
 	/**  Set of extent types for the item. */
-	protected Set<ItemExtent> itemExtents = new HashSet<ItemExtent>();
+	private Set<ItemExtent> itemExtents = new HashSet<ItemExtent>();
 
 	/**  The abstract for the item */
-	protected String itemAbstract;
+	private String itemAbstract;
 	
 	/**  The subject keywords for the item - semicolon (;) separated */
-	protected String itemKeywords;
+	private String itemKeywords;
 	
 	/**  Indicates the item has been publicly published */
-	protected boolean publishedToSystem = false;
+	private boolean publishedToSystem = false;
 	
 	/** Owner of the item */
-	protected IrUser owner;
+	private IrUser owner;
 	
 	/**  Series and report numbers for this item. */
-	protected Set<ItemReport> itemReports = new HashSet<ItemReport>();
+	private Set<ItemReport> itemReports = new HashSet<ItemReport>();
 	
 	/**  Information about the external publish. */
-	protected ExternalPublishedItem externalPublishedItem;
+	private ExternalPublishedItem externalPublishedItem;
 	
 	/**  sponsor for the item. */
 	private Set<ItemSponsor> itemSponsors = new HashSet<ItemSponsor>();
 	
 	/** Set of sub titles for item */
-	protected Set<ItemTitle> subTitles = new HashSet<ItemTitle>();
+	private Set<ItemTitle> subTitles = new HashSet<ItemTitle>();
 	
 	/** indicates this item is a thesis  */
-	protected boolean thesis = false;
+	private boolean thesis = false;
 	
 	/** indicates whether the item is locked for review */
-	protected boolean locked = false;
+	private boolean locked = false;
 	
 	/** Indicates that this item can be viewed by the public. */
 	private boolean publiclyViewable = true;
@@ -144,6 +153,36 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	public GenericItem(String name)
 	{
 		setName(name);
+	}
+	
+	/**
+	 * Create an item with the specified name.
+	 * 
+	 * @param leading Name articles  - articles that should prefix the name - 
+	 * A, an, d', de, the, ye
+	 * 
+	 * @param name - (Title) / name of the item
+	 */
+	public GenericItem(String leadingNameArticles, String name)
+	{
+		this(name);
+		setLeadingNameArticles(leadingNameArticles);
+	}
+	
+	/**
+	 * Override the set name.
+	 * 
+	 * @see edu.ur.persistent.CommonPersistent#setName(java.lang.String)
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
+		if(name.length() > 0)
+		{
+		    this.nameFirstChar = Character.toLowerCase(name.charAt(0));
+		}
+		lowerCaseName = name.toLowerCase();
+
 	}
 	
 	/**
@@ -457,7 +496,9 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	public int hashCode()
 	{
 		int value = 0;
+		value += id == null ? 0 : id.hashCode();
 		value += name == null ? 0 : name.hashCode();
+		value += leadingNameArticles == null ? 0 : leadingNameArticles.hashCode();
 		return value;
 	}
 	
@@ -476,10 +517,13 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		 * So the equals method checks for Id equals
 		 */ 
 		if( ( id != null && !id.equals(other.getId()) ) ||
-				( id == null && other.getId() != null ) ) return false;
+			( id == null && other.getId() != null ) ) return false;
 
 		if( ( name != null && !name.equals(other.getName()) ) ||
 			( name == null && other.getName() != null ) ) return false;
+		
+		if( ( leadingNameArticles != null && !leadingNameArticles.equals(other.getLeadingNameArticles()) ) ||
+			( leadingNameArticles == null && other.getLeadingNameArticles() != null ) ) return false;
 		
 		return true;
 	}
@@ -1157,9 +1201,9 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * 
 	 * @param title
 	 */
-	public void addSubTitle(String title)
+	public void addSubTitle(String title, String leadingArticles)
 	{
-		ItemTitle subTitle = new ItemTitle(this , title);
+		ItemTitle subTitle = new ItemTitle(this , title, leadingArticles);
 		subTitles.add(subTitle);
 	}
 
@@ -1302,13 +1346,14 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	public GenericItem clone() {
 
 		GenericItem newItem = new GenericItem(this.getName());
-		
+		newItem.setLeadingNameArticles(this.getLeadingNameArticles());
 		newItem.setDescription(this.getDescription());
 		newItem.setItemAbstract(this.getItemAbstract());
 		newItem.setItemKeywords(this.getItemKeywords());
 		newItem.setLanguageType(this.getLanguageType());
 		newItem.setOwner(this.getOwner());
 		newItem.setPrimaryContentType(this.getPrimaryContentType());
+		newItem.setPrimaryImageFile(this.getPrimaryImageFile());
 		
         if( firstAvailableDate != null )
         {
@@ -1396,7 +1441,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 
 		// Copy sub titles
 		for(ItemTitle oldTitle:this.getSubTitles()) {
-			newItem.addSubTitle(oldTitle.getTitle());
+			newItem.addSubTitle(oldTitle.getTitle(), oldTitle.getLeadingArticles());
 		}		
 
 		// Copy license
@@ -1717,6 +1762,46 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		this.itemCopyrightStatement = itemCopyrightStatement;
 	}
 
+	/**
+	 * The leading name articles for example "A, an, the, ye"
+	 * @return
+	 */
+	public String getLeadingNameArticles() {
+		return leadingNameArticles;
+	}
 
+	/**
+	 * The leading name articles 
+	 * 
+	 * @param leadingNameArticles
+	 */
+	public void setLeadingNameArticles(String leadingNameArticles) {
+		this.leadingNameArticles = leadingNameArticles;
+	}
+
+	public char getNameFirstChar() {
+		return nameFirstChar;
+	}
+
+	public String getLowerCaseName() {
+		return lowerCaseName;
+	}
+	
+	/**
+	 * Get the full name of the generic item
+	 * @return
+	 */
+	public String getFullName()
+	{
+		if( leadingNameArticles != null )
+		{
+			return  leadingNameArticles + " " + name;
+		}
+		else
+		{
+			return name;
+		}
+		
+	}
 
 }

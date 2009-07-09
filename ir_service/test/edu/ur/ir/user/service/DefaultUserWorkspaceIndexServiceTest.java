@@ -727,7 +727,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		Publisher publisher = new Publisher("publisher");
 		publisherService.savePublisher(publisher);
 		
-		PersonalItem personalItem = userPublishingFileSystemService.createRootPersonalItem(user, "rootCollection");
+		PersonalItem personalItem = userPublishingFileSystemService.createRootPersonalItem(user, "articles", "rootCollection");
 		GenericItem item1 = personalItem.getVersionedItem().getCurrentVersion().getItem();
 		item1.setName("item1");
 		item1.setPrimaryContentType(contentType);

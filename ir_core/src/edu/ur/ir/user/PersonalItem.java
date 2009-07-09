@@ -230,7 +230,7 @@ DescriptionAware, FileSystem{
 	 * @see edu.ur.simple.type.NameAware#getName()
 	 */
 	public String getName() {
-		return versionedItem.getCurrentVersion().getItem().getName();
+		return versionedItem.getCurrentVersion().getItem().getFullName();
 	}
 
 	/**

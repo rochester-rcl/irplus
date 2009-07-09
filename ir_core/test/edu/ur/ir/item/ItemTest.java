@@ -65,7 +65,7 @@ public class ItemTest {
 	 */
 	public void testBasicSets() 
 	{
-		GenericItem item  = new GenericItem("myName");
+		GenericItem item  = new GenericItem("articles", "myName");
 		item.setDescription("myDescription");
 
 		ContentType contentType = new ContentType();
@@ -83,8 +83,8 @@ public class ItemTest {
 		assert item.getDescription().equals("myDescription") : "Descriptions should be equal";
 		assert item.getName().equals("myName") : "Names should be equal";
 		assert item.getFirstAvailableDate().equals(dateFirstAvailable) : "Accessioned Dates should be equal ";
-		
-
+		assert item.getLeadingNameArticles().equals("articles") :  "item articles should = articles but equals " + item.getLeadingNameArticles();
+       
 		
 		assert item.getPrimaryContentType().equals(contentType) : "content type should equal " + contentType + 
 		"but equals " + item.getPrimaryContentType();
@@ -359,7 +359,7 @@ public class ItemTest {
 		item.setOriginalItemCreationDate(new OriginalItemCreationDate(10,25,2008));
 		item.setReleaseDate(new Date());
 		item.addItemSponsor(sponsor);
-		item.addSubTitle("Title 2");
+		item.addSubTitle("Title 2", "The articles");
 		
 		GenericItem clonedItem = item.clone();
 		

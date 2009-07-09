@@ -98,6 +98,7 @@
 	    
 	       <!-- Begin - To create new Publication with selected files, item name is set in this form and submitted -->
 	       <input type="hidden" id="myFolders_item_name" name="itemName"/>
+	       <input type="hidden" id="myFolders_item_name" name="itemArticles"/>
 	       <!-- End - To create new Publication -->
 	       
            <input type="hidden" id="myFolders_parentFolderId" name="parentFolderId" value="${parentFolderId}"/>

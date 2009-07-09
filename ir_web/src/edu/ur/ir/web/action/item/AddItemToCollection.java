@@ -66,6 +66,9 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 	/** Name to give the item */
 	private String itemName;
 	
+	/** the name articles - A, An the ... */
+	private String itemArticles;
+	
 	/** Id of the item */
 	private GenericItem item;
 	
@@ -104,7 +107,7 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 	 */
 	public String createItem()
 	{
-		log.debug("Create Item :" + itemName + " under collection Id:" + parentCollectionId);
+		log.debug("Create Item articles = " + itemArticles + " item name =  " + itemName + " under collection Id:" + parentCollectionId);
 		
 		IrUser user = userService.getUser(userId, false);
 		
@@ -126,14 +129,15 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		PersonalItem personalItem = null;
 		if( parentCollectionId == null || parentCollectionId == ROOT_COLLECTION_ID)
 		{
-			personalItem = userPublishingFileSystemService.createRootPersonalItem(user, itemName);
+			personalItem = userPublishingFileSystemService.createRootPersonalItem(user, itemArticles, itemName);
+			
 		}
 		else
 		{
 			PersonalCollection personalCollection = 
 				userPublishingFileSystemService.getPersonalCollection(parentCollectionId, false);
 
-			personalItem = userPublishingFileSystemService.createPersonalItem(personalCollection, user, itemName);
+			personalItem = userPublishingFileSystemService.createPersonalItem(personalCollection, user, itemArticles, itemName);
 		}
 		
 		item = personalItem.getVersionedItem().getCurrentVersion().getItem();
@@ -402,6 +406,14 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 
 	public void setQuartzScheduler(Scheduler quartzScheduler) {
 		this.quartzScheduler = quartzScheduler;
+	}
+
+	public String getItemArticles() {
+		return itemArticles;
+	}
+
+	public void setItemArticles(String itemArticles) {
+		this.itemArticles = itemArticles;
 	}
 
 

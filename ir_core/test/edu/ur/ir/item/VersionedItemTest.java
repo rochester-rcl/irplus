@@ -38,7 +38,7 @@ public class VersionedItemTest {
 	{
 		GenericItem item = new GenericItem("myItem");
 		IrUser user = new IrUser("username", "password");
-	    VersionedItem vi = new VersionedItem(user, item, "myItem");
+	    VersionedItem vi = new VersionedItem(user, item);
 	    
 	    ItemVersion itemVersion = new ItemVersion(item, vi, 1);
 	    assert vi.getCurrentVersion().equals(itemVersion);
@@ -55,7 +55,7 @@ public class VersionedItemTest {
 		GenericItem item3 = new GenericItem("myNewestItem");
 	    
 		IrUser user = new IrUser("username", "password");
-		VersionedItem vi = new VersionedItem(user, item, "myItem");
+		VersionedItem vi = new VersionedItem(user, item);
 	    vi.addNewVersion(item2);
 	    ItemVersion v3 = vi.addNewVersion(item3);
 	     
@@ -75,7 +75,7 @@ public class VersionedItemTest {
 		GenericItem item3 = new GenericItem("myNewestItem");
 	    
 		IrUser user = new IrUser("username", "password");
-		VersionedItem vi = new VersionedItem(user, item, "myItem");
+		VersionedItem vi = new VersionedItem(user, item);
 	    ItemVersion version2 = vi.addNewVersion(item2);
 	    vi.addNewVersion(item3);
 	     
