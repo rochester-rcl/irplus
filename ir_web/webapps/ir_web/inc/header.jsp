@@ -31,7 +31,9 @@
        </div>
        <div id="header_links">
            <a href="<c:url value="/help.action"/>">Help</a> | <a href="<c:url value="/contactUs.action"/>">Contact Us</a> | <a href="<c:url value="/about.action"/>">About</a> | <a href="<c:url value="/privacyPolicy.action"/>">Privacy Policy</a>
-        
+           <br>
+           <c:url var="poweredByImage" value="/page-resources/images/all-images/poweredby.gif"/>
+           <a href="http://code.google.com/p/irplus/"><img class="powered_by" alt="Powered By IR Plus" src="${poweredByImage}"></a>
        </div>
    </div>
   
