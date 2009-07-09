@@ -76,7 +76,7 @@
 
             <br/>
             <br/>
-	        <ur:div id="newContentTypes"></ur:div>
+	        <div id="newContentTypes"></div>
          </div>
          <!--  end body div -->
       
@@ -86,28 +86,28 @@
   </div>
   <!--  End doc div-->
   
-  <ur:div id="newContentTypeDialog" cssClass="hidden">
-    <ur:div cssClass="hd">Content Type Information</ur:div>
-    <ur:div cssClass="bd">
-      <ur:basicForm id="addContentType" name="newContentTypeForm" 
+  <div id="newContentTypeDialog" class="hidden">
+    <div class="hd">Content Type Information</div>
+    <div class="bd">
+      <form id="addContentType" name="newContentTypeForm" 
 		                    method="post" 
-		                    action="admin/createContentType.action">
-	    <ur:div id="newContentTypeDialogFields">
+		                    action="<c:url value="/admin/createContentType.action"/>">
+	    <div id="newContentTypeDialogFields">
 	       <c:import url="content_type_form.jsp"/>
-	    </ur:div>
-	  </ur:basicForm>
-    </ur:div>
-  </ur:div>
+	    </div>
+	  </form>
+    </div>
+  </div>
 	         
-  <ur:div id="deleteContentTypeDialog" cssClass="hidden">
-    <ur:div cssClass="hd">Delete Content Types</ur:div>
-	  <ur:div cssClass="bd">
-	    <ur:basicForm id="deleteContentType" name="deleteContentType" method="post" 
-		                action="admin/deleteContentType.action">
-		 <ur:div id="deleteContentTypeError" cssClass="errorMessage"></ur:div>
-		   <p>Are you sure you wish to delete the selected content types?</p>
-        </ur:basicForm>
-      </ur:div>
-  </ur:div>
+  <div id="deleteContentTypeDialog" class="hidden">
+    <div class="hd">Delete Content Types</div>
+	  <div class="bd">
+	    <form id="deleteContentType" name="deleteContentType" method="post" 
+		                action="<c:url value="/admin/deleteContentType.action"/>">
+		    <div id="deleteContentTypeError" class="errorMessage"></div>
+		     <p>Are you sure you wish to delete the selected content types?</p>
+        </form>
+      </div>
+  </div>
 </body>
 </html>
