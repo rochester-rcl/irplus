@@ -1190,6 +1190,9 @@ CREATE TABLE ir_item.item
   release_date DATE,
   first_available_date_id BIGINT,
   name TEXT NOT NULL,
+  name_first_char CHAR NOT NULL,
+  lower_case_name TEXT NOT NULL,
+  leading_name_articles TEXT,
   description TEXT,
   abstract TEXT,
   keywords TEXT,
@@ -1211,8 +1214,13 @@ CREATE TABLE ir_item.item
 ) ;
 ALTER TABLE ir_item.item OWNER TO ir_plus;
 
--- Index on the item Name
+-- Index on the item Name and lower case name
+CREATE INDEX item_lower_case_name_idx ON ir_item.item USING btree (lower_case_name);
 CREATE INDEX item_name_idx ON ir_item.item USING btree (name);
+
+-- Index on the item Name first character
+CREATE INDEX item_name_first_char_idx ON ir_item.item(name_first_char);
+
 
 -- The item sequence
 CREATE SEQUENCE ir_item.item_seq;
@@ -1290,8 +1298,6 @@ CREATE TABLE ir_item.versioned_item
     largest_item_version_id INTEGER NOT NULL,
     max_allowed_versions INTEGER NOT NULL,
     current_item_version_id bigint,
-    name TEXT NOT NULL,
-    description TEXT,
     version INTEGER,
     user_id BIGINT,
     FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
@@ -1384,12 +1390,18 @@ ALTER TABLE ir_item.item_link_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Item title table
+-- this is used for other titles 
+-- the main title is currently stored in
+-- the item
 -- ---------------------------------------------
 
 CREATE TABLE ir_item.item_title
 (
     item_title_id BIGINT NOT NULL PRIMARY KEY,
-    title TEXT NULL,
+    title TEXT NOT NULL,
+    lower_case_title TEXT NOT NULL, 
+    title_first_char CHAR NOT NULL,
+    leading_articles TEXT,
     version INTEGER,
     item_id BIGINT NOT NULL,
     FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id)
@@ -1399,6 +1411,13 @@ ALTER TABLE ir_item.item_title OWNER TO ir_plus;
 -- The item link sequence
 CREATE SEQUENCE ir_item.item_title_seq ;
 ALTER TABLE ir_item.item_title_seq OWNER TO ir_plus;
+
+-- Index on the item Name and lower case name
+CREATE INDEX title_lower_case_name_idx ON ir_item.item_title USING btree (lower_case_title);
+CREATE INDEX title_name_idx ON ir_item.item_title USING btree (title);
+
+-- Index on the item Name first character
+CREATE INDEX item_title_first_char_idx ON ir_item.item_title(title_first_char);
 
 
 -- ---------------------------------------------
@@ -1790,9 +1809,6 @@ ALTER TABLE ir_repository.institutional_collection_subscription_seq OWNER TO ir_
 CREATE TABLE ir_repository.versioned_institutional_item
 (
     versioned_institutional_item_id BIGINT PRIMARY KEY,
-    name TEXT NOT NULL,
-    lower_case_name TEXT NOT NULL,
-    name_first_char CHAR NOT NULL,
     largest_item_version_id INTEGER NOT NULL,
     current_institutional_item_version_id BIGINT,
     version INTEGER
@@ -1803,12 +1819,6 @@ ALTER TABLE ir_repository.versioned_institutional_item OWNER TO ir_plus;
 CREATE SEQUENCE ir_repository.versioned_institutional_item_seq;
 ALTER TABLE ir_repository.versioned_institutional_item_seq OWNER TO ir_plus;
 
--- create an index on the versioned item name lower case
-CREATE INDEX versioned_institutional_item_lower_name_idx 
-ON ir_repository.versioned_institutional_item (lower_case_name);
-
--- Index on the item Name first character
-CREATE INDEX versioned_institutional_item_char ON ir_repository.versioned_institutional_item(name_first_char);
 
 -- ---------------------------------------------
 -- Institutional Items
