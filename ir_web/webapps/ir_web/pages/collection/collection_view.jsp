@@ -81,7 +81,7 @@
             <!--  this is the body regin of the page -->
             <div id="bd">
                 <div id="collection_top_info">
-                    <h3 class="collection_path">Collection Path: <a href="home.action">irplus</a> >
+                    <h3 class="collection_path"><a href="home.action">${repository.name}</a> >
                                 <c:forEach var="collection" items="${collectionPath}">
                                     <c:url var="pathCollectionUrl" value="/viewInstitutionalCollection.action">
                                          <c:param name="collectionId" value="${collection.id}"/>
