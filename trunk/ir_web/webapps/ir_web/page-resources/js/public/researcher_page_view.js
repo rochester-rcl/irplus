@@ -97,7 +97,6 @@ YAHOO.ur.researcher.page = {
 	 */
 	buildTree : function(node, parentNode, researcherId) 
 	{
-	       
 			// Build folders and its children
 			for (var i = 0; i < node.folders.length; i++) {
 			
@@ -109,15 +108,29 @@ YAHOO.ur.researcher.page = {
 			    
 				var newNode = new YAHOO.widget.TextNode(nameDescValue, parentNode, false);
               
-				if (node.folders[i].folders == '' && node.folders[i].files == '' &&
-				    node.folders[i].links == '' && node.folders[i].publications == '') {
-					
-					// Set folder icon
-				   newNode.labelStyle  = "icon-folder";
-				}
+				// make sure there is not an empty folder
+				if ( node.folders[i].folders.length == 0 &&
+					 node.folders[i].files.length == 0 &&
+				     node.folders[i].links.length == 0  && 
+				     node.folders[i].publications.length == 0 &&
+				     node.folders[i].institutionalItems.length == 0) {
 				
-				YAHOO.ur.researcher.page.buildTree(node.folders[i], newNode, researcherId);
+					// Set folder icon
+				    newNode.labelStyle  = "icon-folder";
+					
+				    // below would create an empty folder depends on style user would 
+				    // like comment the above line and then uncomment the below 3 lines
+				    //var emptyObj = new Object;
+					// Create file node
+					//var fileNode = new YAHOO.widget.HTMLNode(emptyObj, newNode, false, true);
+				}
+				else
+				{
+				    YAHOO.ur.researcher.page.buildTree(node.folders[i], newNode, researcherId);
+				}
 			}
+			
+			
 			
 			// Build file node
 			for (var i = 0; i < node.files.length; i++) {
