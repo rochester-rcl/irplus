@@ -19,7 +19,7 @@
 -->
 
    <table class="baseTable">
-       <c:if test="${subcollectionCount > 0}">
+       <c:if test="${allSubcollectionCount > 0}">
    	       <tr><td>Number of sub-collections for this collection: ${allSubcollectionCount}</td></tr>
    	   </c:if>
    	   <c:if test="${institutionalItemsCountForACollection > 0}">
