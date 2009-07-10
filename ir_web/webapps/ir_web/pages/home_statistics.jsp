@@ -1,6 +1,6 @@
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
 
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!--  
    Copyright 2008 University of Rochester
 
@@ -18,8 +18,14 @@
 -->
 
 <p>
+   <c:if test="${numberOfCollections > 0}">
    Number of collections  : ${numberOfCollections}<br/><br/>
+   </c:if>
+   <c:if test="${numberOfPublications > 0}">
    Number of publications : ${numberOfPublications}<br/><br/>
+   </c:if>
+   <c:if test="${numberOfFileDownloads > 0}">
    Number of file downloads : ${numberOfFileDownloads}<br/>
+   </c:if>
 </p>
  
