@@ -40,12 +40,6 @@
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
 			
-		<property name="name" column="name" type="string"
-			not-null="true" access="field" />
-			
-		<property name="description" column="description" type="string"
-			not-null="false" access="field"/>
-			
 		<property name="maxAllowedVersions" column="max_allowed_versions" type="int"
 			not-null="true" access="field"/>
 
@@ -82,16 +76,7 @@
 	    select count(*) from VersionedItem
 	</query>
 	
-	<!-- named query for getting all versioned items ordered by name -->
-    <query name="getAllVersionedItemNameAsc">from VersionedItem order by name </query>
-    
-    <!-- named query for getting a versioned items by name -->
-	<query name="getVersionedItemByName">
-		from VersionedItem as VersionedItem where
-		VersionedItem.name = ?
-	</query>
-	
-		<!-- named query for getting all the item belonging to an user -->
+	<!-- named query for getting all the item belonging to an user -->
 	<query name="getAllVersionedItemsForUser">
         from VersionedItem versionedItem
         where versionedItem.owner.id = ?

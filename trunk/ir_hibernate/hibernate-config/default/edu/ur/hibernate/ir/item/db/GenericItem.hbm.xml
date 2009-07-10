@@ -42,7 +42,16 @@
 
 		<property name="name" column="name" type="string"
 			not-null="true" access="field" />
-
+		
+		<property name="lowerCaseName" column="lower_case_name" type="string"
+			not-null="true" access="field" />
+		
+		<property name="leadingNameArticles" column="leading_name_articles" type="string"
+			access="field" />
+			
+		<property name="nameFirstChar" column="name_first_char" type="char"
+			not-null="true" access="field" />
+			
 		<property name="description" column="description" type="string"
 			not-null="false" access="field"/>
 		
@@ -250,7 +259,7 @@
 	</query>
 	
 	<!-- named query for getting all items ordered by name -->
-    <query name="getAllItemNameAsc">from GenericItem order by name </query>
+    <query name="getAllItemNameAsc">from GenericItem order by lowerCaseName </query>
     
     <!-- named query for getting an item by name -->
 	<query name="getItemByName">

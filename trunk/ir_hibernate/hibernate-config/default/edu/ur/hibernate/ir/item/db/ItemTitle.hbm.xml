@@ -20,9 +20,10 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for an Item Title
+	Mapping for an Other titles for an Item 
 	
 	@author Sharmila Ranganathan
+	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.item">
 	<class name="ItemTitle" schema="ir_item" table="item_title"
@@ -42,7 +43,16 @@
 			
 		<property name="title" column="title" type="string"
 			not-null="true" access="field" />
-			
+		
+		<property name="lowerCaseTitle" column="lower_case_title" type="string"
+			not-null="true" access="field" />
+		
+		<property name="leadingArticles" column="leading_articles" type="string"
+			 access="field" />	
+	
+	    <property name="titleFirstChar" column="title_first_char" type="char"
+			not-null="true" access="field" />		
+		
 		<!--  Item title belongs to -->
 		<many-to-one class="GenericItem"
 			name="item" column="item_id" access="field"/>

@@ -40,15 +40,6 @@
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
 		
-		<property name="name" column="name" type="string"
-			not-null="true" access="field" />
-			
-	    <property name="lowerCaseName" column="lower_case_name" type="string"
-			not-null="true" access="field" />
-		
-		<property name="nameFirstChar" column="name_first_char" type="char"
-			not-null="true" access="field" />
-		
 		<property name="maxVersion" 
 		    column="largest_item_version_id" 
 		    type="int"
