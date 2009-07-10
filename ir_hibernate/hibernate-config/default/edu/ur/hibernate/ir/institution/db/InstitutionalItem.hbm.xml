@@ -129,13 +129,13 @@
 	<query name="getRepositoryItemsByNameOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem
 	    where institutionalItem.institutionalCollection.repository.id = ?
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName asc
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getRepositoryItemsByNameOrderDesc">
 	   select institutionalItem from InstitutionalItem as institutionalItem 	   
 	    where institutionalItem.institutionalCollection.repository.id = ?
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName desc
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
 	
@@ -147,21 +147,21 @@
 	<query name="institutionalItemCountForRepositoryByChar">
 	    select count(*) from InstitutionalItem as institutionalItem
 	    where institutionalItem.institutionalCollection.repository.id = ?
-	    and institutionalItem.versionedInstitutionalItem.nameFirstChar = ?
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
 	</query>
 	
 	<query name="getRepositoryItemsByCharOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	  
 	    where institutionalItem.institutionalCollection.repository.id = ?
-	    and institutionalItem.versionedInstitutionalItem.nameFirstChar = ?
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName asc
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getRepositoryItemsByCharOrderDesc">
 	   select institutionalItem from InstitutionalItem as institutionalItem 	   
 	    where institutionalItem.institutionalCollection.repository.id = ?
-	    and institutionalItem.versionedInstitutionalItem.nameFirstChar = ?
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName desc
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
 	<!-- ********************************************************* -->
@@ -171,21 +171,21 @@
 	<query name="institutionalItemCountForRepositoryByCharRange">
 	    select count(*) from InstitutionalItem as institutionalItem
 	    where institutionalItem.institutionalCollection.repository.id = ?
-	    and institutionalItem.versionedInstitutionalItem.nameFirstChar between ? and ?
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
 	</query>
 	
 	<query name="getRepositoryItemsByCharRangeOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	  
 	    where institutionalItem.institutionalCollection.repository.id = ?
-	    and institutionalItem.versionedInstitutionalItem.nameFirstChar between ? and ?
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName asc
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getRepositoryItemsByCharRangeOrderDesc">
 	   select institutionalItem from InstitutionalItem as institutionalItem 	   
 	    where institutionalItem.institutionalCollection.repository.id = ?
-	    and institutionalItem.versionedInstitutionalItem.nameFirstChar between ? and ?
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName desc
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
 	
@@ -197,14 +197,14 @@
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName asc
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 		
     <query name="getInstitutionalCollectionItemsByNameOrderDesc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName desc
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
    <!-- ********************************************************* -->
@@ -232,23 +232,23 @@
 	    select  count(*) from InstitutionalItem as institutionalItem 	    
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	    and institutionalItem.versionedInstitutionalItem.nameFirstChar = ?
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
 	</query>
 	
 	<query name="getInstitutionalCollectionItemsByCharOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	     and institutionalItem.versionedInstitutionalItem.nameFirstChar = ?
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName asc
+	     and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getInstitutionalCollectionItemsByCharOrderDesc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	     and institutionalItem.versionedInstitutionalItem.nameFirstChar = ?
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName desc
+	     and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
    <!-- ********************************************************* -->
@@ -259,23 +259,23 @@
 	    select  count(*) from InstitutionalItem as institutionalItem 	    
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	    and institutionalItem.versionedInstitutionalItem.nameFirstChar between ? and ?
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
 	</query>
 	
 	<query name="getCollectionItemsByCharRangeOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	    and institutionalItem.versionedInstitutionalItem.nameFirstChar between ? and ?
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName asc
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getCollectionItemsByCharRangeOrderDesc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	    and institutionalItem.versionedInstitutionalItem.nameFirstChar between ? and ?
-	    order by institutionalItem.versionedInstitutionalItem.lowerCaseName desc
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
 	
