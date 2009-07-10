@@ -42,10 +42,6 @@
             <artifact name="commons-pool" type="jar"/>
         </dependency>
 
-        <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.5" transitive="false">
-            <artifact name="slf4j-log4j12" type="jar"/>
-        </dependency>
-        
          <!-- postgresql jar files -->
 	    <dependency org="postgresql" name="postgresql" rev="8.3-604.jdbc3" transitive="false">
 	        <artifact name="postgresql" type="jar"/>
