@@ -1,5 +1,6 @@
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!--  
    Copyright 2008 University of Rochester
@@ -18,10 +19,19 @@
 -->
 
    <table class="baseTable">
-   	   <tr> <td>Number of sub-collections for this collection: ${subcollectionCount}</td></tr>
-       <tr> <td>Number of sub-collections in this collection and their sub-collections : ${allSubcollectionCount}</td></tr>
-   	   <tr> <td>Number of Publications in this collection : ${institutionalItemsCountForACollection}</td></tr>
-       <tr> <td>Number of Publications in this collection and its sub-collections : ${institutionalItemCount}</td></tr>
-       <tr> <td>Number of file downloads in this collection : ${fileDownloadCountForCollection}</td></tr>
-       <tr> <td>Number of file downloads in this collection and its sub-collections : ${fileDownloadCountForCollectionAndItsChildren}</td></tr>
+       <c:if test="${subcollectionCount > 0}">
+   	       <tr><td>Number of sub-collections for this collection: ${allSubcollectionCount}</td></tr>
+   	   </c:if>
+   	   <c:if test="${institutionalItemsCountForACollection > 0}">
+   	      <tr> <td>Number of Publications in this collection : ${institutionalItemsCountForACollection}</td></tr>
+       </c:if>
+       <c:if test="${institutionalItemCount > 0}">
+           <tr> <td>Number of Publications in this collection and its sub-collections : ${institutionalItemCount}</td></tr>
+       </c:if>
+       <c:if test="${fileDownloadCountForCollection > 0}">
+           <tr> <td>Number of file downloads in this collection : ${fileDownloadCountForCollection}</td></tr>
+       </c:if>
+       <c:if test="${fileDownloadCountForCollectionAndItsChildren > 0}">
+           <tr> <td>Number of file downloads in this collection and its sub-collections : ${fileDownloadCountForCollectionAndItsChildren}</td></tr>
+       </c:if>
    </table>
