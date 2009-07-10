@@ -783,14 +783,17 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	
 		for(String title : otherTitles)
 		{
-			String name = titleUtil.getName(title);
-			String articles = titleUtil.getLeadingArticle(title);
-			if( articles.equals(""))
-			{
-				articles = null;
+			if( title != null && !title.trim().equals(""))
+			{	
+			    String name = titleUtil.getName(title);
+			    String articles = titleUtil.getLeadingArticle(title);
+			    if( articles.equals(""))
+			    {
+				    articles = null;
+			    }
+			    log.debug("adding title " + name + " and articles " + articles);
+		        genericItem.addSubTitle(name, articles);
 			}
-			log.debug("adding title " + name + " and articles " + articles);
-		    genericItem.addSubTitle(name, articles);
 		}
 	}
 	
