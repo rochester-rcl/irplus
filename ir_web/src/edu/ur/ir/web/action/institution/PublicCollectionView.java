@@ -28,6 +28,7 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.order.OrderType;
@@ -86,6 +87,9 @@ public class PublicCollectionView extends ActionSupport {
 	
 	/**  List of most recent submissions to a collection */
 	private List<InstitutionalItem> mostRecentSubmissions = new LinkedList<InstitutionalItem>();
+	
+	/** The institutional repository */
+	private Repository repository;
 
 	public String getNextPicture()
 	{
@@ -101,7 +105,10 @@ public class PublicCollectionView extends ActionSupport {
 	 */
 	public String view()
 	{
-		
+		 repository = 
+			 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
+					 false);
+		 
 		institutionalCollection = 
 			institutionalCollectionService.getCollection(collectionId, false);
 		
@@ -280,6 +287,10 @@ public class PublicCollectionView extends ActionSupport {
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
+	}
+
+	public Repository getRepository() {
+		return repository;
 	}
 
 }
