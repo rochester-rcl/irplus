@@ -51,16 +51,16 @@
         </dependency>
      
         <!--  checkstyle jar files  -->
-        <dependency org="checkstyle" name="checkstyle" rev="5.0">
+        <dependency org="checkstyle" name="checkstyle" rev="5.0" transitive="false">
             <artifact name="checkstyle" type="jar"/>
         </dependency>
         
         <!--  emma code coverage files  -->
-        <dependency org="emma" name="emma" rev="2.0.5312">
+        <dependency org="emma" name="emma" rev="2.0.5312" transitive="false">
             <artifact name="emma" type="jar"/>
         </dependency>
         
-        <dependency org="emma" name="emma_ant" rev="2.0.5312">
+        <dependency org="emma" name="emma_ant" rev="2.0.5312" transitive="false">
             <artifact name="emma_ant" type="jar"/>
         </dependency>
     </dependencies>
