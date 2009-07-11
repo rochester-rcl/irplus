@@ -62,14 +62,6 @@
             <result name="success" type="no-op"/>
         </action>  
 
-		<action name="getAllDepartments" 
-            class="edu.ur.ir.web.action.researcher.EditResearcher"
-            method="getAllDepartments">
-            <interceptor-ref name="editStack"/>
-            <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success">/pages/user/researcher/researcher_department.jsp</result>
-        </action>
-
         <!--  Get department information -->
         <action name="getDepartmentsInformation"
                 method="getDepartmentsInformation"
@@ -98,18 +90,12 @@
         <!--  ************************************ -->
         <!--  Field Actions            	   -->
         <!--  ************************************ -->
-		<action name="getAllFields" 
-            class="edu.ur.ir.web.action.researcher.EditResearcher"
-            method="getAllFields">
-            <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/researcher/researcher_field.jsp</result>
-        </action> 
                           
         <!--  Get Fields  -->
         <action name="getFieldsInformation"
                 method="getFieldsInformation"
                 class="edu.ur.ir.web.action.researcher.EditResearcher">
-                <interceptor-ref name="editStack"/>
+                <interceptor-ref name="crudStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success">/pages/user/researcher/field_list.jsp</result>
         </action>
