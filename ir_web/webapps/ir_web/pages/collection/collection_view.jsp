@@ -185,7 +185,7 @@
 			                    <input type="hidden" name="userId" id="user_id" value="${user.id}">
 
 		                    	<c:if test="${user == null}">
-									<p> Login to subscribe to this collection. </p>
+									<p> <a href="<c:url value="/user/workspace.action"/>">Login</a> or <a href="<c:url value="viewUserRegistration.action"/>">Create an Account</a> to subscribe to this collection. </p>
 								</c:if>	
 							</ur:div>
                        </div>
