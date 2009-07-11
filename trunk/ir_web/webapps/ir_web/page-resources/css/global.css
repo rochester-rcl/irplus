@@ -19,6 +19,29 @@
    main components on each of the pages
 */
 
+/* set the default link colors */
+a:link 
+{ 
+	color: #00f;
+}
+
+a:visited 
+{ 
+	color: #00f;
+}
+
+a:hover 
+{ 
+	color: #00f;
+}
+
+a:active 
+{ 
+	color: #e00;
+}
+
+/* powered by logo */
+
 .powered_by
 {
 	padding-top:5px;
