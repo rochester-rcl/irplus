@@ -693,62 +693,7 @@ YAHOO.ur.edit.researcher =
 		document.myFolders.action =  basePath + 'user/viewAddPublications.action';
 		document.myFolders.submit();
 	},
-
-	/*
-	 * Removes the Field
-	 */
-	removeField : function(tableId)
-	{
-	        var table_div = document.getElementById("field_form");
-	        var child = document.getElementById(tableId);
-	        table_div.removeChild(child); 
-	        
-	},
 		
-	/**
-	 *  Function that retrieves fields from 
-	 *  the server
-	 */
-	getFields :function()
-	{
-	   // action to get repository pictures
-	   var getFieldsAction = 
-	       basePath + 'user/getAllFields.action';
-	       
-		var callback =
-		{
-		    success: function(o) 
-		    {
-			    // check for the timeout - forward user to login page if timout
-	            // occured
-	            if( !urUtil.checkTimeOut(o.responseText) )
-	            {       		    
-		            var divToUpdate = document.getElementById('field_form');
-		            var newField = o.responseText;
-		        
-		            // id to give to the table
-		    	    document.getElementById("field_table_id").value = parseInt(document.getElementById("field_table_id").value) + 1; 
-		        
-		            // Replace the table id with the latest Id
-		            newField = newField.replace("field_table_i","field_table_" + document.getElementById("field_table_id").value, "gm");
-		        
-		            var newDiv = document.getElementById('new_field');
-		            newDiv.innerHTML = newField;
-		            divToUpdate.appendChild(document.getElementById('field_table_'+document.getElementById("field_table_id").value));
-		            newDiv.innerHTML = "";
-		        }
-		    },
-			
-			failure: function(o) 
-			{
-			    alert('Get Extent Failure ' + o.status + ' status text ' + o.statusText );
-			}
-		}
-	       
-	    var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-	        getFieldsAction + '?bustcache='+new Date().getTime(), 
-	        callback, null);
-	},
 	
 	/**
 	 * Save researcher and update the screen with latest field

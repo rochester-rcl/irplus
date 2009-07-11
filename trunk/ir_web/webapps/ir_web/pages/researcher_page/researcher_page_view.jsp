@@ -92,10 +92,7 @@
  				
 				 <input type="hidden" id="researcher_id" value="${researcher.id}"/>
 				  <c:if test="${researcher != null && (!researcher.public)}">
-				      	<br/>
 	                	<h3 class="errorMessage">The researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName} is private.</h3>
-	                    <br/>
-	                    <br/>
                   </c:if>
 
                 <c:if test="${researcher == null}">
@@ -118,8 +115,7 @@
 							    <c:url var="editResearcherPageUrl" value="/user/viewResearcher.action">
 					        	    <c:param name="researcherId" value="${researcher.id}"/>
 					            </c:url>
-						        	<a href="${editResearcherPageUrl}">Edit Researcher Page</a> 
-
+						        <a href="${editResearcherPageUrl}">Edit Researcher Page</a> 
 					        </c:if>	                
 		                </td>
 	                </tr>
@@ -163,7 +159,7 @@
 		                              <c:if test="${!ur:isEmpty(researcher.fields)}">
 		                                  <strong>Field(s):</strong><br/><br/>
 		                                  <c:forEach items="${researcher.fields}" var="field">
-		                                      ${field.name}
+		                                      ${field.name}<br/>
 		                                  </c:forEach>
 		                                  <br/><br/>
 		                              </c:if>

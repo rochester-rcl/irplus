@@ -24,30 +24,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 
-<c:if test="${researcherFieldsCount == 0}">
-    <c:import url="researcher_field.jsp"/>
-</c:if>
-
-	<c:forEach items="${researcher.fields}" var="researcherField" varStatus="rowCounter">
-    
-   	<table id="field_table_${rowCounter.count}">
-
-		<tr>
-	      <td > 
-	      	   <select id="researcherForm_field" name="fieldIds" />
-	      		<c:forEach items="${fields}" var="field">
-	      			<option value = "${field.id}" 
-		      			<c:if test="${field.name == researcherField.name}">
-		      				selected
-		      			</c:if>
-		      		> <ur:maxText numChars="40" showEllipsis="true" text="${field.name}"/></option>
-	      		</c:forEach>
-	      	   </select>
-	      </td>
-	      <td>   
-	      	   <input type="button" class="ur_button" id="researcherForm_remove" value="Remove Field" onclick="javascript:YAHOO.ur.edit.researcher.removeField('field_table_${rowCounter.count}');"/>
-	      </td>
-	    </tr>
-	</table>
-	</c:forEach> 
+<select size="10" multiple="multiple" id="researcherForm_field" name="fieldIds" />
+    <c:forEach items="${fields}" var="field">
+	    <option  value = "${field.id}" 
+	       <c:forEach items="${researcher.fields}" var="researcherField">
+	      	    <c:if test="${field.id == researcherField.id}">
+	      		    selected
+	      		</c:if>
+	      	</c:forEach>
+		     > <ur:maxText numChars="40" showEllipsis="true" text="${field.name}"/></option>
+	</c:forEach>
+</select>
 

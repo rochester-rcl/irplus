@@ -24,18 +24,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
 
-
-      	    <select size="10" multiple="multiple" name="departmentIds" />
-	      	    <c:forEach items="${departments}" var="department">
-	      		    <option value = "${department.id}"
-	      			    <c:forEach items="${researcher.user.departments}" var="userDepartment">
-	      			        <c:if test="${department.id == userDepartment.id}">
-	      				        selected
-	      			        </c:if>
-	      			    </c:forEach>
-	      			    > ${department.name}</option>
-	      		</c:forEach>
-      	    </select>
+<select size="10" multiple="multiple" name="departmentIds" />
+    <c:forEach items="${departments}" var="department">
+	    <option value = "${department.id}"
+	        <c:forEach items="${researcher.user.departments}" var="userDepartment">
+	      	    <c:if test="${department.id == userDepartment.id}">
+	      		    selected
+	      		</c:if>
+	      	</c:forEach>
+	      	> ${department.name}</option>
+	</c:forEach>
+</select>
           
 	
 	

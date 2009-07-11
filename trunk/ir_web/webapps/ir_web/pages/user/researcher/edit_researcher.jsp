@@ -160,13 +160,13 @@
 	                                <tr>
 	                                    <td class="label">
 	                                        <strong>Field</strong>
-	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="researcherForm_add_field" value="Add Field" onclick="javascript:YAHOO.ur.edit.researcher.getFields();"/>
 	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="show_field" value="Add New Field"/>
 	                                    </td>
 	                               </tr>
 	                              <tr>
 	                              		<td class="input">
 	                					   <div id="new_field"> </div>
+	                                       
 	                                       <!--  this table is built dynamically -->
 							               <div id="field_form">
 							                    <c:import url="field_list.jsp"/>
