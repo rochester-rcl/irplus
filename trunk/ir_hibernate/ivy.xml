@@ -29,7 +29,6 @@
     <dependencies>
 
         <dependency org="ir_dao" name="ir_dao" rev="0.1" />
-        <dependency org="ir_core" name="ir_core" rev="0.1"/>
         <dependency org="file_db_service" name="file_db_service" rev="0.1"/>
         
         <!-- commons dbcp files -->
