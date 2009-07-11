@@ -44,7 +44,7 @@
 		
 		
 		        <div id="destination_path">
-		            Move To Location: /<ur:a href="javascript:YAHOO.ur.institutional.item.move.getMoveCollection('0');">irplus</ur:a>/
+		            Move To Location: /<ur:a href="javascript:YAHOO.ur.institutional.item.move.getMoveCollection('0');">${repository.name}</ur:a>/
 		            <c:forEach var="collection" items="${destinationPath}">
 			            <ur:a href="javascript:YAHOO.ur.institutional.item.move.getMoveCollection('${collection.id}')">${collection.name}</ur:a>/
                     </c:forEach>
