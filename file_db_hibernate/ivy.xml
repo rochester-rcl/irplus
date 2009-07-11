@@ -44,16 +44,43 @@
         <dependency org="commons-logging" name="commons-logging" rev="1.1.1" transitive="false">
             <artifact name="commons-logging" type="jar"/>
         </dependency>
+        
+        <!-- commons logging -->
+        <dependency org="commons-collections" name="commons-collections" rev="3.2.1" transitive="false">
+            <artifact name="commons-collections" type="jar"/>
+        </dependency>
 
 
         <!-- hibernate files -->
-        <dependency org="org.hibernate" name="hibernate-core" rev="3.3.2.GA" >
+        <dependency org="org.hibernate" name="hibernate-core" rev="3.3.2.GA" transitive="false">
             <artifact name="hibernate-core" type="jar"/>
         </dependency>
 
-        <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.5" transitive="false">
+         <dependency org="org.slf4j" name="slf4j-api" rev="1.5.8" transitive="false">
+            <artifact name="slf4j-api" type="jar"/>
+        </dependency>
+
+        <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.8" transitive="false">
             <artifact name="slf4j-log4j12" type="jar"/>
         </dependency>
+        
+        <dependency org="dom4j" name="dom4j" rev="1.6.1" transitive="false">
+            <artifact name="dom4j" type="jar"/>
+        </dependency>
+        
+        <dependency org="javax.transaction" name="jta" rev="1.1" transitive="false">
+            <artifact name="jta" type="jar"/>
+        </dependency>
+        
+        <dependency org="javassist" name="javassist" rev="3.11.0.GA" transitive="false">
+            <artifact name="javassist" type="jar"/>
+        </dependency>
+        
+        <dependency org="antlr" name="antlr" rev="2.7.7" transitive="false">
+            <artifact name="antlr" type="jar"/>
+        </dependency>
+        
+        
         
         <!-- spring files -->
         <dependency org="org.springframework" name="spring" rev="2.5.6" transitive="false">
