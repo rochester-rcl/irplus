@@ -261,7 +261,7 @@
 	                  </tr>              
                       <tr>
 	                       <td align="left" class="label" colspan="2">		
-	                          If you wish, you may use your Net ID  and password to login to IR Plus.  <strong>Net ID is NOT required to use this system.</strong>		  
+	                          If you wish, you may use your Net ID  and password to login. <strong>Net ID is NOT required to use this system.</strong>		  
 				          </td>
 				      </tr>
 	                  <tr> 

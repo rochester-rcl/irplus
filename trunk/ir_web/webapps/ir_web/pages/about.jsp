@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>About IR Plus</title>
+        <title>About</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
@@ -63,7 +63,7 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-               <h3>About IR Plus</h3> 
+               <h3>About</h3> 
                
                <p>A university-based, long-term, digital repository for the management,
                   dissemination and stewardship of digital materials. </p>

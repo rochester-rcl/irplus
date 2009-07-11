@@ -103,6 +103,9 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 	/** End position */
 	private int rowEnd;
 	
+	/** repository object */
+	private Repository repository;
+	
 	public int getRowEnd() {
 		return rowEnd;
 	}
@@ -116,8 +119,9 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 	 * 
 	 * @return
 	 */
-	public String startSearch()
+	public String execute()
 	{
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		return SUCCESS;
 	}
 	
@@ -137,7 +141,7 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 	 */
 	public String searchRepositoryInstitutionalItems() throws CorruptIndexException, IOException, ParseException
 	{
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		searchInit = false;
 		rowEnd = rowStart + numberOfResultsToShow;
 		
@@ -181,7 +185,7 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 	ParseException
 	{
 		rowEnd = rowStart + numberOfResultsToShow;
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		searchInit = false;
 		
 		log.debug("Executing query  with facets : " + query);
@@ -489,6 +493,14 @@ public class RepositoryInstitutionalItemSearch extends Pager {
 
 	public void setFacetIndexToRemove(int facetIndexToRemove) {
 		this.facetIndexToRemove = facetIndexToRemove;
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
 	}
 
 

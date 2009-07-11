@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>IR Plus Help</title>
+        <title>Help</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
@@ -63,7 +63,7 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-               <h3>We're sorry an error has occured - an email has been sent to the administrator</h3> 
+               <h3>We're sorry an error has occurred - an email has been sent to the administrator</h3> 
                
             </div>
             <!--  end the body tag --> 

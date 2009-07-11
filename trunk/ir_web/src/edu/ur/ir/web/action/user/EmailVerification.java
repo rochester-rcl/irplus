@@ -21,6 +21,8 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
@@ -53,14 +55,20 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 	
 	/** Invite user service class */
 	private InviteUserService inviteUserService;
+	
+	/** Service for dealing with repositories */
+	private RepositoryService repositoryService;
+	
+	/** repository object */
+	private Repository repository;
 
 	/**
 	 * Execute method to verify email
 	 */
 	public String execute() {
-		
+		log.debug("execute email verification ");
 		IrUser user = userService.getUser(userId, false);
-
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		if (token != null) {
 			UserEmail email = userService.getUserEmailByToken(token);
 			
@@ -112,6 +120,22 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 
 	public void setInviteUserService(InviteUserService inviteUserService) {
 		this.inviteUserService = inviteUserService;
+	}
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
 	}
 
 }

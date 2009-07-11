@@ -24,6 +24,8 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameService;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 
@@ -84,6 +86,12 @@ public class CollectionPersonNameBrowse extends Pager {
 	/** Path for a the set of collections */
 	private List<InstitutionalCollection> collectionPath;
 	
+	/** repository object */
+	private Repository repository;
+	
+	/** Service for dealing with repositories */
+	private RepositoryService repositoryService;
+	
 	/** Default constructor */
 	public CollectionPersonNameBrowse()
 	{
@@ -105,7 +113,7 @@ public class CollectionPersonNameBrowse extends Pager {
 	 * @return
 	 */
 	public String execute() {
-		
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
 		if( institutionalCollection == null )
 		{
@@ -242,6 +250,22 @@ public class CollectionPersonNameBrowse extends Pager {
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
 	}
 
 }

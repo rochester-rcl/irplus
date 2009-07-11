@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>About IR Plus</title>
+        <title>Accept License for: ${repository.name}</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->

@@ -100,11 +100,7 @@
                 <div class="yui-u first">
                    <div class="contentContainer">
                        <div class="contentBoxTitle">
-                            <c:url var="browseCollectionItems" value="/browseCollectionItems.action">
-                               <c:param name="collectionId" value="${institutionalCollection.id}"/>
-                           </c:url>
-                         
-                           <p><a href="${browseCollectionItems}">Browse/Search</a></p>
+                           <p>Browse/Search</p>
                        </div>
                    
                        <div class="contentBoxContent">
@@ -115,8 +111,16 @@
                                 <br/>
                                 <button type="submit" class="ur_button" 
 		                               onmouseover="this.className='ur_buttonover';"
-	 		                           onmouseout="this.className='ur_button';">Search</button></p>
+	 		                           onmouseout="this.className='ur_button';">Search</button>
                                 <input type="hidden" name="collectionId" value="${institutionalCollection.id}"/>
+                          
+                                <br/>
+                                <br/>
+	 		                      <c:url var="browseCollectionItems" value="/browseCollectionItems.action">
+                                       <c:param name="collectionId" value="${institutionalCollection.id}"/>
+                                  </c:url>
+	 		                      <a href="${browseCollectionItems}"><strong>Browse All/Search</strong></a>
+	 		                      </p>
                            </form>
                            
                        </div>
