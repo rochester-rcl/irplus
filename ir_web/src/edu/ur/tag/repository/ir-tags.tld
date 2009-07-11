@@ -77,6 +77,10 @@
 			<name>displayDates</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>lastNameFirst</name>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
 	</tag>
 
 	<tag>

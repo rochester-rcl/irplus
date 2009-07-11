@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>IR Plus Help</title>
+        <title>Help</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
@@ -63,7 +63,7 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-               <h3>IR Plus Help</h3> 
+               <h3>Help</h3> 
                
             </div>
             <!--  end the body tag --> 

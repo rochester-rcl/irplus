@@ -28,7 +28,7 @@
 
 <html>
     <head>
-        <title>Browsing/Searching: All of irplus</title>
+        <title>Browsing/Searching: All of ${repository.name}</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
@@ -99,7 +99,7 @@
             <!--  this is the body regin of the page -->
             <div id="bd">
             	
-            	 <h3> Browse/Search: UR Research</h3>
+            	 <h3> Browse/Search: ${repository.name}</h3>
 		        
 		        <!--  set up tabs for editing news -->
 		        <div id="all-items-tabs" class="yui-navset">
@@ -142,8 +142,6 @@
 					        <urstb:table width="100%">
 					            <urstb:thead>
 					                <urstb:tr>
-														                
-					                    <urstb:td>Id</urstb:td>
 					                    <urstb:td>Thumbnail</urstb:td>
 					                    <c:url var="sortAscendingNameUrl" value="/browseRepositoryItems.action">
 										     <c:param name="rowStart" value="${rowStart}"/>
@@ -178,7 +176,6 @@
                                             <urstb:thImgSort
                                                          sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
                                                          sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
-					                    <urstb:td>Description</urstb:td>
 					                    <urstb:td>Contributors</urstb:td>
 						                </urstb:tr>
 						            </urstb:thead>
@@ -192,9 +189,7 @@
 						                        cssClass="${rowClass}"
 						                        onMouseOver="this.className='highlight'"
 						                        onMouseOut="this.className='${rowClass}'">
-						                        <urstb:td>
-							                        ${institutionalItem.id}
-						                        </urstb:td>
+						                        
 						                        <urstb:td>
 						                        
 						                             <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile != null }">
@@ -209,11 +204,10 @@
 						                            <c:url var="itemView" value="/institutionalPublicationPublicView.action">
 						                                 <c:param name="institutionalItemId" value="${institutionalItem.id}"/>
 						                            </c:url>
-						                        	<a href="${itemView}">${institutionalItem.name}</a>
+						                        	<a href="${itemView}">${institutionalItem.name}</a><br/>
+						                        	<c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description != '' && institutionalItem.versionedInstitutionalItem.currentVersion.item.description != null}"><div class="smallText"><ur:maxText numChars="50" text="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description}"/></div></c:if>
 						                        </urstb:td>
-						                        <urstb:td>
-						                             ${instiutionalItem.versionedInstitutionalItem.currentVersion.item.description}
-						                        </urstb:td>
+						                        
 						                        <urstb:td>
 						                             <c:forEach var="itemContributor" items="${institutionalItem.versionedInstitutionalItem.currentVersion.item.contributors}">
 									                    <c:url var="contributorUrl" value="/viewContributorPage.action">
@@ -389,19 +383,15 @@
 						        <c:import url="search_all_items_pager.jsp"/>
 						    </div>
 						    <c:if test="${searchDataHelper.hitSize > 0}">
-						    	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: ${searchDataHelper.userQuery} </h3>               
+						    	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: ${searchDataHelper.userQuery} (Relevance Ranked Order)</h3>               
 						    
 						    <div class="dataTable">
 							
 					        <urstb:table>
 					            <urstb:thead>
-														                
-					                    <urstb:td>Id</urstb:td>
 					                    <urstb:td>Thumbnail</urstb:td>
 					                    <urstb:td>Name</urstb:td>
-					                    <urstb:td>Description</urstb:td>
 					                    <urstb:td>Contributors</urstb:td>
-						                
 						            </urstb:thead>
 						            <urstb:tbody
 						                var="institutionalItem" 
@@ -413,9 +403,6 @@
 						                        cssClass="${rowClass}"
 						                        onMouseOver="this.className='highlight'"
 						                        onMouseOut="this.className='${rowClass}'">
-						                        <urstb:td>
-							                        ${institutionalItem.id}
-						                        </urstb:td>
 						                        <urstb:td>
 						                             <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile != null }">
 						                              <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile}" var="url"/>
@@ -431,10 +418,9 @@
 						                                 <c:param name="institutionalItemId" value="${institutionalItem.id}"/>
 						                            </c:url>
 						                        <a href="${itemView}">${institutionalItem.name}</a>
+						                        <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description != '' && institutionalItem.versionedInstitutionalItem.currentVersion.item.description != null}"><div class="smallText"><ur:maxText numChars="50" text="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description}"/></div></c:if>
 						                        </urstb:td>
-						                        <urstb:td>
-						                             ${instiutionalItem.versionedInstitutionalItem.currentVersion.item.description}
-						                        </urstb:td>
+						                        
 						                        <urstb:td>
 						                             <c:forEach var="itemContributor" items="${institutionalItem.versionedInstitutionalItem.currentVersion.item.contributors}">
 									                    <c:url var="contributorUrl" value="/viewContributorPage.action">
@@ -485,7 +471,6 @@
 					        <urstb:table width="100%">
 					            <urstb:thead>
 					                <urstb:tr>
-					                    <urstb:td>Id</urstb:td>
 					                    
 					                    <!--  set up the url's for sorting by last name -->
 					                     <c:url var="sortLastNameAscendingUrl" value="/browsePersonNames.action">
@@ -516,15 +501,11 @@
                                             currentSortAction="${lastNameSort}"
                                             ascendingSortAction="${sortLastNameAscendingUrl}"
                                             descendingSortAction="${sortLastNameDescendingUrl}">
-                                            <a href="${href}">Last Name</a>                                              
+                                            <a href="${href}">Name</a>                                              
                                             <urstb:thImgSort
                                                          sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
                                                          sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
-					                     <urstb:td>First Name</urstb:td>
-					                     <urstb:td>Middle Name</urstb:td>
-					                     <urstb:td>Initials</urstb:td>
-					                     <urstb:td>Birth Year</urstb:td>
-					                     <urstb:td>Death Year</urstb:td>
+					                     
 						                </urstb:tr>
 						            </urstb:thead>
 						            <urstb:tbody
@@ -538,33 +519,13 @@
 						                        onMouseOver="this.className='highlight'"
 						                        onMouseOut="this.className='${rowClass}'">
 						                        <urstb:td>
-							                        ${personName.id}
-						                        </urstb:td>
-						                        <urstb:td>
 						                            <c:url var="contributorUrl" value="/viewContributorPage.action">
 														    <c:param name="personNameId" value="${personName.id}"/>
 												    </c:url>	
-						                             <a href="${contributorUrl}">${personName.surname}</a>
+						                             <a href="${contributorUrl}"><ir:authorName personName="${personName}" displayDates="true" lastNameFirst="true"/>
+						                             </a>
 						                        </urstb:td>
-						                        <urstb:td>
-						                             ${personName.forename}
-						                        </urstb:td>
-						                        <urstb:td>
-						                             ${personName.middleName}
-						                        </urstb:td>
-						                        <urstb:td>
-						                             ${personName.initials}
-						                        </urstb:td>
-						                        <urstb:td>
-						                             <c:if test="${personName.personNameAuthority.birthDate.year != 0}">
-						                             ${personName.personNameAuthority.birthDate.year }
-						                             </c:if>
-						                        </urstb:td>
-						                        <urstb:td>
-						                             <c:if test="${personName.personNameAuthority.deathDate.year != 0}">
-						                             ${personName.personNameAuthority.deathDate.year }
-						                             </c:if>
-						                        </urstb:td>
+						                        
 						                    </urstb:tr>
 						            </urstb:tbody>
 						        </urstb:table>

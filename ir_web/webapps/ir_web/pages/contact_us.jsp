@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>IR Plus Contact Us</title>
+        <title>Contact Us</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
@@ -63,7 +63,7 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-               <h3>IR Plus Contact Us</h3> 
+               <h3>Contact Us</h3> 
                
                <form  method="post" 
 		              action="<c:url value="/contactUs.action"/>">

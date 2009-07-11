@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>IR Plus Privacy Policy</title>
+        <title>Privacy Policy</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->

@@ -24,6 +24,7 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.repository.Repository;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 
@@ -84,6 +85,9 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 	/** Path for a the set of collections */
 	private List<InstitutionalCollection> collectionPath;
 	
+	/** institutional repository  */
+	private Repository repository;
+	
 	/** Default constructor */
 	public CollectionInstitutionalItemBrowse()
 	{
@@ -107,6 +111,7 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 	public String browseCollectionItems() {
 		
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+		repository = institutionalCollection.getRepository();
 		if( institutionalCollection == null )
 		{
 			return "collectionNotFound";
@@ -244,6 +249,14 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
 	}
 
 }

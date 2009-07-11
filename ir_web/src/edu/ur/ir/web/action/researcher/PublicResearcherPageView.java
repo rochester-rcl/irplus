@@ -27,6 +27,8 @@ import net.sf.json.JSONObject;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -80,6 +82,12 @@ Comparator<IrFile>, UserIdAware {
 	
 	/** id of the user trying to access the data */
 	private Long userId;
+	
+	/** Service for dealing with repositories */
+	private RepositoryService repositoryService;
+	
+	/** repository object */
+	private Repository repository;
 
 
 	/**
@@ -90,6 +98,7 @@ Comparator<IrFile>, UserIdAware {
 	public String view()
 	{
 		log.debug("View Researcher page:researcherId="+ researcherId);
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		researcher = researcherService.getResearcher(researcherId, false);
 
 		if (researcher != null) {
@@ -281,5 +290,21 @@ Comparator<IrFile>, UserIdAware {
 	 */
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
 	}
 }

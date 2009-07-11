@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
 
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
@@ -44,6 +45,9 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 			"All", "0-9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", 
 			"K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 	};
+	
+	/** Service for dealing with repositories */
+	private RepositoryService repositoryService;
 	
 	/** currently selected option */
 	private String selectedAlpha ="All";
@@ -77,6 +81,9 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 	/** Indicates this is a browse */
 	private String viewType = "browse";
 	
+	/** repository object */
+	private Repository repository;
+	
 	/** Default constructor */
 	public RepositoryInstitutionalItemBrowse()
 	{
@@ -98,6 +105,7 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 	 * @return
 	 */
 	public String browseRepositoryItems() {
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		log.debug("selected Alpha = " + selectedAlpha);
 		rowEnd = rowStart + numberOfResultsToShow;
 		if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
@@ -201,6 +209,22 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
 	}
 
 

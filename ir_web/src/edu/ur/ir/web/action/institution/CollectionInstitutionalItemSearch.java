@@ -114,6 +114,9 @@ public class CollectionInstitutionalItemSearch extends Pager {
 	/** Path for a the set of collections */
 	private List<InstitutionalCollection> collectionPath;
 	
+	/** repository object */
+	private Repository repository;
+	
 	/** End position of the search  */
 	private int rowEnd;
 	
@@ -130,6 +133,7 @@ public class CollectionInstitutionalItemSearch extends Pager {
 	 */
 	public String execute()
 	{
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		log.debug("COLLECTION ID = " + collectionId);
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
 		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
@@ -140,7 +144,7 @@ public class CollectionInstitutionalItemSearch extends Pager {
 	public String searchCollectionInstitutionalItems() throws CorruptIndexException, IOException, 
 	ParseException
 	{
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
 		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
 		searchInit = false;
@@ -180,7 +184,7 @@ public class CollectionInstitutionalItemSearch extends Pager {
 	ParseException
 	{
 		rowEnd = rowStart + numberOfResultsToShow;
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
 		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
 		searchInit = false;
@@ -531,6 +535,14 @@ public class CollectionInstitutionalItemSearch extends Pager {
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
 	}
 
 }

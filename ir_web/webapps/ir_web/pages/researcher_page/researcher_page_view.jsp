@@ -141,7 +141,7 @@
 					                    <c:url var="contributorUrl" value="/viewContributorPage.action">
 									        <c:param name="personNameId" value="${researcher.user.personNameAuthority.authoritativeName.id}"/>
 									    </c:url>
-					                    All work in: <a href="${contributorUrl}"> IR Plus </a>
+					                    All work in: <a href="${contributorUrl}"> ${repository.name}</a>
 					                </c:if>
 								   </p>
 									
