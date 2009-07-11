@@ -43,7 +43,7 @@ Displayed on the left hand side of the add files to item page -->
 	<thead>
 		<tr>
 			<th class="thItemFolder" width="30%">Submit</th>
-			<th class="thItemFolder">irplus Collections</th>
+			<th class="thItemFolder">Collections</th>
 		</tr>
 	</thead>
 	<tbody>
