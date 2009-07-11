@@ -143,8 +143,7 @@
 	                                </tr>
 	                                <tr>
 	                                    <td class="label">
-	                                        <strong>Department(s)</strong> 
-	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="show_department" value="Create New Department"/>
+	                                        <strong>Department(s)</strong>&nbsp;<input type="button" class="ur_button" id="show_department" value="Create New Department"/>
 	                                    </td>
 	                               </tr>
 	                               <tr>
@@ -159,8 +158,7 @@
 	                                </tr>
 	                                <tr>
 	                                    <td class="label">
-	                                        <strong>Field</strong>
-	                                        &nbsp;&nbsp;&nbsp;<input type="button" class="ur_button" id="show_field" value="Add New Field"/>
+	                                        <strong>Field(s)</strong>&nbsp;<input type="button" class="ur_button" id="show_field" value="Add New Field"/>
 	                                    </td>
 	                               </tr>
 	                              <tr>

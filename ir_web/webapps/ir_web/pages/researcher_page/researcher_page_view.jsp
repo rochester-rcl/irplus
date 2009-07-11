@@ -129,7 +129,7 @@
 	                   
 	                   <div class="contentContainer">
 	                       <div class="contentBoxTitle">
-	                           <p>${researcher.user.firstName} ${researcher.user.lastName}  </p>
+	                           <p>${researcher.user.firstName}&nbsp;${researcher.user.lastName}  </p>
 	                       </div>
 	                   
 	                       <div class="contentBoxContent">
