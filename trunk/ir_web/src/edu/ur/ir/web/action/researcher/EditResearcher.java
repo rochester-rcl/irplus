@@ -105,9 +105,6 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	/** Researcher Service */
 	private RepositoryService repositoryService;
 	
-	/** Number of fields for researcher */
-	private int researcherFieldsCount;
-	
 	/** Id of selected fields */
 	private Long[] fieldIds;
 
@@ -286,17 +283,6 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		{
 			return "accessDenied";
 		}
-		researcherFieldsCount = researcher.getFields().size();
-		fields = fieldService.getAllFieldsNameOrder();
-		return SUCCESS;
-	}
-	
-	/**
-	 * Get all fields
-	 * 
-	 * @return
-	 */
-	public String getAllFields() {
 		fields = fieldService.getAllFieldsNameOrder();
 		return SUCCESS;
 	}
@@ -451,10 +437,6 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
-	}
-
-	public int getResearcherFieldsCount() {
-		return researcherFieldsCount;
 	}
 
 	public Long[] getFieldIds() {
