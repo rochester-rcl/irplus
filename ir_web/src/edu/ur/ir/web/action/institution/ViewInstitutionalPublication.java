@@ -32,6 +32,7 @@ import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.item.ItemSecurityService;
+import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -95,6 +96,9 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	/** Id of item version */
 	private Long institutionalItemVersionId;
 	
+	/** institutional repository object */
+	private Repository repository;
+	
 	/**
 	 * Prepare for action
 	 */
@@ -155,6 +159,8 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
         	message = "The publication doesnot exist!";
         	return SUCCESS;
 		}
+		
+		repository = institutionalItem.getInstitutionalCollection().getRepository();
 
 		path = institutionalCollectionService.getPath(institutionalItem.getInstitutionalCollection());
 		
@@ -331,5 +337,13 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 
 	public GenericItem getItem() {
 		return item;
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
 	}
 }
