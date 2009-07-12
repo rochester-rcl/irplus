@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>Contact Us</title>
+        <title>Thank You</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
@@ -63,41 +63,9 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-               <h3>Contact Us</h3> 
+               <h3>Thank You</h3> 
                
-               <form  method="post" 
-		              action="<c:url value="/sendHelpEmail.action"/>">
-		              <table class="formTable">    
-			              <tr>       
-	                          <td align="left" class="label">
-	                              Subject:*
-	                          </td>
-	                          <td align="left" class="input">
-	                              <input type="text" name="subject"  value="${subject}" size="82"/> 
-	                          </td>
-			              </tr>
-			              <tr>       
-	                          <td align="left" class="label">
-	                              Email Address:*
-	                          </td>
-	                          <td align="left" class="input">
-	                              <input type="text" name="from"  value="${email}" size="82"/> 
-	                          </td>
-			              </tr>
-			              <tr>
-			                  <td align="left" class="label">
-			                      Message:
-			                  </td>
-			                  <td align="left" colspan="2" class="input"> 
-			                      <textarea name="message" 
-	                               cols="80" rows="20">${message}</textarea>
-	                          </td>
-			              </tr>
-			              <tr>
-			                  <td><input type="submit" value="Send"/></td>
-			              </tr>
-	                  </table>
-               </form>
+               Thank you for your comments.  
                
             </div>
             <!--  end the body tag --> 
