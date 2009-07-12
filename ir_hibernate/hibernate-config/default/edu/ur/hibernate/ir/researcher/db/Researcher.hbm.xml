@@ -23,6 +23,7 @@
 	Mapping for an Researcher.
 	
 	@author Sharmila Ranganathan
+	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.researcher">
 	<class name="Researcher" schema="ir_researcher" 
@@ -217,10 +218,29 @@
 	    Where Researcher.isPublic = 'true'
 	</query>
 	
+		<!--  Get a all researchers -->
+	<query name="getAllResearcherByLastFirstNameAsc">
+	    from Researcher as Researcher
+	    order by Researcher.user.lastName, Researcher.user.firstName asc
+	</query>
+	
+		<!--  Get a all researchers whose researcher page is active -->
+	<query name="getAllResearcherByLastFirstNameDesc">
+	    from Researcher as Researcher
+	    order by Researcher.user.lastName, Researcher.user.firstName desc
+	</query>
+	
 	<!--  Get a all researchers whose researcher page is active -->
-	<query name="getAllPublicByLastFirstName">
+	<query name="getAllPublicResearcherByLastFirstNameAsc">
 	    from Researcher as Researcher
 	    where Researcher.isPublic = 'true'
-	    order by Researcher.user.lastName, Researcher.user.firstName
+	    order by Researcher.user.lastName, Researcher.user.firstName asc
+	</query>
+	
+		<!--  Get a all researchers whose researcher page is active -->
+	<query name="getAllPublicResearcherByLastFirstNameDesc">
+	    from Researcher as Researcher
+	    where Researcher.isPublic = 'true'
+	    order by Researcher.user.lastName, Researcher.user.firstName desc
 	</query>
 </hibernate-mapping>

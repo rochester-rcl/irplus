@@ -26,15 +26,14 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
-import edu.ur.dao.CriteriaHelper;
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherDAO;
+import edu.ur.order.OrderType;
 
 
 /**
@@ -104,32 +103,6 @@ public class HbResearcherDAO implements ResearcherDAO {
 		return (List<Researcher>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllPublicResearchers");
 	}
 	
-	/**
-	 * Get the researchers ordered by id starting at the given offset.
-	 * 
-	 * @param offset
-	 * @param maxNumToFetch
-	 * @return list of found researchers
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Researcher> getPublicResearchersOrderedByLastFirstName( final int offset, final int maxNumToFetch)
-	{
-		List<Researcher> foundResearchers = (List<Researcher>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			    q = session.getNamedQuery("getAllPublicByLastFirstName");
-			    q.setFirstResult(offset);
-			    q.setMaxResults(maxNumToFetch);
-			    q.setReadOnly(true);
-			    q.setFetchSize(maxNumToFetch);
-	            return q.list();
-		    }
-	    });
-		
-		return foundResearchers;
-	}
 
 	/**
 	 * Get researchers starting from the specified row and end at specified row.
@@ -138,22 +111,51 @@ public class HbResearcherDAO implements ResearcherDAO {
      * @return List of researchers 
      */
 	@SuppressWarnings("unchecked")
-	public List<Researcher> getResearchers(final int rowStart, final int maxResults, final String propertyName, final String orderType) {
-		List<Researcher> researchers  = 
-			(List<Researcher>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
+	public List<Researcher> getResearchersByLastFirstName(final int rowStart, final int maxResults, final OrderType orderType) {
+		List<Researcher> researchers = (List<Researcher>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
             public Object doInHibernate(Session session)
                     throws HibernateException, SQLException {
-                Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                criteria.setFirstResult(rowStart);
-                criteria.setMaxResults(maxResults);
-                criteria.setFetchSize(maxResults);
-                
-                if (orderType.equalsIgnoreCase(CriteriaHelper.ASC)) {
-                	criteria.createCriteria("user").addOrder(Order.asc(propertyName).ignoreCase());
-                } else {
-                	criteria.createCriteria("user").addOrder(Order.desc(propertyName).ignoreCase());
-                }
-                return criteria.list();
+		        Query q = null;
+		        if (orderType.equals(OrderType.ASCENDING_ORDER)) {
+		        	q = session.getNamedQuery("getAllResearcherByLastFirstNameAsc");
+		        } else {
+		        	q = session.getNamedQuery("getAllResearcherByLastFirstNameDesc");
+		        }
+		        
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setReadOnly(true);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+            }
+        });
+
+        return researchers;
+	}
+	
+	/**
+	 * Get researchers starting from the specified row and end at specified row.
+     * The rows will be sorted by the specified parameter in given order.
+	 *  
+     * @return List of researchers 
+     */
+	@SuppressWarnings("unchecked")
+	public List<Researcher> getPublicResearchersByLastFirstName(final int rowStart, final int maxResults, final OrderType orderType) {
+		List<Researcher> researchers = (List<Researcher>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session session)
+                    throws HibernateException, SQLException {
+		        Query q = null;
+		        if (orderType.equals(OrderType.ASCENDING_ORDER)) {
+		        	q = session.getNamedQuery("getAllPublicResearcherByLastFirstNameAsc");
+		        } else {
+		        	q = session.getNamedQuery("getAllPublicResearcherByLastFirstNameDesc");
+		        }
+		        
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setReadOnly(true);
+			    q.setFetchSize(maxResults);
+	            return q.list();
             }
         });
 

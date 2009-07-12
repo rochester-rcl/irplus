@@ -30,6 +30,7 @@ import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.order.OrderType;
 
 /**
  * Default Service for dealing with the researchers page
@@ -157,8 +158,19 @@ public class DefaultResearcherService implements ResearcherService{
 	 *  
      * @return List of researchers 
      */
-	public List<Researcher> getResearchers(final int rowStart, final int rowEnd, final String propertyName, final String orderType)  {
-		return researcherDAO.getResearchers(rowStart, rowEnd, propertyName,orderType);
+	public List<Researcher> getResearchersByLastFirstName(int rowStart, int rowEnd, OrderType orderType)  {
+		return researcherDAO.getResearchersByLastFirstName(rowStart, rowEnd, orderType);
+	
+	}
+	
+	/**
+	 * Get only PUBLIC researchers starting from the specified row and end at specified row.
+     * The rows will be sorted by the specified parameter in given order.
+	 *  
+     * @return List of researchers 
+     */
+	public List<Researcher> getPublicResearchersByLastFirstName(int rowStart, int rowEnd, OrderType orderType)  {
+		return researcherDAO.getPublicResearchersByLastFirstName(rowStart, rowEnd, orderType);
 	
 	}
 
@@ -170,17 +182,6 @@ public class DefaultResearcherService implements ResearcherService{
 	 */
 	public Long getResearcherCount() {
 		return researcherDAO.getCount();
-	}
-
-	
-	/**
-	 * Get the public researchers
-	 * 
-	 * @see edu.ur.ir.researcher.ResearcherService#getPublicResearchersOrderedByLastFirstName(int, int)
-	 */
-	public List<Researcher> getPublicResearchersOrderedByLastFirstName(int offset,
-			int maxNumToFetch) {
-	    return researcherDAO. getPublicResearchersOrderedByLastFirstName(offset, maxNumToFetch);
 	}
 
 	

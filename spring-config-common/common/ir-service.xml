@@ -531,9 +531,19 @@
    <bean id="errorEmailService" 
        class="edu.ur.ir.util.service.DefaultErrorEmailService">
        <property name="mailSender" ref="mailSender"/>
-       <property name="subject" value="An IR Plus Error Has Occured"/>
+       <property name="subject" value="An Repository Error Has Occured"/>
        <property name="toAddress" value="${email.error.address}"/>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Help email service -->
+   <!-- ****************************************** --> 
+   <bean id="publicHelpService" 
+       class="edu.ur.ir.util.service.DefaultPublicHelpService">
+       <property name="mailSender" ref="mailSender"/>
+       <property name="toAddress" value="${email.public.help.address}"/>
+   </bean>
+   
    
    <!-- ****************************************** --> 
    <!-- Repository License Service  -->
