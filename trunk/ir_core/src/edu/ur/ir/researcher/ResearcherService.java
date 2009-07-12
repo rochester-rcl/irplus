@@ -18,6 +18,8 @@ package edu.ur.ir.researcher;
 
 import java.util.List;
 
+import edu.ur.order.OrderType;
+
 /**
  * Interface for adding files, folders, publications and links to the researcher page
  * 
@@ -75,27 +77,29 @@ public interface ResearcherService {
 	public Long getResearcherCount();
 	
 	/**
-	 * Get researchers orderd by last name then first name
-	 * 
-	 * @param offset - position in the list to start grabbing
-	 * @param maxNumToFetch - maximum number to fetch
-	 * @return - found researchers
-	 */
-	public List<Researcher>  getPublicResearchersOrderedByLastFirstName( final int offset, final int maxNumToFetch);
-
-
-	/**
 	 * Get researchers starting from the specified row and end at specified row.
      * The rows will be sorted by the specified parameter in given order.
 	 *  
      * @param rowStart Start row to fetch the data from
      * @param rowEnd End row to get data
-     * @param propertyName The property to sort on
      * @param orderType The order to sort by (ascending/descending)
      *
      * @return List of researchers 
      */	
-	public List<Researcher> getResearchers(final int rowStart, final int rowEnd, final String propertyName, final String orderType) ;
+	public List<Researcher> getResearchersByLastFirstName(int rowStart, int rowEnd, OrderType orderType) ;
+	
+	/**
+	 * Get PUBLIC researchers starting from the specified row and end at specified row.
+     * The rows will be sorted by the specified parameter in given order.
+	 *  
+     * @param rowStart Start row to fetch the data from
+     * @param rowEnd End row to get data
+     * @param orderType The order to sort by (ascending/descending)
+     *
+     * @return List of researchers 
+     */	
+	public List<Researcher> getPublicResearchersByLastFirstName(int rowStart, int rowEnd, OrderType orderType) ;
+
 	
 	/**
 	 * Get a count of public researchers in the system.

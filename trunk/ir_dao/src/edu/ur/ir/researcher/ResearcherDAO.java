@@ -20,6 +20,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.order.OrderType;
 
 /**
  * Data access for a researcher 
@@ -39,26 +40,28 @@ CrudDAO<Researcher>
 	
 	/**
 	 * Get researchers starting from the specified row and end at specified row.
-     * The rows will be sorted by the specified parameter in given order.
+     * The rows will be sorted by the last name then first name
      *
 	 * @param rowStart Start row to fetch the data from
      * @param rowEnd End row to get data
-     * @param propertyName The property to sort on
      * @param orderType The order to sort by (ascending/descending) 
      *
      * @return List of researchers 
      */
-	public List<Researcher> getResearchers(final int rowStart, final int maxResults, final String propertyName, final String orderType) ;
+	public List<Researcher> getResearchersByLastFirstName(final int rowStart, final int maxResults, final OrderType orderType);
 
- 	/**
- 	 * Get the researchers ordered by last name then first name starting at the given offset.
- 	 * 
- 	 * @param offset - offset to start getting the researchers
- 	 * @param maxNumToFetch - maximum number of researchers to fetch
- 	 * @return list of found researchers
- 	 */
- 	public List<Researcher>  getPublicResearchersOrderedByLastFirstName( final int offset, final int maxNumToFetch);
-
+	/**
+	 * Get ONLY PUBLIC researchers starting from the specified row and end at specified row.
+     * The rows will be sorted by the last then first name in given order type .
+     *
+	 * @param rowStart Start row to fetch the data from
+     * @param rowEnd End row to get data
+     * @param orderType The order to sort by (ascending/descending) 
+     *
+     * @return List of public researchers 
+     */
+	public List<Researcher> getPublicResearchersByLastFirstName(final int rowStart, final int maxResults, final OrderType orderType);
+	
     
  	/**
  	 * Gets a count of the number of public researchers.
