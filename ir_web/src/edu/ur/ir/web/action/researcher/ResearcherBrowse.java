@@ -22,6 +22,7 @@ import java.util.List;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.web.table.Pager;
+import edu.ur.order.OrderType;
 
 /**
  * Action to browse researcher
@@ -74,7 +75,8 @@ public class ResearcherBrowse extends Pager {
 
 		rowEnd = rowStart + numberOfResultsToShow;
 
-		researchers = researcherService.getResearchers(rowStart, numberOfResultsToShow, sortElement, sortType);
+		OrderType orderType= OrderType.getOrderType(sortType);
+		researchers = researcherService.getResearchersByLastFirstName(rowStart, numberOfResultsToShow, orderType);
 		totalHits = researcherService.getAllResearchers().size();
 		
 		if(rowEnd > totalHits)
