@@ -126,7 +126,6 @@
 					            <urstb:thead>
 					                <urstb:tr>
 														                
-					                    <urstb:td>Id</urstb:td>
 					                    <urstb:td>Image</urstb:td>
 										<urstb:td>
 					                
@@ -148,36 +147,8 @@
 													</c:if>																																										
 											</c:url>
 										
+											<a href="${sortLastNameUrl}">Name</a></urstb:td>
 										
-											<a href="${sortLastNameUrl}">Last Name</a></urstb:td>
-										
-										<urstb:td>
-					                
-											<c:url var="sortFirstNameUrl" value="/viewResearcherBrowse.action">
-													<c:param name="rowStart" value="${rowStart}"/>
-													<c:param name="startPageNumber" value="${startPageNumber}"/>
-													<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
-													<c:if test="${(sortElement == 'firstName') && (sortType == 'asc')}">
-														<c:param name="sortElement" value="${sortElement}"/>		
-														<c:param name="sortType" value="desc"/>
-													</c:if>		
-													<c:if test="${(sortElement == 'firstName') && (sortType == 'desc')}">
-														<c:param name="sortElement" value="${sortElement}"/>		
-														<c:param name="sortType" value="asc"/>
-													</c:if>
-													<c:if test="${sortElement != 'firstName'}">
-														<c:param name="sortElement" value="firstName"/>		
-														<c:param name="sortType" value="asc"/>
-													</c:if>																																										
-											</c:url>
-										
-										
-											<a href="${sortFirstNameUrl}">First Name</a></urstb:td>
-
-					                    <urstb:td>Interest</urstb:td>
-					                    <urstb:td>Email</urstb:td>
-					                    <urstb:td>Phone</urstb:td>
-					                    <urstb:td>Page status</urstb:td>					                    
 						                </urstb:tr>
 						            </urstb:thead>
 						            <urstb:tbody
@@ -190,10 +161,7 @@
 						                        cssClass="${rowClass}"
 						                        onMouseOver="this.className='highlight'"
 						                        onMouseOut="this.className='${rowClass}'">
-						                        <urstb:td>
-							                             ${researcher.id}
-						                        </urstb:td>
-						                        <urstb:td>
+						                        <urstb:td width="125px;">
 						                             <c:if test="${researcher.public}">
 						                                 <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
                                                          <c:if test="${url != null}">
@@ -205,36 +173,14 @@
 			                                         </c:if>	
 			                                    </urstb:td>		
 						                        <urstb:td>
-						                        	<c:if test="${researcher.public}">
 						                        	    <c:url value="viewResearcherPage.action" var="viewResearcherPage">
 						                        	        <c:param name="researcherId" value="${researcher.id}"/>
 						                        	    </c:url>
-														<a href="${viewResearcherPage}">${researcher.user.lastName}</a>&nbsp;
-							                        </c:if> 
-							                        <c:if test="${!researcher.public}">
-														${researcher.user.lastName}&nbsp;
-							                        </c:if>  
+														<a href="${viewResearcherPage}">${researcher.user.lastName},${researcher.user.firstName}</a><br>
+														<c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
+														
 						                        </urstb:td>
-						                        <urstb:td>
-							                             ${researcher.user.firstName}
-						                        </urstb:td>
-						                        <urstb:td>
-							                             ${researcher.researchInterest}
-						                        </urstb:td>
-						                        <urstb:td>
-							                             ${researcher.email}
-						                        </urstb:td>
-						                        <urstb:td>
-							                             ${researcher.phoneNumber}
-						                        </urstb:td>
-												<urstb:td>
-													<c:if test="${researcher.public}">
-														Public
-							                        </c:if>     
-													<c:if test="${!researcher.public}">
-														Private
-							                        </c:if>     
-						                        </urstb:td>
+						                        
 						                    </urstb:tr>
 						            </urstb:tbody>
 						        </urstb:table>
