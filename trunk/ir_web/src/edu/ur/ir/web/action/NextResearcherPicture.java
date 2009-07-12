@@ -27,6 +27,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.order.OrderType;
 
 /**
  * Generates HTML for the next picture to be displayed.  This does
@@ -92,7 +93,7 @@ public class NextResearcherPicture extends ActionSupport {
     		if(  researcherCount == 1 || researcherCount == 2)
     		{
     			currentLocation = 0;
-    			researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(0, 2));
+    			researchers.addAll(researcherService.getPublicResearchersByLastFirstName(0, 2, OrderType.ASCENDING_ORDER));
     		}
     		else if ( type.equals(INIT))
      	    {
@@ -106,18 +107,18 @@ public class NextResearcherPicture extends ActionSupport {
          	    if ((currentLocation + 1) >= researcherCount) {
          	    	// get last researcher
          	    	log.debug( "init A fetching = " + currentLocation  );
-         	    	researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 1));
+         	    	researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 1, OrderType.ASCENDING_ORDER));
          	    	
          	    	// reset current location to start
          	    	currentLocation = 0;
          	    	
          	    	log.debug( "init B fetching = " + currentLocation  );
          	    	// get first researcher
-         	    	researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 1));
+         	    	researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 1, OrderType.ASCENDING_ORDER));
          	       
          	    } else {
          	    	// otherwise in middle of list
-         	    	researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 2));
+         	    	researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 2, OrderType.ASCENDING_ORDER));
          	    	currentLocation = currentLocation + 1;
          	    }
          	   log.debug( "init final INIT Location = " + currentLocation  );
@@ -131,7 +132,7 @@ public class NextResearcherPicture extends ActionSupport {
     			{
     				currentLocation = 0;
     				log.debug( "NEXT A fetching = " + currentLocation  );
-     			    researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 2));
+     			    researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 2, OrderType.ASCENDING_ORDER));
      		        currentLocation = currentLocation + 1;
     			}
     		    else
@@ -142,16 +143,16 @@ public class NextResearcherPicture extends ActionSupport {
     			    {
     			    	currentLocation = currentLocation + 1;
     			    	log.debug( "NEXT B fetching = " + currentLocation  );
-    			    	researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 1));
+    			    	researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 1, OrderType.ASCENDING_ORDER));
     			    	currentLocation = 0;
     			    	log.debug( "NEXT C fetching = " + currentLocation  );
-             	    	researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 1));
+             	    	researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 1, OrderType.ASCENDING_ORDER));
     			    }
     			    else
     			    {
     			    	currentLocation = currentLocation + 1;
     			    	log.debug("NEXT D fetching = " + currentLocation  );
-    			    	researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 2));
+    			    	researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 2, OrderType.ASCENDING_ORDER));
     			    	currentLocation = currentLocation + 1;
     			    }
      		    }
@@ -166,14 +167,14 @@ public class NextResearcherPicture extends ActionSupport {
     	    	if (currentLocation == 0) {
     	    		currentLocation = researcherCount - 3;
     	    		log.debug("PREV A fetching = " + currentLocation);
-    	    		researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 2));
+    	    		researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 2, OrderType.ASCENDING_ORDER));
     	    		currentLocation = currentLocation + 1;
     	    	} 
     	    	// position 0 and 1 are loaded - so get very last two
     	    	if( currentLocation == 1)
     	    	{
     	    		currentLocation = researcherCount - 2;
-    	    		researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 2));
+    	    		researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 2, OrderType.ASCENDING_ORDER));
     	    		currentLocation = currentLocation + 1;
     	    	}
     	    	// 1 and 2 are loaded - get very last and first
@@ -181,10 +182,10 @@ public class NextResearcherPicture extends ActionSupport {
     	    	{
     	    		currentLocation = researcherCount - 1;
     	    		log.debug("PREV B fetching = " + currentLocation);
-    	    		researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 1));
+    	    		researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 1, OrderType.ASCENDING_ORDER));
     	    		currentLocation = 0;
     	    		log.debug("PREV C fetching = " + currentLocation);
-    	    		researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 1));
+    	    		researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 1, OrderType.ASCENDING_ORDER));
     	    	}
     	    	// at position grab last 2 from current positions
     	    	else 
@@ -192,7 +193,7 @@ public class NextResearcherPicture extends ActionSupport {
     			    currentLocation = currentLocation - 3;
     			    log.debug("PREV E fetching = " + currentLocation);
     			    //get the last 2
-    			    researchers.addAll(researcherService.getPublicResearchersOrderedByLastFirstName(currentLocation, 2));
+    			    researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 2, OrderType.ASCENDING_ORDER));
     			    currentLocation = currentLocation + 1;
     		    }
     	    	log.debug( "PREV End current = " + currentLocation  );
