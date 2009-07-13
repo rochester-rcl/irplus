@@ -44,64 +44,64 @@
 
             
             <c:if test="${user == null}">
-                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="viewUserRegistration.action"/>"><span class="userImg">&nbsp;</span>Create Account</a></li>    
-                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="/user/workspace.action"/>"><span class="doorInImg">&nbsp;</span>Login</a></li>    
+                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="viewUserRegistration.action"/>"><span class="userImg">&nbsp;</span><span class="menu_text">Create Account</span></a></li>    
+                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="/user/workspace.action"/>"><span class="doorInImg">&nbsp;</span><span class="menu_text">Login</span></a></li>    
             </c:if>
             <c:if test="${user != null}">
-                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="/j_spring_security_logout"/>"><span class="logoutImg">&nbsp;</span>Logout</a>
+                    <li class="yuimenubaritem first-of-type"><a class="yuimenubaritemlabel" href="<c:url value="/j_spring_security_logout"/>"><span class="logoutImg">&nbsp;</span><span class="menu_text">Logout</span></a>
                     </li>    
             </c:if>
  
             <!--  user cannot be null -->
             <c:if test="${user != null}">
                 <c:if test='${ir:userHasRole("ROLE_ADMIN,ROLE_COLLECTION_ADMIN", "OR")}'>
-                   <li class="yuimenubaritem"><a class="yuimenubaritemlabel" href="#administration"><span class="wrenchImg">&nbsp;</span>Administration</a>
+                   <li class="yuimenubaritem"><a class="yuimenubaritemlabel" href="#administration"><span class="wrenchImg">&nbsp;</span><span class="menu_text">Administration</span></a>
                    <div id="administration" class="yuimenu">
                        <div class="bd">                                        
                             <ul>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewAffiliations.action" />"><fmt:message key="menu.affiliations" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPendingApproval.action" />"><fmt:message key="menu.viewPendingApproval" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContentTypes.action"/>" ><fmt:message key="menu.viewContentTypes"/></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContributorTypes.action"/>"><fmt:message key="menu.viewContributorTypes" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewCopyrightStatements.action"/>">Copyright Statements</a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewDepartments.action" />"><fmt:message key="menu.departments" /></a></li>
-				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExtentTypes.action"/>"><fmt:message key="menu.viewExtentTypes" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFields.action" />"><fmt:message key="menu.fields" /></a></li>
-				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFileStorage.action"/>">File Storage</a></li>
-				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewHandleNameAuthorities.action"/>">Handle Name Authorities</a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIdentifierTypes.action"/>"><fmt:message key="menu.viewIdentifierTypes" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIgnoreIpAddresses.action" />"><fmt:message key="menu.ignoreIpAddress" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewInstitutionalCollections.action" />" >Institutional Collections</a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewLanguageTypes.action"/>" ><fmt:message key="menu.viewLanguageTypes" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewTopMediaTypes.action" />"><fmt:message key="menu.viewTopMediaTypes" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewNewsItems.action"/>"><fmt:message key="menu.viewNewsItem" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPersons.action" />">Person Name Authority</a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPublishers.action"/>"><fmt:message key="menu.viewPublishers" /></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewAffiliations.action" />"><span class="menu_text"><fmt:message key="menu.affiliations" /></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPendingApproval.action" />"><span class="menu_text"><fmt:message key="menu.viewPendingApproval" /></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContentTypes.action"/>" ><span class="menu_text"><fmt:message key="menu.viewContentTypes"/></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContributorTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewContributorTypes" /></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewCopyrightStatements.action"/>"><span class="menu_text">Copyright Statements</span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewDepartments.action" />"><span class="menu_text"><fmt:message key="menu.departments"/></span></a></li>
+				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExtentTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewExtentTypes" /></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFields.action" />"><span class="menu_text"><fmt:message key="menu.fields"/></span></a></li>
+				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFileStorage.action"/>"><span class="menu_text">File Storage</span></a></li>
+				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewHandleNameAuthorities.action"/>"><span class="menu_text">Handle Name Authorities</span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIdentifierTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewIdentifierTypes"/></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIgnoreIpAddresses.action" />"><span class="menu_text"><fmt:message key="menu.ignoreIpAddress"/></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewInstitutionalCollections.action" />"><span class="menu_text">Institutional Collections</span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewLanguageTypes.action"/>" ><span class="menu_text"><fmt:message key="menu.viewLanguageTypes"/></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewTopMediaTypes.action" />"><span class="menu_text"><fmt:message key="menu.viewTopMediaTypes"/></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewNewsItems.action"/>"><span class="menu_text"><fmt:message key="menu.viewNewsItem"/></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPersons.action" />"><span class="menu_text">Person Name Authority</span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPublishers.action"/>"><span class="menu_text"><fmt:message key="menu.viewPublishers"/></span></a></li>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
-                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepository.action" />" >Repository</a></li>
+                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepository.action"/>"><span class="menu_text">Repository</span></a></li>
                                 </c:if>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepositoryLicenses.action"/>"><fmt:message key="menu.viewLicenses" /></a></li>
-				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewReviewPendingItems.action"/>">Review Pending Publications</a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepositoryLicenses.action"/>"><span class="menu_text"><fmt:message key="menu.viewLicenses"/></span></a></li>
+				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewReviewPendingItems.action"/>"><span class="menu_text">Review Pending Publications</span></a></li>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN", "OR")}'>
-                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRoles.action" />"><fmt:message key="menu.ir_roles" /></a></li>
+                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRoles.action" />"><span class="menu_text"><fmt:message key="menu.ir_roles"/></span></a></li>
                                 </c:if>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewSeries.action"/>"><fmt:message key="menu.viewSeries" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewSponsors.action"/>"><fmt:message key="menu.viewSponsors" /></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewUserGroups.action" />" >User Groups</a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewUsers.action" />"><fmt:message key="menu.viewUsers" /></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewSeries.action"/>"><span class="menu_text"><fmt:message key="menu.viewSeries"/></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewSponsors.action"/>"><span class="menu_text"><fmt:message key="menu.viewSponsors"/></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewUserGroups.action"/>"><span class="menu_text">User Groups</span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewUsers.action" />"><span class="menu_text"><fmt:message key="menu.viewUsers"/></span></a></li>
                             </ul>
                         </div>
                     </div>                
                     </li>
                     </c:if>
                     <c:if test='${ir:userHasRole("ROLE_COLLABORATOR,ROLE_AUTHOR,ROLE_RESEARCHER,ROLE_ADMIN", "OR")}'>
-                    <li class="yuimenubaritem"><a class="yuimenubaritemlabel" href="#workspace"><span class="report_editImg">&nbsp;</span>Workspace</a>
+                    <li class="yuimenubaritem"><a class="yuimenubaritemlabel" href="#workspace"><span class="report_editImg">&nbsp;</span><span class="menu_text">Workspace</span></a>
                         <div id="workspace" class="yuimenu">
                             <div class="bd">                                        
                                 <ul>
-                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/user/workspace.action"/>">Files and Folders</a></li>
+                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/user/workspace.action"/>"><span class="menu_text">Files and Folders</span></a></li>
                                     <c:if test='${ir:userHasRole("ROLE_RESEARCHER", "OR")}' >
-                               		    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/user/viewResearcher.action"/>">Researcher Page</a></li>
+                               		    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/user/viewResearcher.action"/>"><span class="menu_text">Researcher Page</span></a></li>
                                     </c:if>
                                 </ul>
                             </div>
@@ -111,11 +111,11 @@
                 </c:if>
                 
                 <c:if test="${user != null}">
-                    <li class="yuimenubaritemleft"><a class="yuimenubaritemlabel" href="#welcome"><span class="userImg">&nbsp;</span>Welcome ${user.username}</a>
+                    <li class="yuimenubaritemleft"><a class="yuimenubaritemlabel" href="#welcome"><span class="userImg">&nbsp;</span><span class="menu_text">Welcome ${user.username}</span></a>
                         <div id="welcome" class="yuimenu">
                             <div class="bd">                                        
                                 <ul>
-                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/user/myAccount.action"/>">My Account</a></li>
+                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/user/myAccount.action"/>"><span class="menu_text">My Account</span></a></li>
                                 </ul>
                             </div>
                         </div>

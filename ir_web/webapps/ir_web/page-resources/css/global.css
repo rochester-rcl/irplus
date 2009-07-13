@@ -47,6 +47,13 @@ a:active
 	padding-top:5px;
 }
 
+/* this makes the text black in IE otherwise the
+   a:visited tag overrides*/
+.menu_text
+{
+	color:#000;
+}
+
 #header
 {
 	width : 100%;
