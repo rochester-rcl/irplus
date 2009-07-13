@@ -127,27 +127,36 @@
 					                <urstb:tr>
 														                
 					                    <urstb:td>Image</urstb:td>
-										<urstb:td>
+										
 					                
-											<c:url var="sortLastNameUrl" value="/viewResearcherBrowse.action">
+					                        <c:url var="sortAscLastNameUrl" value="/viewResearcherBrowse.action">
 													<c:param name="rowStart" value="${rowStart}"/>
 													<c:param name="startPageNumber" value="${startPageNumber}"/>
 													<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
-													<c:if test="${(sortElement == 'lastName') && (sortType == 'asc')}">
-														<c:param name="sortElement" value="${sortElement}"/>		
-														<c:param name="sortType" value="desc"/>
-													</c:if>		
-													<c:if test="${(sortElement == 'lastName') && (sortType == 'desc')}">
-														<c:param name="sortElement" value="${sortElement}"/>		
-														<c:param name="sortType" value="asc"/>
-													</c:if>
-													<c:if test="${sortElement != 'lastName'}">
-														<c:param name="sortElement" value="lastName"/>		
-														<c:param name="sortType" value="asc"/>
-													</c:if>																																										
+													<c:param name="sortType" value="asc"/>
+											</c:url>
+											<c:url var="sortDescLastNameUrl" value="/viewResearcherBrowse.action">
+													<c:param name="rowStart" value="${rowStart}"/>
+													<c:param name="startPageNumber" value="${startPageNumber}"/>
+													<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+													<c:param name="sortType" value="desc"/>
 											</c:url>
 										
-											<a href="${sortLastNameUrl}">Name</a></urstb:td>
+											
+										
+										
+											<urstb:tdHeadSort  height="33"
+					                        useHref="true"
+					                        hrefVar="href"
+                                            currentSortAction="${sortType}"
+                                            ascendingSortAction="${sortAscLastNameUrl}"
+                                            descendingSortAction="${sortDescLastNameUrl}">
+                                            <a href="${href}">Name</a>                                              
+                                            <urstb:thImgSort
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+										
+										
 										
 						                </urstb:tr>
 						            </urstb:thead>
@@ -161,26 +170,29 @@
 						                        cssClass="${rowClass}"
 						                        onMouseOver="this.className='highlight'"
 						                        onMouseOut="this.className='${rowClass}'">
-						                        <urstb:td width="125px;">
-						                             <c:if test="${researcher.public}">
+						                        <urstb:td width="125px">
+						                            <c:if test="${researcher.public}">
 						                                 <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
                                                          <c:if test="${url != null}">
                                                              <img height="66px" width="100px" src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
-			                                         <c:if test="${url == null }">
+			                                         <c:if test="${url == null || !researcher.public}">
 	                                                      <img height="66px" width="100px" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
 			                                         </c:if>	
-			                                    </urstb:td>		
-						                        <urstb:td>
-						                        	    <c:url value="viewResearcherPage.action" var="viewResearcherPage">
-						                        	        <c:param name="researcherId" value="${researcher.id}"/>
-						                        	    </c:url>
-														<a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
-														<c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
-														
 						                        </urstb:td>
-						                        
+						                        <urstb:td>
+						                                <c:if test="${researcher.public}">
+						                        	        <c:url value="viewResearcherPage.action" var="viewResearcherPage">
+						                        	            <c:param name="researcherId" value="${researcher.id}"/>
+						                        	        </c:url>
+														    <a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
+														    <c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
+														</c:if>
+														<c:if test="${!researcher.public}">
+														${researcher.user.lastName},&nbsp;${researcher.user.firstName} (Private)
+													    </c:if>
+						                        </urstb:td>
 						                    </urstb:tr>
 						            </urstb:tbody>
 						        </urstb:table>
@@ -293,7 +305,7 @@
 
 							<div class="search_results_table">
 								<c:if test="${searchDataHelper.hitSize > 0}">
-						    		<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: ${searchDataHelper.userQuery} </h3>  
+						    		<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${searchDataHelper.hitSize} for search: ${searchDataHelper.userQuery} (Relevance Ranked)</h3>  
 								</c:if>
 							    <div class="search_div_pager">
 							        <c:import url="search_all_researchers_pager.jsp"/>
@@ -316,25 +328,29 @@
 						                        cssClass="${rowClass}"
 						                        onMouseOver="this.className='highlight'"
 						                        onMouseOut="this.className='${rowClass}'">
-						                        <urstb:td>
+						                        <urstb:td width="125px">
 						                            <c:if test="${researcher.public}">
-						                        	    <c:if test="${researcher.primaryPicture != null }">
-						                                    <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
-                                                             <c:if test="${url != null}">
-                                                                 <img height="66px" width="100px" src="${url}"/></a>
-                                                             </c:if> 
-						                                </c:if>	
-						                            </c:if>
+						                                 <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
+                                                         <c:if test="${url != null}">
+                                                             <img height="66px" width="100px" src="${url}"/>
+                                                         </c:if>
+			                                         </c:if>    
+			                                         <c:if test="${url == null || !researcher.public}">
+	                                                      <img height="66px" width="100px" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
+			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>
-						                        	    <c:url value="viewResearcherPage.action" var="viewResearcherPage">
-						                        	        <c:param name="researcherId" value="${researcher.id}"/>
-						                        	    </c:url>
-														<a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
-														<c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
-														
+						                                <c:if test="${researcher.public}">
+						                        	        <c:url value="viewResearcherPage.action" var="viewResearcherPage">
+						                        	            <c:param name="researcherId" value="${researcher.id}"/>
+						                        	        </c:url>
+														    <a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
+														    <c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
+														</c:if>
+														<c:if test="${!researcher.public}">
+														${researcher.user.lastName},&nbsp;${researcher.user.firstName} (Private)
+													    </c:if>
 						                        </urstb:td>
-						                        
 						                    </urstb:tr>
 						            </urstb:tbody>
 						        </urstb:table>
