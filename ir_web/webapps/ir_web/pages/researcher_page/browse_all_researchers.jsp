@@ -176,7 +176,7 @@
 						                        	    <c:url value="viewResearcherPage.action" var="viewResearcherPage">
 						                        	        <c:param name="researcherId" value="${researcher.id}"/>
 						                        	    </c:url>
-														<a href="${viewResearcherPage}">${researcher.user.lastName},${researcher.user.firstName}</a><br>
+														<a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
 														<c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
 														
 						                        </urstb:td>
@@ -303,10 +303,8 @@
 								
 						        <urstb:table  width="100%">
 						            <urstb:thead>
-						                    <urstb:td>Id</urstb:td>
 						                    <urstb:td>Thumbnail</urstb:td>
 						                    <urstb:td>Name</urstb:td>
-						                    <urstb:td>Title</urstb:td>
 						            </urstb:thead>
 						            <urstb:tbody
 						                var="researcher" 
@@ -319,9 +317,6 @@
 						                        onMouseOver="this.className='highlight'"
 						                        onMouseOut="this.className='${rowClass}'">
 						                        <urstb:td>
-							                        ${researcher.id}
-						                        </urstb:td>
-						                        <urstb:td>
 						                            <c:if test="${researcher.public}">
 						                        	    <c:if test="${researcher.primaryPicture != null }">
 						                                    <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
@@ -332,14 +327,14 @@
 						                            </c:if>
 						                        </urstb:td>
 						                        <urstb:td>
-						                            <c:url var="researcherView" value="/viewResearcherPage.action">
-						                                 <c:param name="researcherId" value="${researcher.id}"/>
-						                            </c:url>
-						                        <a href="${researcherView}">${researcher.user.firstName}&nbsp;${researcher.user.lastName}</a>
+						                        	    <c:url value="viewResearcherPage.action" var="viewResearcherPage">
+						                        	        <c:param name="researcherId" value="${researcher.id}"/>
+						                        	    </c:url>
+														<a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
+														<c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
+														
 						                        </urstb:td>
-						                        <urstb:td>
-						                             ${researcher.title}
-						                        </urstb:td>
+						                        
 						                    </urstb:tr>
 						            </urstb:tbody>
 						        </urstb:table>
