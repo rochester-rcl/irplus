@@ -111,11 +111,11 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 	public String browseCollectionItems() {
 		
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
-		repository = institutionalCollection.getRepository();
 		if( institutionalCollection == null )
 		{
 			return "collectionNotFound";
 		}
+		repository = institutionalCollection.getRepository();		
 		collectionPath = institutionalCollectionService.getPath(institutionalCollection);
 		log.debug("selected Alpha = " + selectedAlpha);
 		rowEnd = rowStart + numberOfResultsToShow;
