@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -44,10 +45,11 @@ import edu.ur.order.OrderType;
  */
 public class HbResearcherDAO implements ResearcherDAO {
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/**  Helper for persisting information using hibernate.   */
 	private final HbCrudDAO<Researcher> hbCrudDAO;
+	
+	/**  Logger  */
+	private static final Logger log = Logger.getLogger(HbResearcherDAO.class);
 
 	/**
 	 * Default Constructor
@@ -112,6 +114,8 @@ public class HbResearcherDAO implements ResearcherDAO {
      */
 	@SuppressWarnings("unchecked")
 	public List<Researcher> getResearchersByLastFirstName(final int rowStart, final int maxResults, final OrderType orderType) {
+		
+		log.debug("order type = " + orderType);
 		List<Researcher> researchers = (List<Researcher>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
             public Object doInHibernate(Session session)
                     throws HibernateException, SQLException {
