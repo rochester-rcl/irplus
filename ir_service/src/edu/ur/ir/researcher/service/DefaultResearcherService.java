@@ -49,7 +49,7 @@ public class DefaultResearcherService implements ResearcherService{
 	/** File system service for researcher file system information/actions */
 	private ResearcherFileSystemService researcherFileSystemService;
 	
-	/**  Logger for add files to item action */
+	/**  Logger  */
 	private static final Logger log = Logger.getLogger(DefaultResearcherService.class);
 
 	

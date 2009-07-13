@@ -19,6 +19,8 @@ package edu.ur.ir.web.action.researcher;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.web.table.Pager;
@@ -28,6 +30,7 @@ import edu.ur.order.OrderType;
  * Action to browse researcher
  *  
  * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
 public class ResearcherBrowse extends Pager {
@@ -58,6 +61,9 @@ public class ResearcherBrowse extends Pager {
 	/** Indicates this is a browse */
 	private String viewType = "browse";
 	
+	/**  Logger */
+	private static final Logger log = Logger.getLogger(ResearcherBrowse.class);
+	
 	/** Default constructor */
 	public ResearcherBrowse()
 	{
@@ -73,9 +79,11 @@ public class ResearcherBrowse extends Pager {
 	 */
 	public String browseResearcher() {
 
+		log.debug("Browse researcher called ");
 		rowEnd = rowStart + numberOfResultsToShow;
 
 		OrderType orderType= OrderType.getOrderType(sortType);
+		log.debug("order type = " + orderType);
 		researchers = researcherService.getResearchersByLastFirstName(rowStart, numberOfResultsToShow, orderType);
 		totalHits = researcherService.getAllResearchers().size();
 		
