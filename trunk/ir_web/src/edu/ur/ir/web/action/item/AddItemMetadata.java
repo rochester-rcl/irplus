@@ -64,6 +64,7 @@ import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.action.user.PersonalWorkspaceSchedulingIndexHelper;
 import edu.ur.order.AscendingOrderComparator;
+import edu.ur.simple.type.AscendingNameComparator;
 
 
 /**
@@ -295,6 +296,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	
 	/** Quartz scheduler instance to schedule jobs  */
 	private Scheduler quartzScheduler;
+	
+	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 
 	
 	/**
@@ -322,19 +325,13 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			return "accessDenied";
 		}
 
-		contentTypes = contentTypeService.getAllContentTypeByNameOrder();
-		
-		seriesList = seriesService.getAllSeries();
-
-		identifierTypes = identifierTypeService.getAll();
-
-		extentTypes = extentTypeService.getAllExtentTypes();
-
-		languages = languageTypeService.getAll();
-		
-		sponsors = sponsorService.getAllSponsor();
-		
-		publishers = publisherService.getAllPublisher();
+		contentTypes = getContentTypes();
+		seriesList = getSeriesList();
+		identifierTypes = getIdentifierTypes();
+		extentTypes = getExtentTypes();
+		languages = getLanguages();
+		sponsors = getSponsors();
+		publishers = getPublishers();
 
 		itemObjects = item.getItemObjects();
 		
@@ -384,7 +381,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		
 		reportsCount = item.getItemReports().size();
 		
-		seriesList = seriesService.getAllSeries();
+		seriesList = this.getSeriesList();
 		
 		return SUCCESS;
 	}
@@ -405,7 +402,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 
 		itemIdentifiersCount = item.getItemIdentifiers().size();
 		
-		identifierTypes = identifierTypeService.getAll();
+		identifierTypes = getIdentifierTypes();;
 		
 		return SUCCESS;
 	}
@@ -425,7 +422,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	
 		itemExtentsCount = item.getItemExtents().size();
 		
-		extentTypes = extentTypeService.getAllExtentTypes();
+		extentTypes = getExtentTypes();
 		
 		return SUCCESS;
 	}
@@ -445,9 +442,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		}
 
 		itemSponsorsCount = item.getItemSponsors().size();
-		
-		sponsors = sponsorService.getAllSponsor();
-		
+		sponsors = getSponsors();
 		return SUCCESS;
 	}
 
@@ -458,7 +453,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getPublisherInformation() 
 	{
-		publishers = publisherService.getAllPublisher();
+		publishers = getPublishers();
 		return SUCCESS;
 	}
 	
@@ -485,7 +480,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		}
 		
 		itemService.makePersistent(item);
-		contentTypes = contentTypeService.getAllContentTypeByNameOrder();
+		contentTypes = this.getContentTypes();
 		return SUCCESS;
 	}
 
@@ -697,8 +692,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getSeries() 
 	{
-		seriesList = seriesService.getAllSeries();
-		
+		seriesList = this.getSeriesList();
 		return SUCCESS;
 	}
 	
@@ -709,8 +703,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getIdentifiers() 
 	{
-		identifierTypes = identifierTypeService.getAll();
-	
+		identifierTypes = getIdentifierTypes();
 		return SUCCESS;
 	}
 
@@ -721,8 +714,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getExtents() 
 	{
-		extentTypes = extentTypeService.getAllExtentTypes();
-	
+		extentTypes = getExtentTypes();
 		return SUCCESS;
 	}
 
@@ -733,8 +725,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getAllSponsors() 
 	{
-		sponsors = sponsorService.getAllSponsor();
-	
+		sponsors = getSponsors();
 		return SUCCESS;
 	}
 	
@@ -798,17 +789,11 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<ContentType> getContentTypes() {
+		contentTypes = contentTypeService.getAllContentType();
+		Collections.sort(contentTypes, nameComparator);
 		return contentTypes;
 	}
 
-	/**
-	 * Set content types
-	 * 
-	 * @param contentTypes
-	 */
-	public void setContentTypes(List<ContentType> contentTypes) {
-		this.contentTypes = contentTypes;
-	}
 
 	/**
 	 * Get List of all series
@@ -816,17 +801,12 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<Series> getSeriesList() {
+		seriesList = seriesService.getAllSeries();
+		Collections.sort(seriesList, nameComparator);
 		return seriesList;
 	}
 	
-	/**
-	 * Set list of all series
-	 * 
-	 * @param seriesList
-	 */
-	public void setSeriesList(List<Series> seriesList) {
-		this.seriesList = seriesList;
-	}
+
 
 	/**
 	 * Get language type service
@@ -870,17 +850,12 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<IdentifierType> getIdentifierTypes() {
+		identifierTypes = identifierTypeService.getAll();
+		Collections.sort(identifierTypes, nameComparator);
 		return identifierTypes;
 	}
 
-	/**
-	 * Set identifier types
-	 * 
-	 * @param identifierTypes
-	 */
-	public void setIdentifierTypes(List<IdentifierType> identifierTypes) {
-		this.identifierTypes = identifierTypes;
-	}
+	
 
 	/**
 	 * Get languages
@@ -888,16 +863,9 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<LanguageType> getLanguages() {
+		languages = languageTypeService.getAll();
+		Collections.sort(languages, nameComparator);
 		return languages;
-	}
-
-	/**
-	 * Set languages
-	 * 
-	 * @param languages
-	 */
-	public void setLanguages(List<LanguageType> languages) {
-		this.languages = languages;
 	}
 
 	/**
@@ -940,16 +908,9 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<Sponsor> getSponsors() {
+		sponsors = sponsorService.getAllSponsor();
+		Collections.sort(sponsors, nameComparator);
 		return sponsors;
-	}
-
-	/**
-	 * Set sponsors
-	 * 
-	 * @param sponsors
-	 */
-	public void setSponsors(List<Sponsor> sponsors) {
-		this.sponsors = sponsors;
 	}
 
 	/**
@@ -958,16 +919,9 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<Publisher> getPublishers() {
+		publishers = publisherService.getAllPublisher();
+		Collections.sort(publishers, nameComparator);
 		return publishers;
-	}
-
-	/**
-	 * Set publishers
-	 * 
-	 * @param publishers
-	 */
-	public void setPublishers(List<Publisher> publishers) {
-		this.publishers = publishers;
 	}
 
 	/**
@@ -1398,11 +1352,9 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	}
 
 	public List<ExtentType> getExtentTypes() {
+		extentTypes = extentTypeService.getAllExtentTypes();
+		Collections.sort(extentTypes, nameComparator);
 		return extentTypes;
-	}
-
-	public void setExtentTypes(List<ExtentType> extentTypes) {
-		this.extentTypes = extentTypes;
 	}
 
 	public String[] getExtentValues() {
@@ -1555,4 +1507,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	public void setSubTitleArticles(String[] subTitleArticles) {
 		this.subTitleArticles = subTitleArticles;
 	}
+	
+
 }
