@@ -51,6 +51,11 @@
         
         function formValidation() {
 
+        	if (document.getElementById('changePasswordForm_password').value.length < 8 ) {
+        		alert('Password must be at least 8 characters.');
+        		return false;
+        	}
+        	
         	if (document.getElementById('changePasswordForm_password').value == '') {
         		alert('Please enter password.');
         		return false;
@@ -99,15 +104,19 @@
 					              action="user/forceChangePassword.action" onSubmit="return formValidation();">
 					              
 					              <input type="hidden" name="token" value=${token}> 
+					              
 		        					<table class="formTable">
+		        					    <tr>
+			        					    <td colspan="2"> Password must be at least 8 characters</td> 
+			        				    </tr>
 			        					<tr>
-			        					<td>  <label  for="newPassword" class="label"> New Password </label> </td> 
-			        				    <td> <input type="password" class="input" id="changePasswordForm_password" name="password"> </td>
+			        					    <td>  New Password  </td> 
+			        				        <td> <input type="password" class="input" id="changePasswordForm_password" name="password"> </td>
 			        				    </tr>
 			        				    
 			        				    <tr>
-			        					<td> <label  for="newPassword" class="label"> Confirm Password </label>  </td> 
-			        				    <td>  <input type="password" class="input" id="changePasswordForm_confirm_password" name="confirmPassword"></td>
+			        					    <td> Confirm Password </td> 
+			        				        <td>  <input type="password" class="input" id="changePasswordForm_confirm_password" name="confirmPassword"></td>
 			        				    </tr>
 			        				   
 			        				   <tr>

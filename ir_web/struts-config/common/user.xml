@@ -1029,6 +1029,12 @@
            <result name="success">/pages/user/login/change_password_form.jsp</result>
         </action> 
         
+         <action name="changeNetId" 
+            class="edu.ur.ir.web.action.user.ChangeNetId">
+            <interceptor-ref name="editStack"/>
+           <result name="success">/pages/user/login/change_net_id_form.jsp</result>
+        </action> 
+        
  		<!--  ************************************ -->
         <!--  Email Actions                        -->
         <!--  ************************************ -->

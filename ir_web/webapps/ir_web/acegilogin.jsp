@@ -163,21 +163,21 @@
                           <a href="<c:url value='viewUserRegistration.action'/>">Create New Account?</a></p>
                    </div>
                    
-			        <ur:div id="forgotPasswordDialog" cssClass="hidden">
-		                <ur:div cssClass="hd">Forgot password</ur:div>
-		                <ur:div cssClass="bd">
-		                    <ur:basicForm id="forgotPassword" name="forgotPasswordForm" 
+			        <div id="forgotPasswordDialog" class="hidden">
+		                <div class="hd">Forgot password</div>
+		                <div class="bd">
+		                    <form id="forgotPassword" name="forgotPasswordForm" 
 				                    method="post" 
-				                    action="savePasswordToken.action">
+				                    action="<c:url value="/savePasswordToken.action"/>">
 				              Please enter the email id associated with your account.
 				              <div class="clear">&nbsp;</div>
 				              
-			                  <ur:div id="forgotPasswordDialogFields">
-			                       <%@ include file="/pages/user/login/forgot_password_form.jsp" %>
-			                  </ur:div>
-			                </ur:basicForm>
-		                </ur:div>
-		            </ur:div>
+			                  <div id="forgotPasswordDialogFields">
+			                      <c:import url="/pages/user/login/forgot_password_form.jsp"/>
+			                  </div>
+			                </form>
+		                </div>
+		            </div>
 		            
 		          
                    

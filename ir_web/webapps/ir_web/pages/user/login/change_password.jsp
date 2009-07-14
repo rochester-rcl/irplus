@@ -50,6 +50,10 @@
         
         function formValidation() {
 
+        	if (document.getElementById('changePasswordForm_password').value.length < 8 ) {
+        		alert('Password must be at least 8 characters.');
+        		return false;
+        	}
         	if (document.getElementById('changePasswordForm_password').value == '') {
         		alert('Please enter password.');
         		return false;
@@ -90,25 +94,28 @@
                        </div>
                    
                        <div class="contentBoxContent">
-                       	  </br>
+                       	 
                        	  <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="tokenDoesnotExist"/></p>
                        	  
-                       	  <p> 
+                       	 
                        	  <c:if test="${validToken == 'true'}">
-	            	          <ur:basicForm id="changePassword" name="changePasswordForm" method="POST" 
-					              action="changePassword.action" onSubmit="return formValidation();">
+	            	          <form id="changePassword" name="changePasswordForm" method="POST" 
+					              action="<c:url value="/changePassword.action"/>" onSubmit="return formValidation();">
 					              
 					              <input type="hidden" name="token" value=${token}> 
 		        					<table class="formTable">
+		        					     <tr>
+			        					    <td colspan="2">  Password must be at least 8 characters long.</td> 
+			        				    </tr>
 			        					<tr>
-			        					<td>  <label  for="newPassword" class="label"> New Password </label> </td> 
-			        				    <td> <input type="password" class="input" id="changePasswordForm_password" name="password"> </td>
+			        					    <td>  New Password </td> 
+			        				        <td> <input type="password" class="input" id="changePasswordForm_password" name="password"> </td>
 			        				    </tr>
 			        				    
 			        				    <tr>
-			        					<td> <label  for="newPassword" class="label"> Confirm Password </label>  </td> 
-			        				    <td>  <input type="password" class="input" id="changePasswordForm_confirm_password" name="confirmPassword"></td>
+			        					    <td>  Confirm Password </td> 
+			        				        <td>  <input type="password" class="input" id="changePasswordForm_confirm_password" name="confirmPassword"></td>
 			        				    </tr>
 			        				   
 			        				   <tr>
@@ -116,9 +123,9 @@
 			        				   </tr>
 			        				 </table>
 		        				    
-					          </ur:basicForm>
+					          </form>
 					      </c:if>
-				          </p>
+				          
                        </div>
                    </div>
                 </div>

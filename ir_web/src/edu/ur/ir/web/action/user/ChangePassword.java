@@ -44,6 +44,9 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 
 	/** New password */
 	private String password;
+	
+	/** password confirm */
+	private String confirmPassword;
 
 	/**  User object */
 	private Long userId;
@@ -84,7 +87,19 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 	 */
 	public String savePassword() {
 
+		log.debug("Save password called");
+		
 		userToChangePassword = userService.getUserByToken(token); 
+		
+		if(password.length() < 8 )
+		{
+			return INPUT;
+		}
+		
+		if(!password.equals(confirmPassword))
+		{
+		    return INPUT;	
+		}
 		
 		userService.updatePassword(password, userToChangePassword); 
 		
@@ -106,6 +121,11 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 	public String changePassword() {
 		
 		log.debug("change Password");
+		
+		if(password.length() < 8 )
+		{
+			return INPUT;
+		}
 		
 		// loaded from session 
 		userToChangePassword = userService.getUser(userId, false);
@@ -210,6 +230,14 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 }

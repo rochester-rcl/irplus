@@ -237,8 +237,6 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 					// system - 
 					if( ldapUser != null )
 					{
-						AbstractAuthenticationToken authRequest = new LdapAuthenticationToken(irUser.getLdapUserName(), this.netIdPassword);
-						ldapAuthProvider.authenticate(authRequest);
 						failure = true;
 				    	addFieldError("netIdAlreadyExists", "The net id user name already exists - you may already have an account please contact the admistrator");
 					}
