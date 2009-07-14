@@ -33,6 +33,7 @@ import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.AscendingOrderComparator;
 import edu.ur.persistent.BasePersistent;
+import edu.ur.simple.type.AscendingNameComparator;
 
 /**
  * A user who does research and contributes a large amount
@@ -1153,7 +1154,11 @@ public class Researcher extends BasePersistent{
 			
 			// Put sub folders
 			JSONArray jsonSubFolders = new JSONArray();
-		 	for(ResearcherFolder folder: rootFolders) {
+			
+			List <ResearcherFolder> folders = new LinkedList<ResearcherFolder> (rootFolders);
+			Collections.sort( folders, new AscendingNameComparator());
+			
+		 	for(ResearcherFolder folder: folders) {
 				jsonSubFolders.add(folder.toJSONObject());
 			}
 
@@ -1161,7 +1166,9 @@ public class Researcher extends BasePersistent{
 
 			// Put files
 			JSONArray jsonFiles = new JSONArray();
-			for(ResearcherFile file: rootFiles) {
+			List <ResearcherFile> files = new LinkedList<ResearcherFile> (rootFiles);
+			Collections.sort( files, new AscendingNameComparator());
+			for(ResearcherFile file: files) {
 				jsonFiles.add(file.toJSONObject());
 			}
 
@@ -1169,7 +1176,9 @@ public class Researcher extends BasePersistent{
 			
 			// Put publications
 			JSONArray jsonPublications = new JSONArray();
-			for(ResearcherPublication p: rootPublications) {
+			List <ResearcherPublication> publications = new LinkedList<ResearcherPublication> (rootPublications);
+			Collections.sort( publications, new AscendingNameComparator());
+			for(ResearcherPublication p: publications) {
 				jsonPublications.add(p.toJSONObject());
 			}
 
@@ -1177,16 +1186,22 @@ public class Researcher extends BasePersistent{
 
 			// Put institutional item
 			JSONArray jsonInstitutionalItems = new JSONArray();
-			for(ResearcherInstitutionalItem i: rootInstitutionalItems) {
+			List <ResearcherInstitutionalItem> institutionalItems = new LinkedList<ResearcherInstitutionalItem> (rootInstitutionalItems);
+			Collections.sort( institutionalItems, new AscendingNameComparator());
+
+			for(ResearcherInstitutionalItem i: institutionalItems) {
 				jsonInstitutionalItems.add(i.toJSONObject());
 			}
 
 			jsonObj.put("institutionalItems",jsonInstitutionalItems);	
 
 			
-			// Put files
+			// Put links
 			JSONArray jsonLinks = new JSONArray();
-			for(ResearcherLink link: rootLinks) {
+			List <ResearcherLink> links = new LinkedList<ResearcherLink> (rootLinks);
+			Collections.sort( links, new AscendingNameComparator());
+
+			for(ResearcherLink link: links) {
 				jsonLinks.add(link.toJSONObject());
 			}
 
