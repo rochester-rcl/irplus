@@ -58,12 +58,8 @@
             <!--  this is the body regin of the page -->
             <div id="bd">
             <br/>
-          		 <p><ir:printError errors="${fieldErrors}" 
-		                       key="emailVerified"/></p>
-
-          		 <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-		                       key="tokenNotExist"/></p>
-			
+          		 <p class="errorMessage"><ir:printError errors="${fieldErrors}"  key="emailVerified"/></p>
+          		 <p class="errorMessage"><ir:printError errors="${fieldErrors}"   key="tokenNotExist"/></p>
 			     <p><a href="<c:url value="/home.action"/>">Go to ${repository.name} home</a></p>
             </div>
             <!--  end the body tag --> 
