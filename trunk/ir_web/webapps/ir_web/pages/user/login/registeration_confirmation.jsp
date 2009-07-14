@@ -59,9 +59,9 @@
             <div id="bd">
             <br/>
           	The account has been created successfully. 
-	     <br/>
-		An email will be sent to you with the link to login into the system. 
-		Please follow the link to complete the registration process.
+	        <br/>
+		    An email will be sent to you with the link to login into the system. 
+		    Please follow the link to complete the registration process.
             </div>
             <!--  end the body tag --> 
 
