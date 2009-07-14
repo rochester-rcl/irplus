@@ -2,13 +2,11 @@ package edu.ur.ir.web.action.user;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.BadCredentialsException;
-import org.springframework.security.providers.AbstractAuthenticationToken;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.security.providers.ldap.LdapAuthenticator;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.ur.ir.security.service.LdapAuthenticationToken;
 import edu.ur.ir.security.service.UrLdapAuthenticationProvider;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
