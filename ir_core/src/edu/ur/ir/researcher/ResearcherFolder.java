@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -35,6 +37,7 @@ import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.persistent.LongPersistentId;
 import edu.ur.persistent.PersistentVersioned;
+import edu.ur.simple.type.AscendingNameComparator;
 import edu.ur.simple.type.DescriptionAware;
 import edu.ur.simple.type.NameAware;
 import edu.ur.tree.PreOrderTreeSetNodeBase;
@@ -1008,7 +1011,9 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 			}
 			// Put sub folders
 			JSONArray jsonSubFolders = new JSONArray();
-		 	for(ResearcherFolder folder: children) {
+			List <ResearcherFolder> folders = new LinkedList<ResearcherFolder> (children);
+			Collections.sort( folders , new AscendingNameComparator());
+		 	for(ResearcherFolder folder: folders) {
 				jsonSubFolders.add(folder.toJSONObject());
 			}
 
@@ -1016,7 +1021,9 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 
 			// Put files
 			JSONArray jsonFiles = new JSONArray();
-			for(ResearcherFile file: files) {
+			List <ResearcherFile> sortedFiles = new LinkedList<ResearcherFile> (files);
+			Collections.sort( sortedFiles , new AscendingNameComparator());
+			for(ResearcherFile file: sortedFiles) {
 				jsonFiles.add(file.toJSONObject());
 			}
 
@@ -1024,7 +1031,9 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 			
 			// Put publications
 			JSONArray jsonPublications = new JSONArray();
-			for(ResearcherPublication p: publications) {
+			List <ResearcherPublication> sortedPublications = new LinkedList<ResearcherPublication> (publications);
+			Collections.sort( sortedPublications , new AscendingNameComparator());
+			for(ResearcherPublication p: sortedPublications) {
 				jsonPublications.add(p.toJSONObject());
 			}
 
@@ -1032,7 +1041,9 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 
 			// Put institutional items
 			JSONArray jsonInstitutionalItems = new JSONArray();
-			for(ResearcherInstitutionalItem i: institutionalItems) {
+			List <ResearcherInstitutionalItem> sortedInstitutionalitems = new LinkedList<ResearcherInstitutionalItem> (institutionalItems);
+			Collections.sort( sortedInstitutionalitems , new AscendingNameComparator());
+			for(ResearcherInstitutionalItem i: sortedInstitutionalitems) {
 				jsonInstitutionalItems.add(i.toJSONObject());
 			}
 
@@ -1040,7 +1051,9 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 			
 			// Put files
 			JSONArray jsonLinks = new JSONArray();
-			for(ResearcherLink link: links) {
+			List <ResearcherLink> sortedLinks = new LinkedList<ResearcherLink> (links);
+			Collections.sort( sortedLinks , new AscendingNameComparator());
+			for(ResearcherLink link: sortedLinks) {
 				jsonLinks.add(link.toJSONObject());
 			}
 
