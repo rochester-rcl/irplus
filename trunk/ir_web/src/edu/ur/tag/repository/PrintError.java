@@ -48,9 +48,10 @@ public class PrintError extends SimpleTagSupport{
 	
 	@SuppressWarnings("unchecked")
 	public void doTag() throws JspException, IOException {
-		log.debug("errors = " + errors.toString());
+		
 		if( errors != null && errors.size() > 0)
 		{
+			log.debug("errors = " + errors.toString());
 			log.debug("errors size = " + errors.size());
 			if( key != null)
 			{
