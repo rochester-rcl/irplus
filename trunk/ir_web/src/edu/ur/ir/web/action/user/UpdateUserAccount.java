@@ -40,14 +40,23 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	private static final long serialVersionUID = -7094483818911517181L;
 
 	/**  Logger for add user action */
-	private static final Logger log = Logger.getLogger(RegisterUser.class);
+	private static final Logger log = Logger.getLogger(UpdateUserAccount.class);
 
 	/** user  */
 	private IrUser irUser;
 	
 	/** Id of the user */
 	private Long userId;
-
+	
+	/** Users phone number */
+	private String phoneNumber;
+	
+	/** first name of the user */
+	private String firstName;
+	
+	/** last name of the user */
+	private String lastName;
+	
 	/** User service class */
 	private UserService userService;
 	
@@ -117,6 +126,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	/** Authentication provider for ldap */
 	private UrLdapAuthenticationProvider ldapAuthProvider;
 	
+	
 	/** 
 	 * Prepare the action - get user
 	 */
@@ -146,8 +156,10 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	public String saveMyAccount() throws NoIndexFoundException
 	{
 		irUser = userService.getUser(userId, false);
-	    irUser.removeAllDepartments();
 		updateUserDepartments();
+		irUser.setPhoneNumber(phoneNumber);
+		irUser.setFirstName(firstName);
+		irUser.setLastName(lastName);
 		userService.makeUserPersistent(irUser);
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 				false);
@@ -471,6 +483,30 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 
 	public void setAuthenticator(LdapAuthenticator authenticator) {
 		this.authenticator = authenticator;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 }

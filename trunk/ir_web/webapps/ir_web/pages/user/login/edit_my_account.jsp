@@ -91,7 +91,7 @@
 	                               >Change Password</button>
 
 	                	  <form id="addUser" name="newUserForm" method="post" 
-			            	  action="user/saveMyAccount.action"  onsubmit="return  YAHOO.ur.user.account.formValidation();">
+			            	  action="<c:url value="/user/saveMyAccount.action"/>"  onsubmit="return  YAHOO.ur.user.account.formValidation();">
 			              
 			              <input type="hidden" id="user_id" name="userId" value="${irUser.id}"/>
 			               
@@ -115,7 +115,7 @@
 						      <td> First Name:  </td>
 				              <td>
 					              <input type="text" class="input"
-					              id="newUserForm_first_name" name="irUser.firstName" value="${irUser.firstName}" size="40"/> 
+					              id="newUserForm_first_name" name="firstName" value="${irUser.firstName}" size="40"/> 
 					              
 				              </td>
 				          </tr>    
@@ -124,14 +124,14 @@
 						      <td>  Last Name: </td>
 					          <td>
 					      		<input type="text" class="input"  
-					              id="newUserForm_last_name" name="irUser.lastName" value="${irUser.lastName}" size="40"/>
+					              id="newUserForm_last_name" name="lastName" value="${irUser.lastName}" size="40"/>
 					          </td>
 					      </tr>
 				          <tr>
 				              <td> Phone Number: </td>
 			                  <td>
 			               		    <input type="text" class="input"  
-				                  id="newUserForm_phone_number" name="irUser.phoneNumber" value="${irUser.phoneNumber}" size="40"/>
+				                  id="newUserForm_phone_number" name="phoneNumber" value="${irUser.phoneNumber}" size="40"/>
 		                      </td>
 	                      </tr>
 	                      
