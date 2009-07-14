@@ -19,6 +19,8 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
+<%@ taglib prefix="ir" uri="ir-tags"%>
+
 
 
 <!--  document type -->
@@ -67,12 +69,14 @@
                
                <form  method="post" 
 		              action="<c:url value="/sendHelpEmail.action"/>">
-		              <table class="formTable">    
+		              <table class="formTable">  
+		                  
 			              <tr>       
 	                          <td align="left" class="label">
 	                              Subject:*
 	                          </td>
 	                          <td align="left" class="input">
+	                              <span class="errorMessage"><ir:printError errors="${fieldErrors}" key="subject"/></span> <br/>
 	                              <input type="text" name="subject"  value="${subject}" size="82"/> 
 	                          </td>
 			              </tr>
@@ -81,16 +85,18 @@
 	                              Email Address:*
 	                          </td>
 	                          <td align="left" class="input">
+	                              <span class="errorMessage"><ir:printError errors="${fieldErrors}" key="from"/></span> <br/>
 	                              <input type="text" name="from"  value="${email}" size="82"/> 
 	                          </td>
 			              </tr>
 			              <tr>
 			                  <td align="left" class="label">
-			                      Message:
+			                      Message*:
 			                  </td>
 			                  <td align="left" colspan="2" class="input"> 
+			                      <span class="errorMessage"><ir:printError errors="${fieldErrors}" key="message"/></span> <br/>
 			                      <textarea name="message" 
-	                               cols="80" rows="20">${message}</textarea>
+		                           cols="80" rows="20">${message}</textarea>
 	                          </td>
 			              </tr>
 			              <tr>
