@@ -19,21 +19,33 @@
   
 <!-- Form to enter the new password  --> 
 
+<%@ taglib prefix="ir" uri="ir-tags"%>
+
+<div id="net_id_error">           
+    <!--  get the error messages from fieldErrors -->
+	<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+			key="netIdAlreadyExists"/></p>
+	<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+			key="netIdPasswordFail"/></p> 
+	<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+			key="netIdPasswordEmpty"/></p>      
+</div>
+
+<input type="hidden" id="net_id_added" value="${added}"/>
+
 <table class="formTable"> 
 
+    
      <tr>
-         <td class="label" colspan="2">Password must be at least 8 characters long</td>
-     </tr>
-     <tr>
-         <td class="label">New Password *:</td>
+         <td class="label">Net Id *:</td>
          <td align="left" class="input"> 
-             <input type="password" id="change_password_form_new_password" name="password"  value=""/>
+             <input type="text" id="net_id" name="netId"  value="${irUser.ldapUserName}"/>
          </td>
      </tr>
      <tr>
-         <td class="label">Confirm new password*:</td>
+         <td class="label">Net Id password*:</td>
          <td align="left" class="input"> 
-              <input type="password"  id="change_password_form_confirm_password"  name="confirmPassword"  value=""/>
+              <input type="password"  id="net_id_password"  name="netIdPassword"  value=""/>
          </td>
      </tr>
  

@@ -33,8 +33,20 @@ var defaultEmailAction = basePath + 'user/setDefaultEmail.action';
 // Action to change password
 var changePasswordAction = basePath + 'user/changeMyPassword.action';
 
+//Action to change password
+var changeNetIdAction = basePath + 'user/changeNetId.action';
+
 YAHOO.ur.user.account = 
 {
+		
+	/**
+	 * clear the change password form
+	 */
+	clearNetIdForm : function()
+	{
+	     var divToUpdate = document.getElementById('net_id_error');
+         divToUpdate.innerHTML = ""; 	
+	},
    
     /**
      * clear the change password form
@@ -110,6 +122,12 @@ YAHOO.ur.user.account =
    
  	    // Validate the entries in the form 
 	    var changePasswordValidate = function() {
+	    	
+	    	if (document.getElementById('change_password_form_new_password').value.length < 8 ) {
+    		    alert('Password must be at least 8 characters.');
+    		    return false;
+    	    }
+	    
     	    if (document.getElementById('change_password_form_new_password').value == '') {
     		    alert('Please enter password.');
     		    return false;
@@ -144,6 +162,97 @@ YAHOO.ur.user.account =
     },
     
     /**
+     * Change password dialog
+     */
+    createNetIdDialog : function()
+    {
+        // Define various event handlers for Dialog
+	    var handleSubmit = function() 
+	    {
+	        YAHOO.util.Connect.setForm('changeNetIdForm');
+	        var cObj = YAHOO.util.Connect.asyncRequest('post',
+        	changeNetIdAction, callback);
+	    };
+	
+	    // handle a cancel of the change net id
+	    var handleCancel = function() 
+	    {
+	        YAHOO.ur.user.account.clearNetIdForm();
+	        YAHOO.ur.user.account.changeNetIdDialog.hide();
+	    };
+	
+	    var handleSuccess = function(o) 
+	    {
+	    	
+	    	// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       
+                //get the response from adding a publisher
+		        var response = o.responseText;
+		        var netIdForm = document.getElementById('net_id_fields');
+		    
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        netIdForm.innerHTML = o.responseText;
+		    
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("net_id_added").value;
+		        //if the publisher was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+		        	YAHOO.ur.user.account.changeNetIdDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the publisher was added
+		        	YAHOO.ur.user.account.changeNetIdDialog.hide();
+		        	YAHOO.ur.user.account.clearNetIdForm();
+		        }
+                
+            }
+	    };
+	
+	    // handle form submission failure
+	    var handleFailure = function(o) 
+	    {
+	        alert('Change net id submission failed ' + o.status);
+ 	    };
+
+	    // Instantiate the Dialog
+	    // make it modal - 
+	    // it should not start out as visible - it should not be shown until 
+	    // change password button is clicked.
+	    YAHOO.ur.user.account.changeNetIdDialog = new YAHOO.widget.Dialog('change_net_id_dialog', 
+        { width : "450px",
+		  visible : false, 
+		  modal : true,
+		  buttons : [ { text:'Submit', handler:handleSubmit, isDefault:true },
+					  { text:'Cancel', handler:handleCancel } ]
+		} );
+
+        // show and center the dialog box
+        YAHOO.ur.user.account.changeNetIdDialog.showDialog = function()
+        {
+            YAHOO.ur.user.account.changeNetIdDialog.center();
+            YAHOO.ur.user.account.changeNetIdDialog.show();
+        }
+   
+	    // Wire up the success and failure handlers
+	    var callback = { success: handleSuccess, failure: handleFailure };
+			
+	    // Render the Dialog
+	    YAHOO.ur.user.account.changeNetIdDialog.render();
+	
+        // listener for showing the dialog when clicked.
+	    YAHOO.util.Event.addListener("show_change_net_id", "click", 
+	        YAHOO.ur.user.account.changeNetIdDialog.showDialog, 
+	        YAHOO.ur.user.account.changeNetIdDialog, true);	
+    },
+    
+    /**
      * validate the form
      */
     formValidation : function() 
@@ -168,6 +277,7 @@ YAHOO.ur.user.account =
     init : function()
     {
         YAHOO.ur.user.account.createChangePasswordDialog();
+        YAHOO.ur.user.account.createNetIdDialog();
         var myTabs = new YAHOO.widget.TabView("user-account-tabs");
     }
 };

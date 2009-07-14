@@ -83,12 +83,17 @@
 		            
 		                <!--  first tab -->
 		                <div id="tab1">
-		                  <div class="clear">&nbsp;</div>
+		                 <br/>
 		                  
 		                  <button class="ur_button" id="show_change_password" 
 	                               onmouseover="this.className='ur_buttonover';"
 	                               onmouseout="this.className='ur_button';"
 	                               >Change Password</button>
+	                               
+	                      <button class="ur_button" id="show_change_net_id" 
+	                               onmouseover="this.className='ur_buttonover';"
+	                               onmouseout="this.className='ur_button';"
+	                               >Change Net Id</button>
 
 	                	  <form id="addUser" name="newUserForm" method="post" 
 			            	  action="<c:url value="/user/saveMyAccount.action"/>"  onsubmit="return  YAHOO.ur.user.account.formValidation();">
@@ -109,7 +114,12 @@
 				          <tr>
 				              <td> User Name: </td>
 						      <td> ${irUser.username}</td>
-					     </tr>
+					      </tr>
+					      
+					      <tr>
+				              <td> Net Id: </td>
+						      <td> ${irUser.ldapUserName}</td>
+					      </tr>
 	
 						  <tr>
 						      <td> First Name:  </td>
@@ -237,7 +247,7 @@
 		      <div class="bd">
 		          <form id="addEmail" name="newEmailForm" 
 		              method="post" 
-		              action="admin/createEmail.action">
+		              action="<c:url value="/admin/createEmail.action"/>">
 		             
 		             <!--  if editing an id must be passed -->     
 		   			 <input type="hidden" id="newEmailForm_id"  name="id" value="${irUser.id}"/>
@@ -253,7 +263,7 @@
 	          <div class="hd">Delete Email</div>
 		      <div class="bd">
 		          <form id="deleteEmail" name="deleteEmail" method="POST" 
-		              action="admin/deleteEmail.action">
+		              action="<c:url value="/admin/deleteEmail.action"/>">
 		              
 		              
 		              <div id="deleteEmailError" class="errorMessage"></div>
@@ -267,22 +277,35 @@
 	          <div class="hd">Change password</div>
 		      <div class="bd">
 		          <form id="change_password_form" name="changePasswordForm" method="POST" 
-		              action="user/changePassword.action">
+		              action="<c:url value="/user/changePassword.action"/>">
 			         
-			         <input type="hidden" id="change_password_form_id"  name="userId" value="${irUser.id}"/>
 					  <div id="new_password_dialog_fields">
-					     <c:import url="/pages/user/login/change_password_form.jsp"/>
+					     <c:import url="change_password_form.jsp"/>
 	                  </div>			         
 		          </form>
 		      </div>
 	      </div>
+	      
+	     <div id="change_net_id_dialog" class="hidden">
+	          <div class="hd">Change or Add Net Id</div>
+		      <div class="bd">
+		          <form id="change_net_id_form" name="changeNetIdForm" method="post" 
+		              action="<c:url value="/user/changeNetId.action"/>">
+			         
+					  <div id="net_id_fields">
+					     <c:import url="change_net_id_form.jsp"/>
+	                  </div>			         
+		          </form>
+		      </div>
+	      </div>
+	      
 
 	     <div id="newPersonNameDialog" class="hidden">
 	         <div class="hd">Name Information</div>
 	         <div class="bd">
 	             <form id="addPersonName" name="newPersonNameForm" 
 	                       method="post" 
-	                       action="user/createPersonName.action">
+	                       action="<c:url value="/user/createPersonName.action"/>">
 		           	
 		           	<input type="hidden" id="newPersonNameForm_id"
 		                   name="id" value=""/>
@@ -352,7 +375,7 @@
 	      <div class="hd">Delete People</div>
 	      <div class="bd">
 	          <form id="deletePersonName" name="deletePersonName" method="POST" 
-	              action="user/deletePersonName.action">
+	              action="<c:url value="/user/deletePersonName.action"/>">
 	              
 	              
 	              <div id="deletePersonNameError" class="errorMessage"></div>
