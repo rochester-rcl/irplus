@@ -60,7 +60,7 @@
                 <br/>
           	    You have successfully created an account 
 	            <br/>
-		        You may now <a href="<c:url value="/workspace.action"/>">log in</a> to the system with your username and password 
+		        You may now <a href="<c:url value="/user/workspace.action"/>">log in</a> to the system with your user name and password 
             </div>
             <!--  end the body tag --> 
 
