@@ -69,7 +69,7 @@
                   dissemination and stewardship of digital materials. </p>
                   
                <h3>Icons</h3>
-               <p>A majority of the icons are from http://www.famfamfam.com/ - a great site for icons</p>
+               <p>A majority of the icons are from <a href="http://www.famfamfam.com/">http://www.famfamfam.com/</a> - a great site for icons</p>
             </div>
             <!--  end the body tag --> 
 
