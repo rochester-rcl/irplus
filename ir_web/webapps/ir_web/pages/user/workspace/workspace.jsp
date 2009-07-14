@@ -192,6 +192,8 @@
  		                                onmouseout="this.className='ur_button';"
  		                                onclick="javascript:YAHOO.ur.shared.file.inbox.deleteInboxFileConfirmDialog.showDialog();"> <span class="deleteBtnImg">&nbsp;</span>Delete</button>
 	                     
+	                     <br/>
+	                     <br/>
 	         
 	                     <!--  location where shared inbox content will be placed -->
 	                     <div id="shared_folder_inbox">
