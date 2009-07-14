@@ -22,6 +22,7 @@
  -->
  
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="ur" uri="ur-tags"%>
 
 <c:if test="${itemIdentifiersCount == 0}">
 	<%@ include file="/pages/user/workspace/item/item_identifier.jsp" %>
@@ -39,7 +40,7 @@
 		      			<c:if test="${identifierType.name == itemIdentifier.identifierType.name}">
 		      				selected
 		      			</c:if>
-		      		> ${identifierType.name}</option>
+		      		> <ur:maxText numChars="65" text="${identifierType.name}" /> </option>
 	      		</c:forEach>
 	      	   </select>
 	      </td>

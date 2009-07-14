@@ -21,6 +21,8 @@
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="ur" uri="ur-tags"%>
+
 
 <c:if test="${reportsCount == 0}">
 	<%@ include file="/pages/user/workspace/item/item_series.jsp" %>
@@ -47,7 +49,7 @@
 			      			<c:if test="${report.series.name == series.name}">
 			      				selected
 			      			</c:if>
-			      		> ${series.name}</option>
+			      		><ur:maxText numChars="65" text="${series.name}" /> </option>
 		      		</c:forEach>
 		      	   </select>
 		      </td>

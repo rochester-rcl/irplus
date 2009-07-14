@@ -21,8 +21,7 @@
  -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<ur:styleSheet href="page-resources/css/global.css"/>
+<%@ taglib prefix="ur" uri="ur-tags"%>
 
 <table id="extent_table_i">
 
@@ -31,12 +30,12 @@
       	   <select id="itemForm_extent" name="extentIds" />
       	   <option value = "0"> Select </option>
       		<c:forEach items="${extentTypes}" var="extentType">
-      			<option value = "${extentType.id}"> ${extentType.name}</option>
+      			<option value = "${extentType.id}"> <ur:maxText numChars="65" text="${extentType.name}" /> </option>
       		</c:forEach>
       	   </select>
       </td>
       <td>
-      	   <input type="text" id="itemForm_extent_value" name="extentValues" size="40"/>
+      	   <input type="text" id="itemForm_extent_value" name="extentValues" size="60"/>
       </td>
       <td>   
       	   <input type="button" class="ur_button" id="itemForm_remove" value="Remove Extent" onclick="javascript:YAHOO.ur.item.metadata.removeExtent('extent_table_i');"/>

@@ -21,8 +21,9 @@
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="ur" uri="ur-tags"%>
 
-<select id="itemForm_type" name="typeIds" multiple="true" size="5"/>
+<select id="itemForm_type" name="typeIds" multiple="true" size="10" />
 	<option value="0">Select</option>
 	<c:forEach items="${contentTypes}" var="contentType">
 		<c:if test="${item.primaryContentType.id != contentType.id}">
@@ -32,7 +33,7 @@
 					selected
 				</c:if>
 			</c:forEach>
-			> ${contentType.name}</option>
+			> <ur:maxText numChars="100" text="${contentType.name}" /></option>
 		</c:if>
 	</c:forEach>
   </select>
