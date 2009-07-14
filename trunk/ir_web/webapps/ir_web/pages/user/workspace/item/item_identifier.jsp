@@ -21,8 +21,7 @@
  -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<ur:styleSheet href="page-resources/css/global.css"/>
+<%@ taglib prefix="ur" uri="ur-tags"%>
 
 <table id="identifier_table_i">
 
@@ -31,12 +30,12 @@
       	   <select id="itemForm_identifier" name="identifierIds" />
       	   <option value = "0"> Select </option>
       		<c:forEach items="${identifierTypes}" var="identifierType">
-      			<option value = "${identifierType.id}"> ${identifierType.name}</option>
+      			<option value = "${identifierType.id}"> <ur:maxText numChars="65" text="${identifierType.name}" /></option>
       		</c:forEach>
       	   </select>
       </td>
       <td>
-      	   <input type="text" id="itemForm_identifier_value" name="identifierValues" size="40"/>
+      	   <input type="text" id="itemForm_identifier_value" name="identifierValues" size="60"/>
       </td>
       <td>   
       	   <input type="button" class="ur_button" id="itemForm_remove" value="Remove Identifier" onclick="javascript:YAHOO.ur.item.metadata.removeIdentifier('identifier_table_i');"/>

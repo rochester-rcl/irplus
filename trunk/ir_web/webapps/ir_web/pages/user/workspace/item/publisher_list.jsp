@@ -20,6 +20,7 @@
 -->
  
  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+ <%@ taglib prefix="ur" uri="ur-tags"%>
 
 	<select id="itemForm_publisher" name="publisherId" />
    		<option value = "0"> Select </option>
@@ -28,7 +29,7 @@
   			<c:if test="${item.externalPublishedItem.publisher.id == publisher.id}">
   				selected
   			</c:if>
-  			> ${publisher.name}</option>
+  			> <ur:maxText numChars="125" text="${publisher.name}" /></option>
   		</c:forEach>
    </select>
 

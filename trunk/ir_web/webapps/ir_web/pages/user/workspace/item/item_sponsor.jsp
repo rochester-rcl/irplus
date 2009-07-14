@@ -21,8 +21,7 @@
  -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<ur:styleSheet href="page-resources/css/global.css"/>
+<%@ taglib prefix="ur" uri="ur-tags"%>
 
 <table id="sponsor_table_i">
 
@@ -31,7 +30,7 @@
       	   <select id="itemForm_sponsor" name="sponsorIds" />
       	   <option value = "0"> Select </option>
       		<c:forEach items="${sponsors}" var="sponsor">
-      			<option value = "${sponsor.id}"> ${sponsor.name}</option>
+      			<option value = "${sponsor.id}"><ur:maxText numChars="65" text="${sponsor.name}" /> </option>
       		</c:forEach>
       	   </select>
       </td>

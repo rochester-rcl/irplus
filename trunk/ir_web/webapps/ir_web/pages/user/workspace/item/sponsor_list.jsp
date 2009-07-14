@@ -21,7 +21,7 @@
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib prefix="ur" uri="ur-tags"%>
 
 <c:if test="${itemSponsorsCount == 0}">
 	<%@ include file="/pages/user/workspace/item/item_sponsor.jsp" %>
@@ -39,7 +39,7 @@
 		      			<c:if test="${sponsor.name == itemSponsor.sponsor.name}">
 		      				selected
 		      			</c:if>
-		      		> ${sponsor.name}</option>
+		      		> <ur:maxText numChars="65" text=" ${sponsor.name}" /></option>
 	      		</c:forEach>
 	      	   </select>
 	      </td>
