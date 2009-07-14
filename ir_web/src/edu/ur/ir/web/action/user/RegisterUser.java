@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.BadCredentialsException;
-import org.springframework.security.providers.AbstractAuthenticationToken;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.security.providers.ldap.LdapAuthenticator;
 
@@ -33,7 +32,6 @@ import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
-import edu.ur.ir.security.service.LdapAuthenticationToken;
 import edu.ur.ir.security.service.UrLdapAuthenticationProvider;
 import edu.ur.ir.user.Affiliation;
 import edu.ur.ir.user.AffiliationService;
