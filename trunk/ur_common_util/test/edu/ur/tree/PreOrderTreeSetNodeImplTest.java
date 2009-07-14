@@ -27,10 +27,7 @@ import java.text.SimpleDateFormat;
  * @author Nathan Sarr
  * 
  */
-@Test(groups =
-{
-    "baseTests"
-}, enabled = true)
+@Test(groups ={"baseTests"}, enabled = true)
 public class PreOrderTreeSetNodeImplTest
 {
 
