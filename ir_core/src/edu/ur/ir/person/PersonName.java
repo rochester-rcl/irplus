@@ -40,11 +40,20 @@ public class PersonName extends BasePersistent{
 	/**  Persons first name. */
 	private String forename;
 	
+	/** lower case value of the forename */
+	private String lowerCaseForename;
+	
 	/**  Middle name of the person. */
 	private String middleName;
 	
+	/** lower case value of the middle name */
+	private String lowerCaseMiddleName;
+	
 	/**  Persons last name */
 	private String surname;
+	
+	/** lower case value of the last name */
+	private String lowerCaseSurname;
 	
 	/** the last name first character  */
 	private char surnameFirstChar;
@@ -52,8 +61,14 @@ public class PersonName extends BasePersistent{
 	/**  Family name : Dunlop Family */
 	private String familyName;
 	
+	/** lower case family name */
+	private String lowerCaseFamilyName;
+	
 	/**  Initials of the name. */
 	private String initials;
+	
+	/** lower case for the initials of the name */
+	private String lowerCaseInitials;
 	
 	/**
 	 * A roman numeral alone or a roman 
@@ -61,6 +76,9 @@ public class PersonName extends BasePersistent{
 	 * i.e. II
 	 */
 	private String numeration;
+		
+	/** lower case on the numeration of the name  */
+	private String lowerCaseNumeration;
 	
 	/**
 	 * Titles and other words used for the persons name.
@@ -92,6 +110,14 @@ public class PersonName extends BasePersistent{
 	 */
 	public void setFamilyName(String familyName) {
 		this.familyName = familyName;
+		if( this.familyName == null )
+		{
+			this.lowerCaseFamilyName = null;
+		}
+		else
+		{
+			this.lowerCaseFamilyName = this.familyName.toLowerCase();
+		}
 	}
 
 	/**
@@ -110,6 +136,14 @@ public class PersonName extends BasePersistent{
 	 */
 	public void setForename(String forename) {
 		this.forename = forename;
+		if( this.forename == null )
+		{
+			this.lowerCaseForename = null;
+		}
+		else
+		{
+			this.lowerCaseForename = this.forename.toLowerCase();
+		}
 	}
 
 	/**
@@ -119,6 +153,7 @@ public class PersonName extends BasePersistent{
 	 */
 	public String getNumeration() {
 		return numeration;
+		
 	}
 
 	/**
@@ -127,6 +162,14 @@ public class PersonName extends BasePersistent{
 	 */
 	public void setNumeration(String numeration) {
 		this.numeration = numeration;
+		if( this.numeration == null )
+		{
+			this.lowerCaseNumeration = null;
+		}
+		else
+		{
+			this.lowerCaseNumeration = this.numeration.toLowerCase();
+		}
 	}
 
 	/**
@@ -146,9 +189,18 @@ public class PersonName extends BasePersistent{
 	public void setSurname(String surname) {
 		this.surname = surname;
 		
-		if(surname.length() > 0)
+		if(surname != null && surname.length() > 0)
 		{
 		    this.surnameFirstChar = Character.toLowerCase(surname.charAt(0));
+		}
+		
+		if( this.surname == null )
+		{
+			this.lowerCaseSurname = null;
+		}
+		else
+		{
+			this.lowerCaseSurname = this.surname.toLowerCase();
 		}
 	}
 
@@ -168,6 +220,14 @@ public class PersonName extends BasePersistent{
 	 */
 	public void setInitials(String initials) {
 		this.initials = initials;
+		if( this.initials == null )
+		{
+			this.lowerCaseInitials = null;
+		}
+		else
+		{
+			this.lowerCaseInitials  = this.initials.toLowerCase();
+		}
 	}
 
 	/**
@@ -186,6 +246,15 @@ public class PersonName extends BasePersistent{
 	 */
 	public void setMiddleName(String middleName) {
 		this.middleName = middleName;
+		if( this.middleName == null )
+		{
+			this.lowerCaseMiddleName = null;
+		}
+		else
+		{
+			this.lowerCaseMiddleName = this.middleName.toLowerCase();
+		}
+		
 	}
 	
 	/**
@@ -318,8 +387,73 @@ public class PersonName extends BasePersistent{
 	}
 
 
+	/**
+	 * The suer name first character - this is used for searching.
+	 * 
+	 * @return
+	 */
 	public char getSurnameFirstChar() {
 		return surnameFirstChar;
+	}
+
+
+	/**
+	 * Lower case of the name - this is used for searching.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseForename() {
+		return lowerCaseForename;
+	}
+
+
+	/**
+	 * Lower case of the middle name - this is used for searching.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseMiddleName() {
+		return lowerCaseMiddleName;
+	}
+
+
+	/**
+	 * Lower case of the surname - this is used for searching.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseSurname() {
+		return lowerCaseSurname;
+	}
+
+
+	/**
+	 * Lower case value of the family name - this is used for searching.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseFamilyName() {
+		return lowerCaseFamilyName;
+	}
+
+
+	/**
+	 * Get the lower case value of the initials - this is used for searching.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseInitials() {
+		return lowerCaseInitials;
+	}
+
+
+	/**
+	 * Lower case value of the numeration.  this is used for searching.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseNumeration() {
+		return lowerCaseNumeration;
 	}
 	
 }
