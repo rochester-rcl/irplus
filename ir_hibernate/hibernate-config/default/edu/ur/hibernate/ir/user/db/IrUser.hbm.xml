@@ -25,7 +25,7 @@
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.user">
-	<class name="IrUser" schema="ir_user" table="user"
+	<class name="IrUser" schema="ir_user" table="ir_user"
 		lazy="true">
 
         <cache usage="read-write" />
@@ -33,7 +33,7 @@
 		<id name="id" type="long" column="user_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_user.user_seq</param>
+				<param name="sequence">ir_user.ir_user_seq</param>
 			</generator>
 		</id>
 
@@ -43,14 +43,29 @@
 
 		<property name="username" column="username" type="string"
 			not-null="true" access="field" />
+			
+		<property name="lowerCaseUsername" column="lower_case_user_name" type="string"
+			 not-null="true" access="field" />
 
 		<property name="ldapUserName" column="ldap_user_name" type="string"
 			access="field" />
 			
 		<property name="firstName" column="first_name" type="string"
 			access="field" />
+		
+		<property name="lowerCaseFirstName" column="lower_case_first_name" type="string"
+			access="field" />
 
 		<property name="lastName" column="last_name" type="string"
+			access="field" />
+		
+		<property name="lowerCaseLastName" column="lower_case_last_name" type="string"
+			access="field" />	
+			
+		<property name="middleName" column="middle_name" type="string"
+			access="field" />
+		
+		<property name="lowerCaseMiddleName" column="lower_case_middle_name" type="string"
 			access="field" />	
 			
 	    <property name="createdDate" column="created_date" type="timestamp" 
@@ -61,7 +76,7 @@
 		     type="boolean" not-null="true"
 			 access="field" />
 		
-		<property name="password" column="password" type="string"
+		<property name="password" column="user_password" type="string"
 			not-null="true" access="field" />
 			
 		<property name="passwordEncoding" column="password_encoding" type="string"
@@ -286,25 +301,25 @@
 	<!-- sort by last name asc -->
 	<query name="getUsersByLastNameOrderAsc">
 		select irUser from IrUser as irUser 
-		order by lastName asc
+		order by lowerCaseLastName asc, lowerCaseFirstName asc, lowerCaseMiddleName asc
 	</query>	
 
 	<!-- sort by last name desc -->
 	<query name="getUsersByLastNameOrderDesc">
 		select irUser from IrUser as irUser 
-		order by lastName desc
+		order by lowerCaseLastName desc, lowerCaseFirstName desc, lowerCaseMiddleName desc
 	</query>	
 	
 	<!-- sort by user name asc -->
 	<query name="getUsersByUserNameOrderAsc">
 		select irUser from IrUser as irUser 
-		order by username asc
+		order by lowerCaseUsername asc
 	</query>	
 	
 	<!-- sort by user name desc -->
 	<query name="getUsersByUserNameOrderDesc">
 		select irUser from IrUser as irUser 
-		order by username desc
+		order by lowerCaseUsername desc
 	</query>	
 	
 	<!-- sort by default email asc -->
@@ -324,7 +339,7 @@
 		select irUser from IrUser as irUser
 		where isAffiliationApproved = false 
 		and affiliation.needsApproval = true
-		order by lastName asc
+		order by lowerCaseLastName asc, lowerCaseFirstName asc, lowerCaseMiddleName asc
 	</query>
 	
 	<!-- get pending approval by last name desc  -->
@@ -332,7 +347,7 @@
 		select irUser from IrUser as irUser
 		where isAffiliationApproved = false 
 		and affiliation.needsApproval = true
-		order by lastName desc
+		order by lowerCaseLastName desc, lowerCaseFirstName desc, lowerCaseMiddleName desc
 	</query>
 	
 	<!-- get pending approval count  -->
