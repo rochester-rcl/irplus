@@ -38,39 +38,41 @@ Displayed on the left hand side of the add files to item page -->
 	    
  
 
-<!-- Table for files and folders  -->            
+<!-- Table for files and folders  --> 
+<c:url var="addArrow" value="/page-resources/images/all-images/addarrow.jpg"/>           
 <table class="itemFolderTable" width="100%">
 	<thead>
 		<tr>
-			<th class="thItemFolder" width="30%">Submit</th>
 			<th class="thItemFolder">Collections</th>
+			<th class="thItemFolder" width="40%">Action</th>
 		</tr>
 	</thead>
 	<tbody>
 		<c:forEach var="collectionPermission" items="${collectionsPermission}">
 			<tr >
-				<td class="tdItemFolderLeftBorder" >
+			    <td class="tdItemFolderLeftBorder">
+                 	<span class="folderImg">&nbsp;</span>
+                 	<a href="javascript:YAHOO.ur.item.collection.getCollections('${collectionPermission.institutionalCollection.id}')"> ${collectionPermission.institutionalCollection.name} </a>
+				</td>
+				<td class="tdItemFolderRightBorder" >
 					<c:if test="${collectionPermission.permission == 'DIRECT_SUBMIT'}">
-		            	<span class="addBtnImg">&nbsp;</span><a href="JAVASCRIPT:YAHOO.ur.item.collection.addCollectionToPublication('${collectionPermission.institutionalCollection.id}');">Direct</a>
+		            	<a href="JAVASCRIPT:YAHOO.ur.item.collection.addCollectionToPublication('${collectionPermission.institutionalCollection.id}');">Submit&nbsp;<img src="${addArrow}"/></a>
 	                </c:if>
 					<c:if test="${collectionPermission.permission == 'REVIEW_SUBMIT'}">
-		                <span class="groupAddBtnImg">&nbsp;</span><a href="JAVASCRIPT:YAHOO.ur.item.collection.addCollectionToPublication('${collectionPermission.institutionalCollection.id}');">Review</a>
+		                <a href="JAVASCRIPT:YAHOO.ur.item.collection.addCollectionToPublication('${collectionPermission.institutionalCollection.id}');">Reviewed Submission&nbsp;<span class="groupAddBtnImg">&nbsp;</span></a>
 	                </c:if>
 					<c:if test="${collectionPermission.permission == 'NO_PERMISSION'}">
-		                 <span class="deleteBtnImg">&nbsp;</span> Can't Submit
+		                Can't Submit &nbsp; <span class="deleteBtnImg">&nbsp;</span> 
 	                </c:if>
 					<c:if test="${collectionPermission.permission == 'ALREADY_SUBMITTED'}">
-		                 <span class="worldBtnImg">&nbsp;</span>Already submitted
+		                 Submitted &nbsp;<span class="worldBtnImg">&nbsp;</span>
 	                </c:if>
 					<c:if test="${collectionPermission.permission == 'REVIEW_PENDING'}">
-		                  <span class="magnifierBtnImg">&nbsp;</span>Review Pending 
+		                 Review Pending  &nbsp; <span class="magnifierBtnImg">&nbsp;</span>
 	                </c:if>
 				</td>
 				
-				<td class="tdItemFolderRightBorder">
-                 	<span class="folderImg">&nbsp;</span>
-                 	<ur:a href="javascript:YAHOO.ur.item.collection.getCollections('${collectionPermission.institutionalCollection.id}')"> ${collectionPermission.institutionalCollection.name} </ur:a>
-				</td>
+				
 			</tr>
 		</c:forEach>
 	</tbody>
