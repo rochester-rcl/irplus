@@ -463,19 +463,15 @@ ALTER TABLE person.person_name_authority_seq OWNER TO ir_plus;
 -- Constraint for birth date 
 -- ---------------------------------------------
 ALTER TABLE person.birth_date ADD CONSTRAINT person_birth_date_id_fkey FOREIGN 
-
 KEY (person_name_authority_id)
-      REFERENCES person.person_name_authority(person_name_authority_id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
+      REFERENCES person.person_name_authority(person_name_authority_id);;
       
 -- ---------------------------------------------
 -- Constraint for death date 
 -- ---------------------------------------------
 ALTER TABLE person.death_date ADD CONSTRAINT person_death_date_id_fkey FOREIGN 
-
 KEY (person_name_authority_id)
-      REFERENCES person.person_name_authority(person_name_authority_id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;      
+      REFERENCES person.person_name_authority(person_name_authority_id);      
 -- ---------------------------------------------
 -- Person Name 
 -- ---------------------------------------------
@@ -485,12 +481,18 @@ CREATE TABLE person.person_name
     person_name_authority_id BIGINT,
     version INTEGER,
     forename TEXT,
+    lower_case_forename TEXT,
     middle_name TEXT,
+    lower_case_middle_name TEXT,
 	surname TEXT,
+	lower_case_surname TEXT,
     surname_first_char char,
 	family_name TEXT,
+	lower_case_family_name TEXT,
 	initials TEXT,
+	lower_case_initials TEXT,
     numeration TEXT,
+    lower_case_numeration TEXT,
     titles_other_words TEXT,
     UNIQUE (person_name_authority_id, person_name_id),
     FOREIGN KEY (person_name_authority_id) REFERENCES person.person_name_authority(person_name_authority_id)
@@ -498,6 +500,8 @@ CREATE TABLE person.person_name
 ALTER TABLE person.person_name OWNER TO ir_plus;
 
 CREATE INDEX person_name_first_char_idx ON person.person_name(surname_first_char);
+
+CREATE INDEX person_full_name_sort_idx ON person.person_name (lower_case_surname, lower_case_forename, lower_case_family_name, lower_case_middle_name);
 
 -- The person name sequence
 CREATE SEQUENCE person.person_name_seq ;
