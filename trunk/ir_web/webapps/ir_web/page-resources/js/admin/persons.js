@@ -139,18 +139,6 @@ YAHOO.ur.person = {
 	},
 
 	/**
-     * Set all series id's form
-     */
-    setCheckboxes : function()
-    {
-        checked = document.myPersons.checkAllSetting.checked;
-        var personIds = document.getElementsByName('personIds');
-        urUtil.setCheckboxes(personIds, checked);
-        
-    }, 	
-
-	
-	/**
 	 * Creates a YUI new person type modal dialog for when a user wants to create 
 	 * a new person
 	 *
@@ -204,6 +192,13 @@ YAHOO.ur.person = {
 		            YAHOO.ur.person.newPersonDialog.hide();
 		        }
 		        myPersonTable.submitForm(myPersonAction);
+
+		        // re-execute the query if user is in search page
+		        var query = document.getElementById("search_person_query").value;
+		        if(query != null)
+		        {
+		        	YAHOO.ur.person.searchPerson(0,1,1);
+		        }
 		    }
 		};
 		
@@ -310,13 +305,13 @@ YAHOO.ur.person = {
 		// Define various event handlers for Dialog
 		var handleSubmit = function() 
 		{
-		    YAHOO.util.Connect.setForm('myPersons');
+			
+		    YAHOO.util.Connect.setForm('deletePersonForm');
 		    
 		    //delete the person type
 	        var cObj = YAHOO.util.Connect.asyncRequest('post',
 	        deletePersonAction, callback);
 		};
-		
 			
 		// handle a cancel of deleting person type dialog
 		var handleCancel = function() 
@@ -354,6 +349,13 @@ YAHOO.ur.person = {
 		        }
 		        // reload the table
 		        myPersonTable.submitForm(myPersonAction);
+		        
+		        var query = document.getElementById("search_person_query").value;
+		        if(query != null)
+		        {
+		        	YAHOO.ur.person.searchPerson(0,1,1);
+		        }
+		        
 		    }
 		};
 		
@@ -387,11 +389,16 @@ YAHOO.ur.person = {
 				
 		// Render the Dialog
 		YAHOO.ur.person.deletePersonDialog.render();
+
+	},
 	
-	    // listener for showing the dialog when clicked.
-		YAHOO.util.Event.addListener("showDeletePerson", "click", 
-		    YAHOO.ur.person.deletePersonDialog.showDialog, 
-		    YAHOO.ur.person.deletePersonDialog, true);
+	/**
+	 * Delete a person
+	 */
+	deletePerson : function(personId)
+	{
+		document.getElementById("delete_person_id").value = personId;
+		YAHOO.ur.person.deletePersonDialog.showDialog();
 	},
 	
 	createDeletePersonMessageDialog : function() {	
