@@ -27,7 +27,7 @@
 <fmt:setBundle basename="messages"/>
 
 
-    <h3>Path: /<span class="worldBtnImg">&nbsp;</span>
+    <h3>Path: /<span class="folderBtnImg">&nbsp;</span>
          <c:if test="${parentCollectionId != 0}">
              <a href="javascript:YAHOO.ur.personal.collection.getCollectionById('0')">My Publications</a>&nbsp;/
          </c:if>
@@ -36,7 +36,7 @@
          </c:if>
          
          <c:forEach var="collection" items="${collectionPath}">
-               <span class="worldBtnImg">&nbsp;</span>
+               <span class="folderBtnImg">&nbsp;</span>
                    <c:if test="${collection.id != parentCollectionId}">
                        <a href="javascript:YAHOO.ur.personal.collection.getCollectionById('${collection.id}')">${collection.name}</a>&nbsp;/
                    </c:if>
@@ -60,7 +60,7 @@
  		            onclick="javascript:YAHOO.ur.personal.collection.newCollectionDialog.showDialog();"
  		            onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
- 		            id="showCollection"><span class="worldAddBtnImg">&nbsp;</span><fmt:message key="new_collection"/></button> 
+ 		            id="showCollection"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_collection"/></button> 
  	            
 	            <button class="ur_button" 
 	        	    onclick="javascript:YAHOO.ur.personal.collection.newItemDialog.createFromPersonalCollection();" 
@@ -147,7 +147,7 @@
  		                             onmouseout="this.className='table_button';"
 	                                onclick="javascript:YAHOO.ur.personal.collection.buildCollectionMenu(this, 'collection_'+ ${fileSystemObject.id}, 
 	                                 'collection_menu_' + ${fileSystemObject.id}, 
-	                                 ${fileSystemObject.id} );"> <span class="worldBtnImg">&nbsp;</span><img src="${downArrow}"/></button>
+	                                 ${fileSystemObject.id} );"> <span class="folderBtnImg">&nbsp;</span><img src="${downArrow}"/></button>
 	                            </div>
 	                         </c:if>
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
