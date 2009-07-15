@@ -341,7 +341,6 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	 */
 	public String submitPublication() throws NoIndexFoundException {
 
-		boolean directAdd = false;
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
 		item = itemService.getGenericItem(genericItemId, false);
@@ -401,8 +400,25 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 				} else {
 					privateCollections.add(institutionalCollection);
 				}
-                directAdd = true;
-			}
+				// add a handle if the handle service is available
+				HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
+				if( handleNameAuthority != null)
+				{
+					String nextHandleName = uniqueHandleNameGenerator.nextName();
+				    InstitutionalItemVersion itemVersion = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
+					
+					String url = this.institutionalItemVersionUrlGenerator.createUrl(institutionalItem, itemVersion.getVersionNumber());
+					info = new HandleInfo(nextHandleName, url, handleNameAuthority);
+					
+				    itemVersion.setHandleInfo(info);
+				}
+				// save the item with the new handle information.
+				institutionalItemService.saveInstitutionalItem(institutionalItem);
+				
+				// only index if the item was added directly to the collection
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				institutionalItemIndexProcessingRecordService.save(item.getId(), processingType);
+ 			}
 			
 			else if(institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.REVIEW_SUBMIT_PERMISSION))
 			{ 
@@ -415,29 +431,6 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			}
 			
 			institutionalCollectionService.saveCollection(institutionalCollection);
-			
-
-			// add a handle if the handle service is available
-			HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
-			if( handleNameAuthority != null)
-			{
-				String nextHandleName = uniqueHandleNameGenerator.nextName();
-			    InstitutionalItemVersion itemVersion = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
-				
-				String url = this.institutionalItemVersionUrlGenerator.createUrl(institutionalItem, itemVersion.getVersionNumber());
-				info = new HandleInfo(nextHandleName, url, handleNameAuthority);
-				
-			    itemVersion.setHandleInfo(info);
-			}
-			// save the item with the new handle information.
-			institutionalItemService.saveInstitutionalItem(institutionalItem);
-			
-			// only index if the item was added directly to the collection
-			if(directAdd)
-			{
-				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-				institutionalItemIndexProcessingRecordService.save(item.getId(), processingType);
-			}
 			
 			if( info != null)
 			{
