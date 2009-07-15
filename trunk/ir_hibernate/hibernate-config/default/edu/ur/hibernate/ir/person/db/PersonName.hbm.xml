@@ -43,7 +43,13 @@
 		<property name="forename" column="forename" type="string"
 			not-null="false" access="field" />
 			
+		<property name="lowerCaseForename" column="lower_case_forename" type="string"
+			not-null="false" access="field" />
+			
 		<property name="surname" column="surname" type="string"
+			not-null="false" access="field"/>
+		
+		<property name="lowerCaseSurname" column="lower_case_surname" type="string"
 			not-null="false" access="field"/>
 		
 		<property name="surnameFirstChar" column="surname_first_char" type="char"
@@ -51,14 +57,26 @@
 		
 		<property name="familyName" column="family_name" type="string"
 			not-null="false" access="field"/>
+		
+		<property name="lowerCaseFamilyName" column="lower_case_family_name" type="string"
+			not-null="false" access="field"/>
 			
 		<property name="middleName" column="middle_name" type="string"
 			not-null="false" access="field"/>
 			
+		<property name="lowerCaseMiddleName" column="lower_case_middle_name" type="string"
+			not-null="false" access="field"/>
+			
 		<property name="initials" column="initials" type="string"
+			not-null="false" access="field"/>
+			
+		<property name="lowerCaseInitials" column="lower_case_initials" type="string"
 			not-null="false" access="field"/>
 		
 		<property name="numeration" column="numeration" type="string"
+			not-null="false" access="field"/>
+		
+		<property name="lowerCaseNumeration" column="lower_case_numeration" type="string"
 			not-null="false" access="field"/>
 
 		<!--  Person who owns the name-->
@@ -87,21 +105,21 @@
 	</query>
 	
 	<!-- named query for getting all personNames ordered by surname forename familyName-->
-    <query name="getAllPersonNameAsc">from PersonName order by surname asc, forename asc, familyName asc, middleName desc </query>
+    <query name="getAllPersonNameAsc">from PersonName order by lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, lowerCaseMiddleName asc </query>
 
 	<!-- named query for getting all personNames ordered by surname forename familyName-->
-    <query name="getAllPersonNameDesc">from PersonName order by surname desc, forename desc, familyName desc, middleName desc </query>
+    <query name="getAllPersonNameDesc">from PersonName order by lowerCaseSurname desc, lowerCaseForename desc, lowerCaseFamilyName desc, lowerCaseMiddleName desc </query>
 
     
     <!-- named query for getting all personNames like the specified first name -->
-    <query name="findPersonLikeFirstName">from PersonName personName where upper(personName.forename) like upper(?) order by  surname asc, forename asc, familyName asc, middleName asc </query>
+    <query name="findPersonLikeFirstName">from PersonName personName where upper(personName.forename) like upper(?) order by  lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, lowerCaseMiddleName asc </query>
 
     <!-- named query for getting all personNames like the specified last name -->
-    <query name="findPersonLikeLastName">from PersonName personName where upper(personName.surname) like upper(?) order by surname asc, forename asc, familyName asc, middleName asc </query>
+    <query name="findPersonLikeLastName">from PersonName personName where upper(personName.surname) like upper(?) order by lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, lowerCaseMiddleName asc </query>
 
     <!-- named query for getting all personNames like the specified first and last name -->
     <query name="findPersonLikeFirstLastName">from PersonName personName where upper(personName.surname) like upper(?) and
-    upper(personName.forename) like upper(?) order by  surname asc, forename asc, familyName asc, middleName asc </query>
+    upper(personName.forename) like upper(?) order by  lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, lowerCaseMiddleName asc </query>
     
   
 	
@@ -117,13 +135,13 @@
 	<query name="getPersonNameByCharOrderAsc">
 	    select personName from PersonName as personName 	  
 	    where  personName.surnameFirstChar = ?
-	    order by personName.surname asc, personName.forename asc, personName.familyName asc, personName.middleName asc
+	    order by personName.lowerCaseSurname asc, personName.lowerCaseForename asc, personName.lowerCaseFamilyName asc, personName.lowerCaseMiddleName asc
 	</query>
 	
     <query name="getPersonNameByCharOrderDesc">
 	    select personName from PersonName as personName 	  
 	    where  personName.surnameFirstChar = ?
-	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
+	    order by personName.lowerCaseSurname desc, personName.lowerCaseForename desc, personName.lowerCaseFamilyName desc, personName.lowerCaseMiddleName desc
 	</query>
 	
 	<!-- ********************************************************* -->
@@ -138,13 +156,13 @@
 	<query name="getPersonNameByCharRangeOrderAsc">
 	    select personName from PersonName as personName	  
 	    where personName.surnameFirstChar between ? and ?
-	    order by personName.surname asc, personName.forename asc, personName.familyName asc, personName.middleName asc
+	    order by personName.lowerCaseSurname asc, personName.lowerCaseForename asc, personName.lowerCaseFamilyName asc, personName.lowerCaseMiddleName asc
 	</query>
 	
     <query name="getPersonNameByCharRangeOrderDesc">
 	    select personName from PersonName as personName	  
 	    where personName.surnameFirstChar between ? and ?
-	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
+	    order by personName.lowerCaseSurname desc, personName.lowerCaseForename desc, personName.lowerCaseFamilyName desc, personName.lowerCaseMiddleName desc
 	</query>
 	
 	
@@ -163,7 +181,7 @@
 	    join contributor.personName as personName	    
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	    order by personName.surname asc, personName.forename asc, personName.familyName asc, personName.middleName asc
+	    order by personName.lowerCaseSurname asc, personName.lowerCaseForename asc, personName.lowerCaseFamilyName asc, personName.lowerCaseMiddleName asc
 	</query>
 		
     <query name="getCollectionPersonNameByNameOrderDesc">
@@ -177,7 +195,7 @@
 	    join contributor.personName as personName	    
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
+	    order by personName.lowerCaseSurname desc, personName.lowerCaseForename desc, personName.lowerCaseFamilyName desc, personName.lowerCaseMiddleName desc
 	</query>
 	
 	<!-- ********************************************************* -->
@@ -225,7 +243,7 @@
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
 	    and personName.surnameFirstChar = ?
-	    order by personName.surname asc, personName.forename asc, personName.familyName asc, personName.middleName asc
+	    order by personName.lowerCaseSurname asc, personName.lowerCaseForename asc, personName.lowerCaseFamilyName asc, personName.lowerCaseMiddleName asc
 	</query>
 	
     <query name="getCollectionPersonNameByCharOrderDesc">
@@ -240,7 +258,7 @@
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
 	    and personName.surnameFirstChar = ?
-	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
+	    order by personName.lowerCaseSurname desc, personName.lowerCaseForename desc, personName.lowerCaseFamilyName desc, personName.lowerCaseMiddleName desc
 	</query>
 	
    <!-- ********************************************************* -->
@@ -273,7 +291,7 @@
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
 	    and personName.surnameFirstChar between ? and ?
-	    order by personName.surname asc, personName.forename asc, personName.familyName asc, personName.middleName asc
+	    order by personName.lowerCaseSurname asc, personName.lowerCaseForename asc, personName.lowerCaseFamilyName asc, personName.lowerCaseMiddleName asc
 	</query>
 	
     <query name="getCollectionPersonNameByCharRangeOrderDesc">
@@ -288,7 +306,7 @@
 	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
 	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
 	    and personName.surnameFirstChar between ? and ?
-	    order by personName.surname desc, personName.forename desc, personName.familyName desc, personName.middleName desc
+	    order by personName.lowerCaseSurname desc, personName.lowerCaseForename desc, personName.lowerCaseFamilyName desc, personName.lowerCaseMiddleName desc
 	</query>
 	
 	
