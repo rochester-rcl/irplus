@@ -98,7 +98,7 @@
 		             <!--  end the first column -->
             
         	        <div class="yui-u">
-        	              Selected Collections
+        	              <strong>Selected Collections</strong>
         	              <br/>
         	              <br/>
 		        	      <form id="selected_collections_form" name="selectedCollectionsForm"  method="POST" action="user/getContributors.action">
