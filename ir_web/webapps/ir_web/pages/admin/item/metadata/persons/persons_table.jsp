@@ -34,8 +34,6 @@
 	    <urstb:table width="100%">
 	        <urstb:thead>
 	            <urstb:tr>
-					<urstb:td><ur:checkbox name="checkAllSetting" 
-								value="off" onClick="YAHOO.ur.person.setCheckboxes();"/></urstb:td>         
 	                <urstb:td>Id</urstb:td>
              
 	                <c:set var="surnameSort" value="none"/>
@@ -85,9 +83,7 @@
 	                        cssClass="${rowClass}"
 	                        onMouseOver="this.className='highlight'"
 	                        onMouseOut="this.className='${rowClass}'">
-	                        <urstb:td>
-		                        <ur:checkbox name="personIds" value="${personNameAuthority.id}"/>
-	                        </urstb:td>
+	                       
 	                        <urstb:td>
 		                        ${personNameAuthority.id}
 	                        </urstb:td>
@@ -124,7 +120,8 @@
 				                </c:if>
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.person.get(${personNameAuthority.id});"> Edit </a>
+			                   <a href="javascript:YAHOO.ur.person.get(${personNameAuthority.id});"> Edit </a> /
+			                    <a href="javascript:YAHOO.ur.person.deletePerson(${personNameAuthority.id});"> Delete </a>
 	                    	</urstb:td>
 	                    </urstb:tr>
 	            </urstb:tbody>

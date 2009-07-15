@@ -93,16 +93,8 @@
 				                </c:if>
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.person.editPerson(${personNameAuthority.id},
-			                   												  ${personNameAuthority.authoritativeName.id},
-			                   												  '${personNameAuthority.authoritativeName.forename}',
-			                   												  '${personNameAuthority.authoritativeName.surname}',
-			                   												  '${personNameAuthority.authoritativeName.middleName}',
-			                   												  '${personNameAuthority.authoritativeName.familyName}',
-			                   												  '${personNameAuthority.authoritativeName.initials}',
-			                   												  '${personNameAuthority.authoritativeName.numeration}',
-			                   												  ${personNameAuthority.birthDate.year},
-			                   												  ${personNameAuthority.deathDate.year});"> Edit </a>
+			                   <a href="javascript:YAHOO.ur.person.get(${personNameAuthority.id});"> Edit </a> /
+			                    <a href="javascript:YAHOO.ur.person.deletePerson(${personNameAuthority.id});"> Delete </a>
 	                    	</urstb:td>
 	                    </urstb:tr>
 	            </urstb:tbody>

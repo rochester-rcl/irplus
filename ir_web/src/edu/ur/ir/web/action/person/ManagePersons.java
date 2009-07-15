@@ -93,9 +93,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	/** id of the person name */
 	private Long personNameId;
 	
-	/** Set of person type ids */
-	private long[] personIds;
-	
+
 	/** Year person was born  */
 	private int birthYear;
 
@@ -303,70 +301,65 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		deleted = true;
 		
 		StringBuffer personsNotDeleted = new StringBuffer();
+		personNameAuthority = personService.getAuthority(id, false);
 		
-		if( personIds != null )
+		if( personNameAuthority != null )
 		{
 			Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 			File nameAuthorityFolder = new File(repo.getNameIndexFolder());
-			
 			// get the user making the change
 			IrUser userMakingChange = userService.getUser(userId, false);
-			
-		    for(int index = 0; index < personIds.length; index++)
-		    {
-		    	boolean isContributor = false;
-		    	log.debug("Deleting person with id " + personIds[index]);
-			    PersonNameAuthority p = personService.getAuthority(personIds[index], false);
+			boolean isContributor = false;
+	    	log.debug("Deleting person with id " + personNameAuthority.getId());
+		    
+		    
+		    for (PersonName personName: personNameAuthority.getNames()) {
+		    	if (itemService.getItemCountByPersonName(personName) > 0) {
+		    		isContributor = true;
+		    		break;
+		    	}
+		    }
+		    
+		    // Delete Person only if the person is not a contributor
+		    if (!isContributor) {
+		    	IrUser user = userService.getUserByPersonNameAuthority(personNameAuthority.getId());
 			    
-			    for (PersonName personName: p.getNames()) {
-			    	if (itemService.getItemCountByPersonName(personName) > 0) {
-			    		isContributor = true;
-			    		break;
-			    	}
-			    }
-			    
-			    // Delete Person only if the person is not a contributor
-			    if (!isContributor) {
-			    	IrUser user = userService.getUserByPersonNameAuthority(personIds[index]);
+		    	// user making change to a name that does not belong to them.
+		    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE) && !userMakingChange.hasRole(IrRole.COLLECTION_ADMIN_ROLE))
+		    	{
+		    		if(user == null || !user.equals(userMakingChange))
+		    		{
+		    			return "accessDenied";
+		    		}
+		    	}
+		    	
+		    	for (PersonName personName: personNameAuthority.getNames()) 
+		    	{
+		    		// delete any old contributors
+				    List<Contributor> contributors = contributorService.get(personName);
+				    for( Contributor c : contributors)
+				    {
+				    	contributorService.delete(c);
+				    }
 				    
-			    	// user making change to a name that does not belong to them.
-			    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE) && !userMakingChange.hasRole(IrRole.COLLECTION_ADMIN_ROLE))
-			    	{
-			    		if(user == null || !user.equals(userMakingChange))
-			    		{
-			    			return "accessDenied";
-			    		}
-			    	}
-			    	
-			    	for (PersonName personName: p.getNames()) 
-			    	{
-			    		// delete any old contributors
-					    List<Contributor> contributors = contributorService.get(personName);
-					    for( Contributor c : contributors)
-					    {
-					    	contributorService.delete(c);
-					    }
-					    
-					}
-					
-				    // Update the user indices with user's person names
-					if (user != null) {
-						user.setPersonNameAuthority(null);
-						userService.makeUserPersistent(user);
-						userIndexService.updateIndex(user, 
-							new File( repo.getUserIndexFolder()) );	
-					}
-					personService.delete(p);
-				    nameAuthorityIndexService.deleteFromIndex(p, nameAuthorityFolder);
-			    } else {
-			    	deleted = false;
-			    	personsNotDeleted.append(p.getAuthoritativeName().getForename());
-			    	personsNotDeleted.append(" ");
-			    	personsNotDeleted.append(p.getAuthoritativeName().getSurname());
-			    	personsNotDeleted.append(",");
-			    	
-			    }
-
+				}
+				
+			    // Update the user indices with user's person names
+				if (user != null) {
+					user.setPersonNameAuthority(null);
+					userService.makeUserPersistent(user);
+					userIndexService.updateIndex(user, 
+						new File( repo.getUserIndexFolder()) );	
+				}
+				personService.delete(personNameAuthority);
+			    nameAuthorityIndexService.deleteFromIndex(personNameAuthority, nameAuthorityFolder);
+		    } else {
+		    	deleted = false;
+		    	personsNotDeleted.append(personNameAuthority.getAuthoritativeName().getForename());
+		    	personsNotDeleted.append(" ");
+		    	personsNotDeleted.append(personNameAuthority.getAuthoritativeName().getSurname());
+		    	personsNotDeleted.append(",");
+		    	
 		    }
 		    
 		    if (personsNotDeleted.length() > 0) {
@@ -374,8 +367,8 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		    	message = getText("personNotDeleted", 
 						new String[]{personsNotDeleted.toString()});
 		    }
-
 		}
+		
 		
 		return "deleted";
 	}
@@ -496,23 +489,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		this.id = id;
 	}
 
-	/**
-	 * Get the person ids.
-	 * 
-	 * @return
-	 */
-	public long[] getPersonIds() {
-		return personIds;
-	}
 
-	/**
-	 * Set the person ids.
-	 * 
-	 * @param personIds
-	 */
-	public void setPersonIds(long[] personIds) {
-		this.personIds = personIds;
-	}
 
 	/**
 	 * Tells if the person has been deleted.

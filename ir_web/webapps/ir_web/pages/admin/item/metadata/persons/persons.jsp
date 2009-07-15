@@ -84,10 +84,6 @@
 				                               onmouseover="this.className='ur_buttonover';"
 				                               onmouseout="this.className='ur_button';">New Person</button> 
 			        
-                    <button id="showDeletePerson" class="ur_button" 
-				                               onmouseover="this.className='ur_buttonover';"
-				                               onmouseout="this.className='ur_button';">Delete</button>
-
                      <br/>
                      <br/>
 				     <div id="newPersons"></div>
@@ -97,13 +93,13 @@
 	            	<form method="post" id="person_search_form" name="personSearchForm" 
 	            	action="javascript:YAHOO.ur.person.searchPerson(0,1,1);">
 	            		<br>
-						Search Person : <input type="input" name="query" size="50"/>
+						Search Person : <input type="input" name="query" id="search_person_query" size="50"/>
 						<button id="search_person" class="ur_button" type="button"
 		                       onmouseover="this.className='ur_buttonover';"
 		                       onmouseout="this.className='ur_button';"
 		                       onclick="javascript:YAHOO.ur.person.searchPerson(0,1,1);">Search</button>
 					</form>
-					
+					<br/>
 					<div id="search_results_div"></div>
 				</div>
 
@@ -144,9 +140,11 @@
 		              <div id="deletePersonMessage" class="errorMessage"></div>
 		      </div>
 	      </div>
-      
-
-  
+	      
+	      <form id="deletePersonForm" name="deletePersonForm">
+	          <input type="hidden" id="delete_person_id" name="id" value=""/> 
+	      </form>
+	      
       <!--  this is the footer of the page -->
       <c:import url="/inc/footer.jsp"/>
   </div>
