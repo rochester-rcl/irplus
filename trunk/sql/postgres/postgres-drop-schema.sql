@@ -140,12 +140,12 @@ DROP TABLE ir_user.user_group_users;
 DROP TABLE ir_user.user_group_admins;
 DROP TABLE ir_user.user_group;
 
-ALTER TABLE ir_user.user DROP CONSTRAINT  user_default_email_id_fkey;
+ALTER TABLE ir_user.ir_user DROP CONSTRAINT  user_default_email_id_fkey;
 DROP TABLE ir_user.user_email;
 DROP TABLE ir_user.invite_info;
-ALTER TABLE ir_user.user DROP CONSTRAINT  user_affiliation_id_fkey;
+ALTER TABLE ir_user.ir_user DROP CONSTRAINT  ir_user_affiliation_id_fkey;
 DROP TABLE ir_user.affiliation;
-ALTER TABLE ir_user.user DROP CONSTRAINT  user_department_id_fkey;
+ALTER TABLE ir_user.ir_user DROP CONSTRAINT  ir_user_department_id_fkey;
 DROP TABLE ir_user.department;
 
 
@@ -154,7 +154,7 @@ DROP SEQUENCE ir_user.personal_collection_seq;
 DROP SEQUENCE ir_user.personal_file_seq;
 DROP SEQUENCE ir_user.personal_folder_seq;
 DROP SEQUENCE ir_user.user_group_seq;
-DROP SEQUENCE ir_user.user_seq;
+DROP SEQUENCE ir_user.ir_user_seq;
 DROP SEQUENCE ir_user.role_seq;
 DROP SEQUENCE ir_user.affiliation_seq;
 DROP SEQUENCE ir_user.department_seq;
@@ -264,7 +264,7 @@ DROP SCHEMA ir_file;
 -- Drop the rest of the user information
 -- ---------------------------------------------
 DROP TABLE ir_user.shared_inbox_file;
-DROP TABLE ir_user.user;
+DROP TABLE ir_user.ir_user;
 DROP SCHEMA ir_user;
 
 -- ---------------------------------------------

@@ -616,16 +616,21 @@ ALTER TABLE ir_user.department_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 -- Users table
 -- ---------------------------------------------
-CREATE TABLE ir_user."user"
+CREATE TABLE ir_user.ir_user
 (
   user_id bigint PRIMARY KEY,
-  "password" text NOT NULL,
+  user_password text NOT NULL,
   password_encoding VARCHAR(50),
   default_email_id BIGINT,
-  username text NOT NULL,
+  username TEXT NOT NULL,
+  lower_case_user_name TEXT NOT NULL,
   ldap_user_name TEXT,
   first_name TEXT,
+  lower_case_first_name TEXT,
   last_name TEXT,
+  lower_case_last_name TEXT,
+  middle_name TEXT,
+  lower_case_middle_name TEXT,
   created_date TIMESTAMP WITH TIME ZONE,
   self_registered BOOLEAN,
   phone_number TEXT,
@@ -645,19 +650,20 @@ CREATE TABLE ir_user."user"
   FOREIGN KEY (person_name_authority_id) REFERENCES person.person_name_authority (person_name_authority_id),
   UNIQUE (username)
 );
-ALTER TABLE ir_user.user OWNER TO ir_plus;
+ALTER TABLE ir_user.ir_user OWNER TO ir_plus;
 
 
 
--- Index on the file Name
-CREATE INDEX user_last_name_idx ON ir_user."user" USING btree (last_name);
+-- Index on the user for sorting
+CREATE INDEX user_last_name_idx ON ir_user.ir_user (lower_case_last_name, lower_case_first_name, lower_case_middle_name);
 
--- Index on the file Name
-CREATE INDEX user_name_idx ON ir_user."user" USING btree (username);
+-- Index on the user name
+CREATE INDEX user_name_idx ON ir_user.ir_user (lower_case_user_name);
+
 
 -- The user sequence
-CREATE SEQUENCE ir_user.user_seq ;
-ALTER TABLE ir_user.user_seq OWNER TO ir_plus;
+CREATE SEQUENCE ir_user.ir_user_seq ;
+ALTER TABLE ir_user.ir_user_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Users department table
@@ -668,7 +674,7 @@ CREATE TABLE ir_user.user_department
     user_id BIGINT NOT NULL, 
     department_id BIGINT NOT NULL,
     PRIMARY KEY (user_id, department_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
     FOREIGN KEY (department_id) REFERENCES ir_user.department(department_id)
 );
 ALTER TABLE ir_user.user_department OWNER TO ir_plus;
@@ -719,7 +725,7 @@ CREATE TABLE ir_user.user_group_users
     group_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
     PRIMARY KEY(group_id, user_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
     FOREIGN KEY (group_id) REFERENCES ir_user.user_group(group_id)
 );
 ALTER TABLE ir_user.user_group_users OWNER TO ir_plus;
@@ -733,7 +739,7 @@ CREATE TABLE ir_user.user_group_admins
     group_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
     PRIMARY KEY(group_id, user_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
     FOREIGN KEY (group_id) REFERENCES ir_user.user_group(group_id)
 );
 ALTER TABLE ir_user.user_group_admins OWNER TO ir_plus;
@@ -747,7 +753,7 @@ CREATE TABLE ir_user.user_role
     user_id BIGINT NOT NULL, 
     role_id BIGINT NOT NULL,
     PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
     FOREIGN KEY (role_id) REFERENCES ir_user.role(role_id)
 );
 ALTER TABLE ir_user.user_role OWNER TO ir_plus;
@@ -786,7 +792,7 @@ CREATE TABLE ir_file.ir_file
     version INTEGER,
     user_id BIGINT,
     FOREIGN KEY (file_id) REFERENCES file_system.file (file_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
 );
 ALTER TABLE ir_file.ir_file OWNER TO ir_plus;
 
@@ -855,8 +861,8 @@ CREATE TABLE ir_file.versioned_file
     current_file_size_bytes BIGINT,
     total_file_size_all_files_bytes BIGINT,
     version INTEGER,
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
-    FOREIGN KEY (locked_user_id) REFERENCES ir_user.user(user_id)
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
+    FOREIGN KEY (locked_user_id) REFERENCES ir_user.ir_user(user_id)
 );
 ALTER TABLE ir_file.versioned_file OWNER TO ir_plus;
 
@@ -876,7 +882,7 @@ CREATE TABLE ir_file.file_collaborator
     FOREIGN KEY (versioned_file_id) REFERENCES 
 
 ir_file.versioned_file(versioned_file_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
     CONSTRAINT file_collaborator_user_versioned_file_key UNIQUE (user_id, 
 
 versioned_file_id)
@@ -906,7 +912,7 @@ CREATE TABLE ir_file.file_version
   FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file 
 
 (versioned_file_id) ,
-  FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
 );
 ALTER TABLE ir_file.file_version OWNER TO ir_plus;
 
@@ -1209,7 +1215,7 @@ CREATE TABLE ir_item.item
   FOREIGN KEY (first_available_date_id) REFERENCES ir_item.first_available_date 
 	(first_available_date_id),	
   FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type (content_type_id),
-  FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
   FOREIGN KEY (external_published_item_id) REFERENCES ir_item.external_published_item (external_published_item_id)
 ) ;
 ALTER TABLE ir_item.item OWNER TO ir_plus;
@@ -1300,7 +1306,7 @@ CREATE TABLE ir_item.versioned_item
     current_item_version_id bigint,
     version INTEGER,
     user_id BIGINT,
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
 );
 ALTER TABLE ir_item.versioned_item OWNER TO ir_plus;
 
@@ -1534,7 +1540,7 @@ CREATE TABLE ir_repository.license
   version INTEGER,
   created_date TIMESTAMP WITH TIME ZONE,
   user_id BIGINT,
-  FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
 );
 ALTER TABLE ir_repository.license OWNER TO ir_plus;
 
@@ -1667,7 +1673,7 @@ CREATE TABLE ir_repository.user_repository_license
     user_id BIGINT NOT NULL,
     version INTEGER,
     UNIQUE(license_version_id, user_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
     FOREIGN KEY (license_version_id) REFERENCES ir_repository.license_version(license_version_id)
 );
 
@@ -1687,7 +1693,7 @@ CREATE TABLE ir_repository.retired_repository_license
     retired_by_user_id BIGINT NOT NULL,
     license_version_id BIGINT NOT NULL,
     FOREIGN KEY (repository_id) REFERENCES ir_repository.repository(repository_id),
-    FOREIGN KEY (retired_by_user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (retired_by_user_id) REFERENCES ir_user.ir_user(user_id),
     FOREIGN KEY (license_version_id) REFERENCES ir_repository.license_version(license_version_id)
 );
 
@@ -1795,7 +1801,7 @@ CREATE TABLE ir_repository.institutional_collection_subscription
   UNIQUE(institutional_collection_id, user_id),
   FOREIGN KEY (institutional_collection_id) REFERENCES 
      ir_repository.institutional_collection (institutional_collection_id),
-  FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id)
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id)
 );
 ALTER TABLE ir_repository.institutional_collection_subscription OWNER TO ir_plus;
 
@@ -1835,7 +1841,7 @@ CREATE TABLE ir_repository.institutional_item
     FOREIGN KEY (versioned_institutional_item_id) 
        REFERENCES ir_repository.versioned_institutional_item(versioned_institutional_item_id),
     UNIQUE(institutional_collection_id, versioned_institutional_item_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
 );
 ALTER TABLE ir_repository.institutional_item OWNER TO ir_plus;
 
@@ -1856,7 +1862,7 @@ CREATE TABLE ir_repository.deleted_institutional_item
     user_id BIGINT NOT NULL,
     deleted_date TIMESTAMP WITH TIME ZONE NOT NULL ,
     version INTEGER,
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
 );
 ALTER TABLE ir_repository.deleted_institutional_item OWNER TO ir_plus;
 
@@ -1907,7 +1913,7 @@ CREATE TABLE ir_repository.institutional_item_repository_license
     date_granted TIMESTAMP WITH TIME ZONE NOT NULL,
     granted_by_user_id BIGINT NOT NULL,
     version INTEGER,
-    FOREIGN KEY (granted_by_user_id) REFERENCES ir_user.user (user_id),
+    FOREIGN KEY (granted_by_user_id) REFERENCES ir_user.ir_user (user_id),
     FOREIGN KEY (license_version_id) REFERENCES ir_repository.license_version(license_version_id),
     FOREIGN KEY (institutional_item_version_id) 
        REFERENCES ir_repository.institutional_item_version (institutional_item_version_id)
@@ -1930,7 +1936,7 @@ CREATE TABLE ir_repository.withdrawn_token
     withdrawn_reason text,
     user_id BIGINT NOT NULL,
     version INTEGER,
-    FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
     FOREIGN KEY (institutional_item_version_id) 
        REFERENCES ir_repository.institutional_item_version (institutional_item_version_id)
 );
@@ -1951,7 +1957,7 @@ CREATE TABLE ir_repository.reinstate_token
     reinstate_reason text,
     user_id BIGINT NOT NULL,
     version INTEGER,
-    FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
     FOREIGN KEY (institutional_item_version_id) 
        REFERENCES ir_repository.institutional_item_version (institutional_item_version_id)
 );
@@ -1987,7 +1993,7 @@ CREATE TABLE ir_repository.reviewable_item
     FOREIGN KEY (institutional_collection_id) 
        REFERENCES ir_repository.institutional_collection(institutional_collection_id) ,
     FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id)
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
 );
 ALTER TABLE ir_repository.reviewable_item OWNER TO ir_plus;
 
@@ -2206,7 +2212,7 @@ CREATE TABLE ir_user.personal_folder
   FOREIGN KEY (root_personal_folder_id) REFERENCES ir_user.personal_folder 
 
 (personal_folder_id),
-  FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
   UNIQUE (parent_id, name),
   UNIQUE (user_id, path, name)
 );
@@ -2230,7 +2236,7 @@ CREATE TABLE ir_user.personal_file
     version INTEGER,
     FOREIGN KEY (personal_folder_id) REFERENCES ir_user.personal_folder (personal_folder_id),
     FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file (versioned_file_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
     UNIQUE(user_id, personal_folder_id, versioned_file_id)
 );
 ALTER TABLE ir_user.personal_file OWNER TO ir_plus;
@@ -2259,7 +2265,7 @@ CREATE TABLE ir_user.personal_collection
   version INTEGER,
   FOREIGN KEY (parent_id) REFERENCES ir_user.personal_collection (personal_collection_id),
   FOREIGN KEY (root_personal_collection_id) REFERENCES ir_user.personal_collection (personal_collection_id),
-  FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
   UNIQUE (parent_id, name),
   UNIQUE (user_id, path, name)
 );
@@ -2284,7 +2290,7 @@ CREATE TABLE ir_user.personal_item
     version INTEGER,
     FOREIGN KEY (personal_collection_id) REFERENCES ir_user.personal_collection (personal_collection_id),
     FOREIGN KEY (versioned_item_id) REFERENCES ir_item.versioned_item (versioned_item_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
     UNIQUE(user_id, personal_collection_id, versioned_item_id)
 );
 ALTER TABLE ir_user.personal_item OWNER TO ir_plus;
@@ -2307,7 +2313,7 @@ CREATE TABLE ir_user.user_email
   email text,
   isVerified boolean NOT NULL,
   token text,
-  FOREIGN KEY (user_id) REFERENCES ir_user."user" (user_id),
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
   UNIQUE (user_id, user_email_id),
   UNIQUE (email)
 ) ; 
@@ -2323,21 +2329,21 @@ ALTER TABLE ir_user.user_email_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 -- Add constraint to ir_user.user for user_email
 -- ---------------------------------------------
-ALTER TABLE ir_user.user ADD CONSTRAINT user_default_email_id_fkey FOREIGN KEY 
+ALTER TABLE ir_user.ir_user ADD CONSTRAINT user_default_email_id_fkey FOREIGN KEY 
 (default_email_id)  REFERENCES ir_user.user_email(user_email_id);
 
 -- ---------------------------------------------
--- Insert data for ir_user.user administrator
+-- Insert data for ir_user.ir_user administrator
 -- the password will be admin
 -- ---------------------------------------------
 insert into 
-ir_user.user ( user_id, password, password_encoding, default_email_id, username, first_name, last_name, 
-
+ir_user.ir_user ( user_id, user_password, password_encoding, default_email_id, username, 
+lower_case_user_name, first_name, lower_case_first_name, last_name, lower_case_last_name, 
 version, account_expired, account_locked, credentials_expired, 
-
 force_change_password, affiliation_approved, self_registered, created_date)  
-values (nextval('ir_user.user_seq'), 
-      'd033e22ae348aeb5660fc2140aec35850c4da997', 'SHA-1', null, 'admin', 'System', 'admin', 0, false, 
+values (nextval('ir_user.ir_user_seq'), 
+      'd033e22ae348aeb5660fc2140aec35850c4da997', 'SHA-1', null, 'admin', 'admin', 'System', 
+      'system', 'Admin', 'admin', 0, false, 
 
 false, false, false, true, false, date(now()));
 
@@ -2345,11 +2351,11 @@ insert into ir_user.user_email(user_email_id, version, email, user_id, isVerifie
 
 (nextval('ir_user.user_email_seq'), 1, 'test@abc.com', 
 
-currval('ir_user.user_seq'), true);
+currval('ir_user.ir_user_seq'), true);
 
-update ir_user.user set default_email_id = currval('ir_user.user_email_seq') where 
+update ir_user.ir_user set default_email_id = currval('ir_user.user_email_seq') where 
 
-user_id = currval('ir_user.user_seq');
+user_id = currval('ir_user.ir_user_seq');
 
 
 
@@ -2366,7 +2372,7 @@ CREATE TABLE ir_user.invite_info
   token TEXT NOT NULL,
   email TEXT NOT NULL,
   user_id BIGINT NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES ir_user."user" (user_id) 
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id) 
 );
 ALTER TABLE ir_user.invite_info OWNER TO ir_plus;
 
@@ -2657,7 +2663,7 @@ CREATE TABLE ir_security.user_control_entry
     acl_id BIGINT NOT NULL,
     version INTEGER,
     UNIQUE (user_id , acl_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.user(user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
     FOREIGN KEY (acl_id) REFERENCES ir_security.acl(acl_id)
 );
 ALTER TABLE ir_security.user_control_entry OWNER TO ir_plus;
@@ -2860,7 +2866,7 @@ CREATE TABLE ir_researcher.researcher
     version INTEGER,
     user_id BIGINT NOT NULL,
     is_public BOOLEAN,
-    FOREIGN KEY (user_id) REFERENCES ir_user.user (user_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
     FOREIGN KEY (primary_picture_id) REFERENCES ir_file.ir_file (ir_file_id)
 );
 ALTER TABLE ir_researcher.researcher OWNER TO ir_plus;
@@ -3055,8 +3061,8 @@ insert into ir_researcher.researcher (researcher_id, version, user_id, is_public
   phone_number ,
   email,
   fax ) 
-select nextval('ir_researcher.researcher_seq'), 0, ir_user.user.user_id, false, null,
-null, null, null, null, null, null from ir_user.user where ir_user.user.username = 'admin';
+select nextval('ir_researcher.researcher_seq'), 0, ir_user.ir_user.user_id, false, null,
+null, null, null, null, null, null from ir_user.ir_user where ir_user.ir_user.username = 'admin';
 
 
 -- **********************************************

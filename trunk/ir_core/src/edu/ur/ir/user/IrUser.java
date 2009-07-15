@@ -61,11 +61,26 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	/**  Last name of the user  .*/
 	private String lastName;
 	
+	/** lower case value of the last name */
+	private String lowerCaseLastName;
+	
 	/**  First name of the user .*/
 	private String firstName;
 	
+	/** lower case of the first name */
+	private String lowerCaseFirstName;
+	
+	/** Middle name of the user */
+	private String middleName;
+	
+	/** lower case value of the middle name */
+	private String lowerCaseMiddleName;
+	
 	/**  User name used by the user.*/
 	private String username;
+	
+	/** lower case value of the user name */
+	private String lowerCaseUsername;
 	
 	/** LDAP user name */
 	private String ldapUserName;
@@ -162,8 +177,8 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	public IrUser(String username, String password)
 	{
 		this();
-		this.password = password;
-		this.username = username;
+		setPassword(password);
+		setUsername(username);
 	}
 	
 	/**
@@ -182,7 +197,6 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 				myEmail = email;
 			}
 		}
-		
 		return myEmail;
 	}
 	
@@ -203,7 +217,6 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 				break;
 			}
 		}
-		
 		return myEmail;
 	}
 
@@ -702,6 +715,14 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	public void setUsername(String username)
 	{
 		this.username = username;
+		if( this.username == null)
+		{
+			this.lowerCaseUsername = null;
+		}
+		else
+		{
+			this.lowerCaseUsername = this.username.toLowerCase();
+		}
 	}
 
 	/**
@@ -1300,6 +1321,15 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+		
+		if( this.lastName == null)
+		{
+			this.lowerCaseLastName = null;
+		}
+		else
+		{
+			this.lowerCaseLastName = this.lastName.toLowerCase();
+		}
 	}
 
 	/**
@@ -1318,6 +1348,15 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+		if( this.firstName == null)
+		{
+			this.lowerCaseFirstName = null;
+		}
+		else
+		{
+			this.lowerCaseFirstName = this.firstName.toLowerCase();
+		}
+		
 	}
 
 	/**
@@ -1636,6 +1675,68 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 */
 	void setAcceptedLicenses(Set<UserRepositoryLicense> acceptedLicenses) {
 		this.acceptedLicenses = acceptedLicenses;
+	}
+
+	/**
+	 * Get the middle name of the user.
+	 * 
+	 * @return - middle name of the user
+	 */
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	/**
+	 * Set the middle name of the user.
+	 * 
+	 * @param middleName
+	 */
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+		if( this.middleName == null)
+		{
+			this.lowerCaseMiddleName = null;
+		}
+		else
+		{
+			this.lowerCaseMiddleName = this.middleName.toLowerCase();
+		}
+	}
+
+	/**
+	 * Get the lower case value of the last name.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseLastName() {
+		return lowerCaseLastName;
+	}
+
+	/**
+	 * Get the lower case value of the first name.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseFirstName() {
+		return lowerCaseFirstName;
+	}
+
+	/**
+	 * Get the lower case middle name value.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseMiddleName() {
+		return lowerCaseMiddleName;
+	}
+
+	/**
+	 * Lower case value of the user name.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseUsername() {
+		return lowerCaseUsername;
 	}
 
 

@@ -4666,33 +4666,33 @@ Collection Administrator';
 -- ---------------------------------------------
 
 insert into ir_user.user_role(user_id, role_id)
-select ir_user.user.user_id, ir_user.role.role_id from
-ir_user.user, ir_user.role
-where ir_user.user.username = 'admin'
+select ir_user.ir_user.user_id, ir_user.role.role_id from
+ir_user.ir_user, ir_user.role
+where ir_user.ir_user.username = 'admin'
 and ir_user.role.name ='ROLE_ADMIN';
 
 insert into ir_user.user_role(user_id, role_id)
-select ir_user.user.user_id, ir_user.role.role_id from
-ir_user.user, ir_user.role
-where ir_user.user.username = 'admin'
+select ir_user.ir_user.user_id, ir_user.role.role_id from
+ir_user.ir_user, ir_user.role
+where ir_user.ir_user.username = 'admin'
 and ir_user.role.name ='ROLE_RESEARCHER';
 
 insert into ir_user.user_role(user_id, role_id)
-select ir_user.user.user_id, ir_user.role.role_id from
-ir_user.user, ir_user.role
-where ir_user.user.username = 'admin'
+select ir_user.ir_user.user_id, ir_user.role.role_id from
+ir_user.ir_user, ir_user.role
+where ir_user.ir_user.username = 'admin'
 and ir_user.role.name ='ROLE_USER';
 
 insert into ir_user.user_role(user_id, role_id)
-select ir_user.user.user_id, ir_user.role.role_id from
-ir_user.user, ir_user.role
-where ir_user.user.username = 'admin'
+select ir_user.ir_user.user_id, ir_user.role.role_id from
+ir_user.ir_user, ir_user.role
+where ir_user.ir_user.username = 'admin'
 and ir_user.role.name ='ROLE_AUTHOR';
 
 insert into ir_user.user_role(user_id, role_id)
-select ir_user.user.user_id, ir_user.role.role_id from
-ir_user.user, ir_user.role
-where ir_user.user.username = 'admin'
+select ir_user.ir_user.user_id, ir_user.role.role_id from
+ir_user.ir_user, ir_user.role
+where ir_user.ir_user.username = 'admin'
 and ir_user.role.name ='COLLECTION_AUTHOR';
 
 
@@ -4706,9 +4706,9 @@ user in the system';
 
 
 insert into ir_user.user_role(user_id, role_id)
-select ir_user.user.user_id, ir_user.role.role_id from
-ir_user.user, ir_user.role
-where ir_user.user.username = 'admin'
+select ir_user.ir_user.user_id, ir_user.role.role_id from
+ir_user.ir_user, ir_user.role
+where ir_user.ir_user.username = 'admin'
 and ir_user.role.name ='ROLE_USER';
 
 -- ---------------------------------------------
