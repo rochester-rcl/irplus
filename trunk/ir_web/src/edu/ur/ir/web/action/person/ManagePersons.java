@@ -221,13 +221,6 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		
 		personNameAuthority = personService.getAuthority(id, false);
 		
-		BirthDate bd = personNameAuthority.getBirthDate();
-		bd.setYear(birthYear);
-		
-		DeathDate dd = personNameAuthority.getDeathDate();
-		dd.setYear(deathYear);
-
-
 		if (personNameId != null) {
 			personName = personService.getName(personNameId, false);
 		} else {
