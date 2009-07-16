@@ -36,6 +36,7 @@ import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
+import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
@@ -188,6 +189,75 @@ public class DefaultInstitutionalCollectionServiceTest {
 	}
 	
 	/**
+	 * Test deleting a collection with at least one item
+	 * @throws LocationAlreadyExistsException 
+	 * @throws DuplicateNameException 
+	 * @throws UserDeletedPublicationException 
+	 * @throws UserHasPublishedDeleteException 
+	 */
+	public void testDeleteInstitutinalCollectionWithItems() throws LocationAlreadyExistsException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException 
+	{
+		// Start the transaction - create the repository
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		// save the repository
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+			
+		String userEmail1 = properties.getProperty("user_1_email");
+		UserEmail email = new UserEmail(userEmail1);
+		IrUser user = userService.createUser("password", "username", email);
+		
+		repo = repositoryService.getRepository(repo.getId(), false);
+		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		InstitutionalCollection subCollection = collection.createChild("sub-collection");
+		institutionalCollectionService.saveCollection(collection);
+		
+		// create the generic items
+		GenericItem genericItem1 = new GenericItem("aItem");
+		GenericItem genericItem2 = new GenericItem("subItem");
+	        
+        // add the item to the collection
+        InstitutionalItem institutionalItem1 = collection.createInstitutionalItem(genericItem1);
+        InstitutionalItem institutionalItem2 = collection.createInstitutionalItem(genericItem2);
+        institutionalItemService.saveInstitutionalItem(institutionalItem1);
+        institutionalItemService.saveInstitutionalItem(institutionalItem2);
+		tm.commit(ts);
+			
+		// delete data
+		ts = tm.getTransaction(td);
+		InstitutionalCollection topLevelCollection = institutionalCollectionService.getCollection(collection.getId(), false);
+		// delete the to level collection
+		institutionalCollectionService.deleteCollection(topLevelCollection, user);
+		tm.commit(ts);
+			
+	    // Start new transaction - make sure things deleted clean up remaining data
+		ts = tm.getTransaction(td);
+		topLevelCollection = institutionalCollectionService.getCollection(collection.getId(), false);
+		assert topLevelCollection == null : "Should not be able to find top level collection " + topLevelCollection;
+		subCollection = institutionalCollectionService.getCollection(subCollection.getId(), false);
+		assert subCollection == null : "Should not be able to find sub collection " + subCollection;
+		
+		institutionalItem1 = institutionalItemService.getInstitutionalItem(institutionalItem1.getId(), false);
+		assert institutionalItem1 == null : "Should not be able to find institutional item " + institutionalItem1;
+
+		institutionalItem2 = institutionalItemService.getInstitutionalItem(institutionalItem2.getId(), false);
+		assert institutionalItem2 == null : "Should not be able to find institutional item " + institutionalItem2;
+
+		
+		helper.cleanUpRepository();
+		institutionalItemService.deleteAllInstitutionalItemHistory();
+		userService.deleteUser(userService.getUser(user.getUsername()));
+
+		tm.commit(ts);	
+	}
+	
+	
+	
+	
+	/**
 	 * Test moving collections to an existing collection
 	 * 
 	 * @throws DuplicateNameException 
@@ -231,10 +301,10 @@ public class DefaultInstitutionalCollectionServiceTest {
 		InstitutionalCollection newRoot = repo.getInstitutionalCollection(subCollection.getName());
 		InstitutionalCollection oldParent = repo.getInstitutionalCollection(collection.getName());
 		
-		assert oldParent.getLeftValue().equals(1l) : "old parent left value should = 2 but equals " + 
+		assert oldParent.getLeftValue().equals(1l) : "old parent left value should = 1l but equals " + 
 		    oldParent.getLeftValue();
 		
-		assert oldParent.getRightValue().equals(2l) : "old parent right value should = 3l but equals " + 
+		assert oldParent.getRightValue().equals(2l) : "old parent right value should = 2l but equals " + 
 	    oldParent.getRightValue();
 		
 		InstitutionalCollection oldChild = oldParent.getChild(subCollection.getName());
@@ -263,6 +333,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 
 	/**
 	 * Test adding subscribers to collection
+	 * 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws LocationAlreadyExistsException 
 	 * 
