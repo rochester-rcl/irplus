@@ -34,8 +34,7 @@
 			            onmouseover="this.className='ur_buttonover';"
 			            onmouseout="this.className='ur_button';" id="showCollection"
 			            onclick="javascript:YAHOO.ur.institution.newCollectionDialog.showDialog();"><span
-			            class="worldAddBtnImg">&nbsp;</span> <fmt:message
-			            key="new_collection" /></button>
+			            class="worldAddBtnImg">&nbsp;</span> New Collection</button>
 		    </td>
 		   </ir:acl>
 		</c:if>
@@ -47,8 +46,7 @@
 			            onmouseover="this.className='ur_buttonover';"
 			            onmouseout="this.className='ur_button';" id="showCollection"
 			            onclick="javascript:YAHOO.ur.institution.newCollectionDialog.showDialog();"><span
-			            class="worldAddBtnImg">&nbsp;</span> <fmt:message
-			            key="new_collection" /></button>
+			            class="worldAddBtnImg">&nbsp;</span> New Collection</button>
 			    
 		    </td>
 			</c:if>

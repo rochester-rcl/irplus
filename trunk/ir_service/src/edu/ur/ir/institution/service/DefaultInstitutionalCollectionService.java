@@ -86,21 +86,24 @@ public class DefaultInstitutionalCollectionService implements
 		
 		List<InstitutionalCollection> allChildren = institutionalCollectionDAO.getAllChildrenForCollection(collection);
 		
-		// delete all security for children
+		// delete all security for children and all items
 		for(InstitutionalCollection child : allChildren)
 		{
 			 institutionalCollectionSecurityService.deleteAcl(child);
-			 Set<InstitutionalItem> items = child.getItems();
+			 LinkedList<InstitutionalItem> items = new LinkedList<InstitutionalItem>();
+			 items.addAll(child.getItems());
 			 for(InstitutionalItem item : items)
 			 {
 				 institutionalItemService.deleteInstitutionalItem(item, deletingUser);
 			 }
 		}
 
-		 for(InstitutionalItem item : collection.getItems())
-		 {
-			 institutionalItemService.deleteInstitutionalItem(item, deletingUser);
-		 }
+		LinkedList<InstitutionalItem> items = new LinkedList<InstitutionalItem>();
+		items.addAll(collection.getItems());
+		for(InstitutionalItem item : items)
+		{
+			institutionalItemService.deleteInstitutionalItem(item, deletingUser);
+		}
 
 		// delete security for parent
 		institutionalCollectionSecurityService.deleteAcl(collection);

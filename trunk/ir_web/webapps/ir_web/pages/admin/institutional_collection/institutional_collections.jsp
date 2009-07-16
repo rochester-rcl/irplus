@@ -83,14 +83,14 @@
             
                 <h3>Institutional Collection Administration</h3>
             
-              <ur:div id="newInstitutionalCollections">
-    	          <ur:basicForm id="institutionalCollections" name="institutionalCollections">
+              <div id="newInstitutionalCollections">
+    	          <form id="institutionalCollections" name="institutionalCollections">
 	              <input type="hidden" 
 	                  id="institutionalCollections_parentCollectionId" 
 	                  name="parentCollectionId" 
 	                 value="${parentCollectionId}"/>
-	              </ur:basicForm>
-	          </ur:div>
+	              </form>
+	          </div>
     
            
             </div>
@@ -102,30 +102,30 @@
         </div>
         <!-- end doc -->
   
-        <ur:div id="newCollectionDialog" cssClass="hidden">
-	        <ur:div cssClass="hd">New Collection</ur:div>
-		    <ur:div cssClass="bd">
-		        <ur:basicForm name="newCollectionForm" method="post" 
-		                  action="admin/createInstitutionalCollection.action">
+        <div id="newCollectionDialog" class="hidden">
+	        <div class="hd">New Collection</div>
+		    <div class="bd">
+		        <form name="newCollectionForm" method="post" 
+		                  action="<c:url value="/admin/createInstitutionalCollection.action"/>">
 		                  <input type="hidden" id="newCollectionForm_parentCollectionId" 
 		                      name="parentCollectionId" value="${parentCollectionId}"/>
 		               
-		                  <ur:div id="collectionNameError" cssClass="errorMessage"></ur:div>
+		                  <div id="collectionNameError" class="errorMessage"></div>
 		                  <table class="formTable">
 		                      <tr>
 		                          <td class="label">Collection Name:</td>
 		                          <td class="input"><input type="text" size="50" name="collectionName" value=""/></td>
 		                      </tr>
 		                  </table>
-		        </ur:basicForm>
-		    </ur:div>
-	    </ur:div> 
+		        </form>
+		    </div>
+	    </div> 
 	    
-	    <ur:div id="deleteCollectionDialog" cssClass="hidden">
-	        <ur:div cssClass="hd">Delete Collection?</ur:div>
-		    <ur:div cssClass="bd">
+	    <div id="deleteCollectionDialog" class="hidden">
+	        <div class="hd">Delete Collection?</div>
+		    <div class="bd">
 		         Are you sure you wish to delete the selected collections?
-		    </ur:div>
-	    </ur:div>   
+		    </div>
+	    </div>   
     </body>
 </html>
