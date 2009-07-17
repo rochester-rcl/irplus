@@ -83,7 +83,7 @@
 	<property name="tomcat.lib.dir" value="${librarydir}/tomcat/tomcat-6.0.14"/>
 	
 	<!-- location for production staging -->
-	<property name="production.stageing.dir" value="${basedir}/production-staging"/>
+	<property name="production.staging.dir" value="${basedir}/production-staging"/>
 
 	<!-- import the base set of files -->
     <import file="${base.build.file}"/>
@@ -170,6 +170,7 @@
 		<copy todir="${lib.dir}">
 			<fileset file="../ur_tags/ur_tags/ur_tags-${project.version}.jar"/>
 		</copy>
+
 		
 		<!-- copy the pdf libraries down from local this will be done
 		     until stable releases are released -->
@@ -251,6 +252,8 @@
 						log4j.xml"/>
     </target>
 	
+	<!-- exlude libs that deal with source file checking, testing
+	     code coverage -->
 	<fileset id="web.libs" dir="${lib.dir}">
 		<exclude name="checkstyle*"/>
 		<exclude name="emma*"/>
@@ -347,65 +350,91 @@
 				      
 		 </war>
 	</target>
+	
+	
+	<!-- copy the custom code in-->
+	<target name="do-custom-build" if="build.custom" depends="prepare-production-staging">
+		<!-- copy over the customizations  -->
+	    <copy todir="${production.staging.dir}/webapp/" overwrite="true">
+			<fileset dir="${custom.build.dir}/ir_web/webapps"/>
+		</copy>
+	</target>
+	
+	<!-- create the production build -->
+	<target name="prepare-production-staging" depends="build, clean-production-staging, move-yui">
+		
+		<!-- re-create production stag -->
+		<mkdir dir="${production.staging.dir}"/>
+		
+		<!-- make the classes dir-->
+		<mkdir dir="${production.staging.dir}/classes"/>
+		
+		<!-- production web-inf directory -->
+		<mkdir dir="${production.staging.dir}/web-inf"/>
+		
+		<!-- production lib directory -->
+        <mkdir dir="${production.staging.dir}/lib"/>
+		
+		<!-- jsp files and resources -->
+		<mkdir dir="${production.staging.dir}/webapp/ir_web"/>
+
+		<!--copy the necessary library directories -->
+        <copy todir="${production.staging.dir}/lib">
+	        <fileset refid="web.libs"/>
+        </copy>
+	
+		<!--copy the necessary jsp files and resources -->
+		<copy todir="${production.staging.dir}/webapp/ir_web/">
+			<fileset dir="${webapp.dir}">
+			    <exclude name="WEB-INF/**"/>
+			</fileset>
+		</copy>
+		
+		
+		
+		<!-- copy the configuration files into the directory  -->
+	    <copy todir="${production.staging.dir}/classes">
+	           <fileset dir="${build.dir}/classes"/>
+	    	   <fileset dir="${struts.config.dir.common}"/>
+	    	   <fileset dir="${struts.config.dir.production}"/>
+	    </copy>
+       
+        <!-- overwrite the logging file to be the production appender -->
+		<copy todir="${production.staging.dir}/classes" overwrite="true">
+	    	   <fileset dir="${log4j.production.appender}"/>
+	   	</copy>
+
+   	    <!-- create the web inf directory -->
+        <copy todir="${production.staging.dir}/web-inf" overwrite="true">
+        	<fileset dir="${ir.plus.properties.production}"/>
+        	<fileset dir="${spring.config.common.config}"/>
+        	<fileset dir="${spring.project.config}"/>
+        	<fileset dir="${webapp.conf.dir}/WEB-INF"/>
+        </copy>	
+	</target>
 
 	
 	<!-- publish the distribution jar file to the local repository -->
 	<!-- this sets production settings.  -->
 	<!--     Make sure the production configuration files have been set properly -->
-	<target name="publish-local" depends="build, clean-production-staging, move-yui" description="-->build production war file">
-		<!-- re-create production stag -->
-		<mkdir dir="${production.stageing.dir}"/>
-		
-		<!-- make the classes dir-->
-		<mkdir dir="${production.stageing.dir}/classes"/>
-		
-		<!-- production web-inf directory -->
-		<mkdir dir="${production.stageing.dir}/web-inf"/>
-		
-		<!-- production lib directory -->
-        <mkdir dir="${production.stageing.dir}/lib"/>
-
-		<!--copy the necessary library directories -->
-        <copy todir="${production.stageing.dir}/lib">
-	        <fileset refid="web.libs"/>
-        </copy>
-		
-		<!-- copy the configuration files into the directory -->
-	    <copy todir="${production.stageing.dir}/classes">
-	           <fileset dir="${build.dir}/classes"/>
-	    	   <fileset dir="${struts.config.dir.common}"/>
-	    	   <fileset dir="${struts.config.dir.production}"/>
-	    </copy>
-
-        <!-- overwrite the logging file to be the production appender -->
-		<copy todir="${webapp.classes.dir}" overwrite="true">
-	    	   <fileset dir="${log4j.production.appender}"/>
-	   	</copy>
-
-   	    <!-- create the web inf directory -->
-        <copy todir="${production.stageing.dir}/web-inf" overwrite="true">
-        	<fileset dir="${ir.plus.properties.production}"/>
-        	<fileset dir="${spring.config.common.config}"/>
-        	<fileset dir="${spring.project.config}"/>
-        	<fileset dir="${webapp.conf.dir}/WEB-INF"/>
-        </copy>
-		
-		<war destfile="../ir_plus.war" webxml="${webapp.conf.dir}/web.xml">
-		    <webinf dir="${production.stageing.dir}/web-inf"/>
-			<fileset dir="${webapp.dir}">
-			    <exclude name="WEB-INF/**"/>
-			</fileset>
-			
-			<classes dir="${production.stageing.dir}/classes"/>
-			<lib dir="${production.stageing.dir}/lib"/>
-				      
-		 </war>
-		
+	<target name="publish-local" depends="do-custom-build" description="-->build production war file">		
+		<war destfile="../ir_plus.war" webxml="${webapp.conf.dir}/web-ssl.xml">
+		    <webinf dir="${production.staging.dir}/web-inf"/>
+			<fileset dir="${production.staging.dir}/webapp/${project.name}"/>			   
+			<classes dir="${production.staging.dir}/classes"/>
+			<lib dir="${production.staging.dir}/lib"/>				      
+		</war>		
+	</target>
+	
+	<target name="build-custom-dir" description="--> Builds the directory structure for custom code">
+		<mkdir dir="${custom.build.dir}"/>
+		<mkdir dir="${custom.build.dir}/ir_web/webapps/ir_web/page-resources/images/all-images"/>
+		<mkdir dir="${custom.build.dir}/ir_web/webapps/ir_web/page-resources/css"/>
 	</target>
 	
 	<!-- delete the webapp production staging files -->
 	<target name="clean-production-staging">
-		 <delete dir="${production.stageing.dir}"/>
+		 <delete dir="${production.staging.dir}"/>
 	</target>
 	
 
