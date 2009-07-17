@@ -20,15 +20,16 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.persistent.LongPersistentId;
 import edu.ur.persistent.PersistentVersioned;
@@ -241,10 +242,10 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 */
 	void setName(String name) throws IllegalFileSystemNameException
 	{
-		for(int i = 0; i < FileSystem.INVALID_CHARACTERS.length; i++) {
-			if (name.contains(Character.toString(FileSystem.INVALID_CHARACTERS[i]))) {
-				throw new IllegalFileSystemNameException(FileSystem.INVALID_CHARACTERS, FileSystem.INVALID_CHARACTERS[i], name);
-			}
+		List<Character> illegalCharacters = IllegalFileSystemNameException.nameHasIllegalCharacerter(name);
+		if( illegalCharacters.size() > 0 )
+		{
+			throw new IllegalFileSystemNameException(illegalCharacters, name);
 		}
 		
 		this.name = name;

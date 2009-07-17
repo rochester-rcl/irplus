@@ -22,10 +22,10 @@ import java.util.Properties;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
@@ -374,21 +374,11 @@ public class ResearcherFolderTest {
 		File f = testUtil.creatFile(directory, "testFile",
 				"Hello  - versionedIrFile This is text in a file"); 
 		
-        // create the first file to store in the temporary folder
-		File f2 = testUtil.creatFile(directory, "testFile2", 
-				"Hello  - versionedIrFile This is text in a file 2"); 
-
 		// get the file database 
 		FileDatabase fd = repo.getFileDatabase();
 		
 		// create a new file info container
 		FileInfo fileInfo1 = fd.addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
-		
-		// create a second file info container
-		FileInfo fileInfo2 = fd.addFile(f2, "newFile2");
-		fileInfo2.setDisplayName("displayName2");
-
 		
 		// create the owner of the folders
 		IrUser u = new IrUser("nate", "password");
@@ -397,7 +387,6 @@ public class ResearcherFolderTest {
 
 		// create a new versioned file
 		IrFile irf = new IrFile(fileInfo1, "displayName1");
-		
 		
 		// create the root colleciton
 		ResearcherFolder ResearcherFolder1 = new ResearcherFolder(r, "ResearcherFolder1");
@@ -453,21 +442,11 @@ public class ResearcherFolderTest {
 		File f = testUtil.creatFile(directory, "testFile",
 				"Hello  - versionedIrFile This is text in a file"); 
 		
-        // create the first file to store in the temporary folder
-		File f2 = testUtil.creatFile(directory, "testFile2", 
-				"Hello  - versionedIrFile This is text in a file 2"); 
-
 		// get the file database 
 		FileDatabase fd = repo.getFileDatabase();
 		
 		// create a new file info container
 		FileInfo fileInfo1 = fd.addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
-		
-		// create a second file info container
-		FileInfo fileInfo2 = fd.addFile(f2, "newFile2");
-		fileInfo2.setDisplayName("displayName2");
-
 		
 		// create the owner of the folders
 		IrUser u = new IrUser("nate", "password");
@@ -475,7 +454,7 @@ public class ResearcherFolderTest {
 		Researcher r = new Researcher(u);
 
 		// create a new versioned file
-		IrFile irf = new IrFile(fileInfo1, "displayName1");
+		IrFile irf = new IrFile(fileInfo1, "displayName1" );
 		
 		
 		// create the root colleciton

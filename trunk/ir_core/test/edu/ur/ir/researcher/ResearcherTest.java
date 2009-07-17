@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.DefaultFileDatabase;
 import edu.ur.file.db.DefaultFileInfo;
 import edu.ur.file.db.DefaultFileServer;
@@ -32,7 +33,6 @@ import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.TreeFolderInfo;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.repository.Repository;
@@ -115,14 +115,13 @@ public class ResearcherTest {
 		user.setFirstName("forename");
 		
 		fileInfo.setVersion(22);
-		fileInfo.setDisplayName("displayName");
 		fileInfo.setId(9l);
 		
 		Department d = new Department("MyDept");
 		
 		Field field = new Field("field");
 		
-		IrFile irFile =  new IrFile(fileInfo, "testFile");
+		IrFile irFile =  new IrFile(fileInfo, "testFile" );
 
 		Researcher researcher = new Researcher(user);
 		researcher.getUser().addDepartment(d);
@@ -244,7 +243,6 @@ public class ResearcherTest {
 		
 		// create a new file info container
 		FileInfo fileInfo1 = fd.addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
 		
 		// create a new versioned file
 		IrUser user = new IrUser("username", "password");

@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
@@ -139,6 +139,7 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 		}
 		else
 		{
+			fileRenamed = true;
 			// assume description change
 			userFileSystemService.makePersonalFilePersistent(personalFile);
 		}

@@ -41,12 +41,6 @@
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
 			
-		<property name="name" column="name" type="string"
-			not-null="true" access="field" />
-
-		<property name="description" column="description" type="string"
-			not-null="false" access="field"/>
-			
 		<property name="publicViewable" column="public_viewable" 
 		     type="boolean" not-null="true"
 			 access="field" />

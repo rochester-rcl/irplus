@@ -32,12 +32,12 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -198,13 +198,13 @@ public class FileDownloadInfoDAOTest {
 		File f1 = testUtil.creatFile(directory, "testFile1", 
 		"Hello  - irFile This is text in a file - VersionedFileDAO test1");
 		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f1, "newFile1");
-		IrFile irFile1 = new IrFile(fileInfo1, "myIrFile");
+		IrFile irFile1 = new IrFile(fileInfo1, "newFile1");
 		irFileDAO.makePersistent(irFile1);
 
 		File f2 = testUtil.creatFile(directory, "testFile2", 
 		"Hello  - irFile This is text in a file - VersionedFileDAO test2");
 		FileInfo fileInfo2 = repo.getFileDatabase().addFile(f2, "newFile2");
-		IrFile irFile2 = new IrFile(fileInfo2, "myIrFile2");
+		IrFile irFile2 = new IrFile(fileInfo2, "newFile2");
 		irFileDAO.makePersistent(irFile2);
 		// save the repository
 		tm.commit(ts);	
@@ -372,13 +372,13 @@ public class FileDownloadInfoDAOTest {
 		File f1 = testUtil.creatFile(directory, "testFile1", 
 		"Hello  - irFile This is text in a file - VersionedFileDAO test1");
 		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f1, "newFile1");
-		IrFile irFile1 = new IrFile(fileInfo1, "myIrFile");
+		IrFile irFile1 = new IrFile(fileInfo1, "newFile1");
 		irFileDAO.makePersistent(irFile1);
 
 		File f2 = testUtil.creatFile(directory, "testFile2", 
 		"Hello  - irFile This is text in a file - VersionedFileDAO test2");
 		FileInfo fileInfo2 = repo.getFileDatabase().addFile(f2, "newFile2");
-		IrFile irFile2 = new IrFile(fileInfo2, "myIrFile2");
+		IrFile irFile2 = new IrFile(fileInfo2, "newFile2");
 		irFileDAO.makePersistent(irFile2);
 		// save the repository
 		tm.commit(ts);	

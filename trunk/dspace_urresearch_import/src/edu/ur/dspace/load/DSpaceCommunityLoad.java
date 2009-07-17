@@ -26,7 +26,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 

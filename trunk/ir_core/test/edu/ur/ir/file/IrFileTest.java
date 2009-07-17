@@ -25,10 +25,10 @@ import org.apache.commons.io.FileUtils;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
@@ -104,14 +104,12 @@ public class IrFileTest{
 
 		// create a file in the file database
 		FileInfo fileInfo1 = fd.addFile(f1, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
 		
 		// create a file in the database
 		FileInfo fileInfo2 = fd.addFile(f2, "newFile2");
-		fileInfo2.setDisplayName("displayName2");
 
 		// create a versioned file and add the file to the collection 
-		IrFile irFile = new IrFile(fileInfo1, "myNewFile");
+		IrFile irFile = new IrFile(fileInfo1,"myNewFile" );
 		irFile.setId(1l);
 		IrFile irFile2 = new IrFile(fileInfo2, "myNewFile2");
 		irFile2.setId(2l);

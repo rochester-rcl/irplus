@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TemporaryFileCreator;
@@ -71,8 +72,9 @@ public class AddRepositoryPicture extends ActionSupport implements UserIdAware{
 	 * Uploads a new image to the system.
 	 * 
 	 * @return
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public String addNewPicture()
+	public String addNewPicture() throws IllegalFileSystemNameException
 	{
 		Repository repository = 
 			repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);

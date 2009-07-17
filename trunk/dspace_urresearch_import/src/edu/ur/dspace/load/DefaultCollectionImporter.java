@@ -48,7 +48,7 @@ import edu.ur.dspace.model.GroupPermission;
 import edu.ur.dspace.model.PermissionConstants;
 import edu.ur.dspace.util.FileZipperUtil;
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TemporaryFileCreator;
 import edu.ur.ir.file.transformer.BasicThumbnailTransformer;

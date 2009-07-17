@@ -29,13 +29,13 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileInfoDAO;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.file.TransformedFile;
@@ -143,7 +143,7 @@ public class TransformedFileDAOTest {
 		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f, "newFile1");
 		FileInfo fileInfo2 = repo.getFileDatabase().addFile(f2, "transformed1");
 
-		IrFile irFile = new IrFile(fileInfo1, "newName");
+		IrFile irFile = new IrFile(fileInfo1,  "newFile1");
 		
 		irFileDAO.makePersistent(irFile);
 		fileInfoDAO.makePersistent(fileInfo2);

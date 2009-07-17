@@ -26,9 +26,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
-import edu.ur.ir.FileSystem;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
@@ -54,10 +53,13 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	/**  The current highest file version number */
 	private int maxVersion = INITIAL_FILE_VERSION;
 	
-	/** Name for the object */
+	/** Name for the object - the name is very important and should generally not change
+	 *  over the life of the object  - however there is the ability to rename - this should
+	 *  remain independent of the file name */
 	protected String name;
 	
-	/** Generic description  */
+	/** Generic description - this is a performance enhancement and should always be a copy
+	 * of the current ir file description */
 	protected String description;
 	
 	/**  The set of versions for this Versioned Ir File */
@@ -116,6 +118,9 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	 * Add a new version of the file info.  This version becomes
 	 * the new current version.
 	 * 
+	 * The FileInfo object display name cannot be NULL - otherwise an IllegalStateException is
+	 * thrown.
+	 * 
 	 * @param fileInfo
 	 */ 
 	public FileVersion addNewVersion(FileInfo fileInfo, IrUser versionCreator) 
@@ -124,7 +129,11 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 			maxVersion = maxVersion + 1;
 			IrFile irFile = null;
 			try {
-				irFile = new IrFile(fileInfo, getName());
+				if( fileInfo.getDisplayName() == null )
+				{
+					throw new IllegalStateException("The info display name cannot be null " + fileInfo);
+				}
+				irFile = new IrFile(fileInfo, fileInfo.getDisplayName());
 			} catch(IllegalFileSystemNameException e) {
 				// This Exception will not happen here since the name is passed from VersionedFile which is 
 				// already checked for illegal characters. So just catching and logging and not throwing.
@@ -137,6 +146,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 			currentVersion = version;
 			currentFileSizeBytes = fileInfo.getSize();
 			totalSizeForAllFilesBytes += fileInfo.getSize();
+			setDescription(irFile.getDescription());
 			return version;
 		} else {
 			throw new IllegalStateException("The user must be Owner or collaborator to add a new version. User :" + versionCreator.toString());
@@ -161,7 +171,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	 * 
 	 * @param irFile
 	 */
-	public boolean changeCurrentIrVersion(int myVersion) {
+	public boolean changeCurrentIrVersion(int myVersion, IrUser versionCreator) {
 		
 		//the max version is always the current version
 		if( myVersion == maxVersion ) return true;
@@ -170,12 +180,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 		{
 			if( version.getVersionNumber() == myVersion)
 			{
-				maxVersion = maxVersion + 1;
-				FileVersion newVersion = new FileVersion(version.getIrFile(), 
-						this, maxVersion, version.getVersionCreator());
-				versions.add(newVersion);
-				extension = newVersion.getIrFile().getFileInfo().getExtension();
-				currentVersion = newVersion;
+				addNewVersion(version.getIrFile().getFileInfo(), versionCreator);
 				return true;
 			}
 		}
@@ -221,6 +226,8 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 		sb.append(getLargestVersion());
 		sb.append( " name = ");
 		sb.append(name);
+		sb.append( " description = ");
+		sb.append(description);
 		sb.append("]");
 		
 		return sb.toString();
@@ -642,6 +649,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	 * @param description
 	 */
 	public void setDescription(String description) {
+		currentVersion.getIrFile().getFileInfo().setDescription(description);
 		this.description = description;
 	}
 
@@ -664,10 +672,10 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 			throw new IllegalStateException("versioned file name cannot be null");
 		}
 		
-		for(int i = 0; i < FileSystem.INVALID_CHARACTERS.length; i++) {
-			if (name.contains(Character.toString(FileSystem.INVALID_CHARACTERS[i]))) {
-				throw new IllegalFileSystemNameException(FileSystem.INVALID_CHARACTERS, FileSystem.INVALID_CHARACTERS[i], name);
-			}
+		List<Character> illegalCharacters = IllegalFileSystemNameException.nameHasIllegalCharacerter(name);
+		if( illegalCharacters.size() > 0 )
+		{
+			throw new IllegalFileSystemNameException(illegalCharacters, name);
 		}
 
 		this.name = name;
@@ -684,10 +692,10 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	public void reName(String nameWithExtension) throws IllegalFileSystemNameException
 	{
 		FileVersion currentVersion = getCurrentVersion();
-		IrFile file = currentVersion.getIrFile();
+		FileInfo file = currentVersion.getIrFile().getFileInfo();
 		String baseName = FilenameUtils.getBaseName(nameWithExtension);
 		setName(baseName);
-		file.setName(baseName);
+		file.setDisplayName(baseName);
 		
 		String extension = FilenameUtils.getExtension(nameWithExtension);
 		if( extension.equals(""))
@@ -696,6 +704,6 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 		}
 		
 		setExtension(extension);
-		file.getFileInfo().setExtension(extension);
+		file.setExtension(extension);
 	}
 }

@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.IrFile;
@@ -114,14 +115,16 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 	 * Add a new version of the versioned file to the system.
 	 * 
 	 * @return
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public String addNewFileVersion()
+	public String addNewFileVersion() throws IllegalFileSystemNameException
 	{
+		log.debug("Adding new version " );
 		String returnStatus = SUCCESS;
 		personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
 		VersionedFile versionedFile = personalFile.getVersionedFile();
 		
-		log.debug("User Id = " + userId);
+		log.debug("User Id = " + userId );
 		IrUser user = userService.getUser(userId, false);
 		
 		boolean canLock = repositoryService.canLockVersionedFile(versionedFile, user);
@@ -139,7 +142,7 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 			if(versionedFile.getLockedBy().equals(user))
 			{
 				repositoryService.addNewFileToVersionedFile(repository, 
-						versionedFile, file, fileFileName, userFileDescription,user);
+						versionedFile, file, fileFileName, userFileDescription, user);
 			
 				versionAdded = true;
 			    IrFile irFile = personalFile.getVersionedFile().getCurrentVersion().getIrFile();

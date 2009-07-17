@@ -19,6 +19,7 @@ package edu.ur.file.db.service;
 
 import java.io.File;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.DefaultDatabaseFileStoreStrategy;
 import edu.ur.file.db.DefaultFileDatabase;
 import edu.ur.file.db.DefaultFileInfo;
@@ -56,11 +57,12 @@ public class MaxFilesStoreStrategy implements
 
 	/**
 	 * Stores the file directly into the file database.
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.file.db.DefaultDatabaseFileStoreStrategy#addFile(edu.ur.file.db.DefaultFileDatabase, java.io.File)
 	 */
 	public DefaultFileInfo addFile(DefaultFileDatabase fileDatabase, 
-			File f, String unqiueFileName) {
+			File f, String unqiueFileName) throws IllegalFileSystemNameException {
 		
 		if( isTooBig(fileDatabase))
 		{
@@ -71,11 +73,12 @@ public class MaxFilesStoreStrategy implements
 	
 	/**
 	 * Create an empty file with the strategy.
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.file.db.DefaultDatabaseFileStoreStrategy#addFile(edu.ur.file.db.DefaultFileDatabase, java.lang.String)
 	 */
 	public DefaultFileInfo addFile(DefaultFileDatabase fileDatabase,
-			String unqiueFileName) {
+			String unqiueFileName) throws IllegalFileSystemNameException {
 		
 		if( isTooBig(fileDatabase))
 		{

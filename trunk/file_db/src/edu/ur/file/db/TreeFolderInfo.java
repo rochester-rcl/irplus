@@ -29,6 +29,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.tree.PreOrderTreeSetNodeBase;
 
 /**
@@ -203,8 +204,9 @@ public class TreeFolderInfo extends PreOrderTreeSetNodeBase implements
 	 *            name to use in the file system
 	 * 
 	 * @return the information about the added file.
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public DefaultFileInfo createFileInfo(File f, String uniqueName) {
+	public DefaultFileInfo createFileInfo(File f, String uniqueName) throws IllegalFileSystemNameException {
 		DefaultFileInfo info = FileSystemManager.addFile(this, f, uniqueName);
 		addFileInfo(info);
 		return info;
@@ -220,8 +222,9 @@ public class TreeFolderInfo extends PreOrderTreeSetNodeBase implements
 	 *            name to use in the file system
 	 * 
 	 * @return the information about the added file.
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public DefaultFileInfo createFileInfo(String uniqueName) {
+	public DefaultFileInfo createFileInfo(String uniqueName) throws IllegalFileSystemNameException {
 		DefaultFileInfo info = FileSystemManager.addFile(this, uniqueName);
 		addFileInfo(info);
 		return info;

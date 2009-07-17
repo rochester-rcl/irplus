@@ -142,6 +142,7 @@ public class InviteInfoDAOTest {
 		FileServerService fileServerService = repoHelper.getFileServerService();
 		FileInfo fileInfo = fileServerService.addFile(repo.getFileDatabase(), f,
 				uniqueNameGenerator.getNextName(), "txt");
+		fileInfo.setDisplayName("name");
 		VersionedFile vf = new VersionedFile(user, fileInfo, "name");
 		versionedFileDAO.makePersistent(vf);
 		Long irFileId = vf.getCurrentVersion().getIrFile().getId(); 

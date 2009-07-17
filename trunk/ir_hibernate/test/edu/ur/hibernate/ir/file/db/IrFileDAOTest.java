@@ -29,12 +29,12 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.repository.Repository;
@@ -119,7 +119,6 @@ public class IrFileDAOTest {
 				"Hello  - irFile This is text in a file");
 
 		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
 		fileInfo1.setDescription("testThis");
 		IrFile irFile = new IrFile(fileInfo1, "newName");
 		

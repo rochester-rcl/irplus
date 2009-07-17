@@ -31,6 +31,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.DefaultFileInfo;
 import edu.ur.file.db.DefaultFileDatabase;
 import edu.ur.file.db.DefaultFileServer;
@@ -543,10 +544,11 @@ public class HbTreeFolderInfoDAOTest {
 	/**
 	 * Test adding files to a folder
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 * 
      */
 	@Test
-	public void TreeFolderInfoFileDAOTest() throws LocationAlreadyExistsException {
+	public void TreeFolderInfoFileDAOTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException {
 		TransactionStatus ts = tm.getTransaction(td);
 		// get a unique name for the folder
 		assert uniqueNameGenerator.getNextName() != null : "Next unique should not be null";

@@ -36,9 +36,6 @@ PersistentVersioned, Serializable, DescriptionAware, NameAware{
 	/**  End separator for paths */
 	public static final String PATH_SEPERATOR = "/";
 	
-	/** Illegal characters in name */
-	public static final char[] INVALID_CHARACTERS = {'\\','/', ':', '*', '?', '\"', '<', '>', '|'};
-	
 	/**
 	 * Either a file or a folder.
 	 * 

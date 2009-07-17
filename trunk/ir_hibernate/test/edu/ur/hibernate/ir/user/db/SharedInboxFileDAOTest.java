@@ -138,6 +138,7 @@ public class SharedInboxFileDAOTest {
 		FileServerService fileServerService = repoHelper.getFileServerService();
 		FileInfo fileInfo = fileServerService.addFile(repo.getFileDatabase(), f,
 				uniqueNameGenerator.getNextName(), "txt");
+		fileInfo.setDisplayName("name");
 		VersionedFile vf = new VersionedFile(sharingUser, fileInfo, "name");
 		versionedFileDAO.makePersistent(vf);
 		Long irFileId = vf.getCurrentVersion().getIrFile().getId(); 

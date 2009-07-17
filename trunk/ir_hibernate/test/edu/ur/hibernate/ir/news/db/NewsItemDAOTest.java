@@ -174,7 +174,6 @@ public class NewsItemDAOTest {
 				"Hello  - irFile This is text in a file");
 
 		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
 		fileInfo1.setDescription("testThis");
 		IrFile irFile = new IrFile(fileInfo1, "newName");
 		

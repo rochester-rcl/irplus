@@ -17,6 +17,8 @@ package edu.ur.file.db;
 
 import java.io.File;
 
+import edu.ur.file.IllegalFileSystemNameException;
+
 /**
  * Allows different file storing strategies for a 
  * default file databases.  This could be to store
@@ -37,10 +39,11 @@ public interface DefaultDatabaseFileStoreStrategy {
 	 * @param uniqueFileName - name to give the file
 	 * 
 	 * @return - the stored file
+	 * @throws IllegalFileSystemNameException - if the file name is illegal for ANY type of file system
 	 * @throws LocationAlreadyExistsException - if the location already exists
 	 */
 	public DefaultFileInfo addFile(DefaultFileDatabase fileDatabase, 
-			File f, String unqiueFileName);
+			File f, String unqiueFileName) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Create an <b>empty</b> the file database with the 
@@ -50,9 +53,10 @@ public interface DefaultDatabaseFileStoreStrategy {
 	 * @param uniqueFileName - name to give the empty file
 	 * 
 	 * @return - the stored file
+	 * @throws IllegalFileSystemNameException - if the file name is illegal
 	 * @throws LocationAlreadyExistsException - if the location already exists
 	 */
 	public DefaultFileInfo addFile(DefaultFileDatabase fileDatabase, 
-			 String unqiueFileName);
+			 String unqiueFileName) throws IllegalFileSystemNameException;
 
 }

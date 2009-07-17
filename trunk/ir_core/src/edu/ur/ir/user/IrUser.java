@@ -28,7 +28,7 @@ import org.springframework.security.userdetails.UserDetails;
 
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.person.PersonNameAuthority;

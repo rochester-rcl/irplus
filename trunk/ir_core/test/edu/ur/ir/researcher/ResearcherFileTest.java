@@ -22,10 +22,10 @@ import java.util.Properties;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
@@ -75,14 +75,13 @@ public class ResearcherFileTest {
 		
 		// create a new file info container
 		FileInfo fileInfo1 = fd.addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
 		
 		// create the owner of the folders
 		IrUser user = new IrUser("nate", "password");
 		Researcher researcher = new Researcher(user);
 		
 		// create a new versioned file
-		IrFile irf = new IrFile(fileInfo1, "displayName1");
+		IrFile irf = new IrFile(fileInfo1,"displayName1");
 		
 		ResearcherFolder researcherFolder = researcher.createRootFolder("testFolder");
 		ResearcherFile researcherFile = new ResearcherFile(researcher, irf, researcherFolder);

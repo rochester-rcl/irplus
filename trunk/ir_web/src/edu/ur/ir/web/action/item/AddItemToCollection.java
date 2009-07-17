@@ -150,7 +150,8 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		    	PersonalFile personalFile = userFileSystemService.getPersonalFile(fileId, false);
 		    	if (personalFile.getVersionedFile().getOwner().equals(user)) {
 			    	ItemFile itemFile = item.addFile(personalFile.getVersionedFile().getCurrentVersion().getIrFile());
-					itemFile.setVersionNumber(personalFile.getVersionedFile().getLargestVersion());
+					itemFile.setDescription(personalFile.getVersionedFile().getDescription());
+			    	itemFile.setVersionNumber(personalFile.getVersionedFile().getLargestVersion());
 		    	}
 		    }
 		}
@@ -168,6 +169,7 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 						
 						if (itemFile != null) {
 							itemFile.setOrder(item.getItemFiles().size());
+							itemFile.setDescription(pf.getVersionedFile().getDescription());
 							itemFile.setVersionNumber(pf.getVersionedFile().getLargestVersion());
 						}
 					}

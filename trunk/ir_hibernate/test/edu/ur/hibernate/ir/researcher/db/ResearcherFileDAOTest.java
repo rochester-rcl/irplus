@@ -28,6 +28,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServerService;
 import edu.ur.file.db.LocationAlreadyExistsException;
@@ -35,7 +36,6 @@ import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.repository.Repository;
@@ -134,7 +134,7 @@ public class ResearcherFileDAOTest {
 		FileUtil testUtil = new FileUtil();
 		testUtil.createDirectory(directory);
 
-		File f = testUtil.creatFile(directory, "testFile", 
+		File f = testUtil.creatFile(directory, "test File", 
 		"Hello  - irFile This is text in a file - VersionedFileDAO test");
 		
 		FileServerService fileServerService = repoHelper.getFileServerService();
@@ -143,7 +143,7 @@ public class ResearcherFileDAOTest {
 
 		IrUser user = new IrUser("user", "password");
 		user.setPasswordEncoding("none");
-		IrFile irFile = new IrFile(info, "test file");
+		IrFile irFile = new IrFile(info, "test File");
         
 		UserEmail userEmail = new UserEmail("user@email");
 		
@@ -245,7 +245,7 @@ public class ResearcherFileDAOTest {
 		ts = tm.getTransaction(td);
 		IrUser user = new IrUser("user", "password");
 		user.setPasswordEncoding("none");
-		IrFile irFile = new IrFile(info, "test file");
+		IrFile irFile = new IrFile(info, "testFile");
         
 		UserEmail userEmail = new UserEmail("user@email");
 		
@@ -371,7 +371,7 @@ public class ResearcherFileDAOTest {
 		ts = tm.getTransaction(td);
 		IrUser user = new IrUser("user", "password");
 		user.setPasswordEncoding("none");
-		IrFile irFile = new IrFile(info, "test file");
+		IrFile irFile = new IrFile(info, "testFile");
         
 		UserEmail userEmail = new UserEmail("user@email");
 		

@@ -18,6 +18,7 @@ package edu.ur.file.db;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.DefaultFileInfo;
 import edu.ur.file.db.FileSystemManager;
 import edu.ur.file.db.TreeFolderInfo;
@@ -151,9 +152,10 @@ public class FileSystemManagerTest {
 	/**
 	 * Test moving a folder. 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
 	@Test
-	public void moveFolderWithFilesTest() throws LocationAlreadyExistsException
+	public void moveFolderWithFilesTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		// create a file server with the specified path
 	    String serverPath = properties.getProperty("FileSystemManagerTest.move.initial");
@@ -219,8 +221,9 @@ public class FileSystemManagerTest {
 	/**
 	 * Test adding a file to a folder
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public void addFileTest() throws LocationAlreadyExistsException
+	public void addFileTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		// create a file server with the specified path
 		String folderPath = properties.getProperty("FilsSystemManagerTest.folder_path");
@@ -266,8 +269,9 @@ public class FileSystemManagerTest {
 	/**
 	 * Test deleting a file 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public void deleteFileTest() throws LocationAlreadyExistsException
+	public void deleteFileTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		// where the file will be copied into
 		String folderPath = properties.getProperty("FilsSystemManagerTest.folder_path");
@@ -339,8 +343,9 @@ public class FileSystemManagerTest {
 	/**
 	 * Test moving a file from one folder into another.
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public void moveFileTest() throws LocationAlreadyExistsException
+	public void moveFileTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		String folderPath = properties.getProperty("FileSystemManagerTest.file.move");
 		

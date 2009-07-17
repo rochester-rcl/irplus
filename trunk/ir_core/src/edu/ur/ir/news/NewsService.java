@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
 
@@ -100,9 +101,10 @@ public interface NewsService {
 	 * @param description - description of the file
 	 * 
 	 * @return the created irFile.
+	 * @throws IllegalFileSystemNameException 
 	 */
 	public IrFile addNewsItemPicture(NewsItem newsItem,Repository repository,
-			File f, String name, String description);
+			File f, String name, String description) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Remove the picture in the news item
@@ -124,9 +126,10 @@ public interface NewsService {
 	 * @param description - description of the file.
 	 * 
 	 * @return the IrFile holding the picture information.
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 */
 	public IrFile addPrimaryNewsItemPicture(NewsItem newsItem,Repository repository,
-			File f, String name, String description);
+			File f, String name, String description) throws edu.ur.file.IllegalFileSystemNameException;
 	
 	/**
 	 * Remove the primary news item picture from the news item.

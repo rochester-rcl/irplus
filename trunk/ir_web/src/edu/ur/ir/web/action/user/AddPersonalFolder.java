@@ -24,7 +24,7 @@ import org.quartz.Scheduler;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;

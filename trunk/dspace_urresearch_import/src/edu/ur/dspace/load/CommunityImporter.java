@@ -22,7 +22,7 @@ import java.util.List;
 
 import edu.ur.dspace.model.Community;
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.repository.Repository;
 
 /**

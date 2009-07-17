@@ -21,10 +21,10 @@ import java.util.Properties;
 
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
@@ -77,9 +77,8 @@ public class ItemFileTest {
 
 		// create a file in the file database
 		FileInfo fileInfo1 = fd.addFile(f1, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
 		
-		IrFile irFile = new IrFile(fileInfo1, "testItemFile");
+		IrFile irFile = new IrFile(fileInfo1,"displayName1");
 		GenericItem item = new GenericItem("testItem");
 		ItemFile itemFile = new ItemFile(item, irFile);
 		
@@ -123,15 +122,13 @@ public class ItemFileTest {
 
 		// create a file in the file database
 		FileInfo fileInfo1 = fd.addFile(f1, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
 		
 		// create a second file in the database
 		FileInfo fileInfo2 = fd.addFile(f2, "newFile2");
-		fileInfo2.setDisplayName("displayName2");
 		
-		IrFile irFile1 = new IrFile(fileInfo1, "testItemFile");
+		IrFile irFile1 = new IrFile(fileInfo1, "displayName1");
 		irFile1.setId(1l);
-		IrFile irFile2 = new IrFile(fileInfo2, "testItemFile2");
+		IrFile irFile2 = new IrFile(fileInfo2, "displayName2");
 		irFile2.setId(2l);
 		
 		GenericItem item = new GenericItem("testItem");

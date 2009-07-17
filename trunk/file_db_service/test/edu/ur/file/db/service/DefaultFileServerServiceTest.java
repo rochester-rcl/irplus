@@ -32,6 +32,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.DefaultFileDatabase;
 import edu.ur.file.db.DefaultFileInfo;
 import edu.ur.file.db.DefaultFileServer;
@@ -213,10 +214,11 @@ public class DefaultFileServerServiceTest {
 	 * - Make sure a file can be created.
 	 * - Makes sure a file can be found.
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 */
 	@Test
-	public void createFileTest() throws LocationAlreadyExistsException {
+	public void createFileTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException {
         // Start the transaction this is for lazy loading
 		TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus ts = tm.getTransaction(td);
@@ -286,10 +288,11 @@ public class DefaultFileServerServiceTest {
 	 * - Make sure an empty file can be created.
 	 * - Makes sure an empty file can be found.
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 */
 	@Test
-	public void createEmptyFileTest() throws LocationAlreadyExistsException {
+	public void createEmptyFileTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException {
 		
         // Start the transaction this is for lazy loading
 		TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -415,10 +418,11 @@ public class DefaultFileServerServiceTest {
 	 * - Make sure a new root folder is created when the max number of files
 	 * is reached.
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 */
 	@Test
-	public void maxFilesStoreStrategy() throws LocationAlreadyExistsException {
+	public void maxFilesStoreStrategy() throws LocationAlreadyExistsException, IllegalFileSystemNameException {
         // Start the transaction this is for lazy loading
 		TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus ts = tm.getTransaction(td);

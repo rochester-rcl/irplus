@@ -27,6 +27,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.DefaultFileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.DefaultFileInfo;
@@ -91,10 +92,11 @@ public class HbFileInfoDAOTest {
 	/**
 	 * Test FileInfo persistance
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 *
 	 */
 	@Test
-	public void baseFileInfoDAOTest() throws LocationAlreadyExistsException
+	public void baseFileInfoDAOTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -204,10 +206,11 @@ public class HbFileInfoDAOTest {
 	/**
 	 * Test FileInfo persistance
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 *
 	 */
 	@Test
-	public void testFileInfoChecksumDAOTest() throws LocationAlreadyExistsException
+	public void testFileInfoChecksumDAOTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 
 		TransactionStatus ts = tm.getTransaction(td);

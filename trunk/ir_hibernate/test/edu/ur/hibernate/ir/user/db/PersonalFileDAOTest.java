@@ -30,6 +30,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServerService;
 import edu.ur.file.db.LocationAlreadyExistsException;
@@ -37,7 +38,6 @@ import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
@@ -142,6 +142,7 @@ public class PersonalFileDAOTest {
 		FileServerService fileServerService = repoHelper.getFileServerService();
 		FileInfo info = fileServerService.addFile(repo.getFileDatabase(), f,
 				uniqueNameGenerator.getNextName(), "txt");
+		info.setDisplayName("test file");
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
@@ -235,6 +236,7 @@ public class PersonalFileDAOTest {
 		FileServerService fileServerService = repoHelper.getFileServerService();
 		FileInfo info = fileServerService.addFile(repo.getFileDatabase(), f,
 				uniqueNameGenerator.getNextName(), "txt");
+		info.setDisplayName("test file");
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
@@ -331,6 +333,7 @@ public class PersonalFileDAOTest {
 		FileServerService fileServerService = repoHelper.getFileServerService();
 		FileInfo info = fileServerService.addFile(repo.getFileDatabase(), f,
 				uniqueNameGenerator.getNextName(), "txt");
+		info.setDisplayName("test file");
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
@@ -410,6 +413,7 @@ public class PersonalFileDAOTest {
 		FileServerService fileServerService = repoHelper.getFileServerService();
 		FileInfo info = fileServerService.addFile(repo.getFileDatabase(), f,
 				uniqueNameGenerator.getNextName(), "txt");
+		info.setDisplayName("testFile");
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
