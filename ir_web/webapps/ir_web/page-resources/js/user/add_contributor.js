@@ -75,14 +75,48 @@ YAHOO.ur.item.contributor = {
 	    document.contributors_form.submit();
 	},
 	
-	/*
-	 * This call back updates the html when the names are retrieved
-	 * 
+
+
+	/**
+	 *  Function that searches the names
+	 *  and returns from start row and end row 
 	 */
-	getNameCallback : 
+	getNamesForPager : function(rowStart, startPageNumber, currentPageNumber)
 	{
+		var handleSuccess = function(o) 
+	    {
+			// check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {               	    
+	            var divToUpdate = document.getElementById('newNames');
+	            divToUpdate.innerHTML = o.responseText; 
+	        }
+	    };
 		
-	    success: function(o) 
+		var handleFailure = function(o) 
+		{
+		    alert('Get name Failure ' + o.status + ' status text ' + o.statusText );
+		};
+	    
+		document.myNames.rowStart.value=rowStart;
+		document.myNames.startPageNumber.value=startPageNumber;
+		document.myNames.currentPageNumber.value=currentPageNumber;
+		
+		var formObject = document.getElementById('names');
+		YAHOO.util.Connect.setForm(formObject);
+		var callback = { success: handleSuccess,  failure: handleFailure };
+		
+	    var transaction = YAHOO.util.Connect.asyncRequest('post', 
+	        mySearchNameAction,  callback);
+	},
+
+
+		
+	//handles the serarch form submit
+	handleSearchFormSubmit : function()
+	{
+	    var handleSuccess = function(o) 
 	    {
 		    YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
@@ -92,47 +126,25 @@ YAHOO.ur.item.contributor = {
 	            var divToUpdate = document.getElementById('newNames');
 	            divToUpdate.innerHTML = o.responseText; 
 	        }
-	    },
+	    };
 		
-		failure: function(o) 
+		var handleFailure = function(o) 
 		{
 	    	YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('Get name Failure ' + o.status + ' status text ' + o.statusText );
-		}
-	},
-
-	/**
-	 *  Function that searches the names
-	 *  and returns from start row and end row 
-	 */
-	getNamesForPager : function(rowStart, startPageNumber, currentPageNumber)
-	{
-		document.myNames.rowStart.value=rowStart;
-		document.myNames.startPageNumber.value=startPageNumber;
-		document.myNames.currentPageNumber.value=currentPageNumber;
+		};
 		
-		var formObject = document.getElementById('names');
+	    var callback = { success: handleSuccess,  failure: handleFailure };
+	    var formObject = document.getElementById('search_form');
 		YAHOO.util.Connect.setForm(formObject);
-		
-	    var transaction = YAHOO.util.Connect.asyncRequest('post', 
-	        mySearchNameAction, 
-	        YAHOO.ur.item.contributor.getNameCallback);
-	},
-
-
-		
-	//handles the serarch form submit
-	handleSearchFormSubmit : function()
-	{
-		    var formObject = document.getElementById('search_form');
-			YAHOO.util.Connect.setForm(formObject);
 			    
-		    if( YAHOO.ur.item.contributor.validate() )
-		    {		    	
-		    	YAHOO.ur.util.wait.waitDialog.showDialog();
-		        var cObj = YAHOO.util.Connect.asyncRequest('POST',
-		        mySearchNameAction, YAHOO.ur.item.contributor.getNameCallback);
-		    }
+		var name = document.getElementById('search_query').value;
+    	if (name != "" && name != null) 
+		{		    	
+		    YAHOO.ur.util.wait.waitDialog.showDialog();
+		    var cObj = YAHOO.util.Connect.asyncRequest('POST',
+		     mySearchNameAction, callback);
+		}
 	},
 	
 	/**
@@ -163,9 +175,8 @@ YAHOO.ur.item.contributor = {
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
-	        {               		
+	        {    
 		        var response = eval("("+o.responseText+")");
-		    
 		        //if the name was not added then show the user the error message.
 		        // received from the server
 		        if( response.nameAdded == "true" )
@@ -189,10 +200,10 @@ YAHOO.ur.item.contributor = {
 			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('add name failed ' + o.status);
 		};
-
-		YAHOO.ur.util.wait.waitDialog.showDialog();
 		// Wire up the success and failure handlers
 		var callback = { success: handleSuccess,  failure: handleFailure };
+
+		YAHOO.ur.util.wait.waitDialog.showDialog();
 		YAHOO.util.Connect.setForm('myNames');
 	    var cObj = YAHOO.util.Connect.asyncRequest('post',
 	           addNameAction + '?personNameId=' + personNameId, callback);
@@ -383,13 +394,12 @@ YAHOO.ur.item.contributor = {
 		        {
 		            // we can clear the form if the person type was added
 		            YAHOO.ur.item.contributor.clearPersonNameForm();
-		            YAHOO.ur.item.contributor.newPersonNameDialog.hide();
+		            YAHOO.ur.item.contributor.newPersonNameDialog.hide();     
 		            // if there is a search query then execute search
 		        	var name = document.getElementById('search_query').value;
 		        	if (name != "" && name != null) {
 				        YAHOO.ur.item.contributor.handleSearchFormSubmit();
-					}
-	        	    
+					}   	    
 		        }
 		    }
 		};
@@ -493,8 +503,8 @@ YAHOO.ur.item.contributor = {
 		// Define various event handlers for Dialog
 		var addPersonNameForUser = function() 
 		{
-	            var cObj = YAHOO.util.Connect.asyncRequest('post',
-	            newPersonNameAction, personNameCallback);
+	        var cObj = YAHOO.util.Connect.asyncRequest('post',
+	        newPersonNameAction, personNameCallback);
 		};	
 			
 		// handle a cancel of the adding person type dialog
@@ -600,7 +610,6 @@ YAHOO.ur.item.contributor = {
 		    	    
 		    if( YAHOO.ur.item.contributor.newPersonDialog.validate() )
 		    {
-	
 				// If My name is true and person authoritative name already exist, then add it as Person name
 		    	if ((document.newPersonForm.myName.checked) && (document.newPersonForm.personId.value != '')) {
 		    	 	addPersonNameForUser();
@@ -613,16 +622,26 @@ YAHOO.ur.item.contributor = {
 	   
 	 	// Validate the entries in the form 
 		YAHOO.ur.item.contributor.newPersonDialog.validate = function() {
+		    var firstName = document.getElementById("person_first_name").value;
+		    var lastName = document.getElementById("person_last_name").value;
+		    
+            if( firstName == null || firstName == "" ||
+                lastName == null || lastName == ""	)
+            {
+            	alert("Must enter a first and last name");
+            	return false;
+            }
+           
 		    return true;
 		};
 	
 		// Wire up the success and failure handlers
 		var callback = { success: handleNewPersonFormSuccess,
-											         failure: handleNewPersonFormFailure };
+						 failure: handleNewPersonFormFailure };
 											         
 		// Wire up the success and failure handlers
 		var personNameCallback = { success: handleNewPersonNameForUserFormSuccess,
-											         failure: handleNewPersonNameForUserFormFailure };										         
+								   failure: handleNewPersonNameForUserFormFailure };										         
 				
 				
 		// Render the Dialog

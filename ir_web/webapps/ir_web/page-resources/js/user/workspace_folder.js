@@ -606,7 +606,7 @@ YAHOO.ur.folder =
 
              dropMenu.addItem({text: '<span class="pageWhitePutBtnImg">&nbsp;</span> Download', url: basePath + 'user/personalFileDownload.action' + '?personalFileId=' +fileId });
          
-             dropMenu.addItem({text: '<span class="reportEditBtnImg">&nbsp;</span> Rename', url: 'javascript:YAHOO.ur.folder.renameFile( ' + fileId + ')' });
+             dropMenu.addItem({text: '<span class="reportEditBtnImg">&nbsp;</span> Edit Name/Description', url: 'javascript:YAHOO.ur.folder.renameFile( ' + fileId + ')' });
          
              /*
                Add items to the menu by passing an array of object literals 
@@ -1245,7 +1245,7 @@ YAHOO.ur.folder =
         renameError.innerHTML = "";   
         
         document.renameForm.newFileName.value = "";
-	    document.renameForm.personalFileId.value = "";
+        document.renameForm.fileDescription.value ="";
     },
     
     /**
@@ -1286,7 +1286,6 @@ YAHOO.ur.folder =
 	            // determine if the add/edit was a success
 	            var success = document.getElementById("renameForm_success").value;
 	    
-	  
 	            //if the rename was not success then show the user the error message
 	            // received from the server
 	            if( success == "false" )
@@ -1296,7 +1295,7 @@ YAHOO.ur.folder =
 	            else
 	            {
 	                // we can clear the form if the file was renamed
-	                YAHOO.ur.folder.renameFileDialog.hide();
+	            	YAHOO.ur.folder.renameFileDialog.hide();
 	                YAHOO.ur.folder.clearFileRenameForm();
 	                var folderId = document.getElementById("myFolders_parentFolderId").value;
 	                YAHOO.ur.folder.getFolderById(folderId); 

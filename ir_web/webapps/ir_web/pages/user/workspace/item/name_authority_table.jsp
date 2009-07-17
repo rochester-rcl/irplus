@@ -85,8 +85,13 @@
 
 	<c:import url="search_contributor_pager.jsp"/>
 </c:if>	 
+
 <c:if test="${totalHits <= 0}">
     <h3> No results found for search</h3>
+    <form method="post" id="names" name="myNames">
+	    <input type="hidden" id="names_query" name="query" value="${query}"/>
+	     <input type="hidden" id="names_itemId" name="genericItemId" value="${item.id}"/>
+	</form>	       
 </c:if>   	
 
 				

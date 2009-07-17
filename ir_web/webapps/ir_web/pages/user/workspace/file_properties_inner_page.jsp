@@ -238,7 +238,7 @@
 	                          <c:param name="personalFileId" value="${personalFile.id}"/>
 	                          <c:param name="versionNumber" value="${version.versionNumber}"/>
 	                      </c:url>
-	                      <td class="${rowType}"><a href="${personalFileDownloadUrl}">${version.irFile.name}</a></td>
+	                      <td class="${rowType}"><a href="${personalFileDownloadUrl}">${version.irFile.nameWithExtension}</a></td>
 	                      <td class="${rowType}">${version.irFile.description}</td>
                           <td class="${rowType}">${version.versionNumber}</td>
                           <td class="${rowType}">
