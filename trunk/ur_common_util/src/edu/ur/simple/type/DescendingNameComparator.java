@@ -14,7 +14,6 @@ public class DescendingNameComparator implements Comparator<NameAware>, Serializ
 	/** eclipse genarated id */
 	private static final long serialVersionUID = -2166294396178883394L;
 
-	@Override
 	public int compare(NameAware o1, NameAware o2) {
 		return o2.getName().compareToIgnoreCase((o1.getName()));
 	}
