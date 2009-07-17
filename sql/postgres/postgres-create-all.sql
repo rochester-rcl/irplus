@@ -791,8 +791,6 @@ CREATE TABLE ir_file.ir_file
     ir_file_id BIGINT PRIMARY KEY,
     file_id BIGINT NOT NULL,
     public_viewable BOOLEAN NOT NULL,
-    name TEXT NOT NULL,
-    description TEXT,
     version INTEGER,
     user_id BIGINT,
     FOREIGN KEY (file_id) REFERENCES file_system.file (file_id),
