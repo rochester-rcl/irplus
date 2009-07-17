@@ -227,7 +227,7 @@
 						                                 <c:param name="institutionalItemId" value="${institutionalItem.id}"/>
 						                            </c:url>
 						                        <a href="${itemView}">${institutionalItem.name}</a><br>
-						                        <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description != '' && institutionalItem.versionedInstitutionalItem.currentVersion.item.description != null}"><div class="smallText"><ur:maxText numChars="50" text="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description}"/></div></c:if>
+						                        <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description != '' && institutionalItem.versionedInstitutionalItem.currentVersion.item.description != null}"><div class="smallText"><ur:maxText numChars="150" text="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description}"/></div></c:if>
 						                        </urstb:td>
 						                        
 						                        <urstb:td>
@@ -436,7 +436,7 @@
 						                                 <c:param name="institutionalItemId" value="${institutionalItem.id}"/>
 						                            </c:url>
 						                        <a href="${itemView}">${institutionalItem.name}</a></br>
-						                        <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description != '' && institutionalItem.versionedInstitutionalItem.currentVersion.item.description != null}"><div class="smallText"><ur:maxText numChars="50" text="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description}"/></div></c:if>
+						                        <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description != '' && institutionalItem.versionedInstitutionalItem.currentVersion.item.description != null}"><div class="smallText"><ur:maxText numChars="150" text="${institutionalItem.versionedInstitutionalItem.currentVersion.item.description}"/></div></c:if>
 						                        </urstb:td>
 						                        <urstb:td>
 						                             <c:forEach var="itemContributor" items="${institutionalItem.versionedInstitutionalItem.currentVersion.item.contributors}">

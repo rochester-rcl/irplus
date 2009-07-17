@@ -38,15 +38,16 @@
             New File Name: 
         </td>
         <td>
-            <input type="text" name="newFileName" size="60" value="${newFileName}"/> 
+            <input type="text" name="newFileName"  size="60" value="${newFileName}"/> 
         </td>
     </tr>
     <tr>
         <td>
             Description: 
         </td>
-        <td>
-            <input type="text" name="fileDescription" size="60" value="${fileDescription}"/>   
+       
+        <td align="left" class="input"><textarea 
+             name="fileDescription"  cols="60" rows="2">${fileDescription}</textarea>
         </td>
     </tr>
 </table>
