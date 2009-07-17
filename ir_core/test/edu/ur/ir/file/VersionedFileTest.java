@@ -21,10 +21,10 @@ import java.util.Properties;
 
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.test.helper.PropertiesLoader;
@@ -116,7 +116,7 @@ public class VersionedFileTest {
 		
 		// switch the current version - user wants the older version to be the current version
 		// create a new version with the same file information
-		assert vif.changeCurrentIrVersion(1): "New version should be changed";
+		assert vif.changeCurrentIrVersion(1, user1): "New version should be changed";
 		assert vif.getCurrentVersion().getIrFile().getFileInfo().equals(fileInfo1) : "Current file should be found " +
 		" current = " + vif.getCurrentVersion() + "fileInfo1 = " + fileInfo1;
 		
@@ -205,7 +205,7 @@ public class VersionedFileTest {
 		
 		// switch the current version - user wants the older version to be the current version
 		// create a new version with the same file information
-		assert vif.changeCurrentIrVersion(1): "New version should be changed";
+		assert vif.changeCurrentIrVersion(1, user1): "New version should be changed";
 		assert vif.getCurrentVersion().getIrFile().getFileInfo().equals(fileInfo1) : "Current file should be found " +
 		" current = " + vif.getCurrentVersion() + "fileInfo1 = " + fileInfo1;
 		
@@ -286,7 +286,7 @@ public class VersionedFileTest {
 		
 		// switch the current version - user wants the older version to be the current version
 		// create a new version with the same file information
-		assert vif.changeCurrentIrVersion(1): "New version should be changed";
+		assert vif.changeCurrentIrVersion(1, user): "New version should be changed";
 		assert vif.getCurrentVersion().getIrFile().getFileInfo().equals(fileInfo1) : "Current file should be found " +
 		" current = " + vif.getCurrentVersion() + "fileInfo1 = " + fileInfo1;
 		

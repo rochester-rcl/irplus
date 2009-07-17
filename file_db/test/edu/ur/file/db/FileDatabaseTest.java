@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import edu.ur.test.helper.PropertiesLoader;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.DefaultFileDatabase;
 import edu.ur.file.db.TreeFolderInfo;
 import edu.ur.util.FileUtil;
@@ -123,8 +124,9 @@ public class FileDatabaseTest {
 	/**
 	 * Test adding a file to the file database.
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public void addFileTest() throws LocationAlreadyExistsException
+	public void addFileTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		DefaultFileServer fs = new DefaultFileServer();
 		
@@ -159,8 +161,9 @@ public class FileDatabaseTest {
 	/**
 	 * Test creating an emtpy file in the file system.
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public void createEmptyFileTest() throws LocationAlreadyExistsException
+	public void createEmptyFileTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		DefaultFileServer fs = new DefaultFileServer();
 		

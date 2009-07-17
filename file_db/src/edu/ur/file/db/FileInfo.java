@@ -20,6 +20,7 @@ import java.net.URI;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.checksum.ChecksumCalculator;
 import edu.ur.persistent.LongPersistentId;
 import edu.ur.persistent.PersistentVersioned;
@@ -51,8 +52,9 @@ LongPersistentId, PersistentVersioned{
 	 * Set the display name to be shown to the user.
 	 * 
 	 * @param displayName The displayName to set.
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public void setDisplayName(String displayName);
+	public void setDisplayName(String displayName) throws IllegalFileSystemNameException;
 
 	/**
 	 * Determine if this file is in the

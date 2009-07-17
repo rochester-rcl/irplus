@@ -212,6 +212,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		}
 		fileAdded = true;
 		
+		// assume most recent version 
 		if (versionedFileId != null) {
 			VersionedFile vf = repositoryService.getVersionedFile(versionedFileId, false);
 			
@@ -227,6 +228,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 			if (fileAdded)
 			{
 				ItemFile itemFile = item.addFile(vf.getCurrentVersion().getIrFile());
+				itemFile.setDescription(vf.getDescription());
 				itemFile.setVersionNumber(vf.getLargestVersion());
 				itemService.makePersistent(item);
 			}
@@ -257,7 +259,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 					
 						if(fileAdded) {
 							ItemFile itemFile = item.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
-							
+							itemFile.setDescription(pf.getVersionedFile().getDescription());
 							if (itemFile != null) {
 								itemFile.setVersionNumber(pf.getVersionedFile().getLargestVersion());
 							}

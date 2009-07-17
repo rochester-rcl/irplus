@@ -18,6 +18,7 @@ package edu.ur.file.db;
 import java.io.File;
 import java.util.List;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServer;
@@ -140,9 +141,10 @@ public interface FileServerService {
 	 * by a period. For example The extension should be "txt" and NOT ".txt"
 	 * 
 	 * @return File Information wrapper of file stored to persistent storage
+	 * @throws IllegalFileSystemNameException 
 	 */
 	public FileInfo addFile(FileDatabase fileDatabase, File f, 
-			String uniqueName, String extension);
+			String uniqueName, String extension) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Add a file to the specified file database.  This places
@@ -158,9 +160,10 @@ public interface FileServerService {
 	 * @param displayName - name to help identify the file when unique name is generated automatically
 	 * 
 	 * @return File Information wrapper stored to disk
+	 * @throws IllegalFileSystemNameException 
 	 */
 	public FileInfo addFile(FileDatabase fileDatabase, File f, String uniqueName, 
-			String extension, String displayName);
+			String extension, String displayName) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Create an empty a file in the specified file database.  This places
@@ -171,9 +174,10 @@ public interface FileServerService {
 	 * @param uniqueName - unique name to be given to the file.
 	 * @param extension - file extension to be used for this file. The extension should not be prefixed
 	 * by a period. For example The extension should be "txt" and NOT ".txt"
+	 * @throws IllegalFileSystemNameException 
 	 */
 	public FileInfo createEmptyFile(FileDatabase fileDatabase, String uniqueName, 
-			String extension);
+			String extension) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Create an empty file in the specified file database.  This places
@@ -187,9 +191,10 @@ public interface FileServerService {
 	 *  
 	 * @param displayName - name to help identify the file when unique name is generated automatically
 	 * @return - 
+	 * @throws IllegalFileSystemNameException 
 	 */
 	public FileInfo createEmptyFile(FileDatabase fileDatabase, String uniqueName, 
-			String extension, String displayName);
+			String extension, String displayName) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Remove the file from the file database.  This permanently 

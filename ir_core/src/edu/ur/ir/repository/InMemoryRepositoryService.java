@@ -17,10 +17,10 @@
 package edu.ur.ir.repository;
 
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FolderInfo;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TransformedFileType;

@@ -22,6 +22,7 @@ import java.util.Properties;
 
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
@@ -124,8 +125,9 @@ public class NewsItemTest {
 	/**
 	 * Make sure we can add the article. 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public void testAddArticle() throws LocationAlreadyExistsException
+	public void testAddArticle() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 

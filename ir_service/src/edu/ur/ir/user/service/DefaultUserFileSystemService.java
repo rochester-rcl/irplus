@@ -27,15 +27,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import edu.ur.cgLib.CgLibHelper;
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FileSystem;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.VersionedFile;
@@ -223,25 +222,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 		
 	}
 	
-	/**
-	 * Add the file to the specified personal folder.
-	 * 
-	 * @see edu.ur.ir.user.UserFileSystemService#addFileToUser(edu.ur.ir.repository.Repository, java.io.File, edu.ur.ir.user.PersonalFolder, java.lang.String, java.lang.String)
-	 */
-	public PersonalFile addFileToUser(Repository repository, 
-			File f, 
-			PersonalFolder personalFolder, 
-			String fileName, 
-			String description)throws DuplicateNameException, IllegalFileSystemNameException
-	{
-		return addFileToUser(repository, 
-				f, 
-				personalFolder, 
-				fileName, 
-				description, 
-				null);
-	}
-    
+	
 	/**
 	 * Add a file to a user.
 	 * @throws DuplicateNameException 
@@ -252,31 +233,28 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 			File f, 
 			PersonalFolder personalFolder, 
 			String fileName,
-			String description, 
-			String originalFileName) throws DuplicateNameException, IllegalFileSystemNameException
+			String description) throws DuplicateNameException, IllegalFileSystemNameException
 	{
 	
-		String aName = determineFileName(fileName, originalFileName);
-		if( aName == null || aName.trim().equals("") )
+		if( fileName == null || fileName.trim().equals("") )
 		{
 			throw new IllegalStateException("Both file name and original " +
 					"file name were null");
 		}
 		
-		PersonalFile personalFile = personalFolder.getFile(aName);
+		PersonalFile personalFile = personalFolder.getFile(fileName);
 		if(  personalFile != null )
 		{
 			throw new DuplicateNameException("File with the name " + 
-					aName + " already exists ", aName);
+					fileName + " already exists ", fileName);
 		}
 		
         VersionedFile versionedFile = 
            repositoryService.createVersionedFile(personalFolder.getOwner(), 
         		        repository, 
             			f, 
-            			aName, 
-            			description, 
-            			originalFileName);
+            			fileName, 
+            			description);
        
         try {
 			personalFile = personalFolder.addVersionedFile(versionedFile);
@@ -292,23 +270,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 		return personalFile;
 	}
 	
-	/**
-	 * Add an empty file to a user.
-	 * 
-	 * @see edu.ur.ir.user.UserFileSystemService#addFileToUser(java.lang.Long, java.lang.Long, java.lang.Long, java.lang.String, java.lang.String)
-	 */
-	public PersonalFile addFileToUser(Repository repository, 
-			PersonalFolder personalFolder,
-			String fileName, 
-			String description) throws DuplicateNameException, IllegalFileSystemNameException{
-		
-		return addFileToUser(repository, 
-				personalFolder, 
-				fileName, 
-				description, 
-				null);
-	}
-	
+
 	
 
 	/**
@@ -320,30 +282,27 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	public PersonalFile addFileToUser(Repository repository, 
 			PersonalFolder personalFolder,
 			String fileName, 
-			String description,
-			String originalFileName) throws DuplicateNameException, IllegalFileSystemNameException {
+			String description) throws DuplicateNameException, IllegalFileSystemNameException {
 		
-		String aName = determineFileName(fileName, originalFileName);
-		if( aName == null || aName.trim().equals("") )
+		if( fileName == null ||fileName.trim().equals("") )
 		{
 			throw new IllegalStateException("Both file name and original " +
 					"file name were null");
 		}
 		
-		PersonalFile personalFile = personalFolder.getFile(aName);
+		PersonalFile personalFile = personalFolder.getFile(fileName);
 		
 		if(  personalFile != null )
 		{
 			throw new DuplicateNameException("File with the name " + 
-					aName + " already exists ", aName);
+					fileName + " already exists ", fileName);
 		}
 		
         VersionedFile versionedFile = 
             	repositoryService.createVersionedFile(personalFolder.getOwner(), 
             			repository, 
-            			aName, 
-            			description, 
-            			originalFileName);
+            			fileName, 
+            			description);
         
         // this is still needed 
         try {
@@ -370,26 +329,24 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	public PersonalFile addFileToUser(Repository repository, 
 			IrUser user,
 			String fileName, 
-			String description,
-			String originalFileName) throws DuplicateNameException, IllegalFileSystemNameException {
+			String description) throws DuplicateNameException, IllegalFileSystemNameException {
 		
-		String aName = determineFileName(fileName, originalFileName);
-		if( aName == null || aName.trim().equals("") )
+		
+		if( fileName == null || fileName.trim().equals("") )
 		{
-			throw new IllegalStateException("Both file name and original " +
-					"file name were null");
+			throw new IllegalStateException("File name is null");
 		}
 		
-		PersonalFile personalFile = user.getRootFile(aName);
+		PersonalFile personalFile = user.getRootFile(fileName);
 		
 		if(  personalFile != null )
 		{
 			throw new DuplicateNameException("File with the name " + 
-					aName + " already exists ", aName);
+					fileName + " already exists ", fileName);
 		}
 		VersionedFile versionedFile = 
 	    	repositoryService.createVersionedFile(user, repository, 
-	    			aName, description, originalFileName);
+	    			fileName, description);
 		try
 		{
 	        personalFile = user.createRootFile(versionedFile);
@@ -405,41 +362,8 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	    return personalFile;
 	}
 	
-	/**
-	 * Add an empty file to a user.
-	 * @throws DuplicateNameException 
-	 * 
-	 * @see edu.ur.ir.user.UserService#addFileToUser(java.lang.Long, java.lang.Long, java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public PersonalFile addFileToUser(Repository repository, 
-			IrUser user,
-			String fileName, 
-			String description) throws DuplicateNameException, IllegalFileSystemNameException {
-		
-		return addFileToUser(repository, user, fileName, description, null);
-	}
-	
-    /**
-     * Create a personal versioned file in the system with the specified file for the
-     * given user. This is created at the root level (added to the user)
-     * 
-     * @param repositoryId - the repository to add the file to.
-     * @param f - file to add
-     * @param userId - Unique user id 
-     * @param fileName - The name to give the file.
-     * @param description - description of the file.
-     * 
-     * @return the created personal file
-     * @throws DuplicateNameException 
-     */
-    public PersonalFile addFileToUser(Repository repository, 
-    		File f, 
-    		IrUser user, 
-    		String fileName, 
-    		String description ) throws DuplicateNameException, IllegalFileSystemNameException
-    {
-    	return addFileToUser(repository, f, user, fileName, description, null);
-    }
+
+  
 	
     /**
      * Create a personal versioned file in the system with the specified file for the
@@ -460,27 +384,25 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
     		File f, 
     		IrUser user, 
     		String fileName, 
-    		String description, 
-    		String originalFileName) throws DuplicateNameException, IllegalFileSystemNameException
+    		String description) throws DuplicateNameException, IllegalFileSystemNameException
     {
-    	String aName = determineFileName(fileName, originalFileName);
-		if( aName == null || aName.trim().equals("") )
+		if( fileName == null || fileName.trim().equals("") )
 		{
 			throw new IllegalStateException("Both file name and original " +
 					"file name were null");
 		}
 		
-		PersonalFile personalFile = user.getRootFile(aName);
+		PersonalFile personalFile = user.getRootFile(fileName);
 		
 		if(  personalFile != null )
 		{
 			throw new DuplicateNameException("File with the name " + 
-					aName + " already exists ", aName);
+					fileName + " already exists ", fileName);
 		}
 		
 		VersionedFile versionedFile = 
 	    	repositoryService.createVersionedFile(user, repository, 
-	    			f, aName, description);
+	    			f, fileName, description);
 		
 		try
 		{
@@ -932,41 +854,6 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 		return personalFolderDAO.getAllVersionedFilesForFolder(folder);
 	}
 	
-	/**
-	 * Determines which name should be used.  Defaults to name if it is
-	 * not null and not empty otherwise originalFile name is returned.
-	 * 
-	 * @param name - new name to use
-	 * @param originalFileName - original file name.
-	 * 
-	 * @return name to use
-	 */
-	private String determineFileName(String name, String originalFileName)
-	{
-		String theName = null;
-		if( name == null || name.trim().equals(""))
-		{
-			theName = originalFileName;
-		}
-		else
-		{
-			theName = name;
-			if( FilenameUtils.getExtension(theName).equals(""))
-			{
-				String extension = FilenameUtils.getExtension(originalFileName);
-				if(extension != null && !extension.equals(""))
-				{
-					theName = theName + "." + extension;
-				}
-			}
-		}
-		return theName;
-		
-	}
-
-	
-
-
 	/**
 	 * Creates an index folder for a user if one does not exist.  The creates a folder
 	 * with the given name in the top level repository user index location.

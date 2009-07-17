@@ -21,6 +21,7 @@ import java.util.Properties;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.DefaultFileInfo;
 import edu.ur.file.db.TreeFolderInfo;
 
@@ -55,9 +56,10 @@ public class FileInfoTest {
 	/**
 	 * Setters and Getters test 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
 	@Test
-	public void basicFileInfoTest() throws LocationAlreadyExistsException {
+	public void basicFileInfoTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException {
 		
 		// this will create folders so we need to place them in directories
 		String folderPath = properties.getProperty("FileInfoTest.base.equals");
@@ -119,9 +121,10 @@ public class FileInfoTest {
 	/**
 	 * Test the hash code.
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
 	@Test
-	public void testHashCode() throws LocationAlreadyExistsException
+	public void testHashCode() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		
 		// this will create folders so we need to place them in directories
@@ -164,9 +167,10 @@ public class FileInfoTest {
 	/**
 	 * Test the hash code.
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
 	@Test
-	public void testEquals() throws LocationAlreadyExistsException
+	public void testEquals() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		
 		// this will create folders so we need to place them in directories

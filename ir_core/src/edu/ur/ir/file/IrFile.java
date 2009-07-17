@@ -23,9 +23,8 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import edu.ur.persistent.BasePersistent;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
-import edu.ur.ir.FileSystem;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.user.IrUser;
 import edu.ur.simple.type.DescriptionAware;
 import edu.ur.simple.type.NameAware;
@@ -35,6 +34,8 @@ import edu.ur.simple.type.NameAware;
  * around a FileInfo object.  This allows the Ir file object
  * to store more information than just what the file info
  * stores.  Including transformed file information.
+ * 
+ * This class overrides the dsplay name of the FileInfo object.
  * 
  * The IR file 
  * 
@@ -48,12 +49,6 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 	
 	/** File information for this ir file */
 	private FileInfo fileInfo;
-	
-	/** name of the ir file */
-	private String name;
-	
-	/**  Description of the ir file */
-	private String description;
 	
 	/** Logger */
 	private static final Logger log = Logger.getLogger(IrFile.class);
@@ -81,8 +76,12 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 	public IrFile(FileInfo fileInfo, String name) throws IllegalFileSystemNameException 
 	{
 		log.debug("Setting the file info");
+		if( name == null )
+		{
+			throw new IllegalStateException("name cannot be null");
+		}
+		fileInfo.setDisplayName(name);
 		setFileInfo(fileInfo);
-		setName(name);
 	}
 
 	/**
@@ -107,40 +106,16 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 	 * @see edu.ur.simple.type.DescriptionAware#getDescription()
 	 */
 	public String getDescription() {
-		return description;
+		return fileInfo.getDescription();
 	}
 
-	/**
-	 * Set the description of this ir file.
-	 * 
-	 * @param description
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-		fileInfo.setDescription(description);
-	}
+
 
 	/* (non-Javadoc)
 	 * @see edu.ur.simple.type.NameAware#getName()
 	 */
 	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Set name
-	 * 
-	 * @param name
-	 */
-	public void setName(String name) throws IllegalFileSystemNameException {
-		
-		for(int i = 0; i < FileSystem.INVALID_CHARACTERS.length; i++) {
-			if (name.contains(Character.toString(FileSystem.INVALID_CHARACTERS[i]))) {
-				throw new IllegalFileSystemNameException(FileSystem.INVALID_CHARACTERS, FileSystem.INVALID_CHARACTERS[i], name);
-			}
-		}
-	
-		this.name = name;
+		return fileInfo.getDisplayName();
 	}
 
 	/* (non-Javadoc)
@@ -167,7 +142,7 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 		final IrFile other = (IrFile) o;
 
 		if( ( fileInfo != null && !fileInfo.equals(other.getFileInfo()) ) ||
-				( fileInfo == null && other.getFileInfo() != null ) ) return false;
+			( fileInfo == null && other.getFileInfo() != null ) ) return false;
 	
 		return true;
 	}
@@ -252,7 +227,7 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 		sb.append(" version = ");
 		sb.append(version);
 		sb.append(" name = ");
-		sb.append(name);
+		sb.append(fileInfo.getName());
 		sb.append(" public viewable = " + publicViewable);
 		sb.append("]");
 		return sb.toString();
@@ -311,13 +286,13 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 	 */
 	public String getNameWithExtension()
 	{
-		String nameWithExtension = name;
+		String nameWithExtension = fileInfo.getDisplayName();
 		String extension = getFileInfo().getExtension();
 		
 		if( extension != null &&
 				!extension.trim().equals(""))
 		{
-			nameWithExtension = name + "." + extension; 
+			nameWithExtension = fileInfo.getDisplayName() + "." + extension; 
 		}
 		
 		return nameWithExtension;

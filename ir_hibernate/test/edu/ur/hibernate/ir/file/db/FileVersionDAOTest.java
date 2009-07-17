@@ -29,9 +29,9 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.FileVersionDAO;

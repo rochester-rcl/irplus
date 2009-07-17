@@ -35,6 +35,7 @@ import org.apache.lucene.store.RAMDirectory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.repository.Repository;
@@ -83,8 +84,9 @@ public class DefaultPlainTextTextExtractorTest {
 	 * 
 	 * @param description
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public void testIndexPlainTextDocument() throws LocationAlreadyExistsException
+	public void testIndexPlainTextDocument() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();

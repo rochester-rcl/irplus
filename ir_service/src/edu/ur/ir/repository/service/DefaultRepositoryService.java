@@ -32,7 +32,7 @@ import edu.ur.file.db.FileServerService;
 import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.FileVersionDAO;
 import edu.ur.ir.file.IrFile;
@@ -103,25 +103,7 @@ public class DefaultRepositoryService implements RepositoryService {
 	/** Strategy for unlocking files */
 	private VersionedFileUnLockStrategy versionedFileUnLockStrategy;
 	
-	/**
-	 * Create a versioned file in the repository.
-	 * 
-	 * @param repository - the repository to create the versioned file in.
-	 * @param f - file to add
-	 * @param fileName - name user wishes to give the file.
-	 * @param descrption - description of the file.
-	 * 
-	 * @return - the created versioned file.
-	 */
-	public VersionedFile createVersionedFile(
-			IrUser user,
-			Repository repository, 
-			File f, 
-			String fileName, 
-			String description) throws IllegalFileSystemNameException
-	{
-		return createVersionedFile(user, repository, f, fileName, description, null);
-	}
+	
 	
 	/**
 	 * Create a versioned file in the repository.
@@ -134,18 +116,17 @@ public class DefaultRepositoryService implements RepositoryService {
 	 * and the user wishes to give the file a name that is different than the one on the file system
 	 * 
 	 * @return - the created versioned file.
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 */
 	public VersionedFile createVersionedFile(
 			IrUser user,
 			Repository repository, 
 			File f, 
-			String fileName, 
-			String description,
-			String originalFileName) throws IllegalFileSystemNameException
+			String fileName,
+			String description) throws IllegalFileSystemNameException
 	{
 
-		FileInfo info = createFileInfo(repository, f, fileName,
-				originalFileName, description);
+		FileInfo info = createFileInfo(repository, f, fileName, description);
 		
 		VersionedFile versionedFile = new VersionedFile(user, info, 
 				FilenameUtils.removeExtension(fileName));
@@ -166,24 +147,6 @@ public class DefaultRepositoryService implements RepositoryService {
 	
 	
 	/**
-	 * Create a versioned file in the repository.
-	 * 
-	 * @param repositoryId - id of the repository to create the versioned file in.
-	 * @param fileName - name user wishes to give the file.
-	 * @param descrption - description of the file.
-	 * 
-	 * @return - the created versioned file.
-	 */
-	public VersionedFile createVersionedFile(
-			IrUser user,
-			Repository repository, 
-			String fileName, 
-			String description) throws IllegalFileSystemNameException
-	{
-		return createVersionedFile(user, repository, fileName, description, null);
-	}
-	
-	/**
 	 * Create a versioned file in the repository which is a file that is emtpy.
 	 * 
 	 * @param repositoryId - id of the repository to create the versioned file in.
@@ -193,15 +156,15 @@ public class DefaultRepositoryService implements RepositoryService {
 	 * and the user wishes to give the file a name that is different than the one on the file system
 	 * 
 	 * @return - the created versioned file.
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 */
 	public VersionedFile createVersionedFile(
 			IrUser user,
 			Repository repository, 
 			String fileName, 
-			String description,
-			String originalFileName) throws IllegalFileSystemNameException
+			String description) throws IllegalFileSystemNameException
 	{
-		FileInfo info = createFileInfo(repository, originalFileName);
+		FileInfo info = createFileInfo(repository, fileName);
 		
 		VersionedFile versionedFile = new VersionedFile(user, info, 
 				FilenameUtils.removeExtension(fileName));
@@ -318,38 +281,39 @@ public class DefaultRepositoryService implements RepositoryService {
 
 	/**
 	 * Add a new file to a versioned file as the next file in the set of versions.
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.ir.repository.RepositoryService#addNewFileToVersionedFile(java.lang.Long, java.lang.Long, java.io.File, java.lang.String)
 	 */
 	public void addNewFileToVersionedFile(Repository repository, 
 			VersionedFile versionedFile, 
 			File f, 
-			String originalFileName, 
-			IrUser versionCreator) {
+			String fileName, 
+			IrUser versionCreator) throws edu.ur.file.IllegalFileSystemNameException {
 	    
-		addNewFileToVersionedFile(repository, versionedFile, f, originalFileName, null, versionCreator);
+		addNewFileToVersionedFile(repository, versionedFile, f, fileName, null, versionCreator);
 		
 	}
 	
 	/**
 	 * Add a new file to a versioned file as the next file in the set of versions.
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.ir.repository.RepositoryService#addNewFileToVersionedFile(java.lang.Long, java.lang.Long, java.io.File, java.lang.String)
 	 */
 	public void addNewFileToVersionedFile(Repository repository, 
 			VersionedFile versionedFile, 
 			File f, 
-			String originalFileName, 
+			String fileName, 
 			String description,
-			IrUser versionCreator) {
+			IrUser versionCreator) throws edu.ur.file.IllegalFileSystemNameException {
 	    
 		
 		// if they can lock it they can edit it
 		if( versionedFile.getLockedBy().equals(versionCreator) )
 		{
-			FileInfo info = createFileInfo(repository, f, originalFileName, description);
-			FileVersion version = versionedFile.addNewVersion(info, versionCreator);
-			version.getIrFile().setDescription(description);
+			FileInfo info = createFileInfo(repository, f, fileName, description);
+			versionedFile.addNewVersion(info, versionCreator);
 		    versionedFileDAO.makePersistent(versionedFile);
 		}
 		else
@@ -463,6 +427,7 @@ public class DefaultRepositoryService implements RepositoryService {
 
 	/**
 	 * Add a transformed file to the given ir file
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.ir.repository.RepositoryService#addTransformedFile(java.lang.Long, java.io.File)
 	 */
@@ -471,7 +436,7 @@ public class DefaultRepositoryService implements RepositoryService {
 			File f, 
 			String transformedFileName, 
 			String transformedFileExtension, 
-			TransformedFileType transformedFileType) {
+			TransformedFileType transformedFileType) throws edu.ur.file.IllegalFileSystemNameException {
 
         
 	    FileInfo info = this.createFileInfo(repository, f, 
@@ -588,11 +553,12 @@ public class DefaultRepositoryService implements RepositoryService {
 	
 	/**
 	 * Add the picture to the repository.
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.ir.repository.RepositoryService#addRepositoryPicture(java.lang.Long, java.io.File, java.lang.String, java.lang.String)
 	 */
 	public IrFile addRepositoryPicture(Repository repository, File f, String name, 
-			String description) {
+			String description) throws edu.ur.file.IllegalFileSystemNameException {
 		IrFile irFile = null;
 		try {
 			 irFile = createIrFile(repository, f, name, description);
@@ -626,23 +592,13 @@ public class DefaultRepositoryService implements RepositoryService {
 
 
 	/**
-	 * Create a file info object.
-	 * 
-	 * @see edu.ur.ir.repository.RepositoryService#createFileInfo(edu.ur.ir.repository.Repository, java.io.File, java.lang.String, java.lang.String)
-	 */
-	public FileInfo createFileInfo(Repository repository, File f, String fileName, String description) 
-	{
-		return createFileInfo(repository, f, fileName, null, description);
-	}
-	
-	
-	/**
 	 * Create the file info object in the specified repository.
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.ir.repository.RepositoryService#createFileInfo(edu.ur.ir.repository.Repository, java.io.File, java.lang.String)
 	 */
 	public FileInfo createFileInfo(Repository repository, File f,
-			String fileName) {
+			String fileName) throws edu.ur.file.IllegalFileSystemNameException {
 		
 		return createFileInfo(repository, f, fileName, null);
 	}
@@ -659,17 +615,20 @@ public class DefaultRepositoryService implements RepositoryService {
 	
 	/**
 	 * Add the file to the repository.
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.ir.repository.RepositoryService#addFileInfo(edu.ur.ir.repository.Repository, java.io.File, java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public FileInfo createFileInfo(Repository repository, File f, 
+	public FileInfo createFileInfo(Repository repository, 
+			File f, 
 			String fileName, 
-			String originalFileName, 
-			String description) 
+			String description) throws edu.ur.file.IllegalFileSystemNameException 
 	{
-		return fileServerService.addFile(repository.getFileDatabase(), f,
-				uniqueNameGenerator.getNextName(), getExtension(fileName, originalFileName), 
-				FilenameUtils.removeExtension(originalFileName));
+		FileInfo info = fileServerService.addFile(repository.getFileDatabase(), f,
+				uniqueNameGenerator.getNextName(), getExtension(fileName), 
+				FilenameUtils.removeExtension(fileName));
+		info.setDescription(description);
+		return info;
 	}
 	
 	/**
@@ -679,62 +638,34 @@ public class DefaultRepositoryService implements RepositoryService {
 	 * @param originalFileName - original file name
 	 * @return - the extension found without the "."
 	 */
-	private String getExtension(String fileName, String originalFileName)
+	private String getExtension( String originalFileName)
 	{
 		String extension = null;
-		
-		if( fileName == null )
+		if( originalFileName != null)
 		{
-			fileName = originalFileName;
-		}
-		else
-		{
-			extension = FilenameUtils.getExtension(fileName);
-		}
-		
-		
-		if( extension == null || extension.trim().equals(""))
-		{
-			if( originalFileName != null)
-			{
-			    extension = FilenameUtils.getExtension(originalFileName);
-			}
-		}
-		return extension;
+		    extension = FilenameUtils.getExtension(originalFileName);
+		}		
+	    return extension;
 	}
 	
 	
 	/**
 	 * Create an institutional repository file.
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.ir.repository.RepositoryService#createIrFile(edu.ur.ir.repository.Repository, java.io.File, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public IrFile createIrFile(Repository repository, 
 			File f, 
 			String fileName, 
-			String originalFileName, 
 			String description) throws IllegalFileSystemNameException
 	{
-	    FileInfo info = createFileInfo(repository, f, fileName, originalFileName, description);
-		IrFile irFile = new IrFile(info, FilenameUtils.removeExtension(fileName));
+	    FileInfo info = createFileInfo(repository, f, fileName, description);
+		IrFile irFile = new IrFile(info, info.getDisplayName());
 		irFileDAO.makePersistent(irFile);
-		irFile.setDescription(description);
 		return irFile;
 	}
 	
-	/**
-	 * Create an institutional repository file.
-	 * 
-	 * @see edu.ur.ir.repository.RepositoryService#createIrFile(edu.ur.ir.repository.Repository, java.io.File, java.lang.String, java.lang.String)
-	 */
-	public IrFile createIrFile(Repository repository, 
-			File f, 
-			String fileName, 
-			String description)  throws IllegalFileSystemNameException
-	{
-	    return createIrFile(repository, f, fileName, null, description);	
-	}
-
 	/**
 	 * Delete the specified ir file.  This also deletes the underlying file
 	 * information.
@@ -751,10 +682,11 @@ public class DefaultRepositoryService implements RepositoryService {
 	
 	/**
 	 * Create a file information object with an empty file.
+	 * @throws edu.ur.file.IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.ir.repository.RepositoryService#createFileInfo(edu.ur.ir.repository.Repository, java.lang.String)
 	 */
-	public FileInfo createFileInfo(Repository repository, String fileName) {
+	public FileInfo createFileInfo(Repository repository, String fileName) throws edu.ur.file.IllegalFileSystemNameException {
 		
 		String extension = null;
 		if( fileName != null )

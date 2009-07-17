@@ -27,10 +27,9 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.FileSystem;
 import edu.ur.ir.file.TemporaryFileCreator;
 import edu.ur.ir.file.TransformedFileType;
 import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
@@ -170,13 +169,11 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 				
 				PersonalFile pf = null;
 				
-				String theFileName = FilenameUtils.getName(fileFileName[index]);
-				
-				FileUploadInfo fileUploadInfo = new FileUploadInfo(theFileName, 
+				FileUploadInfo fileUploadInfo = new FileUploadInfo(fileFileName[index], 
 						userFileDescription[index]);
 				
 				// make sure we have a name if not do not upload!
-				if( theFileName != null && !theFileName.trim().equals(""))
+				if( fileFileName[index] != null && !fileFileName[index].trim().equals(""))
 				{
 				
 				    if( file[index].length() > 0)
@@ -186,9 +183,8 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 							pf = createNonEmptyFile( repository,
 									file[index],
 									user, 
-									theFileName,
-									userFileDescription[index],
-									fileFileName[index]);
+									fileFileName[index],
+									userFileDescription[index]);
 							addedFiles.add(pf);
 						} catch (DuplicateNameException e) {
 							
@@ -206,9 +202,8 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 					        {
 					            pf = userFileSystemService.addFileToUser(repository, 
 						        user, 
-						        theFileName,
-						        userFileDescription[index],
-						        fileFileName[index]);
+						        fileFileName[index],
+						        userFileDescription[index] );
 					            addedFiles.add(pf);
 					        }
 					        catch(DuplicateNameException e)
@@ -224,9 +219,8 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 					    	{
 					    	     pf = userFileSystemService.addFileToUser(repository,
 					    			 personalFolder,
-					    			 theFileName,
-									 userFileDescription[index],
-									 fileFileName[index]);
+					    			 fileFileName[index],
+									 userFileDescription[index]);
 					    	     addedFiles.add(pf);
 					    	}
 					    	catch(DuplicateNameException e)
@@ -253,7 +247,7 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		{
 			if( illegalFileNames.size() > 0 )
 			{
-			    char[] invalidCharacters = FileSystem.INVALID_CHARACTERS;
+			    char[] invalidCharacters = IllegalFileSystemNameException.INVALID_CHARACTERS;
 			    for(char ch : invalidCharacters )
 			    {
 				    illegalFileNameCharacters = illegalFileNameCharacters + " " + ch;
@@ -353,9 +347,8 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 			Repository repository,
 			File file, 
 			IrUser user, 
-			String aUserFileName, 
-			String description, 
-			String originalFileName) throws DuplicateNameException, IllegalFileSystemNameException
+			String fileName, 
+			String description) throws DuplicateNameException, IllegalFileSystemNameException
 	{
 		PersonalFile pf = null;
 		if( personalFolder != null)
@@ -363,18 +356,16 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		    pf = userFileSystemService.addFileToUser(repository, 
 			    file, 
 			    personalFolder,
-			    aUserFileName,
-			    description,
-			    originalFileName);
+			    fileName,
+			    description);
 		}
 		else
 		{
 			pf = userFileSystemService.addFileToUser(repository, 
 				file, 
 				user,
-				aUserFileName,
-				description,
-				originalFileName);
+				fileName,
+				description );
 		}
 		
 		IrFile irFile = pf.getVersionedFile().getCurrentVersion().getIrFile();

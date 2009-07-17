@@ -19,11 +19,11 @@ package edu.ur.ir.repository;
 import java.io.File;
 import java.util.List;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FolderInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TransformedFileType;
@@ -85,6 +85,7 @@ public interface RepositoryService {
 	 * @param descrption - description of the file.
 	 * 
 	 * @return - the created versioned file.
+	 * @throws edu.ur.ir.IllegalFileSystemNameException 
 	 */
 	public VersionedFile createVersionedFile(
 			IrUser user,
@@ -93,41 +94,6 @@ public interface RepositoryService {
 			String fileName, 
 			String description) throws IllegalFileSystemNameException;
 
-	/**
-	 * Create a versioned file in the repository.
-	 * 
-	 * @param repositoryId - id of the repository to create the versioned file in.
-	 * @param f - file to add
-	 * @param fileName - name user wishes to give the file.
-	 * @param descrption - description of the file.
-	 * @param original file name - original file name used to upload this file
-	 * and the user wishes to give the file a name that is different than the one on the file system
-	 * 
-	 * @return - the created versioned file.
-	 */
-	public VersionedFile createVersionedFile(
-			IrUser user,
-			Repository repository, 
-			File f, 
-			String fileName, 
-			String description,
-			String originalFileName) throws IllegalFileSystemNameException;
-	
-	/**
-	 * Create a versioned file in the repository and the file is empty.
-	 * 
-	 * @param user - user who owns the file
-	 * @param repositoryId - id of the repository to create the versioned file in.
-	 * @param fileName - name user wishes to give the file.
-	 * @param descrption - description of the file.
-	 * 
-	 * @return - the created versioned file.
-	 */
-	public VersionedFile createVersionedFile(
-			IrUser user,
-			Repository repository, 
-			String fileName, 
-			String description) throws IllegalFileSystemNameException;
 
 	/**
 	 * Create a versioned file in the repository and the specified file is empty.
@@ -135,17 +101,15 @@ public interface RepositoryService {
 	 * @param repositoryId - id of the repository to create the versioned file in.
 	 * @param fileName - name user wishes to give the file.
 	 * @param descrption - description of the file.
-	 * @param original file name - original file name used to upload this file
-	 * and the user wishes to give the file a name that is different than the one on the file system
 	 * 
 	 * @return - the created versioned file.
+	 * @throws edu.ur.ir.IllegalFileSystemNameException 
 	 */
 	public VersionedFile createVersionedFile(
 			IrUser user,
 			Repository repository, 
-			String fileName, 
-			String description,
-			String originalFileName) throws IllegalFileSystemNameException;
+			String fileName,
+			String description ) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Get the versioned file.
@@ -171,15 +135,16 @@ public interface RepositoryService {
 	 * @param repository - the repository to add the file to.
 	 * @param versionedFile - id of the versioned file to add the file to
 	 * @param f - file to add
-	 * @param originalFileName - original name of the file when uploaded or added to the system
+	 * @param fileName - name of the file when uploaded or added to the system
 	 * @param versionCreator - User creating the user
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 */
 	public void addNewFileToVersionedFile( Repository repository, 
 			VersionedFile versionedFile, 
 			File f, 
-			String originalFileName, 
-			IrUser versionCreator);
+			String fileName, 
+			IrUser versionCreator) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Adds a new version of a file to the repository.
@@ -187,17 +152,18 @@ public interface RepositoryService {
 	 * @param repository - the repository to add the file to.
 	 * @param versionedFile - id of the versioned file to add the file to
 	 * @param f - file to add
-	 * @param originalFileName - original name of the file when uploaded or added to the system
+	 * @param fileName - name of the file when uploaded or added to the system
 	 * @param description - description of the file / changes
 	 * @param versionCreator - User creating the user
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 */
 	public void addNewFileToVersionedFile( Repository repository, 
 			VersionedFile versionedFile, 
 			File f, 
-			String originalFileName, 
+			String fileName, 
 			String description,
-			IrUser versionCreator);
+			IrUser versionCreator) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Find a transformed file type by system code.
@@ -224,13 +190,14 @@ public interface RepositoryService {
 	 * @param transformedFileName - name to give the transformed file
 	 * @param transformedFileExtension - extension that should be used for the transformed file
 	 * @param transformedFileType - type of transformed file created.
+	 * @throws IllegalFileSystemNameException 
 	 */
 	public void addTransformedFile(Repository repository, 
 			IrFile irFile, 
 			File f, 
 			String transformedFileName, 
 			String transformedFileExtension, 
-			TransformedFileType transformedFileType);
+			TransformedFileType transformedFileType) throws IllegalFileSystemNameException;
     
 	/**
 	 * This locks a versioned file for editing.
@@ -282,11 +249,12 @@ public interface RepositoryService {
 	 * @param description - description to give the file
 	 * 
 	 * @return the created irFile storedin the system.
+	 * @throws IllegalFileSystemNameException 
 	 */
 	public IrFile addRepositoryPicture(Repository repository, 
 			File f, 
 			String name, 
-			String description);
+			String description) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Remove the picture from the specified repository.
@@ -307,43 +275,12 @@ public interface RepositoryService {
 	 * @param description - description of the file
 	 * 
 	 * @return - the file information
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public FileInfo createFileInfo(Repository repository, File f, 
-			String fileName, String description);
-	
-	/**
-	 * Add a file to the specified repository.
-	 * 
-	 * @param repository - repository to add the file to
-	 * @param f - file to add
-	 * @param fileName - name of the file
-	 * @param originalFileName - original name given to the file
-	 * @param description - description of the file
-	 * 
-	 * @return - the file information.
-	 */
-	public FileInfo createFileInfo(Repository repository, File f, 
-			String fileName, 
-			String originalFileName, 
-			String description);
-	
-	
-	/**
-	 * Create an institutional repository file.
-	 *  
-	 * @param repository - repository to create the institutional repository file.
-	 * @param f - file to add
-	 * @param fileName - name of the file
-	 * @param originalFileName - orginal name of the file - used if the file is uploaded
-	 * @param description - description given to the file
-	 * 
-	 * @return - the created ir file
-	 */
-	public IrFile createIrFile(Repository repository, 
+	public FileInfo createFileInfo(Repository repository, 
 			File f, 
 			String fileName, 
-			String originalFileName, 
-			String description)  throws IllegalFileSystemNameException;
+			String description) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Create the ir file.
@@ -354,6 +291,7 @@ public interface RepositoryService {
 	 * @param description - description of the ir file
 	 * 
 	 * @return - the created ir file.
+	 * @throws edu.ur.ir.IllegalFileSystemNameException 
 	 */
 	public IrFile createIrFile(Repository repository, 
 			File f, 
@@ -406,12 +344,13 @@ public interface RepositoryService {
 	 * @param fileName - name of the file
 	 * 
 	 * @return Created file info object with the specified information
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * 
 	 */	
 	public FileInfo createFileInfo (Repository repository, 
 			File f, 
-			String fileName);
+			String fileName) throws IllegalFileSystemNameException;
 	
 	
 	/**
@@ -421,9 +360,10 @@ public interface RepositoryService {
 	 * @param fileName - name to give the file on the file system.
 	 * 
 	 * @return information about the empty file.
+	 * @throws IllegalFileSystemNameException 
 	 */
 	public FileInfo createFileInfo(Repository repository, 
-			String fileName);
+			String fileName) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Deletes the folder information

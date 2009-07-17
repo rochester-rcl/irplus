@@ -24,10 +24,10 @@ import org.apache.log4j.Logger;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.person.Contributor;
@@ -142,7 +142,6 @@ public class ItemTest {
 		FileDatabase fd = repo.getFileDatabase();
 
 		FileInfo fileInfo1 = fd.addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
 
 		// create a collection
 		InstitutionalCollection col = repo.createInstitutionalCollection("colName");
@@ -190,7 +189,6 @@ public class ItemTest {
 		FileDatabase fd = repo.getFileDatabase();
 
 		FileInfo fileInfo1 = fd.addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
 
 		// create a collection
 		InstitutionalCollection col = repo.createInstitutionalCollection("colName");
@@ -331,9 +329,8 @@ public class ItemTest {
 		FileDatabase fd = repo.getFileDatabase();
 		
 		FileInfo fileInfo1 = fd.addFile(f, "testFile");
-		fileInfo1.setDisplayName("testDisplayName1");
 		
-		IrFile irFile = new IrFile(fileInfo1, "my test file");
+		IrFile irFile = new IrFile(fileInfo1,"my test file");
 
 
 		
@@ -427,7 +424,6 @@ public class ItemTest {
 		FileDatabase fd = repo.getFileDatabase();
 
 		FileInfo fileInfo1 = fd.addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
 
 		// create a collection
 		InstitutionalCollection col = repo.createInstitutionalCollection("colName");

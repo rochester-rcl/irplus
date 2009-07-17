@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.ir.news.NewsItem;
 import edu.ur.ir.news.NewsService;
@@ -101,8 +102,9 @@ public class ManageNews extends Pager implements  Preparable{
 	 * Method to create a new news item.
 	 * 
 	 * Create a new news item
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public String create()
+	public String create() throws IllegalFileSystemNameException
 	{
 		log.debug("creating a news item = " + newsItem.getName());
 		added = false;

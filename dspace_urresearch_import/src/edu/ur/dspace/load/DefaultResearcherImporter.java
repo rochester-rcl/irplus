@@ -47,7 +47,7 @@ import edu.ur.dspace.model.Link;
 import edu.ur.dspace.model.ResearcherFolderLink;
 import edu.ur.dspace.util.FileZipperUtil;
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TemporaryFileCreator;

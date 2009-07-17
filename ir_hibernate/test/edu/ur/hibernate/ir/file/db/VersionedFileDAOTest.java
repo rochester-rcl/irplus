@@ -30,6 +30,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServerService;
 import edu.ur.file.db.LocationAlreadyExistsException;
@@ -37,7 +38,6 @@ import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.FileCollaboratorDAO;
 import edu.ur.ir.file.IrFileDAO;
@@ -284,7 +284,7 @@ public class VersionedFileDAOTest {
 
 		// create the file in the file system.
 		FileInfo fileInfo2 = repo.getFileDatabase().addFile(f2, "newFile2");
-		fileInfo1.setDisplayName("displayName2");
+		fileInfo2.setDisplayName("displayName2");
 		
 		long fileSize2  = f2.length();
 		assert fileSize2 > 0 : "File 2 size shold be greater than 0";
@@ -407,6 +407,7 @@ public class VersionedFileDAOTest {
 		FileServerService fileServerService = repoHelper.getFileServerService();
 		FileInfo info = fileServerService.addFile(repo.getFileDatabase(), f,
 				uniqueNameGenerator.getNextName(), "txt");
+		info.setDisplayName("test file");
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);

@@ -27,11 +27,11 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.FileServerService;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;

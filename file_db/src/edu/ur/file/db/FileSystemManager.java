@@ -26,6 +26,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
+import edu.ur.file.IllegalFileSystemNameException;
+
 /**
  * Deals with creating and writing files
  * and folders to the file system.  Returns
@@ -214,8 +216,9 @@ public class FileSystemManager implements Serializable{
 	 * @param uniqueName name in the file system to save the file to.
 	 * 
 	 * @return the information of the created file.
+	 * @throws IllegalFileSystemNameException 
 	 */
-	static DefaultFileInfo addFile(TreeFolderInfo parent, File file, String uniqueName)
+	static DefaultFileInfo addFile(TreeFolderInfo parent, File file, String uniqueName) throws IllegalFileSystemNameException
 	{
 		DefaultFileInfo fileInfo = null;
 		
@@ -264,8 +267,9 @@ public class FileSystemManager implements Serializable{
 	 * @param uniqueName name in the file system to save the file to.
 	 * 
 	 * @return the information of the created file.
+	 * @throws IllegalFileSystemNameException 
 	 */
-	static DefaultFileInfo addFile(TreeFolderInfo parent, String uniqueName)
+	static DefaultFileInfo addFile(TreeFolderInfo parent, String uniqueName) throws IllegalFileSystemNameException
 	{
 		DefaultFileInfo fileInfo = null;
 		

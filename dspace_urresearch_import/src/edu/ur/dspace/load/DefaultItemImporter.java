@@ -56,8 +56,7 @@ import edu.ur.dspace.model.GroupPermission;
 import edu.ur.dspace.model.PermissionConstants;
 
 import edu.ur.dspace.util.FileZipperUtil;
-import edu.ur.ir.FileSystem;
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TemporaryFileCreator;
@@ -598,9 +597,9 @@ public class DefaultItemImporter implements ItemImporter{
 				    File f = FileZipperUtil.getZipEntry(zipFile, bfi.newFileName, "contentFile" );
 				    IrFile irFile = null;
 				    try {
-				    	for(int index = 0; index < FileSystem.INVALID_CHARACTERS.length; index++) {
-							if (bfi.originalFileName.contains(Character.toString(FileSystem.INVALID_CHARACTERS[index]))) {
-								bfi.originalFileName = bfi.originalFileName.replace(FileSystem.INVALID_CHARACTERS[index],'_');
+				    	for(int index = 0; index < IllegalFileSystemNameException.INVALID_CHARACTERS.length; index++) {
+							if (bfi.originalFileName.contains(Character.toString(IllegalFileSystemNameException.INVALID_CHARACTERS[index]))) {
+								bfi.originalFileName = bfi.originalFileName.replace(IllegalFileSystemNameException.INVALID_CHARACTERS[index],'_');
 							}
 						}
 				    	

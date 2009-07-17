@@ -22,6 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.DefaultFileInfo;
 import edu.ur.file.db.FileSystemManager;
 import edu.ur.file.db.TreeFolderInfo;
@@ -81,8 +82,9 @@ public class TreeFolderInfoTest {
 	/**
 	 * Test adding a file to the folder.
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public void testAddFileInfo() throws LocationAlreadyExistsException
+	public void testAddFileInfo() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		// this will create folders so we need to place them in directories
 		String filePath = properties.getProperty("FolderInfoTest.file.test");
@@ -204,8 +206,9 @@ public class TreeFolderInfoTest {
     /**
 	 * Test adding and creating files for a given folder.
      * @throws LocationAlreadyExistsException 
+     * @throws IllegalFileSystemNameException 
 	 */
-	public void testAddFiles() throws LocationAlreadyExistsException
+	public void testAddFiles() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");
@@ -262,8 +265,9 @@ public class TreeFolderInfoTest {
     /**
 	 * Test finding files recursively
      * @throws LocationAlreadyExistsException 
+     * @throws IllegalFileSystemNameException 
 	 */
-	public void testRecursiveFindFiles() throws LocationAlreadyExistsException
+	public void testRecursiveFindFiles() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");
@@ -295,8 +299,9 @@ public class TreeFolderInfoTest {
     /**
 	 * Test removing files where it must be done recursively using unique id.
      * @throws LocationAlreadyExistsException 
+     * @throws IllegalFileSystemNameException 
 	 */
-	public void testRecursiveRemoveFilesById() throws LocationAlreadyExistsException
+	public void testRecursiveRemoveFilesById() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");
@@ -327,8 +332,9 @@ public class TreeFolderInfoTest {
     /**
 	 * Test removing files where it must be done recursively using unique name.
      * @throws LocationAlreadyExistsException 
+     * @throws IllegalFileSystemNameException 
 	 */
-	public void testRecursiveRemoveFilesByUniqueName() throws LocationAlreadyExistsException
+	public void testRecursiveRemoveFilesByUniqueName() throws LocationAlreadyExistsException, IllegalFileSystemNameException
 	{
 		// directory to move the file to
 		String folderPath = properties.getProperty("FolderInfoTest.folder_path");

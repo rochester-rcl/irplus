@@ -15,6 +15,7 @@
 */
 package edu.ur.file.db;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.persistent.LongPersistentId;
 import edu.ur.persistent.PersistentVersioned;
 
@@ -51,16 +52,18 @@ Serializable {
 	 * should be unique across all files and folders in the database.
 	 * 
 	 * @return the file information
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public FileInfo addFile(File f, String uniqueFileName);
+	public FileInfo addFile(File f, String uniqueFileName) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Create a new empty file with the specified name.  
 	 * 
 	 * @param uniqueName - name of the file which is unique.
 	 * @return the file information.
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public FileInfo addFile(String uniqueName);
+	public FileInfo addFile(String uniqueName) throws IllegalFileSystemNameException;
 	
 	/**
 	 * Remove the file from the file database.

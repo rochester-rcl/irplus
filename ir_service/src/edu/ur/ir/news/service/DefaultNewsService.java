@@ -25,8 +25,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.news.NewsDAO;
 import edu.ur.ir.news.NewsItem;
@@ -160,11 +160,12 @@ public class DefaultNewsService  implements NewsService {
 
 	/**
 	 * Add the picture to the news.
+	 * @throws edu.ur.ir.IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.ir.news.NewsService#addNewsItemPicture(java.lang.Long, java.lang.Long, java.io.File, java.lang.String, java.lang.String)
 	 */
 	public IrFile addNewsItemPicture(NewsItem newsItem,Repository repository,
-			File f, String name, String description) {
+			File f, String name, String description) throws IllegalFileSystemNameException {
 		
 		IrFile irFile =  null;
 		try {
@@ -210,11 +211,13 @@ public class DefaultNewsService  implements NewsService {
 	
 	/**
 	 * Add the picture to the news.
+	 * @throws edu.ur.ir.IllegalFileSystemNameException 
+	 * @throws edu.ur.ir.IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.ir.news.NewsService#addNewsItemPicture(java.lang.Long, java.lang.Long, java.io.File, java.lang.String, java.lang.String)
 	 */
 	public IrFile addPrimaryNewsItemPicture(NewsItem newsItem,Repository repository,
-			File f, String name, String description) {
+			File f, String name, String description) throws IllegalFileSystemNameException{
 		
 		if(newsItem.getPrimaryPicture() != null)
 		{

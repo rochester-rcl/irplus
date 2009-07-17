@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.checksum.ChecksumCalculator;
 import edu.ur.file.checksum.ChecksumService;
 import edu.ur.file.db.DefaultDatabaseFileStoreStrategy;
@@ -168,10 +169,11 @@ public class DefaultFileServerService implements FileServerService{
 
 	/**
 	 * Adds a file to the specified database.
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.file.db.service.FileServerService#addFile(java.lang.Long, java.io.File, java.lang.String)
 	 */
-	public DefaultFileInfo addFile(FileDatabase fileDatabase, File f, String uniqueName, String extension) {
+	public DefaultFileInfo addFile(FileDatabase fileDatabase, File f, String uniqueName, String extension) throws IllegalFileSystemNameException {
 		return addFile(fileDatabase, f, uniqueName, extension, null);
 	}
 
@@ -522,11 +524,12 @@ public class DefaultFileServerService implements FileServerService{
 
 	/**
 	 * Add a file to the specified file database.
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.file.db.FileServerService#addFile(java.lang.Long, java.io.File, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public DefaultFileInfo addFile(FileDatabase fileDatabase, File f, String uniqueName,
-			String extension, String displayName) {
+			String extension, String displayName) throws IllegalFileSystemNameException {
 		DefaultFileDatabase defaultFileDatabase = (DefaultFileDatabase)fileDatabase;
 		
 		
@@ -578,22 +581,24 @@ public class DefaultFileServerService implements FileServerService{
 	
 	/**
 	 * Create an empty file in the specified file database.
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.file.db.FileServerService#createEmptyFile(java.lang.Long, java.lang.String, java.lang.String)
 	 */
 	public DefaultFileInfo createEmptyFile(FileDatabase fileDatabase, String uniqueName,
-			String extension) {
+			String extension) throws IllegalFileSystemNameException {
 		return createEmptyFile(fileDatabase, uniqueName, extension, null);
 	}
 
 	
 	/**
 	 * Create an empty file in the specified file database.
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.file.db.FileServerService#createEmptyFile(java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public DefaultFileInfo createEmptyFile(FileDatabase fileDatabase, String uniqueName,
-			String extension, String displayName) {
+			String extension, String displayName) throws IllegalFileSystemNameException {
 		DefaultFileDatabase defaultFileDatabase = (DefaultFileDatabase)fileDatabase;
 		DefaultFileInfo info = null;
 		

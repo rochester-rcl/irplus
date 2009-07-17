@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.util.List;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FileSystem;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.repository.Repository;
@@ -165,48 +165,6 @@ public interface UserFileSystemService {
     		String fileName, 
     		String description )throws DuplicateNameException, IllegalFileSystemNameException;
     
-    
-    /**
-     * Create a personal versioned file in the system with the specified file for the
-     * given personal folder. If the file name is null, the original file name is used.
-     * 
-     * @param repositoryId - repository to add the file to.
-     * @param f - file to add
-     * @param personalFolder - personal folder to add the file to.  
-     * @param fileName - The name to give the file.
-     * @param description - description of the file.
-     * @param originalFileName - original file name uploaded from the file system
-     * 
-     * @return the created personal file
-     */
-    public PersonalFile addFileToUser(Repository repository, 
-    		File f, 
-    		PersonalFolder folder, 
-    		String fileName, 
-    		String description, 
-    		String originalFileName)throws DuplicateNameException, IllegalFileSystemNameException;
-    
-    /**
-     * Create a personal versioned file in the system with the specified file for the
-     * given user. If the file name is null, the original file name is used. 
-     * This is created at the root level (added to the user)
-     * 
-     * @param repositoryId - repository to add the file to.
-     * @param f - file to add
-     * @param user - user to add the file to
-     * @param fileName - The name to give the file.
-     * @param description - description of the file.
-     * @param originalFileName - original file name uploaded from the file system
-     * 
-     * @return the created personal file
-     */
-    public PersonalFile addFileToUser(Repository repository, 
-    		File f, 
-    		IrUser user, 
-    		String fileName, 
-    		String description, 
-    		String originalFileName)throws DuplicateNameException, IllegalFileSystemNameException;
-    
     /**
      * Create a personal versioned file in the system with an empty file for the
      * given user. 
@@ -238,43 +196,6 @@ public interface UserFileSystemService {
     		IrUser user, 
     		String fileName, 
     		String description )throws DuplicateNameException, IllegalFileSystemNameException;
-    
-    
-    /**
-     * Create a personal versioned file in the system with  an empty file for the
-     * given user. If the file name is null, the original file name is used.
-     * 
-     * @param repository - repository to add the file to.
-     * @param personalFolder - folder to add the file to.  
-     * @param fileName - The name to give the file.
-     * @param description - description of the file.
-     * @param originalFileName - original file name uploaded from the file system
-     * 
-     * @return the created personal file
-     */
-    public PersonalFile addFileToUser(Repository repository, 
-    		PersonalFolder personalFolder, 
-    		String fileName, 
-    		String description, 
-    		String originalFileName)throws DuplicateNameException, IllegalFileSystemNameException;
-    
-    /**
-     * Create a personal versioned file in the system with  an empty file for the
-     * given user. If the file name is null, the original file name is used.
-     * 
-     * @param repository - repository to add the file to.
-     * @param user - user to add the file to 
-     * @param fileName - The name to give the file.
-     * @param description - description of the file.
-     * @param originalFileName - original file name uploaded from the file system
-     * 
-     * @return the created personal file
-     */
-    public PersonalFile addFileToUser(Repository repository, 
-    		IrUser user, 
-    		String fileName, 
-    		String description, 
-    		String originalFileName)throws DuplicateNameException, IllegalFileSystemNameException;
     
     /**
      * Create a new personal folder with the given parent folder as the parent

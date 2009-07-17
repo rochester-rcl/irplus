@@ -41,9 +41,9 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.FileVersion;

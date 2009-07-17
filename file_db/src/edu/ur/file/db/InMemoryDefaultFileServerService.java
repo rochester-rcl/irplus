@@ -22,6 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import edu.ur.file.IllegalFileSystemNameException;
+
 /**
  * This is an in memeory file server service.  Information is not saved to a database. Files
  * are persisted to the file system and must be deleted if they are not supposed to remain on
@@ -66,19 +68,21 @@ public class InMemoryDefaultFileServerService implements FileServerService{
 	}
 	/**
 	 * Add a file to the file system 
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.file.db.FileServerService#addFile(java.lang.Long, java.io.File, java.lang.String, java.lang.String)
 	 */
-	public FileInfo addFile(FileDatabase fileDatabase, File f, String uniqueName, String extension) {
+	public FileInfo addFile(FileDatabase fileDatabase, File f, String uniqueName, String extension) throws IllegalFileSystemNameException {
 		return addFile(fileDatabase, f, uniqueName, extension, null);
 	}
 
 	/**
 	 * Add a file to the file system
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.file.db.FileServerService#addFile(java.lang.Long, java.io.File, java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public FileInfo addFile(FileDatabase fileDatabase, File f, String uniqueName, String extension, String displayName) {
+	public FileInfo addFile(FileDatabase fileDatabase, File f, String uniqueName, String extension, String displayName) throws IllegalFileSystemNameException {
 		FileInfo info = null;
 		
 		if(fileDatabase == null)

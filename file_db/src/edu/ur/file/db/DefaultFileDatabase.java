@@ -27,6 +27,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.persistent.BasePersistent;
 
 /**
@@ -429,10 +430,11 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 	 * Save the file to the file system.  If the unique file name has
 	 * an extension, the extension will be removed.  The extension
 	 * must be added to the file info object.
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.file.db.FileDatabase#addFile(java.io.File, java.lang.String)
 	 */
-	public DefaultFileInfo addFile(File f, String uniqueFileName) {
+	public DefaultFileInfo addFile(File f, String uniqueFileName) throws IllegalFileSystemNameException {
 		return currentFileFolder.createFileInfo(f, uniqueFileName);
 	}
 	
@@ -441,10 +443,11 @@ public class DefaultFileDatabase extends BasePersistent implements FileDatabase
 	 * file system. If the unique file name has
 	 * an extension, the extension will be removed.  The extension
 	 * must be added to the file info object.
+	 * @throws IllegalFileSystemNameException 
 	 * 
 	 * @see edu.ur.file.db.FileDatabase#addFile(java.lang.String)
 	 */
-	public DefaultFileInfo addFile(String uniqueFileName)
+	public DefaultFileInfo addFile(String uniqueFileName) throws IllegalFileSystemNameException
 	{
 		return currentFileFolder.createFileInfo(uniqueFileName);
 	}

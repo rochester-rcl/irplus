@@ -31,12 +31,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.IllegalFileSystemNameException;
 import edu.ur.ir.file.FileVersionDAO;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.IrFileDAO;
@@ -245,10 +245,7 @@ public class ItemDAOTest {
 		File f = testUtil.creatFile(directory, "testFile", 
 		"Hello  - irFile This is text in a file - ItemDAO test");
 		
-		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
-		
-		
+		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f, "myIrFile");
 		GenericItem item = new GenericItem("item1");
 
 		UserEmail userEmail = new UserEmail("email");
@@ -334,8 +331,7 @@ public class ItemDAOTest {
 		File f = testUtil.creatFile(directory, "testFile", 
 		"Hello  - irFile This is text in a file - ItemDAO test");
 		
-		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f, "newFile1");
-		fileInfo1.setDisplayName("displayName1");
+		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f, "myIrFile");
 		GenericItemDAO itemDAO = (GenericItemDAO) ctx.getBean("itemDAO");
 		
 		GenericItem item = new GenericItem("item1");

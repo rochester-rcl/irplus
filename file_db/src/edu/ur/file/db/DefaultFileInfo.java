@@ -20,10 +20,12 @@ import java.net.URI;
 
 import org.apache.commons.io.FilenameUtils;
 
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.checksum.ChecksumCalculator;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Collections;
 
@@ -123,9 +125,15 @@ public class DefaultFileInfo implements FileInfo {
 	 * file name has an extension it is removed
 	 * 
 	 * @param fileName
+	 * @throws IllegalFileSystemNameException 
 	 */
-	void setName(String name)
+	void setName(String name) throws IllegalFileSystemNameException
 	{
+		List<Character> illegalCharacters = IllegalFileSystemNameException.nameHasIllegalCharacerter(name);
+		if( illegalCharacters.size() > 0 )
+		{
+			throw new IllegalFileSystemNameException(illegalCharacters, name);
+		}
 		this.name = FilenameUtils.removeExtension(name);
 	}
 	
@@ -218,8 +226,14 @@ public class DefaultFileInfo implements FileInfo {
 
 	/**
 	 * @param displayName The displayName to set.
+	 * @throws IllegalFileSystemNameException 
 	 */
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(String displayName) throws IllegalFileSystemNameException {
+		List<Character> illegalCharacters = IllegalFileSystemNameException.nameHasIllegalCharacerter(name);
+		if( illegalCharacters.size() > 0 )
+		{
+			throw new IllegalFileSystemNameException(illegalCharacters, name);
+		}
 		this.displayName = displayName;
 	}
 
