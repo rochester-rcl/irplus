@@ -23,6 +23,15 @@
 		     -->
 	<property name="run.tests" value="true"/>
 	
+	<!-- custom build directory this SHOULD be created ouside the project
+	     this will allow users to have their own repository of custom 
+	     source code  -->
+	<property name="custom.build.dir" value="../../ir_plus_custom/"/>
+	
+	<!-- uncomment this to build a custom site - this is only needed if you have
+	modified jsp/source files
+	-->
+	<property name="build.custom" value="true"/>
 	
 	<!-- pdf box jar directory -->
 	<property name="pdfbox.lib.dir" value="../pdfbox-jars"/> 
