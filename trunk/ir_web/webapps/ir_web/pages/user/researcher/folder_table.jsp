@@ -118,7 +118,7 @@
 	                         	<ir:fileTypeImg cssClass="tableImg" irFile="${fileSystemObject.irFile}"/>
 	                         </c:if>
 							 <c:if test="${fileSystemObject.fileSystemType.type == 'researcherPublication'}">
-		                    	<span class="packageBtnImg">&nbsp;</span>
+		                    	<span class="scriptImg">&nbsp;</span>
 		                	 </c:if>		  
 		                	
 		                	 <c:if test="${fileSystemObject.fileSystemType.type == 'researcherLink'}">

@@ -79,7 +79,7 @@
 				        </c:forEach>
 				        <c:forEach items="${publicationsToMove}" var="publication">
 					        <tr>
-						        <td><span class="packageBtnImg">&nbsp;</span>${publication.name}</td>
+						        <td><span class="scriptImg">&nbsp;</span>${publication.name}</td>
 					        </tr>
 				        </c:forEach>
 				        <c:forEach items="${linksToMove}" var="link">
@@ -159,7 +159,7 @@
 					       </c:if>
 					       <c:if test="${fileSystemObject.fileSystemType.type == 'researcherPublication'}">
 			           	       <c:if test="${!ir:isResearcherObjectToBeMoved(publicationsToMove, fileSystemObject)}">
-						            <td><span class="packageBtnImg">&nbsp;</span>${fileSystemObject.name}</td>
+						            <td><span class="scriptImg">&nbsp;</span>${fileSystemObject.name}</td>
                                </c:if>
 			           	       <c:if test="${ir:isResearcherObjectToBeMoved(publicationsToMove, fileSystemObject)}">
 						            <td class="errorMessage"><span class="packageBtnImg">&nbsp;</span>${fileSystemObject.name}[Moving]</td>

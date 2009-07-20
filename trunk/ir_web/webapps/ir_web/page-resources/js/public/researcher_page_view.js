@@ -178,7 +178,7 @@ YAHOO.ur.researcher.page = {
 				
 				var publicationObj = new Object;
 
-				publicationObj.html = "<span class=\"packageBtnImg\">&nbsp;</span> <a href=\"" + basePath + "researcherPublicationView.action?researcherPublicationId=" + 
+				publicationObj.html = "<span class=\"scriptImg\">&nbsp;</span> <a href=\"" + basePath + "researcherPublicationView.action?researcherPublicationId=" + 
 				    node.publications[i].id +"\">" 
 							+ node.publications[i].name + "</a>";
 							
