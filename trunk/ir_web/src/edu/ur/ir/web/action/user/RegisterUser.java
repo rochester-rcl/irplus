@@ -18,6 +18,7 @@
 package edu.ur.ir.web.action.user;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -47,6 +48,7 @@ import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.simple.type.AscendingNameComparator;
 import edu.ur.util.TokenGenerator;
 
 /**
@@ -60,6 +62,9 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 
 	/** Eclipse generated Id */
 	private static final long serialVersionUID = -7094483818911517181L;
+	
+	/** Comparator for name based classes */
+	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 
 	/**  Logger for add user action */
 	private static final Logger log = Logger.getLogger(RegisterUser.class);
@@ -110,13 +115,13 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	private UserEmail defaultEmail;
 	
 	/** List of all affiliations */
-	private List<Affiliation> affiliations;
+	//private List<Affiliation> affiliations;
 
 	/** Id of the affiliation selected */
 	private Long affiliationId;
 
 	/** List of all departments */
-	private List<Department> departments;
+	//private List<Department> departments;
 
 	/** Id of the department selected */
 	private Long[] departmentIds;
@@ -151,8 +156,6 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		if ((token != null) && (token.length() > 0)) {
 			inviteInfo = inviteUserService.findInviteInfoByToken(token);
 			defaultEmail = new UserEmail(inviteInfo.getEmail());
-			affiliations = affiliationService.getAllAffiliations();
-			departments = departmentService.getAllDepartments();
 		}
 		return SUCCESS;
 	}
@@ -162,8 +165,6 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	 */
 	public String viewUserRegistration() {
 		log.debug("viewUserRegistration called");
-		affiliations = affiliationService.getAllAffiliations();
-		departments = departmentService.getAllDepartments();
 		return SUCCESS;
 	}
 
@@ -176,8 +177,6 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	public String registerUser() throws NoIndexFoundException, FileSharingException
 	{
 		log.debug("creating a user = " + irUser.getUsername());
-		affiliations = affiliationService.getAllAffiliations();
-		departments = departmentService.getAllDepartments();
 		
 		String returnVal = SUCCESS;
 		
@@ -289,8 +288,6 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	public void prepare() {
 		log.debug("Prepare user Id =" + userId);
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		affiliations = affiliationService.getAllAffiliations();
-		departments = departmentService.getAllDepartments();
 	}
 
 
@@ -460,17 +457,12 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	 * @return
 	 */
 	public List<Affiliation> getAffiliations() {
-		return affiliations;
+		List<Affiliation> affiliations = affiliationService.getAllAffiliations();
+		Collections.sort(affiliations, nameComparator);
+		return affiliations ;
 	}
 
-	/**
-	 * Set affiliations
-	 * 
-	 * @param affiliations
-	 */
-	public void setAffiliations(List<Affiliation> affiliations) {
-		this.affiliations = affiliations;
-	}
+
 
 	/**
 	 * Get service class for affiliation
@@ -517,11 +509,10 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	}
 
 	public List<Department> getDepartments() {
-		return departments;
-	}
-
-	public void setDepartments(List<Department> departments) {
-		this.departments = departments;
+		List<Department> departments;
+		departments = departmentService.getAllDepartments();
+		Collections.sort(departments, nameComparator);
+		return departments ;
 	}
 
 	public Long[] getDepartmentIds() {
