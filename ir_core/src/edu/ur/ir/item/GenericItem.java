@@ -1793,7 +1793,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 */
 	public String getFullName()
 	{
-		if( leadingNameArticles != null )
+		if( leadingNameArticles != null && !leadingNameArticles.trim().equals(""))
 		{
 			return  leadingNameArticles + " " + name;
 		}
