@@ -176,9 +176,16 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		List<Long> listItemIds = new LinkedList<Long>();
 		for( Long id : itemIds)
 		{
-			listPublicationIds.add(id);
+			log.debug(" adding item id " + id);
+			listItemIds.add(id);
 		}
+		
 		itemsToMove = researcherFileSystemService.getResearcherInstitutionalItems(researcherId, listItemIds);
+		log.debug("items size = " + itemsToMove.size() );
+		for( ResearcherInstitutionalItem i : itemsToMove )
+		{
+			log.debug("Found item " + i);
+		}
 		
 		if( !destinationId.equals(ResearcherFileSystemService.USE_RESEARCHER_AS_ROOT))
 		{
@@ -294,7 +301,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		List<Long> listItemIds = new LinkedList<Long>();
 		for( Long id : itemIds)
 		{
-			listPublicationIds.add(id);
+			listItemIds.add(id);
 		}
 		itemsToMove = researcherFileSystemService.getResearcherInstitutionalItems(researcherId, listItemIds);
 		

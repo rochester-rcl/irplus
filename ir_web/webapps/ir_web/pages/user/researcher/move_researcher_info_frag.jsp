@@ -22,7 +22,8 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
  
-    <c:url var="cancelUrl" value="/user/getResearcherFileSystem.action">
+    <c:url var="cancelUrl" value="/user/viewResearcher.action">
+        <c:param name="showFoldersTab" value="true"/>
         <c:param name="parentFolderId" value="${parentFolderId}"/>
         <c:param name="researcherId" value="${researcherId}"/>
     </c:url>

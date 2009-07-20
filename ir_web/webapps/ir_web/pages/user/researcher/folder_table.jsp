@@ -100,7 +100,7 @@
 		                     </c:if>
 		                     
 		                     <c:if test="${fileSystemObject.fileSystemType.type == 'researcherInstitutionalItem'}">
-		                         <input type="checkbox"  name="institutionalItemIds" id="item_checkbox_${fileSystemObject.id}" 
+		                         <input type="checkbox"  name="itemIds" id="item_checkbox_${fileSystemObject.id}" 
 		                             value="${fileSystemObject.id}"/>
 		                     </c:if>		                     
                         </urstb:td>                    
