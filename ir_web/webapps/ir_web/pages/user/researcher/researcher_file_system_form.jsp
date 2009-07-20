@@ -63,7 +63,7 @@
 	                 </c:if>
 
 	                 <c:if test="${fileSystemObject.fileSystemType.type == 'researcherPublication'}">
-	                    <span class="packageBtnImg">&nbsp;</span><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText>
+	                    <span class="scriptImg">&nbsp;</span><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText>
 	                 </c:if>	 
 
                 	<c:if test="${fileSystemObject.fileSystemType.type == 'researcherLink'}">

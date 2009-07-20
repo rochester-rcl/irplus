@@ -59,7 +59,7 @@
 	                 </c:if>
 
 	                 <c:if test="${researcherItemFileSystemVersion.researcherFileSystem.fileSystemType.type == 'researcherPublication'}">
-	                    <span class="packageBtnImg">&nbsp;</span><ur:maxText numChars="50" text="${researcherItemFileSystemVersion.researcherFileSystem.name}"></ur:maxText>
+	                    <span class="scriptImg">&nbsp;</span><ur:maxText numChars="50" text="${researcherItemFileSystemVersion.researcherFileSystem.name}"></ur:maxText>
 	                    <select id="item_version" name="version_${researcherItemFileSystemVersion.researcherFileSystem.id}" onChange="javascript:YAHOO.ur.researcher.publications.changePersonalPublicationVersion(this, '${researcherItemFileSystemVersion.researcherFileSystem.id}');" /> 
 				      	   
 					      		<c:forEach var="version" items="${researcherItemFileSystemVersion.versionedItem.itemVersions}" >

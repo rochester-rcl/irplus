@@ -323,7 +323,7 @@
 	                                  <button class="ur_button" id="showAddPublication"
 	                                  onmouseover="this.className='ur_buttonover';"
  		                              onmouseout="this.className='ur_button';"
- 		                              onclick="javascript:YAHOO.ur.edit.researcher.viewAddPublications();"><span class="packageAddBtnImg">&nbsp;</span>Add Publication</button>
+ 		                              onclick="javascript:YAHOO.ur.edit.researcher.viewAddPublications();"><span class="scriptImg">&nbsp;</span>Add Publication</button>
 	                               
 	                                  <button class="ur_button"
 	                                  onmouseover="this.className='ur_buttonover';"
@@ -332,7 +332,7 @@
 	                              
 	                                  <button class="ur_button" id="showDeleteFolder"
 	                                  onmouseover="this.className='ur_buttonover';"
- 		                              onmouseout="this.className='ur_button';"><span class="deleteBtnImg">&nbsp;</span>Delete</button>
+ 		                              onmouseout="this.className='ur_button';"><span class="deleteBtnImg">&nbsp;</span>Remove</button>
    
 	                      </div>
 	                      

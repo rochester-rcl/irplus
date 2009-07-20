@@ -71,12 +71,13 @@
             <c:import url="/inc/header.jsp"/>
             
             <h3> Add publications to Researcher </h3>
-            
+          
             <button class="ur_button" 
                     onmouseover="this.className='ur_buttonover';"
                     onmouseout="this.className='ur_button';"
                     onclick="javascript:YAHOO.ur.researcher.publications.viewResearcherFolders();">Back to Folders</button>
-            
+              <br/>
+              <br/>
             <!--  this is the body region of the page -->
             <div id="bd">
             
