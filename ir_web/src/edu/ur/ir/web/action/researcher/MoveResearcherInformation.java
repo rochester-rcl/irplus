@@ -133,7 +133,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		
 		if( researcher == null || !researcher.getUser().getId().equals(userId) || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE) )
 		{
-			// user cannot move file if they are not a researcher or messing with someone elses researcher page
+			// user cannot move file if they are not a researcher or messing with someone else's researcher page
 	    	return "accessDenied";
 		}
 
@@ -192,7 +192,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		    destination = 
 		    	researcherFileSystemService.getResearcherFolder(destinationId, false);
 		    
-		    if( !destination.getResearcher().getUser().getId().equals(researcherId))
+		    if( !destination.getResearcher().getUser().getId().equals(userId))
 		    {
 		    	// user cannot move file into a destination that they do not own
 		    	return "accessDenied";
@@ -310,7 +310,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		{
 		    destination = 
 		    	researcherFileSystemService.getResearcherFolder(destinationId, false);
-		    if( !destination.getResearcher().getUser().getId().equals(researcherId))
+		    if( !destination.getResearcher().getUser().getId().equals(userId))
 		    {
 		    	// user cannot move file into a destination that they do not own
 		    	return "accessDenied";

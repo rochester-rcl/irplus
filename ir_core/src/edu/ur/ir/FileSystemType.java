@@ -53,7 +53,7 @@ public class FileSystemType implements Serializable, Orderable{
 	/** The type of object */
 	private String type;
 	
-	/**  ordering for type */
+	/**  ordering for type - this allows sorting to occur in a specified order*/
 	private int order;
 	
 	/**

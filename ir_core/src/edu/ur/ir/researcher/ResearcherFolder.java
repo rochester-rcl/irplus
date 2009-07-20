@@ -1041,9 +1041,9 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 
 			// Put institutional items
 			JSONArray jsonInstitutionalItems = new JSONArray();
-			List <ResearcherInstitutionalItem> sortedInstitutionalitems = new LinkedList<ResearcherInstitutionalItem> (institutionalItems);
-			Collections.sort( sortedInstitutionalitems , new AscendingNameComparator());
-			for(ResearcherInstitutionalItem i: sortedInstitutionalitems) {
+			List <ResearcherInstitutionalItem> sortedInstitutionalItems = new LinkedList<ResearcherInstitutionalItem> (institutionalItems);
+			Collections.sort( sortedInstitutionalItems , new AscendingNameComparator());
+			for(ResearcherInstitutionalItem i: sortedInstitutionalItems) {
 				jsonInstitutionalItems.add(i.toJSONObject());
 			}
 
