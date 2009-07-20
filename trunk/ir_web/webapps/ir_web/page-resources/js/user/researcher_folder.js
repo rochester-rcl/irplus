@@ -498,7 +498,7 @@ YAHOO.ur.researcher.folder = {
 	        !urUtil.checkForNoSelections(document.myFolders.fileIds) &&
 	        !urUtil.checkForNoSelections(document.myFolders.publicationIds)&&
 	        !urUtil.checkForNoSelections(document.myFolders.linkIds)&&
-	        !urUtil.checkForNoSelections(document.myFolders.institutionalItemIds)
+	        !urUtil.checkForNoSelections(document.myFolders.itemIds)
 	        )
 		{
 			 alert('Please select at least one checkbox of item you wish to move.');

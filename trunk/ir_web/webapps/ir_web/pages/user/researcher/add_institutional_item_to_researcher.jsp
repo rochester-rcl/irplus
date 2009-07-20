@@ -72,7 +72,7 @@
             <!--  this is the header of the page -->
             <c:import url="/inc/header.jsp"/>
             
-            <h2> Add Institutional item to Researcher </h2>
+            <h3> Add Institutional item to Researcher </h3>
             
             <!--  this is the body region of the page -->
             <div id="bd">

@@ -27,7 +27,7 @@
 <fmt:setBundle basename="messages"/>
 <html>
   <head>
-    <title> Edit Researcher: ${researcher.title}</title>
+    <title> Edit Researcher:&nbsp;${researcher.user.firstName}&nbsp;${researcher.user.lastName}</title>
     <c:import url="/inc/meta-frag.jsp"/>
         
     <!-- Core + Skin CSS -->
