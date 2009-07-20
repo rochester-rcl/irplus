@@ -83,6 +83,7 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 	/** list of publication ids to perform actions on*/
 	private Long[] publicationIds;
 	
+
 	/** list of link ids to perform actions on*/
 	private Long[] linkIds;
 	
@@ -110,7 +111,7 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 	private String folderNameSort = "none";
 	
 	/** List of institutional item ids to perform action on */
-	private Long[] institutionalItemIds;
+	private Long[] itemIds;
 	
 	/**
 	 * Get the researcher table
@@ -196,12 +197,12 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 			}
 		}
 		
-		if(institutionalItemIds != null)
+		if(itemIds != null)
 		{
-			for(int index = 0; index < institutionalItemIds.length; index++)
+			for(int index = 0; index < itemIds.length; index++)
 			{
-				log.debug("Deleting Institutional Item with id " + institutionalItemIds[index]);
-				ResearcherInstitutionalItem ri = researcherFileSystemService.getResearcherInstitutionalItem(institutionalItemIds[index], false);
+				log.debug("Deleting Institutional Item with id " + itemIds[index]);
+				ResearcherInstitutionalItem ri = researcherFileSystemService.getResearcherInstitutionalItem(itemIds[index], false);
 				if( !ri.getResearcher().getUser().getId().equals(userId))
 				{
 					return "accessDenied";
@@ -427,12 +428,12 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 		this.folderNameSort = folderNameSort;
 	}
 
-	public Long[] getInstitutionalItemIds() {
-		return institutionalItemIds;
+	public Long[] getItemIds() {
+		return itemIds;
 	}
 
-	public void setInstitutionalItemIds(Long[] institutionalItemIds) {
-		this.institutionalItemIds = institutionalItemIds;
+	public void setItemIds(Long[] institutionalItemIds) {
+		this.itemIds = institutionalItemIds;
 	}
 
 	public void setUserId(Long userId) {
@@ -447,6 +448,5 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 			ResearcherFileSystemService researcherFileSystemService) {
 		this.researcherFileSystemService = researcherFileSystemService;
 	}
-
 
 }

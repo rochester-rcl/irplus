@@ -295,7 +295,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+		institutionalItemIndexService.deleteItem(institutionalItem.getId(), new File(repo.getInstitutionalItemIndexFolder()));
 	
 		tm.commit(ts);
 		
@@ -556,7 +556,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+		institutionalItemIndexService.deleteItem(institutionalItem.getId(), new File(repo.getInstitutionalItemIndexFolder()));
 	
 		tm.commit(ts);
 		
@@ -874,7 +874,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+		institutionalItemIndexService.deleteItem(institutionalItem.getId(), new File(repo.getInstitutionalItemIndexFolder()));
 	
 		tm.commit(ts);
 		

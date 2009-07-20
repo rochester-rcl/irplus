@@ -70,17 +70,8 @@ public interface InstitutionalItemIndexService {
 	 * 
 	 * @param institutionalItem
 	 */
-	public void deleteItem(InstitutionalItem institutionalItem, File insitutionalItemIndex);
+	public void deleteItem(Long id, File insitutionalItemIndex);
 	
-	/**
-	 * Delete all items for the specified institutional collection.
-	 * 
-	 * @param institutionalCollection
-	 * @param institutionalItemIndex
-	 */
-	public void deleteItemsForCollection(InstitutionalCollection institutionalCollection, File institutionalItemIndex);
-
-
 	/**
 	 * Optimize the index.
 	 * 

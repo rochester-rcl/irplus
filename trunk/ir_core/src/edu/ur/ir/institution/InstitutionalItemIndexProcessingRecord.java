@@ -24,7 +24,7 @@ import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.persistent.BasePersistent;
 
 /**
- * Processing record for an institutional item
+ * Index processing record for an institutional item
  * 
  * @author Nathan Sarr
  *

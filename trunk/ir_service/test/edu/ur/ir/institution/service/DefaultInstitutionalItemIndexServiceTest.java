@@ -19,6 +19,7 @@ package edu.ur.ir.institution.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -41,9 +42,13 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemIndexService;
 import edu.ur.ir.institution.InstitutionalItemSearchService;
 import edu.ur.ir.institution.InstitutionalItemService;
@@ -162,7 +167,13 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	InstitutionalItemSearchService institutionalItemSearchService = 
 		(InstitutionalItemSearchService) ctx.getBean("institutionalItemSearchService");
 	
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService = 
+		(InstitutionalItemIndexProcessingRecordService) ctx.getBean("institutionalItemIndexProcessingRecordService");
 	
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService = 
+		(IndexProcessingTypeService) ctx.getBean("indexProcessingTypeService");
 
 	
 	/**
@@ -412,7 +423,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		institutionalItemIndexService.deleteItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+		institutionalItemIndexService.deleteItem(institutionalItem.getId(), new File(repo.getInstitutionalItemIndexFolder()));
 		
 		try {
 			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder());
@@ -465,6 +476,10 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
+		
+		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+		indexProcessingTypeService.save(deleteProcessingType);
+
 		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
 		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
 		// save the repository
@@ -672,12 +687,22 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		institutionalItemIndexService.deleteItemsForCollection( collection, new File(collection.getRepository().getInstitutionalItemIndexFolder()) );
-		
+		institutionalItemIndexProcessingRecordService.processItemsInCollection(collection, deleteProcessingType);
 		tm.commit(ts);
 		
 		
 		ts = tm.getTransaction(td);
+		List <InstitutionalItemIndexProcessingRecord> records  = institutionalItemIndexProcessingRecordService.getAllOrderByItemIdUpdatedDate();		
+		for( InstitutionalItemIndexProcessingRecord record : records )
+		{
+		    InstitutionalItem i = institutionalItemService.getInstitutionalItem(record.getInstitutionalItemId(), false);
+		    if( record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.DELETE))
+		    {
+		        institutionalItemIndexService.deleteItem(i.getId(), new File(repo.getInstitutionalItemIndexFolder()));
+		        institutionalItemIndexProcessingRecordService.delete(record);
+		    }
+		}
+		
 		try {
 			repo = helper.getRepository();
 			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder());
@@ -712,6 +737,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		publisherService.deletePublisher(publisher.getId());
 		languageTypeService.delete(languageTypeService.get(languageType.getId(), false));
 		contributorTypeService.delete(contributorTypeService.get(contributorType1.getId(), false));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
 		tm.commit(ts);	
 	}
 	

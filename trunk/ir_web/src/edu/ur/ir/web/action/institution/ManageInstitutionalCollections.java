@@ -16,14 +16,15 @@
 
 package edu.ur.ir.web.action.institution;
 
-import java.io.File;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
@@ -76,8 +77,11 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 	/** Institutional Collection service */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
-	/** index service for institutional items */
-	private InstitutionalItemIndexService institutionalItemIndexService;
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 	
 	/**  Logger for view personal collections action */
@@ -150,9 +154,10 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 			    log.debug("Deleting collection with id " + collectionIds[index]);
 			    InstitutionalCollection collection = 
 			    	institutionalCollectionService.getCollection(collectionIds[index], false);
-			    File f = new File(collection.getRepository().getInstitutionalItemIndexFolder());
-			    institutionalItemIndexService.deleteItemsForCollection(collection, f);
-			    institutionalItemIndexService.optimize(f);
+			    
+				// only index if the item was added directly to the collection
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE); 
+				institutionalItemIndexProcessingRecordService.processItemsInCollection(collection, processingType);
 			    institutionalCollectionService.deleteCollection(collection, user);
 		    }
 		}
@@ -331,14 +336,7 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 		this.institutionalCollections = institutionalCollections;
 	}
 
-	public InstitutionalItemIndexService getInstitutionalItemIndexService() {
-		return institutionalItemIndexService;
-	}
 
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
-	}
 	public String getSortType() {
 		return sortType;
 	}
@@ -356,6 +354,28 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 	}
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }

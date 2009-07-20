@@ -39,7 +39,6 @@ import org.apache.lucene.store.LockObtainFailedException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.FileTextExtractor;
 import edu.ur.ir.index.FileTextExtractorService;
-import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexService;
 import edu.ur.ir.institution.InstitutionalItemService;
@@ -249,67 +248,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	    }
 	}
 	
-	/**
-	 * (non-Javadoc)
-	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#deleteItemsForCollection(edu.ur.ir.institution.InstitutionalCollection, java.io.File)
-	 */
-	public void deleteItemsForCollection(InstitutionalCollection institutionalCollection, File institutionalItemIndex)
-	{
-		Directory directory = null;
-		IndexWriter writer = null;
-		
-	    // if the index is empty or does not exist then do nothing
-	    if( institutionalItemIndex == null || institutionalItemIndex.list() == null || 
-	    		institutionalItemIndex.list().length == 0)
-	    {
-	    	return;
-	    }
-	    
-		try {
-			directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
-			while(writer == null )
-			{
-			    writer =  getWriter(directory);
-			}
-			Term term = new Term(COLLECTION_ID, NumberTools.longToString(institutionalCollection.getId()));
-			writer.deleteDocuments(term);
-		} 
-		catch (IOException e) 
-		{
-	       log.error(e);
-		}
-		finally {
-			
-		    if (writer != null) {
-		    	
-			    try {
-				    writer.close();
-			    } catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    writer = null;
-		    try {
-				IndexWriter.unlock(directory);
-			} 
-	    	catch (IOException e1)
-	    	{
-				log.error(e1);
-			}
-		    if( directory != null )
-		    {
-		    	try
-		    	{
-		    		directory.close();
-		    	}
-		    	catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    directory = null;
-		    
-	    }
-	}
+
 	
 	
 	/**
@@ -317,7 +256,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#deleteItem(edu.ur.ir.institution.InstitutionalItem, java.io.File)
 	 */
-	public void deleteItem(InstitutionalItem institutionalItem, File institutionalItemIndex) {
+	public void deleteItem(Long id, File institutionalItemIndex) {
 
 		Directory directory = null;
 		IndexWriter writer = null;
@@ -337,7 +276,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 				writer = getWriter(directory);
 			}
 			
-			Term term = new Term(ID, NumberTools.longToString(institutionalItem.getId()));
+			Term term = new Term(ID, NumberTools.longToString(id));
 			writer.deleteDocuments(term);
 			  
 		} 
@@ -685,7 +624,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexService#updateItem(edu.ur.ir.institution.InstitutionalItem, java.io.File)
 	 */
 	public void updateItem(InstitutionalItem institutionalItem, File institutionalItemIndex, boolean filesChanged) throws NoIndexFoundException{
-		deleteItem(institutionalItem, institutionalItemIndex);
+		deleteItem(institutionalItem.getId(), institutionalItemIndex);
 		addItem(institutionalItem, institutionalItemIndex);
 	}
 	

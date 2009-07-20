@@ -16,18 +16,17 @@
 
 package edu.ur.ir.web.action.institution;
 
-import java.io.File;
-
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
-import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -58,11 +57,14 @@ public class DeleteInstitutionalItem extends ActionSupport implements UserIdAwar
 	/** User id */
 	private Long userId;
 	
-	/** institutional item index service */
-	private InstitutionalItemIndexService institutionalItemIndexService;
-	
 	/** Repository service */
 	private RepositoryService repositoryService;
+	
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/**
 	 * Prepare for action
@@ -76,10 +78,9 @@ public class DeleteInstitutionalItem extends ActionSupport implements UserIdAwar
 			
 			institutionalItemService.deleteInstitutionalItem(institutionalItem, user);
 			
-			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			File f = new File(repository.getInstitutionalItemIndexFolder());
-			institutionalItemIndexService.deleteItem(institutionalItem, f);
-			institutionalItemIndexService.optimize(f);
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE); 
+			institutionalItemIndexProcessingRecordService.save(institutionalItem.getId(), processingType);
+			
 		}		
 		return SUCCESS;		
 	}
@@ -103,7 +104,6 @@ public class DeleteInstitutionalItem extends ActionSupport implements UserIdAwar
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
-		
 	}
 
 	public UserService getUserService() {
@@ -114,21 +114,30 @@ public class DeleteInstitutionalItem extends ActionSupport implements UserIdAwar
 		this.userService = userService;
 	}
 
-	public InstitutionalItemIndexService getInstitutionalItemIndexService() {
-		return institutionalItemIndexService;
-	}
-
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
-	}
-
 	public RepositoryService getRepositoryService() {
 		return repositoryService;
 	}
 
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
+	}
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }
