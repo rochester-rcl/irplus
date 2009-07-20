@@ -196,7 +196,7 @@
 
 				      <tr>
 				      <td align="left" class="label">				  
-				         Password Check:*
+				         Retype Password:*
 				      </td>
 				      <td align="left" class="input"> <input type="password" 
 				              id="irUserForm_password_check" name="passwordCheck" value="" size="40"/>
@@ -225,7 +225,7 @@
                       
                       <tr>
 			            <td align="left" class="label">
-			              Affiliation:
+			              University Affiliation:
 		                </td>
 		                <td  align="left" class="input">
            		      	   <select id="irUserForm_affiliation" name="affiliationId" />
