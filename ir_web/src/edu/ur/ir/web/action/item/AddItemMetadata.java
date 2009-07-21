@@ -592,7 +592,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		// Add subtitles and articles
 		if (subTitles != null) {
 			for (int i =0; i < subTitles.length; i++ ) {
-				if (subTitles[i] != null) {
+				if (subTitles[i] != null && !subTitles[i].trim().equals("")) {
 					item.addSubTitle(subTitles[i], subTitleArticles[i]);
 				}
 			}
