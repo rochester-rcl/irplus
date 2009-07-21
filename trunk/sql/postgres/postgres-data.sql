@@ -124,10 +124,6 @@ values (nextval('person.contributor_type_seq'), 0, 'Thesis Advisor', 'THESIS_ADV
 
 insert into 
 person.contributor_type ( contributor_type_id, version, name, unique_system_code, description) 
-values (nextval('person.contributor_type_seq'), 0, 'Advisor', 'ADVISOR', null);
-
-insert into 
-person.contributor_type ( contributor_type_id, version, name, unique_system_code, description) 
 values (nextval('person.contributor_type_seq'), 0, 'Illustrator', 'ILLUSTRATOR', null);
 
 insert into 
@@ -153,6 +149,10 @@ values (nextval('person.contributor_type_seq'), 0, 'Anthropologist', 'ANTHROPOLO
 insert into 
 person.contributor_type ( contributor_type_id, version, name, unique_system_code, description) 
 values (nextval('person.contributor_type_seq'), 0, 'Librarian', 'LIBRARIAN', null);
+
+insert into 
+person.contributor_type ( contributor_type_id, version, name, unique_system_code, description) 
+values (nextval('person.contributor_type_seq'), 0, 'Photographer', 'PHOTOGRAPHER', null);
 
 -- ---------------------------------------------
 -- Default Languages
