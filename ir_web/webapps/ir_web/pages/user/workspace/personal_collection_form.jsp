@@ -37,12 +37,12 @@
               
 <table class="formTable">
     <tr>
-        <td class="label">Collection Name:</td>
+        <td class="label">Folder Name*:</td>
         <td align="left" class="input"><input type="text" 
             name="collectionName" size="50" id="collectionName" value="${collectionName}"/></td>
     </tr>
     <tr>
-        <td class="label">Collection Description:</td>
+        <td class="label">Description:</td>
         <td align="left" class="input"><textarea cols="45" rows="3" name="collectionDescription" 
             id="collectionDescription">${collectionDescription}</textarea></td>
     </tr>

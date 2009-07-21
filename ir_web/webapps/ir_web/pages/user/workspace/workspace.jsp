@@ -237,7 +237,7 @@
 	          
 	<!--  new collection dialog -->
 	<div id="newCollectionDialog" class="hidden">
-	    <div class="hd">Please enter collection name</div>
+	    <div class="hd">Please enter folder name</div>
 		<div class="bd">
 		    <form name="newCollectionForm" method="post">
 		                  
