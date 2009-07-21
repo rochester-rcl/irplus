@@ -1448,7 +1448,7 @@ YAHOO.ur.item.metadata = {
 	        // creates a Button
 	        button = document.createElement("input");
 	        button.setAttribute("type", "button");
-	        button.setAttribute("value", "Remove SubTitle");
+	        button.setAttribute("value", "Remove Other Title");
 	        button.setAttribute("class", "ur_button");
 	        button.setAttribute("onclick", "javascript:YAHOO.ur.item.metadata.removeSubTitle('" + tableId + "')");
 	        
