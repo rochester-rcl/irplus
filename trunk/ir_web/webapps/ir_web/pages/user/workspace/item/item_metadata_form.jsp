@@ -55,7 +55,7 @@
 	          <input type="text" 
 	              id="itemForm_name" name="itemName" value="<c:out value='${item.name}'/>" size="90"/> 
  	           &nbsp;&nbsp;&nbsp;
- 	           <input type="button" class="ur_button" id="itemForm_add_title" value="Add Sub title" onclick="javascript:YAHOO.ur.item.metadata.addSubTitleRow();"/>
+ 	           <input type="button" class="ur_button" id="itemForm_add_title" value="Add Other title" onclick="javascript:YAHOO.ur.item.metadata.addSubTitleRow();"/>
 	      </td>
 	      </tr> 
 	      
@@ -73,7 +73,7 @@
 						      	   <input type="text" id="itemForm_titleArticles" name="subTitleArticles" value="<c:out value='${title.leadingArticles}'/>" size="15"/>&nbsp;<input type="text" id="itemForm_title" name="subTitles" value="<c:out value='${title.title}'/>" size="90"/>
 						      </td>
 						      <td>   
-						      	  &nbsp;&nbsp;&nbsp; <input type="button" class="ur_button" id="itemForm_remove" value="Remove SubTitle" onclick="javascript:YAHOO.ur.item.metadata.removeSubTitle('title_table_${rowCounter.count}');"/>
+						      	  &nbsp;&nbsp;&nbsp; <input type="button" class="ur_button" id="itemForm_remove" value="Remove Other Title" onclick="javascript:YAHOO.ur.item.metadata.removeSubTitle('title_table_${rowCounter.count}');"/>
 						      </td>
 						    </tr>
 						</table>
