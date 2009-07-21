@@ -13,7 +13,8 @@ public interface ReIndexUserService {
 	/**
 	 * Re-Index the institutional items in an institutional repository.
 	 * 
-	 * @param repository
+	 * @param batchSize - number of users to index at a time
+	 * @param userIndexFolder - location of the user index
 	 */
 	public void reIndexUsers(int batchSize, File userIndexFolder);
 
