@@ -81,6 +81,7 @@
              <class name="edu.ur.hibernate.ir.user.db.UserEmailDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.InviteInfoDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.SharedInboxFileDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.UserWorkspaceIndexProcessingRecordDAOTest"/>
              
              <class name="edu.ur.hibernate.ir.file.db.IrFileDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.file.db.VersionedFileDAOTest"/> 
