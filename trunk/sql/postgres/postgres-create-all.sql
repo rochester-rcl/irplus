@@ -574,6 +574,29 @@ ALTER TABLE person.contributor_seq OWNER TO ir_plus;
 
 CREATE SCHEMA ir_user AUTHORIZATION ir_plus;
 
+
+-- ---------------------------------------------
+-- user workspace index process record Information
+-- ---------------------------------------------
+
+CREATE TABLE ir_user.user_workspace_index_processing_record
+(
+  user_workspace_index_processing_record_id BIGINT PRIMARY KEY,
+  workspace_item_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  workspace_type TEXT NOT NULL, 
+  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  index_processing_type_id BIGINT NOT NULL,
+  UNIQUE(workspace_item_id, user_id, workspace_type, index_processing_type_id),
+  FOREIGN KEY (index_processing_type_id)
+      REFERENCES ir_index.index_processing_type (index_processing_type_id)
+);
+ALTER TABLE ir_user.user_workspace_index_processing_record OWNER TO ir_plus;
+
+-- The repository license sequence
+CREATE SEQUENCE ir_user.user_workspace_index_processing_record_seq;
+ALTER TABLE ir_user.user_workspace_index_processing_record_seq OWNER TO ir_plus;
+
 -- ---------------------------------------------
 -- Affiliation table
 -- ---------------------------------------------
