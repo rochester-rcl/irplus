@@ -126,6 +126,7 @@ DROP SCHEMA ir_researcher;
 -- ---------------------------------------------
 -- Drop user information
 -- ---------------------------------------------
+DROP TABLE ir_user.user_workspace_index_processing_record;
 DROP TABLE ir_user.user_department;
 DROP TABLE ir_user.invite_permissions;
 DROP TABLE ir_user.invite_files;
@@ -148,7 +149,7 @@ DROP TABLE ir_user.affiliation;
 ALTER TABLE ir_user.ir_user DROP CONSTRAINT  ir_user_department_id_fkey;
 DROP TABLE ir_user.department;
 
-
+DROP SEQUENCE ir_user.user_workspace_index_processing_record_seq;
 DROP SEQUENCE ir_user.personal_item_seq;
 DROP SEQUENCE ir_user.personal_collection_seq;
 DROP SEQUENCE ir_user.personal_file_seq;
