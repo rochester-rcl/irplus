@@ -48,7 +48,7 @@
     </tr>
     <tr>
         <td class="label">File:</td>
-        <td align="left" class="input"><input size="100" id="single_file_upload" name="file"
+        <td align="left" class="input"><input size="80" id="single_file_upload" name="file"
              type="file"></td>
     </tr>
     <tr>
