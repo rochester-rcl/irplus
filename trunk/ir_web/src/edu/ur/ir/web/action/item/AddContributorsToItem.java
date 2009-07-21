@@ -16,6 +16,7 @@
 
 package edu.ur.ir.web.action.item;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -47,6 +48,7 @@ import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.action.user.PersonalWorkspaceSchedulingIndexHelper;
+import edu.ur.simple.type.AscendingNameComparator;
 
 /**
  * Action to allow a user to add files to an item.
@@ -79,9 +81,6 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 
 	/** Service for loading contributor type data.  */
 	private ContributorTypeService contributorTypeService;
-
-	/** List of all Contributor Types.  */
-	private List<ContributorType> contributorTypes;
 
 	/** Number of contributors for the item */
 	private int contributorsCount;
@@ -133,6 +132,9 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	
 	/** Quartz scheduler instance to schedule jobs  */
 	private Scheduler quartzScheduler;
+	
+	/** used for sorting names */
+	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 
 
 	/**
@@ -185,7 +187,7 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		
 		contributorsCount = contributors.size();
 		
-		contributorTypes = contributorTypeService.getAll();
+		
 		
 		return SUCCESS;
 	}
@@ -456,11 +458,10 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	}
 
 	public List<ContributorType> getContributorTypes() {
+		
+		List<ContributorType> contributorTypes = contributorTypeService.getAll();
+		Collections.sort(contributorTypes, nameComparator);
 		return contributorTypes;
-	}
-
-	public void setContributorTypes(List<ContributorType> contributorTypes) {
-		this.contributorTypes = contributorTypes;
 	}
 
 	public int getContributorsCount() {
