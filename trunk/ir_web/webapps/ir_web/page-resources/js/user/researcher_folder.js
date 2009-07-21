@@ -260,8 +260,6 @@ YAHOO.ur.researcher.folder = {
 														  { text:"No",  handler:handleNo } ]
 											} );
 		
-		YAHOO.ur.researcher.folder.deleteFolder.setHeader("Delete?");
-	   
 	    // Wire up the success and failure handlers
 	    var callback = { success: handleSuccess, failure: handleFailure };	
 		
