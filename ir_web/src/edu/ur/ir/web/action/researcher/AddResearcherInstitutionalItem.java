@@ -147,11 +147,14 @@ public class AddResearcherInstitutionalItem extends ActionSupport implements Pre
 			{
 				return "accessDenied";
 			}
-			researcherFileSystemService.createInstitutionalItem(parentFolder, item);
+			ResearcherInstitutionalItem researcherItem = researcherFileSystemService.createInstitutionalItem(parentFolder, item);
+		    researcherItem.setDescription(item.getDescription());
+		    researcherFileSystemService.saveResearcherInstitutionalItem(researcherItem);
 		} 
 		else 
 		{
-			researcher.createRootInstitutionalItem(item);
+			ResearcherInstitutionalItem researcherItem = researcher.createRootInstitutionalItem(item);
+			researcherItem.setDescription(item.getDescription());
 			researcherService.saveResearcher(researcher);
 		}
 

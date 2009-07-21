@@ -366,6 +366,20 @@ public interface ResearcherFileSystemService {
 	 * @param entity researcher file to be saved
 	 */
 	public void saveResearcherFile(ResearcherFile entity);
+	
+	/**
+	 * Save the researcher institutional item
+	 * 
+	 * @param entity researcher file to be saved
+	 */
+	public void saveResearcherInstitutionalItem(ResearcherInstitutionalItem entity);
+	
+	/**
+	 * Save the researcher publication
+	 * 
+	 * @param entity researcher file to be saved
+	 */
+	public void saveResearcherPublication(ResearcherPublication entity);
 
 	/**
 	 * Get list of researcher institutional item containing this item
