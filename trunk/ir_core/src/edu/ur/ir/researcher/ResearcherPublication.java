@@ -184,7 +184,6 @@ DescriptionAware, FileSystem{
 	{
 		int value = 0;
 		value += publication == null ? 0 : publication.hashCode();
-		value += parentFolder == null ? 0 : parentFolder.hashCode();
 		value += researcher == null ? 0 : researcher.hashCode();
 		return value;
 	}
@@ -202,11 +201,8 @@ DescriptionAware, FileSystem{
 		final ResearcherPublication other = (ResearcherPublication) o;
 
 		if( (other.getResearcher() != null && !other.getResearcher().equals(getResearcher())) ||
-				(other.getResearcher() == null && getResearcher() != null )) return false;
+			(other.getResearcher() == null && getResearcher() != null )) return false;
 
-		if( (other.getFullPath() != null && !other.getFullPath().equals(getFullPath())) ||
-			(other.getFullPath() == null && getFullPath() != null )	) return false;
-		
 		if( (other.getPublication() != null && !other.getPublication().equals(getPublication())) ||
 			(other.getPublication() == null && getPublication() != null )	) return false;
 		

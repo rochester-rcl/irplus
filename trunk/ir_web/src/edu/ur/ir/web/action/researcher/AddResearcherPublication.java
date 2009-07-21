@@ -206,6 +206,7 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 			}
 			
 			researcherFileSystemService.createPublication(parentFolder, vi.getCurrentVersion().getItem(), vi.getLargestVersion());
+
 		} else {
 			ItemVersion currentVersion = vi.getCurrentVersion();
 			researcher.createRootPublication(currentVersion.getItem(), currentVersion.getVersionNumber());

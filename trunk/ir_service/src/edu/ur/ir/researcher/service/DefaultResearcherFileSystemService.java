@@ -647,7 +647,14 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherFile file : filesToMove)
 		    {
 		    	log.debug("Adding file " + file + " to destination " + destination);
-			    destination.addResearcherFile(file);
+		    	if( !destination.getFiles().contains(file))
+		    	{
+		    		destination.addResearcherFile(file);
+		    	}
+		    	else
+		    	{
+		    		notMoved.add(file);
+		    	}
 		    }
 		}
 		
@@ -665,7 +672,15 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherInstitutionalItem institutionalItem : itemsToMove)
 		    {
 		    	log.debug("Adding item " +  institutionalItem + " to destination " + destination);
-			    destination.addInstitutionalItem(institutionalItem);
+		    	if( !destination.getInstitutionalItems().contains(institutionalItem))
+		    	{
+		    		 destination.addInstitutionalItem(institutionalItem);
+		    	}
+		    	else
+		    	{
+		    		notMoved.add(institutionalItem);
+		    	}
+			   
 		    }
 		}
 		
@@ -674,7 +689,16 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherPublication publication : publicationsToMove)
 		    {
 		    	log.debug("Adding publication " +  publication + " to destination " + destination);
-			    destination.addPublication(publication);
+		    	
+		    	if( !destination.getPublications().contains(publication))
+		    	{
+		    		   destination.addPublication(publication);
+		    	}
+		    	else
+		    	{
+		    		notMoved.add(publication);
+		    	}
+			 
 		    }
 		}
 		
@@ -721,7 +745,14 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherFile file : filesToMove)
 		    {
 		    	log.debug("Adding file " + file + " to researcher " + researcher);
-			    researcher.addRootFile(file);
+		    	if( !researcher.getRootFiles().contains(file))
+		    	{
+			        researcher.addRootFile(file);
+		    	}
+		    	else
+		    	{
+		    		notMoved.add(file);
+		    	}
 		    }
 		}
 		
@@ -739,7 +770,14 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherInstitutionalItem institutionalItem : itemsToMove)
 		    {
 		    	log.debug("Adding item " +  institutionalItem + " to researcher " + researcher);
-			    researcher.addRootInstitutionalItem(institutionalItem);
+		    	if( !researcher.getRootInstitutionalItems().contains(institutionalItem))
+		    	{
+			        researcher.addRootInstitutionalItem(institutionalItem);
+		    	}
+		    	else
+		    	{
+		    		notMoved.add(institutionalItem);
+		    	}
 		    }
 		}
 		
@@ -748,7 +786,14 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherPublication publication : publicationsToMove)
 		    {
 		    	log.debug("Adding publication " +  publication + " to researcher " + researcher);
-		    	researcher.addRootPublication(publication);
+		    	if( !researcher.getRootPublications().contains(publication))
+		    	{
+		    	    researcher.addRootPublication(publication);
+		    	}
+		    	else
+		    	{
+		    		notMoved.add(publication);
+		    	}
 		    }
 		}
 		
@@ -853,6 +898,17 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 
 	public void setResearcherDAO(ResearcherDAO researcherDAO) {
 		this.researcherDAO = researcherDAO;
+	}
+
+
+	public void saveResearcherInstitutionalItem(
+			ResearcherInstitutionalItem entity) {
+		researcherInstitutionalItemDAO.makePersistent(entity);
+	}
+
+
+	public void saveResearcherPublication(ResearcherPublication entity) {
+		researcherPublicationDAO.makePersistent(entity);
 	}
 	
 
