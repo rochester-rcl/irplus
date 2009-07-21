@@ -50,6 +50,78 @@ public class FileSystemType implements Serializable, Orderable{
 	public static final FileSystemType RESEARCHER_INSTITUTIONAL_ITEM = new FileSystemType("researcherInstitutionalItem", 1);
 
 	
+	/**
+	 * Get the file system type based on the string value - this is case insensitive.
+	 * 
+	 * @param systemType
+	 * @return the file system type found or null if type could not be found.
+	 */
+	public static FileSystemType getFileSystemType(String systemType)
+	{
+		if( systemType.equalsIgnoreCase(FILE.getType()))
+		{
+			return FILE;
+		}
+		else if(systemType.equalsIgnoreCase(FOLDER.getType()))
+		{
+			return FOLDER;
+		}
+		else if(systemType.equalsIgnoreCase(PERSONAL_FILE.getType()))
+		{
+			return PERSONAL_FILE;
+		}
+		else if(systemType.equalsIgnoreCase(SHARED_INBOX_FILE.getType()))
+		{
+			return SHARED_INBOX_FILE;
+		}
+		else if(systemType.equalsIgnoreCase(PERSONAL_FOLDER.getType()))
+		{
+			return PERSONAL_FOLDER;
+		}
+		else if(systemType.equalsIgnoreCase(ITEM.getType()))
+		{
+			return ITEM;
+		}
+		else if(systemType.equalsIgnoreCase(COLLECTION.getType()))
+		{
+			return COLLECTION;
+		}
+		else if(systemType.equalsIgnoreCase(PERSONAL_ITEM.getType()))
+		{
+			return PERSONAL_ITEM;
+		}
+		else if(systemType.equalsIgnoreCase(PERSONAL_COLLECTION.getType()))
+		{
+			return PERSONAL_COLLECTION;
+		}
+		else if(systemType.equalsIgnoreCase(INSTITUTIONAL_ITEM.getType()))
+		{
+			return INSTITUTIONAL_ITEM;
+		}
+		else if(systemType.equalsIgnoreCase(INSTITUTIONAL_COLLECTION.getType()))
+		{
+			return INSTITUTIONAL_COLLECTION;
+		}
+		else if(systemType.equalsIgnoreCase(RESEARCHER_FILE.getType()))
+		{
+			return RESEARCHER_FILE;
+		}
+		else if(systemType.equalsIgnoreCase(RESEARCHER_FOLDER.getType()))
+		{
+			return RESEARCHER_FOLDER;
+		}
+		else if(systemType.equalsIgnoreCase(RESEARCHER_PUBLICATION.getType()))
+		{
+			return RESEARCHER_PUBLICATION;
+		}
+		else if(systemType.equalsIgnoreCase(RESEARCHER_INSTITUTIONAL_ITEM.getType()))
+		{
+			return RESEARCHER_INSTITUTIONAL_ITEM;
+		}
+		
+		return null;
+	}
+	
 	/** The type of object */
 	private String type;
 	
