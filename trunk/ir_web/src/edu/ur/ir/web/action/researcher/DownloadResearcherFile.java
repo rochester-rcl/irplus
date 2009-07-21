@@ -86,7 +86,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         if( researcher.isPublic()  || researcher.getUser().getId().equals(userId))
         {	
             FileInfo fileInfo =  researcherFile.getIrFile().getFileInfo();
-            webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), false, true);
+            webIoUtils.StreamFileInfo(researcherFile.getName(), fileInfo, response, request, (1024*4), false, true);
             return SUCCESS;
         }
         else
