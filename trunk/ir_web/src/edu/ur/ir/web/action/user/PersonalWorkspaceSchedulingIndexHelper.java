@@ -29,6 +29,8 @@ public class PersonalWorkspaceSchedulingIndexHelper {
 	private static final Logger log = Logger.getLogger(InviteUser.class);
 	
 	
+	/** -------------------------------- NEW ---------------------------------------------------------- */
+	
 	/**
 	 * Schedule the Indexing of the new personal folder.
 	 * 
