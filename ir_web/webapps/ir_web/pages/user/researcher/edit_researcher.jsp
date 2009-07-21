@@ -495,9 +495,9 @@
  
        <!--  move folder dialog -->
       <div id="deleteFileFolderConfirmDialog" class="hidden">
-          <div class="hd">Delete?</div>
+          <div class="hd">Remove from Researcher Page?</div>
           <div class="bd">
-              <p>Do you want to delete the selected items?</p>
+              <p>Do you want to remove the selected items from your researcher page?</p>
           </div>
       </div>
       <!--  end move folder dialog -->
