@@ -164,10 +164,12 @@
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
 	                            <a href="javascript:YAHOO.ur.personal.collection.getCollectionById('${fileSystemObject.id}')">${fileSystemObject.name}</a>
+	                            <c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
 	                        	<c:if test="${fileSystemObject.versionedItem.currentVersion.item.locked == 'false'}">
 	                            	<a href="JAVASCRIPT:YAHOO.ur.personal.collection.editPublication('${fileSystemObject.id}', '${fileSystemObject.versionedItem.currentVersion.item.id}', '${fileSystemObject.personalCollection.id}', '${fileSystemObject.versionedItem.currentVersion.item.publishedToSystem}');">${fileSystemObject.name}</a>
+	                                <c:if test="${fileSystemObject.versionedItem.currentVersion.item.description != '' && fileSystemObject.versionedItem.currentVersion.item.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.versionedItem.currentVersion.item.description}"/></div></c:if>
 	                            </c:if>
 	                        	<c:if test="${fileSystemObject.versionedItem.currentVersion.item.locked == 'true'}">
 	                            	${fileSystemObject.name} (locked for review)
@@ -196,7 +198,7 @@
 	                                <c:param name="genericItemId" value="${fileSystemObject.versionedItem.currentVersion.item.id}"/>
 	                                <c:param name="parentCollectionId" value="${fileSystemObject.personalCollection.id}"/>
 	                            </c:url>
-	                            <a href="${submitPublicationUrl}">Submit publication</a>
+	                            <a href="${submitPublicationUrl}">Submit</a>
                             </c:if>
                         </urstb:td>
                         <urstb:td>
