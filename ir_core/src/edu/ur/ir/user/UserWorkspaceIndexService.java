@@ -39,8 +39,10 @@ public interface UserWorkspaceIndexService {
 	 * user information.
 	 * 
 	 * @param user - user to re-index.
+	 * @throws IOException 
+	 * @throws LocationAlreadyExistsException 
 	 */
-	public void updateUserIndex(Repository repository, IrUser user);
+	public void updateUserIndex(Repository repository, IrUser user) throws LocationAlreadyExistsException, IOException;
 	
 			
 	/**
