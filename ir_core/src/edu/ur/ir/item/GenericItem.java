@@ -1387,6 +1387,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		// Copy files
 		for(ItemFile oldFile:this.getItemFiles()) {
 			ItemFile itemFile = newItem.addFile(oldFile.getIrFile());
+			itemFile.setDescription(oldFile.getDescription());
 			itemFile.setOrder(oldFile.getOrder());
 		}
 		
