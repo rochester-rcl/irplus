@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -46,8 +45,8 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
-import edu.ur.ir.web.action.user.PersonalWorkspaceSchedulingIndexHelper;
 import edu.ur.simple.type.AscendingNameComparator;
 
 /**
@@ -130,13 +129,14 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
 	
-	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
-	
+
 	/** used for sorting names */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 
-
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	
 	/**
 	 * Execute method
 	 */
@@ -221,8 +221,9 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
+			
+			userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -279,8 +280,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
+			userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}		
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -576,14 +577,6 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		this.institutionalItemService = institutionalItemService;
 	}
 
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
-	}
-
-	public void setQuartzScheduler(Scheduler quartzScheduler) {
-		this.quartzScheduler = quartzScheduler;
-	}
-
 	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
 		return institutionalItemIndexProcessingRecordService;
 	}
@@ -600,6 +593,15 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
+	}
+
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
 

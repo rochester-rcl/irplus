@@ -25,13 +25,13 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.cgLib.CgLibHelper;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
@@ -46,6 +46,7 @@ import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.util.TokenGenerator;
@@ -54,6 +55,7 @@ import edu.ur.util.TokenGenerator;
  * Action to invite user
  * 
  * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
 public class InviteUser extends ActionSupport implements UserIdAware {
@@ -146,8 +148,11 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
 	
-	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 
 	/**
@@ -245,11 +250,8 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	 * Initialize the invite user page with permissions
 	 */
 	public String execute() {
-
 		classTypePermissions = securityService.getClassTypePermissions(VersionedFile.class.getName());
-
 	    return SUCCESS;
-		
 	}
 	
 	/**
@@ -367,9 +369,10 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 
 				for (VersionedFile file : versionedFiles) {
 					try {
+						
 						SharedInboxFile sif = inviteUserService.shareFile(invitingUser, invitedUser, file);
-						PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-						schedulingHelper.scheduleIndexingNew(quartzScheduler, sif);
+						userWorkspaceIndexProcessingRecordService.save(sif.getSharedWithUser().getId(), sif, 
+				    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 					} catch (FileSharingException e1) {
 						throw new RuntimeException("This should never happen", e1);
 					}
@@ -436,16 +439,17 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		// Check if personal file exist. Sometimes the file may be still in Shared file inbox.
 		// In that case, there is no need to delete from index
 		if (pf != null) {
-			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingDelete(quartzScheduler, pf);
+			
+			userWorkspaceIndexProcessingRecordService.save(pf.getOwner().getId(), pf, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
 		}
 		else
 		{
 			SharedInboxFile sif = user.getSharedInboxFile(fileCollaborator.getVersionedFile());
 			if( sif != null )
 			{
-				PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-				schedulingHelper.scheduleIndexingDelete(quartzScheduler, sif);
+				userWorkspaceIndexProcessingRecordService.save(sif.getSharedWithUser().getId(), sif, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
 			}
 		}
 		
@@ -852,12 +856,22 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		this.roleService = roleService;
 	}
 
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
 	}
 
-	public void setQuartzScheduler(Scheduler quartzScheduler) {
-		this.quartzScheduler = quartzScheduler;
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }

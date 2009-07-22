@@ -16,5 +16,12 @@ public interface ErrorEmailService {
 	 * 
 	 */
 	public void sendError(String error);
+	
+	/**
+	 * Send the error information.
+	 * 
+	 * @param e
+	 */
+	public void sendError(Exception e);
 
 }

@@ -18,7 +18,6 @@
 package edu.ur.ir.web.action.user;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
@@ -26,18 +25,18 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
-import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TemporaryFileCreator;
 import edu.ur.ir.file.TransformedFileType;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.UserFileSystemService;
-import edu.ur.ir.user.UserWorkspaceIndexService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -70,6 +69,12 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 	/** File system service for users. */
 	private UserFileSystemService userFileSystemService;
 	
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
+	
 	/** description of the file  */
 	private String userFileDescription;
 	
@@ -90,9 +95,6 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 	
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
-	
-	/** User index service for indexing files */
-	private UserWorkspaceIndexService userWorkspaceIndexService;
 	
 	/** set to true if the version was added  */
 	private boolean versionAdded = false; 
@@ -181,14 +183,9 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 					    log.error("Could not create thumbnail", e);
 				    }
 			    }
-			    try {
-					userWorkspaceIndexService.updateAllIndexes(repository, personalFile);
-				} catch (LocationAlreadyExistsException e) {
-					log.error(e);
-				} catch (IOException e) {
-					log.error(e);
-				}
-
+			    
+			    userWorkspaceIndexProcessingRecordService.saveAll(personalFile, 
+			    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 			}
 			else
 			{
@@ -210,8 +207,6 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 	        returnStatus = INPUT;
 		}
 
-		
-		
 		return returnStatus;
 		
 	}
@@ -313,13 +308,6 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 		this.userFileSystemService = userFileSystemService;
 	}
 
-	public UserWorkspaceIndexService getUserWorkspaceIndexService() {
-		return userWorkspaceIndexService;
-	}
-
-	public void setUserWorkspaceIndexService(UserWorkspaceIndexService userIndexService) {
-		this.userWorkspaceIndexService = userIndexService;
-	}
 
 	public boolean isVersionAdded() {
 		return versionAdded;
@@ -331,6 +319,24 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 
 	public void setKeepLocked(boolean keepLocked) {
 		this.keepLocked = keepLocked;
+	}
+
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
+	}
+
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 

@@ -19,10 +19,10 @@ package edu.ur.ir.web.action.item;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.repository.RepositoryService;
@@ -34,8 +34,8 @@ import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
-import edu.ur.ir.web.action.user.PersonalWorkspaceSchedulingIndexHelper;
 
 /**
  * Allows a user to add an item to a personal collection.
@@ -96,8 +96,12 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 	/** Indicates whether user has chosen files for which user is not the owner */
 	private boolean hasOwnFiles = true;
 	
-	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
+	
 
 	
 	/**
@@ -179,8 +183,8 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		
 		// save personal item
 		userPublishingFileSystemService.makePersonalItemPersistent(personalItem);
-		PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-		schedulingHelper.scheduleIndexingNew(quartzScheduler, personalItem);
+		userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
+    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 		
 		return SUCCESS;
 	}
@@ -402,20 +406,30 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 	}
 
 
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
-	}
-
-	public void setQuartzScheduler(Scheduler quartzScheduler) {
-		this.quartzScheduler = quartzScheduler;
-	}
-
 	public String getItemArticles() {
 		return itemArticles;
 	}
 
 	public void setItemArticles(String itemArticles) {
 		this.itemArticles = itemArticles;
+	}
+
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
+	}
+
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 
