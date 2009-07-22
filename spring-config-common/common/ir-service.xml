@@ -572,6 +572,17 @@
    </bean>
    
    <!-- ****************************************** --> 
+   <!-- User workspace processing records service -->
+   <!-- ****************************************** --> 
+   <bean id="userWorkspaceIndexProcessingRecordService" 
+       class="edu.ur.ir.user.service.DefaultUserWorkspaceIndexProcessingRecordService">
+       <property name="userWorkspaceIndexProcessingRecordDAO" ref="userWorkspaceIndexProcessingRecordDAO"/>
+       <property name="userFileSystemService" ref="userFileSystemService"/>
+       <property name="userPublishingFileSystemService" ref="userPublishingFileSystemService"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
    <!-- index processing type service -->
    <!-- ****************************************** --> 
    <bean id="indexProcessingTypeService" 
