@@ -31,14 +31,15 @@
 		    <class name="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSecurityServiceTest"/>
 		    <class name="edu.ur.ir.institution.service.DefaultInstitutionalItemIndexProcessingRecordServiceTest"/>
 		    
-		    <class name="edu.ur.ir.user.service.DefaultUserServiceTest"/>
-		    <class name="edu.ur.ir.user.service.DefaultUserPublishingFileSystemServiceTest"/>
-		    <class name="edu.ur.ir.user.service.DefaultUserFileSystemServiceTest"/>
 		    <class name="edu.ur.ir.user.service.DefaultInviteUserServiceTest"/>
+		    <class name="edu.ur.ir.user.service.DefaultUserFileSystemServiceTest"/>
+		    <class name="edu.ur.ir.user.service.DefaultUserIndexServiceTest"/>
+		    <class name="edu.ur.ir.user.service.DefaultUserPublishingFileSystemServiceTest"/>
+		    <class name="edu.ur.ir.user.service.DefaultUserSearchServiceTest"/>
+		    <class name="edu.ur.ir.user.service.DefaultUserServiceTest"/>
 		    <class name="edu.ur.ir.user.service.DefaultUserWorkspaceIndexServiceTest"/>
 		    <class name="edu.ur.ir.user.service.DefaultUserWorkspaceSearchServiceTest"/>
-		    <class name="edu.ur.ir.user.service.DefaultUserIndexServiceTest"/>
-		    <class name="edu.ur.ir.user.service.DefaultUserSearchServiceTest"/>
+		    <class name="edu.ur.ir.user.service.UserWorkspaceIndexProcessingRecordServiceTest"/>
 		    
 		    <class name="edu.ur.ir.person.service.DefaultPersonServiceTest"/>
 		    <class name="edu.ur.ir.person.service.DefaultNameAuthorityIndexServiceTest"/>
