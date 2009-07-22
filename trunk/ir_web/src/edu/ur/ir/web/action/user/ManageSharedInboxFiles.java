@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.InviteUserService;
@@ -39,6 +39,7 @@ import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -107,8 +108,11 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
 	
-	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 
 	
@@ -122,9 +126,10 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 			    pf = userFileSystemService.addSharedInboxFileToFolders(user, 
 							    inboxFile);
 				
-				PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-				schedulingHelper.scheduleIndexingNew(quartzScheduler, pf);
-				schedulingHelper.scheduleIndexingDelete(quartzScheduler, inboxFile);
+				userWorkspaceIndexProcessingRecordService.save(inboxFile.getSharedWithUser().getId(), inboxFile, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+				userWorkspaceIndexProcessingRecordService.save(pf.getOwner().getId(), pf, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 			}
 		    catch (DuplicateNameException e) 
 		    {
@@ -149,9 +154,11 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		        try 
 		        {
 				    pf = userFileSystemService.addSharedInboxFileToFolders(destination,  inboxFile);
-				    PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-					schedulingHelper.scheduleIndexingNew(quartzScheduler, pf);
-					schedulingHelper.scheduleIndexingDelete(quartzScheduler, inboxFile);
+					
+					userWorkspaceIndexProcessingRecordService.save(inboxFile.getSharedWithUser().getId(), inboxFile, 
+			    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+					userWorkspaceIndexProcessingRecordService.save(pf.getOwner().getId(), pf, 
+			    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 		        } catch (DuplicateNameException e) {
 		            filesNotMoved.add(inboxFile);
 				}
@@ -434,12 +441,22 @@ public class ManageSharedInboxFiles extends ActionSupport implements UserIdAware
 		this.inviteUserService = inviteUserService;
 	}
 
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
 	}
 
-	public void setQuartzScheduler(Scheduler quartzScheduler) {
-		this.quartzScheduler = quartzScheduler;
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }

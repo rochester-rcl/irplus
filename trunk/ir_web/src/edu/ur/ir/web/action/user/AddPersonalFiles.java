@@ -33,6 +33,7 @@ import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TemporaryFileCreator;
 import edu.ur.ir.file.TransformedFileType;
 import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrRole;
@@ -40,13 +41,13 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserFileSystemService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.util.FileUploadInfo;
 
 import org.apache.commons.io.FilenameUtils;
-import org.quartz.Scheduler;
 
 /**
  * Add personal files to the specified folder.
@@ -107,8 +108,11 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	/** Files not added due to illegal file names */
 	LinkedList<FileUploadInfo> illegalFileNames = new LinkedList<FileUploadInfo>();
 	
-	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 	/**
 	 * Set the user id.
@@ -234,9 +238,11 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 				}
 			}
 			
-			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingNew(quartzScheduler, user, addedFiles);
-		
+			for( PersonalFile personalFile : addedFiles)
+			{
+				userWorkspaceIndexProcessingRecordService.saveAll(personalFile, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+			}
 		}
 		
 		if( this.getAllFilesAdded() )
@@ -453,13 +459,25 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	}
 
 
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
 	}
 
 
-	public void setQuartzScheduler(Scheduler quartzScheduler) {
-		this.quartzScheduler = quartzScheduler;
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }

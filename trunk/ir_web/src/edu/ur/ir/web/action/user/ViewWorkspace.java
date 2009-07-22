@@ -20,11 +20,11 @@ package edu.ur.ir.web.action.user;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrRole;
@@ -33,6 +33,7 @@ import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -84,8 +85,11 @@ UserIdAware {
 	/** Service for dealing with roles */
 	private RoleService roleService;
 	
-	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
+	/** process for setting up personal files to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 	
 	/**
@@ -119,8 +123,12 @@ UserIdAware {
 			// if the user has shared files - add them for the first time to their index
 		    if (token != null) {
 			    Set<SharedInboxFile> inboxFiles = inviteUserService.shareFileForUserWithToken(userId, token);
-				PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-				schedulingHelper.scheduleIndexingNew(quartzScheduler, inboxFiles, user);
+				
+				for(SharedInboxFile sif : inboxFiles)
+				{
+					userWorkspaceIndexProcessingRecordService.save(sif.getSharedWithUser().getId(), sif, 
+			    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+				}
 		    }
 		    return SUCCESS;
 		}
@@ -279,12 +287,22 @@ UserIdAware {
 		this.roleService = roleService;
 	}
 
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
 	}
 
-	public void setQuartzScheduler(Scheduler quartzScheduler) {
-		this.quartzScheduler = quartzScheduler;
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }

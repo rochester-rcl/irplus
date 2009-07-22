@@ -1,5 +1,8 @@
 package edu.ur.ir.util.service;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -73,6 +76,26 @@ public class DefaultErrorEmailService implements ErrorEmailService{
 
 	public void setToAddress(String toAddress) {
 		this.toAddress = toAddress;
+	}
+
+	
+	/**
+	 * Email the specified error.
+	 * 
+	 * @see edu.ur.ir.ErrorEmailService#sendError(java.lang.Error)
+	 */
+	public void sendError(Exception e) {
+		StringWriter sw = null;
+		PrintWriter pw = null;
+		
+		sw = new StringWriter();
+		pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		pw.flush();
+		sw.flush();
+		pw.close();
+		
+		sendError(sw.toString());
 	}
 
 

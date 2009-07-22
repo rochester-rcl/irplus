@@ -1,13 +1,21 @@
 package edu.ur.ir.user.service;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.PersonalCollection;
+import edu.ur.ir.user.PersonalFile;
+import edu.ur.ir.user.PersonalFolder;
+import edu.ur.ir.user.PersonalItem;
+import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecord;
@@ -41,8 +49,34 @@ UserWorkspaceIndexProcessingRecordService
 
 
 
-	public void allUserItems(IrUser user, IndexProcessingType processingType) {
-		// TODO Auto-generated method stub
+	public void reIndexAllUserItems(IrUser user, IndexProcessingType processingType) {
+		List<PersonalFolder> personalFolders = userFileSystemService.getAllPersonalFoldersForUser(user.getId());
+		List<PersonalCollection> personalCollections = userPublishingFileSystemService.getAllPersonalCollectionsForUser(user.getId());
+		List<SharedInboxFile> inboxFiles = userFileSystemService.getSharedInboxFiles(user);
+		
+		// re-index shared inbox files
+		for(SharedInboxFile inboxFile : inboxFiles)
+		{
+			save(user.getId(), inboxFile, processingType);
+		}
+		
+		// re-index all files and folders
+		for(PersonalFolder pf : personalFolders)
+		{
+			save(user.getId(), pf, processingType);
+			for(PersonalFile personalFile : pf.getFiles())
+			{
+				save(user.getId(), personalFile, processingType);
+			}
+		}
+		
+		for(PersonalCollection pc : personalCollections)
+		{
+			for( PersonalItem personalItem : pc.getPersonalItems())
+			{
+				save(user.getId(), personalItem, processingType);
+			}
+		}
 	}
 
 	/**
@@ -85,7 +119,7 @@ UserWorkspaceIndexProcessingRecordService
 		userWorkspaceIndexProcessingRecordDAO.makePersistent(entity);
 	}
 
-	public UserWorkspaceIndexProcessingRecord save(Long userId,
+	public UserWorkspaceIndexProcessingRecord  save(Long userId,
 			FileSystem fileSystem, IndexProcessingType processingType) {
 		
 		IndexProcessingType updateProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE);
@@ -152,11 +186,49 @@ UserWorkspaceIndexProcessingRecordService
 			}
 
 		}
-
-		
-		
+	
 		return record;
+		
 	}
+	
+	/**
+	 * Update all indexes for a personal file - since a personal file is shared across multiple users, we may
+	 * want to update all users.  This method provides this option.
+	 * 
+	 * @param personalFile - personal file to update
+	 * @param processingType - type of processing
+	 * 
+	 * @return list of records updated.
+	 */
+	public List<UserWorkspaceIndexProcessingRecord> saveAll(PersonalFile personalFile, IndexProcessingType processingType)
+	{
+		LinkedList<UserWorkspaceIndexProcessingRecord> records = new LinkedList<UserWorkspaceIndexProcessingRecord>();
+		records.add(save(personalFile.getOwner().getId(), personalFile, processingType));
+    	
+    	//add the new version to all users
+    	Set<FileCollaborator> collaborators = personalFile.getVersionedFile().getCollaborators();
+    	for(FileCollaborator collaborator : collaborators)
+    	{
+     	    PersonalFile collaboratorFile = userFileSystemService.getPersonalFile(collaborator.getCollaborator(), 
+    	        personalFile.getVersionedFile().getCurrentVersion().getIrFile());
+    	    	 
+    	    if( collaboratorFile != null )
+    	    {
+    	    	records.add(save(collaboratorFile.getOwner().getId(), collaboratorFile, processingType));
+ 			}
+    	    else
+    	    {
+    	        SharedInboxFile sharedInboxFile = collaborator.getCollaborator().getSharedInboxFile(personalFile.getVersionedFile());
+    	    	if( sharedInboxFile != null)
+    	    	{
+    	    		records.add(save(sharedInboxFile.getSharedWithUser().getId(), sharedInboxFile, processingType));
+    	    	    
+    	    	}
+    	    }
+    	}
+    	return records;
+	}
+
 	
 	public UserWorkspaceIndexProcessingRecordDAO getUserWorkspaceIndexProcessingRecordDAO() {
 		return userWorkspaceIndexProcessingRecordDAO;

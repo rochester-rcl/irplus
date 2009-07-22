@@ -19,17 +19,18 @@ package edu.ur.ir.web.action.user;
 
 
 import org.apache.log4j.Logger;
-import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserFileSystemService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -81,8 +82,11 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
 	
-	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 	
 	/**
@@ -107,8 +111,9 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 					personalFolder = thisUser.createRootFolder(folderName);
 					personalFolder.setDescription(folderDescription);
 					userFileSystemService.makePersonalFolderPersistent(personalFolder);
-					PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-					schedulingHelper.scheduleIndexingNew(quartzScheduler, personalFolder);
+					
+					userWorkspaceIndexProcessingRecordService.save(personalFolder.getOwner().getId(), personalFolder, 
+			    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 					
 			        folderAdded = true;
 				 } catch (DuplicateNameException e) {
@@ -141,8 +146,10 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 			    PersonalFolder personalFolder = folder.createChild(folderName);
 			    personalFolder.setDescription(folderDescription);
 			    userFileSystemService.makePersonalFolderPersistent(folder);
-			    PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-				schedulingHelper.scheduleIndexingNew(quartzScheduler, personalFolder);
+			    
+			    userWorkspaceIndexProcessingRecordService.save(personalFolder.getOwner().getId(), personalFolder, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+			    
 			    folderAdded = true;
 			}
 			catch(DuplicateNameException e)
@@ -203,8 +210,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 				existingFolder.reName(folderName);
 				userFileSystemService.makePersonalFolderPersistent(existingFolder);
 				
-				PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-				schedulingHelper.scheduleIndexingUpdate(quartzScheduler, existingFolder);
+				userWorkspaceIndexProcessingRecordService.save(existingFolder.getOwner().getId(), existingFolder, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 				
 				folderAdded = true;
 			} catch (DuplicateNameException e) {
@@ -223,8 +230,9 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		{
 			other.setDescription(folderDescription);
 			userFileSystemService.makePersonalFolderPersistent(other);
-			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, other);
+			userWorkspaceIndexProcessingRecordService.save(other.getOwner().getId(), other, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+			
 			folderAdded = true;
 		} else {
 			folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
@@ -398,11 +406,21 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		this.repositoryService = repositoryService;
 	}
 
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
 	}
 
-	public void setQuartzScheduler(Scheduler quartzScheduler) {
-		this.quartzScheduler = quartzScheduler;
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 }

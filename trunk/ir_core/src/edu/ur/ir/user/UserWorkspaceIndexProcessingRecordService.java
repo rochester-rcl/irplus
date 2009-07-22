@@ -75,7 +75,9 @@ public interface UserWorkspaceIndexProcessingRecordService {
 
     /**
      * Determines if there is already an existing processing record for the record, processing type and
-     * creates a new one if one does not exist otherwise does an update.
+     * creates a new one if one does not exist otherwise does an update.  This can insert multiple records.
+     * If the file system type is shared across multiple users, it will perform actions that mantain all
+     * users.
      * 
 	 * @param userId - id of the user who owns the item
 	 * @param fileSystem - file system object of the workspace 
@@ -85,13 +87,24 @@ public interface UserWorkspaceIndexProcessingRecordService {
 			FileSystem fileSystem, 
 			IndexProcessingType processingType);
     
+	/**
+	 * Update all indexes for a personal file - since a personal file can be shared across multiple users, we may
+	 * want to update all users.  This method provides this option.
+	 * 
+	 * @param personalFile - personal file to update
+	 * @param processingType - type of processing
+	 * 
+	 * @return list of records updated.
+	 */
+	public List<UserWorkspaceIndexProcessingRecord> saveAll(PersonalFile personalFile, 
+			IndexProcessingType processingType);
     /**
      * Add all items within the given user to be processed
      * 
      * @param user - user with all items to be processed
      * @param processing type - type of processing to be performed.
      */
-    public void allUserItems( IrUser user,
+    public void reIndexAllUserItems( IrUser user,
 			IndexProcessingType processingType);
     
   

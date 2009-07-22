@@ -195,15 +195,6 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	
 	
 	/**
-	 * 
-	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateUser(edu.ur.ir.user.IrUser)
-	 */
-	public void updateUserIndex(Repository repository, IrUser user) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
 	 * Analyzer used to analyze the file.
 	 * 
 	 * @return the analyzer used to analyze the information
@@ -813,72 +804,9 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	}
 
 	
-	/* (non-Javadoc)
-	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateAllIndexes(edu.ur.ir.user.PersonalFile)
-	 */
-	public void updateAllIndexes(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException, IOException {
-		
-        IrUser owner = personalFile.getOwner();
-		PersonalFile ownerFile = userFileSystemService.getPersonalFile(owner, 
-		    		personalFile.getVersionedFile().getCurrentVersion().getIrFile());
-		updateIndex(repository, ownerFile);
-    	
-    	//add the new version to all users
-    	Set<FileCollaborator> collaborators = personalFile.getVersionedFile().getCollaborators();
-    	for(FileCollaborator collaborator : collaborators)
-    	{
-     	    PersonalFile collaboratorFile = userFileSystemService.getPersonalFile(collaborator.getCollaborator(), 
-    	        personalFile.getVersionedFile().getCurrentVersion().getIrFile());
-    	    	 
-    	    if( collaboratorFile != null )
-    	    {
-    	        updateIndex(repository, collaboratorFile);
-			}
-    	    else
-    	    {
-    	        SharedInboxFile sharedInboxFile = collaborator.getCollaborator().getSharedInboxFile(personalFile.getVersionedFile());
-    	    	if( sharedInboxFile != null)
-    	    	{
-    	    	    updateIndex(repository, sharedInboxFile);
-    	    	}
-    	    }
-    	}
-	}
+
 	
 	
-	/**
-	 * Removes the personal file from all indexes.
-	 * 
-	 * @see edu.ur.ir.user.UserWorkspaceIndexService#deleteFromAllIndexes(edu.ur.ir.user.PersonalFile)
-	 */
-	public void deleteFromAllIndexes(PersonalFile personalFile) {
-        IrUser owner = personalFile.getOwner();
-		PersonalFile ownerFile = userFileSystemService.getPersonalFile(owner, 
-		    		personalFile.getVersionedFile().getCurrentVersion().getIrFile());
-		deleteFileFromIndex(ownerFile.getOwner(), ownerFile.getId());
-    	
-    	//add the new version to all users
-    	Set<FileCollaborator> collaborators = personalFile.getVersionedFile().getCollaborators();
-    	for(FileCollaborator collaborator : collaborators)
-    	{
-     	    PersonalFile collaboratorFile = userFileSystemService.getPersonalFile(collaborator.getCollaborator(), 
-    	        personalFile.getVersionedFile().getCurrentVersion().getIrFile());
-    	    	 
-    	    if( collaboratorFile != null )
-    	    {
-    	    	deleteFileFromIndex(collaboratorFile.getOwner(), collaboratorFile.getId());
-			}
-    	    else
-    	    {
-    	        SharedInboxFile sharedInboxFile = collaborator.getCollaborator().getSharedInboxFile(personalFile.getVersionedFile());
-    	    	if( sharedInboxFile != null)
-    	    	{
-    	    		deleteInboxFileFromIndex(sharedInboxFile.getSharedWithUser(), sharedInboxFile.getId());
-    	    	}
-    	    }
-    	}
-		
-	}
 
 	/**
 	 * Add the personal item to the index.

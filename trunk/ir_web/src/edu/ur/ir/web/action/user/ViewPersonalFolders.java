@@ -22,18 +22,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Validateable;
 
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
-import edu.ur.ir.user.UserWorkspaceIndexService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 
 
@@ -61,8 +61,11 @@ public class ViewPersonalFolders extends ActionSupport implements
 	/** Service for dealing with user file system */
 	private UserFileSystemService userFileSystemService;
 
-	/** Service for dealing with indexing user information*/
-	private UserWorkspaceIndexService userWorkspaceIndexService;
+	/** process for setting up personal files to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
 	
     /** A collection of folders and files for a user in a given location of
         ther personal directory.*/
@@ -106,8 +109,6 @@ public class ViewPersonalFolders extends ActionSupport implements
 	/**  Logger for vierw workspace action */
 	private static final Logger log = Logger.getLogger(ViewPersonalFolders.class);
 	
-	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
 
 	/**
 	 * Get folder table
@@ -161,9 +162,6 @@ public class ViewPersonalFolders extends ActionSupport implements
 			    	deleteFileFromIndex(aFile, user);
 			    }
 			    
-			    PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-				schedulingHelper.scheduleIndexingDelete(quartzScheduler, pf);
-			   
 			    userFileSystemService.deletePersonalFolder(pf);
 		    }
 		}
@@ -197,12 +195,13 @@ public class ViewPersonalFolders extends ActionSupport implements
 	{
 		if(aFile.getOwner().equals(aUser))
     	{
-    		userWorkspaceIndexService.deleteFromAllIndexes(aFile);
+			userWorkspaceIndexProcessingRecordService.saveAll(aFile, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
     	}
     	else
     	{
-    		PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingDelete(quartzScheduler, aFile);
+    		userWorkspaceIndexProcessingRecordService.save(aFile.getOwner().getId(), aFile, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
     	}
 	}
 	
@@ -343,13 +342,6 @@ public class ViewPersonalFolders extends ActionSupport implements
 		this.userFileSystemService = userFileSystemService;
 	}
 
-	public UserWorkspaceIndexService getUserWorkspaceIndexService() {
-		return userWorkspaceIndexService;
-	}
-
-	public void setUserWorkspaceIndexService(UserWorkspaceIndexService userIndexService) {
-		this.userWorkspaceIndexService = userIndexService;
-	}
 
 	public String getSortType() {
 		return sortType;
@@ -391,12 +383,22 @@ public class ViewPersonalFolders extends ActionSupport implements
 		this.userId = userId;
 	}
 
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
 	}
 
-	public void setQuartzScheduler(Scheduler quartzScheduler) {
-		this.quartzScheduler = quartzScheduler;
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 	
 

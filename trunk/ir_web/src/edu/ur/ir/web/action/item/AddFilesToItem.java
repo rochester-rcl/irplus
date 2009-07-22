@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -52,8 +51,8 @@ import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
-import edu.ur.ir.web.action.user.PersonalWorkspaceSchedulingIndexHelper;
 import edu.ur.order.AscendingOrderComparator;
 
 /**
@@ -149,8 +148,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	/** service for user data */
 	private UserService userService;
 	
-	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 
 	/**
 	 * Prepare for action
@@ -283,8 +282,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
+			userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -323,8 +322,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
+			userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -450,8 +449,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
+			userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -561,8 +560,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 
 		userPublishingFileSystemService.makePersonalItemPersistent(personalItem);		
 
-		PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-		schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
+		userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
+    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 
 		return SUCCESS;
 	}
@@ -882,13 +881,6 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		this.userService = userService;
 	}
 
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
-	}
-
-	public void setQuartzScheduler(Scheduler quartzScheduler) {
-		this.quartzScheduler = quartzScheduler;
-	}
 
 	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
 		return institutionalItemIndexProcessingRecordService;
@@ -906,6 +898,15 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
+	}
+
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
 

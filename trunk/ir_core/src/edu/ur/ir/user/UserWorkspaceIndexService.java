@@ -31,20 +31,6 @@ import edu.ur.ir.repository.Repository;
 public interface UserWorkspaceIndexService {
 	
 
-	
-	/**
-	 * Index the user and their data.  This could take
-	 * a fair amount of time it would be best to update 
-	 * an index over time.  This completely re-indexes the
-	 * user information.
-	 * 
-	 * @param user - user to re-index.
-	 * @throws IOException 
-	 * @throws LocationAlreadyExistsException 
-	 */
-	public void updateUserIndex(Repository repository, IrUser user) throws LocationAlreadyExistsException, IOException;
-	
-			
 	/**
 	 * Add the personal file to the index.  This will create an index folder if one does not already exist.
 	 * 
@@ -55,7 +41,8 @@ public interface UserWorkspaceIndexService {
 	public void addToIndex(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException, IOException;
 	
 	/**
-	 * Update the personal file in the index. This will create an index folder if one does not already exist.
+	 * Updates all indexes for all collaborators and the owner who share the specified file.  Creates an index folder if 
+	 * one doesn't already exist
 	 * 
 	 * @param personalFile
 	 * @throws LocationAlreadyExistsException - if the folder location does not already exist
@@ -122,22 +109,6 @@ public interface UserWorkspaceIndexService {
 	 */
 	public void deleteInboxFileFromIndex(IrUser user, Long sharedInboxFileId);
 	
-	/**
-	 * Updates all indexes for all collaborators and the owner who share the specified file.  Creates an index folder if 
-	 * one doesn't already exist
-	 *  
-	 * @param personalFile
-	 * @throws LocationAlreadyExistsException - if trying to create a location that already exists
-	 * @throws IOException - if location cannot be created when needed
-	 */
-	public void updateAllIndexes(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException, IOException;
-	
-	/**
-	 * Delete the file from all indexes including collaborators.
-	 * 
-	 * @param personalFile
-	 */
-	public void deleteFromAllIndexes(PersonalFile personalFile);
 	
 	/**
 	 * Delete a personal item from the index.

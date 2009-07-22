@@ -19,11 +19,8 @@ package edu.ur.ir.user.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
@@ -40,12 +37,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
-import edu.ur.exception.DuplicateNameException;
-import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
 import edu.ur.ir.NoIndexFoundException;
-import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
@@ -67,15 +61,12 @@ import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
 import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.user.FileSharingException;
-import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.InviteInfoDAO;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.PersonalItem;
-import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserFileSystemService;
@@ -93,8 +84,6 @@ import edu.ur.util.FileUtil;
 @Test(groups = { "baseTests" }, enabled = true)
 public class DefaultUserWorkspaceIndexServiceTest {
 	
-	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultUserWorkspaceIndexServiceTest.class);
 	
 	/** Application context  for loading information*/
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
@@ -410,271 +399,6 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		userService.deleteUser(user);
 		helper.cleanUpRepository();
 		tm.commit(ts);	
-	}
-	
-	/**
-	 * Test sharing and indexing a personal file - which has been shared with another user
-	 * but not yet moved into the users files and folders.
-	 * 
-	 * @throws NoIndexFoundException 
-	 * @throws DuplicateNameException 
-	 * @throws FileSharingException 
-	 * @throws UserHasPublishedDeleteException 
-	 * @throws LocationAlreadyExistsException 
-	 * @throws IOException 
-	 */
-	public void testIndexSharedFileInUserInbox() throws NoIndexFoundException,
-		DuplicateNameException, FileSharingException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, IOException 
-	{
-		// determine if we should be sending emails 
-		boolean sendEmail = new Boolean(properties.getProperty("send_emails")).booleanValue();
-		
-		log.debug("test testIndexSharedFileInUserInbox send email = " + sendEmail);
-
-		// Start the transaction 
-		TransactionStatus ts = tm.getTransaction(td);
-
-		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
-		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
-		// save the repository
-		tm.commit(ts);
-		
-        // Start the transaction 
-		ts = tm.getTransaction(td);
-
-		String userEmail1 = properties.getProperty("user_1_email").trim();
-		UserEmail email = new UserEmail(userEmail1);
-		IrUser user = userService.createUser("password", "username", email);
-		
-		
-		String userEmail2 = properties.getProperty("user_2_email").trim();
-		UserEmail email1 = new UserEmail(userEmail2);
-		IrUser user1 = userService.createUser("password1", "username1", email1);
-
-		// create the first file to store in the temporary folder
-		String tempDirectory = properties.getProperty("ir_service_temp_directory");
-		File directory = new File(tempDirectory);
-		
-        // helper to create the file
-		FileUtil testUtil = new FileUtil();
-		testUtil.createDirectory(directory);
-
-		File f = testUtil.creatFile(directory, "testFile.txt", 
-		"Hello  - irFile This is text in a file - VersionedFileDAO test");
-		
-		PersonalFile pf = null;
-		
-		pf = userFileSystemService.addFileToUser(repo, f, user, 
-				    "test_file.txt", "description");
-		
-        tm.commit(ts);
-
-		//Start a transaction 
-		ts = tm.getTransaction(td);
-        VersionedFile vf = pf.getVersionedFile();
-		// Share the file with other user
-		SharedInboxFile inboxFile = inviteUserService.shareFile(user, user1, vf);
-		tm.commit(ts);
-		
-		
-		//Start a transaction - make sure the file exists
-		ts = tm.getTransaction(td);
-		VersionedFile otherVf = versionedFileDAO.getById(vf.getId(), false);
-		IrUser u = userService.getUser(user1.getUsername());
-		FileCollaborator fCollaborator = otherVf.getCollaborator(u);
-		assert u.getSharedInboxFile(otherVf) != null : "Versioned file should exist should be in shared inbox";
-		assert u.getSharedInboxFile(inboxFile.getId()).getVersionedFile().equals(otherVf) : "Versioned file should exist in the other user root";
-		assert fCollaborator.getCollaborator().equals(u) : "Should be equal to user : u";
-		
-		tm.commit(ts);
-
-		/********* Test Indexing the file ****************/
-		//Start a transaction 
-		ts = tm.getTransaction(td);
-
-		//reload the repository and personal file
-	    repo = helper.getRepository();
-	    pf = userFileSystemService.getPersonalFile(pf.getId(), false);
-		userWorkspaceIndexService.updateAllIndexes(repo, pf);
-		
-		// reload the users
-		user = pf.getOwner();
-		user1 = userService.getUser(user1.getUsername());
-		
-		Directory lucenDirectory;
-		try {
-			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
-		} catch (IOException e1) {
-			throw new RuntimeException(e1);
-		}
-		// search the document and make sure we can find the stored data
-		try {
-
-			int hits = executeQuery(DefaultUserWorkspaceIndexService.FILE_BODY_TEXT, 
-					"Hello", 
-					lucenDirectory);
-
-			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultUserWorkspaceIndexService.FILE_BODY_TEXT;
-			
-			
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		
-		
-		// test finding in shared inbox file
-		try {
-			lucenDirectory = FSDirectory.getDirectory(user1.getPersonalIndexFolder());
-		} catch (IOException e1) {
-			throw new RuntimeException(e1);
-		}
-		// search the document and make sure we can find the stored data
-		try {
-
-			int hits = executeQuery(DefaultUserWorkspaceIndexService.FILE_BODY_TEXT, 
-					"Hello", 
-					lucenDirectory);
-
-			assert hits == 1 : "Hit count should equal 1 but equals " + hits 
-			+ " for finding " + DefaultUserWorkspaceIndexService.FILE_BODY_TEXT;
-			
-			
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		// remove the indexes
-		
-		userWorkspaceIndexService.deleteFromAllIndexes(pf);
-		
-		try {
-			lucenDirectory = FSDirectory.getDirectory(user.getPersonalIndexFolder());
-		} catch (IOException e1) {
-			throw new RuntimeException(e1);
-		}
-		// search the document and make sure we can find the stored data
-		try {
-
-			int hits = executeQuery(DefaultUserWorkspaceIndexService.FILE_BODY_TEXT, 
-					"Hello", 
-					lucenDirectory);
-
-			assert hits == 0 : "Hit count should equal 0 but equals " + hits 
-			+ " for finding " + DefaultUserWorkspaceIndexService.FILE_BODY_TEXT;
-			
-			
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		
-		
-		// test finding in shared inbox file
-		try {
-			lucenDirectory = FSDirectory.getDirectory(user1.getPersonalIndexFolder());
-		} catch (IOException e1) {
-			throw new RuntimeException(e1);
-		}
-		// search the document and make sure we can find the stored data
-		try {
-
-			int hits = executeQuery(DefaultUserWorkspaceIndexService.FILE_BODY_TEXT, 
-					"Hello", 
-					lucenDirectory);
-
-			assert hits == 0 : "Hit count should equal 0 but equals " + hits 
-			+ " for finding " + DefaultUserWorkspaceIndexService.FILE_BODY_TEXT;
-			
-			
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		tm.commit(ts);
-		/********* Done Test Indexing the file ****************/
-		
-		//Start a transaction 
-		ts = tm.getTransaction(td);
-		List<IrUser> userList = new ArrayList<IrUser>();
-		userList.add(userService.getUser(user1.getUsername()));
-		otherVf = versionedFileDAO.getById(vf.getId(), false);
-		fCollaborator = otherVf.getCollaborator(u);
-		
-		// get email information
-		String ownerEmail = fCollaborator.getVersionedFile().getOwner().getDefaultEmail().getEmail();
-		String collaboratorEmail = fCollaborator.getCollaborator().getDefaultEmail().getEmail();
-		String fileName = fCollaborator.getVersionedFile().getName();
-		
-		// UnShare the file 		
-		assert fCollaborator.getVersionedFile().getOwner().getUsername() != null : "Owner of the versioned file is null " + fCollaborator.getVersionedFile();
-		inviteUserService.unshareFile(fCollaborator);
-		
-		if( sendEmail )
-		{
-			log.debug("Sending email to ownerEmail " + ownerEmail);
-			inviteUserService.sendUnshareEmail(ownerEmail, collaboratorEmail, fileName);
-		}
-		
-		IrUser u1 = userService.getUser(user1.getUsername());
-		VersionedFile otherVf1 = versionedFileDAO.getById(vf.getId(), false);		
-		assert u1.getRootFile("myname") == null : " The file should be unshared from the user";
-		assert otherVf1.getCollaborators().size() == 0 :"Collaborator size should be 0";
-	
-		tm.commit(ts);
-
-		// Test InviteInfo persistence
-		ts = tm.getTransaction(td);
-		String strEmail = properties.getProperty("user_1_email").trim();
-		user = userService.getUser(user.getUsername());
-		vf = versionedFileDAO.getById(vf.getId(), false);
-		InviteInfo t = new InviteInfo(user, vf);
-		t.setEmail(strEmail);
-		t.setToken("token");
-		t.setInviteMessage("inviteMessage");
-		inviteUserService.makeInviteInfoPersistent(t);
-		
-		tm.commit(ts);
-
-		// Start a transaction 
-		ts = tm.getTransaction(td);
-
-		InviteInfo otherToken = inviteInfoDAO.getById(t.getId(), false);
-		
-		assert otherToken.getEmail().equals(strEmail) : "Email should be equal strEmail = " + strEmail + " other email = " + otherToken.getEmail();
-		assert otherToken.getToken().equals("token"): "Token should be equal";
-		assert otherToken.getUser().equals(user) : "User should be equal";
-		assert otherToken.getFiles().contains(vf) :"Versioned file should be equal";
-
-		tm.commit(ts);
-
-		// Start a transaction 
-		ts = tm.getTransaction(td);
-
-		if(sendEmail)
-		{
-		    inviteUserService.sendEmailToExistingUser(t);
-		}
-
-		tm.commit(ts);
-		
-		// Start a transaction - clean up data
-		ts = tm.getTransaction(td);
-		inviteInfoDAO.makeTransient(otherToken);
-
-		tm.commit(ts);
-		
-		// Start a transaction 
-		ts = tm.getTransaction(td);
-		userService.deleteUser(userService.getUser(user.getId(), false));
-		userService.deleteUser(userService.getUser(user1.getId(), false));
-		tm.commit(ts);
-		
-	    // Start new transaction
-		ts = tm.getTransaction(td);
-		assert userService.getUser(user1.getId(), false) == null : "User should be null"; 
-		assert userService.getUser(user.getId(), false) == null : "User should be null";
-		helper.cleanUpRepository();
-		tm.commit(ts);	 
 	}
 	
 	/**

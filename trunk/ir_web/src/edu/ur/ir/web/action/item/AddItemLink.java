@@ -19,7 +19,6 @@ package edu.ur.ir.web.action.item;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.quartz.Scheduler;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -36,8 +35,8 @@ import edu.ur.ir.item.ItemService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
-import edu.ur.ir.web.action.user.PersonalWorkspaceSchedulingIndexHelper;
 
 /**
  * Action to add a link to the item.
@@ -89,8 +88,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
 	
-	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 
 	/**
 	 * Prepare for action
@@ -129,8 +128,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
+			userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -175,8 +174,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		// Check if personal item exist for this generic item - if not it means that user is editing the institutional item
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
-			PersonalWorkspaceSchedulingIndexHelper schedulingHelper = new PersonalWorkspaceSchedulingIndexHelper();
-			schedulingHelper.scheduleIndexingUpdate(quartzScheduler, personalItem);
+			userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 
 		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
@@ -264,14 +263,6 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		this.userId = userId;
 	}
 
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
-	}
-
-	public void setQuartzScheduler(Scheduler quartzScheduler) {
-		this.quartzScheduler = quartzScheduler;
-	}
-
 	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
 		return institutionalItemIndexProcessingRecordService;
 	}
@@ -288,5 +279,14 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
+	}
+
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 }
