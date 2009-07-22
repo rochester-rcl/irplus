@@ -157,14 +157,12 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	public InstitutionalItemIndexProcessingRecord save(Long itemId,
 			IndexProcessingType processingType) {
 		
-		
-		InstitutionalItemIndexProcessingRecord record = null;
 		IndexProcessingType updateProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE);
 		IndexProcessingType deleteProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE);
 		IndexProcessingType insertProcessingType = indexProcessingTypeService.get(IndexProcessingTypeService.INSERT);
 		
 		
-		record = this.get(itemId, processingType);
+		InstitutionalItemIndexProcessingRecord record = this.get(itemId, processingType);
 		
 		
 		if( record != null)
@@ -179,8 +177,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 				// only update if there is no insert or delete processing type records
 				if( get(itemId, insertProcessingType) == null &&  get(itemId, deleteProcessingType) == null)
 				{
-					record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
-					// update record overrides a no file processing type record
 				    record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
 				    save(record);
 				}
@@ -210,7 +206,7 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 			}
 			else if(processingType.equals(insertProcessingType))
 			{
-				// there should never be an update, delete or no file change record existing for an insert
+				// there should never be an update, delete record existing for an insert
 				if( get(itemId, updateProcessingType) == null &&  get(itemId, deleteProcessingType) == null )
 				{
 				    record = new InstitutionalItemIndexProcessingRecord(itemId, processingType);
