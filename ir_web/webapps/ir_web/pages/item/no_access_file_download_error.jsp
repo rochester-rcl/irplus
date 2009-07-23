@@ -64,7 +64,7 @@
             
             <!--  this is the body region of the page -->
             <div id="bd">
-				<h3> <div class="errorMessage"> You do not have access to download this file! </div> </h3> 
+				<h3>Sorry, you do not have access - you may want to try <a href="<c:url value="/user/workspace.action"/>">Logging In</a> if you are not currently logged in</h3>
 		    </div>
 		    <!--  end the body tag --> 
 	
