@@ -86,12 +86,8 @@
 		                   id="backToWorkspace"><span class="arrowBtnImg">&nbsp;</span> Back to Users</button>
 		</form>
 		
-		<div class="clear">&nbsp;</div>            
-        
-        <strong> File system size : </strong> <ir:fileSizeDisplay sizeInBytes="${fileSystemSize}"/>
-         
-        <div class="clear">&nbsp;</div>    
-         
+		<br/>
+
         <!--  set up tabs for editing users -->
         <div id="edit-user-tabs" class="yui-navset">
             <ul class="yui-nav">
@@ -106,12 +102,17 @@
             
                 <!--  first tab -->
                 <div id="tab1">
+                    <c:url var="reIndexUrl" value="/admin/reIndexUserWorkspace.action">
+                        <c:param name="id" value="${irUser.id}"/>
+                    </c:url>
+                    <a href="${reIndexUrl}">Re Index User Workspace</a>  
+                    <br/>
+                    <strong> File system size : </strong> <ir:fileSizeDisplay sizeInBytes="${fileSystemSize}"/>
+					
 					<form id="editUser" name="editUserForm" method="post" 
-		             	 action="admin/updateUser.action">
+		             	 action="<c:url value="/admin/updateUser.action"/>">
 	                	
 	                	<input type="hidden" id="editUserForm_id" name="id" value="${irUser.id}"/>   
-	                  	
-	                  	<div class="clear">&nbsp;</div>
 	                  	
 	                  	<div id="editUserDialogFields">
 	                  	    <c:import url="edit_user_form.jsp"/>
