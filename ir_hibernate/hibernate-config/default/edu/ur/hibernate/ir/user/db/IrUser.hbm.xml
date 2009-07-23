@@ -110,6 +110,9 @@
 		<property name="personalIndexFolder" column="personal_index_folder" 
 		     type="string" access="field" />	
 					     	 			 			 		 
+        <property name="reBuildUserWorkspaceIndex" column="re_build_user_workspace_index" 
+		     type="boolean" not-null="true"
+			 access="field" />
 
 		<!-- Default email for this user -->
 		<many-to-one class="edu.ur.ir.user.UserEmail" 
