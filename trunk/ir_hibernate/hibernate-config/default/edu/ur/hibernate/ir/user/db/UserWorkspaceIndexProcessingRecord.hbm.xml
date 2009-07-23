@@ -44,6 +44,12 @@
         
         <property name="userId" column="user_id" type="long"
 			not-null="true" access="field" />
+			
+		<property name="skipRecord" column="skip_record" type="boolean"
+			not-null="true" access="field" />
+		
+		<property name="skipReason" column="skip_reason" type="string"
+			  access="field" />
 
 		<property name="createdDate" 
 		          column="created_date" 
