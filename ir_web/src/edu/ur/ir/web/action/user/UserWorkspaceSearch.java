@@ -51,7 +51,7 @@ public class UserWorkspaceSearch extends ActionSupport implements UserIdAware {
 	private String query;
 	
 	/** Results gathered from the search */
-	private SearchResults<FileSystem> userWorkspaceSearchResults;
+	private SearchResults<FileSystem> userWorkspaceSearchResults = new SearchResults<FileSystem>();
 	
 	/** offset to start from when asking for the results */
 	private int offset = 0;
@@ -78,8 +78,11 @@ public class UserWorkspaceSearch extends ActionSupport implements UserIdAware {
 			     numResults);
 		}
 		
-		File personalIndexFolder = new File(user.getPersonalIndexFolder());
-		userWorkspaceSearchResults = userWorkspaceSearchService.search(personalIndexFolder, query, offset, numResults);
+		if( user.getPersonalIndexFolder() != null && !user.getPersonalIndexFolder().equals(""))
+		{
+		    File personalIndexFolder = new File(user.getPersonalIndexFolder());
+		    userWorkspaceSearchResults = userWorkspaceSearchService.search(personalIndexFolder, query, offset, numResults);
+		}
 		return SUCCESS;
 	}
 

@@ -363,6 +363,15 @@ public interface UserFileSystemService {
 	 */
 	public void createIndexFolder(IrUser user, Repository repository, String folderName) throws LocationAlreadyExistsException, IOException;
 	
+	
+	/**
+	 * Delete a users index folder if it exists.
+	 * 
+	 * @param user - user who's folder is to be deleted.
+	 * @throws IOException - if an error occurs during delete.
+	 */
+	public void deleteIndexFolder(IrUser user) throws IOException;
+	
 	/**
 	 * Determine if the irFile is used by any personal files.  This
 	 * checks all users in the system.

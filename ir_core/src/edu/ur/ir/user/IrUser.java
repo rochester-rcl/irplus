@@ -159,6 +159,10 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	/** Set of licenses accepted by the user */
 	private Set<UserRepositoryLicense> acceptedLicenses = new HashSet<UserRepositoryLicense>();
 	
+	/** indicates that the users index needs to be rebuilt by either overwriting the current index
+	 * or deleting the users old index and rebuilding  */
+	private boolean reBuildUserWorkspaceIndex = false;
+	
 	
 	/**
 	 * Default Constructor. 
@@ -1737,6 +1741,24 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 */
 	public String getLowerCaseUsername() {
 		return lowerCaseUsername;
+	}
+
+	/**
+	 * Indicates the user workspace should be rebuilt.
+	 * 
+	 * @return
+	 */
+	public boolean getReBuildUserWorkspaceIndex() {
+		return reBuildUserWorkspaceIndex;
+	}
+
+	/**
+	 * Indicates the user workspace should be rebuilt.
+	 * 
+	 * @param reBuildUserIndex
+	 */
+	public void setReBuildUserWorkspaceIndex(boolean reBuildUserIndex) {
+		this.reBuildUserWorkspaceIndex = reBuildUserIndex;
 	}
 
 

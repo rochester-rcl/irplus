@@ -18,7 +18,9 @@
 package edu.ur.ir.web.action.user.admin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -26,6 +28,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonService;
 import edu.ur.ir.repository.Repository;
@@ -46,8 +49,10 @@ import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
+import edu.ur.simple.type.AscendingNameComparator;
 
 /**
  * Class for managing user information.
@@ -129,17 +134,11 @@ public class ManageUsers extends Pager implements Preparable{
 	/** Message from the admin to the user for changing password */
 	private String emailMessage;
 
-	/** List of all affiliations */
-	private List<Affiliation> affiliations;
-
 	/** Id of the affiliation selected */
 	private Long affiliationId;
 	
 	/** Affiliation service class */
 	private AffiliationService affiliationService;
-
-	/** List of all departments */
-	private List<Department> departments;
 
 	/** Id of the department selected */
 	private Long departmentIds[];
@@ -182,6 +181,15 @@ public class ManageUsers extends Pager implements Preparable{
 	/** Service to allow an administrator to login as a different user */
 	private AuthenticateUserOverrideService authenticateUserOverrideService;
 	
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
+	
+	/** Comparator for name based classes */
+	private AscendingNameComparator nameComparator = new AscendingNameComparator();
+	
 
 
 	/** Default constructor */
@@ -196,9 +204,6 @@ public class ManageUsers extends Pager implements Preparable{
      */
     public String execute(){
     	
-		affiliations = affiliationService.getAllAffiliations();
-		departments = departmentService.getAllDepartments();
-
     	return SUCCESS;
     }
     
@@ -403,11 +408,7 @@ public class ManageUsers extends Pager implements Preparable{
 		{
 			irUser = userService.getUser(id, false);
 			defaultEmail = irUser.getDefaultEmail();
-			affiliations = affiliationService.getAllAffiliations();
-			departments = departmentService.getAllDepartments();
-			
 			fileSystemSize = repositoryService.getFileSystemSizeForUser(irUser);
-
 		}
 		
 		return SUCCESS;
@@ -417,11 +418,12 @@ public class ManageUsers extends Pager implements Preparable{
 	 * Removes the selected users.
 	 * 
 	 * @return
+	 * @throws IOException 
 	 * @throws NoIndexFoundException 
 	 * @throws UserHasPublishedDeleteException
 	 * @throws UserDeletedPublicationException 
 	 */
-	public String delete() 
+	public String delete() throws IOException 
 	{
 		log.debug("Delete users called");
 		
@@ -521,6 +523,23 @@ public class ManageUsers extends Pager implements Preparable{
 		return SUCCESS;
 
 	}
+	
+	/**
+	 * Re Index a users workspace.
+	 * 
+	 * @return
+	 * @throws IOException 
+	 */
+	public String reIndexUserWorkspace() throws IOException
+	{
+		log.debug("user id = " + id);
+		viewEditUser();
+		irUser.setReBuildUserWorkspaceIndex(true);
+		userService.makeUserPersistent(irUser);
+		userWorkspaceIndexProcessingRecordService.reIndexAllUserItems(irUser, 
+    			    indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		return SUCCESS;
+	}
 
 	/**
 	 * Get the user type service.
@@ -588,8 +607,6 @@ public class ManageUsers extends Pager implements Preparable{
 		{
 			irUser = userService.getUser(id, false);
 			defaultEmail = irUser.getDefaultEmail();
-			affiliations = affiliationService.getAllAffiliations();
-			departments = departmentService.getAllDepartments();
 		}
 		
 	}
@@ -672,17 +689,11 @@ public class ManageUsers extends Pager implements Preparable{
 	 * @return
 	 */
 	public List<Affiliation> getAffiliations() {
-		return affiliations;
+		List<Affiliation> affiliations = affiliationService.getAllAffiliations();
+		Collections.sort(affiliations, nameComparator);
+		return affiliations ;
 	}
 
-	/**
-	 * Set affiliations
-	 * 
-	 * @param affiliations
-	 */
-	public void setAffiliations(List<Affiliation> affiliations) {
-		this.affiliations = affiliations;
-	}
 
 	/**
 	 * Get service class for affiliation
@@ -737,11 +748,10 @@ public class ManageUsers extends Pager implements Preparable{
 	}
 
 	public List<Department> getDepartments() {
-		return departments;
-	}
-
-	public void setDepartments(List<Department> departments) {
-		this.departments = departments;
+		List<Department> departments;
+		departments = departmentService.getAllDepartments();
+		Collections.sort(departments, nameComparator);
+		return departments ;
 	}
 
 	public Long[] getDepartmentId() {
@@ -1023,6 +1033,24 @@ public class ManageUsers extends Pager implements Preparable{
 	public void setAuthenticateUserOverrideService(
 			AuthenticateUserOverrideService authenticateUserOverrideService) {
 		this.authenticateUserOverrideService = authenticateUserOverrideService;
+	}
+
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
+	}
+
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 

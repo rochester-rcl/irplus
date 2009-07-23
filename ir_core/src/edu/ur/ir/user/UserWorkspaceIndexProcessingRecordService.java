@@ -1,5 +1,6 @@
 package edu.ur.ir.user;
 
+import java.io.IOException;
 import java.util.List;
 
 import edu.ur.ir.FileSystem;
@@ -103,9 +104,10 @@ public interface UserWorkspaceIndexProcessingRecordService {
      * 
      * @param user - user with all items to be processed
      * @param processing type - type of processing to be performed.
+     * @throws IOException 
      */
     public void reIndexAllUserItems( IrUser user,
-			IndexProcessingType processingType);
+			IndexProcessingType processingType) throws IOException;
     
   
 

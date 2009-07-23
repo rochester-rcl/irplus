@@ -580,6 +580,7 @@
        <property name="userFileSystemService" ref="userFileSystemService"/>
        <property name="userPublishingFileSystemService" ref="userPublishingFileSystemService"/>
        <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+       <property name="userService" ref="userService"/>
    </bean>
    
    <!-- ****************************************** --> 

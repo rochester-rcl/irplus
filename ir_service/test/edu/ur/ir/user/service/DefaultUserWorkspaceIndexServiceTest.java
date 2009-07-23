@@ -299,7 +299,14 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+		
+		File workspaceIndexFolder = new File(user.getPersonalIndexFolder());
+		
+		assert workspaceIndexFolder.exists() : "Workspace folder " + workspaceIndexFolder.getAbsolutePath() + " should exist";
 		userService.deleteUser(user);
+		assert !workspaceIndexFolder.exists() : "Workspace folder " + workspaceIndexFolder.getAbsolutePath() + " should NOT exist";
+		
+		
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 	}
