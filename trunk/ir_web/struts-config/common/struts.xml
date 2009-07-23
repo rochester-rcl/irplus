@@ -75,6 +75,7 @@
         	 <result name="change-password">/pages/user/login/force_change_password.jsp</result>
         	 <result name="registration-error">/pages/user/login/invalid_token.jsp</result>
         	 <result name="handleError">/pages/error.jsp</result>
+        	 <result name="accessDenied">/accessDenied.jsp</result>
         </global-results>
         
         <!--  ************************************ -->

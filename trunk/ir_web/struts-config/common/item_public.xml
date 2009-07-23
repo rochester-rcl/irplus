@@ -33,6 +33,14 @@
             <result name="success" type="no-op"/>
             <result name="input">/pages/item/no_access_file_download_error.jsp</result>
         </action>
+        
+        <action name="downloadResearcherPublicationFile" 
+        		method="fileDownloadWithPermissionCheck"
+                class="edu.ur.ir.web.action.researcher.DownloadResearcherPublicationFile">
+            <interceptor-ref name="default" />
+            <result name="success" type="no-op"/>
+            <result name="input">/pages/item/no_access_file_download_error.jsp</result>
+        </action>
 
 
        <!--  ***************************************************** -->
