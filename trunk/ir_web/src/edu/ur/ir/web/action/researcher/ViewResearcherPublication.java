@@ -179,4 +179,8 @@ public class ViewResearcherPublication extends ActionSupport implements UserIdAw
 		this.researcherFileSystemService = researcherFileSystemService;
 	}
 
+	public Long getResearcherPublicationId() {
+		return researcherPublicationId;
+	}
+
 }

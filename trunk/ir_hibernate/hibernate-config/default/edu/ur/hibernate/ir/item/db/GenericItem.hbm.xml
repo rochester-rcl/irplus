@@ -77,6 +77,15 @@
 		<property name="releaseDate" column="release_date" type="date" 
 		          access="field" />	
 		
+		
+		<!-- Copyright Statement information  -->
+		<many-to-one class="CopyrightStatement"
+			name="copyrightStatement" 
+			access="field"
+			column="copyright_statement_id" 
+			insert="true"
+			unique="true" />
+		
 	    <!-- Primary image information  -->
 		<many-to-one class="ItemFile"
 			name="primaryImageFile" 

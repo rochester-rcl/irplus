@@ -35,6 +35,8 @@ import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeService;
+import edu.ur.ir.item.CopyrightStatement;
+import edu.ur.ir.item.CopyrightStatementService;
 import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.ExtentTypeService;
 import edu.ur.ir.item.ExternalPublishedItem;
@@ -70,6 +72,7 @@ import edu.ur.simple.type.AscendingNameComparator;
  * Action to add item metadata
  *  
  * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
 public class AddItemMetadata extends ActionSupport implements Preparable, UserIdAware {
@@ -112,27 +115,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	/** Service for item.  */
 	private ItemService itemService;
 	
-	/** List of all Content types .  */
-	private List<ContentType> contentTypes;
-	
-	/** List of all Series.  */
-	private List<Series> seriesList;
-
-	/** List of all identifier types  */
-	private List<IdentifierType> identifierTypes;
-
-	/** List of all extent types  */
-	private List<ExtentType> extentTypes;
-	
-	/** List of all language types  */
-	private List<LanguageType> languages;
-	
-	/** List of all sponsors   */
-	private List<Sponsor> sponsors;
-	
-	/** List of all publishers  */
-	private List<Publisher> publishers;
-	
 	/**  Generic Item being edited */
 	private GenericItem item;
 	
@@ -147,6 +129,9 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	
 	/** Id of the language type selected */
 	private Long languageTypeId;
+	
+	/** Id of the language type selected */
+	private Long copyrightStatementId;
 	
 	/** Id of the sponsor selected */
 	private Long sponsorId;
@@ -296,7 +281,11 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	/** process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 	
+	/** Used for sorting name based entities */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
+	
+	/** Service for dealing with copyrights. */
+	private CopyrightStatementService copyrightStatementService;
 
 	
 	/**
@@ -323,14 +312,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		{
 			return "accessDenied";
 		}
-
-		contentTypes = getContentTypes();
-		seriesList = getSeriesList();
-		identifierTypes = getIdentifierTypes();
-		extentTypes = getExtentTypes();
-		languages = getLanguages();
-		sponsors = getSponsors();
-		publishers = getPublishers();
 
 		itemObjects = item.getItemObjects();
 		
@@ -380,8 +361,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		
 		reportsCount = item.getItemReports().size();
 		
-		seriesList = this.getSeriesList();
-		
 		return SUCCESS;
 	}
 
@@ -400,9 +379,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		}
 
 		itemIdentifiersCount = item.getItemIdentifiers().size();
-		
-		identifierTypes = getIdentifierTypes();;
-		
 		return SUCCESS;
 	}
 
@@ -420,9 +396,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		}
 	
 		itemExtentsCount = item.getItemExtents().size();
-		
-		extentTypes = getExtentTypes();
-		
 		return SUCCESS;
 	}
 	
@@ -441,7 +414,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		}
 
 		itemSponsorsCount = item.getItemSponsors().size();
-		sponsors = getSponsors();
 		return SUCCESS;
 	}
 
@@ -452,7 +424,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getPublisherInformation() 
 	{
-		publishers = getPublishers();
 		return SUCCESS;
 	}
 	
@@ -479,7 +450,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		}
 		
 		itemService.makePersistent(item);
-		contentTypes = this.getContentTypes();
 		return SUCCESS;
 	}
 
@@ -531,6 +501,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		
 		item.setPrimaryContentType(contentTypeService.getContentType(contentTypeId, false));
 		item.setLanguageType(languageTypeService.get(languageTypeId, false));
+		item.setCopyrightStatement(copyrightStatementService.get(copyrightStatementId, false));
 		
 		// Removes all existing reports and identifiers
 		item.removeAllItemReports();
@@ -691,7 +662,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getSeries() 
 	{
-		seriesList = this.getSeriesList();
 		return SUCCESS;
 	}
 	
@@ -702,7 +672,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getIdentifiers() 
 	{
-		identifierTypes = getIdentifierTypes();
 		return SUCCESS;
 	}
 
@@ -713,7 +682,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getExtents() 
 	{
-		extentTypes = getExtentTypes();
 		return SUCCESS;
 	}
 
@@ -724,7 +692,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getAllSponsors() 
 	{
-		sponsors = getSponsors();
 		return SUCCESS;
 	}
 	
@@ -788,7 +755,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<ContentType> getContentTypes() {
-		contentTypes = contentTypeService.getAllContentType();
+		List<ContentType> contentTypes = contentTypeService.getAllContentType();
 		Collections.sort(contentTypes, nameComparator);
 		return contentTypes;
 	}
@@ -800,7 +767,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<Series> getSeriesList() {
-		seriesList = seriesService.getAllSeries();
+		 List<Series> seriesList = seriesService.getAllSeries();
 		Collections.sort(seriesList, nameComparator);
 		return seriesList;
 	}
@@ -849,7 +816,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<IdentifierType> getIdentifierTypes() {
-		identifierTypes = identifierTypeService.getAll();
+		List<IdentifierType> identifierTypes = identifierTypeService.getAll();
 		Collections.sort(identifierTypes, nameComparator);
 		return identifierTypes;
 	}
@@ -862,9 +829,20 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<LanguageType> getLanguages() {
-		languages = languageTypeService.getAll();
+		List<LanguageType> languages = languageTypeService.getAll();
 		Collections.sort(languages, nameComparator);
 		return languages;
+	}
+	
+	/**
+	 * Get Copyright Statements
+	 * 
+	 * @return
+	 */
+	public List<CopyrightStatement> getCopyrightStatements() {
+		List<CopyrightStatement> copyrightStatements = copyrightStatementService.getAll();
+		Collections.sort(copyrightStatements, nameComparator);
+		return copyrightStatements;
 	}
 
 	/**
@@ -907,7 +885,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<Sponsor> getSponsors() {
-		sponsors = sponsorService.getAllSponsor();
+		 List<Sponsor> sponsors = sponsorService.getAllSponsor();
 		Collections.sort(sponsors, nameComparator);
 		return sponsors;
 	}
@@ -918,7 +896,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<Publisher> getPublishers() {
-		publishers = publisherService.getAllPublisher();
+		 List<Publisher> publishers = publisherService.getAllPublisher();
 		Collections.sort(publishers, nameComparator);
 		return publishers;
 	}
@@ -1351,7 +1329,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	}
 
 	public List<ExtentType> getExtentTypes() {
-		extentTypes = extentTypeService.getAllExtentTypes();
+		List<ExtentType> extentTypes = extentTypeService.getAllExtentTypes();
 		Collections.sort(extentTypes, nameComparator);
 		return extentTypes;
 	}
@@ -1507,6 +1485,24 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
+
+	public Long getCopyrightStatementId() {
+		return copyrightStatementId;
+	}
+
+	public void setCopyrightStatementId(Long copyrightStatementId) {
+		this.copyrightStatementId = copyrightStatementId;
+	}
+
+	public CopyrightStatementService getCopyrightStatementService() {
+		return copyrightStatementService;
+	}
+
+	public void setCopyrightStatementService(
+			CopyrightStatementService copyrightStatementService) {
+		this.copyrightStatementService = copyrightStatementService;
+	}
+
 	
 
 }

@@ -126,13 +126,24 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         
          // Check if file can be downloaded by user
         if (itemFile.isPublic() ) {
+        	
+        	if( user != null && !genericItem.getOwner().equals(user))
+        	{
+        	    downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
+            		itemFile.getIrFile());
+        	}
         	downloadFile(itemFile);
         }
         else if ( user != null)
         {
         	if( genericItem.getOwner().equals(user) || 
-            		(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) )
+            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) )
         	{
+        		if(genericItem.getOwner().equals(user))
+        		{
+        			downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
+                    		itemFile.getIrFile());
+        		}
         		downloadFile(itemFile);
         	}
         }
@@ -150,9 +161,6 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
      * Downloads the file
      */
     private void downloadFile(ItemFile itemFile) throws Exception {
-        downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
-        		itemFile.getIrFile());
-        
         String fileName = itemFile.getIrFile().getName();
         FileInfo fileInfo =  itemFile.getIrFile().getFileInfo();
         webIoUtils.StreamFileInfo(fileName, fileInfo, response, request, (1024*4), false, true);
