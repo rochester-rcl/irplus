@@ -64,10 +64,12 @@ import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.handle.HandleService;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
@@ -118,8 +120,11 @@ public class DefaultItemImporter implements ItemImporter{
 	/** Service for dealing with institutional items */
 	private InstitutionalItemService institutionalItemService;
 	
-	/** Service for indexing items */
-	private InstitutionalItemIndexService institutionalItemIndexService;
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+	
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/** Service to deal with user groups */
 	private UserGroupService userGroupService;
@@ -549,7 +554,6 @@ public class DefaultItemImporter implements ItemImporter{
 				log.debug("*********************** Done Loading Loading ****************************\n\n");
 			}
 		}
-		institutionalItemIndexService.optimize(new File(repo.getInstitutionalItemIndexFolder()));
 		updateHandleSequence();
 	}
 	
@@ -736,7 +740,9 @@ public class DefaultItemImporter implements ItemImporter{
 					
 			    }
 			    
-			    institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+			    // set the item to be indexed
+			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				institutionalItemIndexProcessingRecordService.save(institutionalItem.getId(), processingType);
 			    jdbcTemplate.execute("insert into dspace_convert.item(dspace_item_id, ur_research_institutional_item_id) values (" + i.itemId + "," + institutionalItem.getId() + ")");
 
 		    }
@@ -1290,15 +1296,6 @@ public class DefaultItemImporter implements ItemImporter{
 		this.institutionalItemService = institutionalItemService;
 	}
 
-	public InstitutionalItemIndexService getInstitutionalItemIndexService() {
-		return institutionalItemIndexService;
-	}
-
-	public void setInstitutionalItemIndexService(
-			InstitutionalItemIndexService institutionalItemIndexService) {
-		this.institutionalItemIndexService = institutionalItemIndexService;
-	}
-
 	public UserGroupService getUserGroupService() {
 		return userGroupService;
 	}
@@ -1410,6 +1407,24 @@ public class DefaultItemImporter implements ItemImporter{
 
 	public void setLicenseService(LicenseService licenseService) {
 		this.licenseService = licenseService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
 	}
 
 }

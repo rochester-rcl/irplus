@@ -1,5 +1,6 @@
 package edu.ur.ir.user.service;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,7 @@ import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
+import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecord;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordDAO;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
@@ -43,16 +45,37 @@ UserWorkspaceIndexProcessingRecordService
 	/** Service for dealing with processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
-
+	/** service for dealing with users */
+	private UserService userService;
+	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserWorkspaceIndexProcessingRecordService.class);
 
 
-
-	public void reIndexAllUserItems(IrUser user, IndexProcessingType processingType) {
+	public void reIndexAllUserItems(IrUser user, IndexProcessingType processingType) throws IOException {
+		
+		if( user.getReBuildUserWorkspaceIndex())
+		{
+			userFileSystemService.deleteIndexFolder(user);
+			user.setReBuildUserWorkspaceIndex(false);
+			userService.makeUserPersistent(user);
+		}
+		
 		List<PersonalFolder> personalFolders = userFileSystemService.getAllPersonalFoldersForUser(user.getId());
 		List<PersonalCollection> personalCollections = userPublishingFileSystemService.getAllPersonalCollectionsForUser(user.getId());
 		List<SharedInboxFile> inboxFiles = userFileSystemService.getSharedInboxFiles(user);
+		Set<PersonalFile> rootFiles = user.getRootFiles();
+		Set<PersonalItem> rootItems = user.getRootPersonalItems();
+		
+		for( PersonalFile rootFile : rootFiles)
+		{
+			save(user.getId(), rootFile, processingType);
+		}
+		
+		for(PersonalItem personalItem : rootItems)
+		{
+			save(user.getId(), personalItem, processingType);
+		}
 		
 		// re-index shared inbox files
 		for(SharedInboxFile inboxFile : inboxFiles)
@@ -263,6 +286,14 @@ UserWorkspaceIndexProcessingRecordService
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 
 }

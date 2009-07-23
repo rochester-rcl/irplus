@@ -33,6 +33,12 @@ public class UserWorkspaceIndexProcessingRecord extends BasePersistent{
 	/** Date the record was last created */
 	private Timestamp createdDate;
 	
+	/** indicates the record should be skipped */
+	private boolean skipRecord = false;
+	
+	/** reason why the record should be skipped */
+	private String skipReason;
+	
 	/**
 	 * Package protected constructor
 	 */
@@ -188,5 +194,42 @@ public class UserWorkspaceIndexProcessingRecord extends BasePersistent{
 		sb.append(version);
 		sb.append("]");
 		return sb.toString();
+	}
+
+	/**
+	 * Returns true if the record should be skipped.
+	 * 
+	 * @return
+	 */
+	public boolean getSkipRecord()
+	{
+		return skipRecord;
+	}
+
+	/**
+	 * Set the skip record status.
+	 * 
+	 * @param skipRecord
+	 */
+	public void setSkipRecord(boolean skipRecord) {
+		this.skipRecord = skipRecord;
+	}
+
+	/**
+	 * Get the skip record reason.
+	 * 
+	 * @return
+	 */
+	public String getSkipReason() {
+		return skipReason;
+	}
+
+	/**
+	 * Set the skip record reason.
+	 * 
+	 * @param skipReason
+	 */
+	public void setSkipReason(String skipReason) {
+		this.skipReason = skipReason;
 	}
 }

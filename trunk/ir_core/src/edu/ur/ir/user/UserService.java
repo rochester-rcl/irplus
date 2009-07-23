@@ -16,6 +16,7 @@
 
 package edu.ur.ir.user;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.security.userdetails.UserDetailsService;
@@ -99,6 +100,7 @@ public interface UserService extends UserDetailsService {
 	 * @throws UserHasPublishedDeleteException - if the user has published into the
 	 * system.
 	 * @throws UserDeletedPublicationException - if user has deleted publications
+	 * @throws IOException 
 	 */
 	public boolean deleteUser(IrUser user) throws UserHasPublishedDeleteException, UserDeletedPublicationException;
 	

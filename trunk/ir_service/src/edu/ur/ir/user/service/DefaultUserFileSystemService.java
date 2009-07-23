@@ -193,9 +193,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 			Long userId, 
 			Long parentFolderId) 
 	{
-		
-		    return personalFolderDAO.getSubFoldersForFolder(userId, parentFolderId);
-		
+		return personalFolderDAO.getSubFoldersForFolder(userId, parentFolderId);
 	}
 
 	
@@ -205,10 +203,8 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	 * @see edu.ur.ir.user.UserFileSystemService#getPersonalFile(IrUser, IrFile)
 	 */
 	public PersonalFile getPersonalFile(IrUser user, IrFile irFile) {
-		
 		return personalFileDAO.getFileForUserWithSpecifiedIrFile(user.getId(), 
 				irFile.getId());
-		
 	}
 	
 	/**
@@ -890,6 +886,40 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 			user.setPersonalIndexFolder(userFolder);
 			irUserDAO.makePersistent(user);
 		}
+	}
+	
+	/**
+	 * Delete a users index folder location.  
+	 * 
+	 * @param user - user who's folder is to be deleted.
+	 * @throws IOException
+	 */
+	public void deleteIndexFolder(IrUser user) throws IOException
+	{
+		 String path = user.getPersonalIndexFolder();
+		 if( path != null && !path.trim().equals(""))
+		 {
+	         File workspaceIndexFolder = new File(path);
+	         if( !workspaceIndexFolder.isDirectory())
+	         {
+	    	     throw new IllegalStateException("user's workspace folder is not a directory " + workspaceIndexFolder.getAbsolutePath());
+	         }
+	         if( workspaceIndexFolder.exists())
+	         {
+	    	     if( log.isDebugEnabled())
+	    	     {
+	    	         log.debug("deleting user workspace index folder " + workspaceIndexFolder.getAbsolutePath());
+	    	     }
+	    	 
+	    	     FileUtils.forceDelete(workspaceIndexFolder);
+	    	     user.setPersonalIndexFolder(null);
+	    	     irUserDAO.makePersistent(user);
+	         }
+	     }
+	     else
+	     {
+	    	 log.debug("no workspace folder for user " + user);
+	     }
 	}
 	
 	/**

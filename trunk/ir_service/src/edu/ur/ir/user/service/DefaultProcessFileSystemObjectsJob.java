@@ -124,7 +124,7 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			IrUser user = userService.getUser(record.getUserId(), false);
 			IndexProcessingType indexProcessingType = record.getIndexProcessingType();
 			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			if( user != null)
+			if( user != null && !record.getSkipRecord())
 			{
 				if( indexProcessingType.getName().equals(IndexProcessingTypeService.DELETE))
 				{			
@@ -132,6 +132,9 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 						processDelete(record, user, userWorkspaceIndexService);
 						userWorkspaceIndexProcessingService.delete(record);
 					} catch (Exception e) {
+						record.setSkipRecord(true);
+						record.setSkipReason("Procesing failed due to error");
+						userWorkspaceIndexProcessingService.save(record);
 						errorEmailService.sendError(e);
 						log.error("Unable to delete index record for user", e);
 					}
@@ -143,6 +146,9 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 							 userPublishingFileSystemService);
 						userWorkspaceIndexProcessingService.delete(record);
 					} catch (Exception e) {
+						record.setSkipRecord(true);
+						record.setSkipReason("Procesing failed due to error");
+						userWorkspaceIndexProcessingService.save(record);
 						errorEmailService.sendError(e);
 						log.error("Unable to update index record for user", e);
 					}
@@ -154,6 +160,9 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 							 userPublishingFileSystemService);
 						userWorkspaceIndexProcessingService.delete(record);
 					} catch (Exception e) {
+						record.setSkipRecord(true);
+						record.setSkipReason("Procesing failed due to error");
+						userWorkspaceIndexProcessingService.save(record);
 						errorEmailService.sendError(e);
 						log.error("Unable to insert index record for user", e);
 					}

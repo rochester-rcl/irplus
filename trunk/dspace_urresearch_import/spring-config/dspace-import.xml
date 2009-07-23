@@ -101,7 +101,8 @@
         <property name="institutionalItemService" ref="institutionalItemService"/>
         <property name="userService" ref="userService"/>
         <property name="userGroupService" ref="userGroupService"/>
-        <property name="institutionalItemIndexService" ref="institutionalItemIndexService"/>
+        <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
+        <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
         <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
         <property name="defaultThumbnailTransformer" ref="defaultThumbnailTransformer"/>
         <property name="temporaryFileCreator" ref="temporaryFileCreator"/>

@@ -17,6 +17,7 @@
 
 package edu.ur.ir.user.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -278,6 +279,7 @@ public class DefaultUserService implements UserService {
 	 * delete the user if they have published into the system.
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws UserDeletedPublicationException
+	 * @throws IOException 
 	 * 
 	 * @see edu.ur.ir.user.service.UserService#deleteUser(java.lang.Long)
 	 */
@@ -411,6 +413,11 @@ public class DefaultUserService implements UserService {
 			}
 		}
 		
+		try {
+			userFileSystemService.deleteIndexFolder(user);
+		} catch (IOException e) {
+		    log.error(e);
+		}
 		irUserDAO.makeTransient(user);
 		return true;
 	}
