@@ -42,6 +42,9 @@
 				    <a href="${itemFileDownload}">
 	                 ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${ir:fileDownloadCount(object.irFile)})
 		        </c:if>
+		        <c:if test="${!object.public && institutionalItem.owner != user && !ir:hasPermission('ITEM_FILE_READ',object) }">
+		            ${object.irFile.nameWithExtension}&nbsp;(Private - try <a href="<c:url value="/user/workspace.action"/>">Logging In</a> if not already) 
+		        </c:if>
 		    </c:if>
 		    <c:if test='${param.isPreview && !param.isResearcherView}'>
 		         ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/>
