@@ -38,7 +38,7 @@
             method="{1}"
             class="edu.ur.ir.web.action.user.admin.ManageUsers">
             <interceptor-ref name="crudStack" />
-            <result name="input">/pages/admin/user/user.jsp</result>
+            <result name="input">/pages/admin/user/edit_user.jsp</result>
             <result name="added">/pages/admin/user/add_user_form.jsp</result>
             <result name="updated">/pages/admin/user/edit_user_form.jsp</result>
             <result name="deleted">/pages/admin/user/user_deleted.jsp</result>
@@ -47,8 +47,14 @@
         <action name="getRolesForUser"
             class="edu.ur.ir.web.action.user.admin.ManageUsers"
             method="getRolesForUser">
-            <result name="input">/pages/admin/user/user.jsp</result>
+            <result name="input">/pages/admin/user/edit_user.jsp</result>
             <result name="success">/pages/admin/user/user_roles.jsp</result>
+        </action> 
+        
+        <action name="reIndexUserWorkspace"
+            class="edu.ur.ir.web.action.user.admin.ManageUsers"
+            method="reIndexUserWorkspace">
+            <result name="success">/pages/admin/user/edit_user.jsp</result>
         </action> 
         
         <action name="changePassword"
