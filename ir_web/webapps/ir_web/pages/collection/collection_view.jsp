@@ -93,6 +93,12 @@
                                     ${collection.name}
                                     </c:if>
                                 </c:forEach>
+                                <c:if test="${user != null && ir:userHasRole('ROLE_ADMIN', 'OR')}">
+                                    <c:url var="editCollection" value="/admin/viewInstitutionalCollection">
+                                        <c:param name="collectionId" value="${institutionalCollection.id}"/>
+                                    </c:url>
+                                    &nbsp;<a href="${editCollection}">(Edit Collection)</a>
+                                </c:if>
                     </h3>
                 </div>
                 <!--  create the first column -->
