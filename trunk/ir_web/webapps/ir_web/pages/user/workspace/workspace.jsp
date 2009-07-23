@@ -262,7 +262,7 @@
                 <input type="hidden" id="newItemForm_parentCollectionId" name="parentCollectionId" />
 		        <table class="formTable">
 				    <tr>
-				        <td>Articles(A, an, The, ...)</td>
+				        <td>Articles(A, An, The, ...)</td>
 				        <td>Title</td>
 				    </tr>
 				    <tr>                                           

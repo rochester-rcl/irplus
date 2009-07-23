@@ -33,18 +33,25 @@
 			
 		    <!--  the is Preview flag indicates that the file is being previewed by a user this should be passed in
 		          by the importing file -->		
-			<c:if test='${!param.isPreview}'>    	
-			<c:if test="${object.public || institutionalItem.owner == user || ir:hasPermission('ITEM_FILE_READ',object) }">
-			    <c:url var="itemFileDownload" value="/fileDownloadForInstitutionalItem.action">
-				    <c:param value="${institutionalItemVersion.item.id}" name="itemId"/>
-					<c:param value="${object.id}" name="itemFileId"/>
-				</c:url>
-				<a href="${itemFileDownload}">
-	             ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${ir:fileDownloadCount(object.irFile)})
+			<c:if test='${!param.isPreview && !param.isResearcherView}'>    	
+			    <c:if test="${object.public || institutionalItem.owner == user || ir:hasPermission('ITEM_FILE_READ',object) }">
+			        <c:url var="itemFileDownload" value="/fileDownloadForInstitutionalItem.action">
+				        <c:param value="${institutionalItemVersion.item.id}" name="itemId"/>
+					    <c:param value="${object.id}" name="itemFileId"/>
+				    </c:url>
+				    <a href="${itemFileDownload}">
+	                 ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${ir:fileDownloadCount(object.irFile)})
+		        </c:if>
 		    </c:if>
-		    </c:if>
-		    <c:if test='${param.isPreview}'>
+		    <c:if test='${param.isPreview && !param.isResearcherView}'>
 		         ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/>
+		    </c:if>
+		    <c:if test='${param.isResearcherView}'>
+					<c:url var="itemFileDownload" value="/downloadResearcherPublicationFile.action">
+					    <c:param value="${researcherPublicationId}" name="publicationId"/>
+						<c:param value="${object.id}" name="itemFileId"/>
+					</c:url>
+					<a href="${itemFileDownload}"> ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${ir:fileDownloadCount(object.irFile)})
 		    </c:if>
 												   
 	    </c:if>

@@ -226,7 +226,7 @@
 	      </tr>
 	      
 	      <tr>
-	      <td> 
+	          <td> 
 	      
 		         <div id="new_extent"> </div>
 	               <!--  this table is built dynamically -->
@@ -234,29 +234,49 @@
 	                   <c:import url="extent_list.jsp"/>
 	               </div>  
 	
-	      </td>
+	          </td>
 	      </tr>
-
 	      
 	      <tr>
-			<td class="rowBorder"> 				          
-	          <label  for="itemForm_languages">Language</label>
-		  </td>
-		   </tr>
+			  <td class="rowBorder"> 				          
+	              <label  for="itemForm_languages">Language</label>
+		       </td>
+		  </tr>
 	
-	     <tr>
-		  <td>
-		  	  <select id="itemForm_languages" name="languageTypeId"  />
-		  	  <option value = "0"> Select </option>
-	      		<c:forEach items="${languages}" var="language">
+	      <tr>
+		      <td>
+		  	      <select id="itemForm_languages" name="languageTypeId"  />
+		  	      <option value = "0"> Select </option>
+	      		   <c:forEach items="${languages}" var="language">
 	       			<option value = "${language.id}"
 	      			<c:if test="${item.languageType.id == language.id}">
 	      				selected
 	      			</c:if>
 	      			> ${language.name}</option>
-	      		</c:forEach>
-	      	   </select>
-	      </td>
+	      		   </c:forEach>
+	      	       </select>
+	          </td>
+	      </tr>
+	      
+	      <tr>
+			  <td class="rowBorder"> 				          
+	              <label  for="itemForm_copyright">Copyright Statement</label>
+		       </td>
+		  </tr>
+	
+	      <tr>
+		      <td>
+		  	      <select id="itemForm_copyright" name="copyrightStatementId"  />
+		  	      <option value = "0"> Select </option>
+	      		   <c:forEach items="${copyrightStatements}" var="copyright">
+	       			<option value = "${copyright.id}"
+	      			<c:if test="${item.copyrightStatement.id == copyright.id}">
+	      				selected
+	      			</c:if>
+	      			> ${copyright.name} - ${copyright.text}</option>
+	      		   </c:forEach>
+	      	       </select>
+	          </td>
 	      </tr>
 	
 	      <tr>
