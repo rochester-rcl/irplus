@@ -587,6 +587,8 @@ CREATE TABLE ir_user.user_workspace_index_processing_record
   workspace_type TEXT NOT NULL, 
   created_date TIMESTAMP WITH TIME ZONE NOT NULL,
   index_processing_type_id BIGINT NOT NULL,
+  skip_record BOOLEAN NOT NULL,
+  skip_reason TEXT,
   UNIQUE(workspace_item_id, user_id, workspace_type, index_processing_type_id),
   FOREIGN KEY (index_processing_type_id)
       REFERENCES ir_index.index_processing_type (index_processing_type_id)
@@ -672,6 +674,7 @@ CREATE TABLE ir_user.ir_user
   affiliation_id BIGINT,
   department_id BIGINT,
   affiliation_approved BOOLEAN,
+  re_build_user_workspace_index BOOLEAN NOT NULL,
   FOREIGN KEY (affiliation_id) REFERENCES ir_user.affiliation (affiliation_id),
   FOREIGN KEY (department_id) REFERENCES ir_user.department (department_id),
   FOREIGN KEY (person_name_authority_id) REFERENCES person.person_name_authority (person_name_authority_id),
@@ -2365,12 +2368,12 @@ insert into
 ir_user.ir_user ( user_id, user_password, password_encoding, default_email_id, username, 
 lower_case_user_name, first_name, lower_case_first_name, last_name, lower_case_last_name, 
 version, account_expired, account_locked, credentials_expired, 
-force_change_password, affiliation_approved, self_registered, created_date)  
+force_change_password, affiliation_approved, self_registered, created_date, re_build_user_workspace_index)  
 values (nextval('ir_user.ir_user_seq'), 
       'd033e22ae348aeb5660fc2140aec35850c4da997', 'SHA-1', null, 'admin', 'admin', 'System', 
       'system', 'Admin', 'admin', 0, false, 
 
-false, false, false, true, false, date(now()));
+false, false, false, true, false, date(now()), false);
 
 insert into ir_user.user_email(user_email_id, version, email, user_id, isVerified) values 
 
