@@ -48,7 +48,7 @@ public class ItemFile extends CommonPersistent implements ItemObject {
 	private int versionNumber;
 	
 	/** Indicates whether the file is publicaly viewable or not */
-	private boolean isPublic = true;
+	private boolean isPublic = false;
 	
 	/**
      * Package protected constructor 

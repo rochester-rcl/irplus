@@ -573,6 +573,7 @@ public class DefaultItemImporter implements ItemImporter{
 	{
 		log.debug("loading dspace item " + i);
 		GenericItem genericItem = genericItemPopulator.createGenericItem(repo, i);
+		genericItem.setPubliclyViewable(true);
 		List<InstitutionalCollection> urResearchCollections = getCollections(i);
 		IrUser repositoryLicenseCreationUser = userService.getUser("admin");
 		LicenseInfo licenseInfo = null;
@@ -598,6 +599,7 @@ public class DefaultItemImporter implements ItemImporter{
 				}
 				else
 				{
+					
 				    File f = FileZipperUtil.getZipEntry(zipFile, bfi.newFileName, "contentFile" );
 				    IrFile irFile = null;
 				    try {
@@ -618,6 +620,12 @@ public class DefaultItemImporter implements ItemImporter{
 				    		// normal file processing
 					        irFile = repositoryService.createIrFile(repo, f, bfi.originalFileName, "imported dspace item file");
 					        ItemFile itemFile = genericItem.addFile(irFile);
+					        
+					        // if the file is public set it as such
+					        if(PermissionConstants.hasAnonymousRead(bfi.groupPermissions) )
+							{
+								itemFile.setPublic(true);
+							}
 					        itemFile.setDescription(bfi.description);
 					        itemFileBitstreamInfos.add(new ItemFileBitstreamInfo(itemFile, bfi));
 					        if( defaultThumbnailTransformer.canTransform(irFile.getFileInfo().getExtension()))

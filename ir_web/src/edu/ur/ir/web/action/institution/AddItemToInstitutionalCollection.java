@@ -38,6 +38,7 @@ import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
@@ -412,6 +413,17 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 					
 				    itemVersion.setHandleInfo(info);
 				}
+				
+				// make the files public if this is the first submit
+				// and the item going into at least one public collection
+				if(publicCollectionExist && !isItemPublished )
+				{
+					for(ItemFile file:item.getItemFiles()) {
+						file.setPublic(true);
+					}
+					item.setPubliclyViewable(true);
+				}
+				
 				// save the item with the new handle information.
 				institutionalItemService.saveInstitutionalItem(institutionalItem);
 				

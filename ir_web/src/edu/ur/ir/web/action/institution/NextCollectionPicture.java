@@ -83,7 +83,7 @@ Comparator<IrFile>{
     	
     	if( log.isDebugEnabled())
     	{
-    		log.debug("Next Repository Picture");
+    		log.debug("Next Collection Picture");
     	}
 	  
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
@@ -98,7 +98,7 @@ Comparator<IrFile>{
         
             // always put the primary picture first
             IrFile primaryPicture = institutionalCollection.getPrimaryPicture();
-		    if(  primaryPicture!= null)
+		    if(primaryPicture!= null)
 		    {
 		        pictures.addFirst(primaryPicture);
 		    }

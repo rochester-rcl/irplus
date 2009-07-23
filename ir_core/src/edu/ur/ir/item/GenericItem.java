@@ -135,10 +135,10 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	private boolean locked = false;
 	
 	/** Indicates that this item can be viewed by the public. */
-	private boolean publiclyViewable = true;
+	private boolean publiclyViewable = false;
 	
 	/** Copyright statement for the item */
-	private ItemCopyrightStatement itemCopyrightStatement;
+	private CopyrightStatement copyrightStatement;
 	
 	/**
 	 * Default constructor; 
@@ -1354,6 +1354,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		newItem.setOwner(this.getOwner());
 		newItem.setPrimaryContentType(this.getPrimaryContentType());
 		newItem.setPrimaryImageFile(this.getPrimaryImageFile());
+		newItem.setCopyrightStatement(this.getCopyrightStatement());
 		
         if( firstAvailableDate != null )
         {
@@ -1744,24 +1745,6 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		return isEmbargoed();
 	}
 
-	/**
-	 * Copyright statement for the item.
-	 * 
-	 * @return the item copyright
-	 */
-	public ItemCopyrightStatement getItemCopyrightStatement() {
-		return itemCopyrightStatement;
-	}
-
-	/**
-	 * Copyright statement for the item.
-	 * 
-	 * @param itemCopyrightStatement
-	 */
-	public void setItemCopyrightStatement(
-			ItemCopyrightStatement itemCopyrightStatement) {
-		this.itemCopyrightStatement = itemCopyrightStatement;
-	}
 
 	/**
 	 * The leading name articles for example "A, an, the, ye"
@@ -1803,6 +1786,14 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 			return name;
 		}
 		
+	}
+
+	public CopyrightStatement getCopyrightStatement() {
+		return copyrightStatement;
+	}
+
+	public void setCopyrightStatement(CopyrightStatement copyrightStatement) {
+		this.copyrightStatement = copyrightStatement;
 	}
 
 }
