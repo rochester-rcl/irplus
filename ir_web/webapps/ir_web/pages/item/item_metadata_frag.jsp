@@ -274,6 +274,14 @@
 					</td>
 				</tr>				
   			</table>
+  			
         </td>
 	</tr>
+	<c:if test="${item.copyrightStatement != null}">
+	<tr>
+	    <td colspan="2" class="greyBorderTableTd">
+  			 <p>Copyright &copy; ${item.copyrightStatement.text}</p>
+	    </td>
+	</tr>
+	</c:if>
 </table>
