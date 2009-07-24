@@ -77,6 +77,7 @@ import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemFileSecurityService;
 import edu.ur.ir.item.ItemSecurityService;
+import edu.ur.ir.person.NameAuthorityIndexService;
 import edu.ur.ir.repository.LicenseService;
 import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.Repository;
@@ -149,6 +150,9 @@ public class DefaultItemImporter implements ItemImporter{
 	
 	/** Service for dealing with licenses */
 	private LicenseService licenseService;
+	
+	/** Service for indexing names */
+	private NameAuthorityIndexService nameAuthorityIndexService;
 
 	/**
 	 * Data source for accessing the database.
@@ -554,6 +558,7 @@ public class DefaultItemImporter implements ItemImporter{
 				log.debug("*********************** Done Loading Loading ****************************\n\n");
 			}
 		}
+		nameAuthorityIndexService.optimize(new File(repo.getNameIndexFolder()));
 		updateHandleSequence();
 	}
 	
@@ -1433,6 +1438,15 @@ public class DefaultItemImporter implements ItemImporter{
 	public void setInstitutionalItemIndexProcessingRecordService(
 			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
 		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public NameAuthorityIndexService getNameAuthorityIndexService() {
+		return nameAuthorityIndexService;
+	}
+
+	public void setNameAuthorityIndexService(
+			NameAuthorityIndexService nameAuthorityIndexService) {
+		this.nameAuthorityIndexService = nameAuthorityIndexService;
 	}
 
 }

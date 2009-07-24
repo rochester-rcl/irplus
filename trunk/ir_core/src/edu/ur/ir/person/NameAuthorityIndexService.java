@@ -53,4 +53,11 @@ public interface NameAuthorityIndexService {
 	 */
 	public void deleteFromIndex(PersonNameAuthority personNameAuthority, File nameAuthorityIndex);
 	
+	/**
+	 * Optimize the index.
+	 * 
+	 * @param name authority index
+	 */
+	public void optimize(File nameAuthorityIndex);
+	
 }

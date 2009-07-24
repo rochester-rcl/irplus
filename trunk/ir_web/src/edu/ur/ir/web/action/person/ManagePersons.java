@@ -170,6 +170,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		File nameAuthorityFolder = new File(repo.getNameIndexFolder());
 		nameAuthorityIndexService.addToIndex(personNameAuthority, nameAuthorityFolder);
+		nameAuthorityIndexService.optimize(nameAuthorityFolder);
 		
 		log.debug( " my Name = " + myName + " add to user id = " + addToUserId);
 		// In user account, to add the names to a user
