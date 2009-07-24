@@ -17,6 +17,8 @@
 
 package edu.ur.ir.web.spring.security;
 
+import java.util.LinkedList;
+
 import org.apache.log4j.Logger;
 import org.springframework.security.Authentication;
 import org.springframework.security.AuthenticationException;
@@ -36,9 +38,7 @@ import javax.servlet.http.HttpSession;
 
 
 /**
- * Authenticating processing filter.  This prevents more than one type of authentication 
- * from being accessed.  This removes the security hole of two different users in two different
- * systems having the same authentication.
+ * Authenticating processing filter.  
  * 
  * 
  * @author Nathan Sarr
@@ -52,19 +52,18 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
 
     public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "j_username";
     public static final String SPRING_SECURITY_FORM_PASSWORD_KEY = "j_password";
-    public static final String SPRING_SECURITY_FORM_AUTHORIZATION_TYPE_KEY = "j_auth_type";
     public static final String SPRING_SECURITY_LAST_USERNAME_KEY = "SPRING_SECURITY_LAST_USERNAME";
 
     private String usernameParameter = SPRING_SECURITY_FORM_USERNAME_KEY;
     private String passwordParameter = SPRING_SECURITY_FORM_PASSWORD_KEY;
-    private String authorizationTypeParameter = SPRING_SECURITY_FORM_AUTHORIZATION_TYPE_KEY;
+    
+    private boolean ldapEnabled = true;
 
     //~ Methods ========================================================================================================
 
     public Authentication attemptAuthentication(HttpServletRequest request) throws AuthenticationException {
         String username = obtainUsername(request);
         String password = obtainPassword(request);
-        String authType = obtainAuthorizationType(request);
         
         if (username == null) {
             username = "";
@@ -74,27 +73,25 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
             password = "";
         }
         
-        if( authType == null)
-        {
-        	authType = "";
-        }
+  
         
         username = username.trim();
 
-        AbstractAuthenticationToken authRequest = null;
         
-        log.debug("auth type = " + authType);
-        if( authType.equals("local"))
+        LinkedList<AbstractAuthenticationToken> authRequests = new LinkedList<AbstractAuthenticationToken>();
+        authRequests.add(new UsernamePasswordAuthenticationToken(username, password));
+        
+        if( ldapEnabled )
         {
-        	log.debug("creating user name password authentication token");
-        	authRequest = new UsernamePasswordAuthenticationToken(username, password);
+        	log.debug("LDAP enabled - adding ldap token");
+            authRequests.add(new LdapAuthenticationToken(username, password)); 
         }
-        if( authType.equals("ldap"))
+        else
         {
-        	log.debug("creating LDAP authentication token");
-        	authRequest = new LdapAuthenticationToken(username, password);
+        	log.debug("LDAP NOT ENABLED");
         }
-
+   
+      
  
         // Place the last username attempted into HttpSession for views
         HttpSession session = request.getSession(false);
@@ -103,10 +100,32 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
             request.getSession().setAttribute(SPRING_SECURITY_LAST_USERNAME_KEY, TextUtils.escapeEntities(username));
         }
 
-        // Allow subclasses to set the "details" property
-        setDetails(request, authRequest);
-
-        return this.getAuthenticationManager().authenticate(authRequest);
+        AuthenticationException lastException = null;
+        Authentication auth = null;
+        for( AbstractAuthenticationToken authRequest : authRequests)
+        {
+        	if( auth == null )
+        	{
+                // Allow subclasses to set the "details" property
+        	    try
+        	    {
+        		    log.debug("Attempting request user name = " + username);
+                    setDetails(request, authRequest);
+                    auth = getAuthenticationManager().authenticate(authRequest);
+                    // if an exception has not occurred  return the auth - everything
+                    // else will return an exception
+                    return auth;
+        	    }
+        	    catch (AuthenticationException ae) {
+        		    log.debug("authentication exception " + ae);
+                    lastException = ae;
+                    auth = null;
+                }
+        	}
+        }
+        
+        throw lastException;
+        	
     }
 
     /**
@@ -146,18 +165,7 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
         return request.getParameter(usernameParameter);
     }
     
-    /**
-     * Enables subclasses to override the composition of the auth type, such as by including additional values
-     * and a separator.
-     *
-     * @param request so that request attributes can be retrieved
-     *
-     * @return the username that will be presented in the <code>Authentication</code> request token to the
-     *         <code>AuthenticationManager</code>
-     */
-    protected String obtainAuthorizationType(HttpServletRequest request) {
-        return request.getParameter(authorizationTypeParameter);
-    }
+ 
 
     /**
      * Provided so that subclasses may configure what is put into the authentication request's details
@@ -201,4 +209,12 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
     String getPasswordParameter() {
         return passwordParameter;
     }
+
+	public boolean getLdapEnabled() {
+		return ldapEnabled;
+	}
+
+	public void setLdapEnabled(boolean ldapEnabled) {
+		this.ldapEnabled = ldapEnabled;
+	}
 }

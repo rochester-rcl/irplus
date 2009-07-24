@@ -93,7 +93,6 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 			}
 			writer.addDocument(document);
 			writer.commit();
-			writer.optimize();
 		} 
 		catch (IOException e) 
 		{
@@ -281,6 +280,61 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 	    }
 		return writer;
+	}
+
+	
+	/**
+	 * Optimize the index.
+	 * 
+	 * @see edu.ur.ir.person.NameAuthorityIndexService#optimize(java.io.File)
+	 */
+	public void optimize(File nameAuthorityIndex) {
+		IndexWriter writer = null;
+		Directory directory = null;
+		try 
+		{
+		    directory = FSDirectory.getDirectory(nameAuthorityIndex.getAbsolutePath());
+		    while(writer == null )
+			{
+				writer = getWriter(directory);
+			}
+			writer.optimize();
+		} 
+		catch (IOException e) 
+		{
+			log.error(e);
+		}
+		finally 
+        {
+		    if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try 
+		    {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		    
+	    }
 	}
 
 }
