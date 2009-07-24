@@ -43,7 +43,11 @@
 	                 ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${ir:fileDownloadCount(object.irFile)})
 		        </c:if>
 		        <c:if test="${!object.public && institutionalItem.owner != user && !ir:hasPermission('ITEM_FILE_READ',object) }">
-		            ${object.irFile.nameWithExtension}&nbsp;(Private - try <a href="<c:url value="/user/workspace.action"/>">Logging In</a> if not already) 
+		            <c:url var="restrictedAccess" value="/user/institutionalPublicationPublicView.action">
+				        <c:param value="${institutionalItem.id}" name="institutionalItemId"/>
+				        <c:param value="${institutionalItemVersion.versionNumber}" name="versionNumber"/>
+				    </c:url>
+		            ${object.irFile.nameWithExtension}&nbsp;(Restricted Access - try <a href="${restrictedAccess}">Logging In</a> if not already) 
 		        </c:if>
 		    </c:if>
 		    <c:if test='${param.isPreview && !param.isResearcherView}'>
