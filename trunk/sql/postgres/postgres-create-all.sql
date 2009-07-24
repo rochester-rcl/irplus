@@ -1219,6 +1219,7 @@ CREATE TABLE ir_item.item
   content_type_id BIGINT,
   external_published_item_id BIGINT,
   original_item_creation_date_id BIGINT,
+  copyright_statement_id BIGINT,
   user_id BIGINT,
   withdrawn BOOLEAN,
   release_date DATE,
@@ -1238,6 +1239,8 @@ CREATE TABLE ir_item.item
   primary_image_item_file_id BIGINT,
   FOREIGN KEY (language_type_id) REFERENCES ir_item.language_type 
 	(language_type_id),
+  FOREIGN KEY (copyright_statement_id) REFERENCES ir_item.copyright_statement
+	(copyright_statement_id),
   FOREIGN KEY (original_item_creation_date_id) REFERENCES ir_item.original_item_creation_date 
 	(original_item_creation_date_id),
   FOREIGN KEY (first_available_date_id) REFERENCES ir_item.first_available_date 
