@@ -61,27 +61,11 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
   
-        <h3>Repository License: ${licenseVersion.license.name} ( Version - ${licenseVersion.versionNumber} )</h3>
+        <h3>Accepted Repository License: ${licenseVersion.license.name} ( Version - ${licenseVersion.versionNumber} )</h3>
 
         <div id="bd">
- 	        <c:url var="addLicenseUrl" value="/admin/addRepositoryLicense.action">
- 	        </c:url>
- 	        
 	        <form method="post" class="formTable">
-	            <table>
-	                <tr>
-	                    <td class="label">License Name:</td>
-	                    <td class="input"><input disabled="disabled" type="text" name="name" size="50" value="${licenseVersion.license.name}"/></td>
-	                </tr>
-	                 <tr>     
-	                    <td class="label">Description/Revision Notes</td>
-	                    <td class="input"><textarea disabled="disabled" name="description" rows="10" cols="70">${licenseVersion.license.description}</textarea></td>
-	                </tr>
-	                <tr>     
-	                    <td class="label">License Text</td>
-	                    <td class="input"><textarea disabled="disabled" name="text" rows="30" cols="70">${licenseVersion.license.text}</textarea></td>
-	                </tr>
-	            </table>
+	            <p>${licenseVersion.license.text}</p>
 	        </form>
         </div>
       <!--  end body div -->
