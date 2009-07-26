@@ -40,10 +40,10 @@
 			<tr >
 				<td class="tdItemSelectLeftBorder" >
 					<c:if test="${collectionPermission.permission == 'DIRECT_SUBMIT'}">
-		            	 <span class="addBtnImg">&nbsp;</span>Direct
+		            	 <span class="addBtnImg">&nbsp;</span>Direct Submission
 	                </c:if>
 					<c:if test="${collectionPermission.permission == 'REVIEW_SUBMIT'}">
-		                 <span class="groupAddBtnImg">&nbsp;</span>Review
+		                 <span class="groupAddBtnImg">&nbsp;</span>Reviewed Submission
 	                </c:if>
 				</td>
 				

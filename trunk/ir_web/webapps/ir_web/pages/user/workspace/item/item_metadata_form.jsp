@@ -21,6 +21,7 @@
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="ur" uri="ur-tags"%>
 			
 	<c:if test="${ThumbnailFilesCount > 0}">
 		<strong> Primary File: </strong> 
@@ -273,7 +274,7 @@
 	      			<c:if test="${item.copyrightStatement.id == copyright.id}">
 	      				selected
 	      			</c:if>
-	      			> ${copyright.name} - ${copyright.text}</option>
+	      			><ur:maxText numChars="140" text="${copyright.name} - ${copyright.text}"/></option>
 	      		   </c:forEach>
 	      	       </select>
 	          </td>

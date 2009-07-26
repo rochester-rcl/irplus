@@ -65,15 +65,7 @@
             
 				<br/>
                                            
-                <button class="ur_button" id="finish_later" 
-                    onmouseover="this.className='ur_buttonover';"
-                    onmouseout="this.className='ur_button';"
-                    onclick="javascript:YAHOO.ur.item.collection.submitPublication();">Submit</button>
                 
-                <button class="ur_button" id="goto_next" 
-                    onmouseover="this.className='ur_buttonover';"
-                    onmouseout="this.className='ur_button';"
-                    onclick="javascript:YAHOO.ur.item.collection.cancel();">Cancel</button>
 				
 				<br/>
 				
@@ -98,7 +90,7 @@
 		             <!--  end the first column -->
             
         	        <div class="yui-u">
-        	              <strong>Selected Collections</strong>
+        	              <strong>Collections To Submit To:</strong>
         	              <br/>
         	              <br/>
 		        	      <form id="selected_collections_form" name="selectedCollectionsForm"  method="POST" action="user/getContributors.action">
@@ -112,7 +104,15 @@
 	                  				<!--  end table of selected institutional collections div -->
 	                      </form>
 	                          
-	                     
+	                     <button class="ur_button" id="finish_later" 
+                                 onmouseover="this.className='ur_buttonover';"
+                                 onmouseout="this.className='ur_button';"
+                                 onclick="javascript:YAHOO.ur.item.collection.submitPublication();">Complete Submission</button>
+                
+                         <button class="ur_button" id="goto_next" 
+                                 onmouseover="this.className='ur_buttonover';"
+                                 onmouseout="this.className='ur_button';"
+                                 onclick="javascript:YAHOO.ur.item.collection.cancel();">Cancel</button>
             	    </div>
                 	<!--  end the second column -->
                 
@@ -120,15 +120,7 @@
                 
                 </div>
                 <!--  end the grid -->
-				<br/>
-	                      <button class="ur_button" id="finish_later" 
-                               onmouseover="this.className='ur_buttonover';"
-                               onmouseout="this.className='ur_button';"
-                               onclick="javascript:YAHOO.ur.item.collection.submitPublication();">Submit</button>
-                          <button class="ur_button" id="goto_next" 
-                               onmouseover="this.className='ur_buttonover';"
-                               onmouseout="this.className='ur_button';"
-                               onclick="javascript:YAHOO.ur.item.collection.cancel();">Cancel</button>
+				
 
             </div>
             <!--  end the body tag --> 
