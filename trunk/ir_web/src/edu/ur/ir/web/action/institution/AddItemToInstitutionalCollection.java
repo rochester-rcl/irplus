@@ -154,14 +154,16 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			item = itemService.getGenericItem(genericItemId, false);
 		}
 		
-		log.debug(" owner id = " + item.getOwner().getId());
-		
-	    log.debug("user id = " + userId);
-		log.debug("User == null " + (user == null));
-		log.debug("!item.getOwner().getId().equals(userId) = " + (!item.getOwner().getId().equals(userId)));
-		log.debug("!user.hasRole(IrRole.ADMIN_ROLE) = " + !user.hasRole(IrRole.ADMIN_ROLE) );
-		log.debug("all together = " + (user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) ) ) );
-		
+        if(log.isDebugEnabled())
+        {
+		    log.debug(" owner id = " + item.getOwner().getId());
+	        log.debug("user id = " + userId);
+		    log.debug("User == null " + (user == null));
+		    log.debug("!item.getOwner().getId().equals(userId) = " + (!item.getOwner().getId().equals(userId)));
+		    log.debug("!user.hasRole(IrRole.ADMIN_ROLE) = " + !user.hasRole(IrRole.ADMIN_ROLE) );
+		    log.debug("all together = " + (user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE) ) ) );
+        }
+        
 		// make sure user has permissions to submit the publication
 		if(user == null || (!item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE)) )
 		{
@@ -401,18 +403,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 				} else {
 					privateCollections.add(institutionalCollection);
 				}
-				// add a handle if the handle service is available
-				HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
-				if( handleNameAuthority != null)
-				{
-					String nextHandleName = uniqueHandleNameGenerator.nextName();
-				    InstitutionalItemVersion itemVersion = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
-					
-					String url = this.institutionalItemVersionUrlGenerator.createUrl(institutionalItem, itemVersion.getVersionNumber());
-					info = new HandleInfo(nextHandleName, url, handleNameAuthority);
-					
-				    itemVersion.setHandleInfo(info);
-				}
+				
 				
 				// make the files public if this is the first submit
 				// and the item going into at least one public collection
@@ -424,8 +415,32 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 					item.setPubliclyViewable(true);
 				}
 				
-				// save the item with the new handle information.
+				// set the default license if one exists for the repository
+				if( repository.getDefaultLicense() != null)
+				{
+				    institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().addRepositoryLicense(repository.getDefaultLicense(), user);
+				}
+				
+				// save the item 
 				institutionalItemService.saveInstitutionalItem(institutionalItem);
+				
+				// add a handle if the handle service is available
+				HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
+				if( handleNameAuthority != null)
+				{
+					String nextHandleName = uniqueHandleNameGenerator.nextName();
+				    InstitutionalItemVersion itemVersion = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
+					
+					String url = institutionalItemVersionUrlGenerator.createUrl(institutionalItem, itemVersion.getVersionNumber());
+					info = new HandleInfo(nextHandleName, url, handleNameAuthority);
+					
+				    itemVersion.setHandleInfo(info);
+				    
+				    // save the item with the new handle information.
+					institutionalItemService.saveInstitutionalItem(institutionalItem);
+				}
+				
+				
 				
 				// only index if the item was added directly to the collection
 				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
