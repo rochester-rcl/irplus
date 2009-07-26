@@ -777,12 +777,11 @@ public class DefaultItemImporter implements ItemImporter{
 	 */
 	public void updateHandleSequence()
 	{
-		Long maxHandleValue = jdbcTemplate.queryForLong("select max(dspace_item_id) from dspace_convert.item");
+		Long maxHandleValue = jdbcTemplate.queryForLong("select max(handle_local_name) from dspace_convert.item");
 		
 		if( maxHandleValue >= 1 )
 		{
-		    jdbcTemplate.execute(" ALTER SEQUENCE handle.unique_handle_name_seq INCREMENT BY " + maxHandleValue);
-	
+		    jdbcTemplate.execute("SELECT setval('handle.unique_handle_name_seq'," + maxHandleValue +")");
 		}
 	}
 
