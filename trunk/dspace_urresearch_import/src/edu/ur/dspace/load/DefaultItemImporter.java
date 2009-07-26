@@ -717,7 +717,7 @@ public class DefaultItemImporter implements ItemImporter{
 			    String handle = i.getHandle();
 			    
 
-			    
+			    int handlePrefix = 0;
 			    if( handle != null )
 			    {
 			    	log.debug("Procesing Handle " + handle);
@@ -731,6 +731,8 @@ public class DefaultItemImporter implements ItemImporter{
 						String localName = prefixLocalNameParts[1];
 						log.debug("Found prefix = " + prefix + " and local name = " + localName);
 						HandleNameAuthority authority = handleService.getNameAuthority(prefix);
+						
+						handlePrefix = Integer.valueOf(localName).intValue();				
 						
 						if( authority == null )
 						{
@@ -756,7 +758,7 @@ public class DefaultItemImporter implements ItemImporter{
 			    // set the item to be indexed
 			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
 				institutionalItemIndexProcessingRecordService.save(institutionalItem.getId(), processingType);
-			    jdbcTemplate.execute("insert into dspace_convert.item(dspace_item_id, ur_research_institutional_item_id) values (" + i.itemId + "," + institutionalItem.getId() + ")");
+			    jdbcTemplate.execute("insert into dspace_convert.item(dspace_item_id, ur_research_institutional_item_id, handle_prefix) values (" + i.itemId + "," + institutionalItem.getId() + "," + handlePrefix + ")");
 
 		    }
 		    loadGroupPermissions(genericItem, i);
@@ -775,7 +777,7 @@ public class DefaultItemImporter implements ItemImporter{
 	 */
 	public void updateHandleSequence()
 	{
-		Long maxHandleValue = jdbcTemplate.queryForLong("select max(handle_id) from handle.handle_info");
+		Long maxHandleValue = jdbcTemplate.queryForLong("select max(dspace_item_id) from dspace_convert.item");
 		
 		if( maxHandleValue >= 1 )
 		{
