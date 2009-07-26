@@ -109,6 +109,7 @@
         <property name="handleService" ref="handleService"/>
         <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
         <property name="licenseService" ref="licenseService"/>
+        <property name="nameAuthorityIndexService" ref="nameAuthorityIndexService"/>
    </bean>
    
    <!--  Class to import user groups -->
