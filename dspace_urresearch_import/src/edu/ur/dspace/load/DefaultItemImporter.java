@@ -717,7 +717,7 @@ public class DefaultItemImporter implements ItemImporter{
 			    String handle = i.getHandle();
 			    
 
-			    int handlePrefix = 0;
+			    int localNameInt = 0;
 			    if( handle != null )
 			    {
 			    	log.debug("Procesing Handle " + handle);
@@ -732,7 +732,7 @@ public class DefaultItemImporter implements ItemImporter{
 						log.debug("Found prefix = " + prefix + " and local name = " + localName);
 						HandleNameAuthority authority = handleService.getNameAuthority(prefix);
 						
-						handlePrefix = Integer.valueOf(localName).intValue();				
+						localNameInt = Integer.valueOf(localName).intValue();				
 						
 						if( authority == null )
 						{
@@ -758,7 +758,7 @@ public class DefaultItemImporter implements ItemImporter{
 			    // set the item to be indexed
 			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
 				institutionalItemIndexProcessingRecordService.save(institutionalItem.getId(), processingType);
-			    jdbcTemplate.execute("insert into dspace_convert.item(dspace_item_id, ur_research_institutional_item_id, handle_prefix) values (" + i.itemId + "," + institutionalItem.getId() + "," + handlePrefix + ")");
+			    jdbcTemplate.execute("insert into dspace_convert.item(dspace_item_id, ur_research_institutional_item_id, handle_local_name) values (" + i.itemId + "," + institutionalItem.getId() + "," + localNameInt + ")");
 
 		    }
 		    loadGroupPermissions(genericItem, i);
