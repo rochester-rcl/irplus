@@ -77,6 +77,7 @@ CREATE TABLE dspace_convert.item
 (
   dspace_item_id BIGINT,
   ur_research_institutional_item_id BIGINT,
+  handle_prefix BIGINT,
   PRIMARY KEY(dspace_item_id, ur_research_institutional_item_id)
 );
 ALTER TABLE dspace_convert.item OWNER TO ir_plus;
