@@ -64,7 +64,7 @@
             
             <!--  this is the body region of the page -->
             <div id="bd">
-				<h3>Sorry, you do not have access - you may want to try <a href="<c:url value="/user/workspace.action"/>">Logging In</a> if you are not currently logged in</h3>
+				<h3>Sorry, you do not have access - you may want to try <a href="<c:url value="/user/workspace.action"/>">Logging In</a> if you currently are not </h3>
 		    </div>
 		    <!--  end the body tag --> 
 	
