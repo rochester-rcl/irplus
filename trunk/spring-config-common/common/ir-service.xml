@@ -520,9 +520,11 @@
        class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSubscriptionService">
        <property name="institutionalCollectionSubscriptionDAO" ref="institutionalCollectionSubscriptionDAO"/>
        <property name="institutionalItemService" ref="institutionalItemService"/>
+       <property name="repositoryService" ref="repositoryService"/>
        <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
        <property name="mailSender" ref="mailSender"/>
        <property name="dateFormat" value="MM/dd/yyyy"/>
+       <property name="helpEmail" value="${email.public.help.address}"/>
    </bean>
  
    <!-- ****************************************** --> 

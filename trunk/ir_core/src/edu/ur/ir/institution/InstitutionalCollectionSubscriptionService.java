@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
+import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -99,5 +100,5 @@ public interface InstitutionalCollectionSubscriptionService
 	 * @param endDate - date range end for items to be sent
 	 * @throws MessagingException
 	 */
-	public void sendSubscriberEmail(IrUser user, Date startDate, Date endDate) throws MessagingException;
+	public void sendSubscriberEmail(IrUser user, Repository repository, Date startDate, Date endDate) throws MessagingException;
 }
