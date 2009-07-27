@@ -34,6 +34,13 @@ import edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.item.ItemContributor;
+import edu.ur.ir.person.BirthDate;
+import edu.ur.ir.person.DeathDate;
+import edu.ur.ir.person.PersonName;
+import edu.ur.ir.person.PersonNameTitle;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -59,8 +66,14 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	/**  Institutional collection subscription data access object */
 	private InstitutionalCollectionSubscriptionDAO institutionalCollectionSubscriptionDAO;
 	
+	/** Service for dealing with repositories */
+	private RepositoryService repositoryService;
+	
 	/** format used for formatting dates */
 	private String dateFormat;
+	
+	/** email that users can use to ask questions */
+	private String helpEmail = "";
 	
 	/**
 	 * 
@@ -120,7 +133,7 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	/**
 	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionService#sendSubriberEmail(edu.ur.ir.user.IrUser)
 	 */
-	public void sendSubscriberEmail(IrUser user, Date startDate, Date endDate) throws MessagingException
+	public void sendSubscriberEmail(IrUser user, Repository repository, Date startDate, Date endDate) throws MessagingException
 	{	
 		log.debug("Send emails for " + startDate + " to " +  endDate);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
@@ -131,6 +144,7 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 		log.debug("Subscriptions found " + subscriptions.size());
 		if( subscriptions.size() > 0  )
 		{
+			emailText.append("New publications are available in the " + repository.getName() + " collections you have subscribed to \n\n");
 			for( InstitutionalCollectionSubscription subscription : subscriptions)
 			{
 				log.debug("Looking at subscription " + subscription);
@@ -140,18 +154,34 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 			    if( items.size() > 0 )
 			    {
 			    	sendEmail = true;
-			    	emailText.append("New Publications in Collection: " + collection.getName() + "\n\n");
+			    	emailText.append("New publications in " + collection.getName() +": " + items.size() + "\n\n");
 			    	for( InstitutionalItem item : items )
 			    	{
 			    		// get the url to the most recent item
 			    		String url = institutionalItemVersionUrlGenerator.createUrl(item, item.getVersionedInstitutionalItem().getCurrentVersion().getVersionNumber());
-			    		emailText.append(item.getName() + " - " + url + "\n");
+			    		emailText.append("Publcation Name: " + item.getName() + "\n");
+			    		emailText.append("URL: " + url + "\n");
+			    		List<ItemContributor> contributors = item.getVersionedInstitutionalItem().getCurrentVersion().getItem().getContributors();
+			    	
+			    		
+			    		for(ItemContributor c : contributors)
+			    		{
+			    			PersonName name = c.getContributor().getPersonName();
+			    			String strName = this.showLastNameFirst(name, true);
+			    			String contributionType = c.getContributor().getContributorType().getName();
+			    			emailText.append(contributionType + ":" + strName + "\n");
+			    		}
+			    		emailText.append("\n\n");
 			    	}
-			    	emailText.append("\n\n");
+			    	 
 			    }
 			}
 		}
 		
+		
+    	emailText.append("Enjoy! \n");
+    	emailText.append("Questions/problems? let us know: " + helpEmail);
+    	
 		if( sendEmail )
 		{
 		    log.debug("send subscribers emails");
@@ -210,6 +240,104 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
+	}
+	
+	private String showLastNameFirst(PersonName personName, boolean displayDates)
+	{
+		String output = "";
+		if( personName.getSurname() != null &&  personName.getSurname().trim().length() > 0)
+    	{
+    		output += personName.getSurname();
+    	}
+		if( personName.getForename() != null && personName.getForename().trim().length() > 0)
+    	{
+			if(output.trim().length() > 0 )
+			{
+				output +=", ";
+			}
+    		output += personName.getForename();
+    	}
+		if( personName.getMiddleName() != null &&  personName.getMiddleName().trim().length() > 0)
+    	{
+			if(output.trim().length() > 0 )
+			{
+				output +=", ";
+			}
+    		output += personName.getMiddleName();
+    	}
+		if( personName.getNumeration() != null && personName.getNumeration().trim().length() > 0)
+    	{
+			if(output.trim().length() > 0 )
+			{
+				output +=", ";
+			}
+    		output += personName.getNumeration();
+    	}
+		if( personName.getPersonNameTitles() != null && personName.getPersonNameTitles().size() > 0)
+    	{
+			if(output.trim().length() > 0 )
+			{
+				output +=", ";
+			}
+    	    for( PersonNameTitle title: personName.getPersonNameTitles())
+    	    {
+    		    output += title.getTitle() + " ";
+    	    }
+    	}
+    	
+    	
+    	if(displayDates)
+    	{
+    		output += " ";
+    	    BirthDate birthDate = personName.getPersonNameAuthority().getBirthDate();
+    	    DeathDate deathDate = personName.getPersonNameAuthority().getDeathDate();
+    	    int birthYear = 0;
+    	    int deathYear = 0;
+    	    
+    	    if(birthDate != null)
+    	    {
+    	    	birthYear = birthDate.getYear();
+    	    }
+    	    
+    	    if(deathDate != null)
+    	    {
+    	    	deathYear = deathDate.getYear();
+    	    }
+    	    
+    	    
+    		if( birthYear > 0 || deathYear > 0 )
+    		{
+    		    output += "(";
+    		    if( birthYear > 0)
+    		    {
+    			    output += birthYear;
+    		    }
+    		    output += " - ";
+    		
+    		    if(  deathYear > 0 )
+    		    {
+    			    output += deathYear;
+    		    }
+    		    output += ")";
+    	    }
+    	}
+    	return output;
+	}
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
+	public String getHelpEmail() {
+		return helpEmail;
+	}
+
+	public void setHelpEmail(String helpEmail) {
+		this.helpEmail = helpEmail;
 	}
 
 	

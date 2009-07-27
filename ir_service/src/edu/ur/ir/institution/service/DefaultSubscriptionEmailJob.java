@@ -113,7 +113,7 @@ public class DefaultSubscriptionEmailJob implements StatefulJob{
 			
 				try 
 				{
-				    subscriptionService.sendSubscriberEmail(user, repository.getLastSubscriptionProcessEmailDate(), endDate );
+				    subscriptionService.sendSubscriberEmail(user, repository, repository.getLastSubscriptionProcessEmailDate(), endDate );
 				} 
 				catch (MessagingException e) 
 				{

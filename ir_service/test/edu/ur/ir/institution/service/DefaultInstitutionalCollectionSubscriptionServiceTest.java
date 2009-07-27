@@ -39,8 +39,16 @@ import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
+import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.item.DuplicateContributorException;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.person.Contributor;
+import edu.ur.ir.person.ContributorType;
+import edu.ur.ir.person.ContributorTypeService;
+import edu.ur.ir.person.PersonName;
+import edu.ur.ir.person.PersonNameAuthority;
+import edu.ur.ir.person.PersonService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
@@ -94,6 +102,13 @@ public class DefaultInstitutionalCollectionSubscriptionServiceTest {
 	/** service for dealing with institutional items */
 	InstitutionalItemService institutionalItemService = (InstitutionalItemService)ctx.getBean("institutionalItemService");
 
+	/** Service for dealing with contributors */
+	ContributorTypeService contributorTypeService = (ContributorTypeService) ctx.getBean("contributorTypeService");
+	
+	/** person data access */
+	PersonService personService = (PersonService) ctx
+	.getBean("personService");
+	
 	/**
 	 * Test sending emails for subscriptions.
 	 * 
@@ -102,8 +117,9 @@ public class DefaultInstitutionalCollectionSubscriptionServiceTest {
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws LocationAlreadyExistsException 
 	 * @throws DuplicateNameException 
+	 * @throws DuplicateContributorException 
 	 */
-	public void testSendSubscriptionEmails() throws MessagingException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, DuplicateNameException 
+	public void testSendSubscriptionEmails() throws MessagingException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, DuplicateNameException, DuplicateContributorException 
 	{
 		
 		boolean sendEmails = new Boolean(properties.getProperty("send_emails"));
@@ -119,6 +135,28 @@ public class DefaultInstitutionalCollectionSubscriptionServiceTest {
 		    String userEmail1 = properties.getProperty("user_1_email");
 		    UserEmail email = new UserEmail(userEmail1);
 		    IrUser user = userService.createUser("password", "username", email);
+		    
+		    // create a contributor type
+			ContributorType contributorType1 = new ContributorType("contributorType1");
+			contributorTypeService.save(contributorType1);
+			
+			// create a person name to add to the item as a contributor
+			PersonName personName = new PersonName();
+			personName.setFamilyName("familyName");
+			personName.setForename("forename");
+			personName.setInitials("n.d.s.");
+			personName.setMiddleName("MiddleName");
+			personName.setNumeration("III");
+			personName.setSurname("surname");
+			
+			PersonNameAuthority p = new PersonNameAuthority(personName);
+			personService.save(p);
+			
+			
+			// create the contributor
+			Contributor c = new Contributor();
+			c.setPersonName(personName);
+			c.setContributorType(contributorType1);
 		
 		    // save the repository
 		    tm.commit(ts);
@@ -126,11 +164,17 @@ public class DefaultInstitutionalCollectionSubscriptionServiceTest {
             // Start the transaction - create collections
 		    ts = tm.getTransaction(td);
 		    repo = repositoryService.getRepository(repo.getId(), false);
-		    InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		    InstitutionalCollection collection = repo.createInstitutionalCollection("Musical Scores");
 		    collection.addSuscriber(user);
 		    // create a personal item to publish into the repository
-		    GenericItem genericItem = new GenericItem("item name");
-		    collection.createInstitutionalItem(genericItem);
+		    GenericItem genericItem = new GenericItem("What's New In Science");
+		    genericItem.addContributor(c);
+		    InstitutionalItem institutionalItem = collection.createInstitutionalItem(genericItem);
+		    
+		    GenericItem genericItem2 = new GenericItem("The way things are");
+		    genericItem2.addContributor(c);
+		    InstitutionalItem institutionalItem2 = collection.createInstitutionalItem(genericItem2);
+		    
 		    institutionalCollectionService.saveCollection(collection);
 		    tm.commit(ts);
         
@@ -145,13 +189,19 @@ public class DefaultInstitutionalCollectionSubscriptionServiceTest {
 		    Date tomorrow = calendar.getTime();
 		
 		
-            subscriptionService.sendSubscriberEmail(user, yesterday, tomorrow);
+            subscriptionService.sendSubscriberEmail(user, repo, yesterday, tomorrow);
             tm.commit(ts);
      
 	        // Start new transaction
 		    ts = tm.getTransaction(td);
+			institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
+			institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem2.getId(), false), user);
+
+			institutionalItemService.deleteAllInstitutionalItemHistory();
  		    userService.deleteUser(userService.getUser(user.getUsername()));
 		    helper.cleanUpRepository();
+			personService.delete(personService.getAuthority(p.getId(), false));
+			contributorTypeService.delete(contributorTypeService.get(contributorType1.getId(), false));
 		    tm.commit(ts);
 		}
 	}
