@@ -251,11 +251,13 @@
 			    </c:if>
 			    					
 			    </c:if>
+			    <c:if test="${institutionalItemVersion != null}">
 			    <tr>	
 			        <td class="previewLabel">License Grantor / Date Granted:  </td>
 				</tr>
 				<tr>
 				    <td>
+				        
 					    <c:url var="viewLicense" value="viewItemRepositoryLicense.action">
 						     <c:param name="versionedLicenseId" value="${institutionalItemVersion.repositoryLicense.licenseVersion.versionedLicense.id}"/>
 							 <c:param name="version" value="${institutionalItemVersion.repositoryLicense.licenseVersion.versionNumber}"/>
@@ -263,8 +265,10 @@
 						${institutionalItemVersion.repositoryLicense.grantedByUser.firstName} &nbsp; 
 						${institutionalItemVersion.repositoryLicense.grantedByUser.lastName} 
 						/ ${institutionalItemVersion.repositoryLicense.dateGranted} ( <a href="${viewLicense}">View License</a> )
+						
 					</td>
 				</tr>	
+				</c:if>
 				<tr>
 				    <td class="previewLabel">Submitter:  </td>
 			    </tr>

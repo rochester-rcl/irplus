@@ -64,9 +64,9 @@
         <h3>Accepted Repository License: ${licenseVersion.license.name} ( Version - ${licenseVersion.versionNumber} )</h3>
 
         <div id="bd">
-	        <form method="post" class="formTable">
-	            <p>${licenseVersion.license.text}</p>
-	        </form>
+	           <form>
+	            <textarea rows="40" cols="140" readonly="readonly">${licenseVersion.license.text}</textarea>
+	           </form>
         </div>
       <!--  end body div -->
 

@@ -50,7 +50,7 @@
         <tr>
             <td align="left">
                 <select onchange="javascript:YAHOO.ur.personal.collection.executeCheckboxAction(this.options[this.selectedIndex].value);">
-                    <option value="action" id="collection_checkbox_action_set"  selected="selected">Action on checked collections and publications ...</option>
+                    <option value="action" id="collection_checkbox_action_set"  selected="selected">Action on checked folders and publications ...</option>
                     <option value="delete">Delete</option>
                     <option value="move">Move</option>
 	            </select>
