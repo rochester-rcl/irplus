@@ -109,6 +109,8 @@
                 <value>edu/ur/hibernate/ir/user/db/SharedInboxFile.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/UserRepositoryLicense.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/UserWorkspaceIndexProcessingRecord.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/PersonalFileDeleteRecord.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/PersonalItemDeleteRecord.hbm.xml</value>
                                 
                 <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrClassTypePermission.hbm.xml</value>

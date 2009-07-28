@@ -1,3 +1,19 @@
+/**  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
 package edu.ur.ir.user;
 
 import java.sql.Timestamp;
@@ -17,7 +33,10 @@ public class PersonalFileDeleteRecord extends BasePersistent{
 	private static final long serialVersionUID = 131579938691713460L;
 
 	/** id of the user who deleted the file */
-	private long userId;
+	private Long userId;
+	
+	/** id of the personal file */
+	private Long personalFileId;
 	
 	/** date the failure record was created  */
 	private Timestamp dateDeleted;
@@ -29,16 +48,22 @@ public class PersonalFileDeleteRecord extends BasePersistent{
 	private String description;
 	
 	/**
+	 * Package protected constructor
+	 */
+	PersonalFileDeleteRecord(){}
+	
+	/**
 	 * Default constructor.
 	 * 
 	 * @param userId - id of the user deleting the file
 	 * @param fullPath - full path to the personal file
 	 * @param description - description of the file
 	 */
-	public PersonalFileDeleteRecord(Long userId, String fullPath, String description)
+	public PersonalFileDeleteRecord(Long userId, Long personalFileId, String fullPath, String description)
 	{
 		setDateDeleted(new Timestamp(new Date().getTime()));
 		setUserId(userId);
+		setPersonalFileId(personalFileId);
 		setFullPath(fullPath);
 		setDescription(description);
 	}
@@ -48,7 +73,7 @@ public class PersonalFileDeleteRecord extends BasePersistent{
 	 * 
 	 * @return
 	 */
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
@@ -57,7 +82,7 @@ public class PersonalFileDeleteRecord extends BasePersistent{
 	 * 
 	 * @param userId
 	 */
-	void setUserId(long userId) {
+	void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -115,12 +140,35 @@ public class PersonalFileDeleteRecord extends BasePersistent{
 		this.description = description;
 	}
 	
+	public int hashCode()
+	{
+		int value = 0;
+		value += personalFileId == null ? 0 : personalFileId.hashCode();
+		return value;
+	}
+	
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof PersonalFileDeleteRecord)) return false;
+
+		final PersonalFileDeleteRecord other = (PersonalFileDeleteRecord) o;
+
+		if( ( personalFileId != null && !personalFileId.equals(other.getPersonalFileId()) ) ||
+			( personalFileId == null && other.getPersonalFileId() != null ) ) return false;
+
+
+		return true;
+	}
+	
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer("[ id = ");
 		sb.append(id);
 		sb.append(" user id = ");
 		sb.append(userId);
+		sb.append(" personal file id = " );
+		sb.append(personalFileId);
 		sb.append(" deleted date = ");
 		sb.append(dateDeleted);
 		sb.append(" full path = ");
@@ -129,6 +177,14 @@ public class PersonalFileDeleteRecord extends BasePersistent{
 		sb.append(description);
 		sb.append("]");
 		return sb.toString();
+	}
+
+	public Long getPersonalFileId() {
+		return personalFileId;
+	}
+
+	void setPersonalFileId(Long personalFileId) {
+		this.personalFileId = personalFileId;
 	}
 
 }
