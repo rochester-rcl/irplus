@@ -603,6 +603,52 @@ ALTER TABLE ir_user.user_workspace_index_processing_record_seq OWNER TO ir_plus;
 -- Affiliation table
 -- ---------------------------------------------
 
+
+-- ---------------------------------------------
+-- user delete personal file record
+-- ---------------------------------------------
+
+CREATE TABLE ir_user.personal_file_delete_record
+(
+  personal_file_delete_record_id BIGINT PRIMARY KEY,
+  personal_file_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  date_deleted TIMESTAMP WITH TIME ZONE NOT NULL,
+  full_path TEXT NOT NULL,
+  description TEXT,
+  UNIQUE(personal_file_id)
+);
+ALTER TABLE ir_user.personal_file_delete_record OWNER TO ir_plus;
+
+-- The repository license sequence
+CREATE SEQUENCE ir_user.personal_file_delete_record_seq;
+ALTER TABLE ir_user.personal_file_delete_record_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- user delete personal file record
+-- ---------------------------------------------
+
+CREATE TABLE ir_user.personal_item_delete_record
+(
+  personal_item_delete_record_id BIGINT PRIMARY KEY,
+  personal_item_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  date_deleted TIMESTAMP WITH TIME ZONE NOT NULL,
+  full_path TEXT NOT NULL,
+  description TEXT,
+  UNIQUE(personal_item_id)
+);
+ALTER TABLE ir_user.personal_item_delete_record OWNER TO ir_plus;
+
+-- The repository license sequence
+CREATE SEQUENCE ir_user.personal_item_delete_record_seq;
+ALTER TABLE ir_user.personal_item_delete_record_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Affiliation table
+-- ---------------------------------------------
+
+
 CREATE TABLE ir_user.affiliation
 (
   affiliation_id bigint NOT NULL,
