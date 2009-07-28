@@ -1,3 +1,19 @@
+/**  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
 package edu.ur.ir.user;
 
 import java.sql.Timestamp;
@@ -17,7 +33,10 @@ public class PersonalItemDeleteRecord extends BasePersistent{
 	private static final long serialVersionUID = 8718231697844695857L;
 	
 	/** id of the user who deleted the file */
-	private long userId;
+	private Long userId;
+	
+	/** id of the personal file */
+	private Long personalItemId;
 	
 	/** date the failure record was created  */
 	private Timestamp dateDeleted;
@@ -29,15 +48,21 @@ public class PersonalItemDeleteRecord extends BasePersistent{
 	private String description;
 	
 	/**
+	 * Package protected constructor
+	 */
+	PersonalItemDeleteRecord(){}
+	
+	/**
 	 * Create a delete record of the personal item.
 	 * 
 	 * @param userId - user who performed the delete
 	 * @param fullPath - full path to the item
 	 * @param description - description of the item
 	 */
-	public PersonalItemDeleteRecord(Long userId, String fullPath, String description)
+	public PersonalItemDeleteRecord(Long userId, Long personalItemId, String fullPath, String description)
 	{
 		setDateDeleted(new Timestamp(new Date().getTime()));
+		setPersonalItemId(personalItemId);
 		setUserId(userId);
 		setFullPath(fullPath);
 		setDescription(description);
@@ -48,7 +73,7 @@ public class PersonalItemDeleteRecord extends BasePersistent{
 	 * 
 	 * @return
 	 */
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
@@ -57,7 +82,7 @@ public class PersonalItemDeleteRecord extends BasePersistent{
 	 * 
 	 * @param userId
 	 */
-	void setUserId(long userId) {
+	void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -115,12 +140,35 @@ public class PersonalItemDeleteRecord extends BasePersistent{
 		this.description = description;
 	}
 	
+	public int hashCode()
+	{
+		int value = 0;
+		value += personalItemId == null ? 0 : personalItemId.hashCode();
+		return value;
+	}
+	
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof PersonalItemDeleteRecord)) return false;
+
+		final PersonalItemDeleteRecord other = (PersonalItemDeleteRecord) o;
+
+		if( ( personalItemId != null && !personalItemId.equals(other.getPersonalItemId()) ) ||
+			( personalItemId == null && other.getPersonalItemId() != null ) ) return false;
+
+
+		return true;
+	}
+	
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer("[ id = ");
 		sb.append(id);
 		sb.append(" user id = ");
 		sb.append(userId);
+		sb.append(" personal item id = ");
+		sb.append(personalItemId);
 		sb.append(" deleted date = ");
 		sb.append(dateDeleted);
 		sb.append(" full path = ");
@@ -130,6 +178,15 @@ public class PersonalItemDeleteRecord extends BasePersistent{
 		sb.append("]");
 		return sb.toString();
 	}
+
+	public Long getPersonalItemId() {
+		return personalItemId;
+	}
+
+	void setPersonalItemId(Long personalItemId) {
+		this.personalItemId = personalItemId;
+	}
+
 	
 	
 
