@@ -50,8 +50,12 @@ import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalFile;
+import edu.ur.ir.user.PersonalFileDeleteRecord;
+import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.PersonalItem;
+import edu.ur.ir.user.PersonalItemDeleteRecord;
+import edu.ur.ir.user.PersonalItemDeleteRecordDAO;
 import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
@@ -143,6 +147,12 @@ public class DefaultUserService implements UserService {
 	
 	/** Service for dealing with user group information */
 	private UserGroupService userGroupService;
+	
+	/** captures information about deleting information */
+	private PersonalItemDeleteRecordDAO personalItemDeleteRecordDAO;
+	
+	/** captures information about deleting information */
+	private PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO;
 
 	/**
 	 * Get the User email if email id exists in the system.
@@ -277,13 +287,14 @@ public class DefaultUserService implements UserService {
 	/**
 	 * Delete a user and all related information.  This will not
 	 * delete the user if they have published into the system.
+	 * 
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws UserDeletedPublicationException
 	 * @throws IOException 
 	 * 
 	 * @see edu.ur.ir.user.service.UserService#deleteUser(java.lang.Long)
 	 */
-	public boolean deleteUser(IrUser user) throws UserHasPublishedDeleteException, UserDeletedPublicationException
+	public boolean deleteUser(IrUser user, IrUser deletingUser) throws UserHasPublishedDeleteException, UserDeletedPublicationException
 	{
 		
 		//Get all the generic items created by this user so they
@@ -340,8 +351,11 @@ public class DefaultUserService implements UserService {
 		for( PersonalItem pi : personalItems )
 		{
 			user.removeRootPersonalItem(pi);
-			userPublishingFileSystemService.deletePersonalItem(pi);
+			userPublishingFileSystemService.deletePersonalItem(pi, deletingUser, "USER BEING DELETED");
 		}
+		
+
+		
 		
 		//delete all the personal collections for the user
 		//this should cascade down to item version
@@ -349,10 +363,21 @@ public class DefaultUserService implements UserService {
 		personalCollections.addAll(user.getRootPersonalCollections());
 		for( PersonalCollection pc : personalCollections )
 		{
+			//set delete records for all items
+			List<PersonalItem> collectionItems = userPublishingFileSystemService.getAllItemsForCollection(pc);
+			
+			for(PersonalItem personalItem : collectionItems)
+			{
+				PersonalItemDeleteRecord personalItemDeleteRecord = new PersonalItemDeleteRecord(deletingUser.getId(),
+						personalItem.getId(),
+						personalItem.getFullPath(), 
+						personalItem.getDescription());
+				personalItemDeleteRecord.setDeleteReason("DELETING USER");
+				personalItemDeleteRecordDAO.makePersistent(personalItemDeleteRecord);
+			}
+			
 			user.removeRootPersonalCollection(pc);
-			userPublishingFileSystemService.deletePersonalCollection(pc);
 		}
-		
 		
 		// delete all versioned items
 		List<VersionedItem> versionedItems = itemService.getAllVersionedItemsForUser(user); 
@@ -386,6 +411,19 @@ public class DefaultUserService implements UserService {
 		// get all of the users root folders
 		for(PersonalFolder rootFolder : rootFolders)
 		{
+			//set delete records for all items
+			List<PersonalFile> folderFiles = userFileSystemService.getAllFilesForFolder(rootFolder);
+			
+			for(PersonalFile folderFile : folderFiles)
+			{
+				PersonalFileDeleteRecord personalFileDeleteRecord = new PersonalFileDeleteRecord(deletingUser.getId(),
+						folderFile.getId(),
+						folderFile.getFullPath(), 
+						folderFile.getDescription());
+				personalFileDeleteRecord.setDeleteReason("DELETING USER");
+				personalFileDeleteRecordDAO.makePersistent(personalFileDeleteRecord);
+			}
+			
 			versionedFiles.addAll(userFileSystemService.getAllVersionedFilesForFolder(rootFolder));
 		    user.removeRootFolder(rootFolder);
 		}
@@ -399,7 +437,7 @@ public class DefaultUserService implements UserService {
 			if (aFile.getOwner().equals(user)) {
 				for(FileCollaborator collaborator : aFile.getCollaborators())
 				{
-				    inviteUserService.unshareFile(collaborator);
+				    inviteUserService.unshareFile(collaborator, deletingUser);
 				}
 			    userFileSystemService.deleteAclForVersionedFile(aFile, user);
 			    repositoryService.deleteVersionedFile(aFile);
@@ -408,7 +446,7 @@ public class DefaultUserService implements UserService {
 				FileCollaborator collaborator = aFile.getCollaborator(user);
 				if( collaborator != null)
 				{
-				    inviteUserService.unshareFile(collaborator);
+				    inviteUserService.unshareFile(collaborator, deletingUser);
 				}
 			}
 		}
@@ -1097,6 +1135,24 @@ public class DefaultUserService implements UserService {
 
 	public void setUserGroupService(UserGroupService userGroupService) {
 		this.userGroupService = userGroupService;
+	}
+
+	public PersonalItemDeleteRecordDAO getPersonalItemDeleteRecordDAO() {
+		return personalItemDeleteRecordDAO;
+	}
+
+	public void setPersonalItemDeleteRecordDAO(
+			PersonalItemDeleteRecordDAO personalItemDeleteRecordDAO) {
+		this.personalItemDeleteRecordDAO = personalItemDeleteRecordDAO;
+	}
+
+	public PersonalFileDeleteRecordDAO getPersonalFileDeleteRecordDAO() {
+		return personalFileDeleteRecordDAO;
+	}
+
+	public void setPersonalFileDeleteRecordDAO(
+			PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO) {
+		this.personalFileDeleteRecordDAO = personalFileDeleteRecordDAO;
 	}
 
 }

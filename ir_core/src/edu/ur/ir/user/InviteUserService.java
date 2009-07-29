@@ -70,10 +70,10 @@ public interface InviteUserService {
 	/**
 	 * Removes the specified shared file from the list of users
 	 *  
-	 * @param users List of users to remove the file from
-	 * @param versionedFile File has to be unshared
+	 * @param fileCollaborator - user to unshare with
+	 * @param unshareUser - user who is unsharing the file
 	 */
-	public void unshareFile(FileCollaborator fileCollaborator);	
+	public void unshareFile(FileCollaborator fileCollaborator, IrUser unshareUser);	
 	
 	/**
 	 * Sends an un-share email.

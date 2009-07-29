@@ -42,6 +42,7 @@ import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
+import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserFileSystemService;
@@ -219,7 +220,8 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			// Get all the files from the selected folders and its sub folders
 			for( Long folderId : folderIds)
 			{
-				files.addAll(userFileSystemService.getAllFilesInFolderAndSubFolder(folderId, userId));
+				PersonalFolder personalFolder = userFileSystemService.getPersonalFolder(folderId, false);
+				files.addAll(userFileSystemService.getAllFilesForFolder(personalFolder));
 			}
 			
 			// Check if the user has SHARE permission for the file 
@@ -453,7 +455,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			}
 		}
 		
-		inviteUserService.unshareFile(fileCollaborator);
+		inviteUserService.unshareFile(fileCollaborator, unInvitingUser);
 		
 		return returnResult;
 	}

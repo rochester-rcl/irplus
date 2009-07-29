@@ -92,4 +92,6 @@ CrudDAO<PersonalFile>
 	 * @return the found files
 	 */
 	public Long getFileWithSpecifiedIrFile(Long irFileId);
+	
+	public void makeTransient(PersonalFile pf);
 }

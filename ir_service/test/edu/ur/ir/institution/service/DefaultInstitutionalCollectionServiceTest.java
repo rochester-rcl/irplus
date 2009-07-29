@@ -249,7 +249,8 @@ public class DefaultInstitutionalCollectionServiceTest {
 		
 		helper.cleanUpRepository();
 		institutionalItemService.deleteAllInstitutionalItemHistory();
-		userService.deleteUser(userService.getUser(user.getUsername()));
+		IrUser userToDelete = userService.getUser(user.getUsername());
+		userService.deleteUser(userToDelete, userToDelete);
 
 		tm.commit(ts);	
 	}
@@ -376,7 +377,8 @@ public class DefaultInstitutionalCollectionServiceTest {
 		InstitutionalCollection otherCollection = institutionalCollectionService.getCollection(collection.getId(), false);
 		assert otherCollection.getSubscriptions().size() == 0: "Collection should not have subscribers";
 		institutionalCollectionService.deleteCollection(otherCollection, user);
-		userService.deleteUser(userService.getUser(user.getUsername()));
+		IrUser userToDelete = userService.getUser(user.getUsername());
+		userService.deleteUser(userToDelete, userToDelete);
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 		
@@ -440,7 +442,8 @@ public class DefaultInstitutionalCollectionServiceTest {
         	
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
         institutionalItemService.deleteAllInstitutionalItemHistory();
-        userService.deleteUser(userService.getUser(user.getId(), false));
+        IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);
         helper.cleanUpRepository();
 		tm.commit(ts);	
 
@@ -503,7 +506,8 @@ public class DefaultInstitutionalCollectionServiceTest {
 		
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
         institutionalItemService.deleteAllInstitutionalItemHistory();
-        userService.deleteUser(userService.getUser(user.getId(), false));	
+        IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);	
         helper.cleanUpRepository();
 		tm.commit(ts);	
 

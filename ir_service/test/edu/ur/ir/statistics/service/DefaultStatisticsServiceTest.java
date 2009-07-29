@@ -171,7 +171,8 @@ public class DefaultStatisticsServiceTest {
         ts = tm.getTransaction(td);
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(), false), user);
         institutionalItemService.deleteAllInstitutionalItemHistory();
-        userService.deleteUser(userService.getUser(user.getId(), false));
+        IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);
         statisticsService.deleteFileDownloadInfo(statisticsService.getFileDownloadInfo(downloadInfo1.getId(), false));
         statisticsService.deleteFileDownloadInfo(statisticsService.getFileDownloadInfo(downloadInfo2.getId(), false));
         helper.cleanUpRepository();
@@ -266,7 +267,8 @@ public class DefaultStatisticsServiceTest {
         ts = tm.getTransaction(td);
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(), false), user);
         institutionalItemService.deleteAllInstitutionalItemHistory();
-        userService.deleteUser(userService.getUser(user.getId(), false));
+        IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);
         statisticsService.deleteFileDownloadInfo(statisticsService.getFileDownloadInfo(info1.getId(), false));
         statisticsService.deleteFileDownloadInfo(statisticsService.getFileDownloadInfo(info2.getId(), false));
         helper.cleanUpRepository();

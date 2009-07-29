@@ -50,6 +50,7 @@ import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 import edu.ur.simple.type.AscendingNameComparator;
@@ -60,7 +61,7 @@ import edu.ur.simple.type.AscendingNameComparator;
  * @author Nathan Sarr
  *
  */
-public class ManageUsers extends Pager implements Preparable{
+public class ManageUsers extends Pager implements Preparable, UserIdAware {
 
 	/**  Generated version id */
 	private static final long serialVersionUID = -2827667086799910951L;
@@ -106,6 +107,9 @@ public class ManageUsers extends Pager implements Preparable{
 	
 	/** id of the user */
 	private Long id;
+	
+	/** id of the admin managing the users */
+	private Long adminUserId;
 	
 	/** indicates if the user is an admin */
 	private boolean adminRole = false;
@@ -434,9 +438,10 @@ public class ManageUsers extends Pager implements Preparable{
 		{
 
             IrUser user = userService.getUser(id, false);
+            IrUser admin = userService.getUser(adminUserId, false);
  			try 
  			{
-			    userService.deleteUser(user);
+			    userService.deleteUser(user, admin);
 			} 
  			catch (UserHasPublishedDeleteException e) 
  			{
@@ -1051,6 +1056,11 @@ public class ManageUsers extends Pager implements Preparable{
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	
+	public void setUserId(Long userId) {
+		adminUserId = userId;
 	}
 
 

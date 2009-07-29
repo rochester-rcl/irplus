@@ -50,6 +50,8 @@
 			 access="field" />
 
 		<property name="description" column="description"  type="string"  access="field" />
+		
+		<property name="deleteReason" column="delete_reason"  type="string"  access="field" />
 	
 	 </class>
 		

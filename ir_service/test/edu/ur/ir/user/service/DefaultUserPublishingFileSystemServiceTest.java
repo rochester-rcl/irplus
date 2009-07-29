@@ -58,6 +58,7 @@ import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalItem;
+import edu.ur.ir.user.PersonalItemDeleteRecordDAO;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
@@ -118,6 +119,10 @@ public class DefaultUserPublishingFileSystemServiceTest {
 	
 	/** Publisher services */
 	PublisherService publisherService = (PublisherService) ctx.getBean("publisherService");
+	
+	/** item data access object  */
+	PersonalItemDeleteRecordDAO personalItemDeleteRecordDAO = (PersonalItemDeleteRecordDAO)ctx.getBean("personalItemDeleteRecordDAO");
+
 
 	
 	/**
@@ -152,10 +157,12 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		
 		// Start new transaction
 		ts = tm.getTransaction(td);
-		userService.deleteUser(userService.getUser(user.getId(), false));
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+		userService.deleteUser(deleteUser, deleteUser);
 		tm.commit(ts);
 		
 		assert userService.getUser(user.getId(), false) == null : "User should be null";
+		personalItemDeleteRecordDAO.deleteAll();
 		
 	}
 	
@@ -208,13 +215,14 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		ts = tm.getTransaction(td);
 		PersonalItem otherPersonalItem = userPublishingFileSystemService.getPersonalItem(personalItem.getId(), false);
 		assert otherPersonalItem.getVersionedItem().getCurrentVersion().getItem().equals(item1) : "Should be equal to item1";
-		userPublishingFileSystemService.deletePersonalItem(otherPersonalItem);
+		userPublishingFileSystemService.deletePersonalItem(otherPersonalItem, otherPersonalItem.getOwner(), "TESTING");
 		tm.commit(ts);
 
 	    // Start new transaction
 		ts = tm.getTransaction(td);
-		IrUser otherUser = userService.getUser(user.getUsername());
-		userService.deleteUser(userService.getUser(otherUser.getId(), false));
+		
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+		userService.deleteUser(deleteUser, deleteUser);
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 	}
@@ -297,14 +305,14 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		assert otherItem.getItemSponsors().contains(itemSponsor): "Sponsor should be equal";
 		assert otherItem.getExternalPublishedItem().equals(externalPublishedItem) : "External Published Item should be equal";
 
-		userPublishingFileSystemService.deletePersonalItem(otherPersonalItem);
+		userPublishingFileSystemService.deletePersonalItem(otherPersonalItem, otherPersonalItem.getOwner(), "TESTING");
 		tm.commit(ts);
 
 	    // Start new transaction
 		ts = tm.getTransaction(td);
 		
-		IrUser otherUser = userService.getUser(user.getUsername());
-		userService.deleteUser(userService.getUser(otherUser.getId(), false));
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+		userService.deleteUser(deleteUser, deleteUser);
 
 		contentTypeService.deleteContentType("contentType");
 		seriesService.deleteSeries("seriesName");
@@ -313,6 +321,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		sponsorService.deleteSponsor("sponsor");
 		publisherService.deletePublisher("publisher");
 
+		personalItemDeleteRecordDAO.deleteAll();
 		tm.commit(ts);	
 	}
 
@@ -454,7 +463,8 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		
 		
 		ts = tm.getTransaction(td);
-		userService.deleteUser(userService.getUser(otherUser2.getId(), false));
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+		userService.deleteUser(deleteUser, deleteUser);
 		tm.commit(ts);
 		
 	    // Start new transaction
@@ -582,7 +592,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		 // Start new transaction
 		ts = tm.getTransaction(td);
 		user = userService.getUser(user.getId(), false);
-		userService.deleteUser(user);
+		userService.deleteUser(user, user);
 		tm.commit(ts);
 		
 		assert userService.getUser(user.getId(), false) == null : "User should be null"; 

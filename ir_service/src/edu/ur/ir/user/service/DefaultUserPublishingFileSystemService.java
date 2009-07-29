@@ -35,6 +35,8 @@ import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalCollectionDAO;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.PersonalItemDAO;
+import edu.ur.ir.user.PersonalItemDeleteRecord;
+import edu.ur.ir.user.PersonalItemDeleteRecordDAO;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 
 
@@ -57,6 +59,9 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 	
 	/**  User data access  */
 	private IrUserDAO irUserDAO;
+	
+	/** captures information about deleting information */
+	private PersonalItemDeleteRecordDAO personalItemDeleteRecordDAO;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserPublishingFileSystemService.class);
@@ -192,23 +197,6 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 	}
 	
 	/**
-	 * Get personal items for a user in the specified folder
-	 * 
-	 * @see edu.ur.ir.user.UserPublishingFileSystemService#getPersonalItemsInCollection(java.lang.Long, java.lang.Long)
-	 */
-	public List<PersonalItem> getPersonalItemsInCollection(Long userId, Long parentCollectionId) {
-	    
-		if( parentCollectionId == null || parentCollectionId == ROOT_COLLECTION_ID)
-		{
-			return  personalItemDAO.getRootPersonalItems(userId);
-		}
-		else
-		{
-		   return personalItemDAO.getPersonalItemsInCollectionForUser(userId, parentCollectionId);
-		}
-	}
-	
-	/**
 	 * Create a personal item 
 	 * 
 	 * @see edu.ur.ir.user.UserPublishingFileSystemService#createPersonalItem(edu.ur.ir.user.PersonalCollection, edu.ur.ir.user.IrUser, java.lang.String)
@@ -297,18 +285,50 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 	 * 
 	 * @see edu.ur.ir.user.UserPublishingFileSystemService#deletePersonalCollection(edu.ur.ir.user.PersonalCollection)
 	 */
-	public void deletePersonalCollection(
-			PersonalCollection personalCollection) {
+	public void deletePersonalCollection( PersonalCollection personalCollection, IrUser deletingUser, String deleteReason) {
+		
+		List<PersonalItem> personalItems = personalCollectionDAO.getAllItemsForCollection(personalCollection);
+		
+		// create delete records for all personal items
+		for(PersonalItem personalItem : personalItems)
+		{
+			PersonalItemDeleteRecord personalItemDeleteRecord = new PersonalItemDeleteRecord(deletingUser.getId(),
+					personalItem.getId(),
+					personalItem.getFullPath(), 
+					personalItem.getDescription());
+			personalItemDeleteRecord.setDeleteReason(deleteReason);
+			personalItemDeleteRecordDAO.makePersistent(personalItemDeleteRecord);
+		}
+		
 		personalCollectionDAO.makeTransient(personalCollection);
 		
+	}
+	
+	/**
+	 * Get all items for the collection including items from children.
+	 * 
+	 * @see edu.ur.ir.user.UserPublishingFileSystemService#getAllItemsForCollection(edu.ur.ir.user.PersonalCollection)
+	 */
+	public List<PersonalItem> getAllItemsForCollection(PersonalCollection personalCollection)
+	{
+		return personalCollectionDAO.getAllItemsForCollection(personalCollection);
 	}
 
 	/**
 	 * Delete the personal item.
 	 * 
-	 * @see edu.ur.ir.user.UserPublishingFileSystemService#deletePersonalItem(edu.ur.ir.user.PersonalItem)
+	 * @see edu.ur.ir.user.UserPublishingFileSystemService#deletePersonalItem(edu.ur.ir.user.PersonalItem, edu.ur.ir.user.IrUser, java.lang.String)
 	 */
-	public void deletePersonalItem(PersonalItem personalItem) {
+	public void deletePersonalItem(PersonalItem personalItem, IrUser deletingUser, String deleteReason) {
+		// create a delete record
+		PersonalItemDeleteRecord personalItemDeleteRecord = new PersonalItemDeleteRecord(deletingUser.getId(),
+				personalItem.getId(),
+				personalItem.getFullPath(), 
+				personalItem.getDescription());
+		personalItemDeleteRecord.setDeleteReason(deleteReason);
+		personalItemDeleteRecordDAO.makePersistent(personalItemDeleteRecord);
+		
+		// delete the item
 		personalItemDAO.makeTransient(personalItem);
 		itemService.deleteVersionedItem(personalItem.getVersionedItem());
 	}
@@ -526,5 +546,14 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 	public PersonalItem getPersonalItem(GenericItem item) {
 		
 		return personalItemDAO.getPersonalItem(item.getId());
+	}
+
+	public PersonalItemDeleteRecordDAO getPersonalItemDeleteRecordDAO() {
+		return personalItemDeleteRecordDAO;
+	}
+
+	public void setPersonalItemDeleteRecordDAO(
+			PersonalItemDeleteRecordDAO personalItemDeleteRecordDAO) {
+		this.personalItemDeleteRecordDAO = personalItemDeleteRecordDAO;
 	}
 }

@@ -303,7 +303,8 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		ts = tm.getTransaction(td);
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
 		institutionalItemService.deleteAllInstitutionalItemHistory();
-        userService.deleteUser(userService.getUser(user.getId(), false));	
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);		
 		helper.cleanUpRepository();
 		personService.delete(personService.getAuthority(p.getId(), false));
 		identifierTypeService.delete(identifierTypeService.get(identType.getId(), false));
@@ -565,7 +566,8 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem2.getId(), false), user);
 		institutionalItemService.deleteAllInstitutionalItemHistory();
-		userService.deleteUser(userService.getUser(user.getId(), false));	
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);	
 		helper.cleanUpRepository();
 		personService.delete(personService.getAuthority(p.getId(), false));
 		identifierTypeService.delete(identifierTypeService.get(identType.getId(), false));
@@ -885,7 +887,8 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem2.getId(), false), user);
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem3.getId(), false), user);
 		institutionalItemService.deleteAllInstitutionalItemHistory();
-		userService.deleteUser(userService.getUser(user.getId(), false));	
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);	
 		helper.cleanUpRepository();
 		personService.delete(personService.getAuthority(p.getId(), false));
 		identifierTypeService.delete(identifierTypeService.get(identType.getId(), false));

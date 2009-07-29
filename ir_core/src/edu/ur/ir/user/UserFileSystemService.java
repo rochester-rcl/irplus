@@ -111,9 +111,11 @@ public interface UserFileSystemService {
 	/**
 	 * Delete a personal folder and all related information.  
 	 * 
-	 * @param personal folder to delete
+	 * @param personalFolder - personal folder to delete
+	 * @param deletingUser - user performing the delete
+	 * @param deleteReason - reason for the deletion 
 	 */
-	public void deletePersonalFolder(PersonalFolder personalFolder);
+	public void deletePersonalFolder(PersonalFolder personalFolder, IrUser deletingUser, String deleteReason);
 	
 	/**
 	 * Get all personal folders not within the specified set of folders.
@@ -225,9 +227,11 @@ public interface UserFileSystemService {
 	/**
 	 * Delete a personal file.
 	 * 
-	 * @param personalFileId
+	 * @param personalFile - personal file to delete
+	 * @param deletingUser - user deleting the file
+	 * @param deleteReason - reason the personal file is being deleted.
 	 */
-	public void deletePersonalFile(PersonalFile personalFile);
+	public void delete(PersonalFile personalFile, IrUser deletingUser, String deleteReason);
 
 	
 	/**
@@ -301,11 +305,14 @@ public interface UserFileSystemService {
 
 	
 	/**
-	 * Delete personal file
+	 * Delete personal file record from the database - this does not physically remove the file
+	 * from the file system.
 	 * 
-	 * @param personalFile personal file to be deleted
+	 * @param personalFile - personal file being deleted
+	 * @param deletingUser - user performing the delete
+	 * @param deleteReason - system reason why the file was deleted (Unshared, folder deleted ...)
 	 */
-	public void makePersonalFileTransient(PersonalFile personalFile);	
+	public void makePersonalFileTransient(PersonalFile personalFile, IrUser deletingUser, String deleteReason);	
 
 	/**
 	 * Save personal file
@@ -460,14 +467,13 @@ public interface UserFileSystemService {
 			Long parentFolderId) ;
     
 	/**
-	 * Returns all files within a folder and its sub folder
+	 * Returns all files within a folder and sub folders
 	 * 
-	 * @param folderId Folder id to get the files from 
-	 * @param userId User id of the folder
+	 * @param personalFolder - personal folder to get all files for
 	 * 
 	 * @return all files within a folder and its sub folder
 	 */
-	public List<PersonalFile> getAllFilesInFolderAndSubFolder(Long folderId, Long userId) ;
+    public List<PersonalFile> getAllFilesForFolder(PersonalFolder personalFolder);
 
 	/**
 	 * Get shared inbox files for specified user and ids

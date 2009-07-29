@@ -154,7 +154,8 @@ public class DefaultInstitutionalItemServiceTest {
 	    // Start new transaction - clean up the data
 		ts = tm.getTransaction(td);
 		institutionalItemService.deleteAllInstitutionalItemHistory();
-        userService.deleteUser(userService.getUser(user.getId(), false));	
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);	
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
         helper.cleanUpRepository();
 		tm.commit(ts);	
@@ -266,7 +267,8 @@ public class DefaultInstitutionalItemServiceTest {
 		securityService.deleteAcl(securityService.getAcl(collection));
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
 		institutionalItemService.deleteAllInstitutionalItemHistory();
-        userService.deleteUser(userService.getUser(user.getId(), false));	
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);		
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
         userGroupService.delete(userGroupService.get(userGroup.getId(), false));
         helper.cleanUpRepository();

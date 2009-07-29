@@ -195,7 +195,7 @@ public class DefaultUserWorkspaceSearchServiceTest {
 			searchResults.getTotalHits() 
 			+ " for finding file_version_creator " + currentVersion.getVersionCreator().getUsername();
 	
-		userService.deleteUser(user);
+		userService.deleteUser(user, user);
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 	}
@@ -265,7 +265,7 @@ public class DefaultUserWorkspaceSearchServiceTest {
 		assert searchResults.getTotalHits() == 0 : "Hit count should equal 0 but equals " + 
 		    searchResults.getTotalHits() + " for finding personal_folder_name " + personalFolder.getName();
 	
-		userService.deleteUser(user);
+		userService.deleteUser(user, user);
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 	}

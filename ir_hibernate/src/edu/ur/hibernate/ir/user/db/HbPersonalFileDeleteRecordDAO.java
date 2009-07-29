@@ -75,4 +75,11 @@ public class HbPersonalFileDeleteRecordDAO implements PersonalFileDeleteRecordDA
 		hbCrudDAO.makeTransient(entity);
 	}
 
+	
+	public int deleteAll() {
+		int count = hbCrudDAO.getAll().size();
+		hbCrudDAO.getHibernateTemplate().deleteAll(hbCrudDAO.getAll());
+		return count;
+	}
+
 }

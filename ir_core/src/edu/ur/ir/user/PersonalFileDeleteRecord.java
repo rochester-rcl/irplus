@@ -47,6 +47,9 @@ public class PersonalFileDeleteRecord extends BasePersistent{
 	/** description of the personal item */
 	private String description;
 	
+	/** reason the file was deleted if any */
+	private String deleteReason;
+	
 	/**
 	 * Package protected constructor
 	 */
@@ -185,6 +188,14 @@ public class PersonalFileDeleteRecord extends BasePersistent{
 
 	void setPersonalFileId(Long personalFileId) {
 		this.personalFileId = personalFileId;
+	}
+
+	public String getDeleteReason() {
+		return deleteReason;
+	}
+
+	public void setDeleteReason(String deleteReason) {
+		this.deleteReason = deleteReason;
 	}
 
 }

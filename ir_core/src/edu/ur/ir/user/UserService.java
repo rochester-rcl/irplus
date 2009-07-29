@@ -97,12 +97,14 @@ public interface UserService extends UserDetailsService {
 	 * Delete the user from the system.
 	 * 
 	 * @param user - user to delete.
+	 * @param deletingUser - user performing the delete
+	 * 
 	 * @throws UserHasPublishedDeleteException - if the user has published into the
 	 * system.
 	 * @throws UserDeletedPublicationException - if user has deleted publications
 	 * @throws IOException 
 	 */
-	public boolean deleteUser(IrUser user) throws UserHasPublishedDeleteException, UserDeletedPublicationException;
+	public boolean deleteUser(IrUser user, IrUser deletingUser) throws UserHasPublishedDeleteException, UserDeletedPublicationException;
 	
 	/**
 	 * Get a set of users with the given ids.

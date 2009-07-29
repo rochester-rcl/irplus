@@ -205,7 +205,7 @@ public class DefaultUserIndexServiceTest {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		userService.deleteUser(user);
+		userService.deleteUser(user, user);
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 	}

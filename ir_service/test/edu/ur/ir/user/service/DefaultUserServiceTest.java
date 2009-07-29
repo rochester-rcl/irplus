@@ -115,8 +115,8 @@ public class DefaultUserServiceTest {
 		IrUser myUser1 = userService.getUser(user.getId(), false);
 		IrUser myUser2 = userService.getUser(user2.getId(), false);
 		
-		userService.deleteUser(myUser1);
-		userService.deleteUser(myUser2);
+		userService.deleteUser(myUser1, myUser1);
+		userService.deleteUser(myUser2, myUser2);
 		
 		tm.commit(ts);
 		
@@ -154,7 +154,8 @@ public class DefaultUserServiceTest {
 		
 		// Start new transaction
 		ts = tm.getTransaction(td);
-		userService.deleteUser(userService.getUser(user.getId(), false));
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+		userService.deleteUser(deleteUser,deleteUser);
 		tm.commit(ts);
 		
 		assert userService.getUser(user.getId(), false) == null : "User should be null";

@@ -217,10 +217,9 @@ public class DefaultInviteUserService implements InviteUserService {
 	/**
 	 * Removes the specified shared file from the list of users
 	 *  
-	 * @param users List of users to remove the file from
-	 * @param versionedFile File has to be unshared
+	 * @param fileCollaborator List of users to remove the file from
 	 */
-	public void unshareFile(FileCollaborator fileCollaborator){
+	public void unshareFile(FileCollaborator fileCollaborator, IrUser unsharingUser){
 		IrUser collaborator = fileCollaborator.getCollaborator();
 		VersionedFile file = fileCollaborator.getVersionedFile();
 		log.debug("UnShare file " + file.toString() + " with user " + collaborator);
@@ -231,7 +230,7 @@ public class DefaultInviteUserService implements InviteUserService {
 					file.getId());
 		
 		if (personalFile != null) {
-			userFileSystemService.makePersonalFileTransient(personalFile);
+			userFileSystemService.makePersonalFileTransient(personalFile, unsharingUser, "UN-SHAREING FILE");
 		}
 		
 		// Remove the personal file from user if the file is in the shared file inbox
