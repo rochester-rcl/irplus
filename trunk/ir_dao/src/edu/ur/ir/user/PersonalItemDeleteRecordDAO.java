@@ -10,4 +10,14 @@ import edu.ur.dao.CrudDAO;
  *
  */
 public interface PersonalItemDeleteRecordDAO extends CountableDAO, 
-CrudDAO<PersonalItemDeleteRecord>{}
+CrudDAO<PersonalItemDeleteRecord>
+{
+	/**
+	 * Delete all personal file delete records.  This should be used with EXTREAM CAUTION.  This 
+	 * deletes all personal file delete records.
+	 * 
+	 * 
+	 * @return
+	 */
+	public int deleteAll();
+}

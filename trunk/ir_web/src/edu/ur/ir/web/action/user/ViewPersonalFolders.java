@@ -154,15 +154,14 @@ public class ViewPersonalFolders extends ActionSupport implements
 			    }
 			    
 			    //un-index all the files
-			    List<PersonalFile> allFiles = 
-			    	userFileSystemService.getAllFilesInFolderAndSubFolder(pf.getId(), pf.getOwner().getId());
+			    List<PersonalFile> allFiles =  userFileSystemService.getAllFilesForFolder(pf);
 			    
 			    for(PersonalFile aFile : allFiles)
 			    {
 			    	deleteFileFromIndex(aFile, user);
 			    }
 			    
-			    userFileSystemService.deletePersonalFolder(pf);
+			    userFileSystemService.deletePersonalFolder(pf, user, "OWNER DELETING FOLDER - " + pf.getFullPath());
 		    }
 		}
 		
@@ -177,7 +176,7 @@ public class ViewPersonalFolders extends ActionSupport implements
 				   	return "accessDenied";
 				 }
 				deleteFileFromIndex(pf, user);
-				userFileSystemService.deletePersonalFile(pf);
+				userFileSystemService.delete(pf, user, "OWNER DELETING FILE");
 			}
 		}
 		createFileSystem();

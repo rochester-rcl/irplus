@@ -156,7 +156,10 @@ public class DefaultReviewableItemServiceTest {
 		assert otherCollection.getItems("itemName").contains(ii) : "Item should be published to collection";
 		institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(), false), reviewer);
 		institutionalItemService.deleteAllInstitutionalItemHistory();
-		userService.deleteUser(userService.getUser(reviewer.getId(), false));
+		
+		IrUser deleteUser = userService.getUser(reviewer.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);	
+		
 		tm.commit(ts);	
 		
 	    // Start new transaction

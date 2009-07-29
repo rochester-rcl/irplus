@@ -110,6 +110,12 @@
 		and PersonalCollection.id = PersonalCollection.treeRoot.id
 	</query>
 	
+	<query name="getAllPersonalItemsForCollection">
+	    from PersonalItem as personalItem
+	    where  personalItem.personalCollection.leftValue between ? and ?
+	    and personalItem.personalCollection.treeRoot.id = ?
+	</query>
+	
 	<!-- named query for getting a personal collection by name parent id -->
 	<query name="getPersonalCollectionByNameParent">
 		from PersonalCollection as PersonalCollection where

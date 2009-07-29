@@ -190,8 +190,11 @@ public class DefaultSecurityServiceTest {
 		
 		// Start a transaction 
 		ts = tm.getTransaction(td);
-		userService.deleteUser(userService.getUser(user.getId(), false));
-		userService.deleteUser(userService.getUser(user1.getId(), false));
+		IrUser deleteUser1 = userService.getUser(user.getId(), false);
+		userService.deleteUser(deleteUser1, deleteUser1);
+		
+		IrUser deleteUser2 = userService.getUser(user1.getId(), false);
+		userService.deleteUser(deleteUser2, deleteUser2);
 		tm.commit(ts);
 		
 	    // Start new transaction
@@ -294,8 +297,11 @@ public class DefaultSecurityServiceTest {
 		
 		// Start a transaction 
 		ts = tm.getTransaction(td);
-		userService.deleteUser(userService.getUser(user.getId(), false));
-		userService.deleteUser(userService.getUser(user1.getId(), false));
+		IrUser deleteUser1 = userService.getUser(user.getId(), false);
+		userService.deleteUser(deleteUser1, deleteUser1);
+		
+		IrUser deleteUser2 = userService.getUser(user1.getId(), false);
+		userService.deleteUser(deleteUser2, deleteUser2);
 		userGroupService.delete(userGroupService.get(userGroup.getId(), false));
 		tm.commit(ts);
 		

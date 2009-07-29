@@ -198,7 +198,8 @@ public class DefaultInstitutionalCollectionSubscriptionServiceTest {
 			institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem2.getId(), false), user);
 
 			institutionalItemService.deleteAllInstitutionalItemHistory();
- 		    userService.deleteUser(userService.getUser(user.getUsername()));
+			IrUser deleteUser = userService.getUser(user.getUsername());
+ 		    userService.deleteUser(deleteUser, deleteUser);
 		    helper.cleanUpRepository();
 			personService.delete(personService.getAuthority(p.getId(), false));
 			contributorTypeService.delete(contributorTypeService.get(contributorType1.getId(), false));

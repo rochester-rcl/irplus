@@ -74,7 +74,9 @@ public class HbPersonalCollectionDAO implements PersonalCollectionDAO{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PersonalItem> getAllItemsForCollection(PersonalCollection personalCollection) {
-		Long[] ids = new Long[] {personalCollection.getLeftValue(), personalCollection.getTreeRoot().getId()};
+		Long[] ids = new Long[] {personalCollection.getLeftValue(),
+				personalCollection.getRightValue(), 
+				personalCollection.getTreeRoot().getId()};
 		List<PersonalItem> personalItems =  (List<PersonalItem>) 
 		hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllPersonalItemsForCollection", ids);
 		return personalItems;

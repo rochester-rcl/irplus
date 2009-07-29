@@ -32,6 +32,8 @@ import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.service.DefaultFileServerService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
+import edu.ur.ir.user.PersonalItemDeleteRecordDAO;
 
 
 /**
@@ -45,18 +47,24 @@ public class RepositoryBasedTestHelper {
 	ApplicationContext ctx;
 	
 	// initialize the repository
-	RepositoryService repositoryService;
-	DefaultFileServerService fileServerService;
-
+	private RepositoryService repositoryService;
+	private DefaultFileServerService fileServerService;
+    private PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO;
+    private PersonalItemDeleteRecordDAO personalItemDeleteRecordDAO;
+	
 	
 	private Repository repository;
 	private FileServer fileServer;
+	
+	
 	
 	public RepositoryBasedTestHelper(ApplicationContext ctx)
 	{
 		this.ctx = ctx;
 		 repositoryService = (RepositoryService)ctx.getBean("repositoryService");
 		 fileServerService = (DefaultFileServerService)ctx.getBean("fileServerService");
+		 personalFileDeleteRecordDAO = (PersonalFileDeleteRecordDAO)ctx.getBean("personalFileDeleteRecordDAO");
+		 personalItemDeleteRecordDAO = (PersonalItemDeleteRecordDAO)ctx.getBean("personalItemDeleteRecordDAO");
 	}
 	
     /**
@@ -167,6 +175,12 @@ public class RepositoryBasedTestHelper {
      */
     public void cleanUpRepository()
     {
+    	// delete all personal file delete records
+    	personalFileDeleteRecordDAO.deleteAll();
+    	
+       	// delete all personal item delete records
+    	personalItemDeleteRecordDAO.deleteAll();
+    	
 		// delete the repository
 		repositoryService.deleteRepository(repositoryService.getRepository(repository.getId(), false));
 		

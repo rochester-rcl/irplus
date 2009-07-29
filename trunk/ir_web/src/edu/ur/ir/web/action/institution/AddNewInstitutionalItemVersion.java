@@ -112,7 +112,7 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 		}
 		
 		Collection<PersonalCollection> myPersonalCollections = userPublishingFileSystemService.getPersonalCollectionsForUser(userId, parentCollectionId);
-		Collection<PersonalItem> myPersonalItems = userPublishingFileSystemService.getPersonalItemsInCollection(userId, parentCollectionId);
+		Collection<PersonalItem> myPersonalItems = userPublishingFileSystemService.getPersonalItems(userId, parentCollectionId);
 		
 	    fileSystem = new LinkedList<FileSystem>();
 	    

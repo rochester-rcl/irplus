@@ -46,6 +46,8 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFileDAO;
+import edu.ur.ir.user.PersonalFileDeleteRecord;
+import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.PersonalFolderDAO;
 import edu.ur.ir.user.SharedInboxFile;
@@ -81,6 +83,9 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	
 	/**   Data access for personal files */
 	private PersonalFileDAO personalFileDAO;
+	
+	/** Data access for trakcing personal file deletions */
+	private PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO;
 	
 	/** Service class for dealing with file sharing*/
 	private InviteUserService inviteUserService;
@@ -422,10 +427,10 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	 * 
 	 * @param personalFileId
 	 */
-	public void deletePersonalFile(PersonalFile pf)
+	public void delete(PersonalFile pf, IrUser deletingUser, String deleteReason)
 	{
 		VersionedFile versionedFile = pf.getVersionedFile();
-		personalFileDAO.makeTransient(pf);
+		makePersonalFileTransient(pf, deletingUser, deleteReason);
 		
 		// Delete versioned file only if requested by its owner
 		if (pf.getOwner().equals(versionedFile.getOwner())) {
@@ -435,7 +440,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 			fileCollaborators.addAll(versionedFile.getCollaborators());
 			
 			for (FileCollaborator fileCollaborator: fileCollaborators) {
-				inviteUserService.unshareFile(fileCollaborator);
+				inviteUserService.unshareFile(fileCollaborator, deletingUser);
 			}
 
 			deleteAclForVersionedFile(versionedFile, pf.getOwner());
@@ -443,7 +448,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 			
 		} else {
 			// unshare the file that is shared with this user
-			inviteUserService.unshareFile(versionedFile.getCollaborator(pf.getOwner()));
+			inviteUserService.unshareFile(versionedFile.getCollaborator(pf.getOwner()), deletingUser);
 		}
 
 	}
@@ -507,14 +512,14 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	 * Delete all sub folders and files from the system for the specified folder id.
 	 * This physically removes the files stored on the file system.
 	 * 
-	 * @see edu.ur.ir.user.service.UserService#deletePersonalFolder(java.lang.Long)
+	 * @see edu.ur.ir.user.UserFileSystemService#deletePersonalFolder(edu.ur.ir.user.PersonalFolder, edu.ur.ir.user.IrUser, java.lang.String)
 	 */
-	public void deletePersonalFolder(PersonalFolder personalFolder) {
+	public void deletePersonalFolder(PersonalFolder personalFolder, IrUser deletingUser, String deleteReason) {
 		List<PersonalFile> personalFiles = personalFolderDAO.getAllFilesForFolder(personalFolder);
 
 		for( PersonalFile aFile : personalFiles)
 		{
-		    deletePersonalFile(aFile);
+		    delete(aFile, deletingUser, deleteReason);
 		}
 
 		personalFolderDAO.makeTransient(personalFolder);
@@ -749,13 +754,23 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 		securityService.deleteAcl(versionedFile.getId(), CgLibHelper.cleanClassName(versionedFile.getClass().getName()));
 	}
 
-	
+
 	/**
 	 * Delete personal file
 	 * 
-	 * @see edu.ur.ir.user.service.UserService#makePersonalFileTransient(PersonalFile personalFile)
+	 * @param personalFile
+	 * @param deletingUser
+	 * 
+	 * @see edu.ur.ir.user.service.UserService#makePersonalFileTransient(PersonalFile personalFile, IrUser deletingUser)
 	 */
-	public void makePersonalFileTransient(PersonalFile personalFile) {
+	public void makePersonalFileTransient(PersonalFile personalFile, IrUser deletingUser, String deleteReason) {
+		// create a delete record
+		PersonalFileDeleteRecord deleteRecord = new PersonalFileDeleteRecord(deletingUser.getId(), 
+				personalFile.getId(), 
+				personalFile.getFullPath(), 
+				personalFile.getDescription());
+		deleteRecord.setDeleteReason(deleteReason);
+		personalFileDeleteRecordDAO.makePersistent(deleteRecord);
 		personalFileDAO.makeTransient(personalFile);
 	}
 	
@@ -1013,24 +1028,12 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	}
 	
 	/**
-	 * Returns all files within a folder and its sub folder
+	 * Returns all files within a folder and its sub folders
 	 * 
 	 * @see edu.ur.ir.user.UserFileSystemService#getAllFilesInFolderAndSubFolder(Long, Long)
 	 */
-	public List<PersonalFile> getAllFilesInFolderAndSubFolder(Long folderId, Long userId) {
-		List<PersonalFile> files = new LinkedList<PersonalFile>();
-		
-		files.addAll(getPersonalFilesInFolder(userId, folderId));
-		
-		List<PersonalFolder> folders = new LinkedList<PersonalFolder>();
-		
-		folders = getSubFoldersForFolder(userId, folderId);
-		
-		for (PersonalFolder folder: folders) {
-			files.addAll(getAllFilesInFolderAndSubFolder(folder.getId(), userId));
-		}
-		
-		return files;
+	public List<PersonalFile> getAllFilesForFolder(PersonalFolder personalFolder) {
+		return personalFolderDAO.getAllFilesForFolder(personalFolder);
 	}
 
 	/**
@@ -1070,6 +1073,25 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	 */
 	public Long getFileSystemSizeForUser(IrUser user) {
 		return repositoryService.getFileSystemSizeForUser(user);
+	}
+
+	/**
+	 * Get data access for dealing with personal file delete records.
+	 * 
+	 * @return
+	 */
+	public PersonalFileDeleteRecordDAO getPersonalFileDeleteRecordDAO() {
+		return personalFileDeleteRecordDAO;
+	}
+
+	/**
+	 * Set data access for dealing with personal file delete records.
+	 * 
+	 * @param personalFileDeleteRecordDAO
+	 */
+	public void setPersonalFileDeleteRecordDAO(
+			PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO) {
+		this.personalFileDeleteRecordDAO = personalFileDeleteRecordDAO;
 	}
 
 }

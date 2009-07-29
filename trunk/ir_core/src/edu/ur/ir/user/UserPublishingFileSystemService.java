@@ -93,9 +93,22 @@ public interface UserPublishingFileSystemService {
 	/**
 	 * Remove the personal collection from persistent storage.
 	 * 
-	 * @param personalCollectionId 
+	 * @param personalCollection - personal collection to delete
+	 * @param deletingUser - user performing the delete
+	 * @param deleteReason - reason for the delete
 	 */
-	public void deletePersonalCollection(PersonalCollection personalCollection);
+	public void deletePersonalCollection(PersonalCollection personalCollection, IrUser deletingUser, String deleteReason);
+	
+	
+	/**
+	 * This gets all items for the given personal collection.  This includes items from all child
+	 * collections.
+	 * 
+	 * @param personalCollection - personal collection to get items for
+	 * @return - all items including items from children.
+	 */
+	public List<PersonalItem> getAllItemsForCollection(PersonalCollection personalCollection);
+	
 	
 	/**
 	 * Get a personal collection with the given name and specified 
@@ -121,9 +134,11 @@ public interface UserPublishingFileSystemService {
 	/**
 	 * Remove the personal item from persistent storage.
 	 * 
-	 * @param personalItemId
+	 * @param personalItem - item to be deleted
+	 * @param deletingUser - user deleting the item
+	 * @param deleteReason - reason the item is being deleted
 	 */
-	public void deletePersonalItem(PersonalItem personalItem);
+	public void deletePersonalItem(PersonalItem personalItem, IrUser deletingUser, String deleteReason);
 	
 	/**
 	 * Get the personal item by unique id.
@@ -253,17 +268,6 @@ public interface UserPublishingFileSystemService {
 	 */
 	public List<PersonalCollection> getPersonalCollectionsForUser(Long userId, Long parentCollectionId);
 	
-
-	/**
-	 * Get the personal items for the user.  If the parent collection id is
-	 * null or equal to ROOT_COLLECTION_ID the root collections for the user are returned
-	 * 
-	 * @param userId
-	 * @param parentCollectionId
-	 * 
-	 * @return
-	 */
-	public List<PersonalItem> getPersonalItemsInCollection(Long userId, Long parentCollectionId);
 
 	/**
 	 * Get personal item which has specified generic item 

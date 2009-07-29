@@ -153,7 +153,7 @@ public class DefaultUserFileSystemServiceTest {
 			ts = tm.getTransaction(td);
 			IrUser otherUser2 = userService.getUser(user.getUsername());
 			assert otherUser2.getRootFile("test_file") != null;
-			userService.deleteUser(userService.getUser(otherUser2.getId(), false));
+			userService.deleteUser(otherUser2, otherUser2);
 			tm.commit(ts);
 			
 		    // Start new transaction
@@ -201,7 +201,7 @@ public class DefaultUserFileSystemServiceTest {
 			PersonalFile rootFile = otherUser2.getRootFile("test_file");
 			assert rootFile != null : "Root file should not be equal to null";
 			assert  rootFile.getVersionedFile().getCurrentVersion().getVersionNumber() == 1;
-			userService.deleteUser(userService.getUser(otherUser2.getId(), false));
+			userService.deleteUser(otherUser2, otherUser2);
 			tm.commit(ts);
 			
 		    // Start new transaction
@@ -311,7 +311,8 @@ public class DefaultUserFileSystemServiceTest {
 			
 			
 			ts = tm.getTransaction(td);
-			userService.deleteUser(userService.getUser(otherUser2.getId(), false));
+			otherUser2 = userService.getUser(otherUser2.getId(), false);
+			userService.deleteUser(otherUser2, otherUser2);
 			tm.commit(ts);
 			
 		    // Start new transaction
@@ -424,7 +425,8 @@ public class DefaultUserFileSystemServiceTest {
 			
 			 // Start new transaction
 			ts = tm.getTransaction(td);
-			userService.deleteUser(userService.getUser(user.getId(), false));
+			IrUser deleteUser = userService.getUser(user.getId(), false);
+			userService.deleteUser(deleteUser, deleteUser);
 			tm.commit(ts);
 			
 			assert userService.getUser(user.getId(), false) == null : "User should be null"; 
@@ -461,7 +463,7 @@ public class DefaultUserFileSystemServiceTest {
 			ts = tm.getTransaction(td);
 			IrUser otherUser2 = userService.getUser(user.getUsername());
 			assert otherUser2.getPersonalIndexFolder() != null;
-			userService.deleteUser(userService.getUser(otherUser2.getId(), false));
+			userService.deleteUser(otherUser2, otherUser2);
 			tm.commit(ts);
 			
 		    // Start new transaction
@@ -561,8 +563,11 @@ public class DefaultUserFileSystemServiceTest {
 
 			// Start a transaction 
 			ts = tm.getTransaction(td);
-			userService.deleteUser(userService.getUser(user.getId(), false));
-			userService.deleteUser(userService.getUser(user1.getId(), false));
+			IrUser deleteUser = userService.getUser(user.getId(), false);
+			userService.deleteUser(deleteUser, deleteUser);
+			
+			IrUser deleteUser2 = userService.getUser(user1.getId(), false);
+			userService.deleteUser(deleteUser2, deleteUser2);
 			tm.commit(ts);
 			
 		    // Start new transaction
@@ -573,63 +578,6 @@ public class DefaultUserFileSystemServiceTest {
 			tm.commit(ts);	 
 		}
 		
-		/**
-		 * Test creating a personal item
-		 */
-//		public void testDeletePersonalFile()
-//		{
-//			
-//			// Start the transaction 
-//			TransactionStatus ts = tm.getTransaction(td);
-//			UserEmail email = new UserEmail("email");
-//
-//			IrUser user = userService.createUser("password", "username", email);
-//			RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
-//			Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
-//			// save the repository
-//			tm.commit(ts);
-//			
-//
-//			// new transaction
-//			ts = tm.getTransaction(td);
-//			// Create an empty file for the user
-//			PersonalFile pf = userFileSystemService.addFileToUser(repo, 
-//					user, "test_file", "description");
-//	        assert pf != null : "Personal file sould not be null";
-//			tm.commit(ts);
-//	
-//			// Start the transaction
-//			ts = tm.getTransaction(td);
-//			PersonalItem personalItem = userService.createRootPersonalItem(user, "itemName");
-//			GenericItem item = personalItem.getVersionedItem().getCurrentVersion().getItem();
-//			ItemFile itemFile = item.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
-//
-//			// save personal item
-//			userService.makePersonalItemPersistent(personalItem);
-//			tm.commit(ts);
-//			
-//			Long irFileId = pf.getVersionedFile().getCurrentVersion().getIrFile().getId();
-//			
-//			
-//			ts = tm.getTransaction(td);
-//			
-//			assert pf.getVersionedFile().getCurrentVersion().getIrFile().equals(itemFile.getIrFile()) : "Should be using the same IrFile";
-//			tm.commit(ts);
-//			
-//			// Start new transaction
-//			ts = tm.getTransaction(td);
-//			//VersionedItem vi = itemService.getVersionedItem(other.getVersionedItem().getId(), false);
-//			
-//			userFileSystemService.deletePersonalFile(pf);
-//			
-//			assert irFileService.getIrFileById(irFileId, false) != null : " IrFile should exist";
-//			
-//			
-//			//userService.deletePersonalItem(userService.getPersonalItem(other.getId(), false));
-//			//itemService.deleteVersionedItem(vi);
-//			userService.deleteUser(userService.getUser(user.getId(), false));
-//			tm.commit(ts);
-//			
-//		}
+
 
 }

@@ -30,6 +30,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalFile;
+import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserPublishingFileSystemService;
@@ -164,7 +165,8 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		if (folderIds != null) {
 			for(Long folderId: folderIds)
 			{
-				List<PersonalFile> files = userFileSystemService.getAllFilesInFolderAndSubFolder(folderId, userId);
+				PersonalFolder personalFolder = userFileSystemService.getPersonalFolder(folderId, false);
+				List<PersonalFile> files = userFileSystemService.getAllFilesForFolder(personalFolder);
 				
 				for (PersonalFile pf:files) {
 						
@@ -215,7 +217,8 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 		if (folderIds != null) {
 			for(Long folderId: folderIds)
 			{
-				List<PersonalFile> files = userFileSystemService.getAllFilesInFolderAndSubFolder(folderId, userId);
+				PersonalFolder personalFolder = userFileSystemService.getPersonalFolder(folderId, false);
+				List<PersonalFile> files = userFileSystemService.getAllFilesForFolder(personalFolder);
 				
 				for (PersonalFile pf:files) {
 						

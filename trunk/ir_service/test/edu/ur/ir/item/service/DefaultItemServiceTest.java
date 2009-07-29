@@ -186,7 +186,7 @@ public class DefaultItemServiceTest {
 		
 		ts = tm.getTransaction(td);
 		PersonalFile pF = userFileSystemService.getPersonalFile(pf.getId(), false);
-		userFileSystemService.deletePersonalFile(pF);
+		userFileSystemService.delete(pF, pf.getOwner(), "user delete");
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
@@ -196,7 +196,8 @@ public class DefaultItemServiceTest {
 	    // Start new transaction
 		ts = tm.getTransaction(td);
 		IrUser otherUser = userService.getUser(user.getUsername());
-		userService.deleteUser(userService.getUser(otherUser.getId(), false));
+        userService.deleteUser(otherUser, otherUser);	
+		
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 	}
@@ -297,7 +298,7 @@ public class DefaultItemServiceTest {
 		
 		ts = tm.getTransaction(td);
 		PersonalFile pF = userFileSystemService.getPersonalFile(pf.getId(), false);
-		userFileSystemService.deletePersonalFile(pF);
+		userFileSystemService.delete(pF, pf.getOwner(), "user delete");
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
@@ -307,7 +308,7 @@ public class DefaultItemServiceTest {
 	    // Start new transaction
 		ts = tm.getTransaction(td);
 		IrUser otherUser = userService.getUser(user.getUsername());
-		userService.deleteUser(userService.getUser(otherUser.getId(), false));
+        userService.deleteUser(otherUser, otherUser);	
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 	}
@@ -350,16 +351,14 @@ public class DefaultItemServiceTest {
 
 		// Start the transaction 
 		ts = tm.getTransaction(td);
-		
-		userPublishingFileSystemService.deletePersonalItem(personalItem);
-		userPublishingFileSystemService.deletePersonalCollection(collection);
-		
+		PersonalCollection pc = userPublishingFileSystemService.getPersonalCollection(collection.getId(), false);
+		userPublishingFileSystemService.deletePersonalCollection(pc, userService.getUser(user.getUsername()), "TESTING");
 		tm.commit(ts);
 		
 		// Start new transaction
 		ts = tm.getTransaction(td);
 		IrUser otherUser = userService.getUser(user.getUsername());
-		userService.deleteUser(userService.getUser(otherUser.getId(), false));
+        userService.deleteUser(otherUser, otherUser);	
 		tm.commit(ts);			
 
 		

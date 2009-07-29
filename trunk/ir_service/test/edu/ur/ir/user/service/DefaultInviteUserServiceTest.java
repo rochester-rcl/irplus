@@ -200,7 +200,7 @@ public class DefaultInviteUserServiceTest {
 		
 		// UnShare the file 
 		assert fCollaborator.getVersionedFile().getOwner().getUsername() != null : "Owner of the versioned file is null " + fCollaborator.getVersionedFile();
-		inviteUserService.unshareFile(fCollaborator);
+		inviteUserService.unshareFile(fCollaborator, fCollaborator.getVersionedFile().getOwner());
 		
 		log.debug("Send email for unshare user test = " + sendEmail);
 		if( sendEmail )
@@ -269,8 +269,11 @@ public class DefaultInviteUserServiceTest {
 		
 		// Start a transaction 
 		ts = tm.getTransaction(td);
-		userService.deleteUser(userService.getUser(user.getId(), false));
-		userService.deleteUser(userService.getUser(user1.getId(), false));
+		IrUser deleteUser = userService.getUser(user.getId(), false); 
+		userService.deleteUser(deleteUser,deleteUser);
+		
+		IrUser deleteUser2 = userService.getUser(user1.getId(), false);
+		userService.deleteUser(deleteUser2, deleteUser2);
 		tm.commit(ts);
 		
 	    // Start new transaction
@@ -386,8 +389,11 @@ public class DefaultInviteUserServiceTest {
 
 		// Start a transaction 
 		ts = tm.getTransaction(td);
-		userService.deleteUser(userService.getUser(user.getId(), false));
-		userService.deleteUser(userService.getUser(user1.getId(), false));
+		IrUser deleteUser = userService.getUser(user.getId(), false); 
+		userService.deleteUser(deleteUser,deleteUser);
+		
+		IrUser deleteUser2 = userService.getUser(user1.getId(), false);
+		userService.deleteUser(deleteUser2, deleteUser2);
 		roleService.deleteRole(roleService.getRole(role.getId(), false));
 		tm.commit(ts);
 		

@@ -167,7 +167,7 @@ public class DefaultResearcherServiceTest {
 	        //new transaction
 			ts = tm.getTransaction(td);
 			IrUser otherUser2 = userService.getUser(user.getUsername());
-			userService.deleteUser(userService.getUser(otherUser2.getId(), false));
+			userService.deleteUser(otherUser2, otherUser2);
 			tm.commit(ts);
 			
 		    // Start new transaction
@@ -220,7 +220,8 @@ public class DefaultResearcherServiceTest {
 	        //new transaction
 			ts = tm.getTransaction(td);
 			IrUser otherUser2 = userService.getUser(user.getUsername());
-			userService.deleteUser(userService.getUser(otherUser2.getId(), false));
+			userService.deleteUser(otherUser2, otherUser2);
+			
 			tm.commit(ts);
 			
 		}
@@ -263,7 +264,7 @@ public class DefaultResearcherServiceTest {
 	        //new transaction
 			ts = tm.getTransaction(td);
 			IrUser otherUser2 = userService.getUser(user.getUsername());
-			userService.deleteUser(userService.getUser(otherUser2.getId(), false));
+			userService.deleteUser(otherUser2, otherUser2);
 			tm.commit(ts);
 			
 		  
@@ -307,7 +308,7 @@ public class DefaultResearcherServiceTest {
 	        //new transaction
 			ts = tm.getTransaction(td);
 			IrUser otherUser2 = userService.getUser(user.getUsername());
-			userService.deleteUser(userService.getUser(otherUser2.getId(), false));
+			userService.deleteUser(otherUser2, otherUser2);
 			tm.commit(ts);
 			
 		  

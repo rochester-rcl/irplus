@@ -58,6 +58,8 @@
        <property name="institutionalItemService" ref="institutionalItemService"/>
        <property name="institutionalCollectionSubscriptionService" ref="institutionalCollectionSubscriptionService"/>
        <property name="userGroupService" ref="userGroupService"/>
+       <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
+       <property name="personalItemDeleteRecordDAO" ref="personalItemDeleteRecordDAO"/>
    </bean>
    
 
@@ -68,6 +70,7 @@
        class="edu.ur.ir.user.service.DefaultUserFileSystemService">
        <property name="sharedInboxFileDAO" ref="sharedInboxFileDAO"/>
        <property name="personalFileDAO" ref="personalFileDAO"/>
+       <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
        <property name="personalFolderDAO" ref="personalFolderDAO"/>
        <property name="repositoryService" ref="repositoryService"/>
        <property name="irUserDAO" ref="irUserDAO"/>
@@ -81,6 +84,7 @@
    <bean id="userPublishingFileSystemService" 
        class="edu.ur.ir.user.service.DefaultUserPublishingFileSystemService">
        <property name="personalItemDAO" ref="personalItemDAO"/>
+       <property name="personalItemDeleteRecordDAO" ref="personalItemDeleteRecordDAO"/>
        <property name="personalCollectionDAO" ref="personalCollectionDAO"/>
        <property name="irUserDAO" ref="irUserDAO"/>
        <property name="itemService" ref="itemService"/>  

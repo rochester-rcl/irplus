@@ -234,7 +234,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		}
 
 		if (folderId != null) {
-			List<PersonalFile> files = userFileSystemService.getAllFilesInFolderAndSubFolder(folderId, userId);
+			PersonalFolder personalFolder = userFileSystemService.getPersonalFolder(folderId, false);
+			List<PersonalFile> files = userFileSystemService.getAllFilesForFolder(personalFolder);
 			List<VersionedFile> versionedFiles = repositoryService.getVersionedFilesForItem(item);
 			
 			StringBuffer buffer = new StringBuffer();

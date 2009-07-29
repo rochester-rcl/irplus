@@ -175,7 +175,8 @@ public class DefaultRepositoryServiceTest {
 		assert repositoryService.getVersionedFile(vf.getId(), false) == null : 
 			"Should no longer be able to find the versioned file";
 		
-		userService.deleteUser(userService.getUser(user.getId(),false));
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);	
 		assert !myFile.exists(): "File should no longer exist at location " + fileLocation;
 		helper.cleanUpRepository();
 		tm.commit(ts);	
@@ -273,7 +274,8 @@ public class DefaultRepositoryServiceTest {
 		transformedFileTypeDAO.makeTransient(transformedFileTypeDAO.getById(transformedFileType.getId(), false));
 
 		helper.cleanUpRepository();
-		userService.deleteUser(userService.getUser(user.getId(), false));
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);	
 		tm.commit(ts);	
 	}
 	
@@ -330,7 +332,8 @@ public class DefaultRepositoryServiceTest {
 		
 		repositoryService.deleteVersionedFile(repositoryService.getVersionedFile(vf.getId(), false));
 				
-		userService.deleteUser(userService.getUser(user.getId(), false));
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);	
 		assert repositoryService.getVersionedFile(vf.getId(), false) == null : 
 			"Should no longer be able to find the versioned file";
 		
@@ -419,8 +422,12 @@ public class DefaultRepositoryServiceTest {
 		assert repositoryService.getVersionedFile(vf.getId(), false) == null : 
 			"Should no longer be able to find the versioned file";
 		
-		userService.deleteUser(userService.getUser(user.getId(),false));
-		userService.deleteUser(userService.getUser(user2.getId(),false));
+		IrUser deleteUser1 = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser1, deleteUser1);	
+		
+        IrUser deleteUser2 = userService.getUser(user2.getId(), false);
+        userService.deleteUser(deleteUser2, deleteUser2);
+  
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 	}

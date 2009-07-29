@@ -119,7 +119,7 @@ public class DefaultUserSearchServiceTest {
 		assert users.contains(user);
 		
 		user = userService.getUser(user.getId(), false);
-		userService.deleteUser(user);
+		userService.deleteUser(user, user);
 		helper.cleanUpRepository();
 		tm.commit(ts);
 	}

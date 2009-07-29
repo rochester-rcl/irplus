@@ -136,35 +136,35 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 						record.setSkipReason("Procesing failed due to error");
 						userWorkspaceIndexProcessingService.save(record);
 						errorEmailService.sendError(e);
-						log.error("Unable to delete index record for user", e);
+						log.error("Unable to delete index record " + record + " for user", e);
 					}
 				}
 				if( indexProcessingType.getName().equals(IndexProcessingTypeService.UPDATE))
 				{
 				    try {
 						processUpdate( record, repository, userWorkspaceIndexService, userFileSystemService, 
-							 userPublishingFileSystemService);
+							 userPublishingFileSystemService, user);
 						userWorkspaceIndexProcessingService.delete(record);
 					} catch (Exception e) {
 						record.setSkipRecord(true);
 						record.setSkipReason("Procesing failed due to error");
 						userWorkspaceIndexProcessingService.save(record);
 						errorEmailService.sendError(e);
-						log.error("Unable to update index record for user", e);
+						log.error("Unable to update index record " + record + " for user", e);
 					}
 				}
 				if( indexProcessingType.getName().equals(IndexProcessingTypeService.INSERT))
 				{
 					try {
 						processInsert( record, repository, userWorkspaceIndexService, userFileSystemService, 
-							 userPublishingFileSystemService);
+							 userPublishingFileSystemService, user);
 						userWorkspaceIndexProcessingService.delete(record);
 					} catch (Exception e) {
 						record.setSkipRecord(true);
 						record.setSkipReason("Procesing failed due to error");
 						userWorkspaceIndexProcessingService.save(record);
 						errorEmailService.sendError(e);
-						log.error("Unable to insert index record for user", e);
+						log.error("Unable to insert index record " + record + " for user", e);
 					}
 				}
 			}
@@ -193,7 +193,9 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 	 * @param user
 	 * @param userWorkspaceIndexService
 	 */
-	private void processDelete(UserWorkspaceIndexProcessingRecord record, IrUser user, UserWorkspaceIndexService userWorkspaceIndexService)
+	private void processDelete(UserWorkspaceIndexProcessingRecord record, 
+			IrUser user, 
+			UserWorkspaceIndexService userWorkspaceIndexService)
 	{
 		FileSystemType fileSystemType = FileSystemType.getFileSystemType(record.getType());
 		Long workspaceItemId = record.getWorkspaceItemId();
@@ -229,7 +231,8 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			Repository repository, 
 			UserWorkspaceIndexService userWorkspaceIndexService,
 			UserFileSystemService userFileSystemService,
-			UserPublishingFileSystemService userPublishingFileSystemService) throws LocationAlreadyExistsException, IOException
+			UserPublishingFileSystemService userPublishingFileSystemService, 
+			IrUser user) throws LocationAlreadyExistsException, IOException
 	{
 		FileSystemType fileSystemType = FileSystemType.getFileSystemType(record.getType());
 		Long workspaceItemId = record.getWorkspaceItemId();
@@ -238,22 +241,50 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 		if(fileSystemType.equals(FileSystemType.PERSONAL_FILE))
 		{
 			PersonalFile file = userFileSystemService.getPersonalFile(workspaceItemId, false);
-		    userWorkspaceIndexService.updateIndex(repository, file);
+			if( file != null )
+			{
+		        userWorkspaceIndexService.updateIndex(repository, file);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
 		}
 		if(fileSystemType.equals(FileSystemType.PERSONAL_FOLDER))
 		{
 			PersonalFolder folder = userFileSystemService.getPersonalFolder(workspaceItemId, false);
-			userWorkspaceIndexService.updateIndex(repository, folder);
+			if( folder != null )
+			{
+			    userWorkspaceIndexService.updateIndex(repository, folder);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
 		}
 		if(fileSystemType.equals(FileSystemType.SHARED_INBOX_FILE))
 		{
 			SharedInboxFile inboxFile = userFileSystemService.getSharedInboxFile(workspaceItemId, false);
-			userWorkspaceIndexService.updateIndex(repository, inboxFile);
+			if( inboxFile != null )
+			{
+			    userWorkspaceIndexService.updateIndex(repository, inboxFile);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
 		}
 		if(fileSystemType.equals(FileSystemType.PERSONAL_ITEM))
 		{
 			PersonalItem item = userPublishingFileSystemService.getPersonalItem(workspaceItemId, false);
-		    userWorkspaceIndexService.updateIndex(repository, item);
+			if( item != null )
+			{
+		        userWorkspaceIndexService.updateIndex(repository, item);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
 		}
 	}
 	
@@ -270,7 +301,8 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			Repository repository, 
 			UserWorkspaceIndexService userWorkspaceIndexService,
 			UserFileSystemService userFileSystemService,
-			UserPublishingFileSystemService userPublishingFileSystemService) throws LocationAlreadyExistsException, IOException
+			UserPublishingFileSystemService userPublishingFileSystemService,
+			IrUser user) throws LocationAlreadyExistsException, IOException
 	{
 		FileSystemType fileSystemType = FileSystemType.getFileSystemType(record.getType());
 		Long workspaceItemId = record.getWorkspaceItemId();
@@ -279,22 +311,50 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 		if(fileSystemType.equals(FileSystemType.PERSONAL_FILE))
 		{
 			PersonalFile file = userFileSystemService.getPersonalFile(workspaceItemId, false);
-		    userWorkspaceIndexService.addToIndex(repository, file);
+			if( file != null )
+			{
+		        userWorkspaceIndexService.addToIndex(repository, file);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
 		}
 		if(fileSystemType.equals(FileSystemType.PERSONAL_FOLDER))
 		{
 			PersonalFolder folder = userFileSystemService.getPersonalFolder(workspaceItemId, false);
-			userWorkspaceIndexService.addToIndex(repository, folder);
+			if( folder != null )
+			{
+			    userWorkspaceIndexService.addToIndex(repository, folder);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
 		}
 		if(fileSystemType.equals(FileSystemType.SHARED_INBOX_FILE))
 		{
 			SharedInboxFile inboxFile = userFileSystemService.getSharedInboxFile(workspaceItemId, false);
-			userWorkspaceIndexService.addToIndex(repository, inboxFile);
+			if( inboxFile != null )
+			{
+			    userWorkspaceIndexService.addToIndex(repository, inboxFile);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
 		}
 		if(fileSystemType.equals(FileSystemType.PERSONAL_ITEM))
 		{
 			PersonalItem item = userPublishingFileSystemService.getPersonalItem(workspaceItemId, false);
-		    userWorkspaceIndexService.addToIndex(repository, item);
+			if( item != null )
+			{
+		        userWorkspaceIndexService.addToIndex(repository, item);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
 		}
 	}
 

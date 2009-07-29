@@ -303,7 +303,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		File workspaceIndexFolder = new File(user.getPersonalIndexFolder());
 		
 		assert workspaceIndexFolder.exists() : "Workspace folder " + workspaceIndexFolder.getAbsolutePath() + " should exist";
-		userService.deleteUser(user);
+		userService.deleteUser(user, user);
 		assert !workspaceIndexFolder.exists() : "Workspace folder " + workspaceIndexFolder.getAbsolutePath() + " should NOT exist";
 		
 		
@@ -403,7 +403,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		userService.deleteUser(user);
+		userService.deleteUser(user, user);
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 	}
@@ -535,9 +535,10 @@ public class DefaultUserWorkspaceIndexServiceTest {
 			throw new RuntimeException(e);
 		}
 
-		userPublishingFileSystemService.deletePersonalItem(userPublishingFileSystemService.getPersonalItem(personalItem.getId(), false));
+		PersonalItem deleteItem = userPublishingFileSystemService.getPersonalItem(personalItem.getId(), false);
+		userPublishingFileSystemService.deletePersonalItem(deleteItem, deleteItem.getOwner(), "TESTING");
 
-		userService.deleteUser(user);
+		userService.deleteUser(user, user);
 		
 		contentTypeService.deleteContentType("contentType");
 		seriesService.deleteSeries("seriesName");

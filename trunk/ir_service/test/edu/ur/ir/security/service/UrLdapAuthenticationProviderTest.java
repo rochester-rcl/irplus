@@ -94,7 +94,8 @@ public class UrLdapAuthenticationProviderTest {
         // start a new transaction
 		ts = tm.getTransaction(td);
 		
-		userService.deleteUser(userService.getUser(user.getId(), false));
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+		userService.deleteUser(deleteUser,deleteUser);
 		
 		tm.commit(ts);
 		

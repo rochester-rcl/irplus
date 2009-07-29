@@ -28,11 +28,13 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Validateable;
 
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 
 /**
@@ -55,6 +57,12 @@ public class ViewPersonalCollections extends ActionSupport implements
 	
 	/**  User information data access  */
 	private UserService userService;
+	
+	/** process for setting up personal files to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
 		
     /** A collection of personal collections and items for a user in a given location of
         their personal directory.*/
@@ -146,7 +154,16 @@ public class ViewPersonalCollections extends ActionSupport implements
 			    {
 			    	return "accessDenied";
 			    }
-			    userPublishingFileSystemService.deletePersonalCollection(pc);
+			    
+			    List<PersonalItem> allItems = userPublishingFileSystemService.getAllItemsForCollection(pc);
+			    for(PersonalItem personalItem : allItems)
+			    {
+			    	userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
+			    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+			    }
+			    
+			    // set delete records for the personal items
+			    userPublishingFileSystemService.deletePersonalCollection(pc, pc.getOwner(), "OWNER DELETING PERSONAL COLLECTION - " + pc.getFullPath());
 		    }
 		}
 		
@@ -160,7 +177,9 @@ public class ViewPersonalCollections extends ActionSupport implements
 				{
 					return "accessDenied";
 				}
-				userPublishingFileSystemService.deletePersonalItem(pi);
+				userWorkspaceIndexProcessingRecordService.save(pi.getOwner().getId(), pi, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+				userPublishingFileSystemService.deletePersonalItem(pi, pi.getOwner(), "OWNER DELETING ITEM");
 			}
 		}
 		createFileSystem();
@@ -185,7 +204,7 @@ public class ViewPersonalCollections extends ActionSupport implements
 		}
 		
 		Collection<PersonalCollection> myPersonalCollections = userPublishingFileSystemService.getPersonalCollectionsForUser(userId, parentCollectionId);
-		Collection<PersonalItem> myPersonalItems = userPublishingFileSystemService.getPersonalItemsInCollection(userId, parentCollectionId);
+		Collection<PersonalItem> myPersonalItems = userPublishingFileSystemService.getPersonalItems(userId, parentCollectionId);
 		
 	    fileSystem = new LinkedList<FileSystem>();
 	    
@@ -401,6 +420,16 @@ public class ViewPersonalCollections extends ActionSupport implements
 	public void setUserPublishingFileSystemService(
 			UserPublishingFileSystemService userPublishingFileSystemService) {
 		this.userPublishingFileSystemService = userPublishingFileSystemService;
+	}
+
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 }

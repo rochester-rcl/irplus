@@ -47,6 +47,9 @@ public class PersonalItemDeleteRecord extends BasePersistent{
 	/** description of the personal item */
 	private String description;
 	
+	/** Reason for the delete if any */
+	private String deleteReason;
+	
 	/**
 	 * Package protected constructor
 	 */
@@ -185,6 +188,14 @@ public class PersonalItemDeleteRecord extends BasePersistent{
 
 	void setPersonalItemId(Long personalItemId) {
 		this.personalItemId = personalItemId;
+	}
+
+	public String getDeleteReason() {
+		return deleteReason;
+	}
+
+	public void setDeleteReason(String deleteReason) {
+		this.deleteReason = deleteReason;
 	}
 
 	
