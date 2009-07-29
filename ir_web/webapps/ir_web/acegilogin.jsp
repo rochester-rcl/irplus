@@ -133,11 +133,7 @@
                  <form name="f" action="<c:url value='j_spring_security_check'/>" method="POST">
                  
                         
-                          <label class="label" for="j_auth_type">Login Type:</label>
-                          <select name="j_auth_type">
-                              <option selected value="local">Local</option>
-                              <option value="ldap">Net Id</option>
-                          </select>
+    
                           <br/>
                           <br/>
                           <label class="label" for="j_name">User Name:</label>
