@@ -161,7 +161,7 @@ public class AddNewFileVersion extends ActionSupport implements UserIdAware{
 				        File tempFile = temporaryFileCreator.createTemporaryFile(extension);
 				        defaultThumbnailTransformer.transformFile(file, extension, tempFile);
 				        
-				        if( tempFile != null && tempFile.exists() && tempFile.length() != 0l)
+				        if( tempFile != null && tempFile.exists() && tempFile.length() > 0l)
 				        {
 				            TransformedFileType transformedFileType = repositoryService.getTransformedFileTypeBySystemCode("PRIMARY_THUMBNAIL");
 				    
