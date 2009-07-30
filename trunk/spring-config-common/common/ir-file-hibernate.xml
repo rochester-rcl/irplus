@@ -151,5 +151,49 @@
            </props>
        </property>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Indexing failure record	                  -->
+   <!-- ****************************************** --> 
+
+   <bean id="irFileIndexingFailureRecordDAOTarget" 
+       class="edu.ur.hibernate.ir.file.db.HbIrFileIndexingFailureRecordDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="irFileIndexingFailureRecordDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="irFileIndexingFailureRecordDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Transformation failure record	           -->
+   <!-- ****************************************** --> 
+
+   <bean id="irFileTransformationFailureRecordDAOTarget" 
+       class="edu.ur.hibernate.ir.file.db.HbIrFileTransformationFailureRecordDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="irFileTransformationFailureRecordDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="irFileTransformationFailureRecordDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
 
 </beans>

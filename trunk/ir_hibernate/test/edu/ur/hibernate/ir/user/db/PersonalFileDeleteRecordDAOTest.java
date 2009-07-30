@@ -28,7 +28,7 @@ import edu.ur.ir.user.PersonalFileDeleteRecord;
 import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
 
 /**
- * Test the persistence methods for IrRoles 
+ * Test the persistence methods for personal file delete records
  * 
  * @author Nathan Sarr
  * 
@@ -50,7 +50,7 @@ public class PersonalFileDeleteRecordDAOTest {
     		TransactionDefinition.PROPAGATION_REQUIRED);
 	
 	/**
-	 * Test role persistence
+	 * Test personal file delete record persistence
 	 */
 	@Test
 	public void basePersonalFileDeleteRecordDAOTest() throws Exception{

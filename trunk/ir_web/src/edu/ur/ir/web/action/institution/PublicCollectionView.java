@@ -17,6 +17,7 @@
 package edu.ur.ir.web.action.institution;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.order.OrderType;
+import edu.ur.simple.type.AscendingNameComparator;
 
 public class PublicCollectionView extends ActionSupport {
 
@@ -90,6 +92,12 @@ public class PublicCollectionView extends ActionSupport {
 	
 	/** The institutional repository */
 	private Repository repository;
+	
+	/** Used for sorting name based entities */
+	private AscendingNameComparator nameComparator = new AscendingNameComparator();
+	
+	/** list of children in name order */
+	private LinkedList<InstitutionalCollection> nameOrderedChildren = new LinkedList<InstitutionalCollection>();
 
 	public String getNextPicture()
 	{
@@ -114,6 +122,8 @@ public class PublicCollectionView extends ActionSupport {
 		
 		if( institutionalCollection != null )
 		{
+			nameOrderedChildren.addAll(institutionalCollection.getChildren());
+			Collections.sort(nameOrderedChildren, nameComparator);
 		    // get the 10 most recent submissions
 		    mostRecentSubmissions = institutionalItemService.getItemsOrderByDate(0, 5, institutionalCollection, OrderType.DESCENDING_ORDER);
 		    collectionPath = institutionalCollectionService.getPath(institutionalCollection);
@@ -292,6 +302,10 @@ public class PublicCollectionView extends ActionSupport {
 
 	public Repository getRepository() {
 		return repository;
+	}
+
+	public LinkedList<InstitutionalCollection> getNameOrderedChildren() {
+		return nameOrderedChildren;
 	}
 
 }

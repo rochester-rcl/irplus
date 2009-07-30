@@ -148,9 +148,9 @@
                             <p>Sub Collections</p>
                         </div>
                         <div id="institutional_collections" class="contentBoxContent">
-                            <c:if test="${numberOfChildren > 0}">
+                            <c:if test="${!ur:isEmpty(nameOrderedChildren)}">
                             <table class="baseTable">
-                            <c:forEach items="${institutionalCollection.children}" var="child" >
+                            <c:forEach items="${nameOrderedChildren}" var="child" >
                                 <c:url var="institutionalCollectionUrl" value="/viewInstitutionalCollection.action">
                                     <c:param name="collectionId" value="${child.id}"/>
                                 </c:url>
@@ -170,7 +170,7 @@
                             </table>
                             </c:if>
                             
-                            <c:if test="${numberOfChildren <= 0}">
+                            <c:if test="${ur:isEmpty(nameOrderedChildren)}">
                                 <p>There are no sub collections</p>
                             </c:if>
                         </div>

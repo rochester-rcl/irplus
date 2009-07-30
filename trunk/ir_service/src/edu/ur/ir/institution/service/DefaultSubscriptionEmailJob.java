@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import javax.mail.MessagingException;
 
 
 import org.apache.log4j.Logger;
@@ -21,6 +20,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
@@ -78,6 +78,7 @@ public class DefaultSubscriptionEmailJob implements StatefulJob{
 		RepositoryService repositoryService = null;
 		PlatformTransactionManager tm = null;
 		TransactionDefinition td = null;
+		ErrorEmailService errorEmailService;
 		try
 		{
 		    subscriptionService = (InstitutionalCollectionSubscriptionService)applicationContext.getBean("institutionalCollectionSubscriptionService");
@@ -86,6 +87,7 @@ public class DefaultSubscriptionEmailJob implements StatefulJob{
 			tm = (PlatformTransactionManager) applicationContext.getBean("transactionManager");
 			td = new DefaultTransactionDefinition(
 					TransactionDefinition.PROPAGATION_REQUIRED);
+			errorEmailService = (ErrorEmailService)applicationContext.getBean("errorEmailService");
 		}
 		catch(BeansException e1)
 		{
@@ -115,9 +117,10 @@ public class DefaultSubscriptionEmailJob implements StatefulJob{
 				{
 				    subscriptionService.sendSubscriberEmail(user, repository, repository.getLastSubscriptionProcessEmailDate(), endDate );
 				} 
-				catch (MessagingException e) 
+				catch (Exception e) 
 				{
-				log.error(e);
+				    log.error("Ir User = " + user, e);
+				    errorEmailService.sendError(e);
 			    }
 		    }
 		
