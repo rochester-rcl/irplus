@@ -28,7 +28,7 @@ import edu.ur.ir.user.PersonalItemDeleteRecord;
 import edu.ur.ir.user.PersonalItemDeleteRecordDAO;
 
 /**
- * Test the persistence methods for IrRoles 
+ * Test the persistence methods for personal item delete records
  * 
  * @author Nathan Sarr
  * 
@@ -50,13 +50,13 @@ public class PersonalItemDeleteRecordDAOTest {
     		TransactionDefinition.PROPAGATION_REQUIRED);
 	
 	/**
-	 * Test role persistence
+	 * Test personal item delete record
 	 */
 	@Test
 	public void basePersonalItemDeleteRecordDAOTest() throws Exception{
 
         TransactionStatus ts = tm.getTransaction(td);
-        PersonalItemDeleteRecord personalItemDeleteRecord = new PersonalItemDeleteRecord(22l, 44l, "/my/path/tofile/file.txt", "the file description");
+        PersonalItemDeleteRecord personalItemDeleteRecord = new PersonalItemDeleteRecord(22l, 44l, "/my/path/toitem/item", "the item description");
 	
         personalItemDeleteRecordDAO.makePersistent(personalItemDeleteRecord);
  		tm.commit(ts);

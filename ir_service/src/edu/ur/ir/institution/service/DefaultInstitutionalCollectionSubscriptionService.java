@@ -72,6 +72,8 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	/** format used for formatting dates */
 	private String dateFormat;
 	
+
+	
 	/** email that users can use to ask questions */
 	private String helpEmail = "";
 	
@@ -131,9 +133,10 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 
 	
 	/**
+	 * @throws MessagingException 
 	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionService#sendSubriberEmail(edu.ur.ir.user.IrUser)
 	 */
-	public void sendSubscriberEmail(IrUser user, Repository repository, Date startDate, Date endDate) throws MessagingException
+	public void sendSubscriberEmail(IrUser user, Repository repository, Date startDate, Date endDate) throws MessagingException 
 	{	
 		log.debug("Send emails for " + startDate + " to " +  endDate);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
@@ -339,8 +342,5 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	public void setHelpEmail(String helpEmail) {
 		this.helpEmail = helpEmail;
 	}
-
-	
-
 
 }

@@ -45,6 +45,7 @@
 		<property name="authenticationFailureUrl" value="/acegilogin.jsp?login_error=1"/>
 		<property name="defaultTargetUrl" value="/user/workspace.action"/>
 		<property name="filterProcessesUrl" value="/j_spring_security_check"/>
+		<property name="ldapEnabled" value="true"/>
   </bean>
   
   <bean id="authenticationProcessingFilterEntryPoint"
@@ -114,6 +115,7 @@
         class="edu.ur.ir.security.service.UrLdapAuthenticationProvider">
        <constructor-arg ref="ldapAuthenticator"/>
        <property name="userDetailsContextMapper" ref="ldapUserService"/>
+ 
     </bean>
              
 

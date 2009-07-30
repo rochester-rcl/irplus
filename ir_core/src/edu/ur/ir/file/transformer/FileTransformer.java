@@ -48,12 +48,10 @@ public interface FileTransformer extends DescriptionAware, NameAware, Serializab
 	public Set<String> getAcceptableFileTypeExtensions();
 	
 	/**
-	 * Create a temporary file with the specified name.  The name
-	 * should not have an extension, as the extension provided by the
-	 * sub type extension will be used.
+	 * Create a transformation of the given file and write it out to the transformed file.
 	 * 
 	 * @param inFile - file to make a transform of.
-	 * @param transformedFile - the file to save the derived file to
+	 * @param transformedFile - the file to save the transformation to
      *	
 	 */
 	public void transformFile(File inFile, String inFileExtension, File transformedFile) throws Exception;

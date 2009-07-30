@@ -4881,7 +4881,7 @@ select nextval('ir_user.department_seq'), 'Mechanical Engineering',
 
 insert into ir_user.department( department_id, 
 name, description, version)
-select nextval('ir_user.department_seq'), 'The Institute of Optics', 
+select nextval('ir_user.department_seq'), 'Institute of Optics', 
 '', 0;
 
 insert into ir_user.department( department_id, 

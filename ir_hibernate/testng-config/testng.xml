@@ -91,6 +91,8 @@
 		     <class name="edu.ur.hibernate.ir.file.db.TransformedFileDAOTest"/> 
 		     <class name="edu.ur.hibernate.ir.file.db.TransformedFileTypeDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.file.db.FileCollaboratorDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.file.db.IrFileTransformationFailureRecordDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.file.db.IrFileIndexingFailureRecordDAOTest"/>
 		    
 		     <class name="edu.ur.hibernate.ir.statistics.db.FileDownloadInfoDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.statistics.db.IgnoreIpAddressDAOTest"/>

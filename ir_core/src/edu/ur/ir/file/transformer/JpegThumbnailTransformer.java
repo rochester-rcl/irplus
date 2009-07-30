@@ -140,7 +140,7 @@ public class JpegThumbnailTransformer extends BaseBasicThumbnailTransformer{
 			{
 				writer.dispose();
 				image = null;
-				log.error("could not thumbnail image", oome);
+				throw(oome);
 			}
 			finally
 			{

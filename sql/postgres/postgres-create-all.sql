@@ -616,6 +616,7 @@ CREATE TABLE ir_user.personal_file_delete_record
   date_deleted TIMESTAMP WITH TIME ZONE NOT NULL,
   full_path TEXT NOT NULL,
   description TEXT,
+  delete_reason TEXT,
   UNIQUE(personal_file_id)
 );
 ALTER TABLE ir_user.personal_file_delete_record OWNER TO ir_plus;
@@ -636,6 +637,7 @@ CREATE TABLE ir_user.personal_item_delete_record
   date_deleted TIMESTAMP WITH TIME ZONE NOT NULL,
   full_path TEXT NOT NULL,
   description TEXT,
+  delete_reason TEXT,
   UNIQUE(personal_item_id)
 );
 ALTER TABLE ir_user.personal_item_delete_record OWNER TO ir_plus;
@@ -854,6 +856,46 @@ ALTER TABLE ir_user.user_role OWNER TO ir_plus;
 
 CREATE SCHEMA ir_file AUTHORIZATION ir_plus;
 
+-- ---------------------------------------------
+-- IR File Indexing failure record
+-- ---------------------------------------------
+CREATE TABLE ir_file.ir_file_indexing_failure_record
+(
+    ir_file_indexing_failure_record_id BIGINT PRIMARY KEY,
+    ir_file_id BIGINT NOT NULL,
+    date_created TIMESTAMP WITH TIME ZONE NOT NULL,
+    failure_reason TEXT
+);
+ALTER TABLE ir_file.ir_file_indexing_failure_record OWNER TO ir_plus;
+
+-- The ir file sequence
+CREATE SEQUENCE ir_file.ir_file_indexing_failure_record_seq ;
+ALTER TABLE ir_file.ir_file_indexing_failure_record_seq OWNER TO ir_plus;
+
+-- Index on the item Name and lower case name
+CREATE INDEX ir_file_indexing_failure_record_file_id_idx ON 
+    ir_file.ir_file_indexing_failure_record (ir_file_id);
+    
+    
+-- ---------------------------------------------
+-- IR File Transformation failure record
+-- ---------------------------------------------
+CREATE TABLE ir_file.ir_file_transformation_failure_record
+(
+    ir_file_transformation_failure_record_id BIGINT PRIMARY KEY,
+    ir_file_id BIGINT NOT NULL,
+    date_created TIMESTAMP WITH TIME ZONE NOT NULL,
+    failure_reason TEXT
+);
+ALTER TABLE ir_file.ir_file_transformation_failure_record OWNER TO ir_plus;
+
+-- The ir file sequence
+CREATE SEQUENCE ir_file.ir_file_transformation_failure_record_seq;
+ALTER TABLE ir_file.ir_file_transformation_failure_record_seq OWNER TO ir_plus;
+
+-- Index on the item Name and lower case name
+CREATE INDEX ir_file_transformation_failure_record_file_id_idx ON 
+    ir_file.ir_file_transformation_failure_record (ir_file_id);
 
 -- ---------------------------------------------
 -- IR File Information

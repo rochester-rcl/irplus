@@ -87,6 +87,7 @@ public class PngThumbnailTransformer extends BaseBasicThumbnailTransformer{
 	 * @see edu.ur.ir.file.transformer.FileTransformer#transformFile(edu.ur.ir.file.IrFile, java.io.File)
 	 */
 	public void transformFile(File inFile, String inFileExtension, File transformFile) throws IOException {
+		log.debug("transform file called");
 		System.setProperty("com.sun.media.jai.disableMediaLib", "true");
 		RenderedImage image = null;
 		RenderedImage scale = null;
@@ -111,7 +112,7 @@ public class PngThumbnailTransformer extends BaseBasicThumbnailTransformer{
 		{
 			image = null;	
 		    scale = null;
-			log.error("could not thumbnail image", oome);
+		    throw(oome);
 		}
 		finally
 		{

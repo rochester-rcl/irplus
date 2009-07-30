@@ -16,8 +16,9 @@
 
 package edu.ur.ir.web.action.institution;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
@@ -27,6 +28,7 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.simple.type.AscendingNameComparator;
 
 /**
  * Returns the set of collections for the specified parent.  this only 
@@ -50,13 +52,16 @@ public class ViewInstitutionalCollections extends ActionSupport{
 	private static final Logger log = Logger.getLogger(ViewInstitutionalCollections.class);
 
 	/** Set of institutional collections to display.  */
-	private Set<InstitutionalCollection> institutionalCollections = new HashSet<InstitutionalCollection>();
+	private LinkedList<InstitutionalCollection> institutionalCollections = new LinkedList<InstitutionalCollection>();
 	
 	/** Repository for accessing institutional information. */
 	private Repository repository;
 	
 	/** Institutional Collection service */
 	private InstitutionalCollectionService institutionalCollectionService;
+	
+	/** Used for sorting name based entities */
+	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 
 	
 	/**
@@ -73,14 +78,16 @@ public class ViewInstitutionalCollections extends ActionSupport{
 		{
 		    if( parentCollectionId.equals(InstitutionalCollectionService.ROOT_COLLECTION_ID))
 		    {
-			    institutionalCollections = repository.getInstitutionalCollections();
+			    institutionalCollections.addAll(repository.getInstitutionalCollections());
+			    
 		    }
 		    else
 		    {
 		    	InstitutionalCollection parent = 
 		    		institutionalCollectionService.getCollection(parentCollectionId, false);
-		    	institutionalCollections = parent.getChildren();
+		    	institutionalCollections.addAll(parent.getChildren());
 		    }
+		    Collections.sort(institutionalCollections, nameComparator);
 		}
 		
 		
@@ -128,20 +135,10 @@ public class ViewInstitutionalCollections extends ActionSupport{
 	 * 
 	 * @return
 	 */
-	public Set<InstitutionalCollection> getInstitutionalCollections() {
+	public Collection<InstitutionalCollection> getInstitutionalCollections() {
 		return institutionalCollections;
 	}
 	
-	/**
-	 * Get the number of institutional collections.
-	 * 
-	 * @return - number of institutional collections.
-	 */
-	public int getNumberOfInstitutionalCollections()
-	{
-		return institutionalCollections.size();
-	}
-
 	public InstitutionalCollectionService getInstitutionalCollectionService() {
 		return institutionalCollectionService;
 	}

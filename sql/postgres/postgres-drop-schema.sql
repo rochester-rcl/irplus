@@ -245,6 +245,8 @@ DROP SCHEMA ir_news;
 -- Drop ir_file information
 -- ---------------------------------------------
 
+DROP TABLE ir_file.ir_file_transformation_failure_record;
+DROP TABLE ir_file.ir_file_indexing_failure_record;
 DROP TABLE ir_file.transformed_file;
 DROP TABLE ir_file.transformed_file_type;
 DROP TABLE ir_file.file_version;
@@ -253,6 +255,8 @@ DROP TABLE ir_file.ir_file;
 DROP TABLE ir_file.file_collaborator;
 DROP TABLE ir_file.versioned_file;
 
+DROP SEQUENCE ir_file.ir_file_transformation_failure_record_seq;
+DROP SEQUENCE ir_file.ir_file_indexing_failure_record_seq;
 DROP SEQUENCE ir_file.transformed_file_seq;
 DROP SEQUENCE ir_file.transformed_file_type_seq;
 DROP SEQUENCE ir_file.file_version_seq;
