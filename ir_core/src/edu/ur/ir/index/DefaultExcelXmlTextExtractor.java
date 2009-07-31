@@ -60,10 +60,11 @@ public class DefaultExcelXmlTextExtractor implements FileTextExtractor{
 
 	/**
 	 * Extract text from a word 97-2003 document.
+	 * @throws Exception 
 	 * 
 	 * @see edu.ur.ir.index.FileTextExtractor#getText(java.io.File)
 	 */
-	public String getText(File f) {
+	public String getText(File f) throws Exception {
 		String text = null;
 		if( isFileTooLarge(f))
 		{
@@ -89,11 +90,13 @@ public class DefaultExcelXmlTextExtractor implements FileTextExtractor{
 		{
 			text = null;
 			log.error("could not extract text", oome);
+			throw(oome);
 		}
 		catch(Exception e)
 		{
 			text = null;
 			log.error("could not get text for word document " + f.getAbsolutePath());
+			throw(e);
 		}
 		finally
 		{
@@ -146,12 +149,12 @@ public class DefaultExcelXmlTextExtractor implements FileTextExtractor{
 	 * @param f - file to convert.
 	 * @return
 	 */
-	private boolean isFileTooLarge(File f)
+	public boolean isFileTooLarge(File f)
 	{
 		return f.length() > maxFileExtractSizeInBytes;
 	}
 	
-	public static void main ( String[] args)
+	public static void main ( String[] args) throws Exception
 	{
 		if( args.length <= 0 )
 		{

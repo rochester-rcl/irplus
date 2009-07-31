@@ -62,10 +62,11 @@ public class DefaultPdfTextExtractor implements FileTextExtractor{
 
 	/**
 	 * Extract text from the PDF document
+	 * @throws Exception 
 	 * 
 	 * @see edu.ur.ir.index.FileTextExtractor#getText(java.io.File)
 	 */
-	public String getText(File f) {
+	public String getText(File f) throws Exception {
 		String text = null;
 		
 		// don't even try if the file is too large
@@ -101,11 +102,13 @@ public class DefaultPdfTextExtractor implements FileTextExtractor{
 		{
 			text = null;
 			log.error("could not extract text", oome);
+			throw(oome);
 		}
 		catch(Exception e)
 		{
 			log.error("could not extract text with other error", e);
 			text = null;
+			throw(e);
 		}
 		finally
 		{
@@ -177,7 +180,7 @@ public class DefaultPdfTextExtractor implements FileTextExtractor{
 	 * @param f - file to convert.
 	 * @return
 	 */
-	private boolean isFileTooLarge(File f)
+	public boolean isFileTooLarge(File f)
 	{
 		return f.length() > maxFileExtractSizeInBytes;
 	}

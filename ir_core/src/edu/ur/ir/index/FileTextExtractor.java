@@ -43,7 +43,7 @@ public interface FileTextExtractor {
 	 * 
 	 * @return the text or null if the file had no text
 	 */
-	public String getText(File f);
+	public String getText(File f) throws Exception;
 	
 	
 	/**
@@ -73,5 +73,13 @@ public interface FileTextExtractor {
 	 * @return max file extract size in bytes;
 	 */
 	public long getMaxFileExtractSizeInBytes();
+	
+	/**
+	 * Determines if this file is too large to process.
+	 * 
+	 * @param f - file to process
+	 * @return true if the file is too large to process.
+	 */
+	public boolean isFileTooLarge(File f);
 
 }

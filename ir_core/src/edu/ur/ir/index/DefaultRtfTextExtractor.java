@@ -66,10 +66,11 @@ public class DefaultRtfTextExtractor implements FileTextExtractor {
 
 	/**
 	 * Extract text from the Rich text file document 
+	 * @throws Exception 
 	 * 
 	 * @see edu.ur.ir.index.FileTextExtractor#getText(java.io.File)
 	 */
-	public String getText(File f) {
+	public String getText(File f) throws Exception {
 		String text = null;
 		// don't even try if the file is too large
 		if( isFileTooLarge(f))
@@ -92,13 +93,15 @@ public class DefaultRtfTextExtractor implements FileTextExtractor {
 		}
 		catch(OutOfMemoryError oome)
 		{
-			text = "";
+			text = null;
 			log.error("could not extract text", oome);
+			throw(oome);
 		}
 		catch(Exception e)
 		{
-			text = "";
+			text = null;
 			log.error("could not get text for rich text document " + f.getAbsolutePath(), e);
+			throw(e);
 		}
 		
 		finally
@@ -168,7 +171,7 @@ public class DefaultRtfTextExtractor implements FileTextExtractor {
 	 * @param f - file to convert.
 	 * @return
 	 */
-	private boolean isFileTooLarge(File f)
+	public boolean isFileTooLarge(File f)
 	{
 		return f.length() > maxFileExtractSizeInBytes;
 	}

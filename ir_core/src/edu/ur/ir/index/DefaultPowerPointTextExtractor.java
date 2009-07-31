@@ -86,10 +86,11 @@ public class DefaultPowerPointTextExtractor implements FileTextExtractor{
 
 	/**
 	 * Extract text from a power point 97-2003 document.
+	 * @throws Exception 
 	 * 
 	 * @see edu.ur.ir.index.FileTextExtractor#getText(java.io.File)
 	 */
-	public String getText(File f) {
+	public String getText(File f) throws Exception {
 		String text = null;
 		if( isFileTooLarge(f))
 		{
@@ -113,11 +114,13 @@ public class DefaultPowerPointTextExtractor implements FileTextExtractor{
 		{
 			text = null;
 			log.error("could not extract text", oome);
+			throw(oome);
 		}
 		catch(Exception e)
 		{
 			text = null;
 			log.error("could not get text for power point document " + f.getAbsolutePath(), e);
+			throw(e);
 		}
 		
 		finally
@@ -166,7 +169,7 @@ public class DefaultPowerPointTextExtractor implements FileTextExtractor{
 	 * @param f - file to convert.
 	 * @return
 	 */
-	private boolean isFileTooLarge(File f)
+	public boolean isFileTooLarge(File f)
 	{
 		return f.length() > maxFileExtractSizeInBytes;
 	}

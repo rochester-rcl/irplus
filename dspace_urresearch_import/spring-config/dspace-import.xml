@@ -28,8 +28,7 @@
         <property name="userService" ref="userService"/>
         <property name="userGroupService" ref="userGroupService"/>
         <property name="repositoryService" ref="repositoryService"/>
-        <property name="defaultThumbnailTransformer" ref="defaultThumbnailTransformer"/>
-        <property name="temporaryFileCreator" ref="temporaryFileCreator"/>
+        <property name="thumbnailTransformerService" ref="thumbnailTransformerService"/>
    </bean>
    
    <!--  Class to help with importing collections -->
@@ -40,8 +39,7 @@
         <property name="userService" ref="userService"/>
         <property name="userGroupService" ref="userGroupService"/>
         <property name="repositoryService" ref="repositoryService"/>
-        <property name="defaultThumbnailTransformer" ref="defaultThumbnailTransformer"/>
-        <property name="temporaryFileCreator" ref="temporaryFileCreator"/>
+        <property name="thumbnailTransformerService" ref="thumbnailTransformerService"/>
    </bean>
    
    <!--  Class to help with importing users -->
@@ -62,8 +60,7 @@
         <property name="departmentService" ref="departmentService"/>
         <property name="researcherFieldService" ref="fieldService"/>
         <property name="repositoryService" ref="repositoryService"/>
-        <property name="defaultThumbnailTransformer" ref="defaultThumbnailTransformer"/>
-        <property name="temporaryFileCreator" ref="temporaryFileCreator"/>
+        <property name="thumbnailTransformerService" ref="thumbnailTransformerService"/>
         <property name="researcherIndexService" ref="researcherIndexService"/>
         <property name="handleService" ref="handleService"/>
         <property name="institutionalItemService" ref="institutionalItemService"/>
@@ -104,8 +101,7 @@
         <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
         <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
         <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
-        <property name="defaultThumbnailTransformer" ref="defaultThumbnailTransformer"/>
-        <property name="temporaryFileCreator" ref="temporaryFileCreator"/>
+        <property name="thumbnailTransformerService" ref="thumbnailTransformerService"/>
         <property name="handleService" ref="handleService"/>
         <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
         <property name="licenseService" ref="licenseService"/>

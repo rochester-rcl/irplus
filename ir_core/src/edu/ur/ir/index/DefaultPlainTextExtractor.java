@@ -65,10 +65,11 @@ public class DefaultPlainTextExtractor implements FileTextExtractor{
 
 	/**
 	 * Extract text from the plain text document
+	 * @throws Exception 
 	 * 
 	 * @see edu.ur.ir.index.FileTextExtractor#getText(java.io.File)
 	 */
-	public String getText(File f){
+	public String getText(File f) throws Exception{
 		String text = null;
 		// don't even try if the file is too large
 		if( isFileTooLarge(f) )
@@ -105,12 +106,13 @@ public class DefaultPlainTextExtractor implements FileTextExtractor{
 			{
 				text = null;
 				log.error("could not extract text", oome);
+				throw(oome);
 			}
 			catch(Exception e)
 			{
 				text = null;
 				log.error("could not create document", e);
-				// can't do much
+				throw(e);
 			}
 			
 			finally
@@ -170,7 +172,7 @@ public class DefaultPlainTextExtractor implements FileTextExtractor{
 	 * @param f - file to convert.
 	 * @return
 	 */
-	private boolean isFileTooLarge(File f)
+	public boolean isFileTooLarge(File f)
 	{
 		return f.length() > maxFileExtractSizeInBytes;
 	}

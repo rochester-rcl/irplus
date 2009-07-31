@@ -36,7 +36,10 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.file.IrFileIndexingFailureRecord;
+import edu.ur.ir.file.IrFileIndexingFailureRecordDAO;
 import edu.ur.ir.index.FileTextExtractor;
 import edu.ur.ir.index.FileTextExtractorService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -59,6 +62,12 @@ import edu.ur.ir.person.PersonName;
  *
  */
 public class DefaultInstitutionalItemIndexService implements InstitutionalItemIndexService {
+	
+	/** Service for sending email errors */
+	private ErrorEmailService errorEmailService;
+	
+	/** data access for indexing record failure data access */
+	private IrFileIndexingFailureRecordDAO irFileIndexingFailureRecordDAO;
 	
 	/** Batch size for processing collections */
 	private int collectionBatchSize = 1;
@@ -949,22 +958,37 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 */
 	private String getDocumentBodyText(ItemFile itemFile)
 	{
-		
-		StringBuffer sb = new StringBuffer();
+		String text = "";
 		String extension = itemFile.getIrFile().getFileInfo().getExtension();
 		FileTextExtractor extractor = fileTextExtractorService.getFileTextExtractor(extension);
 		if( extractor != null)
 		{
 		    log.debug("Extractor found for extension " + extension);
 			File f = new File(itemFile.getIrFile().getFileInfo().getFullPath());
-			sb.append(" " + extractor.getText(f) + " ");
+			
+			try {
+				if( !extractor.isFileTooLarge(f) )
+				{
+				    text = extractor.getText(f);
+				}
+				else
+				{
+					IrFileIndexingFailureRecord failureRecord = new IrFileIndexingFailureRecord(itemFile.getIrFile().getId(),"FILE IS TOO LARGE size in bytes = " + f.length());
+				    irFileIndexingFailureRecordDAO.makePersistent(failureRecord);
+				}
+			} catch (Exception e) {
+				log.error(e);
+				IrFileIndexingFailureRecord failureRecord = new IrFileIndexingFailureRecord(itemFile.getIrFile().getId(), e.toString());
+			    irFileIndexingFailureRecordDAO.makePersistent(failureRecord);
+			    errorEmailService.sendError(e);
+			}
 		}
 		else
 		{
 			log.debug("No extractor found for extension " + extension);
 		}
 		
-		return sb.toString();
+		return text;
 	}
 	
 	private String getSubjects(String subjectValues)
@@ -1171,6 +1195,35 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		    directory = null;
 		    
 	    }
+	}
+
+
+
+
+	public ErrorEmailService getErrorEmailService() {
+		return errorEmailService;
+	}
+
+
+
+
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
+	}
+
+
+
+
+	public IrFileIndexingFailureRecordDAO getIrFileIndexingFailureRecordDAO() {
+		return irFileIndexingFailureRecordDAO;
+	}
+
+
+
+
+	public void setIrFileIndexingFailureRecordDAO(
+			IrFileIndexingFailureRecordDAO irFileIndexingFailureRecordDAO) {
+		this.irFileIndexingFailureRecordDAO = irFileIndexingFailureRecordDAO;
 	}
 	
 
