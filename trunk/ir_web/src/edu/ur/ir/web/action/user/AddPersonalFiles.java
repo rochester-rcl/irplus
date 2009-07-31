@@ -28,11 +28,8 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
-import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.file.TemporaryFileCreator;
-import edu.ur.ir.file.TransformedFileType;
-import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
@@ -89,13 +86,7 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	
 	/** Original file name */
 	private String[] fileFileName;
-			
-	/** Class to create jpeg thumbnails. */
-	private BasicThumbnailTransformer defaultThumbnailTransformer;
-	
-	/** Temporary file creator to allow a temporary file to be created for processing */
-	private TemporaryFileCreator temporaryFileCreator;
-	
+				
 	/** Repository service for placing information in the repostiroy */
 	private RepositoryService repositoryService;
 	
@@ -113,6 +104,11 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	
 	/** service for accessing index processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
+	
+	/** service to create thumbnails  */
+	private ThumbnailTransformerService thumbnailTransformerService;
+
+
 
 	/**
 	 * Set the user id.
@@ -324,23 +320,6 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		this.fileFileName = fileName;
 	}
 
-	public BasicThumbnailTransformer getDefaultThumbnailTransformer() {
-		return defaultThumbnailTransformer;
-	}
-
-	public void setDefaultThumbnailTransformer(
-			BasicThumbnailTransformer defaultThumbnailTransformer) {
-		this.defaultThumbnailTransformer = defaultThumbnailTransformer;
-	}
-
-	public TemporaryFileCreator getTemporaryFileCreator() {
-		return temporaryFileCreator;
-	}
-
-	public void setTemporaryFileCreator(TemporaryFileCreator temporaryFileCreator) {
-		this.temporaryFileCreator = temporaryFileCreator;
-	}
-
 	public RepositoryService getRepositoryService() {
 		return repositoryService;
 	}
@@ -375,32 +354,7 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		}
 		
 		IrFile irFile = pf.getVersionedFile().getCurrentVersion().getIrFile();
-		FileInfo fileInfo = irFile.getFileInfo();
-		String extension = fileInfo.getExtension();
-		
-		log.debug("Extension = " + extension  + " can thumbnail = " +
-		defaultThumbnailTransformer.canTransform(extension));
-		
-		// see if the file can be converted to a thumb nail.
-		if(defaultThumbnailTransformer.canTransform(extension))
-		{
-			try
-			{
-			    File tempFile = temporaryFileCreator.createTemporaryFile(extension);
-			    defaultThumbnailTransformer.transformFile(file, extension, tempFile);
-			    TransformedFileType transformedFileType = repositoryService.getTransformedFileTypeBySystemCode("PRIMARY_THUMBNAIL");
-			    repositoryService.addTransformedFile(repository, 
-			    		irFile, 
-			    		tempFile, 
-			    		"JPEG file", 
-			    		defaultThumbnailTransformer.getFileExtension(), 
-			    		transformedFileType);
-			}
-			catch(Exception e)
-			{
-			    log.error("Could not create thumbnail", e);
-			}
-		}
+	    thumbnailTransformerService.transformFile(repository, irFile);			    
 		return pf;
 		
 	}
@@ -479,5 +433,16 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
+	
+	public ThumbnailTransformerService getThumbnailTransformerService() {
+		return thumbnailTransformerService;
+	}
+
+
+	public void setThumbnailTransformerService(
+			ThumbnailTransformerService thumbnailTransformerService) {
+		this.thumbnailTransformerService = thumbnailTransformerService;
+	}
+
 
 }

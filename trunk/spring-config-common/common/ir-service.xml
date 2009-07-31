@@ -597,4 +597,17 @@
        <property name="indexProcessingTypeDAO" ref="indexProcessingTypeDAO"/>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Thumbnail transformer service -->
+   <!-- ****************************************** --> 
+   <bean id="thumbnailTransformerService" 
+       class="edu.ur.ir.file.transformer.service.DefaultThumbnailTransformerService">
+       <property name="basicThumbnailTransformer" ref="defaultThumbnailTransformer"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
+       <property name="irFileTransformationFailureRecordDAO" ref="irFileTransformationFailureRecordDAO"/>
+       <property name="temporaryFileCreator" ref="temporaryFileCreator"/>
+       <property name="repositoryService" ref="repositoryService"/>
+
+   </bean>
+   
 </beans>

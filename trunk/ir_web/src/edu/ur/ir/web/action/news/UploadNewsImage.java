@@ -22,11 +22,8 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.file.TemporaryFileCreator;
-import edu.ur.ir.file.TransformedFileType;
-import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.news.NewsItem;
 import edu.ur.ir.news.NewsService;
 import edu.ur.ir.repository.Repository;
@@ -51,12 +48,9 @@ public class UploadNewsImage extends ActionSupport implements UserIdAware{
 	/**  Id of the news item to add the id to */
 	private Long newsItemId;
 
-	/** Class to create jpeg thumbnails. */
-	private BasicThumbnailTransformer defaultThumbnailTransformer;
-	
-	/** Temporary file creator to allow a temporary file to be created for processing */
-	private TemporaryFileCreator temporaryFileCreator;
-	
+	/** service to create thumbnails  */
+	private ThumbnailTransformerService thumbnailTransformerService;
+
 	/** Service for dealing with news information */
 	private NewsService newsService;
 	
@@ -117,42 +111,8 @@ public class UploadNewsImage extends ActionSupport implements UserIdAware{
 			addFieldError("newsPictureUploadError", message);
 		}
 		
-		FileInfo fileInfo = picture.getFileInfo();
+		thumbnailTransformerService.transformFile(repository, picture);
 		
-		log.debug("File info = " + fileInfo);
-		String extension = fileInfo.getExtension();
-		
-		if(defaultThumbnailTransformer.canTransform(extension))
-	    {
-	    	log.debug("Creating transform of " + file.getAbsolutePath());
-		    try
-		    {
-		        File tempFile = temporaryFileCreator.createTemporaryFile(extension);
-		        defaultThumbnailTransformer.transformFile(file, extension, tempFile);
-		        
-		        if( tempFile != null && tempFile.exists() && tempFile.length() != 0l)
-		        {
-		            TransformedFileType transformedFileType = repositoryService.getTransformedFileTypeBySystemCode("PRIMARY_THUMBNAIL");
-		    
-		            repositoryService.addTransformedFile(repository, 
-		    		    picture, 
-		    		    tempFile, 
-		    		    "JPEG file", 
-		    		    defaultThumbnailTransformer.getFileExtension(), 
-		    		    transformedFileType);
-		        }
-		        else
-		        {
-		        	log.error("could not create thumbnail for file " + fileInfo);
-		        }
-		    
-		    }
-		    catch(Exception e)
-		    {
-			    log.error("Could not create thumbnail", e);
-		    }
-	    }
-	    
 	    log.debug("returning success");
 	    return SUCCESS;
 	}
@@ -174,43 +134,6 @@ public class UploadNewsImage extends ActionSupport implements UserIdAware{
 	 */
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	/**
-	 * Transformer for the thumbnail.
-	 * 
-	 * @return the Jpeg thumbnail transformer
-	 */
-	public BasicThumbnailTransformer getDefaultThumbnailTransformer() {
-		return defaultThumbnailTransformer;
-	}
-
-	/**
-	 * Set the jpeg thumbnail transformer.
-	 * 
-	 * @param defaultThumbnailTransformer
-	 */
-	public void setDefaultThumbnailTransformer(
-			BasicThumbnailTransformer defaultThumbnailTransformer) {
-		this.defaultThumbnailTransformer = defaultThumbnailTransformer;
-	}
-
-	/**
-	 * This allows a temporary file to be created.
-	 * 
-	 * @return
-	 */
-	public TemporaryFileCreator getTemporaryFileCreator() {
-		return temporaryFileCreator;
-	}
-
-	/**
-	 * Set the temporary file creator.
-	 * 
-	 * @param temporaryFileCreator
-	 */
-	public void setTemporaryFileCreator(TemporaryFileCreator temporaryFileCreator) {
-		this.temporaryFileCreator = temporaryFileCreator;
 	}
 
 	/**
@@ -310,5 +233,16 @@ public class UploadNewsImage extends ActionSupport implements UserIdAware{
 	public void setAdded(boolean added) {
 		this.added = added;
 	}
+	
+	public ThumbnailTransformerService getThumbnailTransformerService() {
+		return thumbnailTransformerService;
+	}
+
+
+	public void setThumbnailTransformerService(
+			ThumbnailTransformerService thumbnailTransformerService) {
+		this.thumbnailTransformerService = thumbnailTransformerService;
+	}
+
 
 }

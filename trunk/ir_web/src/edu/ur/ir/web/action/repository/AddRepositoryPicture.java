@@ -23,11 +23,8 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.IllegalFileSystemNameException;
-import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.file.TemporaryFileCreator;
-import edu.ur.ir.file.TransformedFileType;
-import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -47,12 +44,9 @@ public class AddRepositoryPicture extends ActionSupport implements UserIdAware{
 	/** User trying to upload the file */
 	private Long userId;
 
-	/** Class to create thumbnails. */
-	private BasicThumbnailTransformer defaultThumbnailTransformer;
-	
-	/** Temporary file creator to allow a temporary file to be created for processing */
-	private TemporaryFileCreator temporaryFileCreator;
-	
+	/** service to create thumbnails  */
+	private ThumbnailTransformerService thumbnailTransformerService;
+		
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
 	
@@ -76,42 +70,13 @@ public class AddRepositoryPicture extends ActionSupport implements UserIdAware{
 	 */
 	public String addNewPicture() throws IllegalFileSystemNameException
 	{
+		log.debug("add new picture");
 		Repository repository = 
 			repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		IrFile irFile = repositoryService.addRepositoryPicture(repository, 
 				file, fileFileName, userFileDescription);
 		
-		FileInfo fileInfo = irFile.getFileInfo();
-		String extension = fileInfo.getExtension();
-		
-	    if(defaultThumbnailTransformer.canTransform(extension))
-	    {
-		    try
-		    {
-		        File tempFile = temporaryFileCreator.createTemporaryFile(extension);
-		        defaultThumbnailTransformer.transformFile(file, extension, tempFile);
-		        
-		        if( tempFile != null && tempFile.exists() && tempFile.length() != 0l)
-		        {
-		            TransformedFileType transformedFileType = repositoryService.getTransformedFileTypeBySystemCode("PRIMARY_THUMBNAIL");
-		    
-		            repositoryService.addTransformedFile(repository, 
-		    		    irFile, 
-		    		    tempFile, 
-		    		    "JPEG file", 
-		    		    defaultThumbnailTransformer.getFileExtension(), 
-		    		    transformedFileType);
-		        }
-		        else
-		        {
-		        	log.error("could not create thumbnail for file " + fileInfo);
-		        }
-		    }
-		    catch(Exception e)
-		    {
-			    log.error("Could not create thumbnail", e);
-		    }
-	    }
+		thumbnailTransformerService.transformFile(repository, irFile);
 	    
 	    return SUCCESS;
 	}
@@ -133,43 +98,6 @@ public class AddRepositoryPicture extends ActionSupport implements UserIdAware{
 	 */
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	/**
-	 * Transformer for the thumbnail.
-	 * 
-	 * @return the Jpeg thumbnail transformer
-	 */
-	public BasicThumbnailTransformer getDefaultThumbnailTransformer() {
-		return defaultThumbnailTransformer;
-	}
-
-	/**
-	 * Set the jpeg thumbnail transformer.
-	 * 
-	 * @param defaultThumbnailTransformer
-	 */
-	public void setDefaultThumbnailTransformer(
-			BasicThumbnailTransformer defaultThumbnailTransformer) {
-		this.defaultThumbnailTransformer = defaultThumbnailTransformer;
-	}
-
-	/**
-	 * This allows a temporary file to be created.
-	 * 
-	 * @return
-	 */
-	public TemporaryFileCreator getTemporaryFileCreator() {
-		return temporaryFileCreator;
-	}
-
-	/**
-	 * Set the temporary file creator.
-	 * 
-	 * @param temporaryFileCreator
-	 */
-	public void setTemporaryFileCreator(TemporaryFileCreator temporaryFileCreator) {
-		this.temporaryFileCreator = temporaryFileCreator;
 	}
 
 	/**
@@ -243,5 +171,16 @@ public class AddRepositoryPicture extends ActionSupport implements UserIdAware{
 	public void setUserFileDescription(String userFileDescription) {
 		this.userFileDescription = userFileDescription;
 	}
+	
+	public ThumbnailTransformerService getThumbnailTransformerService() {
+		return thumbnailTransformerService;
+	}
+
+
+	public void setThumbnailTransformerService(
+			ThumbnailTransformerService thumbnailTransformerService) {
+		this.thumbnailTransformerService = thumbnailTransformerService;
+	}
+
 
 }
