@@ -37,9 +37,12 @@ import org.apache.lucene.store.LockObtainFailedException;
 
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.file.db.UniqueNameGenerator;
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.FileVersion;
+import edu.ur.ir.file.IrFileIndexingFailureRecord;
+import edu.ur.ir.file.IrFileIndexingFailureRecordDAO;
 import edu.ur.ir.index.FileTextExtractor;
 import edu.ur.ir.index.FileTextExtractorService;
 import edu.ur.ir.item.ContentType;
@@ -72,6 +75,13 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	
 	/** Analyzer for dealing with text indexing */
 	private Analyzer analyzer;
+	
+	/** Service for sending email errors */
+	private ErrorEmailService errorEmailService;
+	
+	/** data access for indexing record failure data access */
+	private IrFileIndexingFailureRecordDAO irFileIndexingFailureRecordDAO;
+	
 	
 	/** Service that maintains file text extractors */
 	private FileTextExtractorService fileTextExtractorService;
@@ -247,7 +257,22 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		if( extractor != null)
 		{
 			log.debug("Extractor found for extension " + extension);
-		    text = extractor.getText(f);
+		    try {
+		    	if( !extractor.isFileTooLarge(f) )
+				{
+				    text = extractor.getText(f);
+				}
+		    	else
+		    	{
+					IrFileIndexingFailureRecord failureRecord = new IrFileIndexingFailureRecord(version.getIrFile().getId(),"FILE IS TOO LARGE size in bytes = " + f.length());
+				    irFileIndexingFailureRecordDAO.makePersistent(failureRecord);
+		    	}
+			} catch (Exception e) {
+				log.error(e);
+				IrFileIndexingFailureRecord failureRecord = new IrFileIndexingFailureRecord(version.getIrFile().getId(), e.toString());
+			    irFileIndexingFailureRecordDAO.makePersistent(failureRecord);
+			    errorEmailService.sendError(e);
+			}
 		}
 		else
 		{
@@ -1433,6 +1458,23 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 	    }
 		return writer;
+	}
+
+	public ErrorEmailService getErrorEmailService() {
+		return errorEmailService;
+	}
+
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
+	}
+
+	public IrFileIndexingFailureRecordDAO getIrFileIndexingFailureRecordDAO() {
+		return irFileIndexingFailureRecordDAO;
+	}
+
+	public void setIrFileIndexingFailureRecordDAO(
+			IrFileIndexingFailureRecordDAO irFileIndexingFailureRecordDAO) {
+		this.irFileIndexingFailureRecordDAO = irFileIndexingFailureRecordDAO;
 	}
 
 
