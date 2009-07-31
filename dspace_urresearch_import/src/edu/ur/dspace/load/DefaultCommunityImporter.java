@@ -51,8 +51,7 @@ import edu.ur.dspace.util.FileZipperUtil;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.file.TemporaryFileCreator;
-import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
@@ -84,11 +83,8 @@ public class DefaultCommunityImporter implements CommunityImporter{
 	/** Service for dealing with users */
 	private UserService userService;
 	
-	/** Thumb-nailer  for logo files*/
-	private BasicThumbnailTransformer defaultThumbnailTransformer;
-	
-	/** Temporary file creator to allow a temporary file to be created for processing */
-	private TemporaryFileCreator temporaryFileCreator;
+	/** service to create thumbnails  */
+	private ThumbnailTransformerService thumbnailTransformerService;
 
 	/**  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(DefaultCommunityImporter.class);
@@ -418,12 +414,7 @@ public class DefaultCommunityImporter implements CommunityImporter{
 			    System.out.println("file extension = " + logo.getFileInfo().getExtension());
 			
 			    collection.setPrimaryPicture(logo);
-			    try {
-					ThumbnailHelper.thumbnailFile(logo, repo, defaultThumbnailTransformer, 
-							temporaryFileCreator, repositoryService, "collection thumbnail");
-				} catch (Exception e) {
-					log.debug("could not create thumbnial for collection " + collection, e);
-				}
+			    thumbnailTransformerService.transformFile(repo, logo);
 			}
 			
 			loadGroupPermissions(collection, community);
@@ -652,23 +643,6 @@ public class DefaultCommunityImporter implements CommunityImporter{
 		this.repositoryService = repositoryService;
 	}
 
-	public BasicThumbnailTransformer getDefaultThumbnailTransformer() {
-		return defaultThumbnailTransformer;
-	}
-
-	public void setDefaultThumbnailTransformer(
-			BasicThumbnailTransformer defaultThumbnailTransformer) {
-		this.defaultThumbnailTransformer = defaultThumbnailTransformer;
-	}
-
-	public TemporaryFileCreator getTemporaryFileCreator() {
-		return temporaryFileCreator;
-	}
-
-	public void setTemporaryFileCreator(TemporaryFileCreator temporaryFileCreator) {
-		this.temporaryFileCreator = temporaryFileCreator;
-	}
-
 
 	public InstitutionalCollectionSecurityService getInstitutionalCollectionSecurityService() {
 		return institutionalCollectionSecurityService;
@@ -698,6 +672,17 @@ public class DefaultCommunityImporter implements CommunityImporter{
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+
+	public ThumbnailTransformerService getThumbnailTransformerService() {
+		return thumbnailTransformerService;
+	}
+
+
+	public void setThumbnailTransformerService(
+			ThumbnailTransformerService thumbnailTransformerService) {
+		this.thumbnailTransformerService = thumbnailTransformerService;
 	}
 	
 	

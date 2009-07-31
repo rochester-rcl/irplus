@@ -59,8 +59,7 @@ import edu.ur.dspace.util.FileZipperUtil;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.file.TemporaryFileCreator;
-import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.handle.HandleService;
@@ -112,12 +111,6 @@ public class DefaultItemImporter implements ItemImporter{
 	/** Service for dealing with institutional collections */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
-	/** Thumb-nailer  for logo files*/
-	private BasicThumbnailTransformer defaultThumbnailTransformer;
-	
-	/** Temporary file creator to allow a temporary file to be created for processing */
-	private TemporaryFileCreator temporaryFileCreator;
-	
 	/** Service for dealing with institutional items */
 	private InstitutionalItemService institutionalItemService;
 	
@@ -153,6 +146,9 @@ public class DefaultItemImporter implements ItemImporter{
 	
 	/** Service for indexing names */
 	private NameAuthorityIndexService nameAuthorityIndexService;
+	
+	/** service to create thumbnails  */
+	private ThumbnailTransformerService thumbnailTransformerService;
 
 	/**
 	 * Data source for accessing the database.
@@ -633,19 +629,10 @@ public class DefaultItemImporter implements ItemImporter{
 							}
 					        itemFile.setDescription(bfi.description);
 					        itemFileBitstreamInfos.add(new ItemFileBitstreamInfo(itemFile, bfi));
-					        if( defaultThumbnailTransformer.canTransform(irFile.getFileInfo().getExtension()))
+					        
+					        if( thumbnailTransformerService.transformFile(repo, irFile) )
 					        {
-						        try 
-						        {
-							        ThumbnailHelper.thumbnailFile(irFile, repo, defaultThumbnailTransformer, 
-									    temporaryFileCreator, repositoryService, "thumbnail of item");
-							        genericItem.addPrimaryImageFile(itemFile);
-						        } 
-						        catch (Exception e) 
-						        {
-						            log.debug("Could not thubmnail file " + irFile, e);
-						        }
-						
+					        	genericItem.addPrimaryImageFile(itemFile);
 					        }
 				    	}
 				    } catch (IllegalFileSystemNameException e) {
@@ -1284,23 +1271,6 @@ public class DefaultItemImporter implements ItemImporter{
 		this.institutionalCollectionService = institutionalCollectionService;
 	}
 
-	public BasicThumbnailTransformer getDefaultThumbnailTransformer() {
-		return defaultThumbnailTransformer;
-	}
-
-	public void setDefaultThumbnailTransformer(
-			BasicThumbnailTransformer defaultThumbnailTransformer) {
-		this.defaultThumbnailTransformer = defaultThumbnailTransformer;
-	}
-
-	public TemporaryFileCreator getTemporaryFileCreator() {
-		return temporaryFileCreator;
-	}
-
-	public void setTemporaryFileCreator(TemporaryFileCreator temporaryFileCreator) {
-		this.temporaryFileCreator = temporaryFileCreator;
-	}
-
 	public InstitutionalItemService getInstitutionalItemService() {
 		return institutionalItemService;
 	}
@@ -1448,6 +1418,15 @@ public class DefaultItemImporter implements ItemImporter{
 	public void setNameAuthorityIndexService(
 			NameAuthorityIndexService nameAuthorityIndexService) {
 		this.nameAuthorityIndexService = nameAuthorityIndexService;
+	}
+
+	public ThumbnailTransformerService getThumbnailTransformerService() {
+		return thumbnailTransformerService;
+	}
+
+	public void setThumbnailTransformerService(
+			ThumbnailTransformerService thumbnailTransformerService) {
+		this.thumbnailTransformerService = thumbnailTransformerService;
 	}
 
 }
