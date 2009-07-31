@@ -22,11 +22,8 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.file.TemporaryFileCreator;
-import edu.ur.ir.file.TransformedFileType;
-import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.repository.Repository;
@@ -41,7 +38,6 @@ import edu.ur.ir.web.action.UserIdAware;
  */
 public class UploadCollectionImage extends ActionSupport implements UserIdAware{
 	
-	
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = 8172521971856582951L;
 
@@ -50,12 +46,9 @@ public class UploadCollectionImage extends ActionSupport implements UserIdAware{
 	
 	/**  Id of the collection to add the picture to */
 	private Long collectionId;
-
-	/** Class to create jpeg thumbnails. */
-	private BasicThumbnailTransformer defaultThumbnailTransformer;
 	
-	/** Temporary file creator to allow a temporary file to be created for processing */
-	private TemporaryFileCreator temporaryFileCreator;
+	/** service to create thumbnails  */
+	private ThumbnailTransformerService thumbnailTransformerService;
 	
 	/** Service for dealing with news information */
 	private InstitutionalCollection institutionalCollection;
@@ -134,41 +127,7 @@ public class UploadCollectionImage extends ActionSupport implements UserIdAware{
 			institutionalCollectionService.saveCollection(institutionalCollection);
 		}
 		
-		FileInfo fileInfo = picture.getFileInfo();
-		
-		log.debug("File info = " + fileInfo);
-		String extension = fileInfo.getExtension();
-		
-		if(defaultThumbnailTransformer.canTransform(extension))
-	    {
-	    	log.debug("Creating transform of " + file.getAbsolutePath());
-		    try
-		    {
-		        File tempFile = temporaryFileCreator.createTemporaryFile(extension);
-		        defaultThumbnailTransformer.transformFile(file, extension, tempFile);
-		        
-		    
-		        if( tempFile != null && tempFile.exists() && tempFile.length() > 0l)
-		        {
-		        	TransformedFileType transformedFileType = repositoryService.getTransformedFileTypeBySystemCode("PRIMARY_THUMBNAIL");
-		            repositoryService.addTransformedFile(repository, 
-		    		    picture, 
-		    		    tempFile, 
-		    		    "JPEG file", 
-		    		    defaultThumbnailTransformer.getFileExtension(), 
-		    		    transformedFileType);
-		        }
-		        else
-		        {
-		        	log.error("could not create thumbnail for file " + fileInfo);
-		        }
-		    }
-		    catch(Exception e)
-		    {
-			    log.error("Could not create thumbnail", e);
-		    }
-	    }
-	    
+		thumbnailTransformerService.transformFile(repository, picture);
 	    log.debug("returning success");
 	    return SUCCESS;
 	}
@@ -190,43 +149,6 @@ public class UploadCollectionImage extends ActionSupport implements UserIdAware{
 	 */
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	/**
-	 * Transformer for the thumbnail.
-	 * 
-	 * @return the Jpeg thumbnail transformer
-	 */
-	public BasicThumbnailTransformer getDefaultThumbnailTransformer() {
-		return defaultThumbnailTransformer;
-	}
-
-	/**
-	 * Set the jpeg thumbnail transformer.
-	 * 
-	 * @param defaultThumbnailTransformer
-	 */
-	public void setDefaultThumbnailTransformer(
-			BasicThumbnailTransformer defaultThumbnailTransformer) {
-		this.defaultThumbnailTransformer = defaultThumbnailTransformer;
-	}
-
-	/**
-	 * This allows a temporary file to be created.
-	 * 
-	 * @return
-	 */
-	public TemporaryFileCreator getTemporaryFileCreator() {
-		return temporaryFileCreator;
-	}
-
-	/**
-	 * Set the temporary file creator.
-	 * 
-	 * @param temporaryFileCreator
-	 */
-	public void setTemporaryFileCreator(TemporaryFileCreator temporaryFileCreator) {
-		this.temporaryFileCreator = temporaryFileCreator;
 	}
 
 	/**
@@ -372,5 +294,16 @@ public class UploadCollectionImage extends ActionSupport implements UserIdAware{
 			InstitutionalCollectionService institutionalCollectionService) {
 		this.institutionalCollectionService = institutionalCollectionService;
 	}
+	
+	public ThumbnailTransformerService getThumbnailTransformerService() {
+		return thumbnailTransformerService;
+	}
+
+
+	public void setThumbnailTransformerService(
+			ThumbnailTransformerService thumbnailTransformerServie) {
+		this.thumbnailTransformerService = thumbnailTransformerServie;
+	}
+
 
 }
