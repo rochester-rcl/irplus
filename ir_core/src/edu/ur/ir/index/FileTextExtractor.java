@@ -67,7 +67,8 @@ public interface FileTextExtractor {
 	
 	/**
 	 * Returns the max file size this extractor will 
-	 * try to extract text from.
+	 * accept and try to process.  If the file is larger than
+	 * this size it will not even try to process the file.
 	 * 
 	 * @return max file extract size in bytes;
 	 */
