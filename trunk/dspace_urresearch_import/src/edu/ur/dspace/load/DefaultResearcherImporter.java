@@ -50,8 +50,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.file.TemporaryFileCreator;
-import edu.ur.ir.file.transformer.BasicThumbnailTransformer;
+import edu.ur.ir.file.transformer.ThumbnailTransformerService;
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -87,12 +86,6 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 	/** Service for dealing with repositories */
 	private RepositoryService repositoryService;
 	
-	/** Thumb-nailer  for logo files*/
-	private BasicThumbnailTransformer defaultThumbnailTransformer;
-	
-	/** Temporary file creator to allow a temporary file to be created for processing */
-	private TemporaryFileCreator temporaryFileCreator;
-	
 	/** Service for dealing with researchers in the system */
 	private ResearcherService researcherService;
 	
@@ -119,6 +112,9 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 
 	/** Service for dealing with items */
 	private InstitutionalItemService institutionalItemService;
+	
+	/** service to create thumbnails  */
+	private ThumbnailTransformerService thumbnailTransformerService;
 
 
 	/**
@@ -363,13 +359,7 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 			        System.out.println("file extension = " + logo.getFileInfo().getExtension());
 			
 			        urResearcher.setPrimaryPicture(logo);
-			        
-			        try {
-					    ThumbnailHelper.thumbnailFile(logo, repo, defaultThumbnailTransformer, 
-					    		temporaryFileCreator, repositoryService, "researcher thumbnail");
-				    } catch (Exception e) {
-					    log.debug("could not create thumbnail for researcher " + urResearcher, e);
-				    }
+			        thumbnailTransformerService.transformFile(repo, logo);
 			    }
 			    
 			    if( r.links != null )
@@ -702,37 +692,9 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 	}
 
 
-
-	public BasicThumbnailTransformer getDefaultThumbnailTransformer() {
-		return defaultThumbnailTransformer;
-	}
-
-
-
-	public void setDefaultThumbnailTransformer(
-			BasicThumbnailTransformer defaultThumbnailTransformer) {
-		this.defaultThumbnailTransformer = defaultThumbnailTransformer;
-	}
-
-
-
-	public TemporaryFileCreator getTemporaryFileCreator() {
-		return temporaryFileCreator;
-	}
-
-
-
-	public void setTemporaryFileCreator(TemporaryFileCreator temporaryFileCreator) {
-		this.temporaryFileCreator = temporaryFileCreator;
-	}
-
-
-
 	public UserService getUserService() {
 		return userService;
 	}
-
-
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -815,6 +777,17 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
+	}
+
+
+	public ThumbnailTransformerService getThumbnailTransformerService() {
+		return thumbnailTransformerService;
+	}
+
+
+	public void setThumbnailTransformerService(
+			ThumbnailTransformerService thumbnailTransformerService) {
+		this.thumbnailTransformerService = thumbnailTransformerService;
 	}
 
 
