@@ -34,7 +34,8 @@
                 <group>DEFAULT</group>
                 <job-name>SubscriptionEmailer</job-name>
                 <job-group>DEFAULT</job-group>
-                <cron-expression>0 0/5 * * * ?</cron-expression>
+                
+                <cron-expression>0 0 1 ? * FRI</cron-expression>
             </cron>
         </trigger>
     </job>
@@ -57,13 +58,14 @@
             <recover>true</recover>
         </job-detail>
     
+        <!--  run every 5 minutes -->
         <trigger>
             <cron>
                 <name>institutionalItemIndexer</name>
                 <group>DEFAULT</group>
                 <job-name>InstitutionalItemIndexer</job-name>
                 <job-group>DEFAULT</job-group>
-                <cron-expression>0 0/1 * * * ?</cron-expression>
+                <cron-expression>0 0/5 * * * ?</cron-expression>
             </cron>
         </trigger>
     </job>
