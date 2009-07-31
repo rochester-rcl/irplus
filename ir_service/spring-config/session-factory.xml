@@ -128,6 +128,9 @@
                 <value>edu/ur/hibernate/ir/file/db/TransformedFileType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/file/db/TransformedFile.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/file/db/FileCollaborator.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/file/db/IrFileIndexingFailureRecord.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/file/db/IrFileTransformationFailureRecord.hbm.xml</value>
+                
                 
                 <value>edu/ur/hibernate/file/db/UniqueFileSystemName.hbm.xml</value>
                 <value>edu/ur/hibernate/file/db/DefaultFileInfo.hbm.xml</value> 
