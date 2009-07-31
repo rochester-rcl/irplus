@@ -41,7 +41,7 @@
     -->
     
    <!--  this job is for indexing existing changed items and updating/deleting/inserting them into the index -->
-    <job>
+   <job>
         <job-detail>
             <name>InstitutionalItemIndexer</name>
             <group>DEFAULT</group>
@@ -64,6 +64,35 @@
                 <job-name>InstitutionalItemIndexer</job-name>
                 <job-group>DEFAULT</job-group>
                 <cron-expression>0 0/1 * * * ?</cron-expression>
+            </cron>
+        </trigger>
+    </job>
+    
+       <!--  this job is for indexing existing changed items and updating/deleting/inserting them into the index -->
+   <job>
+        <job-detail>
+            <name>UserWorkspaceItemIndexer</name>
+            <group>DEFAULT</group>
+            <description>
+                A job that processes changed workspace items and add/updates/deletes them
+                from the index
+            </description>
+            <job-class>
+                edu.ur.ir.user.service.DefaultProcessFileSystemObjectsJob
+            </job-class>
+            <volatility>false</volatility>
+            <durability>true</durability>
+            <recover>true</recover>
+        </job-detail>
+    
+        <!--  run every 1 seconds -->
+        <trigger>
+            <cron>
+                <name>userWorkspaceItemIndexer</name>
+                <group>DEFAULT</group>
+                <job-name>UserWorkspaceItemIndexer</job-name>
+                <job-group>DEFAULT</job-group>
+                <cron-expression>0/1 * * * * ?</cron-expression>
             </cron>
         </trigger>
     </job>
