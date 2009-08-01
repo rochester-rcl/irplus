@@ -111,17 +111,14 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	/** Indicates the account has been locked */
 	private boolean accountLocked = false;
 	
+	/** indicates the email already exists*/
+	private boolean emailAlreadyExists = false;
+	
 	/** Default email */
 	private UserEmail defaultEmail;
 	
-	/** List of all affiliations */
-	//private List<Affiliation> affiliations;
-
 	/** Id of the affiliation selected */
 	private Long affiliationId;
-
-	/** List of all departments */
-	//private List<Department> departments;
 
 	/** Id of the department selected */
 	private Long[] departmentIds;
@@ -140,6 +137,9 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	
 	/** Set the net id password */
 	private String netIdPassword;
+	
+	/** indicates net id already exists and the net id valiedated against the password*/
+	private boolean netIdAlreadyExistsPasswordSuccess = false;
 	
 	/** Authenticator for ldap username/password */
 	private LdapAuthenticator ldapAuthenticator;
@@ -235,7 +235,8 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 					if( ldapUser != null )
 					{
 						failure = true;
-				    	addFieldError("netIdAlreadyExists", "The net id user name already exists - you may already have an account please contact the admistrator");
+						netIdAlreadyExistsPasswordSuccess = true;
+				    	addFieldError("netIdAlreadyExists", "The net id user name already exists ");
 					}
 
 			    }
@@ -263,6 +264,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		{
 			addFieldError("emailExistError", 
 					"This Email already exists in the system. Email: " + defaultEmail.getEmail());
+			emailAlreadyExists = true;
 			failure = true;
 		}
 		
@@ -699,6 +701,23 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 						new File( repository.getUserIndexFolder()) );
 		
 		return returnVal;
+	}
+
+	public boolean getEmailAlreadyExists() {
+		return emailAlreadyExists;
+	}
+
+	public void setEmailAlreadyExists(boolean emailAlreadyExists) {
+		this.emailAlreadyExists = emailAlreadyExists;
+	}
+
+	public boolean getNetIdAlreadyExistsPasswordSuccess() {
+		return netIdAlreadyExistsPasswordSuccess;
+	}
+
+	public void setNetIdAlreadyExistsPasswordSuccess(
+			boolean netIdAlreadyExistsPasswordSuccess) {
+		this.netIdAlreadyExistsPasswordSuccess = netIdAlreadyExistsPasswordSuccess;
 	}
 
 
