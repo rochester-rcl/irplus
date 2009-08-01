@@ -45,15 +45,25 @@
         <dependency org="commons-pool" name="commons-pool" rev="1.5.1" transitive="false">
             <artifact name="commons-pool" type="jar"/>
         </dependency>
+        
+         <!-- commons logging files -->
+        <dependency org="commons-logging" name="commons-logging" rev="1.1.1" transitive="false">
+	        <artifact name="commons-logging" type="jar"/> 
+        </dependency>
+        
+         <!-- xerces impl -->
+        <dependency org="xerces" name="xercesImpl" rev="2.9.1" transitive="false">
+	        <artifact name="xercesImpl" type="jar"/> 
+        </dependency>
 
-          <!-- test ng files for testing -->
+         <!-- test ng files for testing -->
 	    <dependency org="org.testng" name="testng" rev="5.8" transitive="false">
 	        <artifact name="testng" type="jar"
  	        url="http://repo1.maven.org/maven2/org/testng/testng/5.8/testng-5.8-jdk15.jar"/> 
         </dependency>
         
          <!-- postgresql jar files -->
-	    <dependency org="postgresql" name="postgresql" rev="8.3-603.jdbc4" transitive="false">
+	    <dependency org="postgresql" name="postgresql" rev="8.3-603.jdbc3" transitive="false">
 	        <artifact name="postgresql" type="jar"/>
  	    </dependency>
         
