@@ -77,6 +77,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	/**  Generic Item being viewed */
 	private InstitutionalItemVersion institutionalItemVersion;
 	
+	/** pat to the publication */
 	private List<InstitutionalCollection> path;
 	
 	/** Long user id */
@@ -114,7 +115,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 			if (institutionalItemVersion == null) 
 			{
 	        	log.debug("Institutional Item Version does not exist for InstitutionalItemVersionId :" + institutionalItemVersionId);
-	        	message = "The publication doesnot exist!";
+	        	message = "The publication doesn ot exist";
 	        	showPublication = false;
 	        	return SUCCESS;
 			}
@@ -143,10 +144,10 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 				// Check if Institutional item is deleted
 				if (deleteInfo != null) {
 		        	log.debug("Institutional Item is deleted. Delete Info :" + deleteInfo);
-		        	message = "The publication \"" + deleteInfo.getInstitutionalItemName() + "\"  is deleted.";
+		        	message = "The publication \"" + deleteInfo.getInstitutionalItemName() + "\"  has been deleted.";
 				} else {
 		        	log.debug("Institutional Item does not exist for InstitutionalItemId :" + institutionalItemId);
-		        	message = "The publication doesnot exist!";
+		        	message = "The publication does not exist";
 				}
 	        	showPublication = false;
 	        	return SUCCESS;
@@ -183,7 +184,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	            			&& itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_EDIT_PERMISSION) <= 0)  {
 	            		
 	            	    	log.debug("User has no Read / edit metadata permission for this item");
-	            	    	message = "You do not have access to this publication!";
+	            	    	message = "Restricted Access";
 	            	    	showPublication = false;
 	            	    	return SUCCESS;
 	            	    }
@@ -193,7 +194,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	            {
                 	log.debug("User is null. Publication is private.");
                 	showPublication = false;
-                	message = "You do not have access to this publication!";
+                	message = "Restricted Access";
                 	return SUCCESS;
 	            }
 			}
