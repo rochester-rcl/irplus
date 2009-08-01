@@ -81,7 +81,6 @@
 	        <div id="invite-user-tabs" class="yui-navset">
 	            <ul class="yui-nav">
 	                <li class="selected"><a href="#tab1"><em>Invite User</em></a></li>
-	                <li><a href="#tab2"><em>Search For Users To Share With</em></a></li>
 	            </ul>
 	
 	            <div class="yui-content">
@@ -110,7 +109,7 @@
 				           
 				               <div class="contentBoxContent">
 				               		<p>
-								          <ur:basicForm id="addInvite" name="newInviteForm" method="POST" action="user/addInviteUser.action">
+								          <form id="addInvite" name="newInviteForm" method="POST" action="<c:url value="/user/addInviteUser.action"/>">
 								              <table class="formTable">
 		
 											  <input type="hidden" id="share_file_ids"
@@ -154,7 +153,7 @@
                               				  </td>
 											  </tr>
 											  </table>
-								          </ur:basicForm>
+								          </form>
 							  		 </p>
 			                     </div>
 			                </div>
@@ -170,7 +169,7 @@
 		                        </div>
 		                   
 		                        <div class="contentBoxContent">
-						     		<ur:div id="newCollaborators"></ur:div>
+						     		<div id="newCollaborators"></div>
 		                        </div>
 		                    </div>
 		                </div>
@@ -183,68 +182,36 @@
 	            <!--  end first tab -->
 	                  
 	                  
-              	 <!--  start second tab -->
-               	 <div id="tab2">
-                     <ur:basicForm id="emailSearchForm" name="emailSearchForm" action="javascript:YAHOO.ur.invite.search.executeEmailSearch(0,1,1);" >
-                         
-                         <table class="formTable">
-                             <tr>
-                                 <td class="label">
-                                     Search:
-                                 </td>
-                                 <td class="input">
-                                     <input type="text" name="query" size="50"
-                                         value="${query}"/>
-                                 </td>
-                                 <td>
-                                     <button class="ur_button" type="button"
-                                      onmouseover="this.className='ur_buttonover';"
-	                                  onmouseout="this.className='ur_button';"
-                                      onclick="YAHOO.ur.invite.search.executeEmailSearch(0,1,1)"><span class="magnifierBtnImg">&nbsp;</span>Search</button>
-                                 </td>
-                                 
-                             </tr>
-                         </table>
-                     </ur:basicForm>
-
-                     <!--  location where search results will be placed -->
-                     <div id="search_results">
-                     </div>
-				 </div>
-	             <!--  end tab 2 -->
-	             <div class="clear">&nbsp;</div>
-	          </div>
-	          <!--  end content -->
+              	
 
 	       </div>
 	       <!--  end tabs -->
 
 	        <div id="editPermissionsDialog" class="hidden">
-                <ur:div cssClass="hd">Edit Permissions</ur:div>
-                <ur:div cssClass="bd">
-                    <ur:basicForm id="editPermissions" name="editPermissionsForm" 
-		                    method="post" action="user/editPermissions.action">
-		            	<ur:div id="editPermissionsDialogFields">
+                <div class="hd">Edit Permissions</div>
+                <div class="bd">
+                    <form id="editPermissions" name="editPermissionsForm" 
+		                    method="post" action="<c:url value="/user/editPermissions.action"/>"
+		            	<div id="editPermissionsDialogFields">
 		            	    <c:import url="edit_permissions_form.jsp"/>
-	                  	</ur:div>
-				          
-	                </ur:basicForm>
-                </ur:div>
+	                  	</div>
+	                </form>
+                </div>
             </div>
 
 			<!--  start unshare dialog -->
 			<div id="unshareFileConfirmDialog" class="hidden">
 			     <div class="hd">Delete?</div>
 			     <div class="bd">
-			        <ur:basicForm id="unshareConfirmationForm" name="unshareForm" 
-		                    method="post" action="user/deleteCollaborator.action">
+			        <form id="unshareConfirmationForm" name="unshareForm" 
+		                    method="post" action="<c:url value="/user/deleteCollaborator.action"/>"
 		            	<input type="hidden" id="unshareForm_fileCollaboratorId" name="fileCollaboratorId">
 		            	<input type="hidden" id="unshareForm_personalFileId" name="personalFileId">
 		            	<input type="hidden" id="unshareForm_parentFolderId" name="parentFolderId" value="${parentFolderId}" >
                         <input type="hidden" id="unshareForm_share_file_ids" name="shareFileIds" value="${shareFileIds}"/>
 		            	
 			         <p>Do you want to unshare the file for the selected user?</p>
-			         </ur:basicForm>
+			         </form>
 			     </div>
 			</div>
 			<!--  end unshare dialog -->
@@ -254,13 +221,13 @@
 			<div id="unsharePendingInviteeConfirmDialog" class="hidden" >
 			     <div class="hd">Delete?</div>
 			     <div class="bd">
-			        <ur:basicForm id="unsharePendingInviteeConfirmationForm" name="unsharePendingInviteeForm" 
-		                    method="post" action="user/deletePendingInvitee.action">
+			        <form id="unsharePendingInviteeConfirmationForm" name="unsharePendingInviteeForm" 
+		                    method="post" action="<c:url value="/user/deletePendingInvitee.action"/>"
 		            	<input type="hidden" id="unsharePendingInviteeForm_inviteInfoId" name="inviteInfoId">
 		            	<input type="hidden" id="unsharePendingInviteeForm_personalFileId" name="personalFileId">
 		            	<input type="hidden" id="unsharePendingInviteeForm_share_file_ids" name="shareFileIds" value="${shareFileIds}"/>
 			         <p>Do you want to unshare the file?</p>
-			         </ur:basicForm>
+			         </form>
 			     </div>
 			</div>
 			<!--  end unshare pending invitee dialog -->
@@ -269,12 +236,12 @@
 			<div id="removeFileConfirmDialog" class="hidden" >
 			     <div class="hd">Remove?</div>
 			     <div class="bd">
-			        <ur:basicForm id="remove_file_form" name="removeFileForm" 
-		                    method="post" action="user/removeFile.action">
+			        <form id="remove_file_form" name="removeFileForm" 
+		                    method="post" action="<c:url value="/user/removeFile.action"/>"
 		            	<input type="hidden" id="remove_file_form_personal_file_id" name="personalFileId">
 		            	<input type="hidden" id="removeFileForm_share_file_ids" name="shareFileIds" value="${shareFileIds}"/>
 			         <p>Do you want to remove the file?</p>
-			         </ur:basicForm>
+			         </form>
 			     </div>
 			</div>
 			<!--  end remove file  dialog -->			
