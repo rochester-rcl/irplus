@@ -101,11 +101,11 @@
     <bean id = "accountCreationMessage" class="org.springframework.mail.SimpleMailMessage">
     	<property name="from" value="${mail.sender.from}"/>
     	<property name="replyTo" value="${mail.sender.replyTo}"/>
-    	<property name="subject" value="UR Research - New account details"/>
+    	<property name="subject" value="New account details"/>
     	<property name="text">
     		<value>
     			<![CDATA[
-    			New account has been created for you in ir plus.
+    			A new account has been created for you.
     			
     			User name : %USERNAME%
     			Password  : %PASSWORD%
@@ -178,7 +178,7 @@
 	<bean id = "accountVerificationMessage" class="org.springframework.mail.SimpleMailMessage">
     	<property name="from" value="${mail.sender.from}"/>
     	<property name="replyTo" value="${mail.sender.replyTo}"/>
-    	<property name="subject" value="Registration with XR system"/>
+    	<property name="subject" value="New Registration"/>
     	<property name="text">
     		<value>
     			<![CDATA[
@@ -197,7 +197,7 @@
     <bean id = "userPendingAffiliationMessage" class="org.springframework.mail.SimpleMailMessage">
     	<property name="from" value="${mail.sender.from}"/>
     	<property name="replyTo" value="${mail.sender.replyTo}"/>
-    	<property name="subject" value="Registration with XR system"/>
+    	<property name="subject" value="Registration Affiliation Notice"/>
     	<property name="text">
     		<value>
     			<![CDATA[
