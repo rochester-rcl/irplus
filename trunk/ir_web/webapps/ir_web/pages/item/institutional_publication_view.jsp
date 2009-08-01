@@ -244,7 +244,11 @@
 			<!--  end if for show publication -->
 				
 			<c:if test="${!showPublication && !ir:userHasRole('ROLE_ADMIN', '')}">
-				 <div class="errorMessage"> <h3>${message}</h3></div> 
+			     <c:url var="viewRestricted" value="/user/institutionalPublicationPublicView.action">
+			         <c:param name="institutionalItemId" value="${institutionalItem.id}"/>
+			         <c:param name="versionNumber" value="${institutionalItemVersion.versionNumber}"/>
+			     </c:url>
+				 <div class="errorMessage"> <h3>${message} - (You can try <a href="${viewRestricted}">Logging In</a> if not already) </h3></div> 
 			</c:if>
 				
 			  <!-- *************************  All versions Start *************************  -->
@@ -300,7 +304,7 @@
                           </c:if>
                           <c:if test="${!version.item.publiclyViewable && !(institutionalItem.owner == user) && !ir:userHasRole('ROLE_ADMIN', '') && !showPublication}">
                               <td class="${rowType}" colspan="4">
-                                  The version of this item is private
+                                  The version of this item is restricted
                               </td>
                           </c:if>
 
