@@ -130,14 +130,17 @@
 		              action="registerNewUser.action" onSubmit="return formValidation();">
 		              
 		              <input type="hidden" name="token" value="${token}"/>
+		               <c:url  var="loginPage" value="/acegilogin.jsp"/>
 		               
 					  <table class="formTable">
 					  <tr>
 					      <td colspan="2">
 				              <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="userNameError"/></p>
-		                      <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-		                       key="emailExistError"/></p>
+		                      <p class="errorMessage">
+		                           <ir:printError errors="${fieldErrors}" key="emailExistError"/>
+		                           <c:if test="${emailAlreadyExists}"> - Use the forgot password link on <a href="${loginPage}">this page</a> to get a new password</c:if>
+		                       </p>
 		                      <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="licenseChangeError"/></p>
 		                      <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
@@ -148,6 +151,10 @@
 		                       key="netIdPasswordFail"/></p>
 		                       <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="netIdPasswordEmpty"/></p>
+		                       <p class="errorMessage">
+		                           <ir:printError errors="${fieldErrors}"  key="nnetIdAlreadyExists"/> 
+		                           <c:if test="${netIdAlreadyExists}"> - Try <a href="${loginPage}">Logging In</a></c:if>
+		                       </p>
 			              </td>
 			          </tr>    
    
