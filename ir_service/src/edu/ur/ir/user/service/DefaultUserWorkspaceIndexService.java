@@ -324,7 +324,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	    String extension = mostRecentVersion.getVersionedFile().getExtension() + "";
 	    String nameWithExtension = mostRecentVersion.getVersionedFile().getNameWithExtension() + "";
 	    String creator = mostRecentVersion.getVersionCreator().getUsername() + "";
-	    String text = getDocumentBodyText(mostRecentVersion) + "";
+	    String text = getDocumentBodyText(mostRecentVersion);
 	    String collaborators = "";
 	    
 	    Set<FileCollaborator> collabs = personalFile.getVersionedFile().getCollaborators();
@@ -356,11 +356,14 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				creator, 
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
-		    
-		doc.add(new Field(FILE_BODY_TEXT, 
+		
+		if( text != null  && !text.trim().equals(""))
+		{
+		    doc.add(new Field(FILE_BODY_TEXT, 
 			 	    text, 
 				    Field.Store.NO, 
 				    Field.Index.ANALYZED));
+		}
 		
 		// null out the text as this could hold a huge amount of information
 		text = null;
@@ -692,7 +695,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	    String extension = mostRecentVersion.getVersionedFile().getExtension() + "";
 	    String nameWithExtension = mostRecentVersion.getVersionedFile().getNameWithExtension() + "";
 	    String creator = mostRecentVersion.getVersionCreator().getUsername() + "";
-	    String text = getDocumentBodyText(mostRecentVersion) + "";
+	    String text = getDocumentBodyText(mostRecentVersion);
 	    String collaboratos = "";
 	    
 	    Set<FileCollaborator> collabs = inboxFile.getVersionedFile().getCollaborators();
@@ -724,11 +727,14 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				creator, 
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
-		    
-		doc.add(new Field(FILE_BODY_TEXT, 
+		   
+		if( text != null && !text.trim().equals(""))
+		{
+		    doc.add(new Field(FILE_BODY_TEXT, 
 			 	    text, 
 				    Field.Store.NO, 
 				    Field.Index.ANALYZED));
+		}
 		
 		doc.add(new Field(VERSIONED_FILE_ID, 
 				inboxFile.getVersionedFile().getId().toString(), 
