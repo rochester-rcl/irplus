@@ -457,7 +457,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		    {
 			    // get the text for the files
 			    String fileText = getDocumentBodyText(itemFile);
-		        if(!fileText.trim().equals(""))
+		        if(fileText != null && !fileText.trim().equals(""))
 		        {
 			        doc.add(new Field(FILE_TEXT, 
 					    fileText, 
@@ -675,7 +675,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		    {
 				IndexWriter.unlock(directory);
 			} 
-	    	catch (IOException e1)
+	    	catch (Exception e1)
 	    	{
 				log.error(e1);
 			}
@@ -1178,7 +1178,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		    {
 				IndexWriter.unlock(directory);
 			} 
-	    	catch (IOException e1)
+	    	catch (Exception e1)
 	    	{
 				log.error(e1);
 			}
