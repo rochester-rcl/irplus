@@ -16,10 +16,12 @@
 
 package edu.ur.dspace.util;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -103,6 +105,7 @@ public class FileZipperUtil {
 		 FileOutputStream outStream = null;
 	     FileInputStream fileInputStream = null;
 	     ZipInputStream zipInputStream = null;
+	     OutputStream out = null;
 	     ZipEntry temp;
 	     
 		 try
@@ -110,6 +113,7 @@ public class FileZipperUtil {
 		     outStream = new FileOutputStream(fileOut);
 		     fileInputStream = new FileInputStream(f);
 		     zipInputStream = new ZipInputStream(fileInputStream);
+		     out = new BufferedOutputStream(outStream);
 		     
 		     boolean found = false;
 		     while( !found && (temp=zipInputStream.getNextEntry()) != null )
@@ -129,13 +133,17 @@ public class FileZipperUtil {
 			     int amountRead = 0;
 			     while( (amountRead = zipInputStream.read(fileBytes)) != -1)
 			     {
-				     outStream.write(fileBytes, 0, amountRead);
+				     out.write(fileBytes, 0, amountRead);
 			     }
-			     outStream.flush();
+			     out.flush();
 		     }
 		 }
 		 finally
 		 {
+			 if( out != null )
+			 {
+				 out.close();
+			 }
 			 if( outStream != null)
 			 {
 		         outStream.close();
@@ -150,6 +158,7 @@ public class FileZipperUtil {
 			 {
 		         fileInputStream.close();
 			 }
+			 fileBytes = null;
 		 }
 		 
 		return fileOut;
