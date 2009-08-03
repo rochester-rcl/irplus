@@ -127,7 +127,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
          // Check if file can be downloaded by user
         if (itemFile.isPublic() ) {
         	
-        	if( user != null && !genericItem.getOwner().equals(user))
+        	if( user == null || !genericItem.getOwner().equals(user))
         	{
         	    downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
             		itemFile.getIrFile());
