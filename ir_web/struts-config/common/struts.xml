@@ -85,7 +85,11 @@
         
         <!-- Help action -->
         <action name="help">
-            <result type="redirect">/pages/help.jsp</result>
+            <result type="redirect">/pages/user-help.jsp</result>
+        </action>
+        
+        <action name="admin-help">
+            <result type="redirect">/pages/admin-help.jsp</result>
         </action>
         
         <!-- Help action -->
@@ -249,14 +253,47 @@
         </action> 
       
         <!--  ************************************ -->
-        <!--    Transformed file actions           -->
+        <!--    Transformed file / Thumbnail file actions  -->
         <!--  ************************************ -->  
+        
+         <!--  Action for downloading repository thumbnail files -->
+        <action name="repositoryThumbnailDownloader" 
+            class="edu.ur.ir.web.action.repository.RepositoryThumbnailDownloader">
+            <result name="success" type="no-op"/>
+        </action> 
+        
+          <!--  Action for downloading news thumbnail files -->
+        <action name="newsThumbnailDownloader" 
+            class="edu.ur.ir.web.action.news.NewsThumbnailDownloader">
+            <result name="success" type="no-op"/>
+        </action> 
+        
+        <!--  Action for downloading collection thumbnail files -->
+        <action name="institutionalCollectionThumbnailDownloader" 
+            class="edu.ur.ir.web.action.institution.InstitutionalCollectionThumbnailDownloader">
+            <result name="success" type="no-op"/>
+        </action> 
         
         <!--  Action for downloading transformed files -->
         <action name="transformedFileDownload" 
             class="edu.ur.ir.web.action.repository.TransformedFileDownloader">
             <result name="success" type="no-op"/>
-        </action>         
+        </action> 
+        
+        <!--  Action for item file transformed MOSTLY Thumbnail viewing -->
+        <action name="genericItemTransformedFileDownload" 
+            class="edu.ur.ir.web.action.item.GenericItemTransformedFileDownloader">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+        </action>   
+        
+         <!--  Action for item file transformed MOSTLY Thumbnail viewing -->
+        <action name="researcherThumbnailDownloader" 
+            class="edu.ur.ir.web.action.researcher.ResearcherThumbnailDownloader">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+        </action>               
+                    
         
 
         <!--  ************************************ -->

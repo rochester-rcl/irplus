@@ -89,6 +89,16 @@
         <!--  ************************************ -->
         &researcher;
                 
+                
+        <!--  ************************************ -->
+        <!--  Personal file download actions                -->
+        <!--  ************************************ -->
+        <action name="personalFileThumbnailDownloader" 
+            class="edu.ur.ir.web.action.user.PersonalFileThumbnailDownloader">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+        </action>               
+                    
         <!--  ************************************ -->
         <!--  Workspace information                -->
         <!--  ************************************ -->
