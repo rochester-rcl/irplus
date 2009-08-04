@@ -197,7 +197,7 @@ public class DefaultRepositoryServiceTest {
 		// create a transformed file type
 		TransformedFileType transformedFileType = new TransformedFileType("Primary Thumbnail");
 		transformedFileType.setDescription("Thumbnail created by the system");
-		transformedFileType.setSystemCode("PRIMARY_THUMBNAIL");
+		transformedFileType.setSystemCode(TransformedFileType.PRIMARY_THUMBNAIL);
 		
 		transformedFileTypeDAO.makePersistent(transformedFileType);
 		tm.commit(ts);
@@ -258,7 +258,7 @@ public class DefaultRepositoryServiceTest {
 	    VersionedFile currentLoadedFile = repositoryService.getVersionedFile(vf.getId(), false);
 	    assert  currentLoadedFile.equals(vf) : "Versioned files should be equal";
 		
-	    assert currentLoadedFile.getCurrentVersion().getIrFile().getTransformedFileBySystemCode("PRIMARY_THUMBNAIL") != null :
+	    assert currentLoadedFile.getCurrentVersion().getIrFile().getTransformedFileBySystemCode(TransformedFileType.PRIMARY_THUMBNAIL) != null :
 	    	"Should be able to find the primary thumbnail";
 	    String fileLocation = currentLoadedFile.getCurrentVersion().getIrFile().getFileInfo().getFullPath();
 	    

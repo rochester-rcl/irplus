@@ -576,13 +576,19 @@ public class Researcher extends BasePersistent{
 	}
 	
 	/**
-	 * Get the picture with the specified id.
+	 * Get the picture with the specified id.  This also looks
+	 * at the primary picture.
 	 * 
 	 * @param id - ir file id
 	 * @return the found file otherwise null.
 	 */
 	public IrFile getPicture(Long id)
 	{
+		if(primaryPicture != null && primaryPicture.getId().equals(id))
+		{
+			return primaryPicture;
+		}
+		
 		for(IrFile f : pictures)
 		{
 			if( f.getId().equals(id))

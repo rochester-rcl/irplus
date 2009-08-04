@@ -30,6 +30,7 @@ import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.file.TransformedFileType;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
@@ -472,7 +473,7 @@ public class FileWebUtilFunctions {
 	 * @return
 	 */
 	public static boolean hasThumbnail(IrFile irFile) {
-		return repositoryService.getTransformByIrFileSystemCode(irFile.getId(), "PRIMARY_THUMBNAIL") != null ? true: false;
+		return repositoryService.getTransformByIrFileSystemCode(irFile.getId(), TransformedFileType.PRIMARY_THUMBNAIL) != null ? true: false;
 	}
 
 	public void setRepositoryService(RepositoryService repositoryService) {

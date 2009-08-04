@@ -110,7 +110,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 */
 	private String path;
 	
-	/**  Logo used for the collection */
+	/**  pictures for the collection */
 	private Set<IrFile> pictures = new HashSet<IrFile>();
 	
 	/** main picture to be shown as a thumb-nail to users */
@@ -785,19 +785,27 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	}
 	
 	/**
-	 * Get the picture with the specified id.
+	 * Get the picture with the specified id.  This includes looking
+	 * at the primary picture.
 	 * 
 	 * @param id - ir file id
 	 * @return the found file otherwise null.
 	 */
 	public IrFile getPicture(Long id)
 	{
-		for(IrFile f : pictures)
+		if( primaryPicture != null && primaryPicture.getId().equals(id))
 		{
-			if( f.getId().equals(id))
-			{
-				return f;
-			}
+			return primaryPicture;
+		}
+		else
+		{
+		    for(IrFile f : pictures)
+		    {
+			    if( f.getId().equals(id))
+			    {
+				    return f;
+			    }
+		    }
 		}
 		return null;
 	}

@@ -183,6 +183,13 @@ public class NewsItem extends BasePersistent{
      */
     public IrFile getPicture(Long irFileId)
     {
+ 
+    	if( primaryPicture != null && primaryPicture.getId().equals(irFileId))
+    	{
+    		return primaryPicture;
+    	}
+    	
+    	
     	for( IrFile f : pictures)
     	{
     		if(f.getId().equals(irFileId))

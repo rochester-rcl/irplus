@@ -102,8 +102,6 @@ public class IrAclTag extends TagSupport {
             	 log.debug("acl manager found");
              }
              
-             context = getContext(pageContext);
-             
              IrUser user = null;
              
              final Authentication auth = SecurityContextHolder.getContext().getAuthentication();

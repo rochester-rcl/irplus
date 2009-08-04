@@ -71,7 +71,7 @@ public class DefaultThumbnailTransformerService implements ThumbnailTransformerS
 		    
 		        if( tempFile != null && tempFile.exists() && tempFile.length() > 0l)
 		        {
-		        	TransformedFileType transformedFileType = repositoryService.getTransformedFileTypeBySystemCode("PRIMARY_THUMBNAIL");
+		        	TransformedFileType transformedFileType = repositoryService.getTransformedFileTypeBySystemCode(TransformedFileType.PRIMARY_THUMBNAIL);
 		            repositoryService.addTransformedFile(repository, 
 		    		    inFile, 
 		    		    tempFile, 

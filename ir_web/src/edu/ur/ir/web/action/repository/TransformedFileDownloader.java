@@ -34,7 +34,7 @@ import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.web.util.WebIoUtils;
 
 /**
- * Allows a transformed file to be downloaded 
+ * Allows a transformed file to be downloaded
  * 
  * @author Nathan Sarr
  *
@@ -71,8 +71,7 @@ implements ServletResponseAware, ServletRequestAware {
 	
 	/** Utility to help stream files */
 	private WebIoUtils webIoUtils;
-
-
+	
 	/**
      * Allows a file to be downloaded
      *
@@ -82,8 +81,6 @@ implements ServletResponseAware, ServletRequestAware {
     	log.debug("Trying to download the file to user");
     	
     	IrFile irFile = repositoryService.getIrFile(irFileId, false);
-    	
-    	
     	
     	FileInfo info= repositoryService.getTransformByIrFileSystemCode(irFileId,systemCode);
     	if( info != null )

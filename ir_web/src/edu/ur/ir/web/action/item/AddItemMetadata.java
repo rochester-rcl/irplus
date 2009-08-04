@@ -28,6 +28,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.file.TransformedFileType;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -325,7 +326,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		}
 		
 		for (ItemFile itemFile: item.getItemFiles()) {
-			if (itemFile.getIrFile().getTransformedFileBySystemCode("PRIMARY_THUMBNAIL") != null ) {
+			if (itemFile.getIrFile().getTransformedFileBySystemCode(TransformedFileType.PRIMARY_THUMBNAIL) != null ) {
 				thumbnailFiles.add(itemFile);
 			}
 		}
