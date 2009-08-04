@@ -31,6 +31,9 @@ public class TransformedFileType extends CommonPersistent{
 	/**  Eclipse generated id. */
 	private static final long serialVersionUID = -2988139527242186355L;
 	
+	/** primary thumbnail type */
+	public static final String PRIMARY_THUMBNAIL = "PRIMARY_THUMBNAIL";
+	
 	
 	/** internal systemCode for this transformed file type */
 	private String systemCode;
