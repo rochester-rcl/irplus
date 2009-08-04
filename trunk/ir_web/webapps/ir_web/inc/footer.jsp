@@ -20,9 +20,11 @@
             <!--  footer  -->
             <div id="ft">
                 <ul id="bottomNav" class="basicNav">
+                    <li><a href="<c:url value="/help.action"/>">User Help</a>&nbsp;|</li>
+                    <li><a href="<c:url value="/admin-help.action"/>">Administration Help</a>&nbsp;|</li>
                     <li><a href="<c:url value="/contactUs.action"/>">Contact Us</a>&nbsp;|</li>
-                    <li><a href="<c:url value="/about.action"/>">About UR Research</a>&nbsp;|</li>
-                    <li><a href="<c:url value="/help.action"/>">Help</a>&nbsp;|</li>
+                    <li><a href="<c:url value="/about.action"/>">About</a>&nbsp;|</li>
+                    
                     <li><a href="<c:url value="/privacyPolicy.action"/>">Privacy Policy</a></li>
                 </ul>
                 <div class="copyright"><i>Copyright &copy; UNIVERSITY OF ROCHESTER LIBRARIES. All Rights Reserved</i></div>
