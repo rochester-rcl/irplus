@@ -284,11 +284,12 @@
                       <tr>
                           <c:if test="${version.item.publiclyViewable || (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '') || showPublication}">
                           <td class="${rowType}">
-                              <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${version.item.primaryImageFile}" var="url"/>
-                              <c:if test="${url != null}">
-                                  <img src="${url}"/>
+                              <c:if test="${ir:hasThumbnail(version.item.primaryImageFile.irFile)}">
+                                  <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${version.item.primaryImageFile}" var="url"/>
+                                  <c:if test="${url != null}">
+                                      <img height="66px" width="100px" src="${url}"/></a>
+                                  </c:if>
                               </c:if>
-                              
                           </td>
                           <td class="${rowType}">${version.item.fullName}
                           	<c:if test="${version.withdrawn}">

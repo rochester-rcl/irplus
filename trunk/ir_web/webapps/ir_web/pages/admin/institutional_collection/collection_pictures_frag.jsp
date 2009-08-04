@@ -35,11 +35,11 @@
 			<c:set value="even" var="rowType" />
 			<tr>
 				<td class="${rowType}">
-				<c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
-                    <c:param name="collectionId" value="${collection.id}"/>
-                    <c:param name="irFileId" value="${collection.primaryPicture.id}"/>
-                 </c:url>
-                 <c:if test="${collection.primaryPicture != null}">
+				<c:if test="${ir:hasThumbnail(collection.primaryPicture)}">
+				    <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
+                        <c:param name="collectionId" value="${collection.id}"/>
+                        <c:param name="irFileId" value="${collection.primaryPicture.id}"/>
+                     </c:url>
                      <img height="66px" width="100px" src="${url}"/>
                  </c:if>
 				</td>
@@ -81,11 +81,12 @@ There is currently no primary picture.
 
 			<tr>
 				<td class="${rowType}">
-				 <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
-                    <c:param name="collectionId" value="${collection.id}"/>
-                    <c:param name="irFileId" value="${irFile.id}"/>
-                 </c:url>
-                 <c:if test="${irFile != null}">
+				 <c:if test="${ir:hasThumbnail(irFile)}">
+				     <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
+                        <c:param name="collectionId" value="${collection.id}"/>
+                        <c:param name="irFileId" value="${irFile.id}"/>
+                     </c:url>
+                    
                      <img height="66px" width="100px" src="${url}"/>
                  </c:if>
 				</td>

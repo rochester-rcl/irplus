@@ -69,12 +69,11 @@
 				     <c:param name="researcherId" value="${researcher.id}"/>
 				 </c:url>
 				 <h3>Researcher: <a href="${viewResearcherPage}">${researcher.user.firstName}&nbsp;${researcher.user.lastName}</a> <br/><br/>
-				    
-				    <c:url var="url" value="/researcherThumbnailDownloader.action">
-                        <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
-                        <c:param name="researcherId" value="${researcher.id}"/>
-                    </c:url>
-                    <c:if test="${researcher.primaryPicture != null}">
+				    <c:if test="${ir:hasThumbnail(researcher.primaryPicture)}">
+				        <c:url var="url" value="/researcherThumbnailDownloader.action">
+                            <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
+                            <c:param name="researcherId" value="${researcher.id}"/>
+                        </c:url>
                         <img align="middle" height="66px" width="100px" src="${url}"/>
                     </c:if>	    
 			        <c:if test="${researcher.primaryPicture == null }">

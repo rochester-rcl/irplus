@@ -33,11 +33,11 @@
 	    
 	    <tr>
 			<td class="baseTableImage"> 
-			    <c:url var="url" value="/researcherThumbnailDownloader.action">
-                    <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
-                    <c:param name="researcherId" value="${researcher.id}"/>
-                </c:url>
-                <c:if test="${researcher.primaryPicture != null}">
+			    <c:if test="${ir:hasThumbnail(researcher.primaryPicture)}">
+			        <c:url var="url" value="/researcherThumbnailDownloader.action">
+                        <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
+                        <c:param name="researcherId" value="${researcher.id}"/>
+                    </c:url>
                     <img height="66px" width="100px" src="${url}"/>
                 </c:if>	    												
 	        </td>   
