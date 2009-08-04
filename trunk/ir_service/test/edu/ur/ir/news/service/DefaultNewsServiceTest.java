@@ -191,7 +191,7 @@ public class DefaultNewsServiceTest {
 		// create a transformed file type
 		TransformedFileType transformedFileType = new TransformedFileType("Primary Thumbnail");
 		transformedFileType.setDescription("Thumbnail created by the system");
-		transformedFileType.setSystemCode("PRIMARY_THUMBNAIL");
+		transformedFileType.setSystemCode(TransformedFileType.PRIMARY_THUMBNAIL);
 		
 		transformedFileTypeDAO.makePersistent(transformedFileType);
 		// save the repository

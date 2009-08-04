@@ -82,16 +82,17 @@
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 	</tag>
-
+	
+	
 	<tag>
-		<name>transformUrl</name>
+		<name>itemTransformUrl</name>
 		<tag-class>
-			edu.ur.tag.repository.TransformedFileDownloadUrl
+			edu.ur.tag.repository.ItemTransformDownloadUrl
 		</tag-class>
 		<body-content>scriptless</body-content>
 
 		<attribute>
-			<name>irFile</name>
+			<name>itemFile</name>
 			<rtexprvalue>true</rtexprvalue>
 			<required>true</required>
 		</attribute>
@@ -111,6 +112,8 @@
 			<required>false</required>
 		</attribute>
 	</tag>
+	
+
 
 	<tag>
 		<name>printError</name>
@@ -690,4 +693,6 @@
 			boolean isContributor(edu.ur.ir.item.GenericItem, edu.ur.ir.person.PersonName)
 		</function-signature>
 	</function>
+	
+  
 </taglib>

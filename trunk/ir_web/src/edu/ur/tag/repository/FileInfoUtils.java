@@ -22,8 +22,20 @@ import java.io.File;
 
 import edu.ur.file.db.FileInfo;
 
+/**
+ * Utils for file info information
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public class FileInfoUtils {
 	
+	/**
+	 * Return the size of the file on disk 
+	 * 
+	 * @param fileInfo
+	 * @return size of file in bytes
+	 */
 	public static Long sizeOnDisk(FileInfo fileInfo)
 	{
 		Long size = 0l;
