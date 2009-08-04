@@ -31,11 +31,13 @@
        
         <tr>
             <td class="baseTableImage">
-                <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${institutionalCollection.primaryPicture}" var="url"/>
-                <c:if test="${url != null}">
-                    <a href="${institutionalCollectionUrl}"><img height="66px" width="100px" src="${url}"/></a>
-                </c:if>
-                
+                <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
+                    <c:param name="collectionId" value="${institutionalCollection.id}"/>
+                    <c:param name="irFileId" value="${institutionalCollection.primaryPicture.id}"/>
+                 </c:url>
+                 <c:if test="${institutionalCollection.primaryPicture != null}">
+                     <img height="66px" width="100px" src="${url}"/>
+                 </c:if>
             </td>
             <td>
                 <p><strong><a href="${institutionalCollectionUrl}">${institutionalCollection.name}</a></strong> <ur:maxText numChars="100" text="${institutionalCollection.description}"></ur:maxText></p>

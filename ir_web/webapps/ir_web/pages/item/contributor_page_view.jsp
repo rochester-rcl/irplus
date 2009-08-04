@@ -69,10 +69,14 @@
 								    <c:param name="researcherId" value="${researcher.id}"/>
 								</c:url>
 								
-								<ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
-							 	<c:if test="${ url != null }">
-								    <img align="middle" src="${url}" />
-						        </c:if>	
+								<c:url var="url" value="/researcherThumbnailDownloader.action">
+                                    <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
+                                    <c:param name="researcherId" value="${researcher.id}"/>
+                               </c:url>
+                               <c:if test="${researcher.primaryPicture != null}">
+                                  <img align="middle" height="66px" width="100px" src="${url}"/>
+                               </c:if>	    
+								
 						        <c:if test="${researcher.primaryPicture == null }">
 				                     <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
 						        </c:if>

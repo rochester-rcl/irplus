@@ -156,11 +156,13 @@
                                 </c:url>
                                 <tr>
                                    <td class="baseTableImage">
-                                       <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${child.primaryPicture}" var="url"/>
-                                       <c:if test="${url != null}">
-                                            <img  src="${url}"/>
+                                       <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
+                                           <c:param name="collectionId" value="${child.id}"/>
+                                            <c:param name="irFileId" value="${child.primaryPicture.id}"/>
+                                       </c:url>
+                                       <c:if test="${child.primaryPicture != null}">
+                                           <img height="66px" width="100px"  src="${url}"/>
                                        </c:if>
-                                       
                                    </td>
                                    <td>
                                        <p><strong><a href="${institutionalCollectionUrl}">${child.name}</a></strong></p>

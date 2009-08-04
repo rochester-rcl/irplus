@@ -284,7 +284,7 @@
                       <tr>
                           <c:if test="${version.item.publiclyViewable || (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '') || showPublication}">
                           <td class="${rowType}">
-                              <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${version.item.primaryImageFile.irFile}" var="url"/>
+                              <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${version.item.primaryImageFile}" var="url"/>
                               <c:if test="${url != null}">
                                   <img src="${url}"/>
                               </c:if>

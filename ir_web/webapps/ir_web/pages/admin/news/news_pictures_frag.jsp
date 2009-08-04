@@ -34,10 +34,14 @@
 			<c:set value="even" var="rowType" />
 			<tr>
 				<td class="${rowType}">
-				    <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${newsItem.primaryPicture}" var="url"/>
-                    <c:if test="${url != null}">
-                        <img src="${url}"/>
-                    </c:if>
+				 
+                 <c:url var="url" value="/newsThumbnailDownloader.action">
+                    <c:param name="newsItemId" value="${newsItem.id}"/>
+                    <c:param name="irFileId" value="${newsItem.primaryPicture.id}"/>
+                 </c:url>
+                 <c:if test="${newsItem.primaryPicture != null}">
+                     <img height="66px" width="100px" src="${url}"/>
+                 </c:if>
 				   
 				</td>
 				<c:url var="pictureUrl" value="/downloadNewsItemsPicture.action">
@@ -81,10 +85,14 @@
 
 			<tr>
 				<td class="${rowType}">
-				    <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${irFile}" var="url"/>
-                    <c:if test="${url != null}">
-                        <img src="${url}"/>
+                    <c:url var="url" value="/newsThumbnailDownloader.action">
+                        <c:param name="newsItemId" value="${newsItem.id}"/>
+                        <c:param name="irFileId" value="${irFile.id}"/>
+                    </c:url>
+                    <c:if test="${irFile != null}">
+                        <img height="66px" width="100px" src="${url}"/>
                     </c:if>
+                    
 				</td>
 				<c:url var="pictureUrl" value="/downloadNewsItemsPicture.action">
 					<c:param name="newsItemId" value="${newsItem.id}" />

@@ -51,9 +51,11 @@
                          
                            <tr>
                                <td class="${rowType}">
-                                   <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${irFile}" var="url"/>
-                                   <c:if test="${url != null}">
-                                        <img  src="${url}"/>
+                                   <c:url var="url" value="/repositoryThumbnailDownloader.action">
+                                       <c:param name="irFileId" value="${irFile.id}"/>
+                                   </c:url>
+                                   <c:if test="${irFile != null}">
+                                       <img height="66px" width="100px" src="${url}"/>
                                    </c:if>
                                </td>
      
