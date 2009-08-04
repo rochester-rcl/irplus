@@ -172,11 +172,11 @@
 						                        onMouseOut="this.className='${rowClass}'">
 						                        <urstb:td width="125px">
 						                            <c:if test="${researcher.public}">
-						                                 <c:url var="url" value="/researcherThumbnailDownloader.action">
-                                                             <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
-                                                             <c:param name="researcherId" value="${researcher.id}"/>
-                                                         </c:url>
-                                                         <c:if test="${researcher.primaryPicture != null}">
+						                                <c:if test="${ir:hasThumbnail(researcher.primaryPicture)}">
+						                                    <c:url var="url" value="/researcherThumbnailDownloader.action">
+                                                                <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
+                                                                <c:param name="researcherId" value="${researcher.id}"/>
+                                                            </c:url>
                                                            <img height="66px" width="100px" src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
@@ -333,12 +333,12 @@
 						                        onMouseOut="this.className='${rowClass}'">
 						                        <urstb:td width="125px">
 						                            <c:if test="${researcher.public}">
-						                                 <c:url var="url" value="/researcherThumbnailDownloader.action">
-                                                             <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
-                                                             <c:param name="researcherId" value="${researcher.id}"/>
-                                                         </c:url>
-                                                         <c:if test="${researcher.primaryPicture != null}">
-                                                           <img height="66px" width="100px" src="${url}"/>
+						                                <c:if test="${ir:hasThumbnail(researcher.primaryPicture)}">
+						                                    <c:url var="url" value="/researcherThumbnailDownloader.action">
+                                                                <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
+                                                                 <c:param name="researcherId" value="${researcher.id}"/>
+                                                            </c:url>
+                                                            <img height="66px" width="100px" src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
 			                                         <c:if test="${researcher.primaryPicture == null || !researcher.public}">

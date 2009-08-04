@@ -192,7 +192,7 @@
 						                        
 						                        <urstb:td>
 						                        
-						                             <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile != null }">
+						                             <c:if test="${ir:hasThumbnail(institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile)}">
 						                                  <ir:itemTransformUrl itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url" systemCode="PRIMARY_THUMBNAIL" download="true"/>
 						                                  <c:if test="${url != null}">
 						                                       <img height="66px" width="100px" src="${url}" />
@@ -404,10 +404,10 @@
 						                        onMouseOver="this.className='highlight'"
 						                        onMouseOut="this.className='${rowClass}'">
 						                        <urstb:td>
-						                             <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile != null }">
-						                              <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url"/>
+						                             <c:if test="${ir:hasThumbnail(institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile)}">
+						                               <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url"/>
                                                        <c:if test="${url != null}">
-                                                         <img height="66px" width="100px" src="${url}"/></a>
+                                                         <img height="66px" width="100px" src="${url}"/>
                                                        </c:if> 
 			                                         </c:if>	
 						                        </urstb:td>

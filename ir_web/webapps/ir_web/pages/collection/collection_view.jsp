@@ -156,11 +156,11 @@
                                 </c:url>
                                 <tr>
                                    <td class="baseTableImage">
-                                       <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
-                                           <c:param name="collectionId" value="${child.id}"/>
-                                            <c:param name="irFileId" value="${child.primaryPicture.id}"/>
-                                       </c:url>
-                                       <c:if test="${child.primaryPicture != null}">
+                                       <c:if test="${ir:hasThumbnail(child.primaryPicture)}">
+                                           <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
+                                                <c:param name="collectionId" value="${child.id}"/>
+                                                <c:param name="irFileId" value="${child.primaryPicture.id}"/>
+                                           </c:url>
                                            <img height="66px" width="100px"  src="${url}"/>
                                        </c:if>
                                    </td>

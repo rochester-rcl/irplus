@@ -51,10 +51,10 @@
                          
                            <tr>
                                <td class="${rowType}">
-                                   <c:url var="url" value="/repositoryThumbnailDownloader.action">
-                                       <c:param name="irFileId" value="${irFile.id}"/>
-                                   </c:url>
-                                   <c:if test="${irFile != null}">
+                                   <c:if test="${ir:hasThumbnail(irFile)}">
+                                       <c:url var="url" value="/repositoryThumbnailDownloader.action">
+                                           <c:param name="irFileId" value="${irFile.id}"/>
+                                       </c:url>
                                        <img height="66px" width="100px" src="${url}"/>
                                    </c:if>
                                </td>

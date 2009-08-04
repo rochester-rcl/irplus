@@ -31,11 +31,11 @@
        
         <tr>
             <td class="baseTableImage">
-                <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
-                    <c:param name="collectionId" value="${institutionalCollection.id}"/>
-                    <c:param name="irFileId" value="${institutionalCollection.primaryPicture.id}"/>
-                 </c:url>
-                 <c:if test="${institutionalCollection.primaryPicture != null}">
+                <c:if test="${ir:hasThumbnail(institutionalCollection.primaryPicture)}">
+                    <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
+                        <c:param name="collectionId" value="${institutionalCollection.id}"/>
+                        <c:param name="irFileId" value="${institutionalCollection.primaryPicture.id}"/>
+                     </c:url>
                      <img height="66px" width="100px" src="${url}"/>
                  </c:if>
             </td>
