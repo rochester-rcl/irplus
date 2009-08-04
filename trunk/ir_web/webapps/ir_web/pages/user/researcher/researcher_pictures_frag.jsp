@@ -48,10 +48,13 @@
 						<table align="center" >
 						<tr>
 						<td>
-						      <ir:transformUrl var="url" irFile="${researcher.primaryPicture}"  systemCode="PRIMARY_THUMBNAIL" download="true"/>
-				              <c:if test="${url != null}">
-				                  <img src="${url}"/>
-				              </c:if>		
+                            <c:url var="url" value="/researcherThumbnailDownloader.action">
+                                <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
+                                <c:param name="researcherId" value="${researcher.id}"/>
+                            </c:url>
+                            <c:if test="${researcher.primaryPicture != null}">
+                                <img height="66px" width="100px" src="${url}"/>
+                            </c:if>
 						 </td>
 						 </tr>
 		
@@ -93,10 +96,13 @@
 				<table align="center" >
 				<tr>
 				<td>
-				    <ir:transformUrl var="url" irFile="${irFile}"  systemCode="PRIMARY_THUMBNAIL" download="true"/>
-				    <c:if test="${url != null}">
-				        <img src="${url}"/>
-				    </c:if>			    
+				    <c:url var="url" value="/researcherThumbnailDownloader.action">
+                        <c:param name="irFileId" value="${irFile.id}"/>
+                        <c:param name="researcherId" value="${researcher.id}"/>
+                    </c:url>
+                    <c:if test="${researcher.primaryPicture != null}">
+                        <img height="66px" width="100px" src="${url}"/>
+                    </c:if>	    
 				    				   
 				 </td>
 				 </tr>

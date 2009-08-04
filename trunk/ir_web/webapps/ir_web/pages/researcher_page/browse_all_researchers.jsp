@@ -172,12 +172,15 @@
 						                        onMouseOut="this.className='${rowClass}'">
 						                        <urstb:td width="125px">
 						                            <c:if test="${researcher.public}">
-						                                 <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
-                                                         <c:if test="${url != null}">
-                                                             <img height="66px" width="100px" src="${url}"/>
+						                                 <c:url var="url" value="/researcherThumbnailDownloader.action">
+                                                             <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
+                                                             <c:param name="researcherId" value="${researcher.id}"/>
+                                                         </c:url>
+                                                         <c:if test="${researcher.primaryPicture != null}">
+                                                           <img height="66px" width="100px" src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
-			                                         <c:if test="${url == null || !researcher.public}">
+			                                         <c:if test="${researcher.primaryPicture == null || !researcher.public}">
 	                                                      <img height="66px" width="100px" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
 			                                         </c:if>	
 						                        </urstb:td>
@@ -330,12 +333,15 @@
 						                        onMouseOut="this.className='${rowClass}'">
 						                        <urstb:td width="125px">
 						                            <c:if test="${researcher.public}">
-						                                 <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${researcher.primaryPicture}" var="url"/>
-                                                         <c:if test="${url != null}">
-                                                             <img height="66px" width="100px" src="${url}"/>
+						                                 <c:url var="url" value="/researcherThumbnailDownloader.action">
+                                                             <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
+                                                             <c:param name="researcherId" value="${researcher.id}"/>
+                                                         </c:url>
+                                                         <c:if test="${researcher.primaryPicture != null}">
+                                                           <img height="66px" width="100px" src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
-			                                         <c:if test="${url == null || !researcher.public}">
+			                                         <c:if test="${researcher.primaryPicture == null || !researcher.public}">
 	                                                      <img height="66px" width="100px" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
 			                                         </c:if>	
 						                        </urstb:td>

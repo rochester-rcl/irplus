@@ -229,10 +229,14 @@
                       </c:if>
                       <tr>
                           <td class="${rowType}">
-                          <ir:transformUrl irFile="${version.irFile}"  var="url" systemCode="PRIMARY_THUMBNAIL" download="true"/>
-                              <c:if test='${url != null}'>
-                              <img src="${url}"/>
-                              </c:if>
+                              
+                              <c:if test='${ir:hasThumbnail(version.irFile)}'>
+                                  <c:url var="url" value="/user/personalFileThumbnailDownloader.action">
+                                      <c:param name="personalFileId" value="${personalFile.id}"/>
+                                      <c:param name="versionNumber" value="${version.versionNumber}"/>
+                                  </c:url>
+                                  <img height="66px" width="100px" src="${url}"/>
+                             </c:if>
                           </td>
                           <c:url var="personalFileDownloadUrl" value="/user/personalFileDownload.action">
 	                          <c:param name="personalFileId" value="${personalFile.id}"/>

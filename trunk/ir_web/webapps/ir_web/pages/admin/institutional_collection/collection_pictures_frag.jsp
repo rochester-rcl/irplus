@@ -35,10 +35,13 @@
 			<c:set value="even" var="rowType" />
 			<tr>
 				<td class="${rowType}">
-				    <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${collection.primaryPicture}" var="url"/>
-                    <c:if test="${url != null}">
-                        <img src="${url}"/>
-                    </c:if>
+				<c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
+                    <c:param name="collectionId" value="${collection.id}"/>
+                    <c:param name="irFileId" value="${collection.primaryPicture.id}"/>
+                 </c:url>
+                 <c:if test="${collection.primaryPicture != null}">
+                     <img height="66px" width="100px" src="${url}"/>
+                 </c:if>
 				</td>
 				<td class="${rowType}">
 				<button class="ur_button"
@@ -78,10 +81,13 @@ There is currently no primary picture.
 
 			<tr>
 				<td class="${rowType}">
-				    <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${irFile}" var="url"/>
-                    <c:if test="${url != null}">
-                        <a href="${institutionalCollectionUrl}"><img src="${url}"/></a>
-                    </c:if>
+				 <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
+                    <c:param name="collectionId" value="${collection.id}"/>
+                    <c:param name="irFileId" value="${irFile.id}"/>
+                 </c:url>
+                 <c:if test="${irFile != null}">
+                     <img height="66px" width="100px" src="${url}"/>
+                 </c:if>
 				</td>
 				<td class="${rowType}">
 				<button class="ur_button"

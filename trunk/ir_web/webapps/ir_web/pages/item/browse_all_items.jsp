@@ -193,7 +193,7 @@
 						                        <urstb:td>
 						                        
 						                             <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile != null }">
-						                                  <ir:transformUrl irFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile}" var="url" systemCode="PRIMARY_THUMBNAIL" download="true"/>
+						                                  <ir:itemTransformUrl itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url" systemCode="PRIMARY_THUMBNAIL" download="true"/>
 						                                  <c:if test="${url != null}">
 						                                       <img height="66px" width="100px" src="${url}" />
 						                                  </c:if>
@@ -405,12 +405,10 @@
 						                        onMouseOut="this.className='${rowClass}'">
 						                        <urstb:td>
 						                             <c:if test="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile != null }">
-						                              <ir:transformUrl systemCode="PRIMARY_THUMBNAIL" download="true" irFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile}" var="url"/>
+						                              <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url"/>
                                                        <c:if test="${url != null}">
                                                          <img height="66px" width="100px" src="${url}"/></a>
                                                        </c:if> 
-						                               
-						                                     
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>
