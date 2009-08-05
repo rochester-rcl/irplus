@@ -160,7 +160,7 @@ public class NextResearcherPicture extends ActionSupport {
     	    }
     		else if( type.equals(PREV))
     	    {
-    			System.out.println( "PREV = " + currentLocation  );
+    			log.debug( "PREV = " + currentLocation  );
     			
     			// at position 0 get - so very last and 0 are loaded
     			// get two before very last
@@ -171,7 +171,7 @@ public class NextResearcherPicture extends ActionSupport {
     	    		currentLocation = currentLocation + 1;
     	    	} 
     	    	// position 0 and 1 are loaded - so get very last two
-    	    	if( currentLocation == 1)
+    	    	else if( currentLocation == 1)
     	    	{
     	    		currentLocation = researcherCount - 2;
     	    		researchers.addAll(researcherService.getPublicResearchersByLastFirstName(currentLocation, 2, OrderType.ASCENDING_ORDER));
