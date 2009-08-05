@@ -473,6 +473,10 @@ public class FileWebUtilFunctions {
 	 * @return
 	 */
 	public static boolean hasThumbnail(IrFile irFile) {
+		if( irFile == null )
+		{
+			return false;
+		}
 		return repositoryService.getTransformByIrFileSystemCode(irFile.getId(), TransformedFileType.PRIMARY_THUMBNAIL) != null ? true: false;
 	}
 
