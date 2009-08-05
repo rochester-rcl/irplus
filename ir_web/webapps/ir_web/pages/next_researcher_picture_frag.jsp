@@ -39,6 +39,9 @@
                         <c:param name="researcherId" value="${researcher.id}"/>
                     </c:url>
                     <img height="66px" width="100px" src="${url}"/>
+                </c:if>
+                <c:if test="${!ir:hasThumbnail(researcher.primaryPicture)}">
+                	   <img height="66px" width="100px" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
                 </c:if>	    												
 	        </td>   
 	        <td>
