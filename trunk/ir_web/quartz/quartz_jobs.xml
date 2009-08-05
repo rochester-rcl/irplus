@@ -35,7 +35,7 @@
                 <job-name>SubscriptionEmailer</job-name>
                 <job-group>DEFAULT</job-group>
                 
-                <cron-expression>0 0 1 ? * FRI</cron-expression>
+                <cron-expression>0 0 1 ? * SUN-SAT</cron-expression>
             </cron>
         </trigger>
     </job>
