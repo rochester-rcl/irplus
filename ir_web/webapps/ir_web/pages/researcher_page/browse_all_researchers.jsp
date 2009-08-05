@@ -180,7 +180,7 @@
                                                            <img height="66px" width="100px" src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
-			                                         <c:if test="${researcher.primaryPicture == null || !researcher.public}">
+			                                         <c:if test="${!ir:hasThumbnail(researcher.primaryPicture) || !researcher.public}">
 	                                                      <img height="66px" width="100px" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
 			                                         </c:if>	
 						                        </urstb:td>
