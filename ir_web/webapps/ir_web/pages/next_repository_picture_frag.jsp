@@ -24,7 +24,7 @@
         <c:param name="irFileId" value="${irFile.id}"/>
     </c:url>
     
-   <img class="repository_image"  src="${pictureUrl}"/>
+   <img class="repository_image" width="466px" height="278px" src="${pictureUrl}"/>
 
 <table class="buttonTable">
     <tr>
