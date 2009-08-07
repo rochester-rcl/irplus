@@ -1,6 +1,5 @@
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
 
-
 <!--  
    Copyright 2008 University of Rochester
 
@@ -40,17 +39,17 @@
         <ur:styleSheet href="page-resources/css/tables.css"/>
 
         <!-- Dependencies --> 
-        <ur:js src="page-resources/images/help-images/user/page-resources/yui/yahoo-dom-event/yahoo-dom-event.js"/>
-        <ur:js src="page-resources/images/help-images/user/page-resources/yui/connection/connection-min.js"/>
-        <ur:js src="page-resources/images/help-images/user/page-resources/yui/container/container_core-min.js"/>
-        <ur:js src="page-resources/images/help-images/user/page-resources/yui/menu/menu-min.js"/>
+        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/page-resources/yui/yahoo-dom-event/yahoo-dom-event.js"/>
+        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/page-resources/yui/connection/connection-min.js"/>
+        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/page-resources/yui/container/container_core-min.js"/>
+        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/page-resources/yui/menu/menu-min.js"/>
         
         <!-- Source File -->
-        <ur:js src="page-resources/images/help-images/user/page-resources/js/menu/main_menu.js"/>
+        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/page-resources/js/menu/main_menu.js"/>
         
         <!--  base path information -->
- 	    <ur:js src="page-resources/images/help-images/user/pages/js/base_path.js"/>
- 	    <ur:js src="page-resources/images/help-images/user/page-resources/js/util/ur_util.js"/>
+ 	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/pages/js/base_path.js"/>
+ 	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/user/page-resources/images/help-images/user/page-resources/js/util/ur_util.js"/>
    
     </head>
     
@@ -65,6 +64,9 @@
             <div id="bd">
                <h3>User Help (DRAFT)</h3> 
                
+
+
+
 
 <a id="Back to top"></a>
 <h4><a href="#Document Description">1. Document Description</a><br/></h4>
@@ -183,7 +185,7 @@ Welcome to irplus. Yourhomepage should look similar to the one below (not includ
 numbers). This does not show a fully loaded ir plus system; for screen shots of our alpha system with
 over 5,000 items please see appendix A.<br/> 
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/HomePage.jpg"><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Home_Page.jpg"><br/>
 
 
 Here is a description of the numbered items:
@@ -204,7 +206,7 @@ Here is a description of the numbered items:
 
 By selecting the Login option it will take you to the following screen<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/UserLogin.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/User_Login.jpg"><br/><br/>
 
 <ol>
 <li> <b>User Name</b> – user name entered when account was created. Currently this can be
@@ -217,7 +219,7 @@ you to create a new account.<br/></li>
 Selecting <b>Forgot Password</b> lets you enter your user name and an email will be sent to your default address. Selecting <b>Create New Account</b> allows you to create a new basic account in the system.
 Select the Create New account option. This will take you to the following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/CreateAcoount.jpg"><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Create_Acoount.jpg"><br/>
 
 <br/>
 Enter your information. Create a password that you feel is secure. Select an affiliation and
@@ -227,24 +229,24 @@ getting an account.<br/><br/>
 Once you are done entering the information, click “Create Account.” This should result in the
 following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AccountCraetionSuccessful.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Account_Craetion_Successful.jpg"><br/><br/>
 
 You should get at least one email like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/E-mailconfirmation.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Email_confirmation.jpg"><br/><br/>
 
 Follow or copy and paste the link into your browser. This should take you to the login screen –
 enter your user name and password and select the “Login” button. This should show you a
 screen like the following:<br/>
 <br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/E-mailAddressVerified.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Email_Address_Verified.jpg"><br/><br/>
 
 <b>Note: Each time you add a new email to your account, you must verify that email.</b><br/>
 <br/>
 You may also get another email like the following depending on the type of affiliation you
 choose:
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AffilationVerfied.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Affilation_Verfied.jpg"><br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
 
 
@@ -273,11 +275,11 @@ Administrator<br/><br/>
 To manage account information once you have logged in, go to Welcome [Your User Name] -> My
 Account as shown below<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Gotomyaccount.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Go_to_my_account.jpg"><br/><br/>
 
 This will bring you to the following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Myaccount.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/My_account.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -300,7 +302,7 @@ who publish into the system.</li><br/><br/>
 To change your password, select the change password button. This should bring up the following
 screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/ChangePassword.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Change_Password.jpg"><br/><br/>
 
 Enter the new password and confirm new password. Click the submit button.<br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
@@ -313,7 +315,7 @@ cannot be changed until the new email has been verified. This prevents the steal
 within the system.<br/><br/>
 The following is a screen shot of the Emails tab:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Managingyoure-mails.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Managing_your_emails.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -342,24 +344,24 @@ email, to verify that address in the system.</li><br/><br/>
 
 To add a new email, select the new email button. The following screen will appear:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addinganewemail.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_new_email.jpg"><br/><br/>
 
 Enter the new email and select submit. You should see a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/E-mailsentmessageforchangeofe-mail.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Email_sent_message_for_change_of_email.jpg"><br/><br/>
 
 Clicking ok brings you back to the screen. Notice the new email says Pending Verification. You should
 receive an email similar to the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/E-mailrecievedforchangeofe-mail.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Email_recieved_for_change_of_email.jpg"><br/><br/>
 
 By following the address, you will be asked to log in and once logged in see the following verification:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/NewE-mailaddressverified.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/New_Email_address_verified.jpg"><br/><br/>
 
 Going back to your account, you should see both emails as verified:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Viewnewe-mailadded.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/View_new_email_added.jpg"><br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
 
 
@@ -369,7 +371,7 @@ select the name when publishing (rather than typing it in every time). You can a
 the publishing process. Names will only be needed by users who will be publishing. The following is a
 screen shot of the Publication Names tab:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/ManagingPublicationNames.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Managing_Publication_Names.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -386,7 +388,7 @@ The following is a description of the numbered items:<br/><br/>
 <h4><a id="Adding a Publication Name">4.3.1 Adding a Publication Name</a></h4>
 To add a name under which you will publish, select the new name button<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingaPublicationName.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_Publication_Name.jpg"><br/><br/>
 
 Enter the information and click submit. The Authoritative name checkbox allows you to set a name as
 your “authoritative” name. This allows the system to associate one primary name with your account,
@@ -399,7 +401,7 @@ while also allowing you to publish under multiple names if needed.<br/><br/>
 The workspace is where you can author, co-author and publish your work into the system. All users
 except for basic users will be taken to this area when they log in.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Workspace–FileandFolderManagement.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Workspace_File_and_Folder_Management.jpg"><br/><br/>
 
 Description of numbered items:<br/><br/>
 <ol>
@@ -441,7 +443,7 @@ Folders are a way to organize your files. To create a folder, simply click “Ne
 <h4><a id="Adding a File">5.2 Adding a File</a></h4>
 To add a file select the add file button. You should see a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingaFile.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_File.jpg"><br/><br/>
 
 The following is a list of the fields:<br/><br/>
 <ol>
@@ -453,18 +455,18 @@ you can do it here.</li><br/><br/>
 
 To upload the file, select the browse button. You should see a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Browseafile.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Browse_a_file.jpg"><br/><br/>
 
 Navigate on your local system to the file you would like to upload. Once you select the file, click the
 Open button.<br/><br/>
 The following shows a file I have selected to upload:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Selectafile.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Select_a_file.jpg"><br/><br/>
 
 By selecting the submit button the file will be uploaded into the current path. Once the file is uploaded
 you will see it in your workspace, as pictured below.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Infoofthefile.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Info_of_the_file.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -492,12 +494,12 @@ The following is a description of the numbered items:<br/><br/>
 
 To edit a file the best practice is to select Lock & Edit file:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Lock&editafile.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Lock_&_edit_a_file.jpg"><br/><br/>
 
 Select the drop down arrow next to the file and select Lock & Edit. This will bring up the following
 screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/OpenorSaveyourfileforeditingafterlockingit.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Open_or_Save_your_file_for_editing_after_locking_it.jpg"><br/><br/>
 
 The following is a list of the numbered items:<br/><br/>
 <ol>
@@ -514,11 +516,11 @@ You can now edit the file on your local file system.
 To add a new version to a file, select the drop down and select the Add New Version option as shown
 below.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addanewversionofyourfile.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Add_a_new_version_of_your_file.jpg"><br/><br/>
 
 You will be presented with a window like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addanewversionofyourfile_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Add_a_new_version_of_your_file_1.jpg"><br/><br/>
 
 Select the file you wish to upload using the Browse option (See the section on adding a file).<br/><br/>
 1. Points to the keep locked option. If you wish to store the file in its current state to work on
@@ -527,7 +529,7 @@ to a file you are collaborating on with another person, to prevent them from edi
 you are ready.<br/><br/>
 Once you have selected the new version select submit. You should see the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addanewversionofyourfile_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Add_a_new_version_of_your_file_2.jpg"><br/><br/>
 
 Notice (1) – The version number has changed. There are now two versions of the file.<br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
@@ -538,11 +540,11 @@ Notice (1) – The version number has changed. There are now two versions of the
 To view all the versions and properties of the file select the properties link in the table or select the
 properties option in the file drop down as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Viewversionsandpropertiesofafile_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/View_versions_and_properties_of_a_file_1.jpg"><br/><br/>
 
 This will show the following page:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Viewversionsandpropertiesofafile_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/View_versions_and_properties_of_a_file_2.jpg"><br/><br/>
 
 The following is a list of the numbered arrows:<br/><br/>
 
@@ -579,17 +581,17 @@ changed to collaborators on the file.</li><br/><br/>
 <h4><a id="Creating a Folder">5.6  Creating a Folder</a></h4>
 To create a folder, select the New Folder button. This should produce a screen like the following.
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/CreatingaFolder_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Creating_a_Folder_1.jpg"><br/><br/>
 
 Enter the Folder name and optional description and select submit. This will add the folder to the current
 location.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/CreatingaFolder_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Creating_a_Folder_2.jpg"><br/><br/>
 
 By selecting the folder name you will navigate into the folder. For example selecting the “IR Plus
 Documentation” folder, the screen will look like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/CreatingaFolder_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Creating_a_Folder_3.jpg"><br/><br/>
 
 Here you can add more files or folders as needed.<br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
@@ -598,15 +600,15 @@ Here you can add more files or folders as needed.<br/><br/>
 You can use the drop down to remove files or folders one at a time. To remove multiple files and folders
 at once, select the files and folders you wish to delete as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/DeletingFile(s)orFolder(s)_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Deleting_Files_or_Folders_1.jpg"><br/><br/>
 
 Then select the “Action on checked files and folders …” box as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/DeletingFile(s)orFolder(s)_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Deleting_Files_or_Folders_2.jpg"><br/><br/>
 
 This should bring up a confirmation for the delete:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/DeletingFile(s)orFolder(s)_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Deleting_Files_or_Folders_3.jpg"><br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
 
 
@@ -614,20 +616,20 @@ This should bring up a confirmation for the delete:<br/><br/>
 You may need to organize or reorganize your files. To do this you can move files and folders around.
 For example, the following shows two Folders and one File:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/MovingFilesandFolders_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Moving_Files_and_Folders_1.jpg"><br/><br/>
 
 Say we want to move the file “IR_Plus_Admin_Manual.docx” and “IR Plus Documentation” into the
 Repository Information Folder. First select the folder and file you wish to move as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/MovingFilesandFolders_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Moving_Files_and_Folders_2.jpg"><br/><br/>
 
 Next select the Move option in the “Action on checked files and folders …” box as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/MovingFilesandFolders_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Moving_Files_and_Folders_3.jpg"><br/><br/>
 
 This will bring up a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/MovingFilesandFolders_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Moving_Files_and_Folders_4.jpg"><br/><br/>
 
 The following is a list of the numbered items:<br/><br/>
 <ol>
@@ -640,12 +642,12 @@ The following is a list of the numbered items:<br/><br/>
 Select the hyperlinked folder Repository Information in the Destination (5) to navigate into the folder.
 The screen will look something like below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/MovingFilesandFolders_5.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Moving_Files_and_Folders_5.jpg"><br/><br/>
 
 Selecting the Move button will place the files in the path shown in the “Move To Location,” and take you
 to the location where the files and folders were moved as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/MovingFilesandFolders_6.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Moving_Files_and_Folders_6.jpg"><br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr><hr>
 
 
@@ -653,21 +655,21 @@ to the location where the files and folders were moved as shown below:<br/><br/>
 The system allows you to share files. You can do this in two ways. You can share a single file at a time
 by selecting the drop down for a file and selecting Share as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing,CollaborationandCoAuthoring_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing_Collaboration_and_CoAuthoring_1.jpg"><br/><br/>
 
 Or, you can select multiple files and folders at once using their checkboxes. By selecting a folder you will
 share all files within that folder, including files within sub folders, but this DOES NOT share the folder.
 Adding more files to the folder afterwards will not automatically share those files. The following
 demonstrates sharing some files:<br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing,CollaborationandCoAuthoring_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing_Collaboration_and_CoAuthoring_2.jpg"><br/><br/>
 
 Then select the “Action on checked files and folders” drop down Share option, as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing,CollaborationandCoAuthoring_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing_Collaboration_and_CoAuthoring_3.jpg"><br/><br/>
 
 This will take you to a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing,CollaborationandCoAuthoring_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing_Collaboration_and_CoAuthoring_4.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -698,23 +700,23 @@ If the person you wish to share with does not have an account, this is not a pro
 them by typing in their email directly into the email box as shown below. If the person actually does
 have an account and you didn’t realize it, do not worry, the system will realize this and handle it for you.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharingwithsomeonewhodoesnotyethaveanaccount_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing_with_someone_who_doesnot_yet_have_an_account_1.jpg"><br/><br/>
 
 Here I’m sharing with an email account that does not exist in the system. Once I click the invite user
 button the following screen should show:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharingwithsomeonewhodoesnotyethaveanaccount_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing_with_someone_who_doesnot_yet_have_an_account_2.jpg"><br/><br/>
 
 The following shows that the file is to be shared with the person who has an email natesarr@gmail.com.
 Once the person has created an account, the [to be shared] note will be gone. Notice you can also
 UnShare the file. The following shows the email a user who does not exist in the system will receive
 when they are invited to work on a document.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharingwithsomeonewhodoesnotyethaveanaccount_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing_with_someone_who_doesnot_yet_have_an_account_3.jpg"><br/><br/>
 
 Following the link will take them to the following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharingwithsomeonewhodoesnotyethaveanaccount_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Sharing_with_someone_who_doesnot_yet_have_an_account_4.jpg"><br/><br/>
 
 There are a couple of situations when a user has been invited by email:<br/><br/>
 <ol>
@@ -730,7 +732,7 @@ through the account creation process.</li><br/><br/>
 If you think the person you want to share with may already have an account in the system, you can
 search for them. Select the Search For Users To Share with tab. This will bring up the following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Lookingtoseeifsomeonealreadyexistsinthesystem_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Looking_to_see_if_someone_already_exists_in_the_system_1.jpg"><br/><br/>
 
 Enter the name and select search. This will return all users it finds in the system matching the search.
 Select the email if you wish to share with the user. This will return you to the Invite user screen to fill in
@@ -740,11 +742,11 @@ the remaining information.<br/><br/>
 <h4><a id="Receiving a Shared File">6.3  Receiving a Shared File</a></h4>
 Once a file has been shared with you, it will be placed in your shared inbox tab – see picture below (1):<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/ReceivingaSharedFile_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Receiving_a_Shared_File_1.jpg"><br/><br/>
 
 Once a file shows up in your shared file inbox, you should move it into your workspace:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/ReceivingaSharedFile_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Receiving_a_Shared_File_2.jpg"><br/><br/>
 
 The following describes the numbered items:<br/><br/>
 <ol>
@@ -759,7 +761,7 @@ The following describes the numbered items:<br/><br/>
 To move the file select the check box next to the file and click the move button. You should see a
 screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/ReceivingaSharedFile_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Receiving_a_Shared_File_3.jpg"><br/><br/>
 
 The following is a list of the numbered items:<br/><br/>
 <ol>
@@ -771,7 +773,7 @@ The following is a list of the numbered items:<br/><br/>
 Since the user does not have any folders, the only location they can put the file is in the “root” directory,
 known as My Files. Once the shared file is moved the screen will look like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/ReceivingaSharedFile_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Receiving_a_Shared_File_4.jpg"><br/><br/>
 
 Now John Doe is sharing a file with ndsarr. Notice that even though the file is 3.08 MB this is not
 charged to John Doe’s account (1) and the File System Size is still 0. This is because only the owner is
@@ -784,7 +786,7 @@ When working on a shared file the user should lock the file as shown in section 
 be able to see who is working on the file. From the previous example, if ndsarr locked the file for
 editing, John Doe would see the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/WorkingonasharedFile.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Working_on_a_shared_File.jpg"><br/><br/>
 
 Notice the note that the file is locked and the lock icon is shown to all collaborators.<br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
@@ -796,7 +798,7 @@ vacation and forgot to unlock the file – the owner can override a lock. This f
 used in rare circumstances and is generally considered rude if done for no reason at all. Only an owner
 of the file can override a lock. The following shows how this is done:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/OverridingaLock.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Overriding_a_Lock.jpg"><br/><br/>
 
 Once this option is selected, the lock is removed.<br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
@@ -805,11 +807,11 @@ Once this option is selected, the lock is removed.<br/><br/>
 If for some reason you have made a mistake with the sharing on your files, you can change the sharing
 of a file. To manage the sharing of a file, select the Share option as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/UnsharingandChangingSharingPermissions_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Unsharing_and_Changing_Sharing_Permissions_1.jpg"><br/><br/>
 
 The following screen should appear:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/UnsharingandChangingSharingPermissions_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Unsharing_and_Changing_Sharing_Permissions_2.jpg"><br/><br/>
 
 The following is a list of the numbered items<br/><br/>
 <ol>
@@ -820,14 +822,14 @@ The following is a list of the numbered items<br/><br/>
 To unshared the file with the user, select the Unshare option. You will get a confirmation screen like the
 following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/UnsharingandChangingSharingPermissions_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Unsharing_and_Changing_Sharing_Permissions_3.jpg"><br/><br/>
 
 Select yes to un-share the file with the user or no to cancel.<br/><br/>
 
 To edit the sharing permissions a user currently has, select the Edit Link. You will see a screen like the
 following with the user’s current permissions shown:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/UnsharingandChangingSharingPermissions_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Unsharing_and_Changing_Sharing_Permissions_4.jpg"><br/><br/>
 
 Make changes as necessary.
 <br/><br/>
@@ -871,7 +873,7 @@ a file, don’t worry. To navigate around your file system, use the Current Loca
 listed under File System. For example, navigating into the Repository Information folder from the
 previous example shows the following screen:<br><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addingfilestoapublication_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_files_to_a_publication_1.jpg"><br/><br/>
 
 Notice the path has changed and shows that I am in the Repository Information folder (1). An Add
 button is also displayed next to the folder listed under File System. Selecting this option will add all files
@@ -884,14 +886,14 @@ will be added to the publication. You can also add a description to the file (7)
 file, select the Remove link next to the file.<br/><br/>
 Shown below is an example of two files added to the publication.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addingfilestoapublication_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_files_to_a_publication_2.jpg"><br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
 
 <h4><a id="Adding Information to a Publication">7.2  Adding Information to a Publication</a></h4>
 The following screens show the information that can be added to a publication – there are four screen
 shots that show the entire form.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingInformationtoaPublication_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Information_to_a_Publication_1.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -904,7 +906,7 @@ The following is a description of the numbered items:<br/><br/>
 <li>Thesis indicator</li><br/><br/>
 
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingInformationtoaPublication_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Information_to_a_Publication_2.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 
@@ -930,7 +932,7 @@ extent types.</li><br/><br/>
 <li>Remove Extent – Remove the extent from the publication.</li><br/><br/>
 
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingInformationtoaPublication_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Information_to_a_Publication_3.jpg"><br/><br/>
 
 
 <li>Drop down list to select language of the publication</li><br/><br/>
@@ -945,7 +947,7 @@ extent types.</li><br/><br/>
 materials currently under review for commercial publication <b>(under construction)</b></li><br/><br/>
 
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingInformationtoaPublication_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Information_to_a_Publication_4.jpg"><br/><br/>
 
 
 <li>Date the publication was originally created</li><br/><br/>
@@ -962,7 +964,7 @@ venues such as journals or books.Selecting No will hide fields 33-36.</li><br/><
 The system does its best to maintain authority control with respect to authors within the system. The
 following shows the screen to add contributors to publications:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingPublicationContributorsPublishingNameAuthorityControl_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Publication_Contributors_Publishing_Name_Authority_Control_1.jpg"><br/><br/>
 
 <ol>
 <li>Full text search of existing contributor names in the system</li><br/><br/>
@@ -971,7 +973,7 @@ following shows the screen to add contributors to publications:<br/><br/>
 The first thing you should do is search to see if the contributor name already exists in the system.
 Searching for the name “Nathan” will result in the following update to the screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingPublicationContributorsPublishingNameAuthorityControl_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Publication_Contributors_Publishing_Name_Authority_Control_2.jpg"><br/><br/>
 
 The system found two contributor names with the name Nathan. The following is a description of the
 numbered items:<br/><br/>
@@ -989,7 +991,7 @@ enter an alternate name for the contributor.</li><br/><br/>
 By selecting Add next to any of the names it will place that name in the contributor side, as shown
 below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingPublicationContributorsPublishingNameAuthorityControl_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Publication_Contributors_Publishing_Name_Authority_Control_3.jpg"><br/><br/>
 
 The following is a description of the numbered items: <br/><br/>
 <ol>
@@ -1001,7 +1003,7 @@ want.</li><br/><br/>
 If you search and cannot find the contributor, you can add a new contributor by selecting the Add New
 Person button. The following shows the screen to do this:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingPublicationContributorsPublishingNameAuthorityControl_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Publication_Contributors_Publishing_Name_Authority_Control_4.jpg"><br/><br/>
 
 The following is a description of the numbered items<br/><br/>
 <ol>
@@ -1014,7 +1016,7 @@ accessible in future searches when submitting new publications.<br/><br/>
 
 <h4><a id="Preview Publication">7.4  Preview Publication</a></h4>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/PreviewPublication.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Preview_Publication.jpg"><br/><br/>
 
 The following shows the information stored in the publication for preview. The following is a description
 of the numbered items:<br/><br/>
@@ -1029,7 +1031,7 @@ of the numbered items:<br/><br/>
 Once you are satisfied with the publication you can select the Submit to Publication option. The
 following shows the submit to collection screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Submittingtoacollection_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Submitting_to_a_collection_1.jpg"><br/><br/>
 
 Depending on permissions, you may or may not be able to submit to a collection. The following lists the
 three different possibilities:<br/><br/>
@@ -1046,14 +1048,14 @@ will result in the following screen. I have permission to make “direct submiss
 collection, but my submission to Biology will be reviewed before being finalized. NOTE – you can submit
 to multiple collections.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Submittingtoacollection_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Submitting_to_a_collection_2.jpg"><br/><br/>
 
 The following shows the publication added to the Anthropology and Biology collections (1). You can
 remove a collection from the “Submit to” list by selecting Remove (2). To navigate into the collection to
 submit to a sub-collection, click the collection name in the table on the left. The example below shows
 navigating into the Anthropology collection:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Submittingtoacollection_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Submitting_to_a_collection_3.jpg"><br/><br/>
 
 To navigate back, use the path links (1). (See comment – I think maybe we need one more shot, showing
 what you see when you’ve clicked Submit and the thing is really, finally done.)<br/><br/>
@@ -1063,7 +1065,7 @@ what you see when you’ve clicked Submit and the thing is really, finally done.
 If you decide to finish a publication later or want to submit to new collections, all publications you
 create are stored in the My Publications area. Below is a screen shot of the My Publications Tab:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/MyPublicationsTab.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/My_Publications_Tab.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -1083,7 +1085,7 @@ To edit an existing publication select the name of the publication. This will re
 process. If the publication has already been published to an existing collection, a new version of the
 publication will be created. A note like the following will alert you that a new version is being created:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/EditinganexistingpublicationandVersioning.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Editing_an_existing_publication_and_Versioning.jpg"><br/><br/>
 
 Selecting yes will create the new version. If the publication has not yet been published, a new version
 will not be created and you will be taken to the normal create publication process.<br/><br/>
@@ -1092,7 +1094,7 @@ will not be created and you will be taken to the normal create publication proce
 
 <h4><a id="Publication Properties">7.6.2  Publication Properties</a></h4>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/PublicationProperties.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Publication_Properties.jpg"><br/><br/>
 
 The following is a list of the numbered items:<br/><br/>
 <ol>
@@ -1105,21 +1107,21 @@ institutional collections, it shows where the publication exists in the institut
 To create a collection to organize your publications, select the New Collection button. The following
 screen will be shown when creating a new collection:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/PersonalCollections–organizingpublications_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Personal_Collections_organizing_publications_1.jpg"><br/><br/>
 
 When you enter the name, the collection will be added to the current location. The example below
 shows the created Collection:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/PersonalCollections–organizingpublications_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Personal_Collections_organizing_publications_2.jpg"><br/><br/>
 
 You can also move publications and collections. The following shows me using the drop down menu to
 move a selected collection and publication:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/PersonalCollections–organizingpublications_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Personal_Collections_organizing_publications_3.jpg"><br/><br/>
 
 The following screen should be displayed:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/PersonalCollections–organizingpublications_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Personal_Collections_organizing_publications_4.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -1131,13 +1133,13 @@ The following is a description of the numbered items:<br/><br/>
 </ol>
 Navigating into the General Publishing Collection by clicking its name shows the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/PersonalCollections–organizingpublications_5.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Personal_Collections_organizing_publications_5.jpg"><br/><br/>
 
 By selecting the move option, the publication and personal collection are moved into the General
 Publishing collection. I am then taken to the display of the contents of the General Publishing collection,
 as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/PersonalCollections–organizingpublications_6.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Personal_Collections_organizing_publications_6.jpg"><br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
 
 
@@ -1148,11 +1150,11 @@ have been published to institutional collections.<br/><br/>
 To delete a publication or collection you can select the drop down next to the publication, as shown
 below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/DeletingpublicationsandPersonalCollections_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Deleting_publications_and_Personal_Collections_1.jpg"><br/><br/>
 
 You will be asked to confirm the delete as shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/DeletingpublicationsandPersonalCollections_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Deleting_publications_and_Personal_Collections_2.jpg"><br/><br/>
 
 Selecting yes will delete the selected publications and collections. In this case it is a single delete.<br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr><hr>
@@ -1162,12 +1164,12 @@ After a while, you may find that you need to search for files within your worksp
 workspace, select the “Search My Workspace” tab. This will bring up a screen like the following:
 By entering<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/WorkspaceSearching_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Workspace_Searching_1.jpg"><br/><br/>
 
 By entering a word or phrase, the system will perform a full text search against files, folders and
 publications. The example below shows a search for IR:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/WorkspaceSearching_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Workspace_Searching_2.jpg"><br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr><hr>
 
 
@@ -1182,11 +1184,11 @@ another institution).<br/><br/>
 <h4><a id="Accessing Researcher Page Tools">9.1  Accessing Researcher Page Tools</a></h4>
 To access the researcher page tools, select the Researcher Page menu as shown below see (1):<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AccessingResearcherPageTools_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Accessing_Researcher_Page_Tools_1.jpg"><br/><br/>
 
 This should take you to a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AccessingResearcherPageTools_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Accessing_Researcher_Page_Tools_2.jpg"><br/><br/>
 
 The following is a description of the fields<br/><br/>
 <ol>
@@ -1230,7 +1232,7 @@ everyone.</li><br/><br/>
 <h4><a id="Adding Research to your Researcher Page">9.2  Adding Research to your Researcher Page</a></h4>
 Selecting the Research tab should show the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingResearchtoyourResearcherPage.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Research_to_your_Researcher_Page.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -1244,7 +1246,7 @@ The following is a description of the numbered items:<br/><br/>
 <h4><a id="Adding a Folder">9.2.1  Adding a Folder</a></h4>
 To add a folder, select the add New Folder button. This should bring up a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingaFolder.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_Folder.jpg"><br/><br/>
 
 Enter the folder name and description and select Submit. This should create a folder in the current
 location.<br/><br/>
@@ -1254,7 +1256,7 @@ location.<br/><br/>
 To add a link to the researcher page in the current location, select the New Link option. This should
 bring up a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addingalink.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_link.jpg"><br/><br/>
 
 Enter the Link Name and Link URL and select Submit.<br/><br/><a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
 
@@ -1262,7 +1264,7 @@ Enter the Link Name and Link URL and select Submit.<br/><br/><a href="#Back to t
 Selecting Add File will allow you to add files from your workspace. Selecting Add File will take you to the
 following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingaFileinresearcher'spage_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_File_in_researchers_page_1.jpg"><br/><br/>
 
 The following is a list of numbered items:<br/><br/>
 <ol>
@@ -1278,12 +1280,12 @@ page.</li><br/><br/>
 You can navigate to your files by selecting folders. For example if I click on the folder name “Repository
 Information” the screen will look like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingaFileinresearcher'spage_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_File_in_researchers_page_2.jpg"><br/><br/>
 
 Selecting the Add link will add the file to the current location in your Researcher Files and Folders. For
 example, if I add IR_Plus_Admin_Manual.docx, it will look like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingaFileinresearcher'spage_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_File_in_researchers_page_3.jpg"><br/><br/>
 
 You can alter the version by selecting the drop down associated with the filename. The default is the
 most recent file version (1).<br/><br/>
@@ -1291,7 +1293,7 @@ If you wish to navigate to a new location on your researcher page, select a fold
 Researcher Files and Folders. For example, if I selected Nate’s Folder, the page would look like the
 following (I do not yet have any files or links in Nate’s Folder):<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingaFileinresearcher'spage_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_File_in_researchers_page_4.jpg"><br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
 
 <h4><a id="Adding a personal publication">9.2.4  Adding a personal publication</a></h4>
@@ -1299,7 +1301,7 @@ following (I do not yet have any files or links in Nate’s Folder):<br/><br/>
 You can add a personal publication by selecting Add Publication. This will bring you to a screen like the
 following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addingapersonalpublication_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_personal_publication_1.jpg"><br/><br/>
 
 The following is a list of the numbered items:<br/><br/>
 <ol>
@@ -1316,12 +1318,12 @@ to your researcher page.</li><br/><br/>
 You can navigate to your publications by selecting collections. For example if I select “General
 Publishing Collection” the screen will look like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addingapersonalpublication_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_personal_publication_2.jpg"><br/><br/>
 
 Selecting the Add link will add the publication to the current location in your Researcher Files and
 Folders. For example, if I add IR Plus Administration, it will look like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addingapersonalpublication_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_personal_publication_3.jpg"><br/><br/>
 
 You can alter which version is displayed using the drop down. The default is the most recent version
 (1).<br/><br/>
@@ -1329,12 +1331,12 @@ If you wish to navigate to a different location on the researcher page, select a
 Researcher Files and Folders. For example, if I selected Nate’s Folder, the page would look like the
 following (there are currently no files or links in Nate’s Folder):<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Addingapersonalpublication_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_a_personal_publication_4.jpg"><br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
 
 <h4><a id="Removing Items from the researcher page">9.2.5  Removing Items from the researcher page</a></h4>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/RemovingItemsfromtheresearcherpage_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Removing_Items_from_the_researcher_page_1.jpg"><br/><br/>
 
 Select the files you wish to remove and select the Delete button. <b>(NOTE – this does not delete files or
 publications in your personal account, it only removes them from your researcher page).</b><br/><br/>
@@ -1343,11 +1345,11 @@ publications in your personal account, it only removes them from your researcher
 <h4><a id="Adding Pictures">9.2.6  Adding Pictures</a></h4>
 To add pictures, select the Pictures Tab. This should bring up a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingPicturestoresearcher'spage_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Pictures_to_researchers_page_1.jpg"><br/><br/>
 
 To add a picture, select Upload Picture. This will bring up a screen like the following.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingPicturestoresearcher'spage_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Pictures_to_researchers_page_2.jpg"><br/><br/>
 
 The following is a list of the numbered items:<br/><br/>
 <ol>
@@ -1356,8 +1358,7 @@ The following is a list of the numbered items:<br/><br/>
 site.</li><br/><br/>
 </ol>
 Selecting and uploading an image file will result in a screen like the following:<br/><br/>
-
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingPicturestoresearcher'spage_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Pictures_to_researchers_page_3.jpg"><br/><br/>
 
 You can upload as many pictures as you like.<br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
@@ -1367,19 +1368,19 @@ If you would like to have special links located in your personal information rat
 section – for example links to your CV, personal web site or department, you can add them using the
 Links tab. The screen should look like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingLinkstoreseacher'spage_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Links_to_reseachers_page_1.jpg"><br/><br/>
 
 To add a link, select the Add Link button. The screen shot below shows an example where two links
 have been added:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AddingLinkstoreseacher'spage_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Adding_Links_to_reseachers_page_2.jpg"><br/><br/>
 
 Selecting the up and down arrows allows you to put the links in the order you want (1).<br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><br/>
 
 <h4><a id="Previewing your researcher page">9.2.8  Previewing your researcher page</a></h4>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Previewingyourresearcherpage.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/Previewing_your_researcher_page.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -1425,6 +1426,11 @@ Publication Page<br/><br/>
 
 <img src="${pageContext.request.contextPath}/page-resources/images/help-images/user/AppendixA_7.jpg"><br/><br/>
 <a href="#Back to top" style="font-size=10px"> Back to top </a><hr>
+
+
+
+
+
 
 
                

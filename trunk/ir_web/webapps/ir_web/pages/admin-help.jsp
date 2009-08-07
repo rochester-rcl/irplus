@@ -1,6 +1,5 @@
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
 
-
 <!--  
    Copyright 2008 University of Rochester
 
@@ -40,17 +39,17 @@
         <ur:styleSheet href="page-resources/css/tables.css"/>
 
         <!-- Dependencies --> 
-        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/yui/yahoo-dom-event/yahoo-dom-event.js"/>
-        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/yui/connection/connection-min.js"/>
-        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/yui/container/container_core-min.js"/>
-        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/yui/menu/menu-min.js"/>
+        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/yui/yahoo-dom-event/yahoo-dom-event.js"/>
+        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/yui/connection/connection-min.js"/>
+        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/yui/container/container_core-min.js"/>
+        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/yui/menu/menu-min.js"/>
         
         <!-- Source File -->
-        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/js/menu/main_menu.js"/>
+        <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/js/menu/main_menu.js"/>
         
         <!--  base path information -->
- 	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/pages/js/base_path.js"/>
- 	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/js/util/ur_util.js"/>
+ 	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/pages/js/base_path.js"/>
+ 	    <ur:js src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/${pageContext.request.contextPath}/page-resources/images/help-images/admin/page-resources/images/help-images/user/page-resources/js/util/ur_util.js"/>
    
     </head>
     
@@ -65,7 +64,7 @@
             <div id="bd">
                <h3>Administration Help (DRAFT)</h3>     
                
-   
+
 <a id="Back to top"></a>
 <h4><a href="#Document Description">1. Document Description</a><br/></h4>
 <ul>
@@ -298,7 +297,7 @@ Log into the system using the administration username and password set up when t
 <h4><a id="Home account – Initial view">4.1  Home account – Initial view</a></h4>
 Once you login you should see a home account like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Home_account – Initial view.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Home_account_Initial view.jpg"><br/><br/>
 
 <br/>
 Here is a description of the numbered items <b>(More about the workspace is in the user manual – this is just here to describe what will be seen on an initial login by the administrator)</b>:<br/>
@@ -396,7 +395,7 @@ to upload the picture. Once the picture is uploaded, the system will return you 
 Administration page. The file will be stored and thumb nailed. The picture will now show on your home
 page in the <b>Pictures module</b>.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_pictures _to_the Picture Module_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_pictures_to_the_Picture_Module_2.jpg"><br/><br/>
 </p>
 <a href="#Back to top" style="text-align:right ; font-size=10px"> Back to top </a>
 <hr width="1200px">
@@ -453,7 +452,7 @@ using their email.</li><br/>
 <br/>
 From the main user Administration screen select the new User Button<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AddinganewUser.jpg"><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_a_new_User.jpg"><br/>
 
 This will bring up the screen to add a new user. The following is the description of the form shown
 above:<br/><br/>
@@ -504,11 +503,11 @@ screen.<br/>
 
 <h4><a id="Editing a user">5.2.2  Editing a user</a></h4>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Editingauser_1.jpg"><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Editing_a_user_1.jpg"><br/>
 
 1. Select the hyper linked user name. This should bring up a screen like the following:<br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Editingauser_2.jpg"><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Editing_a_user_2.jpg"><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -527,7 +526,7 @@ published material in the repository</li>
 
 <h4><a id="Managing Emails">5.2.2.1  Managing Emails</a></h4>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/ManagingEmails.jpg"><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Managing_Emails.jpg"><br/>
 
 This system allows users to store multiple emails. This allows sharing of files to multiple email addresses
 that belong to a single user to be associated with a single account.<br/>
@@ -546,7 +545,7 @@ user to their authoritative name. The following is how to do this.<br/>
 To add an authoritative name to a user, search for the authoritative name. In the example below I have
 searched for Bach. This will return all Authoritative names that contain Bach.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AuthoritativeNameTab.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Authoritative_Name_Tab.jpg"><br/><br/>
 
 Description of numbered items:<br/><br/>
 <ol>
@@ -563,11 +562,11 @@ authoritative name from the user account.</li><br/>
 <h3><a id="User Groups Administration Menu">5.3  User Groups Administration Menu</a></h3>
 By selecting the User Groups menu option:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/UserGroupsAdministrationMenu_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/User_Groups_Administration_Menu_1.jpg"><br/><br/>
 
 You should see a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/UserGroupsAdministrationMenu_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/User_Groups_Administration_Menu_2.jpg"><br/><br/>
 
 1. Buttons to manage user groups<br/><br/>
 <ul>
@@ -583,13 +582,13 @@ You should see a screen like the following:<br/><br/>
 To create a new user group, select the New User Group Button. This will bring up a screen like the
 following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/CreatinganewUserGroup_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Creating_a_new_User_Group_1.jpg"><br/><br/>
 
 Enter in the Name and (optionally) the description and select the submit button. This will create a user
 group with the specified name.<br/>
 Selecting submit will take you to the following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/CreatinganewUserGroup_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Creating_a_new_User_Group_2.jpg"><br/><br/>
 
 The following is a description of the numbered items<br/><br/>
 1. Tabs for managing group information<br/><br/>
@@ -606,11 +605,11 @@ The following is a description of the numbered items<br/><br/>
 <h4><a id="Add a user to a group">5.3.2  Add a user to a group</a></h4>
 To add a user to a group first select the name of the group to edit:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Addausertoagroup_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Add_a_user_to_a_group_1.jpg"><br/><br/>
 
 Select the Group Members Tab (shown below):<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Addausertoagroup_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Add_a_user_to_a_group_2.jpg"><br/><br/>
 <ol>
 <li> Search box for a full text search against all users.</li><br/><br/>
 <li> Current members of the group</li><br/><br/>
@@ -633,11 +632,11 @@ See adding a user to group. The same functionality applies in Group Administrato
 <h3><a id="Institutional Collections Administration Menu">5.4  Institutional Collections Administration Menu</a></h3>
 By selecting this menu option:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/InstitutionalCollectionsAdministrationMenu_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Institutional_Collections_Administration_Menu_1.jpg"><br/><br/>
 
 You should get a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/InstitutionalCollectionsAdministrationMenu_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Institutional_Collections_Administration_Menu_2.jpg"><br/><br/>
 
 <ol>
 <li> Buttons for actions that can be performed</li><br/>
@@ -660,13 +659,13 @@ To add a new collection<br/><br/>
 1. Select the New Collection Button. You should see a pop-up box like the following:
 <br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Addinganewcollection_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_a_new_collection_1.jpg"><br/><br/>
 
 2. Enter the collection name (here we have entered Anthropology)<br/><br/>
 3. Select the submit button – this will create an institutional collection with the specified name and
 bring you to the following screen:<br><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Addinganewcollection_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_a_new_collection_2.jpg"><br/><br/>
 
 <ol>
 <li>Current location – since the system allows for an unlimited number of collections within
@@ -693,7 +692,7 @@ module.</li><br/>
 <h4><a id="Adding Images/Logos to a collection">5.4.2  Adding Images/Logos to a collection</a></h4>
 Select the Images tab on the collection page.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AddingImagesLogostoacollection_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_Images_Logos_to_a_collection_1.jpg"><br/><br/>
 
 The following is a list of the numbered items:
 <ol>
@@ -708,14 +707,14 @@ able to cycle through the pictures on the collection page.</li><br/><br/>
 To upload a picture:<br/><br/>
 1. Select the Upload Picture Button. You should see a screen like the following<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AddingImagesLogostoacollection_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_Images_Logos_to_a_collection_2.jpg"><br/><br/>
 
 2. Select the browse button and navigate to the image file on your local file system<br/><br/>
 3. (Optional) If it is the primary picture, check the Primary Picture option<br/><br/>
 4. Select the submit option<br/><br/>
 In the example below I have uploaded an image and have selected the primary picture option.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AddingImagesLogostoacollection_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_Images_Logos_to_a_collection_3.jpg"><br/><br/>
 <a href="#Back to top" style="text-align:right ; font-size=10px"> Back to top </a>
 <hr width="1200px">
 
@@ -724,7 +723,7 @@ In the example below I have uploaded an image and have selected the primary pict
 <h4><a id="Collection Permissions and Groups">5.4.3  Collection Permissions and Groups</a></h4>
 To add/edit permissions on a collection, select the Permissions & Groups Tab<br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/CollectionPermissionsandGroups.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Collection_Permissions_and_Groups.jpg"><br/><br/>
 
 The following is a list of the numbered items<br/><br/>
 1. Change the “collections view” status. The default is publicly viewable. It can either be publicly
@@ -739,7 +738,7 @@ The following is a list of the numbered items<br/><br/>
 <h4><a id="Changing Public/Private Status">5.4.3.1  Changing Public/Private Status</a></h4>
 By selecting the Change Permissions button it should bring up a dialog box like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/ChangingPublic/PrivateStatus_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Changing_Public_Private_Status_1.jpg"><br/><br/>
 
 If the collection is public the options are:<br/><br/>
 	1. Set the collection as private – make only the specified collection private. Do not change the
@@ -755,7 +754,7 @@ If the collection is private (hidden) the options are:<br/><br/>
 <h4><a id="Adding Groups">5.4.3.2  Adding Groups</a></h4>
 Select the Add Groups to Collection link. This should bring you to a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AddingGroups_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_Groups_1.jpg"><br/><br/>
 
 The following is a list of the numbered items.<br/><br/>
 1. Done Link – this allows user to return to the collection after selecting adding group permissions<br/><br/>
@@ -763,7 +762,7 @@ The following is a list of the numbered items.<br/><br/>
 To add permissions for a particular group, select the Add Action. This should bring up a screen like the
 following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AddingGroups_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_Groups_2.jpg"><br/><br/>
 
 The following are the list of actions that can be assigned to the groups:<br/><br/>
 <b>ADMINISTRATION</b> – allows the users in the group to administer the institutional collection<br/><br/>
@@ -780,7 +779,7 @@ permissions.<br/><br/>
 You will be returned to the collection management area. Selecting the Permissions and Groups tab
 again will bring up the following screen, showing the group that has been added and their rights:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AddingGroups_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_Groups_3.jpg"><br/><br/>
 <a href="#Back to top" style="text-align:right ; font-size=10px"> Back to top </a>
 <hr width="1200px">
 
@@ -788,7 +787,7 @@ again will bring up the following screen, showing the group that has been added 
 <h4><a id="Collection Subscribers">5.4.4  Collection Subscribers</a></h4>
 To view collection subscribers, select the subscribers tab. You will see a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/CollectionSubscribers_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Collection_Subscribers_1.jpg"><br/><br/>
 <a href="#Back to top" style="text-align:right ; font-size=10px"> Back to top </a>
 <hr width="1200px">
 
@@ -804,18 +803,18 @@ See user’s manual<br/><br/>
 This allows users to add links to be shown for the collection – in the Links module. The following is a
 screen shot of the Department Links tab:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/DepartmentLinks_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Department_Links_1.jpg"><br/><br/>
 
 The following is a list of the numbered items:<br/><br/>
 1. Add Link – add a new link to be displayed in the Links module of the collection<br/><br/>
 2. List of ordered links<br/><br/>
 To add a link, select the Add Link button. You should see a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/DepartmentLinks_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Department_Links_2.jpg"><br/><br/>
 
 Enter in the link information and select submit. Below, I have created two links:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/DepartmentLinks_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Department_Links_3.jpg"><br/><br/>
 
 1. Order can be changed by selecting the down or up arrow on the respective links.<br/><br/>
 <a href="#Back to top" style="text-align:right ; font-size=10px"> Back to top </a>
@@ -829,13 +828,13 @@ to the collection you wish to move. In the example below, we will be moving the 
 “Anthropology Faculty Articles” into the “Anthropology” collection. First we check the collection we
 wish to move<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/MovingCollections_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Moving_Collections_1.jpg"><br/><br/>
 
 1. Checked collection to move<br/><br/>
 2. Select the Move button<br/><br/>
 Selecting the Move button takes you to the following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/MovingCollections_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Moving_Collections_2.jpg"><br/><br/>
 
 The following is a description of the numbered items<br/><br/>
 1. Cancel Button – cancel the move<br/><br/>
@@ -847,12 +846,12 @@ in the current location.<br/><br/>
 Since we want to move the Anthropology Faculty Articles into Anthropology, we will select the
 Anthropology collection. This will bring up a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/MovingCollections_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Moving_Collections_3.jpg"><br/><br/>
 
 Now we can select the Move button.<br/><br/>
 This will take you to the following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/MovingCollections_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Moving_Collections_4.jpg"><br/><br/>
 
 The collection is now moved underneath the Anthropology collection<br/><br/>
 1. Now shows that the path to this collection is /ir_plus/Anthropology<br/><br/>
@@ -885,11 +884,11 @@ similarly to Content Types.</b><br/><br/>
 <h4><a id="Content Types">5.5.1  Content Types</a></h4>
 Content types allow users to describe the type of content they are placing in the system.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/ContentTypes_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Content_Types_1.jpg"><br/><br/>
 
 Selecting the Content Types menu should take you to the screen below.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/ContentTypes_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Content_Types_2.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -916,7 +915,7 @@ at once</li><br/>
 <h4><a id="Adding a new content type">5.5.2  Adding a new content type</a></h4>
 Select the new content type button.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Addinganewcontenttype_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_a_new_content_type_1.jpg"><br/><br/>
 
 The content type name must be unique. If the content type name already exists, the new content type
 will not be created and the user will be notified the content type already exists.<br/><br/>
@@ -928,7 +927,7 @@ will not be created and the user will be notified the content type already exist
 Check the content types you wish to delete and select the delete button. You will see a confirmation
 like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Deletingacontenttype_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Deleting_a_content_type_1.jpg"><br/><br/>
 <a href="#Back to top" style="text-align:right ; font-size=10px"> Back to top </a>
 <hr width="1200px">
 
@@ -939,11 +938,11 @@ Authority Control. This allows all publications to point to one record that hold
 date, and names they have published under. To go to the name authority control administration area,
 go to Administration -> Person Name Authority menu item as shown below.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/PersonNameAuthority_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Person_Name_Authority_1.jpg"><br/><br/>
 
 You should see the following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/PersonNameAuthority_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Person_Name_Authority_2.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 
@@ -969,25 +968,25 @@ Person name authorities are created in several ways. One is in the administratio
 The other is during the submission process which is shown in the user manual.<br/><br/>
 Select the New Person button. You should see a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/CreatinganewPersonNameAuthority_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Creating_a_new_Person_Name_Authority_1.jpg"><br/><br/>
 
 Enter in the person name information and click the submit button. This will create a new authoritative
 name in the system. To view all names associated with the authoritative name or add other names that
 should be linked to the authoritative name, select the hyperlinked last name.<br/><br/>
 By selecting the hyperlinked last name in the PREVIOUS screen, you will see a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/CreatinganewPersonNameAuthority_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Creating_a_new_Person_Name_Authority_2.jpg"><br/><br/>
 
 To add another person name to this authoritative name, select the button: New Person Name. You
 should see a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/CreatinganewPersonNameAuthority_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Creating_a_new_Person_Name_Authority_3.jpg"><br/><br/>
 
 Notice there are a few differences. There is no birth date or death date. These are associated with the
 person, not each name. You can change the authoritative name by selecting the authoritative name
 check box. Below shows a Person Name Authority with two different names:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/CreatinganewPersonNameAuthority_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Creating_a_new_Person_Name_Authority_4.jpg"><br/><br/>
 <a href="#Back to top" style="text-align:right ; font-size=10px"> Back to top </a>
 <hr width="1200px">
 
@@ -1056,11 +1055,11 @@ not.</li><br/><br/>
 <h4><a id="Approving Affiliations">5.8.1  Approving Affiliations</a></h4>
 To approve an affiliation, go to the administration menu and select:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/ApprovingAffiliations_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Approving_Affiliations_1.jpg"><br/><br/>
 
 The following screen should be shown:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/ApprovingAffiliations_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Approving_Affiliations_2.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -1091,11 +1090,11 @@ Mime types allow the system to determine the content type of files. These can be
 over time. To go to mime types, select the Mime Types option in the Administration menu. It will take
 you to the Top Media Types which is the top level description of a mime type.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/MimeTypes_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Mime_Types_1.jpg"><br/><br/>
 
 You should see a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/MimeTypes_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Mime_Types_2.jpg"><br/><br/>
 
 The following is a list of the numbered items:<br/><br/>
 <ol>
@@ -1125,12 +1124,12 @@ The following is a list of the numbered items:<br/><br/>
 Sub types can be viewed by selecting the name of the top media type. Here is a screen shot of the Sub
 Types for the application top media type:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/SubTypes_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Sub_Types_1.jpg"><br/><br/>
 
 1. Points to the pdf application sub type. By selecting this, we navigate to the file extensions for
 the file type shown below:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/SubTypes_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Sub_Types_2.jpg"><br/><br/>
 
 Here an administrator can manage the extensions for a given sub type, in this case pdf.<br/><br/>
 
@@ -1202,11 +1201,11 @@ This allows the administrator to ignore IP addresses that should not be included
 stores IP addresses, so adding an IP address to the Ignore list will retroactively remove hits from the
 count. This could confuse users as the counts may go down.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Statistics–IgnoreIPAddresses_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Statistics_Ignore_IPAddresses_1.jpg"><br/><br/>
 
 This should bring you to a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Statistics–IgnoreIPAddresses_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Statistics_Ignore_IPAddresses_2.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 <ol>
@@ -1231,7 +1230,7 @@ The following is a description of the numbered items:<br/><br/>
 
 <h4><a id="Adding an ignore IP address">5.12.1  Adding an ignore IP address</a></h4>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AddinganignoreIPaddress_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_an_ignore_IPaddress_1.jpg"><br/><br/>
 
 1. Select New Ignore IpAddress Button.<br/><br/>
 2. Enter in a name and the “From” and “To” Range<br/><br/>
@@ -1245,11 +1244,11 @@ This will remove all counts from that range when reporting the hit counts.<br/><
 IR Plus allows a reviewer to review pending publications and approve or reject the publication. To access
 items to review go to Administration -> Review Pending Publications<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/ReviewPendingPublications_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Review_Pending_Publications_1.jpg"><br/><br/>
 
 This will bring up the following screen<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/ReviewPendingPublications_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Review_Pending_Publications_2.jpg"><br/><br/>
 
 The following is a list of the numbered items : <br/><br/>
 <ol>
@@ -1268,7 +1267,7 @@ The following is a list of the numbered items : <br/><br/>
 By selecting the name of the publication, the administrator can then accept or reject the publication.
 The following is the screen a reviewer will see by selecting the publication name.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AcceptingRejectingapublication_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Accepting_Rejecting_a_publication_1.jpg"><br/><br/>
 
 The following is a list of the numbered items:<br/><br/>
 <ol>
@@ -1282,7 +1281,7 @@ The following is a list of the numbered items:<br/><br/>
 Upon accepting the publication the user will be notified by email. If the publication is rejected, the
 reviewer will be shown the following screen:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/AcceptingRejectingapublication_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Accepting_Rejecting_a_publication_2.jpg"><br/><br/>
 
 The reviewer will be asked to enter in the reject reason. This reason for rejection will be sent to the
 submitter.<br/><br/>
@@ -1294,7 +1293,7 @@ submitter.<br/><br/>
 Administrators have the ability to manage publications. The following is the screen an administrator
 would see by visiting a publication.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/ManagingPublications_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Managing_Publications_1.jpg"><br/><br/>
 
 The following is a list of the numbered items:<br/><br/>
 <ol>
@@ -1329,13 +1328,13 @@ version. See publication process in user manual.<br/><br/>
 By selecting the withdraw publication button, the administrator can withdraw a publication. The
 following screen will be displayed:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/WithdrawReinstatePublication_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Withdraw_Reinstate_Publication_1.jpg"><br/><br/>
 
 The administrator must include a reason for the withdrawal and can opt to let the metadata be
 displayed. The administrator can also withdraw all versions.<br/><br/>
 Once the withdrawal is complete the screen will display the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/WithdrawReinstatePublication_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Withdraw_Reinstate_Publication_2.jpg"><br/><br/>
 
 The administrator can see all the data but a normal user will not. The withdrawal statements will always
 be in red. Also notice the withdraw button has changed to a Reinstate Publication button to allow the
@@ -1349,7 +1348,7 @@ publication to be reinstated at a later date.
 If an administrator determines a publication is in the wrong collection, the publication can be moved.<br/><br/>
 The following demonstrates how to move a publication after selecting the Move Publication Button.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/MovePublication_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Move_Publication_1.jpg"><br/><br/>
 
 The following is a description of the numbered items:<br/><br/>
 
@@ -1362,7 +1361,7 @@ collection. Currently we are in the bottom-most collection</li><br/><br/>
 
 If we select the Anthropology Collection (#3) the following screen is displayed:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/MovePublication_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Move_Publication_2.jpg"><br/><br/>
 
 <li>This shows the sub collections within the anthropology department.</li><br/><br/>
 </ol>
@@ -1374,7 +1373,7 @@ By selecting the move button, the thesis will be moved into the Anthropology col
 <h4><a id="Add new publication version">5.14.4  Add new publication version</a></h4>
 By selecting the Add New Version button we can create a new version of the publication.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Addnewpublicationversion_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Add_new_publication_version_1.jpg"><br/><br/>
 
 This displays the current personal collections and the options to add any personal publication as the
 new version.<br/><br/>
@@ -1386,7 +1385,7 @@ new version.<br/><br/>
 The permissions can be managed for a publication by selecting the Manage Permissions button. It will
 display a screen like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/ManagingPermissions_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Managing_Permissions_1.jpg"><br/><br/>
 
 The following is a description of the numbered items :<br/><br/>
 <ol>
@@ -1409,12 +1408,12 @@ not be checked</li><br/><br/>
 <h4><a id="Adding permissions to a publication">5.14.5.1  Adding permissions to a publication</a></h4>
 On the Publication Permissions tab, select Add Groups To Publication button.<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Addingpermissionstoapublication_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_permissions_to_a_publication_1.jpg"><br/><br/>
 
 This displays all groups available to give permissions to. Select the add button and you will see a screen
 like the following:<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Addingpermissionstoapublication_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Adding_permissions_to_a_publication_2.jpg"><br/><br/>
 
 The following is a description of the permissions for the publications<br/><br/>
 <ol>
@@ -1433,31 +1432,70 @@ permissions. If the file is viewable by all users this will allow everyone to vi
 private, first change this option then add the group or groups that can view the file by selecting “Add
 new user group.”<br/><br/>
 
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Addpermissionstoapublicationfile_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Add_permissions_to_a_publication_file_1.jpg"><br/><br/>
 <a href="#Back to top" style="text-align:right ; font-size=10px"> Back to top </a>
 <hr width="1200px"><hr width="1200px">
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <h1><b>TO DO</b></h1>
 
+<br/><br/><br/><br/><br/>
+
 <h3><a id="Repository Licenses">5.15 Repository Licenses</a></h3>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/RepositoryLicenses_1.jpg"><br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/RepositoryLicenses_2.jpg"><br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/RepositoryLicenses_3.jpg"><br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/RepositoryLicenses_4.jpg"><br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/RepositoryLicenses_5.jpg"><br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/RepositoryLicenses_6.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Repository_Licenses_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Repository_Licenses_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Repository_Licenses_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Repository_Licenses_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Repository_Licenses_5.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/Repository_Licenses_6.jpg"><br/><br/>
 
 
 <h3><a id="File Storage">5.16 File Storage</a></h3>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/FileStorage_1.jpg"><br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/FileStorage_2.jpg"><br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/FileStorage_3.jpg"><br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/FileStorage_4.jpg"><br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/FileStorage_5.jpg"><br/><br/>
-<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/FileStorage_6.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/File_Storage_1.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/File_Storage_2.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/File_Storage_3.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/File_Storage_4.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/File_Storage_5.jpg"><br/><br/>
+<img src="${pageContext.request.contextPath}/page-resources/images/help-images/admin/File_Storage_6.jpg"><br/><br/>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                           
