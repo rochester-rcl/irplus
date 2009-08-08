@@ -248,6 +248,10 @@
                            <a href="<c:url value="/admin/reIndexUsers.action"/>">Re-Index Users</a>
                            <br/>
                            <br/>
+                           <c:url var="resetAllHandles" value="/admin/resetAllHandles.action"/>
+                           <a href="${resetAllHandles}">Reset all handles</a>
+                           <br/>
+                           <br/>
                        </c:if>
 		           </div>
 	               <!--  end first tab -->
