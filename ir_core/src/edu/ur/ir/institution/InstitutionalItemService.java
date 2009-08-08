@@ -406,4 +406,21 @@ public interface InstitutionalItemService {
 	 * @return the found institutional item or null if item version is not found.
 	 */
 	public InstitutionalItemVersion getInstitutionalItemByHandleId(Long handleId);
+	
+	/**
+	 * Reset the institutional item url.
+	 * 
+	 * @param institutionalItem
+	 * @param institutionalItemVersion
+	 */
+	public void resetHandle(InstitutionalItem institutionalItem, InstitutionalItemVersion institutionalItemVersion);
+	
+	/**
+	 * Reset all handles in the system.
+	 * 
+	 * @param batchSize
+	 * @param repositoryId
+	 */
+	public void resetAllHandles(int batchSize, Long repositoryId);
+
 }
