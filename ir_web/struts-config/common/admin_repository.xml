@@ -51,6 +51,13 @@
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
         
+        <!--  reset all handles in the  repository -->
+        <action name="resetAllHandles" 
+            class="edu.ur.ir.web.action.repository.ResetAllHandles">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
         <action name="cancelRepository" 
             class="edu.ur.ir.web.action.repository.EditRepository">
             <interceptor-ref name="editStack"/>
