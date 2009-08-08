@@ -23,6 +23,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
+import edu.ur.ir.handle.HandleInfo;
+import edu.ur.ir.handle.HandleInfoDAO;
 import edu.ur.ir.institution.DeletedInstitutionalItem;
 import edu.ur.ir.institution.DeletedInstitutionalItemDAO;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -32,6 +36,7 @@ import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.institution.ReviewableItemService;
+import edu.ur.ir.institution.VersionedInstitutionalItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemSecurityService;
@@ -69,6 +74,15 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	
 	/** Reviewable item service */
 	private ReviewableItemService reviewableItemService;
+	
+	/** url generator for institutional items. */
+	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
+	
+	/** data access for handle information */
+	private HandleInfoDAO handleInfoDAO;
+	
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemService.class);
 	
 	/**
 	 * Delete an institutional item and all files that are not connected to other resources
@@ -552,5 +566,87 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public List<Long> getCollectionItemsIds(int rowStart, int maxResults,
 			InstitutionalCollection collection, OrderType orderType) {
 		return institutionalItemDAO.getCollectionItemsIds(rowStart, maxResults, collection, orderType);
+	}
+	
+	/**
+	 * Update the handle for a given item.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#resetHandle(edu.ur.ir.institution.InstitutionalItem, edu.ur.ir.institution.InstitutionalItemVersion)
+	 */
+	public void resetHandle(InstitutionalItem institutionalItem, InstitutionalItemVersion institutionalItemVersion)
+	{
+		HandleInfo info = institutionalItemVersion.getHandleInfo();
+		if( info != null )
+		{	
+		    String url = institutionalItemVersionUrlGenerator.createUrl(institutionalItem, institutionalItemVersion.getVersionNumber());
+		    info.setData(url);
+		    handleInfoDAO.makePersistent(info);
+		}
+	}
+	
+	/**
+	 * Reset all handles in the system.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#resetAllHandles(int, java.lang.Long)
+	 */
+	public void resetAllHandles(int batchSize, Long repositoryId )
+	{
+		if(batchSize <= 0 )
+		{
+			throw new IllegalStateException("Batch size cannot be less than or equal to 0 batch Size = " + batchSize);
+		}
+		
+		int rowStart = 0;
+		
+		int numberInstitutionalItems = institutionalItemDAO.getCount().intValue();
+		log.debug("processing a total of " + numberInstitutionalItems + " institutional Items ");
+		
+		
+		// increase number of users by batch size to make sure 
+		// all users are processed 
+		while(rowStart <= (numberInstitutionalItems + batchSize))
+		{
+			log.error("row start = " + rowStart);
+			log.error("batch size = " +  batchSize);
+			
+			// notice the minus one because we are starting at 0
+			log.error("processing " + rowStart + " to " + (rowStart + batchSize - 1) );
+			
+			
+		    List<InstitutionalItem> institutionalItems = institutionalItemDAO.getRepositoryItemsByName(rowStart, batchSize, repositoryId, OrderType.ASCENDING_ORDER);
+		    for( InstitutionalItem i : institutionalItems )
+		    {
+		    	VersionedInstitutionalItem versionedItem = i.getVersionedInstitutionalItem();
+		    	if( versionedItem != null )
+		    	{
+		    	    Set<InstitutionalItemVersion> versions = versionedItem.getInstitutionalItemVersions();
+		            for( InstitutionalItemVersion v : versions)
+		            {
+		        	    resetHandle(i, v);
+		            }
+		    	}
+		    }
+		    
+		    rowStart = rowStart + batchSize;
+		}
+
+		
+	}
+
+	public InstitutionalItemVersionUrlGenerator getInstitutionalItemVersionUrlGenerator() {
+		return institutionalItemVersionUrlGenerator;
+	}
+
+	public void setInstitutionalItemVersionUrlGenerator(
+			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
+	}
+
+	public HandleInfoDAO getHandleInfoDAO() {
+		return handleInfoDAO;
+	}
+
+	public void setHandleInfoDAO(HandleInfoDAO handleInfoDAO) {
+		this.handleInfoDAO = handleInfoDAO;
 	}
 }
