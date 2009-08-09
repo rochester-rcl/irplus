@@ -110,7 +110,7 @@ public class WebIoUtils {
         
         log.debug("user-agent = " + browserType);
         
-        if(browserType.indexOf("MSIE") > -1)
+        if(browserType != null && browserType.indexOf("MSIE") > -1)
         {
         	//use uri to encode the file name to prevent IE from
         	//putting underscores in file name
