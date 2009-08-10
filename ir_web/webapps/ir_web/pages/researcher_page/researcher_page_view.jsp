@@ -186,11 +186,11 @@
 		                           </c:if>
 		                           
 		                           <c:if test="${!ir:isStringEmpty(researcher.researchInterest)}">
-		                           <p> <strong> Research Interest </strong>  <br/> ${researcher.researchInterest}</p>
+		                           <p> <strong> Research Interests </strong>  <br/> ${researcher.researchInterest}</p>
 		                           </c:if>
 		                           
 		                           <c:if test="${!ir:isStringEmpty(researcher.teachingInterest)}">
-		                           <p> <strong> Teaching Interest </strong>  <br/> ${researcher.teachingInterest}</p>
+		                           <p> <strong> Teaching Interests </strong>  <br/> ${researcher.teachingInterest}</p>
 		                           </c:if>
 								</div>																												
 	                       </div>

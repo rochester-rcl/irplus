@@ -246,7 +246,7 @@
                             <table class="formTable">
                                 <tr>
                                      <td class="label">
-                                        <strong>Research Interest</strong>
+                                        <strong>Research Interests</strong>
                                     </td>
                                </tr>
                                <tr>
@@ -258,7 +258,7 @@
 
                                 <tr>
                                      <td class="label">
-                                        <strong>Teaching Interest</strong>
+                                        <strong>Teaching Interests</strong>
                                     </td>
                                     
                                </tr>
