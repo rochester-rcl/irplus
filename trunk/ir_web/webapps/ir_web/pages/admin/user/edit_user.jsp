@@ -78,7 +78,7 @@
   
     <div id="bd">
             
-        <form id="show_users" name="backToUsers" method="POST" action="admin/viewUsers.action">
+        <form id="show_users" name="backToUsers" method="POST" action="<c:url value="/admin/viewUsers.action"/>">
         
         	<button class="ur_button" type="submit"
 		                   onmouseover="this.className='ur_buttonover';"
