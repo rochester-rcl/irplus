@@ -26,6 +26,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.db.FileInfo;
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemFileSecurityService;
@@ -78,6 +79,9 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	/** User service */
 	private UserService userService; 
 	
+	/** service for dealing with sending out errors */
+	private ErrorEmailService errorEmailService;
+	
 	/** Item file security service */
 	private ItemFileSecurityService itemFileSecurityService; 
 	
@@ -129,8 +133,16 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         	
         	if( user == null || !genericItem.getOwner().equals(user))
         	{
-        	    downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
+        		try
+    			{
+        	        downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
             		itemFile.getIrFile());
+    			}
+    			catch(Exception e)
+      		    {
+      			  log.error(e);
+      			  errorEmailService.sendError(e);
+      		    }
         	}
         	downloadFile(itemFile);
         }
@@ -141,8 +153,16 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         	{
         		if(genericItem.getOwner().equals(user))
         		{
-        			downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
+        			try
+        			{
+        			    downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
                     		itemFile.getIrFile());
+        			}
+        			catch(Exception e)
+          		    {
+          			  log.error(e);
+          			  errorEmailService.sendError(e);
+          		    }
         		}
         		downloadFile(itemFile);
         	}
@@ -239,6 +259,10 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	public void setItemFileSecurityService(
 			ItemFileSecurityService itemFileSecurityService) {
 		this.itemFileSecurityService = itemFileSecurityService;
+	}
+
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
 	}
 
 
