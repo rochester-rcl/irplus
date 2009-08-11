@@ -17,8 +17,8 @@
 
 package edu.ur.ir.researcher.service;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -61,8 +61,10 @@ public class DefaultResearcherService implements ResearcherService{
 	public void deleteResearcher(Researcher researcher) {
 		log.debug("delete researcher called");
 		// delete the researcher's root files
-		Set<ResearcherFile> files = researcher.getRootFiles();
-		for(ResearcherFile rf : files)
+		LinkedList<ResearcherFile> rootFiles = new LinkedList<ResearcherFile>();
+		rootFiles.addAll(researcher.getRootFiles());
+		
+		for(ResearcherFile rf : rootFiles)
 		{
 			researcher.removeRootFile(rf);
 		    researcherFileSystemService.deleteFile(rf);
@@ -70,8 +72,9 @@ public class DefaultResearcherService implements ResearcherService{
 		
 		
 		// delete the researcher's root files
-		Set<ResearcherPublication> publications = researcher.getRootPublications();
-		for(ResearcherPublication publication : publications)
+		LinkedList<ResearcherPublication> rootPublications = new LinkedList<ResearcherPublication>();
+		rootPublications.addAll(researcher.getRootPublications());
+		for(ResearcherPublication publication : rootPublications)
 		{
 			researcher.removeRootPublication(publication);
 			researcherFileSystemService.deletePublication(publication);
@@ -79,15 +82,17 @@ public class DefaultResearcherService implements ResearcherService{
 		}
 
 		// delete the researcher's root links
-		Set<ResearcherLink> links = researcher.getRootLinks();
-		for(ResearcherLink link : links)
+		LinkedList<ResearcherLink> rootLinks = new LinkedList<ResearcherLink>();
+		rootLinks.addAll(researcher.getRootLinks());
+		for(ResearcherLink link : rootLinks)
 		{
 			researcher.removeRootLink(link);
 			researcherFileSystemService.deleteLink(link);
 		}
 
 		// Delete researcher's root folders
-		Set<ResearcherFolder> rootFolders = researcher.getRootFolders();
+		LinkedList<ResearcherFolder> rootFolders = new LinkedList<ResearcherFolder>();
+		rootFolders.addAll(researcher.getRootFolders());
 		for(ResearcherFolder rootFolder : rootFolders)
 		{
 			researcher.removeRootFolder(rootFolder);
