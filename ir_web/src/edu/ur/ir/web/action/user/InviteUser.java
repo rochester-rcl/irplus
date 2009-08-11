@@ -317,18 +317,34 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		
 		String[] emails = email.split(";");
 		
+		boolean errorSet = false;
 		
+		LinkedList<String> emailsToInvite = new LinkedList<String>();
+		
+		// do not let user share with themselves
 		for(String email : emails)
 		{
 			email = email.trim();
 			// Check if user exist in the system
 			IrUser invitedUser = userService.getUserForVerifiedEmail(email);
-			
 			//check if the user is sharing the file with themselves
 			if (invitingUser.equals(invitedUser)) {
-				inviteErrorMessage += getText("sharingWithYourself") + "\n";
-			}		
-			
+				if( !errorSet )
+				{
+				    inviteErrorMessage = getText("sharingWithYourself") + " ";
+				    errorSet = true;
+				}
+			}	
+			else 
+			{
+				emailsToInvite.add(email);
+			}
+		}
+		
+		// only invite users who are not the current user
+		for(String email : emailsToInvite)
+		{
+			IrUser invitedUser = userService.getUserForVerifiedEmail(email);
 			Set<VersionedFile>  versionedFiles = new HashSet<VersionedFile>();
 			for(PersonalFile pf : personalFilesToShare)
 			{
@@ -387,7 +403,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 					inviteUserService.sendEmailToExistingUser(inviteInfo);
 					inviteSent = true;
 				} catch(IllegalStateException e) {
-					inviteErrorMessage += getText("emailNotSent", new String[]{email}) + "\n";
+					inviteErrorMessage += getText("emailNotSent", new String[]{email}) +" ";
 				}
 					
 			} else {
@@ -401,7 +417,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 					inviteUserService.makeInviteInfoPersistent(inviteInfo);
 					inviteSent = true;
 				} catch(IllegalStateException e) {
-					inviteErrorMessage += getText("emailIncorrect", new String[]{email}) + "\n";
+					inviteErrorMessage += getText("emailIncorrect", new String[]{email}) + " ";
 				}
 			}
 		}
