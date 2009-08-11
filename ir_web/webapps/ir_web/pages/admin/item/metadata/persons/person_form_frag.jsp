@@ -67,7 +67,7 @@
 		         name="birthYear" 
 		         size="4" 
 		         maxlength ="4"
-		         value="${birthYear}"/> </td>
+		         value="${personNameAuthority.birthDate.year}"/> </td>
 	</tr>
 	<tr>       
 	    <td align="left" class="label">Death Year:</td>
@@ -76,7 +76,7 @@
 		         id="person_deathdate_year" 
 		         name="deathYear" 
 		         size="4" 
-		         value="${deathYear}"
+		         value="${personNameAuthority.deathDate.year}"
 		         maxlength ="4"/>
 		</td>
 	</tr>
