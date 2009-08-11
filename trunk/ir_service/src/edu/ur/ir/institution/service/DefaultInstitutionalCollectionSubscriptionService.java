@@ -72,7 +72,8 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 	/** format used for formatting dates */
 	private String dateFormat;
 	
-
+	/** address the email should be from */
+	private String fromAddress = "";
 	
 	/** email that users can use to ask questions */
 	private String helpEmail = "";
@@ -192,8 +193,9 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 		    String startDateStr = simpleDateFormat.format(startDate); 
 		    String endDateStr = simpleDateFormat.format(endDate); 
 		    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
-		    String subject = "New URResearch Publications for dates: " + startDateStr + " to " + endDateStr;
+		    String subject = "New URResearch Publications for dates: " + startDateStr + " - " + endDateStr;
 		    mimeMessageHelper.setSubject(subject);
+		    mimeMessageHelper.setFrom(fromAddress);
 		    mimeMessageHelper.setTo(user.getDefaultEmail().getEmail());
 		    mimeMessageHelper.setText(emailText.toString());
 		    mailSender.send(message);
@@ -341,6 +343,14 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 
 	public void setHelpEmail(String helpEmail) {
 		this.helpEmail = helpEmail;
+	}
+
+	public String getFromAddress() {
+		return fromAddress;
+	}
+
+	public void setFromAddress(String fromAddress) {
+		this.fromAddress = fromAddress;
 	}
 
 }
