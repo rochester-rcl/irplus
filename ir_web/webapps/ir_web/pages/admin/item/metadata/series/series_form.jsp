@@ -52,7 +52,7 @@
 			    value="${series.name}" size="45"/> </td>
 			</tr>
 			<tr>
-			    <td align="left" class="label">Number:*</td>
+			    <td align="left" class="label">Number:</td>
 			    <td align="left" colspan="2" class="input"> <input type="text" 
                 id="newSeriesForm_number" 
 			    name="series.number" 
