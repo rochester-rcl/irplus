@@ -10,6 +10,7 @@ import org.apache.struts2.interceptor.ServletResponseAware;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.db.FileInfo;
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherFileSystemService;
@@ -38,12 +39,9 @@ public class DownloadResearcherPublicationFile extends ActionSupport implements 
 	
 	/**  File to download */
 	private Long itemFileId;
-	
 
 	/** researcher publication id. */
 	private Long publicationId;
-
- 
     
 	/** Service for dealing with researcher file system information */
 	private ResearcherFileSystemService researcherFileSystemService;
@@ -59,6 +57,9 @@ public class DownloadResearcherPublicationFile extends ActionSupport implements 
 
 	/** Download statistics service */
 	private DownloadStatisticsService downloadStatisticsService;
+	
+	/** service for dealing with sending out errors */
+	private ErrorEmailService errorEmailService;
 	
 	/** Id of user logged in */
 	private Long userId;
@@ -107,8 +108,17 @@ public class DownloadResearcherPublicationFile extends ActionSupport implements 
         	  // only count downloads if we don't know owner
         	  if(  !researcher.getUser().getId().equals(userId))
         	  {
+        		  // statistics should not cause a download failure
+        		  try
+        		  {
         	        downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
         	        		itemFile.getIrFile());
+        		  }
+        		  catch(Exception e)
+        		  {
+        			  log.error(e);
+        			  errorEmailService.sendError(e);
+        		  }
         	  }
         	  downloadFile(itemFile);
         }
@@ -197,6 +207,10 @@ public class DownloadResearcherPublicationFile extends ActionSupport implements 
 
 	public void setPublicationId(Long publicationId) {
 		this.publicationId = publicationId;
+	}
+
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
 	}
 
 
