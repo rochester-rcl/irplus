@@ -535,6 +535,7 @@
        <property name="mailSender" ref="mailSender"/>
        <property name="dateFormat" value="MM/dd/yyyy"/>
        <property name="helpEmail" value="${email.public.help.address}"/>
+       <property name="fromAddress" value="${mail.sender.from}"/>
    </bean>
  
    <!-- ****************************************** --> 
