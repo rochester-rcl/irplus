@@ -190,13 +190,7 @@ YAHOO.ur.series = {
 				return false;
 			}
 			
-			var number = document.getElementById('newSeriesForm_number').value;
-			if (number == "" || number == null) {
-			    alert('Series number must be entered.');
-				return false;
-			} else {
-				return true;
-			}
+			return true;
 		};
 		
 		// Submit the form
