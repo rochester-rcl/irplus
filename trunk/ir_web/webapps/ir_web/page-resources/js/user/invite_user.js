@@ -202,11 +202,24 @@ YAHOO.ur.invite =
 		    	var emails = email.split(";");
 		    	for( i = 0; i < emails.length; i++)
 		    	{
-			        if (!urUtil.emailcheck(emails[i])) 
-			        {
-				        alert('Invalid E-mail address ' + emails[i]);
-				        return false;
-			        }
+		    		checkEmail = urUtil.trim(emails[i])
+		    		// last one - this needs to be checked
+		    		// for ending semicolon
+		    		if( emails.length > 0 && i == (emails.length -1) )
+		    		{
+		    			if ( checkEmail == "" || checkEmail == null)
+		    			{
+		    				// ok
+		    			}
+		    		}
+		    		else
+		    		{
+			            if (!urUtil.emailcheck(checkEmail)) 
+			            {
+				            alert('Invalid E-mail address ' + emails[i]);
+				            return false;
+			            }
+		    		}
 		    	}
 		    }
 		
