@@ -108,7 +108,7 @@
                                     </td>
                                     <td class="input">
 			                            <input type="text" id="newNewsItemForm_dateAvailable" 
-			                                   name="newsItem.dateAvailable" value=""/>
+			                                   name="newsItem.dateAvailable" value="<fmt:formatDate pattern="MM/dd/yyyy" value="${newsItem.dateAvailable}"/>"/>
 			                        </td>
 			                    </tr>
 			                    <tr>       
@@ -117,7 +117,7 @@
 			                        </td>
 			                        <td class="input">   
 			                            <input type="text" id="newNewsItemForm_dateRemoved" 
-			                             name="newsItem.dateRemoved" value=""/>	
+			                             name="newsItem.dateRemoved" value="<fmt:formatDate pattern="MM/dd/yyyy" value="${newsItem.dateRemoved}"/>"/>	
 			                        </td>
 			                    </tr>	
                                 <tr>
