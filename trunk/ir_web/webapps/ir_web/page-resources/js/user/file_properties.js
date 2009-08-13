@@ -556,9 +556,6 @@ YAHOO.ur.file.properties =
 
 	    // Render the Dialog
 	    YAHOO.ur.file.properties.changeOwnerDialog.render();
-	    
-	    YAHOO.util.Event.addListener("change_owner", "click", YAHOO.ur.file.properties.changeOwnerDialog.showDialog,
-	     YAHOO.ur.file.properties.changeOwnerDialog, true);
         
     },
   
