@@ -163,8 +163,8 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 			    	{
 			    		// get the url to the most recent item
 			    		String url = institutionalItemVersionUrlGenerator.createUrl(item, item.getVersionedInstitutionalItem().getCurrentVersion().getVersionNumber());
-			    		emailText.append("Publcation Name: " + item.getName() + "\n");
-			    		emailText.append("URL: " + url + "\n");
+			    		emailText.append("Publication Name: " + item.getName() + "\n");
+			    		emailText.append("URL: " + url + "\n\n");
 			    		List<ItemContributor> contributors = item.getVersionedInstitutionalItem().getCurrentVersion().getItem().getContributors();
 			    	
 			    		
