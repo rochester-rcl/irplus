@@ -118,12 +118,6 @@
  		                 onmouseout="this.className='ur_button';"><span class="pageAddBtnImg">&nbsp;</span> Add New Version</button>
 	         </ir:acl>
 	                
-	         <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
-	             <button class="ur_button" onclick="" 
-	                onmouseover="this.className='ur_buttonover';"
- 		            onmouseout="this.className='ur_button';"><span class="reportGoBtnImg">&nbsp;</span> Publish</button>
- 		     </c:if>
-	                 
 	         <c:if test="${ir:canShareFile(user, personalFile.versionedFile)}">   
 	             <button class="ur_button" onclick="javascript:shareWithUsers.submit()" 
 	                     onmouseover="this.className='ur_buttonover';"
@@ -150,7 +144,7 @@
 		     </ir:acl>
 		     
 		     <c:if test="${ir:isOwner(user, personalFile.versionedFile)}">             
-		         <button class="ur_button" id="change_owner" 
+		         <button class="ur_button" id="change_owner" onClick="javascript:YAHOO.ur.file.properties.changeOwnerDialog.showDialog();"
 	                     onmouseover="this.className='ur_buttonover';"
  		                 onmouseout="this.className='ur_button';">Change Owner</button>
               </c:if>
