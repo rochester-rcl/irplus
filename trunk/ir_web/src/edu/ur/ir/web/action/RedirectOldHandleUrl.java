@@ -84,41 +84,23 @@ public class RedirectOldHandleUrl extends ActionSupport implements ServletReques
 		       if( handleInfo != null )
 		       {
 		           InstitutionalItemVersion itemVersion = institutionalItemService.getInstitutionalItemByHandleId(handleInfo.getId());
-		       
-		           versionNumber = itemVersion.getVersionNumber();
+		           
 		           if(  itemVersion != null )
 		           {
+		        	   versionNumber = itemVersion.getVersionNumber();
 		        	   InstitutionalItem item = institutionalItemService.getInstitutionalItemByVersionId(itemVersion.getId());
 		               if( item != null )
 		               {
 		            	   institutionalItemId = item.getId();
-		               }
-		               else
-		               {
-		            	   return "notFound";
+		            	   return SUCCESS;
 		               }
 		           }
-		           else
-		           {
-		        	   return "notFound";
-		           }
-		       }
-		       else
-		       {
-		    	   return "notFound";
 		       }
 		    }
-		    else
-		    {
-		    	return "notFound";
-		    }
 		}
-		else
-		{
-			return "notFound";
-		}
+		return "notFound";
 		
-		return SUCCESS;
+		
 	}
 
 	
