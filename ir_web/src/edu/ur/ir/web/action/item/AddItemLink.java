@@ -32,6 +32,7 @@ import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
@@ -112,7 +113,7 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
         IrUser user = item.getOwner();
 		
 		// make sure the user is the owner.
-		if( userId == null || !user.getId().equals(userId))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
 		{
 			return "accessDenied";
 		}
