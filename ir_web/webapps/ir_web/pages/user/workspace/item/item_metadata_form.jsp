@@ -142,7 +142,7 @@
 	      </tr>    
 	
 		  <tr> 
-	      <td> Primary Type : 
+	      <td> Primary Type: 
 	      		<select id="itemForm_item_type" name="contentTypeId" onChange="javascript:YAHOO.ur.item.metadata.saveItemTypeAndUpdateSecondaryTypes();"/>
 	      			<option value = "0"> Select </option>
 	      		<c:forEach items="${contentTypes}" var="contentType">
@@ -156,8 +156,13 @@
 	      </td>
 	      </tr>
 	        
+	      <tr class="rowBorder">
+	        <td>
+	          <strong>Secondary Type(s):<strong>
+	        </td>
+	      </tr>
 	      <tr>
-	        <td > Secondary Types:
+	        <td> 
 	        	<div id="type_form">
 	        	    <c:import url="content_type_list.jsp"/>
 	         	 </div>
