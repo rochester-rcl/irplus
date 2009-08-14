@@ -50,10 +50,6 @@
 	                        <urstb:td>
 		                         ${subscription.institutionalCollection.name}
 	                        </urstb:td>
-	                        <urstb:td>
-		                   		<a href="">Unsubscribe</a>
-	                        </urstb:td>
-	                        
 	                    </urstb:tr>
 	            </urstb:tbody>
 	        </urstb:table>
