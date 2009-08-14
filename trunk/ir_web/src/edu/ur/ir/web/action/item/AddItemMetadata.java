@@ -436,7 +436,11 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			return "accessDenied";
 		}
 
-		item.setPrimaryContentType(contentTypeService.getContentType(contentTypeId, false));
+	    ContentType primaryType  = contentTypeService.getContentType(contentTypeId, false);
+	    if( primaryType != null )
+	    {
+		    item.setPrimaryContentType(primaryType);
+	    }
 		item.removeAllSecondaryContentTypes();
 		itemService.makePersistent(item);
 
@@ -445,7 +449,10 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			for (int i =0; i < typeIds.length; i++ ) {
 				if (typeIds[i] != null) {
 					ContentType contentType = contentTypeService.getContentType(typeIds[i], false);
-					item.addSecondaryContentType(contentType);
+					if( contentType != null )
+					{
+					    item.addSecondaryContentType(contentType);
+					}
 				}
 			}
 		}
@@ -461,7 +468,14 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String saveItemMetadata() throws NoIndexFoundException 
 	{
+		// this can happen if user times out
+		if( item == null )
+		{
+			return "workspace";
+		}
+		
 		IrUser user = userService.getUser(userId, false);
+		
 		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
 		{
 			return "accessDenied";
