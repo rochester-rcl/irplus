@@ -50,14 +50,17 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 	/** Description of the folder */
 	private String linkDescription;
 	
+	/** id of the link  */
+	private Long linkId;
+	
 	/** URL */
 	private String linkUrl;
 	
 	/** Current folder the user is looking at  */
 	private Long parentFolderId;
 	
-	/** Id of the folder to update for updating  */
-	private Long updateLinkId;
+	/** loaded link */
+	private ResearcherLink link;
 	
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = 1355765084143781189L;
@@ -76,6 +79,25 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 	
 	/** id of the user making the changes */
 	private Long userId;
+	
+	/**
+	 * Get a link by it's id
+	 * @return
+	 */
+	public String get()
+	{
+		Researcher researcher = null;
+		link = researcherFileSystemService.getResearcherLink(linkId, false);
+		if( link != null )
+		{
+		    researcher = link.getResearcher();
+		}
+		if( researcher == null || !researcher.getUser().getId().equals(userId) || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE))
+		{
+			 return "accessDenied";
+		}
+		return SUCCESS;
+	}
 	
 	/**
 	 * Create the new link
@@ -157,8 +179,9 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 		}
 		else
 		{
-			other = researcherFileSystemService.getResearcherLink(linkName, parentFolderId);
-			if( !other.getResearcher().getId().equals(researcher.getId()))
+			ResearcherFolder folder = researcherFileSystemService.getResearcherFolder(parentFolderId, false);
+			other = folder.getResearcherLink(linkName);
+			if( folder == null || !folder.getResearcher().getId().equals(researcher.getId()))
 			{
 				return "accessDenied";
 			}
@@ -167,7 +190,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 		// name has been changed and does not conflict
 		if( other == null)
 		{
-			ResearcherLink existingLink = researcherFileSystemService.getResearcherLink(updateLinkId, true);
+			ResearcherLink existingLink = researcherFileSystemService.getResearcherLink(linkId, true);
 			if( !existingLink.getResearcher().getId().equals(researcher.getId()))
 			{
 				return "accessDenied";
@@ -179,7 +202,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 			added = true;
 		}
 		// name has not been changed
-		else if(other.getId().equals(updateLinkId))
+		else if(other.getId().equals(linkId))
 		{
 			other.setDescription(linkDescription);
 			other.setLink(linkUrl);
@@ -252,14 +275,6 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 		this.linkDescription = linkDescription;
 	}
 
-	public Long getUpdateLinkId() {
-		return updateLinkId;
-	}
-
-	public void setUpdateLinkId(Long updateLinkId) {
-		this.updateLinkId = updateLinkId;
-	}
-
 	public ResearcherService getResearcherService() {
 		return researcherService;
 	}
@@ -311,5 +326,21 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 	public void setResearcherFileSystemService(
 			ResearcherFileSystemService researcherFileSystemService) {
 		this.researcherFileSystemService = researcherFileSystemService;
+	}
+
+	public Long getLinkId() {
+		return linkId;
+	}
+
+	public void setLinkId(Long linkId) {
+		this.linkId = linkId;
+	}
+
+	public ResearcherLink getLink() {
+		return link;
+	}
+
+	public void setLink(ResearcherLink link) {
+		this.link = link;
 	}
 }
