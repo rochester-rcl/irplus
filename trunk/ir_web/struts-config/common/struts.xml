@@ -23,11 +23,12 @@
     ]>
     
 <struts>
+    <constant name="struts.enable.SlashesInActionNames" value="true"/>
     <include file="struts-default.xml"/>
     <include file="config-browser.xml"/>
     
     <package name="default" extends="struts-default">
-    
+        
         <result-types>
             <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>
         </result-types>
@@ -72,16 +73,26 @@
         <default-action-ref name="unknownAction" />
 
         <global-results>
-        	 <result name="change-password">/pages/user/login/force_change_password.jsp</result>
-        	 <result name="registration-error">/pages/user/login/invalid_token.jsp</result>
-        	 <result name="handleError">/pages/error.jsp</result>
-        	 <result name="accessDenied">/accessDenied.jsp</result>
+        	 <result type="redirect" name="change-password">/pages/user/login/force_change_password.jsp</result>
+        	 <result type="redirect" name="registration-error">/pages/user/login/invalid_token.jsp</result>
+        	 <result type="redirect" name="handleError">/pages/error.jsp</result>
+        	 <result type="redirect" name="accessDenied">/accessDenied.jsp</result>
         </global-results>
         
         <!--  ************************************ -->
         <!--  public item actions                  -->
         <!--  ************************************ -->
         &item_public;
+        
+        <!--  handles old url values from the old system -->
+        <action name="handle/**" class="edu.ur.ir.web.action.RedirectOldHandleUrl">
+            <result name="notFound">/pages/item/institutional_publication_not_found.jsp</result>
+            <result name="success" type="redirectAction"> 
+                <param name="actionName">institutionalPublicationPublicView</param> 
+                <param name="institutionalItemId">${institutionalItemId}</param> 
+                <param name="versionNumber">${versionNumber}</param> 
+            </result> 
+        </action>
         
         <!-- Help action -->
         <action name="help">
