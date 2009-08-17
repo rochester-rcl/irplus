@@ -506,36 +506,12 @@
             <div class="hd">Link Information</div>
             <div class="bd">
                   <form id="addLink" name="newLinkForm" 
-                  method="post" action="user/addResearcherLink.action">
-              
-                   <input type="hidden" id="newLinkForm_parentFolderId"
-                       name="parentFolderId" value="${parentFolderId}"/>
-                       
-                   <input type="hidden" id="newLinkForm_researcherId"
-                       name="researcherId" value="${researcher.id}"/>                       
-               
-                   <input type="hidden" id="newLinkForm_new"
-                       name="newLink" value="true"/>
-              
-                   <input type="hidden" id="newLinkForm_linkId"
-                       name="updateLinkId" value=""/>
-                   
-                  <div id="linkNameError" class="errorMessage"></div>
-	              
-	              <table class="formTable">
-	                  <tr>
-	                      <td align="left" class="label"> Link Name:</td>
-	                      <td align="left" class="input"> <input id="link_name" size="45" type="text" name="linkName" value=""/></td>
-	                  </tr>
-	                  <tr>
-	                      <td align="left" class="label"> Link Description:</td>
-	                      <td align="left" class="input"><textarea cols="42" rows=4" name="linkDescription"></textarea></td>
-	                  </tr>
-	                  <tr>
-	                      <td align="left" class="label"> Link URL:</td>
-	                      <td align="left" class="input"> <input id="link_url" size="45" type="text" name="linkUrl" value="http://"/></td>
-	                  </tr>
-	              </table>
+                  method="post" action="<c:url value="/user/addResearcherLink.action"/>">
+                     <input type="hidden" id="newLinkForm_parentFolderId" name="parentFolderId" value="${parentFolderId}"/>
+                     <input type="hidden" id="newLinkForm_researcherId" name="researcherId" value="${researcher.id}"/>                       
+                     <div id="researcherLinkFields">
+                         <c:import url="researcher_link_form_frag.jsp"/>
+                     </div>
                  </form>
            </div>
            <!-- end dialog body -->
