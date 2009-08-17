@@ -58,24 +58,4 @@ public interface ResearcherLinkDAO  extends CrudDAO<ResearcherLink>
 	 */
 	public List<ResearcherLink> getResearcherLinks(final Long researcherId, final List<Long> linkIds);
 	
-	/**
-	 * Find the folder for the specified researcherId and specified 
-	 * folder name.
-	 * 
-	 * @param name of the collection
-	 * @param researcherId - id of the researcher
-	 * @return the found collection or null if the collection is not found.
-	 */
-	public ResearcherLink getRootResearcherLink(String name, Long researcherId);
-	
-	/**
-	 * Find the researcher folder for the specified folder name and 
-	 * parent id.
-	 * 
-	 * @param name of the folder
-	 * @param parentId id of the parent folder
-	 * @return the found folder or null if the folder is not found.
-	 */
-	public ResearcherLink getResearcherLink(String name, Long parentId);
-
 }

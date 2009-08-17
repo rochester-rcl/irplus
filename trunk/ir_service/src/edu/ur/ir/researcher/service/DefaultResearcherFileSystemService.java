@@ -321,24 +321,6 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 	}
 
 	/**
-	 * Get root researcher link with the specified name for the specified researcher.
-	 * 
-	 * @see edu.ur.ir.researcher.ResearcherService#getRootResearcherLink(String, Long)
-	 */
-	public ResearcherLink getRootResearcherLink(String name, Long researcherId) {
-		return researcherLinkDAO.getRootResearcherLink(name, researcherId);
-	}
-
-	/**
-	 * Get researcher link with the specified name for the specified folder.
-	 * 
-	 * @see edu.ur.ir.researcher.ResearcherService#getResearcherLink(String, Long)
-	 */
-	public ResearcherLink getResearcherLink(String name, Long parentId) {
-		return researcherLinkDAO.getResearcherLink(name, parentId);
-	}
-
-	/**
 	 * Get all folders for the specified researcher.
 	 * 
 	 * @see edu.ur.ir.researcher.ResearcherService#getAllFoldersForResearcher(Long)
