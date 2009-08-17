@@ -26,7 +26,8 @@
 
 <html>
     <head>
-        <title>Welcome</title>
+        <title>${repository.name}</title>
+        
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
