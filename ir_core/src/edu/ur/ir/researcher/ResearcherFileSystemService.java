@@ -263,26 +263,6 @@ public interface ResearcherFileSystemService {
 
 	
 	/**
-	 * Get root researcher link with the specified name for the specified researcher.
-	 * 
-	 * @param name Name of link
-	 * @param researcherId Id of researcher
-	 * 
-	 * @return link if found
-	 */
-	public ResearcherLink getRootResearcherLink(String name, Long researcherId);
-
-	/**
-	 * Get researcher link with the specified name for the specified folder.
-	 * 
-	 * @param name Name of link
-	 * @param parentId Id of parent folder
-	 * 
-	 * @return link if found
-	 */
-	public ResearcherLink getResearcherLink(String name, Long parentId) ;
-	
-	/**
 	 * Get the researcher link with the specified id.
 	 * 
 	 * @param id - id of the researcher link
