@@ -31,6 +31,7 @@ var deleteFolderAction = basePath + 'user/deleteResearcherFileSystemObjects.acti
 // actions for adding and removing links
 var updateLinkAction = basePath + 'user/updateResearcherLink.action';
 var newLinkAction = basePath + 'user/addResearcherLink.action';
+var getLinkAction = basePath + 'user/getResearcherLink.action';
 
 // object to hold the specified folder data.
 var myResearcherFolderTable = new YAHOO.ur.table.Table('myFolders', 'newResearcherFolders');
@@ -320,13 +321,12 @@ YAHOO.ur.researcher.folder = {
 		// handle a successful return
 		var handleSuccess = function(o) 
 		{
+			alert(o.responseText);
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {       		 	
-		        //get the response from adding a folder
-		        var response = eval("("+o.responseText+")");
-		    
+	        	
 		        //if the folder was not added then show the user the error message.
 		        // received from the server
 		        if( response.added == "false" )
@@ -383,7 +383,7 @@ YAHOO.ur.researcher.folder = {
 		        {
 		           action = updateLinkAction;
 		        }
-	
+		        
 	            var cObj = YAHOO.util.Connect.asyncRequest('POST',
 	            action, callback);
 	        }
@@ -414,14 +414,37 @@ YAHOO.ur.researcher.folder = {
 	 },
 	   
     // function to edit folder information
-    editLink : function(linkId, linkName, linkDescription, linkUrl)
+    editLink : function(linkId)
     {
-    	document.newLinkForm.linkName.value = linkName;
-	    document.newLinkForm.linkDescription.value = linkDescription;
-	    document.newLinkForm.linkUrl.value = linkUrl;
-	    document.newLinkForm.updateLinkId.value = linkId;
-	    document.newLinkForm.newLink.value = "false";
-	    YAHOO.ur.researcher.folder.newLinkDialog.showLink();
+	     /*
+	      * This call back updates the html when editing the folder
+	      */
+	      var callback =
+	      {
+	          success: function(o) 
+	          {
+	 		      // check for the timeout - forward user to login page if timout
+		          // occured
+		          if( !urUtil.checkTimeOut(o.responseText) )
+		          {       		           
+		        	  
+	                  var divToUpdate = document.getElementById('researcherLinkFields');
+	                  divToUpdate.innerHTML = o.responseText;
+
+	                  document.getElementById('newLinkForm_new').value="false";
+	          	      YAHOO.ur.researcher.folder.newLinkDialog.showLink();
+	              }
+	        },
+		
+		    failure: function(o) 
+		    {
+		        alert('Edit researcher link Failure ' + o.status + ' status text ' + o.statusText );
+		    }
+	    };
+	        
+	    var transaction = YAHOO.util.Connect.asyncRequest('GET', 
+	            getLinkAction + '?linkId=' + linkId +  '&bustcache='+new Date().getTime(), 
+	            callback, null);
     },
 	
 	/**
