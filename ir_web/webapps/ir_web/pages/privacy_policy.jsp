@@ -90,7 +90,7 @@
                necessary to protect the rights and property of UR Research users.
                <br><br>
 
-               Any DUR Research records used in publicly accessible forum, such as 
+               Any UR Research records used in publicly accessible forum, such as 
                demonstrations, presentations, or research papers, will be 
                scrubbed of specific references to real people and personal information.
                <br><br>
