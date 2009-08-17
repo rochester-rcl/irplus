@@ -162,7 +162,7 @@
 			                 </c:if>
 			                 
 		                	<c:if test="${fileSystemObject.fileSystemType.type == 'researcherLink'}">
-		                    	<ur:a href="javascript:YAHOO.ur.researcher.folder.editLink('${fileSystemObject.id}', '${ur:escapeSingleQuote(fileSystemObject.name)}', '${ur:escapeSingleQuote(fileSystemObject.description)}', '${ur:escapeSingleQuote(fileSystemObject.link)}')"> Edit </ur:a>
+		                    	<ur:a href="javascript:YAHOO.ur.researcher.folder.editLink(${fileSystemObject.id})"> Edit </ur:a>
 		                	</c:if>
 		                </urstb:td>	 	                	
                     </urstb:tr>
