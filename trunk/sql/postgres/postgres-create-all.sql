@@ -3221,7 +3221,12 @@ ALTER TABLE ir_statistics.file_download_info OWNER TO ir_plus;
 -- The field sequence
 CREATE SEQUENCE ir_statistics.file_download_info_seq ;
 ALTER TABLE ir_statistics.file_download_info_seq OWNER TO ir_plus;
-      
+
+CREATE INDEX file_download_info_ip_part_idx
+  ON ir_statistics.file_download_info(ip_address_part1, ip_address_part2, ip_address_part3, ip_address_part4);
+  
+CREATE INDEX ir_file_id_idx
+  ON ir_statistics.file_download_info(ir_file_id);
 
 -- ---------------------------------------------
 -- IP address table
@@ -3240,6 +3245,13 @@ CREATE TABLE ir_statistics.ip_address_ignore
     
 );
 ALTER TABLE ir_statistics.ip_address_ignore OWNER TO ir_plus;
+
+CREATE INDEX ir_address_ignore_ip_part_idx
+  ON ir_statistics.ip_address_ignore(from_ip_address_part1, 
+      from_ip_address_part2, 
+      from_ip_address_part3, 
+      from_ip_address_part4,
+      to_ip_address_part4);
 
 -- The field sequence
 CREATE SEQUENCE ir_statistics.ip_address_ignore_seq ;
