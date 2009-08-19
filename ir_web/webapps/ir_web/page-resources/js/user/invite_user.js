@@ -30,7 +30,7 @@ var deleteCollaboratorAction = basePath + 'user/deleteCollaborator.action';
 
 var unShareFileAction = basePath + 'user/deleteCollaborator.action';
 var unSharePendingInviteeAction = basePath + 'user/deletePendingInvitee.action';
-var removeFileAction = basePath + '/user/removeSharedFile.action';
+var removeFileAction = basePath + 'user/removeSharedFile.action';
 
 YAHOO.ur.invite = 
 {
