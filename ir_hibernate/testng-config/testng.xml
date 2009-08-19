@@ -96,6 +96,7 @@
 		    
 		     <class name="edu.ur.hibernate.ir.statistics.db.FileDownloadInfoDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.statistics.db.IgnoreIpAddressDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.statistics.db.FileDownloadRollUpDAOTest"/>
 		     
 		     <class name="edu.ur.hibernate.ir.handle.db.HandleNameAuthorityDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.handle.db.HandleInfoDAOTest"/>
