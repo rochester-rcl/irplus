@@ -32,6 +32,7 @@ import edu.ur.file.db.FileInfo;
 import edu.ur.file.mime.MimeTypeService;
 import edu.ur.ir.web.action.ResponseBufferedOutputWriter;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -114,8 +115,17 @@ public class WebIoUtils {
         {
         	//use uri to encode the file name to prevent IE from
         	//putting underscores in file name
-            URI uri = new URI(null, fileName + fileExtension, null);
-            fullFileName = uri.toASCIIString();
+        	try
+        	{
+                URI uri = new URI(null, fileName + fileExtension, null);
+                fullFileName = uri.toASCIIString();
+        	}
+        	catch (URISyntaxException e) {
+        		log.error("could not create uri", e );
+        		// rest the file name
+        		fullFileName = fileName + fileExtension;
+			}
+            
         }
         
         if( forceDownload )
