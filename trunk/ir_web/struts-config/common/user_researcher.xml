@@ -262,6 +262,14 @@
             <result name="success">/pages/user/researcher/add_response.jsp</result>
         </action>
         
+        <action name="getResearcherLink"
+            method ="get"
+            class="edu.ur.ir.web.action.researcher.AddResearcherLink">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_link_form_frag.jsp</result>
+        </action>
+        
         <action name="updateResearcherLink"
             method ="updateLink"
             class="edu.ur.ir.web.action.researcher.AddResearcherLink">
