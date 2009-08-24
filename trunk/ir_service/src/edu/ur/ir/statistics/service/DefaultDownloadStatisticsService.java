@@ -83,7 +83,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 			if (fileDownloadInfo == null) {
 				fileDownloadInfo = new FileDownloadInfo(ipAddress, irFile.getId(), noTimeDate);
 			} else {
-				fileDownloadInfo.setCount(fileDownloadInfo.getCount() + 1);
+				fileDownloadInfo.setDownloadCount(fileDownloadInfo.getDownloadCount() + 1);
 			}
 			saveFileDownloadInfo(fileDownloadInfo);
 		} catch (ParseException e) {

@@ -21,6 +21,7 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.statistics.FileDownloadRollUp;
 import edu.ur.ir.statistics.FileDownloadRollUpDAO;
 
@@ -91,15 +92,9 @@ public class HbFileDownloadRollUpDAO implements FileDownloadRollUpDAO{
 		hbCrudDAO.makeTransient(entity);
 	}
 
-	
-	/**
-	 * Roll up the counts.
-	 * 
-	 * @see edu.ur.ir.statistics.FileDownloadRollUpDAO#rollUpCounts()
-	 */
-	public Long rollUpCounts() {
-		// TODO Auto-generated method stub
-		return null;
+	public FileDownloadRollUp getByIrFileId(Long irFileId) {
+		return (FileDownloadRollUp)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getRollUpByIrFileId", irFileId));
 	}
 
 }

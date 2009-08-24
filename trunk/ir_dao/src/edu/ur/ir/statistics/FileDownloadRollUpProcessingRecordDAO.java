@@ -19,21 +19,28 @@ package edu.ur.ir.statistics;
 import edu.ur.dao.CrudDAO;
 
 /**
- * Interface for dealing with File Download rollup inforamtion.
+ * Data access for a file download roll up processing record.
  * 
- * @author Nathan Sarr 
+ * @author Nathan Sarr
  *
  */
-public interface FileDownloadRollUpDAO extends CrudDAO<FileDownloadRollUp>
+public interface FileDownloadRollUpProcessingRecordDAO extends CrudDAO<FileDownloadRollUpProcessingRecord> 
 {
-
 	/**
-	 * Get the download roll up by the irfile id
+	 * Insert all download counts for the repository
 	 * 
-	 * @param irFileId - ir file id 
-	 * @return - the file roll up or null if the roll up does not exist.
+	 * @param processingType - processing type.
+	 * 
+	 * @return - number of records created for processing
 	 */
-	FileDownloadRollUp getByIrFileId(Long irFileId);
+	public Long updateAllRepositoryDownloadCounts();
 	
-
+	/**
+	 * Get a processing record by id.
+	 * 
+	 * @param irFileId - id of the ir file
+	 * @return the found processing record or null if not found
+	 */
+	public FileDownloadRollUpProcessingRecord getByIrFileId(Long irFileId);
+	   
 }

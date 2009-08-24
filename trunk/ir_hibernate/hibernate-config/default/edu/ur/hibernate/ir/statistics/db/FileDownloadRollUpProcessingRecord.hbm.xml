@@ -20,33 +20,44 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for file download roll up
+	Mapping for file download roll up processing record
 	
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.statistics">
-	<class name="FileDownloadRollUp" schema="ir_statistics" table="ir_file_roll_up"
+	<class name="FileDownloadRollUpProcessingRecord" schema="ir_statistics" table="ir_file_roll_up_processing_record"
 		lazy="true">
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="ir_file_roll_up_id"
+		<id name="id" type="long" column="ir_file_roll_up_processing_record_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_statistics.ir_file_roll_up_seq</param>
+				<param name="sequence">ir_statistics.ir_file_roll_up_processing_record_seq</param>
 			</generator>
 		</id>
 			
 		<property name="irFileId" column="ir_file_id" type="long"
 			access="field" not-null="true"/>
+			
+		<property name="createdDate" column="created_date" type="timestamp"
+			access="field" />
 
-		<property name="downloadCount" column="download_count" type="int"
-			access="field" not-null="true"/>
 	</class>
 	
 	<!-- named query for getting a the roll up by ir file id -->
-	<query name="getRollUpByIrFileId">
-		from FileDownloadRollUp as fileDownloadRollUp where
-		fileDownloadRollUp.irFileId = ? 
+	<query name="getRollUpProcessingRecordByIrFileId">
+		from FileDownloadRollUpProcessingRecord as fileDownloadRollUpProcessingRecord where
+		fileDownloadRollUpProcessingRecord.irFileId = ? 
 	</query>
 	
+	<!--  this inserts all files to be reprocessed  -->
+	<query name="insertAllRepositoryFileIds">
+	    insert into FileDownloadRollUpProcessingRecord (irFileId, createdDate )
+	    select irFileId, current_timestamp()
+	    from FileDownloadInfo
+		where irFileId not in( select rollUpRecord.irFileId from FileDownloadRollUpProcessingRecord as rollUpRecord)
+		group by irFileId
+	</query>
+	
+		
 </hibernate-mapping>

@@ -64,6 +64,28 @@
        </property>
    </bean>
    
+      <!-- ****************************************** --> 
+   <!-- File download roll up processing record information          -->
+   <!-- ****************************************** --> 
+   
+   <bean id="fileDownloadRollUpProcessingRecordDAOTarget" 
+       class="edu.ur.hibernate.ir.statistics.db.HbFileDownloadRollUpProcessingRecordDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="fileDownloadRollUpProcessingRecordDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="fileDownloadRollUpProcessingRecordDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
 
    <!-- ****************************************** --> 
    <!-- Ignore IP Address 								   -->

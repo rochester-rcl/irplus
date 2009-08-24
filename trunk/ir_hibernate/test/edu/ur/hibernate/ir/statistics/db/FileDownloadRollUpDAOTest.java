@@ -17,6 +17,7 @@
 
 package edu.ur.hibernate.ir.statistics.db;
 
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -55,7 +56,6 @@ public class FileDownloadRollUpDAOTest {
 	FileDownloadRollUpDAO fileDownloadRollUpDAO = (FileDownloadRollUpDAO) ctx
 	.getBean("fileDownloadRollUpDAO");
 	
-	
 	/**
 	 * Test download file roll up persistance
 	 */
@@ -63,9 +63,7 @@ public class FileDownloadRollUpDAOTest {
 	public void baseDownloadInfoDAOTest() throws Exception{
 
 	    TransactionStatus ts = tm.getTransaction(td);
-        FileDownloadRollUp fileDownloadRollUp = new FileDownloadRollUp(22l, 44l);
-	   
-      
+        FileDownloadRollUp fileDownloadRollUp = new FileDownloadRollUp(22l, 44);
         
         fileDownloadRollUpDAO.makePersistent(fileDownloadRollUp);
  	    tm.commit(ts);
@@ -80,8 +78,5 @@ public class FileDownloadRollUpDAOTest {
 	    tm.commit(ts);
 	}
 	
-
-
-
 
 }
