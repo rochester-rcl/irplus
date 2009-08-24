@@ -43,7 +43,7 @@ public class FileDownloadInfoTest {
 		Date d = simpleDateFormat.parse("12/1/2008");
 	
 		FileDownloadInfo downloadInfo = new FileDownloadInfo("123.1.1.5", 1l, d);
-		downloadInfo.setCount(1);
+		downloadInfo.setDownloadCount(1);
 		downloadInfo.setId(55l);
 		downloadInfo.setVersion(33);
 		
@@ -52,7 +52,7 @@ public class FileDownloadInfoTest {
 		assert downloadInfo.getIpAddressPart2() == 1 : "IpAddressPart2 Shoud equal 1";
 		assert downloadInfo.getIpAddressPart3() == 1 : "IpAddressPart3 Shoud equal 1";
 		assert downloadInfo.getIpAddressPart4()== 5 : " IpAddressPart4 Shoud equal 5";
-		assert downloadInfo.getCount() == 1 : "Count Shoud equal 1";
+		assert downloadInfo.getDownloadCount() == 1 : "Count Shoud equal 1";
 		assert downloadInfo.getDownloadDate().equals(d): "Shoud equal download date";
 		assert downloadInfo.getId().equals(55l) : "Should equal 55l";
 		assert downloadInfo.getVersion() == 33 : "Should equal 33";
@@ -69,20 +69,20 @@ public class FileDownloadInfoTest {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date d = simpleDateFormat.parse("12/1/2008");
 		FileDownloadInfo downloadInfo = new FileDownloadInfo("123.1.1.5", 1l, d);
-		downloadInfo.setCount(1);
+		downloadInfo.setDownloadCount(1);
 		downloadInfo.setId(55l);
 		downloadInfo.setVersion(33);
 		
 		
 		FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.1.1.9", 1l, d);
-		downloadInfo1.setCount(2);
+		downloadInfo1.setDownloadCount(2);
 		downloadInfo1.setId(56l);
 		downloadInfo1.setVersion(34);
 
 		
 		
 		FileDownloadInfo downloadInfo2 = new FileDownloadInfo("123.1.1.5", 1l, d);
-		downloadInfo2.setCount(1);
+		downloadInfo2.setDownloadCount(1);
 		downloadInfo2.setId(55l);
 		downloadInfo2.setVersion(33);;
 		
