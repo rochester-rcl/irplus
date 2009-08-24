@@ -96,13 +96,13 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	    log.debug("Trying to download the file to user");
 	    
         if (itemFileId == null) {
-        	log.debug("file id is null");
+        	log.error("file id is null");
             return INPUT;
         }
         
         if( itemId == null)
         {
-        	log.debug("item id is null");
+        	log.error("item id is null");
         	return INPUT;
         }
          
@@ -118,7 +118,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
  
         if( itemFile == null)
         {
-        	log.debug("Item file is null");
+        	log.error("Item file is null");
         	return INPUT;
         }
         
@@ -151,7 +151,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         	if( genericItem.getOwner().equals(user) || 
             	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) )
         	{
-        		if(genericItem.getOwner().equals(user))
+        		if(!genericItem.getOwner().equals(user))
         		{
         			try
         			{
@@ -165,6 +165,11 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
           		    }
         		}
         		downloadFile(itemFile);
+        	}
+        	else
+        	{
+        		log.debug("User does not have access");
+            	return INPUT;
         	}
         }
         else
