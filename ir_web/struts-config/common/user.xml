@@ -210,9 +210,6 @@
             <result name="notFound">/fileNotFound.jsp</result>
             <result name="success" type="no-op"/>
         </action> 
-
-        
- 
         
         <!--  lock a file so that no other user can upload changes -->
         <action name="lockVersionedFile" class="edu.ur.ir.web.action.user.LockVersionedFile" >
@@ -570,6 +567,9 @@
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
+            
+            <!--  this allows for a time out user goes home -->
+            <result name="workspace" type="redirect">home.action</result>
             <result name="success" type="redirect">workspace.action?parentCollectionId=${parentCollectionId}&amp;showCollectionTab=true</result>
         </action>
         
