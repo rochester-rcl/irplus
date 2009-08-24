@@ -160,10 +160,10 @@ public class DefaultStatisticsServiceTest {
 
         ts = tm.getTransaction(td);
         FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.0.0.1", irFile1.getId(), new Date());
-        downloadInfo1.setCount(1);
+        downloadInfo1.setDownloadCount(1);
         statisticsService.saveFileDownloadInfo(downloadInfo1);
         FileDownloadInfo downloadInfo2 = new FileDownloadInfo("123.0.0.7", irFile2.getId(), new Date());
-        downloadInfo2.setCount(2);
+        downloadInfo2.setDownloadCount(2);
         statisticsService.saveFileDownloadInfo(downloadInfo2);        
         assert statisticsService.getNumberOfDownloadsForAllCollections() == 3 : "Should be 3";
 	    tm.commit(ts);
