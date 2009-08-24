@@ -55,7 +55,7 @@ import edu.ur.persistent.BasePersistent;
 	private Date downloadDate;
 
 	/** Number of times downloaded */
-	private int count = 1;
+	private int downloadCount = 1;
 	
 	/**
 	 * Default constructor
@@ -108,12 +108,12 @@ import edu.ur.persistent.BasePersistent;
 		this.downloadDate = downloadDate;
 	}
 
-	public int getCount() {
-		return count;
+	public int getDownloadCount() {
+		return downloadCount;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setDownloadCount(int count) {
+		this.downloadCount = count;
 	}
 
 	public int getIpAddressPart1() {
@@ -221,7 +221,7 @@ import edu.ur.persistent.BasePersistent;
 			sb.append(simpleDateFormat.format(downloadDate));
 		}
 		sb.append(" count = ");
-		sb.append(count);
+		sb.append(downloadCount);
 		sb.append(" irFileId = ");
 		sb.append(irFileId);
 		

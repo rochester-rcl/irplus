@@ -31,7 +31,7 @@ public class FileDownloadRollUp extends BasePersistent{
 	private static final long serialVersionUID = 4429561710566378894L;
 	
 	/** full count  of the downloads for an ir file*/
-	private Long count;
+	private Integer downloadCount;
 	
 	/** the ir file id*/
 	private Long irFileId;
@@ -48,10 +48,10 @@ public class FileDownloadRollUp extends BasePersistent{
 	 * @param irFileId - ir file id
 	 * @param count - rollup count of the downloads
 	 */
-	public FileDownloadRollUp(Long irFileId, Long count)
+	public FileDownloadRollUp(Long irFileId, Integer count)
 	{
 		setIrFileId(irFileId);
-		setCount(count);
+		setDownloadCount(count);
 	}
 	
 	
@@ -79,30 +79,10 @@ public class FileDownloadRollUp extends BasePersistent{
 		sb.append(" ir file id = ");
 		sb.append(irFileId);
 		sb.append(" count = ");
-		sb.append(count);
+		sb.append(downloadCount);
 		sb.append("]");
 		return sb.toString();
 	}
-
-
-	/**
-	 * Get the count of downloads for the 
-	 * @return
-	 */
-	public Long getCount() {
-		return count;
-	}
-
-
-	/**
-	 * Set the count for the ir file
-	 * 
-	 * @param count
-	 */
-	public void setCount(Long count) {
-		this.count = count;
-	}
-
 
 	/**
 	 * Get the ir file id.
@@ -121,6 +101,23 @@ public class FileDownloadRollUp extends BasePersistent{
 	 */
 	void setIrFileId(Long irFileId) {
 		this.irFileId = irFileId;
+	}
+
+	/**
+	 * Total download count
+	 * @return
+	 */
+	public Integer getDownloadCount() {
+		return downloadCount;
+	}
+
+	/**
+	 * Set the download count.
+	 * 
+	 * @param downloadCount
+	 */
+	public void setDownloadCount(Integer downloadCount) {
+		this.downloadCount = downloadCount;
 	}
 
 }

@@ -133,7 +133,7 @@ public class FileDownloadInfoDAOTest {
 	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
 	    Date d = simpleDateFormat.parse("1/1/2008");
         FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.0.0.1", 1l,d);
-        downloadInfo1.setCount(1);
+        downloadInfo1.setDownloadCount(1);
         
         fileDownloadInfoDAO.makePersistent(downloadInfo1);
  	    tm.commit(ts);
@@ -238,11 +238,11 @@ public class FileDownloadInfoDAOTest {
 	    Date d = simpleDateFormat.parse("1/1/2008");
 	    
         FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.0.0.1", irFile1.getId(), d);
-        downloadInfo1.setCount(1);
+        downloadInfo1.setDownloadCount(1);
         fileDownloadInfoDAO.makePersistent(downloadInfo1);
        
         FileDownloadInfo downloadInfo2 = new FileDownloadInfo("123.0.0.7", irFile2.getId(), d);
-        downloadInfo2.setCount(2);
+        downloadInfo2.setDownloadCount(2);
         fileDownloadInfoDAO.makePersistent(downloadInfo2);
 	    tm.commit(ts);
 
@@ -453,11 +453,11 @@ public class FileDownloadInfoDAOTest {
 	    Date d = simpleDateFormat.parse("1/1/2008");
 	    
         FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.0.0.1", irFile1.getId(), d);
-        downloadInfo1.setCount(1);
+        downloadInfo1.setDownloadCount(1);
         fileDownloadInfoDAO.makePersistent(downloadInfo1);
        
         FileDownloadInfo downloadInfo2 = new FileDownloadInfo("123.0.0.7", irFile2.getId(), d);
-        downloadInfo2.setCount(2);
+        downloadInfo2.setDownloadCount(2);
         fileDownloadInfoDAO.makePersistent(downloadInfo2);
 	    tm.commit(ts);
 

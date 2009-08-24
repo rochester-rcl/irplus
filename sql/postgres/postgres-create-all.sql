@@ -3258,8 +3258,36 @@ CREATE SEQUENCE ir_statistics.ip_address_ignore_seq ;
 ALTER TABLE ir_statistics.ip_address_ignore_seq OWNER TO ir_plus;
 
 
+-- ---------------------------------------------
+-- roll up processing record table for ir files
+-- ---------------------------------------------
+CREATE TABLE ir_statistics.ir_file_roll_up_processing_record
+(
+    ir_file_roll_up_processing_record_id BIGINT PRIMARY KEY,
+    created_date TIMESTAMP WITH TIME ZONE,
+    ir_file_id BIGINT NOT NULL
+);
+ALTER TABLE ir_statistics.ir_file_roll_up_processing_record OWNER TO ir_plus;
+
+-- The field sequence
+CREATE SEQUENCE ir_statistics.ir_file_roll_up_processing_record_seq;
+ALTER TABLE ir_statistics.ir_file_roll_up_processing_record_seq OWNER TO ir_plus;
 
 
+-- ---------------------------------------------
+-- roll up table for ir files
+-- ---------------------------------------------
+CREATE TABLE ir_statistics.ir_file_roll_up
+(
+    ir_file_roll_up_id BIGINT PRIMARY KEY,
+    ir_file_id BIGINT UNIQUE NOT NULL,
+    download_count BIGINT NOT NULL
+);
+ALTER TABLE ir_statistics.ir_file_roll_up OWNER TO ir_plus;
+
+-- The field sequence
+CREATE SEQUENCE ir_statistics.ir_file_roll_up_seq;
+ALTER TABLE ir_statistics.ir_file_roll_up_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
