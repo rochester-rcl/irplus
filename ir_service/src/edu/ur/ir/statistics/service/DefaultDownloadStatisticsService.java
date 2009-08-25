@@ -35,16 +35,32 @@ import edu.ur.ir.person.PersonName;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.statistics.FileDownloadInfo;
 import edu.ur.ir.statistics.FileDownloadInfoDAO;
+import edu.ur.ir.statistics.FileDownloadRollUp;
+import edu.ur.ir.statistics.FileDownloadRollUpDAO;
+import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecord;
+import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecordDAO;
 import edu.ur.ir.statistics.IgnoreIpAddress;
 import edu.ur.ir.statistics.IgnoreIpAddressDAO;
 
+/**
+ * Implementation of the download statistics service.
+ * 
+ * @author Nathan Sarr
+ * @author Sharmila Ranganathan
+ */
 public class DefaultDownloadStatisticsService implements DownloadStatisticsService { 
 	
 	/** Data access for file download info */
 	private FileDownloadInfoDAO fileDownloadInfoDAO;
 	
+	/** Roll up Data access for file download info */
+	private FileDownloadRollUpDAO fileDownloadRollUpDAO;
+	
 	/** Data access for ignore IP address */
 	private IgnoreIpAddressDAO ignoreIpAddressDAO;
+	
+	/** roll up processing record data access object */
+	private FileDownloadRollUpProcessingRecordDAO fileDownloadRollUpProcessingRecordDAO;
 	
 	/**  Logger for file upload */
 	private static final Logger log = Logger.getLogger(DefaultDownloadStatisticsService.class);
@@ -109,8 +125,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		List fileIds = new LinkedList<Long>();
 		fileIds.add(irFile.getId());
 		
-		return fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile);
-		
+		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForIrFile(irFile);
 		
 	}
 	
@@ -124,7 +139,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public Long getNumberOfDownloadsForCollection(InstitutionalCollection institutionalCollection) {
 		
 		log.debug("No. of downloads for insittuional colleciton: " + institutionalCollection );
-		return fileDownloadInfoDAO.getNumberOfFileDownloadsForCollection(institutionalCollection);
+		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForCollection(institutionalCollection);
 	}
 
 	/**
@@ -137,7 +152,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public Long getNumberOfDownloadsForItem(GenericItem item) {
 		
 		log.debug("No. of downloads for item: " + item);
-		return fileDownloadInfoDAO.getNumberOfFileDownloadsForItem(item);
+		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForItem(item);
 	}
 
 	
@@ -151,7 +166,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public Long getNumberOfDownloadsForCollectionAndItsChildren(InstitutionalCollection institutionalCollection) {
 		
 		log.debug("No. of downloads for insitutional collection Id: " + institutionalCollection );
-		return fileDownloadInfoDAO.getNumberOfFileDownloadsForCollectionIncludingChildren(institutionalCollection);
+		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForCollectionIncludingChildren(institutionalCollection);
 		
 	}
 
@@ -161,7 +176,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * @return Number of downloads
 	 */
 	public Long getNumberOfDownloadsForAllCollections() {
-		return fileDownloadInfoDAO.getNumberOfFileDownloadsForRepository();
+		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForRepository();
 	
 	}
 	
@@ -242,7 +257,68 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 			ids.add(p.getId());
 		}
 
-		return fileDownloadInfoDAO.getInstitutionalItemDownloadCountByPersonName(ids);
+		return fileDownloadRollUpDAO.getInstitutionalItemDownloadCountByPersonName(ids);
+	}
+
+	public FileDownloadRollUpDAO getFileDownloadRollUpDAO() {
+		return fileDownloadRollUpDAO;
+	}
+
+	public void setFileDownloadRollUpDAO(FileDownloadRollUpDAO fileDownloadRollUpDAO) {
+		this.fileDownloadRollUpDAO = fileDownloadRollUpDAO;
+	}
+
+	
+	/**
+	 * Update the count for the specified ir file id.
+	 * 
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#updateRollUpCount(java.lang.Long)
+	 */
+	public void updateRollUpCount(Long irFileId) {		
+		Long count = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFileId);
+		
+		FileDownloadRollUp rollUp = fileDownloadRollUpDAO.getByIrFileId(irFileId);
+		
+		if( rollUp == null )
+		{
+			rollUp = new FileDownloadRollUp(irFileId, count.intValue());
+		}
+		else
+		{
+			rollUp.setDownloadCount(count.intValue());
+		}
+		
+		fileDownloadRollUpDAO.makePersistent(rollUp);
+	}
+
+	public FileDownloadRollUpProcessingRecordDAO getFileDownloadRollUpProcessingRecordDAO() {
+		return fileDownloadRollUpProcessingRecordDAO;
+	}
+
+	public void setFileDownloadRollUpProcessingRecordDAO(
+			FileDownloadRollUpProcessingRecordDAO fileDownloadRollUpProcessingRecordDAO) {
+		this.fileDownloadRollUpProcessingRecordDAO = fileDownloadRollUpProcessingRecordDAO;
+	}
+
+	
+	/**
+	 * Delete the file download roll up processing record.
+	 * 
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#delete(edu.ur.ir.statistics.FileDownloadRollUpProcessingRecord)
+	 */
+	public void delete(FileDownloadRollUpProcessingRecord processingRecord) {
+		fileDownloadRollUpProcessingRecordDAO.makeTransient(processingRecord);
+	}
+
+	
+	/**
+	 * Get all download roll up processing records.
+	 * 
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getAllRollUpProcessingRecords()
+	 */
+	@SuppressWarnings("unchecked")
+	public List<FileDownloadRollUpProcessingRecord> getAllDownloadRollUpProcessingRecords() {
+		return fileDownloadRollUpProcessingRecordDAO.getAll();
 	}
 
 }
