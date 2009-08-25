@@ -164,7 +164,9 @@ public class DefaultStatisticsServiceTest {
         statisticsService.saveFileDownloadInfo(downloadInfo1);
         FileDownloadInfo downloadInfo2 = new FileDownloadInfo("123.0.0.7", irFile2.getId(), new Date());
         downloadInfo2.setDownloadCount(2);
-        statisticsService.saveFileDownloadInfo(downloadInfo2);        
+        statisticsService.saveFileDownloadInfo(downloadInfo2);  
+        statisticsService.updateRollUpCount(irFile1.getId());
+        statisticsService.updateRollUpCount(irFile2.getId());
         assert statisticsService.getNumberOfDownloadsForAllCollections() == 3 : "Should be 3";
 	    tm.commit(ts);
 
@@ -175,6 +177,9 @@ public class DefaultStatisticsServiceTest {
         userService.deleteUser(deleteUser, deleteUser);
         statisticsService.deleteFileDownloadInfo(statisticsService.getFileDownloadInfo(downloadInfo1.getId(), false));
         statisticsService.deleteFileDownloadInfo(statisticsService.getFileDownloadInfo(downloadInfo2.getId(), false));
+        
+        statisticsService.delete(statisticsService.getFileDownloadRollUpByIrFileId(irFile1.getId()));
+        statisticsService.delete(statisticsService.getFileDownloadRollUpByIrFileId(irFile2.getId()));
         helper.cleanUpRepository();
         tm.commit(ts);
 	}
@@ -252,11 +257,13 @@ public class DefaultStatisticsServiceTest {
         ts = tm.getTransaction(td);
         irFile1 = repositoryService.getIrFile(irFile1.getId(), false);
         FileDownloadInfo info1 = statisticsService.addFileDownloadInfo("123.0.0.1", irFile1);
+        statisticsService.updateRollUpCount(irFile1.getId());
         irFile2 = repositoryService.getIrFile(irFile2.getId(), false);
        
         // these shoudl be the same info because the download happens on the same day
         FileDownloadInfo info2 = statisticsService.addFileDownloadInfo("123.0.0.7", irFile2);
         FileDownloadInfo info3 = statisticsService.addFileDownloadInfo("123.0.0.7", irFile2);
+        statisticsService.updateRollUpCount(irFile2.getId());
         
         Long count = statisticsService.getNumberOfDownloadsForAllCollections();
         assert info2.equals(info3) : " info 2 " + info2 + " should equal " + info3;
@@ -271,6 +278,9 @@ public class DefaultStatisticsServiceTest {
         userService.deleteUser(deleteUser, deleteUser);
         statisticsService.deleteFileDownloadInfo(statisticsService.getFileDownloadInfo(info1.getId(), false));
         statisticsService.deleteFileDownloadInfo(statisticsService.getFileDownloadInfo(info2.getId(), false));
+        
+        statisticsService.delete(statisticsService.getFileDownloadRollUpByIrFileId(irFile1.getId()));
+        statisticsService.delete(statisticsService.getFileDownloadRollUpByIrFileId(irFile2.getId()));
         helper.cleanUpRepository();
         tm.commit(ts);
 	}

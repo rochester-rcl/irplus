@@ -82,6 +82,31 @@ public interface DownloadStatisticsService {
 	public void delete(FileDownloadRollUpProcessingRecord processingRecord);
 	
 	/**
+	 * Get a file download roll up record by ir file id.
+	 * 
+	 * @param irFileId - ir file id the rollup record represents a roll up count for
+	 * @return the file download roll up or null if not found.
+	 */
+	public FileDownloadRollUp getFileDownloadRollUpByIrFileId(Long irFileId);
+	
+	/**
+	 * Get the roll up record by id.
+	 * 
+	 * @param id - id of the roll up record
+	 * @param lock - upgrade the lock mode.
+	 * 
+	 * @return the file download roll up record if found otherwise null.
+	 */
+	public FileDownloadRollUp getFileDownloadRollUp(Long id, boolean lock);
+	
+	/**
+	 * Delete the roll up record.
+	 * 
+	 * @param fileDownloadRollUp
+	 */
+	public void delete(FileDownloadRollUp fileDownloadRollUp);
+	
+	/**
 	 * Get the number of downloads for the sepecified ir file Id
 	 * 
 	 * @param fileId Id of file to count the number of downloads
