@@ -321,4 +321,34 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		return fileDownloadRollUpProcessingRecordDAO.getAll();
 	}
 
+	
+	/**
+	 * Get the file download roll up by ir file id.
+	 * 
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getFileDownloadRollUpByIrFileId(java.lang.Long)
+	 */
+	public FileDownloadRollUp getFileDownloadRollUpByIrFileId(Long irFileId)
+	{
+		return fileDownloadRollUpDAO.getByIrFileId(irFileId);
+	}
+
+	/**
+	 * Get the file download roll up 
+	 * 
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getFileDownloadRollUp(java.lang.Long, boolean)
+	 */
+	public FileDownloadRollUp getFileDownloadRollUp(Long id, boolean lock)
+	{
+		return fileDownloadRollUpDAO.getById(id, lock);
+	}
+	
+	/**
+	 * Delete the roll up record.
+	 * 
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#delete(edu.ur.ir.statistics.FileDownloadRollUp)
+	 */
+	public void delete(FileDownloadRollUp fileDownloadRollUp) {
+		fileDownloadRollUpDAO.makeTransient(fileDownloadRollUp);
+	}
+
 }
