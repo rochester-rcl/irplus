@@ -16,6 +16,7 @@
 
 package edu.ur.ir.statistics;
 
+import java.util.List;
 import java.util.Set;
 
 import edu.ur.ir.file.IrFile;
@@ -57,7 +58,28 @@ public interface DownloadStatisticsService {
 	 * 
 	 * @return the download info object
 	 */
-	public FileDownloadInfo addFileDownloadInfo(String ipAddress, IrFile irFile) ;
+	public FileDownloadInfo addFileDownloadInfo(String ipAddress, IrFile irFile);
+	
+	/**
+	 * Update the roll up count for the specified irFileId.
+	 * 
+	 * @param irFileId - id of the irFile to update the count for.
+	 */
+	public void updateRollUpCount(Long irFileId);
+	
+	/**
+	 * Get all processing records.
+	 * 
+	 * @return all processing recod
+	 */
+	public List<FileDownloadRollUpProcessingRecord> getAllDownloadRollUpProcessingRecords();
+	
+	/**
+	 * Delete the processing record.
+	 * 
+	 * @param processingRecord
+	 */
+	public void delete(FileDownloadRollUpProcessingRecord processingRecord);
 	
 	/**
 	 * Get the number of downloads for the sepecified ir file Id

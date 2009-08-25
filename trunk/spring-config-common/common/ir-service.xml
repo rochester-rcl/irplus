@@ -490,6 +490,7 @@
        class="edu.ur.ir.statistics.service.DefaultDownloadStatisticsService">
        <property name="fileDownloadInfoDAO" ref="fileDownloadInfoDAO"/>
        <property name="ignoreIpAddressDAO" ref="ignoreIpAddressDAO"/>
+       <property name="fileDownloadRollUpDAO" ref="fileDownloadRollUpDAO"/>
    </bean>
 
    <!-- ****************************************** --> 

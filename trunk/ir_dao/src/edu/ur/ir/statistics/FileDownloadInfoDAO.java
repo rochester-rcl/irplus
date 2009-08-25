@@ -17,14 +17,9 @@
 package edu.ur.ir.statistics;
 
 import java.util.Date;
-import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.ir.file.IrFile;
-import edu.ur.ir.institution.InstitutionalCollection;
-import edu.ur.ir.institution.InstitutionalItemDownloadCount;
-import edu.ur.ir.item.GenericItem;
 
 
 /**
@@ -49,52 +44,12 @@ CrudDAO<FileDownloadInfo> {
 	 */
 	public FileDownloadInfo getFileDownloadInfo(String ipAddress, Long fileId, Date date);
 	
-	
 	/**
 	 * Gets the count of downloads for all collections within the repository.
 	 * 
 	 * @return
 	 */
-	public Long getNumberOfFileDownloadsForRepository();
+	public Long getNumberOfFileDownloadsForIrFile(Long irFileId);
 	
-	/**
-	 * Gets the count of downloads for all collections within the repository.
-	 * 
-	 * @return
-	 */
-	public Long getNumberOfFileDownloadsForIrFile(IrFile irFile);
-	
-	/**
-	 * Get the number of file downloads for a specific collection.  This does not
-	 * include counts for files within children of the collection.
-	 * 
-	 * @param collectionId - id of the collection to get the count for
-	 * @return - a sum of all the counts for file downloads
-	 */
-	public Long getNumberOfFileDownloadsForCollection(InstitutionalCollection institutionalCollection);
-	
-	/**
-	 * Get the number of file downloads for a specific collection.  This 
-	 * include counts for files within children of the collection.
-	 * 
-	 * @param collectionId - id of the collection to get the count for
-	 * @return - a sum of all the counts for file downloads
-	 */
-	public Long getNumberOfFileDownloadsForCollectionIncludingChildren(InstitutionalCollection institutionalCollection);
 
-	/**
-	 * Get number of times the files in the specified item is downloaded.
-	 * 
-	 * @param item Item to get download count
-	 * @return Number of times downloaded
-	 */
-	public Long getNumberOfFileDownloadsForItem(GenericItem item);
-
-	/**
-	 * Get most  downloaded  institutitonal item for specified person name ids.
-	 * 
-	 * @param personNameIds Ids of person name
-	 * @return most  downloaded  institutional Item
-	 */	
-	public InstitutionalItemDownloadCount getInstitutionalItemDownloadCountByPersonName(List<Long> personNameIds) ;
 }
