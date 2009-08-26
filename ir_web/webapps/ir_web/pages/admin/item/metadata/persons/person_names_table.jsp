@@ -58,7 +58,7 @@
 			                    </c:if>
 	                        </urstb:td>
 	                        <urstb:td>
-		                        ${personNameAuthority.id}
+		                        ${personName.id}
 	                        </urstb:td>
 	                        <urstb:td>
 			                   <a href="javascript:YAHOO.ur.person.names.editPersonName('${personName.personNameAuthority.id}',
