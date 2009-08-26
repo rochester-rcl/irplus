@@ -26,7 +26,7 @@
 <!--  images used by the page -->
 <html>
     <head>
-        <title>Add Contributor: ${item.fullName}</title>
+        <title>Add Contributor(s): ${item.fullName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
 
 	    <ur:styleSheet href="page-resources/yui/reset-fonts-grids/reset-fonts-grids.css"/>
