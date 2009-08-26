@@ -44,6 +44,14 @@
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
         
+        <!--  re-index all the items in the repository -->
+        <action name="updateIrFileRollUpCounts" 
+            class="edu.ur.ir.web.action.repository.UpdateAllIrFileRollUpCounts">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
+        
         <!--  re-index all the users in the repository -->
         <action name="reIndexUsers" 
             class="edu.ur.ir.web.action.user.ReIndexUsers">

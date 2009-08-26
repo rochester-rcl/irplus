@@ -3273,6 +3273,10 @@ ALTER TABLE ir_statistics.ir_file_roll_up_processing_record OWNER TO ir_plus;
 CREATE SEQUENCE ir_statistics.ir_file_roll_up_processing_record_seq;
 ALTER TABLE ir_statistics.ir_file_roll_up_processing_record_seq OWNER TO ir_plus;
 
+CREATE INDEX file_roll_up_processing_record_ir_file_idx
+  ON ir_statistics.file_download_info(ir_file_id);
+
+
 
 -- ---------------------------------------------
 -- roll up table for ir files

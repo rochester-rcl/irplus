@@ -142,11 +142,6 @@ public class PersonNameDAOTest {
 		PersonName other = personNameDAO.getById(name.getId(), false);
 		assert other.equals(name) : "other should be equal to name";
 		
-		for( PersonNameTitle pnt : other.getPersonNameTitles() )
-		{
-			System.out.println("Title = " + pnt.getTitle());
-		}
-		
 		assert other.getPersonNameTitles().contains(title) : "other name should have " + title;
 		assert other.getPersonNameTitles().contains(title2) : "other name should have " + title2;
 		

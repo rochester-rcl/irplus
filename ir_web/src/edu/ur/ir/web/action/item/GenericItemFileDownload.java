@@ -137,6 +137,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
     			{
         	        downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
             		itemFile.getIrFile());
+        	        downloadStatisticsService.addDownloadRollUpProcessingRecord(itemFile.getIrFile().getId());
     			}
     			catch(Exception e)
       		    {

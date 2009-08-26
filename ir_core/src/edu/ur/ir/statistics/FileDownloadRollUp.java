@@ -31,7 +31,7 @@ public class FileDownloadRollUp extends BasePersistent{
 	private static final long serialVersionUID = 4429561710566378894L;
 	
 	/** full count  of the downloads for an ir file*/
-	private Integer downloadCount;
+	private Long downloadCount;
 	
 	/** the ir file id*/
 	private Long irFileId;
@@ -48,7 +48,7 @@ public class FileDownloadRollUp extends BasePersistent{
 	 * @param irFileId - ir file id
 	 * @param count - rollup count of the downloads
 	 */
-	public FileDownloadRollUp(Long irFileId, Integer count)
+	public FileDownloadRollUp(Long irFileId, Long count)
 	{
 		setIrFileId(irFileId);
 		setDownloadCount(count);
@@ -107,7 +107,7 @@ public class FileDownloadRollUp extends BasePersistent{
 	 * Total download count
 	 * @return
 	 */
-	public Integer getDownloadCount() {
+	public Long getDownloadCount() {
 		return downloadCount;
 	}
 
@@ -116,7 +116,7 @@ public class FileDownloadRollUp extends BasePersistent{
 	 * 
 	 * @param downloadCount
 	 */
-	public void setDownloadCount(Integer downloadCount) {
+	public void setDownloadCount(Long downloadCount) {
 		this.downloadCount = downloadCount;
 	}
 

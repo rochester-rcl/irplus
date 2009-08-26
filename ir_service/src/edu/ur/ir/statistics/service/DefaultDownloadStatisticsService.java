@@ -39,8 +39,6 @@ import edu.ur.ir.statistics.FileDownloadRollUp;
 import edu.ur.ir.statistics.FileDownloadRollUpDAO;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecord;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecordDAO;
-import edu.ur.ir.statistics.IgnoreIpAddress;
-import edu.ur.ir.statistics.IgnoreIpAddressDAO;
 
 /**
  * Implementation of the download statistics service.
@@ -55,9 +53,6 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	
 	/** Roll up Data access for file download info */
 	private FileDownloadRollUpDAO fileDownloadRollUpDAO;
-	
-	/** Data access for ignore IP address */
-	private IgnoreIpAddressDAO ignoreIpAddressDAO;
 	
 	/** roll up processing record data access object */
 	private FileDownloadRollUpProcessingRecordDAO fileDownloadRollUpProcessingRecordDAO;
@@ -181,22 +176,14 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	}
 	
 	/**
-	 * Save ignore Ip Address
+	 * Update all repository counts for ir files in the system.
 	 * 
-	 * @param ignoreIpAddress
+	 * @return the count of records to be updated
 	 */
-	public void saveIgnoreIpAddress(IgnoreIpAddress ignoreIpAddress) {
-		ignoreIpAddressDAO.makePersistent(ignoreIpAddress);
+	public Long updateAllRepositoryFileRollUpCounts()
+	{
+		return fileDownloadRollUpProcessingRecordDAO.updateAllRepositoryDownloadCounts();
 	}
-	
-	/**
-	 * Delete ignore Ip Address
-	 * 
-	 * @param ignoreIpAddress
-	 */
-	public void deleteIgnoreIpAddress(IgnoreIpAddress ignoreIpAddress) {
-		ignoreIpAddressDAO.makeTransient(ignoreIpAddress);
-	}	
 	
 	/**
 	 * Delete file Download Info
@@ -216,33 +203,13 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		this.fileDownloadInfoDAO = fileDownloadInfoDAO;
 	}
 
-	/**
-	 * Get ignore ip address dao
-	 * 
-	 * @return
-	 */
-	public IgnoreIpAddressDAO getIgnoreIpAddressDAO() {
-		return ignoreIpAddressDAO;
-	}
 
-	/**
-	 * Set ignore ip address dao
-	 * 
-	 * @param ignoreIpAddressDAO
-	 */
-	public void setIgnoreIpAddressDAO(IgnoreIpAddressDAO ignoreIpAddressDAO) {
-		this.ignoreIpAddressDAO = ignoreIpAddressDAO;
-	}
 
 	public FileDownloadInfo getFileDownloadInfo(Long id, boolean lock) {
 		return fileDownloadInfoDAO.getById(id, lock);
 	}
 
 	
-	public IgnoreIpAddress getIgnoreIpAddress(Long id, boolean lock) {
-		return ignoreIpAddressDAO.getById(id, lock);
-	}
-
 	/**
 	 * Get most downloaded institutional item info by person name ids
 	 * 
@@ -281,11 +248,11 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		
 		if( rollUp == null )
 		{
-			rollUp = new FileDownloadRollUp(irFileId, count.intValue());
+			rollUp = new FileDownloadRollUp(irFileId, count);
 		}
 		else
 		{
-			rollUp.setDownloadCount(count.intValue());
+			rollUp.setDownloadCount(count);
 		}
 		
 		fileDownloadRollUpDAO.makePersistent(rollUp);
@@ -319,6 +286,26 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	@SuppressWarnings("unchecked")
 	public List<FileDownloadRollUpProcessingRecord> getAllDownloadRollUpProcessingRecords() {
 		return fileDownloadRollUpProcessingRecordDAO.getAll();
+	}
+	
+	/**
+	 * Add a processing record for the specified file id.  If a processing record for the 
+	 * specified ir file exits, that record is returned otherwise a new processing record is
+	 * created and returned.
+	 * 
+	 * @param irFileId
+	 */
+	public FileDownloadRollUpProcessingRecord addDownloadRollUpProcessingRecord(Long irFileId)
+	{
+		FileDownloadRollUpProcessingRecord	processingRecord = fileDownloadRollUpProcessingRecordDAO.getByIrFileId(irFileId);
+	    if( processingRecord == null )
+	    {
+	    	processingRecord = new FileDownloadRollUpProcessingRecord(irFileId);
+	    	fileDownloadRollUpProcessingRecordDAO.makePersistent(processingRecord);
+	    }
+	    
+	    return processingRecord;
+	
 	}
 
 	
