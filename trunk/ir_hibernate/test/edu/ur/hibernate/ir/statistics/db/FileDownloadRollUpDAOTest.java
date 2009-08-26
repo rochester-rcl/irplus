@@ -141,7 +141,7 @@ public class FileDownloadRollUpDAOTest {
 	public void baseDownloadInfoDAOTest() throws Exception{
 
 	    TransactionStatus ts = tm.getTransaction(td);
-        FileDownloadRollUp fileDownloadRollUp = new FileDownloadRollUp(22l, 44);
+        FileDownloadRollUp fileDownloadRollUp = new FileDownloadRollUp(22l, 44l);
         
         fileDownloadRollUpDAO.makePersistent(fileDownloadRollUp);
  	    tm.commit(ts);
@@ -253,11 +253,11 @@ public class FileDownloadRollUpDAOTest {
         fileDownloadInfoDAO.makePersistent(downloadInfo2);
         
         Long count1 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile1.getId());
-        FileDownloadRollUp rollUp1 = new FileDownloadRollUp(irFile1.getId(), count1.intValue());
+        FileDownloadRollUp rollUp1 = new FileDownloadRollUp(irFile1.getId(), count1);
 		fileDownloadRollUpDAO.makePersistent(rollUp1);
 		
         Long count2 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile2.getId());
-        FileDownloadRollUp rollUp2 = new FileDownloadRollUp(irFile2.getId(), count2.intValue());
+        FileDownloadRollUp rollUp2 = new FileDownloadRollUp(irFile2.getId(), count2);
 		fileDownloadRollUpDAO.makePersistent(rollUp2);
 	    tm.commit(ts);
 
@@ -300,12 +300,12 @@ public class FileDownloadRollUpDAOTest {
         // update the counts
         count1 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile1.getId());
         rollUp1 = fileDownloadRollUpDAO.getByIrFileId(irFile1.getId());
-        rollUp1.setDownloadCount(count1.intValue());
+        rollUp1.setDownloadCount(count1);
 		fileDownloadRollUpDAO.makePersistent(rollUp1);
 		
         count2 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile2.getId());
         rollUp2 = fileDownloadRollUpDAO.getByIrFileId(irFile2.getId());
-        rollUp2.setDownloadCount(count2.intValue());
+        rollUp2.setDownloadCount(count2);
 		fileDownloadRollUpDAO.makePersistent(rollUp2);
         
         
@@ -491,11 +491,11 @@ public class FileDownloadRollUpDAOTest {
         fileDownloadInfoDAO.makePersistent(downloadInfo2);
         
         Long count1 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile1.getId());
-        FileDownloadRollUp rollUp1 = new FileDownloadRollUp(irFile1.getId(), count1.intValue());
+        FileDownloadRollUp rollUp1 = new FileDownloadRollUp(irFile1.getId(), count1);
 		fileDownloadRollUpDAO.makePersistent(rollUp1);
 		
         Long count2 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile2.getId());
-        FileDownloadRollUp rollUp2 = new FileDownloadRollUp(irFile2.getId(), count2.intValue());
+        FileDownloadRollUp rollUp2 = new FileDownloadRollUp(irFile2.getId(), count2);
 		fileDownloadRollUpDAO.makePersistent(rollUp2);
         
 	    tm.commit(ts);

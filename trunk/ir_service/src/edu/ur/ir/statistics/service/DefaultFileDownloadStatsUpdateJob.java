@@ -1,6 +1,5 @@
 package edu.ur.ir.statistics.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -69,7 +68,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		try
 		{
 			downloadStatisticsService = (DefaultDownloadStatisticsService)
-			    applicationContext.getBean("institutionalItemIndexProcessingRecordService");
+			    applicationContext.getBean("downloadStatisticsService");
 			errorEmailService = (ErrorEmailService)applicationContext.getBean("errorEmailService");
 			tm = (PlatformTransactionManager) applicationContext.getBean("transactionManager");
 			td = new DefaultTransactionDefinition(
@@ -80,20 +79,19 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		    throw new JobExecutionException("Unable to retrieve target bean that is to be used as a job source", e1);
 		}
 		
-		List<FileDownloadRollUpProcessingRecord> records = new LinkedList<FileDownloadRollUpProcessingRecord>();
+		List<FileDownloadRollUpProcessingRecord> records =  downloadStatisticsService.getAllDownloadRollUpProcessingRecords();
 		log.debug("processing " + records.size() + " records ");
-		
-		// start a new transaction
-		TransactionStatus ts = tm.getTransaction(td);
-		
 	
 		for( FileDownloadRollUpProcessingRecord record : records )
 		{
 			try
 			{
+				// start a new transaction
+				TransactionStatus ts = tm.getTransaction(td);
 			    Long irFileId = record.getIrFileId();
 			    downloadStatisticsService.updateRollUpCount(irFileId);
 			    downloadStatisticsService.delete(record);
+			    tm.commit(ts);
 			}
 			catch(Exception e)
 			{
@@ -101,7 +99,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			}
 		}
 		
-		tm.commit(ts);
+		
 		
 	}
 

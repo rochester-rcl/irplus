@@ -75,6 +75,22 @@ public interface DownloadStatisticsService {
 	public List<FileDownloadRollUpProcessingRecord> getAllDownloadRollUpProcessingRecords();
 	
 	/**
+	 * Update all repository counts for ir files in the system.
+	 * 
+	 * @return the count of records to be updated
+	 */
+	public Long updateAllRepositoryFileRollUpCounts();
+	
+	/**
+	 * Add a processing record for the specified file id.  If a processing record for the 
+	 * specified ir file exits, that record is returned otherwise a new processing record is
+	 * created and returned.
+	 * 
+	 * @param irFileId
+	 */
+	public FileDownloadRollUpProcessingRecord addDownloadRollUpProcessingRecord(Long irFileId);
+	
+	/**
 	 * Delete the processing record.
 	 * 
 	 * @param processingRecord
@@ -116,36 +132,12 @@ public interface DownloadStatisticsService {
 	public Long getNumberOfDownloadsForFile(IrFile irFile);
 	
 	/**
-	 * Save ignore Ip Address
-	 * 
-	 * @param ignoreIpAddress
-	 */
-	public void saveIgnoreIpAddress(IgnoreIpAddress ignoreIpAddress);
-	
-	/**
-	 * Get the ignore ip address
-	 * 
-	 * @param id - id of the ingore ip address
-	 * @param lock - upgrade the lock
-	 * @return - the found ignore ip address or null if one is not found
-	 */
-	public IgnoreIpAddress getIgnoreIpAddress(Long id,  boolean lock) ;
-	
-
-	/**
 	 * Delete file Download Info
 	 * 
 	 * @param fileDownloadInfo
 	 */
 	public void deleteFileDownloadInfo(FileDownloadInfo fileDownloadInfo);
 	
-	/**
-	 * Delete ignore Ip Address
-	 * 
-	 * @param ignoreIpAddress
-	 */
-	public void deleteIgnoreIpAddress(IgnoreIpAddress ignoreIpAddress);
-
 	/**
 	 * Get the number of file downloads in the items of the specified collection and its children
 	 * 

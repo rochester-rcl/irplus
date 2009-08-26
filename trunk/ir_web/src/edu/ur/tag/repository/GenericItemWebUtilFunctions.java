@@ -26,7 +26,7 @@ public class GenericItemWebUtilFunctions {
 		{
 			if(genericItem.getContributor(personName) != null)
 			{
-				isContributor = true;
+				  isContributor = true;
 			}
 		}
 		return isContributor;

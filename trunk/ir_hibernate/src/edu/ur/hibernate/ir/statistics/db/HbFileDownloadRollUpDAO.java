@@ -171,7 +171,7 @@ public class HbFileDownloadRollUpDAO implements FileDownloadRollUpDAO{
 	 * @see edu.ur.ir.statistics.FileDownloadInfoDAO#getNumberOfFileDownloadsForIrFile(edu.ur.ir.file.IrFile)
 	 */
 	public Long getNumberOfFileDownloadsForIrFile(IrFile irFile) {
-		Integer value = (Integer)
+		Long value = (Long)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getRollUpFileDownloadCount", irFile.getId()));
 		if( value != null )
 		{

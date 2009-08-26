@@ -312,7 +312,8 @@ public class PersonNameAuthority extends BasePersistent{
 	}
 	
 	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
+	 *  This checks the name without using the id.
+	 *  
 	 */
 	public boolean softEquals(Object o) {
 		if (this == o) return true;
@@ -320,7 +321,7 @@ public class PersonNameAuthority extends BasePersistent{
 
 		final PersonNameAuthority other = (PersonNameAuthority) o;
 
-		if( ( authoritativeName != null && !authoritativeName.equals(other.getAuthoritativeName()) ) ||
+		if( ( authoritativeName != null && !authoritativeName.softEquals(other.getAuthoritativeName()) ) ||
 			( authoritativeName == null && other.getAuthoritativeName() != null ) ) return false;
 		
 		if( ( deathDate != null && !deathDate.equals(other.getDeathDate()) ) ||

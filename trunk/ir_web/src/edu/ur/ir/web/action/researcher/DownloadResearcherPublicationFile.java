@@ -113,6 +113,7 @@ public class DownloadResearcherPublicationFile extends ActionSupport implements 
         		  {
         	        downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
         	        		itemFile.getIrFile());
+        	        downloadStatisticsService.addDownloadRollUpProcessingRecord(itemFile.getIrFile().getId());
         		  }
         		  catch(Exception e)
         		  {

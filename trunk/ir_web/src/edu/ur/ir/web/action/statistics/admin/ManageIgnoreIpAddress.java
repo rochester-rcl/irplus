@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.statistics.IgnoreIpAddress;
 import edu.ur.ir.statistics.IgnoreIpAddressService;
 import edu.ur.ir.web.table.Pager;
@@ -40,6 +41,9 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 
 	/** ignore ip address service */
 	private IgnoreIpAddressService ignoreIpAddressService;
+	
+	/** service for dealing with statistics information */
+	private DownloadStatisticsService downloadStatisticsService;
 	
 	/**  Logger for managing ip addresses*/
 	private static final Logger log = Logger.getLogger(ManageIgnoreIpAddress.class);
@@ -96,6 +100,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 		if( other == null)
 		{
 		    ignoreIpAddressService.saveIgnoreIpAddress(ignoreIpAddress);
+		    downloadStatisticsService.updateAllRepositoryFileRollUpCounts();
 		    added = true;
 		}
 		else
@@ -121,6 +126,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 		if( other == null || other.getId().equals(ignoreIpAddress.getId()))
 		{
 			ignoreIpAddressService.saveIgnoreIpAddress(ignoreIpAddress);
+			downloadStatisticsService.updateAllRepositoryFileRollUpCounts();
 			added = true;
 		}
 		else
@@ -147,6 +153,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 			    log.debug("Deleting ignore ip address with id " + ignoreIpAddressIds[index]);
 			    ignoreIpAddressService.deleteIgnoreIpAddress(ignoreIpAddressIds[index]);
 		    }
+		    downloadStatisticsService.updateAllRepositoryFileRollUpCounts();
 		}
 		deleted = true;
 		return "deleted";
@@ -301,6 +308,17 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+
+	public DownloadStatisticsService getDownloadStatisticsService() {
+		return downloadStatisticsService;
+	}
+
+
+	public void setDownloadStatisticsService(
+			DownloadStatisticsService downloadStatisticsService) {
+		this.downloadStatisticsService = downloadStatisticsService;
 	}
 
 }

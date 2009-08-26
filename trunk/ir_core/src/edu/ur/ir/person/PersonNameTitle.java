@@ -78,7 +78,6 @@ public class PersonNameTitle extends BasePersistent {
     {
     	int hash = 0;
     	hash += title == null ? 0 : title.hashCode();
-    	hash += personName == null ? 0 : personName.hashCode();
     	return hash;
     }
     
@@ -96,9 +95,6 @@ public class PersonNameTitle extends BasePersistent {
 
 		if( ( title != null && !title.equals(other.getTitle()) ) ||
 			( title == null && other.getTitle() != null ) ) return false;
-		
-		if( ( personName != null && !personName.equals(other.getPersonName()) ) ||
-			( personName == null && other.getPersonName() != null ) ) return false;
 		
 		return true;
     }

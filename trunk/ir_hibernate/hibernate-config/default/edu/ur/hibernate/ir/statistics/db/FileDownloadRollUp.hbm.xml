@@ -39,7 +39,7 @@
 		<property name="irFileId" column="ir_file_id" type="long"
 			access="field" not-null="true"/>
 
-		<property name="downloadCount" column="download_count" type="int"
+		<property name="downloadCount" column="download_count" type="long"
 			access="field" not-null="true"/>
 	</class>
 	

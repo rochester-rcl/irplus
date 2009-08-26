@@ -321,6 +321,7 @@ public class PersonName extends BasePersistent{
 	public int hashCode()
 	{
 		int value = 0;
+		value += id == null ? 0 : id.hashCode();
 		value += familyName == null ? 0 : familyName.hashCode();
 		value += forename == null? 0 : forename.hashCode();
 		value += initials == null? 0 : initials.hashCode();
@@ -328,6 +329,39 @@ public class PersonName extends BasePersistent{
 		value += numeration == null ? 0 : numeration.hashCode();
 		value += surname == null ? 0 : surname.hashCode();
 		return value;
+	}
+	
+	/**
+	 * This checks to see if the person name is equal without looking
+	 * at the id.
+	 * 
+	 */
+	public boolean softEquals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof PersonName)) return false;
+
+		final PersonName other = (PersonName) o;
+
+		if( ( familyName != null && !familyName.equals(other.getFamilyName()) ) ||
+			( familyName == null && other.getFamilyName() != null ) ) return false;
+		
+		if( ( forename != null && !forename.equals(other.getForename()) ) ||
+		    ( forename == null && other.getForename() != null ) ) return false;
+		
+		if( ( initials != null && !initials.equals(other.getInitials()) ) ||
+			( initials == null && other.getInitials() != null ) ) return false;
+
+		if( ( middleName != null && !middleName.equals(other.getMiddleName()) ) ||
+			( middleName == null && other.getMiddleName() != null ) ) return false;
+		
+		if( ( numeration != null && !numeration.equals(other.getNumeration()) ) ||
+			( numeration == null && other.getNumeration() != null ) ) return false;
+
+		if( ( surname != null && !surname.equals(other.getSurname()) ) ||
+			( surname == null && other.getSurname() != null ) ) return false;
+
+		return true;
 	}
 	
 	/**
@@ -339,6 +373,9 @@ public class PersonName extends BasePersistent{
 		if (!(o instanceof PersonName)) return false;
 
 		final PersonName other = (PersonName) o;
+		
+		if( ( id != null && !id.equals(other.getId()) ) ||
+			( id == null && other.getId() != null ) ) return false;
 
 		if( ( familyName != null && !familyName.equals(other.getFamilyName()) ) ||
 			( familyName == null && other.getFamilyName() != null ) ) return false;
