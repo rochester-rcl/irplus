@@ -1,3 +1,4 @@
+<jsp:directive.page contentType="application/javascript; charset=UTF-8"/>
 
 <input type="hidden" id="newPersonForm_id" name="id" value="${personNameAuthority.id}"/>
 <input type="hidden" id="newPersonForm_auth_id" name="personNameId" value=""/>
