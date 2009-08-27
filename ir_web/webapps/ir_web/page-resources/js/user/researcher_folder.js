@@ -321,12 +321,12 @@ YAHOO.ur.researcher.folder = {
 		// handle a successful return
 		var handleSuccess = function(o) 
 		{
-			alert(o.responseText);
+			
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {       		 	
-	        	
+	        	  var response = eval("("+o.responseText+")");
 		        //if the folder was not added then show the user the error message.
 		        // received from the server
 		        if( response.added == "false" )
