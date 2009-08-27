@@ -157,7 +157,7 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
         IrUser user = item.getOwner();
 		
 		// make sure the user is the owner.
-		if( userId == null || !user.getId().equals(userId))
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
 		{
 			return "accessDenied";
 		}
