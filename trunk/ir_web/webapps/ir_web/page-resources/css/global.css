@@ -134,21 +134,10 @@ goes above the menu bar and in the
 footer
 *********************************/
 ul.basicNav {
+	float: left;
 	margin: 0;
 	padding-bottom: 20px;
 	padding-left: 0px;
-}
-
-.basicNav a {
-	color: #000;
-	font-size: .75em;
-	text-decoration: none;
-	border-bottom: none;
-	padding: 1px 3px 3px 8px;
-}
-
-.basicNav a:hover {
-	font-weight: bold;
 }
 
 .basicNav li {
@@ -156,17 +145,14 @@ ul.basicNav {
 	list-style:none;
 }
 
-/* float the bottom nav to the left */
-#bottomNav {
-	clear: both;
-}
 
 /* copy right statement */
 .copyright {
-	margin-left: 6px;
-	font-size: .75em;
+	float:left;
+	clear: left;
+	width: 550px;
+	font-size: 1 em;
 }
-
 
 /*  customize the footer */
 #ft
@@ -176,6 +162,9 @@ ul.basicNav {
     height: 10em;
     border-top: 1px solid #b9c0c2;
 }
+
+
+
 
 /* styling for buttons that have
    not yet been rolled over*/

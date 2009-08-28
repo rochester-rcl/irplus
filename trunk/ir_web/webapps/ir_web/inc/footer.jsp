@@ -17,16 +17,17 @@
 -->   
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-            <!--  footer  -->
-            <div id="ft">
-                <ul id="bottomNav" class="basicNav">
-                    <li><a href="<c:url value="/help.action"/>">User Help</a>&nbsp;|</li>
-                    <li><a href="<c:url value="/admin-help.action"/>">Administration Help</a>&nbsp;|</li>
-                    <li><a href="<c:url value="/contactUs.action"/>">Contact Us</a>&nbsp;|</li>
-                    <li><a href="<c:url value="/about.action"/>">About</a>&nbsp;|</li>
-                    
-                    <li><a href="<c:url value="/privacyPolicy.action"/>">Privacy Policy</a></li>
-                </ul>
-                <div class="copyright"><i>Copyright &copy; UNIVERSITY OF ROCHESTER LIBRARIES. All Rights Reserved</i></div>
-            </div>
-            <!-- end footer -->
+<!--  footer  -->
+<div id="ft">
+ 
+    <ul id="bottomNav" class="basicNav">
+        <li><a href="<c:url value="/help.action"/>">User Help</a>&nbsp;|&nbsp;</li>
+        <li><a href="<c:url value="/admin-help.action"/>">Administration Help</a>&nbsp;|&nbsp;</li>
+        <li><a href="<c:url value="/contactUs.action"/>">Contact Us</a>&nbsp;|&nbsp;</li>
+        <li><a href="<c:url value="/about.action"/>">About</a>&nbsp;|&nbsp;</li>
+        <li><a href="<c:url value="/privacyPolicy.action"/>">Privacy Policy</a></li>
+    </ul>
+    <div class="copyright"><i>Copyright &copy; UNIVERSITY OF ROCHESTER LIBRARIES. All Rights Reserved</i></div>
+   
+</div>
+<!-- end footer -->
