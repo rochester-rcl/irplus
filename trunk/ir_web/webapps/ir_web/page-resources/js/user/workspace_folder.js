@@ -149,7 +149,7 @@ YAHOO.ur.folder =
 	    var handleFailure = function(o) 
 	    {
 	    	YAHOO.ur.util.wait.waitDialog.hide();
-	        alert('delete files folders failure '  + o.status + ' status text ' + o.statusText);
+	        alert('get folder by id failure '  + o.status + ' status text ' + o.statusText);
 	    };
 
 	    //destroy the folder menus
