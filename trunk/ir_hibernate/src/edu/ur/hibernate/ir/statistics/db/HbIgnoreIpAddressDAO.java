@@ -69,10 +69,20 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }	
 
+	/**
+	 * Get all ip addresses.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
 	public List<IgnoreIpAddress> getAll() {
 		return hbCrudDAO.getAll();
 	}
 
+	/**
+	 * GEt the ignore ip address by id.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
+	 */
 	public IgnoreIpAddress getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
@@ -137,5 +147,40 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
 		
 		return (IgnoreIpAddress) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getIgnoreIpAddress", ipaddress));
 
+	}
+	
+	/**
+	 * Get the count of times the ip address shows up in ignore addresses.  A count of 0 means that
+	 * it should not be ignored.
+	 * 
+	 * the address is expected in the format NNN.NNN.NNN.NNN
+	 * one example would be 192.9.44.23
+	 * 
+	 * @param part1 - first part of the ip address (192)
+	 * @param part2 - second part of the ip address (9)
+	 * @param part3 - third part of the ip address  (44)
+	 * @param part4 - forth part of the ip address (23)
+	 * 
+	 * @return
+	 */
+	public Integer getIgnoreCountForIp(final Integer part1, 
+			final Integer part2,
+			final Integer part3, 
+			final Integer part4)
+	{
+		Integer count = (Integer)hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+            public Object doInHibernate(Session session)
+                    throws HibernateException, SQLException {
+		        Query q = session.getNamedQuery("getIgnoreIPOrderByNameAsc");
+			    q.setParameter("part1", part1);
+			    q.setParameter("part2", part2);
+			    q.setParameter("part3", part3);
+			    q.setParameter("part4", part4);
+	            return q.uniqueResult();
+            }
+        });
+
+        return count;
 	}
 }

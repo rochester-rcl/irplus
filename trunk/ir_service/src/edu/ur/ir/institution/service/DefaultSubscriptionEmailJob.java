@@ -119,7 +119,7 @@ public class DefaultSubscriptionEmailJob implements StatefulJob{
 				} 
 				catch (Exception e) 
 				{
-				    log.error("Ir User = " + user, e);
+				    log.error("email problem with user = " + user, e);
 				    errorEmailService.sendError(e);
 			    }
 		    }

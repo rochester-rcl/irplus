@@ -23,16 +23,17 @@ import java.util.StringTokenizer;
 import edu.ur.persistent.BasePersistent;
 
 /**
- * File download information
+ * This is a record for an existing ignore address.  This allows
+ * ignore addresses to be stored in a separate area.
  * 
- * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
- public class FileDownloadInfo  extends BasePersistent {
+public class IpIgnoreFileDownloadInfo extends BasePersistent {
 
-	/** Eclipse generated id */
-	private static final long serialVersionUID = -4370857994964827750L;
-
+	/** eclipse generated id */
+	private static final long serialVersionUID = 511549268746634484L;
+	
 	/** Complete IP address */
 	private String ipAddress;
 	
@@ -60,7 +61,7 @@ import edu.ur.persistent.BasePersistent;
 	/**
 	 * Default constructor
 	 */
-	FileDownloadInfo() {}
+	IpIgnoreFileDownloadInfo() {}
 
 	/**
 	 * Constructor for file download info
@@ -69,7 +70,7 @@ import edu.ur.persistent.BasePersistent;
 	 * @param irFileId Id of file that is downloaded
 	 * @param date Date of download
 	 */
-	public FileDownloadInfo(String ipAddress, Long fileId, Date downloadDate) {
+	public IpIgnoreFileDownloadInfo(String ipAddress, Long fileId, Date downloadDate) {
 		setIpAddress(ipAddress);
 		this.irFileId = fileId;
 		this.downloadDate = downloadDate;
@@ -153,9 +154,9 @@ import edu.ur.persistent.BasePersistent;
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof FileDownloadInfo)) return false;
+		if (!(o instanceof IpIgnoreFileDownloadInfo)) return false;
 
-		final FileDownloadInfo other = (FileDownloadInfo) o;
+		final IpIgnoreFileDownloadInfo other = (IpIgnoreFileDownloadInfo) o;
 
 		if( ( irFileId != null && !irFileId.equals(other.getIrFileId()) ) ||
 			( irFileId == null && other.getIrFileId() != null ) ) return false;
@@ -229,4 +230,5 @@ import edu.ur.persistent.BasePersistent;
 		return sb.toString();
 		
 	}
+
 }

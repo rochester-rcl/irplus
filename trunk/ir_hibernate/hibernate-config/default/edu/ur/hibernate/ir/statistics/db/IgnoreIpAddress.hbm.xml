@@ -20,7 +20,7 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for download date
+	Mapping for ip ignore address
 	
 	@author Sharmila Ranganathan
 -->
@@ -85,7 +85,16 @@
 		ignoreIpAddress.name desc
 	</query>
 	
-		<!-- named query for getting ip address count -->
+	<!-- named query to determine if the ip address should be ignored -->
+	<query name="getIgnoreCountForIp">
+		select count(*) from IgnoreIpAddress as ignore 
+		where ignore.fromAddress1 = :part1
+		and ignore.fromAddress2 = :part2
+		and ignore.fromAddress3 = :part3
+		and :part4 between ignore.fromAddress4 and ignore.toAddress4
+	</query>
+	
+	<!-- named query for getting ip address count -->
 	<query name="ipCount">
 		select count(*) from IgnoreIpAddress 
 	</query>

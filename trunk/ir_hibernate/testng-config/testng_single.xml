@@ -19,7 +19,7 @@
 <suite name="ir hibernate test single">
 	<test name="Test Single">
 		<classes>
-		      <class name="edu.ur.hibernate.ir.statistics.db.FileDownloadRollUpProcessingRecordDAOTest"/>
+		      <class name="edu.ur.hibernate.ir.statistics.db.IgnoreIpAddressDAOTest"/>
 		</classes>
 	</test>
 </suite>
