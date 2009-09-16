@@ -39,12 +39,15 @@ public class IgnoreIpAddressDAOTest {
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 
+	/** Data access for ignore ip address class */
 	IgnoreIpAddressDAO ignoreIpAddressDAO = (IgnoreIpAddressDAO) ctx
 	.getBean("ignoreIpAddressDAO");
 	
+	/** platform transaction manager  */
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
 	.getBean("transactionManager");
 	
+    /** transaction definition */
     TransactionDefinition td = new DefaultTransactionDefinition(
 	TransactionDefinition.PROPAGATION_REQUIRED);
 
@@ -53,7 +56,7 @@ public class IgnoreIpAddressDAOTest {
 	 * Test Ignore Ip address range persistance
 	 */
 	@Test
-	public void baseDownloadInfoDAOTest() throws Exception{
+	public void baseIgnoreIpInfoDAOTest() throws Exception{
 
 	    TransactionStatus ts = tm.getTransaction(td);
 
@@ -69,6 +72,42 @@ public class IgnoreIpAddressDAOTest {
         ignoreIpAddressDAO.makeTransient(other);
         assert  ignoreIpAddressDAO.getById(other.getId(), false) == null : "Should no longer be able to find Ignore Ip address range";
 	    tm.commit(ts);
+	}
+	
+	/**
+	 * Make sure the count is correct for a given ip address.
+	 */
+	public void checkIngoreAddressCountTest()
+	{
+		 TransactionStatus ts = tm.getTransaction(td);
+
+		 IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,1, 10);
+	     ignoreIpAddressDAO.makePersistent(ip1);
+
+	     IgnoreIpAddress ip2 = new IgnoreIpAddress(123,0,0,5, 5);
+	     ignoreIpAddressDAO.makePersistent(ip1);
+	     tm.commit(ts);
+
+	 	 // check to make sure the ip address counts are correct
+	 	 ts = tm.getTransaction(td);
+	 	 
+	 	 int count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 5);  
+	 	 assert count == 2 : "count equals " + count;
+	 	 
+	 	 count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 7);  
+	 	 assert count == 1 : "count equals " + count;
+	 	 
+	 	 count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 11);  
+	 	 assert count == 0 : "count equals " + count;
+	 	 
+	 	 
+	 	 tm.commit(ts);
+	     
+	 	 
+	 	 ts = tm.getTransaction(td);
+	     ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip1.getId(), false));
+	     ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip2.getId(), false));
+		 tm.commit(ts);
 	}
 	
 

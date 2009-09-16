@@ -20,20 +20,19 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for file download info 
+	Mapping for file ip ignore download info 
 	
-	@author Sharmila Ranganathan
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.statistics">
-	<class name="FileDownloadInfo" schema="ir_statistics" table="file_download_info"
+	<class name="IpIgnoreFileDownloadInfo" schema="ir_statistics" table="ip_ignore_file_download_info"
 		lazy="true">
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="file_download_info_id"
+		<id name="id" type="long" column="ip_ignore_file_download_info_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_statistics.file_download_info_seq</param>
+				<param name="sequence">ir_statistics.ip_ignore_file_download_info_seq</param>
 			</generator>
 		</id>
 
@@ -56,11 +55,10 @@
 		<property name="ipAddressPart4" column="ip_address_part4" type="int"
 			access="field" />
 						
-						
 		<property name="irFileId" column="ir_file_id" type="long"
 			access="field" />
 
-		<property name="downloadCount" column="count" type="int"
+		<property name="downloadCount" column="download_count" type="int"
 			access="field" />
 		
 		<property name="downloadDate" column="download_date" type="date"
@@ -69,27 +67,16 @@
 	</class>
 
 	<!-- named query for getting ip address count -->
-	<query name="fileDownloadInfoCount">
-		select count(*) from FileDownloadInfo 
+	<query name="ipIgnoreFileDownloadInfoCount">
+		select count(*) from IpIgnoreFileDownloadInfo 
 	</query>
 
     <!-- named query for getting a the download info -->
-	<query name="getDownloadInfo">
-		from FileDownloadInfo as fileDownloadInfo where
-		fileDownloadInfo.ipAddress = ? AND
-		fileDownloadInfo.irFileId = ? AND
-		fileDownloadInfo.downloadDate  = ?
-	</query>
-	
-		<!-- named query for getting a count of all the downloads in the repository -->
-	<query name="getIrFileDownloadCount">
-		select sum(fileDownloadInfo.downloadCount) from FileDownloadInfo fileDownloadInfo 
-		where fileDownloadInfo.irFileId = ?
-		and (select count(*) from IgnoreIpAddress as ignore 
-		       where fileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
-		       and fileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
-		       and fileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
-		       and fileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
+	<query name="getIpIgnoreFileDownloadInfo">
+		from IpIgnoreFileDownloadInfo as ipIgnoreFileDownloadInfo where
+		ipIgnoreFileDownloadInfo.ipAddress = ? AND
+		ipIgnoreFileDownloadInfo.irFileId = ? AND
+		ipIgnoreFileDownloadInfo.downloadDate  = ?
 	</query>
 	
 		

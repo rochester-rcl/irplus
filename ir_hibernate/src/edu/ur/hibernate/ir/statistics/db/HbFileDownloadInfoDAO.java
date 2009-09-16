@@ -63,7 +63,7 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 	 */
 	public Long getCount() {
 		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("fileDownloadCount"));
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("fileDownloadInfoCount"));
 	}
 	
 	public List<FileDownloadInfo> getAll() {

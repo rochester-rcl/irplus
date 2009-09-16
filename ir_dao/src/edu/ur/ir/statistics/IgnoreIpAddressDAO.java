@@ -50,4 +50,23 @@ public interface IgnoreIpAddressDAO extends CrudDAO<IgnoreIpAddress>, CountableD
 	 * @return - the found ip address range or null if the ip address is not found.
 	 */
 	public IgnoreIpAddress getIgnoreIpAddress(IgnoreIpAddress ignoreIpAddress);
+	
+	/**
+	 * Get the count of times the ip address shows up in ignore addresses.  A count of 0 means that
+	 * it should not be ignored.
+	 * 
+	 * the address is expected in the format XXX.XXX.XXX.XXX
+	 * one example would be 192.9.44.23
+	 * 
+	 * @param part1 - first part of the ip address (192)
+	 * @param part2 - second part of the ip address (9)
+	 * @param part3 - third part of the ip address  (44)
+	 * @param part4 - forth part of the ip address (23)
+	 * @return
+	 */
+	public Integer getIgnoreCountForIp(final Integer part1, 
+			final Integer part2, 
+			final Integer part3, 
+			final Integer part4);
+
 }

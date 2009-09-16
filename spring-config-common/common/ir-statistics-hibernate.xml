@@ -108,4 +108,27 @@
            </props>
        </property>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Ip Ignore File download info information             -->
+   <!-- ****************************************** --> 
+   
+   <bean id="ipIgnoreFileDownloadInfoDAOTarget" 
+       class="edu.ur.hibernate.ir.statistics.db.HbIpIgnoreFileDownloadInfoDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="ipIgnoreFileDownloadInfoDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="ipIgnoreFileDownloadInfoDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
 </beans>

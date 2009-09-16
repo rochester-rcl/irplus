@@ -27,25 +27,24 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
-import edu.ur.ir.statistics.FileDownloadInfo;
-import edu.ur.ir.statistics.FileDownloadInfoDAO;
+import edu.ur.ir.statistics.IpIgnoreFileDownloadInfo;
+import edu.ur.ir.statistics.IpIgnoreFileDownloadInfoDAO;
 
 
 /**
- * Test file download info persistance
  * 
- * @author Sharmila Ranganathan
+ * Interface to save file download info 
+ * 
  * @author Nathan Sarr
  *
  */
-public class FileDownloadInfoDAOTest {
+public class IpIgnoreFileDownloadInfoDAOTest {
 	
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 
-	FileDownloadInfoDAO fileDownloadInfoDAO = (FileDownloadInfoDAO) ctx
-	.getBean("fileDownloadInfoDAO");
-	
+	IpIgnoreFileDownloadInfoDAO ipIgnorefileDownloadInfoDAO = (IpIgnoreFileDownloadInfoDAO) ctx
+	.getBean("ipIgnoreFileDownloadInfoDAO");
 	
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
 	.getBean("transactionManager");
@@ -57,25 +56,24 @@ public class FileDownloadInfoDAOTest {
 	 * Test download info persistance
 	 */
 	@Test
-	public void baseDownloadInfoDAOTest() throws Exception{
+	public void baseIpIgnoreFileDownloadInfoDAOTest() throws Exception{
 
 	    TransactionStatus ts = tm.getTransaction(td);
 
 	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
 	    Date d = simpleDateFormat.parse("1/1/2008");
-        FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.0.0.1", 1l,d);
-        downloadInfo1.setDownloadCount(1);
+        IpIgnoreFileDownloadInfo ipIgnoredownloadInfo1 = new IpIgnoreFileDownloadInfo("123.0.0.1", 1l,d);
+        ipIgnoredownloadInfo1.setDownloadCount(1);
         
-        fileDownloadInfoDAO.makePersistent(downloadInfo1);
+        ipIgnorefileDownloadInfoDAO.makePersistent(ipIgnoredownloadInfo1);
  	    tm.commit(ts);
  	    
  	    ts = tm.getTransaction(td);
- 		FileDownloadInfo other = fileDownloadInfoDAO.getById(downloadInfo1.getId(), false);
-        assert other.equals(downloadInfo1) : "File download info should be equal other = \n" + other + "\n downloadInfo1 = " + downloadInfo1;
+ 		IpIgnoreFileDownloadInfo other = ipIgnorefileDownloadInfoDAO.getById(ipIgnoredownloadInfo1.getId(), false);
+        assert other.equals(ipIgnoredownloadInfo1) : "Ip Ignore File download info should be equal other = \n" + other + "\n downloadInfo1 = " + ipIgnoredownloadInfo1;
          
-        fileDownloadInfoDAO.makeTransient(other);
-        assert  fileDownloadInfoDAO.getById(other.getId(), false) == null : "Should no longer be able to find file download info";
+        ipIgnorefileDownloadInfoDAO.makeTransient(other);
+        assert  ipIgnorefileDownloadInfoDAO.getById(other.getId(), false) == null : "Should no longer be able to find file download info";
 	    tm.commit(ts);
 	}
-
 }
