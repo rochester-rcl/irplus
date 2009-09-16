@@ -3294,6 +3294,40 @@ CREATE SEQUENCE ir_statistics.ir_file_roll_up_seq;
 ALTER TABLE ir_statistics.ir_file_roll_up_seq OWNER TO ir_plus;
 
 
+
+
+-- ---------------------------------------------
+-- Ip Ignore File download Information
+-- ---------------------------------------------
+CREATE TABLE ir_statistics.ip_ignore_file_download_info
+(
+    ip_ignore_file_download_info_id BIGINT PRIMARY KEY,
+    ip_address text ,
+    ip_address_part1 INTEGER,
+    ip_address_part2 INTEGER,
+    ip_address_part3 INTEGER,
+    ip_address_part4 INTEGER,
+    version INTEGER,
+    ir_file_id BIGINT NOT NULL,
+    download_date DATE NOT NULL,
+    download_count INTEGER,
+    UNIQUE(ip_address, ir_file_id, download_date)
+);
+ALTER TABLE ir_statistics.ip_ignore_file_download_info OWNER TO ir_plus;
+
+-- The field sequence
+CREATE SEQUENCE ir_statistics.ip_ignore_file_download_info_seq ;
+ALTER TABLE ir_statistics.ip_ignore_file_download_info_seq OWNER TO ir_plus;
+
+CREATE INDEX ip_ignore_file_download_info_ip_part_idx
+  ON ir_statistics.ip_ignore_file_download_info(ip_address_part1, ip_address_part2, ip_address_part3, ip_address_part4);
+  
+CREATE INDEX ip_ignore_ir_file_id_idx
+  ON ir_statistics.file_download_info(ir_file_id);
+
+
+
+
 -- ---------------------------------------------
 -- Quartz tables
 -- ---------------------------------------------
