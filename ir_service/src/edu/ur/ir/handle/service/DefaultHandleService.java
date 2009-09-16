@@ -19,6 +19,8 @@ package edu.ur.ir.handle.service;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleInfoDAO;
 import edu.ur.ir.handle.HandleNameAuthority;
@@ -39,11 +41,24 @@ public class DefaultHandleService implements HandleService {
 
 	/** Data access for handle name authority information */
 	private HandleNameAuthorityDAO handleNameAuthorityDAO;
+	
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultHandleService.class);
 
+	/**
+	 * Delete the Handle name authority.
+	 * 
+	 * @see edu.ur.ir.handle.HandleService#delete(edu.ur.ir.handle.HandleNameAuthority)
+	 */
 	public void delete(HandleNameAuthority handleNameAuthority) {
 		handleNameAuthorityDAO.makeTransient(handleNameAuthority);
 	}
 
+	/**
+	 * Delete the handle info object
+	 * 
+	 * @see edu.ur.ir.handle.HandleService#delete(edu.ur.ir.handle.HandleInfo)
+	 */
 	public void delete(HandleInfo handleInfo) {
 		handleInfoDAO.makeTransient(handleInfo);
 	}
@@ -67,7 +82,7 @@ public class DefaultHandleService implements HandleService {
 		    {
 		    	String prefix = parts[0];
 		    	String localName = parts[1];
-		    	System.out.println("prefix = " + prefix + " localName = " + localName);
+		    	log.debug("prefix = " + prefix + " localName = " + localName);
 		    	info =handleInfoDAO.get(prefix, localName);
 		    }
 		}
