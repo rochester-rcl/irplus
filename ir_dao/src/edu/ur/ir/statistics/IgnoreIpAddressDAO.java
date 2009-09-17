@@ -55,6 +55,15 @@ public interface IgnoreIpAddressDAO extends CrudDAO<IgnoreIpAddress>, CountableD
 	 * Get the count of times the ip address shows up in ignore addresses.  A count of 0 means that
 	 * it should not be ignored.
 	 * 
+	 * @param ipAddress
+	 * @return the count of times this address was found to be within a given ingore range
+	 */
+	public Integer getIgnoreCountForIp(String ipAddress);
+	
+	/**
+	 * Get the count of times the ip address shows up in ignore addresses.  A count of 0 means that
+	 * it should not be ignored.
+	 * 
 	 * the address is expected in the format XXX.XXX.XXX.XXX
 	 * one example would be 192.9.44.23
 	 * 

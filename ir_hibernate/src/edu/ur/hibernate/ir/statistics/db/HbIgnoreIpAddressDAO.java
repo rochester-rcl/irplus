@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.statistics.db;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -149,6 +150,26 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
 
 	}
 	
+	
+	/**
+	 * Get the count of times the ip address shows up in ignore addresses.  A count of 0 means that
+	 * it should not be ignored.
+	 * 
+	 * @param ipAddress
+	 * @return the count of times this address was found to be within a given ingore range
+	 */
+	public Integer getIgnoreCountForIp(String ipAddress)
+	{
+        StringTokenizer token = new StringTokenizer(ipAddress, ".");
+		
+		Integer ipAddressPart1 = Integer.parseInt(token.nextToken());
+		Integer ipAddressPart2 = Integer.parseInt(token.nextToken());
+		Integer ipAddressPart3 = Integer.parseInt(token.nextToken());
+		Integer ipAddressPart4 = Integer.parseInt(token.nextToken());
+		
+		return getIgnoreCountForIp(ipAddressPart1, ipAddressPart2, ipAddressPart3, ipAddressPart4);
+	}
+	
 	/**
 	 * Get the count of times the ip address shows up in ignore addresses.  A count of 0 means that
 	 * it should not be ignored.
@@ -161,7 +182,7 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
 	 * @param part3 - third part of the ip address  (44)
 	 * @param part4 - forth part of the ip address (23)
 	 * 
-	 * @return
+	 * @return the count of times this address was found to be within a given ingore range
 	 */
 	public Integer getIgnoreCountForIp(final Integer part1, 
 			final Integer part2,
