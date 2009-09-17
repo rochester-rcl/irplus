@@ -94,66 +94,88 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 		}
 		
 		// start a new transaction
-		TransactionStatus ts = tm.getTransaction(td);
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		TransactionStatus ts = null;
+		try
+		{
+		    ts = tm.getTransaction(td);
+		    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
-		File f = null;
-		List <InstitutionalItemIndexProcessingRecord> records = new LinkedList<InstitutionalItemIndexProcessingRecord>();
-		if( repository != null )
-		{
-		    String indexFolder = repository.getInstitutionalItemIndexFolder();
-		    f = new File(indexFolder);
-		    records = processingRecordService.getAllOrderByItemIdUpdatedDate();
-		}
-		log.debug("processing " + records.size() + " records ");
-		tm.commit(ts);
-	
-		for( InstitutionalItemIndexProcessingRecord record : records )
-		{
-			ts = tm.getTransaction(td);
-			if( record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.DELETE))
-	        {
-	            log.debug("deleting item  " + record.getInstitutionalItemId());
-	        	institutionalItemIndexService.deleteItem(record.getInstitutionalItemId(), f);
-	        	processingRecordService.delete(record);
-	        }
-			else
-			{
-		        InstitutionalItem i = institutionalItemService.getInstitutionalItem(record.getInstitutionalItemId(), false);
-			
-		        if( i != null)
-		        {
-		       
-		            if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.UPDATE))
-		            {
-		                log.debug("updating item  " + i);
-		                try {
-						    institutionalItemIndexService.updateItem(i, f, true);
-						    processingRecordService.delete(record);
-					    } catch (NoIndexFoundException e) {
-						    log.error(e);
-					    }
-		            }
-		            else if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.INSERT))
-				    {
-		        	    try {
-						    institutionalItemIndexService.addItem(i, f);
-						    processingRecordService.delete(record);
-					    } catch (NoIndexFoundException e) {
-						    log.error(e);
-				        }     	
-				    }
-		            else
-		            {
-		        	    log.error("Can't process record type " + record.getIndexProcessingType() + " for item " + i);
-		            }
-		        }
-			}
+		    File f = null;
+		    List <InstitutionalItemIndexProcessingRecord> records = new LinkedList<InstitutionalItemIndexProcessingRecord>();
+		    if( repository != null )
+		    {
+		        String indexFolder = repository.getInstitutionalItemIndexFolder();
+		        f = new File(indexFolder);
+		        records = processingRecordService.getAllOrderByItemIdUpdatedDate();
+		    }
+		    log.debug("processing " + records.size() + " records ");
 		    tm.commit(ts);
+	
+		    for( InstitutionalItemIndexProcessingRecord record : records )
+		    {
+			    ts = tm.getTransaction(td);
+			    if( record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.DELETE))
+	            {
+	                log.debug("deleting item  " + record.getInstitutionalItemId());
+	        	    institutionalItemIndexService.deleteItem(record.getInstitutionalItemId(), f);
+	        	    processingRecordService.delete(record);
+	            }
+			    else
+			    {
+		           InstitutionalItem i = institutionalItemService.getInstitutionalItem(record.getInstitutionalItemId(), false);
+			
+		            if( i != null)
+		            {
+		       
+		                if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.UPDATE))
+		                {
+		                    log.debug("updating item  " + i);
+		                    try {
+						        institutionalItemIndexService.updateItem(i, f, true);
+						        processingRecordService.delete(record);
+					        } 
+		                    catch (NoIndexFoundException e) 
+					        {
+						        log.error(e);
+					        }
+		                }
+		                else if(record.getIndexProcessingType().getName().equals(IndexProcessingTypeService.INSERT))
+				        {
+		        	        try
+		        	        {
+						        institutionalItemIndexService.addItem(i, f);
+						        processingRecordService.delete(record);
+					        } 
+		        	        catch (NoIndexFoundException e)
+		        	        {
+						        log.error(e);
+				            }     	
+				         }
+		                 else
+		                 {
+		        	        log.error("Can't process record type " + record.getIndexProcessingType() + " for item " + i);
+		                 }
+		            }
+			    }
+		        tm.commit(ts);
+		    }
+		    institutionalItemIndexService.optimize(f);
 		}
-		institutionalItemIndexService.optimize(f);
+		finally
+		{
+			if( ts != null  && !ts.isCompleted())
+			{
+				if( tm != null )
+				{
+				    tm.commit(ts);
+				}
+				
+			}
+		}
 		
 		
 	}
+		
+
 
 }

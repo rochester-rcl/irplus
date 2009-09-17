@@ -84,18 +84,29 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 	
 		for( FileDownloadRollUpProcessingRecord record : records )
 		{
+			TransactionStatus ts = null;
 			try
 			{
 				// start a new transaction
-				TransactionStatus ts = tm.getTransaction(td);
+				ts = tm.getTransaction(td);
 			    Long irFileId = record.getIrFileId();
 			    downloadStatisticsService.updateRollUpCount(irFileId);
 			    downloadStatisticsService.delete(record);
-			    tm.commit(ts);
 			}
 			catch(Exception e)
 			{
 				errorEmailService.sendError(e);
+			}
+			finally
+			{
+				if( ts != null )
+				{
+					if( tm != null )
+					{
+					    tm.commit(ts);
+					}
+				}
+					
 			}
 		}
 		
