@@ -39,6 +39,9 @@ import edu.ur.ir.statistics.FileDownloadRollUp;
 import edu.ur.ir.statistics.FileDownloadRollUpDAO;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecord;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecordDAO;
+import edu.ur.ir.statistics.IgnoreIpAddressDAO;
+import edu.ur.ir.statistics.IpIgnoreFileDownloadInfo;
+import edu.ur.ir.statistics.IpIgnoreFileDownloadInfoDAO;
 
 /**
  * Implementation of the download statistics service.
@@ -53,6 +56,12 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	
 	/** Roll up Data access for file download info */
 	private FileDownloadRollUpDAO fileDownloadRollUpDAO;
+	
+	/** data access for ignoring ip address information  */
+	private IgnoreIpAddressDAO ignoreIpAddressDAO;
+	
+	/** download information for an ip address that is ignored  */
+	private IpIgnoreFileDownloadInfoDAO ipIgnoreFileDownloadInfoDAO;
 	
 	/** roll up processing record data access object */
 	private FileDownloadRollUpProcessingRecordDAO fileDownloadRollUpProcessingRecordDAO;
@@ -70,6 +79,15 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	}
 	
 	/**
+	 * Save file download info 
+	 * 
+	 * @param fileDownloadInfo
+	 */
+	public void saveIpIgnoreFileDownloadInfo(IpIgnoreFileDownloadInfo ipIgnroeFileDownloadInfo) {
+		ipIgnoreFileDownloadInfoDAO.makePersistent(ipIgnroeFileDownloadInfo);
+	}
+	
+	/**
 	 * Adds the file download info
 	 * 
 	 * @param ipAddress IP address downloading a file
@@ -78,8 +96,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public FileDownloadInfo addFileDownloadInfo(String ipAddress, IrFile irFile) {
 		FileDownloadInfo fileDownloadInfo = null;
 		log.debug("Add file download Info for Ipaddress: " + ipAddress );
-		
-	
+
 		// get todays date
 		Date d = new Date();
 		
@@ -104,6 +121,67 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		return fileDownloadInfo;
 		 
 	}
+	
+	
+	/**
+	 * Add an ignore ip address.
+	 * 
+	 * @param ipAddress - ip address to add to the ignore set
+	 * @param irFile - file that was downloaded
+	 * 
+	 * @return the created or updated record
+	 */
+	public IpIgnoreFileDownloadInfo addIgnoreFileDownloadInfo(String ipAddress, IrFile irFile) 
+	{
+		IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo = null;
+		log.debug("Add file download Info for Ipaddress: " + ipAddress );
+
+		// get todays date
+		Date d = new Date();
+		
+		// chop off time information
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		String dateStr = simpleDateFormat.format(d);
+		
+		Date noTimeDate = null;
+		try {
+			noTimeDate = simpleDateFormat.parse(dateStr);
+			ipIgnoreFileDownloadInfo = ipIgnoreFileDownloadInfoDAO.getIpIgnoreFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate );
+			if (ipIgnoreFileDownloadInfo == null) {
+				ipIgnoreFileDownloadInfo = new IpIgnoreFileDownloadInfo(ipAddress, irFile.getId(), noTimeDate);
+			} else {
+				ipIgnoreFileDownloadInfo.setDownloadCount(ipIgnoreFileDownloadInfo.getDownloadCount() + 1);
+			}
+			saveIpIgnoreFileDownloadInfo(ipIgnoreFileDownloadInfo);
+		} catch (ParseException e) {
+			log.error("A parse problem should never occur ", e);
+		}
+		
+		return ipIgnoreFileDownloadInfo;
+	}
+	
+	/**
+	 * This process a file download.  This determines where the download
+	 * should be attributed to.
+	 * 
+	 * @param ipAddress - ip address to process
+	 * @param irFile
+	 */
+	public void processFileDownload(String ipAddress, IrFile irFile)
+	{
+		int count = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress);
+		boolean isIgnoreAddress = (count > 0);
+		
+		if( isIgnoreAddress )
+		{
+			addIgnoreFileDownloadInfo(ipAddress, irFile);
+		}
+		else
+		{
+			addFileDownloadInfo(ipAddress, irFile);
+		}
+	}
+
 	
 	/**
 	 * Get the number of downloads for the specified file Id
@@ -337,5 +415,24 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public void delete(FileDownloadRollUp fileDownloadRollUp) {
 		fileDownloadRollUpDAO.makeTransient(fileDownloadRollUp);
 	}
+
+	public IgnoreIpAddressDAO getIgnoreIpAddressDAO() {
+		return ignoreIpAddressDAO;
+	}
+
+	public void setIgnoreIpAddressDAO(IgnoreIpAddressDAO ignoreIpAddressDAO) {
+		this.ignoreIpAddressDAO = ignoreIpAddressDAO;
+	}
+
+	public IpIgnoreFileDownloadInfoDAO getIpIgnoreFileDownloadInfoDAO() {
+		return ipIgnoreFileDownloadInfoDAO;
+	}
+
+	public void setIpIgnoreFileDownloadInfoDAO(
+			IpIgnoreFileDownloadInfoDAO ipIgnoreFileDownloadInfoDAO) {
+		this.ipIgnoreFileDownloadInfoDAO = ipIgnoreFileDownloadInfoDAO;
+	}
+	
+	
 
 }
