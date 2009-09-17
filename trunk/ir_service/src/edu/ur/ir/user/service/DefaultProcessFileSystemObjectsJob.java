@@ -103,85 +103,99 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 		    throw new JobExecutionException("Unable to retrieve target bean that is to be used as a job source", e1);
 		}
 		
-
-		
 		List<UserWorkspaceIndexProcessingRecord> processingRecords = userWorkspaceIndexProcessingService.getAllOrderByIdDate();
 		
         if(log.isDebugEnabled())
         {
         	log.debug("Processing " + processingRecords.size() + " records ");
         }
-		
+        
 		for(UserWorkspaceIndexProcessingRecord record: processingRecords )
 		{
-			if( log.isDebugEnabled() )
+			TransactionStatus ts = null;
+			try
 			{
-			    log.debug("Processing record " + record);
-			}
-			// start a new transaction
-			TransactionStatus ts = tm.getTransaction(td);
+			    if( log.isDebugEnabled() )
+			    {
+			        log.debug("Processing record " + record);
+			    }
+			    // start a new transaction
+			    ts = tm.getTransaction(td);
 		      
-			IrUser user = userService.getUser(record.getUserId(), false);
-			IndexProcessingType indexProcessingType = record.getIndexProcessingType();
-			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			if( user != null && !record.getSkipRecord())
+			    IrUser user = userService.getUser(record.getUserId(), false);
+			    IndexProcessingType indexProcessingType = record.getIndexProcessingType();
+			    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+			
+			    if( user != null && !record.getSkipRecord())
+			    {
+				    if( indexProcessingType.getName().equals(IndexProcessingTypeService.DELETE))
+				    {			
+					    try 
+					    {
+						    processDelete(record, user, userWorkspaceIndexService);
+						    userWorkspaceIndexProcessingService.delete(record);
+					    } 
+					    catch (Exception e) 
+					    {
+						    record.setSkipRecord(true);
+						    record.setSkipReason("Procesing failed due to error");
+						    userWorkspaceIndexProcessingService.save(record);
+						    errorEmailService.sendError(e);
+						    log.error("Unable to delete index record " + record + " for user", e);
+					    }
+				    }
+				    
+				    if( indexProcessingType.getName().equals(IndexProcessingTypeService.UPDATE))
+				    {
+				        try 
+				        {
+						    processUpdate( record, repository, userWorkspaceIndexService, userFileSystemService, 
+							     userPublishingFileSystemService, user);
+						    userWorkspaceIndexProcessingService.delete(record);
+					    } 
+				        catch (Exception e) 
+				        {
+						    record.setSkipRecord(true);
+						    record.setSkipReason("Procesing failed due to error");
+						    userWorkspaceIndexProcessingService.save(record);
+						    errorEmailService.sendError(e);
+						    log.error("Unable to update index record " + record + " for user", e);
+					    }
+				    }
+				    if( indexProcessingType.getName().equals(IndexProcessingTypeService.INSERT))
+				    {
+					    try 
+					    {
+						    processInsert( record, repository, userWorkspaceIndexService, userFileSystemService, 
+							 userPublishingFileSystemService, user);
+						    userWorkspaceIndexProcessingService.delete(record);
+					    } 
+					    catch (Exception e) 
+					    {
+						    record.setSkipRecord(true);
+						    record.setSkipReason("Procesing failed due to error");
+						    userWorkspaceIndexProcessingService.save(record);
+						    errorEmailService.sendError(e);
+						    log.error("Unable to insert index record " + record + " for user", e);
+					    }
+				    }
+			    }
+			   
+			}
+			finally
 			{
-				if( indexProcessingType.getName().equals(IndexProcessingTypeService.DELETE))
-				{			
-					try {
-						processDelete(record, user, userWorkspaceIndexService);
-						userWorkspaceIndexProcessingService.delete(record);
-					} catch (Exception e) {
-						record.setSkipRecord(true);
-						record.setSkipReason("Procesing failed due to error");
-						userWorkspaceIndexProcessingService.save(record);
-						errorEmailService.sendError(e);
-						log.error("Unable to delete index record " + record + " for user", e);
-					}
-				}
-				if( indexProcessingType.getName().equals(IndexProcessingTypeService.UPDATE))
+				if( ts != null )
 				{
-				    try {
-						processUpdate( record, repository, userWorkspaceIndexService, userFileSystemService, 
-							 userPublishingFileSystemService, user);
-						userWorkspaceIndexProcessingService.delete(record);
-					} catch (Exception e) {
-						record.setSkipRecord(true);
-						record.setSkipReason("Procesing failed due to error");
-						userWorkspaceIndexProcessingService.save(record);
-						errorEmailService.sendError(e);
-						log.error("Unable to update index record " + record + " for user", e);
-					}
-				}
-				if( indexProcessingType.getName().equals(IndexProcessingTypeService.INSERT))
-				{
-					try {
-						processInsert( record, repository, userWorkspaceIndexService, userFileSystemService, 
-							 userPublishingFileSystemService, user);
-						userWorkspaceIndexProcessingService.delete(record);
-					} catch (Exception e) {
-						record.setSkipRecord(true);
-						record.setSkipReason("Procesing failed due to error");
-						userWorkspaceIndexProcessingService.save(record);
-						errorEmailService.sendError(e);
-						log.error("Unable to insert index record " + record + " for user", e);
+					if( tm != null )
+					{
+				        tm.commit(ts);
 					}
 				}
 			}
-			tm.commit(ts);
 		}
 		
 		    
-	    try
-	    {
-	        	
-		}
-		catch(Exception e)
-		{
-			errorEmailService.sendError(e);
-			log.error("Unable to index workspace data for user", e);
-		}
-			
+
 		
 		
 	}

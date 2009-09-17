@@ -95,39 +95,56 @@ public class DefaultSubscriptionEmailJob implements StatefulJob{
 		}
 		
 		// start a new transaction
-		TransactionStatus ts = tm.getTransaction(td);
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		TransactionStatus ts = null;
 		
-		if( repository != null)
+		try
 		{
-			log.debug("repository is suspended subscription emails " + subscriptionService.getUniqueSubsciberUserIds());
-		}
+		    ts = tm.getTransaction(td);
+		    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
-		if( repository != null && !repository.isSuspendSuscriptionEmails())
-		{
-			List<Long> uniqueSubscriberIds = subscriptionService.getUniqueSubsciberUserIds();
-			
-			// make the end date today
-			Timestamp endDate = new Timestamp(new Date().getTime());
-		    for( Long id : uniqueSubscriberIds )
+		    if( repository != null)
 		    {
-		        IrUser user = userService.getUser(id, false);
-			
-				try 
-				{
-				    subscriptionService.sendSubscriberEmail(user, repository, repository.getLastSubscriptionProcessEmailDate(), endDate );
-				} 
-				catch (Exception e) 
-				{
-				    log.error("email problem with user = " + user, e);
-				    errorEmailService.sendError(e);
-			    }
+			    log.debug("repository is suspended subscription emails " + subscriptionService.getUniqueSubsciberUserIds());
 		    }
 		
-		    repository.setLastSubscriptionProcessEmailDate(endDate);
-		    repositoryService.saveRepository(repository);
+		    if( repository != null && !repository.isSuspendSuscriptionEmails())
+		    {
+			    List<Long> uniqueSubscriberIds = subscriptionService.getUniqueSubsciberUserIds();
+			
+			    // make the end date today
+			    Timestamp endDate = new Timestamp(new Date().getTime());
+		        for( Long id : uniqueSubscriberIds )
+		        {
+		            IrUser user = userService.getUser(id, false);
+			
+				    try 
+				    {
+				        subscriptionService.sendSubscriberEmail(user, repository, repository.getLastSubscriptionProcessEmailDate(), endDate );
+				    } 
+				    catch (Exception e) 
+				    {
+				       log.error("email problem with user = " + user, e);
+				       errorEmailService.sendError(e);
+			        }
+		       }
+		
+		       repository.setLastSubscriptionProcessEmailDate(endDate);
+		       repositoryService.saveRepository(repository);
+		   
+		    }
 		}
-		tm.commit(ts);
+		finally
+		{
+			if( ts != null )
+			{
+				if( tm != null )
+				{
+			        tm.commit(ts);
+				}
+			}
+		}
+		   
+		
 	}
 
 }

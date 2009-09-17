@@ -84,16 +84,29 @@ public class DefaultReIndexUsersJob implements StatefulJob{
 		}
 		
 		// start a new transaction
-		TransactionStatus ts = tm.getTransaction(td);
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		
-		if( repository != null )
+		TransactionStatus ts = null;
+		try
 		{
-			log.debug("re indexing items for repository " + repository);
-			repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-			reIndexUserService.reIndexUsers(batchSize, new File(repository.getUserIndexFolder()));
+		    ts = tm.getTransaction(td);
+		    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		
+		    if( repository != null )
+		    {
+		 	    log.debug("re indexing items for repository " + repository);
+			    repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+			    reIndexUserService.reIndexUsers(batchSize, new File(repository.getUserIndexFolder()));
+		    }
 		}
-		tm.commit(ts);
+		finally
+		{
+			if( ts != null)
+			{
+				if( tm != null )
+				{
+		            tm.commit(ts);
+				}
+			}
+		}
 	}
 
 }
