@@ -17,6 +17,7 @@
 package edu.ur.ir.statistics;
 
 import java.util.Date;
+import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
@@ -50,6 +51,15 @@ CrudDAO<FileDownloadInfo> {
 	 * @return
 	 */
 	public Long getNumberOfFileDownloadsForIrFile(Long irFileId);
+	
+	
+	/**
+	 * This retrieves all file download info objects that are currently in the ignore
+	 * ip ranges.
+	 * 
+	 * @return the list of file download info objects that are ignored.
+	 */
+	public List<FileDownloadInfo> getAllDownloadInfoIgnored();
 	
 
 }
