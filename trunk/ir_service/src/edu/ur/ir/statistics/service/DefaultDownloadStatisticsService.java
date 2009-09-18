@@ -124,7 +124,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	
 	
 	/**
-	 * Add an ignore ip address.
+	 * Add an ignore ip address file download.
 	 * 
 	 * @param ipAddress - ip address to add to the ignore set
 	 * @param irFile - file that was downloaded
@@ -165,7 +165,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * should be attributed to.
 	 * 
 	 * @param ipAddress - ip address to process
-	 * @param irFile
+	 * @param irFile - file to update the count for.
 	 */
 	public void processFileDownload(String ipAddress, IrFile irFile)
 	{
@@ -180,6 +180,8 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		{
 			addFileDownloadInfo(ipAddress, irFile);
 		}
+		
+		updateRollUpCount(irFile.getId());
 	}
 
 	

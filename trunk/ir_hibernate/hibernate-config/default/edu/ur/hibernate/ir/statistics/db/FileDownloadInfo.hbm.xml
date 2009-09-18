@@ -81,7 +81,7 @@
 		fileDownloadInfo.downloadDate  = ?
 	</query>
 	
-		<!-- named query for getting a count of all the downloads in the repository -->
+	<!-- named query for getting a count of all the downloads in the repository -->
 	<query name="getIrFileDownloadCount">
 		select sum(fileDownloadInfo.downloadCount) from FileDownloadInfo fileDownloadInfo 
 		where fileDownloadInfo.irFileId = ?
@@ -90,6 +90,16 @@
 		       and fileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
 		       and fileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
 		       and fileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
+	</query>
+	
+	<!-- named query for getting the ignored file info  records in the repository repository -->
+	<query name="getFileDownloadsIgnored">
+		select fileDownloadInfo  from FileDownloadInfo fileDownloadInfo 
+		where (select count(*) from IgnoreIpAddress as ignore 
+		       where fileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
+		       and fileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
+		       and fileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
+		       and fileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) != 0
 	</query>
 	
 		

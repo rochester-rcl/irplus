@@ -60,6 +60,26 @@ public interface DownloadStatisticsService {
 	 */
 	public FileDownloadInfo addFileDownloadInfo(String ipAddress, IrFile irFile);
 	
+	
+	/**
+	 * Add an ignore ip address file download.
+	 * 
+	 * @param ipAddress - ip address to add to the ignore set
+	 * @param irFile - file that was downloaded
+	 * 
+	 * @return the created or updated record
+	 */
+	public IpIgnoreFileDownloadInfo addIgnoreFileDownloadInfo(String ipAddress, IrFile irFile);
+	
+	/**
+	 * This process a file download.  This determines where the download
+	 * should be attributed to.
+	 * 
+	 * @param ipAddress - ip address to process
+	 * @param irFile - file to update the count for.
+	 */
+	public void processFileDownload(String ipAddress, IrFile irFile);
+	
 	/**
 	 * Update the roll up count for the specified irFileId.
 	 * 

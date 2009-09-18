@@ -122,5 +122,17 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 		    return 0l;
 		}
 	}
+
+	/**
+	 * This retrieves all file download info objects that are currently in the ignore
+	 * ip ranges.
+	 * 
+	 * @return the list of file download info objects that are ignored.
+	 * @see edu.ur.ir.statistics.FileDownloadInfoDAO#getAllDownloadInfoIgnored()
+	 */
+	@SuppressWarnings("unchecked")
+	public List<FileDownloadInfo> getAllDownloadInfoIgnored() {
+		return (List<FileDownloadInfo>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFileDownloadsIgnored");
+	}
 	
 }
