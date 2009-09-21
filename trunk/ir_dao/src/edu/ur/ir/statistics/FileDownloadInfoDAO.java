@@ -51,15 +51,24 @@ CrudDAO<FileDownloadInfo> {
 	 * @return
 	 */
 	public Long getNumberOfFileDownloadsForIrFile(Long irFileId);
-	
-	
+		
 	/**
 	 * This retrieves all file download info objects that are currently in the ignore
 	 * ip ranges.
 	 * 
-	 * @return the list of file download info objects that are ignored.
+	 * @param rowStart - row to start at
+	 * @param maxResults - maximum number of results to return.
+	 * 
+	 * @return  the list of file download info objects that are ignored.
 	 */
-	public List<FileDownloadInfo> getAllDownloadInfoIgnored();
+	public List<FileDownloadInfo> getDownloadInfoIgnored(int start, int maxResults);
+	
+	/**
+	 * Get the count of file download info's that would be ignored.
+	 * 
+	 * @return count of ignored download info values.
+	 */
+	public Long getDownloadInfoIgnoredCount();
 	
 
 }
