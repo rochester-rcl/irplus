@@ -16,10 +16,16 @@
 
 package edu.ur.hibernate.ir.statistics.db;
 
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
@@ -131,8 +137,33 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 	 * @see edu.ur.ir.statistics.FileDownloadInfoDAO#getAllDownloadInfoIgnored()
 	 */
 	@SuppressWarnings("unchecked")
-	public List<FileDownloadInfo> getAllDownloadInfoIgnored() {
-		return (List<FileDownloadInfo>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFileDownloadsIgnored");
+	public List<FileDownloadInfo> getDownloadInfoIgnored(final int rowStart,
+			final int maxResults) {
+		List<FileDownloadInfo> foundItems = new LinkedList<FileDownloadInfo>();
+		
+		foundItems = (List<FileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = session.getNamedQuery("getFileDownloadsIgnored");
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setCacheable(false);
+			    q.setReadOnly(true);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+        return foundItems;	
+	}
+
+	/**
+	 * Get the count of file download info's that would be ignored.
+	 * 
+	 * @return count of ignored download info values.
+	 */
+	public Long getDownloadInfoIgnoredCount() {
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFileDownloadsIgnoredCount"));
 	}
 	
 }
