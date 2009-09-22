@@ -135,9 +135,8 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         	{
         		try
     			{
-        	        downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
+        			downloadStatisticsService.processFileDownload(request.getRemoteAddr(),
             		itemFile.getIrFile());
-        	        downloadStatisticsService.addDownloadRollUpProcessingRecord(itemFile.getIrFile().getId());
     			}
     			catch(Exception e)
       		    {
@@ -156,7 +155,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         		{
         			try
         			{
-        			    downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
+        				downloadStatisticsService.processFileDownload(request.getRemoteAddr(),
                     		itemFile.getIrFile());
         			}
         			catch(Exception e)

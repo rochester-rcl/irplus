@@ -111,9 +111,8 @@ public class DownloadResearcherPublicationFile extends ActionSupport implements 
         		  // statistics should not cause a download failure
         		  try
         		  {
-        	        downloadStatisticsService.addFileDownloadInfo(request.getRemoteAddr(),
+        	        downloadStatisticsService.processFileDownload(request.getRemoteAddr(),
         	        		itemFile.getIrFile());
-        	        downloadStatisticsService.addDownloadRollUpProcessingRecord(itemFile.getIrFile().getId());
         		  }
         		  catch(Exception e)
         		  {
