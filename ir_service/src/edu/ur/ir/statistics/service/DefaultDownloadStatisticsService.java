@@ -169,7 +169,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 */
 	public void processFileDownload(String ipAddress, IrFile irFile)
 	{
-		int count = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress);
+		long count = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress);
 		boolean isIgnoreAddress = (count > 0);
 		
 		if( isIgnoreAddress )
