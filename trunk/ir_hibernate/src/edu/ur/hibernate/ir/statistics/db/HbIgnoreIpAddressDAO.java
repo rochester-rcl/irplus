@@ -158,7 +158,7 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
 	 * @param ipAddress
 	 * @return the count of times this address was found to be within a given ingore range
 	 */
-	public Integer getIgnoreCountForIp(String ipAddress)
+	public Long getIgnoreCountForIp(String ipAddress)
 	{
         StringTokenizer token = new StringTokenizer(ipAddress, ".");
 		
@@ -184,16 +184,16 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
 	 * 
 	 * @return the count of times this address was found to be within a given ingore range
 	 */
-	public Integer getIgnoreCountForIp(final Integer part1, 
+	public Long getIgnoreCountForIp(final Integer part1, 
 			final Integer part2,
 			final Integer part3, 
 			final Integer part4)
 	{
-		Integer count = (Integer)hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		Long count = (Long)hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
             public Object doInHibernate(Session session)
                     throws HibernateException, SQLException {
-		        Query q = session.getNamedQuery("getIgnoreIPOrderByNameAsc");
+		        Query q = session.getNamedQuery("getIgnoreCountForIp");
 			    q.setParameter("part1", part1);
 			    q.setParameter("part2", part2);
 			    q.setParameter("part3", part3);

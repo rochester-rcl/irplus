@@ -77,6 +77,7 @@ public class IgnoreIpAddressDAOTest {
 	/**
 	 * Make sure the count is correct for a given ip address.
 	 */
+	@Test
 	public void checkIngoreAddressCountTest()
 	{
 		 TransactionStatus ts = tm.getTransaction(td);
@@ -85,20 +86,20 @@ public class IgnoreIpAddressDAOTest {
 	     ignoreIpAddressDAO.makePersistent(ip1);
 
 	     IgnoreIpAddress ip2 = new IgnoreIpAddress(123,0,0,5, 5);
-	     ignoreIpAddressDAO.makePersistent(ip1);
+	     ignoreIpAddressDAO.makePersistent(ip2);
 	     tm.commit(ts);
 
 	 	 // check to make sure the ip address counts are correct
 	 	 ts = tm.getTransaction(td);
 	 	 
-	 	 int count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 5);  
-	 	 assert count == 2 : "count equals " + count;
+	 	 long count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 5);  
+	 	 assert count == 2l : "count equals " + count;
 	 	 
 	 	 count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 7);  
-	 	 assert count == 1 : "count equals " + count;
+	 	 assert count == 1l : "count equals " + count;
 	 	 
 	 	 count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 11);  
-	 	 assert count == 0 : "count equals " + count;
+	 	 assert count == 0l : "count equals " + count;
 	 	 
 	 	 
 	 	 tm.commit(ts);

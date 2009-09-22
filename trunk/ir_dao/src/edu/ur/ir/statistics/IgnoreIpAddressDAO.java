@@ -56,9 +56,9 @@ public interface IgnoreIpAddressDAO extends CrudDAO<IgnoreIpAddress>, CountableD
 	 * it should not be ignored.
 	 * 
 	 * @param ipAddress
-	 * @return the count of times this address was found to be within a given ingore range
+	 * @return the count of times this address was found to be within a given ignore range
 	 */
-	public Integer getIgnoreCountForIp(String ipAddress);
+	public Long getIgnoreCountForIp(String ipAddress);
 	
 	/**
 	 * Get the count of times the ip address shows up in ignore addresses.  A count of 0 means that
@@ -73,7 +73,7 @@ public interface IgnoreIpAddressDAO extends CrudDAO<IgnoreIpAddress>, CountableD
 	 * @param part4 - forth part of the ip address (23)
 	 * @return
 	 */
-	public Integer getIgnoreCountForIp(final Integer part1, 
+	public Long getIgnoreCountForIp(final Integer part1, 
 			final Integer part2, 
 			final Integer part3, 
 			final Integer part4);
