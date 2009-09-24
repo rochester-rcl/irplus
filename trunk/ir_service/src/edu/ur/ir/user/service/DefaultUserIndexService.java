@@ -446,10 +446,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexWriter.isLocked(directory) )
-	    {
-			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
-	    }
+		writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 	
@@ -468,10 +465,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	private synchronized IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexWriter.isLocked(directory) )
-	    {
-			writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
-	    }
+        writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 

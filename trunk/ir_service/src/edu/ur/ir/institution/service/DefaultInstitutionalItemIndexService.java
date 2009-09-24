@@ -1113,10 +1113,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexWriter.isLocked(directory) )
-	    {
-			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
-	    }
+		writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 	
@@ -1135,10 +1132,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	private synchronized IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexWriter.isLocked(directory) )
-	    {
-			writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
-	    }
+	    writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 
