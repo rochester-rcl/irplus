@@ -361,11 +361,13 @@ DROP TABLE ir_statistics.file_download_info;
 DROP TABLE ir_statistics.ip_address_ignore;
 DROP TABLE ir_statistics.ir_file_roll_up;
 DROP TABLE ir_statistics.ir_file_roll_up_processing_record;
+DROP TABLE ir_statistics.ip_ignore_file_download_info;
 
 DROP SEQUENCE ir_statistics.file_download_info_seq;
 DROP SEQUENCE ir_statistics.ip_address_ignore_seq;
 DROP SEQUENCE ir_statistics.ir_file_roll_up_seq;
 DROP SEQUENCE ir_statistics.ir_file_roll_up_processing_record_seq;
+DROP SEQUENCE ir_statistics.ip_ignore_file_download_info_seq;
 
 
 DROP SCHEMA ir_statistics;
