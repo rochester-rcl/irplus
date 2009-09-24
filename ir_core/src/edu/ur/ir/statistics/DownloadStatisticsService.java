@@ -201,4 +201,19 @@ public interface DownloadStatisticsService {
 	 * @return most downloaded  institutional item
 	 */
 	public InstitutionalItemDownloadCount getInstitutionalItemDownloadCountByPersonName(Set<PersonName> personNames);
+	
+	/**
+	 * Moves counts that should be ignored from the download info counts
+	 * to the ignore download info counts.
+	 * 
+	 * @param batchSize - batch size to process.
+	 */
+	public void removeIgnoreCountsFromDownloadInfo(int batchSize);
+	
+	/**
+	 * Move counts that are ignored that are actually ok into the file download counts.
+	 * 
+	 * @param batchSize - number of records to process at once.
+	 */
+	public void removeOkCountsFromIgnoreDownloadInfo(int batchSize);
 }
