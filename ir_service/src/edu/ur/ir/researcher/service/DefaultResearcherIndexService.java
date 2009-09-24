@@ -399,10 +399,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
-		if( !IndexWriter.isLocked(directory) )
-	    {
-			writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
-	    }
+	    writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 

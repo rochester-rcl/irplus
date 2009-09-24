@@ -103,30 +103,34 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 		    throw new JobExecutionException("Unable to retrieve target bean that is to be used as a job source", e1);
 		}
 		
-		List<UserWorkspaceIndexProcessingRecord> processingRecords = userWorkspaceIndexProcessingService.getAllOrderByIdDate();
-		
-        if(log.isDebugEnabled())
-        {
-        	log.debug("Processing " + processingRecords.size() + " records ");
-        }
-        
-		for(UserWorkspaceIndexProcessingRecord record: processingRecords )
+		TransactionStatus ts = null;
+		try
 		{
-			TransactionStatus ts = null;
-			try
-			{
+		    // start a new transaction
+		    ts = tm.getTransaction(td);
+		    List<UserWorkspaceIndexProcessingRecord> processingRecords = userWorkspaceIndexProcessingService.getAllOrderByIdDate();
+		
+            if(log.isDebugEnabled())
+            {
+        	    log.debug("Processing " + processingRecords.size() + " records ");
+            }
+        
+		    for(UserWorkspaceIndexProcessingRecord record: processingRecords )
+		    {
 			    if( log.isDebugEnabled() )
 			    {
 			        log.debug("Processing record " + record);
 			    }
-			    // start a new transaction
-			    ts = tm.getTransaction(td);
 		      
 			    IrUser user = userService.getUser(record.getUserId(), false);
 			    IndexProcessingType indexProcessingType = record.getIndexProcessingType();
 			    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 			
-			    if( user != null && !record.getSkipRecord())
+			    if( user == null )
+			    {
+			    	userWorkspaceIndexProcessingService.delete(record);
+			    }
+			    else if(!record.getSkipRecord())
 			    {
 				    if( indexProcessingType.getName().equals(IndexProcessingTypeService.DELETE))
 				    {			
@@ -179,24 +183,24 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 						    log.error("Unable to insert index record " + record + " for user", e);
 					    }
 				    }
+				    else
+				    {
+				    	IllegalStateException e = new IllegalStateException("Processing type " + indexProcessingType + "could not be found");
+				    	errorEmailService.sendError(e);
+				    }
 			    }
-			   
 			}
-			finally
+		}
+		finally
+		{
+			if( ts != null )
 			{
-				if( ts != null )
+				if( tm != null )
 				{
-					if( tm != null )
-					{
-				        tm.commit(ts);
-					}
+			        tm.commit(ts);
 				}
 			}
 		}
-		
-		    
-
-		
 		
 	}
 	
@@ -371,7 +375,5 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			}
 		}
 	}
-
-
 
 }
