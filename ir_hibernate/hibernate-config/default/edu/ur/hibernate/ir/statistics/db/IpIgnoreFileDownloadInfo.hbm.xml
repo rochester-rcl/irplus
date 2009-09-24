@@ -79,5 +79,27 @@
 		ipIgnoreFileDownloadInfo.downloadDate  = ?
 	</query>
 	
+	 <!-- named query for getting the ignored file downloads that should be ok to count -->
+	<query name="getAcceptableFileDownloadsIgnored">
+		select ipIgnoreFileDownloadInfo from IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo 
+		where (select count(*) from IgnoreIpAddress as ignore 
+		       where ipIgnoreFileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
+		       and ipIgnoreFileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
+		       and ipIgnoreFileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
+		       and ipIgnoreFileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
+	    order by ipIgnoreFileDownloadInfo.ipAddress, 
+	             ipIgnoreFileDownloadInfo.downloadDate desc
+	</query>
+	
+    <!-- named query for getting the count of ignored file info records in the repository repository  that should be ok to count -->
+	<query name="getAcceptableFileDownloadsIgnoredCount">
+		select count(*) from IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo 
+		where (select count(*) from IgnoreIpAddress as ignore 
+		       where ipIgnoreFileDownloadInfo.ipAddressPart1 = ignore.fromAddress1
+		       and ipIgnoreFileDownloadInfo.ipAddressPart2 = ignore.fromAddress2
+		       and ipIgnoreFileDownloadInfo.ipAddressPart3 = ignore.fromAddress3
+		       and ipIgnoreFileDownloadInfo.ipAddressPart4 between ignore.fromAddress4 and ignore.toAddress4) = 0
+	</query>
+	
 		
 </hibernate-mapping>

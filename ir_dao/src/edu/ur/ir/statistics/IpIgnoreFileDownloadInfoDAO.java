@@ -17,6 +17,7 @@
 package edu.ur.ir.statistics;
 
 import java.util.Date;
+import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
@@ -41,5 +42,23 @@ CrudDAO<IpIgnoreFileDownloadInfo> {
 	 * @return Download information
 	 */
 	public IpIgnoreFileDownloadInfo getIpIgnoreFileDownloadInfo(String ipAddress, Long fileId, Date date);
+	
+	/**
+	 * This retrieves all ip ignore file download info objects that should no longer be
+	 * ignored
+	 * 
+	 * @param rowStart - row to start at
+	 * @param maxResults - maximum number of results to return.
+	 * 
+	 * @return  the list of ignore file download info objects that should no longer be ignored. 
+	 */
+	public List<IpIgnoreFileDownloadInfo> getIgnoreInfoNowAcceptable(int rowStart, int maxResults);
+	
+	/**
+	 * Get the count of ignore file download info's that should not be ignored.
+	 * 
+	 * @return count of ignored download info values that should no longer be ignored.
+	 */
+	public Long getIgnoreInfoNowAcceptableCount();
 
 }
