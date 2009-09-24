@@ -76,9 +76,9 @@
 	<query name="getUserWorkspaceIndexProcessingRecordsByUserIdDateItemId">
 	   select userWorkspaceIndexProcessingRecord 
 	   from UserWorkspaceIndexProcessingRecord as userWorkspaceIndexProcessingRecord 	   
-	   order by userWorkspaceIndexProcessingRecord.userId, 
-	       userWorkspaceIndexProcessingRecord.createdDate,
-	       userWorkspaceIndexProcessingRecord.workspaceItemId desc
+	   order by userWorkspaceIndexProcessingRecord.userId asc, 
+	       userWorkspaceIndexProcessingRecord.createdDate asc,
+	       userWorkspaceIndexProcessingRecord.workspaceItemId asc
 	</query>
 	
 	<query name="userWorkspaceProcessingRecByItemIdTypeUserIdProcessingType">

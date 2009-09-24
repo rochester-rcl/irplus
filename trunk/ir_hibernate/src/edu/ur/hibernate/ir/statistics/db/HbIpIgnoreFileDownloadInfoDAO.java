@@ -16,10 +16,16 @@
 
 package edu.ur.hibernate.ir.statistics.db;
 
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
@@ -85,6 +91,31 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 
 	public void makeTransient(IpIgnoreFileDownloadInfo entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<IpIgnoreFileDownloadInfo> getIgnoreInfoNowAcceptable(final int rowStart,
+			final int maxResults) {
+        List<IpIgnoreFileDownloadInfo> foundItems = new LinkedList<IpIgnoreFileDownloadInfo>();
+		
+		foundItems = (List<IpIgnoreFileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = session.getNamedQuery("getAcceptableFileDownloadsIgnored");
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setCacheable(false);
+			    q.setReadOnly(true);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+        return foundItems;	
+	}
+
+	public Long getIgnoreInfoNowAcceptableCount() {
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAcceptableFileDownloadsIgnoredCount"));
 	}
 
 }
