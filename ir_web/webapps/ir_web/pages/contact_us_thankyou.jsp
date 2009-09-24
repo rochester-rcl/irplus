@@ -65,7 +65,7 @@
             <div id="bd">
                <h3>Thank You</h3> 
                
-               Thank you for your comments.  
+               Thank you for your comments. - <a href="<c:url value="/home.action"/>">return to home page</a>  
                
             </div>
             <!--  end the body tag --> 

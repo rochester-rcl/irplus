@@ -79,7 +79,7 @@
                 <br/>
                 <br/>
                 <h3><fmt:message key="unknown.action"/></h3>
-                <p><fmt:message key="unknown.action.message"/></p>
+                <p><fmt:message key="unknown.action.message"/> - <a href="<c:url value="/home.action"/>">return to home page</a></p>
             </div>
             <!--  end the body tag --> 
 
