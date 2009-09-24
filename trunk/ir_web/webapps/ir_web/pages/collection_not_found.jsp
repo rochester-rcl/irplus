@@ -63,7 +63,7 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-               <h3>We're sorry the collection could not be found</h3> 
+               <h3>We're sorry the collection could not be found - <a href="<c:url value="/home.action"/>">return to home page</a></h3> 
                
             </div>
             <!--  end the body tag --> 

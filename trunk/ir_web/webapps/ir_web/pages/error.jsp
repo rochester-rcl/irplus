@@ -63,7 +63,7 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-               <h3>We're sorry an error has occurred - an email has been sent to the administrator</h3> 
+               <h3>We're sorry an error has occurred - an email has been sent to the administrator - <a href="<c:url value="/home.action"/>">return to home page</a></h3> 
                
             </div>
             <!--  end the body tag --> 
