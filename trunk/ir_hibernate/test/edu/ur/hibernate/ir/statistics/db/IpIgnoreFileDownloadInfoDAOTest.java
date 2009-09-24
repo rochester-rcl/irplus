@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.statistics.db;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -27,6 +28,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
+import edu.ur.ir.statistics.IgnoreIpAddress;
+import edu.ur.ir.statistics.IgnoreIpAddressDAO;
 import edu.ur.ir.statistics.IpIgnoreFileDownloadInfo;
 import edu.ur.ir.statistics.IpIgnoreFileDownloadInfoDAO;
 
@@ -51,6 +54,10 @@ public class IpIgnoreFileDownloadInfoDAOTest {
 	
     TransactionDefinition td = new DefaultTransactionDefinition(
 	TransactionDefinition.PROPAGATION_REQUIRED);
+    
+	/** Data access for ignore ip address class */
+	IgnoreIpAddressDAO ignoreIpAddressDAO = (IgnoreIpAddressDAO) ctx
+	.getBean("ignoreIpAddressDAO");
 
 	/**
 	 * Test download info persistance
@@ -75,5 +82,51 @@ public class IpIgnoreFileDownloadInfoDAOTest {
         ipIgnorefileDownloadInfoDAO.makeTransient(other);
         assert  ipIgnorefileDownloadInfoDAO.getById(other.getId(), false) == null : "Should no longer be able to find file download info";
 	    tm.commit(ts);
+	}
+	
+	/**
+	 * Test the ignore code.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void getDownloadInfoIgnoredDAOTest() throws Exception{
+
+	    TransactionStatus ts = tm.getTransaction(td);
+
+	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
+	    Date d = simpleDateFormat.parse("1/1/2008");
+	    IpIgnoreFileDownloadInfo downloadInfo1 = new IpIgnoreFileDownloadInfo("123.0.0.1", 1l,d);
+        downloadInfo1.setDownloadCount(1);
+        
+        IpIgnoreFileDownloadInfo downloadInfo2 = new IpIgnoreFileDownloadInfo("123.0.0.5", 1l,d);
+        downloadInfo2.setDownloadCount(2);
+        
+        
+        ipIgnorefileDownloadInfoDAO.makePersistent(downloadInfo1);
+        ipIgnorefileDownloadInfoDAO.makePersistent(downloadInfo2);
+ 	    tm.commit(ts);
+ 	    
+ 	    ts = tm.getTransaction(td);
+ 	    
+ 	    assert ipIgnorefileDownloadInfoDAO.getIgnoreInfoNowAcceptableCount() == 2l : "Should be two but is " + ipIgnorefileDownloadInfoDAO.getIgnoreInfoNowAcceptableCount();
+	    IgnoreIpAddress ip2 = new IgnoreIpAddress(123,0,0,5, 5);
+	    ignoreIpAddressDAO.makePersistent(ip2);
+ 	    
+ 	    tm.commit(ts);
+ 	    
+ 	    
+ 	    ts = tm.getTransaction(td);
+ 	    assert ipIgnorefileDownloadInfoDAO.getIgnoreInfoNowAcceptableCount() == 1l : "Should be one but is " + ipIgnorefileDownloadInfoDAO.getIgnoreInfoNowAcceptableCount();
+ 	    List<IpIgnoreFileDownloadInfo> downloadInfo =ipIgnorefileDownloadInfoDAO.getIgnoreInfoNowAcceptable(0, 10);
+ 	    
+ 	    assert downloadInfo.contains(downloadInfo1) : "Should contain " + downloadInfo1;
+ 	    assert !downloadInfo.contains(downloadInfo2) : "Should  not contain " + downloadInfo2; 
+ 	    
+ 	    ipIgnorefileDownloadInfoDAO.makeTransient(ipIgnorefileDownloadInfoDAO.getById(downloadInfo1.getId(), false));
+ 	    ipIgnorefileDownloadInfoDAO.makeTransient(ipIgnorefileDownloadInfoDAO.getById(downloadInfo2.getId(), false));
+ 	    ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip2.getId(), false));
+        tm.commit(ts);
+
 	}
 }
