@@ -20,11 +20,14 @@ package edu.ur.ir.security.service;
 
 
 import org.apache.log4j.Logger;
+import org.springframework.security.AccountExpiredException;
 import org.springframework.security.Authentication;
 import org.springframework.security.AuthenticationException;
 import org.springframework.security.AuthenticationServiceException;
 import org.springframework.security.BadCredentialsException;
+import org.springframework.security.DisabledException;
 import org.springframework.security.GrantedAuthority;
+import org.springframework.security.LockedException;
 import org.springframework.security.SpringSecurityMessageSource;
 import org.springframework.security.ldap.LdapAuthoritiesPopulator;
 import org.springframework.security.providers.AuthenticationProvider;
@@ -239,11 +242,25 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
         	
         	// convert to username/password for bind
         	DirContextOperations userData = getAuthenticator().authenticate(new UsernamePasswordAuthenticationToken(username, password));
- 
             GrantedAuthority[] extraAuthorities = loadUserAuthorities(userData, username, password);
-
             UserDetails user = userDetailsContextMapper.mapUserFromContext(userData, username, extraAuthorities);
 
+            
+            if (!user.isAccountNonLocked()) {
+                throw new LockedException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.locked",
+                        "User account is locked"), user);
+            }
+
+            if (!user.isEnabled()) {
+                throw new DisabledException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.disabled",
+                        "User is disabled"), user);
+            }
+
+            if (!user.isAccountNonExpired()) {
+                throw new AccountExpiredException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.expired",
+                        "User account has expired"), user);
+            }
+            
             return createSuccessfulAuthentication(userToken, user);
 
         } catch (NamingException ldapAccessFailure) {
