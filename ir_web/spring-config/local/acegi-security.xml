@@ -41,6 +41,7 @@
   <bean id="authenticationProcessingFilter"
       class="edu.ur.ir.web.spring.security.UrAuthenticationProcessingFilter">
 	    <s:custom-filter position="AUTHENTICATION_PROCESSING_FILTER"/>
+	    <property name="userService" ref="userService"/>
 		<property name="authenticationManager" ref="authenticationManager"/>
 		<property name="authenticationFailureUrl" value="/acegilogin.jsp?login_error=1"/>
 		<property name="defaultTargetUrl" value="/user/workspace.action"/>
