@@ -32,6 +32,8 @@ import org.springframework.security.util.TextUtils;
 import org.springframework.util.Assert;
 
 import edu.ur.ir.security.service.LdapAuthenticationToken;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -57,11 +59,25 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
     private String usernameParameter = SPRING_SECURITY_FORM_USERNAME_KEY;
     private String passwordParameter = SPRING_SECURITY_FORM_PASSWORD_KEY;
     
-    private boolean ldapEnabled = true;
+    /** ldap enabled is defaulted to false */
+    private boolean ldapEnabled = false;
+    
+    /** service for dealing with user information  */
+    private UserService userService;
+    
 
     //~ Methods ========================================================================================================
 
-    public Authentication attemptAuthentication(HttpServletRequest request) throws AuthenticationException {
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	public Authentication attemptAuthentication(HttpServletRequest request) throws AuthenticationException {
         String username = obtainUsername(request);
         String password = obtainPassword(request);
         
@@ -73,8 +89,6 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
             password = "";
         }
         
-  
-        
         username = username.trim();
 
         
@@ -84,7 +98,15 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
         if( ldapEnabled )
         {
         	log.debug("LDAP enabled - adding ldap token");
-            authRequests.add(new LdapAuthenticationToken(username, password)); 
+        	IrUser user = userService.getUserByLdapUserName(username);
+        	if( user != null )
+        	{
+                authRequests.add(new LdapAuthenticationToken(username, password)); 
+        	}
+        	else
+        	{
+        		log.debug("ldap user name does not exist in local database");
+        	}
         }
         else
         {
@@ -112,6 +134,7 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
         		    log.debug("Attempting request user name = " + username);
                     setDetails(request, authRequest);
                     auth = getAuthenticationManager().authenticate(authRequest);
+                                       
                     // if an exception has not occurred  return the auth - everything
                     // else will return an exception
                     return auth;
