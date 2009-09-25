@@ -21,7 +21,7 @@
 -->
 <project name="ir_web" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
 	
-	<!-- uncomment this to automatically have the YUI libraries unzipped  
+	<!-- this automatically sets the YUI libraries to be unzipped  
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
     -->
@@ -171,12 +171,6 @@
 			<fileset file="../ur_tags/ur_tags/ur_tags-${project.version}.jar"/>
 		</copy>
 
-		
-		<!-- copy the pdf libraries down from local this will be done
-		     until stable releases are released -->
-		<copy todir="${lib.dir}">
-			<fileset dir="${pdfbox.lib.dir}" includes="**/*.jar"/>
-		</copy>
 	</target>
 
 	<!-- compile the java source files -->
