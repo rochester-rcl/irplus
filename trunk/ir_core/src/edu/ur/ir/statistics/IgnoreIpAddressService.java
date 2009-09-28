@@ -49,7 +49,7 @@ public interface IgnoreIpAddressService {
      * 
      * @param id
      */
-    public boolean deleteIgnoreIpAddress(Long id);
+    public void deleteIgnoreIpAddress(IgnoreIpAddress ignoreIpAddress);
     
     /**
      * Get a ip addresses by id

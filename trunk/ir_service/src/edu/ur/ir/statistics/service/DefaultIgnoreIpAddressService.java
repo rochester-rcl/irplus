@@ -40,13 +40,8 @@ public class DefaultIgnoreIpAddressService implements IgnoreIpAddressService{
 	 * 
 	 * @see edu.ur.ir.statistics.IgnoreIpAddressService#deleteIgnoreIpAddress(java.lang.Long)
 	 */
-	public boolean deleteIgnoreIpAddress(Long id) {
-		IgnoreIpAddress ignoreIpAddress = this.getIgnoreIpAddress(id, false);
-		if( ignoreIpAddress != null)
-		{
+	public void deleteIgnoreIpAddress(IgnoreIpAddress ignoreIpAddress) {
 			ignoreIpAddressDAO.makeTransient(ignoreIpAddress);
-		}
-		return true;
 	}
 
 	/**

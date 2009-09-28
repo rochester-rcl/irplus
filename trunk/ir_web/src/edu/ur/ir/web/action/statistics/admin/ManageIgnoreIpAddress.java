@@ -151,7 +151,8 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 		    for(int index = 0; index < ignoreIpAddressIds.length; index++)
 		    {
 			    log.debug("Deleting ignore ip address with id " + ignoreIpAddressIds[index]);
-			    ignoreIpAddressService.deleteIgnoreIpAddress(ignoreIpAddressIds[index]);
+			    IgnoreIpAddress address = ignoreIpAddressService.getIgnoreIpAddress(ignoreIpAddressIds[index], false);
+			    ignoreIpAddressService.deleteIgnoreIpAddress(address);
 		    }
 		    downloadStatisticsService.updateAllRepositoryFileRollUpCounts();
 		}

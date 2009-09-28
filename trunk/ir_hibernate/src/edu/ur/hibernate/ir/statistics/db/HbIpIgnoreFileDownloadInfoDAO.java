@@ -64,6 +64,11 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
     }	
 	
 	
+	/**
+	 * Get the ip ignore file download info.
+	 * 
+	 * @see edu.ur.ir.statistics.IpIgnoreFileDownloadInfoDAO#getIpIgnoreFileDownloadInfo(java.lang.String, java.lang.Long, java.util.Date)
+	 */
 	public IpIgnoreFileDownloadInfo getIpIgnoreFileDownloadInfo(
 			String ipAddress, Long fileId, Date date) {
 	    Object[] values = new Object[] {ipAddress, fileId, date};
