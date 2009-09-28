@@ -16,6 +16,7 @@
 
 package edu.ur.ir.statistics;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -49,6 +50,16 @@ public interface DownloadStatisticsService {
 	 * @return - the found file download info or null if not found
 	 */
 	public FileDownloadInfo getFileDownloadInfo(Long id,  boolean lock) ;
+	
+	/**
+	 * Get the ignore file download info 
+	 * 
+	 * @param id - id of the file download information
+	 * @param lock - upgrade the lock mode
+	 * 
+	 * @return - the found file download info or null if not found
+	 */
+	public IpIgnoreFileDownloadInfo getIpIgnoreFileDownloadInfo(Long id,  boolean lock) ;
 	
 	/**
 	 * Adds the file download info
@@ -85,7 +96,7 @@ public interface DownloadStatisticsService {
 	 * 
 	 * @param irFileId - id of the irFile to update the count for.
 	 */
-	public void updateRollUpCount(Long irFileId);
+	public FileDownloadRollUp updateRollUpCount(Long irFileId);
 	
 	/**
 	 * Get all processing records.
@@ -156,7 +167,14 @@ public interface DownloadStatisticsService {
 	 * 
 	 * @param fileDownloadInfo
 	 */
-	public void deleteFileDownloadInfo(FileDownloadInfo fileDownloadInfo);
+	public void delete(FileDownloadInfo fileDownloadInfo);
+	
+	/**
+	 * Delete file Download Info
+	 * 
+	 * @param fileDownloadInfo
+	 */
+	public void delete(IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo);
 	
 	/**
 	 * Get the number of file downloads in the items of the specified collection and its children
@@ -216,4 +234,26 @@ public interface DownloadStatisticsService {
 	 * @param batchSize - number of records to process at once.
 	 */
 	public void removeOkCountsFromIgnoreDownloadInfo(int batchSize);
+	
+	/**
+	 * Get the file download info.
+	 * 
+	 * @param ipAddress ip address
+	 * @param fileId the id of the file
+	 * @param date - date for the downloads
+	 * 
+	 * @return the file download info or null if not found
+	 */
+	public FileDownloadInfo getFileDownloadInfo(String ipAddress, Long fileId, Date date);
+	
+	/**
+	 * Get the ingnore file download info.
+	 * 
+	 * @param ipAddress - ip address
+	 * @param fileId - the id of the file
+	 * @param date - date of the download information
+	 *  
+	 * @return the ignore file download info.
+	 */
+	public IpIgnoreFileDownloadInfo getIpIgnoreFileDownloadInfo(String ipAddress, Long fileId, Date date);
 }

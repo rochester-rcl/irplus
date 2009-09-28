@@ -169,7 +169,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 */
 	public void processFileDownload(String ipAddress, IrFile irFile)
 	{
-		long count = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress);
+		long count = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress);		
 		boolean isIgnoreAddress = (count > 0);
 		
 		if( isIgnoreAddress )
@@ -179,9 +179,8 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		else
 		{
 			addFileDownloadInfo(ipAddress, irFile);
+			updateRollUpCount(irFile.getId());
 		}
-		
-		updateRollUpCount(irFile.getId());
 	}
 
 	
@@ -270,7 +269,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * 
 	 * @param fileDownloadInfo
 	 */
-	public void deleteFileDownloadInfo(FileDownloadInfo fileDownloadInfo) {
+	public void delete(FileDownloadInfo fileDownloadInfo) {
 		fileDownloadInfoDAO.makeTransient(fileDownloadInfo);
 	}	
 	
@@ -321,9 +320,8 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * 
 	 * @see edu.ur.ir.statistics.DownloadStatisticsService#updateRollUpCount(java.lang.Long)
 	 */
-	public void updateRollUpCount(Long irFileId) {		
+	public FileDownloadRollUp updateRollUpCount(Long irFileId) {		
 		Long count = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFileId);
-		
 		FileDownloadRollUp rollUp = fileDownloadRollUpDAO.getByIrFileId(irFileId);
 		
 		if( rollUp == null )
@@ -336,6 +334,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		}
 		
 		fileDownloadRollUpDAO.makePersistent(rollUp);
+		return rollUp;
 	}
 
 	public FileDownloadRollUpProcessingRecordDAO getFileDownloadRollUpProcessingRecordDAO() {
@@ -398,7 +397,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		int count = fileDownloadInfoDAO.getDownloadInfoIgnoredCount().intValue();
 		if( count > 0l )
 		{
-			int numProcessed = 0;
+			int numProcessed = 1;
 			while( numProcessed < count)
 			{
 				if(log.isDebugEnabled())
@@ -437,7 +436,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		int count = ipIgnoreFileDownloadInfoDAO.getIgnoreInfoNowAcceptableCount().intValue(); 
 		if( count > 0l )
 		{
-			int numProcessed = 0;
+			int numProcessed = 1;
 			while( numProcessed < count)
 			{
 				if(log.isDebugEnabled())
@@ -511,6 +510,57 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public void setIpIgnoreFileDownloadInfoDAO(
 			IpIgnoreFileDownloadInfoDAO ipIgnoreFileDownloadInfoDAO) {
 		this.ipIgnoreFileDownloadInfoDAO = ipIgnoreFileDownloadInfoDAO;
+	}
+
+	/**
+	 * Get the file download info.
+	 * 
+	 * @param ipAddress ip address
+	 * @param fileId the id of the file
+	 * @param date - date for the downloads - should not contain time only the date
+	 * 
+	 * @return the file download info or null if not found
+	 */
+	public FileDownloadInfo getFileDownloadInfo(String ipAddress, Long fileId,
+			Date date) {
+		return fileDownloadInfoDAO.getFileDownloadInfo(ipAddress, fileId, date);
+	}
+
+	/**
+	 * Get the ingnore file download info.
+	 * 
+	 * @param ipAddress - ip address
+	 * @param fileId - the id of the file
+	 * @param date - date of the download information - should only contain the date not time
+	 *  
+	 * @return the ignore file download info.
+	 */
+	public IpIgnoreFileDownloadInfo getIpIgnoreFileDownloadInfo(
+			String ipAddress, Long fileId, Date date) {
+		return ipIgnoreFileDownloadInfoDAO.getIpIgnoreFileDownloadInfo(ipAddress, fileId, date);
+	}
+
+	
+	/**
+	 * Delete the ip ignore file download info.
+	 * 
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#delete(edu.ur.ir.statistics.IpIgnoreFileDownloadInfo)
+	 */
+	public void delete(IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo) {
+		ipIgnoreFileDownloadInfoDAO.makeTransient(ipIgnoreFileDownloadInfo);
+	}
+
+	/**
+	 * Get the ignore file download info 
+	 * 
+	 * @param id - id of the file download information
+	 * @param lock - upgrade the lock mode
+	 * 
+	 * @return - the found file download info or null if not found
+	 */
+	public IpIgnoreFileDownloadInfo getIpIgnoreFileDownloadInfo(Long id,
+			boolean lock) {
+		return ipIgnoreFileDownloadInfoDAO.getById(id, lock);
 	}
 	
 	

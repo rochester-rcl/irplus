@@ -491,6 +491,8 @@
        <property name="fileDownloadInfoDAO" ref="fileDownloadInfoDAO"/>
        <property name="fileDownloadRollUpDAO" ref="fileDownloadRollUpDAO"/>
        <property name="fileDownloadRollUpProcessingRecordDAO" ref="fileDownloadRollUpProcessingRecordDAO"/>
+       <property name="ipIgnoreFileDownloadInfoDAO" ref="ipIgnoreFileDownloadInfoDAO"/>
+       <property name="ignoreIpAddressDAO" ref="ignoreIpAddressDAO"/>
    </bean>
 
    <!-- ****************************************** --> 
