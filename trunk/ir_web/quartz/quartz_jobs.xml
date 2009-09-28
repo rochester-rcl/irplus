@@ -40,34 +40,6 @@
         </trigger>
     </job>
    -->
-   
-   <!--  this job is for updating statistics for ir files-->
-   <job>
-        <job-detail>
-            <name>IrFileStatisticsRollUpUpdater</name>
-            <group>DEFAULT</group>
-            <description>
-                A job that processes that updates counts for ir files
-            </description>
-            <job-class>
-               edu.ur.ir.statistics.service.DefaultFileDownloadStatsUpdateJob
-            </job-class>
-            <volatility>false</volatility>
-            <durability>true</durability>
-            <recover>true</recover>
-        </job-detail>
-    
-        <!--  run every 5 minutes -->
-        <trigger>
-            <cron>
-                <name>irFileStatisticsRollUpUpdater</name>
-                <group>DEFAULT</group>
-                <job-name>IrFileStatisticsRollUpUpdater</job-name>
-                <job-group>DEFAULT</job-group>
-                <cron-expression>0 0/1 * * * ?</cron-expression>
-            </cron>
-        </trigger>
-    </job>
     
    <!--  this job is for indexing existing changed items and updating/deleting/inserting them into the index -->
    <job>
