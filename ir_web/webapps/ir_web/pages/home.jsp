@@ -134,8 +134,7 @@
                         </div>
                    
                         <div class="contentBoxContentPicture">
-                            <div id="repository_picture" >
-                            </div>
+                            <div id="repository_picture"></div>
                         </div>
                     </div>
                     
