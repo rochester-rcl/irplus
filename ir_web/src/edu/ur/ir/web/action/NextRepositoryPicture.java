@@ -68,6 +68,11 @@ Comparator<IrFile>{
 	/**  Ir file that should be shown. */
 	private IrFile irFile;
 	
+	/**  number of pictures */
+	private int numPictures;
+	
+
+
 	/**
 	 * Determine if the user is initializing wants the next or previous
 	 * picture
@@ -97,11 +102,11 @@ Comparator<IrFile>{
 		{
 		    LinkedList<IrFile> pictures = new LinkedList<IrFile>(repository.getPictures());
         
-		    
+		    numPictures = pictures.size();
             // sort the pictures to assure order
             Collections.sort(pictures, this);
         
-            if( pictures != null && pictures.size() > 0 )
+            if( pictures != null && numPictures > 0 )
             {
         	    if( pictures.size() == 1 )
         	    {
@@ -110,11 +115,11 @@ Comparator<IrFile>{
         	    else if ( type.equals(INIT))
         	    {
         		    Random random = new Random();
-        		    currentLocation = random.nextInt(pictures.size());
+        		    currentLocation = random.nextInt(numPictures);
         	    }
         	    else if( type.equals(NEXT))
         	    {
-        		    if( (currentLocation + 1) >= pictures.size())
+        		    if( (currentLocation + 1) >= numPictures)
         		    {
         			    currentLocation = 0;
         		    }
@@ -127,7 +132,7 @@ Comparator<IrFile>{
         	    {
         		    if( (currentLocation -1 ) < 0 )
         		    {
-        			    currentLocation = pictures.size() - 1;
+        			    currentLocation = numPictures - 1;
         		    }
         		    else
         		    {
@@ -197,5 +202,14 @@ Comparator<IrFile>{
 	public void setIrFile(IrFile irFile) {
 		this.irFile = irFile;
 	}
+	
+	public int getNumPictures() {
+		return numPictures;
+	}
+
+	public void setNumPictures(int numPictures) {
+		this.numPictures = numPictures;
+	}
+
 
 }
