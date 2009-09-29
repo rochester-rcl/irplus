@@ -61,7 +61,6 @@
 	border-right: 1px solid #808080;
 	border-bottom: 1px solid #808080;
     width: 100%;
-    min-height:300px; 
 	float: left;
 	clear: both;
 }
@@ -76,6 +75,7 @@
 	display: inline;
 	width: 100%;
 	border: 0px;
+	padding: 0px;
 	clear: both;
 }
 

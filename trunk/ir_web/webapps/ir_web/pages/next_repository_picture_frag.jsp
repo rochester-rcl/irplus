@@ -25,23 +25,25 @@
     </c:url>
     
    <img class="repository_image" width="466px" height="278px" src="${pictureUrl}"/>
-
-<table class="buttonTable">
-    <tr>
-        <td class="leftButton">
-            <button class="ur_button" 
-	            onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';"
- 		        onclick="javascript:YAHOO.ur.public.home.getRepositoryPicture(${currentLocation}, 'PREV');">&lt; Previous</button>
- 		</td>
- 		<td class="rightButton">
- 		    <button class="ur_button" 
-	            onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';"
- 		        onclick="javascript:YAHOO.ur.public.home.getRepositoryPicture(${currentLocation}, 'NEXT');">Next &gt;</button>
-        </td>
-     </tr>
-</table>
+   
+   <c:if test="${numPictures > 1}"> 
+   <table class="buttonTable">
+        <tr>
+            <td class="leftButton">
+                <button class="ur_button" 
+	                onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';"
+ 		            onclick="javascript:YAHOO.ur.public.home.getRepositoryPicture(${currentLocation}, 'PREV');">&lt; Previous</button>
+ 		    </td>
+ 		    <td class="rightButton">
+ 		        <button class="ur_button" 
+	                onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';"
+ 		            onclick="javascript:YAHOO.ur.public.home.getRepositoryPicture(${currentLocation}, 'NEXT');">Next &gt;</button>
+            </td>
+        </tr>
+    </table>
+    </c:if>
 </c:if>
 <c:if test="${irFile == null }">
     <p>There are no pictures to display</p>
