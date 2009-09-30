@@ -252,10 +252,6 @@
                            <a href="${resetAllHandles}">Reset all handles</a>
                            <br/>
                            <br/>
-                           <c:url var="updateIrFileRollUpCounts" value="/admin/updateIrFileRollUpCounts.action"/>
-                           <a href="${updateIrFileRollUpCounts}">Update All Repository File Statistics</a>
-                           <br/>
-                           <br/>
                        </c:if>
 		           </div>
 	               <!--  end first tab -->

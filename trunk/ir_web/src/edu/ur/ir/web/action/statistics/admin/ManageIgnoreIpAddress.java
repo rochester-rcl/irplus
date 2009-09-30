@@ -20,6 +20,11 @@ package edu.ur.ir.web.action.statistics.admin;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerUtils;
 
 import com.opensymphony.xwork2.Preparable;
 
@@ -35,6 +40,9 @@ import edu.ur.ir.web.table.Pager;
  *
  */
 public class ManageIgnoreIpAddress extends Pager implements  Preparable{
+	
+	/** Default Batch Size */
+	private int batchSize = 3;
 	
 	/** generated version id. */
 	private static final long serialVersionUID = -4532842741539307216L;
@@ -79,6 +87,9 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	/** Row End */
 	private int rowEnd;
 	
+	/** Quartz scheduler instance to schedule jobs  */
+	private Scheduler quartzScheduler;
+	
 	/** Default constructor */
 	public  ManageIgnoreIpAddress()
 	{
@@ -115,8 +126,9 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	 * Method to update an existing ignore ip address.
 	 * 
 	 * @return
+	 * @throws SchedulerException 
 	 */
-	public String update()
+	public String update() throws SchedulerException
 	{
 		log.debug("updating ignore ip address id = " + ignoreIpAddress.getId());
 		added = false;
@@ -132,7 +144,6 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 		else
 		{
 			message = getText("ignoreIpAddressError");
-			
 			addFieldError("ignoreIpAddressAlreadyExists", message);
 		}
         return "added";
@@ -191,6 +202,27 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 			rowEnd = totalHits;
 		}
 	
+		return SUCCESS;
+	}
+	
+	/**
+	 * Sets the re 
+	 * @return
+	 * @throws SchedulerException
+	 */
+	public String runFileDownloadUpdateProcessing() throws SchedulerException
+	{
+		log.debug("Setting up job to be fired for updateing stats");
+		//create the job detail
+		JobDetail jobDetail = new JobDetail("reCountFileDownloadsJob", Scheduler.DEFAULT_GROUP, 
+				edu.ur.ir.statistics.service.DefaultFileDownloadStatsUpdateJob.class);
+		
+		jobDetail.getJobDataMap().put("batchSize", new Integer(batchSize));
+		
+		//create a trigger that fires once right away
+		Trigger trigger = TriggerUtils.makeImmediateTrigger(0,0);
+		trigger.setName("singleReCountDownlodsJobFireNow");
+		quartzScheduler.scheduleJob(jobDetail, trigger);
 		return SUCCESS;
 	}
 	
@@ -320,6 +352,25 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	public void setDownloadStatisticsService(
 			DownloadStatisticsService downloadStatisticsService) {
 		this.downloadStatisticsService = downloadStatisticsService;
+	}
+
+	public Scheduler getQuartzScheduler() {
+		return quartzScheduler;
+	}
+
+
+	public void setQuartzScheduler(Scheduler quartzScheduler) {
+		this.quartzScheduler = quartzScheduler;
+	}
+
+
+	public int getBatchSize() {
+		return batchSize;
+	}
+
+
+	public void setBatchSize(int batchSize) {
+		this.batchSize = batchSize;
 	}
 
 }

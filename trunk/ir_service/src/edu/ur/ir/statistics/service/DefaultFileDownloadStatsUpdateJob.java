@@ -1,5 +1,6 @@
 package edu.ur.ir.statistics.service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -33,6 +34,10 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultFileDownloadStatsUpdateJob.class);
 	
+	/**  Batch size for processing the records  */
+	public static final int DEFAULT_BATCH_SIZE = 25;
+	
+	
 	/**
 	 * Retrieve the current records to be indexed and then process them.
 	 * 
@@ -41,13 +46,19 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 	public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDetail jobDetail = context.getJobDetail();
 		String beanName = jobDetail.getName();
-		  
+		
 		if (log.isDebugEnabled()) 
 		{
 		    log.info ("Running SpringBeanDelegatingJob - Job Name ["+jobDetail.getName()+"], Group Name ["+jobDetail.getGroup()+"]");
 		    log.info ("Delegating to bean ["+beanName+"]");
 		}
-		  
+		
+		int batchSize = jobDetail.getJobDataMap().getInt("batchSize");
+		if(batchSize <= 0)
+		{
+		    batchSize = DEFAULT_BATCH_SIZE;  	
+		}
+		
 		ApplicationContext applicationContext = null;
 		  
 		try 
@@ -79,39 +90,65 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		    throw new JobExecutionException("Unable to retrieve target bean that is to be used as a job source", e1);
 		}
 		
-		List<FileDownloadRollUpProcessingRecord> records =  downloadStatisticsService.getAllDownloadRollUpProcessingRecords();
-		log.debug("processing " + records.size() + " records ");
-	
-		for( FileDownloadRollUpProcessingRecord record : records )
+		
+		TransactionStatus ts = null;
+		try
 		{
-			TransactionStatus ts = null;
-			try
+			ts = tm.getTransaction(td);
+			downloadStatisticsService.removeIgnoreCountsFromDownloadInfo(batchSize);
+			downloadStatisticsService.removeOkCountsFromIgnoreDownloadInfo(batchSize);
+			downloadStatisticsService.updateAllRepositoryFileRollUpCounts();
+		}
+		catch(Exception e)
+		{
+			errorEmailService.sendError(e);
+			throw new JobExecutionException("Problem preparing records for processing");
+		}
+		finally
+		{
+			if( ts != null )
 			{
-				// start a new transaction
-				ts = tm.getTransaction(td);
-			    Long irFileId = record.getIrFileId();
-			    downloadStatisticsService.updateRollUpCount(irFileId);
-			    downloadStatisticsService.delete(record);
-			}
-			catch(Exception e)
-			{
-				errorEmailService.sendError(e);
-			}
-			finally
-			{
-				if( ts != null )
+				if( tm != null )
 				{
-					if( tm != null )
-					{
-					    tm.commit(ts);
-					}
+				    tm.commit(ts);
 				}
-					
 			}
 		}
 		
-		
-		
+		try
+		{
+			List<FileDownloadRollUpProcessingRecord> records = new LinkedList<FileDownloadRollUpProcessingRecord>();
+			do
+			{
+				ts = tm.getTransaction(td);
+			    records =  downloadStatisticsService.getDownloadRollUpProcessingRecords(0, batchSize);
+			    log.debug("processing " + records.size() + " records ");
+			    for( FileDownloadRollUpProcessingRecord record : records )
+			    {
+				     Long irFileId = record.getIrFileId();
+				     Long downloadCount = downloadStatisticsService.getNumberOfFileDownloadsForIrFile(irFileId);
+				     downloadStatisticsService.updateRollUpCount(irFileId, downloadCount);
+				     downloadStatisticsService.delete(record);
+			    }
+			    tm.commit(ts);
+			}
+			while(records.size() > 0);
+		}
+		catch(Exception e)
+		{
+			errorEmailService.sendError(e);
+		}
+		finally
+		{
+			if( ts != null && !ts.isCompleted())
+			{
+				if( tm != null)
+				{
+				    tm.commit(ts);
+				}
+			}
+				
+		}
 	}
 
 }

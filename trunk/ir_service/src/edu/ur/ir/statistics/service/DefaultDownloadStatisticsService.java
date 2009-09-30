@@ -21,7 +21,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -179,7 +178,14 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		else
 		{
 			addFileDownloadInfo(ipAddress, irFile);
-			updateRollUpCount(irFile.getId());
+			FileDownloadRollUp rollupRecord = this.getFileDownloadRollUpByIrFileId(irFile.getId());
+			
+			Long downloadCount = 1l;
+			if( rollupRecord != null )
+			{
+			    downloadCount = rollupRecord.getDownloadCount() + 1l;
+			}
+			updateRollUpCount(irFile.getId(), downloadCount);
 		}
 	}
 
@@ -191,16 +197,9 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * 
 	 * @return Number of times the file is downloaded
 	 */
-	@SuppressWarnings("unchecked")
-	public Long getNumberOfDownloadsForFile(IrFile irFile) {
-		
-		log.debug("No. of downloads for file Ids: " + irFile.getId() );
-		
-		List fileIds = new LinkedList<Long>();
-		fileIds.add(irFile.getId());
-		
+	public Long getRollUpNumberOfDownloadsForFile(IrFile irFile) {
+		log.debug("No. of downloads for file Ids: " + irFile);
 		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForIrFile(irFile);
-		
 	}
 	
 	/**
@@ -320,8 +319,8 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * 
 	 * @see edu.ur.ir.statistics.DownloadStatisticsService#updateRollUpCount(java.lang.Long)
 	 */
-	public FileDownloadRollUp updateRollUpCount(Long irFileId) {		
-		Long count = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFileId);
+	public FileDownloadRollUp updateRollUpCount(Long irFileId, Long count) {		
+		
 		FileDownloadRollUp rollUp = fileDownloadRollUpDAO.getByIrFileId(irFileId);
 		
 		if( rollUp == null )
@@ -362,9 +361,8 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * 
 	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getAllRollUpProcessingRecords()
 	 */
-	@SuppressWarnings("unchecked")
-	public List<FileDownloadRollUpProcessingRecord> getAllDownloadRollUpProcessingRecords() {
-		return fileDownloadRollUpProcessingRecordDAO.getAll();
+	public List<FileDownloadRollUpProcessingRecord> getDownloadRollUpProcessingRecords(int start, int maxResults) {
+		return fileDownloadRollUpProcessingRecordDAO.getProcessingRecords(start, maxResults);
 	}
 	
 	/**
@@ -391,78 +389,83 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * to the ignore download info counts.
 	 * 
 	 * @param batchSize - batch size to process.
+	 * @return total number of records processed
 	 */
-	public void removeIgnoreCountsFromDownloadInfo(int batchSize)
+	public Integer removeIgnoreCountsFromDownloadInfo(int batchSize)
 	{
-		int count = fileDownloadInfoDAO.getDownloadInfoIgnoredCount().intValue();
-		if( count > 0l )
+		int start = 0;
+		int totalProcessed = 0;
+		List<FileDownloadInfo> infos = fileDownloadInfoDAO.getDownloadInfoIgnored(start, batchSize);
+		while(infos.size() > 0 )
 		{
-			int numProcessed = 1;
-			while( numProcessed < count)
+			if(log.isDebugEnabled())
 			{
-				if(log.isDebugEnabled())
-				{
-					log.debug(" num processed = " + numProcessed + " batch size = " + batchSize + " num processed + batch size = " 
-							+ (numProcessed + batchSize));
-				}
-			    List<FileDownloadInfo> infos = fileDownloadInfoDAO.getDownloadInfoIgnored(numProcessed, numProcessed + batchSize);
-			    for( FileDownloadInfo info : infos)
-			    {
-			    	IpIgnoreFileDownloadInfo ignoreRecord = ipIgnoreFileDownloadInfoDAO.getIpIgnoreFileDownloadInfo(info.getIpAddress(), info.getIrFileId(), info.getDownloadDate());
-			    	if( ignoreRecord == null )
-			    	{
-			    		ignoreRecord = new IpIgnoreFileDownloadInfo(info.getIpAddress(), info.getIrFileId(), info.getDownloadDate());
-			    		ignoreRecord.setDownloadCount(info.getDownloadCount());
-			    	}
-			    	else
-			    	{
-			    		ignoreRecord.setDownloadCount(ignoreRecord.getDownloadCount() + info.getDownloadCount());
-			    	}
-			    	ipIgnoreFileDownloadInfoDAO.makePersistent(ignoreRecord);
-			    	fileDownloadInfoDAO.makeTransient(info);
-			    }
-			    numProcessed = numProcessed + batchSize;
+				log.debug("removeIgnoreCountsFromDownloadInfo total processed = " + totalProcessed + " batch Size = " + batchSize);
 			}
+			    
+			log.debug("infos size = " + infos.size());
+			for( FileDownloadInfo info : infos)
+			{
+				totalProcessed = totalProcessed + 1;
+				log.debug("Processing info record " + info);
+				IpIgnoreFileDownloadInfo ignoreRecord = ipIgnoreFileDownloadInfoDAO.getIpIgnoreFileDownloadInfo(info.getIpAddress(), info.getIrFileId(), info.getDownloadDate());
+				if( ignoreRecord == null )
+				{
+					ignoreRecord = new IpIgnoreFileDownloadInfo(info.getIpAddress(), info.getIrFileId(), info.getDownloadDate());
+					ignoreRecord.setDownloadCount(info.getDownloadCount());
+				}
+				else
+				{
+					ignoreRecord.setDownloadCount(ignoreRecord.getDownloadCount() + info.getDownloadCount());
+				}
+				ipIgnoreFileDownloadInfoDAO.makePersistent(ignoreRecord);
+				fileDownloadInfoDAO.makeTransient(info);
+			}
+			infos = fileDownloadInfoDAO.getDownloadInfoIgnored(start, batchSize);
+			   
 		}
+		return new Integer(totalProcessed);
 	}
 	
+
 	/**
 	 * Move counts that are ignored that are actually ok into the file download counts.
 	 * 
 	 * @param batchSize - number of records to process at once.
+	 * @return total number of records processed
 	 */
-	public void removeOkCountsFromIgnoreDownloadInfo(int batchSize)
+	public Integer removeOkCountsFromIgnoreDownloadInfo(int batchSize)
 	{
-		int count = ipIgnoreFileDownloadInfoDAO.getIgnoreInfoNowAcceptableCount().intValue(); 
-		if( count > 0l )
+		int start = 0;
+		int totalProcessed = 0;
+		List<IpIgnoreFileDownloadInfo> okCounts = ipIgnoreFileDownloadInfoDAO.getIgnoreInfoNowAcceptable(start, batchSize );
+		while(okCounts.size() > 0 )
 		{
-			int numProcessed = 1;
-			while( numProcessed < count)
+			if(log.isDebugEnabled())
 			{
-				if(log.isDebugEnabled())
-				{
-					log.debug(" num processed = " + numProcessed + " batch size = " + batchSize + " num processed + batch size = " 
-							+ (numProcessed + batchSize));
-				}
-			    List<IpIgnoreFileDownloadInfo> okCounts = ipIgnoreFileDownloadInfoDAO.getIgnoreInfoNowAcceptable(numProcessed, numProcessed + batchSize);
-			    for( IpIgnoreFileDownloadInfo okInfo : okCounts)
-			    {
-			    	FileDownloadInfo downloadRecord = fileDownloadInfoDAO.getFileDownloadInfo(okInfo.getIpAddress(), okInfo.getIrFileId(), okInfo.getDownloadDate());
-			    	if( downloadRecord == null )
-			    	{
-			    		downloadRecord = new FileDownloadInfo(okInfo.getIpAddress(), okInfo.getIrFileId(), okInfo.getDownloadDate());
-			    		downloadRecord.setDownloadCount(okInfo.getDownloadCount());
-			    	}
-			    	else
-			    	{
-			    		downloadRecord.setDownloadCount(okInfo.getDownloadCount() + downloadRecord.getDownloadCount());
-			    	}
-			    	fileDownloadInfoDAO.makePersistent(downloadRecord);
-			    	ipIgnoreFileDownloadInfoDAO.makeTransient(okInfo);
-			    }
-			    numProcessed = numProcessed + batchSize;
+				log.debug(" removeOkCountsFromIgnoreDownloadInfo total processed = " + totalProcessed + " batch Size = " + batchSize);
 			}
+			for( IpIgnoreFileDownloadInfo okInfo : okCounts)
+		    {
+		    	totalProcessed = totalProcessed + 1;
+		    	log.debug("processing ignore info record " + okInfo);
+		    	FileDownloadInfo downloadRecord = fileDownloadInfoDAO.getFileDownloadInfo(okInfo.getIpAddress(), okInfo.getIrFileId(), okInfo.getDownloadDate());
+		    	if( downloadRecord == null )
+		    	{
+		    		downloadRecord = new FileDownloadInfo(okInfo.getIpAddress(), okInfo.getIrFileId(), okInfo.getDownloadDate());
+		    		downloadRecord.setDownloadCount(okInfo.getDownloadCount());
+		    	}
+		    	else
+		    	{
+		    		downloadRecord.setDownloadCount(okInfo.getDownloadCount() + downloadRecord.getDownloadCount());
+		    	}
+		    	fileDownloadInfoDAO.makePersistent(downloadRecord);
+		    	ipIgnoreFileDownloadInfoDAO.makeTransient(okInfo);
+		    }
+			okCounts = ipIgnoreFileDownloadInfoDAO.getIgnoreInfoNowAcceptable(start, batchSize );
 		}
+		
+		return new Integer(totalProcessed);
 	}
 
 	
@@ -561,6 +564,17 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public IpIgnoreFileDownloadInfo getIpIgnoreFileDownloadInfo(Long id,
 			boolean lock) {
 		return ipIgnoreFileDownloadInfoDAO.getById(id, lock);
+	}
+
+	/**
+	 * Get the number of file downloads for an ir file.  This does not include
+	 * any downloads which refer to igored counts.
+	 * 
+	 * @param irFileId
+	 * @return count of acceptable downloads for an ir file
+	 */
+	public Long getNumberOfFileDownloadsForIrFile(Long irFileId) {
+		return fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFileId);
 	}
 	
 	

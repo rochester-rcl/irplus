@@ -461,7 +461,7 @@ public class FileWebUtilFunctions {
 	public static Long fileDownloadCount(IrFile irFile)
 	{
         log.debug("No. of file download for file : " + irFile + "  myDownloadStatisticsService:" + myDownloadStatisticsService);
-		Long count = myDownloadStatisticsService.getNumberOfDownloadsForFile(irFile);
+		Long count = myDownloadStatisticsService.getRollUpNumberOfDownloadsForFile(irFile);
 		log.debug("No. of download : " + count);
 		return count;
 	}

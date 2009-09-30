@@ -191,6 +191,12 @@
             <result name="success">/pages/admin/statistics/ignore_ipaddress_table.jsp</result>
         </action>
         
+         <action name="runFileDownloadUpdateProcessing" 
+            class="edu.ur.ir.web.action.statistics.admin.ManageIgnoreIpAddress"
+            method="runFileDownloadUpdateProcessing">
+            <result type="redirectAction" name="success">viewIgnoreIpAddresses</result>
+        </action>
+        
         <!--  This handles update, save and delete -->
         <action name="*IgnoreIpAddress" 
             method="{1}"
