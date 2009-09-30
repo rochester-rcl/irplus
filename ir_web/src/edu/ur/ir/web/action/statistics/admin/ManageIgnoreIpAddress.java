@@ -42,7 +42,7 @@ import edu.ur.ir.web.table.Pager;
 public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	
 	/** Default Batch Size */
-	private int batchSize = 3;
+	private int batchSize = 25;
 	
 	/** generated version id. */
 	private static final long serialVersionUID = -4532842741539307216L;
