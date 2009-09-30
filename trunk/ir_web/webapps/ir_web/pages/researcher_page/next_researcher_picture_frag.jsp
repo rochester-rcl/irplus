@@ -27,23 +27,24 @@
     
  
             <img class="repository_image"  src="${pictureUrl}"/>
- 
-<table class="buttonTable">
-    <tr>
-        <td class="leftButton">
-            <button class="ur_button" 
-	            onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';"
- 		        onclick="javascript:YAHOO.ur.researcher.page.getResearcherPicture(${currentLocation}, 'PREV');">&lt; Previous</button>
- 		</td>
- 		<td class="rightButton">
- 		    <button class="ur_button" 
-	            onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';"
- 		        onclick="javascript:YAHOO.ur.researcher.page.getResearcherPicture(${currentLocation}, 'NEXT');">Next &gt;</button>
-        </td>
-     </tr>
-</table>
+    <c:if test="${numResearcherPictures > 1}">
+    <table class="buttonTable">
+        <tr>
+            <td class="leftButton">
+                <button class="ur_button" 
+	                onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';"
+ 		            onclick="javascript:YAHOO.ur.researcher.page.getResearcherPicture(${currentLocation}, 'PREV');">&lt; Previous</button>
+ 		    </td>
+ 		    <td class="rightButton">
+ 		        <button class="ur_button" 
+	                onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';"
+ 		            onclick="javascript:YAHOO.ur.researcher.page.getResearcherPicture(${currentLocation}, 'NEXT');">Next &gt;</button>
+            </td>
+         </tr>
+    </table>
+    </c:if>
 </c:if>
 
 

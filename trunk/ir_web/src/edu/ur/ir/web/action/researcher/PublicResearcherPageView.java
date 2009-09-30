@@ -68,6 +68,9 @@ Comparator<IrFile>, UserIdAware {
 	/** Service class for researcher */
 	private ResearcherService researcherService;
 	
+	/** Number of researcher pictures */
+	private int numResearcherPictures;
+	
 	/** Researcher folders as JSON object */
 	private JSONObject researcherJSONObject;
 	
@@ -127,6 +130,7 @@ Comparator<IrFile>, UserIdAware {
     	{
     		log.debug("Next researcher Picture");
     	}
+    	
 
     	researcher = researcherService.getResearcher(researcherId, false);
     	if( !researcher.isPublic() && !researcher.getUser().getId().equals(userId))
@@ -137,6 +141,8 @@ Comparator<IrFile>, UserIdAware {
     	LinkedList<IrFile> pictures = new LinkedList<IrFile>();
 	    
 	    pictures.addAll(researcher.getPictures());
+	    numResearcherPictures = pictures.size();
+	    
 	    if (researcher.getPrimaryPicture() != null) {
 	    	pictures.add(researcher.getPrimaryPicture());
 	    }
@@ -306,5 +312,13 @@ Comparator<IrFile>, UserIdAware {
 
 	public void setRepository(Repository repository) {
 		this.repository = repository;
+	}
+
+	public int getNumResearcherPictures() {
+		return numResearcherPictures;
+	}
+
+	public void setNumResearcherPictures(int numResearcherPictures) {
+		this.numResearcherPictures = numResearcherPictures;
 	}
 }
