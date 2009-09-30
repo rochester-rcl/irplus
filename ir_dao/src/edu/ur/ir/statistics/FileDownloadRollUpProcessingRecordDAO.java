@@ -16,6 +16,8 @@
 
 package edu.ur.ir.statistics;
 
+import java.util.List;
+
 import edu.ur.dao.CrudDAO;
 
 /**
@@ -34,6 +36,18 @@ public interface FileDownloadRollUpProcessingRecordDAO extends CrudDAO<FileDownl
 	 * @return - number of records created for processing
 	 */
 	public Long updateAllRepositoryDownloadCounts();
+	
+	/**
+	 * This retrieves all file download roll up processing record objects at the given start positions
+	 * with the a maximum of maxResults
+	 * 
+	 * @param rowStart - row to start at
+	 * @param maxResults - maximum number of results to return.
+	 * 
+	 * @return  the list of file download roll up processing records at the given start position and
+	 * with a max of maxResults.
+	 */
+	public List<FileDownloadRollUpProcessingRecord> getProcessingRecords(int start, int maxResults); 
 	
 	/**
 	 * Get a processing record by id.

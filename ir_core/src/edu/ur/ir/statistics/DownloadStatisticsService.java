@@ -96,14 +96,28 @@ public interface DownloadStatisticsService {
 	 * 
 	 * @param irFileId - id of the irFile to update the count for.
 	 */
-	public FileDownloadRollUp updateRollUpCount(Long irFileId);
+	public FileDownloadRollUp updateRollUpCount(Long irFileId, Long count);
 	
 	/**
-	 * Get all processing records.
+	 * Get the number of file downloads for an ir file.  This does not include
+	 * any downloads which refer to igored counts.
 	 * 
-	 * @return all processing recod
+	 * @param irFileId
+	 * @return count of acceptable downloads for an ir file
 	 */
-	public List<FileDownloadRollUpProcessingRecord> getAllDownloadRollUpProcessingRecords();
+	public Long getNumberOfFileDownloadsForIrFile(Long irFileId);
+	
+	/**
+	 * This retrieves all file download roll up processing record objects at the given start positions
+	 * with the a maximum of maxResults
+	 * 
+	 * @param rowStart - row to start at
+	 * @param maxResults - maximum number of results to return.
+	 * 
+	 * @return  the list of file download roll up processing records at the given start position and
+	 * with a max of maxResults.
+	 */
+	public List<FileDownloadRollUpProcessingRecord> getDownloadRollUpProcessingRecords(int start, int maxResults);
 	
 	/**
 	 * Update all repository counts for ir files in the system.
@@ -160,7 +174,7 @@ public interface DownloadStatisticsService {
 	 * 
 	 * @return Number of times the file is downloaded
 	 */
-	public Long getNumberOfDownloadsForFile(IrFile irFile);
+	public Long getRollUpNumberOfDownloadsForFile(IrFile irFile);
 	
 	/**
 	 * Delete file Download Info
@@ -225,15 +239,17 @@ public interface DownloadStatisticsService {
 	 * to the ignore download info counts.
 	 * 
 	 * @param batchSize - batch size to process.
+	 * @return total number of records processed
 	 */
-	public void removeIgnoreCountsFromDownloadInfo(int batchSize);
+	public Integer removeIgnoreCountsFromDownloadInfo(int batchSize);
 	
 	/**
 	 * Move counts that are ignored that are actually ok into the file download counts.
 	 * 
 	 * @param batchSize - number of records to process at once.
+	 * @return total number of records processed
 	 */
-	public void removeOkCountsFromIgnoreDownloadInfo(int batchSize);
+	public Integer removeOkCountsFromIgnoreDownloadInfo(int batchSize);
 	
 	/**
 	 * Get the file download info.

@@ -37,7 +37,7 @@ public class ReIndexUsers extends ActionSupport{
 		
 		//create a trigger that fires once right away
 		Trigger trigger = TriggerUtils.makeImmediateTrigger(0,0);
-		trigger.setName("SingleReIndexItemsJobFireNow");
+		trigger.setName("SingleReIndexUsersJobFireNow");
 		quartzScheduler.scheduleJob(jobDetail, trigger);
 		
 		return SUCCESS;

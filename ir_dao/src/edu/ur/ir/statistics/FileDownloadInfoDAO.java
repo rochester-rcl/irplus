@@ -53,7 +53,8 @@ CrudDAO<FileDownloadInfo> {
 	public Long getNumberOfFileDownloadsForIrFile(Long irFileId);
 		
 	/**
-	 * This retrieves all file download info objects that are currently in the ignore
+	 * This retrieves all file download info objects at the given start positions
+	 * with the a maiximum of maxResults that are currently in the ignore
 	 * ip ranges.
 	 * 
 	 * @param rowStart - row to start at

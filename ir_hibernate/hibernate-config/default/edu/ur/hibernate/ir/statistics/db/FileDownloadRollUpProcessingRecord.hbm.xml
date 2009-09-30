@@ -50,6 +50,12 @@
 		fileDownloadRollUpProcessingRecord.irFileId = ? 
 	</query>
 	
+	<!-- get all file download roll up processing records ordered by id -->
+	<query name="getAllFileDownloadRollUpProcessingRecords">
+		select fileDownloadRollUpProcessingRecord  from FileDownloadRollUpProcessingRecord fileDownloadRollUpProcessingRecord 
+	    order by fileDownloadRollUpProcessingRecord.id 
+	</query>
+	
 	<!--  this inserts all files to be reprocessed  -->
 	<query name="insertAllRepositoryFileIds">
 	    insert into FileDownloadRollUpProcessingRecord (irFileId, createdDate )

@@ -78,10 +78,13 @@
 	    <br/>
         <br/>
 	    
-	    <ur:div id="newIgnoreIpAddresses"></ur:div>
-	      
+	    <div id="newIgnoreIpAddresses"></div>
 
-	        
+        <br/>
+        <br/>
+        <c:url var="processingUrl" value="/admin/runFileDownloadUpdateProcessing"/>
+        <a href="${processingUrl}">Run Update File Download Counts Job</a>
+	    
       </div>
       <!--  end body div -->
       
@@ -91,28 +94,28 @@
   </div>
   <!--  End doc div-->
   
-  <ur:div id="newIgnoreIpAddressDialog" cssClass="hidden">
-    <ur:div cssClass="hd">Ignore Ipaddress Information</ur:div>
-    <ur:div cssClass="bd">
-      <ur:basicForm id="addIgnoreIpAddress" name="newIgnoreIpAddressForm" 
+  <div id="newIgnoreIpAddressDialog" class="hidden">
+    <div class="hd">Ignore Ipaddress Information</div>
+    <div class="bd">
+      <form id="addIgnoreIpAddress" name="newIgnoreIpAddressForm" 
 		                    method="post" 
-		                    action="admin/createIgnoreIpAddress.action">
-	    <ur:div id="newIgnoreIpAddressDialogFields">
+		                    action="<c:url value="/admin/createIgnoreIpAddress.action"/>">
+	    <div id="newIgnoreIpAddressDialogFields">
 	        <c:import url="ignore_ipaddress_form.jsp"/>
-	    </ur:div>
-	  </ur:basicForm>
-    </ur:div>
-  </ur:div>
+	    </div>
+	  </form>
+    </div>
+  </div>
 	         
-  <ur:div id="deleteIgnoreIpAddressDialog" cssClass="hidden">
-    <ur:div cssClass="hd">Delete Ipaddress</ur:div>
-	  <ur:div cssClass="bd">
-	    <ur:basicForm id="deleteIgnoreIpAddress" name="deleteIgnoreIpAddress" method="post" 
-		                action="user/deleteIgnoreIpAddress.action">
-		 <ur:div id="deleteIgnoreIpAddressError" cssClass="errorMessage"></ur:div>
+  <div id="deleteIgnoreIpAddressDialog" class="hidden">
+    <div class="hd">Delete Ipaddress</div>
+	  <div class="bd">
+	    <form id="deleteIgnoreIpAddress" name="deleteIgnoreIpAddress" method="post" 
+		                action="<c:url value="user/deleteIgnoreIpAddress.action"/>">
+		 <div id="deleteIgnoreIpAddressError" class="errorMessage"></div>
 		   <p>Are you sure you wish to delete the selected ip addresses?</p>
-        </ur:basicForm>
-      </ur:div>
-  </ur:div>
+        </form>
+      </div>
+  </div>
 </body>
 </html>

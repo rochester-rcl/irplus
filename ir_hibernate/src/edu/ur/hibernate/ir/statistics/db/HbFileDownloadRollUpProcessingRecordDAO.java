@@ -95,4 +95,22 @@ public class HbFileDownloadRollUpProcessingRecordDAO implements FileDownloadRoll
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getRollUpProcessingRecordByIrFileId", irFileId));
 	}
 
+	
+	@SuppressWarnings("unchecked")
+	public List<FileDownloadRollUpProcessingRecord> getProcessingRecords(
+			final int start, final int maxResults) {
+		return (List<FileDownloadRollUpProcessingRecord>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session session)
+                    throws HibernateException, SQLException {
+		        Query q = session.getNamedQuery("getAllFileDownloadRollUpProcessingRecords");
+		        q.setReadOnly(true);
+		        q.setCacheable(false);
+		        q.setFirstResult(start);
+		        q.setMaxResults(maxResults);
+		        q.setFetchSize(maxResults);
+			    return (List<FileDownloadRollUpProcessingRecord>) q.list();
+            }
+		});
+	}
+
 }

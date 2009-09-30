@@ -15,6 +15,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.ReIndexUserService;
@@ -32,6 +33,9 @@ public class DefaultReIndexUsersJob implements StatefulJob{
 	 
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultReIndexUsersJob.class);
+	
+	/**  Batch size for processing the records  */
+	public static final int DEFAULT_BATCH_SIZE = 1;
 	
 	/**
 	 * Exceuction of the job
@@ -52,7 +56,7 @@ public class DefaultReIndexUsersJob implements StatefulJob{
 		
 		if( batchSize <= 0 )
 		{
-			batchSize = 1;
+			batchSize = DEFAULT_BATCH_SIZE;
 		}
 		  
 		ApplicationContext applicationContext = null;
@@ -68,12 +72,15 @@ public class DefaultReIndexUsersJob implements StatefulJob{
 		  
 		RepositoryService repositoryService = null;
 		ReIndexUserService reIndexUserService = null;
+		ErrorEmailService errorEmailService;
 		PlatformTransactionManager tm = null;
 		TransactionDefinition td = null;
 		try
 		{
 			repositoryService = (RepositoryService) applicationContext.getBean("repositoryService");
 			reIndexUserService = (ReIndexUserService) applicationContext.getBean("reIndexUserService");
+			errorEmailService = (ErrorEmailService)applicationContext.getBean("errorEmailService");
+
 			tm = (PlatformTransactionManager) applicationContext.getBean("transactionManager");
 			td = new DefaultTransactionDefinition(
 					TransactionDefinition.PROPAGATION_REQUIRED);
@@ -96,6 +103,10 @@ public class DefaultReIndexUsersJob implements StatefulJob{
 			    repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 			    reIndexUserService.reIndexUsers(batchSize, new File(repository.getUserIndexFolder()));
 		    }
+		}
+		catch(Exception e)
+		{
+			errorEmailService.sendError(e);
 		}
 		finally
 		{
