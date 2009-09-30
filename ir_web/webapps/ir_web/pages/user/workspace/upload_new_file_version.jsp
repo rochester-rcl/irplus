@@ -38,13 +38,13 @@
     </tr>
     <tr>
         <td class="label">File:</td>
-        <td align="left" class="input"><input size="100" type="file" id="new_version_file" 
+        <td align="left" class="input"><input size="80" type="file" id="new_version_file" 
             name="file"/> </td>
     </tr>
     <tr>
          <td class="label">Description:</td>
          <td align="left" class="input"><textarea id="user_file_description" 
-             name="userFileDescription" cols="50" rows="2"></textarea></td>
+             name="userFileDescription" cols="47" rows="2"></textarea></td>
     </tr>
         <tr>
          <td class="label">Keep Locked</td>
