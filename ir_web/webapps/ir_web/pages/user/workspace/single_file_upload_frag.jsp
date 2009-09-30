@@ -30,7 +30,7 @@
             <div id="single_file_upload_error">
                 <p class="errorMessage" id="upload_error">
                     <c:forEach var="fileUploadInfo" items="${filesNotAdded}">
-                        The name: "${fileUploadInfo.fileName}" already exits as a file or folder in this folder 
+                        The name: "${fileUploadInfo.fileName}" already exists as a file or folder in this folder 
                     <br/>
                     </c:forEach> 
                 </p>
