@@ -241,6 +241,17 @@
 				</tr>	
 				</c:if>										
 
+                <c:if test="${!ur:isEmpty(item.itemExtents)}">	
+				    <tr>
+				        <td class="previewLabel"> Extents:</td>
+				    </tr>
+				    <c:forEach items="${item.itemExtents}" var="itemExtent">
+				        <tr>
+				           <td>  ${itemExtent.extentType.name} - ${itemExtent.value} </td>
+				        </tr>
+				    </c:forEach>
+				</c:if>
+
                 <c:if test="${item.externalPublishedItem.citation != null}">
                  <tr>
 				    <td class="previewLabel">Citation:</td>
