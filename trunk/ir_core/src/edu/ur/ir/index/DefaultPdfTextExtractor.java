@@ -70,7 +70,7 @@ public class DefaultPdfTextExtractor implements FileTextExtractor{
 		String text = null;
 		
 		// don't even try if the file is too large
-		if( isFileTooLarge(f))
+		if( isFileTooLarge(f) || f.length() <= 0l)
 		{
 			return text;
 		}

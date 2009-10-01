@@ -73,7 +73,7 @@ public class DefaultRtfTextExtractor implements FileTextExtractor {
 	public String getText(File f) throws Exception {
 		String text = null;
 		// don't even try if the file is too large
-		if( isFileTooLarge(f))
+		if( isFileTooLarge(f) || f.length() <= 0l)
 		{
 			return text;
 		}
