@@ -25,24 +25,26 @@
         <c:param name="collectionId" value="${collectionId}"/>
     </c:url>
     
-   <img class="repository_image"  src="${pictureUrl}"/>
+    <img class="repository_image"  src="${pictureUrl}"/>
 
-<table class="buttonTable">
-    <tr>
-        <td class="leftButton">
-            <button class="ur_button" 
-	            onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';"
- 		        onclick="javascript:YAHOO.ur.public.collection.view.getCollectionPicture(${currentLocation}, 'PREV');">&lt; Previous</button>
- 		</td>
- 		<td class="rightButton">
- 		    <button class="ur_button" 
-	            onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';"
- 		        onclick="javascript:YAHOO.ur.public.collection.view.getCollectionPicture(${currentLocation}, 'NEXT');">Next &gt;</button>
-        </td>
-     </tr>
-</table>
+    <c:if test="${numCollectionPictures > 1}">
+    <table class="buttonTable">
+        <tr>
+            <td class="leftButton">
+                <button class="ur_button" 
+	                onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';"
+ 		            onclick="javascript:YAHOO.ur.public.collection.view.getCollectionPicture(${currentLocation}, 'PREV');">&lt; Previous</button>
+ 		    </td>
+ 		    <td class="rightButton">
+ 		        <button class="ur_button" 
+	                onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';"
+ 		            onclick="javascript:YAHOO.ur.public.collection.view.getCollectionPicture(${currentLocation}, 'NEXT');">Next &gt;</button>
+            </td>
+         </tr>
+    </table>
+    </c:if>
 </c:if>
 <c:if test="${irFile == null }">
     <p>There are no pictures to display</p>

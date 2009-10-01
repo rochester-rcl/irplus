@@ -72,8 +72,10 @@ Comparator<IrFile>{
 	
 	/** Institutional Collection service */
 	private InstitutionalCollectionService institutionalCollectionService;
-
 	
+	/** number of collection pictures */
+	private int numCollectionPictures;
+
 	/**
      * Gets the next ir file to be downloaded
      *
@@ -92,6 +94,7 @@ Comparator<IrFile>{
 		{
 		    LinkedList<IrFile> pictures = new LinkedList<IrFile>(institutionalCollection.getPictures());
         
+		   
 		    
             // sort the pictures to assure order
             Collections.sort(pictures, this);
@@ -102,7 +105,7 @@ Comparator<IrFile>{
 		    {
 		        pictures.addFirst(primaryPicture);
 		    }
-		    
+		    numCollectionPictures = pictures.size();
 		    
             if( pictures != null && pictures.size() > 0 )
             {
@@ -196,6 +199,10 @@ Comparator<IrFile>{
 
 	public void setCollectionId(Long collectionId) {
 		this.collectionId = collectionId;
+	}
+
+	public int getNumCollectionPictures() {
+		return numCollectionPictures;
 	}
 
 
