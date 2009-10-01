@@ -92,7 +92,7 @@ public class DefaultExcelTextExtractor implements FileTextExtractor{
 	 */
 	public String getText(File f) throws Exception {
 		String text = null;
-		if( isFileTooLarge(f))
+		if( isFileTooLarge(f) || f.length() <= 0l )
 		{
 			return text;
 		}
