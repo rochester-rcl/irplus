@@ -645,7 +645,14 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    for( ResearcherLink link : linksToMove)
 		    {
 		    	log.debug("Adding link " + link + " to destination " + destination);
-			    destination.addLink(link);
+		    	if( destination.getResearcherLink(link.getName()) == null)
+		    	{
+			        destination.addLink(link);
+		    	}
+		    	else
+		    	{
+		    		notMoved.add(link);
+		    	}
 		    }
 		}
 		
