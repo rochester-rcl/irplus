@@ -24,15 +24,6 @@ YAHOO.namespace("ur.file.upload");
 
 YAHOO.ur.file.upload = 
 {
-	/**
-	 * Submit the files form
-	 */
-    submitFilesForm : function()
-    {
-	    document.newFiles.submit();
-	    YAHOO.ur.file.upload.waitDialog.showDialog();
-    },
- 
     /**
      * Add a file set for files to be uploaded
      */
@@ -108,8 +99,8 @@ YAHOO.ur.file.upload =
 	        
 	        if( !first )
             {
-               var br = document.createElement('br');
-               table_div.appendChild(br);
+               //var br = document.createElement('br');
+               //table_div.appendChild(br);
 	        }
 	        
 	        table_div.appendChild(table);
