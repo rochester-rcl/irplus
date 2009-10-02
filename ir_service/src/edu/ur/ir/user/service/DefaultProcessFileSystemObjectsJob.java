@@ -148,8 +148,7 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 						    log.error("Unable to delete index record " + record + " for user", e);
 					    }
 				    }
-				    
-				    if( indexProcessingType.getName().equals(IndexProcessingTypeService.UPDATE))
+				    else if( indexProcessingType.getName().equals(IndexProcessingTypeService.UPDATE))
 				    {
 				        try 
 				        {
@@ -166,7 +165,7 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 						    log.error("Unable to update index record " + record + " for user", e);
 					    }
 				    }
-				    if( indexProcessingType.getName().equals(IndexProcessingTypeService.INSERT))
+				    else if( indexProcessingType.getName().equals(IndexProcessingTypeService.INSERT))
 				    {
 					    try 
 					    {
