@@ -86,30 +86,28 @@
 	        </form>
             
             <c:url var="fileUpload" value="/user/uploadFiles.action"/>
-	        <form method="post" id="fileInfo" name="newFiles" enctype="multipart/form-data" 
-	            action="${fileUpload}">
-	           <input type="hidden" id="file_upload_table_id" value="1"/>
-	
+
+	         <form method="post" id="fileInfo" name="newFiles" enctype="multipart/form-data" 
+	            action="${fileUpload}" onsubmit="javascript:YAHOO.ur.file.upload.waitDialog.showDialog();">
+	                 <input type="hidden" id="file_upload_table_id" value="1"/>
+	                 <input type="hidden" name="folderId" value="${folderId}"/>
 	          <button type="button" class="ur_button" 
 	              onmouseover="this.className='ur_buttonover';"
  		          onmouseout="this.className='ur_button';"
  		          onclick="javascript:YAHOO.ur.file.upload.addFileSets(1, false)">Add Another</button>
 	          
-	          <button type="button" class="ur_button" 
+	          <input type="submit" class="ur_button" 
 	              onmouseover="this.className='ur_buttonover';"
- 		          onmouseout="this.className='ur_button';"
- 		          onclick="javascript:YAHOO.ur.file.upload.submitFilesForm()">Upload Files</button>
+ 		          onmouseout="this.className='ur_button';" value="Upload Files">
 	          
 	          <button type="button" class="ur_button" 
 	                 onmouseover="this.className='ur_buttonover';"
  		             onmouseout="this.className='ur_button';"
  		             onclick="javascript:document.cancelAddFilesForm.submit();">Cancel</button>
-	           <input type="hidden" name="folderId" value="${folderId}"/>
                
+               <br/>
+               <br/>
                
-               
-               <table class="formTable, uploadFile" id="fileTable">
-	           </table>
                <!--  this table is built dynamically -->
                <div id="file_forms">
                </div>
@@ -119,18 +117,16 @@
  		           onmouseout="this.className='ur_button';"
  		           onclick="javascript:YAHOO.ur.file.upload.addFileSets(1, false)">Add Another</button>
 
-	           <button type="button" class="ur_button" 
+	           <input type="submit" class="ur_button" 
 	              onmouseover="this.className='ur_buttonover';"
- 		          onmouseout="this.className='ur_button';"
- 		          onclick="javascript:YAHOO.ur.file.upload.submitFilesForm()">Upload Files</button>
+ 		          onmouseout="this.className='ur_button';" value="Upload Files">
 	           
-	           <button type="button" class="ur_button" 
+	           <button type="submit" class="ur_button" 
 	               onmouseover="this.className='ur_buttonover';"
  		           onmouseout="this.className='ur_button';"
  		           onclick="javascript:document.cancelAddFilesForm.submit();">Cancel</button>
-	        
-	         </form>
              <!--  end body div -->
+             </form>
       </div>
       <!--  end body div -->
       
