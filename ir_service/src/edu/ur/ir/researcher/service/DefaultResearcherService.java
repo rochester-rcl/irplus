@@ -22,6 +22,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import edu.ur.ir.file.IrFile;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherDAO;
 import edu.ur.ir.researcher.ResearcherFile;
@@ -30,6 +32,7 @@ import edu.ur.ir.researcher.ResearcherFolder;
 import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
 /**
@@ -49,6 +52,10 @@ public class DefaultResearcherService implements ResearcherService{
 	/** File system service for researcher file system information/actions */
 	private ResearcherFileSystemService researcherFileSystemService;
 	
+	/** service for dealing with repositories */
+	private RepositoryService repositoryService;
+	
+
 	/**  Logger  */
 	private static final Logger log = Logger.getLogger(DefaultResearcherService.class);
 
@@ -60,6 +67,26 @@ public class DefaultResearcherService implements ResearcherService{
 	 */
 	public void deleteResearcher(Researcher researcher) {
 		log.debug("delete researcher called");
+		IrUser user = researcher.getUser();
+		user.setResearcher(null);
+		
+		LinkedList<IrFile> pictures = new LinkedList<IrFile>();
+		pictures.addAll(researcher.getPictures());
+		
+		IrFile primaryImage = researcher.getPrimaryPicture();
+		if( primaryImage  != null)
+		{
+			researcher.setPrimaryPicture(null);
+			repositoryService.deleteIrFile(primaryImage);
+		}
+		
+		for(IrFile f : pictures)
+		{
+		    researcher.removePicture(f);	
+			repositoryService.deleteIrFile(f);
+		}
+		
+		
 		// delete the researcher's root files
 		LinkedList<ResearcherFile> rootFiles = new LinkedList<ResearcherFile>();
 		rootFiles.addAll(researcher.getRootFiles());
@@ -208,12 +235,41 @@ public class DefaultResearcherService implements ResearcherService{
 		return researcherDAO.getResearchers(researcherIds);
 	}
 
+	/**
+	 * Get the researcher file system service 
+	 * 
+	 * @return
+	 */
 	public ResearcherFileSystemService getResearcherFileSystemService() {
 		return researcherFileSystemService;
 	}
 
+	/**
+	 * Service for dealing with researcher file system information.
+	 * 
+	 * @param researcherFileSystemService
+	 */
 	public void setResearcherFileSystemService(
 			ResearcherFileSystemService researcherFileSystemService) {
 		this.researcherFileSystemService = researcherFileSystemService;
 	}
+	
+	/**
+	 * Get the repository service.
+	 * 
+	 * @return
+	 */
+	public RepositoryService getRepositorySerivce() {
+		return repositoryService;
+	}
+
+	/**
+	 * Set the repository service.
+	 * 
+	 * @param repositorySerivce
+	 */
+	public void setRepositorySerivce(RepositoryService repositorySerivce) {
+		this.repositoryService = repositorySerivce;
+	}
+
 }

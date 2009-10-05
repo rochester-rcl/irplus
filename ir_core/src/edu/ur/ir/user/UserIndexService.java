@@ -48,19 +48,19 @@ public interface UserIndexService {
 	public void addToIndex(IrUser user, File userIndexFolder) throws NoIndexFoundException;
 	
 	/**
-	 * Update the person names in the index.
+	 * Update the user in the index.
 	 * 
-	 * @param personNameAuthority
-	 * @param repo repository 
+	 * @param user - user in the index
+	 * @param userIndexFolder - folder location of the user 
 	 */
 	public void updateIndex(IrUser user, File userIndexFolder) throws NoIndexFoundException;
 	
 	/**
-	 * Delete the person names in the index.
+	 * Delete the user from index.
 	 * 
-	 * @param personNameAuthority
-	 * @param repo repository 
+	 * @param userId - id of the user
+	 * @param userIndexFolder - location of the user index folder 
 	 */
-	public void deleteFromIndex(IrUser user, File userIndexFolder);
+	public void deleteFromIndex(Long userId, File userIndexFolder);
 
 }

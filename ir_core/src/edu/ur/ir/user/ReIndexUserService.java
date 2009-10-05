@@ -11,12 +11,13 @@ import java.io.File;
 public interface ReIndexUserService {
 	
 	/**
-	 * Re-Index the institutional items in an institutional repository.
+	 * Re-Index the users in the institutional repository
 	 * 
 	 * @param batchSize - number of users to index at a time
 	 * @param userIndexFolder - location of the user index
+	 * @return total number of users processed.
 	 */
-	public void reIndexUsers(int batchSize, File userIndexFolder);
+	public int reIndexUsers(int batchSize, File userIndexFolder);
 
 
 }

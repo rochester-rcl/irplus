@@ -176,7 +176,7 @@ public class DefaultUserIndexServiceTest {
 			throw new RuntimeException(e);
 		}
 		
-		userIndexService.deleteFromIndex(user, userIndex);
+		userIndexService.deleteFromIndex(user.getId(), userIndex);
 		
 		try {
 			lucenDirectory = FSDirectory.getDirectory(repo.getUserIndexFolder());

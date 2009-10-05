@@ -17,6 +17,7 @@
 package edu.ur.ir.researcher;
 
 import java.io.File;
+import java.util.List;
 
 import edu.ur.ir.NoIndexFoundException;
 
@@ -47,10 +48,21 @@ public interface ResearcherIndexService {
 	/**
 	 * Delete the researcher in the index.
 	 * 
-	 * @param researcher
-	 * @param researcherIndexFolder 
+	 * @param researcherId - id of the researcher
+	 * @param researcherIndexFolder  - folder location of the researcher index
 	 */
-	public void deleteFromIndex(Researcher researcher, File researcherIndexFolder);
+	public void deleteFromIndex(Long researcherId, File researcherIndexFolder);
+	
+	/**
+	 * Re-index the specified researchers.  This can be used to re-index 
+	 * all researchers
+	 * 
+	 * @param researchers - researchers to re index
+	 * @param researcherIndexFolder - folder location of the index
+	 * @param overwriteExistingIndex - if set to true, will overwrite the exiting researcher.
+	 */
+	public void addResearchers(List<Researcher> researchers, File researcherIndexFolder,
+			boolean overwriteExistingIndex);
 
 
 }

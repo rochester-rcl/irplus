@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -75,6 +76,9 @@ public class DefaultUserSearchServiceTest {
 
 	/** User indexing service */
 	DefaultUserIndexService userIndexService = (DefaultUserIndexService) ctx.getBean("userIndexService");
+	
+	/**  Get the logger for this class */
+	private static final Logger log = Logger.getLogger(DefaultUserSearchServiceTest.class);
 
 
 	/**
@@ -106,17 +110,18 @@ public class DefaultUserSearchServiceTest {
         //new transaction - add a file to a user
 		ts = tm.getTransaction(td);
 		user = userService.getUser(user.getId(), false);
-		
+		assert user.getFirstName().equals("firstName") : "First name = " + user.getFirstName();
 		File userIndex = new File(repo.getUserIndexFolder());
 		userIndexService.addToIndex(user, userIndex);
+		log.debug("done adding user in test");
 		tm.commit(ts);
 		
 	    // Start new transaction - clean up
 		ts = tm.getTransaction(td);
 		SearchResults<IrUser> searchResults = userSearchService.search(new File(repo.getUserIndexFolder()), "firstName", 0, 10);
 		List<IrUser> users = searchResults.getObjects();
-		assert users.size() == 1;
-		assert users.contains(user);
+		assert users.size() == 1 : "Size should be one but is " + users.size();
+		assert users.contains(user) : "Should contain user " + user + " but does not";
 		
 		user = userService.getUser(user.getId(), false);
 		userService.deleteUser(user, user);

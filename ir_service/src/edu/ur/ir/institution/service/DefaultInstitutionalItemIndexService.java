@@ -200,16 +200,13 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		Directory directory = null;
 		try {
 			directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
-			while(writer == null )
+			if( overwriteExistingIndex )
 			{
-				if( overwriteExistingIndex )
-				{
-				    writer = getWriterOverwriteExisting(directory);
-				}
-				else
-				{
-					writer = getWriter(directory);
-				}
+			    writer = getWriterOverwriteExisting(directory);
+			}
+			else
+			{
+				writer = getWriter(directory);
 			}
 			    
 			for(Document d : docs)
@@ -223,6 +220,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		catch (IOException e) 
 		{
 			log.error(e);
+			errorEmailService.sendError(e);
 		}
 	    finally {
 	    	
@@ -280,11 +278,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		try 
 		{
 			directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
-			while(writer == null )
-			{
-				writer = getWriter(directory);
-			}
-			
+			writer = getWriter(directory);
 			Term term = new Term(ID, NumberTools.longToString(id));
 			writer.deleteDocuments(term);
 			  
@@ -292,6 +286,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
         catch (IOException e) 
         {
 			log.error(e);
+			errorEmailService.sendError(e);
 		}
         finally 
         {
@@ -650,16 +645,14 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		try 
 		{
 		    directory = FSDirectory.getDirectory(directoryPath);
-		    while(writer == null )
-			{
-				writer = getWriter(directory);
-			}
+			writer = getWriter(directory);
 		    writer.addDocument(document);
 			writer.commit();
 		} 
 		catch (IOException e) 
 		{
 			log.error(e);
+			errorEmailService.sendError(e);
 		}
 		finally 
         {
@@ -1110,7 +1103,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * @throws LockObtainFailedException
 	 * @throws IOException
 	 */
-	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
 		writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
@@ -1129,7 +1122,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * @throws LockObtainFailedException
 	 * @throws IOException
 	 */
-	private synchronized IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
 	    writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
@@ -1148,15 +1141,13 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		try 
 		{
 		    directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
-		    while(writer == null )
-			{
-				writer = getWriter(directory);
-			}
+			writer = getWriter(directory);
 			writer.optimize();
 		} 
 		catch (IOException e) 
 		{
 			log.error(e);
+			errorEmailService.sendError(e);
 		}
 		finally 
         {

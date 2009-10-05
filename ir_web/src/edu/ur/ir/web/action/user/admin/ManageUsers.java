@@ -459,7 +459,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
  			
  			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
  		
-			userIndexService.deleteFromIndex(user, 
+			userIndexService.deleteFromIndex(user.getId(), 
 							new File( repository.getUserIndexFolder()) );
 		}
 

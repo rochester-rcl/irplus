@@ -19,6 +19,8 @@ package edu.ur.ir.researcher.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
@@ -33,6 +35,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherIndexService;
@@ -85,6 +88,10 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	/** Analyzer for dealing with text indexing */
 	private Analyzer analyzer;
 	
+	/** Service for sending email errors */
+	private ErrorEmailService errorEmailService;
+
+
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultResearcherIndexService.class);
 
@@ -124,7 +131,257 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		{
 			throw new NoIndexFoundException("the folder " + researcherIndexFolder.getAbsolutePath() + " could not be found");
 		}
+	    writeDocument(researcherIndexFolder.getAbsolutePath(), getDocument(researcher));
+	}
+
+	/**
+	 * Create a single string set of keyword values separated by  a |
+	 *  
+	 * @param keywordValues - keyword values in comma separated values
+	 * @return the string with | separated values
+	 */
+	private String getKeywords(String keywordValues)
+	{
+		String keywords = "";
+		if( keywordValues == null || keywordValues.trim().equals(""))
+		{
+			return keywords;
+		}
+		StringTokenizer tokenizer = new StringTokenizer(keywordValues, ",");
+		boolean first = true;
+		while(tokenizer.hasMoreElements())
+		{
+			String nextValue = tokenizer.nextToken().toLowerCase().trim();
+			if( first )
+			{
+			    keywords = nextValue;
+			    first = false;
+			}
+			else
+			{
+				keywords = keywords + " " + SEPERATOR + " " + nextValue;
+			}
+		}
 		
+		return keywords;
+	}
+	
+	/**
+	 * Delete the researcher from the specified index.
+	 * 
+	 * @see edu.ur.ir.researcher.ResearcherIndexService#deleteFromIndex(edu.ur.ir.researcher.Researcher, java.io.File)
+	 */
+	public void deleteFromIndex(Long researcherId, File researcherIndexFolder) {
+		if( log.isDebugEnabled() )
+		{
+			log.debug("deleting researcher id : " + researcherId + " from index folder " + researcherIndexFolder.getAbsolutePath());
+		}
+		// if the researcher does not have an index folder
+		// don't need to do anything.
+		if( researcherIndexFolder == null || !researcherIndexFolder.exists() || researcherIndexFolder.list() == null ||
+				researcherIndexFolder.list().length == 0)
+		{
+			return;
+		}
+		
+		Directory directory = null;
+		IndexWriter writer = null;
+		try {
+			directory = FSDirectory.getDirectory(researcherIndexFolder.getAbsolutePath());
+			writer = getWriter(directory);
+			Term term = new Term(ID, NumberTools.longToString(researcherId));
+			writer.deleteDocuments(term);
+			writer.commit();
+			writer.optimize();
+			
+		} catch (IOException e) {
+			log.error(e);
+			errorEmailService.sendError(e);
+		}
+		finally {
+			if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+	    }
+		
+	}
+
+	
+	/**
+	 * Update the index with the specified existing researcher.
+	 * 
+	 * @see edu.ur.ir.researcher.ResearcherIndexService#updateIndex(edu.ur.ir.researcher.Researcher, java.io.File)
+	 */
+	public void updateIndex(Researcher researcher, File researcherIndexFolder)
+			throws NoIndexFoundException {
+		if( log.isDebugEnabled() )
+		{
+			log.debug("updating index for researcher: " + researcher + " in index folder " + researcherIndexFolder.getAbsolutePath());
+		}
+		deleteFromIndex(researcher.getId(), researcherIndexFolder);
+		addToIndex(researcher, researcherIndexFolder);
+	}
+	
+	/**
+	 * Write the document to the index in the directory.
+	 * 
+	 * @param directoryPath - location where the directory exists.
+	 * @param documents - documents to add to the directory.
+	 */
+	private void writeDocument(String directoryPath, Document document)
+	{
+		log.debug("write document to directory " + directoryPath );
+		Directory directory = null;
+		IndexWriter writer = null;
+		try {
+			directory = FSDirectory.getDirectory(directoryPath);
+			writer = getWriter(directory);
+			writer.addDocument(document);
+			writer.commit();
+			writer.optimize();
+			
+		} catch (IOException e) {
+			log.error(e);
+			errorEmailService.sendError(e);
+		}
+		finally
+		{
+			if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		}
+	}
+	
+	/**
+	 * Add researchers to the index
+	 * @see edu.ur.ir.researcher.ResearcherIndexService#addResearchers(java.util.List, java.io.File, boolean)
+	 */
+	public void addResearchers(List<Researcher> researchers, File researcherIndexFolder,
+			boolean overwriteExistingIndex) {
+			
+	    LinkedList<Document> docs = new LinkedList<Document>();
+			
+		for(Researcher r : researchers)
+		{
+			docs.add(getDocument(r));
+		}
+			
+		IndexWriter writer = null;
+		Directory directory = null;
+		try {
+			directory = FSDirectory.getDirectory(researcherIndexFolder.getAbsolutePath());
+			
+			if(overwriteExistingIndex)
+			{
+			    writer = getWriterOverwriteExisting(directory);
+			}
+			else
+			{
+				writer = getWriter(directory);
+			}
+			 
+			for(Document d : docs)
+			{
+			    writer.addDocument(d);
+			}
+			writer.commit();
+			writer.optimize();
+			
+		}
+		catch (IOException e) 
+		{
+			log.error(e);
+			errorEmailService.sendError(e);
+		}
+		finally 
+		{
+			if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		    docs = null;
+		}
+	}
+	
+	/**
+	 * Get the document for the researcher 
+	 * 
+	 * @param researcher - researcher to create the document from
+	 * @return - the created document
+	 */
+	private Document getDocument(Researcher researcher)
+	{
 		Document doc = new Document();
         
 	    doc.add(new Field(ID, 
@@ -215,173 +472,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 					Field.Store.YES, 
 					Field.Index.ANALYZED));
 		}
-
-	    writeDocument(researcherIndexFolder.getAbsolutePath(), doc);
-	}
-
-	private String getKeywords(String keywordValues)
-	{
-		String keywords = "";
-		if( keywordValues == null || keywordValues.trim().equals(""))
-		{
-			return keywords;
-		}
-		StringTokenizer tokenizer = new StringTokenizer(keywordValues, ",");
-		boolean first = true;
-		while(tokenizer.hasMoreElements())
-		{
-			String nextValue = tokenizer.nextToken().toLowerCase().trim();
-			if( first )
-			{
-			    keywords = nextValue;
-			    first = false;
-			}
-			else
-			{
-				keywords = keywords + " " + SEPERATOR + " " + nextValue;
-			}
-		}
 		
-		return keywords;
-	}
-	
-	/**
-	 * Delete the researcher from the specified index.
-	 * 
-	 * @see edu.ur.ir.researcher.ResearcherIndexService#deleteFromIndex(edu.ur.ir.researcher.Researcher, java.io.File)
-	 */
-	public void deleteFromIndex(Researcher researcher, File researcherIndexFolder) {
-		if( log.isDebugEnabled() )
-		{
-			log.debug("deleting researcher: " + researcher + " from index folder " + researcherIndexFolder.getAbsolutePath());
-		}
-		// if the researcher does not have an index folder
-		// don't need to do anything.
-		if( researcherIndexFolder == null || !researcherIndexFolder.exists() || researcherIndexFolder.list() == null ||
-				researcherIndexFolder.list().length == 0)
-		{
-			return;
-		}
-		
-		Directory directory = null;
-		IndexWriter writer = null;
-		try {
-			directory = FSDirectory.getDirectory(researcherIndexFolder.getAbsolutePath());
-			while( writer == null)
-			{
-				writer = getWriter(directory);
-			}
-			Term term = new Term(ID, NumberTools.longToString(researcher.getId()));
-			writer.deleteDocuments(term);
-			writer.commit();
-			writer.optimize();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		finally {
-			if (writer != null) {
-			    try {
-				    writer.close();
-			    } catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    writer = null;
-		    try {
-				IndexWriter.unlock(directory);
-			} 
-	    	catch (IOException e1)
-	    	{
-				log.error(e1);
-			}
-		    
-		    if( directory != null )
-		    {
-		    	try
-		    	{
-		    		directory.close();
-		    	}
-		    	catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    directory = null;
-	    }
-		
-	}
-
-	
-	/**
-	 * Update the index with the specified existing researcher.
-	 * 
-	 * @see edu.ur.ir.researcher.ResearcherIndexService#updateIndex(edu.ur.ir.researcher.Researcher, java.io.File)
-	 */
-	public void updateIndex(Researcher researcher, File researcherIndexFolder)
-			throws NoIndexFoundException {
-		if( log.isDebugEnabled() )
-		{
-			log.debug("updating index for researcher: " + researcher + " in index folder " + researcherIndexFolder.getAbsolutePath());
-		}
-		deleteFromIndex(researcher, researcherIndexFolder);
-		addToIndex(researcher, researcherIndexFolder);
-	}
-	
-	/**
-	 * Write the document to the index in the directory.
-	 * 
-	 * @param directoryPath - location where the directory exists.
-	 * @param documents - documents to add to the directory.
-	 */
-	private void writeDocument(String directoryPath, Document document)
-	{
-		log.debug("write document to directory " + directoryPath );
-		Directory directory = null;
-		IndexWriter writer = null;
-		try {
-			directory = FSDirectory.getDirectory(directoryPath);
-			while( writer == null)
-			{
-				writer = getWriter(directory);
-			}
-			writer.addDocument(document);
-			writer.commit();
-			writer.optimize();
-			
-		} catch (IOException e) {
-			log.error(e);
-			throw new RuntimeException(e);
-		}
-		finally
-		{
-			if (writer != null) {
-			    try {
-				    writer.close();
-			    } catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    writer = null;
-		    try {
-				IndexWriter.unlock(directory);
-			} 
-	    	catch (IOException e1)
-	    	{
-				log.error(e1);
-			}
-		    
-		    if( directory != null )
-		    {
-		    	try
-		    	{
-		    		directory.close();
-		    	}
-		    	catch (Exception e) {
-				    log.error(e);
-			    }
-		    }
-		    directory = null;
-		}
+		return doc;
 	}
 	
 	/**
@@ -396,11 +488,48 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	 * @throws LockObtainFailedException
 	 * @throws IOException
 	 */
-	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
 	    writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
+	}
+	
+	/**
+	 * All methods should use this to obtain a writer on the directory.  This will return 
+	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
+	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
+	 * users index at once.
+	 * 
+	 * @param directory
+	 * @return
+	 * @throws CorruptIndexException
+	 * @throws LockObtainFailedException
+	 * @throws IOException
+	 */
+	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	{
+		IndexWriter writer = null;
+        writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+		return writer;
+	}
+	
+	/**
+	 * Service for dealing with emails.
+	 * 
+	 * @return
+	 */
+	public ErrorEmailService getErrorEmailService() {
+		return errorEmailService;
+	}
+
+	/**
+	 * Service for dealing with emails.
+	 * 
+	 * @param errorEmailService
+	 */
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
 	}
 
 }
