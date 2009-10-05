@@ -33,7 +33,7 @@ public class DefaultReIndexUserService implements ReIndexUserService{
 	 * 
 	 * @see edu.ur.ir.user.ReIndexUserService#reIndexUsers(int)
 	 */
-	public void reIndexUsers(int batchSize, File userIndexFolder) {
+	public int reIndexUsers(int batchSize, File userIndexFolder) {
 		log.debug("Re-Indexing users");
 		
 		if(batchSize <= 0 )
@@ -48,9 +48,11 @@ public class DefaultReIndexUserService implements ReIndexUserService{
 		
 		boolean overwriteExistingIndex = true;
 		
+		int numProcessed = 0;
+		
 		// increase number of users by batch size to make sure 
 		// all users are processed 
-		while(rowStart <= (numberOfUsers + batchSize))
+		while(rowStart <= numberOfUsers )
 		{
 			log.debug("row start = " + rowStart);
 			log.debug("batch size = " +  batchSize);
@@ -59,22 +61,16 @@ public class DefaultReIndexUserService implements ReIndexUserService{
 			log.debug("processing " + rowStart + " to " + (rowStart + batchSize - 1) );
 			
 		    List<IrUser> users = userService.getUsers(rowStart, batchSize, "username", OrderType.DESCENDING_ORDER);
+		    numProcessed = numProcessed + users.size();
 		    userIndexService.addUsers(users, userIndexFolder, overwriteExistingIndex);
 		    overwriteExistingIndex = false;
 		    
-		    rowStart = rowStart + batchSize;
+		    rowStart = rowStart + batchSize - 1;
 		}
+		
+		return numProcessed;
 	}
 	
-	/**
-	 * Allows this class to be run from the command line.
-	 * 
-	 * @param args
-	 */
-	public static void main(String [] args)
-	{
-		
-	}
 
 	public UserService getUserService() {
 		return userService;

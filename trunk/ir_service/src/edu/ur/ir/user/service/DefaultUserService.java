@@ -317,7 +317,6 @@ public class DefaultUserService implements UserService {
 		if( user.getResearcher() != null)
 		{
 			Researcher r = user.getResearcher();
-			user.setResearcher(null);
 			researcherService.deleteResearcher(r);
 		}
 		

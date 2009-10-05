@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -33,6 +34,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.Department;
@@ -64,6 +66,11 @@ public class DefaultUserIndexService implements UserIndexService{
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserIndexService.class);
+	
+	/**  Service for sending an email when an error occurs */
+	private ErrorEmailService errorEmailService;
+
+
 
 	/**
 	 * Analyzer used to analyze the file.
@@ -111,10 +118,10 @@ public class DefaultUserIndexService implements UserIndexService{
 	 * 
 	 * @see edu.ur.ir.user.UserIndexService#deleteFromIndex(edu.ur.ir.user.IrUser, java.io.File)
 	 */
-	public void deleteFromIndex(IrUser user, File userIndexFolder) {
+	public void deleteFromIndex(Long userId, File userIndexFolder) {
 		if( log.isDebugEnabled() )
 		{
-			log.debug("deleting user: " + user + " from index folder " + userIndexFolder.getAbsolutePath());
+			log.debug("deleting user id: " + userId + " from index folder " + userIndexFolder.getAbsolutePath());
 		}
 		// if the user does not have an index folder
 		// don't need to do anything.
@@ -128,15 +135,13 @@ public class DefaultUserIndexService implements UserIndexService{
 		IndexWriter writer = null;
 		try {
 			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
-			while( writer == null)
-			{
-				writer = getWriter(directory);
-			}
-			Term term = new Term(USER_ID, user.getId().toString());
+			writer = getWriter(directory);
+			Term term = new Term(USER_ID, NumberTools.longToString(userId));
 			writer.deleteDocuments(term);
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e);
+			errorEmailService.sendError(e);
 		}
 		finally
 		{
@@ -183,7 +188,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		{
 			log.debug("updating index for user: " + user + " in index folder " + userIndexFolder.getAbsolutePath());
 		}
-		deleteFromIndex(user, userIndexFolder);
+		deleteFromIndex(user.getId(), userIndexFolder);
 		addToIndex(user, userIndexFolder);
 	}
 	
@@ -200,18 +205,14 @@ public class DefaultUserIndexService implements UserIndexService{
 		Directory directory = null;
 		try {
 			directory = FSDirectory.getDirectory(directoryPath);
-			while( writer == null)
-			{
-				writer = getWriter(directory);
-			}
-			    
+			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
 			writer.optimize();
 			
 		} catch (IOException e) {
 			log.error(e);
-			throw new RuntimeException(e);
+			errorEmailService.sendError(e);
 		}
 	    finally {
 	    	if (writer != null) {
@@ -263,19 +264,14 @@ public class DefaultUserIndexService implements UserIndexService{
 		try {
 			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
 			
-			while( writer == null)
+			if(overwriteExistingIndex)
 			{
-				if(overwriteExistingIndex)
-				{
-				    writer = getWriterOverwriteExisting(directory);
-				}
-				else
-				{
-					writer = getWriter(directory);
-				}
+			    writer = getWriterOverwriteExisting(directory);
 			}
-			
-			    
+			else
+			{
+				writer = getWriter(directory);
+			}
 			 
 			for(Document d : docs)
 			{
@@ -288,7 +284,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		catch (IOException e) 
 		{
 			log.error(e);
-			throw new RuntimeException(e);
+			errorEmailService.sendError(e);
 		}
 		finally 
 		{
@@ -331,12 +327,10 @@ public class DefaultUserIndexService implements UserIndexService{
 	 */
 	private Document getDocument(IrUser user)
 	{
-
-		
 		Document doc = new Document();
         
 	    doc.add(new Field(USER_ID, 
-			user.getId().toString(), 
+	    		NumberTools.longToString(user.getId()), 
 			Field.Store.YES, 
 			Field.Index.NOT_ANALYZED));
 	    
@@ -443,7 +437,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	 * @throws LockObtainFailedException
 	 * @throws IOException
 	 */
-	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
 		writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
@@ -462,11 +456,29 @@ public class DefaultUserIndexService implements UserIndexService{
 	 * @throws LockObtainFailedException
 	 * @throws IOException
 	 */
-	private synchronized IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
 		IndexWriter writer = null;
         writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
+	}
+	
+	/**
+	 * Email error service.
+	 * 
+	 * @return
+	 */
+	public ErrorEmailService getErrorEmailService() {
+		return errorEmailService;
+	}
+
+	/**
+	 * Service for dealing with emails.
+	 * 
+	 * @param errorEmailService
+	 */
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
 	}
 
 

@@ -81,24 +81,24 @@ public interface ResearcherService {
      * The rows will be sorted by the specified parameter in given order.
 	 *  
      * @param rowStart Start row to fetch the data from
-     * @param rowEnd End row to get data
+     * @param maxResults maximum number of results to return at one time
      * @param orderType The order to sort by (ascending/descending)
      *
      * @return List of researchers 
      */	
-	public List<Researcher> getResearchersByLastFirstName(int rowStart, int rowEnd, OrderType orderType) ;
+	public List<Researcher> getResearchersByLastFirstName(int rowStart, int maxResults, OrderType orderType) ;
 	
 	/**
 	 * Get PUBLIC researchers starting from the specified row and end at specified row.
      * The rows will be sorted by the specified parameter in given order.
 	 *  
      * @param rowStart Start row to fetch the data from
-     * @param rowEnd End row to get data
+     * @param maxResults - maximum results to return at one time.
      * @param orderType The order to sort by (ascending/descending)
      *
      * @return List of researchers 
      */	
-	public List<Researcher> getPublicResearchersByLastFirstName(int rowStart, int rowEnd, OrderType orderType) ;
+	public List<Researcher> getPublicResearchersByLastFirstName(int rowStart, int maxResults, OrderType orderType) ;
 
 	
 	/**

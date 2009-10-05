@@ -82,15 +82,13 @@
 			
 		<!-- user of this researcher -->
 		<many-to-one class="edu.ur.ir.user.IrUser" 
-			unique="true" 
+			unique="true"
 			name="user" 
 			column="user_id" 
 			access="field"
 			not-null="true" 
 			insert="true"
 			update="true" />
-
-
 			
 		<!-- Fields for the researcher -->
 		<set name="fields" 

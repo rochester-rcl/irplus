@@ -355,6 +355,7 @@
    <bean id="userIndexService" 
        class="edu.ur.ir.user.service.DefaultUserIndexService">
        <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
    
     <bean id="reIndexUserService" 
@@ -375,6 +376,7 @@
    
    <bean id="researcherIndexService" 
        class="edu.ur.ir.researcher.service.DefaultResearcherIndexService">
+       <property name="errorEmailService" ref="errorEmailService"/>
        <property name="analyzer" ref="defaultTextAnalyzer"/>
    </bean>
    
