@@ -28,7 +28,7 @@
      <param name="File" value="C:/ir_plus_log/ir_plus_web.log"/>
      <param name="Append" value="true"/>
      <param name="MaxFileSize" value="500KB"/>
-     <param name="MaxBackupIndex" value="1"/>
+     <param name="MaxBackupIndex" value="100"/>
      <layout class="org.apache.log4j.PatternLayout">
        <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
      </layout>
@@ -38,7 +38,7 @@
      <param name="File" value="C:/ir_plus_log/ir_plus_web.db.log"/>
      <param name="Append" value="true"/>
      <param name="MaxFileSize" value="500KB"/>
-     <param name="MaxBackupIndex" value="1"/>
+     <param name="MaxBackupIndex" value="100"/>
      <layout class="org.apache.log4j.PatternLayout">
        <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
      </layout>

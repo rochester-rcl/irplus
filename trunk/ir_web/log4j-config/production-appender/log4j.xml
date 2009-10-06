@@ -20,10 +20,10 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
   <appender name="appenderFile" class="org.apache.log4j.RollingFileAppender">
-     <param name="File" value="C:/ir_plus_log/ir_plus_web.log"/>
+     <param name="File" value="/ir/assetstore/ir_plus_log/ir_plus.log"/>
      <param name="Append" value="true"/>
      <param name="MaxFileSize" value="500KB"/>
-     <param name="MaxBackupIndex" value="1"/>
+     <param name="MaxBackupIndex" value="100"/>
      <layout class="org.apache.log4j.PatternLayout">
        <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
      </layout>
