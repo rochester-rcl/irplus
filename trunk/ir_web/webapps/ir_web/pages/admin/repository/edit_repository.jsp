@@ -245,10 +245,24 @@
                            
                            <br/>
                            <br/>
+                           
                            <a href="<c:url value="/admin/reIndexUsers.action"/>">Re-Index Users</a>
+                           
                            <br/>
                            <br/>
+                           
+                           <a href="<c:url value="/admin/reIndexResearchers.action"/>">Re-Index Researchers</a>
+                           
+                           <br/>
+                           <br/>
+                           
+                           <a href="<c:url value="/admin/reIndexPersonNameAuthorities.action"/>">Re-Index Person Name Authorities</a>
+                           
+                           <br/>
+                           <br/>
+                           
                            <c:url var="resetAllHandles" value="/admin/resetAllHandles.action"/>
+                           
                            <a href="${resetAllHandles}">Reset all handles</a>
                            <br/>
                            <br/>
