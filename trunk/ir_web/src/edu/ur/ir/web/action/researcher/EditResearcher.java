@@ -162,11 +162,21 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		userService.makeUserPersistent(user);
 		researcherService.saveResearcher(researcher);
 		departments= departmentService.getAllDepartmentsNameOrder();
-		
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 				false);
-		researcherIndexService.updateIndex(researcher, 
-				new File(repository.getResearcherIndexFolder()) );
+		if( researcher.isPublic())
+		{
+		    
+		    researcherIndexService.updateIndex(researcher, 
+				    new File(repository.getResearcherIndexFolder()) );
+		}
+		else
+		{
+			researcherIndexService.deleteFromIndex(researcher.getId(), 
+				    new File(repository.getResearcherIndexFolder()) );
+		}
+		    	
+		researcherIndexService.optimize(new File(repository.getResearcherIndexFolder()));
 
         return SUCCESS;
 	}

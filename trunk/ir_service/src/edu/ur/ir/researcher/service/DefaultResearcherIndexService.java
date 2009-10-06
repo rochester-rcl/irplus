@@ -192,9 +192,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 			Term term = new Term(ID, NumberTools.longToString(researcherId));
 			writer.deleteDocuments(term);
 			writer.commit();
-			writer.optimize();
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error(e);
 			errorEmailService.sendError(e);
 		}
@@ -262,9 +261,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
-			writer.optimize();
-			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error(e);
 			errorEmailService.sendError(e);
 		}
@@ -311,6 +308,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 			
 		for(Researcher r : researchers)
 		{
+			log.debug("Adding researcher " + r);
 			docs.add(getDocument(r));
 		}
 			
@@ -333,10 +331,8 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 			    writer.addDocument(d);
 			}
 			writer.commit();
-			writer.optimize();
-			
 		}
-		catch (IOException e) 
+		catch (Exception e) 
 		{
 			log.error(e);
 			errorEmailService.sendError(e);
@@ -483,7 +479,9 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	 * users index at once.
 	 * 
 	 * @param directory
-	 * @return
+	 * @return - writer that will not overwrite an existing directory if it exists.  This will create a directory if 
+	 * one does not yet exist.
+	 * 
 	 * @throws CorruptIndexException
 	 * @throws LockObtainFailedException
 	 * @throws IOException
@@ -502,17 +500,68 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	 * users index at once.
 	 * 
 	 * @param directory
-	 * @return
+	 * @return - writer set to overwrite the existing index
 	 * @throws CorruptIndexException
 	 * @throws LockObtainFailedException
 	 * @throws IOException
 	 */
 	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = null;
-        writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriter  writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
+	
+	/**
+	 * Optimize the index.
+	 * 
+	 * @see edu.ur.ir.person.NameAuthorityIndexService#optimize(java.io.File)
+	 */
+	public void optimize(File researcherIndex) {
+		IndexWriter writer = null;
+		Directory directory = null;
+		try 
+		{
+		    directory = FSDirectory.getDirectory(researcherIndex.getAbsolutePath());
+			writer = getWriter(directory);
+			writer.optimize();
+		} 
+		catch (Exception e) 
+		{
+			log.error(e);
+			errorEmailService.sendError(e);
+		}
+		finally 
+        {
+		    if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try 
+		    {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+	    }
+	}
+	
 	
 	/**
 	 * Service for dealing with emails.

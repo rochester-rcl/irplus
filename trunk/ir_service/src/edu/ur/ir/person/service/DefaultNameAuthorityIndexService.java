@@ -19,6 +19,8 @@ package edu.ur.ir.person.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -32,6 +34,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.person.NameAuthorityIndexService;
 import edu.ur.ir.person.PersonName;
@@ -57,6 +60,9 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	/** Contains all the fields of person name  */
 	public static final String NAMES = "names";
 	
+	/** Service for sending email errors */
+	private ErrorEmailService errorEmailService;
+	
 	/**
 	 * Analyzer used to analyze the name.
 	 * 
@@ -74,6 +80,80 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	public void setAnalyzer(Analyzer analyzer) {
 		this.analyzer = analyzer;
 	}
+	
+
+	/**
+	 * Add the set of names to the index.
+	 * 
+	 * @see edu.ur.ir.person.NameAuthorityIndexService#addNames(java.util.List, java.io.File, boolean)
+	 */
+	public void addNames(List<PersonNameAuthority> names, File nameAuthorityIndexFolder,
+			boolean overwriteExistingIndex) {
+			
+	    LinkedList<Document> docs = new LinkedList<Document>();
+			
+		for(PersonNameAuthority name : names)
+		{
+			docs.add(getDocument(name));
+		}
+			
+		IndexWriter writer = null;
+		Directory directory = null;
+		try {
+			directory = FSDirectory.getDirectory(nameAuthorityIndexFolder.getAbsolutePath());
+			
+			if(overwriteExistingIndex)
+			{
+			    writer = getWriterOverwriteExisting(directory);
+			}
+			else
+			{
+				writer = getWriter(directory);
+			}
+			 
+			for(Document d : docs)
+			{
+			    writer.addDocument(d);
+			}
+			writer.commit();
+		}
+		catch (Exception e) 
+		{
+			log.error(e);
+			errorEmailService.sendError(e);
+		}
+		finally 
+		{
+			if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		    docs = null;
+		}
+	}
 
 	/**
 	 * Write the list of documents to the index in the directory.
@@ -87,16 +167,14 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		Directory directory = null;
 		try {
 			directory = FSDirectory.getDirectory(directoryPath);
-			while( writer == null )
-			{
-				writer = getWriter(directory);
-			}
+			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
 		} 
-		catch (IOException e) 
+		catch (Exception e) 
 		{
 			log.error(e);
+			errorEmailService.sendError(e);
 		}
 		finally {
 		    	
@@ -138,56 +216,13 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	 * 
 	 * @see edu.ur.ir.person.NameAuthorityIndexService#addToIndex(edu.ur.ir.person.PersonNameAuthority, java.io.File)
 	 */
-	public void addToIndex(PersonNameAuthority personNameAuthority, File nameAuthorityFolder) throws NoIndexFoundException  {
-	
-		
-		
+	public void addToIndex(PersonNameAuthority personNameAuthority, File nameAuthorityFolder) throws NoIndexFoundException
+	{
 		if (nameAuthorityFolder == null) {
 			throw new NoIndexFoundException("Name index folder not found ");
 		} 
 
-		Document doc = new Document();
-		doc.add(new Field(PERSON_NAME_AUTHORITY_ID, 
-				personNameAuthority.getId().toString(), 
-				Field.Store.YES, 
-				Field.Index.NOT_ANALYZED));
-		
-		StringBuffer name =  new StringBuffer();
-		Set<PersonName> names = personNameAuthority.getNames();
-		
-		for (PersonName personName: names ) {
-
-			if( personName.getForename() != null )
-			{
-				name.append(" " + personName.getForename() + " ");
-			}
-
-			if( personName.getMiddleName()!= null )
-			{
-				name.append(personName.getMiddleName() + " ");
-			}
-
-			if( personName.getFamilyName() != null )
-			{
-				name.append(personName.getFamilyName() + " ");
-			}
-
-			if( personName.getSurname() != null )
-			{
-				name.append(personName.getSurname() + " ");
-			}
-
-			name.append(":");
-		}
-		
-		
-		doc.add(new Field(NAMES, 
-				names.toString(), 
-				Field.Store.YES, 
-				Field.Index.ANALYZED));
-
-		writeDocument(nameAuthorityFolder.getAbsolutePath(),	doc);
-
+		writeDocument(nameAuthorityFolder.getAbsolutePath(), getDocument(personNameAuthority));
 	}
 
 	/**
@@ -195,9 +230,8 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	 * 
 	 * @see edu.ur.ir.person.NameAuthorityIndexService#deleteFromIndex(edu.ur.ir.person.PersonNameAuthority)
 	 */
-	public void deleteFromIndex(PersonNameAuthority personNameAuthority, File nameAuthorityIndexFolder) {
-		
-		
+	public void deleteFromIndex(PersonNameAuthority personNameAuthority, File nameAuthorityIndexFolder) 
+	{
 		// if the name index folder doesnot exist 
 		// do nothing.
 		if (nameAuthorityIndexFolder == null) {
@@ -209,15 +243,12 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		
 		try {
 			directory = FSDirectory.getDirectory(nameAuthorityIndexFolder);
-			while( writer == null )
-			{
-				writer = getWriter(directory);
-			}
+			writer = getWriter(directory);
 			Term term = new Term(PERSON_NAME_AUTHORITY_ID, personNameAuthority.getId().toString());
 			writer.deleteDocuments(term);
 			writer.close();
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error(e);
 		}
 		finally
@@ -272,10 +303,27 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	 * @throws LockObtainFailedException
 	 * @throws IOException
 	 */
-	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = null;
-	    writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		return writer;
+	}
+	
+	/**
+	 * All methods should use this to obtain a writer on the directory.  This will return 
+	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
+	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
+	 * users index at once.
+	 * 
+	 * @param directory
+	 * @return - writer set to overwrite the existing index
+	 * @throws CorruptIndexException
+	 * @throws LockObtainFailedException
+	 * @throws IOException
+	 */
+	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	{
+		IndexWriter  writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 
@@ -291,15 +339,13 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		try 
 		{
 		    directory = FSDirectory.getDirectory(nameAuthorityIndex.getAbsolutePath());
-		    while(writer == null )
-			{
-				writer = getWriter(directory);
-			}
+			writer = getWriter(directory);
 			writer.optimize();
 		} 
-		catch (IOException e) 
+		catch (Exception e) 
 		{
 			log.error(e);
+			errorEmailService.sendError(e);
 		}
 		finally 
         {
@@ -332,6 +378,70 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		    directory = null;
 		    
 	    }
+	}
+	
+	private Document getDocument(PersonNameAuthority personNameAuthority)
+	{
+		Document doc = new Document();
+		doc.add(new Field(PERSON_NAME_AUTHORITY_ID, 
+				personNameAuthority.getId().toString(), 
+				Field.Store.YES, 
+				Field.Index.NOT_ANALYZED));
+		
+		StringBuffer name =  new StringBuffer();
+		Set<PersonName> names = personNameAuthority.getNames();
+		
+		for (PersonName personName: names ) {
+
+			if( personName.getForename() != null )
+			{
+				name.append(" " + personName.getForename() + " ");
+			}
+
+			if( personName.getMiddleName()!= null )
+			{
+				name.append(personName.getMiddleName() + " ");
+			}
+
+			if( personName.getFamilyName() != null )
+			{
+				name.append(personName.getFamilyName() + " ");
+			}
+
+			if( personName.getSurname() != null )
+			{
+				name.append(personName.getSurname() + " ");
+			}
+
+			name.append(":");
+		}
+		
+		
+		doc.add(new Field(NAMES, 
+				names.toString(), 
+				Field.Store.YES, 
+				Field.Index.ANALYZED));
+		
+		return doc;
+
+	}
+
+	/**
+	 * Service for sending email errors.
+	 * 
+	 * @return - email error service
+	 */
+	public ErrorEmailService getErrorEmailService() {
+		return errorEmailService;
+	}
+
+	/**
+	 * Service for sending error emails.
+	 * 
+	 * @param errorEmailService
+	 */
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
 	}
 
 }

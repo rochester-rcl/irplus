@@ -29,7 +29,7 @@ public class DefaultReIndexResearcherService implements ReIndexResearchersServic
 	private ResearcherIndexService researcherIndexService;
 	
 	public int reIndexResearchers(int batchSize, File researcherIndexFolder) {
-		log.debug("Re-Indexing users");
+		log.debug("Re-Indexing researchers");
 		
 		if(batchSize <= 0 )
 		{
@@ -59,9 +59,28 @@ public class DefaultReIndexResearcherService implements ReIndexResearchersServic
 		    overwriteExistingIndex = false;
 		    rowStart = rowStart + batchSize;
 		}
+		//optimize the index.
+		researcherIndexService.optimize(researcherIndexFolder);
 		
 		return numProcessed;
 		
+	}
+
+	public ResearcherService getResearcherService() {
+		return researcherService;
+	}
+
+	public void setResearcherService(ResearcherService researcherService) {
+		this.researcherService = researcherService;
+	}
+
+	public ResearcherIndexService getResearcherIndexService() {
+		return researcherIndexService;
+	}
+
+	public void setResearcherIndexService(
+			ResearcherIndexService researcherIndexService) {
+		this.researcherIndexService = researcherIndexService;
 	}
 
 }

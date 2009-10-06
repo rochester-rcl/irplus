@@ -18,17 +18,12 @@ package edu.ur.ir.web.action.person;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.dao.CriteriaHelper;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.person.NameAuthorityIndexService;
@@ -42,9 +37,7 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
-import edu.ur.ir.web.table.PropertyConverter;
-import edu.ur.ir.web.table.TableCollectionInfo;
-import edu.ur.ir.web.table.TableRequestHelper;
+
 
 /**
  * This allows for the management of person names.
@@ -52,8 +45,7 @@ import edu.ur.ir.web.table.TableRequestHelper;
  * @author Nathan Sarr
  *
  */
-public class ManagePersonNames extends ActionSupport implements  
-ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdAware{
+public class ManagePersonNames extends ActionSupport implements   Preparable, UserIdAware{
 	
 	/** eclipse generated id. */
 	private static final long serialVersionUID = 9067167667985194047L;
@@ -70,9 +62,6 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdA
 	/** Repository service */
 	private RepositoryService repositoryService;
 
-	/** The request for the system. */
-	private HttpServletRequest request;
-	
 	/** total number of persons */
 	private Integer totalNumberOfPersonNames;
 	
@@ -123,6 +112,10 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdA
     
     /** id of the user */
     private Long userId;
+    
+    private int start = 0;
+    
+    private int maxResults = 25;
 
 	/**
 	 * Loads a person for viewing and editing.
@@ -294,39 +287,9 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdA
 	 */
 	public String viewPersonNames()
 	{
-		TableRequestHelper helper = new TableRequestHelper();
-		helper.processTableData(request, this, this);
-		List<CriteriaHelper> criteria = helper.getCriteriaHelpers();
-		
-		// default the sort to name ascending
-		if(criteria.size() == 0 )
-		{
-			CriteriaHelper crit = new CriteriaHelper("forename");
-			crit.setSort(true);
-			crit.setSortType("asc");
-			crit.setIgnoreCaseOnSort(true);
-			crit.setOrder(0);
-			criteria.add(crit);
-			
-			crit = new CriteriaHelper("surname");
-			crit.setSort(true);
-			crit.setSortType("asc");
-			crit.setIgnoreCaseOnSort(true);
-			crit.setOrder(1);
-			criteria.add(crit);
-		}
-		
-		personNames =  personService.get( helper.getRowStart(), helper.getRowEnd(), personId);
+		personNames =  personService.get(start, maxResults, personId);
 		return SUCCESS;
 
-	}
-	/**
-	 * Set the servlet request.
-	 * 
-	 * @see org.apache.struts2.interceptor.ServletRequestAware#setServletRequest(javax.servlet.http.HttpServletRequest)
-	 */
-	public void setServletRequest(HttpServletRequest request) {
-		this.request = request;
 	}
 
 	/**
@@ -350,7 +313,7 @@ ServletRequestAware, PropertyConverter, TableCollectionInfo, Preparable, UserIdA
 	 * 
 	 * @see edu.ur.ir.web.table.TableCollectionInfo#getTotalNumberOfResults(java.util.List)
 	 */
-	public int getTotalNumberOfResults(List<CriteriaHelper> criteriaHelpers) {
+	public int getTotalNumberOfResults() {
 		totalNumberOfPersonNames = personService.getCount(personId);
 		log.debug("Total number of results = " + totalNumberOfPersonNames);
 		return totalNumberOfPersonNames;

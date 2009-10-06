@@ -305,6 +305,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 			
 			researcherIndexService.addToIndex(irUser.getResearcher(), 
 					new File(repository.getResearcherIndexFolder()) );
+			researcherIndexService.optimize(new File(repository.getResearcherIndexFolder()));
 		}
 				    
 		if (emailPassword) {

@@ -17,8 +17,9 @@
 package edu.ur.ir.person;
 
 import edu.ur.dao.CountableDAO;
-import edu.ur.dao.CriteriaHelper;
 import edu.ur.dao.CrudDAO;
+import edu.ur.order.OrderType;
+
 import java.util.List;
 
 
@@ -40,39 +41,18 @@ CrudDAO<PersonNameAuthority>{
 	 * @return users in given order
 	 */
 	public List<PersonNameAuthority> getAllAuthoritativeNameAsc(int startRecord, int numRecords);
-
 	
-	/**
-	 * Get the list of people.
-	 * 
-	 * 
-	 * @param criteria - how to sort and filter the list
-	 * @param rowStart - start position
-	 * @param rowEnd - number of rows to grab.
-	 * 
-	 * @return list of people found.
-	 */
-	public List<PersonNameAuthority> getPersons( final List<CriteriaHelper> criteriaHelpers,
-			final int rowStart, final int rowEnd);
-	
-	/**
-	 * Get the count of people based on the filter criteria
-	 * 
-	 * @param criteria - criteria to use to get the contributor types.
-	 * @return count of people for the given criteria
-	 */
-	public Integer getPersonsCount(final List<CriteriaHelper> criteriaHelpers);
 
 	/**
-	 * Get a list of person authorities for a specified sort criteria.
+	 * Get person names by last name
 	 * 
-	 * @param rowStart - Start row to fetch the data from
-	 * @param numberOfResultsToShow - maximum number of results to fetch
-	 * @param sortElement - column to sort on 
-	 * @param sortType - The order to sort by (ascending/descending)
+	 * @param rowStart - start position 
+	 * @param maxResults - maximum number of results
+	 * @param orderType - order (asc or desc)
 	 * 
-	 * @return List of person authorities
+	 * @return - all person name authorities at row start up max results.
 	 */
-	public List<PersonNameAuthority> getPersons(final int rowStart, 
-    		final int numberOfResultsToShow, final String sortElement, final String sortType);
+	public List<PersonNameAuthority> getPersonNameAuthorityByLastName(int rowStart,
+			int maxResults, OrderType orderType);
+
 }

@@ -391,18 +391,14 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		Directory directory = null;
 		try {
 			directory = FSDirectory.getDirectory(directoryPath);
-			while(writer == null )
-			{
-				writer = getWriter(directory);
-			}
-		
+			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
 			writer.optimize();
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error(e);
-			throw new RuntimeException(e);
+			errorEmailService.sendError(e);
 		}
 	    finally {
 	    	if (writer != null) {
@@ -478,15 +474,13 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		try {
 			
 			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			while( writer == null )
-			{
-				writer = getWriter(directory);
-			}
+			writer = getWriter(directory);
 			Term term = new Term(PERSONAL_FILE_ID, NumberTools.longToString(personalFileId));
 			writer.deleteDocuments(term);
 			
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error(e);
+			errorEmailService.sendError(e);
 		}
 		finally
 		{
@@ -596,15 +590,13 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		try {
 			
 			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			while( writer == null )
-			{
-				writer = getWriter(directory);
-			}
+			writer = getWriter(directory);
 			Term term = new Term(PERSONAL_FOLDER_ID, NumberTools.longToString(personalFolderId));
 			writer.deleteDocuments(term);
 			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error(e);
+			errorEmailService.sendError(e);
 		}
 		finally
 		{
@@ -779,15 +771,12 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		try {
 			
 			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			while( writer == null)
-			{
-				writer = getWriter(directory);
-			}
-			
+			writer = getWriter(directory);
 			Term term = new Term(SHARED_INBOX_FILE_ID, NumberTools.longToString(sharedInboxFileId));
 			writer.deleteDocuments(term);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error(e);
+			errorEmailService.sendError(e);
 		}
 		finally
 		{
@@ -885,15 +874,12 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		try {
 			
 			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
-			while( writer == null )
-			{
-				writer = getWriter(directory);
-			}
-			
+			writer = getWriter(directory);
 			Term term = new Term(PERSONAL_ITEM_ID, NumberTools.longToString(personalItemId));
 			writer.deleteDocuments(term);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error(e);
+			errorEmailService.sendError(e);
 		}
 		finally
 		{
@@ -1456,10 +1442,9 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	 * @throws LockObtainFailedException
 	 * @throws IOException
 	 */
-	private synchronized IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
+	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = null;
-	    writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 

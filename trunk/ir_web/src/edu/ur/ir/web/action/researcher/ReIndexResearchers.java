@@ -1,4 +1,4 @@
-package edu.ur.ir.web.action.user;
+package edu.ur.ir.web.action.researcher;
 
 import org.apache.log4j.Logger;
 import org.quartz.JobDetail;
@@ -8,13 +8,15 @@ import org.quartz.TriggerUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+
+
 /**
- * This re-indexes all users in the system.
+ * Action that fires off a job to re-index researchers.
  * 
  * @author Nathan Sarr
  *
  */
-public class ReIndexUsers extends ActionSupport{
+public class ReIndexResearchers extends ActionSupport{
 	
 
 	/** eclipse generated id */
@@ -24,7 +26,7 @@ public class ReIndexUsers extends ActionSupport{
 	private Scheduler quartzScheduler;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(ReIndexUsers.class);
+	private static final Logger log = Logger.getLogger(ReIndexResearchers.class);
 	
 	/** Default Batch Size */
 	private int batchSize = 25;
@@ -33,14 +35,14 @@ public class ReIndexUsers extends ActionSupport{
 	{
 		log.debug("re index users called");
 		//create the job detail
-		JobDetail jobDetail = new JobDetail("reIndexUsersJob", Scheduler.DEFAULT_GROUP, 
-				edu.ur.ir.user.service.DefaultReIndexUsersJob.class);
+		JobDetail jobDetail = new JobDetail("reIndexResearchersJob", Scheduler.DEFAULT_GROUP, 
+				edu.ur.ir.researcher.service.DefaultReIndexResearchersJob.class);
 		
 		jobDetail.getJobDataMap().put("batchSize", new Integer(batchSize));
 		
 		//create a trigger that fires once right away
 		Trigger trigger = TriggerUtils.makeImmediateTrigger(0,0);
-		trigger.setName("SingleReIndexUsersJobFireNow");
+		trigger.setName("SingleReIndexResearchersJobFireNow");
 		quartzScheduler.scheduleJob(jobDetail, trigger);
 		
 		return SUCCESS;
@@ -61,7 +63,4 @@ public class ReIndexUsers extends ActionSupport{
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
 	}
-
-
-
 }
