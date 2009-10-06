@@ -231,12 +231,12 @@ public class DefaultInstitutionalCollectionService implements
 	}
 	
 	/**
-	 * Find if the generic item version is already published to this collection.
+	 * Find if the generic item is already published to this collection.
 	 * 
 	 * @param  institutionalCollectionId Id of the institutional collection
-	 * @param itemVersionId Id of the item version
+	 * @param generic item Id 
 	 * 
-	 * @return True if item is published to the collection else false
+	 * @return True if the generic item is published to the collection else false
 	 */
 	public boolean isItemPublishedToCollection(Long institutionalCollectionId, Long genericItemId) {
 		return institutionalItemDAO.isItemPublishedToCollection(institutionalCollectionId, genericItemId);
