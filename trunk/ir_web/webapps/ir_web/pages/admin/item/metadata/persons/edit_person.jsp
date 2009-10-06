@@ -66,8 +66,10 @@
     
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
+        
+        <c:url var="viewPersons" value="/admin/viewPersons.action"/>
       
-        <h3>Edit Person Names</h3>
+        <h3>Edit Person Names > <a href="${viewPersons}">Person Name Authority</a></h3>
   
         <div id="bd">
             <br/>    
