@@ -882,7 +882,7 @@
             class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
             <interceptor-ref name="crudStack" />
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">workspace.action?parentCollectionId=${parentCollectionId}&amp;showCollectionTab=true</result>
+            <result name="success">/pages/user/workspace/item/collection_item_confirmation_page.jsp</result>
             <result name="acceptLicense">/pages/user/workspace/item/accept_license.jsp</result>
         </action>     
         
