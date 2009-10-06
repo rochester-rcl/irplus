@@ -118,14 +118,14 @@ public interface InstitutionalCollectionService {
 	public List<InstitutionalCollection> getAllChildrenForCollection(InstitutionalCollection parent);
 
 	/**
-	 * Find if the item version is already published to this collection.
+	 * Find if the item is already published to this collection.
 	 * 
 	 * @param  institutionalCollectionId Id of the institutional collection
-	 * @param itemVersionId Id of the item version
+	 * @param generic item Id Id  
 	 * 
 	 * @return True if item is published to the collection else false
 	 */
-	public boolean isItemPublishedToCollection(Long institutionalCollectionId, Long itemVersionId);
+	public boolean isItemPublishedToCollection(Long institutionalCollectionId, Long genericItemId);
 	
 	/**
 	 * Allows items and collections to be moved to a different parent collection.  If
