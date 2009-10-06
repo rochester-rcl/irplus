@@ -51,6 +51,20 @@
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
         
+        <!--  re-index all the researchers in the repository -->
+        <action name="reIndexResearchers" 
+            class="edu.ur.ir.web.action.researcher.ReIndexResearchers">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
+        <!--  re-index all the person name Authorities in the repository -->
+        <action name="reIndexPersonNameAuthorities" 
+            class="edu.ur.ir.web.action.person.ReIndexPersonNameAuthorities">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
         <!--  reset all handles in the  repository -->
         <action name="resetAllHandles" 
             class="edu.ur.ir.web.action.repository.ResetAllHandles">
