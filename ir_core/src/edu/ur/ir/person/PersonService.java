@@ -18,29 +18,32 @@ package edu.ur.ir.person;
 
 import java.util.List;
 
+import edu.ur.order.OrderType;
+
 /**
  * Service for dealing with person information.
  * 
  * @author Nathan Sarr
  *
  */
-public interface PersonService {
+public interface PersonService 
+{
 	
 	/**
-	 * Get a list of person authorities for a specified sort criteria.
+	 * Get a list of person name authorities ordered by the authoritative last name.
 	 * 
-	 * @param rowStart - Start row to fetch the data from
-	 * @param numberOfResultsToShow - maximum number of results to fetch
-	 * @param sortElement - column to sort on 
-	 * @param sortType - The order to sort by (ascending/descending)
+	 * @param rowStart - row start 
+	 * @param maxResults - maximum number of results
+	 * @param orderType - order type (asc/desc)
 	 * 
-	 * @return List of person authorities
+	 * @return the set of person name authorities found starting at row start and up to max results will
+	 * be returned.
 	 */
-	public List<PersonNameAuthority> get(int rowStart, 
-    		int numberOfResultsToShow, String sortElement, String sortType);
+	public List<PersonNameAuthority> getPersonNameAuthorityByLastName(int rowStart,
+			int maxResults, OrderType orderType);
 
     /**
-     * Get a count of people with given filter list.
+     * Get a count of person name authorities.
      *  
      * @return - the number of persons found
      */

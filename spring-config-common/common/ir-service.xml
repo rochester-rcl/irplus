@@ -349,7 +349,14 @@
    
    <bean id="nameAuthorityIndexService" 
        class="edu.ur.ir.person.service.DefaultNameAuthorityIndexService">
+       <property name="errorEmailService" ref="errorEmailService"/>
        <property name="analyzer" ref="defaultTextAnalyzer"/>
+   </bean>
+   
+   <bean id="reIndexPersonNameAuthoritiesService" 
+       class="edu.ur.ir.person.service.DefaultReIndexPersonNameAuthoritiesService">
+       <property name="personService" ref="personService"/>
+       <property name="nameAuthorityIndexService" ref="nameAuthorityIndexService"/>
    </bean>
    
    <bean id="userIndexService" 
@@ -378,6 +385,12 @@
        class="edu.ur.ir.researcher.service.DefaultResearcherIndexService">
        <property name="errorEmailService" ref="errorEmailService"/>
        <property name="analyzer" ref="defaultTextAnalyzer"/>
+   </bean>
+   
+   <bean id="reIndexResearchersService" 
+       class="edu.ur.ir.researcher.service.DefaultReIndexResearcherService">
+       <property name="researcherIndexService" ref="researcherIndexService"/>
+       <property name="researcherService" ref="researcherService"/>
    </bean>
    
    <!-- ****************************************** --> 

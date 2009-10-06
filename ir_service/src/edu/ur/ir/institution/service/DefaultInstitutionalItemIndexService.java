@@ -217,7 +217,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			
 			
 		} 
-		catch (IOException e) 
+		catch (Exception e) 
 		{
 			log.error(e);
 			errorEmailService.sendError(e);
@@ -283,7 +283,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			writer.deleteDocuments(term);
 			  
 		} 
-        catch (IOException e) 
+        catch (Exception e) 
         {
 			log.error(e);
 			errorEmailService.sendError(e);
@@ -649,7 +649,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		    writer.addDocument(document);
 			writer.commit();
 		} 
-		catch (IOException e) 
+		catch (Exception e) 
 		{
 			log.error(e);
 			errorEmailService.sendError(e);
@@ -1105,8 +1105,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = null;
-		writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 	
@@ -1124,8 +1123,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 */
 	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = null;
-	    writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriter  writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 
@@ -1144,7 +1142,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 			writer = getWriter(directory);
 			writer.optimize();
 		} 
-		catch (IOException e) 
+		catch (Exception e) 
 		{
 			log.error(e);
 			errorEmailService.sendError(e);

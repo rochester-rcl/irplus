@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -97,7 +96,7 @@ public class DefaultUserSearchService implements UserSearchService{
 				}
 				
 				Document d = searcher.doc(hits.scoreDocs[position].doc);
-				Long userId = NumberTools.stringToLong(d.get(DefaultUserIndexService.USER_ID));
+				Long userId = new Long(d.get(DefaultUserIndexService.USER_ID));
 				log.debug( "user id = " + userId);
 				IrUser user = userService.getUser(userId, false);
 				users.add(user);

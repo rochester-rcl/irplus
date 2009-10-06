@@ -16,24 +16,15 @@
 
 package edu.ur.hibernate.ir.person.db;
 
-import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
-import org.springframework.orm.hibernate3.HibernateCallback;
 
-import edu.ur.dao.CriteriaHelper;
-import edu.ur.hibernate.CriteriaBuilder;
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonNameAuthorityDAO;
+import edu.ur.order.OrderType;
 
 /**
  * Persist person information into the database.
@@ -85,40 +76,24 @@ public class HbPersonNameAuthorityDAO implements PersonNameAuthorityDAO{
 		return hbCrudDAO.getByQuery("getAllAuthoritativeNameAsc", startRecord, numRecords);
 	}
 
-	
-	@SuppressWarnings("unchecked")
-	public List<PersonNameAuthority> getPersons(final List<CriteriaHelper> criteriaHelpers,
-			final int rowStart, final int rowEnd) {
-		List<PersonNameAuthority> people = (List<PersonNameAuthority>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
-                criteriaBuilder.execute(criteria, criteriaHelpers);
-                criteria.setFirstResult(rowStart);
-                criteria.setMaxResults(rowEnd - rowStart);
-                return criteria.list();
-            }
-        });
+	/**
+	 * (non-Javadoc)
+	 * @see edu.ur.ir.person.PersonNameAuthorityDAO#getPersonNameAuthorityByLastName(int, int, edu.ur.order.OrderType)
+	 */
+	public List<PersonNameAuthority> getPersonNameAuthorityByLastName(int rowStart,
+			int maxResults, OrderType orderType) {
 		
-		 return people;
+		if( orderType.equals(OrderType.DESCENDING_ORDER))
+		{
+			return hbCrudDAO.getByQuery("getAllPersonNameAuthorityDesc", rowStart, maxResults);
+		}
+		else
+		{
+			return hbCrudDAO.getByQuery("getAllPersonNameAuthorityAsc", rowStart, maxResults);
+		}
+		
 	}
-
 	
-	public Integer getPersonsCount(final List<CriteriaHelper> criteriaHelpers) {
-		Integer count = (Integer) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
-                criteriaBuilder.executeWithFiltersOnly(criteria, criteriaHelpers);
-                return criteria.setProjection(Projections.rowCount()).uniqueResult();
-            }
-        });
-    	
-    	return count;
-	}
-
 	
 	public List<PersonNameAuthority> getAll() {
 		return hbCrudDAO.getAll();
@@ -136,43 +111,5 @@ public class HbPersonNameAuthorityDAO implements PersonNameAuthorityDAO{
 		hbCrudDAO.makeTransient(entity);
 	}
 	
-	/**
-	 * Get a list of person authorities for a specified sort criteria.
-	 * 
-	 * @param rowStart - Start row to fetch the data from
-	 * @param numberOfResultsToShow - maximum number of results to fetch
-	 * @param sortElement - column to sort on 
-	 * @param sortType - The order to sort by (ascending/descending)
-	 * 
-	 * @return List of person authorities
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PersonNameAuthority> getPersons(final int rowStart, 
-    		final int numberOfResultsToShow, final String sortElement, final String sortType) {
-		
-		List<PersonNameAuthority> persons = new LinkedList<PersonNameAuthority>();
-		
-		persons = (List<PersonNameAuthority>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			    if( sortElement.equalsIgnoreCase("surname") && sortType.equals("asc")) {
-			        q = session.getNamedQuery("getPersonsBySurnameOrderAsc");
-			    } else if ( sortElement.equalsIgnoreCase("surname") && sortType.equals("desc")){
-			        q = session.getNamedQuery("getPersonsBySurnameOrderDesc");
-			    } else if ( sortElement.equalsIgnoreCase("forename") && sortType.equals("asc")){
-			        q = session.getNamedQuery("getPersonsByForenameOrderAsc");
-			    } else if ( sortElement.equalsIgnoreCase("forename") && sortType.equals("desc")){
-			        q = session.getNamedQuery("getPersonsByForenameOrderDesc");
-			    } 
-			    
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(numberOfResultsToShow);
-	            return q.list();
-		    }
-	    });
-		return persons;	
-		
-	}
+
 }

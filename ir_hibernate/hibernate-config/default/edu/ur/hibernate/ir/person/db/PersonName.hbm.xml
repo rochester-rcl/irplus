@@ -105,21 +105,29 @@
 	</query>
 	
 	<!-- named query for getting all personNames ordered by surname forename familyName-->
-    <query name="getAllPersonNameAsc">from PersonName order by lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, lowerCaseMiddleName asc </query>
+    <query name="getAllPersonNameAsc">from PersonName order by lowerCaseSurname asc, lowerCaseForename asc, 
+    lowerCaseFamilyName asc, lowerCaseMiddleName asc </query>
 
 	<!-- named query for getting all personNames ordered by surname forename familyName-->
-    <query name="getAllPersonNameDesc">from PersonName order by lowerCaseSurname desc, lowerCaseForename desc, lowerCaseFamilyName desc, lowerCaseMiddleName desc </query>
+    <query name="getAllPersonNameDesc">from PersonName order by lowerCaseSurname desc, lowerCaseForename desc, 
+    lowerCaseFamilyName desc, lowerCaseMiddleName desc </query>
 
     
     <!-- named query for getting all personNames like the specified first name -->
-    <query name="findPersonLikeFirstName">from PersonName personName where upper(personName.forename) like upper(?) order by  lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, lowerCaseMiddleName asc </query>
+    <query name="findPersonLikeFirstName">from PersonName personName where upper(personName.forename) 
+    like upper(?) order by  lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, 
+    lowerCaseMiddleName asc </query>
 
     <!-- named query for getting all personNames like the specified last name -->
-    <query name="findPersonLikeLastName">from PersonName personName where upper(personName.surname) like upper(?) order by lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, lowerCaseMiddleName asc </query>
+    <query name="findPersonLikeLastName">from PersonName personName where upper(personName.surname) 
+    like upper(?) order by lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, 
+    lowerCaseMiddleName asc </query>
 
     <!-- named query for getting all personNames like the specified first and last name -->
-    <query name="findPersonLikeFirstLastName">from PersonName personName where upper(personName.surname) like upper(?) and
-    upper(personName.forename) like upper(?) order by  lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, lowerCaseMiddleName asc </query>
+    <query name="findPersonLikeFirstLastName">from PersonName personName where upper(personName.surname) 
+    like upper(?) and upper(personName.forename) like upper(?)
+     order by  lowerCaseSurname asc, lowerCaseForename asc, lowerCaseFamilyName asc, 
+     lowerCaseMiddleName asc </query>
     
   
 	

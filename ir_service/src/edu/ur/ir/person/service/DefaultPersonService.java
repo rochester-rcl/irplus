@@ -24,6 +24,7 @@ import edu.ur.ir.person.PersonNameAuthorityDAO;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameDAO;
 import edu.ur.ir.person.PersonService;
+import edu.ur.order.OrderType;
 
 /**
  * Default implementation of the person service
@@ -51,15 +52,6 @@ public class DefaultPersonService implements PersonService {
 	 */
 	public PersonNameAuthority getAuthority(Long id, boolean lock) {
 		return personNameAuthorityDAO.getById(id, lock);
-	}
-
-	/**
-	 * @see edu.ur.ir.person.PersonService#get(int, int, String, String)
-	 */
-	public List<PersonNameAuthority> get(int rowStart, 
-    		int numberOfResultsToShow, String sortElement, String sortType) {
-		return personNameAuthorityDAO.getPersons(rowStart, 
-	    		numberOfResultsToShow, sortElement, sortType);
 	}
 
 	/**
@@ -163,6 +155,17 @@ public class DefaultPersonService implements PersonService {
 	 */
 	public List<PersonName> search(String firstName, String lastName) {
 		return personNameDAO.findPersonLikeFirstLastName(firstName, lastName, 0, 30);
+	}
+
+	
+	/**
+	 * Get the person name authorities ordered by last name.
+	 * 
+	 * @see edu.ur.ir.person.PersonService#getPersonNameAuthorityByLastName(int, int, edu.ur.order.OrderType)
+	 */
+	public List<PersonNameAuthority> getPersonNameAuthorityByLastName(
+			int rowStart, int maxResults, OrderType orderType) {
+		return personNameAuthorityDAO.getPersonNameAuthorityByLastName(rowStart, maxResults, orderType);
 	}
 
 }

@@ -17,6 +17,7 @@
 package edu.ur.ir.person;
 
 import java.io.File;
+import java.util.List;
 
 import edu.ur.ir.NoIndexFoundException;
 
@@ -52,6 +53,17 @@ public interface NameAuthorityIndexService {
 	 * @param nameAuthorityIndex - index to delete from 
 	 */
 	public void deleteFromIndex(PersonNameAuthority personNameAuthority, File nameAuthorityIndex);
+	
+	/**
+	 * Add the set of names to the index.  This can be used to re-index all of the names in the person 
+	 * name authority.
+	 * 
+	 * @param names - set of names to add to the index
+	 * @param nameAuthorityIndexFolder - folder for dealing with name authority information.
+	 * @param overwriteExistingIndex - if set to true will overwrite the existing name authority index.
+	 */
+	public void addNames(List<PersonNameAuthority> names, File nameAuthorityIndexFolder,
+			boolean overwriteExistingIndex);
 	
 	/**
 	 * Optimize the index.

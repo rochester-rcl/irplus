@@ -86,36 +86,21 @@
 	    select count(*) from PersonNameAuthority
 	</query>
 	
-		<!--  Get a count of folders in the system -->
+	<!-- named query for getting all personNames ordered by surname forename familyName-->
+    <query name="getAllPersonNameAuthorityAsc">select personNameAuthority from PersonNameAuthority as personNameAuthority 
+		order by authoritativeName.lowerCaseSurname asc, authoritativeName.lowerCaseForename asc, 
+       authoritativeName.lowerCaseFamilyName asc, authoritativeName.lowerCaseMiddleName asc </query>
+       
+    <!-- named query for getting all personNames ordered by surname forename familyName-->
+    <query name="getAllPersonNameAuthorityDesc">select personNameAuthority from PersonNameAuthority as personNameAuthority 
+		order by authoritativeName.lowerCaseSurname desc, authoritativeName.lowerCaseForename desc, 
+       authoritativeName.lowerCaseFamilyName desc, authoritativeName.lowerCaseMiddleName desc </query>
+	
+	<!--  Get a count of folders in the system -->
 	<query name="getAllAuthoritativeNameAsc">
-	    from PersonNameAuthority order by authoritativeName.surname, authoritativeName.forename, authoritativeName.familyName
+	    from PersonNameAuthority order by authoritativeName.surname, authoritativeName.forename, 
+	    authoritativeName.familyName
 	</query>
 
-	<!--  ****************** Sort Persons    ******************   -->
-	
-	<!-- sort by last name asc -->
-	<query name="getPersonsBySurnameOrderAsc">
-		select personNameAuthority from PersonNameAuthority as personNameAuthority 
-		order by authoritativeName.surname asc
-	</query>	
-
-	<!-- sort by last name desc -->
-	<query name="getPersonsBySurnameOrderDesc">
-		select personNameAuthority from PersonNameAuthority as personNameAuthority 
-		order by authoritativeName.surname desc
-	</query>	
-	
-	<!-- sort by user name asc -->
-	<query name="getPersonsByForenameOrderAsc">
-		select personNameAuthority from PersonNameAuthority as personNameAuthority 
-		order by authoritativeName.forename asc
-	</query>	
-	
-	<!-- sort by user name desc -->
-	<query name="getPersonsByForenameOrderDesc">
-		select personNameAuthority from PersonNameAuthority as personNameAuthority 
-		order by authoritativeName.forename desc
-	</query>	
-	
 	
 </hibernate-mapping>

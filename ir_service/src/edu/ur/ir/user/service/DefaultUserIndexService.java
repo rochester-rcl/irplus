@@ -26,7 +26,6 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -136,7 +135,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		try {
 			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
 			writer = getWriter(directory);
-			Term term = new Term(USER_ID, NumberTools.longToString(userId));
+			Term term = new Term(USER_ID, userId.toString());
 			writer.deleteDocuments(term);
 			
 		} catch (IOException e) {
@@ -256,6 +255,7 @@ public class DefaultUserIndexService implements UserIndexService{
 			
 		for(IrUser user : users)
 		{
+			log.debug("adding user " + user);
 			docs.add(getDocument(user));
 		}
 			
@@ -330,7 +330,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		Document doc = new Document();
         
 	    doc.add(new Field(USER_ID, 
-	    		NumberTools.longToString(user.getId()), 
+	    		user.getId().toString(), 
 			Field.Store.YES, 
 			Field.Index.NOT_ANALYZED));
 	    
@@ -439,8 +439,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = null;
-		writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriter writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 	
@@ -458,8 +457,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	 */
 	private IndexWriter getWriterOverwriteExisting(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = null;
-        writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+		IndexWriter writer = new IndexWriter(directory, analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
 		return writer;
 	}
 	

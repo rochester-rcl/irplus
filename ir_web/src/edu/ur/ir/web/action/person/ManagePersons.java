@@ -42,6 +42,7 @@ import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
+import edu.ur.order.OrderType;
 
 /**
  * Class for dealing with people.
@@ -388,8 +389,10 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	    		+ "   numberOfResultsToShow=" + numberOfResultsToShow + "   sortElement="  + sortElement + "   sortType =" + sortType);
 		rowEnd = rowStart + numberOfResultsToShow;
 	    
-		personNameAuthorities = personService.get(rowStart, 
-	    		numberOfResultsToShow, sortElement, sortType);
+		OrderType orderType  = OrderType.getOrderType(sortType);
+		
+		personNameAuthorities = personService.getPersonNameAuthorityByLastName(rowStart, 
+	    		numberOfResultsToShow, orderType);
 	    totalHits = personService.getCount().intValue();
 		
 		if(rowEnd > totalHits)
