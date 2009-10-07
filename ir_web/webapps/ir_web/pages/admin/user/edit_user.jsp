@@ -135,7 +135,12 @@
 					 <button id="save_user" class="ur_button" 
                                onmouseover="this.className='ur_buttonover';"
                                onmouseout="this.className='ur_button';"
-                               onclick="javascript:YAHOO.ur.email.saveEditUser()";>Save</button>		         	       
+                               onclick="javascript:YAHOO.ur.email.saveEditUser()";>Save</button>	
+                               
+                     <button id="delete_researcher_page" class="ur_button" 
+                               onmouseover="this.className='ur_buttonover';"
+                               onmouseout="this.className='ur_button';"
+                               onclick="YAHOO.ur.email.deleteResearcherPageDialog.showDialog()";>Delete Researcher Page</button>		         	       
           
 		        </div>
 	            <!--  end first tab -->
@@ -217,7 +222,7 @@
 	      <div class="hd">Email Information</div>
 		  <div class="bd">
 		      <form id="addEmail" name="newEmailForm" 
-		              method="post"  action="admin/createEmail.action">
+		              method="post" action="<c:url value="/admin/createEmail.action"/>">
 	                 
 	            <!--  if editing an id must be passed -->     
 		   		<input type="hidden" id="newEmailForm_id"  name="id" value="${irUser.id}"/>
@@ -233,7 +238,7 @@
 	    <div class="hd">Delete Email</div>
 		<div class="bd">
 		    <form id="deleteEmail" name="deleteEmail" method="POST" 
-		              action="admin/deleteEmail.action">
+		              action="<c:url value="/admin/deleteEmail.action"/>">
 		              
 		        <input type="hidden" name="emailId" id="deleteEmailId" value=""/>
 		        <div id="deleteEmailError" class="errorMessage"></div>
@@ -258,6 +263,18 @@
 		</div>
 	</div>    
 
+    <!--  delete the researcher page -->
+    <div id="deleteResearcherPage" class="hidden">
+	    <div class="hd">Delete Researcher Page</div>
+		<div class="bd">
+		    <form id="deleteResearcherPageForm" name="deleteResearcherPageForm" method="post" 
+		              action="<c:url value="/admin/deleteResearcherPage.action"/>">
+		        <input type="hidden" name="researcherUserId" id="researcherUserId" value="${irUser.id}"/>
+		        <div id="deleteResearcherPageError" class="errorMessage"></div>
+			    <p>Are you sure you wish to delete this users researcher page?</p>
+		    </form>
+	    </div>
+	</div>
 
 </body>
 </html>
