@@ -44,6 +44,12 @@
             <result name="deleted">/pages/admin/user/user_deleted.jsp</result>
         </action>
         
+        <action name="deleteResearcherPage"
+            class="edu.ur.ir.web.action.researcher.DeleteResearcherPage">
+            <interceptor-ref name="crudStack" />
+            <result name="success" type="redirectAction">userEditView?id=${researcherUserId}</result>
+        </action>
+        
         <action name="getRolesForUser"
             class="edu.ur.ir.web.action.user.admin.ManageUsers"
             method="getRolesForUser">

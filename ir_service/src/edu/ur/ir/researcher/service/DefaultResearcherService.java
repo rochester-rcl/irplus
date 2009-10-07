@@ -55,7 +55,6 @@ public class DefaultResearcherService implements ResearcherService{
 	/** service for dealing with repositories */
 	private RepositoryService repositoryService;
 	
-
 	/**  Logger  */
 	private static final Logger log = Logger.getLogger(DefaultResearcherService.class);
 
@@ -270,6 +269,14 @@ public class DefaultResearcherService implements ResearcherService{
 	 */
 	public void setRepositorySerivce(RepositoryService repositorySerivce) {
 		this.repositoryService = repositorySerivce;
+	}
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
 	}
 
 }

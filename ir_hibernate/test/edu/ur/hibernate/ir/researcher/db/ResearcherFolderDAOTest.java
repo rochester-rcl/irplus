@@ -843,9 +843,11 @@ public class ResearcherFolderDAOTest {
 		
 		// Start the transaction 
         TransactionStatus ts = tm.getTransaction(td);
+        
 		researcherFolderDAO.makeTransient(researcherFolderDAO.getById(researcherFolder1.getId(), false));
 		researcherFolderDAO.makeTransient(researcherFolderDAO.getById(researcherFolder2.getId(), false));
 		researcherFolderDAO.makeTransient(researcherFolderDAO.getById(researcherFolder.getId(), false));
+		user = userDAO.getById(user.getId(), false);
 		user.setResearcher(null);
 		userDAO.makePersistent(user);
 		tm.commit(ts);

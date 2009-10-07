@@ -36,6 +36,7 @@ var verifyEmailAction = basePath + 'admin/setVerifiedEmail.action';
 var mySearchNameAction =  basePath + 'admin/searchAuthoritativeName.action';
 var removeNameAction =  basePath + 'admin/removeUserAuthoritativeName.action';
 var addNameAction =  basePath + 'admin/addUserAuthoritativeName.action';
+var deleteResearcherPageAction =  basePath + 'admin/deleteResearcherPage.action';
 
 // object to hold the user emails.
 var myEmailTable = new YAHOO.ur.table.Table('myEmails', 'newEmails');
@@ -686,6 +687,49 @@ YAHOO.ur.email = {
 	           addNameAction + '?id=' + userId + '&authorityId=' + authoritativeNameId, YAHOO.ur.email.getUserAuthoritativeNameCallback);
 	},
 	
+	
+	/**
+	 * Creates a YUI dialog for when an admin wants to delete
+	 * a users researcher page
+	 */
+	createDeleteResearcherPageDialog : function()
+	{
+	
+		// Define various event handlers for Dialog
+		var handleSubmit = function() 
+		{
+		    var deleteResearcherForm = document.getElementById('deleteResearcherPageForm');
+		    deleteResearcherForm.submit();
+		};
+			
+		// handle a cancel of deleting researcher page dialog
+		var handleCancel = function() {
+		    YAHOO.ur.email.deleteResearcherPageDialog.hide();
+		};
+	
+		// Instantiate the Dialog
+		// make it modal - 
+		// it should not start out as visible - it should not be shown until 
+		// delete email button is clicked.
+		YAHOO.ur.email.deleteResearcherPageDialog = new YAHOO.widget.Dialog('deleteResearcherPage', 
+	        { width : "400px",
+			  visible : false, 
+			  modal : true,
+			  buttons : [ { text:'Yes', handler:handleSubmit, isDefault:true },
+						  { text:'No', handler:handleCancel } ]
+			} );
+
+	   	// show and center the sponsor dialog
+        YAHOO.ur.email.deleteResearcherPageDialog.showDialog = function()
+        {
+            YAHOO.ur.email.deleteResearcherPageDialog.center();
+            YAHOO.ur.email.deleteResearcherPageDialog.show();
+        }			
+				
+		// Render the Dialog
+		YAHOO.ur.email.deleteResearcherPageDialog.render();
+	},
+	
 	/** initialize the page this is called once the dom has
 	 *  been created
 	 */ 
@@ -695,8 +739,10 @@ YAHOO.ur.email = {
 	    YAHOO.ur.email.createNewEmailDialog();
 	    YAHOO.ur.email.createDeleteEmailDialog();
 	    YAHOO.ur.email.createEmailConfirmationDialog();
+	    YAHOO.ur.email.createDeleteResearcherPageDialog();
 	    YAHOO.util.Event.addListener("search_button", "click", 
 		    YAHOO.ur.email.handleSearchFormSubmit); 
+	    
 	}    	
 }
 

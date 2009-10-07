@@ -265,7 +265,7 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 	 * @see edu.ur.ir.researcher.ResearcherService#deleteFolder(ResearcherFolder)
 	 */
 	public void deleteFolder(ResearcherFolder researcherFolder) {
-		
+		/*
 		List<ResearcherFile> researcherFiles = researcherFolderDAO.getAllFilesForFolder(researcherFolder);
 		log.debug("researcherFiles="+researcherFiles);
 		List<ResearcherPublication> researcherPublications = researcherFolderDAO.getAllPublicationsForFolder(researcherFolder);
@@ -289,6 +289,7 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    deleteLink(aLink);
 		}
 		log.debug("Deleted all contents");
+		*/
 		researcherFolderDAO.makeTransient(researcherFolder);
 
 	}

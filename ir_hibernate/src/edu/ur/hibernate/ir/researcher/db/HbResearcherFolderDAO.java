@@ -225,48 +225,10 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
-	public void makeTransient(ResearcherFolder entity) {
-		
-		log.debug("deleting folder " + entity);
-		
-		Long[] values = new Long[]{entity.getTreeRoot().getId(), entity.getLeftValue(), entity.getRightValue()};
-		
-		String deleteFiles = "DELETE ResearcherFile AS file " +
-		"WHERE file.id IN " +
-		"( " +
-		"  SELECT aFile.id " +
-		"  FROM ResearcherFile aFile " +
-		"  WHERE aFile.parentFolder.treeRoot.id = ? " +
-		"  and aFile.parentFolder.leftValue between ? and ? " +
-		")";
-
-		
-		int numDeleted = hbCrudDAO.getHibernateTemplate().bulkUpdate(deleteFiles, values);
-		
-		if(log.isDebugEnabled())
-		{
-		    log.debug("deleted " + numDeleted + 
-		    		" files from root folder id = " 
-		    		+ entity.getTreeRoot().getId() + 
-		    		" where left value between " + entity.getLeftValue() + 
-		    		" and " + entity.getRightValue());
-		}
-	    
-		
-		String deleteFolders = "delete ResearcherFolder pf where pf.treeRoot.id = ? and " +
-		"pf.leftValue between ? and ?";
-		
-		numDeleted = hbCrudDAO.getHibernateTemplate().bulkUpdate(deleteFolders, values);
-		
-		if(log.isDebugEnabled())
-		{
-		    log.debug("deleted " + numDeleted + 
-		    		" folders from root folder id = " 
-		    		+ entity.getTreeRoot().getId() + 
-		    		" where left value between " + entity.getLeftValue() + 
-		    		" and " + entity.getRightValue());
-		}
-		
+	public void makeTransient(ResearcherFolder entity) 
+	{
+		log.debug("Deleteing researcher folder " + entity);
+		hbCrudDAO.makeTransient(entity);
 	}
 
 	/**

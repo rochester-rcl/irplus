@@ -100,10 +100,13 @@
 
 		<!--  Children publications - cannot cascade the delete orphan because child
 			publications can be promoted to root publications -->
-		<set name="publications" inverse="true" 
+		<set name="publications" 
+		    inverse="true" 
 		    optimistic-lock="false"
 		    cascade="all" 
-		    access="field" lazy="true" fetch="subselect">
+		    access="field" 
+		    lazy="true" 
+		    fetch="subselect">
 			<key column="researcher_folder_id" not-null="true"/>
 			<one-to-many class="ResearcherPublication"/>
 		</set>
@@ -124,9 +127,9 @@
 		<!--  Children links - cannot cascade the delete orphan because child
 			links can be promoted to root links -->
 		<set name="links" 
-		    optimistic-lock="false"
 		    inverse="true" 
-		    cascade="all" 
+		    optimistic-lock="false"
+		    cascade="all"
 		    access="field" 
 		    lazy="true"
 		    fetch="subselect">

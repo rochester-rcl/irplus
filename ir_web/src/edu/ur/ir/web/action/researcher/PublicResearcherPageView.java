@@ -141,12 +141,10 @@ Comparator<IrFile>, UserIdAware {
     	LinkedList<IrFile> pictures = new LinkedList<IrFile>();
 	    
 	    pictures.addAll(researcher.getPictures());
-	    numResearcherPictures = pictures.size();
-	    
 	    if (researcher.getPrimaryPicture() != null) {
 	    	pictures.add(researcher.getPrimaryPicture());
 	    }
-	    
+	    numResearcherPictures = pictures.size();
         // sort the pictures to assure order
         Collections.sort(pictures, this);
 
