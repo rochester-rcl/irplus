@@ -176,16 +176,23 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	 */
 	public String registerUser() throws NoIndexFoundException, FileSharingException
 	{
-		log.debug("creating a user = " + irUser.getUsername());
-		
+
 		String returnVal = SUCCESS;
-		
-		IrUser myIrUser = 
-			userService.getUser(irUser.getUsername());
-		
+	
+		boolean failure = false;
+		IrUser myIrUser = null;
 		LicenseVersion license = repository.getDefaultLicense();
 		
-		boolean failure = false;
+		if( irUser.getUsername() == null || irUser.getUsername().trim().equals(""))
+		{
+			failure = true;
+			addFieldError("enterUserName", "You must enter a user name");
+		}
+		else
+		{
+		     myIrUser = 
+			    userService.getUser(irUser.getUsername().trim());
+		}
 		
 		
 		if(irUser.getPassword() == null || irUser.getPassword().length() < 8)
@@ -619,15 +626,15 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		// we do not use the created ir user but instead
 		// will be creating a new user.  So the information is copied over
 		// to save it.
-		String firstName = irUser.getFirstName();
-		String lastName = irUser.getLastName();
-		String ldapUserName = irUser.getLdapUserName();
+		String firstName = irUser.getFirstName().trim();
+		String lastName = irUser.getLastName().trim();
+		String ldapUserName = irUser.getLdapUserName().trim();
 		
 				
 		defaultEmail.setVerified(false);
 		defaultEmail.setToken(TokenGenerator.getToken());
 				
-		irUser = userService.createUser(irUser.getPassword(), irUser.getUsername(), 
+		irUser = userService.createUser(irUser.getPassword().trim(), irUser.getUsername().trim(), 
 			    		defaultEmail);
 		irUser.setAccountLocked(accountLocked);
 		irUser.setFirstName(firstName);
