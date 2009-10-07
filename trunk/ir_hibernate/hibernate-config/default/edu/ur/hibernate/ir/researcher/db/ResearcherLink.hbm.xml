@@ -50,13 +50,14 @@
 			not-null="true" access="field" />
         
         <!--  The researcher folder -->
-        <many-to-one name="parentFolder" class="ResearcherFolder" 
+        <many-to-one name="parentFolder" 
+              class="ResearcherFolder" 
               unique="true" 
               column="researcher_folder_id" 
               cascade="save-update"
-              access="field"/>
-
-        <!--  The researcher who owns this file -->
+              access="field"/>    
+              
+        <!--  The researcher who owns this link -->
         <many-to-one name="researcher" 
               class="Researcher" 
               unique="true" 

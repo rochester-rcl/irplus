@@ -54,7 +54,8 @@
               access="field"/>
         
         <!--  The researcher folder -->
-        <many-to-one name="parentFolder" class="ResearcherFolder" 
+        <many-to-one name="parentFolder" 
+              class="ResearcherFolder" 
               unique="true" 
               column="researcher_folder_id" 
               cascade="save-update"

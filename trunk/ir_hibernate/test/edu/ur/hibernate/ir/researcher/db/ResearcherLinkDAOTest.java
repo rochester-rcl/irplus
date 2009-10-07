@@ -26,11 +26,14 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
+import edu.ur.exception.DuplicateNameException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.item.GenericItemDAO;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherDAO;
+import edu.ur.ir.researcher.ResearcherFolder;
+import edu.ur.ir.researcher.ResearcherFolderDAO;
 import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherLinkDAO;
 import edu.ur.ir.user.IrUser;
@@ -77,9 +80,12 @@ public class ResearcherLinkDAOTest {
     /** Researcher data access */
     ResearcherDAO researcherDAO= (ResearcherDAO) ctx.getBean("researcherDAO");
     
+    /** Researcher data access */
+    ResearcherFolderDAO researcherFolderDAO= (ResearcherFolderDAO) ctx.getBean("researcherFolderDAO");
+    
     
 	/**
-	 * Test personal item persistence
+	 * Test researcher link test
 	 * 
 	 */
 	@Test
@@ -177,6 +183,56 @@ public class ResearcherLinkDAOTest {
 		tm.commit(ts);
 		
 		assert userDAO.getById(user.getId(), false) == null : "Should not be able to find other";
+	}
+	
+	/**
+	 * Test adding a link to a researcher folder
+	 * @throws DuplicateNameException 
+	 * 
+	 */
+	@Test
+	public void folderResearcherLinkDAOTest() throws DuplicateNameException {
+
+		TransactionStatus ts = tm.getTransaction(td);
+		UserEmail userEmail = new UserEmail("user@email");
+
+		// create a user who has their own folder
+		IrUser user = new IrUser("user", "password");
+		user.setPasswordEncoding("none");
+		user.addUserEmail(userEmail, true);
+		
+		// create the user 
+		userDAO.makePersistent(user);
+		
+		Researcher researcher = new Researcher(user);
+		researcherDAO.makePersistent(researcher);
+		
+		tm.commit(ts);
+		
+
+		ts = tm.getTransaction(td);
+		researcher = researcherDAO.getById(researcher.getId(), false);
+		ResearcherFolder folder = researcher.createRootFolder("My Folder");
+		ResearcherLink researcherLink = researcher.createRootLink("www.google.com", "name", "description");
+		folder.addLink(researcherLink);
+		researcherDAO.makePersistent(researcher);
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		folder = researcherFolderDAO.getById(folder.getId(), false);
+		researcherFolderDAO.makeTransient(folder);
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		user.setResearcher(null);
+		userDAO.makePersistent(user);
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+		researcherDAO.makeTransient(researcherDAO.getById(researcher.getId(), false));
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+	    tm.commit(ts);
+	
 	}
 
 }

@@ -673,9 +673,25 @@ public class DefaultRepositoryService implements RepositoryService {
 	 * @see edu.ur.ir.repository.RepositoryService#deleteIrFile(edu.ur.ir.file.IrFile)
 	 */
 	public boolean deleteIrFile(IrFile irFile) {
+	
+		LinkedList<FileInfo> filesToDelete = new LinkedList<FileInfo>();
+		
 		FileInfo fileInfo = irFile.getFileInfo();
+	    filesToDelete.add(fileInfo);
+		
+		Set<TransformedFile> transforms = irFile.getTransformedFiles();
+		for(TransformedFile tf : transforms)
+		{
+			FileInfo info = tf.getTransformedFile();
+			filesToDelete.add(info);
+		}
+		
 		irFileDAO.makeTransient(irFile);
-		fileServerService.deleteFile(fileInfo);
+		
+		for(FileInfo info : filesToDelete)
+		{
+		    fileServerService.deleteFile(info);
+		}
 		return true;
 	}
 
