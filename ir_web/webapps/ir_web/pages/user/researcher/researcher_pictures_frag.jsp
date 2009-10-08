@@ -80,14 +80,14 @@
 					</td>
 		</c:if>			
 			
-		<c:forEach var="irFile" items="${researcher.pictures}" varStatus="status">
+		<c:forEach var="picture" items="${researcher.pictures}" varStatus="status">
 			
-			<c:if test="${researcher.primaryPicture != null }">
+			<c:if test="${picture != null }">
 				<c:set var="count" value="${status.count + 1}" scope="page"/>
-				<c:set var="primaryPictureCount" value="1" scope="page"/>
+				<c:set var="pictureCount" value="1" scope="page"/>
 			</c:if>
 
-			<c:if test="${status.count == 1 && researcher.primaryPicture == null}">
+			<c:if test="${status.count == 1 && picture == null}">
 				<tr>
 			</c:if>
 
@@ -96,9 +96,9 @@
 				<table align="center" >
 				<tr>
 				<td>
-				    <c:if test="${ir:hasThumbnail(researcher.primaryPicture)}">
+				    <c:if test="${ir:hasThumbnail(picture)}">
 				        <c:url var="url" value="/researcherThumbnailDownloader.action">
-                            <c:param name="irFileId" value="${irFile.id}"/>
+                            <c:param name="irFileId" value="${picture.id}"/>
                             <c:param name="researcherId" value="${researcher.id}"/>
                         </c:url>
                         <img height="66px" width="100px" src="${url}"/>
@@ -112,7 +112,7 @@
 					<button class="ur_button"
 						onmouseover="this.className='ur_buttonover';"
 						onmouseout="this.className='ur_button';"
-						onclick="javascript:YAHOO.ur.edit.researcher.setAsDefaultPicture(${researcher.id}, ${irFile.id});"
+						onclick="javascript:YAHOO.ur.edit.researcher.setAsDefaultPicture(${researcher.id}, ${picture.id});"
 						id="setDefaultPicture">Set as Primary</button>
 				</td>
 				</tr>
@@ -122,19 +122,19 @@
 					<button class="ur_button"
 						onmouseover="this.className='ur_buttonover';"
 						onmouseout="this.className='ur_button';"
-						onclick="javascript:YAHOO.ur.edit.researcher.confirmPictureDelete(${researcher.id}, ${irFile.id}, false);"
+						onclick="javascript:YAHOO.ur.edit.researcher.confirmPictureDelete(${researcher.id}, ${picture.id}, false);"
 						id="deleteResearcherPictureConfirm">Delete Picture&nbsp;</button>
 				</td>
 				</tr>
 				</table>
 			</td>
 			
-			<c:if test="${ ((status.count + primaryPictureCount) % 5) == 0}">
+			<c:if test="${ ((status.count + pictureCount) % 5) == 0}">
 				</tr>
 				<tr>
 			</c:if>
 						
-			<c:if test="${ (numberOfResearcherPictures+ primaryPictureCount) == (status.count + primaryPictureCount)}">
+			<c:if test="${ (numberOfResearcherPictures+ pictureCount) == (status.count + pictureCount)}">
 				</tr>
 			</c:if>								
 		</c:forEach>
