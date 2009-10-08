@@ -89,7 +89,7 @@
             <c:import url="/inc/header.jsp"/>
             <!--  path to this collection -->
             <div id="path">
-                <h3>Edit Collection: <a href="admin/viewInstitutionalCollections.action">${collection.repository.name}</a> >
+                <h3>Edit Collection: <a href="<c:url value="/admin/viewInstitutionalCollections.action"/>">${collection.repository.name}</a> &gt;
                     <c:forEach var="collection" items="${collectionPath}">
                         <c:url var="pathCollectionUrl" value="/admin/viewInstitutionalCollections.action">
                             <c:param name="parentCollectionId" value="${collection.id}"/>
