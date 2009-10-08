@@ -73,19 +73,18 @@
 	        
 	        <br/>
 	        <br/>
-	        <ur:div id="newPendingApprovals"></ur:div>
-	      
+	        <div id="newPendingApprovals"></div>
         
-	        <ur:div id="approveAffiliationDialog" cssClass="hidden">
-	            <ur:div cssClass="hd">Approve affiliation</ur:div>
-		        <ur:div cssClass="bd">
-		            <ur:basicForm id="approve_Affiliation" name="approveAffiliation" method="post" 
-		                action="admin/saveAffiliationApproval.action">
+	        <div id="approveAffiliationDialog" class="hidden">
+	            <div class="hd">Approve affiliation</div>
+		        <div class="bd">
+		            <form id="approve_Affiliation" name="approveAffiliation" method="post" 
+		                action="<c:url value="/admin/saveAffiliationApproval.action"/>">
 		              
 			             <p>Are you sure you want to approve the affiliation(s)?</p>
-		            </ur:basicForm>
-		        </ur:div>
-	        </ur:div>
+		            </form>
+		        </div>
+	        </div>
 	        
       </div>
       <!--  end body div -->
