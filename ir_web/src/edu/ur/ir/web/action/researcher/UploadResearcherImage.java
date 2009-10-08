@@ -104,7 +104,7 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 		}
 		
 		
-		picture = repositoryService.createIrFile(repository, file, fileFileName, "primary news picture for researcher id = " 
+		picture = repositoryService.createIrFile(repository, file, fileFileName, "picture for researcher id = " 
 				+ researcher.getId());
 		
 		if( primaryResearcherPicture )
