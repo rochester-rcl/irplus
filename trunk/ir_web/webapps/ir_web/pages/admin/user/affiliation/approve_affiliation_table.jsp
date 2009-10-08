@@ -29,12 +29,12 @@
 </c:if>
 
 <div class="dataTable">
-	<ur:basicForm method="post" id="pendingApprovals" name="myPendingApprovals" >
+	<form method="post" id="pendingApprovals" name="myPendingApprovals" >
 	             
 	    <urstb:table width="100%">
 	        <urstb:thead>
 	            <urstb:tr>
-					<urstb:td><ur:checkbox name="checkAllSetting" 
+					<urstb:td><input type="checkbox" name="checkAllSetting" 
 								value="off" onClick="YAHOO.ur.affiliation.approval.setCheckboxes();"/></urstb:td>         
 	                <urstb:td>Id</urstb:td>
              
@@ -62,7 +62,7 @@
 	                        onMouseOver="this.className='highlight'"
 	                        onMouseOut="this.className='${rowClass}'">
 	                        <urstb:td>
-		                        <ur:checkbox name="userIds" value="${pendingUser.id}"/>
+		                        <input type="checkbox" name="userIds" value="${pendingUser.id}"/>
 	                        </urstb:td>
 	                        <urstb:td>
 		                        ${pendingUser.id}
@@ -90,7 +90,7 @@
 	                    </urstb:tr>
 	            </urstb:tbody>
 	        </urstb:table>
-		</ur:basicForm>
+		</form>
 </div>	
 
 <c:if test="${totalHits > 0}">
