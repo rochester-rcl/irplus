@@ -43,8 +43,8 @@ YAHOO.ur.affiliation.approval = {
 		{
 		    success: function(o) 
 		    {
-		    	// check for the timeout - forward user to login page if timout
-	            // occured
+		    	// check for the timeout - forward user to login page if timeout
+	            // occurred
 	            if( !urUtil.checkTimeOut(o.responseText) )
 	            {
 		            var divToUpdate = document.getElementById('newPendingApprovals');
@@ -88,7 +88,15 @@ YAHOO.ur.affiliation.approval = {
 	    
 		// Define various event handlers for Dialog
 		var handleSubmit = function() {
-			this.submit();
+			if (!urUtil.checkForNoSelections(document.myPendingApprovals.userIds) )
+		    {
+				 YAHOO.ur.affiliation.approval.approveAffiliationDialog.hide();
+			     alert('Please select at least one user to approve.');
+	        } 
+			else
+			{
+			    this.submit();
+			}
 		};
 			
 		// handle a cancel of affiliation approval dialog
@@ -96,12 +104,10 @@ YAHOO.ur.affiliation.approval = {
 		    YAHOO.ur.affiliation.approval.approveAffiliationDialog.hide();
 		};
 		
-		var handleSuccess = function(o) {
-	
-	        YAHOO.ur.affiliation.approval.approveAffiliationDialog.hide();
-		    
-		    // reload the table
-		    myPendingApprovalTable.submitForm(myPendingApprovalAction);
+		var handleSuccess = function(o) 
+		{
+			 YAHOO.ur.affiliation.approval.approveAffiliationDialog.hide();
+			 YAHOO.ur.affiliation.approval.getPendingApprovals(0,1,1,'asc');
 		};
 		
 		// handle form submission failure
@@ -130,6 +136,7 @@ YAHOO.ur.affiliation.approval = {
 		// Submit the form	
 		YAHOO.ur.affiliation.approval.approveAffiliationDialog.submit = function()
 		{
+			
 		   YAHOO.util.Connect.setForm('myPendingApprovals');
 		    
 			var selectedAffiliationIds = "";
