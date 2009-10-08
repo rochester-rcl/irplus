@@ -464,6 +464,7 @@
        class="edu.ur.ir.researcher.service.DefaultResearcherService">
        <property name="researcherDAO" ref="researcherDAO"/>
        <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
+       <property name="repositoryService" ref="repositoryService"/>
    </bean>
    
    <!-- ****************************************** --> 
