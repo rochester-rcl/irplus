@@ -84,19 +84,16 @@ implements ServletResponseAware, ServletRequestAware
 		if( institutionalCollection != null )
 		{
 			// causes a load form the database;
-			IrFile irFile = institutionalCollection.getPrimaryPicture();
-			if( !irFile.getId().equals(irFileId))
-			{
-				irFile = institutionalCollection.getPicture(irFileId);
-			}
+			IrFile	irFile = institutionalCollection.getPicture(irFileId);
 		   
+			log.debug("Found ir file " + irFile);
 			if( irFile != null )
 			{
                 FileInfo fileInfo = irFile.getFileInfo();
         
                 if( log.isDebugEnabled() )
                 {
-                    log.debug("Found ir File " + irFile);
+                    log.debug("sending file for download " + irFile);
                 }
                 webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
 			}
