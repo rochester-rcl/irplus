@@ -73,7 +73,8 @@
                        <c:url var="itemUrl" value="/institutionalPublicationPublicView.action">
                            <c:param name="institutionalItemId" value="${item.id}"/>
                        </c:url>
-                       <a href="${itemUrl}">${item.institutionalCollection.name} - ${item.name}</a>
+                       <a href="${itemUrl}">${item.institutionalCollection.name} - ${item.name}</a><br/>
+                       
                    </c:forEach>
                </c:if>
                 <c:if test="${!ur:isEmpty(reviewableItems)}">
@@ -83,7 +84,7 @@
                    <br/>
                    <br/>
                    <c:forEach items="${reviewableItems}" var="reviewableItem">
-                       ${reviewableItem.institutionalCollection.name} - ${reviewableItem.item.name}
+                       ${reviewableItem.institutionalCollection.name} - ${reviewableItem.item.name}<br/>
                    </c:forEach>
                </c:if>
                <c:if test="${ur:isEmpty(institutionalItems) && ur:isEmpty(reviewableItems)}">
