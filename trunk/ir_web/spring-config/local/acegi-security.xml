@@ -46,7 +46,7 @@
 		<property name="authenticationFailureUrl" value="/acegilogin.jsp?login_error=1"/>
 		<property name="defaultTargetUrl" value="/user/workspace.action"/>
 		<property name="filterProcessesUrl" value="/j_spring_security_check"/>
-		<property name="ldapEnabled" value="true"/>
+		<property name="ldapEnabled" value="${ldap.enabled}"/>
   </bean>
   
   <bean id="authenticationProcessingFilterEntryPoint"
