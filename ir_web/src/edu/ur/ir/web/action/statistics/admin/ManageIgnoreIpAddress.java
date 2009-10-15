@@ -217,7 +217,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 		JobDetail jobDetail = new JobDetail("reCountFileDownloadsJob", Scheduler.DEFAULT_GROUP, 
 				edu.ur.ir.statistics.service.DefaultFileDownloadStatsUpdateJob.class);
 		
-		jobDetail.getJobDataMap().put("batchSize", new Integer(batchSize));
+		jobDetail.getJobDataMap().put("batchSize", new Integer(1000));
 		
 		//create a trigger that fires once right away
 		Trigger trigger = TriggerUtils.makeImmediateTrigger(0,0);

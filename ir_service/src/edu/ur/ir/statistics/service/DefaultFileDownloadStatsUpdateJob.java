@@ -18,7 +18,10 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import edu.ur.ir.ErrorEmailService;
 
+import edu.ur.ir.statistics.DownloadStatisticsService;
+import edu.ur.ir.statistics.FileDownloadInfo;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecord;
+import edu.ur.ir.statistics.IpIgnoreFileDownloadInfo;
 
 /**
  * Job to process download roll up requests.
@@ -35,7 +38,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 	private static final Logger log = Logger.getLogger(DefaultFileDownloadStatsUpdateJob.class);
 	
 	/**  Batch size for processing the records  */
-	public static final int DEFAULT_BATCH_SIZE = 25;
+	public static final int DEFAULT_BATCH_SIZE = 1000;
 	
 	
 	/**
@@ -70,7 +73,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		    throw new JobExecutionException("problem with the Scheduler", e2);
 		}
 		  
-		DefaultDownloadStatisticsService downloadStatisticsService = null;
+		DownloadStatisticsService downloadStatisticsService = null;
 		ErrorEmailService errorEmailService;
 		
 
@@ -78,7 +81,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		TransactionDefinition td = null;
 		try
 		{
-			downloadStatisticsService = (DefaultDownloadStatisticsService)
+			downloadStatisticsService = (DownloadStatisticsService)
 			    applicationContext.getBean("downloadStatisticsService");
 			errorEmailService = (ErrorEmailService)applicationContext.getBean("errorEmailService");
 			tm = (PlatformTransactionManager) applicationContext.getBean("transactionManager");
@@ -91,30 +94,11 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		}
 		
 		
-		TransactionStatus ts = null;
-		try
-		{
-			ts = tm.getTransaction(td);
-			downloadStatisticsService.removeIgnoreCountsFromDownloadInfo(batchSize);
-			downloadStatisticsService.removeOkCountsFromIgnoreDownloadInfo(batchSize);
-			downloadStatisticsService.updateAllRepositoryFileRollUpCounts();
-		}
-		catch(Exception e)
-		{
-			errorEmailService.sendError(e);
-			throw new JobExecutionException("Problem preparing records for processing");
-		}
-		finally
-		{
-			if( ts != null )
-			{
-				if( tm != null )
-				{
-				    tm.commit(ts);
-				}
-			}
-		}
+		removeIgnoreCountsFromDownloadInfo(errorEmailService, tm, td, downloadStatisticsService, batchSize);
+		removeOkCountsFromIgnoreDownloadInfo(errorEmailService, tm, td, downloadStatisticsService, batchSize);
+		updateAllRepositoryCounts(errorEmailService, tm, td, downloadStatisticsService);
 		
+		TransactionStatus ts = null;
 		try
 		{
 			List<FileDownloadRollUpProcessingRecord> records = new LinkedList<FileDownloadRollUpProcessingRecord>();
@@ -149,6 +133,185 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			}
 				
 		}
+	}
+	
+	/**
+	 * @param errorEmailService
+	 * @param tm
+	 * @param td
+	 * @param downloadStatisticsService
+	 * @param batchSize
+	 * @return
+	 * @throws JobExecutionException
+	 */
+	private int removeIgnoreCountsFromDownloadInfo(ErrorEmailService errorEmailService,
+			PlatformTransactionManager tm,
+			TransactionDefinition td,
+			DownloadStatisticsService downloadStatisticsService,
+			int batchSize) throws JobExecutionException
+	{
+		int start = 0;
+		int totalProcessed = 0;
+		TransactionStatus ts = null;
+		try
+		{
+		    List<FileDownloadInfo> infos = new LinkedList<FileDownloadInfo>();
+		    do
+		    {
+		    	ts = tm.getTransaction(td);
+			    if(log.isDebugEnabled())
+			    {
+				    log.debug("removeIgnoreCountsFromDownloadInfo total processed = " + totalProcessed + " batch Size = " + batchSize);
+			    }
+			    infos = downloadStatisticsService.getIgnoreCountsFromDownloadInfo(start, batchSize);
+			    log.debug("infos size = " + infos.size());
+			    for( FileDownloadInfo info : infos)
+			    {
+				    totalProcessed = totalProcessed + 1;
+				    log.debug("Processing info record " + info);
+				    IpIgnoreFileDownloadInfo ignoreRecord = downloadStatisticsService.getIpIgnoreFileDownloadInfo(info.getIpAddress(), info.getIrFileId(), info.getDownloadDate());
+				    if( ignoreRecord == null )
+				    {
+					    ignoreRecord = new IpIgnoreFileDownloadInfo(info.getIpAddress(), info.getIrFileId(), info.getDownloadDate());
+					    ignoreRecord.setDownloadCount(info.getDownloadCount());
+				    }
+				    else
+				    {
+					    ignoreRecord.setDownloadCount(ignoreRecord.getDownloadCount() + info.getDownloadCount());
+				    }
+				    downloadStatisticsService.save(ignoreRecord);
+				    downloadStatisticsService.delete(info);
+			    }
+			    tm.commit(ts);
+			
+		    }while(infos.size() > 0 );
+		}
+		catch(Exception e)
+		{
+			errorEmailService.sendError(e);
+			throw new JobExecutionException("Problem preparing records for processing");
+		}
+		finally
+		{
+			if( ts != null && !ts.isCompleted())
+			{
+				if( tm != null )
+				{
+				    tm.commit(ts);
+				}
+			}
+		}
+		
+		return new Integer(totalProcessed);
+	}
+	
+	/**
+	 * Remove all ok counts from ingnore download info.
+	 * 
+	 * @param errorEmailService
+	 * @param tm
+	 * @param td
+	 * @param downloadStatisticsService
+	 * @param batchSize
+	 * @return
+	 * @throws JobExecutionException
+	 */
+	private int removeOkCountsFromIgnoreDownloadInfo(ErrorEmailService errorEmailService,
+			PlatformTransactionManager tm,
+			TransactionDefinition td,
+			DownloadStatisticsService downloadStatisticsService,
+			int batchSize) throws JobExecutionException
+	{
+		int start = 0;
+		int totalProcessed = 0;
+		TransactionStatus ts = null;
+		try
+		{
+			List<IpIgnoreFileDownloadInfo> okCounts = new LinkedList<IpIgnoreFileDownloadInfo>();
+		    do
+		    {
+		    	ts = tm.getTransaction(td);
+		    	okCounts = downloadStatisticsService.getIgnoreInfoNowAcceptable(start, batchSize );
+		    	if(log.isDebugEnabled())
+				{
+					log.debug(" removeOkCountsFromIgnoreDownloadInfo total processed = " + totalProcessed + " batch Size = " + batchSize);
+				}
+				for( IpIgnoreFileDownloadInfo okInfo : okCounts)
+			    {
+			    	totalProcessed = totalProcessed + 1;
+			    	log.debug("processing ignore info record " + okInfo);
+			    	FileDownloadInfo downloadRecord = downloadStatisticsService.getFileDownloadInfo(okInfo.getIpAddress(), okInfo.getIrFileId(), okInfo.getDownloadDate());
+			    	if( downloadRecord == null )
+			    	{
+			    		downloadRecord = new FileDownloadInfo(okInfo.getIpAddress(), okInfo.getIrFileId(), okInfo.getDownloadDate());
+			    		downloadRecord.setDownloadCount(okInfo.getDownloadCount());
+			    	}
+			    	else
+			    	{
+			    		downloadRecord.setDownloadCount(okInfo.getDownloadCount() + downloadRecord.getDownloadCount());
+			    	}
+			    	downloadStatisticsService.save(downloadRecord);
+			    	downloadStatisticsService.delete(okInfo);
+			    }
+			    tm.commit(ts);
+			
+		    }while(okCounts.size() > 0 );
+		}
+		catch(Exception e)
+		{
+			errorEmailService.sendError(e);
+			throw new JobExecutionException("Problem preparing records for processing");
+		}
+		finally
+		{
+			if( ts != null && !ts.isCompleted())
+			{
+				if( tm != null )
+				{
+				    tm.commit(ts);
+				}
+			}
+		}
+		
+		return new Integer(totalProcessed);
+	}
+	
+	/**
+	 * Update all repository counts to be re-counted.
+	 * 
+	 * @param errorEmailService
+	 * @param tm
+	 * @param td
+	 * @param downloadStatisticsService
+	 * @throws JobExecutionException
+	 */
+	private void updateAllRepositoryCounts(ErrorEmailService errorEmailService,
+			PlatformTransactionManager tm,
+			TransactionDefinition td,
+			DownloadStatisticsService downloadStatisticsService) throws JobExecutionException
+	{
+		TransactionStatus ts = null;
+		try
+		{
+			ts = tm.getTransaction(td);
+			downloadStatisticsService.updateAllRepositoryFileRollUpCounts();
+		}
+		catch(Exception e)
+		{
+			errorEmailService.sendError(e);
+			throw new JobExecutionException("Problem preparing records for processing");
+		}
+		finally
+		{
+			if( ts != null )
+			{
+				if( tm != null )
+				{
+				    tm.commit(ts);
+				}
+			}
+		}
+
 	}
 
 }

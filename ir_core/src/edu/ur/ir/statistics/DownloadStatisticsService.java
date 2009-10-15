@@ -39,7 +39,14 @@ public interface DownloadStatisticsService {
 	 * 
 	 * @param fileDownloadInfo
 	 */
-	public void saveFileDownloadInfo(FileDownloadInfo fileDownloadInfo) ;
+	public void save(FileDownloadInfo fileDownloadInfo);
+	
+	/**
+	 * Save ignore ip file dlownload info 
+	 * 
+	 * @param fileDownloadInfo
+	 */
+	public void save(IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo);
 	
 	/**
 	 * Get the file download info 
@@ -235,21 +242,23 @@ public interface DownloadStatisticsService {
 	public InstitutionalItemDownloadCount getInstitutionalItemDownloadCountByPersonName(Set<PersonName> personNames);
 	
 	/**
-	 * Moves counts that should be ignored from the download info counts
-	 * to the ignore download info counts.
+	 * Gets a list of file info counts that should be ignored from the download info 
 	 * 
+	 * @param start - start position
 	 * @param batchSize - batch size to process.
-	 * @return total number of records processed
+	 * @return list of records starting at start position and returning no more than batch size
 	 */
-	public Integer removeIgnoreCountsFromDownloadInfo(int batchSize);
+	public List<FileDownloadInfo> getIgnoreCountsFromDownloadInfo(int start, int batchSize);
 	
 	/**
-	 * Move counts that are ignored that are actually ok into the file download counts.
+	 * Get ignored counts that are actually ok to place into the file download counts.
 	 * 
 	 * @param batchSize - number of records to process at once.
-	 * @return total number of records processed
+	 * @param start - start position in the list
+	 * 
+	 * @return list of records starting at start position and returning no more than batch size
 	 */
-	public Integer removeOkCountsFromIgnoreDownloadInfo(int batchSize);
+	public List<IpIgnoreFileDownloadInfo> getIgnoreInfoNowAcceptable(int start, int batchSize);
 	
 	/**
 	 * Get the file download info.
