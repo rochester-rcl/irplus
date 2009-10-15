@@ -167,10 +167,10 @@ public class DefaultStatisticsServiceTest {
         ts = tm.getTransaction(td);
         FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.0.0.1", irFile1.getId(), new Date());
         downloadInfo1.setDownloadCount(1);
-        statisticsService.saveFileDownloadInfo(downloadInfo1);
+        statisticsService.save(downloadInfo1);
         FileDownloadInfo downloadInfo2 = new FileDownloadInfo("123.0.0.7", irFile2.getId(), new Date());
         downloadInfo2.setDownloadCount(2);
-        statisticsService.saveFileDownloadInfo(downloadInfo2);  
+        statisticsService.save(downloadInfo2);  
         
         Long count1 = statisticsService.getNumberOfFileDownloadsForIrFile(irFile1.getId());
         statisticsService.updateRollUpCount(irFile1.getId(), count1);
