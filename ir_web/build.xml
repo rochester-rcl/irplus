@@ -84,6 +84,9 @@
 	
 	<!-- location for production staging -->
 	<property name="production.staging.dir" value="${basedir}/production-staging"/>
+	
+	<!-- location for production staging -->
+	<property name="production.web.xml" value="${webapp.conf.dir}/web.xml"/>
 
 	<!-- import the base set of files -->
     <import file="${base.build.file}"/>
@@ -412,7 +415,7 @@
 	<!-- this sets production settings.  -->
 	<!--     Make sure the production configuration files have been set properly -->
 	<target name="publish-local" depends="do-custom-build" description="-->build production war file">		
-		<war destfile="../ir_plus.war" webxml="${webapp.conf.dir}/web-ssl.xml">
+		<war destfile="../ir_plus.war" webxml="${production.web.xml}">
 		    <webinf dir="${production.staging.dir}/web-inf"/>
 			<fileset dir="${production.staging.dir}/webapp/${project.name}"/>			   
 			<classes dir="${production.staging.dir}/classes"/>
