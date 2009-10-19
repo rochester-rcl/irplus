@@ -22,7 +22,7 @@
 	<property name="target" value="publish-local"/>
 	
 	<!-- current version of the project - also see base.xml to see version for all sub projects -->
-	<property name="version" value="alpha-0.1"/>
+	<property name="version" value="1.0"/>
 	
 	<!-- full distribution project name for downloading as a zip file -->
 	<property name="project.name" value="ir_plus"/>
@@ -116,9 +116,9 @@
 		<delete file="${zip.name}"/>
 	</target>
 	
-	<target name="zip-all" depends="clean-zip">
+	<target name="zip-all" depends="clean-zip" >
 		<zip destfile="${zip.name}">
-			 <zipfileset dir="${basedir}" excludes=".project" prefix="${top.folder.name}"/>
+			 <zipfileset dir="${basedir}" excludes="bin/**,.project,.classpath" prefix="${top.folder.name}"/>
 		</zip>
 	</target>
 	
