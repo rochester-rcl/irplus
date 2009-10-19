@@ -20,8 +20,9 @@
 	
 	<!-- uncomment this to run the tests  it does not matter what the value is so long as the 
 		     line is uncommented.
-		     -->
+		    
 	<property name="run.tests" value="true"/>
+	 -->
 	
 	<!-- custom build directory this SHOULD be created ouside the project
 	     this will allow users to have their own repository of custom 
@@ -30,11 +31,9 @@
 	
 	<!-- uncomment this to build a custom site - this is only needed if you have
 	modified jsp/source files
-	-->
-	<property name="build.custom" value="true"/>
 	
-	<!-- pdf box jar directory -->
-	<property name="pdfbox.lib.dir" value="../pdfbox-jars"/> 
+	<property name="build.custom" value="true"/>
+	-->
 	
     <!-- build directory -->
     <property name="build.dir" value="${basedir}/build"/> 
