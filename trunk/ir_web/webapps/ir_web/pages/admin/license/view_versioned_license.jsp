@@ -24,6 +24,7 @@
 
 <!--  document type -->
 <c:import url="/inc/doctype-frag.jsp"/>
+
           
 <fmt:setBundle basename="messages"/>
 <html>

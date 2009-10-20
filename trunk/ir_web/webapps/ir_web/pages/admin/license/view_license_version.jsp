@@ -23,6 +23,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!--  document type -->
+
 <c:import url="/inc/doctype-frag.jsp"/>
           
 <fmt:setBundle basename="messages"/>
