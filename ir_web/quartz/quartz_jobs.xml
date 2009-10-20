@@ -11,7 +11,7 @@
                     
     <!--  this job is for sending subscrption emails to users who
           have subscribed to collections -->
-    <!--  
+    
     <job>
         <job-detail>
             <name>SubscriptionEmailer</name>
@@ -39,7 +39,7 @@
             </cron>
         </trigger>
     </job>
-   -->
+   
     
    <!--  this job is for indexing existing changed items and updating/deleting/inserting them into the index -->
    <job>
