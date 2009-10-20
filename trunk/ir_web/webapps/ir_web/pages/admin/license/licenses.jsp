@@ -116,7 +116,10 @@
 	                             ${license.currentVersion.license.creator.firstName}&nbsp;${license.currentVersion.license.creator.lastName}
 	                        </urstb:td>
 	                        <urstb:td>
-	                             <a href="">New Version</a> / <a href="">Delete</a>
+	                             <c:url var="addNewLicenseVersionUrl" value="/admin/addNewLicenseVersion.action">
+ 	                               <c:param name="versionedLicenseId" value="${license.id}"/>
+ 	                             </c:url>
+	                             <a href="${addNewLicenseVersionUrl}">New Version</a>
 	                        </urstb:td>
 	                    </urstb:tr>
 	            </urstb:tbody>

@@ -69,8 +69,8 @@
 
   
         <div id="bd">
- 	        <c:url var="addLicenseUrl" value="/admin/addRepositoryLicense.action">
- 	        </c:url>
+ 	        <c:url var="addLicenseUrl" value="/admin/addRepositoryLicense.action"/>
+ 	        
  	        
 	        <form method="post" class="formTable">
 	            <table>
