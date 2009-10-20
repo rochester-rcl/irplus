@@ -59,6 +59,7 @@
 
     <!--  yahoo doc 2 template creates a page 950 pixles wide -->
     <div id="doc2">
+    
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
         
