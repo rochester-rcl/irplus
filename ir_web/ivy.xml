@@ -28,8 +28,8 @@
     <info organisation="ir_web" module="ir_web"/>
     <dependencies>
      
-        <dependency org="ir_service" name="ir_service" rev="0.1" />
-        <dependency org="ur_tags" name="ur_tags" rev="0.1" transitive="false"/>
+        <dependency org="ir_service" name="ir_service" rev="1.0" />
+        <dependency org="ur_tags" name="ur_tags" rev="1.0" transitive="false"/>
         
         <!--  struts 2 files and dependencies -->
         <dependency org="org.apache.struts" name="struts2-core" rev="2.1.6" transitive="false">
