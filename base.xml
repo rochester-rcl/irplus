@@ -129,7 +129,7 @@
     <property name="javac.java.version" value="1.5"/>
 	
     <!-- project version -->
-    <property name="project.version" value="0.1"/> 
+    <property name="project.version" value="1.0"/> 
 	
 	<!-- test properties file location -->
 	<property name="properties.config.test" value="../properties/test"/>
