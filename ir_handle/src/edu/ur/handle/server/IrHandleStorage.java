@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleService;
 
