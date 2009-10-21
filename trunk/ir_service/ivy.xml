@@ -28,7 +28,7 @@
     <info organisation="ir_service" module="ir_service"/>
     <dependencies>
 
-        <dependency org="ir_hibernate" name="ir_hibernate" rev="0.1" />
+        <dependency org="ir_hibernate" name="ir_hibernate" rev="1.0" />
         
          <!--  digester dependency -->    
         <dependency org="commons-digester" name="commons-digester" rev="2.0" transitive="false">
