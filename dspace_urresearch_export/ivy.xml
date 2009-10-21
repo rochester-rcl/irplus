@@ -29,7 +29,7 @@
     <info organisation="dspace_urresearch_export" module="dspace_urresearch_export"/>
     <dependencies>
 
-        <dependency org="dspace_urresearch_import_export" name="dspace_urresearch_import_export" rev="0.1" />
+        <dependency org="dspace_urresearch_import_export" name="dspace_urresearch_import_export" rev="1.0" />
   
         <!-- commons io files -->
         <dependency org="commons-io" name="commons-io" rev="1.4">
