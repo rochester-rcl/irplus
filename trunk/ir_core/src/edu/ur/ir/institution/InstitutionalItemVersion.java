@@ -222,6 +222,8 @@ public class InstitutionalItemVersion extends BasePersistent{
 		
 		if( ( getItem() != null && !getItem().equals(other.getItem()) ) ||
 		    ( getItem() == null && other.getItem() != null ) ) return false;
+		
+		if( versionNumber != other.getVersionNumber() ) return false;
 
 		if( ( versionedInstitutionalItem != null && !versionedInstitutionalItem.equals(other.getVersionedInstitutionalItem()) ) ||
 			( versionedInstitutionalItem == null && other.getVersionedInstitutionalItem() != null ) ) return false;
@@ -239,6 +241,7 @@ public class InstitutionalItemVersion extends BasePersistent{
 		int value = 0;
 		value += getItem() == null? 0 : getItem().hashCode();
 		value += versionedInstitutionalItem == null? 0 : versionedInstitutionalItem.hashCode();
+		value += versionNumber;
 		return value;
 	}
 
