@@ -266,7 +266,7 @@
 	                          Name
 	                      </th>
 	                      <th>
-	                          File Version
+	                          Publication Version
 	                      </th>
 	                      <th>
 	                          Created Date
