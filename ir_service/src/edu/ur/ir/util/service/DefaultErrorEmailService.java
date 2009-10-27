@@ -42,20 +42,28 @@ public class DefaultErrorEmailService implements ErrorEmailService{
 	 * @see edu.ur.ir.ErrorEmailService#sendError(java.lang.String, java.lang.String)
 	 */
 	public void sendError( String error) {
-		 log.debug("send subscribers emails");
-		 MimeMessage message = mailSender.createMimeMessage();
-		 MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
-		 try 
-		 {
+		log.info("send emails = " + sendEmails);
+		if( sendEmails )
+		{
+		    log.debug("send subscribers emails");
+		    MimeMessage message = mailSender.createMimeMessage();
+		    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
+		    try 
+		    {
 				mimeMessageHelper.setSubject(subject);
 				mimeMessageHelper.setTo(toAddress);
 				mimeMessageHelper.setText(error);
 			    mailSender.send(message);
-		 } 
-		 catch (MessagingException e) 
-		 {
-			log.error("Messaging exception occured ", e);
-		 }
+		    } 
+		    catch (MessagingException e) 
+		    {
+			    log.error("Messaging exception occured ", e);
+		    }
+		}
+		else
+		{
+			log.debug( "send emails disabled ");
+		}
 	}
 
 	public JavaMailSender getMailSender() {
