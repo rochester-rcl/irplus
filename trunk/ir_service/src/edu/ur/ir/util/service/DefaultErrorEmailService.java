@@ -32,6 +32,10 @@ public class DefaultErrorEmailService implements ErrorEmailService{
 	/** email address to send the errors to*/
 	private String toAddress;
 	
+	/** indicates if emails should be sent */
+	private boolean sendEmails = true;
+	
+
 	/**
 	 * Send the error to the specified address.
 	 * 
@@ -76,6 +80,15 @@ public class DefaultErrorEmailService implements ErrorEmailService{
 
 	public void setToAddress(String toAddress) {
 		this.toAddress = toAddress;
+	}
+	
+	public void setSendEmails(boolean sendEmails) {
+		this.sendEmails = sendEmails;
+	}
+    
+	public boolean getSendEmails()
+	{
+		return sendEmails;
 	}
 
 	
