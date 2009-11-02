@@ -205,7 +205,7 @@ public class ItemFile extends CommonPersistent implements ItemObject {
 	}
 
 	public boolean isPublic() {
-		return isPublic;
+		return (getItem().isPubliclyViewable() && isPublic);
 	}
 
 	public void setPublic(boolean isPublic) {
