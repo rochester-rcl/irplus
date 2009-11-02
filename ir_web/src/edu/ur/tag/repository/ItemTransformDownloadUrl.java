@@ -64,8 +64,9 @@ public class ItemTransformDownloadUrl  extends SimpleTagSupport{
 				log.debug("found system code!");
 				GenericItem genericItem = itemFile.getItem();
 				log.debug(" generic item = " + genericItem.isPubliclyViewable() + " itemFile.isPublic() = " + itemFile.isPublic() +
-						" irFile.isPublicViewable() = " + irFile.isPublicViewable());
-				if (genericItem.isPubliclyViewable() && itemFile.isPublic() ) 
+						" irFile.isPublicViewable() = " + irFile.isPublicViewable() +
+						" item is embargoed = " + genericItem.isEmbargoed());
+				if (genericItem.isPubliclyViewable() && !genericItem.isEmbargoed() && itemFile.isPublic() ) 
 		        {
 					log.debug("CAN VIEW both are public");
 					canView = true;

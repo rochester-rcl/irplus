@@ -116,7 +116,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
 
         
         // Check if file can be downloaded by user
-        if (genericItem.isPubliclyViewable() && itemFile.isPublic()) 
+        if (genericItem.isPubliclyViewable() && !genericItem.isEmbargoed() && itemFile.isPublic()) 
         {
         	TransformedFile tf = irFile.getTransformedFileBySystemCode(systemCode);
         	if( tf != null )

@@ -78,14 +78,15 @@
 				<!-- Begin - Display the Item preview -->
 				
 				<h3>${institutionalItemVersion.item.fullName}</h3>
-				
+				 
 				<c:if test="${institutionalItemVersion.handleInfo != null}">
 				    <h3 class="errorMessage">URL to cite or link to: <a href="${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}">${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}</a></h3>
 				</c:if>
 				
-				<c:if test="${showPublication }">
+				<c:if test="${showPublication || (user != null && institutionalItem.owner == user) }">
+				 
 				    <c:if test="${institutionalItemVersion.item.embargoed}">
-				        <div class="errorMessage"> <h3>This publication is still under embargo</h3> </div>
+				        <div class="errorMessage"> <h3>This publication is under embargo until ${institutionalItemVersion.item.releaseDate}</h3> </div>
 				    </c:if>
 					<c:if test="${institutionalItemVersion.withdrawn}">
 						<div class="errorMessage"> <h3> This publication is withdrawn. </h3> </div>
@@ -114,7 +115,8 @@
 	
                     <!-- if statements for the buttons the forms are below this in a separate statements 
                          this is due to formatting in IE 6 -->
-					<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
+                     
+					<c:if test="${user != null && institutionalItem.owner == user || ir:userHasRole('ROLE_ADMIN', '')}">
 					    
 						<!--  only allow editing if this is the current largest version -->
 						<c:if test="${institutionalItemVersion.versionNumber == institutionalItem.versionedInstitutionalItem.largestVersion}">
@@ -126,7 +128,7 @@
 						</c:if>
 				    </c:if>
 				    
-				    <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
+				    <c:if test="${user != null && institutionalItem.owner == user || ir:userHasRole('ROLE_ADMIN', '')}">
 							<c:if test="${!institutionalItemVersion.withdrawn}">
 								<button class="ur_button" 
 					                       onmouseover="this.className='ur_buttonover';"
@@ -243,12 +245,16 @@
 			</c:if>
 			<!--  end if for show publication -->
 				
-			<c:if test="${!showPublication && !ir:userHasRole('ROLE_ADMIN', '')}">
+			<c:if test="${!showPublication && !ir:userHasRole('ROLE_ADMIN', '') && institutionalItem.owner != user}">
 			     <c:url var="viewRestricted" value="/user/institutionalPublicationPublicView.action">
 			         <c:param name="institutionalItemId" value="${institutionalItem.id}"/>
 			         <c:param name="versionNumber" value="${institutionalItemVersion.versionNumber}"/>
 			     </c:url>
-				 <div class="errorMessage"> <h3>${message} - (You can try <a href="${viewRestricted}">Logging In</a> if not already) </h3></div> 
+				 <div class="errorMessage"> <h3>${message} 
+				     <c:if test="${user == null}">
+				         - (You can try <a href="${viewRestricted}">Logging In</a>) </h3>
+				     </c:if>
+				 </div> 
 			</c:if>
 				
 			  <!-- *************************  All versions Start *************************  -->

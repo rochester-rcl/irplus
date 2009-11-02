@@ -239,7 +239,16 @@
 				<tr>
 				    <td>${item.externalPublishedItem.publisher.name} </td>
 				</tr>	
-				</c:if>										
+				</c:if>	
+				 <c:if test="${item.externalPublishedItem.citation != null}">
+                 <tr>
+				    <td class="previewLabel">Citation:</td>
+				</tr>
+				<tr>
+				    <td>${item.externalPublishedItem.citation} </td>
+			    </tr>
+			    </c:if>
+			</c:if>									
 
                 <c:if test="${!ur:isEmpty(item.itemExtents)}">	
 				    <tr>
@@ -252,16 +261,7 @@
 				    </c:forEach>
 				</c:if>
 
-                <c:if test="${item.externalPublishedItem.citation != null}">
-                 <tr>
-				    <td class="previewLabel">Citation:</td>
-				</tr>
-				<tr>
-				    <td>${item.externalPublishedItem.citation} </td>
-			    </tr>
-			    </c:if>
-			    					
-			    </c:if>
+			   
 			    <c:if test="${institutionalItemVersion != null}">
 			    <tr>	
 			        <td class="previewLabel">License Grantor / Date Granted:  </td>
@@ -273,15 +273,15 @@
 						     <c:param name="versionedLicenseId" value="${institutionalItemVersion.repositoryLicense.licenseVersion.versionedLicense.id}"/>
 							 <c:param name="version" value="${institutionalItemVersion.repositoryLicense.licenseVersion.versionNumber}"/>
 						</c:url>
-						${institutionalItemVersion.repositoryLicense.grantedByUser.firstName} &nbsp; 
-						${institutionalItemVersion.repositoryLicense.grantedByUser.lastName} 
+						${institutionalItemVersion.repositoryLicense.grantedByUser.firstName}&nbsp;${institutionalItemVersion.repositoryLicense.grantedByUser.lastName} 
 						/ ${institutionalItemVersion.repositoryLicense.dateGranted} ( <a href="${viewLicense}">View License</a> )
 						
 					</td>
 				</tr>	
 				</c:if>
+				
 				<tr>
-				    <td class="previewLabel">Submitter:  </td>
+				    <td class="previewLabel">Submitter:</td>
 			    </tr>
 				<tr>
 				    <td>
