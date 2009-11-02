@@ -47,7 +47,8 @@
 				        <c:param value="${institutionalItem.id}" name="institutionalItemId"/>
 				        <c:param value="${institutionalItemVersion.versionNumber}" name="versionNumber"/>
 				    </c:url>
-		            ${object.irFile.nameWithExtension}&nbsp;(Restricted Access - try <a href="${restrictedAccess}">Logging In</a> if not already) 
+		            ${object.irFile.nameWithExtension}&nbsp; <span class="errorMessage">(Restricted Access) </span>
+		            <c:if test="${user == null}"> You can try <a href="${restrictedAccess}">Logging In</a></c:if>
 		        </c:if>
 		    </c:if>
 		    <c:if test='${param.isPreview && !param.isResearcherView}'>
