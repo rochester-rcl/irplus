@@ -204,7 +204,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 			log.debug("The publication is available for public from date:" + institutionalItemVersion.getItem().getReleaseDate());
 			if (user != null) 
             {
-            	if (!user.hasRole(IrRole.ADMIN_ROLE)) 
+            	if (!user.hasRole(IrRole.ADMIN_ROLE)  && !user.equals(institutionalItemVersion.getItem().getOwner())) 
             	{
             		// check user permissions if they are not an administrator - view privileges override embargo date
             	    if (itemSecurityService.hasPermission(institutionalItemVersion.getItem(), user, ItemSecurityService.ITEM_METADATA_READ_PERMISSION) <= 0

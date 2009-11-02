@@ -86,10 +86,12 @@
             <!--  this is the header of the page -->
             <c:import url="/inc/header.jsp"/>
       		<h3>Managing permissions for publication "${item.name}"</h3>
-      		<div class="clear">&nbsp;</div>
       		
-           <ur:basicForm name="viewPublication" 
-              method="post" action="user/institutionalPublicationPublicView.action">
+      		<c:if test="${item.embargoed}">
+      		<div class="errorMessage"> <h3>This publication and its files are under embargo until ${item.releaseDate}</h3> </div>
+            </c:if>
+           <form name="viewPublication" 
+              method="get" action="<c:url value="/user/institutionalPublicationPublicView.action"/>">
 				
 				<input type="hidden" id="view_item_id" name="institutionalItemId" value="${institutionalItemId}"/>
 	 				
@@ -97,9 +99,9 @@
                        onmouseover="this.className='ur_buttonover';"
 	                   onmouseout="this.className='ur_button';"
                        id="view_publication">Back to Publication</button>
-            </ur:basicForm> 
+            </form> 
 
-			<div class="clear">&nbsp;</div> 
+			<br/>
             
             <!--  set up tabs for the workspace -->
 	        <div id="item-permission-tabs" class="yui-navset">
@@ -123,7 +125,7 @@
 								<c:if test="${item.publiclyViewable}">
 									checked
 								</c:if>
-								> Yes  
+								> Yes  <c:if test="${item.embargoed}"><span class="errorMessage">(After Embargo)&nbsp;</span></c:if>
 								<input type="radio" name="isItemPublic_${item.id}"  value="false" onClick="javascript:YAHOO.ur.institution.item.permission.updateItemPublicView(${item.id}, 'false')"
 								<c:if test="${!item.publiclyViewable}">
 									checked
@@ -141,7 +143,7 @@
 		                  
 	                     <!--  Second tab -->
                      	 <div id="tab2">
- 							 <h2>File Read permission groups </h2>
+ 							 <h3>File Read permission groups</h3>
 		                     
 		                     <div id="file_user_groups">
 		                         <c:import url="item_file_group_permissions_frag.jsp"></c:import>

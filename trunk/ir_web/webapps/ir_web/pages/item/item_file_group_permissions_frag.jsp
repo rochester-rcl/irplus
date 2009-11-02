@@ -41,7 +41,7 @@
 		<c:if test="${itemFile.public}">
 			checked
 		</c:if>
-		> Yes  
+		> Yes  <c:if test="${item.embargoed}"><span class="errorMessage">(After Embargo)&nbsp;</span></c:if>
 		<input type="radio" name="isPublic_${itemFile.id}"  value="false" onClick="javascript:YAHOO.ur.institution.item.permission.updateFilePublicView(${itemFile.id}, ${institutionalItemId}, 'false')"
 		<c:if test="${!itemFile.public}">
 			checked

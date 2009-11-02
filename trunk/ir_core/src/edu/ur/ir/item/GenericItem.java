@@ -1625,7 +1625,17 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * @return
 	 */
 	public boolean isPubliclyViewable() {
-		return (publiclyViewable && !isEmbargoed());
+		return publiclyViewable;
+	}
+	
+	/**
+	 * Returns true if the generic item is publicly viewable.
+	 * 
+	 * @return
+	 */
+	public boolean getPubliclyViewable()
+	{
+		return isPubliclyViewable();
 	}
 
 	/**
