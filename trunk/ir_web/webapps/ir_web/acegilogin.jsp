@@ -142,7 +142,7 @@
                           <br/>
                           <br/>
                           <label class="label" for="j_name">Password:</label>
-                          <input class="input" size="30" type='password' id="password" name='j_password'/>
+                          <input class="input" size="30" type='password' id="password" autocomplete="off" name='j_password'/>
                           <br/>
                           <br/>
                           
