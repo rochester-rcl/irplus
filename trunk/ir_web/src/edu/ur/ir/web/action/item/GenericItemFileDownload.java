@@ -141,7 +141,11 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
     			catch(Exception e)
       		    {
       			  log.error(e);
-      			  errorEmailService.sendError(e);
+      			  // do not send email on stats service conflict
+      			  // usually this is due to the same person downloading the file more
+      			  // than once
+      			  // this will instead log the error
+      			  //errorEmailService.sendError(e);
       		    }
         	}
         	downloadFile(itemFile);
@@ -161,7 +165,11 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         			catch(Exception e)
           		    {
           			  log.error(e);
-          			  errorEmailService.sendError(e);
+          			  // do not send email on stats service conflict
+          			  // usually this is due to the same person downloading the file more
+          			  // than once
+          			  // this will instead log the error
+          			  //errorEmailService.sendError(e);
           		    }
         		}
         		downloadFile(itemFile);
