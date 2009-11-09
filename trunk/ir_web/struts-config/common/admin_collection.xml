@@ -330,6 +330,7 @@
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
             <result name="success" type="redirect">reviewItem.action?reviewableItemId=${reviewableItemId}</result>
+            <result name="workspace" type="redirect">home.action</result>
         </action>
         
         <!-- accept item -->

@@ -189,7 +189,7 @@
             <interceptor-ref name="editStack"/>
             <result name="success" type="no-op"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="notFound">/fileNotFound.jsp</result>
+            <result name="notFound">/pages/researcher_page/researcher_file_not_found.jsp</result>
         </action> 
         
         <!--  Change file version -->

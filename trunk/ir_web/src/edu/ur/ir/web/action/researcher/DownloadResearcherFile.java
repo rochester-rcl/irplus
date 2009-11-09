@@ -81,6 +81,12 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         }
         
         ResearcherFile researcherFile = researcherFileSystemService.getResearcherFile(researcherFileId, false);
+        
+        if( researcherFile == null )
+        {
+        	return "notFound";
+        }
+        
         Researcher researcher = researcherFile.getResearcher();
         
         if( researcher.isPublic()  || researcher.getUser().getId().equals(userId))
