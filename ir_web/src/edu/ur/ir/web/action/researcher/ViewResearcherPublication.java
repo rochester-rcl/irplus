@@ -58,7 +58,19 @@ public class ViewResearcherPublication extends ActionSupport implements UserIdAw
 	public String execute() 
 	{
         log.debug("execute called");
+        
+        if( researcherPublicationId == null || researcherPublicationId <= 0  )
+        {
+        	return "notFound";
+        }
+        
         ResearcherPublication publication = researcherFileSystemService.getResearcherPublication(researcherPublicationId, false);
+        
+        if( publication == null)
+        {
+        	return "notFound";
+        }
+        
         researcher = publication.getResearcher();
         
 		if( researcher.isPublic() || researcher.getUser().getId().equals(userId))

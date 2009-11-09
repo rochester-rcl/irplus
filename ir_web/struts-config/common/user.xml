@@ -580,6 +580,7 @@
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">institutionalPublicationPublicView.action?institutionalItemId=${institutionalItemId}</result>
+            <result name="workspace" type="redirect">home.action</result>
         </action>
         
          <!--  save the item and update the series  -->
@@ -589,6 +590,7 @@
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getSeriesInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
         </action>
         
 		<!--  save the item and update the identifier types  -->
@@ -598,6 +600,7 @@
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getIdentifierInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
         </action>        
 
 		<!--  save the item and update the extent types  -->
@@ -607,6 +610,7 @@
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getExtentInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
         </action> 
          
  		<!--  save the item and update the sponsor -->
@@ -616,6 +620,7 @@
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getSponsorInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
         </action>        
  
   		<!--  save the item and update the publishers -->
@@ -625,6 +630,7 @@
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getPublisherInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
         </action>        
        
        <!--  save the item and goto show add files -->
@@ -634,6 +640,7 @@
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">viewEditItem.action?genericItemId=${genericItemId}&amp;parentCollectionId=${parentCollectionId}&amp;institutionalItemId=${institutionalItemId}</result>
+            <result name="workspace" type="redirect">home.action</result>
         </action>
         
         <!--  save the item and goto show add files -->
@@ -643,6 +650,7 @@
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">viewItemContributor.action?genericItemId=${genericItemId}&amp;parentCollectionId=${parentCollectionId}&amp;institutionalItemId=${institutionalItemId}</result>
+            <result name="workspace" type="redirect">home.action</result>
         </action>
 
         <!--  save the item and goto preview screen  -->
@@ -652,6 +660,7 @@
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">previewPublication.action?genericItemId=${genericItemId}&amp;parentCollectionId=${parentCollectionId}&amp;institutionalItemId=${institutionalItemId}</result>
+            <result name="workspace" type="redirect">home.action</result>
         </action>
 
         <!--  save type  -->

@@ -351,6 +351,7 @@
             <interceptor-ref name="editStack"/>
             <result name="success">/pages/item/personal_publication_view.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/researcher_page/researcher_pub_not_found.jsp</result>
         </action>
 
         <!-- Download Researcher picture  -->
@@ -374,6 +375,7 @@
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="no-op"/>
+            <result name="notFound">/pages/researcher_page/researcher_file_not_found.jsp</result>
         </action>
 
         <!--  ************************************ -->

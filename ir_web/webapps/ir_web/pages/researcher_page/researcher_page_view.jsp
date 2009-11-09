@@ -33,9 +33,7 @@
         <ur:styleSheet href="page-resources/yui/reset-fonts-grids/reset-fonts-grids.css"/>
         <ur:styleSheet href="page-resources/css/base-ur.css"/>
         <ur:styleSheet href="page-resources/yui/menu/assets/skins/sam/menu.css"/>
-        <ur:styleSheet href="page-resources/yui/treeview/assets/skins/sam/treeview.css"/> 
-        
-         
+        <ur:styleSheet href="page-resources/yui/treeview/assets/skins/sam/treeview.css"/>          
 
         <ur:styleSheet href="page-resources/css/global.css"/>
         <ur:styleSheet href="page-resources/css/home_page_content_area.css"/>
