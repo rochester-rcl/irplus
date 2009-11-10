@@ -103,7 +103,7 @@
     
                       <tr>
                       <td colspan="2" align="center">
-						  <button id="create_account" class="ur_button" 
+						  <button id="create_account" class="ur_button" type="submit"
  		                               onmouseover="this.className='ur_buttonover';"
  		                               onmouseout="this.className='ur_button';">Continue Submission</button>                      
                       </td>
