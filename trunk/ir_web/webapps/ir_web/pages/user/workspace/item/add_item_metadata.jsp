@@ -135,8 +135,6 @@
 				
 				<table class="noBorderTable" width="100%">
 					<tr>
-						<td width="100" class="noBorderTabletd">
-						</td>
 						<td class="noBorderTabletd">
 							<table class="greyTable">
 								<c:forEach items="${itemObjects}" var="object">
@@ -167,7 +165,7 @@
 				</table>
 				<!-- End - Display the Item files preview -->
        	        
-       	        <ur:basicForm id="add_item_metadata" name="itemForm" enctype="multipart/form-data"  method="post">
+       	        <form id="add_item_metadata" name="itemForm" enctype="multipart/form-data"  method="post">
 					<input type="hidden" id="series_table_id" value="${reportsCount}"/>
 					<input type="hidden" id="identifier_table_id" value="${itemIdentifiersCount}"/>
 					<input type="hidden" id="extent_table_id" value="${itemExtentsCount}"/>
@@ -177,10 +175,10 @@
 					<input type="hidden" name="parentCollectionId" value="${parentCollectionId}"/>
 					<input type="hidden" name="institutionalItemId" value="${institutionalItemId}"/>
 					       	        
-       	        	<ur:div id="item_metadata_form">
+       	        	<div id="item_metadata_form">
        	        	    <c:import url="item_metadata_form.jsp"/>
-					</ur:div>
-				</ur:basicForm>
+					</div>
+				</form>
 			   
 			
 			<div class="clear">&nbsp;</div>
