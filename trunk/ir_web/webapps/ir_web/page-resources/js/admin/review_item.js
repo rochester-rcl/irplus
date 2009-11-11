@@ -27,13 +27,13 @@ YAHOO.ur.review.item = {
 
 	viewReviewPendingItems : function()
 	{
-		document.previewForm.action = 'admin/viewReviewPendingItems.action';
+		document.previewForm.action = basePath + 'admin/viewReviewPendingItems.action';
 		document.previewForm.submit();
 	},
 	
 	acceptItem : function()
 	{
-		document.previewForm.action = 'admin/acceptReviewableItem.action';
+		document.previewForm.action = basePath + 'admin/acceptReviewableItem.action';
 		document.previewForm.submit();
 	},
 	
@@ -81,7 +81,7 @@ YAHOO.ur.review.item = {
 		//submit form
 		YAHOO.ur.review.item.rejectionDialog.submit = function() 
 		{
-		    document.rejectionForm.action='admin/rejectReviewableItem.action';
+		    document.rejectionForm.action= basePath + 'admin/rejectReviewableItem.action';
 		    document.rejectionForm.submit();	    
 	     }		
 
