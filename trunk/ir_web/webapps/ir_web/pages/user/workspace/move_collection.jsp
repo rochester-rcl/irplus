@@ -30,7 +30,7 @@
 <html>
 <head>
 
-    <title>Move Personal Collections and Publications</title>
+    <title>Move Personal Publication Information</title>
     <c:import url="/inc/meta-frag.jsp" />
 
     <!-- Core + Skin CSS -->
@@ -63,7 +63,7 @@
     <div id="doc2"><!--  this is the header of the page --> 
         <c:import url="/inc/header.jsp" /> 
 
-        <h3>Move Personal Collection Information</h3>
+        <h3>Move Personal Publication Information</h3>
 
         <!--  this is the body regin of the page -->
         <div id="bd">

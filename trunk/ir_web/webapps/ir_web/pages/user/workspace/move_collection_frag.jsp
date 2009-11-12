@@ -56,13 +56,13 @@
 		        <table class="simpleTable" width="400px">
 			        <thead>
 				        <tr>
-					        <th>Collections &amp; Publications to Move</th>
+					        <th>Folders &amp; Publications to Move</th>
 				        </tr>
 			        </thead>
 			        <tbody>
 				        <c:forEach items="${collectionsToMove}" var="collection">
 					        <tr>
-						        <td><span class="worldBtnImg">&nbsp;</span>${collection.name}</td>
+						        <td><span class="folderBtnImg">&nbsp;</span>${collection.name}</td>
 					        </tr>
 				        </c:forEach>
 
@@ -112,12 +112,12 @@
 			           <tr>
 			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
 					           <c:if test="${ir:canMoveToPersonalCollection(collectionsToMove, fileSystemObject)}">
-						            <td><span class="worldBtnImg">&nbsp;</span><a
+						            <td><span class="folderBtnImg">&nbsp;</span><a
 							            href="javascript:YAHOO.ur.collection.move.getMoveCollection(${fileSystemObject.id});">${fileSystemObject.name}</a></td>
 					           </c:if>
 					           <c:if test="${!ir:canMoveToPersonalCollection(collectionsToMove, fileSystemObject)}">
 						
-						           <td class="errorMessage"><span class="worldBtnImg">&nbsp;</span>${fileSystemObject.name} [Moving]</td>
+						           <td class="errorMessage"><span class="folderBtnImg">&nbsp;</span>${fileSystemObject.name} [Moving]</td>
 					           </c:if>
 					       </c:if>
 			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
