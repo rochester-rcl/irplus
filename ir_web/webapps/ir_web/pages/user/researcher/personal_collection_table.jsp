@@ -51,7 +51,7 @@ Displayed on the left hand side of the add files to item page -->
 	<thead>
 		<tr>
 			<th class="thItemFolder" width="20%">Add</th>
-			<th class="thItemFolder">Personal Collections and Publications</th>
+			<th class="thItemFolder">Personal Publication Information</th>
 		</tr>
 	</thead>
 	<tbody>

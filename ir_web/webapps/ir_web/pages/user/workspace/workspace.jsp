@@ -405,7 +405,7 @@
 	 <div id="deleteCollectionDiv" class="hidden">
 	     <div class="hd">Delete?</div>
 		 <div class="bd">
-		     Do you want to delete the selected publications and collections?
+		     Do you want to delete the selected publications and folders?
 		 </div>
 	 </div>
 

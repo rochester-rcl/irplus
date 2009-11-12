@@ -70,7 +70,7 @@
         <!--  this is the body regin of the page -->
         <div id="bd">
             <h3> Properties for : ${personalItem.name}  </h3>
-		    <h3>Path: /<span class="worldBtnImg">&nbsp;</span>
+		    <h3>Path: /<span class="folderBtnImg">&nbsp;</span>
 		         <c:if test="${parentCollectionId != 0}">
                       <c:url var="viewRootCollectionsUrl" value="/user/workspace.action">
                           <c:param name="parentCollectionId" value="0"/>
@@ -88,7 +88,7 @@
 		         
 		         
 		         <c:forEach var="collection" items="${collectionPath}">
-		               <span class="worldBtnImg">&nbsp;</span>
+		               <span class="folderBtnImg">&nbsp;</span>
 		                   <c:if test="${collection.id != parentCollectionId}">
 		                       <a href="${viewCollectionsUrl}&parentCollectionId=${collection.id}">${collection.name}</a>&nbsp;/
 		                   </c:if>
@@ -136,7 +136,10 @@
                           <td class="${rowType}"><a href="${itemPreviewUrl}">${info.version.versionNumber}</a></td>
                           <td class="${rowType}">
  	                          		<c:forEach var="collection" items="${info.collections}">
-		                          		 ${collection.path}${collection.name} <div class="clear"> &nbsp;</div>
+		                          		 <c:url var="collectionUrl" value="/viewInstitutionalCollection.action">
+		                          		     <c:param name="collectionId" value="${collection.id}"/>
+		                          		 </c:url>
+		                          		 <a href="${collectionUrl}">${collection.path}${collection.name}</a> <br/>
 	                          		</c:forEach>
                           
                           </td>
