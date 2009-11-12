@@ -1,6 +1,7 @@
 package edu.ur.ir.web.action.user;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.simple.type.AscendingNameComparator;
 
 /**
  * Class for updating a users account.
@@ -41,6 +43,9 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 
 	/**  Logger for add user action */
 	private static final Logger log = Logger.getLogger(UpdateUserAccount.class);
+	
+	/** Comparator for name based classes */
+	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 
 	/** user  */
 	private IrUser irUser;
@@ -90,14 +95,8 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	/** Default email */
 	private UserEmail defaultEmail;
 	
-	/** List of all affiliations */
-	private List<Affiliation> affiliations;
-
 	/** Id of the affiliation selected */
 	private Long affiliationId;
-
-	/** List of all departments */
-	private List<Department> departments;
 
 	/** Id of the department selected */
 	private Long[] departmentIds;
@@ -133,8 +132,17 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	public void prepare() {
 		log.debug("Prepare user Id =" + userId);
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		affiliations = affiliationService.getAllAffiliations();
-		departments = departmentService.getAllDepartments();
+	}
+	
+	/**
+	 * Get all affiliations
+	 * 
+	 * @return
+	 */
+	public List<Affiliation> getAffiliations() {
+		List<Affiliation> affiliations = affiliationService.getAllAffiliations();
+		Collections.sort(affiliations, nameComparator);
+		return affiliations ;
 	}
 
 	/**
@@ -304,23 +312,6 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 		this.roleService = roleService;
 	}
 
-	/**
-	 * Get all affiliations
-	 * 
-	 * @return
-	 */
-	public List<Affiliation> getAffiliations() {
-		return affiliations;
-	}
-
-	/**
-	 * Set affiliations
-	 * 
-	 * @param affiliations
-	 */
-	public void setAffiliations(List<Affiliation> affiliations) {
-		this.affiliations = affiliations;
-	}
 
 	/**
 	 * Get service class for affiliation
@@ -367,11 +358,10 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	}
 
 	public List<Department> getDepartments() {
-		return departments;
-	}
-
-	public void setDepartments(List<Department> departments) {
-		this.departments = departments;
+		List<Department> departments;
+		departments = departmentService.getAllDepartments();
+		Collections.sort(departments, nameComparator);
+		return departments ;
 	}
 
 	public Long[] getDepartmentIds() {
