@@ -32,6 +32,7 @@ import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemFileSecurityService;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -126,6 +127,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         
         if (userId != null) {
         	user = userService.getUser(userId, false);
+        	log.debug(" User " + user + " trying to download file ");
         }
         
          // Check if file can be downloaded by user
@@ -153,7 +155,9 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         else if ( user != null)
         {
         	if( genericItem.getOwner().equals(user) || 
-            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) )
+            	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) || 
+            	user.hasRole(IrRole.ADMIN_ROLE)
+               )
         	{
         		if(!genericItem.getOwner().equals(user))
         		{
