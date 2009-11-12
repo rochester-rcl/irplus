@@ -629,7 +629,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		String firstName = irUser.getFirstName().trim();
 		String lastName = irUser.getLastName().trim();
 		String ldapUserName = irUser.getLdapUserName().trim();
-		
+		String phoneNumber = irUser.getPhoneNumber().trim();
 				
 		defaultEmail.setVerified(false);
 		defaultEmail.setToken(TokenGenerator.getToken());
@@ -641,6 +641,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		irUser.setLastName(lastName);
 		irUser.setLdapUserName(ldapUserName);
 		irUser.setSelfRegistered(true);
+		irUser.setPhoneNumber(phoneNumber);
 		
 		if( license != null )
 		{
