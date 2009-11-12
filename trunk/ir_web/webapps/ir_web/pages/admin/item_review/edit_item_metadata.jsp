@@ -62,7 +62,8 @@
 	    <ur:js src="page-resources/yui/calendar/calendar-min.js"/>
 
         <!-- Source File -->
-        <ur:js src="pages/js/base_path.js"/>
+        <ur:js src="pages/js/base_path.js"/>        
+        <ur:js src="page-resources/js/util/ur_util.js"/>
         <ur:js src="page-resources/js/menu/main_menu.js"/>
  	    <ur:js src="page-resources/js/user/add_item_metadata.js"/>
  	    
@@ -78,18 +79,50 @@
             <!--  this is the body region of the page -->
             <div id="bd">
 
-       	        
-       	        <ur:basicForm id="add_item_metadata" name="itemForm" enctype="multipart/form-data"  method="post">
+       	        		<table class="noBorderTable" width="100%">
+					<tr>
+						
+						<td class="noBorderTabletd">
+							<table class="greyTable">
+								<c:forEach items="${itemObjects}" var="object">
+								<tr>
+									<td width="10" class="noBorderTabletd">
+										
+									</td>
+									<td class="bottomBorder">
+										<c:if test="${object.type == 'FILE'}">
+											<ir:fileTypeImg cssClass="tableImg" irFile="${object.irFile}"/> <ur:maxText numChars="40" text="${object.irFile.name}"></ur:maxText>
+										</c:if>
+										<c:if test="${object.type == 'URL'}">
+											<img  alt="" class="tableImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>
+    										<ur:maxText numChars="40" text="${object.name}"></ur:maxText>
+										</c:if>
+									</td>
+									<td class="bottomBorder">
+										${object.description}
+									</td>
+									<td width="10" class="noBorderTabletd">
+										
+									</td>
+								</tr>
+								</c:forEach>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<!-- End - Display the Item files preview -->
+				
+       	        <form id="add_item_metadata" name="itemForm" enctype="multipart/form-data"  method="post">
        	        	<input type="hidden" id="series_table_id" value="${reportsCount}"/>
 					<input type="hidden" id="identifier_table_id" value="${itemIdentifiersCount}"/>
 					<input type="hidden" id="extent_table_id" value="${itemExtentsCount}"/>
 					<input type="hidden" id="title_table_id" value="${subTitlesCount}"/>
 					<input type="hidden" name="genericItemId" value="${item.id}"/>
 					<input type="hidden" name="reviewableItemId" value="${reviewableItemId}"/>
-       	        	<ur:div id="item_metadata_form">
-						<%@ include file="/pages/user/workspace/item/item_metadata_form.jsp" %>
-					</ur:div>
-				</ur:basicForm>
+       	        	<div id="item_metadata_form">
+						<c:import url="/pages/user/workspace/item/item_metadata_form.jsp" />
+					</div>
+				</form>
 			   
 
 			   <button class="ur_button" id="saveItemMetadata" 
@@ -102,37 +135,37 @@
                            onmouseout="this.className='ur_button';"
                            onclick="javascript:YAHOO.ur.item.metadata.cancelReviewItemMetadata();">Cancel</button>
 			                
-		<ur:div id="newSeriesDialog" cssClass="hidden">
-                <ur:div cssClass="hd">Series Information</ur:div>
-                <ur:div cssClass="bd">
-                    <ur:basicForm id="addSeries" name="newSeriesForm" 
+		<div id="newSeriesDialog" class="hidden">
+                <div class="hd">Series Information</div>
+                <div class="bd">
+                    <form id="addSeries" name="newSeriesForm" 
 		                    method="post" 
-		                    action="user/addSeries.action">
-	                  <ur:div id="newSeriesDialogFields">
-	                       <%@ include file="/pages/user/workspace/item/series_form.jsp" %>
-	                  </ur:div>
-	                </ur:basicForm>
-                </ur:div>
-        </ur:div>
+		                    action="<c:url value="/user/addSeries.action"/>">
+	                  <div id="newSeriesDialogFields">
+	                       <c:import url="/pages/user/workspace/item/series_form.jsp" />
+	                  </div>
+	                </form>
+                </div>
+        </div>
  
- 		<ur:div id="newSponsorDialog" cssClass="hidden">
-                <ur:div cssClass="hd">Sponsor Information</ur:div>
-                <ur:div cssClass="bd">
-                    <ur:basicForm id="addSponsor" name="newSponsorForm" 
+ 		<div id="newSponsorDialog" class="hidden">
+                <div class="hd">Sponsor Information</div>
+                <div class="bd">
+                    <form id="addSponsor" name="newSponsorForm" 
 		                    method="post" 
 		                    action="user/addSponsor.action">
-	                  <ur:div id="newSponsorDialogFields">
-	                       <%@ include file="/pages/admin/item/metadata/sponsors/sponsor_form.jsp" %>
-	                  </ur:div>
-	                </ur:basicForm>
-                </ur:div>
-         </ur:div>
+	                  <div id="newSponsorDialogFields">
+	                       <c:import url="/pages/admin/item/metadata/sponsors/sponsor_form.jsp"/>
+	                  </div>
+	                </form>
+                </div>
+         </div>
 
-        <ur:div id="newIdentifierTypeDialog" cssClass="hidden">
-            <ur:div cssClass="hd">Identifier Type Information</ur:div>
-	        <ur:div cssClass="bd">
-	            <ur:basicForm id="addIdentifierType" name="newIdentifierType" method="POST" 
-	                  action="user/addIdentifierType.action">
+        <div id="newIdentifierTypeDialog" class="hidden">
+            <div class="hd">Identifier Type Information</div>
+	        <div class="bd">
+	            <form id="addIdentifierType" name="newIdentifierType" method="POST" 
+	                  action="<c:url value="user/addIdentifierType.action"/>">
 	              
 	                <input type="hidden" id="newIdentifierTypeForm_id"
 	                    name="id" value=""/>
@@ -140,7 +173,7 @@
 	                <input type="hidden" id="newIdentifierType_new"
 	                    name="newIdentifierType" value="true"/>
 	              
-	                <ur:div id="identifierTypeError" cssClass="errorMessage"></ur:div>
+	                <div id="identifierTypeError" class="errorMessage"></div>
 
 				<table class="formTable">    
 				    <tr>
@@ -155,14 +188,14 @@
 				                  name="identifierType.description" cols="42" rows="4"></textarea></td>
 			         </tr>
 			     </table>
-	            </ur:basicForm>
-	        </ur:div>
-         </ur:div>
+	            </form>
+	        </div>
+         </div>
          
-        <ur:div id="newExtentTypeDialog" cssClass="hidden">
-            <ur:div cssClass="hd">Extent Type Information</ur:div>
-	        <ur:div cssClass="bd">
-	            <ur:basicForm id="addExtentType" name="newExtentType" method="POST" 
+        <div id="newExtentTypeDialog" class="hidden">
+            <div class="hd">Extent Type Information</div>
+	        <div class="bd">
+	            <form id="addExtentType" name="newExtentType" method="POST" 
 	                  action="user/addExtentType.action">
 	              
 	                <input type="hidden" id="newExtentTypeForm_id"
@@ -171,7 +204,7 @@
 	                <input type="hidden" id="newExtentType_new"
 	                    name="newExtentType" value="true"/>
 	              
-	                <ur:div id="extentTypeError" cssClass="errorMessage"></ur:div>
+	                <div id="extentTypeError" class="errorMessage"></div>
 
 				<table class="formTable">    
 				    <tr>
@@ -186,22 +219,22 @@
 				                  name="extentType.description" cols="42" rows="4"></textarea></td>
 			         </tr>
 			     </table>
-	            </ur:basicForm>
-	        </ur:div>
-         </ur:div>         
+	            </form>
+	        </div>
+         </div>         
       
-	        <ur:div id="newPublisherDialog" cssClass="hidden">
-                <ur:div cssClass="hd">Publisher Information</ur:div>
-                <ur:div cssClass="bd">
-                    <ur:basicForm id="addPublisher" name="newPublisherForm" 
+	        <div id="newPublisherDialog" class="hidden">
+                <div class="hd">Publisher Information</div>
+                <div class="bd">
+                    <form id="addPublisher" name="newPublisherForm" 
 		                    method="post" 
-		                    action="user/addPublisher.action">
-	                  <ur:div id="newPublisherDialogFields">
-	                       <%@ include file="/pages/admin/item/metadata/publishers/publisher_form.jsp" %>
-	                  </ur:div>
-	                </ur:basicForm>
-                </ur:div>
-            </ur:div>
+		                    action="<c:url value="/user/addPublisher.action"/>">
+	                  <div id="newPublisherDialogFields">
+	                      <c:import url="/pages/admin/item/metadata/publishers/publisher_form.jsp" />
+	                  </div>
+	                </form>
+                </div>
+            </div>
             	
 	    </div>
 	    <!--  end the body tag --> 

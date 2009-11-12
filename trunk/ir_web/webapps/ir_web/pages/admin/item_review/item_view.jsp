@@ -81,8 +81,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td width="100" class="noBorderTabletd">
-						</td>
+						
 						<td align="right">
 							
 							<table class="greyBorderTable">
@@ -113,8 +112,7 @@
 					</tr>
 					
 					<tr>
-						<td width="100" class="noBorderTabletd">
-						</td>
+						
 						<td align="right">
                      		 <c:url value="editItemMetadata.action" var="editItemMetadata">
 			     				<c:param name="genericItemId" value="${reviewableItem.item.id}"/>
