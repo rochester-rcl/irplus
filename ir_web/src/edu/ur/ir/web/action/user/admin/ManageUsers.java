@@ -918,7 +918,10 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 			for( int index = 0; index < departmentIds.length; index++)
 			{
 			    Department department = departmentService.getDepartment(departmentIds[index], false); 
-			    irUser.addDepartment(department);
+			    if( department != null )
+			    {
+			        irUser.addDepartment(department);
+			    }
 			}
 		}
 	}
