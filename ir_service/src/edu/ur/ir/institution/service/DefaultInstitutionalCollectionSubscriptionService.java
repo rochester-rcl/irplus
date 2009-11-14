@@ -192,7 +192,7 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 		    MimeMessage message = mailSender.createMimeMessage();
 		    String startDateStr = simpleDateFormat.format(startDate); 
 		    String endDateStr = simpleDateFormat.format(endDate); 
-		    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
+		    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true, "UTF-8");
 		    String subject = "New URResearch Publications for dates: " + startDateStr + " - " + endDateStr;
 		    mimeMessageHelper.setSubject(subject);
 		    mimeMessageHelper.setFrom(fromAddress);
