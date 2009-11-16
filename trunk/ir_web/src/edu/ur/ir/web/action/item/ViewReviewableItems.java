@@ -34,6 +34,7 @@ import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.ReviewableItem;
 import edu.ur.ir.institution.ReviewableItemService;
 import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
+import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
@@ -97,6 +98,11 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 	
 	/**  Repository information data access  */
 	private RepositoryService repositoryService;
+	
+	/** item within the reviewable item */
+	private GenericItem item;
+
+
 
 	/**
 	 * View all pending items
@@ -120,6 +126,7 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 		reviewableItem = reviewableItemService.getReviewableItem(reviewableItemId, false);
 		
 		itemObjects = reviewableItem.getItem().getItemObjects();
+		item = reviewableItem.getItem();
 		
 		// Sort item objects by order
 		Collections.sort(itemObjects,   new AscendingOrderComparator());
@@ -272,6 +279,10 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
+	}
+	
+	public GenericItem getItem() {
+		return item;
 	}
 
 }
