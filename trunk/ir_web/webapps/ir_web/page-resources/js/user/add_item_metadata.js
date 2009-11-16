@@ -37,8 +37,8 @@ var saveItemTypeAndUpdateSecondaryTypesAction = basePath + 'user/saveContentType
 var saveMetadataAndShowAddFilesAction = basePath + 'user/saveMetadataAndShowAddFiles.action';
 var saveMetadataAndViewContributorsAction = basePath + 'user/saveMetadataAndViewContributors.action';
 var saveMetadataAndPreviewAction = basePath + 'user/saveMetadataAndPreview.action';
-var saveReviewItemMetadataAction = basePath + 'user/saveItemMetadata.action';
-var cancelReviewItemMetadataAction = basePath + 'user/reviewItem.action';
+var saveReviewItemMetadataAction = basePath + 'admin/saveItemMetadata.action';
+var cancelReviewItemMetadataAction = basePath + 'admin/reviewItem.action';
 
 // Action to get the series
 var seriesAction = basePath + 'user/getSeries.action';

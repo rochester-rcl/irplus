@@ -52,6 +52,7 @@
  	    
  	</head>
     
+    
     <body class="yui-skin-sam">
         <!--  yahoo doc 2 template creates a page 950 pixles wide -->
         <div id="doc2">  
@@ -72,306 +73,27 @@
 				<table class="noBorderTable" width="100%">
 					<tr>
 						<td colspan="2" class="noBorderTabletd">
-							<label for="preview" class="noBorderTableLabel">${reviewableItem.item.name}   </label>
+							<label for="preview" class="noBorderTableLabel">${reviewableItem.item.fullName}   </label>
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2" class="noBorderTabletd">
-							<label for="title" class="noBorderTableGreyLabel">  </label>
-						</td>
-					</tr>
-					<tr>
-						
 						<td align="right">
-							
 							<table class="greyBorderTable">
-								<c:forEach items="${itemObjects}" var="object">
-								<tr>
-									<td width="10" class="noBorderTabletd">
-										
-									</td>
-									<td class="bottomBorder" align="left">
-										<c:if test="${object.type == 'FILE'}">
-											<ir:fileTypeImg cssClass="tableImg" irFile="${object.irFile}"/> <ur:maxText numChars="40" text="${object.irFile.name}"></ur:maxText>
-										</c:if>
-										<c:if test="${object.type == 'URL'}">
-											<img  alt="" class="tableImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>
-    										<ur:maxText numChars="40" text="${object.name}"></ur:maxText>
-										</c:if>
-									</td>
-									<td class="bottomBorder" align="left">
-										${object.description}
-									</td>
-									<td width="10" class="noBorderTabletd">
-										
-									</td>
-								</tr>
-								</c:forEach>
+								<c:import url="/pages/item/item_files_frag.jsp">
+				                        <c:param name="isPreview" value="true"/>
+				                </c:import>
 							</table>
 						</td>
 					</tr>
-					
-					<tr>
-						
-						<td align="right">
-                     		 <c:url value="editItemMetadata.action" var="editItemMetadata">
-			     				<c:param name="genericItemId" value="${reviewableItem.item.id}"/>
-			     				<c:param name="reviewableItemId" value="${reviewableItem.id}"/>
-			 				 </c:url>
+			   </table>
+              
+               <c:url value="editItemMetadata.action" var="editItemMetadata">
+			        <c:param name="genericItemId" value="${reviewableItem.item.id}"/>
+			     	<c:param name="reviewableItemId" value="${reviewableItem.id}"/>
+			 	</c:url>
 
-							<strong> <a href="${editItemMetadata}">Edit metadata</a> </strong>
-							<table class="greyBorderBlueBgTable">
-								<tr>
-								<td width="60%" valign="top" class="greyBorderTableTd">
-									<table class="noPaddingTable" width="100%" align="left">
-										<tr>
-										<td>	<label for="description" class="previewLabel"> Description </label> </td>
-										</tr> 
-									
-										<tr>
-										<td>	${reviewableItem.item.description} </td>
-										</tr>
-
-										<tr>
-										<td>	<label for="abstract" class="previewLabel"> Abstract </label> </td>
-										</tr> 
-									
-										<tr>
-										<td>	${reviewableItem.item.itemAbstract} </td>
-										</tr>
-									</table>
-								</td>
-								
-								<td valign="top" class="greyBorderTableTd">
-									<table width="100%">
-										<tr>
-										<td class="previewLabel">Contributor:  </td>
-										</tr>
-										
-										<c:forEach items="${reviewableItem.item.contributors}" var="itemContributor">
-										<tr>
-											<td>
-											    <ir:authorName personName="${itemContributor.contributor.personName}" displayDates="true"/>
-											</td>
-										</tr>
-										</c:forEach>
-
-										<tr>
-										<td class="previewLabel">Submitter:  </td>
-										</tr>
-										
-										<tr>
-											<td>
-												${reviewableItem.item.owner.firstName} ${reviewableItem.item.owner.lastName}
-											</td>
-										</tr>
-
-										<tr>
-											<td class="previewLabel"> 
-												Primary Item Type:
-											</td>
-										</tr>
-										<tr>
-											<td > 
-												${reviewableItem.item.primaryContentType.name}
-											</td>											
-										</tr>
-
-										<tr>
-											<td class="previewLabel">
-												<c:if  test="${reviewableItem.item.secondaryContentTypes != null}">
-													Secondary Item Type(s): 
-												</c:if>
- 
-											</td>
-										</tr>
-
-										<c:forEach items="${reviewableItem.item.secondaryContentTypes}" var="contentType">
-										<tr>
-											<td>
-												${contentType.name} 
-											</td>
-										</tr>
-										</c:forEach>
-
-									
-										<tr>
-										<td class="previewLabel"> Series/Report Number:</td>
-										</tr>
-										
-										<c:forEach items="${reviewableItem.item.itemReports}" var="itemReport">
-										<tr>
-											<td>
-												${itemReport.series.name} ${itemReport.reportNumber}
-											</td>
-										</tr>
-										</c:forEach>										
-
-										<tr>
-										<td class="previewLabel"> Identifiers: </td>
-										</tr>
-										
-										<c:forEach items="${reviewableItem.item.itemIdentifiers}" var="itemIdentifier">
-										<tr>
-											<td>
-												${itemIdentifier.identifierType.name} ${itemIdentifier.value}
-											</td>
-										</tr>
-										</c:forEach>										
-
-										<tr>
-										<td class="previewLabel"> Language:</td>
-										</tr>
-										
-										<tr>
-											<td>
-												${reviewableItem.item.languageType.name}
-											</td>
-										</tr>
-
-										<tr>
-										<td class="previewLabel"> Subject Keywords: </td>
-										</tr>
-										
-										<tr>
-											<td >
-												${reviewableItem.item.itemKeywords}
-											</td>
-										</tr>
-										
-										<tr>
-										<td class="previewLabel"> Sponsor:</td>
-										</tr>
-
-										<c:forEach items="${reviewableItem.item.itemSponsors}" var="itemSponsor">
-											<tr>
-												<td>
-													${itemSponsor.sponsor.name}
-												</td>
-											</tr>
-										</c:forEach>
-
-										<tr>
-										<td class="previewLabel"> Date this publication was first presented to the public:</td>
-										</tr>
-										
-										<tr>
-										<td>
-											<c:if test="${reviewableItem.item.firstAvailableDate.month != 0}">
-												Month: ${reviewableItem.item.firstAvailableDate.month} &nbsp;&nbsp;
-											</c:if>
-
-											<c:if test="${reviewableItem.item.firstAvailableDate.day != 0}">
-												Day: ${reviewableItem.item.firstAvailableDate.day} &nbsp;&nbsp;
-											</c:if>
-
-											<c:if test="${reviewableItem.item.firstAvailableDate.year != 0}">
-												Year: ${reviewableItem.item.firstAvailableDate.year} &nbsp;&nbsp;
-											</c:if>
-										</td>
-										</tr>
-										
-										<tr>
-										<td class="previewLabel"> Date this publication can be made available to the public:</td>
-										</tr>
-
-										<tr>
-										<td>
-											<c:if test="${reviewableItem.item.releaseDate.month != 0}">
-												Month: ${reviewableItem.item.releaseDate.month} &nbsp;&nbsp;
-											</c:if>
-
-											<c:if test="${reviewableItem.item.releaseDate.day != 0}">
-												Day: ${reviewableItem.item.releaseDate.day} &nbsp;&nbsp;
-											</c:if>
-
-											<c:if test="${reviewableItem.item.releaseDate.year != 0}">
-												Year: ${reviewableItem.item.releaseDate.year} &nbsp;&nbsp;
-											</c:if>
-										</td>
-										</tr>
-										
-										<tr>
-										<td class="previewLabel"> Date this publication can be made available to the public:</td>
-										</tr>
-
-										<tr>
-										<td>
-											<c:if test="${reviewableItem.item.originalItemCreationDate.month != 0}">
-												Month: ${reviewableItem.item.originalItemCreationDate.month} &nbsp;&nbsp;
-											</c:if>
-
-											<c:if test="${reviewableItem.item.originalItemCreationDate.day != 0}">
-												Day: ${reviewableItem.item.originalItemCreationDate.day} &nbsp;&nbsp;
-											</c:if>
-
-											<c:if test="${reviewableItem.item.originalItemCreationDate.year != 0}">
-												Year: ${reviewableItem.item.originalItemCreationDate.year} &nbsp;&nbsp;
-											</c:if>
-										</td>
-										</tr>										
-
-										<tr>
-										<td class="previewLabel"> Date this publication was made available to public:</td>
-										</tr>
-
-										<tr>
-										<td>
-												${reviewableItem.item.releaseDate} &nbsp;&nbsp;
-										</td>
-										</tr>
-										
-										<c:if test="${reviewableItem.item.externalPublishedItem != null}">
-											<tr>
-											<td class="previewLabel"> Previously published/distributed information:</td>
-											</tr>
-											
-											<tr>
-											<td> Published Date:
-												<c:if test="${reviewableItem.item.externalPublishedItem.publishedDate.month != 0}">
-													Month: ${reviewableItem.item.externalPublishedItem.publishedDate.month} &nbsp;&nbsp;
-												</c:if>
-	
-												<c:if test="${reviewableItem.item.externalPublishedItem.publishedDate.day != 0}">
-													Day: ${reviewableItem.item.externalPublishedItem.publishedDate.day} &nbsp;&nbsp;
-												</c:if>
-	
-												<c:if test="${reviewableItem.item.externalPublishedItem.publishedDate.year != 0}">
-													Year: ${reviewableItem.item.externalPublishedItem.publishedDate.year} &nbsp;&nbsp;
-												</c:if>
-											</td>
-											</tr>
-
-											<tr>
-											<td> Publisher: ${reviewableItem.item.externalPublishedItem.publisher.name}
-											</td>
-											</tr>											
-
-											<tr>
-											<td> Citation: ${reviewableItem.item.externalPublishedItem.citation}
-											</td>
-											</tr>											
-
-										</c:if>
-   										
-									</table>
-								</td>
-								
-								</tr>
-							</table>
-						</td>
-					</tr>
-					
-					
-				</table>
-				<!-- End - Display the Item preview -->
-       	        
-       	        <div class="clear">&nbsp;</div>
-       	        
-       	       
-			   
-			
-			<div class="clear">&nbsp;</div>
+				<strong> <a href="${editItemMetadata}">Edit metadata</a> </strong>
+				<c:import url="/pages/item/item_metadata_frag.jsp"/>
 				
 			<table width="100%">
               <tr>

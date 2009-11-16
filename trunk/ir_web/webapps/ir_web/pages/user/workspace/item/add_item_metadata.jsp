@@ -137,28 +137,9 @@
 					<tr>
 						<td class="noBorderTabletd">
 							<table class="greyTable">
-								<c:forEach items="${itemObjects}" var="object">
-								<tr>
-									<td width="10" class="noBorderTabletd">
-										
-									</td>
-									<td class="bottomBorder">
-										<c:if test="${object.type == 'FILE'}">
-											<ir:fileTypeImg cssClass="tableImg" irFile="${object.irFile}"/> <ur:maxText numChars="40" text="${object.irFile.name}"></ur:maxText>
-										</c:if>
-										<c:if test="${object.type == 'URL'}">
-											<img  alt="" class="tableImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>
-    										<ur:maxText numChars="40" text="${object.name}"></ur:maxText>
-										</c:if>
-									</td>
-									<td class="bottomBorder">
-										${object.description}
-									</td>
-									<td width="10" class="noBorderTabletd">
-										
-									</td>
-								</tr>
-								</c:forEach>
+									<c:import url="/pages/item/item_files_frag.jsp">
+				                        <c:param name="isPreview" value="true"/>
+				                    </c:import>
 							</table>
 						</td>
 					</tr>

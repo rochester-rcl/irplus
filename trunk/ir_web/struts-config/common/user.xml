@@ -410,6 +410,15 @@
         <!--  ************************************ -->
         <!--  Item actions     -->
         <!--  ************************************ -->
+        
+        <action name="itemFileDownload" 
+        		method="fileDownloadWithPermissionCheck"
+                class="edu.ur.ir.web.action.item.GenericItemFileDownload">
+            <interceptor-ref name="default" />
+            <result name="success" type="no-op"/>
+            <result name="input">/pages/item/no_access_file_download_error.jsp</result>
+        </action>
+        
 
         <!--  Check for file ownership  -->
         <action name="checkFileOwnership"

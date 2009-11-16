@@ -164,7 +164,7 @@
 	      <tr>
 	        <td> 
 	        	<div id="type_form">
-	        	    <c:import url="content_type_list.jsp"/>
+	        	    <c:import url="/pages/user/workspace/item/content_type_list.jsp"/>
 	         	 </div>
 		    </td>
 	      </tr>
@@ -188,7 +188,7 @@
 	          <div id="new_series"> </div>
               <!--  this table is built dynamically -->
               <div id="series_forms">
-                    <c:import url="series_list.jsp"/>
+                    <c:import url="/pages/user/workspace/item/series_list.jsp"/>
                </div> 
 	      </td>
 	      </tr>
@@ -212,7 +212,7 @@
 		         <div id="new_identifier"> </div>
 	               <!--  this table is built dynamically -->
 	               <div id="identifier_forms">
-	                   <c:import url="identifier_list.jsp"/>
+	                   <c:import url="/pages/user/workspace/item/identifier_list.jsp"/>
 	               </div>  
 	
 	      </td>
@@ -237,7 +237,7 @@
 		         <div id="new_extent"> </div>
 	               <!--  this table is built dynamically -->
 	               <div id="extent_forms">
-	                   <c:import url="extent_list.jsp"/>
+	                   <c:import url="/pages/user/workspace/item/extent_list.jsp"/>
 	               </div>  
 	
 	          </td>
@@ -318,7 +318,7 @@
 		         <div id="new_sponsor"> </div>
 	               <!--  this table is built dynamically -->
 	               <div id="sponsor_forms">
-	                   <c:import url="sponsor_list.jsp"/>
+	                   <c:import url="/pages/user/workspace/item/sponsor_list.jsp"/>
 	               </div>  
 	
 	      </td>
@@ -460,7 +460,7 @@
 			          <tr>
 			              <td>
 			              	<div id="publisher_form">
-			              	    <c:import url="publisher_list.jsp"/>
+			              	    <c:import url="/pages/user/workspace/item/publisher_list.jsp"/>
 		      	 		    </div>
 			              </td>
 			          </tr>
