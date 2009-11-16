@@ -132,7 +132,9 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         
          // Check if file can be downloaded by user
         if (genericItem.isPubliclyViewable() && !genericItem.isEmbargoed() && itemFile.isPublic() ) {
-        	
+        	log.debug("publicly viewable = " + genericItem.isPubliclyViewable() + " is embargoed " + 
+        			genericItem.isEmbargoed() +
+        			" item file is public = " + itemFile.isPublic());
         	if( user == null || !genericItem.getOwner().equals(user))
         	{
         		try
@@ -154,6 +156,9 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
         }
         else if ( user != null)
         {
+        	log.debug("is owner = " + genericItem.getOwner().equals(user) + " has permissions " + 
+        			itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) +
+        			" is admin = " + user.hasRole(IrRole.ADMIN_ROLE));
         	if( genericItem.getOwner().equals(user) || 
             	(itemFileSecurityService.hasPermission(itemFile, user, ItemFileSecurityService.ITEM_FILE_READ_PERMISSION) > 0) || 
             	user.hasRole(IrRole.ADMIN_ROLE)
