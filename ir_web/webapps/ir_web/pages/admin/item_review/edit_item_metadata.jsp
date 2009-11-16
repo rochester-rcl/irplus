@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>Welcome</title>
+        <title>Edit Item Metadata</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!--  css styles from yahoo -->
@@ -79,35 +79,20 @@
             <!--  this is the body region of the page -->
             <div id="bd">
 
-       	        		<table class="noBorderTable" width="100%">
+               <button class="ur_button" id="saveItemMetadata" 
+                           onmouseover="this.className='ur_buttonover';"
+                           onmouseout="this.className='ur_button';"
+                           onclick="javascript:YAHOO.ur.item.metadata.saveReviewItemMetadata();">Save</button>
+                           
+	     	   <button class="ur_button" id="saveItemMetadata" 
+                           onmouseover="this.className='ur_buttonover';"
+                           onmouseout="this.className='ur_button';"
+                           onclick="javascript:YAHOO.ur.item.metadata.cancelReviewItemMetadata();">Cancel</button>
+       	        <table class="noBorderTable" width="100%">
 					<tr>
-						
-						<td class="noBorderTabletd">
-							<table class="greyTable">
-								<c:forEach items="${itemObjects}" var="object">
-								<tr>
-									<td width="10" class="noBorderTabletd">
-										
-									</td>
-									<td class="bottomBorder">
-										<c:if test="${object.type == 'FILE'}">
-											<ir:fileTypeImg cssClass="tableImg" irFile="${object.irFile}"/> <ur:maxText numChars="40" text="${object.irFile.name}"></ur:maxText>
-										</c:if>
-										<c:if test="${object.type == 'URL'}">
-											<img  alt="" class="tableImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>
-    										<ur:maxText numChars="40" text="${object.name}"></ur:maxText>
-										</c:if>
-									</td>
-									<td class="bottomBorder">
-										${object.description}
-									</td>
-									<td width="10" class="noBorderTabletd">
-										
-									</td>
-								</tr>
-								</c:forEach>
-							</table>
-						</td>
+					    <c:import url="/pages/item/item_files_frag.jsp">
+				            <c:param name="isPreview" value="true"/>
+				        </c:import>
 					</tr>
 				</table>
 				<!-- End - Display the Item files preview -->
