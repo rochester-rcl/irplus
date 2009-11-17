@@ -68,7 +68,10 @@
 		                        ${pendingUser.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   ${pendingUser.username} 
+	                           <c:url var="viewAccountUrl" value="/admin/userEditView.action">
+	                               <c:param name="id" value="${pendingUser.id}"/>
+	                           </c:url>
+			                   <a href="${viewAccountUrl}">${pendingUser.username}</a> 
 	                        </urstb:td>
 	                         <urstb:td>
 			                   ${pendingUser.firstName} 
