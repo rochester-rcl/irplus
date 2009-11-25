@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a published version.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.institution">
+	<class name="InstitutionalItemVersion" schema="ir_repository" table="institutional_item_version"
+		lazy="true">
+	
+		<!-- Common id property. -->
+		<id name="id" type="long" column="institutional_item_version_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_repository.institutional_item_version_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="dateOfDeposit" column="date_of_deposit" type="timestamp" 
+		          access="field" 
+		          not-null="true"/>
+
+		<property name="versionNumber" column="version_number" type="int" 
+		          access="field" 
+		          not-null="true"/>	
+		  
+        <!--  withdrawn token -->
+		<many-to-one class="WithdrawnToken" 
+			unique="true" 
+			name="withdrawnToken" 
+			column="withdrawn_token_id" 
+			cascade="save-update"
+			access="field" 
+			insert="true"
+			update="true"/>
+	
+	    <!--  institutional item repository license -->
+	    <one-to-one name="repositoryLicense" 
+	        cascade="all"
+	        property-ref="institutionalItemVersion"/>
+		
+                
+        <!--  The versioned institutional item -->
+		<many-to-one class="VersionedInstitutionalItem" 
+		    optimistic-lock="false"
+			unique="true" 
+			name="versionedInstitutionalItem" 
+			column="versioned_institutional_item_id" 
+			cascade="save-update"
+			access="field" 
+			insert="true"
+			update="true"/>
+
+        <!--  The Generic item Institutional ItemVersion version wraps -->
+        <many-to-one name="item" 
+              optimistic-lock="false"
+              class="edu.ur.ir.item.GenericItem" 
+              unique="true" 
+              column="item_id" 
+              cascade="save-update"
+              not-null="true" 
+              access="field"/>
+        
+        <!--  The handle information for the generic item-->
+		<many-to-one class="edu.ur.ir.handle.HandleInfo" 
+			unique="true" 
+			name="handleInfo" 
+			column="handle_info_id" 
+			cascade="save-update"
+			access="field" 
+			insert="true"
+			update="true"/>
+			
+        <!--  withdrawn history -->
+		<set name="withdrawHistory" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all-delete-orphan" 
+		     access="field"
+			 lazy="true"  
+			 fetch="subselect">
+			<key column="institutional_item_version_id"/>
+			<one-to-many class="WithdrawnToken"/>
+		</set>	
+		
+		<!--  ReInstate history -->
+		<set name="reinstateHistory" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all-delete-orphan" 
+		     access="field"
+			 lazy="true"  
+			 fetch="subselect">
+			<key column="institutional_item_version_id"/>
+			<one-to-many class="ReinstateToken"/>
+		</set>	
+ 
+	</class>
+
+	<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameId">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds) order by item.name asc, institutionalItemVersion.versionNumber desc
+	</query>	
+	
+	<!-- institutional item version for a given handle -->
+	<query name="getInstitutionalItemByHandleId">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion
+	    where handleInfo.id = ?
+	</query>	
+		
+    
+</hibernate-mapping>

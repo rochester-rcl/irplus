@@ -1,0 +1,362 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a user.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.user">
+	<class name="IrUser" schema="ir_user" table="ir_user"
+		lazy="true">
+
+        <cache usage="read-write" />
+		<!-- Common id property. -->
+		<id name="id" type="long" column="user_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_user.ir_user_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="username" column="username" type="string"
+			not-null="true" access="field" />
+			
+		<property name="lowerCaseUsername" column="lower_case_user_name" type="string"
+			 not-null="true" access="field" />
+
+		<property name="ldapUserName" column="ldap_user_name" type="string"
+			access="field" />
+			
+		<property name="firstName" column="first_name" type="string"
+			access="field" />
+		
+		<property name="lowerCaseFirstName" column="lower_case_first_name" type="string"
+			access="field" />
+
+		<property name="lastName" column="last_name" type="string"
+			access="field" />
+		
+		<property name="lowerCaseLastName" column="lower_case_last_name" type="string"
+			access="field" />	
+			
+		<property name="middleName" column="middle_name" type="string"
+			access="field" />
+		
+		<property name="lowerCaseMiddleName" column="lower_case_middle_name" type="string"
+			access="field" />	
+			
+	    <property name="createdDate" column="created_date" type="timestamp" 
+		          access="field" 
+		          not-null="true"/>		
+		
+		<property name="selfRegistered" column="self_registered" 
+		     type="boolean" not-null="true"
+			 access="field" />
+		
+		<property name="password" column="user_password" type="string"
+			not-null="true" access="field" />
+			
+		<property name="passwordEncoding" column="password_encoding" type="string"
+			not-null="true" access="field" />
+
+		<property name="accountExpired" column="account_expired" 
+		     type="boolean" not-null="true"
+			 access="field" />
+	
+	    <property name="accountLocked" column="account_locked" 
+		     type="boolean" not-null="true"
+			 access="field" />
+		
+		<property name="credentialsExpired" column="credentials_expired" 
+		     type="boolean" not-null="true"
+			 access="field" />
+
+		<property name="phoneNumber" column="phone_number" type="string"
+			 access="field" not-null="false"/>			 
+			
+		<property name="passwordToken" column="password_token" type="string"
+			 access="field" not-null="false"/>			 
+
+		<property name="passwordChangeRequired" column="force_change_password" type="boolean"
+			 access="field" />	
+			 
+		<property name="isAffiliationApproved" column="affiliation_approved" 
+		     type="boolean" access="field" />	
+		
+		<!-- location where the users personal index information is stored -->
+		<property name="personalIndexFolder" column="personal_index_folder" 
+		     type="string" access="field" />	
+					     	 			 			 		 
+        <property name="reBuildUserWorkspaceIndex" column="re_build_user_workspace_index" 
+		     type="boolean" not-null="true"
+			 access="field" />
+
+		<!-- Default email for this user -->
+		<many-to-one class="edu.ur.ir.user.UserEmail" 
+			name="defaultEmail" column="default_email_id" insert="true"
+			update="true" unique="true"/>
+
+		<!-- Affiliation of the user with the university -->
+		<many-to-one class="edu.ur.ir.user.Affiliation" 
+			name="affiliation" 
+			column="affiliation_id" 
+			insert="true"
+			update="true"/>
+
+		<!-- Authoritative name for this user -->
+		<many-to-one class="edu.ur.ir.person.PersonNameAuthority" 
+			name="personNameAuthority" 
+			column="person_name_authority_id"
+			insert="true"
+			update="true" 
+			unique="true"/>	
+						
+		<!-- Researcher information for the user -->
+		<one-to-one class="edu.ur.ir.researcher.Researcher" 
+		    fetch="join"
+			name="researcher"
+		    cascade="all" 
+			property-ref="user"/>
+		
+		<!-- Departments for the user -->
+		<set name="departments" 
+		     optimistic-lock="false"
+		     table="ir_user.user_department" 
+		     access="field" 
+		     lazy="true"
+		     fetch="subselect">
+			<key column="user_id" />
+			<many-to-many column="department_id" class="Department"/>
+		</set>							
+
+	    <!-- Emails for this user -->
+		<set name="emails" access="field" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all-delete-orphan"
+			 lazy="true"
+			 fetch="subselect">
+			<key column="user_id" not-null="true" />
+			<one-to-many class="edu.ur.ir.user.UserEmail"/>
+		</set>
+		
+	    <!-- licenses this user -->
+		<set name="acceptedLicenses" access="field" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all-delete-orphan"
+			 lazy="true"
+			 fetch="subselect">
+			<key column="user_id" not-null="true" />
+			<one-to-many class="edu.ur.ir.user.UserRepositoryLicense"/>
+		</set>
+		
+	    <!-- Emails for this user -->
+		<set name="sharedInboxFiles" 
+		     optimistic-lock="false" 
+		     access="field" 
+		     inverse="true" 
+		     cascade="all-delete-orphan"
+			 lazy="true"
+			 fetch="subselect">
+			<key column="shared_with_user_id" not-null="true" />
+			<one-to-many class="edu.ur.ir.user.SharedInboxFile"/>
+		</set>
+	
+        <!--  Root Personal Folders -->
+		<set name="rootFolders" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     where="personal_folder_id = root_personal_folder_id"
+		     access="field"
+			 order-by="name" 
+			 lazy="true"
+			 schema="ir_user"
+			 fetch="subselect">
+			<key column="user_id"/>
+			<one-to-many class="PersonalFolder"/>
+		</set>
+		
+		<!--  Root Personal Files -->
+		<set name="rootFiles" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     where="personal_folder_id is null"
+		     access="field"
+			 lazy="true"
+			 schema="ir_user"
+			 fetch="subselect">
+			<key column="user_id"/>
+			<one-to-many class="PersonalFile"/>
+		</set>
+		
+		<!--  Root Personal Collections -->
+		<set name="rootPersonalCollections" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     where="personal_collection_id = root_personal_collection_id"
+		     access="field"
+			 order-by="name" 
+			 lazy="true"
+			 schema="ir_user"
+			 fetch="subselect">
+			<key column="user_id"/>
+			<one-to-many class="PersonalCollection"/>
+		</set>
+		
+		<!--  Root Personal Items -->
+		<set name="rootPersonalItems" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     where="personal_collection_id is null"
+		     access="field"
+			 lazy="true"
+			 fetch="subselect"
+			 schema="ir_user">
+			<key column="user_id"/>
+			<one-to-many class="PersonalItem"/>
+		</set>
+        
+		<!-- Roles for this user -->
+		<set name="roles" 
+		     optimistic-lock="false"
+		     table="ir_user.user_role" 
+		     access="field" 
+		     lazy="true"
+		     fetch="subselect">
+			<key column="user_id" />
+			<many-to-many column="role_id" class="edu.ur.ir.user.IrRole"/>
+		</set>
+	
+	 </class>
+		
+	<!--  Get a count of users in the system -->
+	<query name="userCount">
+	    select count(*) from IrUser
+	</query>
+	
+	<!-- named query for getting all users ordered by names -->
+    <query name="getAllUserNameAsc">from IrUser order by username </query>
+    
+    <!-- named query for getting a user -->
+	<query name="getUserByName">
+		from IrUser as IrUser where
+		IrUser.username = ?
+	</query>
+	
+	   <!-- named query for getting a user -->
+	<query name="getUserByLdapName">
+		from IrUser as IrUser where
+		IrUser.ldapUserName = ?
+	</query>
+
+    <!-- named query for getting a user -->
+	<query name="getUserByToken">
+		from IrUser as IrUser where
+		IrUser.passwordToken = ?
+	</query>	
+
+    <!-- named query for getting a user -->
+	<query name="getUsersPendingAffiliationApproval">
+		from IrUser as IrUser where
+		IrUser.isAffiliationApproved = false
+	</query>	
+
+    <!-- named query for getting a user -->
+	<query name="getUserByRole">
+		select irUser from IrUser as irUser 
+		join irUser.roles as role
+		where role.name = ?
+	</query>	
+
+    <!-- named query for getting a user by person name authority -->
+	<query name="getUserByPersonNameAuthority">
+		select irUser from IrUser as irUser 
+		join irUser.personNameAuthority as personNameAuthority
+		where personNameAuthority.id = ?
+	</query>	
+	
+	<!--  ****************** Sort Users    ******************   -->
+	
+	<!-- sort by last name asc -->
+	<query name="getUsersByLastNameOrderAsc">
+		select irUser from IrUser as irUser 
+		order by lowerCaseLastName asc, lowerCaseFirstName asc, lowerCaseMiddleName asc
+	</query>	
+
+	<!-- sort by last name desc -->
+	<query name="getUsersByLastNameOrderDesc">
+		select irUser from IrUser as irUser 
+		order by lowerCaseLastName desc, lowerCaseFirstName desc, lowerCaseMiddleName desc
+	</query>	
+	
+	<!-- sort by user name asc -->
+	<query name="getUsersByUserNameOrderAsc">
+		select irUser from IrUser as irUser 
+		order by lowerCaseUsername asc
+	</query>	
+	
+	<!-- sort by user name desc -->
+	<query name="getUsersByUserNameOrderDesc">
+		select irUser from IrUser as irUser 
+		order by lowerCaseUsername desc
+	</query>	
+	
+	<!-- sort by default email asc -->
+	<query name="getUsersByEmailOrderAsc">
+		select irUser from IrUser as irUser 
+		order by defaultEmail.email asc
+	</query>	
+	
+	<!-- sort by email desc -->
+	<query name="getUsersByEmailOrderDesc">
+		select irUser from IrUser as irUser 
+		order by defaultEmail.email desc
+	</query>	
+
+	<!-- get pending approval by last name asc -->
+	<query name="getPendingApprovalsOrderByNameAsc">
+		select irUser from IrUser as irUser
+		where isAffiliationApproved = false 
+		and affiliation.needsApproval = true
+		order by lowerCaseLastName asc, lowerCaseFirstName asc, lowerCaseMiddleName asc
+	</query>
+	
+	<!-- get pending approval by last name desc  -->
+	<query name="getPendingApprovalsOrderByNameDesc">
+		select irUser from IrUser as irUser
+		where isAffiliationApproved = false 
+		and affiliation.needsApproval = true
+		order by lowerCaseLastName desc, lowerCaseFirstName desc, lowerCaseMiddleName desc
+	</query>
+	
+	<!-- get pending approval count  -->
+	<query name="getPendingApprovalsCount">
+		select count(*) from IrUser as irUser
+		where isAffiliationApproved = false 
+		and affiliation.needsApproval = true
+	</query>	
+</hibernate-mapping>

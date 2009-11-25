@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for file download roll up
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.statistics">
+	<class name="FileDownloadRollUp" schema="ir_statistics" table="ir_file_roll_up"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="ir_file_roll_up_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_statistics.ir_file_roll_up_seq</param>
+			</generator>
+		</id>
+			
+		<property name="irFileId" column="ir_file_id" type="long"
+			access="field" not-null="true"/>
+
+		<property name="downloadCount" column="download_count" type="long"
+			access="field" not-null="true"/>
+	</class>
+	
+	<!-- named query for getting a the roll up by ir file id -->
+	<query name="getRollUpByIrFileId">
+		from FileDownloadRollUp as fileDownloadRollUp where
+		fileDownloadRollUp.irFileId = ? 
+	</query>
+	
+			<!-- named query for getting a count of all the downloads in the repository -->
+	<query name="getRollUpFileDownloadCount">
+		select fileDownloadRollUp.downloadCount from FileDownloadRollUp fileDownloadRollUp 
+		where fileDownloadRollUp.irFileId = ?
+	</query>
+	
+	<!-- named query for getting a count of all the downloads in the repository -->
+	<query name="getRepositoryRollUpFileDownloadCount">
+		select sum(fileDownloadRollUp.downloadCount) from FileDownloadRollUp fileDownloadRollUp
+	</query>
+	
+    <!-- named query for getting a count of all the downloads in the repository -->
+	<query name="getCollectionRollUpFileDownloadCount">
+		select sum(fileDownloadRollUp.downloadCount) from FileDownloadRollUp as fileDownloadRollUp, 
+		InstitutionalCollection as institutionalCollection 
+	    join institutionalCollection.items institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemFiles itemFile 
+	    where institutionalCollection.id =  ? 
+	    and itemFile.irFile.id = fileDownloadRollUp.irFileId
+	</query>
+	
+	<!-- named query for getting a count of all the downloads in the repository including children-->
+	<query name="getCollectionRollUpFileDownloadCountWithChildren">
+	    select sum(fileDownloadRollUp.downloadCount) from FileDownloadRollUp as fileDownloadRollUp, 
+		InstitutionalCollection as institutionalCollection 
+	    join institutionalCollection.items institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemFiles itemFile
+	    where  itemFile.irFile.id = fileDownloadRollUp.irFileId
+	    and institutionalCollection.leftValue  &gt;= ? 
+	    and institutionalCollection.leftValue &lt;= ? 
+	    and institutionalCollection.treeRoot.id = ?
+	</query>
+	
+	<!-- No. of downloads for an item -->
+	<query name="getItemRollUpFileDownloadCount">
+		select sum(fileDownloadRollUp.downloadCount) from FileDownloadRollUp as fileDownloadRollUp,
+		GenericItem as item 
+		join item.itemFiles itemFile 
+	    where item.id = ?
+	    and itemFile.irFile.id = fileDownloadRollUp.irFileId
+
+	</query>
+	
+	<!-- Count of institutional item contributed by given person name -->
+	<query name="getInstitutionalItemRollUpDownloadCountByPersonName">
+	    select sum(fileDownloadRollUp.downloadCount) as downloadCount, max(institutionalItemVersion.dateOfDeposit) as latestDatePublished, 
+	    institutionalItem 
+	    from FileDownloadRollUp as fileDownloadRollUp,  
+	    InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as  versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    join item.itemFiles itemFile
+	    where  itemFile.irFile.id = fileDownloadRollUp.irFileId
+	    and contributor.personName.id in (:personNameIds)
+		group by institutionalItem 
+		order by sum(fileDownloadRollUp.downloadCount) desc, max(institutionalItemVersion.dateOfDeposit) desc
+	</query>
+	
+</hibernate-mapping>

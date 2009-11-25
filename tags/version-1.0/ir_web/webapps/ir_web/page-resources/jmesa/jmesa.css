@@ -1,0 +1,115 @@
+.jmesa {
+	margin: 0;
+	padding: 0;
+}
+
+.jmesa caption {
+	caption-side: top;
+	color: #444444;
+	font-weight: bold;
+	font-size: 1em;
+	text-align: left;
+	padding-left: 5px;
+}
+
+.jmesa .table {
+	border: 1px solid silver;
+	padding: 2px;
+}
+
+.jmesa .toolbar td {
+	padding: 0px 3px 0px 3px;
+	padding-left: 1px;
+	padding-right: 1px;
+}
+
+.jmesa .toolbar select {
+	border: solid 1px #c4c3c2;
+	width: 75px;
+}
+
+.jmesa .filter td {
+	padding: 2px;
+}
+
+.jmesa .filter div {
+	height: 15px;
+	border: solid 1px #444444;
+	background-color: #efebe7;
+	position: relative;
+}
+
+.jmesa .filter img {
+	display:inline;
+	position:absolute;
+	right:2px;
+	top:4px
+}
+
+.jmesa .filter #dynFilterDiv {
+	position: absolute;
+	top: 16px;
+	width: 131px;
+	height: 29px;
+	background-color: #edd400;
+	padding-left: 3px;
+}
+
+.jmesa .filter #dynFilterInput {
+	margin-top: 4px;
+	background-color: #eee;
+	border-style: none;
+	border: solid 1px #444444;
+	width: 124px;
+}
+
+.jmesa .header td {
+	background-color: #729fcf;
+	color: white;
+	font-weight: bold;
+	padding-right: 3px;
+	padding-left: 3px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-color: white;
+}
+
+.jmesa .odd a, .even a {
+	color: black;
+}
+
+.jmesa .odd td, .jmesa .even td {
+	padding-top: 2px;
+	padding-right: 3px;
+	padding-bottom: 2px;
+	padding-left: 3px;
+}
+
+.jmesa .odd {
+	background-color: #ffffff;
+}
+
+.jmesa .even {
+  	background-color: #e3e3e3;
+}
+
+.jmesa .highlight td {
+	background-color: #fdecae;
+	padding-top: 2px;
+	padding-right: 3px;
+	padding-bottom: 2px;
+	padding-left: 3px;
+}
+
+.jmesa .highlight a, .highlight a {
+	color: black;
+}
+
+.jmesa .statusBar td {
+
+	border-top: 1px solid silver;
+	background-color: #efebe7;
+	padding: 2px;
+}

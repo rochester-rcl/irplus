@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+	Copyright 2008 University of Rochester
+	
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd">
+
+	<tlib-version>1.0</tlib-version>
+	<short-name>ir</short-name>
+	<uri>ir-tags</uri>
+
+	<tag>
+		<name>fileSizeDisplay</name>
+		<tag-class>edu.ur.tag.repository.FileSizeTag</tag-class>
+		<body-content>scriptless</body-content>
+
+		<attribute>
+			<name>sizeInBytes</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>bytes</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>kilobytes</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>megabytes</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>gigabytes</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>terabytes</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>pedabytes</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>exabytes</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+	</tag>
+
+	<tag>
+		<name>authorName</name>
+		<tag-class>edu.ur.tag.repository.AuthorNameTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>personName</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>displayDates</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>lastNameFirst</name>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	
+	<tag>
+		<name>itemTransformUrl</name>
+		<tag-class>
+			edu.ur.tag.repository.ItemTransformDownloadUrl
+		</tag-class>
+		<body-content>scriptless</body-content>
+
+		<attribute>
+			<name>itemFile</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>systemCode</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>download</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>false</required>
+		</attribute>
+	</tag>
+	
+
+
+	<tag>
+		<name>printError</name>
+		<tag-class>edu.ur.tag.repository.PrintError</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>errors</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>key</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+	</tag>
+
+	<!--  this tag ouputs an icon image for the specified file type -->
+	<tag>
+		<name>fileTypeImg</name>
+		<tag-class>edu.ur.tag.repository.FileTypeImgTag</tag-class>
+		<body-content>scriptless</body-content>
+
+		<!--  Attributes specific to the file type image -->
+		<attribute>
+			<name>versionedFile</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>irFile</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>ismap</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>longDesc</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>useMap</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<!--  Core attributes -->
+
+		<attribute>
+			<name>id</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>cssClass</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>title</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>style</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>dir</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>lang</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>xmlLang</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<!--   Keyboard Events -->
+
+		<attribute>
+			<name>onKeyDown</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>onKeyPress</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>onKeyUp</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<!--   Mouse Events -->
+
+		<attribute>
+			<name>onClick</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>ondblclick</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>onMouseDown</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>onMouseMove</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>onMouseOver</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>onMouseOut</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>onMouseUp</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+
+	<tag>
+		<name>acl</name>
+		<tag-class>edu.ur.tag.repository.IrAclTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>hasPermission</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+				A comma separated list of string names of the
+				authorization
+			</description>
+		</attribute>
+		<attribute>
+			<name>domainObject</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+				The actual domain object instance for which permissions
+				are being evaluated.
+			</description>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>aclVar</name>
+		<tag-class>edu.ur.tag.repository.IrAclSimpleTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>hasPermission</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+				A comma separated list of string names of the
+				authorization
+			</description>
+		</attribute>
+		<attribute>
+			<name>domainObject</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+				The actual domain object instance for which permissions
+				are being evaluated.
+			</description>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>
+				The variable set with true or false if the user has the
+				permission
+			</description>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>facet</name>
+		<tag-class>edu.ur.tag.repository.FacetTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>key</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>facets</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>jsPagination</name>
+		<tag-class>
+			edu.ur.tag.repository.JavascriptPaginationTag
+		</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>totalHits</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>rowStart</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>javaScriptFunctionName</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>numberOfResultsToShow</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>false</required>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>fileGroupEntries</name>
+		<tag-class>edu.ur.tag.repository.FileGroupEntriesTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>itemFile</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+	</tag>
+
+	<function>
+		<name>isOwner</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isOwner(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isLocker</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isLocker(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isInGroup</name>
+		<function-class>
+			edu.ur.tag.repository.GroupWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isInGroup(edu.ur.ir.user.IrUser, edu.ur.ir.user.IrUserGroup)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isAdminOfGroup</name>
+		<function-class>
+			edu.ur.tag.repository.GroupWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isAdminOfGroup(edu.ur.ir.user.IrUser, edu.ur.ir.user.IrUserGroup)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>entryHasPermission</name>
+		<function-class>
+			edu.ur.tag.repository.SecurityUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean entryHasPermission(edu.ur.ir.security.AccessControlEntry, java.lang.String)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>groupHasAceForCollection</name>
+		<function-class>
+			edu.ur.tag.repository.SecurityUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean groupHasAceForCollection(edu.ur.ir.security.IrAcl, edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.user.IrUserGroup)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>groupHasPermissionForCollection</name>
+		<function-class>
+			edu.ur.tag.repository.SecurityUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean groupHasPermissionForCollection(edu.ur.ir.security.IrAcl, edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.user.IrUserGroup, edu.ur.ir.security.IrClassTypePermission)
+		</function-signature>
+	</function>
+
+
+	<function>
+		<name>canMoveToCollection</name>
+		<function-class>
+			edu.ur.tag.repository.InstitutionalCollectionUtils
+		</function-class>
+		<function-signature>
+			boolean canMoveToCollection(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isInstitutionalPublicationToBeMoved</name>
+		<function-class>
+			edu.ur.tag.repository.InstitutionalCollectionUtils
+		</function-class>
+		<function-signature>
+			boolean isInstitutionalPublicationToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>canMoveToFolder</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canMoveToFolder(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isFileToBeMoved</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isFileToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+	
+	<function>
+		<name>canMoveToResearcherFolder</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canMoveToResearcherFolder(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isResearcherObjectToBeMoved</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isResearcherObjectToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>canMoveToPersonalCollection</name>
+		<function-class>
+			edu.ur.tag.repository.CollectionWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canMoveToPersonalCollection(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isPublicationToBeMoved</name>
+		<function-class>
+			edu.ur.tag.repository.CollectionWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isPublicationToBeMoved(java.util.Collection, edu.ur.ir.FileSystem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>canLockFile</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canLockFile(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>canShareFile</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canShareFile(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>canEditFile</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canEditFile(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>canBreakLock</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean canBreakLock(edu.ur.ir.user.IrUser, edu.ur.ir.file.VersionedFile)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>fileExistsInItem</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean fileExistsInItem(edu.ur.ir.user.PersonalFile, edu.ur.ir.item.GenericItem)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>hasTransform</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean hasTransformedFile(edu.ur.ir.file.IrFile, java.lang.String)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>userHasRole</name>
+		<function-class>
+			edu.ur.tag.repository.UserWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean userHasRole(java.lang.String, java.lang.String)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>checkUserHasRole</name>
+		<function-class>
+			edu.ur.tag.repository.UserWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean checkUserHasRole(edu.ur.ir.user.IrUser, java.lang.String, java.lang.String)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>fileDownloadCount</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			Long fileDownloadCount(edu.ur.ir.file.IrFile)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>hasThumbnail</name>
+		<function-class>
+			edu.ur.tag.repository.FileWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean hasThumbnail(edu.ur.ir.file.IrFile)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>facetSelected</name>
+		<function-class>
+			edu.ur.tag.repository.SearchUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean facetSelected(edu.ur.ir.FacetSearchHelper, edu.ur.ir.search.FacetResult)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>groupHasPermissionForItem</name>
+		<function-class>
+			edu.ur.tag.repository.SecurityUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean groupHasPermissionForItem(edu.ur.ir.security.IrAcl, edu.ur.ir.item.GenericItem, edu.ur.ir.user.IrUserGroup, edu.ur.ir.security.IrClassTypePermission)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>groupHasAceForItem</name>
+		<function-class>
+			edu.ur.tag.repository.SecurityUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean groupHasAceForItem(edu.ur.ir.security.IrAcl, edu.ur.ir.item.GenericItem, edu.ur.ir.user.IrUserGroup)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>groupHasAceForItemFile</name>
+		<function-class>
+			edu.ur.tag.repository.SecurityUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean groupHasAceForItemFile(edu.ur.ir.security.IrAcl, edu.ur.ir.item.ItemFile, edu.ur.ir.user.IrUserGroup)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>hasPermission</name>
+		<function-class>
+			edu.ur.tag.repository.SecurityUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean hasPermission(java.lang.String, java.lang.Object)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isStringEmpty</name>
+		<function-class>
+			edu.ur.tag.repository.StringUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isEmpty(java.lang.String)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>infoSizeOnDisk</name>
+		<function-class>
+			edu.ur.tag.repository.FileInfoUtils
+		</function-class>
+		<function-signature>
+			java.lang.Long sizeOnDisk(edu.ur.file.db.FileInfo)
+		</function-signature>
+	</function>
+
+	<function>
+		<name>isContributor</name>
+		<function-class>
+			edu.ur.tag.repository.GenericItemWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isContributor(edu.ur.ir.item.GenericItem, edu.ur.ir.person.PersonName)
+		</function-signature>
+	</function>
+	
+  
+</taglib>

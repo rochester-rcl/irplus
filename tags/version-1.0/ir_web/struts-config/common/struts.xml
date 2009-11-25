@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd" [
+    <!ENTITY item_public SYSTEM "item_public.xml">
+    ]>
+    
+<struts>
+    <constant name="struts.enable.SlashesInActionNames" value="true"/>
+    <include file="struts-default.xml"/>
+    <include file="config-browser.xml"/>
+    
+    <package name="default" extends="struts-default">
+        
+        <result-types>
+            <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>
+        </result-types>
+        <interceptors>
+             <interceptor name="user" class="edu.ur.web.interceptor.AcegiUserInterceptor"/>
+             <interceptor name="emailError" class="edu.ur.web.interceptor.EmailErrorInterceptor"/>
+
+             <interceptor-stack name="default">
+                <interceptor-ref name="emailError"/>
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="user"/>
+             </interceptor-stack>
+        
+             <interceptor-stack name="editStack">
+                 <interceptor-ref name="emailError"/>
+                 <interceptor-ref name="servletConfig"/>
+                 <interceptor-ref name="staticParams"/>
+                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="prepare"/>
+                 <interceptor-ref name="modelDriven"/>
+                 <interceptor-ref name="conversionError"/>
+                 <interceptor-ref name="user"/>
+             </interceptor-stack>
+             
+             <interceptor-stack name="crudStack">
+                 <interceptor-ref name="emailError"/>
+                 <interceptor-ref name="servletConfig"/>
+                 <interceptor-ref name="staticParams"/>
+                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="prepare"/>
+                 <interceptor-ref name="modelDriven"/>
+                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="conversionError"/>
+                 <interceptor-ref name="validation"/>
+                 <interceptor-ref name="workflow"/>
+                 <interceptor-ref name="user"/>
+             </interceptor-stack>
+             
+        </interceptors>
+        
+       
+        <default-action-ref name="unknownAction" />
+
+        <global-results>
+        	 <result type="redirect" name="change-password">/pages/user/login/force_change_password.jsp</result>
+        	 <result type="redirect" name="registration-error">/pages/user/login/invalid_token.jsp</result>
+        	 <result type="redirect" name="handleError">/pages/error.jsp</result>
+        	 <result type="redirect" name="accessDenied">/accessDenied.jsp</result>
+        </global-results>
+        
+        <!--  ************************************ -->
+        <!--  public item actions                  -->
+        <!--  ************************************ -->
+        &item_public;
+        
+        <!--  handles old url values from the old system -->
+        <action name="handle/**" class="edu.ur.ir.web.action.RedirectOldHandleUrl">
+            <result name="notFound">/pages/item/institutional_publication_not_found.jsp</result>
+            <result name="success" type="redirectAction"> 
+                <param name="actionName">institutionalPublicationPublicView</param> 
+                <param name="institutionalItemId">${institutionalItemId}</param> 
+                <param name="versionNumber">${versionNumber}</param> 
+            </result> 
+        </action>
+        
+        <!-- Help action -->
+        <action name="help">
+            <result type="redirect">/pages/user-help.jsp</result>
+        </action>
+        
+        <action name="admin-help">
+            <result type="redirect">/pages/admin-help.jsp</result>
+        </action>
+        
+        <!-- Help action -->
+        <action name="privacyPolicy">
+            <result type="redirect">/pages/privacy_policy.jsp</result>
+        </action>
+        
+        <!--  Conact Us action -->
+        <action name="contactUs">
+            <result type="redirect"> /pages/contact_us.jsp</result>
+        </action>
+        
+        <action name="sendHelpEmail" class="edu.ur.ir.web.action.ContactUs">
+            <result name="success">/pages/contact_us_thankyou.jsp</result>
+            <result name="input">/pages/contact_us.jsp</result>
+        </action>
+        
+        <!-- Help action -->
+        <action name="about">
+            <result type="redirect">/pages/about.jsp</result>
+        </action>
+        
+        <!--  Home page actions -->
+        <action name="goHome">
+            <result name="success" type="redirect">home.action</result>
+        </action>
+
+        <action name="home" class="edu.ur.ir.web.action.Home">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/home.jsp</result>
+        </action>
+
+        <action name="loadHomeStatistics" class="edu.ur.ir.web.action.Home"
+        		method="loadStatistics">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/home_statistics.jsp</result>
+        </action>
+                
+        <action name="unknownAction" class="edu.ur.ir.web.action.UnknownAction">
+            <result>/pages/unknown_action.jsp</result>
+        </action>
+        
+        <action name="j_acegi_logout">
+             <result type="redirect">home.action</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  actions for viewing collections      -->
+        <!--  ************************************ -->
+        <action name="getInstitutionalCollections" 
+                class="edu.ur.ir.web.action.institution.ViewInstitutionalCollections">
+                <interceptor-ref name="editStack" />
+                <result name="success">/pages/view_collections_frag.jsp</result>
+        </action>
+        
+        <action name="viewInstitutionalCollection" 
+                class="edu.ur.ir.web.action.institution.PublicCollectionView"
+                method="view">
+                <interceptor-ref name="editStack" />
+                <result name="view">/pages/collection/collection_view.jsp</result>
+        </action>
+        
+        <action name="getInstitutionalCollectionStatistics" 
+                class="edu.ur.ir.web.action.institution.PublicCollectionView"
+                method="getInstitutionalCollectionStatistic">
+                <interceptor-ref name="editStack" />
+                <result name="success">/pages/collection/collection_statistics_view.jsp</result>
+        </action>
+        
+        <!-- Collection pictures action -->
+        <action name="downloadCollectionPicture"
+            class="edu.ur.ir.web.action.institution.CollectionPictureFileDownload">
+            <result name="success" type="no-op"/>
+        </action>
+        
+        <!-- Collection pictures action -->
+        <action name="nextCollectionPicture"
+            class="edu.ur.ir.web.action.institution.NextCollectionPicture">
+            <result name="success">/pages/collection/next_collection_picture_frag.jsp</result>
+        </action> 
+        
+        <!--  ************************************ -->
+        <!--  Inviting and adding invited user     -->
+        <!--  actions                              -->
+        <!--  ************************************ -->
+        
+        <!-- Login for invited user - actions -->
+        <action name="inviteLogin"
+            class="edu.ur.ir.web.action.user.InviteLogin">
+            <interceptor-ref name="editStack" />
+            <result name="success">/pages/user/login/invite_login.jsp</result>
+        </action>
+        
+        <action name="viewAddUser"
+            class="edu.ur.ir.web.action.user.RegisterUser">
+            <interceptor-ref name="editStack" />
+            <result name="success">/pages/user/login/register_user.jsp</result>
+        </action>     
+        
+         <!--  ************************************ -->
+        <!--   User Registration - actions                  -->
+        <!--  ************************************ -->
+
+        <action name="viewUserRegistration" method="viewUserRegistration" 
+            class="edu.ur.ir.web.action.user.RegisterUser">
+            <interceptor-ref name="editStack" />
+            <result name="success">/pages/user/login/register_user.jsp</result>
+        </action>     
+
+        <action name="registerNewUser" method="registerUser"
+            class="edu.ur.ir.web.action.user.RegisterUser">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/user/login/register_user.jsp</result>
+            <result name="success">/pages/user/login/registeration_confirmation.jsp</result>
+            <result name="successInvite">/pages/user/login/invite_confirmation.jsp</result>
+        </action>
+                 
+        <!--  ************************************ -->
+        <!--   password - actions                  -->
+        <!--  ************************************ -->
+        
+        <!-- forgot password -->
+        <action name="viewForgotPassword"
+            class="edu.ur.ir.web.action.user.ForgotPassword">
+            <result name="success">/pages/user/login/change_password.jsp</result>
+        </action>
+ 
+        <!-- forgot password -->
+        <action name="savePasswordToken"
+            class="edu.ur.ir.web.action.user.ForgotPassword">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/login/forgot_password_form.jsp</result>
+        </action>
+
+
+       <!-- Change password - actions  -->
+        <action name="viewChangePassword"
+            class="edu.ur.ir.web.action.user.ChangePassword">
+            <result name="success">/pages/user/login/change_password.jsp</result>
+        </action> 
+
+        <action name="changePassword" method="savePassword" 
+            class="edu.ur.ir.web.action.user.ChangePassword">
+            <interceptor-ref name="editStack"/>
+           <result name="success" type="redirect">/user/passwordConfirmation.action</result>
+        </action> 
+
+        <!--  ************************************ -->
+        <!--    Repository pictures actions        -->
+        <!--  ************************************ -->
+        <!-- Repository pictures action -->
+        <action name="downloadRepositoryPicture"
+            class="edu.ur.ir.web.action.RepositoryPictureFileDownload">
+            <result name="success" type="no-op"/>
+        </action>
+        
+        <!-- Repository pictures action -->
+        <action name="nextRepositoryPicture"
+            class="edu.ur.ir.web.action.NextRepositoryPicture">
+            <result name="success">/pages/next_repository_picture_frag.jsp</result>
+        </action> 
+      
+        <!--  ************************************ -->
+        <!--    Transformed file / Thumbnail file actions  -->
+        <!--  ************************************ -->  
+        
+         <!--  Action for downloading repository thumbnail files -->
+        <action name="repositoryThumbnailDownloader" 
+            class="edu.ur.ir.web.action.repository.RepositoryThumbnailDownloader">
+            <result name="success" type="no-op"/>
+        </action> 
+        
+          <!--  Action for downloading news thumbnail files -->
+        <action name="newsThumbnailDownloader" 
+            class="edu.ur.ir.web.action.news.NewsThumbnailDownloader">
+            <result name="success" type="no-op"/>
+        </action> 
+        
+        <!--  Action for downloading collection thumbnail files -->
+        <action name="institutionalCollectionThumbnailDownloader" 
+            class="edu.ur.ir.web.action.institution.InstitutionalCollectionThumbnailDownloader">
+            <result name="success" type="no-op"/>
+        </action> 
+        
+        <!--  Action for downloading transformed files -->
+        <action name="transformedFileDownload" 
+            class="edu.ur.ir.web.action.repository.TransformedFileDownloader">
+            <result name="success" type="no-op"/>
+        </action> 
+        
+        <!--  Action for item file transformed MOSTLY Thumbnail viewing -->
+        <action name="genericItemTransformedFileDownload" 
+            class="edu.ur.ir.web.action.item.GenericItemTransformedFileDownloader">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+        </action>   
+        
+         <!--  Action for item file transformed MOSTLY Thumbnail viewing -->
+        <action name="researcherThumbnailDownloader" 
+            class="edu.ur.ir.web.action.researcher.ResearcherThumbnailDownloader">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+        </action>               
+                    
+        
+
+        <!--  ************************************ -->
+        <!--    News actions                       -->
+        <!--  ************************************ --> 
+        <!-- News items -->
+        <action name="getNewsItems"
+            class="edu.ur.ir.web.action.GetNewsItems">
+            <result name="success">/pages/news_items_frag.jsp</result>
+        </action> 
+        
+        <action name="viewNews" 
+            class="edu.ur.ir.web.action.GetNewsArticle">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/news.jsp</result>
+        </action>
+        
+        <!-- News pictures action -->
+        <action name="downloadNewsItemsPicture"
+            class="edu.ur.ir.web.action.NewsImageDownloader">
+            <result name="success" type="no-op"/>
+        </action>
+
+        <!--  ************************************ -->
+        <!--    Researcher actions                 -->
+        <!--  ************************************ -->
+        
+        <!-- Researcher pictures action -->
+        <action name="nextResearcherPicture"
+            class="edu.ur.ir.web.action.NextResearcherPicture">
+            <result name="success">/pages/next_researcher_picture_frag.jsp</result>
+        </action>         
+        
+         <action name="viewResearcherPage" 
+                class="edu.ur.ir.web.action.researcher.PublicResearcherPageView"
+                method="view">
+                <interceptor-ref name="editStack" />
+                <result name="accessDenied">/accessDenied.jsp</result>
+                <result name="success">/pages/researcher_page/researcher_page_view.jsp</result>
+        </action>
+        
+        <action name="researcherPublicationView" 
+            class="edu.ur.ir.web.action.researcher.ViewResearcherPublication">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/item/personal_publication_view.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/researcher_page/researcher_pub_not_found.jsp</result>
+        </action>
+
+        <!-- Download Researcher picture  -->
+        <action name="downloadResearcherPicture"
+            class="edu.ur.ir.web.action.researcher.ResearcherPictureFileDownload">
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="no-op"/>
+        </action>
+        
+        <!-- Next Researcher picture  -->
+        <action name="nextPicture"
+            class="edu.ur.ir.web.action.researcher.PublicResearcherPageView" 
+            method="getPictures">
+            <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/researcher_page/next_researcher_picture_frag.jsp</result>
+        </action>  
+        
+        <action name="researcherFileDownload" 
+                class="edu.ur.ir.web.action.researcher.DownloadResearcherFile">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="no-op"/>
+            <result name="notFound">/pages/researcher_page/researcher_file_not_found.jsp</result>
+        </action>
+
+        <!--  ************************************ -->
+        <!--    Researcher browse / Search actions -->
+        <!--  ************************************ -->
+                
+        <action name="viewResearcherBrowse" method="browseResearcher" 
+            class="edu.ur.ir.web.action.researcher.ResearcherBrowse">
+            <result name="success">/pages/researcher_page/browse_all_researchers.jsp</result>
+        </action>
+
+        <action name="startSearchResearchers" 
+             class="edu.ur.ir.web.action.researcher.ResearcherSearch">
+             <result name="success">/pages/researcher_page/browse_all_researchers.jsp</result>
+        </action>
+        
+        <action name="searchResearchers" 
+             class="edu.ur.ir.web.action.researcher.ResearcherSearch"
+             method="searchResearchers">
+             <result name="success">/pages/researcher_page/browse_all_researchers.jsp</result>
+        </action>
+        
+        <action name="filterSearchResearchers" 
+             class="edu.ur.ir.web.action.researcher.ResearcherSearch"
+             method="filteredSearchResearchers">
+             <result name="success">/pages/researcher_page/browse_all_researchers.jsp</result>
+        </action>
+        
+        
+        <!--  ************************************ -->
+        <!--    Conrtibutor actions                 -->
+        <!--  ************************************ -->
+        
+         <action name="viewContributorPage" 
+                class="edu.ur.ir.web.action.item.ViewContributorPage">
+         	<result name="success">/pages/item/contributor_page_view.jsp</result>
+         </action> 
+         
+          <action name="viewByPersonNameContributorPage" 
+                class="edu.ur.ir.web.action.item.ViewByPersonContributorPage">
+         	<result name="success">/pages/item/contributor_page_view.jsp</result>
+         </action>       
+                 
+    </package>
+         
+        
+    
+    <!-- admin functions -->
+    <include file="admin.xml"/>
+    
+    <!-- include user functions -->
+    <include file="user.xml"/>
+    
+    
+</struts>

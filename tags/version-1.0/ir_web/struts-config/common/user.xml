@@ -1,0 +1,1230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd" [
+    <!ENTITY researcher SYSTEM "user_researcher.xml">
+    ]>
+<struts>
+    
+    <include file="struts-default.xml"/>
+
+    <package name="user" namespace="/user" extends="struts-default">
+           <result-types>
+               <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>
+           </result-types>
+           
+           <interceptors>
+             <interceptor name="user" class="edu.ur.web.interceptor.AcegiUserInterceptor"/>
+             <interceptor name="emailError" class="edu.ur.web.interceptor.EmailErrorInterceptor"/>
+             
+             <interceptor-stack name="default">
+                <interceptor-ref name="emailError"/>
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="user"/>
+             </interceptor-stack>
+        
+             <interceptor-stack name="editStack">
+                 <interceptor-ref name="emailError"/>
+                 <interceptor-ref name="servletConfig"/>
+                 <interceptor-ref name="staticParams"/>
+                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="prepare"/>
+                 <interceptor-ref name="modelDriven"/>
+                 <interceptor-ref name="conversionError"/>
+                 <interceptor-ref name="user"/>
+             </interceptor-stack>
+             
+             
+             <!-- U of R file upload stack -->
+            <interceptor-stack name="urUploadStack">
+                <interceptor-ref name="emailError"/>
+                <interceptor-ref name="fileUploadStack"/>
+                <interceptor-ref name="basicStack"/>
+                <interceptor-ref name="user"/>
+            </interceptor-stack>
+          
+             
+             <interceptor-stack name="crudStack">
+                 <interceptor-ref name="emailError"/>
+                 <interceptor-ref name="servletConfig"/>
+                 <interceptor-ref name="staticParams"/>
+                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="prepare"/>
+                 <interceptor-ref name="modelDriven"/>
+                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="conversionError"/>
+                 <interceptor-ref name="validation"/>
+                 <interceptor-ref name="workflow"/>
+                 <interceptor-ref name="user"/>
+             </interceptor-stack>
+             
+        </interceptors>
+        
+ 
+  		<global-results>
+        	 <result name="change-password">/pages/user/login/force_change_password.jsp</result>
+        	 <result name="registration-error">/pages/user/login/invalid_token.jsp</result>
+        	 <result name="accessDenied">/accessDenied.jsp</result>
+        </global-results>
+
+        <!--  ************************************ -->
+        <!--  Researcher actions                -->
+        <!--  ************************************ -->
+        &researcher;
+                
+                
+        <!--  ************************************ -->
+        <!--  Personal file download actions                -->
+        <!--  ************************************ -->
+        <action name="personalFileThumbnailDownloader" 
+            class="edu.ur.ir.web.action.user.PersonalFileThumbnailDownloader">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+        </action>               
+                    
+        <!--  ************************************ -->
+        <!--  Workspace information                -->
+        <!--  ************************************ -->
+        <action name="workspace" class="edu.ur.ir.web.action.user.ViewWorkspace">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/workspace.jsp</result>
+            <result name="basic_view">/pages/home.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Pages and action to upload files     -->
+        <!--  ************************************ -->
+        <action name="viewUploadFilesPage" class="edu.ur.ir.web.action.user.AddPersonalFiles">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/upload_files.jsp</result>
+        </action>
+        
+        <action name="uploadFiles" method="uploadFiles"
+               class="edu.ur.ir.web.action.user.AddPersonalFiles">
+            <interceptor-ref name="urUploadStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">workspace.action?parentFolderId=${folderId}</result>
+            <result name="input">/pages/user/workspace/upload_files.jsp</result>
+        </action>
+        
+        <action name="singleFileUpload" method="uploadFiles" 
+            class="edu.ur.ir.web.action.user.AddPersonalFiles">
+            <interceptor-ref name="urUploadStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/single_file_upload_frag.jsp</result>
+            <result name="input">/pages/user/workspace/single_file_upload_frag.jsp</result>
+        </action>
+        
+        
+        <!--  ************************************ -->
+        <!--  Personal folder and file actions     -->
+        <!--  ************************************ -->
+        <action name="viewPersonalFolders"
+            method="getTable"
+            class="edu.ur.ir.web.action.user.ViewPersonalFolders">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/folder_table.jsp</result>
+        </action>
+        
+        <action name="*PersonalFolder"
+            method ="{1}"
+            class="edu.ur.ir.web.action.user.AddPersonalFolder">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="added">/pages/user/workspace/personal_folder_form.jsp</result>
+            <result name="get">/pages/user/workspace/personal_folder_form.jsp</result>
+        </action>
+     
+        <!--  Allows a user to delete files and folders -->
+        <action name="deletePersonalFileSystemObjects"
+            method ="deleteFileSystemObjects"
+            class="edu.ur.ir.web.action.user.ViewPersonalFolders">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/folder_table.jsp</result>
+        </action>
+        
+        <!-- Allows a user to view the information for a personal file -->
+        <action name="viewPersonalFile" class="edu.ur.ir.web.action.user.ViewPersonalFile">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/file_properties.jsp</result>
+        </action>
+ 
+         <!-- Allows a user to view the properties for a personal folder -->
+        <action name="viewFolderProperties" class="edu.ur.ir.web.action.user.ViewPersonalFolderProperties">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/folder_properties.jsp</result>
+        </action>
+               
+        <!-- This only returns a fragment of the personal folder properties -->
+        <action name="getPersonalFolderProperties" class="edu.ur.ir.web.action.user.ViewPersonalFolderProperties">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/folder_properties_inner_page.jsp</result>
+        </action>
+                       
+        <!-- This only returns a fragment of the personal file properties -->
+        <action name="getPersonalFileProperties" class="edu.ur.ir.web.action.user.ViewPersonalFile">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/file_properties_inner_page.jsp</result>
+        </action>
+        
+        <action name="viewNewFileVersionUpload" class="edu.ur.ir.web.action.user.AddNewFileVersion">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/upload_new_file_version.jsp</result>
+        </action>
+        
+        <!--  Allows a user to upload a new version of one of their files -->
+        <action name="uploadNewFileVersion" method="addNewFileVersion" 
+            class="edu.ur.ir.web.action.user.AddNewFileVersion">
+            <interceptor-ref name="urUploadStack"/>
+            <result name="success">/pages/user/workspace/upload_new_file_version.jsp</result>
+            <result name="input">/pages/user/workspace/upload_new_file_version.jsp</result>
+        </action>
+        
+        <action name="personalFileDownload" 
+            class="edu.ur.ir.web.action.user.DownloadPersonalFile">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/fileNotFound.jsp</result>
+            <result name="success" type="no-op"/>
+        </action> 
+        
+        <!--  lock a file so that no other user can upload changes -->
+        <action name="lockVersionedFile" class="edu.ur.ir.web.action.user.LockVersionedFile" >
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/lock_file_response.jsp</result>
+        </action>
+        
+        <!--  un lock a file so that other users can upload changes -->
+        <action name="unLockVersionedFile" class="edu.ur.ir.web.action.user.UnLockVersionedFile" >
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/unlock_file_response.jsp</result>
+        </action>
+        
+        <!--  Rename file  -->
+        <action name="*File" class="edu.ur.ir.web.action.user.RenamePersonalFile" method="{1}">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/rename_file_form.jsp</result>
+            <result name="get">/pages/user/workspace/rename_file_form.jsp</result>
+        </action>   
+ 
+        <!--  Change owner for  file  -->
+        <action name="changeOwner" class="edu.ur.ir.web.action.user.ChangeOwnerForPersonalFile" >
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/access_denied_js.jsp</result>
+            <result name="success" type="no-op"/>
+        </action>  
+        
+        <action name="viewMovePersonalFolderLocations"
+            class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/move_folder.jsp</result>
+        </action>
+        
+        <action name="getMovePersonalFolderDestinations"
+            class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/move_folder_frag.jsp</result>
+        </action>
+        
+        <action name="movePersonalFolderInformation"
+            class="edu.ur.ir.web.action.user.MoveFilesAndFolders"
+            method="move">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/move_folder_frag.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  shared inbox actions     -->
+        <!--  ************************************ -->
+        <action name="viewSharedInboxFiles"
+            method="viewSharedInboxFiles"
+            class="edu.ur.ir.web.action.user.ManageSharedInboxFiles">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/shared_file_inbox_table_frag.jsp</result>
+        </action>
+
+        <action name="getNumberOfSharedInboxFiles"
+            method="getNumberOfSharedInboxFiles"
+            class="edu.ur.ir.web.action.user.ManageSharedInboxFiles">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/shared_file_inbox_table_frag.jsp</result>
+        </action>
+                
+         <action name="viewMoveSharedFilesLocations"
+            class="edu.ur.ir.web.action.user.ManageSharedInboxFiles"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/move_shared_file.jsp</result>
+        </action>
+        
+        
+        <action name="getMoveSharedFilesDestinations"
+            class="edu.ur.ir.web.action.user.ManageSharedInboxFiles"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/move_shared_file_frag.jsp</result>
+        </action>     
+        
+        <action name="moveSharedFileInformation"
+            class="edu.ur.ir.web.action.user.ManageSharedInboxFiles"
+            method="move">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/move_shared_file_frag.jsp</result>
+        </action>        
+
+        <action name="deleteInboxFile"
+            class="edu.ur.ir.web.action.user.ManageSharedInboxFiles"
+            method="deleteSharedInboxFiles">
+            <interceptor-ref name="crudStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/shared_file_inbox_table_frag.jsp</result>
+        </action>  
+              
+        <action name="inboxFileDownload" 
+            class="edu.ur.ir.web.action.user.DownloadSharedInboxFile">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+        </action>               
+        
+        <!--  ************************************ -->
+        <!--  Personal Collection 		           -->
+        <!--  ************************************ -->
+
+        <action name="viewPersonalCollections"
+            method="getTable"
+            class="edu.ur.ir.web.action.user.ViewPersonalCollections">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/collection_table.jsp</result>
+        </action>
+
+        <action name="*PersonalCollection"
+            method ="{1}"
+            class="edu.ur.ir.web.action.user.AddPersonalCollection">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="added">/pages/user/workspace/personal_collection_form.jsp</result>
+            <result name="get">/pages/user/workspace/personal_collection_form.jsp</result>
+        </action>
+          
+        <!--  Allows a user to delete files and folders -->
+        <action name="deletePersonalCollectionSystemObjects"
+            method ="deleteCollectionSystemObjects"
+            class="edu.ur.ir.web.action.user.ViewPersonalCollections">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/collection_table.jsp</result>
+        </action>
+
+        <!--  ****************************************** -->
+        <!--  Move Collections and Publications actions	 -->
+        <!--  ****************************************** -->
+        
+        <action name="viewMovePersonalCollectionLocations"
+            class="edu.ur.ir.web.action.user.MoveItemsAndCollections"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/move_collection.jsp</result>
+        </action>
+        
+        <action name="getMovePersonalCollectionDestinations"
+            class="edu.ur.ir.web.action.user.MoveItemsAndCollections"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/move_collection_frag.jsp</result>
+        </action>
+        
+        <action name="movePersonalCollectionInformation"
+            class="edu.ur.ir.web.action.user.MoveItemsAndCollections"
+            method="move">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/move_collection_frag.jsp</result>
+        </action>        
+
+        <!--  ************************************ -->
+        <!--  Personal Item properties  actions	   -->
+        <!--  ************************************ -->
+
+        <action name="viewPersonalItemProperties"
+            class="edu.ur.ir.web.action.user.ViewPersonalItemProperties">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item_properties.jsp</result>
+        </action>
+        
+        <action name="viewPersonalItemVersion"
+            class="edu.ur.ir.web.action.item.ViewPersonalPublication">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/item/view_personal_item_version.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+        </action>
+                
+        <!--  ************************************ -->
+        <!--  Search  actions			           -->
+        <!--  ************************************ -->
+
+        <action name="userWorkspaceSearch"
+            class="edu.ur.ir.web.action.user.UserWorkspaceSearch">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/workspace/user_search_table.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Item actions     -->
+        <!--  ************************************ -->
+        
+        <action name="itemFileDownload" 
+        		method="fileDownloadWithPermissionCheck"
+                class="edu.ur.ir.web.action.item.GenericItemFileDownload">
+            <interceptor-ref name="default" />
+            <result name="success" type="no-op"/>
+            <result name="input">/pages/item/no_access_file_download_error.jsp</result>
+        </action>
+        
+
+        <!--  Check for file ownership  -->
+        <action name="checkFileOwnership"
+                method="checkFileOwnership"
+                class="edu.ur.ir.web.action.item.AddItemToCollection">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/item/file_owner_response.jsp</result>
+        </action>
+        
+        <!--  Creates new item -->
+        <action name="addItemToCollection"
+                method="createItem"
+                class="edu.ur.ir.web.action.item.AddItemToCollection">
+            <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success"  type="redirect">viewEditItem.action?genericItemId=${item.id}&amp;parentFolderId=${parentFolderId}&amp;parentCollectionId=${personalItem.personalCollection.id}</result>
+        </action>
+
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="getPersonalFolders"
+                method="getFolders"
+                class="edu.ur.ir.web.action.item.AddFilesToItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/folder_display.jsp</result>
+        </action>
+        
+        <!--  Action to get the selected files for display in the table -->
+        <action name="getSelectedFiles"
+                method="getFiles"
+                class="edu.ur.ir.web.action.item.AddFilesToItem">
+                <interceptor-ref name="editStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/selected_files_form.jsp</result>
+        </action>
+        
+        <!--  Removes file from the selected list of files -->
+        <action name="removeFile"
+                method="removeFile"
+                class="edu.ur.ir.web.action.item.AddFilesToItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/selected_files_form.jsp</result>
+        </action>
+        
+        <!--  Add file to selected list of files -->
+        <action name="addFile"
+                method="addFile"
+                class="edu.ur.ir.web.action.item.AddFilesToItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/add_file_response.jsp</result>
+        </action>
+        
+        <!--  Change file version -->
+        <action name="changeFileVersion"
+                method="changeFileVersion"
+                class="edu.ur.ir.web.action.item.AddFilesToItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/selected_files_form.jsp</result>
+        </action>
+        
+        <!--  Change file description -->
+        <action name="updateDescription"
+                method="updateDescription"
+                class="edu.ur.ir.web.action.item.AddFilesToItem">
+                <interceptor-ref name="editStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>    
+            <result name="success">/pages/user/workspace/item/selected_files_form.jsp</result>
+        </action>        
+        
+        <!--  Action to move the file down -->
+        <action name="moveFileDown"
+                method="moveFileDown"
+                class="edu.ur.ir.web.action.item.AddFilesToItem">
+                <interceptor-ref name="editStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+        </action>
+        
+        <!--  Action to move the file up-->
+        <action name="moveFileUp"
+                method="moveFileUp"
+                class="edu.ur.ir.web.action.item.AddFilesToItem">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+        </action>
+        
+        <!--  Edit item -->
+        <action name="viewEditItem"
+                class="edu.ur.ir.web.action.item.AddFilesToItem">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/add_files_to_item.jsp</result>
+        </action>
+
+        <!--  Show item metadata -->
+        <action name="viewItemMetadata"
+                method="viewItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/add_item_metadata.jsp</result>
+        </action>
+
+		<!--  Update the series form  -->
+        <action name="getSeriesInformation"
+                method="getSeriesInformation"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/series_list.jsp</result>
+        </action>    
+        
+        <!--  Update the identifier form  -->
+        <action name="getIdentifierInformation"
+                method="getIdentifierInformation"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/identifier_list.jsp</result>
+        </action> 
+
+        <!--  Update the extent form  -->
+        <action name="getExtentInformation"
+                method="getExtentInformation"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/extent_list.jsp</result>
+        </action>
+                
+        <!--  Update the sponsor form  -->
+        <action name="getSponsorInformation"
+                method="getSponsorInformation"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/sponsor_list.jsp</result>
+        </action>         
+
+        <!--  Update the publisher form  -->
+        <action name="getPublisherInformation"
+                method="getPublisherInformation"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/item/publisher_list.jsp</result>
+        </action>         
+        
+        <!--  save the item and goto Publication table -->
+        <action name="saveItemMetadataAndFinishLater"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            
+            <!--  this allows for a time out user goes home -->
+            <result name="workspace" type="redirect">home.action</result>
+            <result name="success" type="redirect">workspace.action?parentCollectionId=${parentCollectionId}&amp;showCollectionTab=true</result>
+        </action>
+        
+        <!--  save the item and goto institutional Item  -->
+        <action name="saveItemMetadataGoToInstitutionalItem"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">institutionalPublicationPublicView.action?institutionalItemId=${institutionalItemId}</result>
+            <result name="workspace" type="redirect">home.action</result>
+        </action>
+        
+         <!--  save the item and update the series  -->
+        <action name="saveItemMetadataAndGetSeries"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getSeriesInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
+        </action>
+        
+		<!--  save the item and update the identifier types  -->
+        <action name="saveItemMetadataAndGetIdentifier"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getIdentifierInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
+        </action>        
+
+		<!--  save the item and update the extent types  -->
+        <action name="saveItemMetadataAndGetExtent"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getExtentInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
+        </action> 
+         
+ 		<!--  save the item and update the sponsor -->
+        <action name="saveItemMetadataAndGetSponsor"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getSponsorInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
+        </action>        
+ 
+  		<!--  save the item and update the publishers -->
+        <action name="saveItemMetadataAndGetPublisher"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getPublisherInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
+        </action>        
+       
+       <!--  save the item and goto show add files -->
+        <action name="saveMetadataAndShowAddFiles"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">viewEditItem.action?genericItemId=${genericItemId}&amp;parentCollectionId=${parentCollectionId}&amp;institutionalItemId=${institutionalItemId}</result>
+            <result name="workspace" type="redirect">home.action</result>
+        </action>
+        
+        <!--  save the item and goto show add files -->
+        <action name="saveMetadataAndViewContributors"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">viewItemContributor.action?genericItemId=${genericItemId}&amp;parentCollectionId=${parentCollectionId}&amp;institutionalItemId=${institutionalItemId}</result>
+            <result name="workspace" type="redirect">home.action</result>
+        </action>
+
+        <!--  save the item and goto preview screen  -->
+        <action name="saveMetadataAndPreview"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">previewPublication.action?genericItemId=${genericItemId}&amp;parentCollectionId=${parentCollectionId}&amp;institutionalItemId=${institutionalItemId}</result>
+            <result name="workspace" type="redirect">home.action</result>
+        </action>
+
+        <!--  save type  -->
+        <action name="saveContentType"
+                method="saveContentType"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/content_type_list.jsp</result>
+        </action>
+                
+        <!--  Get series  -->
+        <action name="getSeries"
+                method="getSeries"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/item_series.jsp</result>
+        </action>
+        
+        <!--  Get Identifiers -->
+        <action name="getIdentifiers"
+                method="getIdentifiers"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/item_identifier.jsp</result>
+        </action>
+
+        <!--  Get extents -->
+        <action name="getExtents"
+                method="getExtents"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/item_extent.jsp</result>
+        </action>
+
+        <!--  Get sponsors  -->
+        <action name="getSponsors"
+                method="getAllSponsors"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/item_sponsor.jsp</result>
+        </action>
+                        
+        <!--  Search names -->
+        <action name="searchNameAction"
+                class="edu.ur.ir.web.action.item.NameSearch">
+                <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/user/workspace/item/name_authority_table.jsp</result>
+        </action>
+        
+         <!--  save the item and goto show add files -->
+        <action name="viewItemContributor"
+                class="edu.ur.ir.web.action.item.AddContributorsToItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/add_contributor.jsp</result>
+        </action>
+        
+       <!--  show contributors for the item -->
+        <action name="getContributors"
+                method="getItemContributors"
+                class="edu.ur.ir.web.action.item.AddContributorsToItem">
+                <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" >/pages/user/workspace/item/selected_contributors_form.jsp</result>
+        </action>
+        
+       <!--  Add person name for the item -->
+        <action name="addPersonName"
+                method="addNameToItem"
+                class="edu.ur.ir.web.action.item.AddContributorsToItem">
+                <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" >/pages/user/workspace/item/add_name_response.jsp</result>
+        </action>
+        
+       <!--  Add person name for the item -->
+        <action name="removeContributor"
+                method="removeContributor"
+                class="edu.ur.ir.web.action.item.AddContributorsToItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getContributors.action?genericItemId=${genericItemId}</result>
+        </action>
+        
+        <!--  Add person name for the item -->
+        <action name="addContributorType"
+                method="addContributorType"
+                class="edu.ur.ir.web.action.item.AddContributorsToItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getContributors.action?genericItemId=${genericItemId}</result>
+        </action>
+        
+        <!--  Move contributor up -->
+        <action name="moveContributorUp"
+                method="moveContributorUp"
+                class="edu.ur.ir.web.action.item.AddContributorsToItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getContributors.action?genericItemId=${genericItemId}</result>
+        </action>
+        
+        <!--  Move contributor down -->
+        <action name="moveContributorDown"
+                method="moveContributorDown"
+                class="edu.ur.ir.web.action.item.AddContributorsToItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getContributors.action?genericItemId=${genericItemId}</result>
+        </action>
+        
+        <!--  This handles creating new person name -->
+        <action name="addNewPersonName" 
+            method="create"
+            class="edu.ur.ir.web.action.person.ManagePersonNames">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="added">/pages/user/workspace/item/person_name_added.jsp</result>
+        </action>
+
+		<!--  This handles creating new person -->
+        <action name="addNewPerson" 
+            method="create"
+            class="edu.ur.ir.web.action.person.ManagePersons">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="added">/pages/user/workspace/item/person_added.jsp</result>
+        </action>        
+
+
+		<!--  This handles creating new series -->
+        <action name="createSeries" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManageSeries">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/series/series_form.jsp</result>
+        </action>   
+        
+        <!--  This handles creating new sponsor -->
+        <action name="createSponsor" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManageSponsors">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/sponsors/sponsor_form.jsp</result>
+        </action>     
+        
+        <!--  This handles creating new  identifier type -->
+        <action name="createIdentifierType" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManageIdentifierTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/identifier_types/identifier_type_added.jsp</result>
+        </action>      
+        
+        <!--  This handles creating new extent type -->
+        <action name="createExtentType" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManageExtentTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/extent_types/extent_type_added.jsp</result>
+        </action>    
+        
+         <!--  This handles creating new extent type -->
+        <action name="createPublisher" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManagePublishers">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/publishers/publisher_form.jsp</result>
+        </action>                          
+
+        <!--  ************************************ -->
+        <!--  Submission into institutional collections     -->
+        <!--  ************************************ -->
+        
+        <!-- if user has not already accepted the license, make them -->
+        <action name="acceptRepositoryLicense" 
+            class="edu.ur.ir.web.action.user.AcceptRepositoryLicense">
+            <interceptor-ref name="editStack" />
+            <result name="input">/pages/user/workspace/item/accept_license.jsp</result>
+            <result name="success" type="redirectAction">viewAddItemToCollections?genericItemId=${genericItemId}</result>
+        </action> 
+
+		<!--  This allows a user to view the institutional collections an item can 
+		      be submitted to -->
+        <action name="viewAddItemToCollections" 
+            class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
+            <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/add_institutional_collection.jsp</result>
+            <result name="acceptLicense">/pages/user/workspace/item/accept_license.jsp</result>
+        </action> 
+        
+		<!--  This handles getting the institutional collections for a user to view -->
+        <action name="getInstitutionalCollections" 
+            method="getCollectionsTable"
+            class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/institutional_collections_table.jsp</result>
+        </action>   
+
+		<!--  allows an item to be added to institutional collections -->
+        <action name="addInstitutionalCollection" 
+            method="addInstitutionalCollection"
+            class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/selected_collections_table.jsp</result>
+        </action>             
+
+		<!--  allows removing an item from submission to an institutional collection -->
+        <action name="removeInstitutionalCollection" 
+            method="removeInstitutionalCollection"
+            class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/selected_collections_table.jsp</result>
+        </action>             
+
+		<!--  This submits publication -->
+        <action name="submitPublicationAndFinishLater" 
+            method="submitPublication"
+            class="edu.ur.ir.web.action.institution.AddItemToInstitutionalCollection">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/collection_item_confirmation_page.jsp</result>
+            <result name="acceptLicense">/pages/user/workspace/item/accept_license.jsp</result>
+        </action>     
+        
+        <!--  ************************************ -->
+        <!--  Publication versioning     -->
+        <!--  ************************************ -->
+		<!--  This created new publication version for user to edit -->
+        <action name="createPublicationVersionForEdit" 
+            method="createPublicationVersion"
+            class="edu.ur.ir.web.action.item.AddFilesToItem">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">viewEditItem.action?genericItemId=${item.id}&amp;parentCollectionId=${parentCollectionId}</result>
+        </action>  
+                        
+        <!--  Action to preview publication  -->
+        <action name="previewPublication" 
+            class="edu.ur.ir.web.action.item.ViewPersonalPublication">
+             <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/item/preview_publication.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Item Link Actions            -->
+        <!--  ************************************ -->
+        
+        <action name="addItemLink"
+            method ="save"
+            class="edu.ur.ir.web.action.item.AddItemLink">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+        </action>
+        
+        <action name="updateItemLink"
+            method ="updateLink"
+            class="edu.ur.ir.web.action.item.AddItemLink">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Invite User actions			       -->
+        <!--  ************************************ -->
+
+		<action name="checkSharePermission" class="edu.ur.ir.web.action.user.InviteUser"
+				method="checkFileSharePermission">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/invite_files_confirmation.jsp</result>
+        </action>
+        
+        <action name="viewInviteUser" class="edu.ur.ir.web.action.user.InviteUser">
+            <interceptor-ref name="editStack"/>           
+            <result name="success">/pages/user/workspace/invite_user.jsp</result>
+        </action>
+       
+        <action name="getCollaborators" method="viewCollaborators"  
+        		class="edu.ur.ir.web.action.user.InviteUser">
+        	<interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/invited_users.jsp</result>
+        </action>
+
+        <action name="getPermissions" method="getPermissions"  
+        		class="edu.ur.ir.web.action.user.InviteUser">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/workspace/edit_permissions_form.jsp</result>
+        </action>
+
+        <action name="updatePermissions" method="updatePermissions"  
+        		class="edu.ur.ir.web.action.user.InviteUser">
+        	<interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="added">/pages/user/workspace/edit_permissions_form.jsp</result>
+        </action>
+
+        <action name="deleteCollaborator" method="deleteCollaborator" 
+               class="edu.ur.ir.web.action.user.InviteUser">
+            <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">viewInviteUser.action?shareFileIds=${shareFileIds}&amp;parentFolderId=${parentFolderId}</result>
+            <result name="workspace" type="redirect">workspace.action?parentFolderId=${parentFolderId}</result>
+        </action>
+        
+		<action name="removeSharedFile" method="removeFile" 
+		        class="edu.ur.ir.web.action.user.InviteUser">
+            <interceptor-ref name="crudStack"/>
+            <result name="success" type="redirect">getCollaborators.action?shareFileIds=${shareFileIds}</result>
+        </action>        
+
+        <action name="deletePendingInvitee" method="deletePendingInvitee" class="edu.ur.ir.web.action.user.InviteUser">
+            <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getCollaborators.action?shareFileIds=${shareFileIds}</result>
+        </action>
+                 
+        <action name="addInviteUser"
+            method="sendInvite"
+            class="edu.ur.ir.web.action.user.InviteUser">
+            <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="input">/pages/user/workspace/invite_user.jsp</result>
+            <result name="added">/pages/user/workspace/add_invite_response.jsp</result>
+        </action> 
+
+        <!--  ************************************ -->
+        <!--  Search Email  actions			       -->
+        <!--  ************************************ -->
+                     
+        <action name="emailSearch"
+            class="edu.ur.ir.web.action.user.UserSearch">
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/user/workspace/email_search_table.jsp</result>
+        </action>              
+        
+        <!--  ************************************ -->
+        <!--  Change Password  actions			       -->
+        <!--  ************************************ -->
+
+       <action name="passwordConfirmation" >
+       	 <interceptor-ref name="default"/>
+            <result>/pages/user/login/password_confirmation.jsp</result>
+        </action>
+        
+        
+       <action name="forceChangePassword" method="changePassword" 
+            class="edu.ur.ir.web.action.user.ChangePassword">
+            <interceptor-ref name="editStack"/>
+           <result name="success" type="redirect">passwordConfirmation.action</result>
+        </action> 
+
+
+        <!--  ************************************ -->
+        <!--  Edit My account actions		       -->
+        <!--  ************************************ -->
+
+       <action name="myAccount" method="viewEditAccount" 
+            class="edu.ur.ir.web.action.user.UpdateUserAccount">
+       	 <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/login/edit_my_account.jsp</result>
+        </action>
+        
+       <action name="saveMyAccount" method="saveMyAccount" 
+            class="edu.ur.ir.web.action.user.UpdateUserAccount">
+       	 <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/user/login/edit_my_account.jsp</result>
+        </action>  
+        
+        <action name="changeMyPassword" method="changePassword" 
+            class="edu.ur.ir.web.action.user.ChangePassword">
+            <interceptor-ref name="editStack"/>
+           <result name="success">/pages/user/login/change_password_form.jsp</result>
+        </action> 
+        
+         <action name="changeNetId" 
+            class="edu.ur.ir.web.action.user.ChangeNetId">
+            <interceptor-ref name="editStack"/>
+           <result name="success">/pages/user/login/change_net_id_form.jsp</result>
+        </action> 
+        
+ 		<!--  ************************************ -->
+        <!--  Email Actions                        -->
+        <!--  ************************************ -->
+ 		<action name="getEmails" 
+            class="edu.ur.ir.web.action.user.admin.ManageEmails"
+            method="viewEmails">
+            <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/admin/user/email_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*Email" 
+            method="{1}"
+            class="edu.ur.ir.web.action.user.admin.ManageEmails">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/user/login/edit_user.jsp</result>
+            <result name="added">/pages/admin/user/email_form.jsp</result>
+            <result name="deleted">/pages/admin/user/email_deleted.jsp</result>
+            <result name="viewEmails">/pages/admin/user/email_table.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Person Actions                       -->
+        <!--  ************************************ -->
+ 
+         <!--  This handles update, save and delete -->
+        <action name="*Person" 
+            method="{1}"
+            class="edu.ur.ir.web.action.person.ManagePersons">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/persons/persons.jsp</result>
+            <result name="added">/pages/admin/item/metadata/persons/person_form_frag.jsp</result>
+            <result name="get">/pages/admin/item/metadata/persons/person_form_frag.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/persons/person_deleted.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Person Edit/Name Actions             -->
+        <!--  ************************************ -->
+        
+        <action name="getPersonNames" 
+            class="edu.ur.ir.web.action.person.ManagePersonNames"
+            method="viewPersonNames">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/admin/item/metadata/persons/person_names_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*PersonName" 
+            method="{1}"
+            class="edu.ur.ir.web.action.person.ManagePersonNames">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/persons/person_edit.jsp</result>
+            <result name="added">/pages/admin/item/metadata/persons/person_name_added.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/persons/person_name_deleted.jsp</result>
+            <result name="accessDenied">/accessDenied.jsp</result>
+        </action> 
+        
+        <!--  ************************************ -->
+        <!--  Department Actions            	   -->
+        <!--  ************************************ -->
+        <!--  This handles adding a department -->
+        <action name="createDepartment"
+            method="create" 
+            class="edu.ur.ir.web.action.user.admin.ManageDepartments">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="added">/pages/admin/department/department_form.jsp</result>
+        </action>
+        
+                <!--  This handles update, save and delete -->
+        <action name="createField" 
+            method="create"
+            class="edu.ur.ir.web.action.researcher.ManageFields">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="added">/pages/admin/field/field_form.jsp</result>
+        </action>   
+        
+        <!--  ************************************ -->
+        <!--  Subscription to collection   	   -->
+        <!--  ************************************ -->
+        
+        <!--  This handles adding a department -->
+        <action name="subscribeToCollection"
+            method="subscribe" 
+            class="edu.ur.ir.web.action.institution.ManageCollectionSubscription">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/collection/collection_subscription_form.jsp</result>
+        </action>
+        
+        <action name="unSubscribeFromCollection"
+            method="unSubscribe" 
+            class="edu.ur.ir.web.action.institution.ManageCollectionSubscription">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/collection/collection_subscription_form.jsp</result>
+        </action>
+        
+        <action name="getUserSubscription"
+            method="getUserSubscriptionForThisCollection" 
+            class="edu.ur.ir.web.action.institution.ManageCollectionSubscription">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/collection/collection_subscription_form.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Email Verification 				   -->
+        <!--  ************************************ -->
+        
+        <action name="emailVerification"
+            class="edu.ur.ir.web.action.user.EmailVerification">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/user/login/email_verification_confirmation.jsp</result>
+        </action>        
+
+        <!--  ************************************ -->
+        <!--  Withdraw/Reinstate publication	   -->
+        <!--  ************************************ -->
+       
+        <action name="withdrawPublication"
+            class="edu.ur.ir.web.action.institution.WithdrawInstitutionalPublication">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">institutionalPublicationPublicView.action?institutionalItemId=${institutionalItemId}&amp;versionNumber=${versionNumber}</result>
+        </action>        
+
+        <action name="reinstatePublication"
+            class="edu.ur.ir.web.action.institution.ReinstateInstitutionalPublication">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">institutionalPublicationPublicView.action?institutionalItemId=${institutionalItemId}&amp;versionNumber=${versionNumber}</result>
+        </action>        
+ 
+        <!--  **************************************************** -->
+        <!--  Add new Institutional Publications version actions	 -->
+        <!--  **************************************************** -->
+
+        <!--  get personal item and collections -->
+        <action name="getPersonalItems"  method="getPersonalItems"
+            class="edu.ur.ir.web.action.institution.AddNewInstitutionalItemVersion">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/item/collection_table.jsp</result>
+        </action>
+
+        <!--  view personal item and collections -->
+        <action name="viewAddInstitutionalItemVersion" 
+            class="edu.ur.ir.web.action.institution.AddNewInstitutionalItemVersion">
+            <interceptor-ref name="editStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/item/add_institutional_item_version.jsp</result>
+        </action>        
+
+        <!--  Add new version -->
+        <action name="addInstitutionalItemVersion"  method="addVersion"
+            class="edu.ur.ir.web.action.institution.AddNewInstitutionalItemVersion">
+            <interceptor-ref name="editStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">institutionalPublicationPublicView?institutionalItemId=${institutionalItemId}</result>
+        </action> 
+ 
+    </package>
+ </struts>
