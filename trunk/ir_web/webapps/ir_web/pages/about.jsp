@@ -63,6 +63,10 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
+               <h3>Version</h3>
+               
+               <p>IR+ version 1.0</p>
+                
                <h3>About</h3> 
                
                <p>A university-based, long-term, digital repository for the management,
