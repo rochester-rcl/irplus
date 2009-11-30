@@ -91,10 +91,7 @@
 						     		<tr> <td> Total Downloads : ${totalDownloads}</td></tr>
 						     	</table>
 						     	
-						     	<button class="ur_button"
-										onmouseover="this.className='ur_buttonover';"
-										onmouseout="this.className='ur_button';"
-										onclick="location.href='${viewResearcherPageUrl}';">   View  Researcher Page   </button>
+						     	<a href="${viewResearcherPageUrl}"><h3>View  Researcher Page</h3></a>
 						     	
 							 </td>    
 						</c:if>
