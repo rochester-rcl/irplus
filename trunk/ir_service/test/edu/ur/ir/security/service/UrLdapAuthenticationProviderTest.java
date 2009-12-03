@@ -86,13 +86,13 @@ public class UrLdapAuthenticationProviderTest {
 		user.setLdapUserName(ldapUsername);
 		tm.commit(ts);
 		
-		
+		// start a new transaction
+		ts = tm.getTransaction(td);
 		LdapAuthenticationToken authRequest = new LdapAuthenticationToken(ldapUsername, ldapPassword);
 		Authentication authentication = ldapAuthProvider.authenticate(authRequest);
 		assert authentication.isAuthenticated() : "user should be authenticated" + authentication.getDetails() ;
 		
-        // start a new transaction
-		ts = tm.getTransaction(td);
+       
 		
 		IrUser deleteUser = userService.getUser(user.getId(), false);
 		userService.deleteUser(deleteUser,deleteUser);
