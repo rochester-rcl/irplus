@@ -67,7 +67,7 @@ public class UrLdapAuthenticationProviderTest {
 	UrLdapAuthenticationProvider ldapAuthProvider = (UrLdapAuthenticationProvider) ctx.getBean("ldapAuthProvider");
 	
 	/**
-	 * Test the service methods for the indexing user information
+	 * Test the service methods for authenticating/looking up user information using ldap
 	 * 
 	 * @author Nathan Sarr
 	 * 
