@@ -1,0 +1,18 @@
+
+
+irplus changes 1.0 to 1.1 
+
+
+[Global]
+=============================
+- Updated from spring ldap 1.2.1 to spring ldap 1.3.0
+- Updated from Apache POI-3.5beta6 - POI-3.5FINAL
+- Updated from Struts 2.1.6 to 2.1.8.1
+- Updated from freemarker 2.1.14 to 2.1.15
+- Updated from ognl 2.6.11 to 2.7.3
+- Updated from xwork-core 2.1.2 to 2.1.6
+- Updated from Ivy 2.1.0-rc1 to 2.1.0
+
+[ir_core]
+=============================
+- Added interface for group membership filter -  edu.ur.ir.user.UserGroupMemberFilter
