@@ -54,6 +54,16 @@ CrudDAO<IrUserGroup>, NameListDAO, UniqueNameDAO<IrUserGroup>
 	 * @return - list of groups the user is in.
 	 */
 	public List<IrUserGroup> getUserGroupsForUser(Long userId);
+	
+	/**
+	 * Get a user for the specified group 
+	 * 
+	 * @param groupId - id of the group
+	 * @param userId - id of the user
+	 * 
+	 * @return the user if found - otherwise null.
+	 */
+	public IrUser getUserForGroup(Long groupId, Long userId);
 
 }
 

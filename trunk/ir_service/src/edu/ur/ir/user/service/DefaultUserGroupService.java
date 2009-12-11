@@ -19,6 +19,7 @@ package edu.ur.ir.user.service;
 
 import java.util.List;
 
+import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.IrUserGroupDAO;
 import edu.ur.ir.user.UserGroupService;
@@ -148,6 +149,19 @@ public class DefaultUserGroupService implements UserGroupService {
 	 */
 	public List<IrUserGroup> getUserGroupsForUser(Long userId) {
 		return irUserGroupDAO.getUserGroupsForUser(userId);
+	}
+
+	
+	/**
+	 * Get the user for a particular user group
+	 * 
+	 * @param userGroupId - id of the user group
+	 * @param userId - id of the user
+	 * 
+	 * @return the found user or null if the user is not found.
+	 */
+	public IrUser getUser(Long userGroupId, Long userId) {
+		return irUserGroupDAO.getUserForGroup(userGroupId, userId);
 	}
 
 }
