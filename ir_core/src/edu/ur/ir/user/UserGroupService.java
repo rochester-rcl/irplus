@@ -107,6 +107,16 @@ public interface UserGroupService {
 	 * 
 	 */
 	public List<IrUserGroup> getUserGroupsForUser(Long userId);
+	
+	/**
+	 * Get the user for a particular user group
+	 * 
+	 * @param userGroupId - id of the user group
+	 * @param userId - id of the user
+	 * 
+	 * @return the found user or null if the user is not found.
+	 */
+	public IrUser getUser(Long userGroupId, Long userId);
 
 
 }

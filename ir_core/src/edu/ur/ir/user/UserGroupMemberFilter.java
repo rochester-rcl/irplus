@@ -37,6 +37,15 @@ public interface UserGroupMemberFilter {
 	public IrUserGroup getUserGroup();
 	
 	/**
+	 * Updates the status of the user for the group. If the user
+	 * is eligible they are added.  If they are not a valid member, 
+	 * they are removed from the group.  
+	 * 
+	 * @param user - user to update the status for
+	 */
+	public void setMemberShipStatus(IrUser user);
+	
+	/**
 	 * Determines if the user is eligible to be a member of the group
 	 * 
 	 * @param user - user to check

@@ -115,6 +115,13 @@ public class IrUserGroupDAOTest {
  		group = irGroupDAO.getById(group.getId(), false);
  		assert group.getUsers().contains(user) : "Group should contain user " + user;
  		
+ 		//make sure select works.
+ 		user = irGroupDAO.getUserForGroup(group.getId(), user.getId());	
+ 		assert user != null : "Should find user";
+ 		
+ 		IrUser otherUser = irGroupDAO.getUserForGroup(group.getId(), user.getId() + 55);
+ 		assert otherUser == null : "Should not find other user";
+ 		
  		List<IrUserGroup> groups = irGroupDAO.getUserGroupsForUser(user.getId());
  		assert groups.size() == 1 : "Should contain 1 group but contains " + groups.size();
  		assert groups.contains(group) : " select should contain group " + group;

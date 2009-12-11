@@ -85,10 +85,19 @@
 		IrUserGroup.name = ?
 	</query>
 	
+	<!--  Get a list of groups for a particular user -->
 	<query name="getGroupsForUser">
 	    select userGroup from IrUserGroup userGroup
 	    join userGroup.users as user
 	    where user.id = ?
+	</query>
+	
+	<!--  Get a particular user from a user group -->
+	<query name="getUserForGroup">
+	    select user from IrUserGroup userGroup
+	    join userGroup.users as user
+	    where user.id = :userId
+	    and userGroup.id = :userGroupId
 	</query>
 
     <!-- named query for getting a user group order by name asc -->

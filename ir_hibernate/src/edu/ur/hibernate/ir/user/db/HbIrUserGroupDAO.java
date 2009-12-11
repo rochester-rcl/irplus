@@ -29,6 +29,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.IrUserGroupDAO;
 
@@ -153,6 +154,19 @@ public class HbIrUserGroupDAO implements IrUserGroupDAO{
 	@SuppressWarnings("unchecked")
 	public List<IrUserGroup> getUserGroupsForUser(Long userId) {
 		return (List<IrUserGroup>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("getGroupsForUser", userId);
+	}
+
+	
+	/**
+	 * Get User for group
+	 * 
+	 * @see edu.ur.ir.user.IrUserGroupDAO#getUserForGroup(java.lang.Long, java.lang.Long)
+	 */
+	public IrUser getUserForGroup(Long groupId, Long userId) {
+		
+		String[] paramNames = {"userId", "userGroupId"};
+		Object[] values = {userId, groupId};
+		return (IrUser)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQueryAndNamedParam("getUserForGroup", paramNames, values));
 	}
 	
 
