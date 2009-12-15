@@ -101,7 +101,7 @@ public class ManageFields extends Pager implements Preparable, UserIdAware {
 	{
 		log.debug("creating a field = " + field.getName());
 		IrUser user = userService.getUser(userId, false);
-		if(!user.hasRole(IrRole.RESEARCHER_ROLE) || !user.hasRole(IrRole.ADMIN_ROLE) )
+		if(!user.hasRole(IrRole.RESEARCHER_ROLE) && !user.hasRole(IrRole.ADMIN_ROLE) )
 		{
 			return "accessDenied";
 		}
