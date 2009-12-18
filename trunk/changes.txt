@@ -16,3 +16,8 @@ irplus changes 1.0 to 1.1
 [ir_core]
 =============================
 - Added interface for group membership filter -  edu.ur.ir.user.UserGroupMemberFilter
+
+[ir_web]
+=============================
+- Fixed issue where researcher could not add a new field
+- Fixed issue where researcher id was missing or interrupted
