@@ -176,9 +176,9 @@
 		                           </p>
 		                           
 		                           <c:if test="${ur:collectionSize(researcher.personalLinks) > 0}">
-		                           <p> <strong> Links </strong>  <br/>
+		                           <p> <strong> Links </strong>  <br/><br/>
 		                               <c:forEach var="link" items="${researcher.personalLinks}">
-		                                   <a href="${link.url}">${link.name}</a><br/>
+		                                   <a href="${link.url}">${link.name}</a> <c:if test="${link.description != null}"> <br> ${link.description} </c:if><br/><br/>
 		                               </c:forEach>
 		                           </p>
 		                           </c:if>
