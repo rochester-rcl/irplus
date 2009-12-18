@@ -102,7 +102,11 @@ Comparator<IrFile>, UserIdAware {
 	{
 		log.debug("View Researcher page:researcherId="+ researcherId);
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		researcher = researcherService.getResearcher(researcherId, false);
+		
+		if( researcherId != null && researcherId > 0)
+		{	
+		    researcher = researcherService.getResearcher(researcherId, false);
+		}
 
 		if (researcher != null) {
 			// if the researcher page is not public and the user accessing the file
@@ -112,6 +116,10 @@ Comparator<IrFile>, UserIdAware {
 	    		return "accessDenied";
 	    	}
 			researcherJSONObject = researcher.toJSONObject();
+		}
+		else
+		{
+			return "notFound";
 		}
 
 		log.debug("researcherJSONObject::" + researcherJSONObject);

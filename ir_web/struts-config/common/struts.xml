@@ -344,6 +344,7 @@
                 <interceptor-ref name="editStack" />
                 <result name="accessDenied">/accessDenied.jsp</result>
                 <result name="success">/pages/researcher_page/researcher_page_view.jsp</result>
+                <result name="notFound">/pages/researcher_page/researcher_not_found.jsp</result>
         </action>
         
         <action name="researcherPublicationView" 
