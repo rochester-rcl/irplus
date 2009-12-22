@@ -18,6 +18,7 @@
 package edu.ur.ir.web.spring.security;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.Authentication;
@@ -34,6 +35,7 @@ import org.springframework.util.Assert;
 import edu.ur.ir.security.service.LdapAuthenticationToken;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserGroupMemberFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -64,6 +66,9 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
     
     /** service for dealing with user information  */
     private UserService userService;
+    
+    /** set of filters to manage groups */
+    private List<UserGroupMemberFilter> groupMemberFilters = new LinkedList<UserGroupMemberFilter>();
     
 
     //~ Methods ========================================================================================================
@@ -134,7 +139,16 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
         		    log.debug("Attempting request user name = " + username);
                     setDetails(request, authRequest);
                     auth = getAuthenticationManager().authenticate(authRequest);
-                                       
+                     
+                    IrUser user = ((IrUser)auth.getPrincipal());
+                    // process the group membership information
+                    if( user != null )
+                    {
+                    	for(UserGroupMemberFilter filter : this.groupMemberFilters)
+                    	{
+                    		filter.setMembershipStatus(user);
+                    	}
+                    }
                     // if an exception has not occurred  return the auth - everything
                     // else will return an exception
                     return auth;
@@ -239,5 +253,13 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
 
 	public void setLdapEnabled(boolean ldapEnabled) {
 		this.ldapEnabled = ldapEnabled;
+	}
+
+	public List<UserGroupMemberFilter> getGroupMemberFilters() {
+		return groupMemberFilters;
+	}
+
+	public void setGroupMemberFilters(List<UserGroupMemberFilter> groupMemberFilters) {
+		this.groupMemberFilters = groupMemberFilters;
 	}
 }
