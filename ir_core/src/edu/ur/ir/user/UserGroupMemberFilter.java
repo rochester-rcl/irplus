@@ -43,7 +43,7 @@ public interface UserGroupMemberFilter {
 	 * 
 	 * @param user - user to update the status for
 	 */
-	public void setMemberShipStatus(IrUser user);
+	public void setMembershipStatus(IrUser user);
 	
 	/**
 	 * Determines if the user is eligible to be a member of the group
