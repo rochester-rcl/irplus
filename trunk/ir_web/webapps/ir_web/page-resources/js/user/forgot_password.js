@@ -161,6 +161,8 @@ YAHOO.ur.login =
     init : function()
     {
         YAHOO.ur.login.createForgotPasswordDialog();
+        // set the username as focus
+        document.f.j_username.focus();
     }
 }
 
