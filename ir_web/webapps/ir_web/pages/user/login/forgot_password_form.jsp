@@ -35,7 +35,7 @@
 	    
 	    <label class="dialogLabel" for="forgotPasswordForm_email"> Email </label>
 	    
-	    <input type="text"  class="input" id="forgotPasswordForm_email" name="email" value="${email}"/>
+	    <input type="text" tabindex="5" class="input" id="forgotPasswordForm_email" name="email" value="${email}"/>
 			          
 	    <div class="clear">&nbsp;</div>
 	    
