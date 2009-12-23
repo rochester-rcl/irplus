@@ -131,24 +131,21 @@
                       login form is present see ur_util.js  -->
                 <div id="loginForm">
                  <form name="f" action="<c:url value='j_spring_security_check'/>" method="POST">
-                 
-                        
-    
                           <br/>
                           <br/>
                           <label class="label" for="j_name">User Name:</label>
-                          <input type='text' size="30" name='j_username' value='<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION.message}"><c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></c:if>'/>
+                          <input tabindex="1" type='text' size="30" name='j_username' value='<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION.message}"><c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></c:if>'/>
                            
                           <br/>
                           <br/>
                           <label class="label" for="j_name">Password:</label>
-                          <input class="input" size="30" type='password' id="password" autocomplete="off" name='j_password'/>
+                          <input class="input" size="30" type='password' tabindex="2" id="password" autocomplete="off" name='j_password'/>
                           <br/>
                           <br/>
                           
                           <div id="buttons">
-                              <input value="<s:text name="login"/>" type="submit">
-                              <input value="<s:text name="reset"/>" type="reset">
+                              <input tabindex="3" value="<s:text name="login"/>" type="submit">
+                              <input tabindex="4" value="<s:text name="reset"/>" type="reset">
                           </div>
                           
                           <br/>
