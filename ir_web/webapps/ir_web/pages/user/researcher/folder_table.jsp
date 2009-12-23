@@ -21,14 +21,53 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<fmt:setBundle basename="messages"/>
 <div class="dataTable">
-
-	<form method="post" id="folders" name="myFolders" >
-	   <h3>Path: /<span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.folder.getFolderById('0')">My Research</ur:a>/
+   <h3>Path: /<span class="folderBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.researcher.folder.getFolderById('0')">My Research</a>/
            <c:forEach var="folder" items="${folderPath}">
-               <span class="folderBtnImg">&nbsp;</span><ur:a href="javascript:YAHOO.ur.researcher.folder.getFolderById('${folder.id}')">${folder.name}</ur:a>/
-           </c:forEach></h3>
+               <span class="folderBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.researcher.folder.getFolderById('${folder.id}')">${folder.name}</a>/
+           </c:forEach>
+    </h3>
+    <div align="right" id="files_folders_buttons">
+ 	    <button class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';"
+ 	 		    onclick="YAHOO.ur.researcher.folder.newFolderDialog.showDialog();"
+ 		        id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
+	                              
+ 		<button class="ur_button" 
+ 		        onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';"
+ 	 		    onclick="YAHOO.ur.researcher.folder.newLinkDialog.showLink();"
+ 		        id="showLink"><img  alt="" class="buttonImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link_add.gif"/>
+ 		       <fmt:message key="new_link"/></button> 
+	                              
+	    <button class="ur_button" id="showAddFile"
+	            onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';"
+ 		        onclick="javascript:YAHOO.ur.edit.researcher.viewAddFiles();"><span class="pageAddBtnImg">&nbsp;</span>Add file</button>
+	                              
+	    <button class="ur_button" id="showAddPublication"
+	            onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';"
+ 		        onclick="javascript:YAHOO.ur.edit.researcher.viewAddPublications();"><span class="scriptImg">&nbsp;</span>Add Publication</button>
+	                               
+	   <button class="ur_button"
+	           onmouseover="this.className='ur_buttonover';"
+ 		       onmouseout="this.className='ur_button';"
+ 		       onclick="javascript:YAHOO.ur.researcher.folder.moveResearcherData()"> <span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button>
+	                              
+	    <button class="ur_button" id="showDeleteFolder"
+	            onmouseover="this.className='ur_buttonover';"
+ 		        onmouseout="this.className='ur_button';"
+ 		        onclick="YAHOO.ur.researcher.folder.deleteFolder.showDialog();"><span class="deleteBtnImg">&nbsp;</span>Remove</button>
+   
+	</div>
+    <br/>
+	<form method="post" id="folders" name="myFolders" >
+	   
 	    
            <input type="hidden" id="myFolders_parentFolderId" name="parentFolderId" value="${parentFolderId}"/>
 		   <input type="hidden" id="myFolders_researcherId" name="researcherId" value="${researcher.id}"/>   
@@ -37,7 +76,6 @@
    
        
        <!-- Table for files and folders  -->    
-        <h3>Researcher Folders</h3>        
         <urstb:table width="100%">
             <urstb:thead>
                 <urstb:tr>
