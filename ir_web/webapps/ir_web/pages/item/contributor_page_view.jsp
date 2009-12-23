@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>Contributor </title>
+        <title><ir:authorName personName="${personName}" displayDates="true"/></title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         

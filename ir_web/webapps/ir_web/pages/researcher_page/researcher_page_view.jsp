@@ -26,7 +26,7 @@
 
 <html>
     <head>
-        <title>Researcher: ${researcher.user.firstName}&nbsp;${researcher.user.lastName}</title>
+        <title>${researcher.user.firstName}&nbsp;${researcher.user.lastName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
