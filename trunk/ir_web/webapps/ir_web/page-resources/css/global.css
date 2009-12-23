@@ -171,6 +171,7 @@ ul.basicNav {
 .ur_button
 {
 	margin-right: 2px;
+	margin-left: 2px;
     border: 1px solid #B9C0C2;
     background: url(../images/all-images/button_background.gif);
     height: 28px;
@@ -180,12 +181,14 @@ ul.basicNav {
     color: #454545;
     cursor:pointer;
     cursor:hand;
+    
 }
 
 /* styling for buttons when they have been rolled over*/
 .ur_buttonover
 {
 	margin-right: 2px;
+	margin-left: 2px;
     border: 1px solid #B9C0C2;
     background: url(../images/all-images/button_highlight.gif);
     height: 28px;

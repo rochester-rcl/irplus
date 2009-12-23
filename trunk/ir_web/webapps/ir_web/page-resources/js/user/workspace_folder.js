@@ -456,6 +456,20 @@ YAHOO.ur.folder =
     },
     
     /**
+     * Select and move the folder or file 
+     */
+    moveSingle : function(elementId)
+    {
+       //uncheck all the ones that have been checked
+       checked = document.myFolders.checkAllSetting.checked = false;
+       YAHOO.ur.folder.setCheckboxes();
+   
+       element = document.getElementById(elementId);
+       element.checked=true;
+       YAHOO.ur.folder.moveFolderData();
+    },
+    
+    /**
      * Select and share the file / folder
      */
     shareSingleConfirm : function(elementId)
@@ -486,7 +500,7 @@ YAHOO.ur.folder =
     /**
      * function to build the folder menu
      */
-    buildFolderMenu : function(folderId, element, div, menuName, folderName, folderDescription)
+    buildFolderMenu : function(folderId, element, div, menuName)
     {
      
         var buttonMenu = document.getElementById(div);
@@ -516,9 +530,11 @@ YAHOO.ur.folder =
               configuration properties) to the "addItems" method.
              */
              dropMenu.addItems([
-                 { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:YAHOO.ur.folder.deleteSingleConfirm('folder_checkbox_"+ folderId +"')" },
+                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Edit',  url: "javascript:YAHOO.ur.folder.editFolder(" + folderId + ")" },
+                 { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:YAHOO.ur.folder.moveSingle('folder_checkbox_"+ folderId +"')" },
                  { text: '<span class="groupAddBtnImg">&nbsp;</span> Share',  url: "javascript:YAHOO.ur.folder.shareSingleConfirm('folder_checkbox_"+ folderId +"')" },
-                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Edit',  url: "javascript:YAHOO.ur.folder.editFolder(" + folderId + ")" }
+                 { text: '<span class="reportGoBtnImg">&nbsp;</span> Publish', url: "javascript:YAHOO.ur.folder.publishSingle('folder_checkbox_"+ folderId +"')" },  
+                 { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:YAHOO.ur.folder.deleteSingleConfirm('folder_checkbox_"+ folderId +"')" }
              ]);
                
              dropMenu.showEvent.subscribe(function () {
@@ -640,8 +656,9 @@ YAHOO.ur.folder =
          
              dropMenu.addItems([
                  { text: '<span class="reportGoBtnImg">&nbsp;</span> Publish', url: "javascript:YAHOO.ur.folder.publishSingle('file_checkbox_"+ fileId +"')" },             
-                 { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:YAHOO.ur.folder.deleteSingleConfirm('file_checkbox_"+ fileId +"')" },
-                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: filePropertiesUrl }
+                 { text: '<span class="pageWhiteGoBtnImg">&nbsp;</span> Move', url: "javascript:YAHOO.ur.folder.moveSingle('file_checkbox_"+ fileId +"')" },
+                 { text: '<span class="wrenchBtnImg">&nbsp;</span> Properties',  url: filePropertiesUrl },
+                 { text: '<span class="deleteBtnImg">&nbsp;</span> Delete', url: "javascript:YAHOO.ur.folder.deleteSingleConfirm('file_checkbox_"+ fileId +"')" }
              ]);
          
              dropMenu.showEvent.subscribe(function () {
@@ -1412,37 +1429,6 @@ YAHOO.ur.folder =
             document.myFolders.action = viewMoveFoldersAction;
             document.myFolders.submit();
         }
-    },
-    
-    /**
-     * execute the action based on the selected value for
-     * files and folders
-     */
-    executeCheckboxAction : function(action)
-    {
-        var resetSelected = document.getElementById("folder_checkbox_action_set");
-        if( action == "publish" )
-        {
-            YAHOO.ur.personal.collection.newItemDialog.createFromFilesFolders();
-            resetSelected.selected = true; 
-        }
-        if( action == "share" )
-        {
-            YAHOO.ur.folder.inviteUser();
-            resetSelected.selected = true;
-        }
-        if( action == "delete" )
-        {
-            YAHOO.ur.folder.deleteFolder.showDialog();
-            resetSelected.selected = true;
-        }
-        if( action == "move" )
-        {
-            YAHOO.ur.folder.moveFolderData();
-            resetSelected.selected = true;
-        }
-        
-        YAHOO.ur.shared.file.inbox.getSharedFilesCount();
     },
     
     init : function()

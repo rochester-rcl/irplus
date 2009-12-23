@@ -79,17 +79,7 @@
             <!--  this is the body of the page -->
             <div id="bd">
             
-            <h3> Researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName}</h3>
-    
-            <!--  set up tabs for the researcher -->
-	        <div id="researcher-properties-tabs" class="yui-navset">
-
-	            <div id="preview" align="left">
-		        	<a href="viewResearcherPage.action?researcherId=${researcher.id}">Preview Researcher Page</a> 
-	            </div>	        
-
-		        <div id="publi" align="right">
-		        	Researcher Page : 
+            <h3>${researcher.user.firstName}&nbsp;${researcher.user.lastName}&nbsp;Researcher page (<a href="viewResearcherPage.action?researcherId=${researcher.id}">Preview Page</a>) &nbsp;: 
 		        	<input type="radio" name="isPublic" onclick="javascript:YAHOO.ur.edit.researcher.changePublicValue(false);"
 	            		<c:if test="${!researcher.public}">
 	            			checked
@@ -101,6 +91,12 @@
 	            			checked
 	            		</c:if>
 	            	> Public </input>
+	        </h3>
+    
+            <!--  set up tabs for the researcher -->
+	        <div id="researcher-properties-tabs" class="yui-navset">
+		        <div id="publi" align="left">
+		        	
 	            	
 	            </div>
 
@@ -128,7 +124,12 @@
 
 					        <!--  create the first column -->
 					        <div class="yui-u first">
-                             
+					         <br/>
+                                <button class="ur_button" id="update_researcher_information" 
+               				         onmouseover="this.className='ur_buttonover';"
+             				         onmouseout="this.className='ur_button';"
+                 		             type="submit">Save</button>
+                 		             
                                 <table class = "formTable">
 	                                <tr>
 	                                    <td class="label">
@@ -301,43 +302,7 @@
 	                  
 	                 <!--  start second tab -->
 	                 <div id="tab2">
-	                 	  <br/>
-	                      <div id="files_folders_buttons">
-	                     
- 		                              <button class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';"
- 		                               id="showFolder"><span class="addFolderBtnImg">&nbsp;</span><fmt:message key="new_folder"/></button> 
-	                              
- 		                              <button class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';"
- 		                               id="showLink"><img  alt="" class="buttonImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link_add.gif"/>
- 		                               <fmt:message key="new_link"/></button> 
-	                              
-	                                  <button class="ur_button" id="showAddFile"
-	                                  onmouseover="this.className='ur_buttonover';"
- 		                              onmouseout="this.className='ur_button';"
- 		                              onclick="javascript:YAHOO.ur.edit.researcher.viewAddFiles();"><span class="pageAddBtnImg">&nbsp;</span>Add file</button>
-	                              
-	                                  <button class="ur_button" id="showAddPublication"
-	                                  onmouseover="this.className='ur_buttonover';"
- 		                              onmouseout="this.className='ur_button';"
- 		                              onclick="javascript:YAHOO.ur.edit.researcher.viewAddPublications();"><span class="scriptImg">&nbsp;</span>Add Publication</button>
-	                               
-	                                  <button class="ur_button"
-	                                  onmouseover="this.className='ur_buttonover';"
- 		                              onmouseout="this.className='ur_button';"
- 		                              onclick="javascript:YAHOO.ur.researcher.folder.moveResearcherData()"> <span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button>
-	                              
-	                                  <button class="ur_button" id="showDeleteFolder"
-	                                  onmouseover="this.className='ur_buttonover';"
- 		                              onmouseout="this.className='ur_button';"><span class="deleteBtnImg">&nbsp;</span>Remove</button>
-   
-	                      </div>
-	                      
-
-	                      <!--  table of files and folders -->
+		                      <!--  table of files and folders -->
 	                      <div id="newResearcherFolders" >
 	                          <form  id="folders" name="myFolders">
 	                              <input type="hidden" id="myFolders_parentFolderId" 

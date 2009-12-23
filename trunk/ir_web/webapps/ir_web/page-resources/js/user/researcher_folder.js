@@ -166,13 +166,8 @@ YAHOO.ur.researcher.folder = {
 				
 		// Render the Dialog
 		YAHOO.ur.researcher.folder.newFolderDialog.render();
-	
-	    // listener for showing the dialog when clicked.
-		YAHOO.util.Event.addListener("showFolder", "click", 
-		    YAHOO.ur.researcher.folder.newFolderDialog.showDialog, 
-		    YAHOO.ur.researcher.folder.newFolderDialog, true);
 	},
-	    
+	
     // function to edit folder information
     editFolder : function(folderId, folderName, folderDescription)
     {
@@ -273,12 +268,6 @@ YAHOO.ur.researcher.folder = {
 		
 		// Render the Dialog
 		YAHOO.ur.researcher.folder.deleteFolder.render();
-	
-		YAHOO.util.Event.addListener("showDeleteFolder", 
-		    "click", 
-		    YAHOO.ur.researcher.folder.deleteFolder.showDialog, 
-		    YAHOO.ur.researcher.folder.deleteFolder, true);
-	
 	},
 	
 	/** 
@@ -405,12 +394,6 @@ YAHOO.ur.researcher.folder = {
 				
 		// Render the Dialog
 		YAHOO.ur.researcher.folder.newLinkDialog.render();
-	
-	    // listener for showing the dialog when clicked.
-		YAHOO.util.Event.addListener("showLink", "click", 
-		    YAHOO.ur.researcher.folder.newLinkDialog.showLink, 
-		    YAHOO.ur.researcher.folder.newLinkDialog, true);
-		    
 	 },
 	   
     // function to edit folder information

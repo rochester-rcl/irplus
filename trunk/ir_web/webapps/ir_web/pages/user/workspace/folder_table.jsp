@@ -25,10 +25,13 @@
 
 <fmt:setBundle basename="messages"/>
 
-  <h3> File system size : <ir:fileSizeDisplay sizeInBytes="${fileSystemSize}"/>  </h3>
+   <br/>
 
-  <h3>Path:&nbsp;/
-	    <span class="folderBtnImg">&nbsp;</span>
+   <table width="100%">
+   <tr>
+       <td align="left" width="75%">
+           <strong>Path:&nbsp;/
+	          <span class="folderBtnImg">&nbsp;</span>
 	          <c:if test="${parentFolderId != 0}">
                    <a href="javascript:YAHOO.ur.folder.getFolderById('0')">${user.username}</a>&nbsp;/
                </c:if>
@@ -36,7 +39,7 @@
                    ${user.username}&nbsp;/
                </c:if>
 	    
-           <c:forEach var="folder" items="${folderPath}">
+               <c:forEach var="folder" items="${folderPath}">
                <span class="folderBtnImg">&nbsp;</span>
                    <c:if test="${folder.id != parentFolderId}">
                        <a href="javascript:YAHOO.ur.folder.getFolderById('${folder.id}')">${folder.name}</a>&nbsp;/
@@ -44,22 +47,17 @@
                    <c:if test="${folder.id == parentFolderId}">
                        ${folder.name}&nbsp;/
                    </c:if>
-           </c:forEach>
-   </h3>
-      
-
-    <table width="100%">
-        <tr>
-            <td align="left">
-                <select onchange="javascript:YAHOO.ur.folder.executeCheckboxAction(this.options[this.selectedIndex].value);">
-                    <option value="action" id="folder_checkbox_action_set"  selected="selected">Action on checked files and folders ...</option>
-	                <option value="publish">Publish</option>
-	                <option value="share">Share</option>
-                    <option value="delete">Delete</option>
-                    <option value="move">Move</option>
-	            </select>
-	        </td>
-	        <td align="right">
+               </c:forEach>
+           </strong>
+       </td>
+       <td align="right" width="25%">
+           <strong> File system size : <ir:fileSizeDisplay sizeInBytes="${fileSystemSize}"/>  </strong>
+       </td>
+   </tr>
+   </table>
+   
+   
+  <div align="right">
 	           <button class="ur_button" 
  		                   onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
@@ -75,15 +73,30 @@
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
 	                       id="addFilesButton"><span class="pageCopyBtnImg">&nbsp;</span>Add Files</button>
+	               <button class="ur_button" 
+	                       onclick="YAHOO.ur.folder.moveFolderData();"
+	                       onmouseover="this.className='ur_buttonover';"
+ 		                   onmouseout="this.className='ur_button';"
+	                       id="moveButton"><span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button>
+	               <button class="ur_button" 
+	                       onclick="YAHOO.ur.folder.deleteFolder.showDialog();"
+	                       onmouseover="this.className='ur_buttonover';"
+ 		                   onmouseout="this.className='ur_button';"
+	                       id="deleteButton"><span class="deleteBtnImg">&nbsp;</span>Delete</button>
+	               <button class="ur_button" 
+	                       onclick="YAHOO.ur.folder.inviteUser();"
+	                       onmouseover="this.className='ur_buttonover';"
+ 		                   onmouseout="this.className='ur_button';"
+	                       id="shareButton"><span class="groupAddBtnImg">&nbsp;</span>Share</button>
 	               <button class="ur_button" id="showPublishItem" 
 	                   onclick="javascript:YAHOO.ur.personal.collection.newItemDialog.createFromFilesFolders();"
 	                   onmouseover="this.className='ur_buttonover';"
  		               onmouseout="this.className='ur_button';"><span class="reportGoBtnImg">&nbsp;</span>Publish</button>
 	           </c:if>
-	        </td>
-	    </tr>
-	</table>
-                
+    </div>
+    <br/>
+ 
+               
 <div class="dataTable">
 	<c:url var="uploadFiles" value="/user/viewUploadFilesPage.action"/>
 	
@@ -177,11 +190,10 @@
 	                            <div id="folder_${fileSystemObject.id}">
 	                             <button type="button"  class="table_button" 
 	                                onmouseover="this.className='table_buttonover';"
- 		                            onmouseout="this.className='ur_button';"
+ 		                            onmouseout="this.className='table_button';"
 	                                onclick="javascript:YAHOO.ur.folder.buildFolderMenu(${fileSystemObject.id}, 
 	                                this,'folder_'+ ${fileSystemObject.id}, 
-	                                'folder_menu_' + ${fileSystemObject.id},
-	                                '${ur:escapeSingleQuote(fileSystemObject.name)}');"><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
+	                                'folder_menu_' + ${fileSystemObject.id});"><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
 	                            </div>
 	                         </c:if>
 	                     
