@@ -372,7 +372,11 @@
                 class="edu.ur.ir.web.action.researcher.AddResearcherInstitutionalItem">
                 <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">viewResearcher.action?showFoldersTab=true</result>
+            <result name="success" type="redirectAction"> 
+                <param name="actionName">viewResearcher</param> 
+                <param name="showFoldersTab">true</param> 
+                <param name="parentFolderId">${parentFolderId}</param> 
+            </result> 
         </action>         
         
         <!--  move the selected researcher objects -->
