@@ -133,6 +133,8 @@ DescriptionAware, FileSystem{
 		sb.append(parentFolder);
 		sb.append(" institutional item = ");
 		sb.append(institutionalItem);
+		sb.append( " researcher = ");
+		sb.append(researcher);
 		sb.append("]");
 		return sb.toString();
 		
@@ -178,7 +180,7 @@ DescriptionAware, FileSystem{
 		final ResearcherInstitutionalItem other = (ResearcherInstitutionalItem) o;
 
 		if( (other.getResearcher() != null && !other.getResearcher().equals(getResearcher())) ||
-				(other.getResearcher() == null && getResearcher() != null )) return false;
+			(other.getResearcher() == null && getResearcher() != null )) return false;
 
 		
 		if( (other.getInstitutionalItem() != null && !other.getInstitutionalItem().equals(getInstitutionalItem())) ||
