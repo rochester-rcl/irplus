@@ -201,7 +201,7 @@
     			<![CDATA[
     			Dear %USERNAME%,
     			
-    			You affiliation - "%AFFILIATION%" is being verified. You will be notified by email when the verification process is complete.
+    			Your affiliation - "%AFFILIATION%" is being verified. You will be notified by email when the verification process is complete.
     			Until then your account will have limited functionality.
     			
     			]]>
