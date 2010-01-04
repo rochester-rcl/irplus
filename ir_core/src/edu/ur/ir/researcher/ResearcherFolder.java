@@ -264,9 +264,13 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 * @param irFile
 	 */
 	public ResearcherFile addFile(IrFile irFile) {
-		 ResearcherFile rf = new ResearcherFile(researcher, irFile, this);
-		 addResearcherFile(rf);
-		 return rf;
+		ResearcherFile rf = getFile(irFile);
+		if( rf == null )
+		{
+		    rf = new ResearcherFile(researcher, irFile, this);
+		    addResearcherFile(rf);
+		}
+		return rf;
 	}
 
 	/**
@@ -276,9 +280,12 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 * @param irFile
 	 */
 	public ResearcherPublication createPublication(GenericItem item, int versionNumber) {
-		 
-		ResearcherPublication rp = new ResearcherPublication(researcher, this, item, versionNumber);
-		publications.add(rp);
+		ResearcherPublication rp = getPublication(item);
+		if( rp == null )
+		{
+		    rp = new ResearcherPublication(researcher, this, item, versionNumber);
+		    publications.add(rp);
+		}
 		return rp;
 	}
 
@@ -289,10 +296,68 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 * @param institutionalItem
 	 */
 	public ResearcherInstitutionalItem createInstitutionalItem(InstitutionalItem institutionalItem) {
-		 
-		ResearcherInstitutionalItem ri = new ResearcherInstitutionalItem(researcher, this, institutionalItem);
-		institutionalItems.add(ri);
+		ResearcherInstitutionalItem ri = getInstitutionalItem(institutionalItem);
+		if( ri == null )
+		{
+		    ri = new ResearcherInstitutionalItem(researcher, this, institutionalItem);
+		    institutionalItems.add(ri);
+		}
 		return ri;
+	}
+	
+	/**
+	 * Get the researcher institutional item based on the institutional item
+	 * 
+	 * @param institutionalItem - institutional item to check for
+	 * @return - the researcher institutional item or null if not found
+	 */
+	public ResearcherInstitutionalItem getInstitutionalItem(InstitutionalItem institutionalItem)
+	{
+		for( ResearcherInstitutionalItem item : institutionalItems)
+		{
+			if(item.getInstitutionalItem().equals(institutionalItem))
+			{
+				return item;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get a publication based on the generic item.
+	 * 
+	 * @param publication - publication in the researcher publication
+	 * @return the found researcher publication or null
+	 */
+	public ResearcherPublication getPublication(GenericItem publication)
+	{
+		for(ResearcherPublication pub :publications)
+		{
+			if( pub.getPublication().equals(publication))
+			{
+				return pub;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get the researcher file based on the ir file.
+	 * 
+	 * @param f - IR file the researcher file should contain.
+	 * @return - the found researcher file
+	 */
+	public ResearcherFile getFile(IrFile f)
+	{
+		for(ResearcherFile file : files)
+		{
+			if( file.getIrFile().equals(f ))
+			{
+				return file;
+			}
+		}
+		
+		return null;
 	}
 	
 	/**

@@ -346,15 +346,20 @@ public class Researcher extends BasePersistent{
 	 * @param f the ir file to add to the root.	
 	 * @return the created researcher file
 	 * 
-	 * @throws DuplicateNameException - if the file name already exists as a root file
 	 */
 	public ResearcherFile createRootFile(IrFile f, int versionNumber)
 	{
-		ResearcherFile rf = new ResearcherFile(this, f);
-		rf.setVersionNumber(versionNumber);
-		rootFiles.add(rf);
+		ResearcherFile rf = this.getFile(f);
+		if( rf == null )
+		{
+		    rf = new ResearcherFile(this, f);
+		    rf.setVersionNumber(versionNumber);
+		    rootFiles.add(rf);
+		}
 		return rf;
 	}
+	
+
 	
 	/**
 	 * Creates the root folder by name if it does not exist.  The 
@@ -397,10 +402,12 @@ public class Researcher extends BasePersistent{
 	 */
 	public ResearcherPublication createRootPublication(GenericItem publication, int versionNumber)
 	{ 
-		ResearcherPublication researcherPublication = null;
-		researcherPublication = new ResearcherPublication(this, publication, versionNumber);
-	    rootPublications.add(researcherPublication);
-		
+		ResearcherPublication  researcherPublication = this.getPublication(publication);
+		if( researcherPublication == null )
+		{	
+		    researcherPublication = new ResearcherPublication(this, publication, versionNumber);
+	        rootPublications.add(researcherPublication);
+		}
 		return researcherPublication;
 	}
 
@@ -414,11 +421,68 @@ public class Researcher extends BasePersistent{
 	 */
 	public ResearcherInstitutionalItem createRootInstitutionalItem(InstitutionalItem institutionalItem)
 	{ 
-		ResearcherInstitutionalItem researcherInstitutionalItem = null;
-		researcherInstitutionalItem = new ResearcherInstitutionalItem(this, institutionalItem);
-	    rootInstitutionalItems.add(researcherInstitutionalItem);
-		
+		ResearcherInstitutionalItem researcherInstitutionalItem = getInstitutionalItem(institutionalItem);
+		if( researcherInstitutionalItem == null )
+		{
+		    researcherInstitutionalItem = new ResearcherInstitutionalItem(this, institutionalItem);
+	        rootInstitutionalItems.add(researcherInstitutionalItem);
+		}
 		return researcherInstitutionalItem;
+	}
+	
+	/**
+	 * Get the researcher institutional item based on the institutional item
+	 * 
+	 * @param institutionalItem - institutional item to check for
+	 * @return - the researcher institutional item or null if not found
+	 */
+	public ResearcherInstitutionalItem getInstitutionalItem(InstitutionalItem institutionalItem)
+	{
+		for( ResearcherInstitutionalItem item : rootInstitutionalItems)
+		{
+			if(item.getInstitutionalItem().equals(institutionalItem))
+			{
+				return item;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get a publication based on the generic item.
+	 * 
+	 * @param publication - publication in the researcher publication
+	 * @return the found researcher publication or null
+	 */
+	public ResearcherPublication getPublication(GenericItem publication)
+	{
+		for(ResearcherPublication pub : rootPublications)
+		{
+			if( pub.getPublication().equals(publication))
+			{
+				return pub;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get the researcher file based on the ir file.
+	 * 
+	 * @param f - IR file the researcher file should contain.
+	 * @return - the found researcher file
+	 */
+	public ResearcherFile getFile(IrFile f)
+	{
+		for(ResearcherFile file : rootFiles)
+		{
+			if( file.getIrFile().equals(f ))
+			{
+				return file;
+			}
+		}
+		
+		return null;
 	}
 	
 	/**
