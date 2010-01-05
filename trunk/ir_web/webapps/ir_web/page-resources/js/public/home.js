@@ -62,7 +62,7 @@ YAHOO.ur.public.home =
 	
 	    // Get the next picture
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getRepositoryPictureAction +"?currentLocation="+ 
+            getRepositoryPictureAction +"?currentRepositoryPictureLocation="+ 
             currentLocation +'&type='+ type +'&bustcache='+new Date().getTime(), 
             {success: handleSuccess, failure: handleFailure}, null);
     },
@@ -112,45 +112,9 @@ YAHOO.ur.public.home =
             {success: handleSuccess, failure: handleFailure}, null);
     }, 
     
-    /*
-     * Get the top level institutional collections 
-     * 
+    /**
+     * Get the next set of researcher pages
      */
-    getInstitutionalCollections : function()
-    {
-        // action for getting institutional collections
-        var getInstitutionalCollections = basePath + 'getInstitutionalCollections.action';
-    
-        // Success action on getting the institutional collection
-        var handleSuccess = function(o) 
-        { 
-			// check for the timeout - forward user to login page if timout
-	        // occured
-	        if( !urUtil.checkTimeOut(o.responseText) )
-	        {                       
-                var divToUpdate = document.getElementById('institutional_collections');
-                divToUpdate.innerHTML = o.responseText; 
-            }
-        };
-    
-        // Faiure action on getting the institutional collection
-    
-        var handleFailure = function(o) 
-	    {
-	        if( o.status != 0 )
-	        {
-	            alert('Could not get institutional collections ' 
-	                + o.status + ' status text ' + o.statusText );
-	        }
-	    };
-	
-	    // Get the next picture
-        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getInstitutionalCollections +"?parentId=0"+ 
-            '&bustcache='+new Date().getTime(), 
-            {success: handleSuccess, failure: handleFailure}, null);
-    },
-    
     getResearcherPicture : function(currentLocation, type)
     {
         // action for getting the researcher information
@@ -181,52 +145,18 @@ YAHOO.ur.public.home =
 	
 	    //  Get the next picture
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getResearcherPictureAction +"?currentLocation="+ 
+            getResearcherPictureAction +"?currentResearcherLocation="+ 
             currentLocation +'&type='+ type +'&bustcache='+new Date().getTime(), 
         {success: handleSuccess, failure: handleFailure}, null);
     },
     
-    getHomeStatistics : function()
-    {
-    
-        // action for getting the statistics information
-        var getStatisticsAction =  basePath + 'loadHomeStatistics.action';
 
-        // Success action on getting the statistics information
-        var handleSuccess = function(o) 
-        {
-			// check for the timeout - forward user to login page if timout
-	        // occured
-	        if( !urUtil.checkTimeOut(o.responseText) )
-	        {               
-                var divToUpdate = document.getElementById('statistics_div');
-                divToUpdate.innerHTML = o.responseText; 
-            }
-        };
-    
-        //Failure action on getting statistics 
-        var handleFailure = function(o) 
-	    {
-	        if( o.status != 0 )
-	        {
-	            alert('Could not get statistics' 
-	                + o.status + ' status text ' + o.statusText );
-	        }
-	    };
-	
-	    //  Get the statistics 
-        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getStatisticsAction, 
-        	{success: handleSuccess, failure: handleFailure}, null);
-    },
-    
+    /**
+     * Init the javascript
+     */
     init : function()
     {
-        YAHOO.ur.public.home.getResearcherPicture(0, 'INIT');
-        YAHOO.ur.public.home.getInstitutionalCollections();
-        YAHOO.ur.public.home.getRepositoryPicture(0, 'INIT');
         YAHOO.ur.public.home.getNewsItems(0, 'INIT', 2);
-        YAHOO.ur.public.home.getHomeStatistics();
     }
     
 };
