@@ -150,12 +150,6 @@
         <!--  ************************************ -->
         <!--  actions for viewing collections      -->
         <!--  ************************************ -->
-        <action name="getInstitutionalCollections" 
-                class="edu.ur.ir.web.action.institution.ViewInstitutionalCollections">
-                <interceptor-ref name="editStack" />
-                <result name="success">/pages/view_collections_frag.jsp</result>
-        </action>
-        
         <action name="viewInstitutionalCollection" 
                 class="edu.ur.ir.web.action.institution.PublicCollectionView"
                 method="view">
