@@ -17,11 +17,6 @@
 
 package edu.ur.ir.web.action;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.Random;
-
 
 import org.apache.log4j.Logger;
 
@@ -39,23 +34,11 @@ import edu.ur.ir.repository.RepositoryService;
  * @author Nathan Sarr
  *
  */
-public class NextRepositoryPicture extends ActionSupport implements
-Comparator<IrFile>{
+public class NextRepositoryPicture extends ActionSupport {
 	
 	/** Eclipse generated Id */
 	private static final long serialVersionUID = 470760718471391384L;
-	
-	/** determine what the user is trying to do */
-	
-	// this if when the page is first initalized
-	public static final String INIT = "INIT";
-	
-	// get the next picture
-	public static final String NEXT = "NEXT";
-	
-	// get the previous picture
-	public static final String PREV = "PREV";
-	
+		
 	/**  Logger for file upload */
 	private static final Logger log = Logger.getLogger(NextRepositoryPicture.class);
 	
@@ -66,23 +49,22 @@ Comparator<IrFile>{
 	private RepositoryService repositoryService;
 	
 	/**  Ir file that should be shown. */
-	private IrFile irFile;
+	private IrFile repositoryImageFile;
 	
 	/**  number of pictures */
-	private int numPictures;
+	private int numRepositoryPictures;
 	
-
-
 	/**
 	 * Determine if the user is initializing wants the next or previous
 	 * picture
 	 */
 	private String type;
 	
-	/**
-	 * Current picture location
-	 */
-	private int currentLocation;
+	/**  Current picture location */
+	private int currentRepositoryPictureLocation;
+	
+	/**  Helper to get the next repository picture */
+	private RandomRepositoryPictureHelper repositoryPictureHelper = new RandomRepositoryPictureHelper();
 	
 	/**
      * Gets the next ir file to be downloaded
@@ -97,70 +79,13 @@ Comparator<IrFile>{
     	}
 	  
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-       
-		if( repository != null )
-		{
-		    LinkedList<IrFile> pictures = new LinkedList<IrFile>(repository.getPictures());
-        
-		    numPictures = pictures.size();
-            // sort the pictures to assure order
-            Collections.sort(pictures, this);
-        
-            if( pictures != null && numPictures > 0 )
-            {
-        	    if( pictures.size() == 1 )
-        	    {
-        		    currentLocation = 0;
-        	    }
-        	    else if ( type.equals(INIT))
-        	    {
-        		    Random random = new Random();
-        		    currentLocation = random.nextInt(numPictures);
-        	    }
-        	    else if( type.equals(NEXT))
-        	    {
-        		    if( (currentLocation + 1) >= numPictures)
-        		    {
-        			    currentLocation = 0;
-        		    }
-        		    else
-        		    {
-        			    currentLocation += 1;
-        		    }
-        	    }
-        	    else if( type.equals(PREV))
-        	    {
-        		    if( (currentLocation -1 ) < 0 )
-        		    {
-        			    currentLocation = numPictures - 1;
-        		    }
-        		    else
-        		    {
-        			    currentLocation -= 1;
-        		    }
-        	    }
-        	    
-        	    irFile = pictures.get(currentLocation);
-            }
-           
-        }
-        
+		repositoryImageFile = repositoryPictureHelper.getNextPicture(type, repository, currentRepositoryPictureLocation);
+        currentRepositoryPictureLocation = repositoryPictureHelper.getCurrentRepositoryPictureLocation();
+        numRepositoryPictures = repositoryPictureHelper.getNumRepositoryPictures();
+
         return SUCCESS;
     }
     
-    
-    /**
-     * Simple comparison to assure order.
-     * 
-     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-     */
-    public int compare(IrFile o1, IrFile o2) {
-    	if( o1.getId().equals(o2.getId())) return 0;
-    	else if( o1.getId() > o2.getId() ) return 1;
-    	else  return -1;
-    		
-    }
-
 	public Repository getRepository() {
 		return repository;
 	}
@@ -185,31 +110,29 @@ Comparator<IrFile>{
 		this.type = type;
 	}
 
-	public int getCurrentLocation() {
-		return currentLocation;
+	public int getCurrentRepositoryPictureLocation() {
+		return currentRepositoryPictureLocation;
 	}
 
-	public void setCurrentLocation(int currentLocation) {
-		this.currentLocation = currentLocation;
-	}
-
-
-	public IrFile getIrFile() {
-		return irFile;
+	public void setCurrentRepositoryPictureLocation(int currentLocation) {
+		this.currentRepositoryPictureLocation = currentLocation;
 	}
 
 
-	public void setIrFile(IrFile irFile) {
-		this.irFile = irFile;
+	public IrFile getRepositoryImageFile() {
+		return repositoryImageFile;
+	}
+
+	public void setRepositoryImageFile(IrFile irFile) {
+		this.repositoryImageFile = irFile;
 	}
 	
-	public int getNumPictures() {
-		return numPictures;
+	public int getNumRepositoryPictures() {
+		return numRepositoryPictures;
 	}
 
-	public void setNumPictures(int numPictures) {
-		this.numPictures = numPictures;
+	public void setNumRepositoryPictures(int numPictures) {
+		this.numRepositoryPictures = numPictures;
 	}
-
 
 }

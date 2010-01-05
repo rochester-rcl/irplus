@@ -18,20 +18,30 @@
 package edu.ur.ir.web.action;
 
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.file.IrFile;
+import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.researcher.Researcher;
+import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
+import edu.ur.simple.type.AscendingNameComparator;
 
 
 /**
- * Home Administration Action
+ * Home  Action - this is for loading a majority of the home page information.
+ * 
  * @author Nathan Sarr
  *
  */
@@ -70,6 +80,36 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	/** Number of file downloads in the repository */
 	private Long numberOfFileDownloads;
 	
+	/** Set of institutional collections */
+	private List<InstitutionalCollection> institutionalCollections = new LinkedList<InstitutionalCollection>();
+	
+	/** Used for sorting name based entities */
+	private AscendingNameComparator nameComparator = new AscendingNameComparator();
+	
+	/**  Helper to get the next repository picture */
+	private RandomRepositoryPictureHelper repositoryPictureHelper = new RandomRepositoryPictureHelper();
+	
+	/**  Current picture location */
+	private int currentRepositoryPictureLocation = 0;
+	
+	/**  Ir file that should be shown. */
+	private IrFile repositoryImageFile;
+	
+	/**  number of repository pictures */
+	private int numRepositoryPictures;
+	
+	/** Service for dealing with researcher information*/
+	private ResearcherService researcherService;
+	
+	/** helper for dealing with researcher information */
+	private RandomResearcherPictureHelper researcherPictureHelper = new RandomResearcherPictureHelper();
+	
+	/**  Current picture location */
+	private int currentResearcherLocation = 0;
+	
+	/** researchers found */
+	private List<Researcher> researchers = new LinkedList<Researcher>();
+	
 	/**
 	 * Prepare the ur published object
 	 * 
@@ -81,17 +121,6 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	}
 	
 	/**
-	 * Load statistics for repository
-	 * 
-	 */
-	public String loadStatistics() {
-		numberOfCollections = institutionalCollectionService.getCount();
-		numberOfPublications = institutionalItemService.getDistinctInstitutionalItemCount();
-		numberOfFileDownloads = downloadStatisticsService.getNumberOfDownloadsForAllCollections();
-		return SUCCESS;
-	}
-	
-	/**
      * A default implementation that does nothing and returns "success".
      *
      * @return {@link #SUCCESS}
@@ -99,7 +128,25 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
     public String execute() throws Exception 
     {
     	log.debug("execute called");
-        return SUCCESS;
+    	// get the statistics
+    	numberOfCollections = institutionalCollectionService.getCount();
+		numberOfPublications = institutionalItemService.getDistinctInstitutionalItemCount();
+		numberOfFileDownloads = downloadStatisticsService.getNumberOfDownloadsForAllCollections();
+		
+		// get and sort the institutional collections
+		institutionalCollections.addAll(repository.getInstitutionalCollections());
+		Collections.sort(institutionalCollections, nameComparator);
+		
+		// get the first repository image
+		repositoryImageFile = repositoryPictureHelper.getNextPicture(RandomRepositoryPictureHelper.INIT, repository, currentRepositoryPictureLocation);
+        currentRepositoryPictureLocation = repositoryPictureHelper.getCurrentRepositoryPictureLocation();
+        numRepositoryPictures = repositoryPictureHelper.getNumRepositoryPictures();
+        
+        // get the first set of researchers
+        researchers = researcherPictureHelper.getResearchers(RandomResearcherPictureHelper.INIT, researcherService, currentResearcherLocation);
+        currentResearcherLocation = researcherPictureHelper.getCurrentResearcherLocation();
+        
+		return SUCCESS;
     }
 
 	public RepositoryService getRepositoryService() {
@@ -153,5 +200,44 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	public Long getNumberOfFileDownloads() {
 		return numberOfFileDownloads;
 	}
+
+	public List<InstitutionalCollection> getInstitutionalCollections() {
+		return institutionalCollections;
+	}
+
+	public void setInstitutionalCollections(
+			List<InstitutionalCollection> institutionalCollections) {
+		this.institutionalCollections = institutionalCollections;
+	}
+	
+
+	public IrFile getRepositoryImageFile() {
+		return repositoryImageFile;
+	}
+
+	public int getCurrentRepositoryPictureLocation() {
+		return currentRepositoryPictureLocation;
+	}
+
+	public int getNumRepositoryPictures() {
+		return numRepositoryPictures;
+	}
+
+	public ResearcherService getResearcherService() {
+		return researcherService;
+	}
+
+	public void setResearcherService(ResearcherService researcherService) {
+		this.researcherService = researcherService;
+	}
+
+	public int getCurrentResearcherLocation() {
+		return currentResearcherLocation;
+	}
+
+	public List<Researcher> getResearchers() {
+		return researchers;
+	}
+
 
 }

@@ -205,7 +205,6 @@
                         </div>
                    
                         <div class="contentBoxContentPicture" id="collection_picture">
-                            <p>Pictures will go here</p>
                         </div>
                     </div>
                     

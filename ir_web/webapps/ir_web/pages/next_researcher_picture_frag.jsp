@@ -60,13 +60,13 @@
 	            <button class="ur_button" 
 		            onmouseover="this.className='ur_buttonover';"
 	 		        onmouseout="this.className='ur_button';"
-	 		        onclick="javascript:YAHOO.ur.public.home.getResearcherPicture(${currentLocation}, 'PREV');">&lt; Previous</button>
+	 		        onclick="javascript:YAHOO.ur.public.home.getResearcherPicture(${currentResearcherLocation}, 'PREV');">&lt; Previous</button>
 	 		</td>
 	 		<td class="rightButton">
 	 		    <button class="ur_button" 
 		            onmouseover="this.className='ur_buttonover';"
 	 		        onmouseout="this.className='ur_button';"
-	 		        onclick="javascript:YAHOO.ur.public.home.getResearcherPicture(${currentLocation}, 'NEXT');">Next &gt;</button>
+	 		        onclick="javascript:YAHOO.ur.public.home.getResearcherPicture(${currentResearcherLocation}, 'NEXT');">Next &gt;</button>
 	        </td>
 	     </tr>
 	</table>

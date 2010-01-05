@@ -19,6 +19,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
+<%@ taglib prefix="ir" uri="ir-tags"%>
 
 
 <!--  document type -->
@@ -113,16 +114,43 @@
                        </div>
                    </div>
                    
-                    <div class="contentContainer">
+                   <!--  container to view all of the institutional collections -->
+                   <div class="contentContainer">
                         <div class="contentBoxTitle">
                             <p>Institutional Collections</p>
                         </div>
-                        <div id="institutional_collections" class="contentBoxContent">
+                        <div class="contentBoxContent">
+                            <c:if test="${!ur:isEmpty(institutionalCollections)}">
+                                <table class="baseTable">
+                                <c:forEach items="${institutionalCollections}" var="institutionalCollection" >
+       
+                                    <c:url var="institutionalCollectionUrl" value="/viewInstitutionalCollection.action">
+                                        <c:param name="collectionId" value="${institutionalCollection.id}"/>
+                                    </c:url>
+       
+                                    <tr>
+                                        <td class="baseTableImage">
+                                            <c:if test="${ir:hasThumbnail(institutionalCollection.primaryPicture)}">
+                                                <c:url var="url" value="/institutionalCollectionThumbnailDownloader.action">
+                                                    <c:param name="collectionId" value="${institutionalCollection.id}"/>
+                                                    <c:param name="irFileId" value="${institutionalCollection.primaryPicture.id}"/>
+                                                </c:url>
+                                                <img height="66px" width="100px" src="${url}"/>
+                                            </c:if>
+                                        </td>
+                                        <td>
+                                            <p><strong><a href="${institutionalCollectionUrl}">${institutionalCollection.name}</a></strong> <ur:maxText numChars="100" text="${institutionalCollection.description}"></ur:maxText></p>
+                                        </td>
+                                    </tr>
+       
+                                </c:forEach>
+                               </table>
+                           </c:if>
+                           <c:if test="${ur:isEmpty(institutionalCollections)}">
+                               <p>There are no institutional collections</p>
+                           </c:if>
                         </div>
                     </div>
-
-                   
-                    
                 </div>
                 <!--  end the first column -->
             
@@ -134,7 +162,9 @@
                         </div>
                    
                         <div class="contentBoxContentPicture">
-                            <div id="repository_picture"></div>
+                            <div id="repository_picture">
+                                <c:import url="next_repository_picture_frag.jsp"/>
+                            </div>
                         </div>
                     </div>
                     
@@ -144,6 +174,7 @@
                         </div>
                         <div class="contentBoxContent">
                             <div id="researcher_picture" >
+                                <c:import url="next_researcher_picture_frag.jsp"/>
                             </div>
                         </div>
                     </div>
@@ -164,8 +195,17 @@
                        </div>
                    
                        <div class="contentBoxContent">
-                       		<div id="statistics_div">
-                       		</div>
+                       		<p>
+                                <c:if test="${numberOfCollections > 0}">
+                                    Number of collections  : ${numberOfCollections}<br/><br/>
+                                </c:if>
+                                <c:if test="${numberOfPublications > 0}">
+                                    Number of publications : ${numberOfPublications}<br/><br/>
+                                </c:if>
+                                <c:if test="${numberOfFileDownloads > 0}">
+                                    Number of file downloads : ${numberOfFileDownloads}<br/>
+                                </c:if>
+                          </p>
                       </div>
                    </div>
                 </div>
