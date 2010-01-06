@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
-import net.sf.json.JSONObject;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -71,9 +70,6 @@ Comparator<IrFile>, UserIdAware {
 	/** Number of researcher pictures */
 	private int numResearcherPictures;
 	
-	/** Researcher folders as JSON object */
-	private JSONObject researcherJSONObject;
-	
 	/** Researcher picture IrFile */
 	private IrFile irFile;
 	
@@ -115,14 +111,12 @@ Comparator<IrFile>, UserIdAware {
 	    	{
 	    		return "accessDenied";
 	    	}
-			researcherJSONObject = researcher.toJSONObject();
 		}
 		else
 		{
 			return "notFound";
 		}
 
-		log.debug("researcherJSONObject::" + researcherJSONObject);
 		
 		return SUCCESS;
 	}
@@ -266,14 +260,6 @@ Comparator<IrFile>, UserIdAware {
 		this.researcherService = researcherService;
 	}
 
-	/**
-	 * Get JSON object for researcher
-	 *  
-	 * @return
-	 */
-	public JSONObject getResearcherJSONObject() {
-		return researcherJSONObject;
-	}
 
 	public IrFile getIrFile() {
 		return irFile;
