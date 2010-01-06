@@ -16,9 +16,6 @@
 
 package edu.ur.ir.researcher;
 
-import org.apache.log4j.Logger;
-import net.sf.json.JSONObject;
-
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
 import edu.ur.ir.item.GenericItem;
@@ -40,9 +37,6 @@ DescriptionAware, FileSystem{
 	/** Eclipse generated id */
 	private static final long serialVersionUID = -6543465629776275496L;
 
-	/**  Logger */
-	private static final Logger log = Logger.getLogger(ResearcherPublication.class);
-	
 	/**  Publication that is in the folder */
 	private GenericItem publication;
 	
@@ -257,42 +251,5 @@ DescriptionAware, FileSystem{
 	public void setResearcher(Researcher researcher) {
 		this.researcher = researcher;
 	}
-	
-	/**
-	 * Creates JSON object
-	 * 
-	 * @return
-	 */
-	public JSONObject toJSONObject() {
-		log.debug("call getJsonString Publication");
-		
-		JSONObject jsonObj = new JSONObject();
-		
-		try {
-			jsonObj.put("name",getName().replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
-			
-			String description = getDescription();
-			if( description != null )
-			{
-			    jsonObj.put("description",description.replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
-			}
-			else
-			{
-				jsonObj.put("description", "");
-			}
-			jsonObj.put("id",id);
-			jsonObj.put("publicationId",publication.getId());
-			jsonObj.put("type",fileSystemType.getType());
-
-		} catch (Exception e) {
-			 log.debug("jsonObj Exception::"+e.getMessage());
-		}
-		
-		log.debug("jsonObj Publication::"+jsonObj);
-		
-		return jsonObj;
-	}
-
-
 	
 }

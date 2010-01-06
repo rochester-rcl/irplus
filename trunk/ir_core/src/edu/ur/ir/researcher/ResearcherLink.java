@@ -19,9 +19,6 @@ package edu.ur.ir.researcher;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
-import net.sf.json.JSONObject;
-
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
 import edu.ur.net.UrlAware;
@@ -40,9 +37,6 @@ public class ResearcherLink extends CommonPersistent implements UrlAware, FileSy
 	/** Eclipse generated id */
 	private static final long serialVersionUID = 3144484183634385274L;
 
-	/**  Logger */
-	private static final Logger log = Logger.getLogger(ResearcherLink.class);
-	
 	/**  Link  */
 	private String link;
 	
@@ -243,41 +237,5 @@ public class ResearcherLink extends CommonPersistent implements UrlAware, FileSy
 	public void setResearcher(Researcher researcher) {
 		this.researcher = researcher;
 	}
-	
-	/**
-	 * Creates JSON object
-	 * 
-	 * @return
-	 */
-	public JSONObject toJSONObject() {
-		log.debug("call getJsonString Link");
-		
-		JSONObject jsonObj = new JSONObject();
-		
-		try {
-			jsonObj.put("name",getName().replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
-			jsonObj.put("id",id);
-			jsonObj.put("type",fileSystemType.getType());
-			jsonObj.put("url",getLink());
-			
-			if(description != null)
-			{
-			    jsonObj.put("description",getDescription().replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
-			}
-			else
-			{
-				jsonObj.put("description", "");
-			}
-				
-		} catch (Exception e) {
-			 log.debug("jsonObj Exception::"+e.getMessage());
-		}
-		
-		log.debug("jsonObj Link::"+jsonObj);
-		
-		return jsonObj;
-	}
-
-
 	
 }

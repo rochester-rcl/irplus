@@ -20,14 +20,10 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.FileSystem;
@@ -37,7 +33,6 @@ import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.persistent.LongPersistentId;
 import edu.ur.persistent.PersistentVersioned;
-import edu.ur.simple.type.AscendingNameComparator;
 import edu.ur.simple.type.DescriptionAware;
 import edu.ur.simple.type.NameAware;
 import edu.ur.tree.PreOrderTreeSetNodeBase;
@@ -1051,88 +1046,6 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 		}
 	}
 	
-	/**
-	 * Creates JSON object
-	 * 
-	 * @return
-	 */
-	public JSONObject toJSONObject() {
-		log.debug("call getJsonString Folder");
-		
-		JSONObject jsonObj = new JSONObject();
-		
-		try {
-			jsonObj.put("name",name.replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
-			jsonObj.put("id",id);
-			jsonObj.put("type",fileSystemType.getType());
-			
-			if( description != null )
-			{
-			    jsonObj.put("description",description.replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
-			}
-			else
-			{
-				jsonObj.put("description", "");
-			}
-			// Put sub folders
-			JSONArray jsonSubFolders = new JSONArray();
-			List <ResearcherFolder> folders = new LinkedList<ResearcherFolder> (children);
-			Collections.sort( folders , new AscendingNameComparator());
-		 	for(ResearcherFolder folder: folders) {
-				jsonSubFolders.add(folder.toJSONObject());
-			}
-
-			jsonObj.put("folders",jsonSubFolders);	
-
-			// Put files
-			JSONArray jsonFiles = new JSONArray();
-			List <ResearcherFile> sortedFiles = new LinkedList<ResearcherFile> (files);
-			Collections.sort( sortedFiles , new AscendingNameComparator());
-			for(ResearcherFile file: sortedFiles) {
-				jsonFiles.add(file.toJSONObject());
-			}
-
-			jsonObj.put("files",jsonFiles);	
-			
-			// Put publications
-			JSONArray jsonPublications = new JSONArray();
-			List <ResearcherPublication> sortedPublications = new LinkedList<ResearcherPublication> (publications);
-			Collections.sort( sortedPublications , new AscendingNameComparator());
-			for(ResearcherPublication p: sortedPublications) {
-				jsonPublications.add(p.toJSONObject());
-			}
-
-			jsonObj.put("publications",jsonPublications);	
-
-			// Put institutional items
-			JSONArray jsonInstitutionalItems = new JSONArray();
-			List <ResearcherInstitutionalItem> sortedInstitutionalItems = new LinkedList<ResearcherInstitutionalItem> (institutionalItems);
-			Collections.sort( sortedInstitutionalItems , new AscendingNameComparator());
-			for(ResearcherInstitutionalItem i: sortedInstitutionalItems) {
-				jsonInstitutionalItems.add(i.toJSONObject());
-			}
-
-			jsonObj.put("institutionalItems",jsonInstitutionalItems);
-			
-			// Put files
-			JSONArray jsonLinks = new JSONArray();
-			List <ResearcherLink> sortedLinks = new LinkedList<ResearcherLink> (links);
-			Collections.sort( sortedLinks , new AscendingNameComparator());
-			for(ResearcherLink link: sortedLinks) {
-				jsonLinks.add(link.toJSONObject());
-			}
-
-			jsonObj.put("links",jsonLinks);	
-
-		} catch (Exception e) {
-			 log.debug("jsonObj Exception::"+e.getMessage());
-		}
-		
-		log.debug("jsonObj Folder ::"+jsonObj);
-		
-		return jsonObj;
-	}
-
 	/**
 	 * Returns an unmodifiable set of institutional items.
 	 * 

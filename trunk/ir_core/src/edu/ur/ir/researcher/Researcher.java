@@ -22,10 +22,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -33,7 +29,6 @@ import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.AscendingOrderComparator;
 import edu.ur.persistent.BasePersistent;
-import edu.ur.simple.type.AscendingNameComparator;
 
 /**
  * A user who does research and contributes a large amount
@@ -48,9 +43,6 @@ public class Researcher extends BasePersistent{
 
 	/** Generated serial id. */
 	private static final long serialVersionUID = 1391737909500803512L;
-	
-	/** Logger */
-	private static final Logger log = Logger.getLogger(Researcher.class);
 	
 	/** Title of the Research */
 	private String title;
@@ -1207,83 +1199,6 @@ public class Researcher extends BasePersistent{
 			}
 		}
 		return null;
-	}
-	
-	/**
-	 * Creates JSON object
-	 * 
-	 * @return
-	 */
-	public JSONObject toJSONObject() {
-		log.debug("call getJsonString Researcher");
-		
-		JSONObject jsonObj = new JSONObject();
-		
-		try {
-			jsonObj.put("id",id);
-			
-			// Put sub folders
-			JSONArray jsonSubFolders = new JSONArray();
-			
-			List <ResearcherFolder> folders = new LinkedList<ResearcherFolder> (rootFolders);
-			Collections.sort( folders, new AscendingNameComparator());
-			
-		 	for(ResearcherFolder folder: folders) {
-				jsonSubFolders.add(folder.toJSONObject());
-			}
-
-			jsonObj.put("folders",jsonSubFolders);	
-
-			// Put files
-			JSONArray jsonFiles = new JSONArray();
-			List <ResearcherFile> files = new LinkedList<ResearcherFile> (rootFiles);
-			Collections.sort( files, new AscendingNameComparator());
-			for(ResearcherFile file: files) {
-				jsonFiles.add(file.toJSONObject());
-			}
-
-			jsonObj.put("files",jsonFiles);	
-			
-			// Put publications
-			JSONArray jsonPublications = new JSONArray();
-			List <ResearcherPublication> publications = new LinkedList<ResearcherPublication> (rootPublications);
-			Collections.sort( publications, new AscendingNameComparator());
-			for(ResearcherPublication p: publications) {
-				jsonPublications.add(p.toJSONObject());
-			}
-
-			jsonObj.put("publications",jsonPublications);	
-
-			// Put institutional item
-			JSONArray jsonInstitutionalItems = new JSONArray();
-			List <ResearcherInstitutionalItem> institutionalItems = new LinkedList<ResearcherInstitutionalItem> (rootInstitutionalItems);
-			Collections.sort( institutionalItems, new AscendingNameComparator());
-
-			for(ResearcherInstitutionalItem i: institutionalItems) {
-				jsonInstitutionalItems.add(i.toJSONObject());
-			}
-
-			jsonObj.put("institutionalItems",jsonInstitutionalItems);	
-
-			
-			// Put links
-			JSONArray jsonLinks = new JSONArray();
-			List <ResearcherLink> links = new LinkedList<ResearcherLink> (rootLinks);
-			Collections.sort( links, new AscendingNameComparator());
-
-			for(ResearcherLink link: links) {
-				jsonLinks.add(link.toJSONObject());
-			}
-
-			jsonObj.put("links",jsonLinks);	
-
-		} catch (Exception e) {
-			 log.debug("jsonObj Exception::"+e.getMessage());
-		}
-		
-		log.debug("jsonObj Researcher ::"+jsonObj);
-		
-		return jsonObj;
 	}
 
 	/**
