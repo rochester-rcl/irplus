@@ -83,6 +83,17 @@
 		</attribute>
 	</tag>
 	
+	<tag>
+		<name>drawResearcherFolder</name>
+		<tag-class>edu.ur.tag.repository.ResearcherFolderTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>researcher</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+	</tag>
+	
 	
 	<tag>
 		<name>itemTransformUrl</name>
