@@ -12,12 +12,31 @@ irplus changes 1.0 to 1.1
 - Updated from ognl 2.6.11 to 2.7.3
 - Updated from xwork-core 2.1.2 to 2.1.6
 - Updated from Ivy 2.1.0-rc1 to 2.1.0
+- Removed JSON library as it was no longer needed [ was used by toJson for researcher ]
 
 [ir_core]
 =============================
 - Added interface for group membership filter -  edu.ur.ir.user.UserGroupMemberFilter
+- Added methods to Researcher and Researcher Folder to check for existing file/personal 
+  publication/Institutional Publication
+- Removed the toJson method calls from researcher classes as they are no longer needed
 
 [ir_web]
 =============================
 - Fixed issue where researcher could not add a new field
 - Fixed issue where researcher id was missing or interrupted
+- Updated collection and researcher page to show link descriptions
+- Updated workspace to have buttons and no select drop down at the top of page - increases visibility
+- Updated drop down file / folder buttons to include move
+- Updated researcher page to have preview and public/private following the researcher page title
+- Login page - set focus on user name
+- Moved buttons on researcher workspace folder to right hand side - same as file workspace
+- Fixed so error no longer occurs when trying to add the same publication twice to a folder
+- Fixed so that after adding an institutional publication the user is taken to the folder the publication
+  was added to
+- Fixed home page to allow google to more easily index the site.  This is for institutional collection listing,
+  researcher pages listing, images.
+- Fixed researcher page to use unordered lists for non-javascript based browsers/search engines.  This allows
+  the page to be indexed
+- Added tag to draw the researcher tree for as an unordered list
+
