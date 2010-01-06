@@ -21,7 +21,6 @@ import java.io.File;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import net.sf.json.JSONObject;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -95,9 +94,6 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	private Long parentFolderId = 0L;
 
 	private boolean showFoldersTab;
-	
-	/** Researcher folders as JSON object */
-	private JSONObject researcherJSONObject;
 	
 	/** Researcher Index Service */
 	private ResearcherIndexService researcherIndexService;
@@ -230,11 +226,7 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 			return "accessDenied";
 		}
 		
-		
-		if (researcher != null) 
-		{
-			researcherJSONObject = researcher.toJSONObject();
-		}
+
 		
 		departments = departmentService.getAllDepartmentsNameOrder();
 		getFieldsInformation();
@@ -423,15 +415,6 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		this.showFoldersTab = showFoldersTab;
 	}
 	
-	/**
-	 * Get JSON object for researcher
-	 *  
-	 * @return
-	 */
-	public JSONObject getResearcherJSONObject() {
-		return researcherJSONObject;
-	}
-
 	public ResearcherIndexService getResearcherIndexService() {
 		return researcherIndexService;
 	}
