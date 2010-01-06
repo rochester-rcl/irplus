@@ -16,9 +16,6 @@
 
 package edu.ur.ir.researcher;
 
-import org.apache.log4j.Logger;
-import net.sf.json.JSONObject;
-
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
 import edu.ur.ir.file.IrFile;
@@ -51,10 +48,6 @@ public class ResearcherFile extends BasePersistent implements FileSystem{
 	
 	/** Version number of IrFile */
 	private int versionNumber;
-	
-	/** Logger */
-	private static final Logger log = Logger.getLogger(ResearcherFile.class);
-	
 	
 	/**
 	 * Default constructor
@@ -279,41 +272,6 @@ public class ResearcherFile extends BasePersistent implements FileSystem{
 	 */
 	void setResearcher(Researcher researcher) {
 		this.researcher = researcher;
-	}
-
-	/**
-	 * Creates JSON object
-	 * 
-	 * @return
-	 */
-	public JSONObject toJSONObject() {
-		log.debug("call File getJsonString");
-		
-		JSONObject jsonObj = new JSONObject();
-		
-		try {
-			jsonObj.put("name",getName().replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
-			
-			String description = getDescription();
-			if(description != null)
-			{
-			    jsonObj.put("description",description.replaceAll("'", "&#146;").replaceAll("\"", "&#148;"));
-			}
-			else
-			{
-				jsonObj.put("description", "");
-			}
-			jsonObj.put("id",id);
-			jsonObj.put("type",fileSystemType.getType());
-			jsonObj.put("extension",irFile.getFileInfo().getExtension());
-
-		} catch (Exception e) {
-			 log.debug("jsonObj Exception::"+e.getMessage());
-		}
-		
-		log.debug("jsonObj File ::"+jsonObj);
-		
-		return jsonObj;
 	}
 
 	public int getVersionNumber() {
