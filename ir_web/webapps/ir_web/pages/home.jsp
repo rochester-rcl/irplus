@@ -27,7 +27,7 @@
 
 <html>
     <head>
-        <title>${repository.name}</title>
+        <title>${repository.name} Institutional Repository</title>
         
         <c:import url="/inc/meta-frag.jsp"/>
         
