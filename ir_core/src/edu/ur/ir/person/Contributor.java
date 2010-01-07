@@ -35,9 +35,17 @@ public class Contributor extends BasePersistent{
 	/**  The type of contribution they made.  */
 	private ContributorType contributorType;
 
-	public Contributor() {
-	}
+	/**
+	 * Default constructor
+	 */
+	public Contributor() {}
 
+	/**
+	 * Contributor record.
+	 * 
+	 * @param personName - person name 
+	 * @param contributorType - type of contribution
+	 */
 	public Contributor(PersonName personName, ContributorType contributorType) {
 		this.personName = personName;
 		this.contributorType = contributorType;
