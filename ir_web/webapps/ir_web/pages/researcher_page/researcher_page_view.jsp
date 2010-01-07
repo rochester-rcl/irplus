@@ -45,8 +45,9 @@
         <ur:js src="page-resources/yui/utilities/utilities.js"/>
         <ur:js src="page-resources/yui/container/container-min.js"/>
         <ur:js src="page-resources/yui/menu/menu-min.js"/>
-        <ur:js src="page-resources/yui/treeview/treeview-min.js"/> 
         <ur:js src="page-resources/yui/json/json-min.js"/>
+        <ur:js src="page-resources/yui/treeview/treeview-min.js"/> 
+        
         
         <!-- Source File -->
         <ur:js src="page-resources/js/menu/main_menu.js"/>
@@ -207,10 +208,9 @@
 	                       </div>
 	                   
 	                       <div class="contentBoxContent"> 
-	                           <div id="treeDiv"></div>
-	                           <input type="hidden" id="json_object" value='${researcherJSONObject}' size="100">
-	                        </div>
-	                   </div>
+	                           <div id="treeDiv"><ir:drawResearcherFolder researcher="${researcher}"/></div>
+	                       </div>
+	                     </div>
 	                    
 	                </div>
 	                <!--  end the second column -->
