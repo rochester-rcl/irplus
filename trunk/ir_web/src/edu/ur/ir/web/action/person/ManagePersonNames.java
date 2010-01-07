@@ -18,6 +18,7 @@ package edu.ur.ir.web.action.person;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -26,6 +27,8 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.item.ItemService;
+import edu.ur.ir.person.Contributor;
+import edu.ur.ir.person.ContributorService;
 import edu.ur.ir.person.NameAuthorityIndexService;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameAuthority;
@@ -116,6 +119,9 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
     private int start = 0;
     
     private int maxResults = 25;
+    
+    /** service for dealing with contributors*/
+    private ContributorService contributorService;
 
 	/**
 	 * Loads a person for viewing and editing.
@@ -255,6 +261,14 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
 			    	personNamesNotDeleted.append(pn.getSurname());
 			    	personNamesNotDeleted.append(",");
 		    	} else {
+		    		// delete any old contributors
+				    List<Contributor> contributors = contributorService.get(pn);
+				    for( Contributor c : contributors)
+				    {
+				    	contributorService.delete(c);
+				    }
+				    
+				    // remove the person name
 			        personNameAuthority.removeName(pn);
 		    	}
 		    }
@@ -620,6 +634,14 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
 	
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public ContributorService getContributorService() {
+		return contributorService;
+	}
+
+	public void setContributorService(ContributorService contributorService) {
+		this.contributorService = contributorService;
 	}
 
 }
