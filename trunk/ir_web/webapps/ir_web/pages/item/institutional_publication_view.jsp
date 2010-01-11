@@ -28,7 +28,7 @@
 
 <html>
     <head>
-        <title>Viewing Institutional Publication: ${institutionalItemVersion.item.fullName}</title>
+        <title>${institutionalItemVersion.item.fullName}</title>
         <c:import url="/inc/meta-frag.jsp"/>
                 
     <!-- Core + Skin CSS -->
