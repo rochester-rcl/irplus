@@ -36,6 +36,7 @@ import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
+import edu.ur.ir.user.UserService;
 import edu.ur.simple.type.AscendingNameComparator;
 
 
@@ -59,6 +60,9 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	/** File Download Statistics data access */
 	private DownloadStatisticsService downloadStatisticsService;
 	
+	/** Service to get user information */
+	private UserService userService;
+	
 	/** The repository for this system  */
 	private Repository repository;
 	
@@ -79,6 +83,9 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	
 	/** Number of file downloads in the repository */
 	private Long numberOfFileDownloads;
+	
+	/** Number of users in the system */
+	private Long numberOfUsers;
 	
 	/** Set of institutional collections */
 	private List<InstitutionalCollection> institutionalCollections = new LinkedList<InstitutionalCollection>();
@@ -132,6 +139,7 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
     	numberOfCollections = institutionalCollectionService.getCount();
 		numberOfPublications = institutionalItemService.getDistinctInstitutionalItemCount();
 		numberOfFileDownloads = downloadStatisticsService.getNumberOfDownloadsForAllCollections();
+		numberOfUsers = userService.getUserCount();
 		
 		// get and sort the institutional collections
 		institutionalCollections.addAll(repository.getInstitutionalCollections());
@@ -237,6 +245,18 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 
 	public List<Researcher> getResearchers() {
 		return researchers;
+	}
+
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+	public Long getNumberOfUsers() {
+		return numberOfUsers;
 	}
 
 
