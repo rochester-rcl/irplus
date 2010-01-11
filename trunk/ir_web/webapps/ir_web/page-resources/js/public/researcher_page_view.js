@@ -63,169 +63,20 @@ YAHOO.ur.researcher.page = {
 	
 	createFolderTree : function() 
 	{
-			var jsonObject = document.getElementById('json_object').value;
-	
-			// Parsing JSON strings can throw a SyntaxError exception, so we wrap the call
-			// in a try catch block
-			try {
-			    var researcher = YAHOO.lang.JSON.parse(jsonObject);
-			}
-			catch (e) {
-			    alert("Invalid JSON object data");
-			}
-
 			//create the TreeView instance:
 			var tree = new YAHOO.widget.TreeView("treeDiv");
-			
-			//get a reusable reference to the root node:
-			var root = tree.getRoot();
-			
 			// this stops the tree from hiding the URL - this is a problem with 
 			// YUI 2.7.X - see http://yuilibrary.com/projects/yui2/ticket/2527720
 			tree.subscribe('clickEvent',function () {return false;});
-			// build tree 
-			YAHOO.ur.researcher.page.buildTree(researcher, root, researcher.id);
-
 			
+			//get a reusable reference to the root node:
+			var root = tree.getRoot();
 			tree.render(); 
 			tree.expandAll();
 	
 	},
 	
-	/**
-	 * Build tree
-	 */
-	buildTree : function(node, parentNode, researcherId) 
-	{
-			// Build folders and its children
-			for (var i = 0; i < node.folders.length; i++) {
-			
-			    var nameDescValue = node.folders[i].name;
-			    if( node.folders[i].description != null &&  node.folders[i].description != '')
-				{
-				    nameDescValue = nameDescValue + " - " + node.folders[i].description + "<br/><br/>";
-				}
-			    
-				var newNode = new YAHOO.widget.TextNode(nameDescValue, parentNode, false);
-              
-				// make sure there is not an empty folder
-				if ( node.folders[i].folders.length == 0 &&
-					 node.folders[i].files.length == 0 &&
-				     node.folders[i].links.length == 0  && 
-				     node.folders[i].publications.length == 0 &&
-				     node.folders[i].institutionalItems.length == 0) {
-				
-					// Set folder icon
-				    newNode.labelStyle  = "icon-folder";
-					
-				    // below would create an empty folder depends on style user would 
-				    // like comment the above line and then uncomment the below 3 lines
-				    //var emptyObj = new Object;
-					// Create file node
-					//var fileNode = new YAHOO.widget.HTMLNode(emptyObj, newNode, false, true);
-				}
-				else
-				{
-				    YAHOO.ur.researcher.page.buildTree(node.folders[i], newNode, researcherId);
-				}
-			}
-			
-			
-			
-			// Build file node
-			for (var i = 0; i < node.files.length; i++) {
-	
-				var fileObj = new Object;
-				
-				if (node.files[i].extension == 'doc' || node.files[i].extension == 'docx') {
-					fileObj.html = "<span class=\"wordFileImg\">&nbsp;</span>" + "<a href=\"" + basePath + "researcherFileDownload.action?researcherFileId=" + node.files[i].id + "\">" 
-							+ node.files[i].name + "</a>";
-				} else if (node.files[i].extension == 'pdf') {
-					fileObj.html = "<span class=\"pdfFileImg\">&nbsp;</span>" + "<a href=\"" + basePath + "researcherFileDownload.action?researcherFileId=" + node.files[i].id + "\">" 
-							+ node.files[i].name + "</a>";
-				} else if (node.files[i].extension == 'ppt' || node.files[i].extension == 'pptx') {
-					fileObj.html = "<span class=\"powerPointFileImg\">&nbsp;</span>" + "<a href=\"" + basePath + "researcherFileDownload.action?researcherFileId=" + node.files[i].id + "\">" 
-							+ node.files[i].name + "</a>";
-				} else if (node.files[i].extension == 'xls' || node.files[i].extension == 'xlsx') {
-					fileObj.html = "<span class=\"excelFileImg\">&nbsp;</span>" + "<a href=\"" + basePath + "researcherFileDownload.action?researcherFileId=" + node.files[i].id + "\">" 
-							+ node.files[i].name + "</a>";
-				} else if (node.files[i].extension == 'txt') {
-					fileObj.html = "<span class=\"textFileImg\">&nbsp;</span>" + "<a href=\"" + basePath + "researcherFileDownload.action?researcherFileId=" + node.files[i].id + "\">" 
-							+ node.files[i].name + "</a>";
-				} else if (node.files[i].extension == 'zip' ) {
-					fileObj.html = "<span class=\"compressedFileImg\">&nbsp;</span>" + "<a href=\"" + basePath + "researcherFileDownload.action?researcherFileId=" + node.files[i].id + "\">" 
-							+ node.files[i].name + "</a>";
-				} else if (node.files[i].extension == 'jpg' || node.files[i].extension == 'gif' || node.files[i].extension == 'png' || node.files[i].extension == 'tiff' || node.files[i].extension == 'tif') {
-					fileObj.html = "<span class=\"imgFileImg\">&nbsp;</span>" + "<a href=\"" + basePath + "researcherFileDownload.action?researcherFileId=" + node.files[i].id + "\">" 
-							+ node.files[i].name + "</a>";
-				} else {
-					fileObj.html = "<span class=\"whiteFileImg\">&nbsp;</span>" + "<a href=\"" + basePath + "researcherFileDownload.action?researcherFileId=" + node.files[i].id + "\">" 
-							+ node.files[i].name + "</a>";
-				}
-				
-                if( node.files[i].description != null &&  node.files[i].description != '')
-				{
-				    fileObj.html = fileObj.html + " - " + node.files[i].description + "<br/><br/>";
-				}
-				// Create file node
-				var fileNode = new YAHOO.widget.HTMLNode(fileObj, parentNode, false, true);
-				
 
-			}
-			
-			// Build publication node
-			for (var i = 0; i < node.publications.length; i++) {
-				
-				var publicationObj = new Object;
-
-				publicationObj.html = "<span class=\"scriptImg\">&nbsp;</span> <a href=\"" + basePath + "researcherPublicationView.action?researcherPublicationId=" + 
-				    node.publications[i].id +"\">" 
-							+ node.publications[i].name + "</a>";
-							
-				if( node.publications[i].description != null &&  node.publications[i].description != '')
-				{
-				    publicationObj.html = publicationObj.html + " - " + node.publications[i].description + "<br/><br/>";
-				}
-						
-				var pNode = new YAHOO.widget.HTMLNode(publicationObj, parentNode, false, true);
-				
-			}
-
-			// Build institutional item node
-			for (var i = 0; i < node.institutionalItems.length; i++) {
-				
-				var institutionalItemObj = new Object;
-
-				institutionalItemObj.html = "<span class=\"packageBtnImg\">&nbsp;</span> <a href=\"" + basePath + "institutionalPublicationPublicView.action?institutionalItemId=" + 
-				    node.institutionalItems[i].institutionalItemId + "\">" 
-							+ node.institutionalItems[i].name + "</a>";
-							
-				if( node.institutionalItems[i].description != null &&  node.institutionalItems[i].description != '')
-				{
-				    institutionalItemObj.html = institutionalItemObj.html + " - " + node.institutionalItems[i].description + "<br/><br/>";
-				}
-						
-				var pNode = new YAHOO.widget.HTMLNode(institutionalItemObj, parentNode, false, true);
-				
-			}
-						
-			// Build link node 
-			for (var i = 0; i < node.links.length; i++) {
-	
-				var linkObj = new Object;
-				linkImg = "<img  alt=\"link\" src=\"" + basePath + "page-resources/images/all-images/link.gif\"/>";
-				linkObj.html = linkImg + "<a href=\"" + node.links[i].url + "\">" + node.links[i].name + "</a>";
-				if( node.links[i].description != null &&  node.links[i].description != '')
-				{
-				    
-				    linkObj.html = linkObj.html + " - " + node.links[i].description + "<br/><br/>";
-				}
-				var linkNode = new YAHOO.widget.HTMLNode(linkObj, parentNode, false, true);
-				
-				
-			}
-		
-	},
 	
 	// initialize the page
 	// this is called once the dom has
