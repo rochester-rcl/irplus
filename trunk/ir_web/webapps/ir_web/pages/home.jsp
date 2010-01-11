@@ -203,7 +203,10 @@
                                     Number of publications : ${numberOfPublications}<br/><br/>
                                 </c:if>
                                 <c:if test="${numberOfFileDownloads > 0}">
-                                    Number of file downloads : ${numberOfFileDownloads}<br/>
+                                    Number of file downloads : ${numberOfFileDownloads}<br/><br/>
+                                </c:if>
+                                <c:if test="${numberOfUsers > 0}">
+                                    Number of members : ${numberOfUsers}<br/>
                                 </c:if>
                           </p>
                       </div>
