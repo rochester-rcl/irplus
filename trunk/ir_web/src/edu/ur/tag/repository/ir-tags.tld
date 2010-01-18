@@ -373,6 +373,12 @@
 			<required>true</required>
 		</attribute>
 	</tag>
+	
+     <tag>
+		<name>baseUrl</name>
+		<tag-class>edu.ur.tag.repository.BaseUrlTag</tag-class>
+		<body-content>scriptless</body-content>
+	</tag>
 
 	<function>
 		<name>isOwner</name>
