@@ -76,7 +76,6 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	private KeywordAnalyzer keywordAnalyzer = new KeywordAnalyzer();
 	
 	
-
 	/** fields to search in the index*/
 	private static final String[] fields = 
 	{DefaultInstitutionalItemIndexService.ABSTRACT, 
@@ -92,6 +91,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	 DefaultInstitutionalItemIndexService.SPONSORS_DESCRIPTION,
 	 DefaultInstitutionalItemIndexService.SUB_TITLES,
 	 DefaultInstitutionalItemIndexService.PUBLISHER_ANALYZED,
+	 DefaultInstitutionalItemIndexService.SERIES_ANALYZED,
 	 DefaultInstitutionalItemIndexService.CITATION,
 	 DefaultInstitutionalItemIndexService.CONTENT_TYPES_ANALYZED,
 	 DefaultInstitutionalItemIndexService.COLLECTION_LEFT_VALUE,
