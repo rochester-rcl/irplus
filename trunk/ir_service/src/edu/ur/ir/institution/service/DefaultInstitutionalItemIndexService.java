@@ -51,12 +51,17 @@ import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemIdentifier;
 import edu.ur.ir.item.ItemLink;
+import edu.ur.ir.item.ItemReport;
 import edu.ur.ir.item.ItemSponsor;
 import edu.ur.ir.item.ItemTitle;
 import edu.ur.ir.person.PersonName;
 
 /**
- * Implementation of the Institutional Item index service.  
+ * Implementation of the Institutional Item index service. 
+ * 
+ *  There are analyzed and non analyzed fields.  The non
+ *  analyzed allows for exact matching on particular fields - that
+ *  is why some fields are both analyzed and non-analyzed. 
  * 
  * @author Nathan Sarr
  *
@@ -153,6 +158,9 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	/** Type of this item  - been analyzed by analyzer*/
 	public static final String CONTENT_TYPES_ANALYZED = "content_type_analyzed";
 	
+	/** series for this item  - been analyzed by analyzer*/
+	public static final String SERIES_ANALYZED = "series_analyzed";
+		
 	/** name of the collection the item is in */
 	public static final String COLLECTION_NAME = "collection_name";
 	
@@ -548,6 +556,16 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 					Field.Index.ANALYZED ));
 		}	
 		
+		//series/report numbers for item
+		String seriesReports = this.getSeries(genericItem);
+	    if(seriesReports != null)
+	    {
+	    	doc.add(new Field(SERIES_ANALYZED, 
+	    			seriesReports,
+	    			Field.Store.YES,
+	    			Field.Index.ANALYZED));
+	    }
+		
 		List<String> contentValues = getNotAnalyzedContentTypes(genericItem);
 		for(String value : contentValues)
 		{
@@ -924,10 +942,10 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	}
 	
 	/**
-	 * Get the identifiers
+	 * Get the subtitles
 	 * 
 	 * @param item
-	 * @return
+	 * @return string of sub titles with separators
 	 */
 	private String getSubTitles(GenericItem genericItem)
 	{
@@ -969,7 +987,8 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 					IrFileIndexingFailureRecord failureRecord = new IrFileIndexingFailureRecord(itemFile.getIrFile().getId(),"FILE IS TOO LARGE size in bytes = " + f.length());
 				    irFileIndexingFailureRecordDAO.makePersistent(failureRecord);
 				}
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				log.error(e);
 				IrFileIndexingFailureRecord failureRecord = new IrFileIndexingFailureRecord(itemFile.getIrFile().getId(), e.toString());
 			    irFileIndexingFailureRecordDAO.makePersistent(failureRecord);
@@ -1034,6 +1053,26 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		return values;
 	}
 	
+	
+	/**
+	 * Get the series
+	 * 
+	 * @param item
+	 * @return string of series
+	 */
+	private String getSeries(GenericItem genericItem)
+	{
+		StringBuffer sb = new StringBuffer();
+		Set<ItemReport> reportSeries = genericItem.getItemReports();
+		
+		for(ItemReport report : reportSeries)
+		{
+			sb.append(" " + report.getSeries().getName() + " ");
+			sb.append(" " + report.getReportNumber() + " ");
+			sb.append(SEPERATOR);
+		}
+		return sb.toString();
+	}
 	
 	
 	/**
