@@ -409,6 +409,11 @@
          	<result name="success">/pages/item/contributor_page_view.jsp</result>
          </action> 
          
+         <action name="viewContributorXmlPage" 
+                class="edu.ur.ir.web.action.item.ViewContributorPage">
+         	<result name="success">/pages/item/contributor_page_view_xml.jsp</result>
+         </action>
+         
           <action name="viewByPersonNameContributorPage" 
                 class="edu.ur.ir.web.action.item.ViewByPersonContributorPage">
          	<result name="success">/pages/item/contributor_page_view.jsp</result>
