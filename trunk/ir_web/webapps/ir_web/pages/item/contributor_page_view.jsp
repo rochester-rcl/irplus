@@ -65,7 +65,7 @@
 					<tr>
 						<c:if test="${researcher != null && researcher.public}">
 							<td width="12%">
-								<c:url value="viewResearcherPage.action" var="viewResearcherPageUrl">
+								<c:url value="/viewResearcherPage.action" var="viewResearcherPageUrl">
 								    <c:param name="researcherId" value="${researcher.id}"/>
 								</c:url>
 								<c:if test="${ir:hasThumbnail(researcher.primaryPicture)}">
