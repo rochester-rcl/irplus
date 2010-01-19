@@ -228,7 +228,7 @@
 			          
 			    <table class="formTable">    
 				    <tr>       
-					    <td align="left" class="label">First Name:*</td>
+					    <td align="left" class="label">First Name:</td>
 					    <td align="left" class="input"><input type="text" 
 							id="person_first_name" 
 							          name="personName.forename" 
@@ -307,7 +307,7 @@
 			          
 			        <table class="formTable">    
 					    <tr>       
-					        <td align="left" class="label">First Name:*</td>
+					        <td align="left" class="label">First Name:</td>
 					        <td align="left" class="input"><input type="text" 
 							    id="newPersonNameFormFirstName" 
 			              			name="personName.forename" 

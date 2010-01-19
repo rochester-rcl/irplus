@@ -249,14 +249,11 @@ YAHOO.ur.person.names = {
 			
 	 
 	 	// Validate the entries in the form 
-		YAHOO.ur.person.names.newPersonNameDialog.validate = function() {
-			if (document.getElementById('newPersonNameFormFirstName').value == '') {
-			    alert('Please enter First name!');
-				return false;
-			} 
-	
+		YAHOO.ur.person.names.newPersonNameDialog.validate = function() 
+		{
+			
 	    	if (document.getElementById('newPersonNameFormLastName').value == '') {
-	    		alert('Please enter Last name!');
+	    		alert('Please enter Last name');
 	    		return false;
 	    	}
 	
