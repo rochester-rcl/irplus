@@ -248,13 +248,8 @@ YAHOO.ur.person = {
         
 	 	// Validate the entries in the form 
 		YAHOO.ur.person.newPersonDialog.validate = function() {
-			if (document.getElementById('person_first_name').value == '') {
-			    alert('Please enter First name!');
-				return false;
-			} 
-	
 	    	if (document.getElementById('person_last_name').value == '') {
-	    		alert('Please enter Last name!');
+	    		alert('Please enter Last name');
 	    		return false;
 	    	}
 	

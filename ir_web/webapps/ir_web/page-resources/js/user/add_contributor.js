@@ -445,7 +445,15 @@ YAHOO.ur.item.contributor = {
 	   
 	 	// Validate the entries in the form 
 		YAHOO.ur.item.contributor.newPersonNameDialog.validate = function() {
-		    return true
+			 var lastName = document.getElementById("newPersonNameFormLastName").value;
+			    
+	            if( lastName == null || lastName == ""	)
+	            {
+	            	alert("Must enter a last name");
+	            	return false;
+	            }
+	           
+			    return true;
 		};
 	
 		// Wire up the success and failure handlers
@@ -622,13 +630,11 @@ YAHOO.ur.item.contributor = {
 	   
 	 	// Validate the entries in the form 
 		YAHOO.ur.item.contributor.newPersonDialog.validate = function() {
-		    var firstName = document.getElementById("person_first_name").value;
 		    var lastName = document.getElementById("person_last_name").value;
 		    
-            if( firstName == null || firstName == "" ||
-                lastName == null || lastName == ""	)
+            if( lastName == null || lastName == ""	)
             {
-            	alert("Must enter a first and last name");
+            	alert("Must enter a last name");
             	return false;
             }
            
