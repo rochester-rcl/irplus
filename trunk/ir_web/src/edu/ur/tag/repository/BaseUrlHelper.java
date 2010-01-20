@@ -16,36 +16,40 @@
 
 package edu.ur.tag.repository;
 
-import java.io.IOException;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 /**
- * Tag that outputs the base url for the web application.  This assumes
- * that the base url is the same for the request object.
+ * Class to help get the base url.
  * 
  * @author Nathan Sarr
  *
  */
-public class BaseUrlTag extends SimpleTagSupport{
-	
-	
-	public void doTag() throws JspException
-	{
-		JspWriter out = this.getJspContext().getOut();
-		String baseUrl = "";
-		
-		PageContext context = (PageContext) getJspContext();
-		baseUrl = BaseUrlHelper.getBaseUrl(context);
-	    
-	    try {
-			out.write(baseUrl);
-		} catch (IOException e) {
-			throw new JspException(e);
-		}
-	}
+public class BaseUrlHelper {
 
+	/**
+	 * Get the base URL.
+	 * 
+	 * @param context
+	 * @return the base url.
+	 */
+	public static String getBaseUrl(PageContext context)
+	{
+		HttpServletRequest request = (HttpServletRequest)context.getRequest();
+		String baseUrl =  request.getScheme() + "://";
+		baseUrl += request.getServerName();
+		if( request.getServerPort() != 80 && request.getServerPort() != 443)
+		{
+			baseUrl += ":" + request.getServerPort();
+		}
+			
+		if( request.getContextPath() != null && !request.getContextPath().trim().equals(""))
+		{
+			baseUrl += 	request.getContextPath();
+		}
+		
+		baseUrl +="/";
+		
+		return baseUrl;
+	}
 }
