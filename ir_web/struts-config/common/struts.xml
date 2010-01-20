@@ -332,7 +332,7 @@
             <result name="success">/pages/next_researcher_picture_frag.jsp</result>
         </action>         
         
-         <action name="viewResearcherPage" 
+        <action name="viewResearcherPage" 
                 class="edu.ur.ir.web.action.researcher.PublicResearcherPageView"
                 method="view">
                 <interceptor-ref name="editStack" />
@@ -341,6 +341,16 @@
                 <result name="notFound">/pages/researcher_page/researcher_not_found.jsp</result>
         </action>
         
+        <action name="viewResearcherXmlPage" 
+                class="edu.ur.ir.web.action.researcher.PublicResearcherPageView"
+                method="view">
+                <interceptor-ref name="editStack" />
+                <result name="accessDenied">/accessDenied_xml.jsp</result>
+                <result name="success">/pages/researcher_page/researcher_page_xml_view.jsp</result>
+                <result name="notFound">/pages/researcher_page/researcher_not_found_xml.jsp</result>
+        </action>
+        
+ 
         <action name="researcherPublicationView" 
             class="edu.ur.ir.web.action.researcher.ViewResearcherPublication">
             <interceptor-ref name="editStack"/>
