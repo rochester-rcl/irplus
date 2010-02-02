@@ -103,7 +103,7 @@
 		              action="user/deleteCopyrightStatement.action">
 		        <input type="hidden" id="delete_id" name="id"/>
 		        <div id="deleteCopyrightStatementError" class="errorMessage"></div>
-			          <p>Are you sure you wish to delete the selected copright statement?</p>
+			          <p>Are you sure you wish to delete the selected copyright statement?</p>
 		    </form>
 		</div>
      </div>
