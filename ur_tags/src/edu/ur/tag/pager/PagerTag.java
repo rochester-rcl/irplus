@@ -69,6 +69,12 @@ public class PagerTag extends SimpleTagSupport {
 			totalPageNumber = (totalHits / numberOfResultsToShow) + 1;
 		}
 		
+		if( totalPageNumber == 0)
+		{
+			totalPageNumber = 1;
+		}
+		
+		
 		if ((startPageNumber + numberOfPagesToShow - 1) <= totalPageNumber) {
 			endPageNumber = startPageNumber + numberOfPagesToShow - 1;
 		} else {
