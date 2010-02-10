@@ -37,7 +37,7 @@ public class FileSystemDescendingTypeNameComparator implements Comparator<FileSy
 		
 	    if ( arg1.getFileSystemType().equals(arg0.getFileSystemType()) )
 	    {
-	    	return arg1.getName().compareToIgnoreCase(arg0.getName());
+	    	return arg0.getName().compareToIgnoreCase(arg1.getName());
 	    }
 	    else
 	    {
