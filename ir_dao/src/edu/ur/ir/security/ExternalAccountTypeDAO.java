@@ -14,7 +14,8 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.item;
+
+package edu.ur.ir.security;
 
 import java.util.List;
 
@@ -22,36 +23,28 @@ import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.UniqueNameDAO;
-import edu.ur.dao.UniqueSystemCodeDAO;
-
+import edu.ur.order.OrderType;
 
 /**
- * Interface for persisting a content type.
+ * Represents an external account type data access.
  * 
  * @author Nathan Sarr
  *
  */
-public interface ContentTypeDAO extends CountableDAO, 
-CrudDAO<ContentType>, NameListDAO, UniqueNameDAO<ContentType>, UniqueSystemCodeDAO<ContentType>
-{
+public interface ExternalAccountTypeDAO extends CountableDAO, 
+CrudDAO<ExternalAccountType>, NameListDAO, UniqueNameDAO<ExternalAccountType>{
+	
 	/**
-	 * Get the list of content types.
+	 * Get the list of external account types by name
 	 * 
 	 * 
 	 * @param rowStart - start position
 	 * @param numberOfResultsToShow - number of rows to grab.
-	 * @param sortType - Order (Desc/Asc) 
+	 * @param orderType - Order (Desc/Asc) 
 	 * 
-	 * @return list of content types found.
+	 * @return list of external account types found.
 	 */
-	public List<ContentType> getContentTypesOrderByName(
-			final int rowStart, final int numberOfResultsToShow, final String sortType);
-	
-	/**
-	 * Get the content type by it's unique system code.
-	 * 
-	 * @param systemCode
-	 * @return the content type or null if a content type is not found.
-	 */
-	public ContentType getByUniqueSystemCode(String systemCode);
+	public List<ExternalAccountType> getOrderByName(
+			final int rowStart, final int numberOfResultsToShow, final OrderType orderType);
+
 }

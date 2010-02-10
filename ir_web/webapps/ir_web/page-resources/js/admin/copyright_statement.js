@@ -91,8 +91,8 @@ YAHOO.ur.copyright.statement = {
 	},
 	
 	/**
-	 * Creates a YUI new copyrigght statement modal dialog for when a user wants to create 
-	 * a new copyrigght statement
+	 * Creates a YUI new copyright statement modal dialog for when a user wants to create 
+	 * a new copyright statement
 	 *
 	 */
 	createNewCopyrightStatementDialog : function()
@@ -250,7 +250,7 @@ YAHOO.ur.copyright.statement = {
 	
 	 /** 
 	  * clear out any form data messages or input
-	  * in the new copyrigght statement form
+	  * in the delete form
 	  */
 	clearDeleteCopyrightStatementForm : function()
 	{
@@ -277,8 +277,8 @@ YAHOO.ur.copyright.statement = {
 	},
 	
 	/**
-	 * Creates a YUI new copyrigght statement modal dialog for when a user wants to create 
-	 * a new copyrigght statement
+	 * Creates a YUI new copyright statement modal dialog for when a user wants to delete 
+	 * a copyright statement
 	 *
 	 */
 	createDeleteCopyrightStatementDialog : function()

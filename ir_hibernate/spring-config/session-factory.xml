@@ -118,6 +118,7 @@
                 <value>edu/ur/hibernate/ir/security/db/IrUserAccessControlEntry.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrRoleAccessControlEntry.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrUserGroupAccessControlEntry.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/security/db/ExternalAccountType.hbm.xml</value>
 
                 <value>edu/ur/hibernate/ir/file/db/IrFile.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/file/db/VersionedFile.hbm.xml</value>

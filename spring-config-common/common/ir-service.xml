@@ -634,7 +634,14 @@
        <property name="irFileTransformationFailureRecordDAO" ref="irFileTransformationFailureRecordDAO"/>
        <property name="temporaryFileCreator" ref="temporaryFileCreator"/>
        <property name="repositoryService" ref="repositoryService"/>
-
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- External Account type service -->
+   <!-- ****************************************** --> 
+   <bean id="externalAccountTypeService" 
+       class="edu.ur.ir.security.service.DefaultExternalAccountTypeService">
+       <property name="externalAccountTypeDAO" ref="externalAccountTypeDAO"/>
    </bean>
    
 </beans>

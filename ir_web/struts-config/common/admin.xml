@@ -212,7 +212,7 @@
         <!--  ************************************ -->
         <!--  Repository License Actions           -->
         <!--  ************************************ -->
-       <action name="viewRepositoryLicenses"
+        <action name="viewRepositoryLicenses"
                method="viewLicenses"
                class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
             <result name="success">/pages/admin/license/licenses.jsp</result>
@@ -254,7 +254,31 @@
             <result name="cancel" type="redirect">viewRepositoryLicenses.action</result>
             <result name="success" type="redirect">viewRepositoryLicenses.action</result>
         </action>
-           
+        
+        <!--  ************************************ -->
+        <!--  External account types management    -->
+        <!--  ************************************ -->
+        <action name="viewExternalAccountTypes"
+               method="viewExternalAccountTypes"
+               class="edu.ur.ir.web.action.security.ManageExternalAccountTypes">
+            <result name="success">/pages/admin/external_account_type/external_account_types.jsp</result>
+        </action> 
+        
+        <action name="getExternalAccountTypesTable"
+               method="getExternalAccountTypesTable"
+               class="edu.ur.ir.web.action.security.ManageExternalAccountTypes">
+            <result name="success">/pages/admin/external_account_type/external_account_type_table.jsp</result>
+        </action> 
+        
+        <!--  This handles update, save and delete -->
+        <action name="*ExternalAccountType" 
+            method="{1}"
+            class="edu.ur.ir.web.action.security.ManageExternalAccountTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/external_account_type/external_account_type_form.jsp</result>
+            <result name="deleted">/pages/admin/external_account_type/external_account_type_deleted.jsp</result>
+            <result name="get">/pages/admin/external_account_type/external_account_type_form.jsp</result>
+        </action>       
     </package>
     
 </struts>
