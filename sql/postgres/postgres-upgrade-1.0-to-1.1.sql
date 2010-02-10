@@ -1,3 +1,25 @@
+-- ---------------------------------------------
+-- This represents an external account typ
+-- in particular for user accounts that are in
+-- other external ssytems that can be used to
+-- validate against
+-- ---------------------------------------------
+
+CREATE TABLE ir_security.external_account_type
+(
+    external_account_type_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE ir_security.external_account_type OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_security.external_account_type_seq;
+ALTER TABLE ir_security.external_account_type_seq OWNER TO ir_plus;
+
+
 -- ----------------------------------------------
 -- **********************************************
        
