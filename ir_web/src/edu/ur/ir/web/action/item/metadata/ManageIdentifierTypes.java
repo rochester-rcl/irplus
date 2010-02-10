@@ -31,7 +31,7 @@ import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
- * Interface component back end to allow a user to manage identifier types.
+ * User Interface component back end to allow a user to manage identifier types.
  * 
  * @author Nathan Sarr
  *
