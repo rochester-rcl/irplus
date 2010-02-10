@@ -34,6 +34,7 @@ import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.researcher.Researcher;
+import edu.ur.ir.security.ExternalAccountType;
 import edu.ur.ir.security.Sid;
 import edu.ur.persistent.BasePersistent;
 import edu.ur.security.PersistentUser;
@@ -162,6 +163,9 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	/** indicates that the users index needs to be rebuilt by either overwriting the current index
 	 * or deleting the users old index and rebuilding  */
 	private boolean reBuildUserWorkspaceIndex = false;
+	
+	/** represents an external account that a user can be authenticated against */
+	private Set<UserExternalAccount> userExternalAccounts = new HashSet<UserExternalAccount>();
 	
 	
 	/**
@@ -1759,6 +1763,67 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 */
 	public void setReBuildUserWorkspaceIndex(boolean reBuildUserIndex) {
 		this.reBuildUserWorkspaceIndex = reBuildUserIndex;
+	}
+	
+	/**
+	 * Add a new external account to a user.  There should only be ONE external 
+	 * account type per user.
+	 * 
+	 * @param externalAccountType - the type of external account
+	 * @param accountUserName - user name for the external account
+	 * @return the created user external account.
+	 * 
+	 * @throws ExternalAccountTypeAlreadyExistsException - if the user already has the specified external account.
+	 */
+	public UserExternalAccount addExternalAccount(ExternalAccountType externalAccountType, String accountUserName) throws ExternalAccountTypeAlreadyExistsException
+	{
+		UserExternalAccount externalAccount = null;
+		if( this.getUserExternalAccount(externalAccountType) == null )
+		{
+		    externalAccount = new UserExternalAccount(this, accountUserName, externalAccountType);
+		    userExternalAccounts.add(externalAccount);
+		}
+		else
+		{
+			throw new ExternalAccountTypeAlreadyExistsException(externalAccountType, this); 
+		}
+		return externalAccount;
+	}
+	
+	/**
+	 * Find an external user account by external account type.
+	 * 
+	 * @param externalAccountType
+	 * @return  the found user external account or null if not found.
+	 */
+	public UserExternalAccount getUserExternalAccount(ExternalAccountType externalAccountType)
+	{
+		for( UserExternalAccount account : userExternalAccounts)
+		{
+			if( account.getExternalAccountType().equals(externalAccountType))
+			{
+				return account;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns an unmodifiable set of user external accounts.
+	 * 
+	 * @return
+	 */
+	public Set<UserExternalAccount> getUserExternalAccounts() {
+		return Collections.unmodifiableSet(userExternalAccounts);
+	}
+
+	/**
+	 * Set the list of external user accounts.
+	 * 
+	 * @param userExternalAccounts
+	 */
+	void setUserExternalAccounts(Set<UserExternalAccount> userExternalAccount) {
+		this.userExternalAccounts = userExternalAccount;
 	}
 
 
