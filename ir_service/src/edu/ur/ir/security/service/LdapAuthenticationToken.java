@@ -31,8 +31,9 @@ import org.springframework.security.providers.AbstractAuthenticationToken;
  */
 public class LdapAuthenticationToken extends AbstractAuthenticationToken {
 
-    private static final long serialVersionUID = 1L;
-    private Object credentials;
+    /** eclipse generated serial version id */
+	private static final long serialVersionUID = 4643039653874657498L;
+	private Object credentials;
     private Object principal;
 
 
@@ -64,7 +65,8 @@ public class LdapAuthenticationToken extends AbstractAuthenticationToken {
         this.credentials = credentials;
         super.setAuthenticated(true); // must use super, as we override
     }
-
+    
+ 
     //~ Methods ========================================================================================================
 
     public Object getCredentials() {

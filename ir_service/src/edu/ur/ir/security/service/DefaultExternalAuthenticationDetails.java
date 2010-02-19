@@ -58,6 +58,44 @@ public class DefaultExternalAuthenticationDetails implements ExternalAuthenticat
 	{
 		this.type = type;
 	}
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer("[DefaultExternalAuthenticationDetails type = ");
+		sb.append(type);
+		sb.append("]");
+		return sb.toString();
+
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode()
+	{
+		int value = 0;
+		value += type == null ? 0 : type.hashCode();
+		return value;
+	}
+	
+	/**
+	 * This assumes if the names are the same, the IrFiles are the
+	 * same.
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof DefaultExternalAuthenticationDetails)) return false;
+
+		final DefaultExternalAuthenticationDetails other = (DefaultExternalAuthenticationDetails) o;
+
+		if( ( type != null && !type.equals(other.getType()) ) ||
+			( type == null && other.getType() != null ) ) return false;
+	
+		return true;
+	}
 
 	
 }

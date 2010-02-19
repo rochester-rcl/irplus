@@ -21,8 +21,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.Authentication;
 import org.springframework.security.AuthenticationException;
+import org.springframework.security.BadCredentialsException;
+import org.springframework.security.SpringSecurityMessageSource;
 import org.springframework.security.providers.AuthenticationProvider;
 
 import edu.ur.ir.security.ExternalAuthenticationProvider;
@@ -38,6 +41,8 @@ public class DefaultExternalAuthenticaionProvider implements ExternalAuthenticat
 	/** list of authentication providers.  */
 	private List<AuthenticationProvider> authenticationProviders = new LinkedList<AuthenticationProvider>();
 	
+    protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+	
 	/**
 	 * Authenticate against the given external providers.
 	 * 
@@ -52,8 +57,11 @@ public class DefaultExternalAuthenticaionProvider implements ExternalAuthenticat
         	try
         	{
         		// return out of loop as soon as authentication occurs
-        	    provider.authenticate(authentication);
-        	    return authentication;
+        		if( provider.supports(authentication.getClass()))
+        		{
+        	        Authentication auth = provider.authenticate(authentication);
+        	        return auth;
+        		}
         	}
         	catch(AuthenticationException exception)
         	{
@@ -65,7 +73,12 @@ public class DefaultExternalAuthenticaionProvider implements ExternalAuthenticat
         {
         	throw ae;
         }
-        return authentication;
+        else
+        {
+        	 throw new BadCredentialsException(messages.getMessage("ProviderManager.providerNotFound",
+             authentication.getClass().getName()));
+        }
+       
 	}
 
 	/**
