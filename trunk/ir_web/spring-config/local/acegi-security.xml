@@ -118,6 +118,8 @@
         class="edu.ur.ir.security.service.UrLdapAuthenticationProvider">
        <constructor-arg ref="ldapAuthenticator"/>
        <property name="userDetailsContextMapper" ref="ldapUserService"/>
+       <property name="externalAccountTypeService" ref="externalAccountTypeService"/>
+       <property name="externalAccountTypeName" value="${external.account.type.name}"/>
  
     </bean>
     
