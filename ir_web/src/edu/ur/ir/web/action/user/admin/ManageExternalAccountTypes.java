@@ -14,7 +14,7 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.web.action.security;
+package edu.ur.ir.web.action.user.admin;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -25,8 +25,8 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.ir.security.ExternalAccountType;
-import edu.ur.ir.security.ExternalAccountTypeService;
+import edu.ur.ir.user.ExternalAccountType;
+import edu.ur.ir.user.ExternalAccountTypeService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;

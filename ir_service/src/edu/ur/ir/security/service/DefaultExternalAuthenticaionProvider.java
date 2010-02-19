@@ -1,0 +1,89 @@
+/**  
+   Copyright 2008-2010 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
+
+package edu.ur.ir.security.service;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.springframework.security.Authentication;
+import org.springframework.security.AuthenticationException;
+import org.springframework.security.providers.AuthenticationProvider;
+
+import edu.ur.ir.security.ExternalAuthenticationProvider;
+
+/**
+ * Default external authentication provider.
+ * 
+ * @author Nathan Sarr
+ *
+ */
+public class DefaultExternalAuthenticaionProvider implements ExternalAuthenticationProvider{
+
+	/** list of authentication providers.  */
+	private List<AuthenticationProvider> authenticationProviders = new LinkedList<AuthenticationProvider>();
+	
+	/**
+	 * Authenticate against the given external providers.
+	 * 
+	 * @see edu.ur.ir.security.ExternalAuthenticationProvider#authenticate(org.springframework.security.Authentication)
+	 */
+	public Authentication authenticate(Authentication authentication)
+			throws AuthenticationException {
+
+		AuthenticationException ae = null;
+        for( AuthenticationProvider provider : authenticationProviders)
+        {
+        	try
+        	{
+        		// return out of loop as soon as authentication occurs
+        	    provider.authenticate(authentication);
+        	    return authentication;
+        	}
+        	catch(AuthenticationException exception)
+        	{
+        		ae = exception;
+        	}
+        }
+        
+        if( ae != null )
+        {
+        	throw ae;
+        }
+        return authentication;
+	}
+
+	/**
+	 * Get the list of authentication providers
+	 * @return - unmodifiable linked list
+	 */
+	public List<AuthenticationProvider> getAuthenticationProviders() {
+		return Collections.unmodifiableList(authenticationProviders);
+	}
+
+	/**
+	 * Set the list of authentication providers.
+	 * 
+	 * @param authenticationProviders
+	 */
+	public void setAuthenticationProviders(
+			List<AuthenticationProvider> authenticationProviders) {
+		this.authenticationProviders = authenticationProviders;
+	}
+
+}

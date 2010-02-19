@@ -16,13 +16,13 @@
 
 
 
-package edu.ur.ir.security.service;
+package edu.ur.ir.user.service;
 
 import java.util.List;
 
-import edu.ur.ir.security.ExternalAccountType;
-import edu.ur.ir.security.ExternalAccountTypeDAO;
-import edu.ur.ir.security.ExternalAccountTypeService;
+import edu.ur.ir.user.ExternalAccountType;
+import edu.ur.ir.user.ExternalAccountTypeDAO;
+import edu.ur.ir.user.ExternalAccountTypeService;
 import edu.ur.order.OrderType;
 
 /**
@@ -40,7 +40,7 @@ public class DefaultExternalAccountTypeService implements ExternalAccountTypeSer
 	/**
 	 * Delete the external acocunt type from persistent storage.
 	 * 
-	 * @see edu.ur.ir.security.ExternalAccountTypeService#delete(edu.ur.ir.security.ExternalAccountType)
+	 * @see edu.ur.ir.user.ExternalAccountTypeService#delete(edu.ur.ir.user.ExternalAccountType)
 	 */
 	public void delete(ExternalAccountType externalAccountType) {
 		externalAccountTypeDAO.makeTransient(externalAccountType);
@@ -50,7 +50,7 @@ public class DefaultExternalAccountTypeService implements ExternalAccountTypeSer
 	/**
 	 * Get the extrenal account type by name.
 	 * 
-	 * @see edu.ur.ir.security.ExternalAccountTypeService#get(java.lang.String)
+	 * @see edu.ur.ir.user.ExternalAccountTypeService#get(java.lang.String)
 	 */
 	public ExternalAccountType get(String name) {
 		return externalAccountTypeDAO.findByUniqueName(name);
@@ -60,7 +60,7 @@ public class DefaultExternalAccountTypeService implements ExternalAccountTypeSer
 	/**
 	 * Get the external account type by id.
 	 * 
-	 * @see edu.ur.ir.security.ExternalAccountTypeService#get(java.lang.Long, boolean)
+	 * @see edu.ur.ir.user.ExternalAccountTypeService#get(java.lang.Long, boolean)
 	 */
 	public ExternalAccountType get(Long id, boolean lock) {
 		return externalAccountTypeDAO.getById(id, lock);
@@ -70,7 +70,7 @@ public class DefaultExternalAccountTypeService implements ExternalAccountTypeSer
 	/**
 	 * Get all external account types.
 	 * 
-	 * @see edu.ur.ir.security.ExternalAccountTypeService#getAll()
+	 * @see edu.ur.ir.user.ExternalAccountTypeService#getAll()
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ExternalAccountType> getAll() {
@@ -80,7 +80,7 @@ public class DefaultExternalAccountTypeService implements ExternalAccountTypeSer
 	/**
 	 * Get the count of external count types.
 	 * 
-	 * @see edu.ur.ir.security.ExternalAccountTypeService#getCount()
+	 * @see edu.ur.ir.user.ExternalAccountTypeService#getCount()
 	 */
 	public Long getCount() {
 		return externalAccountTypeDAO.getCount();
@@ -90,7 +90,7 @@ public class DefaultExternalAccountTypeService implements ExternalAccountTypeSer
 	/**
 	 * Get the external account types ordered by name.
 	 * 
-	 * @see edu.ur.ir.security.ExternalAccountTypeService#getExternalAccountTypesOrderByName(int, int, edu.ur.order.OrderType)
+	 * @see edu.ur.ir.user.ExternalAccountTypeService#getExternalAccountTypesOrderByName(int, int, edu.ur.order.OrderType)
 	 */
 	public List<ExternalAccountType> getExternalAccountTypesOrderByName(
 			int rowStart, int numberOfResultsToShow, OrderType orderType) {
@@ -101,7 +101,7 @@ public class DefaultExternalAccountTypeService implements ExternalAccountTypeSer
 	/**
 	 * Save the external account type.
 	 * 
-	 * @see edu.ur.ir.security.ExternalAccountTypeService#save(edu.ur.ir.security.ExternalAccountType)
+	 * @see edu.ur.ir.user.ExternalAccountTypeService#save(edu.ur.ir.user.ExternalAccountType)
 	 */
 	public void save(ExternalAccountType externalAccountType) {
 		externalAccountTypeDAO.makePersistent(externalAccountType);

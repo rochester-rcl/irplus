@@ -22,6 +22,9 @@ import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.GrantedAuthority;
 import org.springframework.security.userdetails.UserDetails;
 
+import edu.ur.ir.user.ExternalAccountType;
+import edu.ur.ir.user.ExternalAccountTypeService;
+import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.LdapUserService;
 import edu.ur.ir.user.UserService;
 
@@ -38,6 +41,12 @@ public class FakeLdapUserService implements LdapUserService  {
 	/** loads user data from local db*/
 	private UserService userService;
 	
+	/** the external account type   */
+	private ExternalAccountTypeService externalAccountTypeService;
+	
+	/** the external ldap account type this search is for  */
+	private String externalAccountTypeName;
+	
 	/**
 	 * This actually does not search but always returns null.
 	 * 
@@ -49,7 +58,16 @@ public class FakeLdapUserService implements LdapUserService  {
 
 	public UserDetails mapUserFromContext(DirContextOperations arg0,
 			String username, GrantedAuthority[] arg2) {
-		return userService.getUserByLdapUserName(username);
+		ExternalAccountType externalAccountType = externalAccountTypeService.get(externalAccountTypeName);
+		ExternalUserAccount externalAccount = userService.getByExternalUserNameAccountType(username, externalAccountType);
+		if( externalAccount != null )
+		{
+			return externalAccount.getUser();
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	public void mapUserToContext(UserDetails arg0, DirContextAdapter arg1) {
@@ -62,6 +80,23 @@ public class FakeLdapUserService implements LdapUserService  {
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+
+	public ExternalAccountTypeService getExternalAccountTypeService() {
+		return externalAccountTypeService;
+	}
+
+	public void setExternalAccountTypeService(
+			ExternalAccountTypeService externalAccountTypeService) {
+		this.externalAccountTypeService = externalAccountTypeService;
+	}
+
+	public String getExternalAccountTypeName() {
+		return externalAccountTypeName;
+	}
+
+	public void setExternalAccountTypeName(String externalAccountTypeName) {
+		this.externalAccountTypeName = externalAccountTypeName;
 	}
 
 

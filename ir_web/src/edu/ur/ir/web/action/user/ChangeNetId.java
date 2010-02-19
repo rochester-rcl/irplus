@@ -1,13 +1,17 @@
 package edu.ur.ir.web.action.user;
 
 import org.apache.log4j.Logger;
+import org.springframework.security.Authentication;
 import org.springframework.security.BadCredentialsException;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.security.providers.ldap.LdapAuthenticator;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.ir.security.ExternalAuthenticationDetails;
+import edu.ur.ir.security.ExternalAuthenticationProvider;
 import edu.ur.ir.security.service.UrLdapAuthenticationProvider;
+import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -50,6 +54,9 @@ public class ChangeNetId extends ActionSupport implements UserIdAware {
 	/** true if the net id was added/updated */
 	private boolean added = true;
 	
+	/** External authentication provider */
+	private ExternalAuthenticationProvider externalAuthenticationProvider;
+	
 	
 	/**
 	 * Execute method
@@ -57,14 +64,6 @@ public class ChangeNetId extends ActionSupport implements UserIdAware {
 	public String execute(){
 		
 		irUser = userService.getUser(userId, false);
-		
-		// user did not change net id
-		if( (irUser.getLdapUserName() != null && irUser.getLdapUserName().equals(netId)) ||
-		    (irUser.getLdapUserName() == null && netId == null) )
-		{
-			return SUCCESS;
-		}
-		
 		
 		
 		if( netId != null  && !netId.trim().equals(""))
@@ -76,19 +75,27 @@ public class ChangeNetId extends ActionSupport implements UserIdAware {
 			{
 			    try
 			    {
-			        ldapAuthenticator.authenticate(new UsernamePasswordAuthenticationToken(netId, netIdPassword));
-			        IrUser ldapUser = userService.getUserByLdapUserName(netId);
+			    	Authentication auth = externalAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(netId, this.netIdPassword));
+			        ExternalAuthenticationDetails externalDetails = null;
+			    	
+			    	if( auth.getDetails() instanceof ExternalAuthenticationDetails)
+			        {
+			    		externalDetails  = (ExternalAuthenticationDetails)auth.getDetails();
+			        }
+			    	
+			        ExternalUserAccount externalUserAccount = userService.getByExternalUserNameAccountType( netId, externalDetails.getType());
+			        IrUser externalAccountUser = externalUserAccount.getUser();
 					// we have an interesting problem
 					// irUser has authenticated correctly - but the irUser name already exists in the 
 					// system - 
-					if( ldapUser != null )
+					if( externalAccountUser != null )
 					{
 						added = false;
-				    	addFieldError("netIdAlreadyExists", "The net id irUser name already exists - you may already have an account please contact the admistrator");
+				    	addFieldError("netIdAlreadyExists", "The user name already exists - you may have more than one account please contact the admistrator");
 					}
 					else
 					{
-						irUser.setLdapUserName(netId);
+						
 					}
 
 			    }
@@ -108,7 +115,7 @@ public class ChangeNetId extends ActionSupport implements UserIdAware {
 		}
 		else
 		{
-			irUser.setLdapUserName(null);
+			
 		}
 		
 
@@ -205,5 +212,16 @@ public class ChangeNetId extends ActionSupport implements UserIdAware {
 
 	public void setAdded(boolean added) {
 		this.added = added;
+	}
+
+
+	public ExternalAuthenticationProvider getExternalAuthenticationProvider() {
+		return externalAuthenticationProvider;
+	}
+
+
+	public void setExternalAuthenticationProvider(
+			ExternalAuthenticationProvider externalAuthenticationProvider) {
+		this.externalAuthenticationProvider = externalAuthenticationProvider;
 	}
 }

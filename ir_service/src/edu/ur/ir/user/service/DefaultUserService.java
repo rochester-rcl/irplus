@@ -43,6 +43,9 @@ import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.Affiliation;
+import edu.ur.ir.user.ExternalAccountType;
+import edu.ur.ir.user.ExternalUserAccount;
+import edu.ur.ir.user.ExternalUserAccountDAO;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -153,6 +156,9 @@ public class DefaultUserService implements UserService {
 	
 	/** captures information about deleting information */
 	private PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO;
+	
+	/** data access for external user accounts */
+	private ExternalUserAccountDAO externalUserAccountDAO;
 
 	/**
 	 * Get the User email if email id exists in the system.
@@ -1099,10 +1105,6 @@ public class DefaultUserService implements UserService {
 	}
 
 	
-	public IrUser getUserByLdapUserName(String ldapUserName) {
-		return irUserDAO.findByLdapUserName(ldapUserName);
-	}
-
 	public void setInstitutionalItemService(
 			InstitutionalItemService institutionalItemService) {
 		this.institutionalItemService = institutionalItemService;
@@ -1152,6 +1154,52 @@ public class DefaultUserService implements UserService {
 	public void setPersonalFileDeleteRecordDAO(
 			PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO) {
 		this.personalFileDeleteRecordDAO = personalFileDeleteRecordDAO;
+	}
+
+	
+	public void delete(ExternalUserAccount externalUserAccount) {
+		externalUserAccountDAO.makeTransient(externalUserAccount);
+	}
+
+	public ExternalUserAccountDAO getExternalUserAccountDAO() {
+		return externalUserAccountDAO;
+	}
+
+	public void setExternalUserAccountDAO(
+			ExternalUserAccountDAO externalUserAccountDAO) {
+		this.externalUserAccountDAO = externalUserAccountDAO;
+	}
+
+	
+	/**
+	 * Get the list of user(s) with the given external user name.
+	 * 
+	 * @see edu.ur.ir.user.UserService#getByExternalUserName(java.lang.String)
+	 */
+	public List<ExternalUserAccount> getByExternalUserName(
+			String externalUserName) {
+		return externalUserAccountDAO.getByExternalUserName(externalUserName);
+	}
+
+	
+	/**
+	 * Save the external user account.
+	 * 
+	 * @see edu.ur.ir.user.UserService#save(edu.ur.ir.user.ExternalUserAccount)
+	 */
+	public void save(ExternalUserAccount externalUserAccount) {
+		externalUserAccountDAO.makePersistent(externalUserAccount);
+	}
+
+	
+	/**
+	 * Get the external user account by using the external user name and account type.
+	 * 
+	 * @see edu.ur.ir.user.UserService#getByExternalUserNameAccountType(java.lang.String, edu.ur.ir.user.ExternalAccountType)
+	 */
+	public ExternalUserAccount getByExternalUserNameAccountType(
+			String externalUserName, ExternalAccountType externalAccountType) {
+		return externalUserAccountDAO.getByExternalUserNameAccountType(externalUserName, externalAccountType);
 	}
 
 }

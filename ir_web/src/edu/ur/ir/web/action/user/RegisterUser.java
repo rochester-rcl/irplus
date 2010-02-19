@@ -22,9 +22,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.security.Authentication;
 import org.springframework.security.BadCredentialsException;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.providers.ldap.LdapAuthenticator;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -33,11 +32,14 @@ import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
-import edu.ur.ir.security.service.UrLdapAuthenticationProvider;
+import edu.ur.ir.security.ExternalAuthenticationDetails;
+import edu.ur.ir.security.ExternalAuthenticationProvider;
+import edu.ur.ir.security.service.LdapAuthenticationToken;
 import edu.ur.ir.user.Affiliation;
 import edu.ur.ir.user.AffiliationService;
 import edu.ur.ir.user.Department;
 import edu.ur.ir.user.DepartmentService;
+import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.InviteUserService;
@@ -135,19 +137,18 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	/** id of the license the user has agreed to */
 	private Long licenseId;
 	
-	/** Set the net id password */
-	private String netIdPassword;
+	/** Set the external account password */
+	private String externalAccountPassword;
 	
 	/** indicates net id already exists and the net id valiedated against the password*/
 	private boolean netIdAlreadyExistsPasswordSuccess = false;
 	
-	/** Authenticator for ldap username/password */
-	private LdapAuthenticator ldapAuthenticator;
+	/** External authentication provider */
+	private ExternalAuthenticationProvider externalAuthenticationProvider;
 	
-	/** Authentication provider for ldap */
-	private UrLdapAuthenticationProvider ldapAuthProvider;
+	/** external user account name */
+	private String externalUserAccountName;
 	
-
 	/**
 	 * Execute method to initialize invite information
 	 */
@@ -225,40 +226,8 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 			failure = true;
 		}
 		
-		if( irUser.getLdapUserName() != null  && !irUser.getLdapUserName().trim().equals(""))
-		{
-			log.debug("creating LDAP authentication token");
-	
-			// don't hit ldap unless a user has entered a username and password
-			if( netIdPassword != null && !netIdPassword.trim().equals("")  )
-			{
-			    try
-			    {
-			        ldapAuthenticator.authenticate(new UsernamePasswordAuthenticationToken(irUser.getLdapUserName(), this.netIdPassword));
-			        IrUser ldapUser = userService.getUserByLdapUserName(irUser.getLdapUserName());
-					// we have an interesting problem
-					// user has authenticated correctly - but the user name already exists in the 
-					// system - 
-					if( ldapUser != null )
-					{
-						failure = true;
-						netIdAlreadyExistsPasswordSuccess = true;
-				    	addFieldError("netIdAlreadyExists", "The net id user name already exists ");
-					}
-
-			    }
-			    catch(BadCredentialsException bce)
-			    {
-			    	 failure = true;
-			    	 addFieldError("netIdPasswordFail", "The net id credentials could not be verified");
-			    }
-		     }
-			 else
-			 {
-			      failure = true;
-				  addFieldError("netIdPasswordEmpty", "The net id password must be entered for net id user name verification");
-			 }
-		}
+		failure = createExternalAccount();
+		
 		if( myIrUser != null )
 		{
 			addFieldError("userNameError", 
@@ -588,19 +557,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		this.passwordCheck = passwordCheck;
 	}
 
-	public UrLdapAuthenticationProvider getLdapAuthProvider() {
-		return ldapAuthProvider;
-	}
 
-	public void setLdapAuthProvider(
-			UrLdapAuthenticationProvider urLdapAuthenticationProvider) {
-		this.ldapAuthProvider = urLdapAuthenticationProvider;
-	}
-
-	public void setNetIdPassword(String netIdPassword) {
-		this.netIdPassword = netIdPassword;
-	}
-	
 	private void updateUserDepartments()
 	{
 		if (departmentIds != null && departmentIds.length > 0) {
@@ -612,13 +569,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	    }
 	}
 
-	public LdapAuthenticator getLdapAuthenticator() {
-		return ldapAuthenticator;
-	}
 
-	public void setLdapAuthenticator(LdapAuthenticator authenticator) {
-		this.ldapAuthenticator = authenticator;
-	}
 	
 	private String createAccount(LicenseVersion license) throws NoIndexFoundException, FileSharingException
 	{
@@ -628,8 +579,8 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		// to save it.
 		String firstName = irUser.getFirstName().trim();
 		String lastName = irUser.getLastName().trim();
-		String ldapUserName = irUser.getLdapUserName().trim();
 		String phoneNumber = irUser.getPhoneNumber().trim();
+		ExternalUserAccount externalAccount = irUser.getExternalAccount();
 				
 		defaultEmail.setVerified(false);
 		defaultEmail.setToken(TokenGenerator.getToken());
@@ -639,7 +590,10 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		irUser.setAccountLocked(accountLocked);
 		irUser.setFirstName(firstName);
 		irUser.setLastName(lastName);
-		irUser.setLdapUserName(ldapUserName);
+		if( externalAccount != null )
+		{
+		    irUser.createExternalUserAccount(externalAccount.getExternalUserAccountName(), externalAccount.getExternalAccountType());
+		}
 		irUser.setSelfRegistered(true);
 		irUser.setPhoneNumber(phoneNumber);
 		
@@ -726,6 +680,96 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	public void setNetIdAlreadyExistsPasswordSuccess(
 			boolean netIdAlreadyExistsPasswordSuccess) {
 		this.netIdAlreadyExistsPasswordSuccess = netIdAlreadyExistsPasswordSuccess;
+	}
+
+	public ExternalAuthenticationProvider getExternalAuthenticationProvider() {
+		return externalAuthenticationProvider;
+	}
+
+	public void setExternalAuthenticationProvider(
+			ExternalAuthenticationProvider externalAuthenticationProvider) {
+		this.externalAuthenticationProvider = externalAuthenticationProvider;
+	}
+
+	public String getExternalUserAccountName() {
+		return externalUserAccountName;
+	}
+
+	public void setExternalUserAccountName(String externalUserAccountName) {
+		this.externalUserAccountName = externalUserAccountName;
+	}
+	
+	/**
+	 * Try to create an external account.  
+	 * @return - false if there is a failure when creating the external account.
+	 */
+	private boolean createExternalAccount()
+	{
+		boolean failure = false;
+		if( repositoryService.isExternalAuthenticationEnabled())
+		{
+			if( externalUserAccountName != null  && !externalUserAccountName.trim().equals(""))
+			{
+				log.debug("creating LDAP authentication token");
+		
+				// don't hit ldap unless a user has entered a username and password
+				if( externalAccountPassword != null && !externalAccountPassword.trim().equals("")  )
+				{
+				    try
+				    {
+				    	Authentication auth = externalAuthenticationProvider.authenticate(new LdapAuthenticationToken(externalUserAccountName, externalAccountPassword));
+				        ExternalAuthenticationDetails externalDetails = null;
+				    	
+				    	if( auth.getDetails() instanceof ExternalAuthenticationDetails)
+				        {
+				    		externalDetails  = (ExternalAuthenticationDetails)auth.getDetails();
+				        }
+				        
+				    	if( externalDetails != null  && externalDetails.getType() != null)
+				    	{
+				    		externalDetails.getType();
+				    		ExternalUserAccount externalAccount = userService.getByExternalUserNameAccountType(externalUserAccountName, externalDetails.getType());
+				    		IrUser externalUser = externalAccount.getUser();
+				    	
+						    // we have an interesting problem
+						    // user has authenticated correctly - but the user name already exists in the 
+						    // system  
+						    if( externalUser != null )
+						    {
+							    failure = true;
+							    netIdAlreadyExistsPasswordSuccess = true;
+					    	    addFieldError("netIdAlreadyExists", "The specified user name already has an account");
+						    }
+						    else
+						    {
+						    	irUser.createExternalUserAccount(externalUserAccountName, externalDetails.getType());
+						    }
+				    	}
+				    	else
+				    	{
+				    		failure = true;
+					    	addFieldError("netIdPasswordFail", "The credentials could not be verified");
+				    	}
+
+				    }
+				    catch(BadCredentialsException bce)
+				    {
+				    	 failure = true;
+				    	 addFieldError("netIdPasswordFail", "The net id credentials could not be verified");
+				    }
+			     }
+				 else
+				 {
+				      failure = true;
+					  addFieldError("netIdPasswordEmpty", "The net id password must be entered for net id user name verification");
+				 }
+			}
+		}
+		return failure;
+	}
+
+	public void setExternalAccountPassword(String externalAccountPassword) {
+		this.externalAccountPassword = externalAccountPassword;
 	}
 
 
