@@ -32,11 +32,11 @@
         <dependency org="ur_tags" name="ur_tags" rev="1.0" transitive="false"/>
         
         <!--  struts 2 files and dependencies -->
-        <dependency org="org.apache.struts" name="struts2-core" rev="2.1.6" transitive="false">
+        <dependency org="org.apache.struts" name="struts2-core" rev="2.1.8.1" transitive="false">
             <artifact name="struts2-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.apache.struts" name="struts2-spring-plugin" rev="2.1.6" transitive="false">
+        <dependency org="org.apache.struts" name="struts2-spring-plugin" rev="2.1.8.1" transitive="false">
             <artifact name="struts2-spring-plugin" type="jar"/>
         </dependency>
         
@@ -44,17 +44,17 @@
             <artifact name="commons-fileupload" type="jar"/>
         </dependency>
         
-        <dependency org="org.freemarker" name="freemarker" rev="2.3.14" transitive="false">
+        <dependency org="org.freemarker" name="freemarker" rev="2.3.15" transitive="false">
             <artifact name="freemarker" type="jar"/>
         </dependency>
 
-        <dependency org="opensymphony" name="ognl" rev="2.6.11" transitive="false">
+        <dependency org="ognl" name="ognl" rev="2.7.3" transitive="false">
             <artifact name="ognl" type="jar"/>
         </dependency>
         
         <!--  xwork files -->
-        <dependency org="com.opensymphony" name="xwork" rev="2.1.2" transitive="false">
-            <artifact name="xwork" type="jar"/>
+        <dependency org="com.opensymphony" name="xwork-core" rev="2.1.6" transitive="false">
+            <artifact name="xwork-core" type="jar"/>
         </dependency>
         
         <!--  jstl files -->

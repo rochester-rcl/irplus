@@ -24,7 +24,7 @@
 	<!-- this automatically sets the YUI libraries to be unzipped  
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
-    -->
+     -->
  	<property name="yui.unzip" value="true"/>
     
 	
@@ -86,7 +86,7 @@
 	<property name="production.staging.dir" value="${basedir}/production-staging"/>
 	
 	<!-- location for production staging -->
-	<property name="production.web.xml" value="${webapp.conf.dir}/web.xml"/>
+	<property name="production.web.xml" value="${webapp.conf.dir}/web-ssl.xml"/>
 
 	<!-- import the base set of files -->
     <import file="${base.build.file}"/>
@@ -355,6 +355,15 @@
 	    <copy todir="${production.staging.dir}/webapp/" overwrite="true">
 			<fileset dir="${custom.build.dir}/ir_web/webapps"/>
 		</copy>
+		<copy todir="${production.staging.dir}/web-inf/" overwrite="true">
+		    <fileset dir="${custom.build.dir}/ir_web/spring-config/local"/>
+		</copy>
+		<copy todir="${production.staging.dir}/lib/" overwrite="true" 
+			file="${custom.build.dir}/ir_service/ir_service_custom/ir_service_custom-1.0.jar"/>
+		
+		<copy todir="${production.staging.dir}/web-inf/" overwrite="true" 
+					file="${custom.build.dir}/properties/production/ir_plus.properties"/>
+		
 	</target>
 	
 	<!-- create the production build -->
