@@ -6,13 +6,14 @@ irplus changes 1.0 to 1.1
 [Global]
 =============================
 - Updated from spring ldap 1.2.1 to spring ldap 1.3.0
-- Updated from Apache POI-3.5beta6 - POI-3.5FINAL
+- Updated from Apache POI-3.5beta6 - POI-3.6
 - Updated from Struts 2.1.6 to 2.1.8.1
 - Updated from freemarker 2.1.14 to 2.1.15
 - Updated from ognl 2.6.11 to 2.7.3
 - Updated from xwork-core 2.1.2 to 2.1.6
 - Updated from Ivy 2.1.0-rc1 to 2.1.0
 - Removed JSON library as it was no longer needed [ was used by toJson for researcher ]
+- Updated to pdf box 1.0.0
 
 [ir_core]
 =============================
@@ -20,6 +21,11 @@ irplus changes 1.0 to 1.1
 - Added methods to Researcher and Researcher Folder to check for existing file/personal 
   publication/Institutional Publication
 - Removed the toJson method calls from researcher classes as they are no longer needed
+
+[ir_service]
+==================================
+- Updated to index series / report number 
+- Updated repository service to include external authtentication enabled flag - 
 
 [ir_web]
 =============================
@@ -39,4 +45,17 @@ irplus changes 1.0 to 1.1
 - Fixed researcher page to use unordered lists for non-javascript based browsers/search engines.  This allows
   the page to be indexed
 - Added tag to draw the researcher tree for as an unordered list
+- Fixed deleting a person name that has been attached to a contributor record that does not have any publications
+- Added statistics to show number of members
+- Updated to only require last name for person names
+- XML output for contributor pages
+- XML output for researcher pages
+- Removed ur:div tag from all jsp pages - provided no extra benefit
+- ldap.enbabled has been changed to external.authentication.enabled
+
+
+ur_tags
+====================================
+- Fixed pager tag to always output at least one page even when there is no data
+
 
