@@ -117,8 +117,11 @@
 					      </tr>
 					      
 					      <tr>
-				              <td> Net Id: </td>
-						      <td> ${irUser.ldapUserName}</td>
+				              <td>External Account: </td>
+				              <c:if test="${irUser.externalAccount != null}">
+				                  <td> ${irUser.externalAccount.externalUserAccountName} - ${irUser.externalAccount.externalAccountType.name}</td>
+				              </c:if>
+						      
 					      </tr>
 	
 						  <tr>

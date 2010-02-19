@@ -22,7 +22,7 @@
 		               
 <input type="hidden" id="newExtentType_new" name="newExtentType" value="true"/>
 		              
-<ur:div id="extentTypeError" cssClass="errorMessage"></ur:div>
+<div id="extentTypeError" class="errorMessage"></div>
 			            
 <table class="formTable">    
     <tr>

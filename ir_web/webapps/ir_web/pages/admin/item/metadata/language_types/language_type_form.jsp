@@ -27,7 +27,7 @@
 		               
 <input type="hidden" id="newLanguageType_new" name="newLanguageType" value="true"/>
 		              
-<ur:div id="languageTypeError" cssClass="errorMessage"></ur:div>
+<div id="languageTypeError" class="errorMessage"></div>
 <table class="formTable"> 
     <tr>
 	    <td align="left" class="label">Name:*</td>

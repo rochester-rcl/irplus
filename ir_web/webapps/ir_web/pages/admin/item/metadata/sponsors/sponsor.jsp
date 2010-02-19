@@ -78,33 +78,9 @@
 	        
 	        <br/>
 	        <br/>
-	        <ur:div id="newSponsors"></ur:div>
+	        <div id="newSponsors"></div>
 	      
-	        <ur:div id="newSponsorDialog" cssClass="hidden">
-                <ur:div cssClass="hd">Sponsor Information</ur:div>
-                <ur:div cssClass="bd">
-                    <ur:basicForm id="addSponsor" name="newSponsorForm" 
-		                    method="post" 
-		                    action="user/addSponsor.action">
-	                  <ur:div id="newSponsorDialogFields">
-	                       <c:import url="sponsor_form.jsp"/>
-	                  </ur:div>
-	                </ur:basicForm>
-                </ur:div>
-            </ur:div>
-	         
-	        <ur:div id="deleteSponsorDialog" cssClass="hidden">
-	            <ur:div cssClass="hd">Delete sponsors</ur:div>
-		        <ur:div cssClass="bd">
-		            <ur:basicForm id="deleteSponsor" name="deleteSponsor" method="post" 
-		                action="user/deleteSponsor.action">
-		              
-		              
-		                 <ur:div id="deleteSponsorError" cssClass="errorMessage"></ur:div>
-			             <p>Are you sure you wish to delete the selected sponsors?</p>
-		            </ur:basicForm>
-		        </ur:div>
-	        </ur:div>
+
 	        
       </div>
       <!--  end body div -->
@@ -114,6 +90,32 @@
   
   </div>
   <!--  End doc div-->
+  
+  	        <div id="newSponsorDialog" class="hidden">
+                <div class="hd">Sponsor Information</div>
+                <div class="bd">
+                    <form id="addSponsor" name="newSponsorForm" 
+		                    method="post" 
+		                    action="/user/addSponsor.action">
+	                  <div id="newSponsorDialogFields">
+	                       <c:import url="sponsor_form.jsp"/>
+	                  </div>
+	                </form>
+                </div>
+            </div>
+	         
+	        <div id="deleteSponsorDialog" class="hidden">
+	            <div class="hd">Delete sponsors</div>
+		        <div class="bd">
+		            <form id="deleteSponsor" name="deleteSponsor" method="post" 
+		                action="/user/deleteSponsor.action">
+		              
+		              
+		                 <div id="deleteSponsorError" class="errorMessage"></div>
+			             <p>Are you sure you wish to delete the selected sponsors?</p>
+		            </form>
+		        </div>
+	        </div>
 
 </body>
 </html>

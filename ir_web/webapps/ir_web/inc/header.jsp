@@ -66,6 +66,9 @@
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewCopyrightStatements.action"/>"><span class="menu_text">Copyright Statements</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewDepartments.action" />"><span class="menu_text"><fmt:message key="menu.departments"/></span></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExtentTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewExtentTypes" /></span></a></li>
+                                <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
+                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExternalAccountTypes.action"/>"><span class="menu_text">External Account Types</span></a></li>
+                                </c:if>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFields.action" />"><span class="menu_text"><fmt:message key="menu.fields"/></span></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFileStorage.action"/>"><span class="menu_text">File Storage</span></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewHandleNameAuthorities.action"/>"><span class="menu_text">Handle Name Authorities</span></a></li>

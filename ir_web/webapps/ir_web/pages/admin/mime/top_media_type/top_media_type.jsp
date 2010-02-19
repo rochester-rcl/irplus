@@ -76,35 +76,9 @@
  		         onmouseout="this.className='ur_button';">Delete</button> 
  		  <br/>
  		  <br/>
-	      <ur:div id="newTopMediaTypes"></ur:div>
+	      <div id="newTopMediaTypes"></div>
 	      
-	      <ur:div id="newTopMediaTypeDialog">
-	          <ur:div cssClass="hd">Top Media Type Information</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="addTopMediaType" name="newTopMediaTypeForm" 
-		              method="post" 
-		              action="user/createTopMediaType.action">
-		              
-		              <ur:div id="newTopMediaTypeDialogFields">
-	                   <%@ include file="/pages/admin/mime/top_media_type/top_media_type_form.jsp" %>
-	                  </ur:div>
-		              
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
-	      
-	      <ur:div id="deleteTopMediaTypeDialog">
-	          <ur:div cssClass="hd">Delete Top Media Types</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="deleteTopMediaType" name="deleteTopMediaType" method="POST" 
-		              action="user/deleteTopMediaType.action">
-		              
-		              
-		              <ur:div id="deleteTopMediaTypeError" cssClass="errorMessage"></ur:div>
-			          <p>Are you sure you wish to delete the selected top media types?</p>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+
 	      
 	  </div>
 	  <!--  End body div -->
@@ -114,7 +88,34 @@
    
    
    </div>  
-   <!--  end doc div -->    
+   <!--  end doc div -->  
+   
+   	      <div id="newTopMediaTypeDialog">
+	          <div class="hd">Top Media Type Information</div>
+		      <div class="bd">
+		          <form id="addTopMediaType" name="newTopMediaTypeForm" 
+		              method="post" 
+		              action="/admin/createTopMediaType.action">
+		              
+		              <div id="newTopMediaTypeDialogFields">
+		                  <c:import url="top_media_type_form.jsp"/>
+	                  </div>
+		          </form>
+		      </div>
+	      </div>
+	      
+	      <div id="deleteTopMediaTypeDialog">
+	          <div class="hd">Delete Top Media Types</div>
+		      <div class="bd">
+		          <form id="deleteTopMediaType" name="deleteTopMediaType" method="POST" 
+		              action="/admin/deleteTopMediaType.action">
+		              
+		              
+		              <div id="deleteTopMediaTypeError" class="errorMessage"></div>
+			          <p>Are you sure you wish to delete the selected top media types?</p>
+		          </form>
+		      </div>
+	      </div>  
  
 </body>
 </html>

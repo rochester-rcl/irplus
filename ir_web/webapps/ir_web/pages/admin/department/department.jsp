@@ -77,7 +77,7 @@
 	        
 	        <br/>
 	        <br/>
-	        <ur:div id="newDepartments"></ur:div>
+	        <div id="newDepartments"></div>
       </div>
       <!--  end body div -->
       
@@ -87,30 +87,30 @@
   </div>
   <!--  End doc div-->
   
-  <ur:div id="newDepartmentDialog" cssClass="hidden">
-      <ur:div cssClass="hd">Department Information</ur:div>
-      <ur:div cssClass="bd">
-          <ur:basicForm id="addDepartment" 
+  <div id="newDepartmentDialog" class="hidden">
+      <div class="hd">Department Information</div>
+      <div class="bd">
+          <form id="addDepartment" 
                             name="newDepartmentForm" 
 		                    method="POST"
-		                    action="admin/createDepartment.action">
-	          <ur:div id="newDepartmentDialogFields">
+		                    action="/admin/createDepartment.action">
+	          <div id="newDepartmentDialogFields">
 	              <c:import url="department_form.jsp"/>
-	          </ur:div>
-	      </ur:basicForm>
-      </ur:div>
-  </ur:div>
+	          </div>
+	      </form>
+      </div>
+  </div>
 	         
-  <ur:div id="deleteDepartmentDialog" cssClass="hidden">
-      <ur:div cssClass="hd">Delete departments</ur:div>
-		<ur:div cssClass="bd">
-		    <ur:basicForm id="deleteDepartment" name="deleteDepartment" method="POST" 
-		                action="admin/deleteDepartment.action">
-		       <ur:div id="deleteDepartmentError" cssClass="errorMessage"></ur:div>
+  <div id="deleteDepartmentDialog" class="hidden">
+      <div class="hd">Delete departments</div>
+		<div class="bd">
+		    <form id="deleteDepartment" name="deleteDepartment" method="POST" 
+		                action="/admin/deleteDepartment.action">
+		       <div id="deleteDepartmentError" class="errorMessage"></div>
 			   <p>Are you sure you wish to delete the selected department(s)?</p>
-		    </ur:basicForm>
-		</ur:div>
-  </ur:div>
+		    </form>
+		</div>
+  </div>
 
 </body>
 </html>

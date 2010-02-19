@@ -93,36 +93,9 @@
 	      
 	      <br/>
 	      <br/>              
-	      <ur:div id="newSubTypeExtensions">
-	      </ur:div>
+	      <div id="newSubTypeExtensions"> </div>
 	      
-	      <ur:div id="newSubTypeExtensionDialog">
-	          <ur:div cssClass="hd">Sub Type Extension Information</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="addSubTypeExtension" name="newSubTypeExtensionForm" 
-		              method="post" 
-		              action="admin/updateSubTypeExtension.action">
-		              
-		              <ur:div id="newSubTypeExtensionDialogFields">
-	                   <%@ include file="/pages/admin/mime/top_media_type/sub_type_extension_form.jsp" %>
-	                  </ur:div>
-		              
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
-	      
-	      <ur:div id="deleteSubTypeExtensionDialog">
-	          <ur:div cssClass="hd">Delete Sub Type Extension</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="deleteSubTypeExtension" name="deleteSubTypeExtension" method="POST" 
-		              action="user/deleteSubTypeExtension.action">
-		              
-		              
-		              <ur:div id="deleteSubTypeExtensionError" cssClass="errorMessage"></ur:div>
-			          <p>Are you sure you wish to delete the selected sub type extensions?</p>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+
 	      
 	  </div>
 	  <!--  End body div -->
@@ -131,7 +104,35 @@
       <c:import url="/inc/footer.jsp"/>
    
    </div>  
-   <!--  end doc div -->    
+   <!--  end doc div -->  
+   
+   	      <div id="newSubTypeExtensionDialog">
+	          <div class="hd">Sub Type Extension Information</div>
+		      <div class="bd">
+		          <form id="addSubTypeExtension" name="newSubTypeExtensionForm" 
+		              method="post" 
+		              action="/admin/updateSubTypeExtension.action">
+		              
+		              <div id="newSubTypeExtensionDialogFields">
+		                  <c:import url="sub_type_extension_form.jsp"/>
+	                  </div>
+		              
+		          </form>
+		      </div>
+	      </div>
+	      
+	      <div id="deleteSubTypeExtensionDialog">
+	          <div class="hd">Delete Sub Type Extension</div>
+		      <div class="bd">
+		          <form id="deleteSubTypeExtension" name="deleteSubTypeExtension" method="POST" 
+		              action="/admin/deleteSubTypeExtension.action">
+		              
+		              
+		              <div id="deleteSubTypeExtensionError" class="errorMessage"></div>
+			          <p>Are you sure you wish to delete the selected sub type extensions?</p>
+		          </form>
+		      </div>
+	      </div>  
 
 </body>
 </html>

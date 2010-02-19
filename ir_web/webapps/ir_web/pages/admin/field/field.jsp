@@ -89,29 +89,29 @@
   </div>
   <!--  End doc div-->
   
-  <ur:div id="newFieldDialog" cssClass="hidden">
-      <ur:div cssClass="hd">Field Information</ur:div>
-      <ur:div cssClass="bd">
-          <ur:basicForm id="addField" name="newFieldForm" 
+  <div id="newFieldDialog" class="hidden">
+      <div class="hd">Field Information</div>
+      <div class="bd">
+          <form id="addField" name="newFieldForm" 
 		                    method="post" 
-		                    action="admin/createField.action">
-	          <ur:div id="newFieldDialogFields">
+		                    action="/admin/createField.action">
+	          <div id="newFieldDialogFields">
 	              <c:import url="field_form.jsp"/>
-	          </ur:div>
-	      </ur:basicForm>
-      </ur:div>
-  </ur:div>
+	          </div>
+	      </form>
+      </div>
+  </div>
 	         
-  <ur:div id="deleteFieldDialog" cssClass="hidden">
-      <ur:div cssClass="hd">Delete fields</ur:div>
-		<ur:div cssClass="bd">
-		    <ur:basicForm id="deleteField" name="deleteField" method="post" 
-		                action="admin/deleteField.action">
-		       <ur:div id="deleteFieldError" cssClass="errorMessage"></ur:div>
+  <div id="deleteFieldDialog" class="hidden">
+      <div class="hd">Delete fields</div>
+		<div class="bd">
+		    <form id="deleteField" name="deleteField" method="post" 
+		                action="/admin/deleteField.action">
+		       <div id="deleteFieldError" class="errorMessage"></div>
 			   <p>Are you sure you wish to delete the selected field(s)?</p>
-		    </ur:basicForm>
-		</ur:div>
-  </ur:div>
+		    </form>
+		</div>
+  </div>
 
 </body>
 </html>
