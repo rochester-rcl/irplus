@@ -29,6 +29,7 @@
 		<property name="providers">
 			<list>
 				<ref local="daoAuthenticationProvider"/>
+				<ref local="ldapAuthProvider"/>
 			</list>
 		</property>
 	</bean>
@@ -56,6 +57,8 @@
         class="edu.ur.ir.user.service.DefaultLdapUserService">
         <property name="userSearch" ref="userSearch"/>
         <property name="userService" ref="userService"/>
+        <property name="externalAccountTypeService" ref="externalAccountTypeService"/>
+        <property name="externalAccountTypeName" value="${external.account.type.name}"/> 
     </bean>
 	
 	<!-- context source for connecting to the LDAP directory -->
@@ -84,6 +87,15 @@
            </bean>
        </constructor-arg>
        <property name="userDetailsContextMapper" ref="ldapUserService"/>
+    </bean>
+    
+    <!--  this should hold all other authentication systems that do not relate to local accounts -->
+    <bean id="ExternalAuthenticationProvider" class="edu.ur.ir.security.service.DefaultExternalAuthenticaionProvider">
+       <property name="authenticationProviders">
+			<list>
+				<ref local="ldapAuthProvider"/>
+			</list>
+		</property>
     </bean>
              
 
