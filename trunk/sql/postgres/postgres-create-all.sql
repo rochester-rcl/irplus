@@ -574,6 +574,27 @@ ALTER TABLE person.contributor_seq OWNER TO ir_plus;
 
 CREATE SCHEMA ir_user AUTHORIZATION ir_plus;
 
+-- ---------------------------------------------
+-- External account type table
+-- ---------------------------------------------
+CREATE TABLE ir_user.external_account_type
+(
+    external_account_type_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE ir_user.external_account_type OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_user.external_account_type_seq;
+ALTER TABLE ir_user.external_account_type_seq OWNER TO ir_plus;
+
+
+
+
+
 
 -- ---------------------------------------------
 -- user workspace index process record Information
@@ -742,6 +763,36 @@ CREATE INDEX user_name_idx ON ir_user.ir_user (lower_case_user_name);
 -- The user sequence
 CREATE SEQUENCE ir_user.ir_user_seq ;
 ALTER TABLE ir_user.ir_user_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- This binds an external account type to 
+-- a particular user
+-- ---------------------------------------------
+
+CREATE TABLE ir_user.external_user_account
+(
+    external_user_account_id BIGINT PRIMARY KEY,
+    external_account_type_id BIGINT NOT NULL,
+    external_user_account_name TEXT NOT NULL,
+    user_id BIGINT NOT NULL,
+    UNIQUE(external_account_type_id, external_user_account_name),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
+    FOREIGN KEY (external_account_type_id) REFERENCES ir_user.external_account_type(external_account_type_id)
+);
+ALTER TABLE ir_user.external_user_account OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_user.external_user_account_seq;
+ALTER TABLE ir_user.external_user_account_seq OWNER TO ir_plus;
+
+-- Index on the external user name
+CREATE INDEX external_user_name_idx ON ir_user.external_user_account (external_user_account_name);
+
+-- create a unique constraint on user id
+ALTER TABLE ir_user.external_user_account ADD CONSTRAINT external_user_account_user_id_key UNIQUE (user_id);
+
+-- Index on the external user name
+CREATE INDEX external_user_name_type_idx ON ir_user.external_user_account (external_user_account_name, external_account_type_id);
 
 -- ---------------------------------------------
 -- Users department table
@@ -2563,6 +2614,7 @@ ALTER TABLE ir_user.shared_inbox_file_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 
 CREATE SCHEMA ir_security AUTHORIZATION ir_plus;
+
 -- ---------------------------------------------
 -- Class type table
 -- ---------------------------------------------
