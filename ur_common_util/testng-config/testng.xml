@@ -19,6 +19,8 @@
 <suite name="ur common testing">
 	<test name="UR Common Testing">
 		<classes>
+		    <class name="edu.ur.simple.type.AscendingNameComparatorTest"/>
+		    <class name="edu.ur.simple.type.DescendingNameComparatorTest"/>
 		    <class name="edu.ur.tree.PreOrderTreeSetNodeImplTest"/>
 		</classes>
 	</test>
