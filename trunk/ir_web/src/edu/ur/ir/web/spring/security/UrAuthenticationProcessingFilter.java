@@ -33,6 +33,7 @@ import org.springframework.security.util.TextUtils;
 import org.springframework.util.Assert;
 
 import edu.ur.ir.security.service.LdapAuthenticationToken;
+import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserGroupMemberFilter;
@@ -103,8 +104,8 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
         if( ldapEnabled )
         {
         	log.debug("LDAP enabled - adding ldap token");
-        	IrUser user = userService.getUserByLdapUserName(username);
-        	if( user != null )
+        	List<ExternalUserAccount> externalAccounts = userService.getByExternalUserName(username);
+        	if( externalAccounts.size() > 0 )
         	{
                 authRequests.add(new LdapAuthenticationToken(username, password)); 
         	}

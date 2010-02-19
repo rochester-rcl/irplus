@@ -42,6 +42,9 @@ import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import edu.ur.ir.user.ExternalAccountType;
+import edu.ur.ir.user.ExternalAccountTypeService;
+
 
 /**
  * NOTE: Based on LdapAuthenticationProvider originally written by Luke Taylor.
@@ -145,6 +148,12 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
     private LdapAuthoritiesPopulator authoritiesPopulator;
     private UserDetailsContextMapper userDetailsContextMapper = new LdapUserDetailsMapper();
     private boolean useAuthenticationRequestCredentials = true;
+    
+    /**  name of the of external authentication*/
+    private String externalAccountTypeName;
+    
+    /** Service to deal with external account type information */
+    private ExternalAccountTypeService externalAccountTypeService;
 
     //~ Constructors ===================================================================================================
 
@@ -276,7 +285,12 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
             UserDetails user) {
         Object password = useAuthenticationRequestCredentials ? authentication.getCredentials() : user.getPassword();
 
-        return new LdapAuthenticationToken(user, password, user.getAuthorities());
+        LdapAuthenticationToken authenticationToken =  new LdapAuthenticationToken(user, password, user.getAuthorities());
+        ExternalAccountType externalAccountType = externalAccountTypeService.get(externalAccountTypeName);
+        DefaultExternalAuthenticationDetails externalAuthenictaionDetails = new DefaultExternalAuthenticationDetails(externalAccountType);
+       
+        authenticationToken.setDetails(externalAuthenictaionDetails);
+        return authenticationToken;
     }
 
     @SuppressWarnings("unchecked")
@@ -292,6 +306,23 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
+	
+	public ExternalAccountTypeService getExternalAccountTypeService() {
+		return externalAccountTypeService;
+	}
+
+	public void setExternalAccountTypeService(
+			ExternalAccountTypeService externalAccountTypeService) {
+		this.externalAccountTypeService = externalAccountTypeService;
+	}
+
+	public String getExternalAccountTypeName() {
+		return externalAccountTypeName;
+	}
+
+	public void setExternalAccountTypeName(String externalAccountTypeName) {
+		this.externalAccountTypeName = externalAccountTypeName;
+	}
 
 }
 

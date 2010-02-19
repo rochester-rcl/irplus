@@ -254,28 +254,9 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	        return "added";
 		}
 		
-		if( irUser.getLdapUserName() != null && !irUser.getLdapUserName().trim().equals(""))
-		{
-		
-		    myIrUser = userService.getUserByLdapUserName(irUser.getLdapUserName());
-		
-		    if( myIrUser != null )
-		    {
-			    addFieldError("ldapNameExists", 
-					    "This Ldap User name already exist : " + irUser.getLdapUserName());
-			    // Reloads the affiliation & department drop downs
-			    execute();
-			
-	            return "added";
-		    }
-		}
-		
-		
-		
 		String password = irUser.getPassword();
 		String firstName = irUser.getFirstName();
 		String lastName = irUser.getLastName();
-		String ldapUserName = irUser.getLdapUserName();
 					
 		defaultEmail.setVerified(true);
 		irUser = userService.createUser(irUser.getPassword(), irUser.getUsername(), defaultEmail);
@@ -286,7 +267,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		irUser.setPhoneNumber(phoneNumber);
 		irUser.setFirstName(firstName);
 		irUser.setLastName(lastName);
-		irUser.setLdapUserName(ldapUserName);
 
 		setDepartments();
 		updateAffilation();
@@ -350,18 +330,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 			addFieldError("userAlreadyExists", 
 					"This User name already exist. " + irUser.getUsername());
 			return "updated";
-		}
-		
-		if( irUser.getLdapUserName() != null && !irUser.getLdapUserName().trim().equals(""))
-		{
-		    other = 
-			    userService.getUserByLdapUserName(irUser.getLdapUserName());
-		    if(other != null && !other.getId().equals(irUser.getId()))
-		    {
-			    addFieldError("ldapNameExists", 
-					    "The net-id User name already exist. " + irUser.getLdapUserName());
-			    return "updated";
-		    }
 		}
 		
 		if ((!isAdminRole()) && (!isUserRole()) ) 

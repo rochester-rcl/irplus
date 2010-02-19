@@ -103,6 +103,9 @@ public class DefaultRepositoryService implements RepositoryService {
 	/** Strategy for unlocking files */
 	private VersionedFileUnLockStrategy versionedFileUnLockStrategy;
 	
+	/** determine if the external authentication is enabled */
+	private boolean externalAuthenticationEnabled = false;
+	
 	
 	
 	/**
@@ -884,5 +887,33 @@ public class DefaultRepositoryService implements RepositoryService {
 	public void setResearcherFileSystemService(
 			ResearcherFileSystemService researcherFileSystemService) {
 		this.researcherFileSystemService = researcherFileSystemService;
+	}
+
+	/**
+	 * Determine if the external authentication is enabled
+	 * 
+	 * @see edu.ur.ir.repository.RepositoryService#getExternalAuthenticationEnabled()
+	 */
+	public boolean getExternalAuthenticationEnabled() {
+		return externalAuthenticationEnabled;
+	}
+
+	/**
+	 * Determine if the external authentication is enabled.
+	 * 
+	 * @see edu.ur.ir.repository.RepositoryService#isExternalAuthenticationEnabled()
+	 */
+	public boolean isExternalAuthenticationEnabled() {
+		return externalAuthenticationEnabled;
+	}
+
+	/**
+	 * Set the external authentication flag.
+	 * 
+	 * @param externalAuthenticationEnabled
+	 */
+	public void setExternalAuthenticationEnabled(
+			boolean externalAuthenticationEnabled) {
+		this.externalAuthenticationEnabled = externalAuthenticationEnabled;
 	}
 }

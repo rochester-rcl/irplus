@@ -83,7 +83,6 @@ public class UrLdapAuthenticationProviderTest {
 	    String ldapPassword = (String)properties.get("ldap.user.password");
 
 		IrUser user = userService.createUser("password","username",email);
-		user.setLdapUserName(ldapUsername);
 		tm.commit(ts);
 		
 		// start a new transaction

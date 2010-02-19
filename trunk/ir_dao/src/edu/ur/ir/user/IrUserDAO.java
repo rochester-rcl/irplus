@@ -95,15 +95,6 @@ CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
 	public IrUser getUserByPersonNameAuthority(Long personNameAuthorityId);	
 	
 	/**
-	 * Finds a user by their ldap user name.  Null is returned if the user
-	 * does not have an ldap user name.
-	 * 
-	 * @param ldapUserName
-	 * @return the user found or null if the ldap user name does not exist
-	 */
-	public IrUser findByLdapUserName(String ldapUserName);
-
-	/**
 	 * Get a list of users for a specified sort criteria.
 	 * 
 	 * @param rowStart - Start row to fetch the data from
