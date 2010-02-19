@@ -1,4 +1,4 @@
-package edu.ur.hibernate.ir.security.db;
+package edu.ur.hibernate.ir.user.db;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
-import edu.ur.ir.security.ExternalAccountType;
-import edu.ur.ir.security.ExternalAccountTypeDAO;
+import edu.ur.ir.user.ExternalAccountType;
+import edu.ur.ir.user.ExternalAccountTypeDAO;
 
 /**
  * Test the persistence methods for external account types.
