@@ -14,7 +14,7 @@
    limitations under the License.
 */  
 
-package edu.ur.hibernate.ir.security.db;
+package edu.ur.hibernate.ir.user.db;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -27,8 +27,8 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
-import edu.ur.ir.security.ExternalAccountType;
-import edu.ur.ir.security.ExternalAccountTypeDAO;
+import edu.ur.ir.user.ExternalAccountType;
+import edu.ur.ir.user.ExternalAccountTypeDAO;
 import edu.ur.order.OrderType;
 
 /**
@@ -64,7 +64,7 @@ public class HbExternalAccountTypeDAO implements ExternalAccountTypeDAO{
 	/**
 	 * Get external account types ordered by name.
 	 * 
-	 * @see edu.ur.ir.security.ExternalAccountTypeDAO#getOrderByName(int, int, edu.ur.order.OrderType)
+	 * @see edu.ur.ir.user.ExternalAccountTypeDAO#getOrderByName(int, int, edu.ur.order.OrderType)
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ExternalAccountType> getOrderByName(final int rowStart,

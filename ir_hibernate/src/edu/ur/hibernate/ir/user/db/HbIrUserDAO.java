@@ -119,12 +119,6 @@ public class HbIrUserDAO implements IrUserDAO {
 		return irUser;
 	}
 	
-	public IrUser findByLdapUserName(String ldapUserName)
-	{
-		return (IrUser) 
-	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getUserByLdapName", ldapUserName));
-	}
-
 	@SuppressWarnings("unchecked")
 	public List getAll() {
 		return hbCrudDAO.getAll();
