@@ -254,22 +254,25 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
             GrantedAuthority[] extraAuthorities = loadUserAuthorities(userData, username, password);
             UserDetails user = userDetailsContextMapper.mapUserFromContext(userData, username, extraAuthorities);
 
-            
-            if (!user.isAccountNonLocked()) {
-                throw new LockedException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.locked",
+            if( user != null )
+            {
+                if (!user.isAccountNonLocked()) {
+                    throw new LockedException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.locked",
                         "User account is locked"), user);
-            }
+                }
 
-            if (!user.isEnabled()) {
-                throw new DisabledException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.disabled",
+                if (!user.isEnabled()) {
+                    throw new DisabledException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.disabled",
                         "User is disabled"), user);
-            }
+                }
 
-            if (!user.isAccountNonExpired()) {
-                throw new AccountExpiredException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.expired",
+                if (!user.isAccountNonExpired()) {
+                    throw new AccountExpiredException(messages.getMessage("AbstractUserDetailsAuthenticationProvider.expired",
                         "User account has expired"), user);
+                }
             }
             
+            log.debug("creating successful authentication");
             return createSuccessfulAuthentication(userToken, user);
 
         } catch (NamingException ldapAccessFailure) {
@@ -285,11 +288,24 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
             UserDetails user) {
         Object password = useAuthenticationRequestCredentials ? authentication.getCredentials() : user.getPassword();
 
-        LdapAuthenticationToken authenticationToken =  new LdapAuthenticationToken(user, password, user.getAuthorities());
+        LdapAuthenticationToken authenticationToken = null;
         ExternalAccountType externalAccountType = externalAccountTypeService.get(externalAccountTypeName);
         DefaultExternalAuthenticationDetails externalAuthenictaionDetails = new DefaultExternalAuthenticationDetails(externalAccountType);
-       
+
+        if( user != null )
+        {
+            authenticationToken =  new LdapAuthenticationToken(user, password, user.getAuthorities());
+        }
+        else
+        {
+        	// this means the user authenticated but they are not yet part of the irplus system
+        	authenticationToken =  new LdapAuthenticationToken(user, password, null);
+        }
+        
+        log.debug("adding details " + externalAuthenictaionDetails);
         authenticationToken.setDetails(externalAuthenictaionDetails);
+        log.debug("added details " + authenticationToken.getDetails());
+       
         return authenticationToken;
     }
 

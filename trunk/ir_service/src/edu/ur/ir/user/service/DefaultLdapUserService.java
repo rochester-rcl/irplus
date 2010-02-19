@@ -72,8 +72,15 @@ public class DefaultLdapUserService implements LdapUserService  {
 	}
 
 	
+	/**
+	 * This maps a user from the context information.
+	 * This method ignores the Granted Authority[] 
+	 * @see org.springframework.security.userdetails.ldap.UserDetailsContextMapper#mapUserFromContext(org.springframework.ldap.core.DirContextOperations, java.lang.String, org.springframework.security.GrantedAuthority[])
+	 */
 	public UserDetails mapUserFromContext(DirContextOperations arg0,
-			String username, GrantedAuthority[] arg2) {
+			String username, 
+			GrantedAuthority[] arg2) 
+	{
 		ExternalAccountType externalAccountType = externalAccountTypeService.get(externalAccountTypeName);
 		ExternalUserAccount externalAccount = userService.getByExternalUserNameAccountType(username, externalAccountType);
 		if( externalAccount != null )
