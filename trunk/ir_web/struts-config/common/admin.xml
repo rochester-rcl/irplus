@@ -260,20 +260,20 @@
         <!--  ************************************ -->
         <action name="viewExternalAccountTypes"
                method="viewExternalAccountTypes"
-               class="edu.ur.ir.web.action.security.ManageExternalAccountTypes">
+               class="edu.ur.ir.web.action.user.admin.ManageExternalAccountTypes">
             <result name="success">/pages/admin/external_account_type/external_account_types.jsp</result>
         </action> 
         
         <action name="getExternalAccountTypesTable"
                method="getExternalAccountTypesTable"
-               class="edu.ur.ir.web.action.security.ManageExternalAccountTypes">
+               class="edu.ur.ir.web.action.user.admin.ManageExternalAccountTypes">
             <result name="success">/pages/admin/external_account_type/external_account_type_table.jsp</result>
         </action> 
         
         <!--  This handles update, save and delete -->
         <action name="*ExternalAccountType" 
             method="{1}"
-            class="edu.ur.ir.web.action.security.ManageExternalAccountTypes">
+            class="edu.ur.ir.web.action.user.admin.ManageExternalAccountTypes">
             <interceptor-ref name="crudStack" />
             <result name="added">/pages/admin/external_account_type/external_account_type_form.jsp</result>
             <result name="deleted">/pages/admin/external_account_type/external_account_type_deleted.jsp</result>
