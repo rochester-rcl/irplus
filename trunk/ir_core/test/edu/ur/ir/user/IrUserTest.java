@@ -68,7 +68,6 @@ public class IrUserTest {
 		IrUser user = new IrUser();
 		user.setLastName("familyName");
 		user.setFirstName("forename");
-		user.setLdapUserName("ldapUserName");
 		user.setId(4L);
 		ShaPasswordEncoder shaEncoder = new ShaPasswordEncoder();
 		user.setPassword(shaEncoder.encodePassword("password", null));
@@ -79,7 +78,6 @@ public class IrUserTest {
 		assert user.getFirstName().equals("forename") : "First name should equal ";
 		assert user.getLastName().equals("familyName") : "Last name should equal ";
 		assert user.getUsername().equals("username") : "User name should equal username";
-		assert user.getLdapUserName().equals("ldapUserName") : "LDAP User name should equal ldapUserName";
 		assert user.getPassword().equals(shaEncoder.encodePassword("password",null)) : "Password should equal password";
 		assert user.getDefaultEmail().equals(userEmail);
 	}
