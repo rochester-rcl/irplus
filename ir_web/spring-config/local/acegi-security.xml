@@ -46,7 +46,7 @@
 		<property name="authenticationFailureUrl" value="/acegilogin.jsp?login_error=1"/>
 		<property name="defaultTargetUrl" value="/user/workspace.action"/>
 		<property name="filterProcessesUrl" value="/j_spring_security_check"/>
-		<property name="ldapEnabled" value="${ldap.enabled}"/>
+		<property name="ldapEnabled" value="${external.authentication.enabled}"/>
   </bean>
   
   <bean id="authenticationProcessingFilterEntryPoint"
@@ -87,6 +87,8 @@
         class="edu.ur.ir.user.service.DefaultLdapUserService">
         <property name="userSearch" ref="userSearch"/>
         <property name="userService" ref="userService"/>
+        <property name="externalAccountTypeService" ref="externalAccountTypeService"/>
+        <property name="externalAccountTypeName" value="${external.account.type.name}"/>
     </bean>
 	
 	<!-- context source for connecting to the LDAP directory -->
@@ -117,6 +119,15 @@
        <constructor-arg ref="ldapAuthenticator"/>
        <property name="userDetailsContextMapper" ref="ldapUserService"/>
  
+    </bean>
+    
+    <!--  this should hold all other authentication systems that do not relate to local accounts -->
+    <bean id="externalAuthenticationProvider" class="edu.ur.ir.security.service.DefaultExternalAuthenticaionProvider">
+       <property name="authenticationProviders">
+			<list>
+				<ref local="ldapAuthProvider"/>
+			</list>
+		</property>
     </bean>
              
 
