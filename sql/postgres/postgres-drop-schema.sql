@@ -267,13 +267,15 @@ DROP SEQUENCE ir_file.versioned_file_seq;
 DROP SCHEMA ir_file;
 
 
-
-
 -- ---------------------------------------------
 -- Drop the rest of the user information
 -- ---------------------------------------------
 DROP TABLE ir_user.shared_inbox_file;
+DROP TABLE ir_user.external_user_account;
+DROP SEQUENCE ir_user.external_user_account_seq;
 DROP TABLE ir_user.ir_user;
+DROP TABLE ir_user.external_account_type;
+DROP SEQUENCE ir_user.external_account_type_seq;
 DROP SCHEMA ir_user;
 
 -- ---------------------------------------------
