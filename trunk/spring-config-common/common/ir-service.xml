@@ -60,6 +60,7 @@
        <property name="userGroupService" ref="userGroupService"/>
        <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
        <property name="personalItemDeleteRecordDAO" ref="personalItemDeleteRecordDAO"/>
+       <property name="externalUserAccountDAO" ref="externalUserAccountDAO"/>
    </bean>
    
 
@@ -163,6 +164,7 @@
        <property name="itemService" ref="itemService"/>
        <property name="fileVersionDAO" ref="fileVersionDAO"/>
        <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
+       <property name="externalAuthenticationEnabled" value="${external.authentication.enabled}"/>
    </bean>
 
     <!--  Service for helping with item file security --> 
@@ -640,7 +642,7 @@
    <!-- External Account type service -->
    <!-- ****************************************** --> 
    <bean id="externalAccountTypeService" 
-       class="edu.ur.ir.security.service.DefaultExternalAccountTypeService">
+       class="edu.ur.ir.user.service.DefaultExternalAccountTypeService">
        <property name="externalAccountTypeDAO" ref="externalAccountTypeDAO"/>
    </bean>
    
