@@ -16,6 +16,7 @@
 
 package edu.ur.hibernate.ir.user.db;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -28,6 +29,11 @@ import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
+import edu.ur.ir.user.ExternalAccountType;
+import edu.ur.ir.user.ExternalAccountTypeAlreadyExistsException;
+import edu.ur.ir.user.ExternalAccountTypeDAO;
+import edu.ur.ir.user.ExternalUserAccount;
+import edu.ur.ir.user.ExternalUserAccountDAO;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrRoleDAO;
 import edu.ur.ir.user.IrUser;
@@ -48,11 +54,9 @@ public class IrUserDAOTest {
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 
 	// Transaction manager
-	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
-	.getBean("transactionManager");
+	PlatformTransactionManager tm = (PlatformTransactionManager) ctx.getBean("transactionManager");
 	
-    TransactionDefinition td = new DefaultTransactionDefinition(
-    		TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
     
 	/** Properties file with testing specific information. */
 	PropertiesLoader propertiesLoader = new PropertiesLoader();
@@ -60,12 +64,17 @@ public class IrUserDAOTest {
 	/** Get the properties file  */
 	Properties properties = propertiesLoader.getProperties();
 
-	
-     IrUserDAO userDAO= (IrUserDAO) ctx
-	.getBean("irUserDAO");
+	/** user data access */
+     IrUserDAO userDAO= (IrUserDAO) ctx.getBean("irUserDAO");
 
-     IrRoleDAO irRoleDAO= (IrRoleDAO) ctx
-		.getBean("irRoleDAO");
+     /** role data access */
+     IrRoleDAO irRoleDAO= (IrRoleDAO) ctx.getBean("irRoleDAO");
+     
+     /** external account data access */
+ 	 ExternalAccountTypeDAO externalAccountTypeDAO = (ExternalAccountTypeDAO) ctx.getBean("externalAccountTypeDAO");
+ 	 
+     /** external account data access */
+ 	 ExternalUserAccountDAO externalUserAccountDAO = (ExternalUserAccountDAO) ctx.getBean("externalUserAccountDAO");
 
 	/**
 	 * Test PersonName persistance
@@ -168,7 +177,6 @@ public class IrUserDAOTest {
 		IrUser user = userManager.createUser("passowrd", "userName");
 		user.setLastName("familyName");
 		user.setFirstName("forename");
-		user.setLdapUserName("ldapUserName");
 		user.addUserEmail(userEmail, true);
 		user.setAccountExpired(true);
 		user.setAccountLocked(true);
@@ -187,14 +195,11 @@ public class IrUserDAOTest {
 		assert user.getAccountExpired() : "Account should be set to expired";
 		assert user.getAccountLocked() : "Account should be set to locked";
 		assert user.getCredentialsExpired() : "Credentials should be set to expired";
-		assert user.getLdapUserName().equals("ldapUserName") : "LDAP user name should be equal";
 
 		//complete the transaction
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
-		IrUser ldapUser = userDAO.findByLdapUserName(user.getLdapUserName());
-		assert ldapUser != null : "could not find user by " + user.getLdapUserName();
 		userDAO.makeTransient(userDAO.getById(other.getId(), false));
 		tm.commit(ts);
 		
@@ -233,6 +238,108 @@ public class IrUserDAOTest {
 		tm.commit(ts);
 		
 		assert userDAO.getById(other.getId(), false) == null : "Should not be able to find other";
+	}
+	
+	/**
+	 * Test adding external account information to a user.
+	 * 
+	 * @throws ExternalAccountTypeAlreadyExistsException 
+	 */
+	@Test
+	public void testAddExternalAccount() throws ExternalAccountTypeAlreadyExistsException
+	{
+		TransactionStatus ts = tm.getTransaction(td);
+		ExternalAccountType externalAccountType1 = new ExternalAccountType("externalAccountTypeName1");
+		externalAccountType1.setDescription("description1");
+        externalAccountTypeDAO.makePersistent(externalAccountType1);
+        
+        ExternalAccountType externalAccountType2 = new ExternalAccountType("externalAccountTypeName2");
+		externalAccountType2.setDescription("description2");
+        externalAccountTypeDAO.makePersistent(externalAccountType2);
+ 	    tm.commit(ts);
+		
+	
+		ts = tm.getTransaction(td);
+		UserEmail userEmail = new UserEmail("user@email");
+ 		// create the user and test.
+		IrUser user = new IrUser("userName", "passowrd");
+		user.addUserEmail(userEmail, true);
+		user.setPasswordEncoding("none");
+		user.createExternalUserAccount( "user_account_name1", externalAccountType1);
+		ExternalUserAccount userAccount1 = user.getExternalAccount();
+		userDAO.makePersistent(user);
+	    tm.commit(ts);
+	    
+	    
+        ts = tm.getTransaction(td);
+        
+		IrUser other = userDAO.getById(user.getId(), false);
+		ExternalUserAccount otherAccount = other.getExternalAccount();
+
+		assert otherAccount.equals(userAccount1) : "Account "+ userAccount1 + " should be found for this user";
+		
+		List<ExternalUserAccount> otherAccounts = externalUserAccountDAO.getByExternalUserName("user_account_name1");
+		assert otherAccounts.size() == 1 : "accounts size should be 1 but is " + otherAccounts.size();
+		assert otherAccounts.contains(userAccount1) : "Should contain user account " + userAccount1;
+	
+		ExternalUserAccount otherAccount2 = otherAccounts.get(0);
+		assert otherAccount2.getUser().equals(other) : "other account should point to user " + other + " but is " + otherAccount.getUser(); 
+		
+		other.deleteExternalUserAccount();
+		externalUserAccountDAO.makeTransient(otherAccount);
+		//complete the transaction
+		tm.commit(ts);
+		
+		// switch to a new external account
+		ts = tm.getTransaction(td);
+		other = userDAO.getById(user.getId(), false);
+		
+		// switch the account for the user
+		other.createExternalUserAccount( "user_account_name2", externalAccountType2);
+		ExternalUserAccount userAccount2 = other.getExternalAccount();
+		
+		userDAO.makePersistent(other);
+		
+		//complete the transaction
+		tm.commit(ts);
+		
+		// make sue the new account exists and the old one is deleted
+		ts = tm.getTransaction(td);
+	        
+		other = userDAO.getById(user.getId(), false);
+		otherAccount = other.getExternalAccount();
+
+		assert otherAccount.equals(userAccount2) : "Account "+ userAccount2 + " should be found for this user";
+		assert !otherAccount.equals(userAccount1) : "Account "+ userAccount1 + " should NOT be found for this user";
+			
+		otherAccounts = externalUserAccountDAO.getByExternalUserName("user_account_name2");
+		assert otherAccounts.size() == 1 : "accounts size should be 1 but is " + otherAccounts.size();
+		assert otherAccounts.contains(userAccount2) : "Should contain user account " + userAccount2;
+		
+		otherAccount2 = otherAccounts.get(0);
+		assert otherAccount2.getUser().equals(other) : "other account should point to user " + other + " but is " + otherAccount2.getUser(); 
+
+		// old account should no longer exist
+		otherAccounts = externalUserAccountDAO.getByExternalUserName("user_account_name1");
+		assert otherAccounts.size() == 0 : "accounts size should be 0 but is " + otherAccounts.size();
+		
+		ExternalUserAccount externalAccountByType1 = externalUserAccountDAO.getByExternalUserNameAccountType("user_account_name2", otherAccount.getExternalAccountType());
+		assert externalAccountByType1.equals(otherAccount) : "Account by type name should = " + otherAccount + " but equals " + externalAccountByType1;
+			
+			
+		//complete the transaction
+		tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		
+		
+		assert userDAO.getById(other.getId(), false) == null : "Should not be able to find other";
+		
+		externalAccountTypeDAO.makeTransient(externalAccountTypeDAO.getById(externalAccountType1.getId(), false));
+		externalAccountTypeDAO.makeTransient(externalAccountTypeDAO.getById(externalAccountType2.getId(), false));
+		tm.commit(ts);
 	}
 
 }
