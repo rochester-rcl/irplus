@@ -196,7 +196,6 @@ public class DefaultUserImporter implements UserImporter{
 		irUser.setPhoneNumber(u.phoneNumber);
 		irUser.setFirstName(u.firstName);
 		irUser.setLastName(u.lastName);
-		irUser.setLdapUserName(u.netId);
 		
 		// override the original password
 		irUser.setPassword(u.password);
@@ -257,7 +256,8 @@ public class DefaultUserImporter implements UserImporter{
 		{
 			return false;
 		}
-		return userService.getUserByLdapUserName(netId) != null;
+		return false;
+		//return userService.getUserByLdapUserName(netId) != null;
 	}
 	
 	
