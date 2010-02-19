@@ -14,28 +14,28 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.user;
+package edu.ur.ir.security;
 
+import org.springframework.security.Authentication;
+import org.springframework.security.AuthenticationException;
 
 /**
- * Represents an account type that already exists for a given user.
+ * This interface allows all external authentication methods to be
+ * tried 
  * 
  * @author Nathan Sarr
  *
  */
-public class ExternalAccountTypeAlreadyExistsException extends Exception{
-
-	/** eclipse generated id */
-	private static final long serialVersionUID = -1639603447458736629L;
+public interface ExternalAuthenticationProvider {
 	
 	/**
-	 * Default constructor
+	 * Attempt to authenticate with the givein information
 	 * 
-	 * @param externalAccountType
+	 * @param authentication - authentication information
+	 * @return authentication - with credentials and details
+	 *
+	 * @throws AuthenticationException - if the authentication fails
 	 */
-	public ExternalAccountTypeAlreadyExistsException(ExternalAccountType externalAccountType, IrUser user)
-	{
-		super("The external account type " + externalAccountType + " already exists for user " + user);
-	}
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException;
 
 }

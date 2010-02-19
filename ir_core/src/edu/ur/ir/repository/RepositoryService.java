@@ -438,4 +438,18 @@ public interface RepositoryService {
 	 * @return - list of available licenses
 	 */
 	public List<LicenseVersion> getAvailableRepositoryLicenses(Long repositoryId);
+	
+	/**
+	 * Determine if external authentication is enabled.
+	 * 
+	 * @return true if external authentication is enabled
+	 */
+	public boolean getExternalAuthenticationEnabled();
+	
+	/**
+	 * Determine if external authentication is enabled.
+	 * 
+	 * @return true if external authentication is enabled
+	 */
+	public boolean isExternalAuthenticationEnabled();
 }
