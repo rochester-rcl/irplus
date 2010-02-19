@@ -37,13 +37,13 @@
 
     
      <tr>
-         <td class="label">Net Id *:</td>
+         <td class="label">Username *:</td>
          <td align="left" class="input"> 
-             <input type="text" id="net_id" name="netId"  value="${irUser.ldapUserName}"/>
+             <input type="text" id="net_id" name="netId"  value="${irUser.externalAccount.externalAccountType.name}"/>
          </td>
      </tr>
      <tr>
-         <td class="label">Net Id password*:</td>
+         <td class="label">Password*:</td>
          <td align="left" class="input"> 
               <input type="password"  id="net_id_password"  name="netIdPassword"  value=""/>
          </td>

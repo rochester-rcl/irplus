@@ -249,20 +249,20 @@
       <!-- end doc -->
         
         <!-- Dialog box for uploading pictures -->
-        <ur:div id="uploadCollectionPictureDialog" cssClass="hidden">
-	        <ur:div cssClass="hd">Picture Upload</ur:div>
-		    <ur:div cssClass="bd">
-		        <ur:basicForm id="addCollectionPicture" name="pictureUploadForm" 
+        <div id="uploadCollectionPictureDialog" class="hidden">
+	        <div class="hd">Picture Upload</div>
+		    <div class="bd">
+		        <form id="addCollectionPicture" name="pictureUploadForm" 
 		            method="post" enctype="multipart/form-data"
-		            action="admin/uploadCollectionPicture.action">
+		            action="/admin/uploadCollectionPicture.action">
 		              
 		            <input type="hidden" id="collection_id" name="collectionId" value="${collection.id}"/>
 		            <div id="upload_form_fields">
 		                <c:import url="collection_upload_form_frag.jsp"/>
 		             </div>
-		        </ur:basicForm>
-		    </ur:div>
-	     </ur:div>
+		        </form>
+		    </div>
+	     </div>
 	     <!--  end upload picture dialog -->
 
 	     <!--  generic error dialog -->   	     

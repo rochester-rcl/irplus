@@ -117,7 +117,7 @@
 											  <input type="hidden" name="parentFolderId" value="${parentFolderId}"/>						               		
 								               		
 								              <tr>
-								              <td colspan="2">  <ur:div id="inviteUserError" cssClass="errorMessage"></ur:div> </td>
+								              <td colspan="2">  <div id="inviteUserError" class="errorMessage"></div> </td>
 									          </tr>
 									          <tr> 
 									              <td></td>

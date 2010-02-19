@@ -25,7 +25,7 @@
 		               
 <input type="hidden" id="newIdentifierType_new" name="newIdentifierType" value="true"/>
 		              
-<ur:div id="identifierTypeError" cssClass="errorMessage"></ur:div>
+<div id="identifierTypeError" class="errorMessage"></div>
 			            
 <table class="formTable">    
     <tr>

@@ -77,32 +77,7 @@
 
             <br/>
             <br/>	        
-	        <ur:div id="newPublishers" ></ur:div>
-	      
-	        <ur:div id="newPublisherDialog" cssClass="hidden">
-                <ur:div cssClass="hd">Publisher Information</ur:div>
-                <ur:div cssClass="bd">
-                    <ur:basicForm id="addPublisher" name="newPublisherForm" 
-		                    method="post" 
-		                    action="user/addPublisher.action">
-	                  <ur:div id="newPublisherDialogFields">
-	                      <c:import url="publisher_form.jsp"/>
-	                  </ur:div>
-	                </ur:basicForm>
-                </ur:div>
-            </ur:div>
-	         
-	        <ur:div id="deletePublisherDialog" cssClass="hidden">
-	            <ur:div cssClass="hd">Delete publishers</ur:div>
-		        <ur:div cssClass="bd">
-		            <ur:basicForm id="deletePublisher" name="deletePublisher" method="post" 
-		                action="user/deletePublisher.action">
-		              
-		                 <ur:div id="deletePublisherError" cssClass="errorMessage"></ur:div>
-			             <p>Are you sure you wish to delete the selected publishers?</p>
-		            </ur:basicForm>
-		        </ur:div>
-	        </ur:div>
+
 	        
       </div>
       <!--  end body div -->
@@ -112,6 +87,33 @@
   
   </div>
   <!--  End doc div-->
+  
+  	        <div id="newPublishers" ></div>
+	      
+	        <div id="newPublisherDialog" class="hidden">
+                <div class="hd">Publisher Information</div>
+                <div class="bd">
+                    <form id="addPublisher" name="newPublisherForm" 
+		                    method="post" 
+		                    action="/user/addPublisher.action">
+	                  <div id="newPublisherDialogFields">
+	                      <c:import url="publisher_form.jsp"/>
+	                  </div>
+	                </form>
+                </div>
+            </div>
+	         
+	        <div id="deletePublisherDialog" class="hidden">
+	            <div class="hd">Delete publishers</div>
+		        <div class="bd">
+		            <form id="deletePublisher" name="deletePublisher" method="post" 
+		                action="/user/deletePublisher.action">
+		              
+		                 <div id="deletePublisherError" class="errorMessage"></div>
+			             <p>Are you sure you wish to delete the selected publishers?</p>
+		            </form>
+		        </div>
+	        </div>
 
 </body>
 </html>

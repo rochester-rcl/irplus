@@ -31,7 +31,7 @@
 		<input type="hidden" id="forgotPasswordForm_message" 
 		       value="${message}"/>		       
 
-		<ur:div id="emailError" cssClass="errorMessage"></ur:div>
+		<div id="emailError" class="errorMessage"></div>
 	    
 	    <label class="dialogLabel" for="forgotPasswordForm_email"> Email </label>
 	    
@@ -39,7 +39,7 @@
 			          
 	    <div class="clear">&nbsp;</div>
 	    
-	    (Note: Password details will be sent to this E-mail ID)
+	    (Note: Password details will be sent to this E-mail )
 	    
 	    <div class="clear">&nbsp;</div> 
 			

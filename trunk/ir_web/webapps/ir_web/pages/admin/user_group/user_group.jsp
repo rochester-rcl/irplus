@@ -76,7 +76,7 @@
  		                               onmouseout="this.className='ur_button';">Delete</button>
 	        <br/>
 	        <br/>
-	        <ur:div id="newUserGroups"></ur:div>
+	        <div id="newUserGroups"></div>
       </div>
       <!--  end body div -->
       
@@ -86,28 +86,28 @@
   </div>
   <!--  End doc div-->
   
-  <ur:div id="newUserGroupDialog">
-    <ur:div cssClass="hd">UserGroup Information</ur:div>
-    <ur:div cssClass="bd">
-      <ur:basicForm id="addUserGroup" name="newUserGroupForm" 
+  <div id="newUserGroupDialog">
+    <div class="hd">UserGroup Information</div>
+    <div class="bd">
+      <form id="addUserGroup" name="newUserGroupForm" 
 		                    method="post" 
-		                    action="admin/createUserGroup.action">
-	    <ur:div id="newUserGroupDialogFields">
+		                    action="/admin/createUserGroup.action">
+	    <div id="newUserGroupDialogFields">
 	        <c:import url="user_group_form.jsp"/>
-	    </ur:div>
-	  </ur:basicForm>
-    </ur:div>
-  </ur:div>
+	    </div>
+	  </form>
+    </div>
+  </div>
 	         
-  <ur:div id="deleteUserGroupDialog">
-    <ur:div cssClass="hd">Delete User Groups</ur:div>
-	  <ur:div cssClass="bd">
-	    <ur:basicForm id="deleteUserGroup" name="deleteUserGroup" method="post" 
-		                action="user/deleteUserGroup.action">
-		 <ur:div id="deleteUserGroupError" cssClass="errorMessage"></ur:div>
+  <div id="deleteUserGroupDialog">
+    <div class="hd">Delete User Groups</div>
+	  <div class="bd">
+	    <form id="deleteUserGroup" name="deleteUserGroup" method="post" 
+		                action="/admin/deleteUserGroup.action">
+		 <div id="deleteUserGroupError" class="errorMessage"></div>
 		   <p>Are you sure you wish to delete the selected user groups?</p>
-        </ur:basicForm>
-      </ur:div>
-  </ur:div>
+        </form>
+      </div>
+  </div>
 </body>
 </html>

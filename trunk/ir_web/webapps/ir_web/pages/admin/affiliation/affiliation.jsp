@@ -76,7 +76,7 @@
  		       onmouseout="this.className='ur_button';">Delete</button>
 	        <br/>
 	        
-	        <ur:div id="newAffiliations"></ur:div>
+	        <div id="newAffiliations"></div>
       </div>
       <!--  end body div -->
 
@@ -87,28 +87,28 @@
   <!--  End doc div-->
 
   
-  <ur:div id="newAffiliationDialog" cssClass="hidden">
-	<ur:div cssClass="hd">Affiliation Information</ur:div>
-	<ur:div cssClass="bd">
-		<ur:basicForm id="addAffiliation" name="newAffiliationForm"
-			method="post" action="admin/createAffiliation.action">
-			<ur:div id="newAffiliationDialogFields">
+  <div id="newAffiliationDialog" class="hidden">
+	<div class="hd">Affiliation Information</div>
+	<div class="bd">
+		<form id="addAffiliation" name="newAffiliationForm"
+			method="post" action="/admin/createAffiliation.action">
+			<div id="newAffiliationDialogFields">
 			    <c:import url="affiliation_form.jsp"/>
-			</ur:div>
-		</ur:basicForm>
-	</ur:div>
-  </ur:div>
+			</div>
+		</form>
+	</div>
+  </div>
 
-  <ur:div id="deleteAffiliationDialog" cssClass="hidden">
-	<ur:div cssClass="hd">Delete affiliations</ur:div>
-	<ur:div cssClass="bd">
-		<ur:basicForm id="deleteAffiliation" name="deleteAffiliation"
-			method="post" action="admin/deleteAffiliation.action">
-			<ur:div id="deleteAffiliationError" cssClass="errorMessage"></ur:div>
+  <div id="deleteAffiliationDialog" class="hidden">
+	<div class="hd">Delete affiliations</div>
+	<div class="bd">
+		<form id="deleteAffiliation" name="deleteAffiliation"
+			method="post" action="/admin/deleteAffiliation.action">
+			<div id="deleteAffiliationError" class="errorMessage"></div>
 			<p>Are you sure you wish to delete the selected affiliation(s)?</p>
-		</ur:basicForm>
-	</ur:div>
-  </ur:div>
+		</form>
+	</div>
+  </div>
   
 </body>
 </html>

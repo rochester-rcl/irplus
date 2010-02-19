@@ -82,35 +82,9 @@
 
        	<br/>
        	<br/>      
-	    <ur:div id="newSubTypes"></ur:div>
+	    <div id="newSubTypes"></div>
 	      
-	      <ur:div id="newSubTypeDialog">
-	          <ur:div cssClass="hd">Sub Type Information</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="addSubType" name="newSubTypeForm" 
-		              method="post" 
-		              action="admin/updateSubType.action">
-		              
-		              <ur:div id="newSubTypeDialogFields">
-	                   <%@ include file="/pages/admin/mime/top_media_type/sub_type_form.jsp" %>
-	                  </ur:div>
-		              
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
-	      
-	      <ur:div id="deleteSubTypeDialog">
-	          <ur:div cssClass="hd">Delete Sub Types</ur:div>
-		      <ur:div cssClass="bd">
-		          <ur:basicForm id="deleteSubType" name="deleteSubType" method="POST" 
-		              action="user/deleteSubType.action">
-		              
-		              
-		              <ur:div id="deleteSubTypeError" cssClass="errorMessage"></ur:div>
-			          <p>Are you sure you wish to delete the selected sub types?</p>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+
 	      	      
 	  </div>
 	  <!--  End body div -->
@@ -119,7 +93,35 @@
       <c:import url="/inc/footer.jsp"/>
    
    </div>  
-   <!--  end doc div -->    	      
+   <!--  end doc div --> 
+   
+   	      <div id="newSubTypeDialog">
+	          <div class="hd">Sub Type Information</div>
+		      <div class="bd">
+		          <form id="addSubType" name="newSubTypeForm" 
+		              method="post" 
+		              action="/admin/updateSubType.action">
+		              
+		              <div id="newSubTypeDialogFields">
+		                  <c:import url="sub_type_form.jsp"/>
+	                  </div>
+		              
+		          </form>
+		      </div>
+	      </div>
+	      
+	      <div id="deleteSubTypeDialog">
+	          <div class="hd">Delete Sub Types</div>
+		      <div class="bd">
+		          <form id="deleteSubType" name="deleteSubType" method="POST" 
+		              action="/admin/deleteSubType.action">
+		              
+		              
+		              <div id="deleteSubTypeError" class="errorMessage"></div>
+			          <p>Are you sure you wish to delete the selected sub types?</p>
+		          </form>
+		      </div>
+	      </div>   	      
  
 </body>
 </html>

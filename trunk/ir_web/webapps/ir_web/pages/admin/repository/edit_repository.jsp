@@ -389,7 +389,7 @@
 		           action="<c:url value="/admin/deleteRepositoryPicture.action"/>">
 		         <input type="hidden" id="picture_id" name="irFilePictureId" value=""/>
 		              
-		         <div id="deletePictureError" cssClass="errorMessage"></div>
+		         <div id="deletePictureError" class="errorMessage"></div>
 			     <p>Are you sure you wish to delete the selected picture?</p>
 		     </form>
 		 </div>

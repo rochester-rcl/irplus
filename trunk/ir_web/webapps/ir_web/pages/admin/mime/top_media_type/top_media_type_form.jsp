@@ -34,7 +34,7 @@
     <input type="hidden" id="newTopMediaTypeForm_new"
 		   name="newTopMediaType" value="true"/>
 		              
-	<ur:div id="topMediaTypeError" cssClass="errorMessage"></ur:div>
+	<div id="topMediaTypeError" class="errorMessage"></div>
 	
 	<!--  get the error messages from fieldErrors -->
 	<p class="errorMessage"><ir:printError errors="${fieldErrors}" 

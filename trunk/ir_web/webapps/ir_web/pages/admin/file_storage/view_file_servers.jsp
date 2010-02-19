@@ -113,7 +113,7 @@
 		  <div class="bd">
 		    <form id="deleteFileServer" method="post"  action="admin/deleteFileServer.action">
 		       <input type="hidden" id="deleteFileServerId" name="fileServerId" value=""/>
-		       <div id="deleteFileServerError" cssClass="errorMessage"></div>
+		       <div id="deleteFileServerError" class="errorMessage"></div>
 			   <p>Are you sure you wish to delete the selected file server?</p>
 		    </form>
 		</div>

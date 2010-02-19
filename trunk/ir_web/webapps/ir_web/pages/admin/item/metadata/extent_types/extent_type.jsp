@@ -76,7 +76,7 @@
  		                
 	      <br/>
 	      <br/>  
-	      <ur:div id="newExtentTypes"></ur:div>
+	      <div id="newExtentTypes"></div>
 	      
       <div>
       <!--  end bd div -->
@@ -87,30 +87,30 @@
   </div>
   <!--  End  context div-->
 
-	        <ur:div id="newExtentTypeDialog" cssClass="hidden">
-	            <ur:div cssClass="hd">Extent Type Information</ur:div>
-		        <ur:div cssClass="bd">
-		            <ur:basicForm id="addExtentType" name="newExtentType" method="POST" 
-		                  action="user/addExtentType.action">
+	        <div id="newExtentTypeDialog" class="hidden">
+	            <div class="hd">Extent Type Information</div>
+		        <div class="bd">
+		            <form id="addExtentType" name="newExtentType" method="POST" 
+		                  action="/user/addExtentType.action">
 		              
 		            <div id="extent_type_form_fields">
 		                <c:import url="extent_type_form.jsp"/>
 		            </div>
 		                
-		            </ur:basicForm>
-		        </ur:div>
-	         </ur:div>
+		            </form>
+		        </div>
+	         </div>
 	      
-	         <ur:div id="deleteExtentTypeDialog" cssClass="hidden">
-	             <ur:div cssClass="hd">Delete Extent Types</ur:div>
-		         <ur:div cssClass="bd">
-		             <ur:basicForm id="deleteExtentType" name="deleteExtentType" method="POST" 
-		                  action="user/deleteExtentType.action">
-		                  <ur:div id="deleteExtentTypeError" cssClass="errorMessage"></ur:div>
+	         <div id="deleteExtentTypeDialog" class="hidden">
+	             <div class="hd">Delete Extent Types</div>
+		         <div class="bd">
+		             <form id="deleteExtentType" name="deleteExtentType" method="POST" 
+		                  action="/user/deleteExtentType.action">
+		                  <div id="deleteExtentTypeError" dlass="errorMessage"></div>
 			              <p>Are you sure you wish to delete the selected extent types?</p>
-		             </ur:basicForm>
-		         </ur:div>
-	         </ur:div>
+		             </form>
+		         </div>
+	         </div>
 
 
 </body>

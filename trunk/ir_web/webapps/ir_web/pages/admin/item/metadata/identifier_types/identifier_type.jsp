@@ -77,7 +77,7 @@
 	        
 	        <br/>
 	        <br/>
-	        <ur:div id="newIdentifierTypes"></ur:div>
+	        <div id="newIdentifierTypes"></div>
 	      
       <div>
       <!--  end bd div -->
@@ -88,28 +88,28 @@
   </div>
   <!--  End  context div-->
 
-	        <ur:div id="newIdentifierTypeDialog" cssClass="hidden">
-	            <ur:div cssClass="hd">Identifier Type Information</ur:div>
-		        <ur:div cssClass="bd">
-		            <ur:basicForm id="addIdentifierType" name="newIdentifierType" method="POST" 
-		                  action="user/addIdentifierType.action">
+	        <div id="newIdentifierTypeDialog" class="hidden">
+	            <div class="hd">Identifier Type Information</div>
+		        <div class="bd">
+		            <form id="addIdentifierType" name="newIdentifierType" method="POST" 
+		                  action="/user/addIdentifierType.action">
 		                <div id="identifierTypeFormFields">
 		                    <c:import url="identifier_type_form.jsp"/>
 		                </div>
-		            </ur:basicForm>
-		        </ur:div>
-	         </ur:div>
+		            </form>
+		        </div>
+	         </div>
 	      
-	         <ur:div id="deleteIdentifierTypeDialog" cssClass="hidden">
-	             <ur:div cssClass="hd">Delete Identifier Types</ur:div>
-		         <ur:div cssClass="bd">
-		             <ur:basicForm id="deleteIdentifierType" name="deleteIdentifierType" method="POST" 
-		                  action="user/deleteIdentifierType.action">
-		                  <ur:div id="deleteIdentifierTypeError" cssClass="errorMessage"></ur:div>
+	         <div id="deleteIdentifierTypeDialog" class="hidden">
+	             <div class="hd">Delete Identifier Types</div>
+		         <div class="bd">
+		             <form id="deleteIdentifierType" name="deleteIdentifierType" method="POST" 
+		                  action="/user/deleteIdentifierType.action">
+		                  <div id="deleteIdentifierTypeError" class="errorMessage"></div>
 			              <p>Are you sure you wish to delete the selected identifier types?</p>
-		             </ur:basicForm>
-		         </ur:div>
-	         </ur:div>
+		             </form>
+		         </div>
+	         </div>
 
 
 </body>

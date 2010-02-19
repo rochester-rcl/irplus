@@ -77,33 +77,9 @@
 	        
 	        <br/>
 	        <br/>
-	        <ur:div id="newSeries"></ur:div>
+	        <div id="newSeries"></div>
 	      
-	        <ur:div id="newSeriesDialog" cssClass="hidden">
-                <ur:div cssClass="hd">Series Information</ur:div>
-                <ur:div cssClass="bd">
-                    <ur:basicForm id="addSeries" name="newSeriesForm" 
-		                    method="post" 
-		                    action="user/addSeries.action">
-	                  <ur:div id="newSeriesDialogFields">
-	                      <c:import url="series_form.jsp"/>
-	                  </ur:div>
-	                </ur:basicForm>
-                </ur:div>
-            </ur:div>
-	         
-	        <ur:div id="deleteSeriesDialog" cssClass="hidden">
-	            <ur:div cssClass="hd">Delete series</ur:div>
-		        <ur:div cssClass="bd">
-		            <ur:basicForm id="deleteSeries" name="deleteSeries" method="post" 
-		                action="user/deleteSeries.action">
-		              
-		              
-		                 <ur:div id="deleteSeriesError" cssClass="errorMessage"></ur:div>
-			             <p>Are you sure you wish to delete the selected series?</p>
-		            </ur:basicForm>
-		        </ur:div>
-	        </ur:div>
+
 	        
       </div>
       <!--  end body div -->
@@ -113,6 +89,32 @@
   
   </div>
   <!--  End doc div-->
+  
+  	        <div id="newSeriesDialog" class="hidden">
+                <div class="hd">Series Information</div>
+                <div class="bd">
+                    <form id="addSeries" name="newSeriesForm" 
+		                    method="post" 
+		                    action="/user/addSeries.action">
+	                  <div id="newSeriesDialogFields">
+	                      <c:import url="series_form.jsp"/>
+	                  </div>
+	                </form>
+                </div>
+            </div>
+	         
+	        <div id="deleteSeriesDialog" class="hidden">
+	            <div class="hd">Delete series</div>
+		        <div class="bd">
+		            <form id="deleteSeries" name="deleteSeries" method="post" 
+		                action="/user/deleteSeries.action">
+		              
+		              
+		                 <div id="deleteSeriesError" class="errorMessage"></div>
+			             <p>Are you sure you wish to delete the selected series?</p>
+		            </form>
+		        </div>
+	        </div>
 
 </body>
 </html>

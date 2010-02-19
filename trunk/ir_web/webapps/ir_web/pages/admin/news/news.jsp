@@ -87,7 +87,7 @@
 	        </table>
 	        <br/>
 	      
-	        <ur:div id="newNewsItems"></ur:div>
+	        <div id="newNewsItems"></div>
 	      
 
 	      
@@ -99,12 +99,12 @@
   </div>
   <!--  End  doc div-->
      
-	        <ur:div id="newNewsItemDialog" >
-	            <ur:div cssClass="hd">News Information</ur:div>
-		        <ur:div cssClass="bd">
-		            <ur:basicForm id="addNewsItem" name="newNewsItemForm" 
+	        <div id="newNewsItemDialog" >
+	            <div class="hd">News Information</div>
+		        <civ class="bd">
+		            <form id="addNewsItem" name="newNewsItemForm" 
 		                 method="post" 
-		                 action="user/addNewsItem.action">
+		                 action="/admin/addNewsItem.action">
 		              
 		                 <input type="hidden" id="newNewsItemForm_id"
 		                        name="id" value=""/>
@@ -112,7 +112,7 @@
 		                 <input type="hidden" id="newNewsItemForm_new"
 		                        name="newNewsItem" value="true"/>
 		              
-		                 <ur:div id="newsItemError" cssClass="errorMessage"></ur:div>
+		                 <div id="newsItemError" class="errorMessage"></div>
 			          
 			             <table class="formTable">    
 		                     <tr>       
@@ -125,24 +125,24 @@
 			                    </td>
 			                 </tr>
 			             </table>
-		             </ur:basicForm>
-		         </ur:div>
-	         </ur:div>
+		             </form>
+		         </div>
+	         </div>
 	        
 	      
-	         <ur:div id="deleteNewsItemDialog">
-	             <ur:div cssClass="hd">Delete News Items</ur:div>
-		         <ur:div cssClass="bd">
-		             <ur:basicForm id="deleteNewsItem" 
+	         <div id="deleteNewsItemDialog">
+	             <div class="hd">Delete News Items</div>
+		         <div class="bd">
+		             <form id="deleteNewsItem" 
 		                  name="deleteNewsItem" method="POST" 
-		                  action="user/deleteNewsItem.action">
+		                  action="/admin/deleteNewsItem.action">
 		              
 		              
-		              <ur:div id="deleteNewsItemError" cssClass="errorMessage"></ur:div>
+		              <div id="deleteNewsItemError" class="errorMessage"></div>
 			          <p>Are you sure you wish to delete the selected news item?</p>
-		          </ur:basicForm>
-		      </ur:div>
-	      </ur:div>
+		          </form>
+		      </div>
+	      </div>
 
 </body>
 </html>

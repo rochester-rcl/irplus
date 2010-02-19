@@ -37,14 +37,14 @@
     <input type="hidden" id="newSubTypeForm_new"
 		   name="newSubType" value="true"/>
 		              
-	<ur:div id="SubTypeError" cssClass="errorMessage">
+	<div id="SubTypeError" class="errorMessage">
 	
 	    <!--  get the error messages from fieldErrors -->
 	    <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		    key="subType.name"/></p>
 	    <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		    key="subTypeAlreadyExists"/></p> 
-	</ur:div>
+	</div>
 
     <table class="formTable">    
 		    <tr>

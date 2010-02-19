@@ -61,10 +61,15 @@
 	</tr>  
 	
 	<tr>
-              <td align="left" class="label">Net Id:</td>
+              <td align="left" class="label">External User Account Name:</td>
               <td align="left" class="input"><input type="text" 
-              id="editUserForm_password_check" name="irUser.ldapUserName" value="${irUser.ldapUserName}" size="45"/></td>
-    </tr>            
+              id="editUserForm_password_check" name="FIX_ME" value="${irUser.externalAccount.externalUserAccountName}" size="45"/></td>
+    </tr>  
+    
+    <tr>
+         <td align="left" class="label">External Account Type:</td>
+         <td align="left" class="input">${irUser.externalAccount.externalAccountType.name}</td>
+    </tr>          
 
 	<tr>
 		 <td align="left" class="label">Phone Number:</td>

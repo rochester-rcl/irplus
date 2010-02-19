@@ -77,7 +77,7 @@
 	      
 	        <br/>
 	        <br/>
-	        <ur:div id="newLanguageTypes"></ur:div>
+	        <div id="newLanguageTypes"></div>
        <div>
        <!--  end body div -->
 
@@ -87,29 +87,29 @@
   <div>
   <!--  End doc div-->
   
- 	         <ur:div id="newLanguageTypeDialog" cssClass="hidden">
-	             <ur:div cssClass="hd">Language Type Information</ur:div>
-		         <ur:div cssClass="bd">
+ 	         <div id="newLanguageTypeDialog" class="hidden">
+	             <div class="hd">Language Type Information</div>
+		         <div class="bd">
 		         
-		         <ur:basicForm id="addLanguageType" name="newLanguageType" method="POST" 
-		              action="user/addLanguageType.action">
+		         <form id="addLanguageType" name="newLanguageType" method="POST" 
+		              action="/user/addLanguageType.action">
 		              <div id="languageTypeForm">
 		                  <c:import url="language_type_form.jsp"/>
 		              </div>
-		          </ur:basicForm>
-		          </ur:div>
-	         </ur:div>
+		          </form>
+		          </div>
+	         </div>
 	      
-	         <ur:div id="deleteLanguageTypeDialog" cssClass="hidden">
-	            <ur:div cssClass="hd">Delete Language Types</ur:div>
-		        <ur:div cssClass="bd">
-		           <ur:basicForm id="deleteLanguageType" name="deleteLanguageType" method="post" 
-		              action="user/deleteLanguageType.action">
-		              <ur:div id="deleteLanguageTypeError" cssClass="errorMessage"></ur:div>
+	         <div id="deleteLanguageTypeDialog" class="hidden">
+	            <div class="hd">Delete Language Types</div>
+		        <div class="bd">
+		           <form id="deleteLanguageType" name="deleteLanguageType" method="post" 
+		              action="/user/deleteLanguageType.action">
+		              <div id="deleteLanguageTypeError" class="errorMessage"></div>
 			          <p>Are you sure you wish to delete the selected language types?</p>
-		           </ur:basicForm>
-		        </ur:div>
-	         </ur:div>	     	      
+		           </form>
+		        </div>
+	         </div>	     	      
 
 
 </body>

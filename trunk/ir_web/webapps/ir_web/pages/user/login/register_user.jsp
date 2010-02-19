@@ -100,10 +100,10 @@
             	return false;
         	}
 
-        	if ( document.getElementById('irUserForm_ldapUserName').value != '') {
-            	if( document.getElementById('irUserForm_ldapPassword').value == null || document.getElementById('irUserForm_ldapPassword').value == '')
+        	if ( document.getElementById('irUserForm_externalUserAccountName').value != '') {
+            	if( document.getElementById('irUserForm_externalUserAccountPassword').value == null || document.getElementById('irUserForm_externalUserAccountPassword').value == '')
             	{
-        		    alert('You must enter your Net ID Password for verification or clear out the Net Id field');
+        		    alert('You must enter your external account Password for verification or clear out the external account field');
         		    return false;
             	}
         	}
@@ -265,30 +265,39 @@
 	      		             </c:forEach>
       	                     </select>
       	                 </td> 
-	                  </tr>              
-                      <tr>
-	                       <td align="left" class="label" colspan="2">		
+	                  </tr>
+	                  
+	                  <!--  only show if external authentication is available -->
+	                  <c:if test="${repositoryService.externalAuthenticationEnabled}">              
+                          <tr>
+	                          <td align="left" class="label" colspan="2">	
 	                          If you wish, you may use your Net ID  and password to login. <strong>Net ID is NOT required to use this system.</strong>		  
-				          </td>
-				      </tr>
-	                  <tr> 
-			              <td align="left" class="label">
-				              Net ID:
-					      </td>
-					      <td align="left" class="input">
-					  		<input type="text" 
-				              id="irUserForm_ldapUserName" name="irUser.ldapUserName" value="${irUser.ldapUserName}" size="40"/>
-				         </td>
-				     </tr>
-				     <tr>
-				         <td align="left" class="label"> 				          
-				              Net ID Password:
-					     </td>
-					     <td align="left" class="input">
-					      <input type="password" 
-				              id="irUserForm_ldapPassword" name="netIdPassword" value="" size="40"/>
-				          </td>
-				      </tr>
+				              </td>
+				          </tr>
+	                      <tr> 
+			                  <td align="left" class="label">
+				                  External Account User Name:
+					          </td>
+					          <td align="left" class="input">
+					  		      <input type="text" 
+				                         id="irUserForm_externalUserAccountName" 
+				                         name="externalUserAccountName" 
+				                         value="${irUser.externalAccount.externalUserAccountName}" 
+				                         size="40"/>
+				              </td>
+				         </tr>
+				         <tr>
+				             <td align="left" class="label"> 				          
+				                  External Account Password:
+					         </td>
+					         <td align="left" class="input">
+					             <input type="password" 
+				                        id="irUserForm_externalAccountPassword" 
+				                        name="externalAccountPassword" 
+				                        value="" size="40"/>
+				             </td>
+				          </tr>
+				      </c:if>
                       <tr>
                           <td align="left" class="label">I accept the terms of the License</td>
                           <td><input id="acceptLicense" name="acceptLicense" value="true" type="checkbox"/></td>
