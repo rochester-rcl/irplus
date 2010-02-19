@@ -70,6 +70,7 @@
              <class name="edu.ur.hibernate.ir.security.db.IrRoleAccessControlEntryDAOTest"/>
              <class name="edu.ur.hibernate.ir.security.db.IrUserAccessControlEntryDAOTest"/>
              <class name="edu.ur.hibernate.ir.security.db.IrUserGroupAccessControlEntryDAOTest"/>
+             
 		     
 		     <class name="edu.ur.hibernate.ir.user.db.IrUserDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.IrUserGroupDAOTest"/>
@@ -84,6 +85,7 @@
              <class name="edu.ur.hibernate.ir.user.db.UserWorkspaceIndexProcessingRecordDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.PersonalItemDeleteRecordDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.PersonalFileDeleteRecordDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.ExternalAccountTypeDAOTest"/>
              
              <class name="edu.ur.hibernate.ir.file.db.IrFileDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.file.db.VersionedFileDAOTest"/> 
