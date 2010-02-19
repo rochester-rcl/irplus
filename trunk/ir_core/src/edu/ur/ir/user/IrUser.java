@@ -34,7 +34,6 @@ import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.repository.LicenseVersion;
 import edu.ur.ir.researcher.Researcher;
-import edu.ur.ir.security.ExternalAccountType;
 import edu.ur.ir.security.Sid;
 import edu.ur.persistent.BasePersistent;
 import edu.ur.security.PersistentUser;
@@ -83,9 +82,7 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	/** lower case value of the user name */
 	private String lowerCaseUsername;
 	
-	/** LDAP user name */
-	private String ldapUserName;
-	
+
 	/**  Encoding used for the password */
 	private String passwordEncoding;
 	
@@ -165,7 +162,7 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	private boolean reBuildUserWorkspaceIndex = false;
 	
 	/** represents an external account that a user can be authenticated against */
-	private Set<UserExternalAccount> userExternalAccounts = new HashSet<UserExternalAccount>();
+	private ExternalUserAccount externalAccount;
 	
 	
 	/**
@@ -1651,13 +1648,6 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 		return userEmail;
 	}
 
-	public String getLdapUserName() {
-		return ldapUserName;
-	}
-
-	public void setLdapUserName(String ldapUserName) {
-		this.ldapUserName = ldapUserName;
-	}
 
 	public boolean isSelfRegistered() {
 		return selfRegistered;
@@ -1764,68 +1754,33 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	public void setReBuildUserWorkspaceIndex(boolean reBuildUserIndex) {
 		this.reBuildUserWorkspaceIndex = reBuildUserIndex;
 	}
-	
+
 	/**
-	 * Add a new external account to a user.  There should only be ONE external 
-	 * account type per user.
+	 * Get the users external account.
 	 * 
-	 * @param externalAccountType - the type of external account
-	 * @param accountUserName - user name for the external account
-	 * @return the created user external account.
-	 * 
-	 * @throws ExternalAccountTypeAlreadyExistsException - if the user already has the specified external account.
+	 * @return the users external account
 	 */
-	public UserExternalAccount addExternalAccount(ExternalAccountType externalAccountType, String accountUserName) throws ExternalAccountTypeAlreadyExistsException
-	{
-		UserExternalAccount externalAccount = null;
-		if( this.getUserExternalAccount(externalAccountType) == null )
-		{
-		    externalAccount = new UserExternalAccount(this, accountUserName, externalAccountType);
-		    userExternalAccounts.add(externalAccount);
-		}
-		else
-		{
-			throw new ExternalAccountTypeAlreadyExistsException(externalAccountType, this); 
-		}
+	public ExternalUserAccount getExternalAccount() {
 		return externalAccount;
 	}
 	
 	/**
-	 * Find an external user account by external account type.
-	 * 
-	 * @param externalAccountType
-	 * @return  the found user external account or null if not found.
+	 * Set the external user account to null
 	 */
-	public UserExternalAccount getUserExternalAccount(ExternalAccountType externalAccountType)
+	public void deleteExternalUserAccount()
 	{
-		for( UserExternalAccount account : userExternalAccounts)
-		{
-			if( account.getExternalAccountType().equals(externalAccountType))
-			{
-				return account;
-			}
-		}
-		return null;
+		externalAccount = null;
 	}
-
+	
 	/**
-	 * Returns an unmodifiable set of user external accounts.
+	 * Creates the external user account and sets it as the current external account.  
 	 * 
-	 * @return
+	 * @param externalUserAccountName - name to use
+	 * @param externalAccountType - account type
 	 */
-	public Set<UserExternalAccount> getUserExternalAccounts() {
-		return Collections.unmodifiableSet(userExternalAccounts);
+	public void createExternalUserAccount(String externalUserAccountName, ExternalAccountType externalAccountType )
+	{
+		externalAccount = new ExternalUserAccount(this,externalUserAccountName, externalAccountType );
 	}
-
-	/**
-	 * Set the list of external user accounts.
-	 * 
-	 * @param userExternalAccounts
-	 */
-	void setUserExternalAccounts(Set<UserExternalAccount> userExternalAccount) {
-		this.userExternalAccounts = userExternalAccount;
-	}
-
-
-
+	
 }

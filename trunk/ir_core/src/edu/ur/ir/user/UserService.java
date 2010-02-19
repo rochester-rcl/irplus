@@ -154,14 +154,6 @@ public interface UserService extends UserDetailsService {
 	
 	
 	/**
-	 * Get a user by their ldap user name.
-	 * 
-	 * @param ldapUserName
-	 * @return the found user or null if the ldap user name is not found
-	 */
-	public IrUser getUserByLdapUserName(String ldapUserName);
-	
-	/**
 	 * Get the User having this email
 	 * 
 	 * @param email Email to verify
@@ -367,6 +359,38 @@ public interface UserService extends UserDetailsService {
 	 */
 	public List<IrUser> getUsers(int rowStart, 
     		int numberOfResultsToShow, String sortElement, OrderType orderType);
+	
+	
+	/**
+	 * Delete the specified user account.
+	 * 
+	 * @param externalUserAccount
+	 */
+	public void delete(ExternalUserAccount externalUserAccount);
+	
+	/**
+	 * Save the external user account.
+	 * 
+	 * @param externalUserAccount
+	 */
+	public void save(ExternalUserAccount externalUserAccount);
+	
+	/**
+	 * Get the list of external user accounts for a given user name.
+	 * 
+	 * @see edu.ur.ir.user.ExternalUserAccountDAO#getByExternalUserName(java.lang.String)
+	 */
+	public List<ExternalUserAccount> getByExternalUserName(String externalUserName);
+	
+	/**
+	 * Get the external user account by the given external user name and external account type.
+	 * 
+	 * @param externalUserName - the external user name
+	 * @param externalAccountType - the external account type used
+	 *  
+	 * @return - the found external user account or null if the external user account is not found.
+	 */
+	public ExternalUserAccount getByExternalUserNameAccountType(String externalUserName, ExternalAccountType externalAccountType);
 }
 
 

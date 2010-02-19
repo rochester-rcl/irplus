@@ -14,7 +14,7 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.security;
+package edu.ur.ir.user;
 
 import edu.ur.persistent.CommonPersistent;
 

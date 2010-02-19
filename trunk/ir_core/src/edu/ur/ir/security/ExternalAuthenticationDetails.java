@@ -14,28 +14,24 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.user;
 
+package edu.ur.ir.security;
+
+import edu.ur.ir.user.ExternalAccountType;
 
 /**
- * Represents an account type that already exists for a given user.
+ * Represents authentication by an external entity.
  * 
  * @author Nathan Sarr
  *
  */
-public class ExternalAccountTypeAlreadyExistsException extends Exception{
-
-	/** eclipse generated id */
-	private static final long serialVersionUID = -1639603447458736629L;
+public interface ExternalAuthenticationDetails {
 	
 	/**
-	 * Default constructor
+	 * Returns the external account type.
 	 * 
-	 * @param externalAccountType
+	 * @return the external account type
 	 */
-	public ExternalAccountTypeAlreadyExistsException(ExternalAccountType externalAccountType, IrUser user)
-	{
-		super("The external account type " + externalAccountType + " already exists for user " + user);
-	}
+	public ExternalAccountType getType();
 
 }

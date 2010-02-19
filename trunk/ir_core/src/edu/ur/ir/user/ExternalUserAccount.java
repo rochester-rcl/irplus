@@ -16,7 +16,6 @@
 
 package edu.ur.ir.user;
 
-import edu.ur.ir.security.ExternalAccountType;
 import edu.ur.persistent.BasePersistent;
 
 /**
@@ -25,7 +24,7 @@ import edu.ur.persistent.BasePersistent;
  * @author Nathan Sarr
  *
  */
-public class UserExternalAccount extends BasePersistent{
+public class ExternalUserAccount extends BasePersistent{
 	
 	/** eclipse generated id */
 	private static final long serialVersionUID = 1233063477455271165L;
@@ -42,7 +41,7 @@ public class UserExternalAccount extends BasePersistent{
 	/**
 	 * Package protected constructor
 	 */
-	UserExternalAccount(){};
+	ExternalUserAccount(){};
 	
 	/**
 	 * Constructor for an external user account.
@@ -51,7 +50,7 @@ public class UserExternalAccount extends BasePersistent{
 	 * @param externalUserAccountName - external user account name
 	 * @param externalAuthorizationAccountType - authorization account type
 	 */
-	public UserExternalAccount(IrUser user, 
+	public ExternalUserAccount(IrUser user, 
 			String externalUserAccountName, 
 			ExternalAccountType externalAuthorizationAccountType)
 	{
@@ -74,7 +73,7 @@ public class UserExternalAccount extends BasePersistent{
 	 * 
 	 * @param user
 	 */
-	public void setUser(IrUser user) {
+	void setUser(IrUser user) {
 		this.user = user;
 	}
 
@@ -115,6 +114,11 @@ public class UserExternalAccount extends BasePersistent{
 		this.externalAccountType = externalAccountType;
 	}
 	
+	/**
+	 * To string method
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer("[ id = ");
@@ -127,6 +131,11 @@ public class UserExternalAccount extends BasePersistent{
 		return sb.toString();
 	}
 	
+	/**
+	 * Hash code creation.
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
 	public int hashCode()
 	{
 		int hash = 0;
@@ -136,12 +145,17 @@ public class UserExternalAccount extends BasePersistent{
     	return hash;
 	}
 	
+	/**
+	 * Determines equality.
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof UserExternalAccount)) return false;
+		if (!(o instanceof ExternalUserAccount)) return false;
 
-		final UserExternalAccount other = (UserExternalAccount) o;
+		final ExternalUserAccount other = (ExternalUserAccount) o;
 
 		if( ( user != null && !user.equals(other.getUser()) ) ||
 			( user == null && other.getUser() != null ) ) return false;
