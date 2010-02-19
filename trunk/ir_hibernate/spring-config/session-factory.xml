@@ -111,6 +111,8 @@
                 <value>edu/ur/hibernate/ir/user/db/UserWorkspaceIndexProcessingRecord.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/PersonalFileDeleteRecord.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/PersonalItemDeleteRecord.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/ExternalAccountType.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/ExternalUserAccount.hbm.xml</value>
                                 
                 <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrClassTypePermission.hbm.xml</value>
@@ -118,7 +120,7 @@
                 <value>edu/ur/hibernate/ir/security/db/IrUserAccessControlEntry.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrRoleAccessControlEntry.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrUserGroupAccessControlEntry.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/security/db/ExternalAccountType.hbm.xml</value>
+                
 
                 <value>edu/ur/hibernate/ir/file/db/IrFile.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/file/db/VersionedFile.hbm.xml</value>
