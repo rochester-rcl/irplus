@@ -718,8 +718,11 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 				    try
 				    {
 				    	Authentication auth = externalAuthenticationProvider.authenticate(new LdapAuthenticationToken(externalUserAccountName, externalAccountPassword));
-				        ExternalAuthenticationDetails externalDetails = null;
+				        
+				    	log.debug("Auth = " + auth);
+				    	ExternalAuthenticationDetails externalDetails = null;
 				    	
+				        log.debug( " auth details = " + auth.getDetails());
 				    	if( auth.getDetails() instanceof ExternalAuthenticationDetails)
 				        {
 				    		externalDetails  = (ExternalAuthenticationDetails)auth.getDetails();
@@ -729,16 +732,15 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 				    	{
 				    		externalDetails.getType();
 				    		ExternalUserAccount externalAccount = userService.getByExternalUserNameAccountType(externalUserAccountName, externalDetails.getType());
-				    		IrUser externalUser = externalAccount.getUser();
-				    	
+				    		
 						    // we have an interesting problem
 						    // user has authenticated correctly - but the user name already exists in the 
 						    // system  
-						    if( externalUser != null )
+						    if( externalAccount != null )
 						    {
 							    failure = true;
 							    netIdAlreadyExistsPasswordSuccess = true;
-					    	    addFieldError("netIdAlreadyExists", "The specified user name already has an account");
+					    	    addFieldError("netIdAlreadyExists", "The specified user name already has an account for system: " + externalAccount.getExternalAccountType().getName());
 						    }
 						    else
 						    {
