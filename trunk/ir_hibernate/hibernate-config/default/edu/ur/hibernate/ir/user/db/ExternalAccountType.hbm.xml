@@ -24,8 +24,8 @@
 	
 	@author Nathan Sarr
 -->
-<hibernate-mapping package="edu.ur.ir.security">
-	<class name="ExternalAccountType" schema="ir_security" table="external_account_type"
+<hibernate-mapping package="edu.ur.ir.user">
+	<class name="ExternalAccountType" schema="ir_user" table="external_account_type"
 		lazy="true">
 
         <cache usage="nonstrict-read-write" />
@@ -34,7 +34,7 @@
 		<id name="id" type="long" column="external_account_type_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_security.external_account_type_seq</param>
+				<param name="sequence">ir_user.external_account_type_seq</param>
 			</generator>
 		</id>
 

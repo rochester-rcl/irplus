@@ -47,9 +47,6 @@
 		<property name="lowerCaseUsername" column="lower_case_user_name" type="string"
 			 not-null="true" access="field" />
 
-		<property name="ldapUserName" column="ldap_user_name" type="string"
-			access="field" />
-			
 		<property name="firstName" column="first_name" type="string"
 			access="field" />
 		
@@ -133,6 +130,12 @@
 			insert="true"
 			update="true" 
 			unique="true"/>	
+		
+		<one-to-one class="ExternalUserAccount" 
+			name="externalAccount" 
+			access="field"
+			cascade="all"
+			property-ref="user"/>
 						
 		<!-- Researcher information for the user -->
 		<one-to-one class="edu.ur.ir.researcher.Researcher" 
@@ -140,6 +143,7 @@
 			name="researcher"
 		    cascade="all" 
 			property-ref="user"/>
+	
 		
 		<!-- Departments for the user -->
 		<set name="departments" 
@@ -250,7 +254,7 @@
 			<key column="user_id" />
 			<many-to-many column="role_id" class="edu.ur.ir.user.IrRole"/>
 		</set>
-	
+
 	 </class>
 		
 	<!--  Get a count of users in the system -->
@@ -267,12 +271,6 @@
 		IrUser.username = ?
 	</query>
 	
-	   <!-- named query for getting a user -->
-	<query name="getUserByLdapName">
-		from IrUser as IrUser where
-		IrUser.ldapUserName = ?
-	</query>
-
     <!-- named query for getting a user -->
 	<query name="getUserByToken">
 		from IrUser as IrUser where
