@@ -39,6 +39,9 @@ import edu.ur.ir.user.Affiliation;
 import edu.ur.ir.user.AffiliationService;
 import edu.ur.ir.user.Department;
 import edu.ur.ir.user.DepartmentService;
+import edu.ur.ir.user.ExternalAccountType;
+import edu.ur.ir.user.ExternalAccountTypeService;
+import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
@@ -194,6 +197,14 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	/** Comparator for name based classes */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 	
+	/** service for dealing with external account type information */
+	private ExternalAccountTypeService externalAccountTypeService;
+	
+	/** Type of external account for the user */
+	private long externalAccountTypeId = 0;
+	
+	/** the external account user name */
+	private String externalAccountUserName;
 
 
 	/** Default constructor */
@@ -228,8 +239,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		{
 			addFieldError("userAlreadyExists", 
 					"This User name already exist : " + irUser.getUsername());
-			// Reloads the affiliation & department drop downs
-			execute();
 			
 	        return "added";
 		}
@@ -240,18 +249,19 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 			addFieldError("emailExistError", 
 					"This Email already exists in the system. Email: " + defaultEmail.getEmail());
 			
-            execute();
-			
 	        return "added";
 		}
 		
+
+		if( !externalAccountIsOk() )
+		{
+			return "added";
+		}
 		if ((!isAdminRole()) && (!isUserRole()) )
 		{
 			addFieldError("rolesNotSelectedError", 
 			"Please select a role for this user." );
-             execute();
-			
-	        return "added";
+             return "added";
 		}
 		
 		String password = irUser.getPassword();
@@ -267,6 +277,12 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		irUser.setPhoneNumber(phoneNumber);
 		irUser.setFirstName(firstName);
 		irUser.setLastName(lastName);
+		
+		if( externalAccountTypeId > 0 )
+		{
+			ExternalAccountType externalAccountType = externalAccountTypeService.get(externalAccountTypeId, false);
+			irUser.createExternalUserAccount(this.externalAccountUserName, externalAccountType);
+		}
 
 		setDepartments();
 		updateAffilation();
@@ -332,6 +348,12 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 			return "updated";
 		}
 		
+
+		if( !externalAccountIsOk() )
+		{
+			return "updated";
+		}
+		
 		if ((!isAdminRole()) && (!isUserRole()) ) 
 		{
 			addFieldError("rolesNotSelectedError", 
@@ -343,6 +365,29 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		irUser.setAccountExpired(accountExpired);
 		irUser.setCredentialsExpired(credentialsExpired);
 		irUser.setAccountLocked(accountLocked);
+		
+		ExternalUserAccount externalUserAccount = irUser.getExternalAccount();
+		if( externalAccountTypeId > 0 )
+		{
+			ExternalAccountType externalAccountType = externalAccountTypeService.get(externalAccountTypeId, false);
+			
+			if( externalUserAccount == null )
+			{
+			    
+			    irUser.createExternalUserAccount(externalAccountUserName, externalAccountType);
+			}
+			else
+			{
+				externalUserAccount.setExternalAccountType(externalAccountType);
+				externalUserAccount.setExternalUserAccountName(externalAccountUserName);
+			}
+		}
+		else if(externalUserAccount != null)
+		{
+			ExternalUserAccount externalAccount = irUser.getExternalAccount();
+			irUser.deleteExternalUserAccount();
+			userService.delete(externalAccount);
+		}
 				
 		setDepartments();
 			    	
@@ -727,6 +772,13 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		Collections.sort(departments, nameComparator);
 		return departments ;
 	}
+	
+	public List<ExternalAccountType> getExternalAccountTypes() {
+		List<ExternalAccountType> externalAccountTypes;
+		externalAccountTypes = externalAccountTypeService.getAll();
+		Collections.sort(externalAccountTypes, nameComparator);
+		return  externalAccountTypes;
+	}
 
 	public Long[] getDepartmentId() {
 		return departmentIds;
@@ -782,6 +834,40 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 
 	public void setAuthorRole(boolean authorRole) {
 		this.authorRole = authorRole;
+	}
+	
+	/**
+	 * Make sure the external account is set up correctly
+	 * @return
+	 */
+	private boolean externalAccountIsOk()
+	{
+		boolean ok = true;
+		
+		// same as null
+		if(externalAccountUserName != null && externalAccountUserName.trim().equals(""))
+		{
+			externalAccountUserName = null;
+		}
+		
+		if( externalAccountTypeId > 0 && externalAccountUserName == null )
+		{
+			ok = false;
+			addFieldError("externalAccountError", 
+					"The user must have both an external account type and user name - clear out both fields if it should not exist1");
+			
+	        
+		}
+		
+		if( externalAccountTypeId <= 0 && externalAccountUserName != null)
+		{
+			addFieldError("externalAccountError", 
+					"The user must have both an external account type and user name - clear out both fields if it should not exist2");
+			
+	        ok = false;
+		}
+		return ok;
+		
 	}
 	
 	/**
@@ -1033,6 +1119,31 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	
 	public void setUserId(Long userId) {
 		adminUserId = userId;
+	}
+
+	public ExternalAccountTypeService getExternalAccountTypeService() {
+		return externalAccountTypeService;
+	}
+
+	public void setExternalAccountTypeService(
+			ExternalAccountTypeService externalAccountTypeService) {
+		this.externalAccountTypeService = externalAccountTypeService;
+	}
+
+	public long getExternalAccountTypeId() {
+		return externalAccountTypeId;
+	}
+
+	public void setExternalAccountTypeId(long externalAccountTypeId) {
+		this.externalAccountTypeId = externalAccountTypeId;
+	}
+
+	public String getExternalAccountUserName() {
+		return externalAccountUserName;
+	}
+
+	public void setExternalAccountUserName(String externalAccountUserName) {
+		this.externalAccountUserName = externalAccountUserName;
 	}
 
 

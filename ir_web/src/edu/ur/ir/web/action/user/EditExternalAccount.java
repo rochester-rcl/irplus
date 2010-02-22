@@ -53,7 +53,6 @@ public class EditExternalAccount extends ActionSupport implements UserIdAware {
 	/** Repository service for placing information in the repository */
 	private RepositoryService repositoryService;
 	
-	
 	/**
 	 * Execute method
 	 */
@@ -145,8 +144,10 @@ public class EditExternalAccount extends ActionSupport implements UserIdAware {
 		}
 		else
 		{
-			added = false;
-			addFieldError("userNameEmpty", "The external account user name must be entered");
+			added = true;
+			ExternalUserAccount externalAccount = irUser.getExternalAccount();
+			irUser.deleteExternalUserAccount();
+			userService.delete(externalAccount);
 		}
 		
 
