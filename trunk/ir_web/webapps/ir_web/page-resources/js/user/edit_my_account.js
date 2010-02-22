@@ -29,12 +29,14 @@ var newEmailAction = basePath + 'user/createEmail.action';
 var deleteEmailAction = basePath + 'user/deleteEmail.action';
 var defaultEmailAction = basePath + 'user/setDefaultEmail.action';
 
+var myAccountAction = basePath + 'user/myAccount.action';
+
 
 // Action to change password
 var changePasswordAction = basePath + 'user/changeMyPassword.action';
 
-//Action to change password
-var changeNetIdAction = basePath + 'user/changeNetId.action';
+//Action to change external account information
+var editExternalAccountAction = basePath + 'user/editExternalAccount.action';
 
 YAHOO.ur.user.account = 
 {
@@ -42,9 +44,9 @@ YAHOO.ur.user.account =
 	/**
 	 * clear the change password form
 	 */
-	clearNetIdForm : function()
+	clearExternalAccountForm : function()
 	{
-	     var divToUpdate = document.getElementById('net_id_error');
+	     var divToUpdate = document.getElementById('external_account_error');
          divToUpdate.innerHTML = ""; 	
 	},
    
@@ -164,52 +166,50 @@ YAHOO.ur.user.account =
     /**
      * Change password dialog
      */
-    createNetIdDialog : function()
+    createExternalAccountDialog : function()
     {
         // Define various event handlers for Dialog
 	    var handleSubmit = function() 
 	    {
-	        YAHOO.util.Connect.setForm('changeNetIdForm');
+	        YAHOO.util.Connect.setForm('editExternalAccountForm');
 	        var cObj = YAHOO.util.Connect.asyncRequest('post',
-        	changeNetIdAction, callback);
+        	editExternalAccountAction, callback);
 	    };
 	
 	    // handle a cancel of the change net id
 	    var handleCancel = function() 
 	    {
-	        YAHOO.ur.user.account.clearNetIdForm();
-	        YAHOO.ur.user.account.changeNetIdDialog.hide();
+	        YAHOO.ur.user.account.clearExternalAccountForm();
+	        YAHOO.ur.user.account.editExternalAccountDialog.hide();
 	    };
 	
 	    var handleSuccess = function(o) 
 	    {
-	    	
-	    	// check for the timeout - forward user to login page if timout
+	    	// check for the timeout - forward user to login page if timeout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {       
                 //get the response from adding a publisher
 		        var response = o.responseText;
-		        var netIdForm = document.getElementById('net_id_fields');
-		    
+		        var externalAccountForm = document.getElementById('external_account_fields');
 		        // update the form fields with the response.  This updates
 		        // the form, if there was an issue, update the form with
 		        // the error messages.
-		        netIdForm.innerHTML = o.responseText;
-		    
+		        externalAccountForm.innerHTML = o.responseText;
 		        // determine if the add/edit was a success
-		        var success = document.getElementById("net_id_added").value;
+		        var success = document.getElementById("external_account_added").value;
 		        //if the publisher was not added then show the user the error message.
 		        // received from the server
 		        if( success == "false" )
 		        {
-		        	YAHOO.ur.user.account.changeNetIdDialog.showDialog();
+		        	YAHOO.ur.user.account.editExternalAccountDialog.showDialog();
 		        }
 		        else
 		        {
 		            // we can clear the form if the publisher was added
-		        	YAHOO.ur.user.account.changeNetIdDialog.hide();
-		        	YAHOO.ur.user.account.clearNetIdForm();
+		        	YAHOO.ur.user.account.editExternalAccountDialog.hide();
+		        	YAHOO.ur.user.account.clearExternalAccountForm();
+		        	window.location = myAccountAction;
 		        }
                 
             }
@@ -218,14 +218,15 @@ YAHOO.ur.user.account =
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	        alert('Change net id submission failed ' + o.status);
+	        alert('Edit external account submission failed ' + o.status);
  	    };
+ 	    
 
 	    // Instantiate the Dialog
 	    // make it modal - 
 	    // it should not start out as visible - it should not be shown until 
 	    // change password button is clicked.
-	    YAHOO.ur.user.account.changeNetIdDialog = new YAHOO.widget.Dialog('change_net_id_dialog', 
+	    YAHOO.ur.user.account.editExternalAccountDialog = new YAHOO.widget.Dialog('edit_external_account_dialog', 
         { width : "450px",
 		  visible : false, 
 		  modal : true,
@@ -234,22 +235,22 @@ YAHOO.ur.user.account =
 		} );
 
         // show and center the dialog box
-        YAHOO.ur.user.account.changeNetIdDialog.showDialog = function()
+        YAHOO.ur.user.account.editExternalAccountDialog.showDialog = function()
         {
-            YAHOO.ur.user.account.changeNetIdDialog.center();
-            YAHOO.ur.user.account.changeNetIdDialog.show();
+            YAHOO.ur.user.account.editExternalAccountDialog.center();
+            YAHOO.ur.user.account.editExternalAccountDialog.show();
         }
    
 	    // Wire up the success and failure handlers
 	    var callback = { success: handleSuccess, failure: handleFailure };
 			
 	    // Render the Dialog
-	    YAHOO.ur.user.account.changeNetIdDialog.render();
+	    YAHOO.ur.user.account.editExternalAccountDialog.render();
 	
         // listener for showing the dialog when clicked.
-	    YAHOO.util.Event.addListener("show_change_net_id", "click", 
-	        YAHOO.ur.user.account.changeNetIdDialog.showDialog, 
-	        YAHOO.ur.user.account.changeNetIdDialog, true);	
+	    YAHOO.util.Event.addListener("edit_external_account", "click", 
+	        YAHOO.ur.user.account.editExternalAccountDialog.showDialog, 
+	        YAHOO.ur.user.account.editExternalAccountDialog, true);	
     },
     
     /**
@@ -277,7 +278,7 @@ YAHOO.ur.user.account =
     init : function()
     {
         YAHOO.ur.user.account.createChangePasswordDialog();
-        YAHOO.ur.user.account.createNetIdDialog();
+        YAHOO.ur.user.account.createExternalAccountDialog();
         var myTabs = new YAHOO.widget.TabView("user-account-tabs");
     }
 };

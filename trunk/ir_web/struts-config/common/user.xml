@@ -1057,10 +1057,11 @@
            <result name="success">/pages/user/login/change_password_form.jsp</result>
         </action> 
         
-         <action name="changeNetId" 
-            class="edu.ur.ir.web.action.user.ChangeNetId">
+         <action name="editExternalAccount" 
+            class="edu.ur.ir.web.action.user.EditExternalAccount">
             <interceptor-ref name="editStack"/>
-           <result name="success">/pages/user/login/change_net_id_form.jsp</result>
+           <result name="success">/pages/user/login/edit_external_account_form.jsp</result>
+           <result name="accessDenied">/accessDenied.jsp</result>
         </action> 
         
  		<!--  ************************************ -->

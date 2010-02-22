@@ -21,17 +21,23 @@
 
 <%@ taglib prefix="ir" uri="ir-tags"%>
 
-<div id="net_id_error">           
+<div id="external_account_error">           
     <!--  get the error messages from fieldErrors -->
 	<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-			key="netIdAlreadyExists"/></p>
+			key="userNull"/></p>
 	<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-			key="netIdPasswordFail"/></p> 
+			key="externalAutthenticationDisabled"/></p> 
 	<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-			key="netIdPasswordEmpty"/></p>      
+			key="userNameAlreadyExists"/></p>      
+	<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+			key="passwordFail"/></p>   
+	<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+			key="passwordEmpty"/></p>
+	<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+			key="userNameEmpty"/></p>      
 </div>
 
-<input type="hidden" id="net_id_added" value="${added}"/>
+<input type="hidden" id="external_account_added" value="${added}"/>
 
 <table class="formTable"> 
 
@@ -39,13 +45,13 @@
      <tr>
          <td class="label">Username *:</td>
          <td align="left" class="input"> 
-             <input type="text" id="net_id" name="netId"  value="${irUser.externalAccount.externalAccountType.name}"/>
+             <input type="text" id="user_name" name="userName"  value="${irUser.externalAccount.externalUserAccountName}"/>
          </td>
      </tr>
      <tr>
          <td class="label">Password*:</td>
          <td align="left" class="input"> 
-              <input type="password"  id="net_id_password"  name="netIdPassword"  value=""/>
+              <input type="password"  id="password"  name="password"  value=""/>
          </td>
      </tr>
  

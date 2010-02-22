@@ -89,11 +89,13 @@
 	                               onmouseover="this.className='ur_buttonover';"
 	                               onmouseout="this.className='ur_button';"
 	                               >Change Password</button>
-	                               
-	                      <button class="ur_button" id="show_change_net_id" 
+	                       
+	                      <c:if test="${repositoryService.externalAuthenticationEnabled }">
+	                      <button class="ur_button" id="edit_external_account" 
 	                               onmouseover="this.className='ur_buttonover';"
 	                               onmouseout="this.className='ur_button';"
-	                               >Change Net Id</button>
+	                               >Edit External Account</button>
+	                      </c:if>
 
 	                	  <form id="addUser" name="newUserForm" method="post" 
 			            	  action="<c:url value="/user/saveMyAccount.action"/>"  onsubmit="return  YAHOO.ur.user.account.formValidation();">
@@ -115,15 +117,15 @@
 				              <td> User Name: </td>
 						      <td> ${irUser.username}</td>
 					      </tr>
-					      
+					       <c:if test="${repositoryService.externalAuthenticationEnabled }">
 					      <tr>
 				              <td>External Account: </td>
 				              <c:if test="${irUser.externalAccount != null}">
-				                  <td> ${irUser.externalAccount.externalUserAccountName} - ${irUser.externalAccount.externalAccountType.name}</td>
+				                  <td> ${irUser.externalAccount.externalUserAccountName} &nbsp;<strong>[${irUser.externalAccount.externalAccountType.name}]</strong></td>
 				              </c:if>
 						      
 					      </tr>
-	
+					      </c:if>
 						  <tr>
 						      <td> First Name:  </td>
 				              <td>
@@ -289,14 +291,14 @@
 		      </div>
 	      </div>
 	      
-	     <div id="change_net_id_dialog" class="hidden">
-	          <div class="hd">Change or Add Net Id</div>
+	     <div id="edit_external_account_dialog" class="hidden">
+	          <div class="hd">Edit External Account Information</div>
 		      <div class="bd">
-		          <form id="change_net_id_form" name="changeNetIdForm" method="post" 
-		              action="<c:url value="/user/changeNetId.action"/>">
+		          <form id="edit_external_account_form" name="editExternalAccountForm" method="post" 
+		              action="<c:url value="/user/editExternalAccount.action"/>">
 			         
-					  <div id="net_id_fields">
-					     <c:import url="change_net_id_form.jsp"/>
+					  <div id="external_account_fields">
+					     <c:import url="edit_external_account_form.jsp"/>
 	                  </div>			         
 		          </form>
 		      </div>
