@@ -117,14 +117,14 @@
 				              <td> User Name: </td>
 						      <td> ${irUser.username}</td>
 					      </tr>
-					       <c:if test="${repositoryService.externalAuthenticationEnabled }">
-					      <tr>
-				              <td>External Account: </td>
-				              <c:if test="${irUser.externalAccount != null}">
-				                  <td> ${irUser.externalAccount.externalUserAccountName} &nbsp;<strong>[${irUser.externalAccount.externalAccountType.name}]</strong></td>
-				              </c:if>
-						      
-					      </tr>
+					      
+					      <c:if test="${repositoryService.externalAuthenticationEnabled }">
+					          <tr>
+				                  <td>External Account: </td>
+				                  <c:if test="${irUser.externalAccount != null}">
+				                      <td> ${irUser.externalAccount.externalUserAccountName} &nbsp;<strong>[${irUser.externalAccount.externalAccountType.name}]</strong></td>
+				                  </c:if>
+					          </tr>
 					      </c:if>
 						  <tr>
 						      <td> First Name:  </td>

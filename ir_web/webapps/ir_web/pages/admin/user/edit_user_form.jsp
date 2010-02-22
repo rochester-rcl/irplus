@@ -27,6 +27,8 @@
 
 <table class="formTable">
 
+    <tr>
+        <td colspan="2">
 		<!--  represents a successful submission -->
 		 <input type="hidden" id="editUserForm_success" value="${added}"/>
 		
@@ -40,8 +42,9 @@
                    key="rolesNotSelectedError"/></p>
           
           <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-                   key="ldapNameExists"/></p>
-          
+                   key="externalAccountError"/></p>
+         </td>
+        </tr> 
 	<tr>
 		 <td align="left" class="label"> First Name:</td>
          <td align="left" class="input"><input type="text" 
@@ -60,16 +63,30 @@
               id="editUserForm_name" name="irUser.username" value="${irUser.username}" size="45"/> </td> 
 	</tr>  
 	
-	<tr>
+	<c:if test="${repositoryService.externalAuthenticationEnabled }">
+	    <tr>
               <td align="left" class="label">External User Account Name:</td>
               <td align="left" class="input"><input type="text" 
-              id="editUserForm_password_check" name="FIX_ME" value="${irUser.externalAccount.externalUserAccountName}" size="45"/></td>
-    </tr>  
+              id="editUserForm_password_check" name="externalAccountUserName" value="${irUser.externalAccount.externalUserAccountName}" size="45"/></td>
+        </tr>  
     
-    <tr>
-         <td align="left" class="label">External Account Type:</td>
-         <td align="left" class="input">${irUser.externalAccount.externalAccountType.name}</td>
-    </tr>          
+   	    <tr>
+		     <td align="left" class="label">External Account Type:</td>
+ 		     <td align="left" class="input"> 
+      	         <select id="editUserForm_external_account_type" name="externalAccountTypeId" />
+      	             <option value = "0"> N/A</option>
+	      		     <c:forEach items="${externalAccountTypes}" var="externalAccountType">
+	      		   
+	      			      <option value = "${externalAccountType.id}"
+	      			      <c:if test="${externalAccountType.id == irUser.externalAccount.externalAccountType.id}">
+	      				   selected
+	      			      </c:if>
+	      			      > ${externalAccountType.name}</option>
+	      		     </c:forEach>
+      	         </select>
+		    </td> 
+	    </tr>   
+	</c:if>               
 
 	<tr>
 		 <td align="left" class="label">Phone Number:</td>
