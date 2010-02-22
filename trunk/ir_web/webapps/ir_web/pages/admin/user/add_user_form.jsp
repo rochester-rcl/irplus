@@ -37,7 +37,7 @@
                    key="rolesNotSelectedError"/></p>
                    
           <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-                   key="ldapNameExists"/></p>
+                   key="externalAccountError"/></p>
 </div>
 
 <table class="formTable">
@@ -79,13 +79,28 @@
               id="newUserForm_password_check" name="passwordCheck" value="${irUser.password}" size="45"/></td>
          </tr>
          
-         
-         <tr>
-              <td align="left" class="label">External Account Username:</td>
-              <td align="left" class="input"><input type="text" 
-              id="newUserForm_password_check" name="FIX_ME" value="${irUser.externalAccount.externalUserAccountName}" size="45"/></td>
-         </tr>
-         
+        <c:if test="${repositoryService.externalAuthenticationEnabled }">
+             <tr>
+                 <td align="left" class="label">External Account Username:</td>
+                 <td align="left" class="input"><input type="text" 
+                     id="newUserForm_password_check" 
+                     name="externalAccountUserName" 
+                     value="${irUser.externalAccount.externalUserAccountName}" 
+                     size="45"/></td>
+             </tr>
+             <tr>
+      	         <td align="left" class="label">External Account Type:</td>
+      	         <td align="left" class="input">
+
+      	             <select id="newUserForm_department" name="departmentId" />
+      	   		         <option value = "0"> N/A</option>
+	      		         <c:forEach items="${externalAccountTypes}" var="externalAccountType">
+	      			        <option value = "${externalAccountType.id}"> ${externalAccountType.name}</option>
+	      		         </c:forEach>
+      	             </select>
+      	          </td>
+      	     </tr>
+         </c:if>
          
          <tr>
   			<td align="left" class="label"> E-mail:*</td>
