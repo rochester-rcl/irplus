@@ -590,7 +590,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		irUser.setAccountLocked(accountLocked);
 		irUser.setFirstName(firstName);
 		irUser.setLastName(lastName);
-		if( externalAccount != null )
+		if( externalAccount != null   && repositoryService.isExternalAuthenticationEnabled())
 		{
 		    irUser.createExternalUserAccount(externalAccount.getExternalUserAccountName(), externalAccount.getExternalAccountType());
 		}
