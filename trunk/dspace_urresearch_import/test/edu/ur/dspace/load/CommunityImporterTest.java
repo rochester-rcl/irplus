@@ -33,7 +33,7 @@ import edu.ur.dspace.model.GroupPermission;
 import edu.ur.dspace.model.Link;
 import edu.ur.dspace.test.ContextHolder;
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.dspace.test.PropertiesLoader;
 
 /**

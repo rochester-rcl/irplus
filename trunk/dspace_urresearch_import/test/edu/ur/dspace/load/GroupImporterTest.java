@@ -32,7 +32,7 @@ import org.w3c.dom.DOMException;
 import edu.ur.dspace.model.DspaceGroup;
 import edu.ur.dspace.test.ContextHolder;
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.IllegalFileSystemNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 
 /**
  * Help with testing user imports
