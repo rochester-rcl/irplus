@@ -152,7 +152,7 @@
 		                       <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="netIdPasswordEmpty"/></p>
 		                       <p class="errorMessage">
-		                           <ir:printError errors="${fieldErrors}"  key="nnetIdAlreadyExists"/> 
+		                           <ir:printError errors="${fieldErrors}"  key="netIdAlreadyExists"/> 
 		                           <c:if test="${netIdAlreadyExists}"> - Try <a href="${loginPage}">Logging In</a></c:if>
 		                       </p>
 			              </td>
@@ -271,7 +271,7 @@
 	                  <c:if test="${repositoryService.externalAuthenticationEnabled}">              
                           <tr>
 	                          <td align="left" class="label" colspan="2">	
-	                          If you wish, you may use your Net ID  and password to login. <strong>Net ID is NOT required to use this system.</strong>		  
+	                          If you wish, you may use an external account and password to login. <strong>An external account is NOT required to use this system.</strong>		  
 				              </td>
 				          </tr>
 	                      <tr> 
