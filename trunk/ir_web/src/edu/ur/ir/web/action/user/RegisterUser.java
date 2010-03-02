@@ -140,9 +140,12 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	/** Set the external account password */
 	private String externalAccountPassword;
 	
-	/** indicates net id already exists and the net id valiedated against the password*/
-	private boolean netIdAlreadyExistsPasswordSuccess = false;
+	/** indicates net id already exists and the net id validated against the password*/
+	private boolean externalAccountAlreadyExists = false;
 	
+
+
+
 	/** External authentication provider */
 	private ExternalAuthenticationProvider externalAuthenticationProvider;
 	
@@ -673,14 +676,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		this.emailAlreadyExists = emailAlreadyExists;
 	}
 
-	public boolean getNetIdAlreadyExistsPasswordSuccess() {
-		return netIdAlreadyExistsPasswordSuccess;
-	}
 
-	public void setNetIdAlreadyExistsPasswordSuccess(
-			boolean netIdAlreadyExistsPasswordSuccess) {
-		this.netIdAlreadyExistsPasswordSuccess = netIdAlreadyExistsPasswordSuccess;
-	}
 
 	public ExternalAuthenticationProvider getExternalAuthenticationProvider() {
 		return externalAuthenticationProvider;
@@ -739,8 +735,8 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 						    if( externalAccount != null )
 						    {
 							    failure = true;
-							    netIdAlreadyExistsPasswordSuccess = true;
-					    	    addFieldError("netIdAlreadyExists", "The specified user name already has an account for system: " + externalAccount.getExternalAccountType().getName());
+							    externalAccountAlreadyExists = true;
+					    	    addFieldError("externalAccountExists", "The specified user name already has an account for system: " + externalAccount.getExternalAccountType().getName());
 						    }
 						    else
 						    {
@@ -750,20 +746,20 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 				    	else
 				    	{
 				    		failure = true;
-					    	addFieldError("netIdPasswordFail", "The credentials could not be verified");
+					    	addFieldError("externalAccountPasswordFail", "The external account credentials could not be verified");
 				    	}
 
 				    }
 				    catch(BadCredentialsException bce)
 				    {
 				    	 failure = true;
-				    	 addFieldError("netIdPasswordFail", "The net id credentials could not be verified");
+				    	 addFieldError("externalAccountPasswordFail", "The external account credentials could not be verified");
 				    }
 			     }
 				 else
 				 {
 				      failure = true;
-					  addFieldError("netIdPasswordEmpty", "The net id password must be entered for net id user name verification");
+					  addFieldError("externalAccountPasswordEmpty", "The external account password must be entered for external account verification");
 				 }
 			}
 		}
@@ -774,6 +770,8 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		this.externalAccountPassword = externalAccountPassword;
 	}
 
-
+	public boolean getExternalAccountAlreadyExists() {
+		return externalAccountAlreadyExists;
+	}
 
 }
