@@ -148,12 +148,12 @@
 		                      <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                       key="enterPassword"/></p>
 		                       <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-		                       key="netIdPasswordFail"/></p>
+		                       key="externalAccountPasswordFail"/></p>
 		                       <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-		                       key="netIdPasswordEmpty"/></p>
+		                       key="externalAccountPasswordEmpty"/></p>
 		                       <p class="errorMessage">
-		                           <ir:printError errors="${fieldErrors}"  key="netIdAlreadyExists"/> 
-		                           <c:if test="${netIdAlreadyExists}"> - Try <a href="${loginPage}">Logging In</a></c:if>
+		                           <ir:printError errors="${fieldErrors}"  key="externalAccountExists"/> 
+		                           <c:if test="${externalAccountAlreadyExists}"> - Try <a href="${loginPage}">Logging In</a></c:if>
 		                       </p>
 			              </td>
 			          </tr>    
