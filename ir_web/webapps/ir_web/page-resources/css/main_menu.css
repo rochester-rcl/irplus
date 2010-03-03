@@ -149,7 +149,7 @@ span.reportEditBtnImg{background-position: 0 -1140px;}
 
 /* file images */
 span.whiteFileImg, span.wordFileImg, span.imgFileImg, span.pdfFileImg,
-span.excelFileImg, span.textFileImg, span.compressedFileImg, span.powerPointFileImg
+span.excelFileImg, span.textFileImg, span.compressedFileImg, span.powerPointFileImg, span.musicFileImg
 {
     display: inline;
 	overflow: hidden;
@@ -170,6 +170,7 @@ span.excelFileImg{background-position: 0 -920px;}
 span.textFileImg{background-position: 0 -1040px;}
 span.compressedFileImg{background-position: 0 -900px;}
 span.powerPointFileImg{background-position: 0 -1000px;}
+span.musicFileImg{background-position: 0 -1360px;}
 
 
 /* Icons for Researcher folders */
