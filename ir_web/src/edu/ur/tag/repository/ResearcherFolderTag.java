@@ -175,6 +175,13 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 				{
 					out.write("<span class=\"imgFileImg\">&nbsp;</span>");
 				}
+				else if(extension.equalsIgnoreCase("mp3") || 
+			    		   extension.equalsIgnoreCase("wav") ||
+			    		   extension.equalsIgnoreCase("mp4") ||
+			    		   extension.equalsIgnoreCase("aac"))
+			    {
+					out.write("<span class=\"musicFileImg\"></span>");
+			    }
 				else
 				{
 					out.write("<span class=\"whiteFileImg\">&nbsp;</span>");
@@ -182,7 +189,7 @@ public class ResearcherFolderTag extends SimpleTagSupport{
 			
 			}
 			out.write("<a href=\"" + basePath + "researcherFileDownload.action?researcherFileId=" + f.getId() +"\">");
-			out.write(f.getName());
+			out.write(f.getNameWithExtension());
 			out.write("</a>");		
 			if( f.getDescription() != null && !f.getDescription().trim().equals(""))
 			{
