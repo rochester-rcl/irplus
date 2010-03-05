@@ -29,10 +29,12 @@ public class OaiUtil
 {
 	
 	/**
-	 * Calculates offset from the current time zone and creates an OAI date
+	 * Calculates offset from the current time zone and creates an OAI date also refered to
+	 * as Zulu time
 	 * 
 	 * @param d
-	 * @return the date as UTC with the current hosts offset - this will be in the UTC format
+	 * @return the date as UTC (Coordinated Universal Time)  
+	 * with the current hosts offset - this will be in the UTC format
 	 * yyyy-MM-ddTHH:mm:ssZ
 	 * 
 	 */
