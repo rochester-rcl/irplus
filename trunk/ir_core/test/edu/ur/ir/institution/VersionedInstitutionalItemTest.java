@@ -41,8 +41,8 @@ public class VersionedInstitutionalItemTest {
 	public void testVersionedInstitutionalItem() 
 	{
 		GenericItem item = new GenericItem("myItem");
-	    
-	    VersionedInstitutionalItem vii = new VersionedInstitutionalItem(item);
+		VersionedInstitutionalItem vii = new VersionedInstitutionalItem();
+	    vii.addNewVersion(item);
 
 	    assert vii.getCurrentVersion().getItem().equals(item);
 	    assert vii.getLargestVersion() == 1 : "The largest version number should equal 1";
@@ -60,8 +60,9 @@ public class VersionedInstitutionalItemTest {
 		IrUser user = new IrUser("username", "password");
 		VersionedItem vi = new VersionedItem(user, item);
 	   
-	    VersionedInstitutionalItem vii = new VersionedInstitutionalItem(item);
-    
+	    VersionedInstitutionalItem vii = new VersionedInstitutionalItem();
+        vii.addNewVersion(item);
+        
 	    // Add new version
 	    ItemVersion v2 = vi.addNewVersion(item2);
 	    

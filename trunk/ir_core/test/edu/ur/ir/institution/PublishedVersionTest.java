@@ -41,7 +41,8 @@ public class PublishedVersionTest {
 		GenericItem genericItem = new GenericItem("genericItem");
 		GenericItem genericItem2 = new GenericItem("genericItem2");
 		
-		VersionedInstitutionalItem vii = new VersionedInstitutionalItem(genericItem);		
+		VersionedInstitutionalItem vii =  new VersionedInstitutionalItem();
+		vii.addNewVersion(genericItem);		
 		
 		InstitutionalItemVersion publishedVersion1 =  new InstitutionalItemVersion(genericItem, vii, 1);
 		

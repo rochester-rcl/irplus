@@ -88,7 +88,7 @@ public class ResearcherFolderTest {
 		}
 		catch(DuplicateNameException dne)
 		{
-			assert true : "This should be ok";
+			assert true;
 		}
 	}
 	

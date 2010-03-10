@@ -87,7 +87,7 @@ public class PersonalFolderTest {
 		}
 		catch(DuplicateNameException dne)
 		{
-			assert true : "This should be ok";
+			assert true;
 		}
 	}
 	

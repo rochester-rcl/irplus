@@ -321,7 +321,7 @@ public class InstitutionalCollectionTest {
 		}
 		catch(IllegalStateException e)
 		{
-		    assert true : "Exception should be thrown";
+		    assert true;
 		}
 		
 		repoHelper.cleanUpRepository();
