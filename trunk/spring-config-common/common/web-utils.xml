@@ -33,7 +33,6 @@
    <bean id="fileWebUtilsFunctions" class="edu.ur.tag.repository.FileWebUtilFunctions">
        <property name="securityService" ref="securityService"/>
        <property name="repositoryService" ref="repositoryService"/>
-       <property name="downloadStatisticsService" ref="downloadStatisticsService"/>
    </bean>
    
 

@@ -623,16 +623,6 @@
 	</function>
 
 	<function>
-		<name>fileDownloadCount</name>
-		<function-class>
-			edu.ur.tag.repository.FileWebUtilFunctions
-		</function-class>
-		<function-signature>
-			Long fileDownloadCount(edu.ur.ir.file.IrFile)
-		</function-signature>
-	</function>
-
-	<function>
 		<name>hasThumbnail</name>
 		<function-class>
 			edu.ur.tag.repository.FileWebUtilFunctions

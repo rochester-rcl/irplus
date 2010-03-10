@@ -136,4 +136,23 @@ public class HbRepositoryDAO implements RepositoryDAO {
 	public List<LicenseVersion> getAvailableRepositoryLicenses(Long repositoryId) {
 		return (List<LicenseVersion>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAvailableLicensesForRepository", repositoryId);
 	}
+
+	
+	/**
+	 * Get the download count for the repository.
+	 * 
+	 * @see edu.ur.ir.repository.RepositoryDAO#getDownloadCount()
+	 */
+	public Long getDownloadCount() {
+		Long value =   (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getRepositoryDownloadCount"));
+		if( value != null )
+		{
+		    return value;
+		}
+		else
+		{
+		    return 0l;
+		}
+	}
 }

@@ -351,13 +351,64 @@ public interface InstitutionalItemService {
 	 */
 	public DeletedInstitutionalItem getDeleteInfoForInstitutionalItem(Long institutionalItemId);
 
+	
 	/**
-	 * Get the publications published under given names
+	 * Get a list of institutional item version for a specified sponsor ordered by publication name.
 	 * 
-	 * @param personNames
-	 * @return List of publications
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param sponsorId - id of the sponsor
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional item version download count
 	 */
-	public List<InstitutionalItemVersion> getPublicationVersionsByPersonName(Set<PersonName> personName);
+	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemNameOrder(int rowStart,
+			int maxResults, 
+			long sponsorId, 
+			OrderType orderType);
+	
+	/**
+	 * Get a list of institutional item version for a specified sponsor ordered by deposit date.
+	 * 
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param sponsorId - id of the sponsor
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional item version
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDepositDateOrder(int rowStart,
+			int maxResults, 
+			long sponsorId, 
+			OrderType orderType);
+	
+	/**
+	 * Get a list of institutional item version for a specified sponsor ordered by publication name.
+	 * 
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param sponsorId - id of the sponsor
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional item version
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDownloadOrder(int rowStart,
+			int maxResults, 
+			long sponsorId, 
+			OrderType orderType);
+	
+
+	
+	/**
+	 * Get the count of institutional item version for a given sponsor.
+	 * 
+	 * @param sponsorId - id of the sponsor
+	 * @return - count of items for a sponsor.
+	 */
+	public Long getItemsBySponsorCount(long sponsorId);
 	
 	/**
 	 * Set item as private and assign submitted collections user group permissions
@@ -422,5 +473,46 @@ public interface InstitutionalItemService {
 	 * @param repositoryId
 	 */
 	public void resetAllHandles(int batchSize, Long repositoryId);
+	
+	
+	/**
+	 * Get the list of publication versions for names ordered by download.
+	 * 
+	 * @param rowStart - row start
+	 * @param maxResults - maximum number of results
+	 * @param personNames - set of name ids to use
+	 * @param orderType - order type
+	 * 
+	 * @return - return the list of institutional item version download counts
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByDownload(final int rowStart,
+			final int maxResults, 
+			final Set<PersonName> personNames, 
+			final OrderType orderType);
+	
+	/**
+	 * Get the list of publication versions for names ordered by title
+	 * 
+	 * @param rowStart - start position in the list
+	 * @param maxResults - maximum number of results
+	 * @param personNames - set of person names.
+	 * @param orderType - order type ascending / descending
+	 * 
+	 * @return - return the list of institutional item version download counts
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByTitle(final int rowStart,
+			final int maxResults, 
+			final Set<PersonName> personNames, 
+			final OrderType orderType);
+	
+	/**
+	 * Get the number of downloads for a given set of person names.
+	 * 
+	 * @param personNames - set of person names.
+	 * @return count for the person names.
+	 */
+	public Long getNumberOfDownlodsForPersonNames(Set<PersonName> personNames);
+	
+
 
 }

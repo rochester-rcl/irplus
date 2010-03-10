@@ -16,15 +16,22 @@
 
 package edu.ur.hibernate.ir.institution.db;
 
+import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
+import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
+import edu.ur.order.OrderType;
 
 /**
  * Persistence of Institutional item version data.
@@ -34,9 +41,7 @@ import edu.ur.ir.institution.InstitutionalItemVersionDAO;
  */
 public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDAO{
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<InstitutionalItemVersion> hbCrudDAO;
 
 	/**
@@ -93,24 +98,86 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 		hbCrudDAO.makeTransient(entity);
 	}
 
-
-
 	/**
-	 * get the publications for given name id.
+	 * Get the  publications for a given set of names ordered by title.
 	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getPublicationVersionsByPersonName(Long)
+	 * @param rowStart - start position
+	 * @param maxResults - maximum number of results to return
+	 * @param personNameIds - set of name ids to get 
+	 * @param orderType - way to order the set
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InstitutionalItemVersion> getPublicationVersionsByPersonName(List<Long> personNameIds) {
-		
-	    Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getPublicationVersionsByPersonNameId");
-		
-	    q.setParameterList("personNameIds", personNameIds);
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByTitle(final int rowStart,
+			final int maxResults, 
+			final List<Long> personNameIds, 
+			final OrderType orderType)
+	{
+		List<InstitutionalItemVersionDownloadCount> foundItems = new LinkedList<InstitutionalItemVersionDownloadCount>();
+		foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdTitleDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdTitleAsc");
+			    }
+			    
+			    q.setParameterList("personNameIds", personNameIds);
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+			    return q.list();
+			    
+		    }
+	    });
+        return foundItems;	
+	}
 	
-	    List<InstitutionalItemVersion> versions = (List<InstitutionalItemVersion>)q.list();
-	    
-	    return versions;
-
+	/**
+	 * Get the  publications for a given set of names by title.
+	 * 
+	 * @param rowStart - start position
+	 * @param maxResults - maximum number of results to return
+	 * @param personNameIds - set of name ids to get 
+	 * @param orderType - way to order the set
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByDownload(final int rowStart,
+			final int maxResults, 
+			final List<Long> personNameIds, 
+			final OrderType orderType)
+	{
+		List<InstitutionalItemVersionDownloadCount> foundItems = new LinkedList<InstitutionalItemVersionDownloadCount>();
+		foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdDownloadDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdDownloadAsc");
+			    }
+			    
+			    q.setParameterList("personNameIds", personNameIds);
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+			    return q.list();
+			    
+		    }
+	    });
+        return foundItems;	
 	}
 
 	/**
@@ -122,5 +189,151 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 		return (InstitutionalItemVersion)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalItemByHandleId", handleId));
 	}
+    
+	/**
+	 * Get the download count for a sponsor
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getDownloadCountForSponsor(java.lang.Long)
+	 */
+	public Long getDownloadCountForSponsor(Long sponsorId) {
+		
+		Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getDownloadCountBySponsor");
+		q.setLong(0, sponsorId);
+	    Long count = (Long)q.uniqueResult();
+	    if( count == null )
+	    {
+	    	count = new Long(0l);
+	    }
+	    return count;
+	}
+	
+	/**
+	 *  (non-Javadoc)
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getItemsBySponsorItemNameOrder(int, int, long, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemNameOrder(final int rowStart,
+			final int maxResults, final long sponsorId, final OrderType orderType) {
+		List<InstitutionalItemVersionDownloadCount> foundItems = new LinkedList<InstitutionalItemVersionDownloadCount>();
+		foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getPublicationsForSponsorDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getPublicationsForSponsorAsc");
+			    }
+			    
+			    q.setLong("sponsorId", sponsorId);
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+			    return q.list();
+			    
+		    }
+	    });
+        return foundItems;	
+	}
+
+	
+	/**
+	 * Get a count of the number of items sponsored by a particular person.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getItemsBySponsorCount(long)
+	 */
+	public Long getItemsBySponsorCount(long sponsorId) {
+        Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getPublicationsForSponsorCount");
+	    q.setLong("sponsorId", sponsorId);
+	    Long count = (Long)q.uniqueResult();
+	    return count;
+
+	}
+
+	/**
+	 * Get items by sponsor item deposit date order.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsBySponsorItemDepositDateOrder(int, int, long, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDepositDateOrder(
+			final int rowStart, final int maxResults, final long sponsorId, final OrderType orderType) {
+		List<InstitutionalItemVersionDownloadCount> foundItems = new LinkedList<InstitutionalItemVersionDownloadCount>();
+		
+		foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getPublicationsForSponsorDepositDateDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getPublicationsForSponsorDepositDateAsc");
+			    }
+			    
+			    q.setLong("sponsorId", sponsorId);
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+        return foundItems;	
+	}
+	
+	/**
+	 * Get items by sponsor item deposit download order.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsBySponsorItemDepositDateOrder(int, int, long, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDownloadOrder(
+			final int rowStart, final int maxResults, final long sponsorId, final OrderType orderType) {
+		List<InstitutionalItemVersionDownloadCount> foundItems = new LinkedList<InstitutionalItemVersionDownloadCount>();
+		
+		foundItems =  (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getPublicationsSponsorDownloadCountOrderByCountDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getPublicationsSponsorDownloadCountOrderByCountAsc");
+			    }
+			    
+			    q.setLong("sponsorId", sponsorId);
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+			    return q.list();
+		    }
+	    });
+        return foundItems;	
+	}
+
+	
+	/**
+	 * Get the download counts for a set of person names.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getDownloadCountByPersonName(java.util.List)
+	 */
+	public Long getDownloadCountByPersonName(List<Long> personNameIds) {
+		Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getDownloadCountByPersonNames");
+	    q.setParameterList("personNameIds", personNameIds);
+	    Long count = (Long)q.uniqueResult();
+	    return count;
+	}
+
 
 }

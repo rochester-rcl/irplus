@@ -17,6 +17,7 @@
 package edu.ur.hibernate.ir.item.db;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -29,14 +30,17 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.item.SponsorDAO;
+import edu.ur.order.OrderType;
 
 
 /**
  * Data access for Sponsor
  * 
  * @author Sharmila Ranganathan
+ * @contributor Nathan Sarr
  *
  */
 public class HbSponsorDAO implements SponsorDAO {
@@ -119,12 +123,12 @@ public class HbSponsorDAO implements SponsorDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Sponsor> getSponsorsOrderByName(
-			final int rowStart, final int numberOfResultsToShow, final String sortType) {
+			final int rowStart, final int numberOfResultsToShow, final OrderType orderType) {
 		List<Sponsor> sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
             public Object doInHibernate(Session session)
                     throws HibernateException, SQLException {
 		        Query q = null;
-		        if (sortType.equalsIgnoreCase("asc")) {
+		        if (  orderType.equals(OrderType.ASCENDING_ORDER)) {
 		        	q = session.getNamedQuery("getSponsorsOrderByNameAsc");
 		        } else {
 		        	q = session.getNamedQuery("getSponsorsOrderByNameDesc");
@@ -137,6 +141,226 @@ public class HbSponsorDAO implements SponsorDAO {
 	            return q.list();            }
         });
         return sponsors;
+	}
+
+	/**
+	 *  
+	 * @see edu.ur.ir.item.SponsorDAO#getByNameFirstChar(int, int, char, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Sponsor> getByNameFirstChar(final int rowStart,final int maxResults,
+			final char firstChar, final OrderType orderType) {
+		List<Sponsor> sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session session)
+                    throws HibernateException, SQLException 
+            {
+		        Query q = null;
+		        if (  orderType.equals(OrderType.ASCENDING_ORDER)) {
+		        	q = session.getNamedQuery("getSponsorsOrderByNameFirstCharAsc");
+		        } else {
+		        	q = session.getNamedQuery("getSponsorsOrderByNameFirstCharDesc");
+		        }
+			    q.setCharacter("sponsorFirstChar", Character.toLowerCase(firstChar));
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setReadOnly(true);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+	        }
+        });
+        return sponsors;
+	}
+
+	/**
+	 * 
+	 * @see edu.ur.ir.item.SponsorDAO#getCount(char)
+	 */
+	public Long getCount(char nameFirstChar) {
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getSponsorsNameFirstCharCount", Character.toLowerCase(nameFirstChar)));
+	}
+
+	/**
+	 * 
+	 * @see edu.ur.ir.item.SponsorDAO#getCount(char, char)
+	 */
+	public Long getCount(char firstCharRange, char lastCharRange) {
+		Object[] values = new Object[]{new Character(Character.toLowerCase(firstCharRange)), new Character(Character.toLowerCase(lastCharRange))};
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getSponsorsOrderByNameFirstCharRangeCount", values));
+
+	}
+
+	/**
+	 * 
+	 * @see edu.ur.ir.item.SponsorDAO#getSponsorsByNameBetweenChar(int, int, char, char, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Sponsor> getSponsorsByNameBetweenChar(final int rowStart,
+			final int maxResults, final char firstChar, final char lastChar,
+			final OrderType orderType) 
+	{
+		List<Sponsor> sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
+            public Object doInHibernate(Session session)
+                    throws HibernateException, SQLException 
+            {
+		        Query q = null;
+		        if (  orderType.equals(OrderType.ASCENDING_ORDER)) {
+		        	q = session.getNamedQuery("getSponsorsOrderByNameFirstCharRangeAsc");
+		        } else {
+		        	q = session.getNamedQuery("getSponsorsOrderByNameFirstCharRangeDesc");
+		        }
+			    q.setCharacter("firstChar", Character.toLowerCase(firstChar));
+			    q.setCharacter("secondChar", Character.toLowerCase(lastChar));
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setReadOnly(true);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+	        }
+        });
+        return sponsors;
+	}
+
+	/**
+	 * 
+	 * @see edu.ur.ir.item.SponsorDAO#getCollectionSponsorsBetweenChar(int, int, edu.ur.ir.institution.InstitutionalCollection, char, char, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Sponsor> getCollectionSponsorsBetweenChar(final int rowStart,
+			final int maxResults, final InstitutionalCollection collection, final char firstChar,
+			final char lastChar, final OrderType orderType) {
+		List<Sponsor> sponsors = new LinkedList<Sponsor>();
+		
+		sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getCollectionSponsorNameByCharRangeOrderDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getCollectionsponsorNameByCharRangeOrderAsc");
+			    }
+			    
+			    q.setLong(0, collection.getLeftValue());
+			    q.setLong(1, collection.getRightValue());
+			    q.setLong(2, collection.getTreeRoot().getId());
+			    q.setCharacter( 3, Character.toLowerCase(firstChar) );
+			    q.setCharacter( 4, Character.toLowerCase(lastChar) );
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+        return sponsors;	
+	}
+
+	/**
+	 * @see edu.ur.ir.item.SponsorDAO#getCollectionSponsorsByChar(int, int, edu.ur.ir.institution.InstitutionalCollection, char, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Sponsor> getCollectionSponsorsByChar(final int rowStart,
+			final int maxResults, final InstitutionalCollection collection,
+			final char firstChar, final OrderType orderType) {
+        List<Sponsor> sponsors = new LinkedList<Sponsor>();
+		
+		sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getCollectionSponsorNameByCharOrderDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getCollectionSponsorNameByCharOrderAsc");
+			    }
+			    
+			    q.setLong(0, collection.getLeftValue());
+			    q.setLong(1, collection.getRightValue());
+			    q.setLong(2, collection.getTreeRoot().getId());
+			    q.setCharacter( 3, Character.toLowerCase(firstChar) );
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+        return sponsors;	
+	}
+
+	/**
+	 * 
+	 * @see edu.ur.ir.item.SponsorDAO#getCollectionSponsorsByName(int, int, edu.ur.ir.institution.InstitutionalCollection, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Sponsor> getCollectionSponsorsByName(final int rowStart,
+			final int maxResults, final InstitutionalCollection collection,
+			final OrderType orderType) {
+		List<Sponsor> sponsors = new LinkedList<Sponsor>();
+		
+		sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getCollectionSponsorNameByNameOrderDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getCollectionSponsorNameByNameOrderAsc");
+			    }
+			    
+			    q.setLong(0, collection.getLeftValue());
+			    q.setLong(1, collection.getRightValue());
+			    q.setLong(2, collection.getTreeRoot().getId());
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+	            return q.list();
+		    }
+	    });
+	
+        return sponsors;	
+	}
+
+	/**
+	 * @see edu.ur.ir.item.SponsorDAO#getCount(edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public Long getCount(InstitutionalCollection collection) {
+		Object[] values = new Object[]{collection.getLeftValue(), collection.getRightValue(), 
+				collection.getTreeRoot().getId()};
+
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("sponsorCollectionNameCount", values));
+
+	}
+
+	/**
+	 * 
+	 * @see edu.ur.ir.item.SponsorDAO#getCount(edu.ur.ir.institution.InstitutionalCollection, char)
+	 */
+	public Long getCount(InstitutionalCollection collection, char nameFirstChar) {
+		Object[] values = new Object[]{collection.getLeftValue(), collection.getRightValue(), 
+				collection.getTreeRoot().getId(), new Character(Character.toLowerCase(nameFirstChar))};
+
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("collectionSponsorNameCountByChar", values));
+
+	}
+
+	public Long getCount(InstitutionalCollection collection,
+			char nameFirstCharRange, char nameLastCharRange) {
+		Object[] values = new Object[]{collection.getLeftValue(), collection.getRightValue(), 
+				collection.getTreeRoot().getId(), new Character(Character.toLowerCase(nameFirstCharRange)), new Character(Character.toLowerCase(nameLastCharRange))};
+
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("sponsorCollectionNameCountByCharRange", values));
+
 	}
 
 }

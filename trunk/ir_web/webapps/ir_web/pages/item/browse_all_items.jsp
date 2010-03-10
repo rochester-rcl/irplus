@@ -53,6 +53,7 @@
          
          <c:url var="browseRepositoryItems" value="/browseRepositoryItems.action"/>
          <c:url var="browsePersonNames" value="/browsePersonNames.action"/>
+         <c:url var="browseSponsors" value="/browseSponsorNames.action"/>
          <c:url var="searchRepositoryItems" value="/startSearchRepositoryItems.action"/>
 		 <script type="text/javascript">
     
@@ -68,6 +69,11 @@
           {
               window.location='${searchRepositoryItems}';
           }
+
+          function handleBrowseSponsorsClick(e)
+          {
+              window.location="${browseSponsors}";
+          }
           
           function init()
           {
@@ -80,6 +86,9 @@
 
 	            var tab2 = myTabs.getTab(2);
 	            tab2.addListener('click', handleBrowseNamesClick);
+
+	            var tab3 = myTabs.getTab(3);
+	            tab3.addListener('click', handleBrowseSponsorsClick);
           }
           
           // initialize the code once the dom is ready
@@ -108,16 +117,25 @@
 		                    <li class="selected"><a href="${browseRepositoryItems}"><em>Browse Publications</em></a></li>
 		                    <li><a href="${searchRepositoryItems}"><em>Search</em></a></li>
 		                    <li><a href="${browsePersonNames}"><em>Browse Authors/Contributors</em></a></li>
+		                    <li><a href="${browseSponsors}"><em>Browse Sponsors</em></a></li>
 		               </c:if>
 		               <c:if test='${viewType == "search"}'>
 		                    <li><a href="${browseRepositoryItems}"><em>Browse Publications</em></a></li>
 		                    <li class="selected"><a href="${searchRepositoryItems}"><em>Search</em></a></li>
 		                    <li><a href="${browsePersonNames}"><em>Browse Authors/Contributors</em></a></li>
+		                    <li><a href="${browseSponsors}"><em>Browse Sponsors</em></a></li>
 		               </c:if>
 		                <c:if test='${viewType == "browsePersonName"}'>
 		                    <li><a href="${browseRepositoryItems}"><em>Browse Publications</em></a></li>
 		                    <li><a href="${searchRepositoryItems}"><em>Search</em></a></li>
 		                    <li class="selected"><a href="${searchPersonNames}"><em>Browse Authors/Contributors</em></a></li>
+		                    <li><a href="${browseSponsors}"><em>Browse Sponsors</em></a></li>
+		               </c:if>
+		               <c:if test='${viewType == "browseSponsorName"}'>
+		                    <li><a href="${browseRepositoryItems}"><em>Browse Publications</em></a></li>
+		                    <li><a href="${searchRepositoryItems}"><em>Search</em></a></li>
+		                    <li><a href="${searchPersonNames}"><em>Browse Authors/Contributors</em></a></li>
+		                    <li class="selected"><a href="${browseSponsors}"><em>Browse Sponsors</em></a></li>
 		               </c:if>
 		            </ul>
 		
@@ -542,6 +560,104 @@
 					        </c:if>
 			        </div>
 		            <!--  end tab  3-->
+		            
+		            
+		            <!--  start 4th tab -->
+		            <div id="tab4">
+		                  
+				         <c:if test='${viewType == "browseSponsorName"}'>
+				         
+				         <div class="center">
+				              <c:import url="browse_all_sponsor_names_alpha_list.jsp"/>
+				         </div>
+				    	 <c:if test="${totalHits > 0}">
+				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
+				         </c:if>  
+				         <c:import url="browse_all_sponsor_names_pager.jsp"/>
+						
+						
+						<div class="dataTable">
+							             
+					        <urstb:table width="100%">
+					            <urstb:thead>
+					                <urstb:tr>
+					                    
+					                    <!--  set up the url's for sorting by last name -->
+					                     <c:url var="sortSponsorNameAscendingUrl" value="/browseSponsorNames.action">
+										     <c:param name="rowStart" value="${rowStart}"/>
+											 <c:param name="startPageNumber" value="${startPageNumber}"/>
+											 <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											 <c:param name="sortType" value="asc"/>
+											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+										</c:url>
+					                     
+					                    <c:url var="sortSponsorNameDescendingUrl" value="/browseSponsorNames.action">
+										    <c:param name="rowStart" value="${rowStart}"/>
+											<c:param name="startPageNumber" value="${startPageNumber}"/>
+											<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											<c:param name="sortType" value="desc"/>
+											<c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+										</c:url>
+					                    
+					                    <c:set var="sponsorNameSortType" value="none"/>
+					                    <c:if test='${sortElement == "sponsorName"}'>
+					                        <c:set var="sponsorNameSortType" value="${sortType}"/>
+					                    </c:if>
+					                    <urstb:tdHeadSort  height="33"
+					                        useHref="true"
+					                        hrefVar="href"
+                                            currentSortAction="${sponsorNameSortType}"
+                                            ascendingSortAction="${sortSponsorNameAscendingUrl}"
+                                            descendingSortAction="${sortSponsorNameDescendingUrl}">
+                                            <a href="${href}">Name</a>                                              
+                                            <urstb:thImgSort
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+					                     
+						                <urstb:td>Description</urstb:td>
+						                </urstb:tr>
+						            </urstb:thead>
+						            <urstb:tbody
+						                var="sponsor" 
+						                oddRowClass="odd"
+						                evenRowClass="even"
+						                currentRowClassVar="rowClass"
+						                collection="${sponsors}">
+						                    <urstb:tr 
+						                        cssClass="${rowClass}"
+						                        onMouseOver="this.className='highlight'"
+						                        onMouseOut="this.className='${rowClass}'">
+						                        <urstb:td>
+						                            <c:url var="sponsorUrl" value="/viewSponsorPage.action">
+														    <c:param name="sponsorId" value="${sponsor.id}"/>
+												    </c:url>	
+						                             <a href="${sponsorUrl}">${sponsor.name}</a>
+						                        </urstb:td>
+						                        <urstb:td>
+						                            ${sponsor.description}
+						                        </urstb:td>
+						                    </urstb:tr>
+						            </urstb:tbody>
+						        </urstb:table>
+						    </div>	
+                         
+					        <c:import url="browse_all_sponsor_names_pager.jsp"/>
+					        
+					         <br/>
+				             <br/>
+				             
+					        <div class="center">
+				                 <c:import url="browse_all_sponsor_names_alpha_list.jsp"/>
+				            </div>
+				         
+				        
+					        </c:if>
+			        </div>
+		            <!--  end tab  4-->
+		            
+		            
+		            
+		            
 		             
 		          </div>
 		          <!--  end content -->

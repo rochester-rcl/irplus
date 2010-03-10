@@ -958,6 +958,7 @@ CREATE TABLE ir_file.ir_file
     public_viewable BOOLEAN NOT NULL,
     version INTEGER,
     user_id BIGINT,
+    download_count BIGINT,
     FOREIGN KEY (file_id) REFERENCES file_system.file (file_id),
     FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
 );
@@ -1225,9 +1226,10 @@ ALTER TABLE ir_item.identifier_type_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 CREATE TABLE ir_item.sponsor(
   sponsor_id bigint NOT NULL,
-  version integer,
-  name text,
-  description text,
+  version INTEGER,
+  sponsor_name_first_char CHAR NOT NULL,
+  name TEXT,
+  description TEXT,
   PRIMARY KEY (sponsor_id),
   UNIQUE (name)
   
@@ -1237,6 +1239,7 @@ ALTER TABLE ir_item.sponsor OWNER TO ir_plus;
 -- The sponser sequence
 CREATE SEQUENCE ir_item.sponsor_seq ;
 ALTER TABLE ir_item.sponsor_seq OWNER TO ir_plus;
+CREATE INDEX sponsor_name_first_char_idx ON ir_item.sponsor(sponsor_name_first_char);
 
 
 -- ---------------------------------------------
@@ -1244,15 +1247,15 @@ ALTER TABLE ir_item.sponsor_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 
 CREATE TABLE ir_item.published_date (
-  published_date_id bigint NOT NULL,
-  version integer,
-  day integer,
-  month integer,
-  year integer,
-  hours integer,
-  minutes integer,
-  seconds integer,
-  fraction_seconds integer,
+  published_date_id BIGINT NOT NULL,
+  version INTEGER,
+  day INTEGER,
+  month INTEGER,
+  year INTEGER,
+  hours INTEGER,
+  minutes INTEGER,
+  seconds INTEGER,
+  fraction_seconds INTEGER,
   external_published_item_id BIGINT,
   PRIMARY KEY (published_date_id)
   
@@ -1270,10 +1273,10 @@ ALTER TABLE ir_item.published_date_seq OWNER TO ir_plus;
 
 CREATE TABLE ir_item.external_published_item(
   external_published_item_id bigint NOT NULL,
-  version integer,
+  version INTEGER,
   publisher_id BIGINT,
   published_date_id BIGINT,
-  citation text,
+  citation TEXT,
   PRIMARY KEY (external_published_item_id),
   FOREIGN KEY (publisher_id)
       REFERENCES ir_item.publisher (publisher_id) ,
@@ -1985,6 +1988,7 @@ ALTER TABLE ir_repository.institutional_collection_subscription_seq OWNER TO ir_
 CREATE TABLE ir_repository.versioned_institutional_item
 (
     versioned_institutional_item_id BIGINT PRIMARY KEY,
+    institutional_item_id BIGINT,
     largest_item_version_id INTEGER NOT NULL,
     current_institutional_item_version_id BIGINT,
     version INTEGER
@@ -3327,25 +3331,6 @@ ALTER TABLE ir_statistics.ir_file_roll_up_processing_record_seq OWNER TO ir_plus
 
 CREATE INDEX file_roll_up_processing_record_ir_file_idx
   ON ir_statistics.file_download_info(ir_file_id);
-
-
-
--- ---------------------------------------------
--- roll up table for ir files
--- ---------------------------------------------
-CREATE TABLE ir_statistics.ir_file_roll_up
-(
-    ir_file_roll_up_id BIGINT PRIMARY KEY,
-    ir_file_id BIGINT UNIQUE NOT NULL,
-    download_count BIGINT NOT NULL
-);
-ALTER TABLE ir_statistics.ir_file_roll_up OWNER TO ir_plus;
-
--- The field sequence
-CREATE SEQUENCE ir_statistics.ir_file_roll_up_seq;
-ALTER TABLE ir_statistics.ir_file_roll_up_seq OWNER TO ir_plus;
-
-
 
 
 -- ---------------------------------------------

@@ -453,7 +453,7 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		seriesService.saveSeries(series);
 		
 		Sponsor sponsor = new Sponsor("sponsor");
-		sponsorService.saveSponsor(sponsor);
+		sponsorService.save(sponsor);
 		
 		Publisher publisher = new Publisher("publisher");
 		publisherService.savePublisher(publisher);
@@ -544,7 +544,8 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		seriesService.deleteSeries("seriesName");
 		identifierTypeService.delete(identifierTypeService.get("identifierType"));
 		languageTypeService.delete(languageTypeService.get("languageType"));
-		sponsorService.deleteSponsor("sponsor");
+		sponsor = sponsorService.get("sponsor");
+		sponsorService.delete(sponsor);
 		publisherService.deletePublisher("publisher");
 		
 		helper.cleanUpRepository();

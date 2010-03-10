@@ -17,6 +17,9 @@
 package edu.ur.hibernate.ir.institution.db;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -41,9 +44,18 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionDAO;
 import edu.ur.ir.institution.InstitutionalCollectionLink;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
+import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.GenericItemDAO;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryDAO;
+import edu.ur.ir.statistics.FileDownloadInfo;
+import edu.ur.ir.statistics.FileDownloadInfoDAO;
+import edu.ur.ir.statistics.IgnoreIpAddress;
+import edu.ur.ir.statistics.IgnoreIpAddressDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
+import edu.ur.ir.user.UserEmail;
+import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserManager;
 import edu.ur.util.FileUtil;
 
@@ -81,7 +93,20 @@ public class InstitutionalCollectionDAOTest {
 	/** Ir File relational data access.  */
 	IrFileDAO irFileDAO = (IrFileDAO) ctx.getBean("irFileDAO");
 	
+	/** Class to help with download information */
+	FileDownloadInfoDAO fileDownloadInfoDAO = (FileDownloadInfoDAO) ctx
+	.getBean("fileDownloadInfoDAO");
 	
+	/** persistance for dealing with ignoring ip addesses */
+	IgnoreIpAddressDAO ignoreIpAddressDAO = (IgnoreIpAddressDAO) ctx
+	.getBean("ignoreIpAddressDAO");
+	
+	/** Repository relational data access  */
+	RepositoryDAO repositoryDAO = (RepositoryDAO) ctx.getBean("repositoryDAO");
+	
+    /** Generic item data access */
+    GenericItemDAO itemDAO = (GenericItemDAO) ctx.getBean("itemDAO");
+
 	
 	/**
 	 * Test Institutional Collection persistence
@@ -831,6 +856,196 @@ public class InstitutionalCollectionDAOTest {
 		tm.commit(ts);
 		
 
+	}
+	
+	/**
+	 * Test download counts.
+	 * 
+	 * @throws DuplicateNameException
+	 * @throws IllegalFileSystemNameException
+	 * @throws UserHasPublishedDeleteException
+	 * @throws ParseException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	@Test
+	public void numberOfFileDownloadsForCollectionsTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException, LocationAlreadyExistsException {
+
+		// start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+
+		// create a repository to store files in.
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+	
+		UserEmail userEmail = new UserEmail("email");
+		
+		// create a user and add the versioned file to the item
+		IrUser user = new IrUser("user", "password");
+		user.setPasswordEncoding("encoding");
+		user.addUserEmail(userEmail, true);
+		userDAO.makePersistent(user);
+
+
+		// save the repository
+		tm.commit(ts);
+
+		// Start the transaction - create collections
+		ts = tm.getTransaction(td);
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_hibernate_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f1 = testUtil.creatFile(directory, "testFile1", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test1");
+		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f1, "newFile1");
+		IrFile irFile1 = new IrFile(fileInfo1, "newFile1");
+		irFileDAO.makePersistent(irFile1);
+
+		File f2 = testUtil.creatFile(directory, "testFile2", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test2");
+		FileInfo fileInfo2 = repo.getFileDatabase().addFile(f2, "newFile2");
+		IrFile irFile2 = new IrFile(fileInfo2, "newFile2");
+		irFileDAO.makePersistent(irFile2);
+		// save the repository
+		tm.commit(ts);	
+		
+        // Start the transaction - create collections
+		ts = tm.getTransaction(td);
+		
+		GenericItem item1 = new GenericItem("itemName1");
+		item1.addFile(irFile1);
+
+		GenericItem item2 = new GenericItem("itemName2");
+		item2.addFile(irFile2);
+		
+		// create the collections
+		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		collection.createInstitutionalItem(item1);
+		InstitutionalCollection subCollection = collection.createChild("subChild");
+		subCollection.createInstitutionalItem(item2);
+		
+		institutionalCollectionDAO.makePersistent(collection);
+   
+		// save the repository
+		tm.commit(ts);	
+
+		// create some downloads
+        ts = tm.getTransaction(td);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
+	    Date d = simpleDateFormat.parse("1/1/2008");
+	    
+        FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.0.0.1", irFile1.getId(), d);
+        downloadInfo1.setDownloadCount(1);
+        fileDownloadInfoDAO.makePersistent(downloadInfo1);
+       
+        FileDownloadInfo downloadInfo2 = new FileDownloadInfo("123.0.0.7", irFile2.getId(), d);
+        downloadInfo2.setDownloadCount(2);
+        fileDownloadInfoDAO.makePersistent(downloadInfo2);
+        
+        Long count1 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile1.getId());
+        assert count1 == 1l : "Count should equal 1  but equals " + count1;
+        irFile1 = irFileDAO.getById(irFile1.getId(), false);
+        irFile1.setDownloadCount(count1);
+        irFileDAO.makePersistent(irFile1);
+        
+        Long count2 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile2.getId());
+        assert count2 == 2l : "Count should equal 2  but equals " + count2;
+        irFile2 = irFileDAO.getById(irFile2.getId(), false);
+        irFile2.setDownloadCount(count2);
+        irFileDAO.makePersistent(irFile1);
+	    tm.commit(ts);
+
+        ts = tm.getTransaction(td);
+		Long count = repositoryDAO.getDownloadCount();
+		assert count.equals(3l) : "Should find 3 but found " + count;
+		
+		// test with count for collection files only
+		Long collectionCount1 = institutionalCollectionDAO.getFileDownloads(collection);
+		assert collectionCount1.equals(1l) : "Should find 1 but found " + collectionCount1 ;
+		
+		// test with count for sub-collection files only
+		Long collectionCount2 = institutionalCollectionDAO.getFileDownloads(subCollection);
+		assert collectionCount2.equals(2l) : "Should find 2 but found " + collectionCount2 ;
+		
+		// test with count for ir file
+		Long irFileCount = irFile1.getDownloadCount();
+		assert irFileCount.equals(1l) : "Should find 1 but found " + irFileCount ;
+		
+		irFileCount = irFile2.getDownloadCount();
+		assert irFileCount.equals(2l) : "Should find 2 but found " + irFileCount ;
+		
+		// test with parent
+		Long collectionCountWithChildren = institutionalCollectionDAO.getFileDownloadsWithChildren(collection);
+		assert collectionCountWithChildren.equals(3l) : "Should find 3 but found " + collectionCountWithChildren;
+		
+		// test with sub collection
+		collectionCountWithChildren = institutionalCollectionDAO.getFileDownloadsWithChildren(subCollection);
+		assert collectionCountWithChildren.equals(2l) : "Should find 2 but found " + collectionCountWithChildren;
+		tm.commit(ts);
+		
+		
+		// add an ip address to the ignore list
+	    //create a new transaction
+		ts = tm.getTransaction(td);
+	    IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,7, 7);
+        ignoreIpAddressDAO.makePersistent(ip1);
+        
+        // update the counts
+        count1 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile1.getId());
+        irFile1 = irFileDAO.getById(irFile1.getId(), false);
+        irFile1.setDownloadCount(count1);
+        irFileDAO.makePersistent(irFile1);
+		
+        count2 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile2.getId());
+        irFile2 = irFileDAO.getById(irFile2.getId(), false);
+        irFile2.setDownloadCount(count2);
+        irFileDAO.makePersistent(irFile2);
+        tm.commit(ts);
+        
+		
+	    //create a new transaction
+		ts = tm.getTransaction(td);
+		count = repositoryDAO.getDownloadCount();
+		assert count.equals(1l) : "Should find 1 but found " + count;
+		
+		collectionCount1 = institutionalCollectionDAO.getFileDownloads(collection);
+		assert collectionCount1.equals(1l) : "Should find 1 but found " + collectionCount1 ;
+		
+		collectionCount2 = institutionalCollectionDAO.getFileDownloads(subCollection);
+		assert collectionCount2.equals(0l) : "Should find 0 but found " + collectionCount2 ;
+		
+		assert irFile1.getDownloadCount() == 1l : "Should find 1 but found " + irFile1.getDownloadCount() ;
+		
+		irFileCount = irFile2.getDownloadCount();
+		assert irFileCount.equals(0l) : "Should find 0 but found " + irFileCount ;
+		tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+		ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip1.getId(), false));
+		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(collection.getId(), false));
+		
+        itemDAO.makeTransient(itemDAO.getById(item1.getId(), false));
+        itemDAO.makeTransient(itemDAO.getById(item2.getId(), false));
+        
+		irFileDAO.makeTransient(irFileDAO.getById(irFile1.getId(), false));
+		irFileDAO.makeTransient(irFileDAO.getById(irFile2.getId(), false));
+		
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		fileDownloadInfoDAO.makeTransient(fileDownloadInfoDAO.getById(downloadInfo1.getId(), false));
+		fileDownloadInfoDAO.makeTransient(fileDownloadInfoDAO.getById(downloadInfo2.getId(), false));
+		repoHelper.cleanUpRepository();
+		tm.commit(ts);	
 	}
 
 }

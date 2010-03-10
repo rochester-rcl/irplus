@@ -45,6 +45,9 @@
 		    type="int"
 			not-null="true" 
 			access="field"/>
+			
+		<!--  reference the parent institutional item -->
+		<one-to-one name="institutionalItem" property-ref="versionedInstitutionalItem"/>
 
 		<!--  current version of the item -->
         <many-to-one name="currentVersion" 

@@ -114,7 +114,24 @@
         </action>
         
        <!--  ***************************************************** -->
-       <!--  Public Person Name actions    (Repository / Collection) -->
+       <!--  Public Sponsor actions    (Repository / Collection) -->
+       <!--  ****************************************************** -->
+       
+       <action name="browseSponsorNames" 
+            class="edu.ur.ir.web.action.sponsor.RepositorySponsorNameBrowse">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/item/browse_all_items.jsp</result>
+        </action>
+        
+        <action name="browseCollectionSponsorNames" 
+            class="edu.ur.ir.web.action.sponsor.CollectionSponsorNameBrowse">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/item/browse_collection_items.jsp</result>
+            <result name="collectionNotFound">/pages/collection_not_found.jsp</result>
+        </action>
+        
+       <!--  ***************************************************** -->
+       <!--  View item repository license -->
        <!--  ****************************************************** -->
  
         <action name="viewItemRepositoryLicense" 

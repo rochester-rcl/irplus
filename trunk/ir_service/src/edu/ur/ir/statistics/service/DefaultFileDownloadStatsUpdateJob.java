@@ -18,6 +18,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import edu.ur.ir.ErrorEmailService;
 
+import edu.ur.ir.file.IrFile;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.statistics.FileDownloadInfo;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecord;
@@ -75,6 +77,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		  
 		DownloadStatisticsService downloadStatisticsService = null;
 		ErrorEmailService errorEmailService;
+		RepositoryService repositoryService = null;
 		
 
 		PlatformTransactionManager tm = null;
@@ -84,6 +87,8 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			downloadStatisticsService = (DownloadStatisticsService)
 			    applicationContext.getBean("downloadStatisticsService");
 			errorEmailService = (ErrorEmailService)applicationContext.getBean("errorEmailService");
+			repositoryService = (RepositoryService) applicationContext.getBean("repositoryService");
+			
 			tm = (PlatformTransactionManager) applicationContext.getBean("transactionManager");
 			td = new DefaultTransactionDefinition(
 					TransactionDefinition.PROPAGATION_REQUIRED);
@@ -111,7 +116,9 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			    {
 				     Long irFileId = record.getIrFileId();
 				     Long downloadCount = downloadStatisticsService.getNumberOfFileDownloadsForIrFile(irFileId);
-				     downloadStatisticsService.updateRollUpCount(irFileId, downloadCount);
+				     IrFile irFile = repositoryService.getIrFile(irFileId, false);
+				     irFile.setDownloadCount(downloadCount);
+				     repositoryService.save(irFile);
 				     downloadStatisticsService.delete(record);
 			    }
 			    tm.commit(ts);

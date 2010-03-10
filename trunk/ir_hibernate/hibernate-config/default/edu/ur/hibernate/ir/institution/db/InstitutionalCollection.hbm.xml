@@ -370,5 +370,40 @@
 	    where institutionalCollection.repository.id = :repositoryId
 	    and institutionalCollection.parent is null
 	</query>
+	
+	<!-- Get a download count for an institutional collection not including child collections -->
+	   <!-- named query for getting a count of all the downloads in the repository -->
+	<query name="getCollectionFileDownloadCount">
+		select sum(file.downloadCount) from  
+		IrFile as file
+		where file.id IN (
+		    select irFile.id from
+		    InstitutionalCollection as institutionalCollection 
+	        join institutionalCollection.items institutionalItem
+	        join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	        join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	        join institutionalItemVersion.item item
+	        join item.itemFiles itemFile
+	        join itemFile.irFile irFile 
+	        where institutionalCollection.id = ? ) 
+	</query>
+	
+    <!-- named query for getting a count of all the downloads in the repository including children-->
+	<query name="getCollectionDownloadCountWithChildren">
+	    select sum(file.downloadCount) from  
+		IrFile as file
+		where file.id IN (
+		    select irFile.id from
+		    InstitutionalCollection as institutionalCollection 
+	        join institutionalCollection.items institutionalItem
+	        join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	        join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	        join institutionalItemVersion.item item
+	        join item.itemFiles itemFile
+	        join itemFile.irFile irFile
+	        where institutionalCollection.leftValue  &gt;= ? 
+	        and institutionalCollection.leftValue &lt;= ? 
+	        and institutionalCollection.treeRoot.id = ? )
+	</query>
 
 </hibernate-mapping>

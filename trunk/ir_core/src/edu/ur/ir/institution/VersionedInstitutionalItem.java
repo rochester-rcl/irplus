@@ -54,8 +54,10 @@ public class VersionedInstitutionalItem extends BasePersistent {
 	/**  The current highest publication version number */
 	private int maxVersion = INITIAL_ITEM_VERSION;
 	
-
+	/** parent institutional item */
+	private InstitutionalItem institutionalItem;
 	
+
 	/**
 	 * Package protected versioned publication constructor.
 	 */
@@ -64,10 +66,12 @@ public class VersionedInstitutionalItem extends BasePersistent {
 	/**
 	 * Create a new versioned publication with the initial version  
 	 * 
-	 * @param item Item to create versioned institutional Item
+	 * @param parent institutional item
+	 * @param generic item Item to create versioned institutional Item
 	 */
-	public VersionedInstitutionalItem(GenericItem item)
+	public VersionedInstitutionalItem(InstitutionalItem institutionalItem, GenericItem item)
 	{
+		this.setInstitutionalItem(institutionalItem);
 		addNewVersion(item);
 	}
 	
@@ -158,6 +162,21 @@ public class VersionedInstitutionalItem extends BasePersistent {
 	}
 	
 	/**
+	 * Output the string value of the object.
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer("[ id = ");
+		sb.append(id);
+		sb.append(" max version = ");
+		sb.append(maxVersion);
+		sb.append("]");
+		return sb.toString();
+	}
+	
+	/**
 	 * Get the current largest ir version number.  
 	 * 
 	 * @return
@@ -173,6 +192,24 @@ public class VersionedInstitutionalItem extends BasePersistent {
 	 */
 	void setLargestVersion(int largestVersion) {
 		this.maxVersion = largestVersion;
+	}
+	
+	/**
+	 * The parent institutional item.
+	 * 
+	 * @return
+	 */
+	public InstitutionalItem getInstitutionalItem() {
+		return institutionalItem;
+	}
+
+	/**
+	 * Parent institutional item.
+	 * 
+	 * @param institutionalItem
+	 */
+	void setInstitutionalItem(InstitutionalItem institutionalItem) {
+		this.institutionalItem = institutionalItem;
 	}
 
 }

@@ -18,13 +18,11 @@ package edu.ur.ir.statistics;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
-import edu.ur.ir.institution.InstitutionalItemDownloadCount;
 import edu.ur.ir.item.GenericItem;
-import edu.ur.ir.person.PersonName;
+import edu.ur.order.OrderType;
 
 /**
  * Interface to get file download statistics
@@ -98,12 +96,6 @@ public interface DownloadStatisticsService {
 	 */
 	public void processFileDownload(String ipAddress, IrFile irFile);
 	
-	/**
-	 * Update the roll up count for the specified irFileId.
-	 * 
-	 * @param irFileId - id of the irFile to update the count for.
-	 */
-	public FileDownloadRollUp updateRollUpCount(Long irFileId, Long count);
 	
 	/**
 	 * Get the number of file downloads for an ir file.  This does not include
@@ -148,41 +140,7 @@ public interface DownloadStatisticsService {
 	 * @param processingRecord
 	 */
 	public void delete(FileDownloadRollUpProcessingRecord processingRecord);
-	
-	/**
-	 * Get a file download roll up record by ir file id.
-	 * 
-	 * @param irFileId - ir file id the rollup record represents a roll up count for
-	 * @return the file download roll up or null if not found.
-	 */
-	public FileDownloadRollUp getFileDownloadRollUpByIrFileId(Long irFileId);
-	
-	/**
-	 * Get the roll up record by id.
-	 * 
-	 * @param id - id of the roll up record
-	 * @param lock - upgrade the lock mode.
-	 * 
-	 * @return the file download roll up record if found otherwise null.
-	 */
-	public FileDownloadRollUp getFileDownloadRollUp(Long id, boolean lock);
-	
-	/**
-	 * Delete the roll up record.
-	 * 
-	 * @param fileDownloadRollUp
-	 */
-	public void delete(FileDownloadRollUp fileDownloadRollUp);
-	
-	/**
-	 * Get the number of downloads for the sepecified ir file Id
-	 * 
-	 * @param fileId Id of file to count the number of downloads
-	 * 
-	 * @return Number of times the file is downloaded
-	 */
-	public Long getRollUpNumberOfDownloadsForFile(IrFile irFile);
-	
+		
 	/**
 	 * Delete file Download Info
 	 * 
@@ -230,16 +188,15 @@ public interface DownloadStatisticsService {
 	 * 
 	 * @return Number of downloads
 	 */
-	public Long getNumberOfDownloadsForItem(GenericItem item) ;
-
+	public Long getNumberOfDownloadsForItem(GenericItem item) ;	
+	
 	/**
-	 * Get the most downloaded  institutional item info by person name ids
+	 * Get the number of downloads for all institutional items in the repository.
 	 * 
-	 * @param personNameIds Id of person name
-	 * 
-	 * @return most downloaded  institutional item
+	 * @param sponsorId - id of the sponsor
+	 * @return - total number of downloads for all institutional items in the repository.
 	 */
-	public InstitutionalItemDownloadCount getInstitutionalItemDownloadCountByPersonName(Set<PersonName> personNames);
+	public Long getNumberOfDownloadsBySponsor(Long sponsorId);
 	
 	/**
 	 * Gets a list of file info counts that should be ignored from the download info 
@@ -281,4 +238,16 @@ public interface DownloadStatisticsService {
 	 * @return the ignore file download info.
 	 */
 	public IpIgnoreFileDownloadInfo getIpIgnoreFileDownloadInfo(String ipAddress, Long fileId, Date date);
+	
+	/**
+	 * Get the list of ipaddress summed by download ordered by download count (asc/desc) 
+	 * 
+	 * @param rowStart - start position in paged set
+	 * @param numberOfResultsToShow - end position in paged set
+	 * @param sortType - Order by (asc/desc)
+	 * 
+	 * @return List of ip download counts for the specified information.
+	 */
+	public List<IpDownloadCount> getIpOrderByDownloadCount(int rowStart, 
+    		int numberOfResultsToShow, OrderType sortType);
 }

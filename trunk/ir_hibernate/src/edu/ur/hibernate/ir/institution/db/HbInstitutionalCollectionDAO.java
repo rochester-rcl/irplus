@@ -430,4 +430,47 @@ public class HbInstitutionalCollectionDAO implements InstitutionalCollectionDAO 
 		List<GenericItem> listTree =  (List<GenericItem>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllGenericItemsIncludingChildren", ids);
 		return listTree;
 	}
+
+	
+	/**
+	 * Get the download count for the institutional collection.  This does not include 
+	 * downloads for an institutional collection.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalCollectionDAO#getFileDownloads(edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public Long getFileDownloads(InstitutionalCollection institutionalCollection) {
+		Long value =   (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getCollectionFileDownloadCount", institutionalCollection.getId()));
+	
+	    if( value != null )
+	    {
+	    	return value;
+	    }
+	    else
+	    {
+	    	return 0l;
+	    }
+	}
+
+	/**
+	 * Get the file downloads with children coillection download counts included.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalCollectionDAO#getFileDownloadsWithChildren(edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public Long getFileDownloadsWithChildren(
+			InstitutionalCollection institutionalCollection) {
+		Long[] ids = new Long[] {institutionalCollection.getLeftValue(), institutionalCollection.getRightValue(), 
+				institutionalCollection.getTreeRoot().getId()};
+		Long value =    (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getCollectionDownloadCountWithChildren", ids));
+		
+		if( value != null )
+		{
+		    return value;
+		}
+		else
+		{
+		    return 0l;
+		}
+	}
 }

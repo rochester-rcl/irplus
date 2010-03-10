@@ -22,15 +22,19 @@ import edu.ur.persistent.CommonPersistent;
  * Sponsors
  * 
  * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
 public class Sponsor extends CommonPersistent {
 	
-	/**
-	 * Eclipse generated id
-	 */
+	/**  Eclipse generated id */
 	private static final long serialVersionUID = -6950892882624713152L;
 	
+	/** first character of the sponsor */
+	private char sponsorFirstChar;
+	
+
+
 	/**
 	 * Default constructor
 	 */
@@ -44,6 +48,30 @@ public class Sponsor extends CommonPersistent {
 	public Sponsor(String name)
 	{
 		setName(name);
+	}
+	
+	/**
+	 * Set the name of the sponsor.
+	 * 
+	 * @see edu.ur.persistent.CommonPersistent#setName(java.lang.String)
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
+		if(name.length() > 0)
+		{
+		    this.sponsorFirstChar = Character.toLowerCase(name.charAt(0));
+		}
+		
+	}
+	
+	/**
+	 * Sponsor name first char.
+	 * 
+	 * @return
+	 */
+	public char getSponsorFirstChar() {
+		return sponsorFirstChar;
 	}
 	
 	/**

@@ -133,7 +133,7 @@ CrudDAO<PersonName>, NameListDAO
 	/**
 	 * Get a list of items for a specified collection by first character of the name
 	 * 
-	 * NOTE: This search includes all items in child collections
+	 * NOTE: This search includes all person names in child collections
 	 * 
 	 * @param rowStart - Start row to fetch the data from
 	 * @param maxResulsts - maximum number of results to fetch
@@ -141,7 +141,7 @@ CrudDAO<PersonName>, NameListDAO
 	 * @param firstChar - first character that the name should have
 	 * @param orderType - The order to sort by (asc/desc)
 	 * 
-	 * @return List of institutional items
+	 * @return List of person names
 	 */
 	public List<PersonName> getCollectionPersonNamesByChar(final int rowStart,
 			int maxResults, 
@@ -162,7 +162,7 @@ CrudDAO<PersonName>, NameListDAO
 	 * @param lastChar - last character in range that the first letter of the last name can have
 	 * @param orderType - The order to sort by (asc/desc)
 	 * 
-	 * @return List of institutional items
+	 * @return List of person names
 	 */
 	public List<PersonName> getCollectionPersonNamesBetweenChar(final int rowStart,
 			int maxResults, 
@@ -211,8 +211,7 @@ CrudDAO<PersonName>, NameListDAO
 	public Long getCount(char lastNameFirstCharRange, char lastNamelastCharRange);
 	
 	/**
-	 * Get a count of person names in the institutional collection with a name
-	 * that starts with the specified first character.
+	 * Get a count of person names in the institutional collection
 	 * 
 	 * NOTE: This search includes all person names in child collections
 	 * 

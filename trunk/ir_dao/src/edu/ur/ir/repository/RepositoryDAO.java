@@ -37,4 +37,11 @@ CrudDAO<Repository>, UniqueNameDAO<Repository>
 	 * @return set of license versions.
 	 */
 	public List<LicenseVersion> getAvailableRepositoryLicenses(Long repositoryId);
+	
+	/**
+	 * Get the download count for the repository.
+	 * 
+	 * @return
+	 */
+	public Long getDownloadCount();
 }

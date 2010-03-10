@@ -14,26 +14,34 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.web.action.person;
+package edu.ur.ir.web.action.sponsor;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.ur.ir.person.PersonName;
-import edu.ur.ir.person.PersonNameService;
+import edu.ur.ir.item.Sponsor;
+import edu.ur.ir.item.SponsorService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.web.action.person.RepositoryPersonNameBrowse;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 
-public class RepositoryPersonNameBrowse extends Pager {
-
-	/** eclipse generated id */
-	private static final long serialVersionUID = -7121226780091062392L;
+/**
+ * Allow a user to browse all sponsors for the repository.
+ * 
+ * @author Nathan Sarr
+ *
+ */
+public class RepositorySponsorNameBrowse extends Pager{
 
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(RepositoryPersonNameBrowse.class);
+	
+	/** eclipse generated serial version id */
+	private static final long serialVersionUID = 7404992323965723601L;
 	
 	/** List of characters/options that can be selected */
 	private String[] alphaList = new String[]{
@@ -43,35 +51,19 @@ public class RepositoryPersonNameBrowse extends Pager {
 	
 	/** currently selected option */
 	private String selectedAlpha ="All";
-
-	/** service for dealing with person name information */
-	private PersonNameService personNameService;
 	
-
-	/** List of person names found */
-	private List<PersonName> personNames;
+	/** list of sponsors found */
+	private List<Sponsor> sponsors = new LinkedList<Sponsor>();
 	
-
-
+	/** Service for dealing with sponsor information */
+	private SponsorService sponsorService;
+	
 	/** type of sort [ ascending | descending ] 
 	 *  this is for incoming requests */
 	private String sortType = "asc";
 	
-	/** name of the element to sort on 
-	 *   this is for incoming requests */
-	private String sortElement = "lastName";
-
-	/** Total number of institutional items*/
+	/** Total number of sponsors */
 	private int totalHits;
-	
-	/** Row End */
-	private int rowEnd;
-	
-	/** parent id of the collection */
-	private long parentCollectionId = 0l;
-	
-	/** Indicates this is a browse */
-	private String viewType = "browsePersonName";
 	
 	/** repository object */
 	private Repository repository;
@@ -79,46 +71,52 @@ public class RepositoryPersonNameBrowse extends Pager {
 	/** Service for dealing with repositories */
 	private RepositoryService repositoryService;
 	
+	/** Row End */
+	private int rowEnd;
+	
+	/** parent id of the collection */
+	private long parentCollectionId = 0l;
+	
+	/** Indicates this is a browse by sponsor name*/
+	private String viewType = "browseSponsorName";
+		
+	/** Sort on sponsor name element  */
+	private String sortElement = "sponsorName";
+	
+	
+
+
 	/** Default constructor */
-	public RepositoryPersonNameBrowse()
+	public RepositorySponsorNameBrowse()
 	{
 		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 20;
 	}
 	
-	public String getViewType() {
-		return viewType;
-	}
-
-	public void setViewType(String viewType) {
-		this.viewType = viewType;
-	}
-
 	/**
-	 * Browse repository by person name
+	 * Browse repository by sponsor
 	 * 
 	 * @return
 	 */
-	public String execute() {
+	public String execute() 
+	{
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		log.debug("selected Alpha = " + selectedAlpha);
 		rowEnd = rowStart + numberOfResultsToShow;
 		if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
 		{
-		    
-		    personNames = personNameService.getPersonNamesOrderByLastName(rowStart, 
-		    		numberOfResultsToShow,  OrderType.getOrderType(sortType));
-		    totalHits = personNameService.getCount().intValue();
+		    sponsors = sponsorService.getOrderByName(rowStart, numberOfResultsToShow, OrderType.getOrderType(sortType));
+		    totalHits = sponsorService.getCount().intValue();
 		}
 		else if (selectedAlpha.equals("0-9"))
 		{
-			personNames = personNameService.getPersonNamesBetweenChar(rowStart, numberOfResultsToShow, '0', '9', OrderType.getOrderType(sortType));
-			totalHits = personNameService.getCount('0', '9').intValue();
+			sponsors = sponsorService.getSponsorsByNameBetweenChar(rowStart, numberOfResultsToShow, '0', '9', OrderType.getOrderType(sortType));
+			totalHits = sponsorService.getCount('0', '9').intValue();
 		}
 		else
 		{
-			personNames = personNameService.getPersonNamesByLastNameChar(rowStart, numberOfResultsToShow, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
-			totalHits = personNameService.getCount(selectedAlpha.charAt(0)).intValue();
+			sponsors = sponsorService.getByNameFirstChar(rowStart, numberOfResultsToShow, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+			totalHits = sponsorService.getCount(selectedAlpha.charAt(0)).intValue();
 		}
 		
 		if(rowEnd > totalHits)
@@ -129,22 +127,24 @@ public class RepositoryPersonNameBrowse extends Pager {
 		return SUCCESS;
 	}
 	
-	/**
-	 * Get total number of researchers
-	 * 
-	 * @see edu.ur.ir.web.table.Pager#getTotalHits()
-	 */
-	public int getTotalHits() {		
-		return totalHits;
+	public int getRowEnd() {
+		return rowEnd;
 	}
 
-
-	public String getSortElement() {
-		return sortElement;
+	public void setRowEnd(int rowEnd) {
+		this.rowEnd = rowEnd;
 	}
 
-	public void setSortElement(String sortElement) {
-		this.sortElement = sortElement;
+	public long getParentCollectionId() {
+		return parentCollectionId;
+	}
+
+	public void setParentCollectionId(long parentCollectionId) {
+		this.parentCollectionId = parentCollectionId;
+	}
+
+	public String getViewType() {
+		return viewType;
 	}
 
 	public String getSortType() {
@@ -153,32 +153,6 @@ public class RepositoryPersonNameBrowse extends Pager {
 
 	public void setSortType(String sortType) {
 		this.sortType = sortType;
-	}
-
-
-	public List<PersonName> getPersonNames() {
-		return personNames;
-	}
-
-	public void setPersonNames(List<PersonName> personNames) {
-		this.personNames = personNames;
-	}
-
-	public PersonNameService getPersonNameService() {
-		return personNameService;
-	}
-
-	public void setPersonNameService(PersonNameService personNameService) {
-		this.personNameService = personNameService;
-	}
-
-
-	public long getParentCollectionId() {
-		return parentCollectionId;
-	}
-
-	public void setParentCollectionId(long parentCollectionId) {
-		this.parentCollectionId = parentCollectionId;
 	}
 
 	public String[] getAlphaList() {
@@ -197,30 +171,51 @@ public class RepositoryPersonNameBrowse extends Pager {
 		this.selectedAlpha = selectedAlpha;
 	}
 
-	public int getRowEnd() {
-		return rowEnd;
+	public List<Sponsor> getSponsors() {
+		return sponsors;
 	}
 
-	public void setRowEnd(int rowEnd) {
-		this.rowEnd = rowEnd;
+	public void setSponsors(List<Sponsor> sponsors) {
+		this.sponsors = sponsors;
 	}
 
+	public SponsorService getSponsorService() {
+		return sponsorService;
+	}
+
+	public void setSponsorService(SponsorService sponsorService) {
+		this.sponsorService = sponsorService;
+	}
+
+	public int getTotalHits() {
+		return totalHits;
+	}
+	
 	public Repository getRepository() {
 		return repository;
 	}
+
 
 	public void setRepository(Repository repository) {
 		this.repository = repository;
 	}
 
+
 	public RepositoryService getRepositoryService() {
 		return repositoryService;
 	}
 
+
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
 	}
+	public String getSortElement() {
+		return sortElement;
+	}
 
-
+	
+	public void setSortElement(String sortElement) {
+		this.sortElement = sortElement;
+	}
 
 }

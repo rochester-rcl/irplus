@@ -22,12 +22,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import com.opensymphony.xwork2.ActionSupport;
-
-import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemDownloadCount;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
 import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.PersonName;
@@ -37,14 +34,17 @@ import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.table.Pager;
+import edu.ur.order.OrderType;
 
 /**
  * Action to display contributor page
  * 
  * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
-public class ViewContributorPage extends ActionSupport  {
+public class ViewContributorPage extends Pager {
 
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = -3059332380151731902L;
@@ -94,6 +94,27 @@ public class ViewContributorPage extends ActionSupport  {
 	/**  Name for a person that was selected for viewing*/
 	private PersonName personName;
 	
+	/** type of sort [ ascending | descending ] 
+	 *  this is for incoming requests */
+	private String sortType = "asc";
+	
+	/** name of the element to sort on 
+	 *   this is for incoming requests */
+	private String sortElement = "title";
+
+	/** Total number of institutional items*/
+	private int totalHits;
+	
+	/** Row End */
+	private int rowEnd;
+	
+	/** Default constructor */
+	public ViewContributorPage()
+	{
+		numberOfResultsToShow = 25;
+		numberOfPagesToShow = 20;
+	}
+	
 	/**
 	 * View the contributor page.
 	 * 
@@ -112,14 +133,25 @@ public class ViewContributorPage extends ActionSupport  {
 		}
 		
 		Timestamp timeStamp = null;
+	
+		totalDownloads = institutionalItemService.getNumberOfDownlodsForPersonNames(names);
+		
+		 List<InstitutionalItemVersionDownloadCount> itemVersions = new LinkedList<InstitutionalItemVersionDownloadCount>();
 		
 		// Construct the object with item and download info for display
-		List<InstitutionalItemVersion> itemVersions = institutionalItemService.getPublicationVersionsByPersonName(names);
-		for (InstitutionalItemVersion itemVersion:itemVersions) {
+		if( sortElement.equals("title"))
+		{
+		    itemVersions = institutionalItemService.getPublicationVersionsForNamesByTitle(totalHits, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
+		} 
+		else if( sortElement.equals("download"))
+		{
+			itemVersions = institutionalItemService.getPublicationVersionsForNamesByDownload(totalHits, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
+		}
+		for (InstitutionalItemVersionDownloadCount itemVersionDownloadCount:itemVersions) {
 
 			// Find the contributor type
-			ContributorPublication cp = new ContributorPublication(itemVersion);
-			for(ItemContributor c :itemVersion.getItem().getContributors()) {
+			ContributorPublication cp = new ContributorPublication(itemVersionDownloadCount.getInstitutionalItemVersion());
+			for(ItemContributor c :itemVersionDownloadCount.getInstitutionalItemVersion().getItem().getContributors()) {
 				if (c.getContributor().getPersonName().getPersonNameAuthority().equals(authority)) {
 					cp.setContributor(c.getContributor());
 					break;
@@ -128,17 +160,16 @@ public class ViewContributorPage extends ActionSupport  {
 			
 			// Determine the latest publication
 			if (timeStamp == null ) {
-				timeStamp = itemVersion.getDateOfDeposit();
-				latestItemVersion = itemVersion;
+				timeStamp = itemVersionDownloadCount.getInstitutionalItemVersion().getDateOfDeposit();
+				latestItemVersion = itemVersionDownloadCount.getInstitutionalItemVersion();
 				latestPublicationContributorType = cp.getContributor().getContributorType().getName();
-			} else if (itemVersion.getDateOfDeposit().compareTo(timeStamp) > 0 ) {
-				latestItemVersion = itemVersion;
+			} else if (itemVersionDownloadCount.getInstitutionalItemVersion().getDateOfDeposit().compareTo(timeStamp) > 0 ) {
+				latestItemVersion = itemVersionDownloadCount.getInstitutionalItemVersion();
 				latestPublicationContributorType = cp.getContributor().getContributorType().getName();
 			}
 			
 			// Calculate the total download count
-			long downloadCountForItem = downloadStatisticsService.getNumberOfDownloadsForItem(itemVersion.getItem());
-			totalDownloads = totalDownloads + downloadCountForItem;
+			long downloadCountForItem = downloadStatisticsService.getNumberOfDownloadsForItem(itemVersionDownloadCount.getInstitutionalItemVersion().getItem());
 			
 			// Set download count for an item
 			cp.setDownloadsCount(downloadCountForItem);
@@ -146,34 +177,27 @@ public class ViewContributorPage extends ActionSupport  {
 		}
 
 		// Set most downloaded publication
-		InstitutionalItemDownloadCount downloadInfo = downloadStatisticsService.getInstitutionalItemDownloadCountByPersonName(names);
+		List<InstitutionalItemVersionDownloadCount> topDownloads  = institutionalItemService.getPublicationVersionsForNamesByDownload(0, 1, names, OrderType.DESCENDING_ORDER);
 		
-
-		if( downloadInfo != null)
+		if( topDownloads.size() > 0 )
 		{
-			mostDownloadedCount = downloadInfo.getCount();
-			InstitutionalItem mostDownloadedItem = downloadInfo.getInstitutionalItem();
-			
-		    for (int versionNumber = mostDownloadedItem.getVersionedInstitutionalItem().getLargestVersion(); versionNumber > 0 ; versionNumber--) {
-			    InstitutionalItemVersion version = mostDownloadedItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(versionNumber);
-		
-			    Iterator<ItemContributor> contribIterator = version.getItem().getContributors().iterator();
+			InstitutionalItemVersionDownloadCount downloadInfo = topDownloads.get(0);
+			mostDownloadedCount = downloadInfo.getDownloadCount();
+			mostDownloadedItemVersion = downloadInfo.getInstitutionalItemVersion();
+			Iterator<ItemContributor> contribIterator = downloadInfo.getInstitutionalItemVersion().getItem().getContributors().iterator();
 			    
-			    boolean done = false;
-			    while(contribIterator.hasNext() && !done)
-			    {
-			    	 ItemContributor c = contribIterator.next();
-			    	 if (c.getContributor().getPersonName().getPersonNameAuthority().equals(authority)) {
-			    		    mostDownloadedItemVersion = version;
-						    mostDownloadedItemContributorType = c.getContributor().getContributorType().getName();
-						    done = true;
-					 }
-			    }
-		    }
+			boolean done = false;
+			while(contribIterator.hasNext() && !done)
+			{
+			    ItemContributor c = contribIterator.next();
+			    if (c.getContributor().getPersonName().getPersonNameAuthority().equals(authority)) {
+				    mostDownloadedItemContributorType = c.getContributor().getContributorType().getName();
+				    done = true;
+				}
+			}
 
 		}
-		
-		
+
 		publicationsCount = institutionalItemService.getPublicationCountByPersonName(names);
 		
 		return SUCCESS;
@@ -313,6 +337,43 @@ public class ViewContributorPage extends ActionSupport  {
 
 	public PersonName getPersonName() {
 		return personName;
+	}
+
+	
+	public int getTotalHits() {
+		return totalHits;
+	}
+	
+	public String getSortType() {
+		return sortType;
+	}
+
+	public void setSortType(String sortType) {
+		this.sortType = sortType;
+	}
+
+	public String getSortElement() {
+		return sortElement;
+	}
+
+	public void setSortElement(String sortElement) {
+		this.sortElement = sortElement;
+	}
+
+	public int getRowEnd() {
+		return rowEnd;
+	}
+
+	public void setRowEnd(int rowEnd) {
+		this.rowEnd = rowEnd;
+	}
+
+	public void setTotalDownloads(long totalDownloads) {
+		this.totalDownloads = totalDownloads;
+	}
+
+	public void setTotalHits(int totalHits) {
+		this.totalHits = totalHits;
 	}
 
 

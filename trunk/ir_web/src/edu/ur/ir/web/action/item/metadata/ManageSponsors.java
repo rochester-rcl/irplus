@@ -29,6 +29,7 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
+import edu.ur.order.OrderType;
 
 /**
  * Action to deal with sponsors.
@@ -107,10 +108,10 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 		}
 		
 		added = false;
-		Sponsor other = sponsorService.getSponsor(sponsor.getName());
+		Sponsor other = sponsorService.get(sponsor.getName());
 		if( other == null)
 		{
-		    sponsorService.saveSponsor(sponsor);
+		    sponsorService.save(sponsor);
 		    added = true;
 		}
 		else
@@ -132,11 +133,11 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 		log.debug("updateing sponsor id = " + sponsor.getId());
 		added = false;
 
-		Sponsor other = sponsorService.getSponsor(sponsor.getName());
+		Sponsor other = sponsorService.get(sponsor.getName());
 		
 		if( other == null || other.getId().equals(sponsor.getId()))
 		{
-			sponsorService.saveSponsor(sponsor);
+			sponsorService.save(sponsor);
 			added = true;
 		}
 		else
@@ -162,7 +163,8 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 		    for(int index = 0; index < sponsorIds.length; index++)
 		    {
 			    log.debug("Deleting sponsor with id " + sponsorIds[index]);
-			    sponsorService.deleteSponsor(sponsorIds[index]);
+			    Sponsor s = sponsorService.get(sponsorIds[index], false);
+			    sponsorService.delete(s);
 		    }
 		}
 		deleted = true;
@@ -176,7 +178,7 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 	 */
     public String get()
     {
-    	sponsor = sponsorService.getSponsor(id, false);
+    	sponsor = sponsorService.get(id, false);
     	return "get";
     }
 	
@@ -189,9 +191,9 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 	{
 		rowEnd = rowStart + numberOfResultsToShow;
 	    
-		sponsors = sponsorService.getSponsorsOrderByName(rowStart, 
-	    		numberOfResultsToShow, sortType);
-	    totalHits = sponsorService.getSponsorsCount().intValue();
+		sponsors = sponsorService.getOrderByName(rowStart, 
+	    		numberOfResultsToShow, OrderType.getOrderType(sortType));
+	    totalHits = sponsorService.getCount().intValue();
 		
 		if(rowEnd > totalHits)
 		{
@@ -284,7 +286,7 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 	public void prepare() throws Exception {
 		if( id != null)
 		{
-			sponsor = sponsorService.getSponsor(id, false);
+			sponsor = sponsorService.get(id, false);
 		}
 	}
 

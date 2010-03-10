@@ -507,7 +507,11 @@
    <bean id="downloadStatisticsService" 
        class="edu.ur.ir.statistics.service.DefaultDownloadStatisticsService">
        <property name="fileDownloadInfoDAO" ref="fileDownloadInfoDAO"/>
-       <property name="fileDownloadRollUpDAO" ref="fileDownloadRollUpDAO"/>
+       <property name="irFileDAO" ref="irFileDAO"/>
+       <property name="institutionalCollectionDAO" ref="institutionalCollectionDAO"/>
+       <property name="genericItemDAO" ref="itemDAO"/>
+       <property name="repositoryDAO" ref="repositoryDAO"/>
+       <property name="institutionalItemVersionDAO" ref="institutionalItemVersionDAO"/>
        <property name="fileDownloadRollUpProcessingRecordDAO" ref="fileDownloadRollUpProcessingRecordDAO"/>
        <property name="ipIgnoreFileDownloadInfoDAO" ref="ipIgnoreFileDownloadInfoDAO"/>
        <property name="ignoreIpAddressDAO" ref="ignoreIpAddressDAO"/>
@@ -567,7 +571,7 @@
        <property name="mailSender" ref="mailSender"/>
        <property name="subject" value="An Repository Error Has Occured"/>
        <property name="toAddress" value="${email.error.address}"/>
-       <property name="sendEmails" value="true"/>
+       <property name="sendEmails" value="false"/>
    </bean>
    
    <!-- ****************************************** --> 

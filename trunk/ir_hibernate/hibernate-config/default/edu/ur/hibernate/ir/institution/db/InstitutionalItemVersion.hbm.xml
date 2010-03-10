@@ -122,19 +122,221 @@
 	</class>
 
 	<!-- institutional item version contributed by given person name -->
-	<query name="getPublicationVersionsByPersonNameId">
-	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion
+	<query name="getPublicationVersionsByPersonNameIdTitleAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
 	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
 	    join item.contributors as itemContributor
 	    join itemContributor.contributor as contributor
-	    where contributor.personName.id in (:personNameIds) order by item.name asc, institutionalItemVersion.versionNumber desc
-	</query>	
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
+	    order by item.lowerCaseName asc, institutionalItemVersion.versionNumber desc
+	</query>
+	
+	<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdTitleDesc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber    
+	    order by item.lowerCaseName desc, institutionalItemVersion.versionNumber desc
+	</query>		
+	
+		<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdDownloadAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
+	    order by sum(irFile.downloadCount) asc, item.lowerCaseName asc, institutionalItemVersion.versionNumber desc
+	</query>
+	
+	<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdDownloadDesc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
+	    order by sum(irFile.downloadCount) desc, item.lowerCaseName desc, institutionalItemVersion.versionNumber desc
+	</query>
 	
 	<!-- institutional item version for a given handle -->
 	<query name="getInstitutionalItemByHandleId">
 	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion
 	    where handleInfo.id = ?
-	</query>	
-		
+	</query>
+	
+	<!-- ********************************************************* -->
+	<!--  Get all institutional item version publications based on a sponsor  -->
+	<!-- ********************************************************* -->
+	<query name="getPublicationsForSponsorAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
+	    order by item.lowerCaseName asc, institutionalItemVersion.versionNumber asc
+	</query>
+
+	<query name="getPublicationsForSponsorDesc">
+	   select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
+	    order by item.lowerCaseName desc, institutionalItemVersion.versionNumber desc
+	</query>
+	
+	<query name="getPublicationsForSponsorCount">
+	    select count(institutionalItemVersion) from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor
+	    where sponsor.id = :sponsorId
+	</query>
+	
+	<!-- ********************************************************* -->
+	<!--  Get all institutional item version publications based on a sponsor -->
+	<!--  order by deposit date-->
+	<!-- ********************************************************* -->
+	
+	<query name="getPublicationsForSponsorDepositDateDesc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as  versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
+	    order by institutionalItemVersion.dateOfDeposit desc 
+	</query>
+	
+	<query name="getPublicationsForSponsorDepositDateAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from  InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as  versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit 
+	    order by institutionalItemVersion.dateOfDeposit asc 
+	</query>
+
+	<!-- ********************************************************* -->
+	<!--  get the publications  along with download count -->
+	<!-- ********************************************************* -->
+	<query name="getPublicationsSponsorDownloadCountOrderByCountDesc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from  InstitutionalItem institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemSponsors itemSponsor
+	    join itemSponsor.sponsor sponsor
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
+	    order by sum(irFile.downloadCount) desc, institutionalItemVersion.dateOfDeposit desc
+    </query>
+	
+	<query name="getPublicationsSponsorDownloadCountOrderByCountAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from  InstitutionalItem institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemSponsors itemSponsor
+	    join itemSponsor.sponsor sponsor
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    where sponsor.id = :sponsorId
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
+	    order by sum(irFile.downloadCount) asc, institutionalItemVersion.dateOfDeposit asc
+    </query>
     
+    	
+	<!-- Count of institutional item contributed by given person name -->
+	<query name="getInstitutionalItemVersionCountByPersonName">
+	    select  institutionalItemVersion, sum(irFile.downloadCount) 
+	    from InstitutionalItem institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.contributors itemContributor
+	    join itemContributor.contributor contributor
+	    left join item.itemFiles itemFile
+	    left join itemFile.irFile irFile
+	    where  contributor.personName.id in (:personNameIds)
+		group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
+		order by sum(irFile.downloadCount) desc, institutionalItemVersion.dateOfDeposit desc
+	</query>
+	
+	<!-- Count of downloads for a given sponsor -->
+	<query name="getDownloadCountBySponsor">
+	    select sum(file.downloadCount) as downloadCount 
+	    from IrFile as file 
+	    where file.id in
+	    (select irFile.id 
+	     from  InstitutionalItem institutionalItem
+	     join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	     join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	     join institutionalItemVersion.item item
+	     join item.itemSponsors itemSponsor
+	     join itemSponsor.sponsor sponsor
+	     join item.itemFiles itemFile
+	     join itemFile.irFile irFile
+	     where sponsor.id = ?)
+	</query>	
+	
+	<!-- Count of downloads for a given contributor -->
+	<query name="getDownloadCountByPersonNames">
+	    select sum(file.downloadCount) as downloadCount 
+	    from IrFile as file 
+	    where file.id in
+	    ( select irFile.id 
+	      from InstitutionalItem institutionalItem 
+	      join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	      join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	      join institutionalItemVersion.item item
+	      join item.contributors itemContributor
+	      join itemContributor.contributor contributor
+	      join item.itemFiles itemFile
+	      join itemFile.irFile irFile
+	      where  contributor.personName.id in (:personNameIds) )
+	</query>	
+	
 </hibernate-mapping>
