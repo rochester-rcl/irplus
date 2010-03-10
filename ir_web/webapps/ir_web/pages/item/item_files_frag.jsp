@@ -40,7 +40,7 @@
 					    <c:param value="${object.id}" name="itemFileId"/>
 				    </c:url>
 				    <a href="${itemFileDownload}">
-	                 ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${ir:fileDownloadCount(object.irFile)})
+	                 ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
 		        </c:if>
 		        <c:if test="${!object.public && institutionalItem.owner != user && !ir:hasPermission('ITEM_FILE_READ',object) }">
 		            <c:url var="restrictedAccess" value="/user/institutionalPublicationPublicView.action">
@@ -63,7 +63,7 @@
 					    <c:param value="${researcherPublicationId}" name="publicationId"/>
 						<c:param value="${object.id}" name="itemFileId"/>
 					</c:url>
-					<a href="${itemFileDownload}"> ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${ir:fileDownloadCount(object.irFile)})
+					<a href="${itemFileDownload}"> ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
 		    </c:if>
 												   
 	    </c:if>

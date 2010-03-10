@@ -412,7 +412,7 @@
         
         
         <!--  ************************************ -->
-        <!--    Conrtibutor actions                 -->
+        <!--    Contributor actions                 -->
         <!--  ************************************ -->
         
          <action name="viewContributorPage" 
@@ -430,6 +430,16 @@
          	<result name="success">/pages/item/contributor_page_view.jsp</result>
          </action>       
                  
+                 
+        <!--  ************************************ -->
+        <!--    Sponsor actions                 -->
+        <!--  ************************************ -->
+        
+         <action name="viewSponsorPage" 
+                class="edu.ur.ir.web.action.sponsor.ViewSponsor">
+         	<result name="success">/pages/sponsor/sponsor_page_view.jsp</result>
+         </action> 
+        
     </package>
          
         

@@ -587,7 +587,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		if (sponsorIds != null ) {
 			for (int i =0; i < sponsorIds.length; i++ ) {
 				if (sponsorIds[i] != 0) {
-					Sponsor sponsor = sponsorService.getSponsor(sponsorIds[i], false);
+					Sponsor sponsor = sponsorService.get(sponsorIds[i], false);
 					item.addItemSponsor(sponsor, sponsorDescriptions[i]);
 				}
 			}
@@ -900,7 +900,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 * @return
 	 */
 	public List<Sponsor> getSponsors() {
-		 List<Sponsor> sponsors = sponsorService.getAllSponsor();
+		 List<Sponsor> sponsors = sponsorService.getAll();
 		Collections.sort(sponsors, nameComparator);
 		return sponsors;
 	}

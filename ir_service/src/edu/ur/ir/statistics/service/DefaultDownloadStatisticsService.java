@@ -19,28 +19,29 @@ package edu.ur.ir.statistics.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.institution.InstitutionalCollection;
-import edu.ur.ir.institution.InstitutionalItemDownloadCount;
+import edu.ur.ir.institution.InstitutionalCollectionDAO;
+import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.item.GenericItem;
-import edu.ur.ir.person.PersonName;
+import edu.ur.ir.item.GenericItemDAO;
+import edu.ur.ir.repository.RepositoryDAO;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.statistics.FileDownloadInfo;
 import edu.ur.ir.statistics.FileDownloadInfoDAO;
-import edu.ur.ir.statistics.FileDownloadRollUp;
-import edu.ur.ir.statistics.FileDownloadRollUpDAO;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecord;
 import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecordDAO;
 import edu.ur.ir.statistics.IgnoreIpAddressDAO;
+import edu.ur.ir.statistics.IpDownloadCount;
 import edu.ur.ir.statistics.IpIgnoreFileDownloadInfo;
 import edu.ur.ir.statistics.IpIgnoreFileDownloadInfoDAO;
+import edu.ur.order.OrderType;
 
 /**
  * Implementation of the download statistics service.
@@ -53,9 +54,22 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	/** Data access for file download info */
 	private FileDownloadInfoDAO fileDownloadInfoDAO;
 	
-	/** Roll up Data access for file download info */
-	private FileDownloadRollUpDAO fileDownloadRollUpDAO;
-	
+    /** ir File data access */
+    private IrFileDAO irFileDAO;
+    
+    /** institutional collection data access */
+    private InstitutionalCollectionDAO institutionalCollectionDAO;
+    
+    /** generic item data access */
+    private GenericItemDAO genericItemDAO;
+    
+    /** repository data access */
+    private RepositoryDAO repositoryDAO;
+    
+    /** institutional item version data access */
+    private InstitutionalItemVersionDAO institutionalItemVersionDAO;
+
+
 	/** data access for ignoring ip address information  */
 	private IgnoreIpAddressDAO ignoreIpAddressDAO;
 	
@@ -178,28 +192,11 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		else
 		{
 			addFileDownloadInfo(ipAddress, irFile);
-			FileDownloadRollUp rollupRecord = this.getFileDownloadRollUpByIrFileId(irFile.getId());
-			
-			Long downloadCount = 1l;
-			if( rollupRecord != null )
-			{
-			    downloadCount = rollupRecord.getDownloadCount() + 1l;
-			}
-			updateRollUpCount(irFile.getId(), downloadCount);
+			long downloadCount = irFile.getDownloadCount();
+			downloadCount = downloadCount + 1l;
+			irFile.setDownloadCount(downloadCount);
+			irFileDAO.makePersistent(irFile);
 		}
-	}
-
-	
-	/**
-	 * Get the number of downloads for the specified file Id
-	 * 
-	 * @param fileId Id of file to count the number of downloads
-	 * 
-	 * @return Number of times the file is downloaded
-	 */
-	public Long getRollUpNumberOfDownloadsForFile(IrFile irFile) {
-		log.debug("No. of downloads for file Ids: " + irFile);
-		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForIrFile(irFile);
 	}
 	
 	/**
@@ -212,7 +209,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public Long getNumberOfDownloadsForCollection(InstitutionalCollection institutionalCollection) {
 		
 		log.debug("No. of downloads for insittuional colleciton: " + institutionalCollection );
-		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForCollection(institutionalCollection);
+		return institutionalCollectionDAO.getFileDownloads(institutionalCollection);
 	}
 
 	/**
@@ -225,7 +222,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public Long getNumberOfDownloadsForItem(GenericItem item) {
 		
 		log.debug("No. of downloads for item: " + item);
-		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForItem(item);
+		return genericItemDAO.getDownloadCount(item.getId());
 	}
 
 	
@@ -239,8 +236,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public Long getNumberOfDownloadsForCollectionAndItsChildren(InstitutionalCollection institutionalCollection) {
 		
 		log.debug("No. of downloads for insitutional collection Id: " + institutionalCollection );
-		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForCollectionIncludingChildren(institutionalCollection);
-		
+		return institutionalCollectionDAO.getFileDownloadsWithChildren(institutionalCollection); 
 	}
 
 	/**
@@ -249,8 +245,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 * @return Number of downloads
 	 */
 	public Long getNumberOfDownloadsForAllCollections() {
-		return fileDownloadRollUpDAO.getNumberOfFileDownloadsForRepository();
-	
+		return repositoryDAO.getDownloadCount();
 	}
 	
 	/**
@@ -286,55 +281,7 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public FileDownloadInfo getFileDownloadInfo(Long id, boolean lock) {
 		return fileDownloadInfoDAO.getById(id, lock);
 	}
-
 	
-	/**
-	 * Get most downloaded institutional item info by person name ids
-	 * 
-	 * @param personNameIds Id of person name
-	 * 
-	 * @return most downloaded  institutional item
-	 */
-	public InstitutionalItemDownloadCount getInstitutionalItemDownloadCountByPersonName(Set<PersonName> personNames) {
-		
-		List<Long> ids = new ArrayList<Long>();
-		for (PersonName p: personNames) {
-			ids.add(p.getId());
-		}
-
-		return fileDownloadRollUpDAO.getInstitutionalItemDownloadCountByPersonName(ids);
-	}
-
-	public FileDownloadRollUpDAO getFileDownloadRollUpDAO() {
-		return fileDownloadRollUpDAO;
-	}
-
-	public void setFileDownloadRollUpDAO(FileDownloadRollUpDAO fileDownloadRollUpDAO) {
-		this.fileDownloadRollUpDAO = fileDownloadRollUpDAO;
-	}
-
-	
-	/**
-	 * Update the count for the specified ir file id.
-	 * 
-	 * @see edu.ur.ir.statistics.DownloadStatisticsService#updateRollUpCount(java.lang.Long)
-	 */
-	public FileDownloadRollUp updateRollUpCount(Long irFileId, Long count) {		
-		
-		FileDownloadRollUp rollUp = fileDownloadRollUpDAO.getByIrFileId(irFileId);
-		
-		if( rollUp == null )
-		{
-			rollUp = new FileDownloadRollUp(irFileId, count);
-		}
-		else
-		{
-			rollUp.setDownloadCount(count);
-		}
-		
-		fileDownloadRollUpDAO.makePersistent(rollUp);
-		return rollUp;
-	}
 
 	public FileDownloadRollUpProcessingRecordDAO getFileDownloadRollUpProcessingRecordDAO() {
 		return fileDownloadRollUpProcessingRecordDAO;
@@ -405,36 +352,6 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	public List<IpIgnoreFileDownloadInfo> getIgnoreInfoNowAcceptable(int start, int batchSize)
 	{
 		return ipIgnoreFileDownloadInfoDAO.getIgnoreInfoNowAcceptable(start, batchSize );
-	}
-
-	
-	/**
-	 * Get the file download roll up by ir file id.
-	 * 
-	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getFileDownloadRollUpByIrFileId(java.lang.Long)
-	 */
-	public FileDownloadRollUp getFileDownloadRollUpByIrFileId(Long irFileId)
-	{
-		return fileDownloadRollUpDAO.getByIrFileId(irFileId);
-	}
-
-	/**
-	 * Get the file download roll up 
-	 * 
-	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getFileDownloadRollUp(java.lang.Long, boolean)
-	 */
-	public FileDownloadRollUp getFileDownloadRollUp(Long id, boolean lock)
-	{
-		return fileDownloadRollUpDAO.getById(id, lock);
-	}
-	
-	/**
-	 * Delete the roll up record.
-	 * 
-	 * @see edu.ur.ir.statistics.DownloadStatisticsService#delete(edu.ur.ir.statistics.FileDownloadRollUp)
-	 */
-	public void delete(FileDownloadRollUp fileDownloadRollUp) {
-		fileDownloadRollUpDAO.makeTransient(fileDownloadRollUp);
 	}
 
 	public IgnoreIpAddressDAO getIgnoreIpAddressDAO() {
@@ -516,6 +433,61 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		return fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFileId);
 	}
 	
+	/**
+	 * Get the total number of downloads by sponsor.
+	 * 
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getNumberOfDownloadsBySponsor(java.lang.Long)
+	 */
+	public Long getNumberOfDownloadsBySponsor(Long sponsorId) {
+		return institutionalItemVersionDAO.getDownloadCountForSponsor(sponsorId);
+	}
 	
+	public IrFileDAO getIrFileDAO() {
+		return irFileDAO;
+	}
+
+	public void setIrFileDAO(IrFileDAO irFileDAO) {
+		this.irFileDAO = irFileDAO;
+	}
+
+	public InstitutionalCollectionDAO getInstitutionalCollectionDAO() {
+		return institutionalCollectionDAO;
+	}
+
+	public void setInstitutionalCollectionDAO(
+			InstitutionalCollectionDAO institutionalCollectionDAO) {
+		this.institutionalCollectionDAO = institutionalCollectionDAO;
+	}
+
+	public GenericItemDAO getGenericItemDAO() {
+		return genericItemDAO;
+	}
+
+	public void setGenericItemDAO(GenericItemDAO genericItemDAO) {
+		this.genericItemDAO = genericItemDAO;
+	}
+	
+	public RepositoryDAO getRepositoryDAO() {
+		return repositoryDAO;
+	}
+
+	public void setRepositoryDAO(RepositoryDAO repositoryDAO) {
+		this.repositoryDAO = repositoryDAO;
+	}
+
+	public InstitutionalItemVersionDAO getInstitutionalItemVersionDAO() {
+		return institutionalItemVersionDAO;
+	}
+
+	public void setInstitutionalItemVersionDAO(
+			InstitutionalItemVersionDAO institutionalItemVersionDAO) {
+		this.institutionalItemVersionDAO = institutionalItemVersionDAO;
+	}
+
+	public List<IpDownloadCount> getIpOrderByDownloadCount(int rowStart,
+			int numberOfResultsToShow, OrderType sortType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

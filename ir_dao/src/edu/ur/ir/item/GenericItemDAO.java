@@ -94,5 +94,13 @@ CrudDAO<GenericItem>, NameListDAO, NonUniqueNameDAO<GenericItem>
 	 * @return list of Items
 	 */
 	public List<GenericItem> getAllItemsForUser(Long userId);
+	
+	/**
+	 * Get the download count of all files within an item.
+	 * 
+	 * @param itemId - id of the item to get the downloads for
+	 * @return - the count of downloads.
+	 */
+	public Long getDownloadCount(Long itemId);
 
 }

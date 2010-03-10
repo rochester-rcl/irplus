@@ -44,6 +44,10 @@
 		<property name="publicViewable" column="public_viewable" 
 		     type="boolean" not-null="true"
 			 access="field" />
+		
+		<!--  download count for the file -->	 
+		<property name="downloadCount" column="download_count" 
+		     type="long"  access="field" />
 			
 			
         <!--  The file information for this ir file (Wrapper) -->

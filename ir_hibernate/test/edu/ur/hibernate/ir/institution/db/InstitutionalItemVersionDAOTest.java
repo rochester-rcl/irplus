@@ -16,8 +16,11 @@
 
 package edu.ur.hibernate.ir.institution.db;
 
+import java.io.File;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -30,10 +33,13 @@ import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
+import edu.ur.file.db.FileInfo;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
+import edu.ur.ir.file.IrFile;
+import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleInfoDAO;
 import edu.ur.ir.handle.HandleNameAuthority;
@@ -44,9 +50,12 @@ import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemDAO;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
+import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
 import edu.ur.ir.item.DuplicateContributorException;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.GenericItemDAO;
+import edu.ur.ir.item.Sponsor;
+import edu.ur.ir.item.SponsorDAO;
 import edu.ur.ir.item.VersionedItemDAO;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorDAO;
@@ -58,10 +67,16 @@ import edu.ur.ir.person.PersonNameAuthorityDAO;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.VersionedLicense;
 import edu.ur.ir.repository.VersionedLicenseDAO;
+import edu.ur.ir.statistics.FileDownloadInfo;
+import edu.ur.ir.statistics.FileDownloadInfoDAO;
+import edu.ur.ir.statistics.IgnoreIpAddress;
+import edu.ur.ir.statistics.IgnoreIpAddressDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
+import edu.ur.order.OrderType;
+import edu.ur.util.FileUtil;
 
 /**
  * Test the persistence methods for published version Information
@@ -125,8 +140,24 @@ public class InstitutionalItemVersionDAOTest {
 	HandleInfoDAO handleInfoDAO = (HandleInfoDAO) ctx
 	.getBean("handleInfoDAO");
 	
-    /** user data access  */
+    /** versioned license data access  */
     VersionedLicenseDAO versionedLicenseDAO= (VersionedLicenseDAO) ctx.getBean("versionedLicenseDAO");
+    
+    /** sponsor data access */
+    SponsorDAO sponsorDAO = (SponsorDAO) ctx.getBean("sponsorDAO");
+    
+    /** ir file data access */
+    IrFileDAO irFileDAO = 
+    	(IrFileDAO) ctx.getBean("irFileDAO");
+    
+	/**  File download information */
+	FileDownloadInfoDAO fileDownloadInfoDAO = (FileDownloadInfoDAO) ctx
+	.getBean("fileDownloadInfoDAO");
+	
+	/** persistance for dealing with ignoring ip addesses */
+	IgnoreIpAddressDAO ignoreIpAddressDAO = (IgnoreIpAddressDAO) ctx
+	.getBean("ignoreIpAddressDAO");
+
 
 	
 	/**
@@ -463,11 +494,18 @@ public class InstitutionalItemVersionDAOTest {
 		List<Long> personNameIds = new ArrayList<Long>();
 		personNameIds.add(name.getId());
 		personNameIds.add(name1.getId());
-		List<InstitutionalItemVersion> itemVersions = institutionalItemVersionDAO.getPublicationVersionsByPersonName(personNameIds);
+		List<InstitutionalItemVersionDownloadCount> itemVersions = institutionalItemVersionDAO.getPublicationVersionsForNamesByDownload(0, 10, personNameIds, OrderType.ASCENDING_ORDER);
 		
-		assert itemVersions.size()  == 2 : "Should be 2 " ;
-		assert itemVersions.contains(ii2.getVersionedInstitutionalItem().getCurrentVersion()) : "Institutional item version 1 should exist" ;
-		assert itemVersions.contains(ii1.getVersionedInstitutionalItem().getCurrentVersion()) : "Institutional item version 2 should exist" ;
+		assert itemVersions.size()  == 2 : "Should be 2 but is " + itemVersions.size() ;
+		InstitutionalItemVersionDownloadCount one = new InstitutionalItemVersionDownloadCount(ii2.getVersionedInstitutionalItem().getCurrentVersion(), 0l);
+		InstitutionalItemVersionDownloadCount two = new InstitutionalItemVersionDownloadCount(ii1.getVersionedInstitutionalItem().getCurrentVersion(),0l);
+
+		for(InstitutionalItemVersionDownloadCount count : itemVersions)
+		{
+			System.out.println("Found " + count);
+		}
+		assert itemVersions.contains(one) : "download count 1 should exist " + one;
+		assert itemVersions.contains(two) : "download count 2 should exist " + two;
 		tm.commit(ts);
 		
 		
@@ -649,4 +687,291 @@ public class InstitutionalItemVersionDAOTest {
 			"Should not be able to find the insitutional item" + institutionalItem;
 	}
 
+	/**
+	 * Test Institutional item persistence
+	 * 
+	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	@Test
+	public void institutionalItemSponsorDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+
+	    // start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+		
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+
+		//commit the transaction 
+		// create a collection
+		InstitutionalCollection col = repo.createInstitutionalCollection("colName");
+		col.setDescription("colDescription");
+		
+		institutionalCollectionDAO.makePersistent(col);
+		tm.commit(ts);
+		
+		// start a new transaction
+		ts = tm.getTransaction(td);
+		
+		UserEmail userEmail = new UserEmail("email");
+				
+		IrUser user = new IrUser("user", "password");
+		user.setPasswordEncoding("encoding");
+		user.addUserEmail(userEmail, true);
+
+        userDAO.makePersistent(user);
+		col = institutionalCollectionDAO.getById(col.getId(), false);
+		GenericItem genericItem = new GenericItem("genericItem");
+		
+		Sponsor sponsor1 = new Sponsor("sponsor1");
+		sponsorDAO.makePersistent(sponsor1);
+
+		genericItem.addItemSponsor(sponsor1);
+		
+		InstitutionalItem institutionalItem = col.createInstitutionalItem(genericItem);
+		institutionalItemDAO.makePersistent(institutionalItem);
+
+		tm.commit(ts);
+
+		ts = tm.getTransaction(td);
+		institutionalItem = institutionalItemDAO.getById(institutionalItem.getId(), false);
+		assert institutionalItemDAO.getById(institutionalItem.getId(), false).equals(institutionalItem) :
+			"Should be able to find item " + institutionalItem;
+		
+		List<InstitutionalItemVersionDownloadCount> items = institutionalItemVersionDAO.getItemsBySponsorItemNameOrder(0, 10, sponsor1.getId(), OrderType.ASCENDING_ORDER);
+		assert items.size() == 1 : "Should have one item but got " + items.size();
+		
+		List<InstitutionalItemVersionDownloadCount> downloadItems = institutionalItemVersionDAO.getItemsBySponsorItemDownloadOrder(0, 10, sponsor1.getId(), OrderType.ASCENDING_ORDER);
+		assert downloadItems.size() == 1 : "Should have one download item count but have " + downloadItems.size(); 
+		tm.commit(ts);
+
+		//create a new transaction
+		ts = tm.getTransaction(td);
+		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(col.getId(), false));
+		
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+        sponsorDAO.makeTransient(sponsorDAO.getById(sponsor1.getId(), false));
+		
+		repoHelper.cleanUpRepository();
+		
+		tm.commit(ts);	
+		
+		assert institutionalItemDAO.getById(institutionalItem.getId(), false) == null : 
+			"Should not be able to find the insitutional item" + institutionalItem;
+	}
+	
+	/**
+	 * Test download counts for institutional item by person name.
+	 * 
+	 * @throws DuplicateNameException
+	 * @throws IllegalFileSystemNameException
+	 * @throws UserHasPublishedDeleteException
+	 * @throws ParseException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	@Test
+	public void getInstitutionalItemDownloadCountByPersonNameTest() 
+		throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException, DuplicateContributorException, LocationAlreadyExistsException {
+
+		// start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+
+		// create a repository to store files in.
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+	
+		UserEmail userEmail = new UserEmail("email");
+		
+		// create a user and add the versioned file to the item
+		IrUser user = new IrUser("user", "password");
+		user.setPasswordEncoding("encoding");
+		user.addUserEmail(userEmail, true);
+		userDAO.makePersistent(user);
+
+
+		// save the repository
+		tm.commit(ts);
+
+		// Start the transaction - create collections
+		ts = tm.getTransaction(td);
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_hibernate_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f1 = testUtil.creatFile(directory, "testFile1", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test1");
+		FileInfo fileInfo1 = repo.getFileDatabase().addFile(f1, "newFile1");
+		IrFile irFile1 = new IrFile(fileInfo1, "newFile1");
+		irFileDAO.makePersistent(irFile1);
+
+		File f2 = testUtil.creatFile(directory, "testFile2", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test2");
+		FileInfo fileInfo2 = repo.getFileDatabase().addFile(f2, "newFile2");
+		IrFile irFile2 = new IrFile(fileInfo2, "newFile2");
+		irFileDAO.makePersistent(irFile2);
+		// save the repository
+		tm.commit(ts);	
+		
+ 		PersonName name = new PersonName();
+		name.setFamilyName("familyName");
+		name.setForename("forename");
+		name.setInitials("n.d.s.");
+		name.setMiddleName("MiddleName");
+		name.setNumeration("III");
+		name.setSurname("surname");
+
+ 		PersonName name1 = new PersonName();
+		name1.setFamilyName("familyName1");
+		name1.setForename("forename1");
+		name1.setInitials("n.d.s.1");
+		name1.setMiddleName("MiddleName1");
+		name1.setNumeration("III1");
+		name1.setSurname("surname1");
+
+		PersonNameAuthority p = new PersonNameAuthority(name);
+		p.addBirthDate(2005);
+		p.addDeathDate(2105);
+		
+		p.addName(name, true);
+		p.addName(name1, false);
+
+        ts = tm.getTransaction(td);
+		personNameAuthorityDAO.makePersistent(p);
+		
+		
+		ContributorType ct1 = new ContributorType("Author");
+		contributorTypeDAO.makePersistent(ct1);
+        
+		ContributorType ct2 = new ContributorType("Advisor");
+		contributorTypeDAO.makePersistent(ct2);
+		
+		//complete the transaction
+		tm.commit(ts);
+
+		
+        // Start the transaction - create collections
+		ts = tm.getTransaction(td);
+		
+		GenericItem item1 = new GenericItem("itemName1");
+		item1.addFile(irFile1);
+		Contributor c1 = new Contributor(name, ct1);
+		item1.addContributor(c1);
+		itemDAO.makePersistent(item1);
+
+		GenericItem item2 = new GenericItem("itemName2");
+		item2.addFile(irFile2);
+		Contributor c2 = new Contributor(name1, ct2);
+		item2.addContributor(c2);
+		itemDAO.makePersistent(item2);
+		
+		// create the collections
+		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		collection.createInstitutionalItem(item1);
+		InstitutionalCollection subCollection = collection.createChild("subChild");
+		InstitutionalItem ii2 = subCollection.createInstitutionalItem(item2);
+		
+		institutionalCollectionDAO.makePersistent(collection);
+   
+		// save the repository
+		tm.commit(ts);	
+
+		// create some downloads
+        ts = tm.getTransaction(td);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
+	    Date d = simpleDateFormat.parse("1/1/2008");
+	    
+        FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.0.0.1", irFile1.getId(), d);
+        downloadInfo1.setDownloadCount(1);
+        fileDownloadInfoDAO.makePersistent(downloadInfo1);
+       
+        FileDownloadInfo downloadInfo2 = new FileDownloadInfo("123.0.0.7", irFile2.getId(), d);
+        downloadInfo2.setDownloadCount(2);
+        fileDownloadInfoDAO.makePersistent(downloadInfo2);
+        
+        Long count1 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile1.getId());
+        irFile1 = irFileDAO.getById(irFile1.getId(), false);
+        irFile1.setDownloadCount(count1);
+        irFileDAO.makePersistent(irFile1);
+		
+        Long count2 = fileDownloadInfoDAO.getNumberOfFileDownloadsForIrFile(irFile2.getId());
+        irFile2 = irFileDAO.getById(irFile2.getId(), false);
+        irFile2.setDownloadCount(count2);
+        irFileDAO.makePersistent(irFile2);
+        
+	    tm.commit(ts);
+
+        
+        ts = tm.getTransaction(td);
+		long itemFileCount = itemDAO.getDownloadCount(item1.getId());
+		assert itemFileCount == 1 : "Should find 1 but found " + itemFileCount ;
+		
+		itemFileCount = itemDAO.getDownloadCount(item2.getId());
+		assert itemFileCount == 2 : "Should find 2 but found " + itemFileCount ;
+		
+		tm.commit(ts);
+		
+		
+		// add an ip address to the ignore list
+	    //create a new transaction
+		ts = tm.getTransaction(td);
+	    IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,10, 15);
+        ignoreIpAddressDAO.makePersistent(ip1);
+        tm.commit(ts);
+        
+		
+	    //create a new transaction
+		ts = tm.getTransaction(td);
+		List<Long> personNameIds = new ArrayList<Long>();
+		personNameIds.add(name.getId());
+		personNameIds.add(name1.getId());
+		List<InstitutionalItemVersionDownloadCount> topDownloads = institutionalItemVersionDAO.getPublicationVersionsForNamesByDownload(0, 1, personNameIds, OrderType.DESCENDING_ORDER);
+		assert topDownloads.size() == 1 :  " size should be one but is " + topDownloads.size();
+		InstitutionalItemVersionDownloadCount c = topDownloads.get(0);
+		
+		assert c.getDownloadCount() == 2 : "Download count should be 2 but " + c.getDownloadCount();
+		assert c.getInstitutionalItemVersion().equals(ii2.getVersionedInstitutionalItem().getCurrentVersion()) : "Institutional item should be equal" ;
+		tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+		ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip1.getId(), false));
+		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(collection.getId(), false));
+		
+        itemDAO.makeTransient(itemDAO.getById(item1.getId(), false));
+        itemDAO.makeTransient(itemDAO.getById(item2.getId(), false));
+        
+		irFileDAO.makeTransient(irFileDAO.getById(irFile1.getId(), false));
+		irFileDAO.makeTransient(irFileDAO.getById(irFile2.getId(), false));
+
+		contributorDAO.makeTransient(contributorDAO.getById(c1.getId(), false));
+		contributorDAO.makeTransient(contributorDAO.getById(c2.getId(), false));
+
+		contributorTypeDAO.makeTransient(contributorTypeDAO.getById(ct1.getId(), false));
+		contributorTypeDAO.makeTransient(contributorTypeDAO.getById(ct2.getId(), false));
+		
+		personNameAuthorityDAO.makeTransient(personNameAuthorityDAO.getById(p.getId(), false));
+		
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		fileDownloadInfoDAO.makeTransient(fileDownloadInfoDAO.getById(downloadInfo1.getId(), false));
+		fileDownloadInfoDAO.makeTransient(fileDownloadInfoDAO.getById(downloadInfo2.getId(), false));
+		
+		repoHelper.cleanUpRepository();
+		tm.commit(ts);	
+	}
 }

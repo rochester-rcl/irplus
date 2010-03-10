@@ -222,4 +222,22 @@ CrudDAO<InstitutionalCollection>, NameListDAO, NonUniqueNameDAO<InstitutionalCol
 	 * @return List of ir file ids
 	 */
 	public List<Long> getIrFileIdsForAllCollections(); 
+	
+	/**
+	 * Get the number of file downloads for the collection.  This does
+	 * not include the downloads in child collections.
+	 * 
+	 * @param institutionalCollection - instiitutional collection to get the count for
+	 * @return number of downloads not including child collections.
+	 */
+	public Long getFileDownloads(InstitutionalCollection institutionalCollection);
+	
+	/**
+	 * Get the number of file downloads for the collection.  Include the downloads
+	 * for child collections.
+	 * 
+	 * @param institutionalCollection - instiitutional collection to get the count for
+	 * @return the count includeing counts from child collections
+	 */
+	public Long getFileDownloadsWithChildren(InstitutionalCollection institutionalCollection);
 }

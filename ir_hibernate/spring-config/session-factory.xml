@@ -142,7 +142,6 @@
                 
                 <value>edu/ur/hibernate/ir/statistics/db/FileDownloadInfo.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/statistics/db/IgnoreIpAddress.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/statistics/db/FileDownloadRollUp.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/statistics/db/FileDownloadRollUpProcessingRecord.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/statistics/db/IpIgnoreFileDownloadInfo.hbm.xml</value>
                 

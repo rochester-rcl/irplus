@@ -37,7 +37,6 @@ import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.SecurityService;
-import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 
@@ -58,9 +57,7 @@ public class FileWebUtilFunctions {
 	/** Security service  */
 	private static SecurityService mySecurityService = null;
 	
-	/** Service for dealing with downloads */
-	private static DownloadStatisticsService myDownloadStatisticsService = null;
-	
+	/** service to deal with repository information */
 	private static RepositoryService repositoryService = null;
 	
 	/**
@@ -444,26 +441,6 @@ public class FileWebUtilFunctions {
 		}
 		
 		return fileExist;
-	}
-
-	public void setDownloadStatisticsService(
-			DownloadStatisticsService downloadStatisticsService) {
-		myDownloadStatisticsService = downloadStatisticsService;
-	}
-	
-	/**
-	 * Determine if the file exists in the item
-	 * @param personalFile - personal file to check for
-	 * @param item - item to check
-	 * 
-	 * @return true if the personal file exists in the item
-	 */
-	public static Long fileDownloadCount(IrFile irFile)
-	{
-        log.debug("No. of file download for file : " + irFile + "  myDownloadStatisticsService:" + myDownloadStatisticsService);
-		Long count = myDownloadStatisticsService.getRollUpNumberOfDownloadsForFile(irFile);
-		log.debug("No. of download : " + count);
-		return count;
 	}
 
 	/**

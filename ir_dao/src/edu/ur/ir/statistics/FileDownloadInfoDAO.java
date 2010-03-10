@@ -21,6 +21,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.order.OrderType;
 
 
 /**
@@ -70,6 +71,18 @@ CrudDAO<FileDownloadInfo> {
 	 * @return count of ignored download info values.
 	 */
 	public Long getDownloadInfoIgnoredCount();
+	
+	/**
+	 * Get the list of ip address summed by download ordered by download count (asc/desc) 
+	 * 
+	 * @param rowStart - start position in paged set
+	 * @param numberOfResultsToShow - end position in paged set
+	 * @param sortType - Order by (asc/desc)
+	 * 
+	 * @return List of ip download counts for the specified information.
+	 */
+	public List<IpDownloadCount> getIpOrderByDownloadCount(int rowStart, 
+    		int numberOfResultsToShow, OrderType sortType);
 	
 
 }

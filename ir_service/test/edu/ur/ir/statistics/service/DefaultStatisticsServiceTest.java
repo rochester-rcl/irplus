@@ -173,10 +173,15 @@ public class DefaultStatisticsServiceTest {
         statisticsService.save(downloadInfo2);  
         
         Long count1 = statisticsService.getNumberOfFileDownloadsForIrFile(irFile1.getId());
-        statisticsService.updateRollUpCount(irFile1.getId(), count1);
+        irFile1 = repositoryService.getIrFile(irFile1.getId(), false);
+        irFile1.setDownloadCount(count1);
+        repositoryService.save(irFile1);
         
         Long count2= statisticsService.getNumberOfFileDownloadsForIrFile(irFile2.getId());
-        statisticsService.updateRollUpCount(irFile2.getId(), count2);
+        irFile2 = repositoryService.getIrFile(irFile2.getId(), false);
+        irFile2.setDownloadCount(count2);
+        repositoryService.save(irFile2);
+        
         assert statisticsService.getNumberOfDownloadsForAllCollections() == 3 : "Should be 3";
 	    tm.commit(ts);
 
@@ -188,12 +193,6 @@ public class DefaultStatisticsServiceTest {
         statisticsService.delete(statisticsService.getFileDownloadInfo(downloadInfo1.getId(), false));
         statisticsService.delete(statisticsService.getFileDownloadInfo(downloadInfo2.getId(), false));
                 
-        statisticsService.delete(statisticsService.getFileDownloadRollUpByIrFileId(irFile1.getId()));
-        statisticsService.delete(statisticsService.getFileDownloadRollUpByIrFileId(irFile2.getId()));
-        
-        assert statisticsService.getFileDownloadRollUpByIrFileId(irFile1.getId()) == null : "Should not be able to find roll up";
-        assert statisticsService.getFileDownloadRollUpByIrFileId(irFile2.getId()) == null : "Should not be able to find roll up";
-        
         helper.cleanUpRepository();
         tm.commit(ts);
 	}
@@ -271,9 +270,19 @@ public class DefaultStatisticsServiceTest {
         ts = tm.getTransaction(td);
         irFile1 = repositoryService.getIrFile(irFile1.getId(), false);
         FileDownloadInfo info1 = statisticsService.addFileDownloadInfo("123.0.0.1", irFile1);
-        
         Long count1 = statisticsService.getNumberOfFileDownloadsForIrFile(irFile1.getId());
-        statisticsService.updateRollUpCount(irFile1.getId(), count1);
+        irFile1.setDownloadCount(count1);
+        repositoryService.save(irFile1);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         irFile2 = repositoryService.getIrFile(irFile2.getId(), false);
        
         // these shoudl be the same info because the download happens on the same day
@@ -281,7 +290,8 @@ public class DefaultStatisticsServiceTest {
         FileDownloadInfo info3 = statisticsService.addFileDownloadInfo("123.0.0.7", irFile2);
         
         Long count2 = statisticsService.getNumberOfFileDownloadsForIrFile(irFile2.getId());
-        statisticsService.updateRollUpCount(irFile2.getId(), count2);
+        irFile2.setDownloadCount(count2);
+        repositoryService.save(irFile2);
         
         Long count = statisticsService.getNumberOfDownloadsForAllCollections();
         assert info2.equals(info3) : " info 2 " + info2 + " should equal " + info3;
@@ -297,9 +307,6 @@ public class DefaultStatisticsServiceTest {
         statisticsService.delete(statisticsService.getFileDownloadInfo(info1.getId(), false));
         statisticsService.delete(statisticsService.getFileDownloadInfo(info2.getId(), false));
         
-        statisticsService.delete(statisticsService.getFileDownloadRollUpByIrFileId(irFile1.getId()));
-        statisticsService.delete(statisticsService.getFileDownloadRollUpByIrFileId(irFile2.getId()));
-                
         helper.cleanUpRepository();
         tm.commit(ts);
 	}
@@ -418,10 +425,6 @@ public class DefaultStatisticsServiceTest {
         ignoreStatisticsService.deleteIgnoreIpAddress(ignoreStatisticsService.getIgnoreIpAddress(ignoreIpAddress1.getId(), false));
         ignoreStatisticsService.deleteIgnoreIpAddress(ignoreStatisticsService.getIgnoreIpAddress(ignoreIpAddress2.getId(), false));
         
-        statisticsService.delete(statisticsService.getFileDownloadRollUpByIrFileId(irFile1.getId()));
-        statisticsService.delete(statisticsService.getFileDownloadRollUpByIrFileId(irFile2.getId()));
-        
-
         helper.cleanUpRepository();
         tm.commit(ts);
 	}

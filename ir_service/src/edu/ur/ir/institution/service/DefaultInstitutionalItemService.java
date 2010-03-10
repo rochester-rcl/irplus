@@ -35,6 +35,7 @@ import edu.ur.ir.institution.InstitutionalItemDAO;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
+import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
 import edu.ur.ir.institution.ReviewableItemService;
 import edu.ur.ir.institution.VersionedInstitutionalItem;
 import edu.ur.ir.item.GenericItem;
@@ -277,10 +278,20 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		institutionalItemDAO.makePersistent(institutionalItem);
 	}
 
+	/**
+	 * Get the item service.
+	 * 
+	 * @return item service used
+	 */
 	public ItemService getItemService() {
 		return itemService;
 	}
 
+	/**
+	 * Set the item service.
+	 * 
+	 * @param itemService
+	 */
 	public void setItemService(ItemService itemService) {
 		this.itemService = itemService;
 	}
@@ -390,10 +401,20 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		return institutionalItemDAO.getDistinctInstitutionalItemCount();
 	}
 
+	/**
+	 * Get the institutional item version data access object.
+	 * 
+	 * @return
+	 */
 	public InstitutionalItemVersionDAO getInstitutionalItemVersionDAO() {
 		return institutionalItemVersionDAO;
 	}
 
+	/**
+	 * Set the institutional item version data access object
+	 * 
+	 * @param institutionalItemVersionDAO
+	 */
 	public void setInstitutionalItemVersionDAO(
 			InstitutionalItemVersionDAO institutionalItemVersionDAO) {
 		this.institutionalItemVersionDAO = institutionalItemVersionDAO;
@@ -418,26 +439,23 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		return institutionalItemDAO.getInstitutionalCollectionsForGenericItem(itemId);
 	}
 
+	/**
+	 * Get the deleted institutional item data access object.
+	 * 
+	 * @return
+	 */
 	public DeletedInstitutionalItemDAO getDeletedInstitutionalItemDAO() {
 		return deletedInstitutionalItemDAO;
 	}
 
+	/**
+	 * Set the deleted institutional item data acess object 
+	 * 
+	 * @param deletedInstitutionalItemDAO
+	 */
 	public void setDeletedInstitutionalItemDAO(
 			DeletedInstitutionalItemDAO deletedInstitutionalItemDAO) {
 		this.deletedInstitutionalItemDAO = deletedInstitutionalItemDAO;
-	}
-
-	/**
-	 * Get the publication versions contributed by given person names
-	 *  
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getPublicationVersionsByPersonName(Set)
-	 */
-	public List<InstitutionalItemVersion> getPublicationVersionsByPersonName(Set<PersonName> personNames) {
-		List<Long> ids = new ArrayList<Long>();
-		for (PersonName p: personNames) {
-			ids.add(p.getId());
-		}
-		return institutionalItemVersionDAO.getPublicationVersionsByPersonName(ids);
 	}
 
 	/**
@@ -475,11 +493,20 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		
 	}
 
-
+	/**
+	 * Set the item security service.
+	 * 
+	 * @param itemSecurityService
+	 */
 	public void setItemSecurityService(ItemSecurityService itemSecurityService) {
 		this.itemSecurityService = itemSecurityService;
 	}
 
+	/**
+	 * Set the reviewable item service.
+	 * 
+	 * @param reviewableItemService
+	 */
 	public void setReviewableItemService(ReviewableItemService reviewableItemService) {
 		this.reviewableItemService = reviewableItemService;
 	}
@@ -548,10 +575,20 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		return institutionalItemDAO.getItemsOrderByDate(rowStart, maxResults, collection, orderType);
 	}
 
+	/**
+	 * Get the researcher file system service.
+	 * 
+	 * @return
+	 */
 	public ResearcherFileSystemService getResearcherFileSystemService() {
 		return researcherFileSystemService;
 	}
 
+	/**
+	 * Set the researcher file system service.
+	 * 
+	 * @param researcherFileSystemService
+	 */
 	public void setResearcherFileSystemService(
 			ResearcherFileSystemService researcherFileSystemService) {
 		this.researcherFileSystemService = researcherFileSystemService;
@@ -633,20 +670,124 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		
 	}
 
+	/**
+	 * Get the institutional item version url generator.
+	 * 
+	 * @return
+	 */
 	public InstitutionalItemVersionUrlGenerator getInstitutionalItemVersionUrlGenerator() {
 		return institutionalItemVersionUrlGenerator;
 	}
 
+	/**
+	 * Set the institutional item version url generator.
+	 * 
+	 * @param institutionalItemVersionUrlGenerator
+	 */
 	public void setInstitutionalItemVersionUrlGenerator(
 			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
 		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
 	}
 
+	/**
+	 * Get the handle info data access object.
+	 * 
+	 * @return
+	 */
 	public HandleInfoDAO getHandleInfoDAO() {
 		return handleInfoDAO;
 	}
 
+	/**
+	 * Set the handle info data acess object.
+	 * 
+	 * @param handleInfoDAO
+	 */
 	public void setHandleInfoDAO(HandleInfoDAO handleInfoDAO) {
 		this.handleInfoDAO = handleInfoDAO;
 	}
+
+	
+	/**
+	 * Get the items by sponsor count.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getItemsBySponsorCount(long)
+	 */
+	public Long getItemsBySponsorCount(long sponsorId) {
+		return institutionalItemVersionDAO.getItemsBySponsorCount(sponsorId);
+	}
+
+	
+	/**
+	 * Get the item sponsored by the given sponsor ordered by item name.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getItemsBySponsorItemNameOrder(int, int, long, edu.ur.order.OrderType)
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemNameOrder(
+			int rowStart, int maxResults, long sponsorId, OrderType orderType) {
+		return institutionalItemVersionDAO.getItemsBySponsorItemNameOrder(rowStart, maxResults, sponsorId, orderType);
+	}
+
+	/**
+	 * Get the items sponsored by the given sponsor ordered by deposit date.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getItemsBySponsorItemDepositDateOrder(int, int, long, edu.ur.order.OrderType)
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDepositDateOrder(
+			int rowStart, int maxResults, long sponsorId, OrderType orderType) {
+		return institutionalItemVersionDAO.getItemsBySponsorItemDepositDateOrder(rowStart, maxResults, sponsorId, orderType);
+	}
+
+	/**
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getItemsBySponsorItemDownloadOrder(int, int, long, edu.ur.order.OrderType)
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDownloadOrder(
+			int rowStart, int maxResults, long sponsorId, OrderType orderType) {
+		return institutionalItemVersionDAO.getItemsBySponsorItemDownloadOrder(rowStart, maxResults, sponsorId, orderType);
+	}
+
+	/**
+	 * Get the list of publication versions for names ordered by download.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getPublicationVersionsForNamesByDownload(int, int, java.util.Set, edu.ur.order.OrderType)
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByDownload(
+			int rowStart, int maxResults, Set<PersonName> personNames,
+			OrderType orderType) {
+		List<Long> ids = new ArrayList<Long>();
+		for (PersonName p: personNames) {
+			ids.add(p.getId());
+		}
+		return institutionalItemVersionDAO.getPublicationVersionsForNamesByDownload(rowStart, maxResults, ids, orderType);
+	}
+
+	/**
+	 * Get publication verssions for a set of names ordered by title.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getPublicationVersionsForNamesByTitle(int, int, java.util.Set, edu.ur.order.OrderType)
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByTitle(
+			int rowStart, int maxResults, Set<PersonName> personNames,
+			OrderType orderType) {
+		List<Long> ids = new ArrayList<Long>();
+		for (PersonName p: personNames) {
+			ids.add(p.getId());
+		}
+		return institutionalItemVersionDAO.getPublicationVersionsForNamesByTitle(rowStart, maxResults, ids, orderType);
+	}
+	
+	/**
+	 * Get the number of downloads for a given set of name ids.
+	 * 
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getNumberOfDownlodsForPersonNames(java.util.List)
+	 */
+	public Long getNumberOfDownlodsForPersonNames(Set<PersonName> personNames) {
+		List<Long> ids = new ArrayList<Long>();
+		for (PersonName p: personNames) {
+			ids.add(p.getId());
+		}
+		return institutionalItemVersionDAO.getDownloadCountByPersonName(ids);
+	}
+
 }

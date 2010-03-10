@@ -31,6 +31,8 @@ import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.statistics.FileDownloadInfo;
 import edu.ur.ir.statistics.FileDownloadInfoDAO;
+import edu.ur.ir.statistics.IpDownloadCount;
+import edu.ur.order.OrderType;
 
 /**
  * File download info persistance
@@ -164,6 +166,13 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 	 */
 	public Long getDownloadInfoIgnoredCount() {
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFileDownloadsIgnoredCount"));
+	}
+
+	
+	public List<IpDownloadCount> getIpOrderByDownloadCount(int rowStart,
+			int numberOfResultsToShow, OrderType sortType) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

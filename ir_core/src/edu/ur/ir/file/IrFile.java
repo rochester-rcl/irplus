@@ -62,6 +62,10 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 	/** this indicates the file can be viewed by the public*/
 	private boolean publicViewable = false;
 	
+	/** roll up download count for the ir file */
+	private Long downloadCount = new Long(0l);
+	
+
 	/**
 	 * Package protected default constructor 
 	 */
@@ -297,4 +301,30 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 		
 		return nameWithExtension;
 	}
+	
+	/**
+	 * Get the download count for this ir file.
+	 * 
+	 * @return download count
+	 */
+	public Long getDownloadCount() {
+		return downloadCount;
+	}
+
+	/**
+	 * Set the download count.
+	 * 
+	 * @param downloadCount
+	 */
+	public void setDownloadCount(Long downloadCount) {
+		if( downloadCount != null )
+		{
+		    this.downloadCount = downloadCount;
+		}
+		else
+		{
+			this.downloadCount = new Long(0l);
+		}
+	}
+
 }

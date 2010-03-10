@@ -27,7 +27,7 @@
 
 <html>
     <head>
-        <title><ir:authorName personName="${personName}" displayDates="true"/></title>
+        <title>Sponsor ${sponsor.name}</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         
@@ -64,54 +64,19 @@
             <div id="bd">
 				<table width ="100%">
 					<tr>
-						<c:if test="${researcher != null && researcher.public}">
-							<td width="12%">
-								<c:url value="/viewResearcherPage.action" var="viewResearcherPageUrl">
-								    <c:param name="researcherId" value="${researcher.id}"/>
-								</c:url>
-								<c:if test="${ir:hasThumbnail(researcher.primaryPicture)}">
-								   <c:url var="url" value="/researcherThumbnailDownloader.action">
-                                        <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
-                                        <c:param name="researcherId" value="${researcher.id}"/>
-                                   </c:url>
-                                   <img align="middle" height="66px" width="100px" src="${url}"/>
-                               </c:if>	    
-								
-						        <c:if test="${researcher.primaryPicture == null }">
-				                     <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
-						        </c:if>
-						     </td>
-						     <td width="22%">
-						     	<h3><ir:authorName personName="${personName}" displayDates="true"/></h3>
+					    <td width="12%">
+			                <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
+						</td>						
+						<td width="22%">
+							<h3>${sponsor.name}</h3>
+						    <table 	class="blueBox">
+						     	<tr> <td> Total Publications : ${totalHits}</td></tr>
+						    </table>
 						     	
-						     	<table 	class="blueBox">
-						     		<tr> <td> Total Publications : ${publicationsCount}</td></tr>
-						     	</table>
-						     	
-						     	<table 	class="blueBox">
-						     		<tr> <td> Total Downloads : ${totalDownloads}</td></tr>
-						     	</table>
-						     	
-						     	<a href="${viewResearcherPageUrl}"><h3>View  Researcher Page</h3></a>
-						     	
-							 </td>    
-						</c:if>
-						<c:if test="${researcher == null || !researcher.public}">
-							<td width="12%">
-			                     <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
-						     </td>						
-							<td width="22%">
-								<h3><ir:authorName personName="${personName}" displayDates="true"/></h3>
-						     	
-						     	<table 	class="blueBox">
-						     		<tr> <td> Total Publications : ${publicationsCount}</td></tr>
-						     	</table>
-						     	
-						     	<table 	class="blueBox">
-						     		<tr> <td> Total Downloads : ${totalDownloads}</td></tr>
-						     	</table>
-							 </td>
-						</c:if>
+						    <table 	class="blueBox">
+						        <tr> <td> Total Downloads : ${totalDownloads}</td></tr>
+						    </table>
+						</td>
 						
 						<c:url var="latestItemViewUrl" value="/institutionalPublicationPublicView.action">
 	                                 <c:param name="institutionalItemVersionId" value="${latestItemVersion.id}"/>
@@ -131,7 +96,7 @@
 						<td width="33%" align="right">
 							<table class="statBox">
 								<tr> <td> Most Downloaded: </td> </tr>
-								<tr> <td> <p>&nbsp;<strong><a href="${mostDownloadedItemViewUrl}"><ur:maxText numChars="40" text="${mostDownloadedItemVersion.item.name}"/></a></strong><br>&nbsp;${mostDownloadedItemContributorType} </p> </td> </tr>
+								<tr> <td> <p>&nbsp;<strong><a href="${mostDownloadedItemViewUrl}"><ur:maxText numChars="40" text="${mostDownloadedItemVersion.item.name}"/></a></strong> </p> </td> </tr>
 								<tr> <td> Downloads: ${mostDownloadedCount} </td> </tr>
 							</table>
 						</td>
@@ -139,40 +104,41 @@
 					</tr>
             	</table>
             	
-               <c:url var="sortAscendingTitleUrl" value="/viewContributorPage.action">
+            	
+            	<c:url var="sortAscendingTitleUrl" value="/viewSponsorPage.action">
                    <c:param name="rowStart" value="${rowStart}"/>
 				   <c:param name="startPageNumber" value="${startPageNumber}"/>
 				   <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 				   <c:param name="sortElement" value="title"/>		
 				   <c:param name="sortType" value="asc"/>
-				   <c:param name="personNameId" value="${personNameId}"/>
+				   <c:param name="sponsorId" value="${sponsorId}"/>
 			   </c:url>
 					                     
-			   <c:url var="sortDescendingTitleUrl" value="/viewContributorPage.action">
+			   <c:url var="sortDescendingTitleUrl" value="/viewSponsorPage.action">
 			       <c:param name="rowStart" value="${rowStart}"/>
 				   <c:param name="startPageNumber" value="${startPageNumber}"/>
 				   <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 				   <c:param name="sortElement" value="title"/>		
 				   <c:param name="sortType" value="desc"/>
-				   <c:param name="personNameId" value="${personNameId}"/>
+				   <c:param name="sponsorId" value="${sponsorId}"/>
 			   </c:url>
 			   
-			    <c:url var="sortAscendingDownloadUrl" value="/viewContributorPage.action">
+			    <c:url var="sortAscendingDownloadUrl" value="/viewSponsorPage.action">
                    <c:param name="rowStart" value="${rowStart}"/>
 				   <c:param name="startPageNumber" value="${startPageNumber}"/>
 				   <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 				   <c:param name="sortElement" value="download"/>		
 				   <c:param name="sortType" value="asc"/>
-				   <c:param name="personNameId" value="${personNameId}"/>
+				   <c:param name="sponsorId" value="${sponsorId}"/>
 			   </c:url>
 					                     
-			   <c:url var="sortDescendingDownloadUrl" value="/viewContributorPage.action">
+			   <c:url var="sortDescendingDownloadUrl" value="/viewSponsorPage.action">
 			       <c:param name="rowStart" value="${rowStart}"/>
 				   <c:param name="startPageNumber" value="${startPageNumber}"/>
 				   <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 				   <c:param name="sortElement" value="download"/>		
 				   <c:param name="sortType" value="desc"/>
-				   <c:param name="personNameId" value="${personNameId}"/>
+				   <c:param name="sponsorId" value="${sponsorId}"/>
 			   </c:url>
             	
             	<c:set var="titleSort" value="none"/>
@@ -185,7 +151,12 @@
 				    <c:set var="downloadSort" value="${sortType}"/>
 				</c:if>
             	
-            	<c:import url="contributor_page_view_pager.jsp"/>
+            	
+            	
+            	<c:if test="${totalHits > 0}">
+				    <h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
+				</c:if> 
+				<c:import url="browse_all_sponsor_items_pager.jsp"/>
             	<div class="dataTable">
 				    <urstb:table width="100%">
 					    <urstb:thead>
@@ -205,8 +176,6 @@
 					        
 					            
 					            <urstb:td>Version Number</urstb:td>
-					            <urstb:td>Published Under</urstb:td>
-					            <urstb:td>Contribution Type</urstb:td>
 					            <urstb:tdHeadSort  height="33"
 					                useHref="true"
 					                hrefVar="href"
@@ -223,11 +192,11 @@
 						    </urstb:tr>
 						</urstb:thead>
 						<urstb:tbody
-						    var="contributorPublication" 
+						    var="sponsorPublication" 
 						    oddRowClass="odd"
 						    evenRowClass="even"
 						    currentRowClassVar="rowClass"
-						    collection="${contributorPublications}">
+						    collection="${sponsorPublications}">
 						    <urstb:tr 
 						        cssClass="${rowClass}"
 						        onMouseOver="this.className='highlight'"
@@ -235,32 +204,25 @@
 						                        
 						        <urstb:td>
 						            <c:url var="itemViewUrl" value="/institutionalPublicationPublicView.action">
-	                                    <c:param name="institutionalItemVersionId" value="${contributorPublication.institutionalItemVersion.id}"/>
+	                                    <c:param name="institutionalItemVersionId" value="${sponsorPublication.institutionalItemVersion.id}"/>
 	                                </c:url>
-		                            <a href="${itemViewUrl}">${contributorPublication.institutionalItemVersion.item.name}</a>
+		                            <a href="${itemViewUrl}">${sponsorPublication.institutionalItemVersion.item.name}</a>
 						        </urstb:td>
 						        
 						        <urstb:td>
-						            ${contributorPublication.institutionalItemVersion.versionNumber}
+						            ${sponsorPublication.institutionalItemVersion.versionNumber}
 						        </urstb:td>
 						                        
 						        <urstb:td>
-						            <ir:authorName personName="${contributorPublication.contributor.personName}" displayDates="false"/>
-						        </urstb:td>
-						        
-						        <urstb:td>
-						            ${contributorPublication.contributor.contributorType.name}
-						        </urstb:td>
-						        
-						        <urstb:td>
-						            ${contributorPublication.downloadsCount}
+						            ${sponsorPublication.downloadCount}
 						        </urstb:td>
 						    </urstb:tr>
 						</urstb:tbody>
 				    </urstb:table>
 				</div>	
-				<c:import url="contributor_page_view_pager.jsp"/>
-            	       	        
+				<c:import url="browse_all_sponsor_items_pager.jsp"/>
+
+						
 		    </div>
 		    <!--  end the body tag --> 
 		

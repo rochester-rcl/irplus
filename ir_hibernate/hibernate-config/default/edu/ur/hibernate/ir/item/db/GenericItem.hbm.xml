@@ -324,6 +324,15 @@
         from GenericItem genericItem
         where genericItem.owner.id = ?
 	</query>
+	
+		<!-- No. of downloads for an item -->
+	<query name="getItemDownloadCount">
+		select sum(irFile.downloadCount) from 
+		GenericItem as item 
+		join item.itemFiles itemFile
+		join itemFile.irFile irFile 
+	    where item.id = ?
+	</query>
 		
 	
 </hibernate-mapping>

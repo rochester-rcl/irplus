@@ -19,14 +19,17 @@ package edu.ur.ir.item.service;
 
 import java.util.List;
 
+import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.item.SponsorDAO;
 import edu.ur.ir.item.SponsorService;
+import edu.ur.order.OrderType;
 
 /**
  * Default service for dealing with sponsor.
  * 
  * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
 public class DefaultSponsorService implements SponsorService {
@@ -36,48 +39,28 @@ public class DefaultSponsorService implements SponsorService {
 
 
 	/**
-	 * Delete a sponsor with the specified id.
+	 * Delete a sponsor 
 	 * 
-	 * @see edu.ur.ir.item.SponsorService#deleteSponsor(java.lang.Long)
 	 */
-	public boolean deleteSponsor(Long id) {
-		Sponsor sponsor  = this.getSponsor(id, false);
-		if( sponsor  != null)
-		{
-			sponsorDAO.makeTransient(sponsor);
-		}
-		return true;
-	}
-
-	/**
-	 * Delete a sponsor with the specified name.
-	 * 
-	 * @see edu.ur.ir.item.SponsorService#deleteSponsor(java.lang.String)
-	 */
-	public boolean deleteSponsor(String name) {
-		Sponsor sponsor = this.getSponsor(name);
-		if( sponsor != null)
-		{
-			sponsorDAO.makeTransient(sponsor);
-		}
-		return true;
+	public void delete(Sponsor sponsor) {
+		sponsorDAO.makeTransient(sponsor);
 	}
 
 	/**
 	 * Get the sponsor with the name.
 	 * 
-	 * @see edu.ur.ir.item.SponsorService#getSponsor(java.lang.String)
+	 * @see edu.ur.ir.item.SponsorService#get(java.lang.String)
 	 */
-	public Sponsor getSponsor(String name) {
+	public Sponsor get(String name) {
 		return sponsorDAO.findByUniqueName(name);
 	}
 
 	/**
 	 * Get the sponsor by id.
 	 * 
-	 * @see edu.ur.ir.item.SponsorService#getSponsor(java.lang.Long, boolean)
+	 * @see edu.ur.ir.item.SponsorService#get(java.lang.Long, boolean)
 	 */
-	public Sponsor getSponsor(Long id, boolean lock) {
+	public Sponsor get(Long id, boolean lock) {
 		return sponsorDAO.getById(id, lock);
 	}
 
@@ -104,7 +87,7 @@ public class DefaultSponsorService implements SponsorService {
 	 * 
 	 * @see edu.ur.ir.item.SponsorService#saveSponsor(edu.ur.ir.item.Sponsor)
 	 */
-	public void saveSponsor(Sponsor sponsor) {
+	public void save(Sponsor sponsor) {
 		sponsorDAO.makePersistent(sponsor);
 	}
 
@@ -114,7 +97,7 @@ public class DefaultSponsorService implements SponsorService {
 	 * @see edu.ur.ir.item.SponsorService#getAllSponsor()
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Sponsor> getAllSponsor() { 
+	public List<Sponsor> getAll() { 
 		return (List<Sponsor>) sponsorDAO.getAll();
 	}
 
@@ -123,10 +106,10 @@ public class DefaultSponsorService implements SponsorService {
 	 * 
 	 * @see edu.ur.ir.item.SponsorService#getSponsorsOrderByName(int, int, String)
 	 */
-	public List<Sponsor> getSponsorsOrderByName(final int rowStart, 
-    		final int numberOfResultsToShow, final String sortType) {
+	public List<Sponsor> getOrderByName(final int rowStart, 
+    		final int numberOfResultsToShow, final OrderType orderType) {
 		return sponsorDAO.getSponsorsOrderByName(rowStart, 
-	    		numberOfResultsToShow, sortType);
+	    		numberOfResultsToShow, orderType);
 	}
 	
 	/**
@@ -134,8 +117,105 @@ public class DefaultSponsorService implements SponsorService {
 	 * 
 	 * @see edu.ur.ir.item.SponsorService#getSponsorsCount()
 	 */
-	public Long getSponsorsCount() {
+	public Long getCount() {
 		return sponsorDAO.getCount();
+	}
+
+	
+	/**
+	 * Get sponsors by the first character in their name.
+	 * 
+	 * @see edu.ur.ir.item.SponsorService#getByNameFirstChar(int, int, char, edu.ur.order.OrderType)
+	 */
+	public List<Sponsor> getByNameFirstChar(int rowStart, int maxResults,
+			char firstChar, OrderType orderType) {
+		return sponsorDAO.getByNameFirstChar(rowStart, maxResults, firstChar, orderType);
+	}
+
+	/**
+	 * Get count of sponsors with the given first character in their name
+	 * 
+	 * @see edu.ur.ir.item.SponsorService#getCount(char)
+	 */
+	public Long getCount(char nameFirstChar) {
+		return sponsorDAO.getCount(nameFirstChar);
+	}
+
+	/**
+	 * Get a count of sponsors that have a first character in the
+	 * specified range.
+	 * 
+	 * @see edu.ur.ir.item.SponsorService#getCount(char, char)
+	 */
+	public Long getCount(char firstCharRange, char lastCharRange) {
+		return sponsorDAO.getCount(firstCharRange, lastCharRange);
+	}
+
+	/**
+	 * Get the sponsors that have a first character in the given range.
+	 * 
+	 * @see edu.ur.ir.item.SponsorService#getSponsorsByNameBetweenChar(int, int, char, char, edu.ur.order.OrderType)
+	 */
+	public List<Sponsor> getSponsorsByNameBetweenChar(int rowStart,
+			int maxResults, char firstChar, char lastChar,
+			OrderType orderType) {
+		return sponsorDAO.getSponsorsByNameBetweenChar(rowStart, maxResults, firstChar, lastChar, orderType);
+	}
+
+	/**
+	 * 
+	 * @see edu.ur.ir.item.SponsorService#getCollectionSponsorsBetweenChar(int, int, edu.ur.ir.institution.InstitutionalCollection, char, char, edu.ur.order.OrderType)
+	 */
+	public List<Sponsor> getCollectionSponsorsBetweenChar(int rowStart,
+			int maxResults, InstitutionalCollection collection,
+			char firstChar, char lastChar, OrderType orderType) {
+		return sponsorDAO.getCollectionSponsorsBetweenChar(rowStart, maxResults, collection, firstChar, lastChar, orderType);
+	}
+
+	
+	/**
+	 * @see edu.ur.ir.item.SponsorService#getCollectionSponsorsOrderByLastName(int, int, edu.ur.ir.institution.InstitutionalCollection, edu.ur.order.OrderType)
+	 */
+	public List<Sponsor> getCollectionSponsorsOrderByName(int rowStart,
+			int maxResults, InstitutionalCollection collection,
+			OrderType orderType) {
+		return sponsorDAO.getCollectionSponsorsByName(rowStart, maxResults, collection, orderType);
+	}
+
+	
+	/**
+	 * @see edu.ur.ir.item.SponsorService#getCount(edu.ur.ir.institution.InstitutionalCollection, char)
+	 */
+	public Long getCount(InstitutionalCollection collection, char nameFirstChar) {
+		return sponsorDAO.getCount(collection, nameFirstChar);
+	}
+
+	
+	/**
+	 * @see edu.ur.ir.item.SponsorService#getCount(edu.ur.ir.institution.InstitutionalCollection, char, char)
+	 */
+	public Long getCount(InstitutionalCollection collection,
+			char nameFirstCharRange, char nameLastCharRange) {
+		return sponsorDAO.getCount(collection, nameFirstCharRange, nameLastCharRange);
+	}
+
+	
+	/**
+	 * @see edu.ur.ir.item.SponsorService#getSponsorsByChar(int, int, edu.ur.ir.institution.InstitutionalCollection, char, edu.ur.order.OrderType)
+	 */
+	public List<Sponsor> getCollectionSponsorsByChar(int rowStart, int maxResults,
+			InstitutionalCollection institutionalCollection, char firstChar,
+			OrderType orderType) {
+		return sponsorDAO.getCollectionSponsorsByChar(rowStart, maxResults, institutionalCollection, firstChar, orderType);
+	}
+
+	
+	/**
+	 * 
+	 * @see edu.ur.ir.item.SponsorService#getCount(edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public Long getCount(InstitutionalCollection collection) {
+		return sponsorDAO.getCount(collection);
 	}
 
 

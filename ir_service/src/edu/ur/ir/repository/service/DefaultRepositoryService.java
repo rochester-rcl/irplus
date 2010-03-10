@@ -697,6 +697,16 @@ public class DefaultRepositoryService implements RepositoryService {
 		}
 		return true;
 	}
+	
+	/**
+	 * Save the ir file.
+	 * 
+	 * @param irFile
+	 */
+	public void save(IrFile irFile)
+	{
+		irFileDAO.makePersistent(irFile);
+	}
 
 	
 	/**

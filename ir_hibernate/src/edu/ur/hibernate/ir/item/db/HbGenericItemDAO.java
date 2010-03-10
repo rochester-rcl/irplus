@@ -188,5 +188,24 @@ public class HbGenericItemDAO implements GenericItemDAO{
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemContributionByPersonNameCount", personName.getId()) );
 	}
 
+	
+	/**
+	 * Get the download count for the item.
+	 * 
+	 * @see edu.ur.ir.item.GenericItemDAO#getDownloadCount(java.lang.Long)
+	 */
+	public Long getDownloadCount(Long itemId) {
+		Long value =    (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getItemDownloadCount", itemId));
+		if( value != null )
+		{
+		    return value;
+		}
+		else
+		{
+		    return 0l;
+		}
+	}
+
 
 }

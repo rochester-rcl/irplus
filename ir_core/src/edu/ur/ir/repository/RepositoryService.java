@@ -327,6 +327,13 @@ public interface RepositoryService {
 	public boolean deleteIrFile(IrFile irFile);
 	
 	/**
+	 * Save the ir file
+	 * 
+	 * @param irFile
+	 */
+	public void save(IrFile irFile);
+	
+	/**
 	 * Delete the file info from this repository.
 	 * 
 	 * @param - repository the file info object resides in.

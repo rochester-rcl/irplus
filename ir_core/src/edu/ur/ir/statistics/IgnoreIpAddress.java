@@ -44,6 +44,11 @@ public class IgnoreIpAddress extends CommonPersistent {
 	
 	/** TO Ip address part 4 */
 	private int toAddress4;
+	
+	/** determine if the ignore ip address should be stored in
+	 * the ignore table*/
+	private boolean store = false;
+
 
 	/**
 	 * Default Constructor
@@ -100,6 +105,19 @@ public class IgnoreIpAddress extends CommonPersistent {
 	public void setToAddress4(int toAddress4) {
 		this.toAddress4 = toAddress4;
 	}
+	
+	public boolean isStore() {
+		return store;
+	}
+
+	public void setStore(boolean store) {
+		this.store = store;
+	}
+	
+	public boolean getStore(){
+		return store;
+	}
+
 
 	
 	/**
@@ -138,6 +156,8 @@ public class IgnoreIpAddress extends CommonPersistent {
 		sb.append(fromAddress4);
 		sb.append(" toAddress4 = ");
 		sb.append(toAddress4);
+		sb.append(" store = ");
+		sb.append(store);
 		sb.append("]");
 		return sb.toString();
 	}

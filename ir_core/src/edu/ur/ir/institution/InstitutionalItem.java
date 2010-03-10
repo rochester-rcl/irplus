@@ -64,7 +64,7 @@ public class InstitutionalItem extends BasePersistent implements FileSystem{
 	{
 		setInstitutionalCollection(institutionalCollection);
 		setOwner(item.getOwner());
-		versionedInstitutionalItem = new VersionedInstitutionalItem(item);
+		versionedInstitutionalItem = new VersionedInstitutionalItem(this, item);
 	}
 	
 	/**
