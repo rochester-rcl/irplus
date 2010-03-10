@@ -42,7 +42,8 @@ public class InstitutionalItemVersionTest {
 		IrUser user = new IrUser("username", "password");
 		GenericItem item = new GenericItem("myItem");
 	    
-	    VersionedInstitutionalItem vii = new VersionedInstitutionalItem(item);
+	    VersionedInstitutionalItem vii = new VersionedInstitutionalItem();
+	    vii.addNewVersion(item);
 
 	    InstitutionalItemVersion institutionalItemVersion = vii.getCurrentVersion();
 	    assert !institutionalItemVersion.getWithdrawn() : "item should NOT be withdrawn";
@@ -66,7 +67,8 @@ public class InstitutionalItemVersionTest {
 		IrUser user = new IrUser("username", "password");
 		GenericItem item = new GenericItem("myItem");
 	    
-	    VersionedInstitutionalItem vii = new VersionedInstitutionalItem(item);
+	    VersionedInstitutionalItem vii = new VersionedInstitutionalItem();
+	    vii.addNewVersion(item);
 
 	    InstitutionalItemVersion institutionalItemVersion = vii.getCurrentVersion();
 	    assert !institutionalItemVersion.getWithdrawn() : "item should NOT be withdrawn";
