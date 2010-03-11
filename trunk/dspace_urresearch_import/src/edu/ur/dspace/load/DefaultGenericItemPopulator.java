@@ -263,11 +263,11 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		    	sponsorName = sponsor.substring(0, firstSpaceIndex);
 		    }
 		    
-		    Sponsor theSponsor = sponsorService.getSponsor(sponsorName);
+		    Sponsor theSponsor = sponsorService.get(sponsorName);
 		    if( theSponsor == null )
 	        {
 	            theSponsor = new Sponsor(sponsorName);
-	            sponsorService.saveSponsor(theSponsor);
+	            sponsorService.save(theSponsor);
 	        }
 	        ItemSponsor itemSponsor = genericItem.addItemSponsor(theSponsor);
 	        
