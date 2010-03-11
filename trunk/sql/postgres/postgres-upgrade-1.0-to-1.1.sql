@@ -129,5 +129,9 @@ SET download_count =
 ir_statistics.ir_file_roll_up
 where ir_file_roll_up.ir_file_id = file.ir_file_id);
 
+-- update all null values
+UPDATE ir_file.ir_file
+SET download_count = 0 
+where ir_file.download_count is null;
 
 DROP TABLE ir_statistics.ir_file_roll_up;
