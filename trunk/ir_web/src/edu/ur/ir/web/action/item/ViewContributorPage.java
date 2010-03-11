@@ -105,6 +105,11 @@ public class ViewContributorPage extends Pager {
 	/** Total number of institutional items*/
 	private int totalHits;
 	
+	/** Row End */
+	private int rowEnd;
+	
+
+
 
 	/** Default constructor */
 	public ViewContributorPage()
@@ -120,6 +125,8 @@ public class ViewContributorPage extends Pager {
 	 */
 	public String execute()
 	{
+		
+		rowEnd = rowStart + numberOfResultsToShow;
 		personName = personService.getName(personNameId, false);
 		PersonNameAuthority authority = personName.getPersonNameAuthority();
 		Set<PersonName> names = authority.getNames();
@@ -133,6 +140,8 @@ public class ViewContributorPage extends Pager {
 		Timestamp timeStamp = null;
 	
 		totalDownloads = institutionalItemService.getNumberOfDownlodsForPersonNames(names);
+		
+		
 		
 		 List<InstitutionalItemVersionDownloadCount> itemVersions = new LinkedList<InstitutionalItemVersionDownloadCount>();
 		
@@ -198,6 +207,10 @@ public class ViewContributorPage extends Pager {
 
 		publicationsCount = institutionalItemService.getPublicationCountByPersonName(names);
 		totalHits = publicationsCount.intValue();
+		if(rowEnd > totalHits)
+		{
+			rowEnd = totalHits;
+		}
 		return SUCCESS;
 	}
 
@@ -366,6 +379,10 @@ public class ViewContributorPage extends Pager {
 
 	public void setTotalHits(int totalHits) {
 		this.totalHits = totalHits;
+	}
+	
+	public int getRowEnd() {
+		return rowEnd;
 	}
 
 
