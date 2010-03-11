@@ -71,10 +71,10 @@ public class ViewContributorPage extends Pager {
 	private DownloadStatisticsService downloadStatisticsService;
 
 	/** Total downloads */
-	private long totalDownloads = 0l;
+	private Long totalDownloads = 0l;
 	
 	/** Count of publications */
-	private long publicationsCount = 01;
+	private Long publicationsCount = 0l;
 	
 	/** Latest publication */
 	private InstitutionalItemVersion latestItemVersion;
@@ -83,7 +83,7 @@ public class ViewContributorPage extends Pager {
 	private String latestPublicationContributorType;
 	
 	/** Maximum number of times an item is downloaded */
-	private long mostDownloadedCount = 0l;
+	private Long mostDownloadedCount = 0l;
 	
 	/** Maximum downloaded item version */
 	private InstitutionalItemVersion mostDownloadedItemVersion ;
@@ -105,9 +105,7 @@ public class ViewContributorPage extends Pager {
 	/** Total number of institutional items*/
 	private int totalHits;
 	
-	/** Row End */
-	private int rowEnd;
-	
+
 	/** Default constructor */
 	public ViewContributorPage()
 	{
@@ -141,11 +139,11 @@ public class ViewContributorPage extends Pager {
 		// Construct the object with item and download info for display
 		if( sortElement.equals("title"))
 		{
-		    itemVersions = institutionalItemService.getPublicationVersionsForNamesByTitle(totalHits, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
+		    itemVersions = institutionalItemService.getPublicationVersionsForNamesByTitle(rowStart, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
 		} 
 		else if( sortElement.equals("download"))
 		{
-			itemVersions = institutionalItemService.getPublicationVersionsForNamesByDownload(totalHits, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
+			itemVersions = institutionalItemService.getPublicationVersionsForNamesByDownload(rowStart, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
 		}
 		for (InstitutionalItemVersionDownloadCount itemVersionDownloadCount:itemVersions) {
 
@@ -199,7 +197,7 @@ public class ViewContributorPage extends Pager {
 		}
 
 		publicationsCount = institutionalItemService.getPublicationCountByPersonName(names);
-		
+		totalHits = publicationsCount.intValue();
 		return SUCCESS;
 	}
 
@@ -360,13 +358,7 @@ public class ViewContributorPage extends Pager {
 		this.sortElement = sortElement;
 	}
 
-	public int getRowEnd() {
-		return rowEnd;
-	}
 
-	public void setRowEnd(int rowEnd) {
-		this.rowEnd = rowEnd;
-	}
 
 	public void setTotalDownloads(long totalDownloads) {
 		this.totalDownloads = totalDownloads;
