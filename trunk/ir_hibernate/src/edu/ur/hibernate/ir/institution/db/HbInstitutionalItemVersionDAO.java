@@ -202,7 +202,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	    Long count = (Long)q.uniqueResult();
 	    if( count == null )
 	    {
-	    	count = new Long(0l);
+	    	count = Long.valueOf(0l);
 	    }
 	    return count;
 	}
@@ -250,6 +250,10 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
         Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getPublicationsForSponsorCount");
 	    q.setLong("sponsorId", sponsorId);
 	    Long count = (Long)q.uniqueResult();
+	    if( count == null )
+	    {
+	    	count = Long.valueOf(0l);
+	    }
 	    return count;
 
 	}
@@ -332,6 +336,10 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 		Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getDownloadCountByPersonNames");
 	    q.setParameterList("personNameIds", personNameIds);
 	    Long count = (Long)q.uniqueResult();
+	    if( count == null )
+	    {
+	    	count = Long.valueOf(0l);
+	    }
 	    return count;
 	}
 
