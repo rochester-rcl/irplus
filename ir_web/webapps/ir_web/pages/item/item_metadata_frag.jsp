@@ -143,8 +143,11 @@
 				        <td class="previewLabel"> Sponsor - Description:</td>
 				    </tr>
 				    <c:forEach items="${item.itemSponsors}" var="itemSponsor">
+				         <c:url var="sponsorUrl" value="/viewSponsorPage.action">
+			                 <c:param name="sponsorId" value="${itemSponsor.sponsor.id}"/>
+						</c:url>	
 				        <tr>
-				           <td>  ${itemSponsor.sponsor.name} - ${itemSponsor.description} </td>
+				           <td>  <a href="${sponsorUrl}">${itemSponsor.sponsor.name}</a> - ${itemSponsor.description} </td>
 				        </tr>
 				    </c:forEach>
 				</c:if>
