@@ -1,6 +1,5 @@
 package edu.ur.ir.statistics.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -106,7 +105,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		TransactionStatus ts = null;
 		try
 		{
-			List<FileDownloadRollUpProcessingRecord> records = new LinkedList<FileDownloadRollUpProcessingRecord>();
+			List<FileDownloadRollUpProcessingRecord> records;
 			do
 			{
 				ts = tm.getTransaction(td);
@@ -117,8 +116,11 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 				     Long irFileId = record.getIrFileId();
 				     Long downloadCount = downloadStatisticsService.getNumberOfFileDownloadsForIrFile(irFileId);
 				     IrFile irFile = repositoryService.getIrFile(irFileId, false);
-				     irFile.setDownloadCount(downloadCount);
-				     repositoryService.save(irFile);
+				     if( irFile != null )
+				     {
+				         irFile.setDownloadCount(downloadCount);
+				         repositoryService.save(irFile);			         
+				     }
 				     downloadStatisticsService.delete(record);
 			    }
 			    tm.commit(ts);
@@ -127,6 +129,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		}
 		catch(Exception e)
 		{
+		 	log.error("failure processing records", e);
 			errorEmailService.sendError(e);
 		}
 		finally
@@ -162,7 +165,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		TransactionStatus ts = null;
 		try
 		{
-		    List<FileDownloadInfo> infos = new LinkedList<FileDownloadInfo>();
+		    List<FileDownloadInfo> infos;
 		    do
 		    {
 		    	ts = tm.getTransaction(td);
@@ -195,6 +198,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		}
 		catch(Exception e)
 		{
+			log.error("Problem preparing records for processing", e);
 			errorEmailService.sendError(e);
 			throw new JobExecutionException("Problem preparing records for processing");
 		}
@@ -209,7 +213,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			}
 		}
 		
-		return new Integer(totalProcessed);
+		return totalProcessed;
 	}
 	
 	/**
@@ -234,7 +238,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		TransactionStatus ts = null;
 		try
 		{
-			List<IpIgnoreFileDownloadInfo> okCounts = new LinkedList<IpIgnoreFileDownloadInfo>();
+			List<IpIgnoreFileDownloadInfo> okCounts;
 		    do
 		    {
 		    	ts = tm.getTransaction(td);
@@ -266,6 +270,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		}
 		catch(Exception e)
 		{
+			log.error("Problem preparing records for processing", e);
 			errorEmailService.sendError(e);
 			throw new JobExecutionException("Problem preparing records for processing");
 		}
@@ -280,7 +285,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			}
 		}
 		
-		return new Integer(totalProcessed);
+		return totalProcessed;
 	}
 	
 	/**
@@ -305,6 +310,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		}
 		catch(Exception e)
 		{
+			log.error("Problem preparing records for processing", e);
 			errorEmailService.sendError(e);
 			throw new JobExecutionException("Problem preparing records for processing");
 		}
