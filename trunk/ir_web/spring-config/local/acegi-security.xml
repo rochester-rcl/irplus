@@ -120,7 +120,6 @@
        <property name="userDetailsContextMapper" ref="ldapUserService"/>
        <property name="externalAccountTypeService" ref="externalAccountTypeService"/>
        <property name="externalAccountTypeName" value="${external.account.type.name}"/>
- 
     </bean>
     
     <!--  this should hold all other authentication systems that do not relate to local accounts -->
