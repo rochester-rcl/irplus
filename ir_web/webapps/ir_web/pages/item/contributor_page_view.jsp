@@ -241,7 +241,7 @@
 						            <c:url var="itemViewUrl" value="/institutionalPublicationPublicView.action">
 	                                    <c:param name="institutionalItemVersionId" value="${contributorPublication.institutionalItemVersion.id}"/>
 	                                </c:url>
-		                            <a href="${itemViewUrl}">${contributorPublication.institutionalItemVersion.item.name}</a>
+		                            <a href="${itemViewUrl}">${contributorPublication.institutionalItemVersion.item.fullName}</a>
 						        </urstb:td>
 						        
 						        <urstb:td>
