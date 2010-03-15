@@ -22,7 +22,7 @@
 	<c:if test="${!subscriber}">
 		<table class="formTable">  
 			<tr> 
-				<td align="left" class="label"> Click on the "Subscribe" button to subscribe to this collection.</td> 
+				<td align="left" class="label"> Click on the "Subscribe" button to receive e-mails about new submissions [Note: this is a daily digest and only sends e-mails if there is new content]</td> 
 			</tr>  
 		    <tr>       
 	            <td align="left" class="label">Include all subcollections: <input type="checkbox" name="includeSubCOllections" id="include_sub_collections">  </td>
@@ -39,7 +39,7 @@
 	<c:if test="${subscriber}">
 		<table class="formTable">  
 			<tr> 
-				<td align="left" class="label"> Click on the "UnSubscribe" button to unsubscribe from this collection.</td> 
+				<td align="left" class="label"> Click on the "UnSubscribe" button to no longer receive e-mails about new content in this collection.</td> 
 			</tr>  
 			<tr>
 			    <td align="left" class="label" ><button class="ur_button"
