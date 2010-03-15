@@ -571,7 +571,7 @@
        <property name="mailSender" ref="mailSender"/>
        <property name="subject" value="An Repository Error Has Occured"/>
        <property name="toAddress" value="${email.error.address}"/>
-       <property name="sendEmails" value="false"/>
+       <property name="sendEmails" value="${send.error.emails}"/>
    </bean>
    
    <!-- ****************************************** --> 
