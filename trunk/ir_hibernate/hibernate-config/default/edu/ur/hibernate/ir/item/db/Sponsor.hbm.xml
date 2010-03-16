@@ -109,7 +109,7 @@
 	<!-- named query for getting a cont of Sponsors order by name first char -->
 	<query name="getSponsorsOrderByNameFirstCharRangeCount">
 		select count(*) 
-		from Sponsor where sponsorFirstChar between :firstChar and :secondChar
+		from Sponsor where sponsorFirstChar between ? and ?
 	</query>
 
 	<!-- named query for getting a cont of Sponsors order by name first char -->
@@ -231,7 +231,7 @@
 	    and sponsor.sponsorFirstChar between ? and ?
 	</query>
 	
-	<query name="getCollectionSonsorNameByCharRangeOrderAsc">
+	<query name="getCollectionSponsorNameByCharRangeOrderAsc">
 	    select distinct(sponsor)
 	    from InstitutionalItem as institutionalItem
 	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
