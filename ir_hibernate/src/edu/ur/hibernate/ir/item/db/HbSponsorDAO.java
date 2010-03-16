@@ -17,7 +17,6 @@
 package edu.ur.hibernate.ir.item.db;
 
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -184,7 +183,7 @@ public class HbSponsorDAO implements SponsorDAO {
 	 * @see edu.ur.ir.item.SponsorDAO#getCount(char, char)
 	 */
 	public Long getCount(char firstCharRange, char lastCharRange) {
-		Object[] values = new Object[]{new Character(Character.toLowerCase(firstCharRange)), new Character(Character.toLowerCase(lastCharRange))};
+		Object[] values = new Object[]{Character.valueOf(Character.toLowerCase(firstCharRange)), Character.valueOf(Character.toLowerCase(lastCharRange))};
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getSponsorsOrderByNameFirstCharRangeCount", values));
 
 	}
@@ -228,9 +227,8 @@ public class HbSponsorDAO implements SponsorDAO {
 	public List<Sponsor> getCollectionSponsorsBetweenChar(final int rowStart,
 			final int maxResults, final InstitutionalCollection collection, final char firstChar,
 			final char lastChar, final OrderType orderType) {
-		List<Sponsor> sponsors = new LinkedList<Sponsor>();
-		
-		sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+			
+		 List<Sponsor> sponsors  = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -240,8 +238,8 @@ public class HbSponsorDAO implements SponsorDAO {
 			        q = session.getNamedQuery("getCollectionSponsorNameByCharRangeOrderDesc");
 			    }
 		 	    else
-			    {
-			        q = session.getNamedQuery("getCollectionsponsorNameByCharRangeOrderAsc");
+			    {		 	    	                           
+			        q = session.getNamedQuery("getCollectionSponsorNameByCharRangeOrderAsc");
 			    }
 			    
 			    q.setLong(0, collection.getLeftValue());
@@ -265,9 +263,8 @@ public class HbSponsorDAO implements SponsorDAO {
 	public List<Sponsor> getCollectionSponsorsByChar(final int rowStart,
 			final int maxResults, final InstitutionalCollection collection,
 			final char firstChar, final OrderType orderType) {
-        List<Sponsor> sponsors = new LinkedList<Sponsor>();
-		
-		sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+
+		List<Sponsor> sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -302,9 +299,8 @@ public class HbSponsorDAO implements SponsorDAO {
 	public List<Sponsor> getCollectionSponsorsByName(final int rowStart,
 			final int maxResults, final InstitutionalCollection collection,
 			final OrderType orderType) {
-		List<Sponsor> sponsors = new LinkedList<Sponsor>();
 		
-		sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<Sponsor> sponsors = (List<Sponsor>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -348,7 +344,7 @@ public class HbSponsorDAO implements SponsorDAO {
 	 */
 	public Long getCount(InstitutionalCollection collection, char nameFirstChar) {
 		Object[] values = new Object[]{collection.getLeftValue(), collection.getRightValue(), 
-				collection.getTreeRoot().getId(), new Character(Character.toLowerCase(nameFirstChar))};
+				collection.getTreeRoot().getId(), Character.valueOf(Character.toLowerCase(nameFirstChar))};
 
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("collectionSponsorNameCountByChar", values));
 
@@ -357,7 +353,7 @@ public class HbSponsorDAO implements SponsorDAO {
 	public Long getCount(InstitutionalCollection collection,
 			char nameFirstCharRange, char nameLastCharRange) {
 		Object[] values = new Object[]{collection.getLeftValue(), collection.getRightValue(), 
-				collection.getTreeRoot().getId(), new Character(Character.toLowerCase(nameFirstCharRange)), new Character(Character.toLowerCase(nameLastCharRange))};
+				collection.getTreeRoot().getId(), Character.valueOf(Character.toLowerCase(nameFirstCharRange)), Character.valueOf(Character.toLowerCase(nameLastCharRange))};
 
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("sponsorCollectionNameCountByCharRange", values));
 
