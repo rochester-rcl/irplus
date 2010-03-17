@@ -134,12 +134,6 @@
             <result name="success">/pages/home.jsp</result>
         </action>
 
-        <action name="loadHomeStatistics" class="edu.ur.ir.web.action.Home"
-        		method="loadStatistics">
-            <interceptor-ref name="editStack"/>
-            <result name="success">/pages/home_statistics.jsp</result>
-        </action>
-                
         <action name="unknownAction" class="edu.ur.ir.web.action.UnknownAction">
             <result>/pages/unknown_action.jsp</result>
         </action>
