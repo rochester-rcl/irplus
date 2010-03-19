@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!--
+    Document   : ivy.xml
+    Created on : November 22, 2008, 3:52 PM
+    Author     : Nathan Sarr
+    Description:
+        Purpose of the document follows.
+-->
+
+<ivy-module version="2.0">
+    <info organisation="ur_persistence_util" 
+          module="ur_persistence_util">
+          <ivyauthor name="Nathan Sarr"/>
+     </info>
+    <dependencies>
+        
+        <!-- commons io files -->
+        <dependency org="commons-io" name="commons-io" rev="1.4" transitive="false">
+            <artifact name="commons-io" type="jar"/>
+        </dependency>
+        
+        <!-- hiberante files -->
+        <dependency org="org.hibernate" name="hibernate-core" rev="3.3.2.GA" transitive="false">
+            <artifact name="hibernate-core" type="jar"/>
+        </dependency>
+        
+         <!-- spring files -->
+        <dependency org="org.springframework" name="spring" rev="2.5.6" transitive="false">
+            <artifact name="spring" type="jar"/>
+        </dependency>
+            
+        <!-- test ng files for testing -->
+	    <dependency org="org.testng" name="testng" rev="5.8" transitive="false">
+	        <artifact name="testng" type="jar"
+ 	        url="http://repo1.maven.org/maven2/org/testng/testng/5.8/testng-5.8-jdk15.jar"/> 
+        </dependency>
+
+         <!-- log 4j files -->
+        <dependency org="log4j" name="log4j" rev="1.2.15" transitive="false">
+            <artifact name="log4j" type="jar"/>
+        </dependency>
+        
+        <dependency org="checkstyle" name="checkstyle" rev="5.0" transitive="false">
+            <artifact name="checkstyle" type="jar"/>
+        </dependency>
+    </dependencies>
+</ivy-module>

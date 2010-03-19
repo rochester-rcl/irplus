@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for an index processing type.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.index">
+	<class name="IndexProcessingType" schema="ir_index" table="index_processing_type"
+		lazy="true">
+
+        <cache usage="nonstrict-read-write" />
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="index_processing_type_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_index.index_processing_type_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+	 </class>
+		
+	<!--  Get a count of index processing types in the system -->
+	<query name="indexProcessingTypeCount">
+	    select count(*) from IndexProcessingType
+	</query>
+	
+    <!-- named query for getting an index processing type-->
+	<query name="getIndexProcessingTypeByName">
+		from IndexProcessingType as IndexProcessingType where
+		IndexProcessingType.name = ?
+	</query>
+
+</hibernate-mapping>
