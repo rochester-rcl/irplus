@@ -790,4 +790,19 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		return institutionalItemVersionDAO.getDownloadCountByPersonName(ids);
 	}
 
+	/**
+	 * Get the publications for a set of names ordered by submission date.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getPublicationVersionsForNamesBySubmissionDate(int, int, java.util.Set, edu.ur.order.OrderType)
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesBySubmissionDate(
+			int rowStart, int maxResults, Set<PersonName> personNames,
+			OrderType orderType) {
+		List<Long> ids = new ArrayList<Long>();
+		for (PersonName p: personNames) {
+			ids.add(p.getId());
+		}
+		return institutionalItemVersionDAO.getPublicationVersionsForNamesBySubmissionDate(rowStart, maxResults, ids, orderType);
+	}
+
 }

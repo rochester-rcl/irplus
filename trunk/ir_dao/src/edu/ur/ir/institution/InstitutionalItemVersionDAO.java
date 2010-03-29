@@ -136,5 +136,20 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 			final int maxResults, 
 			final List<Long> personNameIds, 
 			final OrderType orderType);
+	
+	/**
+	 * Get the  publications for a given set of names by submission date
+	 * 
+	 * @param rowStart - start position
+	 * @param maxResults - maximum number of results to return
+	 * @param personNameIds - set of name ids to get 
+	 * @param orderType - way to order the set
+	 * 
+	 * @return - 
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesBySubmissionDate(final int rowStart,
+			final int maxResults, 
+			final List<Long> personNameIds, 
+			final OrderType orderType);
 
 }

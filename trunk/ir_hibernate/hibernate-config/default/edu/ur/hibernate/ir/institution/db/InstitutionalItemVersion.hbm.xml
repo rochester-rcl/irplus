@@ -177,6 +177,38 @@
 	    order by sum(irFile.downloadCount) desc, item.lowerCaseName desc, institutionalItemVersion.versionNumber desc
 	</query>
 	
+	
+	
+	<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdSubmissionDateAsc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit, institutionalItemVersion.versionNumber
+	    order by sum(irFile.downloadCount) asc, institutionalItemVersion.dateOfDeposit asc, institutionalItemVersion.versionNumber desc
+	</query>
+	
+	<!-- institutional item version contributed by given person name -->
+	<query name="getPublicationVersionsByPersonNameIdSubmissionDateDesc">
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    left join item.itemFiles file
+	    left join file.irFile irFile
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds)
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit, institutionalItemVersion.versionNumber
+	    order by sum(irFile.downloadCount) desc, institutionalItemVersion.dateOfDeposit desc, institutionalItemVersion.versionNumber desc
+	</query>
+	
+	
+	
 	<!-- institutional item version for a given handle -->
 	<query name="getInstitutionalItemByHandleId">
 	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion

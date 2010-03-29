@@ -46,6 +46,13 @@
         <ur:js src="page-resources/yui/container/container-min.js"/>
  	    <ur:js src="page-resources/yui/menu/menu-min.js"/>
         
+        
+        <c:url var="collectionRss" value="viewInstitutionalCollectionRss.action">
+	        <c:param name="collectionId" value="${collectionId}"/>
+		</c:url>
+        <link rel="alternate" type="application/rss+xml" title="${institutionalCollection.name} - Recent Submissions" href="${collectionRss}">
+        
+        
         <!-- Source File -->
         <ur:js src="page-resources/js/menu/main_menu.js"/>
         <ur:js src="pages/js/base_path.js"/>
@@ -185,7 +192,7 @@
                     
                      <div class="contentContainer">
                        <div class="contentBoxTitle">
-                           <p>Subscribe</p>
+                           <p>Subscribe/RSS Feeds</p>
                        </div>
                    
                        <div class="contentBoxContent">
@@ -195,6 +202,8 @@
 		                    	<c:if test="${user == null}">
 									<p> <a href="<c:url value="/user/workspace.action"/>">Login</a> or <a href="<c:url value="viewUserRegistration.action"/>">Create an Account</a> to subscribe to this collection. </p>
 								</c:if>	
+								
+								<p><img src="<c:url value='/page-resources/images/all-images/feed.jpg'/>" alt="RSS Feed"/>&nbsp;<a href="${collectionRss}">${institutionalCollection.name} Recent Submissions</a></p>
 							</div>
                        </div>
                    </div>
@@ -234,7 +243,10 @@
                                <c:url var="itemView" value="/institutionalPublicationPublicView.action">
 						           <c:param name="institutionalItemId" value="${item.id}"/>
 						       </c:url>
-                               <a href="${itemView}">${item.versionedInstitutionalItem.currentVersion.item.name}</a> <c:if test="${item.versionedInstitutionalItem.currentVersion.item.description != null}">- <ur:maxText numChars="100" text="${item.versionedInstitutionalItem.currentVersion.item.description}"/> </c:if> - (<fmt:formatDate pattern="yyyy-MM-dd" value="${item.versionedInstitutionalItem.currentVersion.dateOfDeposit}"/>) <br/><br/>
+                               <a href="${itemView}">${item.versionedInstitutionalItem.currentVersion.item.name}</a> 
+                                    <c:set var="description" value="${ir:getItemDescription(item.versionedInstitutionalItem.currentVersion.item)}"/>
+						            <c:if test="${!ir:isStringEmpty(description)}"><ur:maxText numChars="150" text="${description}"/></c:if>
+                                     - (<fmt:formatDate pattern="yyyy-MM-dd" value="${item.versionedInstitutionalItem.currentVersion.dateOfDeposit}"/>) <br/><br/>
                            </c:forEach>
                            </p>
                        </div>

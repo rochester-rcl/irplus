@@ -17,7 +17,6 @@
 package edu.ur.hibernate.ir.institution.db;
 
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -113,8 +112,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 			final List<Long> personNameIds, 
 			final OrderType orderType)
 	{
-		List<InstitutionalItemVersionDownloadCount> foundItems = new LinkedList<InstitutionalItemVersionDownloadCount>();
-		foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<InstitutionalItemVersionDownloadCount> foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -154,8 +152,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 			final List<Long> personNameIds, 
 			final OrderType orderType)
 	{
-		List<InstitutionalItemVersionDownloadCount> foundItems = new LinkedList<InstitutionalItemVersionDownloadCount>();
-		foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		List<InstitutionalItemVersionDownloadCount> foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -214,8 +211,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemNameOrder(final int rowStart,
 			final int maxResults, final long sponsorId, final OrderType orderType) {
-		List<InstitutionalItemVersionDownloadCount> foundItems = new LinkedList<InstitutionalItemVersionDownloadCount>();
-		foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<InstitutionalItemVersionDownloadCount> foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -266,9 +262,8 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDepositDateOrder(
 			final int rowStart, final int maxResults, final long sponsorId, final OrderType orderType) {
-		List<InstitutionalItemVersionDownloadCount> foundItems = new LinkedList<InstitutionalItemVersionDownloadCount>();
 		
-		foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<InstitutionalItemVersionDownloadCount> foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -300,9 +295,8 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDownloadOrder(
 			final int rowStart, final int maxResults, final long sponsorId, final OrderType orderType) {
-		List<InstitutionalItemVersionDownloadCount> foundItems = new LinkedList<InstitutionalItemVersionDownloadCount>();
 		
-		foundItems =  (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		List<InstitutionalItemVersionDownloadCount> foundItems =  (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -341,6 +335,41 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	    	count = Long.valueOf(0l);
 	    }
 	    return count;
+	}
+
+	/**
+	 * Get list of downloads by submission date.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getPublicationVersionsForNamesBySubmissionDate(int, int, java.util.List, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesBySubmissionDate(
+			final int rowStart, final int maxResults, final List<Long> personNameIds,
+			final OrderType orderType) {
+		List<InstitutionalItemVersionDownloadCount> foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		{
+		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
+		    {
+		        Query q = null;
+			    if( orderType.equals(OrderType.DESCENDING_ORDER))
+			    {
+			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdSubmissionDateDesc");
+			    }
+		 	    else
+			    {
+			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdSubmissionDateAsc");
+			    }
+			    
+			    q.setParameterList("personNameIds", personNameIds);
+			    q.setFirstResult(rowStart);
+			    q.setMaxResults(maxResults);
+			    q.setFetchSize(maxResults);
+			    return q.list();
+			    
+		    }
+	    });
+        return foundItems;	
 	}
 
 

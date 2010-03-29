@@ -99,11 +99,39 @@ public class PublicCollectionView extends ActionSupport {
 	/** list of children in name order */
 	private LinkedList<InstitutionalCollection> nameOrderedChildren = new LinkedList<InstitutionalCollection>();
 
+	/**
+	 * Get the next picture for a collection.
+	 * 
+	 * @return - next collection picture
+	 */
 	public String getNextPicture()
 	{
 		log.debug("get picture called");
 		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
 		return SUCCESS;
+	}
+	
+	/**
+	 * Get the rss feed.
+	 * 
+	 * @return
+	 */
+	public String viewRss()
+	{
+		repository = 
+			 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
+					 false);
+		 
+		institutionalCollection = 
+			institutionalCollectionService.getCollection(collectionId, false);
+		
+		if( institutionalCollection != null )
+		{
+		    // get the 10 most recent submissions
+		    mostRecentSubmissions = institutionalItemService.getItemsOrderByDate(0, 50, institutionalCollection, OrderType.DESCENDING_ORDER);
+		    collectionPath = institutionalCollectionService.getPath(institutionalCollection);
+		}
+		return "view";
 	}
 	
 	/**

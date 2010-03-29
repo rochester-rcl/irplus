@@ -711,6 +711,15 @@
 			boolean isContributor(edu.ur.ir.item.GenericItem, edu.ur.ir.person.PersonName)
 		</function-signature>
 	</function>
+	<function>
+		<name>getItemDescription</name>
+		<function-class>
+			edu.ur.tag.repository.GenericItemWebUtilFunctions
+		</function-class>
+		<function-signature>
+			String getItemDescription(edu.ur.ir.item.GenericItem)
+		</function-signature>
+	</function>
 	
   
 </taglib>

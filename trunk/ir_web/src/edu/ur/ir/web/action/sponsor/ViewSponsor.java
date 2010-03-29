@@ -84,8 +84,6 @@ public class ViewSponsor extends Pager
 	private String sortType = "asc";
 	
 
-
-
 	/** name of the element to sort on 
 	 *   this is for incoming requests */
 	private String sortElement = "title";
@@ -127,6 +125,15 @@ public class ViewSponsor extends Pager
 				sponsorId, 
 				OrderType.getOrderType(sortType));
 		}
+		if( sortElement.equals("submissionDate"))
+		{
+			// Construct the object with item and download info for display
+		    sponsorPublications = institutionalItemService.getItemsBySponsorItemDepositDateOrder(rowStart, 
+				numberOfResultsToShow, 
+				sponsorId, 
+				OrderType.getOrderType(sortType));
+		}
+		
 		
 		totalHits = institutionalItemService.getItemsBySponsorCount(sponsorId).intValue();
 		
