@@ -252,7 +252,7 @@
                      <tr>
 		                 <td align="left" class="label">Department(s):</td>
                          <td align="left" class="input"> 
-      	                     <select multiple="multiple" id="editUserForm_department" name="departmentIds" />
+      	                     <select multiple="multiple" id="editUserForm_department" name="departmentIds" size="20"/>
       	   		
 	      		             <c:forEach items="${departments}" var="department">
 	      			             <option value = "${department.id}"

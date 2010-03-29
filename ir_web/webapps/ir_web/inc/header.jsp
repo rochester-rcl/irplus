@@ -27,7 +27,7 @@
    
    <div id="header">
        <div id="header_logo">
-           <a href="<c:url value="/home.action"/>"><img align="left" alt="irplus" src="${pageContext.request.contextPath}/page-resources/images/all-images/ir_plus_logo.jpg"/></a>  
+           <a href="<c:url value="/home.action"/>"><img align="left" alt="Home Page" src="${pageContext.request.contextPath}/page-resources/images/all-images/ir_plus_logo.jpg"/></a>  
        </div>
        <div id="header_links">
            <a href="<c:url value="/help.action"/>">User Help</a> | <a href="<c:url value="/admin-help.action"/>">Administration Help</a> | <a href="<c:url value="/contactUs.action"/>">Contact Us</a> | <a href="<c:url value="/about.action"/>">About</a> | <a href="<c:url value="/privacyPolicy.action"/>">Privacy Policy</a>
@@ -113,16 +113,9 @@
                     </c:if> 
                 </c:if>
                 
+                <li class="yuimenubaritemleft"><a class="yuimenubaritemlabel" href="<c:url value="/home.action"/>"><span class="homeImg">&nbsp;</span><span class="menu_text">Home</span></a></li>
                 <c:if test="${user != null}">
-                    <li class="yuimenubaritemleft"><a class="yuimenubaritemlabel" href="#welcome"><span class="userImg">&nbsp;</span><span class="menu_text">Welcome ${user.username}</span></a>
-                        <div id="welcome" class="yuimenu">
-                            <div class="bd">                                        
-                                <ul>
-                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/user/myAccount.action"/>"><span class="menu_text">My Account</span></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>    
+                    <li class="yuimenubaritemleft"><a class="yuimenubaritemlabel" href="<c:url value="/user/myAccount.action"/>"><span class="userImg">&nbsp;</span><span class="menu_text">My Account: ${user.username}</span></a></li>    
                 </c:if>
             </ul>            
         </div>

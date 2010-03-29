@@ -152,6 +152,16 @@
                 <result name="view">/pages/collection/collection_view.jsp</result>
         </action>
         
+        <!--  ************************************ -->
+        <!--  actions for viewing collections      -->
+        <!--  ************************************ -->
+        <action name="viewInstitutionalCollectionRss" 
+                class="edu.ur.ir.web.action.institution.PublicCollectionView"
+                method="viewRss">
+                <interceptor-ref name="editStack" />
+                <result name="view">/pages/collection/collection_rss_feed.jsp</result>
+        </action>
+        
         <action name="getInstitutionalCollectionStatistics" 
                 class="edu.ur.ir.web.action.institution.PublicCollectionView"
                 method="getInstitutionalCollectionStatistic">
@@ -408,6 +418,13 @@
         <!--  ************************************ -->
         <!--    Contributor actions                 -->
         <!--  ************************************ -->
+        
+        <action name="viewContributorRss" 
+                class="edu.ur.ir.web.action.item.ViewContributorPage"
+                method="getRss">
+                <interceptor-ref name="editStack" />
+                <result name="success">/pages/item/contributor_page_rss_feed.jsp</result>
+        </action>
         
          <action name="viewContributorPage" 
                 class="edu.ur.ir.web.action.item.ViewContributorPage">

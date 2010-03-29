@@ -513,6 +513,21 @@ public interface InstitutionalItemService {
 	 */
 	public Long getNumberOfDownlodsForPersonNames(Set<PersonName> personNames);
 	
+	/**
+	 * Get the list of publication versions for names ordered by title
+	 * 
+	 * @param rowStart - start position in the list
+	 * @param maxResults - maximum number of results
+	 * @param personNames - set of person names.
+	 * @param orderType - order type ascending / descending
+	 * 
+	 * @return - return the list of institutional item version download counts
+	 */
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesBySubmissionDate(final int rowStart,
+			final int maxResults, 
+			final Set<PersonName> personNames, 
+			final OrderType orderType);
+	
 
 
 }

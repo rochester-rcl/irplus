@@ -31,5 +31,29 @@ public class GenericItemWebUtilFunctions {
 		}
 		return isContributor;
 	}
+	
+	/**
+	 * Determine if the generic item uses the abstract or description field for it's display.
+	 * 
+	 * @param genericItem - generic item to get the information from
+	 * @return - the description or abstract
+	 */
+	public static String getItemDescription(GenericItem genericItem)
+	{
+		String description = "";
+		if( genericItem != null)
+		{
+			if(genericItem.getDescription() != null && !genericItem.getDescription().trim().equals(""))
+			{
+				description = genericItem.getDescription();
+			}
+			else if( genericItem.getItemAbstract() != null && !genericItem.getItemAbstract().trim().equals(""))
+			{
+				description = genericItem.getItemAbstract();
+			}
+		}
+		
+		return description;
+	}
 
 }
