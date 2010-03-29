@@ -189,8 +189,8 @@
 	    join item.contributors as itemContributor
 	    join itemContributor.contributor as contributor
 	    where contributor.personName.id in (:personNameIds)
-	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit, institutionalItemVersion.versionNumber
-	    order by sum(irFile.downloadCount) asc, institutionalItemVersion.dateOfDeposit asc, institutionalItemVersion.versionNumber desc
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit, item.lowerCaseName
+	    order by institutionalItemVersion.dateOfDeposit asc, item.lowerCaseName desc
 	</query>
 	
 	<!-- institutional item version contributed by given person name -->
@@ -203,8 +203,8 @@
 	    join item.contributors as itemContributor
 	    join itemContributor.contributor as contributor
 	    where contributor.personName.id in (:personNameIds)
-	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit, institutionalItemVersion.versionNumber
-	    order by sum(irFile.downloadCount) desc, institutionalItemVersion.dateOfDeposit desc, institutionalItemVersion.versionNumber desc
+	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit, item.lowerCaseName
+	    order by institutionalItemVersion.dateOfDeposit desc, item.lowerCaseName desc
 	</query>
 	
 	
