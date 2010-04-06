@@ -5,7 +5,7 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<fmt:setLocale value="en_US" scope="session"/>
 <rss version="2.0">
    <channel>
       <title><ir:authorName personName="${personName}" displayDates="true"/></title>
@@ -26,7 +26,7 @@
 			   <title><c:out value="${item.institutionalItemVersion.item.name}"/></title>
 			   <link><ir:baseUrl/>${itemView}</link>
 			   <description><c:out value="${ir:getItemDescription(item.institutionalItemVersion.item)}"/></description>
-               <pubDate><fmt:formatDate type="both" dateStyle="long" timeStyle="long" value="${item.institutionalItemVersion.dateOfDeposit}"/></pubDate>
+               <pubDate><fmt:formatDate  pattern="EE, dd MMM yyyy HH:mm:ss Z" value="${item.institutionalItemVersion.dateOfDeposit}"/></pubDate>
                <guid  isPermaLink="false">institutional_item_version_id:${item.institutionalItemVersion.id}</guid>
           </item>
       </c:forEach>     
