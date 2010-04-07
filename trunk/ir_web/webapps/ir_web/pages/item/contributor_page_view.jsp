@@ -88,7 +88,7 @@
 						        </c:if>
 						     </td>
 						     <td width="22%">
-						     	<h3><ir:authorName personName="${personName}" displayDates="true"/> </h3>
+						     	<h3><a href="${contributorRss}"><ir:authorName personName="${personName}" displayDates="true"/></a>&nbsp;<img src="<c:url value='/page-resources/images/all-images/feed.jpg'/>" alt="RSS Feed"/></h3>
 						     	
 						     	<table 	class="blueBox">
 						     		<tr> <td> Total Publications : ${publicationsCount}</td></tr>
