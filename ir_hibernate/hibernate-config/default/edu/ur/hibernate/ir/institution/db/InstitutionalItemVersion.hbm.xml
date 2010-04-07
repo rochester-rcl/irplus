@@ -160,7 +160,7 @@
 	    join itemContributor.contributor as contributor
 	    where contributor.personName.id in (:personNameIds)
 	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
-	    order by sum(irFile.downloadCount) asc, item.lowerCaseName asc, institutionalItemVersion.versionNumber desc
+	    order by  coalesce(sum(irFile.downloadCount), 0) asc, item.lowerCaseName asc, institutionalItemVersion.versionNumber desc
 	</query>
 	
 	<!-- institutional item version contributed by given person name -->
@@ -174,7 +174,7 @@
 	    join itemContributor.contributor as contributor
 	    where contributor.personName.id in (:personNameIds)
 	    group by institutionalItemVersion, item.lowerCaseName, institutionalItemVersion.versionNumber
-	    order by sum(irFile.downloadCount) desc, item.lowerCaseName desc, institutionalItemVersion.versionNumber desc
+	    order by  coalesce(sum(irFile.downloadCount), 0) desc, item.lowerCaseName desc, institutionalItemVersion.versionNumber desc
 	</query>
 	
 	
@@ -291,7 +291,7 @@
 	<!--  get the publications  along with download count -->
 	<!-- ********************************************************* -->
 	<query name="getPublicationsSponsorDownloadCountOrderByCountDesc">
-	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount) ) 
 	    from  InstitutionalItem institutionalItem
 	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
 	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
@@ -302,11 +302,11 @@
 	    left join file.irFile irFile
 	    where sponsor.id = :sponsorId
 	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
-	    order by sum(irFile.downloadCount) desc, institutionalItemVersion.dateOfDeposit desc
+	    order by coalesce(sum(irFile.downloadCount), 0) desc, institutionalItemVersion.dateOfDeposit desc
     </query>
 	
 	<query name="getPublicationsSponsorDownloadCountOrderByCountAsc">
-	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
+	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount) ) 
 	    from  InstitutionalItem institutionalItem
 	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
 	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
@@ -317,13 +317,13 @@
 	    left join file.irFile irFile
 	    where sponsor.id = :sponsorId
 	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
-	    order by sum(irFile.downloadCount) asc, institutionalItemVersion.dateOfDeposit asc
+	    order by coalesce(sum(irFile.downloadCount), 0) asc, institutionalItemVersion.dateOfDeposit asc
     </query>
     
     	
 	<!-- Count of institutional item contributed by given person name -->
 	<query name="getInstitutionalItemVersionCountByPersonName">
-	    select  institutionalItemVersion, sum(irFile.downloadCount) 
+	    select  institutionalItemVersion, sum(irFile.downloadCount)
 	    from InstitutionalItem institutionalItem
 	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
 	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
@@ -334,7 +334,7 @@
 	    left join itemFile.irFile irFile
 	    where  contributor.personName.id in (:personNameIds)
 		group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit
-		order by sum(irFile.downloadCount) desc, institutionalItemVersion.dateOfDeposit desc
+		order by coalesce(sum(irFile.downloadCount), 0) desc, institutionalItemVersion.dateOfDeposit desc
 	</query>
 	
 	<!-- Count of downloads for a given sponsor -->
