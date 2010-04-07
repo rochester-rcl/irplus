@@ -224,7 +224,7 @@ NameAware, DescriptionAware{
 	}
 	
 	/**
-	 * Get an image reader instead of an extension.
+	 * Get an image reader based on an extension.
 	 * 
 	 * @param extension
 	 */
