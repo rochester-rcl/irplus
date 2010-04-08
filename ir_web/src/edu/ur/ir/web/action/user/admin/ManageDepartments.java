@@ -102,7 +102,7 @@ public class ManageDepartments extends Pager implements Preparable, UserIdAware{
 	{
 		log.debug("creating a department = " + department.getName());
 		IrUser user = userService.getUser(userId, false);
-		if(!user.hasRole(IrRole.RESEARCHER_ROLE) || !user.hasRole(IrRole.ADMIN_ROLE) )
+		if(!user.hasRole(IrRole.RESEARCHER_ROLE) && !user.hasRole(IrRole.ADMIN_ROLE) )
 		{
 			return "accessDenied";
 		}
@@ -130,7 +130,12 @@ public class ManageDepartments extends Pager implements Preparable, UserIdAware{
 	 */
 	public String update()
 	{
-		log.debug("updateing department id = " + department.getId());
+		log.debug("updating department id = " + department.getId());
+		IrUser user = userService.getUser(userId, false);
+		if(!user.hasRole(IrRole.ADMIN_ROLE) )
+		{
+			return "accessDenied";
+		}
 		added = false;
 
 		Department other = departmentService.getDepartment(department.getName());
@@ -158,6 +163,11 @@ public class ManageDepartments extends Pager implements Preparable, UserIdAware{
 	public String delete()
 	{
 		log.debug("Delete departments called");
+		IrUser user = userService.getUser(userId, false);
+		if(!user.hasRole(IrRole.ADMIN_ROLE) )
+		{
+			return "accessDenied";
+		}
 		if( departmentIds != null )
 		{
 		    for(int index = 0; index < departmentIds.length; index++)

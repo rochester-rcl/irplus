@@ -130,6 +130,11 @@ public class ManageFields extends Pager implements Preparable, UserIdAware {
 	public String update()
 	{
 		log.debug("updateing field id = " + field.getId());
+		IrUser user = userService.getUser(userId, false);
+		if(!user.hasRole(IrRole.ADMIN_ROLE) )
+		{
+			return "accessDenied";
+		}
 		added = false;
 
 		Field other = fieldService.getField(field.getName());
@@ -157,6 +162,11 @@ public class ManageFields extends Pager implements Preparable, UserIdAware {
 	public String delete()
 	{
 		log.debug("Delete fields called");
+		IrUser user = userService.getUser(userId, false);
+		if(!user.hasRole(IrRole.ADMIN_ROLE) )
+		{
+			return "accessDenied";
+		}
 		if( fieldIds != null )
 		{
 		    for(int index = 0; index < fieldIds.length; index++)
