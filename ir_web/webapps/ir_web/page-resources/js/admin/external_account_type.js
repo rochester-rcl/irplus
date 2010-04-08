@@ -34,37 +34,6 @@ var getExternalAccountTypeAction = basePath + 'admin/getExternalAccountType.acti
 YAHOO.ur.external_account_type = 
 {
 		
-    delete : function(id)
-    {
-        /*
-         * This call back updates the html when a deleting an external account type
-         */
-        var callback =
-        {
-            success: function(o) 
-            {
-        	    // check for the timeout - forward user to login page if timeout
-                // occurred
-	            if( !urUtil.checkTimeOut(o.responseText) )
-	            {     
-                    var divToUpdate = document.getElementById('newExternalAccountTypeDialogFields');
-                    divToUpdate.innerHTML = o.responseText; 
-                    document.newExternalAccountTypeForm.newExternalAccountType.value = "false";
-                    YAHOO.ur.external_account_type.newExternalAccountTypeDialog.showDialog();
-                }
-            },
-	
-	        failure: function(o) 
-	        {
-	           alert('edit external account type failed ' + o.status + ' status text ' + o.statusText );
-	        }
-        };
-        
-        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-    		getExternalAccountTypeAction + '?id=' + id +  '&bustcache='+new Date().getTime(), 
-            callback, null);
-    },
-		
 	/**
 	  * function to edit a single external account type
 	  */
@@ -142,7 +111,7 @@ YAHOO.ur.external_account_type =
          };
      
          var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-        		 getExternalAccountTypesTable, 
+        		 getExternalAccountTypesTable +  '?bustcache='+new Date().getTime(), 
                  callback, null);
     },
     
