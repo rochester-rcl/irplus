@@ -14,7 +14,7 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.metadata.dc;
+package edu.ur.metadata.dc;
 
 import edu.ur.persistent.CommonPersistent;
 
@@ -40,6 +40,39 @@ public class DublinCoreElement extends CommonPersistent {
 	public DublinCoreElement(String name)
 	{
 		this.setName(name);
+	}
+	
+	public int hashCode()
+	{
+		int value = 0;
+		value += name == null ? 0 : name.hashCode();
+		return value;
+	}
+	
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof DublinCoreElement)) return false;
+
+		final DublinCoreElement other = (DublinCoreElement) o;
+
+		if( ( name != null && !name.equals(other.getName()) ) ||
+			( name == null && other.getName() != null ) ) return false;
+		
+		return true;
+	}
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer("[");
+		sb.append(" id = " );
+		sb.append(id);
+		sb.append(" name = ");
+		sb.append(name);
+		sb.append(" description = ");
+		sb.append( description );
+		sb.append("]");
+		return sb.toString();
 	}
 
 }
