@@ -35,6 +35,7 @@ import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeDAO;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionDAO;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -143,7 +144,9 @@ public class InstitutionalItemIndexProcessingRecordDAOTest {
 	}
 	
 	@Test
-	public void insertCollectionRecordsProcessingRecordTest() throws LocationAlreadyExistsException, DuplicateNameException
+	public void insertCollectionRecordsProcessingRecordTest() throws LocationAlreadyExistsException,
+	DuplicateNameException,
+	CollectionDoesNotAcceptItemsException
 	{
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

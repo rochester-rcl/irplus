@@ -44,6 +44,7 @@ import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleInfoDAO;
 import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.handle.HandleNameAuthorityDAO;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionDAO;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -166,7 +167,9 @@ public class InstitutionalItemVersionDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void baseInstitutionalItemDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void baseInstitutionalItemDAOTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -230,7 +233,9 @@ public class InstitutionalItemVersionDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemWithdrawDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void institutionalItemWithdrawDAOTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -306,7 +311,9 @@ public class InstitutionalItemVersionDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemReInstateDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void institutionalItemReInstateDAOTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -401,7 +408,12 @@ public class InstitutionalItemVersionDAOTest {
 	 */
 	@Test
 	public void getPublicationVersionsByPersonNameTest() 
-		throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException, DuplicateContributorException, LocationAlreadyExistsException {
+		throws DuplicateNameException, IllegalFileSystemNameException, 
+		UserHasPublishedDeleteException, 
+		ParseException, 
+		DuplicateContributorException, 
+		LocationAlreadyExistsException,
+		CollectionDoesNotAcceptItemsException{
 
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -535,7 +547,9 @@ public class InstitutionalItemVersionDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemHandleInfoDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void institutionalItemHandleInfoDAOTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -582,7 +596,7 @@ public class InstitutionalItemVersionDAOTest {
 			institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(institutionalItem.getVersionedInstitutionalItem().getLargestVersion());
 
 		HandleInfo myInfo = handleInfoDAO.getById(handleInfo.getId(), false);
-		assert myInfo != null : "Should be able to find handle info " + myInfo;
+		assert myInfo != null : "Should be able to find handle info " + handleInfo.getId();
 		institutionalItemVersion.setHandleInfo(myInfo);
 		assert institutionalItemVersion.getHandleInfo() != null : "Should be able to find handle information " + myInfo;
 		institutionalItemDAO.makePersistent(institutionalItem);
@@ -618,7 +632,9 @@ public class InstitutionalItemVersionDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemRepositoryLicenseDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void institutionalItemRepositoryLicenseDAOTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -694,7 +710,9 @@ public class InstitutionalItemVersionDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemSponsorDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void institutionalItemSponsorDAOTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -777,7 +795,13 @@ public class InstitutionalItemVersionDAOTest {
 	 */
 	@Test
 	public void getInstitutionalItemDownloadCountByPersonNameTest() 
-		throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException, DuplicateContributorException, LocationAlreadyExistsException {
+		throws DuplicateNameException, 
+		IllegalFileSystemNameException, 
+		UserHasPublishedDeleteException, 
+		ParseException, 
+		DuplicateContributorException, 
+		LocationAlreadyExistsException,
+		CollectionDoesNotAcceptItemsException{
 
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

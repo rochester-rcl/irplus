@@ -33,6 +33,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
@@ -111,7 +112,8 @@ public class DefaultInstitutionalCollectionServiceTest {
 	 * @throws DuplicateNameException 
 	 * @throws LocationAlreadyExistsException 
 	 */
-	public void moveCollectionToCollectionTest() throws DuplicateNameException, LocationAlreadyExistsException
+	public void moveCollectionToCollectionTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException, CollectionDoesNotAcceptItemsException
 	{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -126,9 +128,9 @@ public class DefaultInstitutionalCollectionServiceTest {
 		ts = tm.getTransaction(td);
 		repo = repositoryService.getRepository(repo.getId(), false);
 		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
-		InstitutionalCollection subCollection = collection.createChild("subChild");
-		institutionalCollectionService.saveCollection(collection);
 		assert collection != null : "collection should be created";
+		InstitutionalCollection subCollection = collection.createChild("subChild");
+		institutionalCollectionService.saveCollection(collection);	
 		InstitutionalCollection destination = repo.createInstitutionalCollection("destination"); 
 	    assert destination != null : "destination collection should be created";
 		tm.commit(ts);
@@ -195,7 +197,11 @@ public class DefaultInstitutionalCollectionServiceTest {
 	 * @throws UserDeletedPublicationException 
 	 * @throws UserHasPublishedDeleteException 
 	 */
-	public void testDeleteInstitutinalCollectionWithItems() throws LocationAlreadyExistsException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException 
+	public void testDeleteInstitutinalCollectionWithItems() throws LocationAlreadyExistsException, 
+	DuplicateNameException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException,
+	CollectionDoesNotAcceptItemsException
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -384,7 +390,13 @@ public class DefaultInstitutionalCollectionServiceTest {
 		
 	}
 	
-	public void testSetAllPublicationsWithinCollectionPublic() throws IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, UserDeletedPublicationException, LocationAlreadyExistsException{
+	public void testSetAllPublicationsWithinCollectionPublic() throws IllegalFileSystemNameException, 
+	DuplicateNameException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException, 
+	UserDeletedPublicationException,
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -449,7 +461,12 @@ public class DefaultInstitutionalCollectionServiceTest {
 
 	}
 
-	public void testSetAllPublicationsWithinCollectionPrivate() throws IllegalFileSystemNameException, DuplicateNameException, UserDeletedPublicationException, UserHasPublishedDeleteException, LocationAlreadyExistsException{
+	public void testSetAllPublicationsWithinCollectionPrivate() throws IllegalFileSystemNameException, 
+	DuplicateNameException, 
+	UserDeletedPublicationException, 
+	UserHasPublishedDeleteException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);

@@ -311,18 +311,13 @@ public class InstitutionalCollectionTest {
 		InstitutionalCollection institutionalCollection = repo.createInstitutionalCollection("collection1");
 		institutionalCollection.setAllowsItems(false);
 		assert !institutionalCollection.getAllowsItems() : "Should not allow items";
-
-		try
-		{
-			
 			GenericItem i = new GenericItem("item1");
-			institutionalCollection.createInstitutionalItem(i);
-			assert false : "Should fail before this";
-		}
-		catch(IllegalStateException e)
-		{
-		    assert true;
-		}
+			try {
+				institutionalCollection.createInstitutionalItem(i);
+				assert false : "Should fail before this";
+			} catch (CollectionDoesNotAcceptItemsException e) {
+				
+			}
 		
 		repoHelper.cleanUpRepository();
 		
@@ -333,7 +328,7 @@ public class InstitutionalCollectionTest {
 	 * @throws DuplicateNameException 
 	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testAddingItems() throws DuplicateNameException, LocationAlreadyExistsException
+	public void testAddingItems() throws DuplicateNameException, LocationAlreadyExistsException, CollectionDoesNotAcceptItemsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -388,7 +383,7 @@ public class InstitutionalCollectionTest {
 	 * @throws DuplicateNameException 
 	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testGetItemsByName() throws DuplicateNameException, LocationAlreadyExistsException
+	public void testGetItemsByName() throws DuplicateNameException, LocationAlreadyExistsException, CollectionDoesNotAcceptItemsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 

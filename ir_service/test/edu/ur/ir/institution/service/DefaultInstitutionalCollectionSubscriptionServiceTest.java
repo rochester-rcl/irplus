@@ -36,6 +36,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
@@ -119,10 +120,16 @@ public class DefaultInstitutionalCollectionSubscriptionServiceTest {
 	 * @throws DuplicateNameException 
 	 * @throws DuplicateContributorException 
 	 */
-	public void testSendSubscriptionEmails() throws MessagingException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, DuplicateNameException, DuplicateContributorException 
+	public void testSendSubscriptionEmails() throws MessagingException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException, 
+	LocationAlreadyExistsException, 
+	DuplicateNameException, 
+	DuplicateContributorException,
+	CollectionDoesNotAcceptItemsException
 	{
 		
-		boolean sendEmails = new Boolean(properties.getProperty("send_emails"));
+		boolean sendEmails = Boolean.valueOf(properties.getProperty("send_emails"));
 		
 		if( sendEmails )
 		{	

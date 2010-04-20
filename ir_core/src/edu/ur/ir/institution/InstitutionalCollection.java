@@ -195,7 +195,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * @param item item to publish
 	 * @return Institutional item
      */
-	public InstitutionalItem createInstitutionalItem(GenericItem item) {
+	public InstitutionalItem createInstitutionalItem(GenericItem item) throws  CollectionDoesNotAcceptItemsException{
 		item.setPublishedToSystem(true);
 		InstitutionalItem institutionalItem = new InstitutionalItem(this, item);
 		addItem(institutionalItem);
@@ -274,15 +274,15 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * in a different collection, it is removed from that 
 	 * collection.
 	 * 
-	 * @throws IllegalStateException if allowsItems = false
+	 * @throws  CollectionDoesNotAcceptItemsException if allowsItems = false
 	 * 
 	 * @param item - item to add
 	 */
-	public void addItem(InstitutionalItem item)
+	public void addItem(InstitutionalItem item) throws  CollectionDoesNotAcceptItemsException
 	{
 		if(!allowsItems)
 		{
-			throw new IllegalStateException("This collection does not allow items");
+			throw new CollectionDoesNotAcceptItemsException("This collection does not allow items");
 		}
 		
 		if( item.getInstitutionalCollection() != null && !item.getInstitutionalCollection().equals(this) )
@@ -539,7 +539,6 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * the repository name plus the path of all 
 	 * parents.
 	 * 
-	 * @throws IllegalStateException if the collection is a root 
 	 * collection and the repository does not exist.
 	 *  
 	 * @return the path
@@ -885,7 +884,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 		this.reviewableItems = reviewableItems;
 	}
 	
-	public ReviewableItem addReviewableItem(GenericItem item) { 
+	public ReviewableItem addReviewableItem(GenericItem item) throws CollectionDoesNotAcceptItemsException { 
 		item.setLocked(true);
 		ReviewableItem reviewableItem = new ReviewableItem(item, this);
 		reviewableItems.add(reviewableItem);
@@ -1035,7 +1034,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
      * @return - true if the link is moved
      * 
      */
-    public boolean moveLink(InstitutionalCollectionLink link, int position) throws IllegalStateException
+    public boolean moveLink(InstitutionalCollectionLink link, int position)
     {
     	InstitutionalCollectionLink theLink = this.getLink(link.getName());
     	if( theLink == null)

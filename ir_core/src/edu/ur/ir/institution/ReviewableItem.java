@@ -68,7 +68,11 @@ public class ReviewableItem extends BasePersistent {
 	 * @param item item to be reviewed
 	 * @param institutionalCollection
 	 */
-	ReviewableItem(GenericItem item, InstitutionalCollection institutionalCollection) {
+	ReviewableItem(GenericItem item, InstitutionalCollection institutionalCollection) throws  CollectionDoesNotAcceptItemsException{
+		if(!institutionalCollection.getAllowsItems())
+		{
+			throw new CollectionDoesNotAcceptItemsException("This collection does not allow items");
+		}
 		this.item = item;
 		this.institutionalCollection = institutionalCollection;
 		this.reviewStatus = PENDING_REVIEW;

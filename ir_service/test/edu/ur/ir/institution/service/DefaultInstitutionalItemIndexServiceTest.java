@@ -44,6 +44,7 @@ import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -212,7 +213,14 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	 * @throws DuplicateContributorException 
 	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testIndexInstitutionalItem() throws NoIndexFoundException, IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException, LocationAlreadyExistsException 
+	public void testIndexInstitutionalItem() throws NoIndexFoundException, 
+	IllegalFileSystemNameException, 
+	DuplicateNameException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException, 
+	DuplicateContributorException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -473,7 +481,14 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	 * @throws DuplicateContributorException 
 	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testDeleteSearchCollectionItemIndex() throws NoIndexFoundException, IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException, LocationAlreadyExistsException 
+	public void testDeleteSearchCollectionItemIndex() throws NoIndexFoundException, 
+	IllegalFileSystemNameException, 
+	DuplicateNameException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException, 
+	DuplicateContributorException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);

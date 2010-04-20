@@ -28,6 +28,7 @@ import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -100,8 +101,12 @@ public class DefaultReviewableItemServiceTest {
 	 * 
 	 * @throws DuplicateNameException 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws CollectionDoesNotAcceptItemsException 
 	 */
-	public void acceptReviewableItemTest() throws DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
+	public void acceptReviewableItemTest() throws DuplicateNameException, 
+	UserHasPublishedDeleteException,
+	UserDeletedPublicationException, 
+	LocationAlreadyExistsException, CollectionDoesNotAcceptItemsException
 	{
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

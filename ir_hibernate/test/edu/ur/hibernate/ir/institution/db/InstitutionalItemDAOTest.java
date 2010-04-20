@@ -35,6 +35,7 @@ import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionDAO;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -106,7 +107,9 @@ public class InstitutionalItemDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void baseInstitutionalItemDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void baseInstitutionalItemDAOTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -176,7 +179,9 @@ public class InstitutionalItemDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemSearchDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void institutionalItemSearchDAOTest() throws DuplicateNameException,
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -289,7 +294,9 @@ public class InstitutionalItemDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemSearchisPublishedDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void institutionalItemSearchisPublishedDAOTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -359,7 +366,9 @@ public class InstitutionalItemDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void itemCountTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void itemCountTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -446,7 +455,9 @@ public class InstitutionalItemDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void institutionalItemBySubmittedDateDAOTest() throws DuplicateNameException, LocationAlreadyExistsException {
+	public void institutionalItemBySubmittedDateDAOTest() throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);

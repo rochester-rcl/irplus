@@ -40,6 +40,7 @@ import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.IrFileDAO;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionDAO;
 import edu.ur.ir.institution.InstitutionalCollectionLink;
@@ -868,7 +869,12 @@ public class InstitutionalCollectionDAOTest {
 	 * @throws LocationAlreadyExistsException 
 	 */
 	@Test
-	public void numberOfFileDownloadsForCollectionsTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, ParseException, LocationAlreadyExistsException {
+	public void numberOfFileDownloadsForCollectionsTest() throws DuplicateNameException,
+	IllegalFileSystemNameException, 
+	UserHasPublishedDeleteException, 
+	ParseException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException {
 
 		// start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
