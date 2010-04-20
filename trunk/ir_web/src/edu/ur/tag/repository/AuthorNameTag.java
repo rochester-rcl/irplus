@@ -23,10 +23,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import edu.ur.ir.person.BirthDate;
-import edu.ur.ir.person.DeathDate;
+import edu.ur.ir.person.FirstNamePersonNameFormatter;
+import edu.ur.ir.person.LastNamePersonNameFormatter;
 import edu.ur.ir.person.PersonName;
-import edu.ur.ir.person.PersonNameTitle;
 
 /**
  * Tag to output an author name.
@@ -45,6 +44,12 @@ public class AuthorNameTag extends SimpleTagSupport{
 	/** show the name starting with last name */
 	private boolean lastNameFirst = false;
 	
+	/** formatter to show person first name */
+	private FirstNamePersonNameFormatter firstNameFormatter = new FirstNamePersonNameFormatter();
+	
+	/** formatter to show a person name with last name first */
+	private LastNamePersonNameFormatter lastNameFormatter = new LastNamePersonNameFormatter();
+	
 	public void doTag() throws JspException
 	{
 		JspWriter out = this.getJspContext().getOut();
@@ -55,11 +60,11 @@ public class AuthorNameTag extends SimpleTagSupport{
 	    }
 		else if( !lastNameFirst )
 		{
-	        output = this.showFirstNameFirst();
+	        output = firstNameFormatter.getNameFormatted(personName, displayDates);
 		}
 		else if ( lastNameFirst)
 		{
-	        output = showLastNameFirst();	
+	        output = lastNameFormatter.getNameFormatted(personName, displayDates);	
 	    }
 	    
 	    try {
@@ -90,154 +95,6 @@ public class AuthorNameTag extends SimpleTagSupport{
 		this.displayDates = displayDates;
 	}
 	
-	private String showFirstNameFirst()
-	{
-		String output = "";
-		if( personName.getPersonNameTitles() != null )
-    	{
-    	    for( PersonNameTitle title: personName.getPersonNameTitles())
-    	    {
-    		    output += title.getTitle() + " ";
-    	    }
-    	}
-    	if( personName.getForename() != null)
-    	{
-    		output += personName.getForename() + " ";
-    	}
-    	
-    	if( personName.getMiddleName() != null)
-    	{
-    		output += personName.getMiddleName() + " ";
-    	}
-    	if( personName.getSurname() != null)
-    	{
-    		output += personName.getSurname() + " ";
-    	}
-    	
-    	if( personName.getNumeration() != null )
-    	{
-    		output += personName.getNumeration() + " ";
-    	}
-    	
-    	if(displayDates)
-    	{
-    	    BirthDate birthDate = personName.getPersonNameAuthority().getBirthDate();
-    	    DeathDate deathDate = personName.getPersonNameAuthority().getDeathDate();
-    	    int birthYear = 0;
-    	    int deathYear = 0;
-    	    
-    	    if(birthDate != null)
-    	    {
-    	    	birthYear = birthDate.getYear();
-    	    }
-    	    
-    	    if(deathDate != null)
-    	    {
-    	    	deathYear = deathDate.getYear();
-    	    }
-    	    
-    	    
-    		if( birthYear > 0 || deathYear > 0 )
-    		{
-    		    output += "(";
-    		    if( birthYear > 0)
-    		    {
-    			    output += birthYear;
-    		    }
-    		    output += " - ";
-    		
-    		    if(  deathYear > 0 )
-    		    {
-    			    output += deathYear;
-    		    }
-    		    output += ")";
-    	    }
-    	}
-    	return output;
-	}
-	
-	private String showLastNameFirst()
-	{
-		String output = "";
-		if( personName.getSurname() != null &&  personName.getSurname().trim().length() > 0)
-    	{
-    		output += personName.getSurname();
-    	}
-		if( personName.getForename() != null && personName.getForename().trim().length() > 0)
-    	{
-			if(output.trim().length() > 0 )
-			{
-				output +=", ";
-			}
-    		output += personName.getForename();
-    	}
-		if( personName.getMiddleName() != null &&  personName.getMiddleName().trim().length() > 0)
-    	{
-			if(output.trim().length() > 0 )
-			{
-				output +=", ";
-			}
-    		output += personName.getMiddleName();
-    	}
-		if( personName.getNumeration() != null && personName.getNumeration().trim().length() > 0)
-    	{
-			if(output.trim().length() > 0 )
-			{
-				output +=", ";
-			}
-    		output += personName.getNumeration();
-    	}
-		if( personName.getPersonNameTitles() != null && personName.getPersonNameTitles().size() > 0)
-    	{
-			if(output.trim().length() > 0 )
-			{
-				output +=", ";
-			}
-    	    for( PersonNameTitle title: personName.getPersonNameTitles())
-    	    {
-    		    output += title.getTitle() + " ";
-    	    }
-    	}
-    	
-    	
-    	if(displayDates)
-    	{
-    		output += " ";
-    	    BirthDate birthDate = personName.getPersonNameAuthority().getBirthDate();
-    	    DeathDate deathDate = personName.getPersonNameAuthority().getDeathDate();
-    	    int birthYear = 0;
-    	    int deathYear = 0;
-    	    
-    	    if(birthDate != null)
-    	    {
-    	    	birthYear = birthDate.getYear();
-    	    }
-    	    
-    	    if(deathDate != null)
-    	    {
-    	    	deathYear = deathDate.getYear();
-    	    }
-    	    
-    	    
-    		if( birthYear > 0 || deathYear > 0 )
-    		{
-    		    output += "(";
-    		    if( birthYear > 0)
-    		    {
-    			    output += birthYear;
-    		    }
-    		    output += " - ";
-    		
-    		    if(  deathYear > 0 )
-    		    {
-    			    output += deathYear;
-    		    }
-    		    output += ")";
-    	    }
-    	}
-    	return output;
-	}
-
 
 	public boolean isLastNameFirst() {
 		return lastNameFirst;

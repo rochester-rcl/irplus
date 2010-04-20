@@ -650,4 +650,29 @@
        <property name="externalAccountTypeDAO" ref="externalAccountTypeDAO"/>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Contributor type dublin core mapping service -->
+   <!-- ****************************************** --> 
+   <bean id="contributorTypeDublinCoreMappingService" 
+       class="edu.ur.ir.item.metadata.dc.service.DefaultContributorTypeDublinCoreMappingService">
+       <property name="contributorTypeDublinCoreMappingDAO" ref="contributorTypeDublinCoreMappingDAO"/>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Mappings for name formatters -->
+   <!-- ****************************************** --> 
+   <bean id="firstNamePersonNameFormatter" class="edu.ur.ir.person.FirstNamePersonNameFormatter"/>
+   <bean id="lastNamePersonNameFormatter" class="edu.ur.ir.person.LastNamePersonNameFormatter"/>
+
+   <!-- ****************************************** --> 
+   <!-- Contributor type dublin core mapping service -->
+   <!-- ****************************************** --> 
+   <bean id="dublinCoreOaiMetadataProvider" 
+       class="edu.ur.ir.oai.metadata.provider.service.DublinCoreOaiMetadataProvider">
+       <property name="contributorTypeDublinCoreMappingService" ref="contributorTypeDublinCoreMappingService"/>
+       <property name="nameFormatter" ref="lastNamePersonNameFormatter" />
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+   </bean>
+
+   
 </beans>

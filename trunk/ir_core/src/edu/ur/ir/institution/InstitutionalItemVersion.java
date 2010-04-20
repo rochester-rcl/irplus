@@ -50,6 +50,15 @@ public class InstitutionalItemVersion extends BasePersistent{
 	/**  Date this item was submitted to this collection.*/
 	private Timestamp dateOfDeposit;
 	
+	/** Date this version or the underlying item was modified */
+	private Timestamp dateLastModified;
+	
+	/** User who modified the the version or underlying item */
+	private IrUser lastModifiedBy;
+	
+	/** Note indicating reason for modification */
+	private String lastModifiedNote;
+
 	/** Parent versioned publication  */
 	private VersionedInstitutionalItem versionedInstitutionalItem;
 	
@@ -73,6 +82,7 @@ public class InstitutionalItemVersion extends BasePersistent{
 	 */
 	InstitutionalItemVersion(){
 		dateOfDeposit = new java.sql.Timestamp(new Date().getTime());
+		dateLastModified = new java.sql.Timestamp(new Date().getTime());
 	}
 	
 	/**
@@ -389,6 +399,59 @@ public class InstitutionalItemVersion extends BasePersistent{
 		this.repositoryLicense = repositoryLicense;
 	}
 	
+	
+	/**
+	 * Date the version or underlying item was modified.
+	 * 
+	 * @return date the last time the item was modified
+	 */
+	public Timestamp getDateLastModified() {
+		return dateLastModified;
+	}
 
+	/**
+	 * Set the date the version or underlying item was modified.
+	 * 
+	 * @param dateLastModified
+	 */
+	public void setDateLastModified(Timestamp dateLastModified) {
+		this.dateLastModified = dateLastModified;
+	}
 
+	/**
+	 * Get the user who last modified the item.
+	 * 
+	 * @return
+	 */
+	public IrUser getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+
+	/**
+	 * Set the last modified by user.
+	 * 
+	 * @param lasModifiedBy
+	 */
+	public void setLastModifiedBy(IrUser lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
+	
+	/**
+	 * Get the last modified note.
+	 * 
+	 * @return
+	 */
+	public String getLastModifiedNote() {
+		return lastModifiedNote;
+	}
+
+	/**
+	 * Set the last modified note.
+	 * 
+	 * @param lastModifiedNote
+	 */
+	public void setLastModifiedNote(String lastModifiedNote) {
+		this.lastModifiedNote = lastModifiedNote;
+	}
+	
 }
