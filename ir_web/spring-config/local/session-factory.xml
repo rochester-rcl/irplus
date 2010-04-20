@@ -154,6 +154,11 @@
                 <value>edu/ur/hibernate/ir/handle/db/HandleInfo.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/handle/db/UniqueHandleName.hbm.xml</value>
                 
+                <value>edu/ur/hibernate/ir/item/metadata/dc/db/ContributorTypeDublinCoreMapping.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/metadata/dc/DublinCoreElement.hbm.xml</value>
+                
+                
             </set>
         </property>
         <property name="hibernateProperties">

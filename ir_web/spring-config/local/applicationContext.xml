@@ -121,5 +121,17 @@
     <!-- Index processing persistence classes -->
     <!-- ****************************************** --> 
     <import resource="ir-index-hibernate.xml"/>
+    
+    <!-- ****************************************** --> 
+    <!-- Metadata processing persistence classes -->
+    <!-- ****************************************** --> 
+    <import resource="ir-metadata-hibernate.xml"/>
+    
+    <!-- ****************************************** --> 
+    <!-- Metadata service -->
+    <!-- ****************************************** -->
+    <import resource="metadata-hibernate.xml"/> 
+    <import resource="metadata-service.xml"/>
+    
    
 </beans>
