@@ -22,11 +22,12 @@
 <project name="ir_web" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
 	
 	<!-- this automatically sets the YUI libraries to be unzipped  
-	          it does not matter what the value is so long as the 
-		     line is uncommented.
-     -->
- 	<property name="yui.unzip" value="true"/>
-    
+		          it does not matter what the value is so long as the 
+			     line is uncommented.
+	     
+	 	   <property name="yui.unzip" value="true"/>
+	 -->	 	 
+	  
 	
 	<!-- always disable emma -->
 	<property name="emma.enabled" value="false" />
@@ -129,49 +130,6 @@
 			
 			<!-- quartz configuration files -->
 			<fileset dir="${quartz.dir}"/>
-		</copy>
-		
-		<!-- copy the most recent jar files created by the application-->
-		<copy todir="${lib.dir}">
-			<fileset file="../file_db/file_db/file_db-${project.version}.jar"/>
-		</copy>
-		<copy todir="${lib.dir}">
-			<fileset file="../file_db_dao/file_db_dao/file_db_dao-${project.version}.jar"/>
-		</copy>
-		<copy todir="${lib.dir}">
-			<fileset file="../ur_common_util/ur_common_util/ur_common_util-${project.version}.jar"/>
-		</copy>
-		<copy todir="${lib.dir}">
-			<fileset file="../ur_persistence_util/ur_persistence_util/ur_persistence_util-${project.version}.jar"/>
-		</copy>
-		<copy todir="${lib.dir}">
-			<fileset file="../file_db_hibernate/file_db_hibernate/file_db_hibernate-${project.version}.jar"/>
-		</copy>		
-		<copy todir="${lib.dir}">
-			<fileset file="../file_db_service/file_db_service/file_db_service-${project.version}.jar"/>
-		</copy>		
-		
-		<copy todir="${lib.dir}">
-			<fileset file="../ur_common_util/ur_common_util/ur_common_util-${project.version}.jar"/>
-		</copy>
-		<copy todir="${lib.dir}">
-			<fileset file="../ur_persistence_util/ur_persistence_util/ur_persistence_util-${project.version}.jar"/>
-		</copy>
-		<copy todir="${lib.dir}">
-			<fileset file="../ir_core/ir_core/ir_core-${project.version}.jar"/>
-		</copy>
-		<copy todir="${lib.dir}">
-			<fileset file="../ir_dao/ir_dao/ir_dao-${project.version}.jar"/>
-		</copy>
-		<copy todir="${lib.dir}">
-			<fileset file="../ir_hibernate/ir_hibernate/ir_hibernate-${project.version}.jar"/>
-		</copy>
-		<copy todir="${lib.dir}">
-			<fileset file="../ir_service/ir_service/ir_service-${project.version}.jar"/>
-		</copy>
-		
-		<copy todir="${lib.dir}">
-			<fileset file="../ur_tags/ur_tags/ur_tags-${project.version}.jar"/>
 		</copy>
 
 	</target>
