@@ -19,7 +19,7 @@
 <suite name="ir_service">
 	<test name="UR IR Service Test">
 		<classes>
-			<class name="edu.ur.ir.institution.service.DefaultInstitutionalItemIndexProcessingRecordServiceTest"/>
+			<class name="edu.ur.ir.oai.metadata.provider.service.DublinCoreMetadataProviderTest"/>
 		</classes>
 	</test>
 </suite>
