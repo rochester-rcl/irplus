@@ -20,6 +20,94 @@
 
 
 
+-- ----------------------------------------------
+-- **********************************************
+       
+-- Metadata tables  
+
+-- **********************************************
+
+
+-- ----------------------------------------------
+-- ---------------------------------------------
+-- Create a schema to basic metadata information
+-- ---------------------------------------------
+
+CREATE SCHEMA metadata AUTHORIZATION ir_plus;
+
+-- ---------------------------------------------
+-- Dublin core element table
+-- ---------------------------------------------
+CREATE TABLE metadata.metadata_type
+(
+    metadata_type_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE metadata.metadata_type OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.metadata_type_seq;
+ALTER TABLE metadata.metadata_type_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Dublin core element table
+-- ---------------------------------------------
+CREATE TABLE metadata.dublin_core_element
+(
+    dublin_core_element_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE metadata.dublin_core_element OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.dublin_core_element_seq;
+ALTER TABLE metadata.dublin_core_element_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Dublin core term table
+-- ---------------------------------------------
+CREATE TABLE metadata.dublin_core_term
+(
+    dublin_core_term_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE metadata.dublin_core_term OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.dublin_core_term_seq;
+ALTER TABLE metadata.dublin_core_term_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Dublin core term table
+-- ---------------------------------------------
+CREATE TABLE metadata.dublin_core_term_type
+(
+    dublin_core_term_type_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE metadata.dublin_core_term_type OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.dublin_core_term_type_seq;
+ALTER TABLE metadata.dublin_core_term_type_seq OWNER TO ir_plus;
+
+
+
 -- **********************************************
        
 -- Index SCHEMA     
@@ -3361,8 +3449,8 @@ CREATE INDEX ip_ignore_file_download_info_ip_part_idx
   
 CREATE INDEX ip_ignore_ir_file_id_idx
   ON ir_statistics.file_download_info(ir_file_id);
-
-
+  
+  
 
 
 -- ---------------------------------------------

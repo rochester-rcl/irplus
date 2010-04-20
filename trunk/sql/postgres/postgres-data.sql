@@ -144,14 +144,6 @@ values (nextval('person.contributor_type_seq'), 0, 'Donor', 'DONOR',  null);
 
 insert into 
 person.contributor_type ( contributor_type_id, version, name, unique_system_code, description) 
-values (nextval('person.contributor_type_seq'), 0, 'Anthropologist', 'ANTHROPOLOGIST', null);
-
-insert into 
-person.contributor_type ( contributor_type_id, version, name, unique_system_code, description) 
-values (nextval('person.contributor_type_seq'), 0, 'Librarian', 'LIBRARIAN', null);
-
-insert into 
-person.contributor_type ( contributor_type_id, version, name, unique_system_code, description) 
 values (nextval('person.contributor_type_seq'), 0, 'Photographer', 'PHOTOGRAPHER', null);
 
 -- ---------------------------------------------
