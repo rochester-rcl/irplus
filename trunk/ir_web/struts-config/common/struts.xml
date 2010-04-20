@@ -450,6 +450,15 @@
                 class="edu.ur.ir.web.action.sponsor.ViewSponsor">
          	<result name="success">/pages/sponsor/sponsor_page_view.jsp</result>
          </action> 
+         
+        <!--  ************************************ -->
+        <!--    OAI actions                 -->
+        <!--  ************************************ -->
+         <action name="oai2" 
+                class="edu.ur.ir.web.action.oai.Oai_2_0">
+         	<result name="badVerb">/pages/oai/bad_verb.jsp</result>
+         	<result name="success">/pages/oai/ok.jsp</result>
+         </action> 
         
     </package>
          
