@@ -25,9 +25,15 @@
 <ivy-module version="2.0">
     <info organisation="ir_core" module="ir_core"/>
     <dependencies>
-
-        <dependency org="file_db" name="file_db" rev="1.0" />
+    
+       
+        <!--  file database dependency -->
+        <dependency org="file_db" name="file_db" rev="1.0" changing="true"/>
       
+        <!--  file database dependency -->
+        <dependency org="metadata" name="metadata" rev="1.0" changing="true"/>
+
+
         <!-- javax mail libaries -->
         <dependency org="javax.mail" name="mail" rev="1.4.1" transitive="false">
             <artifact name="mail" type="jar"/>
