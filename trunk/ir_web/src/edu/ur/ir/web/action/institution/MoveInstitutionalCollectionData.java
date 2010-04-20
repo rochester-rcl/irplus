@@ -27,6 +27,7 @@ import edu.ur.ir.FileSystem;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
@@ -162,8 +163,9 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 	 * 
 	 * @return
 	 * @throws NoIndexFoundException 
+	 * @throws CollectionDoesNotAcceptItemsException 
 	 */
-	public String move() throws NoIndexFoundException
+	public String move() throws NoIndexFoundException, CollectionDoesNotAcceptItemsException
 	{
 		log.debug("move called");
 		List<InstitutionalCollection> collectionsNotMoved = new LinkedList<InstitutionalCollection>();

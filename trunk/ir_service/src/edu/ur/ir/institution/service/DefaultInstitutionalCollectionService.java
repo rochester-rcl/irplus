@@ -27,6 +27,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionDAO;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
@@ -259,7 +260,7 @@ public class DefaultInstitutionalCollectionService implements
 	 */
 	public List<InstitutionalCollection> moveCollectionInformation(InstitutionalCollection destination,
 			List<InstitutionalCollection> collectionsToMove,
-			List<InstitutionalItem> itemsToMove) {
+			List<InstitutionalItem> itemsToMove) throws CollectionDoesNotAcceptItemsException{
 		
 		// collections may not be moved due to duplicate collection name
 		LinkedList<InstitutionalCollection> collectionsNotMoved = new LinkedList<InstitutionalCollection>();

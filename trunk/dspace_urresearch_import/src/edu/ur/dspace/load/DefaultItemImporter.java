@@ -65,6 +65,7 @@ import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.handle.HandleService;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -511,7 +512,7 @@ public class DefaultItemImporter implements ItemImporter{
 	 * @see edu.ur.dspace.load.ItemImporter#importItems(java.lang.String, edu.ur.ir.repository.Repository)
 	 */
 	public void importItems(String zipFile, Repository repository, boolean publicOnly)
-			throws IOException, NoIndexFoundException {
+			throws IOException, NoIndexFoundException, CollectionDoesNotAcceptItemsException {
 		log.debug("Processing zip file " + zipFile);
 		 File zip = new File(zipFile);
 		 if(!zip.exists())
@@ -537,7 +538,8 @@ public class DefaultItemImporter implements ItemImporter{
 	 * @throws IOException
 	 * @throws NoIndexFoundException
 	 */
-	private void loadItems(List<DspaceItem> items, File zipFile, Repository repo, boolean publicOnly) throws IOException, NoIndexFoundException
+	private void loadItems(List<DspaceItem> items, File zipFile, Repository repo, boolean publicOnly) 
+	throws IOException, NoIndexFoundException, CollectionDoesNotAcceptItemsException
 	{
 		for(DspaceItem i : items)
 		{
@@ -570,7 +572,8 @@ public class DefaultItemImporter implements ItemImporter{
 	 * @throws NoIndexFoundException
 	 * @throws IOException
 	 */
-	private void loadItem(DspaceItem i,  File zipFile, Repository repo, boolean publicOnly) throws NoIndexFoundException, IOException
+	private void loadItem(DspaceItem i,  File zipFile, Repository repo, boolean publicOnly) throws NoIndexFoundException, 
+	IOException, CollectionDoesNotAcceptItemsException
 	{
 		log.debug("loading dspace item " + i);
 		GenericItem genericItem = genericItemPopulator.createGenericItem(repo, i);

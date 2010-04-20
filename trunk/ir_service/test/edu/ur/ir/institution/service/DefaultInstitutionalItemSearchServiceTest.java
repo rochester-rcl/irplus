@@ -34,6 +34,7 @@ import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FacetSearchHelper;
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -168,7 +169,14 @@ public class DefaultInstitutionalItemSearchServiceTest {
 	 * @throws DuplicateContributorException 
 	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testSearchInstitutionalItem() throws NoIndexFoundException, IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException, LocationAlreadyExistsException 
+	public void testSearchInstitutionalItem() throws NoIndexFoundException, 
+	IllegalFileSystemNameException, 
+	DuplicateNameException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException, 
+	DuplicateContributorException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -326,7 +334,14 @@ public class DefaultInstitutionalItemSearchServiceTest {
 	 * @throws DuplicateContributorException 
 	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testFacetSearchInstitutionalItem() throws NoIndexFoundException, IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException, LocationAlreadyExistsException 
+	public void testFacetSearchInstitutionalItem() throws NoIndexFoundException, 
+	IllegalFileSystemNameException, 
+	DuplicateNameException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException, 
+	DuplicateContributorException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -597,7 +612,14 @@ public class DefaultInstitutionalItemSearchServiceTest {
 	 * @throws DuplicateContributorException 
 	 * @throws LocationAlreadyExistsException 
 	 */
-	public void testCollectionSearchInstitutionalItem() throws NoIndexFoundException, IllegalFileSystemNameException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, DuplicateContributorException, LocationAlreadyExistsException 
+	public void testCollectionSearchInstitutionalItem() throws NoIndexFoundException, 
+	IllegalFileSystemNameException, 
+	DuplicateNameException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException, 
+	DuplicateContributorException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);

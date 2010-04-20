@@ -25,6 +25,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
 
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -182,13 +183,14 @@ public class DefaultReviewableItemService implements ReviewableItemService {
 	 * 
 	 * @param reviewableItem
 	 * @param reviewer
+	 * @throws CollectionDoesNotAcceptItemsException 
 	 */
-	public InstitutionalItem acceptItem(ReviewableItem reviewableItem, IrUser reviewer) {
+	public InstitutionalItem acceptItem(ReviewableItem reviewableItem, IrUser reviewer) throws CollectionDoesNotAcceptItemsException {
 		reviewableItem.accept(reviewer); 
 		
 		saveReviewableItem(reviewableItem);
 		
-		InstitutionalItem institutionalItem = reviewableItem.getInstitutionalCollection().createInstitutionalItem(reviewableItem.getItem());
+		InstitutionalItem institutionalItem = new InstitutionalItem(reviewableItem.getInstitutionalCollection(), reviewableItem.getItem());
 		
 		institutionalItemService.saveInstitutionalItem(institutionalItem);
 		

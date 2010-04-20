@@ -29,6 +29,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
@@ -37,6 +38,7 @@ import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.ReviewableItem;
+import edu.ur.ir.institution.ReviewableItemService;
 import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
@@ -132,8 +134,12 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	
 	/** list of reviewable items created during the submission */
 	private List<ReviewableItem> reviewableItems = new LinkedList<ReviewableItem>();
+	
+	/** Service for dealing with reviewable items */
+	private ReviewableItemService reviewableItemService;
 
 
+	
 	/**
 	 * Set the user id.
 	 * 
@@ -327,7 +333,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		
 		log.debug("Institutional Collection Id: "+ institutionalCollectionId);
 
-		// Add the file id only if its not in the selected list 
+		// Add the collection id only if its not in the selected list 
 		if (!(selectedCollectionIds.equals(Long.toString(institutionalCollectionId.longValue()))) 
 				&& !(selectedCollectionIds.startsWith(Long.toString(institutionalCollectionId.longValue())+",")) 
 				&& !(selectedCollectionIds.endsWith(","+Long.toString(institutionalCollectionId.longValue()))) 
@@ -347,9 +353,10 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	/**
 	 * Submit publication to the institutional collection
 	 * @throws NoIndexFoundException 
+	 * @throws CollectionDoesNotAcceptItemsException 
 	 * 
 	 */
-	public String submitPublication() throws NoIndexFoundException {
+	public String submitPublication() throws NoIndexFoundException, CollectionDoesNotAcceptItemsException {
 
 		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
@@ -399,13 +406,13 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		
 		for(InstitutionalCollection institutionalCollection: collections) {
 			if( !institutionalCollectionService.isItemPublishedToCollection(institutionalCollection.getId(), item.getId()))
-			{    
+			{   
 				log.debug("Institutional Collection Id: "+ institutionalCollection.getId());
 			
 			    InstitutionalItem institutionalItem = null;
 			    if( institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION))
 			    {
-                    institutionalItem = institutionalCollection.createInstitutionalItem(item);
+                    institutionalItem = new InstitutionalItem(institutionalCollection, item);
 				    if (institutionalCollection.isPubliclyViewable()) 
 				    {
 					    publicCollectionExist = true;
@@ -432,10 +439,6 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 				        institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().addRepositoryLicense(repository.getDefaultLicense(), user);
 				    }
 				
-				    // save the item 
-				    institutionalItemService.saveInstitutionalItem(institutionalItem);
-				    institutionalItems.add(institutionalItem);
-				
 				    // add a handle if the handle service is available
 				    HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
 				    log.debug("handle name authority = " + handleNameAuthority);
@@ -443,7 +446,11 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 				    {
 					    this.addHandleInfo(handleNameAuthority, institutionalItem);
 				    }
-				
+				    
+				    // save the item 
+				    institutionalItemService.saveInstitutionalItem(institutionalItem);
+				    institutionalItems.add(institutionalItem);
+				    
 				    // only index if the item was added directly to the collection
 				    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
 				    institutionalItemIndexProcessingRecordService.save(item.getId(), processingType);
@@ -453,6 +460,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			    { 
 				    ReviewableItem reviewableItem = institutionalCollection.addReviewableItem(item);
 				    reviewableItems.add(reviewableItem);
+				    reviewableItemService.saveReviewableItem(reviewableItem);
 				    institutionalCollectionService.sendEmailToReviewer(institutionalCollection, item.getName());
 			    }
 			    else
@@ -460,7 +468,6 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 				    return "accessDenied";
 			    }
 			
-			    institutionalCollectionService.saveCollection(institutionalCollection);
 		    }
 			/*
 			 * Assign group permission only when the item is being submitted for the first time and
@@ -488,9 +495,6 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		HandleInfo info = new HandleInfo(nextHandleName, url, handleNameAuthority);
 		log.debug( " info = " + info);
 	    itemVersion.setHandleInfo(info);
-
-	    // save the item with the new handle information.
-		institutionalItemService.saveInstitutionalItem(institutionalItem);
 	}
 	
 	/**
@@ -806,5 +810,14 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	public List<ReviewableItem> getReviewableItems() {
 		return reviewableItems;
 	}
+	
+	public ReviewableItemService getReviewableItemService() {
+		return reviewableItemService;
+	}
+
+	public void setReviewableItemService(ReviewableItemService reviewableItemService) {
+		this.reviewableItemService = reviewableItemService;
+	}
+
 
 }

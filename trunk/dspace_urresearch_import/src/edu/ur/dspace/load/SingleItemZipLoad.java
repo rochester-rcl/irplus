@@ -13,6 +13,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.w3c.dom.DOMException;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 
@@ -35,9 +36,10 @@ public class SingleItemZipLoad {
 	 * @throws DOMException 
 	 * @throws NoIndexFoundException 
 	 * @throws IOException 
+	 * @throws CollectionDoesNotAcceptItemsException 
 
 	 */
-	public static void main(String[] args) throws DOMException, ParseException, IOException, NoIndexFoundException 
+	public static void main(String[] args) throws DOMException, ParseException, IOException, NoIndexFoundException, CollectionDoesNotAcceptItemsException 
 	{
 		// id of the repository
 		String idStr = args[0];

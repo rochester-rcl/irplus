@@ -138,9 +138,10 @@ public interface InstitutionalCollectionService {
 	 * 
 	 * @return list of collections that could not be moved if there were duplicate names 
 	 * in the destination 
+	 * @throws CollectionDoesNotAcceptItemsException 
 	 */
 	public List<InstitutionalCollection> moveCollectionInformation(InstitutionalCollection destination,
-			List<InstitutionalCollection> collectionToMove, List<InstitutionalItem> itemsToMove);
+			List<InstitutionalCollection> collectionToMove, List<InstitutionalItem> itemsToMove) throws CollectionDoesNotAcceptItemsException;
 		
 	
 	/**

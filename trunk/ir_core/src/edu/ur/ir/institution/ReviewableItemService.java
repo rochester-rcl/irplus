@@ -73,8 +73,9 @@ public interface ReviewableItemService {
 	 * 
 	 * @param reviewableItem
 	 * @param reviewer
+	 * @throws CollectionDoesNotAcceptItemsException 
 	 */
-	public InstitutionalItem acceptItem(ReviewableItem reviewableItem, IrUser reviewer);
+	public InstitutionalItem acceptItem(ReviewableItem reviewableItem, IrUser reviewer) throws CollectionDoesNotAcceptItemsException;
 
 	/**
 	 * Get review history for item

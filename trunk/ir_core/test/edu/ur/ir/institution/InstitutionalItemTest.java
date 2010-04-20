@@ -42,7 +42,7 @@ public class InstitutionalItemTest {
 	 * 
 	 * @param description
 	 */
-	public void testBasicSets() 
+	public void testBasicSets() throws CollectionDoesNotAcceptItemsException 
 	{
 		Repository repository  = new Repository();
 		repository.setDescription("myDescription");
@@ -66,7 +66,7 @@ public class InstitutionalItemTest {
 	    assert !institutionalItem1.equals(institutionalItem3) : "Institutional Items should not be equal";
 	}
 	
-	public void testInstitutionalItemPublishing()
+	public void testInstitutionalItemPublishing()throws CollectionDoesNotAcceptItemsException 
 	{
 		
 		Repository repository  = new Repository();

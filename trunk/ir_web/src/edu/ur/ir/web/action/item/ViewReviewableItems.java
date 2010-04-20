@@ -27,6 +27,7 @@ import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.handle.UniqueHandleNameGenerator;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
@@ -138,8 +139,9 @@ public class ViewReviewableItems  extends ActionSupport implements UserIdAware {
 	 * Accept item
 	 * 
 	 * @return
+	 * @throws CollectionDoesNotAcceptItemsException 
 	 */
-	public String accept() throws NoIndexFoundException {
+	public String accept() throws NoIndexFoundException, CollectionDoesNotAcceptItemsException {
 		IrUser user = userService.getUser(userId, false);
 		HandleInfo info = null;
 		

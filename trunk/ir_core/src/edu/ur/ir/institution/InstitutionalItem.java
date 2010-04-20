@@ -59,10 +59,16 @@ public class InstitutionalItem extends BasePersistent implements FileSystem{
 	 * 
 	 * @param item - item to create a link with
 	 * @param institutionalCollection - collection to match with the item
+     *
+	 * @throws CollectionDoesNotAcceptItemsException if the collection does not accept items
 	 */
-	InstitutionalItem(InstitutionalCollection institutionalCollection, 
-			GenericItem item)
+	public InstitutionalItem(InstitutionalCollection institutionalCollection, 
+			GenericItem item) throws  CollectionDoesNotAcceptItemsException
 	{
+		if(!institutionalCollection.getAllowsItems())
+		{
+			throw new CollectionDoesNotAcceptItemsException("This collection does not allow items");
+		}
 		setInstitutionalCollection(institutionalCollection);
 		setOwner(item.getOwner());
 		versionedInstitutionalItem = new VersionedInstitutionalItem(this, item);

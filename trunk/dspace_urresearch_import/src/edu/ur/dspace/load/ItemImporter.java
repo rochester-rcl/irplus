@@ -22,6 +22,7 @@ import java.util.List;
 
 import edu.ur.dspace.model.DspaceItem;
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.repository.Repository;
 
 /**
@@ -40,8 +41,9 @@ public interface ItemImporter {
 	 * @param publicOnly - only load public items and public files
 	 * 
 	 * @throws IOException - if reading the file or writing data fails
+	 * @throws CollectionDoesNotAcceptItemsException 
 	 */
-	public void importItems(String zipfile, Repository repository, boolean publicOnly) throws IOException,  NoIndexFoundException ;
+	public void importItems(String zipfile, Repository repository, boolean publicOnly) throws IOException,  NoIndexFoundException, CollectionDoesNotAcceptItemsException ;
 	
 
 	/**
