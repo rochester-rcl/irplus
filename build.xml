@@ -33,6 +33,7 @@
 	<!-- name of the zip file for distribution -->
 	<property name="zip.name" value="${project.name}-${version}.zip"/>
 
+	<!-- Build the common packages -->
     <target name="do-ur-common-util" 
     	description="-->runs the described target for ur common util">
         <ant dir="ur_common_util" target="${target}" inheritAll="false"/>
@@ -43,6 +44,8 @@
     	<ant dir="ur_persistence_util" target="${target}" inheritAll="false"/>
     </target>
 
+	
+	<!-- Build the file database packages -->
     <target name="do-file-db" depends="do-ur-persistence-util, do-ur-common-util" 
     	description="-->runs the described target for file db">
     	<ant dir="file_db" target="${target}" inheritAll="false"/>
@@ -62,8 +65,31 @@
     	description="-->runs the described target for file db serivce layer">
     	<ant dir="file_db_service" target="${target}" inheritAll="false"/>
     </target>
-	
-    <target name="do-ir-core" depends="do-file-db" 
+
+	<!-- Build the metadata packages -->
+	<target name="do-metadata"  depends="do-ur-persistence-util, do-ur-common-util" 
+	     description="-->runs the described target for metadata layer">
+	     <ant dir="metadata" target="${target}" inheritAll="false"/>
+	</target>
+
+	<target name="do-metadata-dao" depends="do-metadata" 
+	     description="-->runs the described target for metadata data access interface layer">
+	     <ant dir="metadata_dao" target="${target}" inheritAll="false"/>
+	</target>
+
+	<target name="do-metadata-hibernate" depends="do-metadata-dao" 
+	     description="-->runs the described target for metadata hibernate persistance layer">
+	     <ant dir="metadata_hibernate" target="${target}" inheritAll="false"/>
+	</target>
+
+	<target name="do-metadata-service" depends="do-metadata-hibernate" 
+	     description="-->runs the described target for metadata service layer">
+	     <ant dir="metadata_service" target="${target}" inheritAll="false"/>
+	</target>
+
+
+	<!-- Build the repository packages -->
+    <target name="do-ir-core" depends="do-file-db, do-metadata" 
     	description="-->runs the described target for ir core">
     	<ant dir="ir_core" target="${target}" inheritAll="false"/>
     </target>
@@ -73,7 +99,7 @@
     	<ant dir="ir_dao" target="${target}" inheritAll="false"/>
     </target>
 
-    <target name="do-ir-hibernate" depends="do-ir-dao, do-file-db-service" 
+    <target name="do-ir-hibernate" depends="do-ir-dao, do-file-db-service, do-metadata-hibernate" 
     	description="-->runs the described target for ir hibernate">
     	<ant dir="ir_hibernate" target="${target}" inheritAll="false"/>
     </target>
