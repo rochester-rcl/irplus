@@ -18,12 +18,18 @@ irplus changes 1.0 to 1.1
 - Added access method for getting contributor publications ordered by submission date
 - Added access method for getting sponsor publications ordered by submission date
 
+[ir_metadata]
+============================
+initial addition for dealing with metadata information
+
 [ir_core]
 =============================
 - Added interface for group membership filter -  edu.ur.ir.user.UserGroupMemberFilter
 - Added methods to Researcher and Researcher Folder to check for existing file/personal 
   publication/Institutional Publication
 - Removed the toJson method calls from researcher classes as they are no longer needed
+- Added lastDateModified, lastModifiedNote and LastModifiedBy to Institutional item version
+- Added OAI infrastructure and ability for OAI havesting 
 
 [ir_service]
 ==================================
@@ -62,13 +68,12 @@ irplus changes 1.0 to 1.1
 - Updated statistics for more accuracy if an item has been published in more than one collection
 - Updated sponsor page with sponsor icon
 - Fixed contributor page to show full item name - was missing articles (The, a, etc.)
+- Fixed researcher data page to allow researchers to add new departments
 - Added tag to determine if publication contains a abstract or description and displays accordingly
 - Added RSS to contributor pages
 - Added Date Submitted column to contributor pages
 - Added RSS to collection pages
 - Added RSS icon
-
-
 
 
 
