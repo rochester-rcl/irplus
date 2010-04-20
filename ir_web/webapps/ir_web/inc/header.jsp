@@ -63,6 +63,8 @@
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPendingApproval.action" />"><span class="menu_text"><fmt:message key="menu.viewPendingApproval" /></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContentTypes.action"/>" ><span class="menu_text"><fmt:message key="menu.viewContentTypes"/></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContributorTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewContributorTypes" /></span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContributorTypeDublinCoreMappings.action" />"><span class="menu_text">Contributor Type DC Mapping</span></a></li>
+               
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewCopyrightStatements.action"/>"><span class="menu_text">Copyright Statements</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewDepartments.action" />"><span class="menu_text"><fmt:message key="menu.departments"/></span></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExtentTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewExtentTypes" /></span></a></li>
