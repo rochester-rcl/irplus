@@ -35,7 +35,7 @@ import edu.ur.ir.statistics.IgnoreIpAddressDAO;
 
 
 /**
- * Test file download info persistance
+ * Test file download info persistence
  * 
  * @author Sharmila Ranganathan
  * @author Nathan Sarr

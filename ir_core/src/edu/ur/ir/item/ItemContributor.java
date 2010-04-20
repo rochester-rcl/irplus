@@ -83,7 +83,7 @@ public class ItemContributor extends BasePersistent implements Orderable{
 	}
 	
     /**
-     * Researcher Equals.
+     * Override Equals.
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */

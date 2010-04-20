@@ -343,7 +343,6 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getPublicationVersionsForNamesBySubmissionDate(int, int, java.util.List, edu.ur.order.OrderType)
 	 */
 	@SuppressWarnings("unchecked")
-	@Override
 	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesBySubmissionDate(
 			final int rowStart, final int maxResults, final List<Long> personNameIds,
 			final OrderType orderType) {

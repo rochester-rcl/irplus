@@ -24,7 +24,8 @@ import edu.ur.persistent.BasePersistent;
 
 /**
  * Represents a relationship between
- * a collection an item and it's published stats for the given collection.
+ * a collection and an item
+ * 
  * This is a wrapper around a versioned institutional item.
  * 
  * @author Nathan Sarr

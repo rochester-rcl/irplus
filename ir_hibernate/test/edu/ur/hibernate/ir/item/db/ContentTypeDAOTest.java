@@ -51,7 +51,7 @@ public class ContentTypeDAOTest {
 	TransactionDefinition.PROPAGATION_REQUIRED);
 	
 	/**
-	 * Test Contributor type persistance
+	 * Test content type persistance
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
