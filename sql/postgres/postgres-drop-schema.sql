@@ -18,7 +18,14 @@
 -- **********************************************
 -- ----------------------------------------------
 
+-- ---------------------------------------------
+-- Drop Institutional Repository Metadata tables/schema
+-- ---------------------------------------------
 
+DROP TABLE ir_metadata_dublin_core.contributor_type_dc_mapping;
+DROP SEQUENCE ir_metadata_dublin_core.contributor_type_dc_mapping_seq;
+
+DROP SCHEMA ir_metadata_dublin_core;
 
 
 -- ---------------------------------------------
@@ -409,3 +416,26 @@ DROP TABLE QRTZ_BLOB_TRIGGERS;
 DROP TABLE qrtz_triggers;
 DROP TABLE qrtz_job_details;
 DROP TABLE qrtz_calendars;
+
+
+
+-- ---------------------------------------------
+-- Drop Metadata tables/schema
+-- ---------------------------------------------
+
+DROP TABLE metadata.metadata_type;
+DROP TABLE metadata.dublin_core_element;
+DROP TABLE metadata.dublin_core_term;
+DROP TABLE metadata.dublin_core_term_type;
+
+DROP SEQUENCE metadata.metadata_type_seq;
+DROP SEQUENCE metadata.dublin_core_element_seq;
+DROP SEQUENCE metadata.dublin_core_term_seq;
+DROP SEQUENCE metadata.dublin_core_term_type_seq;
+
+DROP SCHEMA metadata;
+
+
+
+
+
