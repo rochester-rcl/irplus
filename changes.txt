@@ -28,6 +28,9 @@ initial addition for dealing with metadata information
 - Added methods to Researcher and Researcher Folder to check for existing file/personal 
   publication/Institutional Publication
 - Removed the toJson method calls from researcher classes as they are no longer needed
+- Added Exception if trying to add an item to a collection that does not allow items to be added 
+  to add item and add reviewable item
+- Made constructor for ReviewableItem and InstitutionalItem public for performance reasons
 - Added lastDateModified, lastModifiedNote and LastModifiedBy to Institutional item version
 - Added OAI infrastructure and ability for OAI havesting 
 
@@ -74,6 +77,9 @@ initial addition for dealing with metadata information
 - Added Date Submitted column to contributor pages
 - Added RSS to collection pages
 - Added RSS icon
+- Made it so adding an item to an institutional collection only saves the item and does not load all items to
+  complete submission - greatly enhances performance on larger collections 
+- Added a link back to main group page
 
 
 
