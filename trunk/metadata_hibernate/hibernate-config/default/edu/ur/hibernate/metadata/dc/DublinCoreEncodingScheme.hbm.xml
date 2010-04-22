@@ -25,16 +25,16 @@
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.metadata.dc">
-	<class name="DublinCoreElement" schema="metadata" table="dublin_core_element"
+	<class name="DublinCoreEncodingScheme" schema="metadata" table="dublin_core_encoding_scheme"
 		lazy="true">
 
         <cache usage="nonstrict-read-write" />
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="dublin_core_element_id"
+		<id name="id" type="long" column="dublin_core_encoding_scheme_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">metadata.dublin_core_element_seq</param>
+				<param name="sequence">metadata.dublin_core_encoding_scheme_seq</param>
 			</generator>
 		</id>
 
@@ -50,15 +50,15 @@
 		
 	 </class>
 		
-	<!--  Get a count of dublin core elements in the system -->
-	<query name="dublinCoreElementCount">
-	    select count(*) from DublinCoreElement
+	<!--  Get a count of metadata types in the system -->
+	<query name="dublinCoreEncodingSchemeCount">
+	    select count(*) from DublinCoreEncodingScheme
 	</query>
 	
-    <!-- named query for getting a dublin core element by name-->
-	<query name="getDublinCoreElementByName">
-		from DublinCoreElement as DublinCoreElement where
-		DublinCoreElement.name = ?
+    <!-- named query for getting a syntax encoding scheme by name-->
+	<query name="getDublinCoreEncodingSchemeByName">
+		from DublinCoreEncodingScheme as DublinCoreEncodingScheme where
+		DublinCoreEncodingScheme.name = ?
 	</query>
 	
 	

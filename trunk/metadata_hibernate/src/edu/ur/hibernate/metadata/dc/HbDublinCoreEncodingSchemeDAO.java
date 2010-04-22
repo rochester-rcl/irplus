@@ -22,21 +22,25 @@ import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
-import edu.ur.metadata.dc.DublinCoreTerm;
-import edu.ur.metadata.dc.DublinCoreTermDAO;
+import edu.ur.metadata.dc.DublinCoreEncodingScheme;
+import edu.ur.metadata.dc.DublinCoreEncodingSchemeDAO;
 
-public class HbDublinCoreTermDAO implements DublinCoreTermDAO{
+/**
+ * @author NathanS
+ *
+ */
+public class HbDublinCoreEncodingSchemeDAO implements DublinCoreEncodingSchemeDAO{
 	
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */
-	private final HbCrudDAO<DublinCoreTerm> hbCrudDAO;
+	private final HbCrudDAO<DublinCoreEncodingScheme> hbCrudDAO;
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbDublinCoreTermDAO() {
-		hbCrudDAO = new HbCrudDAO<DublinCoreTerm>(DublinCoreTerm.class);
+	public HbDublinCoreEncodingSchemeDAO() {
+		hbCrudDAO = new HbCrudDAO<DublinCoreEncodingScheme>(DublinCoreEncodingScheme.class);
 	}
 	
 	/**
@@ -55,14 +59,14 @@ public class HbDublinCoreTermDAO implements DublinCoreTermDAO{
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("dublinCoreTermCount"));
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("dublinCoreEncodingSchemeCount"));
 	}
 
 	/**
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getAll()
 	 */
-	public List<DublinCoreTerm> getAll() {
+	public List<DublinCoreEncodingScheme> getAll() {
 		return hbCrudDAO.getAll();
 	}
 
@@ -70,7 +74,7 @@ public class HbDublinCoreTermDAO implements DublinCoreTermDAO{
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */
-	public DublinCoreTerm getById(Long id, boolean lock) {
+	public DublinCoreEncodingScheme getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
@@ -78,7 +82,7 @@ public class HbDublinCoreTermDAO implements DublinCoreTermDAO{
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
 	 */
-	public void makePersistent(DublinCoreTerm entity) {
+	public void makePersistent(DublinCoreEncodingScheme entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
@@ -86,16 +90,17 @@ public class HbDublinCoreTermDAO implements DublinCoreTermDAO{
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
-	public void makeTransient(DublinCoreTerm entity) {
+	public void makeTransient(DublinCoreEncodingScheme entity) {
 		hbCrudDAO.makeTransient(entity);	
 	}
 
 	/**
 	 * @see edu.ur.dao.UniqueNameDAO#findByUniqueName(java.lang.String)
 	 */
-	public DublinCoreTerm findByUniqueName(String name) {
-		return (DublinCoreTerm) 
-	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getDublinCoreTermByName", name));
+	public DublinCoreEncodingScheme findByUniqueName(String name) {
+		return (DublinCoreEncodingScheme) 
+	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getDublinCoreEncodingSchemeByName", name));
 	}
+
 
 }

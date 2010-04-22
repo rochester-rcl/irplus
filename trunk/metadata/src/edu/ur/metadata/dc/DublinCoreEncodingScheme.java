@@ -13,36 +13,35 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */  
+
 package edu.ur.metadata.dc;
 
 import edu.ur.persistent.CommonPersistent;
 
 /**
- * Represents the type of a term
+ * The qualified dublin core encoding scheme.
  * 
  * @author Nathan Sarr
  *
  */
-public class DublinCoreTermType extends CommonPersistent {
-
-	/** eclipse generated id */
-	private static final long serialVersionUID = 7283599758395505951L;
+public class DublinCoreEncodingScheme extends CommonPersistent{
 	
-    /**
-     * Default constructor
-     */
-    DublinCoreTermType(){}
-    
-    /**
-     * Set the dublin core term type.
-     * 
-     * @param name - name of the term type
-     */
-    public DublinCoreTermType(String name)
-    {
-    	setName(name);
-    }
-    
+	/** eclipse generated id */
+	private static final long serialVersionUID = -7955632883615365012L;
+	
+	/**  Default constructor */
+	DublinCoreEncodingScheme(){}
+	
+	/**
+	 * Create a dublin core element with the given name.
+	 * 
+	 * @param name
+	 */
+	public DublinCoreEncodingScheme(String name)
+	{
+		this.setName(name);
+	}
+	
 	public int hashCode()
 	{
 		int value = 0;
@@ -53,9 +52,9 @@ public class DublinCoreTermType extends CommonPersistent {
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof DublinCoreTermType)) return false;
+		if (!(o instanceof DublinCoreEncodingScheme)) return false;
 
-		final DublinCoreTermType other = (DublinCoreTermType) o;
+		final DublinCoreEncodingScheme other = (DublinCoreEncodingScheme) o;
 
 		if( ( name != null && !name.equals(other.getName()) ) ||
 			( name == null && other.getName() != null ) ) return false;
@@ -75,4 +74,5 @@ public class DublinCoreTermType extends CommonPersistent {
 		sb.append("]");
 		return sb.toString();
 	}
+
 }
