@@ -25,16 +25,16 @@
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.metadata.dc">
-	<class name="DublinCoreElement" schema="metadata" table="dublin_core_element"
+	<class name="DublinCoreTerm" schema="metadata" table="dublin_core_term"
 		lazy="true">
 
         <cache usage="nonstrict-read-write" />
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="dublin_core_element_id"
+		<id name="id" type="long" column="dublin_core_term_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">metadata.dublin_core_element_seq</param>
+				<param name="sequence">metadata.dublin_core_term_seq</param>
 			</generator>
 		</id>
 
@@ -47,18 +47,21 @@
 
 		<property name="description" column="description" type="string"
 			not-null="false" />
+			
+		<property name="isSimpleDublinCoreElement" column="is_simple_dublin_core_element" type="boolean"
+			not-null="true" access="field" />
 		
 	 </class>
 		
-	<!--  Get a count of dublin core elements in the system -->
-	<query name="dublinCoreElementCount">
-	    select count(*) from DublinCoreElement
+	<!--  Get a count of terms in the system -->
+	<query name="dublinCoreTermCount">
+	    select count(*) from DublinCoreTerm
 	</query>
 	
-    <!-- named query for getting a dublin core element by name-->
-	<query name="getDublinCoreElementByName">
-		from DublinCoreElement as DublinCoreElement where
-		DublinCoreElement.name = ?
+    <!-- named query for getting a term by name-->
+	<query name="getDublinCoreTermByName">
+		from DublinCoreTerm as DublinCoreTerm where
+		DublinCoreTerm.name = ?
 	</query>
 	
 	

@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */  
+
 package edu.ur.metadata.dc;
 
 import edu.ur.dao.CountableDAO;
@@ -20,12 +21,10 @@ import edu.ur.dao.CrudDAO;
 import edu.ur.dao.UniqueNameDAO;
 
 /**
- * Represents a dublin core term type data access object.
+ * Persistence for the dublin core syntax encoding scheme
  * 
  * @author Nathan Sarr
  *
  */
-public interface DublinCoreTermTypeDAO extends CountableDAO, 
-CrudDAO<DublinCoreTermType>, UniqueNameDAO<DublinCoreTermType>{
-
-}
+public interface DublinCoreEncodingSchemeDAO extends CountableDAO, 
+CrudDAO<DublinCoreEncodingScheme>, UniqueNameDAO<DublinCoreEncodingScheme>{}
