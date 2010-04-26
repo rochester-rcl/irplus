@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for an Researcher.
+	
+	@author Sharmila Ranganathan
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.researcher">
+	<class name="Researcher" schema="ir_researcher" 
+	table="researcher"
+	lazy="true">
+
+        <cache usage="nonstrict-read-write" />
+		<!-- Common id property. -->
+		<id name="id" type="long" column="researcher_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_researcher.researcher_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="title" column="title" type="string"
+			not-null="false" access="field" />
+
+		<property name="campusLocation" column="campus_location" type="string"
+			not-null="false" access="field" />			
+
+		<property name="fax" column="fax" type="string"
+			not-null="false" access="field" />			
+
+		<property name="phoneNumber" column="phone_number" type="string"
+			not-null="false" access="field" />			
+
+		<property name="email" column="email" type="string"
+			not-null="false" access="field" />
+			
+		<property name="researchInterest" column="research_interest" type="string"
+			not-null="false" access="field" />	
+			
+		<property name="teachingInterest" column="teaching_interest" type="string"
+			not-null="false" access="field" />	
+
+		<property name="keywords" column="keywords" type="string"
+			not-null="false" access="field" />	
+						
+		<property name="isPublic" column="is_public" type="boolean"
+			not-null="true" access="field" />				
+
+	    <!-- Primary picture for the researcher -->
+		<many-to-one class="edu.ur.ir.file.IrFile" 
+		    cascade="save-update"
+			name="primaryPicture" 
+			column="primary_picture_id" 
+			insert="true"
+			update="true" 
+			unique="true"
+			access="field"/>
+			
+		<!-- user of this researcher -->
+		<many-to-one class="edu.ur.ir.user.IrUser" 
+			unique="true"
+			name="user" 
+			column="user_id" 
+			access="field"
+			not-null="true" 
+			insert="true"
+			update="true" />
+			
+		<!-- Fields for the researcher -->
+		<set name="fields" 
+		     optimistic-lock="false"
+		     table="ir_researcher.researcher_field" 
+		     access="field" 
+		     lazy="true"
+		     fetch="subselect">
+			<key column="researcher_id" />
+			<many-to-many column="field_id" class="edu.ur.ir.researcher.Field"/>
+		</set>		
+					
+						
+	    <!--  set of images for the researcher -->
+		<set name="pictures" 
+		     cascade="save-update"
+		     access="field"
+		     table="researcher_picture"
+		     schema="ir_researcher"
+		     fetch="subselect">
+            <key column="researcher_id"/>
+            <many-to-many column="ir_file_id"
+                         unique="true"
+                         class="edu.ur.ir.file.IrFile"/>
+        </set>
+ 
+         <!--  Root Personal Folders -->
+		<set name="rootFolders" 
+		     optimistic-lock="false"
+		     inverse="true" 
+		     cascade="all-delete-orphan" 
+		     where="researcher_folder_id = root_researcher_folder_id"
+		     access="field"
+			 order-by="name" 
+			 lazy="true"
+			 schema="ir_researcher"
+			 fetch="subselect">
+			<key column="researcher_id"/>
+			<one-to-many class="ResearcherFolder"/>
+		</set>
+		
+        <!--  Root Researcher Files -->
+		<set name="rootFiles" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     where="researcher_folder_id is null"
+		     access="field"
+			 lazy="true"
+			 fetch="subselect"
+			 schema="ir_researcher">
+			<key column="researcher_id"/>
+			<one-to-many class="ResearcherFile"/>
+		</set>
+		
+		<!--  Root Researcher publications -->
+		<set name="rootPublications" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     where="researcher_folder_id is null"
+		     access="field"
+			 lazy="true"
+			 fetch="subselect"
+			 schema="ir_researcher">
+			<key column="researcher_id"/>
+			<one-to-many class="ResearcherPublication"/>
+		</set>
+
+		<!--  Root Researcher institutional items -->
+		<set name="rootInstitutionalItems" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     where="researcher_folder_id is null"
+		     access="field"
+			 lazy="true"
+			 fetch="subselect"
+			 schema="ir_researcher">
+			<key column="researcher_id"/>
+			<one-to-many class="ResearcherInstitutionalItem"/>
+		</set>
+
+		<!--  Root Researcher Links -->
+		<set name="rootLinks" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     where="researcher_folder_id is null"
+		     access="field"
+			 lazy="true"
+			 fetch="subselect"
+			 schema="ir_researcher">
+			<key column="researcher_id"/>
+			<one-to-many class="ResearcherLink"/>
+		</set>
+		
+		<!--  set of links for this researcher -->
+        <list name="personalLinks" 
+             optimistic-lock="false"
+             cascade="all-delete-orphan"
+		     access="field"
+		     table="researcher_personal_link"
+		     schema="ir_researcher"
+		     inverse="true">
+          <key column="researcher_id"/>
+		  <list-index column="order_value"/>
+          <one-to-many class="ResearcherPersonalLink"/>
+		</list>
+		
+        
+			
+	</class>
+	
+	<!--  Get a count of researchers in the system -->
+	<query name="researcherCount">
+	    select count(*) from Researcher
+	</query>
+	
+	<!--  Get a count of researchers in the system -->
+	<query name="publicResearcherCount">
+	    select count(*) from Researcher as researcher
+	    where researcher.isPublic = 'true'
+	</query>
+	
+	<!--  Get a all researchers whose researcher page is active -->
+	<query name="getAllPublicResearchers">
+	    from Researcher as Researcher
+	    Where Researcher.isPublic = 'true'
+	</query>
+	
+		<!--  Get a all researchers -->
+	<query name="getAllResearcherByLastFirstNameAsc">
+	    from Researcher as Researcher
+	    order by Researcher.user.lastName asc, Researcher.user.firstName asc
+	</query>
+	
+		<!--  Get a all researchers whose researcher page is active -->
+	<query name="getAllResearcherByLastFirstNameDesc">
+	    from Researcher as Researcher
+	    order by Researcher.user.lastName desc, Researcher.user.firstName desc
+	</query>
+	
+	<!--  Get a all researchers whose researcher page is active -->
+	<query name="getAllPublicResearcherByLastFirstNameAsc">
+	    from Researcher as Researcher
+	    where Researcher.isPublic = 'true'
+	    order by Researcher.user.lastName asc, Researcher.user.firstName asc
+	</query>
+	
+		<!--  Get a all researchers whose researcher page is active -->
+	<query name="getAllPublicResearcherByLastFirstNameDesc">
+	    from Researcher as Researcher
+	    where Researcher.isPublic = 'true'
+	    order by Researcher.user.lastName desc, Researcher.user.firstName desc
+	</query>
+</hibernate-mapping>

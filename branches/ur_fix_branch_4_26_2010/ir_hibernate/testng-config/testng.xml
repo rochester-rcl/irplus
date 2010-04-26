@@ -1,0 +1,112 @@
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+
+<suite name="ir_hibernate_all">
+
+	<test name="IR Hibernate Testing - All">
+		<classes>
+		     <class name="edu.ur.hibernate.ir.index.db.IndexProcessingTypeDAOTest"/>
+		
+		     <class name="edu.ur.hibernate.ir.item.db.ItemVersionDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.VersionedItemDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.PublisherDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.LanguageTypeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.IdentifierTypeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ContentTypeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ItemDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ItemLinkDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ItemIdentifierDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.SeriesDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ExternalPublishedItemDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.SponsorDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ExtentTypeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ItemExtentDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.ItemSponsorDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.db.CopyrightStatementDAOTest"/>
+		     
+		     <class name="edu.ur.hibernate.ir.news.db.NewsItemDAOTest"/>
+		     
+		     <class name="edu.ur.hibernate.ir.person.db.PersonNameAuthorityDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.person.db.PersonNameDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.person.db.ContributorTypeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.person.db.ContributorDAOTest"/>
+		     
+		     <class name="edu.ur.hibernate.ir.researcher.db.ResearcherDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.researcher.db.ResearcherFolderDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.researcher.db.ResearcherFileDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.researcher.db.ResearcherPublicationDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.researcher.db.ResearcherLinkDAOTest"/>
+	     	
+	     	 <class name="edu.ur.hibernate.ir.repository.db.RepositoryDAOTest"/>
+	     	 <class name="edu.ur.hibernate.ir.repository.db.LicenseDAOTest"/>
+	     	 <class name="edu.ur.hibernate.ir.repository.db.VersionedLicenseDAOTest"/>
+	     	 
+		     <class name="edu.ur.hibernate.ir.institution.db.InstitutionalCollectionDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.institution.db.InstitutionalItemDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.institution.db.InstitutionalItemVersionDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.institution.db.DeletedInstitutionalItemDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.institution.db.InstitutionalCollectionSubscriptionDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.institution.db.InstitutionalItemIndexProcessingRecordDAOTest"/>
+		    
+		     <class name="edu.ur.hibernate.ir.security.db.IrAclDAOTest"/>
+	         <class name="edu.ur.hibernate.ir.security.db.IrClassTypeDAOTest"/>
+             <class name="edu.ur.hibernate.ir.security.db.IrClassTypePermissionDAOTest"/>
+             <class name="edu.ur.hibernate.ir.security.db.IrRoleAccessControlEntryDAOTest"/>
+             <class name="edu.ur.hibernate.ir.security.db.IrUserAccessControlEntryDAOTest"/>
+             <class name="edu.ur.hibernate.ir.security.db.IrUserGroupAccessControlEntryDAOTest"/>
+             
+		     
+		     <class name="edu.ur.hibernate.ir.user.db.IrUserDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.IrUserGroupDAOTest"/>
+         	 <class name="edu.ur.hibernate.ir.user.db.IrRoleDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.PersonalFolderDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.PersonalFileDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.PersonalItemDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.PersonalCollectionDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.UserEmailDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.InviteInfoDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.SharedInboxFileDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.UserWorkspaceIndexProcessingRecordDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.PersonalItemDeleteRecordDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.PersonalFileDeleteRecordDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.ExternalAccountTypeDAOTest"/>
+             
+             <class name="edu.ur.hibernate.ir.file.db.IrFileDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.file.db.VersionedFileDAOTest"/> 
+		     <class name="edu.ur.hibernate.ir.file.db.FileVersionDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.file.db.TransformedFileDAOTest"/> 
+		     <class name="edu.ur.hibernate.ir.file.db.TransformedFileTypeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.file.db.FileCollaboratorDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.file.db.IrFileTransformationFailureRecordDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.file.db.IrFileIndexingFailureRecordDAOTest"/>
+		    
+		     <class name="edu.ur.hibernate.ir.statistics.db.FileDownloadInfoDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.statistics.db.IgnoreIpAddressDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.statistics.db.FileDownloadRollUpProcessingRecordDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.statistics.db.IpIgnoreFileDownloadInfoDAOTest"/>
+		     
+		     <class name="edu.ur.hibernate.ir.handle.db.HandleNameAuthorityDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.handle.db.HandleInfoDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.handle.db.UniqueHandleNameDAOTest"/>
+		     
+		     <class name="edu.ur.ir.item.metadata.dc.db.ContributorTypeDublinCoreMappingDAOTest"/>
+		     
+		</classes>
+	</test>
+	
+</suite>

@@ -1,0 +1,409 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for an Institutional Collection.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.institution">
+	<class name="InstitutionalCollection" schema="ir_repository" 
+	table="institutional_collection"
+	lazy="true">
+
+        <cache usage="read-write" />
+		<!-- Common id property. -->
+		<id name="id" type="long" column="institutional_collection_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_repository.institutional_collection_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+			
+		<property name="copyright" column="copyright" type="string"
+			not-null="false" />
+			
+		<property name="leftValue" column="left_value" type="long"
+			not-null="true" access="field" />
+			
+		<property name="rightValue" column="right_value" type="long"
+			not-null="true" access="field" />
+		
+		<property name="path" column="path" type="string"
+			not-null="false" access="field" />
+
+		<property name="publiclyViewable" column="publicly_viewable" type="boolean"
+			not-null="false" access="field" />
+
+		
+		<!--  Parent Collection -->
+		<many-to-one class="InstitutionalCollection"
+		    optimistic-lock="false"
+			name="parent" 
+			column="parent_id" 
+			insert="true"
+			update="true"
+			access="field"/>
+			
+		<!--  Children collections - do not delete orphan
+		      because collections can be made root level collections -->
+		<set name="children"
+		     optimistic-lock="false" 
+		     inverse="true" 
+		     cascade="all" 
+		     access="field"
+			 order-by="name" 
+			 lazy="true"
+			 fetch="subselect">
+			<key column="parent_id"/>
+			<one-to-many class="InstitutionalCollection"/>
+		</set>
+		
+		<!-- Items In this collection -->
+		<set name="items" 
+		     optimistic-lock="false"
+		     cascade="all" 
+		     access="field" 
+		     inverse="true" 
+		     lazy="true"
+		     fetch="subselect">
+			<key column="institutional_collection_id"/>
+			<one-to-many class="InstitutionalItem"/>
+		</set>
+
+		<!-- Items In this collection -->
+		<set name="reviewableItems" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     access="field" 
+		     inverse="true" 
+		     fetch="subselect"
+		     lazy="true">
+			<key column="institutional_collection_id"/>
+			<one-to-many class="ReviewableItem"/>
+		</set>		
+		
+	    <!--  Root Collection of entire tree-->
+		<many-to-one class="InstitutionalCollection"
+		    optimistic-lock="false"
+			name="treeRoot" 
+			column="root_collection_id" 
+			insert="true"
+			update="true" 
+			access="field"/>
+	    
+	    <!-- Repository This collection is in -->
+		<many-to-one class="edu.ur.ir.repository.Repository" 
+		    optimistic-lock="false"
+			name="repository" 
+			column="repository_id" 
+			insert="true"
+			update="true" 
+			unique="true"/>
+		
+	    <!-- Primary picture for the institutional collection -->
+		<many-to-one class="edu.ur.ir.file.IrFile"
+		    optimistic-lock="false" 
+		    cascade="save-update"
+			name="primaryPicture" 
+			column="primary_picture_id" 
+			insert="true"
+			update="true" 
+			unique="true"
+			access="field"/>
+			
+	    <!--  set of images for this collection item -->
+		<set name="pictures" 
+		     optimistic-lock="false"
+		     cascade="save-update"
+		     access="field"
+		     table="institutional_collection_picture"
+		     schema="ir_repository"
+		     lazy="true"
+		     fetch="subselect">
+            <key column="institutional_collection_id"/>
+            <many-to-many column="ir_file_id"
+                         unique="true"
+                         class="edu.ur.ir.file.IrFile"/>
+        </set>
+		
+		<!--  set of subscribers for this collection -->
+		<set name="subscriptions" 
+		     cascade="all-delete-orphan"
+		     optimistic-lock="false"
+		     access="field"
+		     table="institutional_collection_subscription"
+		     schema="ir_repository"
+		     lazy="true"
+		     inverse="true"
+		     fetch="subselect">
+            <key column="institutional_collection_id"/>
+            <one-to-many  class="InstitutionalCollectionSubscription"/>
+        </set>
+        
+        <!--  set of links for this collection -->
+        <list name="links" 
+             optimistic-lock="false"
+             cascade="all-delete-orphan"
+		     access="field"
+		     table="institutional_collection_link"
+		     schema="ir_repository"
+		     fetch="subselect"
+		     inverse="true">
+          <key column="institutional_collection_id"/>
+		  <list-index column="order_value"/>
+          <one-to-many class="InstitutionalCollectionLink"/>
+		</list>
+        
+	</class>
+		
+	<!--  Get a count of collections in the system -->
+	<query name="irCollectionCount">
+	    select count(*) from InstitutionalCollection
+	</query>
+	
+	<!-- named query for getting all collections ordered by name -->
+    <query name="getAllIrCollectionNameAsc">from InstitutionalCollection order by name </query>
+    
+    <!-- named query for getting a collection by name -->
+	<query name="getIrCollectionByName">
+		from InstitutionalCollection as InstitutionalCollection where
+		InstitutionalCollection.name = ?
+	</query>
+	
+	<!-- named query for getting a root collection by name/repository -->
+	<query name="getRootIrCollectionByNameRepository">
+		from InstitutionalCollection as InstitutionalCollection where
+		InstitutionalCollection.name = ?
+		and InstitutionalCollection.repository.id = ?
+		and InstitutionalCollection.id = InstitutionalCollection.treeRoot.id
+	</query>
+	
+	<!-- named query for getting a collection by name parent id -->
+	<query name="getIrCollectionByNameParent">
+		from InstitutionalCollection as InstitutionalCollection where
+		InstitutionalCollection.name = ?
+		and InstitutionalCollection.parent.id = ?
+	</query>
+	
+	<!--  Get all collections that have a left or right value greater than the
+           specified value -->	
+	<query name="getAllIrCollectionsValueGreaterEqual">
+	   from InstitutionalCollection as institutionalCollection
+	   where ( institutionalCollection.leftValue &gt;= ?
+	   or institutionalCollection.rightValue &gt;= ? )
+	   and institutionalCollection.treeRoot.id = ?
+	</query>
+	
+	<!-- Gets the all collections within the specified 
+	     tree that are not within the child tree
+         Specified.  This only works across the specified root collection -->
+	<query name="getAllIrCollectionsNotInChildTree">
+	    from InstitutionalCollection as institutionalCollection 	    
+	    where institutionalCollection.leftValue not between ? and ? 
+	    and institutionalCollection.treeRoot.id = ?
+	    order by institutionalCollection.name
+	</query>
+	
+     <!-- Gets the all folders for the specified database except the specified collection and
+	     all it's children.  This works accross all root collections in the repository  -->
+	<query name="getAllNodesNotInChildTreeRepo">
+	    from InstitutionalCollection as institutionalCollection 	    
+	    where ( institutionalCollection.leftValue not between ? and ? 
+	    and institutionalCollection.treeRoot.id = ? 
+	    and institutionalCollection.repository.id = ?)
+	    or ( institutionalCollection.repository.id = ? and institutionalCollection.treeRoot.id != ? )
+	    order by institutionalCollection.name
+	</query>
+	
+	<!-- Gets all collections for the specified repository-->
+	<query name="getIrCollectionsInRepository">
+	    from InstitutionalCollection as institutionalCollection 	    
+	    where institutionalCollection.repository.id = ?
+	    order by institutionalCollection.name
+	</query>
+	
+    <!-- Gets the path for a given collection-->
+	<query name="getIrCollectionPath">
+	    from InstitutionalCollection as institutionalCollection 	    
+	    where ? between institutionalCollection.leftValue and institutionalCollection.rightValue
+	    and institutionalCollection.treeRoot.id = ?
+	    and institutionalCollection.repository.id = ?
+	    order by institutionalCollection.leftValue
+	</query>
+
+	<!-- Gets the all collections within the specified 
+	     tree. This only works across the specified root collection -->
+	<query name="getAllInstitutionalCollectionChildren">
+	    from InstitutionalCollection as institutionalCollection 	    
+	    where institutionalCollection.leftValue  &gt; ? 
+	    and institutionalCollection.leftValue &lt; ? 
+	    and institutionalCollection.treeRoot.id = ?
+	   
+	</query>
+		
+	<!-- Gets the sub collections count within the specified 
+	     tree. This only works across the specified root collection -->
+	<query name="getAllInstitutionalCollectionChildrenCount">
+	    select count(*) from InstitutionalCollection as institutionalCollection 	    
+	    where institutionalCollection.leftValue  &gt; ? 
+	    and institutionalCollection.leftValue &lt; ? 
+	    and institutionalCollection.treeRoot.id = ?
+	   
+	</query>
+	
+	<!-- Gets the ir file ids in the item for this collection -->
+	<query name="getIrFileIdsForCollection">
+	    select distinct(itemFile.irFile.id) from InstitutionalCollection as institutionalCollection 
+	    join institutionalCollection.items institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemFiles itemFile
+	    where institutionalCollection.id =  ? 
+	</query>
+	
+	<!--  Gets the ir file ids in the items for this collection and its sub collection -->
+	<query name="getIrFileIdsForCollectionAndItsSubCollection">
+	    select distinct(itemFile.irFile.id) from InstitutionalCollection as institutionalCollection 
+	    join institutionalCollection.items institutionalItem
+	    join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemFiles itemFile
+	    where institutionalCollection.leftValue  &gt;= ? 
+	    and institutionalCollection.leftValue &lt;= ? 
+	    and institutionalCollection.treeRoot.id = ?
+	</query>			
+
+	<!--  Gets the ir file ids in all collection -->
+	<query name="getIrFileIdsForAllCollections">
+	    select distinct(itemFile.irFile.id) from InstitutionalItemVersion as institutionalItemVersion
+	    join institutionalItemVersion.item item
+	    join item.itemFiles itemFile
+	</query>
+	
+	<!-- Gets the all generic items used within the specified 
+	     tree. This only works across the specified root collection -->
+	<query name="getAllGenericItemsIncludingChildren">
+	    select genericItem from InstitutionalCollection institutionalCollection 	
+	        join institutionalCollection.items as institutionalItem
+	        join institutionalItem.versionedInstitutionalItem as versionedItem
+	        join versionedItem.institutionalItemVersions as version    
+	        join version.item as genericItem
+	    where institutionalCollection.leftValue  &gt;= ? 
+	    and institutionalCollection.leftValue &lt;= ? 
+	    and institutionalCollection.treeRoot.id = ?	   
+	</query>
+	
+	<!-- Gets root collections by Name Asc  -->
+	<query name="getRootCollectionsByNameAsc">
+	    from InstitutionalCollection as institutionalCollection 	    
+	    where institutionalCollection.repository.id = :repositoryId
+	    and institutionalCollection.parent is null
+	    order by institutionalCollection.name asc
+	</query>
+	
+	<!-- Gets root collections  by Name desc -->
+	<query name="getRootCollectionsByNameDesc">
+	    from InstitutionalCollection as institutionalCollection 	    
+	    where institutionalCollection.repository.id = :repositoryId
+	    and institutionalCollection.parent is null
+	    order by institutionalCollection.name desc
+	</query>
+	
+		<!-- Gets sub collections by Name Asc  -->
+	<query name="getSubCollectionsByNameAsc">
+	    from InstitutionalCollection as institutionalCollection 	    
+	    where institutionalCollection.repository.id = :repositoryId
+	    and institutionalCollection.parent.id = :parentCollectionId
+	    order by institutionalCollection.name asc
+	</query>
+	
+	<!-- Gets sub collections  by Name desc -->
+	<query name="getSubCollectionsByNameDesc">
+	    from InstitutionalCollection as institutionalCollection 	    
+	    where institutionalCollection.repository.id = :repositoryId
+	    and institutionalCollection.parent.id = :parentCollectionId
+	    order by institutionalCollection.name desc
+	</query>
+	
+
+	<!-- Gets sub collections count -->
+	<query name="getSubCollectionsCount">
+	    select count(*) from InstitutionalCollection as institutionalCollection 	    
+	    where institutionalCollection.repository.id = :repositoryId
+	    and institutionalCollection.parent.id = :parentCollectionId
+	</query>
+	
+	<!-- Gets root collections count -->
+	<query name="getRootCollectionsCount">
+	    select count(*) from InstitutionalCollection as institutionalCollection 	    
+	    where institutionalCollection.repository.id = :repositoryId
+	    and institutionalCollection.parent is null
+	</query>
+	
+	<!-- Get a download count for an institutional collection not including child collections -->
+	   <!-- named query for getting a count of all the downloads in the repository -->
+	<query name="getCollectionFileDownloadCount">
+		select sum(file.downloadCount) from  
+		IrFile as file
+		where file.id IN (
+		    select irFile.id from
+		    InstitutionalCollection as institutionalCollection 
+	        join institutionalCollection.items institutionalItem
+	        join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	        join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	        join institutionalItemVersion.item item
+	        join item.itemFiles itemFile
+	        join itemFile.irFile irFile 
+	        where institutionalCollection.id = ? ) 
+	</query>
+	
+    <!-- named query for getting a count of all the downloads in the repository including children-->
+	<query name="getCollectionDownloadCountWithChildren">
+	    select sum(file.downloadCount) from  
+		IrFile as file
+		where file.id IN (
+		    select irFile.id from
+		    InstitutionalCollection as institutionalCollection 
+	        join institutionalCollection.items institutionalItem
+	        join institutionalItem.versionedInstitutionalItem versionedInstitutionalItem
+	        join versionedInstitutionalItem.institutionalItemVersions institutionalItemVersion
+	        join institutionalItemVersion.item item
+	        join item.itemFiles itemFile
+	        join itemFile.irFile irFile
+	        where institutionalCollection.leftValue  &gt;= ? 
+	        and institutionalCollection.leftValue &lt;= ? 
+	        and institutionalCollection.treeRoot.id = ? )
+	</query>
+
+</hibernate-mapping>

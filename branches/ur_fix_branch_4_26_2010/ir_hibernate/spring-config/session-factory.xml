@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+    
+<beans>
+
+    <!-- ****************************************** --> 
+    <!-- Session factory for hibernate -->
+    <!-- ****************************************** --> 
+    
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="dataSource">
+           <ref bean="dataSource"/>
+        </property>
+        <property name="mappingResources">
+            <set>
+                <value>edu/ur/hibernate/ir/index/db/IndexProcessingType.hbm.xml</value>
+            
+                <value>edu/ur/hibernate/ir/repository/db/Repository.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/repository/db/License.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/repository/db/LicenseVersion.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/repository/db/VersionedLicense.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/repository/db/RetiredRepositoryLicense.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollection.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollectionSubscription.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollectionLink.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalItem.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemVersion.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/ReviewableItem.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/VersionedInstitutionalItem.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/WithdrawnToken.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/ReInstateToken.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/DeletedInstitutionalItem.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemRepositoryLicense.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemIndexProcessingRecord.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/item/db/GenericItem.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ItemVersion.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/VersionedItem.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ContentType.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/LanguageType.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/IdentifierType.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ItemIdentifier.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ItemLink.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ItemFile.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/Publisher.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ItemReport.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/Sponsor.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/Series.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ExternalPublishedItem.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ItemTitle.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/OriginalItemCreationDate.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/PublishedDate.hbm.xml</value> 
+                <value>edu/ur/hibernate/ir/item/db/FirstAvailableDate.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ExtentType.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ItemExtent.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ItemContributor.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/ItemSponsor.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/db/CopyrightStatement.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/person/db/PersonNameAuthority.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/person/db/PersonName.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/person/db/ContributorType.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/person/db/Contributor.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/person/db/PersonNameTitle.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/person/db/BirthDate.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/person/db/DeathDate.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/researcher/db/Researcher.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/researcher/db/Field.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/researcher/db/ResearcherFolder.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/researcher/db/ResearcherFile.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/researcher/db/ResearcherPublication.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/researcher/db/ResearcherLink.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/researcher/db/ResearcherPersonalLink.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/researcher/db/ResearcherInstitutionalItem.hbm.xml</value>
+               
+                <value>edu/ur/hibernate/ir/user/db/IrUserGroup.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/IrUser.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/IrRole.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/PersonalFolder.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/PersonalFile.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/PersonalCollection.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/PersonalItem.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/UserEmail.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/InviteInfo.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/Affiliation.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/Department.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/SharedInboxFile.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/UserRepositoryLicense.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/UserWorkspaceIndexProcessingRecord.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/PersonalFileDeleteRecord.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/PersonalItemDeleteRecord.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/ExternalAccountType.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/ExternalUserAccount.hbm.xml</value>
+                                
+                <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/security/db/IrClassTypePermission.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/security/db/IrAcl.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/security/db/IrUserAccessControlEntry.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/security/db/IrRoleAccessControlEntry.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/security/db/IrUserGroupAccessControlEntry.hbm.xml</value>
+                
+
+                <value>edu/ur/hibernate/ir/file/db/IrFile.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/file/db/VersionedFile.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/file/db/FileVersion.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/file/db/TransformedFileType.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/file/db/TransformedFile.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/file/db/FileCollaborator.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/file/db/IrFileIndexingFailureRecord.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/file/db/IrFileTransformationFailureRecord.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/file/db/UniqueFileSystemName.hbm.xml</value>
+                <value>edu/ur/hibernate/file/db/DefaultFileInfo.hbm.xml</value> 
+                <value>edu/ur/hibernate/file/db/FileInfoChecksum.hbm.xml</value>
+                <value>edu/ur/hibernate/file/db/TreeFolderInfo.hbm.xml</value>
+                <value>edu/ur/hibernate/file/db/DefaultFileDatabase.hbm.xml</value>
+                <value>edu/ur/hibernate/file/db/DefaultFileServer.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/news/db/NewsItem.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/statistics/db/FileDownloadInfo.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/statistics/db/IgnoreIpAddress.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/statistics/db/FileDownloadRollUpProcessingRecord.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/statistics/db/IpIgnoreFileDownloadInfo.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/handle/db/HandleNameAuthority.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/handle/db/HandleInfo.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/handle/db/UniqueHandleName.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/ir/item/metadata/dc/db/ContributorTypeDublinCoreMapping.hbm.xml</value>
+                
+                <value>edu/ur/hibernate/metadata/dc/DublinCoreElement.hbm.xml</value>
+                
+            </set>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
+		        <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+		        <prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.cache.provider_configuration_file_resource_path}</prop>
+		        <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+
+		        <prop key="hibernate.cache.use_minimal_puts">${hibernate.cache.use_minimal_puts}</prop>
+                <prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+                <prop key="hibernate.default_batch_fetch_size">${hibernate.default_batch_fetch_size}</prop>
+                <prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+                <prop key="hibernate.use_sql_comments">${hibernate.use_sql_comments}</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+            </props>
+        </property>
+   </bean>
+
+   
+</beans>
