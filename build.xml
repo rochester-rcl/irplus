@@ -99,7 +99,7 @@
     	<ant dir="ir_dao" target="${target}" inheritAll="false"/>
     </target>
 
-    <target name="do-ir-hibernate" depends="do-ir-dao, do-file-db-service, do-metadata-service" 
+    <target name="do-ir-hibernate" depends="do-ir-dao, do-file-db-service, do-metadata-hibernate" 
     	description="-->runs the described target for ir hibernate">
     	<ant dir="ir_hibernate" target="${target}" inheritAll="false"/>
     </target>

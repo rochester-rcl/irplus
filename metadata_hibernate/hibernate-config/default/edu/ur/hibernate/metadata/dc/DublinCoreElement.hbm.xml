@@ -50,12 +50,12 @@
 		
 	 </class>
 		
-	<!--  Get a count of dublin core elements in the system -->
+	<!--  Get a count of metadata types in the system -->
 	<query name="dublinCoreElementCount">
 	    select count(*) from DublinCoreElement
 	</query>
 	
-    <!-- named query for getting a dublin core element by name-->
+    <!-- named query for getting a content type-->
 	<query name="getDublinCoreElementByName">
 		from DublinCoreElement as DublinCoreElement where
 		DublinCoreElement.name = ?

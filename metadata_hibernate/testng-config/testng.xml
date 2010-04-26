@@ -22,7 +22,6 @@
 		<classes>
 		     <class name="edu.ur.hibernate.metadata.MetadataTypeDAOTest"/>
 		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreElementDAOTest"/>
-		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreTermDAOTest"/>
 		</classes>
 	</test>
 	

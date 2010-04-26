@@ -19,7 +19,7 @@
 <suite name="metadata test single">
 	<test name="Test Single">
 		<classes>
-		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreEncodingSchemeDAOTest"/>
+		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreElementDAOTest"/>
 		</classes>
 	</test>
 </suite>

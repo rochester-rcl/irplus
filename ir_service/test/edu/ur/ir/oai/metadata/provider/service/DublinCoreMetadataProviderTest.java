@@ -24,7 +24,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
-import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.item.ContentType;
@@ -78,7 +77,7 @@ public class DublinCoreMetadataProviderTest {
 	DublinCoreOaiMetadataProvider provider = (DublinCoreOaiMetadataProvider) ctx.getBean("dublinCoreOaiMetadataProvider");
 	
 	
-	public void basicDublinCoreMetadaProviderTest() throws DuplicateContributorException, CollectionDoesNotAcceptItemsException
+	public void basicDublinCoreMetadaProviderTest() throws DuplicateContributorException
 	{
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);

@@ -20,10 +20,7 @@ import edu.ur.persistent.CommonPersistent;
 
 /**
  * Represents the updated qualified dublin core 
- * standard.  This represents the dublin core term object.  This
- * can also be used to determine if the term is part of the simplified 
- * dublin core elements. The isSimpleDublinCoreElement is set to true
- * if the term is also a simple dublin core element.
+ * standard.  This represents the dublin core term object.
  * 
  * @author Nathan Sarr
  *
@@ -33,8 +30,8 @@ public class DublinCoreTerm extends CommonPersistent {
 	/** eclipse generated version uid  */
 	private static final long serialVersionUID = 7292156977710663790L;
 	
-	/** indicates this is also a simple dublin core element */
-	private boolean isSimpleDublinCoreElement = false;
+	/** Represents the type of term */
+	private DublinCoreTermType type;	
 
 	/**  Default constructor */
 	DublinCoreTerm(){}
@@ -69,6 +66,23 @@ public class DublinCoreTerm extends CommonPersistent {
 		return true;
 	}
 	
+	/**
+	 * The type of term for this dublin core term
+	 * 
+	 * @return type of term
+	 */
+	public DublinCoreTermType getType() {
+		return type;
+	}
+
+	/**
+	 * Set the type of dublin core term.
+	 * 
+	 * @param termType
+	 */
+	public void setType(DublinCoreTermType type) {
+		this.type = type;
+	}
 	
 	public String toString()
 	{
@@ -77,20 +91,9 @@ public class DublinCoreTerm extends CommonPersistent {
 		sb.append(id);
 		sb.append(" name = ");
 		sb.append(name);
-		sb.append(" isSimpleDublinCoreElement = ");
-		sb.append(isSimpleDublinCoreElement);
 		sb.append(" description = ");
 		sb.append( description );
 		sb.append("]");
 		return sb.toString();
 	}
-
-	public boolean getIsSimpleDublinCoreElement() {
-		return isSimpleDublinCoreElement;
-	}
-
-	public void setIsSimpleDublinCoreElement(boolean isSimpleDublinCoreElement) {
-		this.isSimpleDublinCoreElement = isSimpleDublinCoreElement;
-	}
-	
 }
