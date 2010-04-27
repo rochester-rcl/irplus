@@ -45,8 +45,9 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	private static final long serialVersionUID = -247941538791834361L;
 	
 	/**  Service for dealing with contributor type dublin core mapping */
-	private ContributorTypeDublinCoreMappingService contribtorTypeDublinCoreMappingService;
+	private ContributorTypeDublinCoreMappingService contributorTypeDublinCoreMappingService;
 	
+
 	/** list of contributor type mappings */
 	private List<ContributorTypeDublinCoreMapping> contributorTypeDublinCoreMappings;
 
@@ -64,6 +65,7 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
     
     /** Contributor Type dublin core mapping */
     private ContributorTypeDublinCoreMapping contributorTypeDublinCoreMapping;
+
 
 	/** Message that can be displayed to the user. */
 	private String message;
@@ -107,7 +109,7 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 		added = false;
 		
 	    // determine if the mapping already exists
-		ContributorTypeDublinCoreMapping other = contribtorTypeDublinCoreMappingService.get(contributorTypeId);
+		ContributorTypeDublinCoreMapping other = contributorTypeDublinCoreMappingService.get(contributorTypeId);
 		
 		if( other == null)
 		{
@@ -117,7 +119,7 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 			if( contributorType != null && dublinCoreElement != null)
 			{
 				contributorTypeDublinCoreMapping = new ContributorTypeDublinCoreMapping(contributorType, dublinCoreElement);
-				contribtorTypeDublinCoreMappingService.save(contributorTypeDublinCoreMapping);
+				contributorTypeDublinCoreMappingService.save(contributorTypeDublinCoreMapping);
 				added = true;
 			}
 			else
@@ -149,9 +151,9 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 		added = false;
 
 	    // determine if the mapping already exists
-		contributorTypeDublinCoreMapping = contribtorTypeDublinCoreMappingService.getById(id, false);
+		contributorTypeDublinCoreMapping = contributorTypeDublinCoreMappingService.getById(id, false);
 
-		ContributorTypeDublinCoreMapping other = contribtorTypeDublinCoreMappingService.get(contributorTypeId);
+		ContributorTypeDublinCoreMapping other = contributorTypeDublinCoreMappingService.get(contributorTypeId);
 		log.debug("other = " + other  + " other.getId().equals(id) = " + other.getId().equals(id));
 		
 		if( other == null  || other.getId().equals(id))
@@ -168,7 +170,7 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 				
 				log.debug("contributor type dublinc**2** core mapping with changes = " + contributorTypeDublinCoreMapping);
 
-				contribtorTypeDublinCoreMappingService.save(contributorTypeDublinCoreMapping);
+				contributorTypeDublinCoreMappingService.save(contributorTypeDublinCoreMapping);
 				added = true;
 			}
 			else
@@ -192,7 +194,7 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	 */
 	public String get()
 	{
-		contributorTypeDublinCoreMapping = contribtorTypeDublinCoreMappingService.getById(id, false);
+		contributorTypeDublinCoreMapping = contributorTypeDublinCoreMappingService.getById(id, false);
 		return "get";
 	}
 	
@@ -204,10 +206,10 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	public String delete()
 	{
 		log.debug("Delete contributor type dublin core mapping called id = " + id);
-		contributorTypeDublinCoreMapping = contribtorTypeDublinCoreMappingService.getById(id, false);
+		contributorTypeDublinCoreMapping = contributorTypeDublinCoreMappingService.getById(id, false);
 		if( contributorTypeDublinCoreMapping != null)
 		{
-			contribtorTypeDublinCoreMappingService.delete(contributorTypeDublinCoreMapping);
+			contributorTypeDublinCoreMappingService.delete(contributorTypeDublinCoreMapping);
 		}
 		deleted = true;
 		return "deleted";
@@ -220,20 +222,11 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	 */
 	public String viewAll()
 	{
-		contributorTypeDublinCoreMappings = contribtorTypeDublinCoreMappingService.getAll();
+		contributorTypeDublinCoreMappings = contributorTypeDublinCoreMappingService.getAll();
 		Collections.sort(contributorTypeDublinCoreMappings, this);
 		return SUCCESS;
 	}
 
-	public ContributorTypeDublinCoreMappingService getContribtorTypeDublinCoreMappingService() {
-		return contribtorTypeDublinCoreMappingService;
-	}
-
-	public void setContribtorTypeDublinCoreMappingService(
-			ContributorTypeDublinCoreMappingService contribtorTypeDublinCoreMappingService) {
-		this.contribtorTypeDublinCoreMappingService = contribtorTypeDublinCoreMappingService;
-	}
-	
 	public void setContributorTypeId(Long contributorTypeId) {
 		this.contributorTypeId = contributorTypeId;
 	}
@@ -252,8 +245,14 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 		this.dublinCoreElementService = dublinCoreElementService;
 	}
 
-	public ContributorTypeDublinCoreMapping getContributorTypeDublinCoreMapping() {
-		return contributorTypeDublinCoreMapping;
+	public void setContributorTypeDublinCoreMappingService(
+			ContributorTypeDublinCoreMappingService contributorTypeDublinCoreMappingService) {
+		this.contributorTypeDublinCoreMappingService = contributorTypeDublinCoreMappingService;
+	}
+
+	public void setContributorTypeDublinCoreMapping(
+			ContributorTypeDublinCoreMapping contributorTypeDublinCoreMapping) {
+		this.contributorTypeDublinCoreMapping = contributorTypeDublinCoreMapping;
 	}
 	
 	public boolean getAdded() {
