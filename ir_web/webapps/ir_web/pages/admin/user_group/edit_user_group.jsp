@@ -64,7 +64,7 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>Edit User Group - ${userGroup.name}</h3>
+        <h3><a href="<c:url value="/admin/viewUserGroups.action"/>">All User Groups</a> > ${userGroup.name}</h3>
   
         <div id="bd">
       

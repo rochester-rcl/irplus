@@ -80,6 +80,9 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	/** pat to the publication */
 	private List<InstitutionalCollection> path;
 	
+	/** Information related to deleted institutional item */
+	private DeletedInstitutionalItem deleteInfo;
+	
 	/** Long user id */
 	private Long userId;
 	
@@ -104,7 +107,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	 * Prepare for action
 	 */
 	public String execute(){
-		log.debug("Institutional ItemId = " + institutionalItemId);
+		log.debug("Institutional ItemId = " + institutionalItemId + " institutional item version id = " + institutionalItemVersionId);
 
 		// load a specific version - already specified in the request
 		if (institutionalItemVersionId != null) 
@@ -115,9 +118,9 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 			if (institutionalItemVersion == null) 
 			{
 	        	log.debug("Institutional Item Version does not exist for InstitutionalItemVersionId :" + institutionalItemVersionId);
-	        	message = "The publication doesn ot exist";
+	        	message = "The publication does not exist or has been deleted";
 	        	showPublication = false;
-	        	return SUCCESS;
+	        	return "not_found";
 			}
 
 		} 
@@ -139,26 +142,28 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 			else 
 			{
 				
-				DeletedInstitutionalItem deleteInfo =  institutionalItemService.getDeleteInfoForInstitutionalItem(institutionalItemId);
+				deleteInfo =  institutionalItemService.getDeleteInfoForInstitutionalItem(institutionalItemId);
 				
 				// Check if Institutional item is deleted
 				if (deleteInfo != null) {
 		        	log.debug("Institutional Item is deleted. Delete Info :" + deleteInfo);
 		        	message = "The publication \"" + deleteInfo.getInstitutionalItemName() + "\"  has been deleted.";
+		        	showPublication = false;
+		        	return "deleted";
 				} else {
 		        	log.debug("Institutional Item does not exist for InstitutionalItemId :" + institutionalItemId);
 		        	message = "The publication does not exist";
+		        	showPublication = false;
+		        	return "not_found";
 				}
-	        	showPublication = false;
-	        	return SUCCESS;
 			}
 		} 
 		else 
 		{
         	log.debug("institutional Item id is null");
         	showPublication = false;
-        	message = "The publication doesnot exist!";
-        	return SUCCESS;
+        	message = "The publication does not exist";
+        	return "not_found";
 		}
 		
 		repository = institutionalItem.getInstitutionalCollection().getRepository();
@@ -346,5 +351,9 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 
 	public void setRepository(Repository repository) {
 		this.repository = repository;
+	}
+	
+	public DeletedInstitutionalItem getDeleteInfo() {
+		return deleteInfo;
 	}
 }

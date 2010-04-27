@@ -18,6 +18,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ur" uri="ur-tags"%>
+<%@ taglib prefix="ir" uri="ir-tags"%>
 
 
 <!--  document type -->
@@ -25,7 +26,7 @@
 
 <html>
     <head>
-        <title>Publication not found</title>
+        <title>Publication Deleted</title>
         <c:import url="/inc/meta-frag.jsp"/>
         
         <!-- Core + Skin CSS -->
@@ -62,13 +63,18 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-               <h3>Institutional Publication Not Found</h3> 
+               <h3>Institutional Publication Deleted</h3> 
                
-               <p>The institutional publication could not be found if you think this is an error please <a href="<c:url value="/contactUs.action" />">contact us</a> with the information below</p>
-   
-               <h3>Institutional Item Id: ${institutionalItemId}</h3>
-               <h3>Version number: ${versionNumber}</h3>
-               <h3>Institutional Item Version id: ${institutionalItemVersionId}</h3>
+               <p>The institutional publication was deleted</p>
+               <h3>Date Deleted: ${deleteInfo.deletedDate}</h3>
+               <c:if test="${ ir:userHasRole('ROLE_ADMIN', '') }">
+                   <p>(Only viewable by administrators)</p>
+                   
+                   <h3>Institutional Item Id: ${deleteInfo.institutionalItemId}</h3>
+                   <h3>Institutional Item Name: ${deleteInfo.institutionalItemName}</h3>
+                   <h3>Institutional Collection Name: ${deleteInfo.institutionalCollectionName}</h3>
+                   <h3>Deleted By: ${deleteInfo.deletedBy}</h3>
+			   </c:if>
             </div>
             <!--  end the body tag --> 
 

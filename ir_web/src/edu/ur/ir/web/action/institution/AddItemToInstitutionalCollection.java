@@ -352,6 +352,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 
 	/**
 	 * Submit publication to the institutional collection
+	 * 
 	 * @throws NoIndexFoundException 
 	 * @throws CollectionDoesNotAcceptItemsException 
 	 * 
@@ -413,6 +414,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			    if( institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION))
 			    {
                     institutionalItem = new InstitutionalItem(institutionalCollection, item);
+                   
 				    if (institutionalCollection.isPubliclyViewable()) 
 				    {
 					    publicCollectionExist = true;
@@ -438,7 +440,9 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 				    {
 				        institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().addRepositoryLicense(repository.getDefaultLicense(), user);
 				    }
-				
+				    // generates the id and persists the item.
+                    institutionalItemService.saveInstitutionalItem(institutionalItem);
+                    
 				    // add a handle if the handle service is available
 				    HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
 				    log.debug("handle name authority = " + handleNameAuthority);
