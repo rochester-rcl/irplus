@@ -1,0 +1,2 @@
+ALTER TABLE ir_repository.versioned_institutional_item
+DROP COLUMN institutional_item_id;
