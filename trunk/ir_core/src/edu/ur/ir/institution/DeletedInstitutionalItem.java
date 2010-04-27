@@ -38,8 +38,10 @@ public class DeletedInstitutionalItem extends BasePersistent{
 	/** Reason this item was withdran */
 	private Long institutionalItemId;
 	
+	/** name of the institutional item */
 	private String institutionalItemName;
 	
+	/** Name of the collection the item was deleted from */
 	private String institutionalCollectionName;
 	
 	/** User who withdrew the  version*/
