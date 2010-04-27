@@ -73,27 +73,6 @@ insert into ir_user.external_user_account select
 -- ----------------------------------------------
 -- **********************************************
        
--- Update to create a link from Versioned Institutional 
--- item to Institutional Item     
-
--- **********************************************
--- ----------------------------------------------
-
-ALTER TABLE ir_repository.versioned_institutional_item
-ADD COLUMN institutional_item_id BIGINT;
-
-
--- update all with the item id
-UPDATE ir_repository.versioned_institutional_item as version
-SET institutional_item_id = 
-(SELECT institutional_item_id from
-ir_repository.institutional_item
-where ir_repository.institutional_item.versioned_institutional_item_id = version.versioned_institutional_item_id);
-
-
--- ----------------------------------------------
--- **********************************************
-       
 -- add the sponsor name first character column
 
 -- **********************************************
@@ -205,7 +184,7 @@ ALTER TABLE metadata.dublin_core_element_seq OWNER TO ir_plus;
 CREATE TABLE metadata.dublin_core_term
 (
     dublin_core_term_id BIGINT PRIMARY KEY,
-    is_simple_dublin_core_element BOOLEAN,
+    is_simple_dublin_core_element BOOLEAN NOT NULL,
     version INTEGER,
     name TEXT NOT NULL,
     description TEXT,
@@ -536,6 +515,9 @@ ALTER TABLE metadata.dublin_core_encoding_scheme OWNER TO ir_plus;
 CREATE SEQUENCE metadata.dublin_core_encoding_scheme_seq;
 ALTER TABLE metadata.dublin_core_encoding_scheme_seq OWNER TO ir_plus;
 
+-- -----------------------------------
+--  Insert the encoding schemes 
+-- -----------------------------------
 insert into                                                         
 metadata.dublin_core_encoding_scheme ( dublin_core_encoding_scheme_id, version, name, description) 
 values (nextval('metadata.dublin_core_encoding_scheme_seq'), 0, 'DCMIType',  'The set of classes specified by the DCMI Type Vocabulary, used to categorize the nature or genre of the resource.');

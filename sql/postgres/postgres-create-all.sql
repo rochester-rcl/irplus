@@ -77,6 +77,7 @@ ALTER TABLE metadata.dublin_core_element_seq OWNER TO ir_plus;
 CREATE TABLE metadata.dublin_core_term
 (
     dublin_core_term_id BIGINT PRIMARY KEY,
+    is_simple_dublin_core_element BOOLEAN NOT NULL,
     version INTEGER,
     name TEXT NOT NULL,
     description TEXT,
@@ -88,25 +89,22 @@ ALTER TABLE metadata.dublin_core_term OWNER TO ir_plus;
 CREATE SEQUENCE metadata.dublin_core_term_seq;
 ALTER TABLE metadata.dublin_core_term_seq OWNER TO ir_plus;
 
-
 -- ---------------------------------------------
--- Dublin core term table
+-- Dublin core encoding scheme table
 -- ---------------------------------------------
-CREATE TABLE metadata.dublin_core_term_type
+CREATE TABLE metadata.dublin_core_encoding_scheme
 (
-    dublin_core_term_type_id BIGINT PRIMARY KEY,
+    dublin_core_encoding_scheme_id BIGINT PRIMARY KEY,
     version INTEGER,
     name TEXT NOT NULL,
     description TEXT,
     UNIQUE(name)
 );
-ALTER TABLE metadata.dublin_core_term_type OWNER TO ir_plus;
+ALTER TABLE metadata.dublin_core_encoding_scheme OWNER TO ir_plus;
 
 -- The external account type sequence
-CREATE SEQUENCE metadata.dublin_core_term_type_seq;
-ALTER TABLE metadata.dublin_core_term_type_seq OWNER TO ir_plus;
-
-
+CREATE SEQUENCE metadata.dublin_core_encoding_scheme_seq;
+ALTER TABLE metadata.dublin_core_encoding_scheme_seq OWNER TO ir_plus;
 
 -- **********************************************
        
@@ -2076,7 +2074,6 @@ ALTER TABLE ir_repository.institutional_collection_subscription_seq OWNER TO ir_
 CREATE TABLE ir_repository.versioned_institutional_item
 (
     versioned_institutional_item_id BIGINT PRIMARY KEY,
-    institutional_item_id BIGINT,
     largest_item_version_id INTEGER NOT NULL,
     current_institutional_item_version_id BIGINT,
     version INTEGER
@@ -3452,6 +3449,32 @@ CREATE INDEX ip_ignore_ir_file_id_idx
   
   
 
+-- ----------------------------------------------
+-- **********************************************
+       
+-- IR metadata schema  
+
+-- **********************************************
+-- ----------------------------------------------
+
+CREATE SCHEMA ir_metadata_dublin_core AUTHORIZATION ir_plus;
+
+CREATE TABLE ir_metadata_dublin_core.contributor_type_dc_mapping
+(
+    contributor_type_dc_mapping_id BIGINT PRIMARY KEY,
+    contributor_type_id BIGINT NOT NULL,
+    dublin_core_element_id BIGINT NOT NULL,
+    version INTEGER,
+    UNIQUE(contributor_type_id),
+    FOREIGN KEY (contributor_type_id) REFERENCES person.contributor_type(contributor_type_id),
+    FOREIGN KEY (dublin_core_element_id) REFERENCES metadata.dublin_core_element(dublin_core_element_id)
+);
+
+ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping OWNER TO ir_plus;
+
+-- The contributor type dc mapping sequence
+CREATE SEQUENCE ir_metadata_dublin_core.contributor_type_dc_mapping_seq ;
+ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Quartz tables
