@@ -16,8 +16,11 @@
 
 package edu.ur.ir.oai.metadata.provider;
 
+import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.IdDoesNotExistException;
+import edu.ur.ir.oai.exception.NoRecordsMatchException;
+import edu.ur.ir.oai.exception.NoSetHierarchyException;
 
 /**
  * @author NathanS
@@ -38,15 +41,22 @@ public interface OaiService {
 	/**
 	 * Get the oai namespace identifier.
 	 * 
-	 * @return
+	 * @return the namsespace identifier
 	 */
 	public String getNamespaceIdentifier();
 	
 	/**
 	 * Get the oai identify response.
 	 * 
-	 * @return
+	 * @return an xml document for the identify request
 	 */
 	public String identify();
+	
+	/**
+	 * List the identifiers.
+	 * 
+	 * @return a list of identifiers 
+	 */
+	public String listIdentifiers(String metadataPrefix, String set, String from, String until, String resumptionToken) throws BadResumptionTokenException, CannotDisseminateFormatException, NoRecordsMatchException, NoSetHierarchyException ;
 	
 }

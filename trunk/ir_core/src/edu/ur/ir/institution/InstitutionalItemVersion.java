@@ -82,7 +82,7 @@ public class InstitutionalItemVersion extends BasePersistent{
 	 */
 	InstitutionalItemVersion(){
 		dateOfDeposit = new java.sql.Timestamp(new Date().getTime());
-		dateLastModified = new java.sql.Timestamp(new Date().getTime());
+		dateLastModified = dateOfDeposit;
 	}
 	
 	/**

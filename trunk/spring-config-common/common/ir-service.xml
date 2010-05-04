@@ -673,6 +673,7 @@
        <property name="contributorTypeDublinCoreMappingService" ref="contributorTypeDublinCoreMappingService"/>
        <property name="nameFormatter" ref="lastNamePersonNameFormatter" />
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
    </bean>
    
    <!-- ****************************************** --> 

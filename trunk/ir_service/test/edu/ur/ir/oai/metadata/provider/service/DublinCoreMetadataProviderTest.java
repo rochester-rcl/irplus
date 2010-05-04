@@ -15,7 +15,9 @@
 */  
 package edu.ur.ir.oai.metadata.provider.service;
 
+import java.io.File;
 import java.util.Date;
+import java.util.Properties;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -24,9 +26,14 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
+import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.DuplicateContributorException;
@@ -47,8 +54,16 @@ import edu.ur.ir.person.ContributorTypeService;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
+import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
+import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserDeletedPublicationException;
+import edu.ur.ir.user.UserEmail;
+import edu.ur.ir.user.UserHasPublishedDeleteException;
+import edu.ur.ir.user.UserService;
+import edu.ur.util.FileUtil;
 
 /**
  * Class for testing the dublin core metadata provider.
@@ -77,17 +92,51 @@ public class DublinCoreMetadataProviderTest {
 	/** dublin core metadata provider */
 	DefaultDublinCoreOaiMetadataProvider provider = (DefaultDublinCoreOaiMetadataProvider) ctx.getBean("dublinCoreOaiMetadataProvider");
 	
+	/** User data access */
+	UserService userService = (UserService) ctx.getBean("userService");
 	
-	public void basicDublinCoreMetadaProviderTest() throws DuplicateContributorException, CollectionDoesNotAcceptItemsException
+	/** Properties file with testing specific information. */
+	PropertiesLoader propertiesLoader = new PropertiesLoader();
+	
+	/** Get the properties file  */
+	Properties properties = propertiesLoader.getProperties();
+	
+	/** service for dealing with institutional items */
+	InstitutionalItemService institutionalItemService = (InstitutionalItemService)ctx.getBean("institutionalItemService");
+
+	/** Repository data access */
+	RepositoryService repositoryService = (RepositoryService) ctx.getBean("repositoryService");
+	
+    /** Collection service  */
+    InstitutionalCollectionService institutionalCollectionService = 
+    	(InstitutionalCollectionService) ctx.getBean("institutionalCollectionService");
+	
+	public void basicDublinCoreMetadaProviderTest() throws DuplicateContributorException, CollectionDoesNotAcceptItemsException, 
+	LocationAlreadyExistsException, DuplicateNameException, UserHasPublishedDeleteException, UserDeletedPublicationException
 	{
-		// Start the transaction 
+		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+
+		// save the repository
+		repo = repositoryService.getRepository(repo.getId(), false);
+		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		
+		UserEmail email = new UserEmail("email");
+		IrUser user = userService.createUser("password", "username", email);
+
+		// create a personal item to publish into the repository
+		institutionalCollectionService.saveCollection(collection);
+		
 		ContributorType contributorType = new ContributorType("a contributor");
 		contributorTypeService.save(contributorType);
+
 		tm.commit(ts);
 		
+	
 		
-		ts = tm.getTransaction(td);
+	
 		GenericItem item = new GenericItem("genericItem");
 		
 		ContentType contentType = new ContentType("aContentType");
@@ -146,21 +195,13 @@ public class DublinCoreMetadataProviderTest {
 		item.setReleaseDate(new Date());
 		item.addItemSponsor(sponsor);
 		item.addSubTitle("Title 2", "The articles");
-
-	    
-		Repository repository  = new Repository();
-		repository.setDescription("myDescription");
-		repository.setName("repositoryName");
+		InstitutionalItem institutionalItem1 =  collection.createInstitutionalItem(item);
+        institutionalItem1.getVersionedInstitutionalItem().getCurrentVersion().setId(187l);
+		
 		
 
-		// create a new institution
-		InstitutionalCollection institutionalCollection = 
-			new InstitutionalCollection(repository, "myInstitution");
-		institutionalCollection.setId(87l);
-				
-		// create the owner of the personal item
-		InstitutionalItem institutionalItem1 =  institutionalCollection.createInstitutionalItem(item);
-		institutionalItem1.getVersionedInstitutionalItem().getCurrentVersion().setId(22l);
+
+		ts = tm.getTransaction(td);	
 		String xml = provider.getXml(institutionalItem1.getVersionedInstitutionalItem().getCurrentVersion());
 		System.out.println(xml);
 		tm.commit(ts);
@@ -170,6 +211,11 @@ public class DublinCoreMetadataProviderTest {
 		 // Start the transaction 
 		ts = tm.getTransaction(td);
 		contributorTypeService.delete(contributorTypeService.get(contributorType.getId(), false));
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+		userService.deleteUser(deleteUser, deleteUser);	
+        institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
+        helper.cleanUpRepository();
+
 		tm.commit(ts);
 	}
 }

@@ -43,6 +43,14 @@
 		<property name="dateOfDeposit" column="date_of_deposit" type="timestamp" 
 		          access="field" 
 		          not-null="true"/>
+	    
+	    <property name="dateLastModified" column="date_modified" type="timestamp" 
+		          access="field" 
+		          not-null="true"/>
+	
+	    <property name="lastModifiedNote" column="modification_note" type="string" 
+		          access="field" 
+		          not-null="false"/>
 
 		<property name="versionNumber" column="version_number" type="int" 
 		          access="field" 
@@ -117,7 +125,14 @@
 			 fetch="subselect">
 			<key column="institutional_item_version_id"/>
 			<one-to-many class="ReinstateToken"/>
-		</set>	
+		</set>
+		
+		<!-- User who last modified the insitutional item version or underlying generic itemitem -->
+		<many-to-one class="edu.ur.ir.user.IrUser" 
+			name="lastModifiedBy" 
+			column="modified_by_user_id" 
+			access="field" 
+			unique="true"/>          	
  
 	</class>
 

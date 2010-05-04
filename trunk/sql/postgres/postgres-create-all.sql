@@ -2144,12 +2144,16 @@ CREATE TABLE ir_repository.institutional_item_version
     withdrawn_token_id BIGINT,
     version_number int,
     handle_info_id BIGINT,
-    date_of_deposit TIMESTAMP WITH TIME ZONE,
+    date_of_deposit TIMESTAMP WITH TIME ZONE NOT NULL,
+    date_modified TIMESTAMP WITH TIME ZONE NOT NULL,
+    modified_by_user_id BIGINT,
+    modification_note TEXT,
     version INTEGER,
     FOREIGN KEY (versioned_institutional_item_id) 
        REFERENCES ir_repository.versioned_institutional_item (versioned_institutional_item_id),
     FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id),
-    FOREIGN KEY (handle_info_id) REFERENCES handle.handle_info(handle_id)
+    FOREIGN KEY (handle_info_id) REFERENCES handle.handle_info(handle_id),
+    FOREIGN KEY (modified_by_user_id) REFERENCES ir_user.ir_user(user_id)
 );
 ALTER TABLE ir_repository.institutional_item_version OWNER TO ir_plus;
 

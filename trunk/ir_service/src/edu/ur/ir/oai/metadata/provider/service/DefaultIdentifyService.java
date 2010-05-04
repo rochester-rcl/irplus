@@ -98,7 +98,7 @@ public class DefaultIdentifyService implements IdentifyService{
 		 StringWriter stringWriter = new StringWriter();
 		 lsOut.setCharacterStream(stringWriter);
 
-		 Document doc = impl.createDocument(null, "identify", null);
+		 Document doc = impl.createDocument(null, "Identify", null);
 		 
 		 Element root = doc.getDocumentElement();
 		 
