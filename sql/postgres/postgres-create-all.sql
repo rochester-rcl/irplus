@@ -54,24 +54,6 @@ ALTER TABLE metadata.metadata_type_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
--- Dublin core element table
--- ---------------------------------------------
-CREATE TABLE metadata.dublin_core_element
-(
-    dublin_core_element_id BIGINT PRIMARY KEY,
-    version INTEGER,
-    name TEXT NOT NULL,
-    description TEXT,
-    UNIQUE(name)
-);
-ALTER TABLE metadata.dublin_core_element OWNER TO ir_plus;
-
--- The external account type sequence
-CREATE SEQUENCE metadata.dublin_core_element_seq;
-ALTER TABLE metadata.dublin_core_element_seq OWNER TO ir_plus;
-
-
--- ---------------------------------------------
 -- Dublin core term table
 -- ---------------------------------------------
 CREATE TABLE metadata.dublin_core_term
@@ -2115,7 +2097,7 @@ ALTER TABLE ir_repository.institutional_item_seq OWNER TO ir_plus;
 CREATE TABLE ir_repository.deleted_institutional_item
 (
 	deleted_institutional_item_id BIGINT PRIMARY KEY,
-    institutional_item_id BIGINT,
+    institutional_item_id BIGINT NOT NULL,
     institutional_collection_name TEXT,
     institutional_item_name TEXT,
     user_id BIGINT NOT NULL,
@@ -2128,6 +2110,25 @@ ALTER TABLE ir_repository.deleted_institutional_item OWNER TO ir_plus;
 -- The deleted institutional item seq
 CREATE SEQUENCE ir_repository.deleted_institutional_item_seq;
 ALTER TABLE ir_repository.deleted_institutional_item_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Deleted Institutional Item Version
+-- ---------------------------------------------
+CREATE TABLE ir_repository.deleted_institutional_item_version
+(
+	deleted_institutional_item_version_id BIGINT PRIMARY KEY,
+	deleted_institutional_item_id BIGINT NOT NULL,
+    institutional_item_version_id BIGINT NOT NULL,
+    handle_info_id BIGINT,
+    version_number INTEGER NOT NULL,
+    version INTEGER,
+    FOREIGN KEY (deleted_institutional_item_id) REFERENCES ir_repository.deleted_institutional_item(deleted_institutional_item_id)
+);
+ALTER TABLE ir_repository.deleted_institutional_item_version OWNER TO ir_plus;
+
+-- The deleted institutional item seq
+CREATE SEQUENCE ir_repository.deleted_institutional_item_version_seq;
+ALTER TABLE ir_repository.deleted_institutional_item_version_seq OWNER TO ir_plus;
 
 
 
@@ -3463,11 +3464,11 @@ CREATE TABLE ir_metadata_dublin_core.contributor_type_dc_mapping
 (
     contributor_type_dc_mapping_id BIGINT PRIMARY KEY,
     contributor_type_id BIGINT NOT NULL,
-    dublin_core_element_id BIGINT NOT NULL,
+    dublin_core_term_id BIGINT NOT NULL,
     version INTEGER,
     UNIQUE(contributor_type_id),
     FOREIGN KEY (contributor_type_id) REFERENCES person.contributor_type(contributor_type_id),
-    FOREIGN KEY (dublin_core_element_id) REFERENCES metadata.dublin_core_element(dublin_core_element_id)
+    FOREIGN KEY (dublin_core_term_id) REFERENCES metadata.dublin_core_term(dublin_core_term_id)
 );
 
 ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping OWNER TO ir_plus;

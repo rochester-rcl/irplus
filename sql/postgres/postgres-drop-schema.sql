@@ -68,8 +68,9 @@ DROP TABLE ir_repository.reinstate_token;
 DROP TABLE ir_repository.institutional_item_repository_license;
 DROP TABLE ir_repository.institutional_item_version;
 DROP TABLE ir_repository.institutional_item;
-DROP TABLE ir_repository.deleted_institutional_item;
 DROP TABLE ir_repository.versioned_institutional_item;
+DROP TABLE ir_repository.deleted_institutional_item_version;
+DROP TABLE ir_repository.deleted_institutional_item;
 DROP TABLE ir_repository.institutional_collection_link;
 DROP TABLE ir_repository.institutional_collection_subscription;
 DROP TABLE ir_repository.institutional_collection_picture;
@@ -94,6 +95,7 @@ DROP SEQUENCE ir_repository.repository_picture_seq;
 DROP SEQUENCE ir_repository.institutional_item_version_seq;
 DROP SEQUENCE ir_repository.institutional_item_seq;
 DROP SEQUENCE ir_repository.deleted_institutional_item_seq;
+DROP SEQUENCE ir_repository.deleted_institutional_item_version_seq;
 DROP SEQUENCE ir_repository.institutional_collection_seq;
 DROP SEQUENCE ir_repository.repository_seq;
 DROP SEQUENCE ir_repository.license_seq;
@@ -424,14 +426,14 @@ DROP TABLE qrtz_calendars;
 -- ---------------------------------------------
 
 DROP TABLE metadata.metadata_type;
-DROP TABLE metadata.dublin_core_element;
 DROP TABLE metadata.dublin_core_term;
-DROP TABLE metadata.dublin_core_term_type;
+DROP TABLE metadata.dublin_core_encoding_scheme;
+
 
 DROP SEQUENCE metadata.metadata_type_seq;
-DROP SEQUENCE metadata.dublin_core_element_seq;
 DROP SEQUENCE metadata.dublin_core_term_seq;
-DROP SEQUENCE metadata.dublin_core_term_type_seq;
+DROP SEQUENCE metadata.dublin_core_encoding_scheme_seq;
+
 
 DROP SCHEMA metadata;
 

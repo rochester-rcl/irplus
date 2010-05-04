@@ -159,25 +159,6 @@ ALTER TABLE metadata.metadata_type OWNER TO ir_plus;
 CREATE SEQUENCE metadata.metadata_type_seq;
 ALTER TABLE metadata.metadata_type_seq OWNER TO ir_plus;
 
-
--- ---------------------------------------------
--- Dublin core element table
--- ---------------------------------------------
-CREATE TABLE metadata.dublin_core_element
-(
-    dublin_core_element_id BIGINT PRIMARY KEY,
-    version INTEGER,
-    name TEXT NOT NULL,
-    description TEXT,
-    UNIQUE(name)
-);
-ALTER TABLE metadata.dublin_core_element OWNER TO ir_plus;
-
--- The external account type sequence
-CREATE SEQUENCE metadata.dublin_core_element_seq;
-ALTER TABLE metadata.dublin_core_element_seq OWNER TO ir_plus;
-
-
 -- ---------------------------------------------
 -- Dublin core term table
 -- ---------------------------------------------
@@ -195,76 +176,6 @@ ALTER TABLE metadata.dublin_core_term OWNER TO ir_plus;
 -- The external account type sequence
 CREATE SEQUENCE metadata.dublin_core_term_seq;
 ALTER TABLE metadata.dublin_core_term_seq OWNER TO ir_plus;
-
-
-
-
-
-
--- ---------------------------------------------
--- Insert the 15 elements into the dublin core
--- table
--- ---------------------------------------------
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'contributor', 'An entity responsible for making contributions to the resource');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'coverage', 'The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'creator', 'An entity primarily responsible for making the resource.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'date', 'A point or period of time associated with an event in the lifecycle of the resource.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'description', 'An account of the resource');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'format', 'The file format, physical medium, or dimensions of the resource.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'identifier', 'An unambiguous reference to the resource within a given context.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'language', 'A language of the resource.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'publisher', 'An entity responsible for making the resource available.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'relation', 'A related resource.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'rights', 'Information about rights held in and over the resource.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'source', 'A related resource from which the described resource is derived.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'subject', 'The topic of the resource.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'title', 'A name given to the resource.');
-
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'type', 'The nature or genre of the resource.');
 
 
 -- ---------------------------------------------
@@ -613,11 +524,11 @@ CREATE TABLE ir_metadata_dublin_core.contributor_type_dc_mapping
 (
     contributor_type_dc_mapping_id BIGINT PRIMARY KEY,
     contributor_type_id BIGINT NOT NULL,
-    dublin_core_element_id BIGINT NOT NULL,
+    dublin_core_term_id BIGINT NOT NULL,
     version INTEGER,
     UNIQUE(contributor_type_id),
     FOREIGN KEY (contributor_type_id) REFERENCES person.contributor_type(contributor_type_id),
-    FOREIGN KEY (dublin_core_element_id) REFERENCES metadata.dublin_core_element(dublin_core_element_id)
+    FOREIGN KEY (dublin_core_term_id) REFERENCES metadata.dublin_core_term(dublin_core_term_id)
 );
 
 ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping OWNER TO ir_plus;
@@ -625,3 +536,32 @@ ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping OWNER TO ir_plus
 -- The contributor type dc mapping sequence
 CREATE SEQUENCE ir_metadata_dublin_core.contributor_type_dc_mapping_seq ;
 ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping_seq OWNER TO ir_plus;
+
+
+-- ----------------------------------------------
+-- **********************************************
+       
+-- Changes to deleted institutional item data
+
+-- **********************************************
+-- ----------------------------------------------
+ALTER TABLE ir_repository.deleted_institutional_item ALTER COLUMN institutional_item_id SET NOT NULL;
+
+-- ---------------------------------------------
+-- Deleted Institutional Item Version
+-- ---------------------------------------------
+CREATE TABLE ir_repository.deleted_institutional_item_version
+(
+	deleted_institutional_item_version_id BIGINT PRIMARY KEY,
+	deleted_institutional_item_id BIGINT NOT NULL,
+    institutional_item_version_id BIGINT NOT NULL,
+    handle_info_id BIGINT,
+    versionNumber INTEGER NOT NULL,
+    version INTEGER,
+    FOREIGN KEY (deleted_institutional_item_id) REFERENCES ir_repository.deleted_institutional_item(deleted_institutional_item_id)
+);
+ALTER TABLE ir_repository.deleted_institutional_item_version OWNER TO ir_plus;
+
+-- The deleted institutional item seq
+CREATE SEQUENCE ir_repository.deleted_institutional_item_version_seq;
+ALTER TABLE ir_repository.deleted_institutional_item_version_seq OWNER TO ir_plus;
