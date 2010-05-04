@@ -20,6 +20,9 @@ import java.util.Date;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.oai.OaiUtil;
+import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
+import edu.ur.ir.oai.exception.IdDoesNotExistException;
+import edu.ur.ir.oai.metadata.provider.OaiService;
 
 /**
  * Handles an oai request.
@@ -28,8 +31,6 @@ import edu.ur.ir.oai.OaiUtil;
  *
  */
 public class Oai_2_0 extends ActionSupport{
-	
-
 	
 
 	/** eclipse generated id */
@@ -56,12 +57,34 @@ public class Oai_2_0 extends ActionSupport{
 	/** resumption token  */
 	private String resumptionToken;
 	
+	/** Output of the oai information */
+	private String oaiOutput;
+	
+	/** Service to help deal with underlying calls for oai information */
+	private OaiService oaiService;
 
 	public String execute()
 	{
 		if( !OaiUtil.isValidOaiVerb(verb))
 		{
 			return "badVerb";
+		}
+		if( verb.equalsIgnoreCase(OaiUtil.GET_RECORD_VERB))
+		{
+			
+			try {
+				oaiOutput = oaiService.getRecord(identifier, metadataPrefix);
+				return "getRecord";
+			} catch (CannotDisseminateFormatException e) {
+				return "cannotDisseminateFormat";
+			} catch (IdDoesNotExistException e) {
+				return "idDoesNotExist";
+			}
+		}
+		if( verb.equalsIgnoreCase(OaiUtil.IDENTIFY_VERB))
+		{
+			oaiOutput = oaiService.identify();
+			return "identify";
 		}
 		return SUCCESS;
 	
@@ -131,6 +154,13 @@ public class Oai_2_0 extends ActionSupport{
 		return responseDate;
 	}
 
+	public String getOaiOutput() {
+		return oaiOutput;
+	}
+
+	public void setOaiService(OaiService oaiService) {
+		this.oaiService = oaiService;
+	}
 
 
 }

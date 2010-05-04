@@ -16,8 +16,8 @@
 package edu.ur.ir.oai.metadata.provider.service;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
@@ -32,7 +32,8 @@ import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
  */
 public class DefaultOaiMetadataServiceProvider implements OaiMetadataServiceProvider{
     
-	private HashSet<OaiMetadataProvider> providers = new HashSet<OaiMetadataProvider>();
+	/** List of oai metadata providers */
+	private List<OaiMetadataProvider> providers = new LinkedList<OaiMetadataProvider>();
 	
 	/**
 	 * @see edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider#getProvider(java.lang.String)
@@ -53,8 +54,8 @@ public class DefaultOaiMetadataServiceProvider implements OaiMetadataServiceProv
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider#getProviders()
 	 */
-	public Set<OaiMetadataProvider> getProviders() {
-		return Collections.unmodifiableSet(providers);
+	public List<OaiMetadataProvider> getProviders() {
+		return Collections.unmodifiableList(providers);
 	}
 
 	/**
@@ -110,5 +111,14 @@ public class DefaultOaiMetadataServiceProvider implements OaiMetadataServiceProv
 	public void removeProvider(OaiMetadataProvider provider) {
 		providers.remove(provider);
 	}
-
+	
+	/**
+	 * Set the list of providers.
+	 * 
+	 * @param providers
+	 */
+	public void setProviders(List<OaiMetadataProvider> providers) {
+		this.providers = providers;
+	}
+	
 }

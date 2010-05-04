@@ -256,7 +256,13 @@
 				     </c:if>
 				 </div> 
 			</c:if>
-				
+			
+			<c:url var="oaiDcUrl" value="/oai2.action">
+			    <c:param name="verb" value="GetRecord"/>
+			    <c:param name="identifier" value="oai:${oaiNamespaceIdentifier}:${institutionalItemVersion.id}"/>
+			    <c:param name="metadataPrefix" value="oai_dc"/>
+			</c:url>
+			<h3><a href="${oaiDcUrl}">Get OAI Dublin Core Record</a></h3>
 			  <!-- *************************  All versions Start *************************  -->
             <c:if test="${institutionalItem != null}">
               

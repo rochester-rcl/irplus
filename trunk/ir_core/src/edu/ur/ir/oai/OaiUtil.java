@@ -36,7 +36,7 @@ public class OaiUtil
 	public static final String LIST_RECORDS_VERB = "ListRecords";
 	
 	/**
-	 * Determine if the oai verb is valid.
+	 * Determine if the oai verb is valid.  This method ignores case.
 	 * 
 	 * @param verb - verb to check
 	 * @return true if the verb is valid

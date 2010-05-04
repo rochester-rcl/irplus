@@ -46,8 +46,8 @@
 			access="field" not-null="true"/>
 		
 		<!--  Type of dublin core element -->
-		<many-to-one class="edu.ur.metadata.dc.DublinCoreElement"
-			name="dublinCoreElement" column="dublin_core_element_id" 
+		<many-to-one class="edu.ur.metadata.dc.DublinCoreTerm"
+			name="dublinCoreTerm" column="dublin_core_term_id" 
 			 access="field" not-null="true"/>
 	 </class>
 		
@@ -60,7 +60,7 @@
 	<query name="getContributorTypeDublinCoreMappingByIds">
 	    from ContributorTypeDublinCoreMapping as contributorTypeDublinCoreMapping 	    
 	    where contributorTypeDublinCoreMapping.contributorType.id = :contributorTypeId
-	    and contributorTypeDublinCoreMapping.dublinCoreElement.id = :dublinCoreElementId
+	    and contributorTypeDublinCoreMapping.dublinCoreTerm.id = :dublinCoreTermId
 	</query>
 
 	<!-- Gets contributor types by contributor type id and dublin core element id  -->

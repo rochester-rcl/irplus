@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.util.Date;
 import java.util.List;
 
 import edu.ur.dao.CrudDAO;
@@ -151,5 +152,13 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 			final int maxResults, 
 			final List<Long> personNameIds, 
 			final OrderType orderType);
+	
+	
+	/**
+	 * Get the earliest submission date found in the institutional item versions. 
+	 * 
+	 * @return the earliest date of deposit found in the repository.
+	 */
+	public Date getEarliestDateOfDeposit();
 
 }

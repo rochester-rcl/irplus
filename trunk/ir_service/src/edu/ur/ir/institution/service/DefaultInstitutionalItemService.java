@@ -29,6 +29,8 @@ import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleInfoDAO;
 import edu.ur.ir.institution.DeletedInstitutionalItem;
 import edu.ur.ir.institution.DeletedInstitutionalItemDAO;
+import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
+import edu.ur.ir.institution.DeletedInstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemDAO;
@@ -82,6 +84,11 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	/** data access for handle information */
 	private HandleInfoDAO handleInfoDAO;
 	
+	/** Deleted Institutional item data access */
+	private DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO;
+	
+
+
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemService.class);
 	
@@ -145,8 +152,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 */
 	public void addDeleteHistory(InstitutionalItem institutionalItem, IrUser deletingUser) {
 		
-		DeletedInstitutionalItem i = new DeletedInstitutionalItem(
-				institutionalItem.getId(), institutionalItem.getName(), institutionalItem.getInstitutionalCollection().getName());
+		DeletedInstitutionalItem i = new DeletedInstitutionalItem(institutionalItem);
 
 		i.setDeletedBy(deletingUser);
 		i.setDeletedDate(new Date());
@@ -803,6 +809,35 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			ids.add(p.getId());
 		}
 		return institutionalItemVersionDAO.getPublicationVersionsForNamesBySubmissionDate(rowStart, maxResults, ids, orderType);
+	}
+
+	/**
+	 * Get the deleted institutional item by the original institutional item version id.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getDeletedVersionByItemVersion(java.lang.Long, int)
+	 */
+	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersion(
+			Long institutionalItemId, int versionNumber) {
+		return deletedInstitutionalItemVersionDAO.get(institutionalItemId, versionNumber);
+	}
+
+	/**
+	 * Get the deleted version by item version id.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getDeletedVersionByItemVersionId(java.lang.Long)
+	 */
+	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersionId(
+			Long institutionalItemVersionId) {
+		return deletedInstitutionalItemVersionDAO.get(institutionalItemVersionId);
+	}
+	
+	public DeletedInstitutionalItemVersionDAO getDeletedInstitutionalItemVersionDAO() {
+		return deletedInstitutionalItemVersionDAO;
+	}
+
+	public void setDeletedInstitutionalItemVersionDAO(
+			DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO) {
+		this.deletedInstitutionalItemVersionDAO = deletedInstitutionalItemVersionDAO;
 	}
 
 }

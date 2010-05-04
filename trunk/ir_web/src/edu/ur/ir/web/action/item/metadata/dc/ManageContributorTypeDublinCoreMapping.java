@@ -28,8 +28,8 @@ import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMapping;
 import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMappingService;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.ContributorTypeService;
-import edu.ur.metadata.dc.DublinCoreElement;
-import edu.ur.metadata.dc.DublinCoreElementService;
+import edu.ur.metadata.dc.DublinCoreTerm;
+import edu.ur.metadata.dc.DublinCoreTermService;
 import edu.ur.simple.type.AscendingNameComparator;
 
 /**
@@ -55,17 +55,16 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	private Long contributorTypeId;
 
 	/** id of the dublin core element id */
-	private Long dublinCoreElementId;
+	private Long dublinCoreTermId;
 	
 	/**  Service for dealing with contributor types */
 	private ContributorTypeService contributorTypeService;
 
     /** Service for dealing with Dublin core elements */
-    private DublinCoreElementService dublinCoreElementService;
+    private DublinCoreTermService dublinCoreTermService;
     
     /** Contributor Type dublin core mapping */
     private ContributorTypeDublinCoreMapping contributorTypeDublinCoreMapping;
-
 
 	/** Message that can be displayed to the user. */
 	private String message;
@@ -82,7 +81,6 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	/** determine if this is an update */
 	private boolean update = false;
 	
-
 	/**  Logger for managing copyright statements*/
 	private static final Logger log = Logger.getLogger(ManageContributorTypeDublinCoreMapping.class);
 	
@@ -104,7 +102,7 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	public String create()
 	{
 		log.debug("creating a dc contributor type mapping contributorTypeId = " + contributorTypeId +
-				" dublin core elment id = " + dublinCoreElementId);
+				" dublin core elment id = " + dublinCoreTermId);
 		
 		added = false;
 		
@@ -114,24 +112,24 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 		if( other == null)
 		{
 			ContributorType contributorType = contributorTypeService.get(contributorTypeId, false);
-			DublinCoreElement dublinCoreElement = dublinCoreElementService.getById(dublinCoreElementId, false);
+			DublinCoreTerm dublinCoreTerm = dublinCoreTermService.getById(dublinCoreTermId, false);
 			
-			if( contributorType != null && dublinCoreElement != null)
+			if( contributorType != null && dublinCoreTerm != null)
 			{
-				contributorTypeDublinCoreMapping = new ContributorTypeDublinCoreMapping(contributorType, dublinCoreElement);
+				contributorTypeDublinCoreMapping = new ContributorTypeDublinCoreMapping(contributorType, dublinCoreTerm);
 				contributorTypeDublinCoreMappingService.save(contributorTypeDublinCoreMapping);
 				added = true;
 			}
 			else
 			{
-				message = getText("contributorTypeDublinCoreElementMappingMissingDataError");
-				addFieldError("contributorTypeDublinCoreElementMappingMissingData", message);
+				message = getText("contributorTypeDublinCoreTermMappingMissingDataError");
+				addFieldError("contributorTypeDublinCoreTermMappingMissingData", message);
 			}
 		}
 		else
 		{
-			message = getText("contributorTypeDublinCoreElementMappingExistsError");
-			addFieldError("contributorTypeDublinCoreElementMappingAlreadyExists", message);
+			message = getText("contributorTypeDublinCoreTermMappingExistsError");
+			addFieldError("contributorTypeDublinCoreTermMappingAlreadyExists", message);
 		}
 		log.debug("message = " + message);
 		log.debug(" returning added");
@@ -146,7 +144,7 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	public String update()
 	{
 		log.debug("updating a dc contributor type mapping contributorTypeId = " + contributorTypeId +
-				" dublin core elment id = " + dublinCoreElementId + " id = " + id);
+				" dublin core elment id = " + dublinCoreTermId + " id = " + id);
 
 		added = false;
 
@@ -159,14 +157,14 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 		if( other == null  || other.getId().equals(id))
 		{
 			ContributorType contributorType = contributorTypeService.get(contributorTypeId, false);
-			DublinCoreElement dublinCoreElement = dublinCoreElementService.getById(dublinCoreElementId, false);
+			DublinCoreTerm dublinCoreTerm = dublinCoreTermService.getById(dublinCoreTermId, false);
 			
-			if( contributorType != null && dublinCoreElement != null)
+			if( contributorType != null && dublinCoreTerm != null)
 			{
 				
 				log.debug("contributor type dublinc core mapping = " + contributorTypeDublinCoreMapping);
 				contributorTypeDublinCoreMapping.setContributorType(contributorType);
-				contributorTypeDublinCoreMapping.setDublinCoreElement(dublinCoreElement);
+				contributorTypeDublinCoreMapping.setDublinCoreTerm(dublinCoreTerm);
 				
 				log.debug("contributor type dublinc**2** core mapping with changes = " + contributorTypeDublinCoreMapping);
 
@@ -175,14 +173,14 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 			}
 			else
 			{
-				message = getText("contributorTypeDublinCoreElementMappingMissingDataError");
-				addFieldError("contributorTypeDublinCoreElementMappingMissingData", message);
+				message = getText("contributorTypeDublinCoreTermMappingMissingDataError");
+				addFieldError("contributorTypeDublinCoreTermMappingMissingData", message);
 			}
 		}
 		else			
 		{
-			message = getText("contributorTypeDublinCoreElementMappingExistsError");
-			addFieldError("contributorTypeDublinCoreElementMappingAlreadyExists", message);
+			message = getText("contributorTypeDublinCoreTermMappingExistsError");
+			addFieldError("contributorTypeDublinCoreTermMappingAlreadyExists", message);
 		}        
 		return "added";
 	}
@@ -231,8 +229,8 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 		this.contributorTypeId = contributorTypeId;
 	}
 
-	public void setDublinCoreElementId(Long dublinCoreElementId) {
-		this.dublinCoreElementId = dublinCoreElementId;
+	public void setDublinCoreTermId(Long dublinCoreTermId) {
+		this.dublinCoreTermId = dublinCoreTermId;
 	}
 	
 	public void setContributorTypeService(
@@ -240,9 +238,9 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 		this.contributorTypeService = contributorTypeService;
 	}
 
-	public void setDublinCoreElementService(
-			DublinCoreElementService dublinCoreElementService) {
-		this.dublinCoreElementService = dublinCoreElementService;
+	public void setDublinCoreTermService(
+			DublinCoreTermService dublinCoreTermService) {
+		this.dublinCoreTermService = dublinCoreTermService;
 	}
 
 	public void setContributorTypeDublinCoreMappingService(
@@ -283,10 +281,10 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	 * 
 	 * @return
 	 */
-	public List<DublinCoreElement> getDublinCoreElements() {
-		List<DublinCoreElement> dublinCoreElements = dublinCoreElementService.getAll();
-		Collections.sort(dublinCoreElements, nameComparator);
-		return dublinCoreElements;
+	public List<DublinCoreTerm> getDublinCoreTerms() {
+		List<DublinCoreTerm> dublinCoreTerms = dublinCoreTermService.getAll();
+		Collections.sort(dublinCoreTerms, nameComparator);
+		return dublinCoreTerms;
 	}
 
 	public void setId(Long id) {

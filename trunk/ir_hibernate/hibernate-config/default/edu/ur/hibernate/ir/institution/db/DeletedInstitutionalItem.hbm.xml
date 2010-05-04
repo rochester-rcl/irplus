@@ -60,16 +60,28 @@
 			column="user_id" 
 			access="field" 
 			insert="true"
-			not-null="true"/>	
+			not-null="true"/>
+			
+		<!-- Items In this collection -->
+		<set name="deletedInstitutionalItemVersions" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     access="field" 
+		     inverse="true" 
+		     fetch="subselect"
+		     lazy="true">
+			<key column="deleted_institutional_item_id"/>
+			<one-to-many class="DeletedInstitutionalItemVersion"/>
+		</set>			
 	
 	</class>
 		
-	<query name="deletedItemCount">
+	<query name="deletedInstitutionalItemCount">
 	    select count(*) from DeletedInstitutionalItem
 	</query>
 
 
-	<query name="deleteInfoForItem">
+	<query name="deleteInstitutionalItemInfo">
 	    from DeletedInstitutionalItem d
 	    where d.institutionalItemId = ?
 	</query>

@@ -16,6 +16,9 @@
 package edu.ur.ir.oai.metadata.provider.service;
 
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -30,6 +33,7 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 
+import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.item.ContentType;
@@ -37,15 +41,18 @@ import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemContributor;
+import edu.ur.ir.item.ItemExtent;
 import edu.ur.ir.item.ItemIdentifier;
 import edu.ur.ir.item.ItemTitle;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PublishedDate;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMapping;
 import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMappingService;
 import edu.ur.ir.oai.OaiUtil;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataProvider;
 import edu.ur.ir.person.BasicPersonNameFormatter;
+import edu.ur.ir.SimpleDateFormatter;
 
 /**
  * Dublin core implementation of the oai provider.
@@ -53,7 +60,7 @@ import edu.ur.ir.person.BasicPersonNameFormatter;
  * @author Nathan Sarr
  *
  */
-public class DublinCoreOaiMetadataProvider implements OaiMetadataProvider{
+public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider{
 	
 	/** Prefix handled by this provider */
 	public static String METADATA_PREFIX = "oai_dc";
@@ -96,6 +103,8 @@ public class DublinCoreOaiMetadataProvider implements OaiMetadataProvider{
          createMetadata(doc, institutionalItemVersion);		
 			
 		 Element root = doc.getDocumentElement();
+		 serializer.getDomConfig().setParameter("xml-declaration", false);
+		 
 		 serializer.write(root, lsOut);
 		 return stringWriter.getBuffer().toString();
 	}
@@ -184,6 +193,15 @@ public class DublinCoreOaiMetadataProvider implements OaiMetadataProvider{
 		 addSubjects(doc, oaiDc, item);
 		 addPublisher(doc, oaiDc, item);
 		 addRights(doc, oaiDc, item);
+		 addAvailable(doc, oaiDc, item);
+		 addCitation(doc, oaiDc, item);
+		 addDateAccepted(doc, oaiDc, institutionalItemVersion);
+		 addDateIssued(doc, oaiDc, item);
+		 addDateModified(doc, oaiDc, institutionalItemVersion);
+		 addExtents(doc, oaiDc, item);
+		 addHandle(doc, oaiDc, institutionalItemVersion);
+		 
+		 
 	}
 	
 	public ContributorTypeDublinCoreMappingService getContributorTypeDublinCoreMappingService() {
@@ -281,7 +299,14 @@ public class DublinCoreOaiMetadataProvider implements OaiMetadataProvider{
 			 Element creator = null;
 			 if( dcMapping != null )
 			 {
-			     creator = doc.createElement("dc:" + dcMapping.getDublinCoreElement().getName());
+				 if( dcMapping.getDublinCoreTerm().getIsSimpleDublinCoreElement())
+				 {
+			         creator = doc.createElement("dc:" + dcMapping.getDublinCoreTerm().getName());
+				 }
+				 else
+				 {
+					 creator = doc.createElement("dcterms:" + dcMapping.getDublinCoreTerm().getName());
+				 }
 		 
 			 }
 			 else
@@ -445,10 +470,154 @@ public class DublinCoreOaiMetadataProvider implements OaiMetadataProvider{
 		if( copyrightStatement != null )
 		{
 			Element rightsElement = doc.createElement("dc:rights");
-			Text data = doc.createTextNode(copyrightStatement.getName());
+			Text data = doc.createTextNode(copyrightStatement.getText());
 	    	rightsElement.appendChild(data);
 	    	oaiDc.appendChild(rightsElement);
 		}
 	}
+	
+	/**
+	 * Add the date this publication was made available.
+	 * 
+	 * @param doc
+	 * @param oaiDc
+	 * @param item
+	 */
+	private void addAvailable(Document doc, Element oaiDc, GenericItem item)
+	{
+		if( item.getReleaseDate() != null )
+		{
+		    Date d = item.getReleaseDate();
+		    Element availableElement = doc.createElement("dcterms:available");
+		    DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
+			Text data = doc.createTextNode(dateFormat.format(d));
+	    	availableElement.appendChild(data);
+	    	oaiDc.appendChild(availableElement);
+		}
+	}
+	
+	/**
+	 * Add the citation
+	 * 
+	 * @param doc
+	 * @param oaiDc
+	 * @param item
+	 */
+	private void addCitation(Document doc, Element oaiDc, GenericItem item)
+	{
+		ExternalPublishedItem externalPublishedItem = item.getExternalPublishedItem();
+		if( externalPublishedItem != null )
+		{
+			if( externalPublishedItem.getCitation() != null )
+			{
+		        Element citationElement = doc.createElement("dcterms:bibliographicCitation");
+			    Text data = doc.createTextNode(externalPublishedItem.getCitation());
+			    citationElement.appendChild(data);
+	    	    oaiDc.appendChild(citationElement);
+			}
+		}
+	}
+	
+	/**
+	 * Add the date accepted
+	 * 
+	 * @param doc
+	 * @param oaiDc
+	 * @param item
+	 */
+	private void addDateAccepted(Document doc, Element oaiDc, InstitutionalItemVersion item)
+	{
+		if( item.getDateOfDeposit() != null )
+		{
+		    Date d = item.getDateOfDeposit();
+		    Element acceptedElement = doc.createElement("dcterms:dateAccepted");
+		    DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+			Text data = doc.createTextNode(dateFormat.format(d));
+	    	acceptedElement.appendChild(data);
+	    	oaiDc.appendChild(acceptedElement);
+		}
+	}
+	
+	/**
+	 * Add the date issued
+	 * 
+	 * @param doc
+	 * @param oaiDc
+	 * @param item
+	 */
+	private void addDateIssued(Document doc, Element oaiDc, GenericItem item)
+	{
+		ExternalPublishedItem externalPublishedItem = item.getExternalPublishedItem();
+		if( externalPublishedItem != null )
+		{
+			PublishedDate publishedDate = externalPublishedItem.getPublishedDate();
+			if( publishedDate != null )
+			{
+		        Element citationElement = doc.createElement("dcterms:issued");
+		        SimpleDateFormatter sdf = new SimpleDateFormatter();
+		        Text data = doc.createTextNode(sdf.getDate(publishedDate));
+		        citationElement.appendChild(data);
+    	        oaiDc.appendChild(citationElement);
+			}
+		}
+	}
+	
+	/**
+	 * Add the date modified
+	 * 
+	 * @param doc
+	 * @param oaiDc
+	 * @param item
+	 */
+	private void addDateModified(Document doc, Element oaiDc, InstitutionalItemVersion item)
+	{
+		if( item.getDateLastModified() != null )
+		{
+		    Date d = item.getDateLastModified();
+		    Element modifiedElement = doc.createElement("dcterms:modified");
+		    DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+			Text data = doc.createTextNode(dateFormat.format(d));
+	    	modifiedElement.appendChild(data);
+	    	oaiDc.appendChild(modifiedElement);
+		}
+	}
+	
+	/**
+	 * Add the extents
+	 * 
+	 * @param doc
+	 * @param oaiDc
+	 * @param item
+	 */
+	private void addExtents(Document doc, Element oaiDc, GenericItem item)
+	{
+		for( ItemExtent ie : item.getItemExtents())
+		{
+			Element extentElement = doc.createElement("dcterms:extent");
+		    Text data = doc.createTextNode(ie.getExtentType().getName() + ":" + ie.getValue());
+		    extentElement.appendChild(data);
+    	    oaiDc.appendChild(extentElement);
+		}
+	}
+	
+	/**
+	 * Add handle url.
+	 * 
+	 * @param doc
+	 * @param oaiDc
+	 * @param item
+	 */
+	private void addHandle(Document doc, Element oaiDc, InstitutionalItemVersion item)
+	{
+		if( item.getHandleInfo() != null )
+		{
+			HandleInfo handle = item.getHandleInfo();
+		    Element identifier = doc.createElement("dc:identifier");
+		    Text data = doc.createTextNode(handle.getNameAuthority().getAuthorityBaseUrl() + handle.getNameAuthority().getNamingAuthority() + "/" + handle.getLocalName());
+		    identifier.appendChild(data);
+		    oaiDc.appendChild(identifier);
+		}
+	}
+
 
 }

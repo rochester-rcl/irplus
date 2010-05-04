@@ -43,28 +43,6 @@
    </bean>
    
    <!-- ****************************************** --> 
-   <!-- Dublin Core Metadata tables  -->
-   <!-- ****************************************** --> 
-   
-   <bean id="dublinCoreElementDAOTarget" 
-       class="edu.ur.hibernate.metadata.dc.HbDublinCoreElementDAO">
-       <property name="sessionFactory" ref="sessionFactory"/>
-   </bean>
-   
-   <bean id="dublinCoreElementDAO" 
-       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-       <property name="transactionManager" ref="transactionManager"/>
-       <property name="target" ref="dublinCoreElementDAOTarget"/>
-       <property name="transactionAttributes">
-           <props>
-               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
-               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
-               <prop key="make*">PROPAGATION_REQUIRED</prop>
-           </props>
-       </property>
-   </bean>
-   
-   <!-- ****************************************** --> 
    <!-- Dublin Core Term table  -->
    <!-- ****************************************** --> 
    

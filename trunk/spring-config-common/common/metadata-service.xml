@@ -19,11 +19,19 @@
     "http://www.springframework.org/dtd/spring-beans.dtd">
     
 <beans>
+
    <!-- ****************************************** --> 
-   <!-- Dublin Core Element service -->
+   <!-- Dublin Core Term service -->
    <!-- ****************************************** --> 
-   <bean id="dublinCoreElementService" class="edu.ur.metadata.dc.service.DefaultDublinCoreElementService">
-       <property name="dublinCoreElementDAO" ref="dublinCoreElementDAO"/>
+   <bean id="dublinCoreTermService" class="edu.ur.metadata.dc.service.DefaultDublinCoreTermService">
+       <property name="dublinCoreTermDAO" ref="dublinCoreTermDAO"/>
+   </bean> 
+   
+   <!-- ****************************************** --> 
+   <!-- Dublin Core Encoding Scheme service -->
+   <!-- ****************************************** --> 
+   <bean id="dublinCoreEncodingSchemeService" class="edu.ur.metadata.dc.service.DefaultDublinCoreEncodingSchemeService">
+       <property name="dublinCoreEncodingSchemeDAO" ref="dublinCoreEncodingSchemeDAO"/>
    </bean> 
    
 </beans>
