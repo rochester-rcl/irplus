@@ -21,8 +21,10 @@ import org.apache.log4j.Logger;
 
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.IdDoesNotExistException;
+import edu.ur.ir.oai.exception.NoRecordsMatchException;
 import edu.ur.ir.oai.metadata.provider.IdentifyService;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataProvider;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
@@ -84,6 +86,18 @@ public class DefaultOaiService implements OaiService{
 		}
 		return value;
 	}
+	
+	/**
+	 * List the identifiers in the system.
+	 * 
+	 * @see edu.ur.ir.oai.metadata.provider.OaiService#listIdentifiers(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	public String listIdentifiers(String metadataPrefix, String set, String from, String until, String resumptionToken) throws BadResumptionTokenException,
+			CannotDisseminateFormatException, NoRecordsMatchException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	/**
 	 * Get the institutional item service.
@@ -174,5 +188,6 @@ public class DefaultOaiService implements OaiService{
 	public void setIdentifyService(IdentifyService identifyService) {
 		this.identifyService = identifyService;
 	}
+
 
 }

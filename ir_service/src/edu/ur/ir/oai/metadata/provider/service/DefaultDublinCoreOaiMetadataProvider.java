@@ -19,6 +19,7 @@ import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,6 +36,7 @@ import org.w3c.dom.ls.LSSerializer;
 
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.CopyrightStatement;
@@ -73,6 +75,11 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	
 	/** namespace for the oai url */
 	private String namespaceIdentifier;
+	
+	/** Service to deal with institutional collection information */
+	private InstitutionalCollectionService institutionalCollectionService;
+
+
 
 	/**
 	 * Get the xml output for the item
@@ -146,16 +153,28 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		 
 		 // datestamp element
 		 Element datestamp = doc.createElement("datestamp");
-		 String zuluDateTime = OaiUtil.zuluTime(institutionalItemVersion.getDateLastModified());
+		 Date d = institutionalItemVersion.getDateLastModified();
+		 if( d == null )
+		 {
+			 d = institutionalItemVersion.getDateOfDeposit();
+		 }
+		 String zuluDateTime = OaiUtil.zuluTime(d);
+		 
 		 data = doc.createTextNode(zuluDateTime);
 		 datestamp.appendChild(data);
 		 header.appendChild(datestamp);
 		 
 		 InstitutionalCollection collection = institutionalItemVersion.getVersionedInstitutionalItem().getInstitutionalItem().getInstitutionalCollection();
-		 Element setSpec = doc.createElement("setSpec");
-		 data = doc.createTextNode(collection.getId().toString());
-		 setSpec.appendChild(data);
-		 header.appendChild(setSpec);
+		 
+		 List<InstitutionalCollection> collections = institutionalCollectionService.getPath(collection);
+		 
+		 for(InstitutionalCollection c : collections)
+		 {
+		     Element setSpec = doc.createElement("setSpec");
+		     data = doc.createTextNode(c.getId().toString());
+		     setSpec.appendChild(data);
+		     header.appendChild(setSpec);
+		 }
 	}
 	
 	/**
@@ -619,5 +638,14 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		}
 	}
 
+	
+	public InstitutionalCollectionService getInstitutionalCollectionService() {
+		return institutionalCollectionService;
+	}
+
+	public void setInstitutionalCollectionService(
+			InstitutionalCollectionService institutionalCollectionService) {
+		this.institutionalCollectionService = institutionalCollectionService;
+	}
 
 }

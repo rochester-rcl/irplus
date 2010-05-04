@@ -280,7 +280,23 @@
 						/ ${institutionalItemVersion.repositoryLicense.dateGranted} ( <a href="${viewLicense}">View License</a> )
 						
 					</td>
-				</tr>	
+				</tr>
+				<tr>
+				    <td class="previewLabel">Date Deposited</td>
+			    </tr>
+				<tr>
+				    <td>
+					    ${institutionalItemVersion.dateOfDeposit}
+					</td>
+				</tr>
+				<tr>
+				    <td class="previewLabel">Date Last Updated</td>
+			    </tr>
+				<tr>
+				    <td>
+					    ${institutionalItemVersion.dateLastModified}
+					</td>
+				</tr>					
 				</c:if>
 				
 				<tr>

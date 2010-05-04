@@ -565,3 +565,26 @@ ALTER TABLE ir_repository.deleted_institutional_item_version OWNER TO ir_plus;
 -- The deleted institutional item seq
 CREATE SEQUENCE ir_repository.deleted_institutional_item_version_seq;
 ALTER TABLE ir_repository.deleted_institutional_item_version_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- New columns for institutional item version
+-- ---------------------------------------------
+
+ALTER TABLE ir_repository.institutional_item_version
+ADD COLUMN date_modified TIMESTAMP WITH TIME ZONE;
+
+UPDATE ir_repository.institutional_item_version AS item_version 
+SET date_modified = ( SELECT date_of_deposit FROM ir_repository.institutional_item_version 
+where institutional_item_version.institutional_item_version_id = item_version.institutional_item_version_id);
+
+ALTER TABLE ir_repository.institutional_item_version ALTER COLUMN date_modified SET NOT NULL;
+
+ALTER TABLE ir_repository.institutional_item_version
+ADD COLUMN  modified_by_user_id BIGINT
+
+ALTER TABLE ir_repository.institutional_item_version ADD CONSTRAINT modbyuserfk FOREIGN KEY ( modified_by_user_id) REFERENCES ir_user.ir_user(user_id) ;
+
+ALTER TABLE ir_repository.institutional_item_version
+ADD COLUMN modification_note TEXT;
+
+

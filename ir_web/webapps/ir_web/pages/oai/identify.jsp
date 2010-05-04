@@ -7,7 +7,5 @@
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <responseDate>${responseDate}</responseDate>
   <request verb="${verb}"> <ir:baseUrl/>oai2.action</request>
-  <Identify>
     ${oaiOutput}
-  </Identify>
 </OAI-PMH>
