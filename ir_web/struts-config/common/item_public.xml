@@ -24,6 +24,8 @@
             class="edu.ur.ir.web.action.institution.ViewInstitutionalPublication">
             <interceptor-ref name="default" />
             <result name="success">/pages/item/institutional_publication_view.jsp</result>
+            <result name="deleted">/pages/item/institutional_publication_deleted.jsp</result>
+            <result name="not_found">/pages/item/institutional_publication_not_found.jsp</result>
         </action>
 
         <action name="fileDownloadForInstitutionalItem" 

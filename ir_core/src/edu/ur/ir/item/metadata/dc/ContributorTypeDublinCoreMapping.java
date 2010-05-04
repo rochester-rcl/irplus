@@ -16,7 +16,7 @@
 package edu.ur.ir.item.metadata.dc;
 
 import edu.ur.ir.person.ContributorType;
-import edu.ur.metadata.dc.DublinCoreElement;
+import edu.ur.metadata.dc.DublinCoreTerm;
 import edu.ur.persistent.BasePersistent;
 
 /**
@@ -33,8 +33,8 @@ public class ContributorTypeDublinCoreMapping extends BasePersistent{
 	/** IR+ contributor type */
 	private ContributorType contributorType;
 	
-	/** represents a dublin core element */
-	private DublinCoreElement dublinCoreElement;
+	/** represents a dublin core term */
+	private DublinCoreTerm dublinCoreTerm;
 
 	
 	/**
@@ -49,10 +49,10 @@ public class ContributorTypeDublinCoreMapping extends BasePersistent{
 	 * @param contributorType
 	 * @param dublinCoreElement
 	 */
-	public ContributorTypeDublinCoreMapping(ContributorType contributorType, DublinCoreElement dublinCoreElement)
+	public ContributorTypeDublinCoreMapping(ContributorType contributorType, DublinCoreTerm dublinCoreTerm)
 	{
 		setContributorType(contributorType);
-		setDublinCoreElement(dublinCoreElement);
+		setDublinCoreTerm(dublinCoreTerm);
 	}
 	
 	public ContributorType getContributorType() {
@@ -63,12 +63,12 @@ public class ContributorTypeDublinCoreMapping extends BasePersistent{
 		this.contributorType = contributorType;
 	}
 
-	public DublinCoreElement getDublinCoreElement() {
-		return dublinCoreElement;
+	public DublinCoreTerm getDublinCoreTerm() {
+		return dublinCoreTerm;
 	}
 
-	public void setDublinCoreElement(DublinCoreElement dublinCoreElement) {
-		this.dublinCoreElement = dublinCoreElement;
+	public void setDublinCoreTerm(DublinCoreTerm dublinCoreTerm) {
+		this.dublinCoreTerm = dublinCoreTerm;
 	}
 	
 	/**
@@ -83,8 +83,8 @@ public class ContributorTypeDublinCoreMapping extends BasePersistent{
 
 		final ContributorTypeDublinCoreMapping other = (ContributorTypeDublinCoreMapping) o;
 
-		if( ( dublinCoreElement != null && !dublinCoreElement.equals(other.getDublinCoreElement()) ) ||
-			( dublinCoreElement == null && other.getDublinCoreElement() != null ) ) return false;
+		if( ( dublinCoreTerm != null && !dublinCoreTerm.equals(other.getDublinCoreTerm()) ) ||
+			( dublinCoreTerm == null && other.getDublinCoreTerm() != null ) ) return false;
 		
 		if( ( contributorType != null && !contributorType.equals(other.getContributorType()) ) ||
 			( contributorType == null && other.getContributorType() != null ) ) return false;
@@ -99,7 +99,7 @@ public class ContributorTypeDublinCoreMapping extends BasePersistent{
     public int hashCode()
     {
     	int hash = 0;
-    	hash += dublinCoreElement == null ? 0 : dublinCoreElement.hashCode();
+    	hash += dublinCoreTerm == null ? 0 : dublinCoreTerm.hashCode();
     	hash += contributorType == null ? 0 : contributorType.hashCode();
     	return hash;
     }
@@ -108,8 +108,8 @@ public class ContributorTypeDublinCoreMapping extends BasePersistent{
 	{
 		StringBuffer sb = new StringBuffer("[ id = ");
 		sb.append(id);
-		sb.append( "dublin core element = ");
-		sb.append(dublinCoreElement);
+		sb.append( "dublin core term = ");
+		sb.append(dublinCoreTerm);
 		sb.append("contributorType = ");
 		sb.append(contributorType);
 		sb.append("]");

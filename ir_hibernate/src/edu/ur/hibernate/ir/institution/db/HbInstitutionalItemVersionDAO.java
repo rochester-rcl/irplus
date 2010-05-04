@@ -17,6 +17,7 @@
 package edu.ur.hibernate.ir.institution.db;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -369,6 +370,18 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 		    }
 	    });
         return foundItems;	
+	}
+	
+	/**
+	 * Get the earliest submission date found in the institutional item versions. 
+	 * 
+	 * @return the earliest date of deposit found in the repository.
+	 */
+	public Date getEarliestDateOfDeposit()
+	{
+		Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getEarliestDateOfDeposit");
+	    Date ealiestDateOfDepositoy = (Date)q.uniqueResult();
+	    return ealiestDateOfDepositoy;
 	}
 
 

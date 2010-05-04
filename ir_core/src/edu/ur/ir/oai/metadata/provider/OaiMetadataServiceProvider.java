@@ -15,7 +15,7 @@
 */  
 package edu.ur.ir.oai.metadata.provider;
 
-import java.util.Set;
+import java.util.List;
 
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
@@ -29,11 +29,11 @@ import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 public interface OaiMetadataServiceProvider {
 	
 	/**
-	 * Set of providers.
+	 * List of providers.
 	 * 
 	 * @return
 	 */
-	public Set<OaiMetadataProvider> getProviders();
+	public List<OaiMetadataProvider> getProviders();
 	
 	/**
 	 * Determine if this supports the given metadata prefix.
@@ -76,5 +76,7 @@ public interface OaiMetadataServiceProvider {
 	 * @param provider
 	 */
 	public void removeProvider(OaiMetadataProvider provider);
+	
+
 
 }

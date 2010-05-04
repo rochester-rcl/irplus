@@ -105,15 +105,14 @@ public class HbContributorTypeDublinCoreMappingDAO implements ContributorTypeDub
 	 * @see edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMappingDAO#get(java.lang.Long, java.lang.Long)
 	 */
 	public ContributorTypeDublinCoreMapping get(final Long contributorTypeId,
-			final Long dublinCoreElementId) {
+			final Long dublinCoreTermId) {
 		ContributorTypeDublinCoreMapping mapping = (ContributorTypeDublinCoreMapping) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
             public Object doInHibernate(Session session)
                     throws HibernateException, SQLException {
             	
 		        Query q = session.getNamedQuery("getContributorTypeDublinCoreMappingByIds");
 		        q.setParameter("contributorTypeId", contributorTypeId);
-		        q.setParameter("dublinCoreElmentId", dublinCoreElementId);
-		        q.setReadOnly(true);
+		        q.setParameter("dublinCoreTermId", dublinCoreTermId);
 	            return q.uniqueResult();
             }
         });
@@ -132,7 +131,6 @@ public class HbContributorTypeDublinCoreMappingDAO implements ContributorTypeDub
             	
 		        Query q = session.getNamedQuery("getContributorTypeDublinCoreMappingByContributorTypeId");
 		        q.setParameter("contributorTypeId", contributorTypeId);
-		        q.setReadOnly(true);
 	            return q.uniqueResult();
             }
         });

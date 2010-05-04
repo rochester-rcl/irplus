@@ -75,7 +75,7 @@ public class DublinCoreMetadataProviderTest {
 	ContributorTypeService contributorTypeService = (ContributorTypeService) ctx.getBean("contributorTypeService");
 
 	/** dublin core metadata provider */
-	DublinCoreOaiMetadataProvider provider = (DublinCoreOaiMetadataProvider) ctx.getBean("dublinCoreOaiMetadataProvider");
+	DefaultDublinCoreOaiMetadataProvider provider = (DefaultDublinCoreOaiMetadataProvider) ctx.getBean("dublinCoreOaiMetadataProvider");
 	
 	
 	public void basicDublinCoreMetadaProviderTest() throws DuplicateContributorException, CollectionDoesNotAcceptItemsException

@@ -457,6 +457,10 @@
          <action name="oai2" 
                 class="edu.ur.ir.web.action.oai.Oai_2_0">
          	<result name="badVerb">/pages/oai/bad_verb.jsp</result>
+         	<result name="getRecord">/pages/oai/get_record.jsp</result>
+         	<result name="cannotDisseminateFormat">/pages/oai/cannot_disseminate_format.jsp</result>
+         	<result name="idDoesNotExist">/pages/oai/id_does_not_exist.jsp</result>
+         	<result name="identify">/pages/oai/identify.jsp</result>
          	<result name="success">/pages/oai/ok.jsp</result>
          </action> 
         

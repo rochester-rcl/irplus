@@ -369,6 +369,11 @@
 	      join item.itemFiles itemFile
 	      join itemFile.irFile irFile
 	      where  contributor.personName.id in (:personNameIds) )
+	</query>
+	
+	<!--  get the ealieast date of depostit -->
+    <query name="getEarliestDateOfDeposit">
+	    select min(dateOfDeposit) from InstitutionalItemVersion
 	</query>	
 	
 </hibernate-mapping>

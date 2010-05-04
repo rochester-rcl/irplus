@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a deleted institutional item version.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.institution">
+	<class name="DeletedInstitutionalItemVersion" schema="ir_repository" table="deleted_institutional_item_version"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="deleted_institutional_item_version_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_repository.deleted_institutional_item_version_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version" access="org.hibernate.property.DirectPropertyAccessor" />
+		
+	    <!-- version number of the set of versions -->
+		<property name="versionNumber" column="version_number" type="int" not-null="true" access="field" />
+		
+		<!--  the oroginal institutional item version id -->
+		<property name="institutionalItemVersionId" column="institutional_item_version_id" type="long"
+			not-null="true" access="field" />
+
+
+        <!--  The parent institutional item -->
+		<many-to-one class="DeletedInstitutionalItem" 
+		    optimistic-lock="false"
+			unique="true" 
+			name="deletedInstitutionalItem" 
+			column="deleted_institutional_item_id" 
+			cascade="save-update"
+			access="field" 
+			insert="true"
+			update="true"/>
+			
+		<!--  The handle information for the generic item-->
+		<many-to-one class="edu.ur.ir.handle.HandleInfo" 
+			unique="true" 
+			name="handleInfo" 
+			column="handle_info_id" 
+			cascade="save-update"
+			access="field" 
+			insert="true"
+			update="true"/>
+	
+	</class>
+		
+	<query name="getDeleteInstitutionalItemVersionById">
+	    from DeletedInstitutionalItemVersion dv
+	    where dv.institutionalItemVersionId = :instititutionalItemVersionId
+	</query>
+	
+	<!--  get the version by the institutional item id and the verson number -->
+	<query name="getDeleteInstitutionalItemVersionByInstVersion">
+	    from DeletedInstitutionalItemVersion dv
+	    where dv.versionNumber = :versionNumber
+	    and dv.deletedInstitutionalItem.institutionalItemId = :institutionalItemId
+	</query>
+	
+
+</hibernate-mapping>

@@ -28,8 +28,8 @@ import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMapping;
 import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMappingDAO;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.ContributorTypeDAO;
-import edu.ur.metadata.dc.DublinCoreElement;
-import edu.ur.metadata.dc.DublinCoreElementService;
+import edu.ur.metadata.dc.DublinCoreTerm;
+import edu.ur.metadata.dc.DublinCoreTermService;
 
 /**
  * @author Nathan Sarr
@@ -45,7 +45,7 @@ public class ContributorTypeDublinCoreMappingDAOTest {
 	.getBean("contributorTypeDublinCoreMappingDAO");
 
     /** dublin core element data access object */
-	DublinCoreElementService dublinCoreElementService = (DublinCoreElementService)ctx.getBean("dublinCoreElementService");
+	DublinCoreTermService dublinCoreTermService = (DublinCoreTermService)ctx.getBean("dublinCoreTermService");
 	
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
 	.getBean("transactionManager");
@@ -66,9 +66,9 @@ public class ContributorTypeDublinCoreMappingDAOTest {
 	    TransactionStatus ts = tm.getTransaction(td);
 
 	    // create a dublin core element
-		DublinCoreElement element = new DublinCoreElement("Dublin Core Element");
+		DublinCoreTerm element = new DublinCoreTerm("Dublin Core Term");
  		element.setDescription("ctDescription");
- 		dublinCoreElementService.save(element);
+ 		dublinCoreTermService.save(element);
  		
         // create a contributor type
  		ContributorType ct = new ContributorType("ctName");
@@ -90,7 +90,7 @@ public class ContributorTypeDublinCoreMappingDAOTest {
 	    ts = tm.getTransaction(td);
         // delete data
 	    contributorTypeDublinCoreMappingDAO.makeTransient(contributorTypeDublinCoreMappingDAO.getById(ctMapping.getId(), false));
-	    dublinCoreElementService.delete(dublinCoreElementService.getById(element.getId(), false));
+	    dublinCoreTermService.delete(dublinCoreTermService.getById(element.getId(), false));
 	    contributorTypeDAO.makeTransient(contributorTypeDAO.getById(ct.getId(), false));
 	    tm.commit(ts);
 	}
@@ -105,13 +105,13 @@ public class ContributorTypeDublinCoreMappingDAOTest {
 	    TransactionStatus ts = tm.getTransaction(td);
 
 	    // create a dublin core element
-		DublinCoreElement element = new DublinCoreElement("Dublin Core Element");
+		DublinCoreTerm element = new DublinCoreTerm("Dublin term Element");
  		element.setDescription("ctDescription");
- 		dublinCoreElementService.save(element);
+ 		dublinCoreTermService.save(element);
  		
  	    // create a 2nd dublin core element
-		DublinCoreElement element2 = new DublinCoreElement("Dublin Core Element2");
- 		dublinCoreElementService.save(element2);
+		DublinCoreTerm element2 = new DublinCoreTerm("Dublin Core Term2");
+ 		dublinCoreTermService.save(element2);
  		
         // create a contributor type
  		ContributorType ct = new ContributorType("ctName");
@@ -127,20 +127,20 @@ public class ContributorTypeDublinCoreMappingDAOTest {
  	    
  	    ContributorTypeDublinCoreMapping other = contributorTypeDublinCoreMappingDAO.getById(ctMapping.getId(), false);
  	    assert other.equals(ctMapping) : " Other " + other + "\n should be equal to " + ctMapping;
-	    other.setDublinCoreElement(element2);
+	    other.setDublinCoreTerm(element2);
 	    contributorTypeDublinCoreMappingDAO.makePersistent(other);
  	    tm.commit(ts);
  	    
  	    ts = tm.getTransaction(td);
  	    other = contributorTypeDublinCoreMappingDAO.getById(ctMapping.getId(), false);
- 	    assert other.getDublinCoreElement().equals(element2) : "other element2 should = " + element2 + " other dc = " + other.getDublinCoreElement();
+ 	    assert other.getDublinCoreTerm().equals(element2) : "other element2 should = " + element2 + " other dc = " + other.getDublinCoreTerm();
  	    tm.commit(ts);
  	    
 	    ts = tm.getTransaction(td);
         // delete data
 	    contributorTypeDublinCoreMappingDAO.makeTransient(contributorTypeDublinCoreMappingDAO.getById(ctMapping.getId(), false));
-	    dublinCoreElementService.delete(dublinCoreElementService.getById(element.getId(), false));
-	    dublinCoreElementService.delete(dublinCoreElementService.getById(element2.getId(), false));
+	    dublinCoreTermService.delete(dublinCoreTermService.getById(element.getId(), false));
+	    dublinCoreTermService.delete(dublinCoreTermService.getById(element2.getId(), false));
 	    contributorTypeDAO.makeTransient(contributorTypeDAO.getById(ct.getId(), false));
 	    tm.commit(ts);
 	}

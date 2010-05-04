@@ -32,6 +32,7 @@ import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.item.ItemSecurityService;
+import edu.ur.ir.oai.metadata.provider.OaiService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -103,6 +104,11 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	/** institutional repository object */
 	private Repository repository;
 	
+	/** Service to deal with oai information */
+	private OaiService oaiService;
+	
+	
+
 	/**
 	 * Prepare for action
 	 */
@@ -241,6 +247,16 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 		
 		return SUCCESS;		
 	}
+	
+	/**
+	 * Returns the oai namespace identifier.
+	 * 
+	 * @return
+	 */
+	public String getOaiNamespaceIdentifier()
+	{
+		return oaiService.getNamespaceIdentifier();
+	}
 
 	public Long getInstitutionalItemId() {
 		return institutionalItemId;
@@ -356,4 +372,9 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	public DeletedInstitutionalItem getDeleteInfo() {
 		return deleteInfo;
 	}
+	
+	public void setOaiService(OaiService oaiService) {
+		this.oaiService = oaiService;
+	}
+
 }

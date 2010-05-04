@@ -14,18 +14,21 @@
    limitations under the License.
 */  
 
-package edu.ur.metadata.dc;
-
-import edu.ur.dao.CountableDAO;
-import edu.ur.dao.CrudDAO;
-import edu.ur.dao.UniqueNameDAO;
-import edu.ur.metadata.dc.DublinCoreElement;
+package edu.ur.ir.oai.metadata.provider;
 
 /**
- * Data access for a dublin core element 
+ * Helps with the identify portion of the oai specification.
  * 
  * @author Nathan Sarr
  *
  */
-public interface DublinCoreElementDAO extends CountableDAO, 
-CrudDAO<DublinCoreElement>, UniqueNameDAO<DublinCoreElement>{}
+public interface IdentifyService {
+	
+	/**
+	 * Return the identify response as an XML string.
+	 * 
+	 * @return
+	 */
+	public String identify();
+
+}

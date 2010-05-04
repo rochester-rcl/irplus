@@ -28,7 +28,7 @@
 	            <urstb:tr>
 	                <urstb:td>Id</urstb:td>
 					<urstb:td>Contributor Type</urstb:td>
-					<urstb:td>Dublin Core Element</urstb:td>
+					<urstb:td>Dublin Core Term</urstb:td>
 					<urstb:td>Action</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>
@@ -49,7 +49,7 @@
 			                   ${mapping.contributorType.name}
 	                        </urstb:td>
 	                        <urstb:td>
-	                           ${mapping.dublinCoreElement.name}
+	                           ${mapping.dublinCoreTerm.name}
 	                        </urstb:td>
 	                        <urstb:td>
 	                             <a href="javascript:YAHOO.ur.contributor_type_dc_mapping.edit(${mapping.id});">Edit</a> / <a href="javascript:YAHOO.ur.contributor_type_dc_mapping.deleteMapping(${mapping.id});">Delete</a>

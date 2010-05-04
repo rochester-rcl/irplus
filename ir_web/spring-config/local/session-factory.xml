@@ -51,6 +51,7 @@
                 <value>edu/ur/hibernate/ir/institution/db/DeletedInstitutionalItem.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemRepositoryLicense.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemIndexProcessingRecord.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/DeletedInstitutionalItemVersion.hbm.xml</value>
                 
                 
                 <value>edu/ur/hibernate/ir/item/db/GenericItem.hbm.xml</value>
@@ -156,7 +157,7 @@
                 
                 <value>edu/ur/hibernate/ir/item/metadata/dc/db/ContributorTypeDublinCoreMapping.hbm.xml</value>
                 
-                <value>edu/ur/hibernate/metadata/dc/DublinCoreElement.hbm.xml</value>
+                <value>edu/ur/hibernate/metadata/dc/DublinCoreTerm.hbm.xml</value>
                 
                 
             </set>

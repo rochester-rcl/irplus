@@ -30,25 +30,25 @@ public class BasicDate extends BasePersistent implements Date  {
 	private static final long serialVersionUID = -6935937743336824323L;
 
 	/** Day of the month */
-	private int day;
+	private int day = 0;
 	
 	/** Month of the year */
-	private int month;
+	private int month = 0;
 	
 	/** year in the date */
-	private int year;
+	private int year = 0;
 	
 	/** Hour of the date */
-	private int hours;
+	private int hours = 0;
 	
 	/** Minute of the hour */
-	private int minutes;
+	private int minutes = 0;
 	
 	/** Second of the minute */
-	private int seconds;
+	private int seconds = 0;
 	
 	/** Fraction of the second */
-	private int fractionOfSecond;
+	private int fractionOfSecond = 0;
 	
 	/**
 	 * Default constructor

@@ -59,7 +59,7 @@ public class HbDeletedInstitutionalItemDAO implements DeletedInstitutionalItemDA
 
 	public Long getCount() {
 		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("deletedItemCount"));
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("deletedInstitutionalItemCount"));
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class HbDeletedInstitutionalItemDAO implements DeletedInstitutionalItemDA
 	 */
 	public DeletedInstitutionalItem getDeleteInfoForInstitutionalItem(Long institutionalItemId) {
 		return (DeletedInstitutionalItem)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("deleteInfoForItem", institutionalItemId));
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("deleteInstitutionalItemInfo", institutionalItemId));
 	}
 
 	

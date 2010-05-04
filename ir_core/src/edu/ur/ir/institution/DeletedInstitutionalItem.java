@@ -16,7 +16,10 @@
 
 package edu.ur.ir.institution;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
@@ -31,6 +34,9 @@ public class DeletedInstitutionalItem extends BasePersistent{
 	
 	/** eclipse generated id */
 	private static final long serialVersionUID = 2632928311286244395L;
+	
+	/** List of deleted institutional item versions */
+	private Set<DeletedInstitutionalItemVersion> deletedInstitutionalItemVersions = new HashSet<DeletedInstitutionalItemVersion>(); 
 
 	/** Date the item was withdrawn. */
 	private Date deletedDate;
@@ -50,52 +56,128 @@ public class DeletedInstitutionalItem extends BasePersistent{
 	/** Package protected constructor */
 	DeletedInstitutionalItem(){}
 	
-	/** Package protected constructor */
-	public DeletedInstitutionalItem(Long institutionalItemId, String itemName, String collectionName) {
+	/** Constructor */
+	public DeletedInstitutionalItem(InstitutionalItem institutionalItem) {
 		
-		this.institutionalItemId = institutionalItemId;
-		this.institutionalItemName = itemName;
-		this.institutionalCollectionName = collectionName;
+		institutionalItemId = institutionalItem.getId();
+		institutionalItemName = institutionalItem.getName();
+		institutionalCollectionName = institutionalItem.getInstitutionalCollection().getName();
+		
+		Set<InstitutionalItemVersion> versions = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions();
+		for(InstitutionalItemVersion version : versions)
+		{
+			deletedInstitutionalItemVersions.add(new DeletedInstitutionalItemVersion(this, version));
+		}
+		
 	}
 	
+	/**
+	 * Date this item was deleted.
+	 * 
+	 * @return
+	 */
 	public Date getDeletedDate() {
 		return deletedDate;
 	}
 
+	/**
+	 * Set the deleted date.
+	 * 
+	 * @param deletedDate
+	 */
 	public void setDeletedDate(Date deletedDate) {
 		this.deletedDate = deletedDate;
 	}
 
+	/**
+	 * Get the institutional item id.
+	 * 
+	 * @return the institutional item id.
+	 */
 	public Long getInstitutionalItemId() {
 		return institutionalItemId;
 	}
 
+	/**
+	 * Set the institutional item id.
+	 * 
+	 * @param institutionalItemId
+	 */
 	public void setInstitutionalItemId(Long institutionalItemId) {
 		this.institutionalItemId = institutionalItemId;
 	}
 
+	/**
+	 * Get the institutional item name.
+	 * 
+	 * @return get the institutional item name.
+	 */
 	public String getInstitutionalItemName() {
 		return institutionalItemName;
 	}
 
+	/**
+	 * Set the institutional item name.
+	 * 
+	 * @param institutionalItemName
+	 */
 	public void setInstitutionalItemName(String institutionalItemName) {
 		this.institutionalItemName = institutionalItemName;
 	}
 
+	/**
+	 * Get the parent collection this deleted item was in.
+	 * 
+	 * @return the institutional collection name
+	 */
 	public String getInstitutionalCollectionName() {
 		return institutionalCollectionName;
 	}
 
+	/**
+	 * Set the institutional collection name.
+	 * 
+	 * @param institutionalCollectionName
+	 */
 	public void setInstitutionalCollectionName(String institutionalCollectionName) {
 		this.institutionalCollectionName = institutionalCollectionName;
 	}
 
+	/**
+	 * Get the user who deleted the item.
+	 * 
+	 * @return
+	 */
 	public IrUser getDeletedBy() {
 		return deletedBy;
 	}
 
+	/**
+	 * Set the user who deleted the item.
+	 * 
+	 * @param deletedBy
+	 */
 	public void setDeletedBy(IrUser deletedBy) {
 		this.deletedBy = deletedBy;
+	}
+	
+	/**
+	 * Get the list of version information for this deleted item.
+	 * 
+	 * @return list of versions for the deleted information
+	 */
+	public Set<DeletedInstitutionalItemVersion> getDeletedInstitutionalItemVersions() {
+		return Collections.unmodifiableSet(deletedInstitutionalItemVersions);
+	}
+
+	/**
+	 * Set the deleted institutional item versions.
+	 * 
+	 * @param deletedInstitutionalItemVersions
+	 */
+	public void setDeletedInstitutionalItemVersions(
+			Set<DeletedInstitutionalItemVersion> deletedInstitutionalItemVersions) {
+		this.deletedInstitutionalItemVersions = deletedInstitutionalItemVersions;
 	}
 
 	public int hashCode()
@@ -120,7 +202,9 @@ public class DeletedInstitutionalItem extends BasePersistent{
 
 	public String toString()
 	{
-		StringBuffer sb = new StringBuffer("[ Deleted Institutional item Id= ");
+		StringBuffer sb = new StringBuffer("[ id = ");
+		sb.append(id);
+		sb.append( " Deleted Institutional item Id= ");
 		sb.append(institutionalItemId);
 		sb.append(" item name = " );
 		sb.append(institutionalItemName);

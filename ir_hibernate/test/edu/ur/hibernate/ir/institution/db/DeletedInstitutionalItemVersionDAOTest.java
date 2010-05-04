@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008-2010 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.institution.db;
 
 import java.util.Date;
 import java.util.Properties;
+import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -34,6 +35,8 @@ import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.DeletedInstitutionalItem;
 import edu.ur.ir.institution.DeletedInstitutionalItemDAO;
+import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
+import edu.ur.ir.institution.DeletedInstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionDAO;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -46,13 +49,13 @@ import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserEmail;
 
 /**
- * Test the persistence methods for an institutional item Information
+ * Test the persistence of deleted insitutional item versions.
  * 
  * @author Nathan Sarr
- * 
+ *
  */
 @Test(groups = { "baseTests" }, enabled = true)
-public class DeletedInstitutionalItemDAOTest {
+public class DeletedInstitutionalItemVersionDAOTest {
 	
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
@@ -82,6 +85,10 @@ public class DeletedInstitutionalItemDAOTest {
     /** Deleted Institutional Item data access*/
     DeletedInstitutionalItemDAO deletedInstitutionalItemDAO = (DeletedInstitutionalItemDAO)ctx.getBean("deletedInstitutionalItemDAO");
 
+    /** Deleted Institutional Item data access*/
+    DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO = (DeletedInstitutionalItemVersionDAO)ctx.getBean("deletedInstitutionalItemVersionDAO");
+
+    
 	/** Institution collection data access.  */
 	InstitutionalCollectionDAO institutionalCollectionDAO = (InstitutionalCollectionDAO) ctx
 	.getBean("institutionalCollectionDAO");
@@ -95,7 +102,7 @@ public class DeletedInstitutionalItemDAOTest {
 	 * 
 	 */
 	@Test
-	public void baseDeletedInstitutionalItemDAOTest() throws CollectionDoesNotAcceptItemsException, LocationAlreadyExistsException, DuplicateNameException {
+	public void baseDeletedInstitutionalItemVersionDAOTest() throws CollectionDoesNotAcceptItemsException, LocationAlreadyExistsException, DuplicateNameException {
 
 	    // start a new transaction
 		TransactionStatus ts = tm.getTransaction(td);
@@ -138,12 +145,25 @@ public class DeletedInstitutionalItemDAOTest {
         deletedInstitutionalItem.setDeletedBy(user);
         deletedInstitutionalItem.setDeletedDate(new Date());
 		deletedInstitutionalItemDAO.makePersistent(deletedInstitutionalItem);
-
+		Set<DeletedInstitutionalItemVersion> versions = deletedInstitutionalItem.getDeletedInstitutionalItemVersions();
+		assert versions.size() == 1 : "Should have at least one deleted version but has "  + versions.size();
 		tm.commit(ts);
 
 		ts = tm.getTransaction(td);
-		assert deletedInstitutionalItemDAO.getById(deletedInstitutionalItem.getId(), false).equals(deletedInstitutionalItem) :
-			"Should be able to find deleted item " + deletedInstitutionalItem;
+		
+		DeletedInstitutionalItemVersion version = (DeletedInstitutionalItemVersion) versions.toArray()[0];
+		assert version != null : "Should find the version";
+		
+		DeletedInstitutionalItemVersion other = deletedInstitutionalItemVersionDAO.getById(version.getId(), false);
+		
+		assert other.equals(version) : "version " + version + " should be eqal to " + other;
+		
+		other = deletedInstitutionalItemVersionDAO.get(institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().getId());
+        assert other != null : "Should be able to find deleted version by original version identifier " + institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().getId();
+        
+		other = deletedInstitutionalItemVersionDAO.get(institutionalItem.getId(), institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().getVersionNumber());
+        assert other != null : "Should be able to find deleted version by original item id and version number id = " 
+        	+ institutionalItem.getId() + "version = " + institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().getVersionNumber();
 		
 		tm.commit(ts);
 
@@ -160,6 +180,5 @@ public class DeletedInstitutionalItemDAOTest {
 		
 		tm.commit(ts);	
 	}
-	
 
 }

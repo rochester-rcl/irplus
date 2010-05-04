@@ -24,7 +24,7 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 			
 	<c:if test="${ThumbnailFilesCount > 0}">
-		<strong> Primary File: </strong> 
+		<strong> Primary Image File: </strong> 
 		<select id="itemForm_primary_file" name="primaryFileId" />
 	
 			<option value = "0"> Select </option>

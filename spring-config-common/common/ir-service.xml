@@ -187,6 +187,7 @@
        <property name="itemService" ref="itemService"/>
        <property name="institutionalItemVersionDAO" ref="institutionalItemVersionDAO"/>
        <property name="deletedInstitutionalItemDAO" ref="deletedInstitutionalItemDAO"/>
+       <property name="deletedInstitutionalItemVersionDAO" ref="deletedInstitutionalItemVersionDAO"/>
        <property name="itemSecurityService" ref="itemSecurityService"/>
        <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
        <property name="reviewableItemService" ref="reviewableItemService"/>
@@ -665,14 +666,54 @@
    <bean id="lastNamePersonNameFormatter" class="edu.ur.ir.person.LastNamePersonNameFormatter"/>
 
    <!-- ****************************************** --> 
-   <!-- Contributor type dublin core mapping service -->
+   <!-- Service that provides dublin core metadata -->
    <!-- ****************************************** --> 
    <bean id="dublinCoreOaiMetadataProvider" 
-       class="edu.ur.ir.oai.metadata.provider.service.DublinCoreOaiMetadataProvider">
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultDublinCoreOaiMetadataProvider">
        <property name="contributorTypeDublinCoreMappingService" ref="contributorTypeDublinCoreMappingService"/>
        <property name="nameFormatter" ref="lastNamePersonNameFormatter" />
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- OAI harvesting Service for the system -->
+   <!-- ****************************************** --> 
+   <bean id="oaiMetadataServiceProvider" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultOaiMetadataServiceProvider">
+       <property name="providers">
+           <list>
+               <ref bean="dublinCoreOaiMetadataProvider"/>
+           </list>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- OAI harvesting Service for the system -->
+   <!-- ****************************************** --> 
+   <bean id="identifyService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultIdentifyService">
+       <property name="repositoryService" ref="repositoryService" />
+       <property name="institutionalItemVersionDAO" ref="institutionalItemVersionDAO" />
+       <property name="baseOaiUrl" value="${base.oai.url}" />
+       <property name="adminEmails">
+           <list>
+               <value>nsarr@library.rochester.edu</value>
+           </list>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- OAI harvesting Output Service for the system -->
+   <!-- ****************************************** --> 
+   <bean id="oaiService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultOaiService">
+       <property name="identifyService" ref="identifyService"/>
+       <property name="oaiMetadataServiceProvider" ref="oaiMetadataServiceProvider"/>
+       <property name="institutionalItemService" ref="institutionalItemService" />
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+   </bean>
+   
+
 
    
 </beans>

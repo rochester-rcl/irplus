@@ -46,15 +46,15 @@
 		</td>
 	</tr>
 	<tr>       
-	    <td align="left" class="label">Dublin Core Element:*</td>
+	    <td align="left" class="label">Dublin Core Term:*</td>
 		<td align="left" class="input">
-		    <select name="dublinCoreElementId">
-		        <c:forEach items="${dublinCoreElements}" var="dublinCoreElement">
-		            <option value="${dublinCoreElement.id}"
-		             <c:if test="${contributorTypeDublinCoreMapping.dublinCoreElement.id == dublinCoreElement.id}">
+		    <select name="dublinCoreTermId">
+		        <c:forEach items="${dublinCoreTerms}" var="dublinCoreTerm">
+		            <option value="${dublinCoreTerm.id}"
+		             <c:if test="${contributorTypeDublinCoreMapping.dublinCoreTerm.id == dublinCoreTerm.id}">
 		                  selected="true"
 		              </c:if>
-		            >${dublinCoreElement.name}</option>
+		            >${dublinCoreTerm.name}</option>
 		        </c:forEach>
 		    </select> 
 		</td>
