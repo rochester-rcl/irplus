@@ -16,6 +16,7 @@
 
 package edu.ur.ir.statistics;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Sharmila Ranganathan
  *
  */
-public interface IgnoreIpAddressService {
+public interface IgnoreIpAddressService extends Serializable{
 	
 	/**
 	 * Get ip addresses sorting according to the sort  information .  

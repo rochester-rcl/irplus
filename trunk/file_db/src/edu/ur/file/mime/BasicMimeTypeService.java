@@ -16,6 +16,7 @@
 package edu.ur.file.mime;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Basic mime service for finding mime information for a given file extension.
@@ -23,7 +24,7 @@ import java.io.File;
  * @author Nathan Sarr
  *
  */
-public interface BasicMimeTypeService {
+public interface BasicMimeTypeService  extends Serializable{
 	
 	/**
 	 * Returns a mime type for the specifed extension or null if

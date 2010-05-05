@@ -30,6 +30,9 @@ import edu.ur.ir.index.IndexProcessingTypeDAO;
  */
 public class DefaultIndexProcessingTypeService implements IndexProcessingTypeService{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = -8401648771104735073L;
+	
 	/** Data access for index processing */
 	private IndexProcessingTypeDAO indexProcessingTypeDAO;
 	

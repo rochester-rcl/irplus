@@ -51,6 +51,9 @@ import edu.ur.order.OrderType;
  */
 public class DefaultDownloadStatisticsService implements DownloadStatisticsService { 
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -6213945410469379189L;
+
 	/** Data access for file download info */
 	private FileDownloadInfoDAO fileDownloadInfoDAO;
 	

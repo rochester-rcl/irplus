@@ -68,6 +68,9 @@ import edu.ur.ir.person.PersonName;
  */
 public class DefaultInstitutionalItemIndexService implements InstitutionalItemIndexService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 2088750504787725269L;
+
 	/** Service for sending email errors */
 	private ErrorEmailService errorEmailService;
 	

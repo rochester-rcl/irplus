@@ -16,6 +16,7 @@
 
 package edu.ur.metadata.dc;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface DublinCoreEncodingSchemeService 
+public interface DublinCoreEncodingSchemeService extends Serializable
 {
 	/**
 	 * Get a count of dublin core encoding schemes.

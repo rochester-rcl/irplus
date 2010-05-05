@@ -16,6 +16,8 @@
 
 package edu.ur.ir.user;
 
+import java.io.Serializable;
+
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.userdetails.ldap.UserDetailsContextMapper;
 
@@ -25,7 +27,7 @@ import org.springframework.security.userdetails.ldap.UserDetailsContextMapper;
  * @author nathans
  *
  */
-public interface LdapUserService extends UserDetailsContextMapper {
+public interface LdapUserService extends UserDetailsContextMapper, Serializable {
 	
 	/**
 	 * Find a user by ldap user name.

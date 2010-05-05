@@ -16,6 +16,7 @@
 
 package edu.ur.ir.item;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -30,7 +31,7 @@ import edu.ur.ir.user.IrUserGroup;
  * @author Sharmila Ranganathan
  *
  */
-public interface ItemSecurityService {
+public interface ItemSecurityService extends Serializable{
 	
 	/** permissions that can be granted on institutional collections */
 	public static final ItemPermission ITEM_METADATA_READ_PERMISSION = new ItemPermission("ITEM_METADATA_READ");

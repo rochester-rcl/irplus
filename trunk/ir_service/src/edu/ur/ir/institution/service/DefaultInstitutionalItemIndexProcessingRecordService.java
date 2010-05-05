@@ -36,6 +36,9 @@ import edu.ur.ir.institution.InstitutionalItemService;
 public class DefaultInstitutionalItemIndexProcessingRecordService  implements InstitutionalItemIndexProcessingRecordService
 {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 2975220442906453057L;
+
 	/** Data access for institutional item processing records */
 	private InstitutionalItemIndexProcessingRecordDAO processingRecordDAO;
 	

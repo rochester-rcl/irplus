@@ -64,6 +64,9 @@ import edu.ur.ir.SimpleDateFormatter;
  */
 public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1080968843728303258L;
+
 	/** Prefix handled by this provider */
 	public static String METADATA_PREFIX = "oai_dc";
 	
@@ -279,15 +282,18 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	 */
 	private void addType(Document doc, Element oaiDc, GenericItem item)
 	{
-		 Element type = doc.createElement("dc:type");
-		 Text data = doc.createTextNode(item.getPrimaryContentType().getName());
-		 type.appendChild(data);
-		 oaiDc.appendChild(type);
+		if( item.getPrimaryImageFile() != null )
+		{
+		     Element type = doc.createElement("dc:type");
+		     Text data = doc.createTextNode(item.getPrimaryContentType().getName());
+		     type.appendChild(data);
+		     oaiDc.appendChild(type);
+		}
 		 
 		 for(ContentType secType : item.getSecondaryContentTypes())
 		 {
 			 Element secondaryType = doc.createElement("dc:type");
-			 data = doc.createTextNode(secType.getName());
+			 Text data = doc.createTextNode(secType.getName());
 			 secondaryType.appendChild(data);
 			 oaiDc.appendChild(secondaryType);
 		 }		 

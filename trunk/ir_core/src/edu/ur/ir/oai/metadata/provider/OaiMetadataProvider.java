@@ -16,6 +16,8 @@
 package edu.ur.ir.oai.metadata.provider;
 
 
+import java.io.Serializable;
+
 import edu.ur.ir.institution.InstitutionalItemVersion;
 
 /**
@@ -24,7 +26,7 @@ import edu.ur.ir.institution.InstitutionalItemVersion;
  * @author Nathan Sarr
  *
  */
-public interface OaiMetadataProvider {
+public interface OaiMetadataProvider extends Serializable{
 	
 	/**
 	 * Get the metadata prefix that this metadata provider provides

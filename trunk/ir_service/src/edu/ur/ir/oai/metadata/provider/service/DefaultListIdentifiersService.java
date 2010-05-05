@@ -30,6 +30,9 @@ import edu.ur.ir.oai.metadata.provider.ListIdentifiersService;
  */
 public class DefaultListIdentifiersService implements ListIdentifiersService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 9056980425349175595L;
+	
 	/**  Default batch size for harvesting */
 	private int batchSize = 100;
 

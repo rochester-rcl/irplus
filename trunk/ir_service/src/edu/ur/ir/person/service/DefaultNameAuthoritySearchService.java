@@ -46,6 +46,9 @@ import edu.ur.ir.repository.Repository;
  */
 public class DefaultNameAuthoritySearchService implements NameAuthoritySearchService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -2397275247687886048L;
+
 	/** Analyzer for dealing with analyzing the search */
 	private Analyzer analyzer;
 	

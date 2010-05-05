@@ -17,6 +17,7 @@
 package edu.ur.ir.index;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface FileTextExtractorService {
+public interface FileTextExtractorService  extends Serializable{
 	
 	
 	/**

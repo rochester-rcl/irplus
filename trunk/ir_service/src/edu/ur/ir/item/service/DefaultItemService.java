@@ -63,6 +63,9 @@ import edu.ur.ir.user.UserFileSystemService;
  */
 public class DefaultItemService implements ItemService {
 
+	/** eclipse generated id  */
+	private static final long serialVersionUID = 3943102947344838093L;
+
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultItemService.class);
 	

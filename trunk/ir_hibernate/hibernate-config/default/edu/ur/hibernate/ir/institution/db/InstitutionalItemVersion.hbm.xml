@@ -391,4 +391,10 @@
 	    select min(dateOfDeposit) from InstitutionalItemVersion
 	</query>	
 	
+	<!--  get the institutional item versions for a given generic item -->
+	<query name="getInstitutionalItemVersionsForGenericItemId">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 	    
+	    where institutionalItemVersion.item.id = ?
+	</query>
+	
 </hibernate-mapping>

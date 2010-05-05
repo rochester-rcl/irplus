@@ -47,6 +47,9 @@ import edu.ur.ir.repository.RepositoryService;
  */
 public class DefaultIdentifyService implements IdentifyService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 794752256345735294L;
+
 	/** Service to deal with repository information. */
 	private RepositoryService repositoryService;
 	

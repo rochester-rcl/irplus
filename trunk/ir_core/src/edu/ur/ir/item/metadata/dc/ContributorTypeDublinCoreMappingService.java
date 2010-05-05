@@ -15,6 +15,7 @@
 */  
 package edu.ur.ir.item.metadata.dc;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface ContributorTypeDublinCoreMappingService {
+public interface ContributorTypeDublinCoreMappingService extends Serializable{
 	
 	/**
 	 * Get a count of the mappings

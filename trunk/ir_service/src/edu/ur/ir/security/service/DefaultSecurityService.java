@@ -50,6 +50,9 @@ import edu.ur.ir.user.IrUserGroup;
  */
 public class DefaultSecurityService implements SecurityService {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 8614907507229543784L;
+
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultSecurityService.class);
 

@@ -162,7 +162,7 @@ public abstract class PreOrderTreeSetNodeBase implements PreOrderTreeSetNode
             while (iter.hasNext() && !found)
             {
                 PreOrderTreeSetNodeBase child = iter.next();
-                if (leftValue == child.getLeftValue())
+                if (leftValue.equals(child.getLeftValue()))
                 {
                     node = child;
                 } else
@@ -194,7 +194,7 @@ public abstract class PreOrderTreeSetNodeBase implements PreOrderTreeSetNode
             while (iter.hasNext() && !found)
             {
                 PreOrderTreeSetNodeBase child = iter.next();
-                if (rightValue == child.getRightValue())
+                if (rightValue.equals(child.getRightValue()))
                 {
                     node = child;
                 } else

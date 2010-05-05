@@ -44,6 +44,9 @@ import edu.ur.order.OrderType;
  */
 public class DefaultResearcherService implements ResearcherService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -5323833628973230288L;
+
 	public static final long USE_RESEARCHER_AS_ROOT = 0L;
 	
 	/** Data access for researcher */

@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.IdDoesNotExistException;
@@ -38,6 +39,9 @@ import edu.ur.ir.oai.metadata.provider.OaiService;
  */
 public class DefaultOaiService implements OaiService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -2559261575500618745L;
+
 	/**  List of oai metadata service providers */
 	private OaiMetadataServiceProvider oaiMetadataServiceProvider;
 
@@ -49,9 +53,9 @@ public class DefaultOaiService implements OaiService{
 	
 	/** Service to handle identify information */
 	private IdentifyService identifyService;
-
-
-
+	
+	/** Service to deal with institutional item information */
+	private InstitutionalItemVersionService institutionalItemVersionService;
 
 	/**  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(DefaultOaiService.class);
@@ -69,7 +73,7 @@ public class DefaultOaiService implements OaiService{
 		if( oaiMetadataProvider != null )
 		{
 			Long institutionalItemVersionId = getInstitutionalItemVersionId(identifier);
-			InstitutionalItemVersion institutionalItemVersion = institutionalItemService.getInstitutionalItemVersion(institutionalItemVersionId, false);
+			InstitutionalItemVersion institutionalItemVersion = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
 			
 			if( institutionalItemVersion != null )
 			{
@@ -189,5 +193,13 @@ public class DefaultOaiService implements OaiService{
 		this.identifyService = identifyService;
 	}
 
+	public InstitutionalItemVersionService getInstitutionalItemVersionService() {
+		return institutionalItemVersionService;
+	}
+
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
 
 }

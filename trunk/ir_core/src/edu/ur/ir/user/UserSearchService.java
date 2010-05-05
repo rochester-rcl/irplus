@@ -17,10 +17,11 @@
 package edu.ur.ir.user;
 
 import java.io.File;
+import java.io.Serializable;
 
 import edu.ur.ir.SearchResults;
 
-public interface UserSearchService {
+public interface UserSearchService extends Serializable{
 	
 	/**
 	 * Returns search results for the user.

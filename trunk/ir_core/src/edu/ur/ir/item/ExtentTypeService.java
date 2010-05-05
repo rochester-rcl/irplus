@@ -16,6 +16,7 @@
 
 package edu.ur.ir.item;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Sharmila Ranganathan
  *
  */
-public interface ExtentTypeService {
+public interface ExtentTypeService extends Serializable{
 	
 	/**
 	 * Get extent types sorted according to order information .  

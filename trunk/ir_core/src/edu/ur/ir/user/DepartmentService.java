@@ -16,6 +16,7 @@
 
 package edu.ur.ir.user;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Sharmila Ranganathan
  *
  */
-public interface DepartmentService {
+public interface DepartmentService extends Serializable{
 	
 	/**
 	 * Get a count of the departments in the system

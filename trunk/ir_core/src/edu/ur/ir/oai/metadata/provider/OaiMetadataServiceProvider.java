@@ -15,6 +15,7 @@
 */  
 package edu.ur.ir.oai.metadata.provider;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.institution.InstitutionalItemVersion;
@@ -26,7 +27,7 @@ import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
  * @author Nathan Sarr
  *
  */
-public interface OaiMetadataServiceProvider {
+public interface OaiMetadataServiceProvider extends Serializable{
 	
 	/**
 	 * List of providers.

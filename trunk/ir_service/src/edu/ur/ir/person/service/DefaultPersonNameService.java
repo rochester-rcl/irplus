@@ -32,6 +32,10 @@ import edu.ur.order.OrderType;
  */
 public class DefaultPersonNameService implements PersonNameService{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7285672671372870399L;
+	
+	/** data access for a person name  */
 	private PersonNameDAO personNameDAO;
 	
 

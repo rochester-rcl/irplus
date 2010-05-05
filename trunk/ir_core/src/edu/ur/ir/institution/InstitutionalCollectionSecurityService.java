@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ import edu.ur.ir.user.IrUserGroup;
  * @author Nathan Sarr
  *
  */
-public interface InstitutionalCollectionSecurityService {
+public interface InstitutionalCollectionSecurityService extends Serializable{
 	
 	/** permissions that can be granted on institutional collections */
 	

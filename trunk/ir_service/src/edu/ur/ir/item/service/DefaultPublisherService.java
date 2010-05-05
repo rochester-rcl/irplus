@@ -31,9 +31,11 @@ import edu.ur.ir.item.PublisherService;
  */
 public class DefaultPublisherService implements PublisherService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5187522152567883857L;
+	
 	/**  publisher data access. */
 	private PublisherDAO publisherDAO;
-
 
 	/**
 	 * Delete a publisher with the specified id.

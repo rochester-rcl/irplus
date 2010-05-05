@@ -302,7 +302,7 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 			return "accessDenied";
 		}
 		ItemVersion itemVersion = itemService.getItemVersion(itemVersionId, false);
-		if( itemVersion.getVersionedItem().getOwner().getId() != userId )
+		if( !itemVersion.getVersionedItem().getOwner().getId().equals(userId) )
 		{
 			return "accessDenied";
 		}

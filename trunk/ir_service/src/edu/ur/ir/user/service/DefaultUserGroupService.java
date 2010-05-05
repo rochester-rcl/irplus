@@ -32,6 +32,9 @@ import edu.ur.ir.user.UserGroupService;
  */
 public class DefaultUserGroupService implements UserGroupService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -8115693415684419195L;
+	
 	/** User group data access.  */
 	private IrUserGroupDAO irUserGroupDAO;
 

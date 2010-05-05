@@ -25,6 +25,9 @@ import edu.ur.ir.user.RoleService;
 
 public class DefaultRoleService implements RoleService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -4663859381098216049L;
+	
 	/** Role data access object */
 	private IrRoleDAO irRoleDAO;
 	

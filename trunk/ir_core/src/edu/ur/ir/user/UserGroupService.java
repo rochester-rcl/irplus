@@ -16,6 +16,7 @@
 
 package edu.ur.ir.user;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface UserGroupService {
+public interface UserGroupService extends Serializable{
 	
 	/**
 	 * Get user groups sorting according to the sort and filter information .  

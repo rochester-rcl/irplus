@@ -16,6 +16,7 @@
 
 package edu.ur.ir.researcher;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Sharmila Ranganathan
  *
  */
-public interface FieldService {
+public interface FieldService extends Serializable{
 	
 	/**
 	 * Get a count of the  fields in the system

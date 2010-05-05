@@ -18,6 +18,7 @@ package edu.ur.ir.user;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.exception.DuplicateNameException;
@@ -34,7 +35,7 @@ import edu.ur.ir.repository.Repository;
  * @author Nathan Sarr
  *
  */
-public interface UserFileSystemService {
+public interface UserFileSystemService extends Serializable{
 	
 	/** Default id for the root folder for each users*/
 	public static final long ROOT_FOLDER_ID = 0L;

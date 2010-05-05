@@ -42,7 +42,10 @@ import edu.ur.ir.repository.RepositoryService;
  */
 public class DefaultNewsService  implements NewsService {
 	
-    /**  Repository service for storing files */
+    /** eclipse generated id */
+	private static final long serialVersionUID = -3238797242347314207L;
+
+	/**  Repository service for storing files */
     RepositoryService repositoryService;
 
 	/**  Logger for add personal folder action */

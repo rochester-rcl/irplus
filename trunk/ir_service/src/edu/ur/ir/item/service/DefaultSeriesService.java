@@ -31,6 +31,9 @@ import edu.ur.ir.item.SeriesService;
  */
 public class DefaultSeriesService implements SeriesService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5220504813100265609L;
+	
 	/**  series data access. */
 	private SeriesDAO seriesDAO;
 

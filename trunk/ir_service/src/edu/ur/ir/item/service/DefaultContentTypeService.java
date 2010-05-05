@@ -31,6 +31,9 @@ import edu.ur.ir.item.ContentTypeService;
  */
 public class DefaultContentTypeService implements ContentTypeService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -7895868786287923787L;
+	
 	/**  Content type data access. */
 	private ContentTypeDAO contentTypeDAO;
 

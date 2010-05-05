@@ -79,6 +79,9 @@ import edu.ur.util.TokenGenerator;
  */
 public class DefaultUserService implements UserService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 8453376073372213621L;
+
 	/**  Encoder for passwords.  */
 	private MessageDigestPasswordEncoder passwordEncoder;
 	

@@ -38,6 +38,9 @@ import edu.ur.ir.user.IrUserGroup;
  */
 public class DefaultItemFileSecurityService implements ItemFileSecurityService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7481910383273248125L;
+	
 	/** Security service */
 	private SecurityService securityService;
 	

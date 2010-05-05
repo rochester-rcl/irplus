@@ -24,6 +24,9 @@ import edu.ur.ir.repository.RepositoryService;
  */
 public class DefaultThumbnailTransformerService implements ThumbnailTransformerService{
 	
+	/** eclipse generated id. */
+	private static final long serialVersionUID = 2141651499558773297L;
+
 	/**  Thumbnailer to perform thumbnailing */
 	private BasicThumbnailTransformer basicThumbnailTransformer;
 	

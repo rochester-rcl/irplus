@@ -49,6 +49,9 @@ import edu.ur.ir.user.UserIndexService;
  */
 public class DefaultUserIndexService implements UserIndexService{
 	
+	/** eclipse generated id */
+	
+	private static final long serialVersionUID = -8043158491287077593L;
 	public static final String USER_ID = "user_id";
 	public static final String USER_NAME = "user_name";
 	public static final String USER_FIRST_NAME = "user_first_name";

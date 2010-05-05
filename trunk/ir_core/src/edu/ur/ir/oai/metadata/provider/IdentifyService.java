@@ -16,13 +16,15 @@
 
 package edu.ur.ir.oai.metadata.provider;
 
+import java.io.Serializable;
+
 /**
  * Helps with the identify portion of the oai specification.
  * 
  * @author Nathan Sarr
  *
  */
-public interface IdentifyService {
+public interface IdentifyService extends Serializable{
 	
 	/**
 	 * Return the identify response as an XML string.

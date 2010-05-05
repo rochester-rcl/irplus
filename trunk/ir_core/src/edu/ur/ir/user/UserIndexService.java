@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.NoIndexFoundException;
@@ -27,7 +28,7 @@ import edu.ur.ir.NoIndexFoundException;
  * @author Nathan Sarr
  *
  */
-public interface UserIndexService {
+public interface UserIndexService extends Serializable{
 	
 	/**
 	 * Add a set of items to the index - this is generally used for batch processing of multiple institutional items.

@@ -63,6 +63,9 @@ import edu.ur.ir.search.FacetResultHitComparator;
  */
 public class DefaultInstitutionalItemSearchService implements InstitutionalItemSearchService{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 4908678264742124106L;
+
 	/** Analyzer to use for parsing the queries */
 	private Analyzer analyzer;
 	

@@ -16,6 +16,7 @@
 
 package edu.ur.ir.user;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import edu.ur.ir.file.FileCollaborator;
@@ -27,7 +28,7 @@ import edu.ur.ir.file.VersionedFile;
  * @author Sharmila Ranganathan
  *
  */
-public interface InviteUserService {
+public interface InviteUserService extends Serializable{
 
 	/** permissions that can be granted on versioned files */
 	public static final String VIEW_PERMISSION = "VIEW";

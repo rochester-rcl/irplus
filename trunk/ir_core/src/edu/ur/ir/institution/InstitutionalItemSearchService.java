@@ -17,6 +17,7 @@
 package edu.ur.ir.institution;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -32,7 +33,7 @@ import edu.ur.ir.search.FacetFilter;
  * @author Nathan Sarr
  *
  */
-public interface InstitutionalItemSearchService {
+public interface InstitutionalItemSearchService extends Serializable{
 	
 	public static final String AUTHOR_MAP = "authors";
 	public static final String LANGUAGE_MAP = "languages";

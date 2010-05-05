@@ -16,6 +16,7 @@
 
 package edu.ur.ir.item;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.security.IrAcl;
@@ -29,7 +30,7 @@ import edu.ur.ir.user.IrUserGroup;
  * @author Sharmila Ranganathan
  *
  */
-public interface ItemFileSecurityService {
+public interface ItemFileSecurityService extends Serializable{
 	
 	/** permission to read a file */
 	public static final ItemFilePermission ITEM_FILE_READ_PERMISSION =  new ItemFilePermission("ITEM_FILE_READ");

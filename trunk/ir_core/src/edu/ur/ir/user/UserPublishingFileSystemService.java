@@ -16,6 +16,7 @@
 
 package edu.ur.ir.user;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.exception.DuplicateNameException;
@@ -28,7 +29,7 @@ import edu.ur.ir.item.GenericItem;
  * @author Nathan Sarr
  *
  */
-public interface UserPublishingFileSystemService {
+public interface UserPublishingFileSystemService  extends Serializable{
 	
 	/** indicates that the user should be used as the root of the file  system */
 	public static final long ROOT_COLLECTION_ID = 0L;

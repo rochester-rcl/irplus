@@ -49,6 +49,9 @@ import edu.ur.ir.user.Department;
  */
 public class DefaultResearcherIndexService implements ResearcherIndexService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 3165292267647040418L;
+
 	/** Id of researcher */
 	public static final String ID = "id";
 	

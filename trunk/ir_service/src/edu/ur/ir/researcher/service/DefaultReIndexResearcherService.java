@@ -19,6 +19,9 @@ import edu.ur.order.OrderType;
  */
 public class DefaultReIndexResearcherService implements ReIndexResearchersService{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = -375213147610576261L;
+
 	/** Service for dealing with researchers. */
 	private ResearcherService researcherService;
 	

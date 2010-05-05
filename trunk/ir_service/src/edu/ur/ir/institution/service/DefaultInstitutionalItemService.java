@@ -25,8 +25,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import edu.ur.ir.handle.HandleInfo;
-import edu.ur.ir.handle.HandleInfoDAO;
+import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.institution.DeletedInstitutionalItem;
 import edu.ur.ir.institution.DeletedInstitutionalItemDAO;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
@@ -34,10 +33,10 @@ import edu.ur.ir.institution.DeletedInstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemDAO;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
-import edu.ur.ir.institution.InstitutionalItemVersionDAO;
-import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.institution.ReviewableItemService;
 import edu.ur.ir.institution.VersionedInstitutionalItem;
 import edu.ur.ir.item.GenericItem;
@@ -57,14 +56,14 @@ import edu.ur.order.OrderType;
  */
 public class DefaultInstitutionalItemService implements InstitutionalItemService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -319698084702094847L;
+
 	/** Institutional item Data access. */
 	private InstitutionalItemDAO institutionalItemDAO;
 	
 	/** Service for dealing with low level items   */
 	private ItemService itemService;
-	
-	/** Institutional item version Data access. */
-	private InstitutionalItemVersionDAO institutionalItemVersionDAO;
 	
 	/** Deleted Institutional item data access */
 	private DeletedInstitutionalItemDAO deletedInstitutionalItemDAO;
@@ -77,17 +76,15 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	
 	/** Reviewable item service */
 	private ReviewableItemService reviewableItemService;
-	
-	/** url generator for institutional items. */
-	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
-	
-	/** data access for handle information */
-	private HandleInfoDAO handleInfoDAO;
-	
+		
 	/** Deleted Institutional item data access */
 	private DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO;
 	
-
+	/** Service for dealing with institutional item information */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+	/** Service for dealing with institutional item index processing  */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;	
 
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemService.class);
@@ -198,14 +195,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		return institutionalItemDAO.getById(id, lock);
 	}
 
-	/**
-	 * Get the institutional item version.
-	 * 
-	 * @see edu.ur.ir.repository.RepositoryService#getInstitutionalItemVersion(java.lang.Long, boolean)
-	 */
-	public InstitutionalItemVersion getInstitutionalItemVersion(Long id, boolean lock) {
-		return institutionalItemVersionDAO.getById(id, lock);
-	}
+
 	
 	/**
 	 * Return the list of found items 
@@ -407,33 +397,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		return institutionalItemDAO.getDistinctInstitutionalItemCount();
 	}
 
-	/**
-	 * Get the institutional item version data access object.
-	 * 
-	 * @return
-	 */
-	public InstitutionalItemVersionDAO getInstitutionalItemVersionDAO() {
-		return institutionalItemVersionDAO;
-	}
 
-	/**
-	 * Set the institutional item version data access object
-	 * 
-	 * @param institutionalItemVersionDAO
-	 */
-	public void setInstitutionalItemVersionDAO(
-			InstitutionalItemVersionDAO institutionalItemVersionDAO) {
-		this.institutionalItemVersionDAO = institutionalItemVersionDAO;
-	}
-
-	/**
-	 * Save Institutional Item Version
-	 * 
-	 * @param institutionalItemVersion
-	 */
-	public void saveInstitutionalItemVersion(InstitutionalItemVersion institutionalItemVersion) {
-		institutionalItemVersionDAO.makePersistent(institutionalItemVersion);
-	}
 
 	/**
 	 * Get a institutional collections  the generic item exists in
@@ -527,17 +491,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	}
 
 	/**
-	 * Get Institutional item by given version id
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getInstitutionalItemByVersionId(Long)
-	 */
-	public InstitutionalItem getInstitutionalItemByVersionId(Long institutionalVersionId) {
-		
-		return institutionalItemDAO.getInstitutionalItemByVersionId(institutionalVersionId);
-		
-	}
-	
-	/**
 	 * Get institutional item by generic item id
 	 * 
 	 * @param genericItemId
@@ -546,17 +499,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public List<InstitutionalItem> getInstitutionalItemsByGenericItemId(Long genericItemId) {
 		return institutionalItemDAO.getInstitutionalItemsForGenericItemId(genericItemId);
 	}
-
-	
-	/**
-	 * Get the institutional item version by the handle id.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getInstitutionalItemByHandleId(java.lang.Long)
-	 */
-	public InstitutionalItemVersion getInstitutionalItemByHandleId(Long handleId) {
-		return institutionalItemVersionDAO.getItemVersionByHandleId(handleId);
-	}
-
 	
 	/**
 	 * Get all institutional items that were submitted into the collection between the given
@@ -568,7 +510,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			Date startDate, Date endDate) {
 		 return institutionalItemDAO.getItems(collection, startDate, endDate);
 	}
-
 	
 	/**
 	 *  Get all institutional items that were submitted into the collection between the given
@@ -611,21 +552,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		return institutionalItemDAO.getCollectionItemsIds(rowStart, maxResults, collection, orderType);
 	}
 	
-	/**
-	 * Update the handle for a given item.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#resetHandle(edu.ur.ir.institution.InstitutionalItem, edu.ur.ir.institution.InstitutionalItemVersion)
-	 */
-	public void resetHandle(InstitutionalItem institutionalItem, InstitutionalItemVersion institutionalItemVersion)
-	{
-		HandleInfo info = institutionalItemVersion.getHandleInfo();
-		if( info != null )
-		{	
-		    String url = institutionalItemVersionUrlGenerator.createUrl(institutionalItem, institutionalItemVersion.getVersionNumber());
-		    info.setData(url);
-		    handleInfoDAO.makePersistent(info);
-		}
-	}
+
 	
 	/**
 	 * Reset all handles in the system.
@@ -665,7 +592,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		    	    Set<InstitutionalItemVersion> versions = versionedItem.getInstitutionalItemVersions();
 		            for( InstitutionalItemVersion v : versions)
 		            {
-		        	    resetHandle(i, v);
+		        	    institutionalItemVersionService.resetHandle(v);
 		            }
 		    	}
 		    }
@@ -674,141 +601,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		}
 
 		
-	}
-
-	/**
-	 * Get the institutional item version url generator.
-	 * 
-	 * @return
-	 */
-	public InstitutionalItemVersionUrlGenerator getInstitutionalItemVersionUrlGenerator() {
-		return institutionalItemVersionUrlGenerator;
-	}
-
-	/**
-	 * Set the institutional item version url generator.
-	 * 
-	 * @param institutionalItemVersionUrlGenerator
-	 */
-	public void setInstitutionalItemVersionUrlGenerator(
-			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
-		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
-	}
-
-	/**
-	 * Get the handle info data access object.
-	 * 
-	 * @return
-	 */
-	public HandleInfoDAO getHandleInfoDAO() {
-		return handleInfoDAO;
-	}
-
-	/**
-	 * Set the handle info data acess object.
-	 * 
-	 * @param handleInfoDAO
-	 */
-	public void setHandleInfoDAO(HandleInfoDAO handleInfoDAO) {
-		this.handleInfoDAO = handleInfoDAO;
-	}
-
-	
-	/**
-	 * Get the items by sponsor count.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getItemsBySponsorCount(long)
-	 */
-	public Long getItemsBySponsorCount(long sponsorId) {
-		return institutionalItemVersionDAO.getItemsBySponsorCount(sponsorId);
-	}
-
-	
-	/**
-	 * Get the item sponsored by the given sponsor ordered by item name.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getItemsBySponsorItemNameOrder(int, int, long, edu.ur.order.OrderType)
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemNameOrder(
-			int rowStart, int maxResults, long sponsorId, OrderType orderType) {
-		return institutionalItemVersionDAO.getItemsBySponsorItemNameOrder(rowStart, maxResults, sponsorId, orderType);
-	}
-
-	/**
-	 * Get the items sponsored by the given sponsor ordered by deposit date.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getItemsBySponsorItemDepositDateOrder(int, int, long, edu.ur.order.OrderType)
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDepositDateOrder(
-			int rowStart, int maxResults, long sponsorId, OrderType orderType) {
-		return institutionalItemVersionDAO.getItemsBySponsorItemDepositDateOrder(rowStart, maxResults, sponsorId, orderType);
-	}
-
-	/**
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getItemsBySponsorItemDownloadOrder(int, int, long, edu.ur.order.OrderType)
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDownloadOrder(
-			int rowStart, int maxResults, long sponsorId, OrderType orderType) {
-		return institutionalItemVersionDAO.getItemsBySponsorItemDownloadOrder(rowStart, maxResults, sponsorId, orderType);
-	}
-
-	/**
-	 * Get the list of publication versions for names ordered by download.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getPublicationVersionsForNamesByDownload(int, int, java.util.Set, edu.ur.order.OrderType)
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByDownload(
-			int rowStart, int maxResults, Set<PersonName> personNames,
-			OrderType orderType) {
-		List<Long> ids = new ArrayList<Long>();
-		for (PersonName p: personNames) {
-			ids.add(p.getId());
-		}
-		return institutionalItemVersionDAO.getPublicationVersionsForNamesByDownload(rowStart, maxResults, ids, orderType);
-	}
-
-	/**
-	 * Get publication verssions for a set of names ordered by title.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getPublicationVersionsForNamesByTitle(int, int, java.util.Set, edu.ur.order.OrderType)
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByTitle(
-			int rowStart, int maxResults, Set<PersonName> personNames,
-			OrderType orderType) {
-		List<Long> ids = new ArrayList<Long>();
-		for (PersonName p: personNames) {
-			ids.add(p.getId());
-		}
-		return institutionalItemVersionDAO.getPublicationVersionsForNamesByTitle(rowStart, maxResults, ids, orderType);
-	}
-	
-	/**
-	 * Get the number of downloads for a given set of name ids.
-	 * 
-	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getNumberOfDownlodsForPersonNames(java.util.List)
-	 */
-	public Long getNumberOfDownlodsForPersonNames(Set<PersonName> personNames) {
-		List<Long> ids = new ArrayList<Long>();
-		for (PersonName p: personNames) {
-			ids.add(p.getId());
-		}
-		return institutionalItemVersionDAO.getDownloadCountByPersonName(ids);
-	}
-
-	/**
-	 * Get the publications for a set of names ordered by submission date.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getPublicationVersionsForNamesBySubmissionDate(int, int, java.util.Set, edu.ur.order.OrderType)
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesBySubmissionDate(
-			int rowStart, int maxResults, Set<PersonName> personNames,
-			OrderType orderType) {
-		List<Long> ids = new ArrayList<Long>();
-		for (PersonName p: personNames) {
-			ids.add(p.getId());
-		}
-		return institutionalItemVersionDAO.getPublicationVersionsForNamesBySubmissionDate(rowStart, maxResults, ids, orderType);
 	}
 
 	/**
@@ -839,5 +631,38 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO) {
 		this.deletedInstitutionalItemVersionDAO = deletedInstitutionalItemVersionDAO;
 	}
+	
+	public InstitutionalItemVersionService getInstitutionalItemVersionService() {
+		return institutionalItemVersionService;
+	}
 
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemService#markAllInstitutionalItemsForIndexing(java.lang.Long, java.lang.String)
+	 */
+	public void markAllInstitutionalItemsForIndexing(Long genericItemId,
+			IndexProcessingType processingType) {
+		List<InstitutionalItem> institutionalItems = getInstitutionalItemsByGenericItemId(genericItemId);
+
+		if (institutionalItems != null) {
+	
+			for(InstitutionalItem i : institutionalItems) {
+				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
+			}
+		}
+	}
+
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
 }

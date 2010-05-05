@@ -16,6 +16,7 @@
 
 package edu.ur.ir.person;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -28,7 +29,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public interface PersonNameService {
+public interface PersonNameService extends Serializable{
 	
 	/**
 	 * Get a count of all person names in the system.

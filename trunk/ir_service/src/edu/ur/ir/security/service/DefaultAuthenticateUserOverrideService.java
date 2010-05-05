@@ -41,6 +41,9 @@ import edu.ur.ir.user.IrUser;
 public class DefaultAuthenticateUserOverrideService implements AuthenticateUserOverrideService{
 	
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = -5262888575707357395L;
+	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultAuthenticateUserOverrideService.class);
 	

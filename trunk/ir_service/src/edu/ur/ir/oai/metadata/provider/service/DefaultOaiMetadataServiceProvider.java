@@ -32,6 +32,9 @@ import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
  */
 public class DefaultOaiMetadataServiceProvider implements OaiMetadataServiceProvider{
     
+	/** eclipse generated id */
+	private static final long serialVersionUID = 3096747633058885629L;
+	
 	/** List of oai metadata providers */
 	private List<OaiMetadataProvider> providers = new LinkedList<OaiMetadataProvider>();
 	

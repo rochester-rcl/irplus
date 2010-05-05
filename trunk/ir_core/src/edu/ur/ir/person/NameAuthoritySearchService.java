@@ -17,6 +17,7 @@
 package edu.ur.ir.person;
 
 import java.io.File;
+import java.io.Serializable;
 
 import edu.ur.ir.SearchResults;
 
@@ -26,7 +27,7 @@ import edu.ur.ir.SearchResults;
  * @author Sharmila Ranganathan
  *
  */
-public interface NameAuthoritySearchService {
+public interface NameAuthoritySearchService extends Serializable{
 
 	/**
 	 * Returns search results for the names.  This searches all names for all users but returns the

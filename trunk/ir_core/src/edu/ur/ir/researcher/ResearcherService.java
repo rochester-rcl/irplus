@@ -16,6 +16,7 @@
 
 package edu.ur.ir.researcher;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.order.OrderType;
@@ -27,7 +28,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public interface ResearcherService {
+public interface ResearcherService extends Serializable{
 	
 	/**
 	 * Delete researcher and all related information within it.

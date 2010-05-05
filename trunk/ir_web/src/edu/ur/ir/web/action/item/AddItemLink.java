@@ -16,7 +16,6 @@
 
 package edu.ur.ir.web.action.item;
 
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -24,11 +23,9 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
-import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
-import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemService;
@@ -36,6 +33,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
+import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -80,9 +78,6 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	/** User Publishing File System Service */
 	private UserPublishingFileSystemService userPublishingFileSystemService;
 	
-	/** service for marking items that need to be indexed */
-	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
-
 	/** index processing type service */
 	private IndexProcessingTypeService indexProcessingTypeService;
 
@@ -91,6 +86,15 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	
 	/** process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for dealing with institutional item version information */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+	/** Service to deal with user information */
+	private UserService userService;
+
+
+
 
 	/**
 	 * Prepare for action
@@ -110,7 +114,7 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	{
 		log.debug("Add link " );
 		
-        IrUser user = item.getOwner();
+        IrUser user = userService.getUser(userId, false);
 		
 		// make sure the user is the owner.
 		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
@@ -133,15 +137,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
-		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
-
-		if (institutionalItems != null) {
-			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-
-			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
-			}
-		}
+		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "Item Links Modified");
 
 		return SUCCESS;
 	}
@@ -154,7 +151,7 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	 */
 	public String updateLink() throws NoIndexFoundException
 	{
-        IrUser user = item.getOwner();
+        IrUser user = userService.getUser(userId, false);
 		
 		// make sure the user is the owner.
 		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
@@ -179,15 +176,8 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 
-		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
-
-		if (institutionalItems != null) {
-			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-
-			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
-			}
-		}
+		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "Item Links Modified");
 
 		return SUCCESS;
 		
@@ -264,15 +254,6 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 		this.userId = userId;
 	}
 
-	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
-		return institutionalItemIndexProcessingRecordService;
-	}
-
-	public void setInstitutionalItemIndexProcessingRecordService(
-			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
-		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
-	}
-
 	public IndexProcessingTypeService getIndexProcessingTypeService() {
 		return indexProcessingTypeService;
 	}
@@ -289,5 +270,14 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	public void setUserWorkspaceIndexProcessingRecordService(
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+	
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 }

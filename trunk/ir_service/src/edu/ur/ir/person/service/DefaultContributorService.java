@@ -33,6 +33,9 @@ import edu.ur.ir.person.PersonName;
  */
 public class DefaultContributorService implements ContributorService{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = -7403936054618550292L;
+
 	/**  Contributor data access object */
 	private ContributorDAO contributorDAO;
 	

@@ -29,11 +29,9 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.TransformedFileType;
-import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
-import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.item.CopyrightStatement;
@@ -270,8 +268,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	/** Indicates whether the publication is a thesis */
 	private boolean thesis;
 	
-	/** service for marking items that need to be indexed */
-	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
 
 	/** index processing type service */
 	private IndexProcessingTypeService indexProcessingTypeService;
@@ -287,8 +283,13 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	
 	/** Service for dealing with copyrights. */
 	private CopyrightStatementService copyrightStatementService;
+	
+	/** service for dealing with institutional item version information */
+	private InstitutionalItemVersionService institutionalItemVersionService;
 
 	
+
+
 	/**
 	 * Prepare for action
 	 */
@@ -656,16 +657,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
-		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
-
-		if (institutionalItems != null) {
-			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-
-			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
-			}
-		}
-
+		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "Item Medatadata Modified");
 
 		return SUCCESS;
 	}
@@ -1458,15 +1451,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		this.userId = userId;
 	}
 
-	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
-		return institutionalItemIndexProcessingRecordService;
-	}
-
-	public void setInstitutionalItemIndexProcessingRecordService(
-			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
-		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
-	}
-
 	public IndexProcessingTypeService getIndexProcessingTypeService() {
 		return indexProcessingTypeService;
 	}
@@ -1518,6 +1502,10 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		this.copyrightStatementService = copyrightStatementService;
 	}
 
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
 	
 
 }

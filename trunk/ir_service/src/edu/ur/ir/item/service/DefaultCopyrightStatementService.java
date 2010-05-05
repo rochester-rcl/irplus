@@ -31,6 +31,9 @@ import edu.ur.order.OrderType;
  */
 public class DefaultCopyrightStatementService implements CopyrightStatementService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -2796347194408383578L;
+
 	/** Copyright statement data access. */
 	private CopyrightStatementDAO copyrightStatementDAO;
 

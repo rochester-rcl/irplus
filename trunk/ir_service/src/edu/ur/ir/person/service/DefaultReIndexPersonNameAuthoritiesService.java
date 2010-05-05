@@ -20,6 +20,9 @@ import edu.ur.order.OrderType;
  */
 public class DefaultReIndexPersonNameAuthoritiesService implements ReIndexPersonNameAuthoritiesService {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = -3228783400421504776L;
+
 	/** Service for dealing with researchers. */
 	private PersonService personService;
 	

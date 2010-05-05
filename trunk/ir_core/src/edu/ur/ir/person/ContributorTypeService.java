@@ -16,6 +16,7 @@
 
 package edu.ur.ir.person;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface ContributorTypeService {
+public interface ContributorTypeService extends Serializable{
 	
 	/**
 	 * Get contributor types sorting according to the sort information .  

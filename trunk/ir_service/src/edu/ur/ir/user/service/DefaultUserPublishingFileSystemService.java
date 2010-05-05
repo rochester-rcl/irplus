@@ -48,6 +48,9 @@ import edu.ur.ir.user.UserPublishingFileSystemService;
  */
 public class DefaultUserPublishingFileSystemService implements UserPublishingFileSystemService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 526098690480011095L;
+
 	/** collection data access object */
 	private PersonalCollectionDAO personalCollectionDAO;
 	

@@ -48,6 +48,9 @@ import edu.ur.ir.person.PersonNameAuthority;
  */
 public class DefaultNameAuthorityIndexService implements NameAuthorityIndexService {
 	
+	/** eclipse generated id  */
+	private static final long serialVersionUID = -2917625239480866680L;
+
 	/** Analyzer for dealing with text indexing */
 	private Analyzer analyzer;
 	

@@ -289,14 +289,26 @@
 					    ${institutionalItemVersion.dateOfDeposit}
 					</td>
 				</tr>
-				<tr>
-				    <td class="previewLabel">Date Last Updated</td>
-			    </tr>
-				<tr>
-				    <td>
+				    <c:if test="${institutionalItemVersion.dateLastModified != institutionalItemVersion.dateOfDeposit}">
+				    <tr>
+				        <td class="previewLabel">Date Last Updated</td>
+			        </tr>
+				    <tr>
+				        <td>
 					    ${institutionalItemVersion.dateLastModified}
-					</td>
-				</tr>					
+					    </td>
+				    </tr>
+				    <tr>
+				        <td class="previewLabel">Last Updated Note</td>
+			        </tr>
+			            <c:if test="${institutionalItemVersion.lastModifiedNote != null}">
+				            <tr>
+				                <td>
+					            ${institutionalItemVersion.lastModifiedNote}
+					            </td>
+				            </tr>
+				        </c:if>	
+				    </c:if>				
 				</c:if>
 				
 				<tr>

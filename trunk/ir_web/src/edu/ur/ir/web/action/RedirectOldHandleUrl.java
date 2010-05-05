@@ -26,8 +26,8 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 
 /**
  * Will handle the old dspace handle and redirect.
@@ -46,8 +46,8 @@ public class RedirectOldHandleUrl extends ActionSupport implements ServletReques
 	/** Service for dealing with handles */
 	private HandleService handleService;
 	
-	/** service for dealing with institutional item data */
-	private InstitutionalItemService institutionalItemService;
+	/** Service for dealing with institutional item version information */
+	private InstitutionalItemVersionService institutionalItemVersionService;
 	
 	/** institutional item id */
 	private Long institutionalItemId;
@@ -83,12 +83,12 @@ public class RedirectOldHandleUrl extends ActionSupport implements ServletReques
 		       
 		       if( handleInfo != null )
 		       {
-		           InstitutionalItemVersion itemVersion = institutionalItemService.getInstitutionalItemByHandleId(handleInfo.getId());
+		           InstitutionalItemVersion itemVersion = institutionalItemVersionService.getInstitutionalItemByHandleId(handleInfo.getId());
 		           
 		           if(  itemVersion != null )
 		           {
 		        	   versionNumber = itemVersion.getVersionNumber();
-		        	   InstitutionalItem item = institutionalItemService.getInstitutionalItemByVersionId(itemVersion.getId());
+		        	   InstitutionalItem item = itemVersion.getVersionedInstitutionalItem().getInstitutionalItem();
 		               if( item != null )
 		               {
 		            	   institutionalItemId = item.getId();
@@ -126,11 +126,6 @@ public class RedirectOldHandleUrl extends ActionSupport implements ServletReques
 
 	public int getVersionNumber() {
 		return versionNumber;
-	}
-
-	public void setInstitutionalItemService(
-			InstitutionalItemService institutionalItemService) {
-		this.institutionalItemService = institutionalItemService;
 	}
 
 }

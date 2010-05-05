@@ -20,7 +20,10 @@ import edu.ur.ir.ErrorEmailService;
  */
 public class DefaultErrorEmailService implements ErrorEmailService{
 
-    /** Java mail sender to send emails */
+    /** eclipse generated id */
+	private static final long serialVersionUID = -3929770443839230101L;
+
+	/** Java mail sender to send emails */
     private JavaMailSender mailSender;
     
 	/**  Get the logger for this class */

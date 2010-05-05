@@ -34,6 +34,9 @@ import edu.ur.order.OrderType;
  */
 public class DefaultSponsorService implements SponsorService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -1849663074170285890L;
+	
 	/**  sponsor data access. */
 	private SponsorDAO sponsorDAO;
 

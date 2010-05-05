@@ -17,6 +17,7 @@
 package edu.ur.ir.repository;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.file.IllegalFileSystemNameException;
@@ -37,7 +38,7 @@ import edu.ur.ir.user.IrUser;
  * @author Nathan Sarr
  *
  */
-public interface RepositoryService {
+public interface RepositoryService extends Serializable{
 	
 	/**
 	 * Creates a repository with the specified repository name and specified file database.

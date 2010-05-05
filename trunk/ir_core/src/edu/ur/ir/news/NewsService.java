@@ -17,6 +17,7 @@
 package edu.ur.ir.news;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import edu.ur.ir.repository.Repository;
  * @author Sharmila Ranganathan
  *
  */
-public interface NewsService {
+public interface NewsService extends Serializable{
 
 	/**
 	 * Save the news information
