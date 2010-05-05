@@ -31,6 +31,9 @@ import edu.ur.ir.user.AffiliationService;
  */
 public class DefaultAffiliationService implements AffiliationService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -5471187881741739268L;
+	
 	/** Affiliation data access object */
 	private AffiliationDAO affiliationDAO;
 	

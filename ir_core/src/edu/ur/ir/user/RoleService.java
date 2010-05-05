@@ -16,6 +16,7 @@
 
 package edu.ur.ir.user;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface RoleService {
+public interface RoleService extends Serializable{
 	/**
 	 * Get a count of the roles in the system
 	 * 

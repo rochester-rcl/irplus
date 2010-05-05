@@ -16,6 +16,7 @@
 
 package edu.ur.ir.statistics;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,7 @@ import edu.ur.order.OrderType;
  * @author Sharmila Ranganathan
  *
  */
-public interface DownloadStatisticsService {
+public interface DownloadStatisticsService extends Serializable{
 
 	/**
 	 * Save file download info 

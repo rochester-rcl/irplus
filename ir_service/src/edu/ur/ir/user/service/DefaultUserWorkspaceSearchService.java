@@ -47,6 +47,9 @@ import edu.ur.ir.user.UserWorkspaceSearchService;
  */
 public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 8399684576467880725L;
+
 	/** Analyzer for dealing with analyzing the search */
 	private Analyzer analyzer;
 	

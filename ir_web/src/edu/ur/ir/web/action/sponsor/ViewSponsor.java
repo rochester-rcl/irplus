@@ -19,9 +19,9 @@ package edu.ur.ir.web.action.sponsor;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.item.SponsorService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
@@ -50,8 +50,11 @@ public class ViewSponsor extends Pager
 	private SponsorService sponsorService;
 	
 	/** Service class for institutional Item */
-	private InstitutionalItemService institutionalItemService;
+	private InstitutionalItemVersionService institutionalItemVersionService;
 	
+
+
+
 	/** Statistics service*/
 	private DownloadStatisticsService downloadStatisticsService;
 
@@ -112,7 +115,7 @@ public class ViewSponsor extends Pager
 		if( sortElement.equals("title"))
 		{
 		    // Construct the object with item and download info for display
-		    sponsorPublications = institutionalItemService.getItemsBySponsorItemNameOrder(rowStart, 
+		    sponsorPublications = institutionalItemVersionService.getItemsBySponsorItemNameOrder(rowStart, 
 				numberOfResultsToShow, 
 				sponsorId, 
 				OrderType.getOrderType(sortType));
@@ -120,7 +123,7 @@ public class ViewSponsor extends Pager
 		if( sortElement.equals("download"))
 		{
 			// Construct the object with item and download info for display
-		    sponsorPublications = institutionalItemService.getItemsBySponsorItemDownloadOrder(rowStart, 
+		    sponsorPublications = institutionalItemVersionService.getItemsBySponsorItemDownloadOrder(rowStart, 
 				numberOfResultsToShow, 
 				sponsorId, 
 				OrderType.getOrderType(sortType));
@@ -128,14 +131,14 @@ public class ViewSponsor extends Pager
 		if( sortElement.equals("submissionDate"))
 		{
 			// Construct the object with item and download info for display
-		    sponsorPublications = institutionalItemService.getItemsBySponsorItemDepositDateOrder(rowStart, 
+		    sponsorPublications = institutionalItemVersionService.getItemsBySponsorItemDepositDateOrder(rowStart, 
 				numberOfResultsToShow, 
 				sponsorId, 
 				OrderType.getOrderType(sortType));
 		}
 		
 		
-		totalHits = institutionalItemService.getItemsBySponsorCount(sponsorId).intValue();
+		totalHits = institutionalItemVersionService.getItemsBySponsorCount(sponsorId).intValue();
 		
 		if(rowEnd > totalHits)
 		{
@@ -145,14 +148,14 @@ public class ViewSponsor extends Pager
 		totalDownloads = downloadStatisticsService.getNumberOfDownloadsBySponsor(sponsorId);
 		
 		// latest added to the repository
-		List<InstitutionalItemVersionDownloadCount> dateOrderItems = institutionalItemService.getItemsBySponsorItemDepositDateOrder(0, 1, sponsorId, OrderType.DESCENDING_ORDER);
+		List<InstitutionalItemVersionDownloadCount> dateOrderItems = institutionalItemVersionService.getItemsBySponsorItemDepositDateOrder(0, 1, sponsorId, OrderType.DESCENDING_ORDER);
 		if(dateOrderItems.size() > 0 )
 		{
 			latestItemVersion =  dateOrderItems.get(0).getInstitutionalItemVersion();
 		}
 		
 		//most downloaded
-		List<InstitutionalItemVersionDownloadCount> downloadOrderedItems = institutionalItemService.getItemsBySponsorItemDownloadOrder(0, 1, sponsorId, OrderType.DESCENDING_ORDER);
+		List<InstitutionalItemVersionDownloadCount> downloadOrderedItems = institutionalItemVersionService.getItemsBySponsorItemDownloadOrder(0, 1, sponsorId, OrderType.DESCENDING_ORDER);
 		if( downloadOrderedItems.size() > 0 )
 		{
 			mostDownloadedItemVersion = downloadOrderedItems.get(0).getInstitutionalItemVersion();
@@ -209,13 +212,9 @@ public class ViewSponsor extends Pager
 		this.sponsorService = sponsorService;
 	}
 
-	public InstitutionalItemService getInstitutionalItemService() {
-		return institutionalItemService;
-	}
-
-	public void setInstitutionalItemService(
-			InstitutionalItemService institutionalItemService) {
-		this.institutionalItemService = institutionalItemService;
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
 
 

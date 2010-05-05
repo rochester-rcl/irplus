@@ -19,6 +19,9 @@ import edu.ur.order.OrderType;
  */
 public class DefaultReIndexUserService implements ReIndexUserService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5357072366790939121L;
+
 	/** Service for dealing with users. */
 	private UserService userService;
 	

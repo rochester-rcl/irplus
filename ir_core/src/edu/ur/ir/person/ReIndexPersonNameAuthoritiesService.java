@@ -1,6 +1,7 @@
 package edu.ur.ir.person;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Re index the person name authorities.
@@ -8,7 +9,7 @@ import java.io.File;
  * @author Nathan Sarr
  *
  */
-public interface ReIndexPersonNameAuthoritiesService {
+public interface ReIndexPersonNameAuthoritiesService extends Serializable{
 	
 	/**
 	 * Re-Index the person name authorities in the institutional repository

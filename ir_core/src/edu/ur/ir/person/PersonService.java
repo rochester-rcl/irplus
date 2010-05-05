@@ -16,6 +16,7 @@
 
 package edu.ur.ir.person;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.order.OrderType;
@@ -26,8 +27,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public interface PersonService 
-{
+public interface PersonService extends Serializable{
 	
 	/**
 	 * Get a list of person name authorities ordered by the authoritative last name.

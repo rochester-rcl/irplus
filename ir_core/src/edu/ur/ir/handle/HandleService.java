@@ -1,5 +1,6 @@
 package edu.ur.ir.handle;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface HandleService {
+public interface HandleService extends Serializable {
 	
 	/**
 	 * Get a name authority 

@@ -16,6 +16,7 @@
 
 package edu.ur.ir.item;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface IdentifierTypeService {
+public interface IdentifierTypeService extends Serializable{
 	
 	/**
 	 * Get identifier types sorted according to the sort information .  

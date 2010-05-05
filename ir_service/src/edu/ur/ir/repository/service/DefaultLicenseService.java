@@ -33,6 +33,9 @@ import edu.ur.ir.user.IrUser;
  */
 public class DefaultLicenseService implements LicenseService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5057651663296196438L;
+
 	/**Class for versioned license persistence */
 	private VersionedLicenseDAO versionedLicenseDAO;
 	

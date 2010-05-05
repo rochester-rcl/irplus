@@ -25,11 +25,9 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
-import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
-import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.DuplicateContributorException;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemContributor;
@@ -120,15 +118,17 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	/** Service for dealing with contributors */
 	private ContributorService contributorService;
 	
-	/** service for marking items that need to be indexed */
-	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
-
 	/** index processing type service */
 	private IndexProcessingTypeService indexProcessingTypeService;
 
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
 	
+	/** Institutional item service */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+
+
 
 	/** used for sorting names */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
@@ -182,13 +182,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		}
 		
 		log.debug("getting contriutors for item id = " + genericItemId);
-		
 		contributors  = item.getContributors();
-		
 		contributorsCount = contributors.size();
-		
-		
-		
 		return SUCCESS;
 	}
 	
@@ -210,9 +205,7 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		}
 		
 		ItemContributor removeContributor = item.getContributor(contributorId);
-
 		item.removeContributor(removeContributor);
-
 		itemService.makePersistent(item);
 		
 		// Update personal item index
@@ -223,18 +216,12 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		if (personalItem != null) {
 			
 			userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
-	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+	    	indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
-		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
-
-		if (institutionalItems != null) {
-			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-
-			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
-			}
-		}
+		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "Contributors Metadata Modified");
+	
 
 		return SUCCESS;
 	}
@@ -284,17 +271,9 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}		
 		
-		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
+		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "Contributors Metadata Modified");
 
-		if (institutionalItems != null) {
-			
-			for(InstitutionalItem i : institutionalItems) {
-				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
-			}
-		}
-
-		
 		return SUCCESS;
 	}
 	
@@ -577,15 +556,6 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		this.institutionalItemService = institutionalItemService;
 	}
 
-	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
-		return institutionalItemIndexProcessingRecordService;
-	}
-
-	public void setInstitutionalItemIndexProcessingRecordService(
-			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
-		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
-	}
-
 	public IndexProcessingTypeService getIndexProcessingTypeService() {
 		return indexProcessingTypeService;
 	}
@@ -604,5 +574,8 @@ public class AddContributorsToItem extends ActionSupport implements UserIdAware,
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
-
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
 }

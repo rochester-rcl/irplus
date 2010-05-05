@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,7 @@ import edu.ur.ir.user.IrUser;
  * @author Nathan Sarr
  *
  */
-public interface InstitutionalCollectionSubscriptionService 
+public interface InstitutionalCollectionSubscriptionService extends Serializable 
 {
 
 	/**

@@ -1,5 +1,6 @@
 package edu.ur.ir.repository;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.user.IrUser;
@@ -10,7 +11,7 @@ import edu.ur.ir.user.IrUser;
  * @author Nathan Sarr
  *
  */
-public interface LicenseService {
+public interface LicenseService  extends Serializable{
 	
 	/**
 	 * Create a versioned license.

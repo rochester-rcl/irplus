@@ -29,6 +29,7 @@ import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.item.ItemSecurityService;
@@ -70,6 +71,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	/** Service for dealing with user file system. */
 	private InstitutionalItemService institutionalItemService;
 	
+	/** Service to deal with institutional collection information */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
 	/** Item object sorted for display */
@@ -107,7 +109,9 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	/** Service to deal with oai information */
 	private OaiService oaiService;
 	
-	
+	/** Service for dealing with institutional item version inforamtion */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+
 
 	/**
 	 * Prepare for action
@@ -118,8 +122,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 		// load a specific version - already specified in the request
 		if (institutionalItemVersionId != null) 
 		{
-			institutionalItemVersion = institutionalItemService.getInstitutionalItemVersion(institutionalItemVersionId, false);
-			institutionalItem = institutionalItemService.getInstitutionalItemByVersionId(institutionalItemVersionId);
+			institutionalItemVersion = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
 			
 			if (institutionalItemVersion == null) 
 			{
@@ -128,6 +131,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	        	showPublication = false;
 	        	return "not_found";
 			}
+			institutionalItem = institutionalItemVersion.getVersionedInstitutionalItem().getInstitutionalItem();
 
 		} 
 		// item and version seperated in request
@@ -376,5 +380,11 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	public void setOaiService(OaiService oaiService) {
 		this.oaiService = oaiService;
 	}
+	
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+
 
 }

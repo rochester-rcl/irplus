@@ -33,6 +33,9 @@ import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 public class DefaultUserWorkspaceIndexProcessingRecordService implements 
 UserWorkspaceIndexProcessingRecordService
 {
+	/** eclipse generated id */
+	private static final long serialVersionUID = -8883263812548415064L;
+
 	/** worspace data access object */
 	private UserWorkspaceIndexProcessingRecordDAO userWorkspaceIndexProcessingRecordDAO;
 	

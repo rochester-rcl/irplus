@@ -63,6 +63,9 @@ import edu.ur.ir.user.UserFileSystemService;
 public class DefaultUserFileSystemService implements UserFileSystemService{
 	
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 4772256208913792044L;
+
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserFileSystemService.class);
 

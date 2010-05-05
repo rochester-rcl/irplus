@@ -56,6 +56,9 @@ import edu.ur.ir.user.UserService;
  */
 public class DefaultInviteUserService implements InviteUserService {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = -6844595955214510755L;
+
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInviteUserService.class);
 	

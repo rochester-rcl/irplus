@@ -15,6 +15,7 @@
 */
 package edu.ur.file.checksum;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface ChecksumService {
+public interface ChecksumService  extends Serializable{
 	
 	/**
 	 * Get the checksum calculators managed by this service.

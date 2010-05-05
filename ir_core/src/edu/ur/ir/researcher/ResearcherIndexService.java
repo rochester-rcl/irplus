@@ -17,6 +17,7 @@
 package edu.ur.ir.researcher;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.NoIndexFoundException;
@@ -27,7 +28,7 @@ import edu.ur.ir.NoIndexFoundException;
  * @author Sharmila Ranganathan
  *
  */
-public interface ResearcherIndexService {
+public interface ResearcherIndexService extends Serializable{
 	
 	/**
 	 * Add the researcher to the index.

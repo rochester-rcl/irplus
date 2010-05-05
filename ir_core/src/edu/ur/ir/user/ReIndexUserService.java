@@ -1,6 +1,7 @@
 package edu.ur.ir.user;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * This will re-index all users
@@ -8,7 +9,7 @@ import java.io.File;
  * @author Nathan Sarr
  *
  */
-public interface ReIndexUserService {
+public interface ReIndexUserService extends Serializable{
 	
 	/**
 	 * Re-Index the users in the institutional repository

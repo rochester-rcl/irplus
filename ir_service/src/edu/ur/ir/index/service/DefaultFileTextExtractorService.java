@@ -32,6 +32,9 @@ import edu.ur.ir.index.FileTextExtractorService;
  */
 public class DefaultFileTextExtractorService implements FileTextExtractorService {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = -3081831773018485414L;
+	
 	/** List of extractors to deal with text */
 	private List<FileTextExtractor> fileTextExtractors;
 	

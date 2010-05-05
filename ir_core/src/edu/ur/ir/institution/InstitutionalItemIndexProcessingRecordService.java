@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.index.IndexProcessingType;
@@ -27,7 +28,7 @@ import edu.ur.ir.index.IndexProcessingType;
  * @author Nathan Sarr
  *
  */
-public interface InstitutionalItemIndexProcessingRecordService {
+public interface InstitutionalItemIndexProcessingRecordService extends Serializable{
 	
 	/**
 	 * Get all institutional item index processing records ordered by item id then processing date.

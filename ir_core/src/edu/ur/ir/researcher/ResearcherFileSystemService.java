@@ -1,5 +1,6 @@
 package edu.ur.ir.researcher;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.exception.DuplicateNameException;
@@ -14,7 +15,7 @@ import edu.ur.ir.item.GenericItem;
  * @author Nathan Sarr
  *
  */
-public interface ResearcherFileSystemService {
+public interface ResearcherFileSystemService extends Serializable{
 	
 	/** indicates that the researcher should be used as root */
 	public static final long USE_RESEARCHER_AS_ROOT = 0L;

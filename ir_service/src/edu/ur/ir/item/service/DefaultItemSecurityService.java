@@ -42,6 +42,9 @@ import edu.ur.ir.user.IrUserGroup;
  */
 public class DefaultItemSecurityService implements ItemSecurityService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -4761222312161134579L;
+
 	/** Security service */
 	private SecurityService securityService;
 	

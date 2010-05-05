@@ -104,8 +104,8 @@ public class InstitutionalCollectionSubscription extends BasePersistent{
 		if( ( user != null && !user.equals(other.getUser()) ) ||
 			( user == null && other.getUser() != null ) ) return false;
 		
-		if( ( institutionalCollection != null && !institutionalCollection.equals(other.getInstitutionalCollection()) ) &&
-			( institutionalCollection == null && !institutionalCollection.equals(other.getInstitutionalCollection()) ) ) return false; 
+		if( ( institutionalCollection != null && !institutionalCollection.equals(other.getInstitutionalCollection()) ) ||
+			( institutionalCollection == null && other.getInstitutionalCollection() != null ) ) return false; 
 		return true;
 	}
 	

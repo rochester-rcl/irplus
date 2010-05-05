@@ -16,6 +16,7 @@
 package edu.ur.file.db;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.file.IllegalFileSystemNameException;
@@ -30,7 +31,7 @@ import edu.ur.file.db.FileServer;
  * @author Nathan Sarr
  *
  */
-public interface FileServerService {
+public interface FileServerService  extends Serializable{
 	
 	/**
 	 * Create a file server with the specified name.

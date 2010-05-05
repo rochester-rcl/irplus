@@ -31,6 +31,9 @@ import edu.ur.ir.item.IdentifierTypeService;
  */
 public class DefaultIdentifierTypeService implements IdentifierTypeService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 6591880273798668979L;
+	
 	/**  Content type data access. */
 	private IdentifierTypeDAO identifierTypeDAO;
 

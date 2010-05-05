@@ -17,6 +17,7 @@
 package edu.ur.ir.institution;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.NoIndexFoundException;
@@ -27,7 +28,7 @@ import edu.ur.ir.NoIndexFoundException;
  * @author Nathan Sarr
  *
  */
-public interface InstitutionalItemIndexService {
+public interface InstitutionalItemIndexService extends Serializable{
 	
 	
 	/**

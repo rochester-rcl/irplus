@@ -31,6 +31,9 @@ import edu.ur.ir.person.ContributorTypeService;
  */
 public class DefaultContributorTypeService implements ContributorTypeService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7983079468567771197L;
+	
 	/**  Data access class for contributor type information */
 	private ContributorTypeDAO contributorTypeDAO;
 

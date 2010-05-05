@@ -73,6 +73,9 @@ import edu.ur.ir.user.UserWorkspaceIndexService;
  */
 public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 6464289484410384584L;
+
 	/** Analyzer for dealing with text indexing */
 	private Analyzer analyzer;
 	

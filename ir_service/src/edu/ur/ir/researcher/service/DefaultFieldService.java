@@ -31,6 +31,9 @@ import edu.ur.ir.researcher.FieldService;
  */
 public class DefaultFieldService implements FieldService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1615200112445173953L;
+	
 	/** Field data access object */
 	private FieldDAO fieldDAO;
 	

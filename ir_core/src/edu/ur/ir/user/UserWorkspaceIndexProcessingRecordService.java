@@ -1,6 +1,7 @@
 package edu.ur.ir.user;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.FileSystem;
@@ -14,7 +15,7 @@ import edu.ur.ir.index.IndexProcessingType;
  * @author Nathan Sarr
  *
  */
-public interface UserWorkspaceIndexProcessingRecordService {
+public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
 	
 	/**
 	 * Get all user workspace index processing records ordered by user id then processing date.

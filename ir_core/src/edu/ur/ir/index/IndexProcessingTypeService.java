@@ -17,6 +17,7 @@
 
 package edu.ur.ir.index;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -26,7 +27,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface IndexProcessingTypeService {
+public interface IndexProcessingTypeService  extends Serializable {
 	
 	/**  default insert processing type */
 	public static final String INSERT = "INSERT";

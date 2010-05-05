@@ -31,6 +31,9 @@ import edu.ur.ir.user.DepartmentService;
  */
 public class DefaultDepartmentService implements DepartmentService{
 	
+	/** eclipse generated id  */
+	private static final long serialVersionUID = -2961439999099252325L;
+	
 	/** Department data access object */
 	private DepartmentDAO departmentDAO;
 	

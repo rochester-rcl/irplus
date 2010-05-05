@@ -31,6 +31,9 @@ import edu.ur.ir.statistics.IgnoreIpAddressService;
  */
 public class DefaultIgnoreIpAddressService implements IgnoreIpAddressService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -575069284684537474L;
+	
 	/** Ignore ip addresses  data access. */
 	private IgnoreIpAddressDAO ignoreIpAddressDAO;
 

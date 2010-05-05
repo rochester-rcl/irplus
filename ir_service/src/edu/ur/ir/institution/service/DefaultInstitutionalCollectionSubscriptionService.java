@@ -51,7 +51,10 @@ import edu.ur.ir.user.IrUser;
  */
 public class DefaultInstitutionalCollectionSubscriptionService implements InstitutionalCollectionSubscriptionService{
 
-    /** Java mail sender to send emails */
+    /** eclipse generated id */
+	private static final long serialVersionUID = -2058783531945128792L;
+
+	/** Java mail sender to send emails */
     private JavaMailSender mailSender;
     
     /** Service for dealing with institutional items  */

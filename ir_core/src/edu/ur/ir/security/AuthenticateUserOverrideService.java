@@ -1,6 +1,8 @@
 package edu.ur.ir.security;
 
 
+import java.io.Serializable;
+
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -13,7 +15,7 @@ import edu.ur.ir.user.IrUser;
  * @author Nathan Sarr
  *
  */
-public interface AuthenticateUserOverrideService {
+public interface AuthenticateUserOverrideService extends Serializable{
 	
 	/**
 	 * Authenticates the user and places them in the context.

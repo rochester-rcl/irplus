@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.repository.Repository;
@@ -27,7 +28,7 @@ import edu.ur.ir.user.IrUser;
  * @author Nathan Sarr
  *
  */
-public interface InstitutionalCollectionService {
+public interface InstitutionalCollectionService extends Serializable{
 
 	/**  indicates the root collection should be used */
 	public static final long ROOT_COLLECTION_ID = 0l;

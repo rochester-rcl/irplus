@@ -1,5 +1,7 @@
 package edu.ur.ir.file.transformer;
 
+import java.io.Serializable;
+
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.repository.Repository;
 
@@ -11,7 +13,7 @@ import edu.ur.ir.repository.Repository;
  * @author Nathan Sarr
  *
  */
-public interface ThumbnailTransformerService 
+public interface ThumbnailTransformerService  extends Serializable
 {
 	
     /**

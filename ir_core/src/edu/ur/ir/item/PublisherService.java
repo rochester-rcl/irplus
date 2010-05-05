@@ -16,6 +16,7 @@
 
 package edu.ur.ir.item;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Sharmila Ranganathan
  *
  */
-public interface PublisherService {
+public interface PublisherService  extends Serializable{
 	
 	/**
 	 * Get publisher sorted according to the sort information .  

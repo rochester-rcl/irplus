@@ -160,5 +160,13 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 * @return the earliest date of deposit found in the repository.
 	 */
 	public Date getEarliestDateOfDeposit();
+	
+	/**
+	 * Get all institutional item versions by using the specified generic item id.
+	 * 
+	 * @param genericItemId - the generic item id
+	 * @return list of institutional item versions using the specified generic item id.
+	 */
+	public List<InstitutionalItemVersion> getInstitutionalItemVersionsByGenericItemId(Long genericItemId);
 
 }

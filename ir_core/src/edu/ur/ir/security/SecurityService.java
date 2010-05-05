@@ -16,6 +16,7 @@
 
 package edu.ur.ir.security;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +30,7 @@ import edu.ur.ir.user.IrUserGroup;
  *
  * @author Nathan Sarr
  */
-public interface SecurityService {
+public interface SecurityService extends Serializable{
  
     /**
      * Obtains the ACLs that apply to the specified domain instance.

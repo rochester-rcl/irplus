@@ -32,11 +32,9 @@ import edu.ur.ir.FileSystem;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.VersionedFile;
-import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
-import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemLink;
@@ -139,9 +137,6 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	/** Id of institutional item being edited */
 	private Long institutionalItemId;
 	
-	/** service for marking items that need to be indexed */
-	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
-
 	/** index processing type service */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
@@ -150,6 +145,9 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	
 	/** process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/** service for dealing with institutional item version information */
+	private InstitutionalItemVersionService institutionalItemVersionService;
 
 	/**
 	 * Prepare for action
@@ -259,8 +257,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 					
 						if(fileAdded) {
 							ItemFile itemFile = item.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
-							itemFile.setDescription(pf.getVersionedFile().getDescription());
 							if (itemFile != null) {
+							    itemFile.setDescription(pf.getVersionedFile().getDescription());
 								itemFile.setVersionNumber(pf.getVersionedFile().getLargestVersion());
 							}
 						}
@@ -284,18 +282,11 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		// in which case we don't have to update personal item index
 		if (personalItem != null) {
 			userWorkspaceIndexProcessingRecordService.save(personalItem.getOwner().getId(), personalItem, 
-	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+	    	indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
-		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
-
-		if (institutionalItems != null) {
-			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-
-			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
-			}
-		}
+		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "one or more files changed");
 
 		return SUCCESS;
 	}
@@ -327,15 +318,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
-		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
-
-		if (institutionalItems != null) {
-			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-
-			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
-			}
-		}
+		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "one or more files changed");
 
 		return getFiles();
 	}
@@ -454,15 +438,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		}
 		
-		List<InstitutionalItem> institutionalItems = institutionalItemService.getInstitutionalItemsByGenericItemId(genericItemId);
-
-		if (institutionalItems != null) {
-			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-
-			for(InstitutionalItem i : institutionalItems) {
-				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
-			}
-		}
+		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "one or more files changed");
 
 		return getFiles();
 	}
@@ -882,16 +859,6 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 		this.userService = userService;
 	}
 
-
-	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
-		return institutionalItemIndexProcessingRecordService;
-	}
-
-	public void setInstitutionalItemIndexProcessingRecordService(
-			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
-		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
-	}
-
 	public IndexProcessingTypeService getIndexProcessingTypeService() {
 		return indexProcessingTypeService;
 	}
@@ -909,6 +876,19 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
+	
+	
+	
+	
+
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+		
+	
+	
+	
 
 
 }

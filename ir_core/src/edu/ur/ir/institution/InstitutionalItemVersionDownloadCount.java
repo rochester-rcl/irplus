@@ -25,7 +25,7 @@ package edu.ur.ir.institution;
 public class InstitutionalItemVersionDownloadCount 
 {
     /** download count for the insitutional item version */
-    private Long downloadCount = new Long(0l);
+    private Long downloadCount = Long.valueOf(0l);
     
 	/** institutional item version  */
 	private InstitutionalItemVersion institutionalItemVersion;
@@ -45,7 +45,7 @@ public class InstitutionalItemVersionDownloadCount
 		}
 		else
 		{
-			setDownloadCount(new Long(0l));
+			setDownloadCount(Long.valueOf(0l));
 		}
 		setInstitutionalItemVersion(institutionalItemVersion);
 	}
@@ -67,11 +67,11 @@ public class InstitutionalItemVersionDownloadCount
 	public void setDownloadCount(Long downloadCount) {
 		if( downloadCount != null )
 		{
-			this.downloadCount = new Long(downloadCount.longValue());	
+			this.downloadCount = Long.valueOf(downloadCount.longValue());	
 		}
 		else
 		{
-			this.downloadCount = new Long(0l);
+			this.downloadCount = Long.valueOf(0l);
 		}
 		
 	}
@@ -135,7 +135,7 @@ public class InstitutionalItemVersionDownloadCount
 	public int hashCode()
 	{
 		int value = 0;
-		value += downloadCount > 0l? 0 : new Long(downloadCount).hashCode();
+		value += downloadCount > 0l? 0 : Long.valueOf(downloadCount).hashCode();
 		value += institutionalItemVersion == null? 0 : institutionalItemVersion.hashCode();
 		return value;
 	}

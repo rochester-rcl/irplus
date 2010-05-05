@@ -45,6 +45,9 @@ import edu.ur.ir.user.IrUser;
 public class DefaultReviewableItemService implements ReviewableItemService {
 	
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 2933648309047077151L;
+
 	/** Reviewable item Data access. */
 	private ReviewableItemDAO reviewableItemDAO;
 

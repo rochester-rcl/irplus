@@ -216,6 +216,18 @@ public class InstitutionalItemVersion extends BasePersistent{
 		sb.append(getWithdrawn());
 		sb.append(" item = " );
 		sb.append(item);
+		sb.append(" versionNumber = ");
+		sb.append(versionNumber);
+		sb.append(" last modified by = ");
+		sb.append(lastModifiedBy);		
+		sb.append(" date of deposit = ");
+		sb.append(dateOfDeposit);
+		sb.append(" last modified date = ");
+		sb.append(dateLastModified);
+		sb.append(" last modified note = ");
+		sb.append(lastModifiedNote);
+		sb.append(" handle info = ");
+		sb.append(handleInfo);
 		sb.append("]");
 		
 		
@@ -409,14 +421,7 @@ public class InstitutionalItemVersion extends BasePersistent{
 		return dateLastModified;
 	}
 
-	/**
-	 * Set the date the version or underlying item was modified.
-	 * 
-	 * @param dateLastModified
-	 */
-	public void setDateLastModified(Timestamp dateLastModified) {
-		this.dateLastModified = dateLastModified;
-	}
+	
 
 	/**
 	 * Get the user who last modified the item.
@@ -427,14 +432,7 @@ public class InstitutionalItemVersion extends BasePersistent{
 		return lastModifiedBy;
 	}
 
-	/**
-	 * Set the last modified by user.
-	 * 
-	 * @param lasModifiedBy
-	 */
-	public void setLastModifiedBy(IrUser lastModifiedBy) {
-		this.lastModifiedBy = lastModifiedBy;
-	}
+
 	
 	/**
 	 * Get the last modified note.
@@ -445,13 +443,20 @@ public class InstitutionalItemVersion extends BasePersistent{
 		return lastModifiedNote;
 	}
 
+
+	
 	/**
-	 * Set the last modified note.
+	 * Updates the last modified date to now and sets the user who modified
+	 * the data and the reason.
 	 * 
-	 * @param lastModifiedNote
+	 * @param modifiedBy
+	 * @param reason
 	 */
-	public void setLastModifiedNote(String lastModifiedNote) {
-		this.lastModifiedNote = lastModifiedNote;
+	public void updateLastModified(IrUser modifiedBy, String reason)
+	{
+		dateLastModified = new java.sql.Timestamp(new Date().getTime());
+		lastModifiedBy = modifiedBy;
+		lastModifiedNote = reason;
 	}
 	
 }

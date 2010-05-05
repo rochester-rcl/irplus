@@ -33,7 +33,10 @@ import edu.ur.order.OrderType;
  */
 public class DefaultExternalAccountTypeService implements ExternalAccountTypeService{
 
-	/* Data access for account type information*/
+	/** eclipse generated id */
+	private static final long serialVersionUID = -9032119409419030798L;
+	
+	/** Data access for account type information*/
 	private ExternalAccountTypeDAO externalAccountTypeDAO;
 
 	

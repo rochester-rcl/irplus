@@ -54,6 +54,9 @@ import edu.ur.ir.user.IrUserGroup;
 public class DefaultInstitutionalCollectionService implements 
     	InstitutionalCollectionService{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7984625061769816698L;
+
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalCollectionService.class);
 	

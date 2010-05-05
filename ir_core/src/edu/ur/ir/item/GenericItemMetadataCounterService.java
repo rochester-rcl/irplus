@@ -1,5 +1,7 @@
 package edu.ur.ir.item;
 
+import java.io.Serializable;
+
 import edu.ur.ir.person.ContributorType;
 
 /**
@@ -12,7 +14,7 @@ import edu.ur.ir.person.ContributorType;
  * @author Nathan Sarr
  *
  */
-public interface GenericItemMetadataCounterService {
+public interface GenericItemMetadataCounterService extends Serializable{
 	
 	/**
 	 * Get the count of items this extent type is used by

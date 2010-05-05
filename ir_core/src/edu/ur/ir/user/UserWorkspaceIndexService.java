@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.repository.Repository;
@@ -28,7 +29,7 @@ import edu.ur.ir.repository.Repository;
  * @author Nathan Sarr
  *
  */
-public interface UserWorkspaceIndexService {
+public interface UserWorkspaceIndexService extends Serializable{
 	
 
 	/**

@@ -16,6 +16,8 @@
 
 package edu.ur.ir.oai.metadata.provider;
 
+import java.io.Serializable;
+
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.IdDoesNotExistException;
@@ -26,7 +28,7 @@ import edu.ur.ir.oai.exception.NoSetHierarchyException;
  * @author NathanS
  *
  */
-public interface OaiService {
+public interface OaiService extends Serializable{
 	
 	/**
 	 * Returns the body of the record in the specified format.

@@ -16,6 +16,7 @@
 
 package edu.ur.ir.item;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -27,7 +28,7 @@ import edu.ur.order.OrderType;
  * @author Sharmila Ranganathan
  *
  */
-public interface SponsorService {
+public interface SponsorService extends Serializable{
 	
 	/**
 	 * Get Sponsor sorted according to the sort information .  

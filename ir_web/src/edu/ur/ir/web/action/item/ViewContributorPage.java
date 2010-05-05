@@ -23,6 +23,7 @@ import java.util.Set;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.PersonName;
@@ -114,6 +115,11 @@ public class ViewContributorPage extends Pager {
 	
 	/** Service to get repository information  */
 	private RepositoryService repositoryService;
+	
+	/** Service to deal with institutional item version information */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+
+
 
 	/** Default constructor */
 	public ViewContributorPage()
@@ -134,8 +140,8 @@ public class ViewContributorPage extends Pager {
 		personName = personService.getName(personNameId, false);
 		PersonNameAuthority authority = personName.getPersonNameAuthority();
 		Set<PersonName> names = authority.getNames();
-		totalDownloads = institutionalItemService.getNumberOfDownlodsForPersonNames(names);
-		List<InstitutionalItemVersionDownloadCount> itemVersions = institutionalItemService.getPublicationVersionsForNamesBySubmissionDate(rowStart, numberOfResultsToShow, names, OrderType.DESCENDING_ORDER);
+		totalDownloads = institutionalItemVersionService.getNumberOfDownlodsForPersonNames(names);
+		List<InstitutionalItemVersionDownloadCount> itemVersions = institutionalItemVersionService.getPublicationVersionsForNamesBySubmissionDate(rowStart, numberOfResultsToShow, names, OrderType.DESCENDING_ORDER);
 		createContributorPublications(itemVersions, authority);
 		return SUCCESS;
 	}
@@ -159,22 +165,22 @@ public class ViewContributorPage extends Pager {
 			researcher = user.getResearcher();
 		}
 			
-		totalDownloads = institutionalItemService.getNumberOfDownlodsForPersonNames(names);
+		totalDownloads = institutionalItemVersionService.getNumberOfDownlodsForPersonNames(names);
 		
 		 List<InstitutionalItemVersionDownloadCount> itemVersions = new LinkedList<InstitutionalItemVersionDownloadCount>();
 		
 		// Construct the object with item and download info for display
 		if( sortElement.equals("title"))
 		{
-		    itemVersions = institutionalItemService.getPublicationVersionsForNamesByTitle(rowStart, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
+		    itemVersions = institutionalItemVersionService.getPublicationVersionsForNamesByTitle(rowStart, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
 		} 
 		else if( sortElement.equals("download"))
 		{
-			itemVersions = institutionalItemService.getPublicationVersionsForNamesByDownload(rowStart, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
+			itemVersions = institutionalItemVersionService.getPublicationVersionsForNamesByDownload(rowStart, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
 		}
 		else if( sortElement.equals("submissionDate"))
 		{
-			itemVersions = institutionalItemService.getPublicationVersionsForNamesBySubmissionDate(rowStart, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
+			itemVersions = institutionalItemVersionService.getPublicationVersionsForNamesBySubmissionDate(rowStart, numberOfResultsToShow, names, OrderType.getOrderType(sortType));
 		}
 		
 		createContributorPublications(itemVersions, authority);
@@ -224,7 +230,7 @@ public class ViewContributorPage extends Pager {
 	private void getMostRecent(Set<PersonName> names, PersonNameAuthority authority)
 	{
 		// Set most downloaded publication
-		List<InstitutionalItemVersionDownloadCount> mostRecent  = institutionalItemService.getPublicationVersionsForNamesBySubmissionDate(0, 1, names, OrderType.DESCENDING_ORDER);
+		List<InstitutionalItemVersionDownloadCount> mostRecent  = institutionalItemVersionService.getPublicationVersionsForNamesBySubmissionDate(0, 1, names, OrderType.DESCENDING_ORDER);
 		
 		if( mostRecent.size() > 0 )
 		{
@@ -247,7 +253,7 @@ public class ViewContributorPage extends Pager {
 	private void getMostDownloaded(Set<PersonName> names, PersonNameAuthority authority)
 	{
 		// Set most downloaded publication
-		List<InstitutionalItemVersionDownloadCount> topDownloads  = institutionalItemService.getPublicationVersionsForNamesByDownload(0, 1, names, OrderType.DESCENDING_ORDER);
+		List<InstitutionalItemVersionDownloadCount> topDownloads  = institutionalItemVersionService.getPublicationVersionsForNamesByDownload(0, 1, names, OrderType.DESCENDING_ORDER);
 		
 		if( topDownloads.size() > 0 )
 		{
@@ -460,7 +466,10 @@ public class ViewContributorPage extends Pager {
 		return repository;
 	}
 
-
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
 
 
 }

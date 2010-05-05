@@ -64,6 +64,9 @@ import edu.ur.ir.user.IrUser;
  */
 public class DefaultRepositoryService implements RepositoryService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7265577479425797457L;
+
 	/**  File service for dealing with underlying file storage. */
 	private FileServerService fileServerService;
 	

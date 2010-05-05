@@ -17,6 +17,7 @@
 package edu.ur.ir.researcher;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.lucene.index.CorruptIndexException;
@@ -31,7 +32,7 @@ import edu.ur.ir.search.FacetFilter;
  * @author Sharmila Ranganathan
  *
  */
-public interface ResearcherSearchService {
+public interface ResearcherSearchService extends Serializable{
 	
 	public static final String DEPARTMENT_MAP = "departments";
 	public static final String FIELD_MAP = "fields";

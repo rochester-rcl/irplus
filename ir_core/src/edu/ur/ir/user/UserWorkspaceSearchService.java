@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.File;
+import java.io.Serializable;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.SearchResults;
@@ -27,7 +28,7 @@ import edu.ur.ir.SearchResults;
  * @author Nathan Sarr
  *
  */
-public interface UserWorkspaceSearchService {
+public interface UserWorkspaceSearchService extends Serializable{
 
 	/**
 	 * Returns search results for the user.

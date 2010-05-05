@@ -35,9 +35,11 @@ import edu.ur.ir.handle.HandleService;
  */
 public class DefaultHandleService implements HandleService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -4031920868025173205L;
+
 	/** Handle info data access */
-	private HandleInfoDAO handleInfoDAO;
-	
+	private HandleInfoDAO handleInfoDAO;	
 
 	/** Data access for handle name authority information */
 	private HandleNameAuthorityDAO handleNameAuthorityDAO;

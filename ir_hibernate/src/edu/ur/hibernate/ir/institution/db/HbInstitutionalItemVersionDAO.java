@@ -384,5 +384,16 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	    return ealiestDateOfDepositoy;
 	}
 
+	/**
+	 * List of institutional item versions by generic item id.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getInstitutionalItemVersionsByGenericItemId(java.lang.Long)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersion> getInstitutionalItemVersionsByGenericItemId(
+			Long genericItemId) {
+		return (List<InstitutionalItemVersion>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalItemVersionsForGenericItemId", genericItemId);
+	}
+
 
 }

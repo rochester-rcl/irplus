@@ -1,6 +1,7 @@
 package edu.ur.ir.researcher;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Re index the researchers in the institutional repository.
@@ -8,7 +9,7 @@ import java.io.File;
  * @author Nathan Sarr
  *
  */
-public interface ReIndexResearchersService {
+public interface ReIndexResearchersService extends Serializable{
 	
 	/**
 	 * Re-Index the researchers in the institutional repository

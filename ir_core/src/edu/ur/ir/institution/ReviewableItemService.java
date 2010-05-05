@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.item.GenericItem;
@@ -27,7 +28,7 @@ import edu.ur.ir.user.IrUser;
  * @author Sharmila Ranganathan
  *
  */
-public interface ReviewableItemService {
+public interface ReviewableItemService extends Serializable{
 
 	/**
 	 * Get all items pending for review for specified user

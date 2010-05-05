@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.security.userdetails.UserDetailsService;
@@ -29,7 +30,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public interface UserService extends UserDetailsService {
+public interface UserService extends UserDetailsService, Serializable {
 	
 	/**
 	 * Get a count of the users in the system

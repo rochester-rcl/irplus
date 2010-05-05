@@ -56,6 +56,7 @@ import edu.ur.ir.handle.HandleService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
@@ -115,6 +116,12 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 	
 	/** service to create thumbnails  */
 	private ThumbnailTransformerService thumbnailTransformerService;
+	
+	/** Service to deal with instituitonal item versions */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+
+
+
 
 
 	/**
@@ -474,10 +481,10 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 						log.debug( "info = " + info);
 						if( info != null )
 						{
-							InstitutionalItemVersion version = this.institutionalItemService.getInstitutionalItemByHandleId(info.getId());
+							InstitutionalItemVersion version = this.institutionalItemVersionService.getInstitutionalItemByHandleId(info.getId());
 						    if( version != null )
 						    {
-						    	InstitutionalItem item = institutionalItemService.getInstitutionalItemByVersionId(version.getVersionedInstitutionalItem().getId());
+						    	InstitutionalItem item = version.getVersionedInstitutionalItem().getInstitutionalItem();
 						    	ResearcherInstitutionalItem ri = new ResearcherInstitutionalItem(f.getResearcher(), item);
 						    	ri.setDescription(l.description);
 						    	f.addInstitutionalItem(ri);
@@ -788,6 +795,16 @@ public class DefaultResearcherImporter implements ResearcherImporter{
 	public void setThumbnailTransformerService(
 			ThumbnailTransformerService thumbnailTransformerService) {
 		this.thumbnailTransformerService = thumbnailTransformerService;
+	}
+	
+	public InstitutionalItemVersionService getInstitutionalItemVersionService() {
+		return institutionalItemVersionService;
+	}
+
+
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
 
 

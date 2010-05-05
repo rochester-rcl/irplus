@@ -33,6 +33,7 @@ import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.item.ItemVersion;
 import edu.ur.ir.user.IrRole;
@@ -95,6 +96,11 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 	/** Institutional item to which version has to be added */
 	private InstitutionalItem institutionalItem;
 	
+	/** Service dealing with institutional item versions */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+
+
 	/**
 	 * Create the file system to view.
 	 */
@@ -173,7 +179,7 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 		
 		InstitutionalItemVersion institutionalItemVersion = institutionalItem.getVersionedInstitutionalItem().addNewVersion(version.getItem());
 		
-		institutionalItemService.saveInstitutionalItemVersion(institutionalItemVersion);
+		institutionalItemVersionService.saveInstitutionalItemVersion(institutionalItemVersion);
 		
 		/**
 		 * If item is not yet published and the collection being published to is private
@@ -284,5 +290,9 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
 
 }

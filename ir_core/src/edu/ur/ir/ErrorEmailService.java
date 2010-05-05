@@ -1,12 +1,14 @@
 package edu.ur.ir;
 
+import java.io.Serializable;
+
 /**
  * This service is designed to send emails when an error occurs.
  * 
  * @author Nathan Sarr
  *
  */
-public interface ErrorEmailService {
+public interface ErrorEmailService  extends Serializable{
 	
 
 	/**

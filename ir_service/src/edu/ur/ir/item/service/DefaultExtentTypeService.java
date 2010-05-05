@@ -31,6 +31,9 @@ import edu.ur.ir.item.ExtentTypeService;
  */
 public class DefaultExtentTypeService implements ExtentTypeService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -8710830522344806745L;
+	
 	/**  extent type data access. */
 	private ExtentTypeDAO extentTypeDAO;
 

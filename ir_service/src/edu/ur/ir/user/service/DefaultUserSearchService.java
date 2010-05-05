@@ -44,6 +44,9 @@ import edu.ur.ir.user.UserSearchService;
  */
 public class DefaultUserSearchService implements UserSearchService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -4995845331563910038L;
+
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserSearchService.class);
 	

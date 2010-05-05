@@ -16,6 +16,7 @@
 
 package edu.ur.ir.person;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface ContributorService {
+public interface ContributorService extends Serializable{
 	
 	/**
 	 * Get the contributor for the given personName, contributor type

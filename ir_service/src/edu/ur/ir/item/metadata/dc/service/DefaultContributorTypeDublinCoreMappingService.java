@@ -29,6 +29,9 @@ import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMappingService;
  */
 public class DefaultContributorTypeDublinCoreMappingService implements ContributorTypeDublinCoreMappingService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -9086595347205159116L;
+	
 	/**  Data access for contributor type dublin core */
 	private ContributorTypeDublinCoreMappingDAO contributorTypeDublinCoreMappingDAO;
 

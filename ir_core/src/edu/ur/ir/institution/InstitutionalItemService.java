@@ -16,10 +16,12 @@
 
 package edu.ur.ir.institution;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
@@ -32,7 +34,7 @@ import edu.ur.order.OrderType;
  * @author NathanS
  *
  */
-public interface InstitutionalItemService {
+public interface InstitutionalItemService extends Serializable{
 
 	/**
 	 * Get a count of all institutional items in the system - this is across all
@@ -132,16 +134,6 @@ public interface InstitutionalItemService {
 	 */
 	public List<InstitutionalItem> getRepositoryItemsOrderByName(int rowStart, int rowEnd, Long repositoryId, 
 			OrderType orderType) ;	
-
-    /**
-     * Get the Institutional item version
-     * 
-     * @param id - id of the institutional item version
-     * @param lock - upgrade the lock
-     * 
-     * @return the institutional item version or null if not found.
-     */
-    public InstitutionalItemVersion getInstitutionalItemVersion(Long id, boolean lock);
     
     /**
      * Get the Institutional item
@@ -315,13 +307,6 @@ public interface InstitutionalItemService {
 	public Long getDistinctInstitutionalItemCount();
 	
 	/**
-	 * Save Institutional Item Version
-	 * 
-	 * @param institutionalItemVersion
-	 */
-	public void saveInstitutionalItemVersion(InstitutionalItemVersion institutionalItemVersion);
-	
-	/**
 	 * Get a institutional collections  the generic item exists in
 	 * 
 	 * @param itemId Id of generic Item 
@@ -350,65 +335,6 @@ public interface InstitutionalItemService {
 	 * @return Information about deleted institutional item
 	 */
 	public DeletedInstitutionalItem getDeleteInfoForInstitutionalItem(Long institutionalItemId);
-
-	
-	/**
-	 * Get a list of institutional item version for a specified sponsor ordered by publication name.
-	 * 
-	 * 
-	 * @param rowStart - Start row to fetch the data from
-	 * @param maxResulsts - maximum number of results to fetch
-	 * @param sponsorId - id of the sponsor
-	 * @param orderType - The order to sort by (ascending/descending)
-	 * 
-	 * @return List of institutional item version download count
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemNameOrder(int rowStart,
-			int maxResults, 
-			long sponsorId, 
-			OrderType orderType);
-	
-	/**
-	 * Get a list of institutional item version for a specified sponsor ordered by deposit date.
-	 * 
-	 * 
-	 * @param rowStart - Start row to fetch the data from
-	 * @param maxResulsts - maximum number of results to fetch
-	 * @param sponsorId - id of the sponsor
-	 * @param orderType - The order to sort by (ascending/descending)
-	 * 
-	 * @return List of institutional item version
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDepositDateOrder(int rowStart,
-			int maxResults, 
-			long sponsorId, 
-			OrderType orderType);
-	
-	/**
-	 * Get a list of institutional item version for a specified sponsor ordered by publication name.
-	 * 
-	 * 
-	 * @param rowStart - Start row to fetch the data from
-	 * @param maxResulsts - maximum number of results to fetch
-	 * @param sponsorId - id of the sponsor
-	 * @param orderType - The order to sort by (ascending/descending)
-	 * 
-	 * @return List of institutional item version
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDownloadOrder(int rowStart,
-			int maxResults, 
-			long sponsorId, 
-			OrderType orderType);
-	
-
-	
-	/**
-	 * Get the count of institutional item version for a given sponsor.
-	 * 
-	 * @param sponsorId - id of the sponsor
-	 * @return - count of items for a sponsor.
-	 */
-	public Long getItemsBySponsorCount(long sponsorId);
 	
 	/**
 	 * Set item as private and assign submitted collections user group permissions
@@ -435,99 +361,20 @@ public interface InstitutionalItemService {
 	public Long getPublicationCountByPersonName(Set<PersonName> personNames) ;
 
 	/**
-	 * Get Institutional item by given version id
-	 * 
-	 * @param institutionalVersionId Version id
-	 * @return Institutional item found
-	 */
-	public InstitutionalItem getInstitutionalItemByVersionId(Long institutionalVersionId) ;
-
-	/**
-	 * Get institutional items having given generic item id as the latest version
+	 * Get institutional items having given generic item id as the LATEST VERSION.
 	 * 
 	 * @param genericItemId Id of generic item
 	 * @return Institutional items found
 	 */
 	public List<InstitutionalItem> getInstitutionalItemsByGenericItemId(Long genericItemId) ;
-	
-	/**
-	 * Get an institutional item version by handle id.
-	 * 
-	 * @param handleId - id of the handle to get the institutional item by.
-	 * @return the found institutional item or null if item version is not found.
-	 */
-	public InstitutionalItemVersion getInstitutionalItemByHandleId(Long handleId);
-	
-	/**
-	 * Reset the institutional item url.
-	 * 
-	 * @param institutionalItem
-	 * @param institutionalItemVersion
-	 */
-	public void resetHandle(InstitutionalItem institutionalItem, InstitutionalItemVersion institutionalItemVersion);
-	
+		
 	/**
 	 * Reset all handles in the system.
 	 * 
 	 * @param batchSize
 	 * @param repositoryId
 	 */
-	public void resetAllHandles(int batchSize, Long repositoryId);
-	
-	
-	/**
-	 * Get the list of publication versions for names ordered by download.
-	 * 
-	 * @param rowStart - row start
-	 * @param maxResults - maximum number of results
-	 * @param personNames - set of name ids to use
-	 * @param orderType - order type
-	 * 
-	 * @return - return the list of institutional item version download counts
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByDownload(final int rowStart,
-			final int maxResults, 
-			final Set<PersonName> personNames, 
-			final OrderType orderType);
-	
-	/**
-	 * Get the list of publication versions for names ordered by title
-	 * 
-	 * @param rowStart - start position in the list
-	 * @param maxResults - maximum number of results
-	 * @param personNames - set of person names.
-	 * @param orderType - order type ascending / descending
-	 * 
-	 * @return - return the list of institutional item version download counts
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByTitle(final int rowStart,
-			final int maxResults, 
-			final Set<PersonName> personNames, 
-			final OrderType orderType);
-	
-	/**
-	 * Get the number of downloads for a given set of person names.
-	 * 
-	 * @param personNames - set of person names.
-	 * @return count for the person names.
-	 */
-	public Long getNumberOfDownlodsForPersonNames(Set<PersonName> personNames);
-	
-	/**
-	 * Get the list of publication versions for names ordered by title
-	 * 
-	 * @param rowStart - start position in the list
-	 * @param maxResults - maximum number of results
-	 * @param personNames - set of person names.
-	 * @param orderType - order type ascending / descending
-	 * 
-	 * @return - return the list of institutional item version download counts
-	 */
-	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesBySubmissionDate(final int rowStart,
-			final int maxResults, 
-			final Set<PersonName> personNames, 
-			final OrderType orderType);
-	
+	public void resetAllHandles(int batchSize, Long repositoryId);	
 
 	/**
 	 * Gets a deleted institutional item version by the original institutional item version.
@@ -548,4 +395,14 @@ public interface InstitutionalItemService {
 	 * @return - the deleted institutional item version record.
 	 */
 	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersion(Long institutionalItemId, int versionNumber);
+
+	/**
+	 * Mark all institutional items for update that have the most current version pointing to the
+	 * generic item id.
+	 * 
+	 * @param genericItemId - the generic item id
+	 * @param index processing type - way the records should be processed
+	 */
+	public void markAllInstitutionalItemsForIndexing(Long genericItemId, IndexProcessingType processingType);
+	
 }

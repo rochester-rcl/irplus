@@ -71,7 +71,7 @@ public class ReinstateToken extends BasePersistent{
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof WithdrawnToken)) return false;
+		if (!(o instanceof ReinstateToken)) return false;
 
 		final ReinstateToken other = (ReinstateToken) o;
 		

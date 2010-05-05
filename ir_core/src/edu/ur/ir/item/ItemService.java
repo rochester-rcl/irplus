@@ -16,6 +16,7 @@
 
 package edu.ur.ir.item;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
 
-public interface ItemService {
+public interface ItemService extends Serializable{
 	
 	/**
 	 * Delete the versioned item from persisten storage.

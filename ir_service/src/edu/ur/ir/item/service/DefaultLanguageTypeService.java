@@ -31,6 +31,9 @@ import edu.ur.ir.item.LanguageTypeService;
  */
 public class DefaultLanguageTypeService implements LanguageTypeService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -6419514555550797083L;
+	
 	/** Language type data access. */
 	private LanguageTypeDAO languageTypeDAO;
 

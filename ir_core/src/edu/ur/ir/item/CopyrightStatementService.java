@@ -1,5 +1,6 @@
 package edu.ur.ir.item;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.order.OrderType;
@@ -10,7 +11,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public interface CopyrightStatementService {
+public interface CopyrightStatementService extends Serializable{
 	
 	/**
 	 * Get content types sorting according to the sort and filter information .  

@@ -103,8 +103,6 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 	/** index processing type service */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
-
-	
 	/**
 	 * Create the item for the specified collection.
 	 * 

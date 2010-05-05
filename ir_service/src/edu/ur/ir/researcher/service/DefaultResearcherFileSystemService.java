@@ -35,6 +35,9 @@ import edu.ur.ir.user.UserFileSystemService;
  */
 public class DefaultResearcherFileSystemService implements ResearcherFileSystemService {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 8168747479279250084L;
+
 	/** Data access for researcher folder */
 	private ResearcherFolderDAO researcherFolderDAO;
 

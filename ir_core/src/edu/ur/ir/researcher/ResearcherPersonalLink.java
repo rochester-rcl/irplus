@@ -79,6 +79,20 @@ public class ResearcherPersonalLink extends BasePersistent implements Orderable 
 	}
 	
 	/**
+	 * Hash code for a personal link
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode()
+	{
+		int value = 0;
+		value += getName() == null ? 0 : getName().hashCode();
+		value += researcher == null ? 0 : researcher.hashCode();
+		return value;
+		
+	}
+	
+	/**
 	 * Equals method for a personal researcher link.
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -94,7 +108,7 @@ public class ResearcherPersonalLink extends BasePersistent implements Orderable 
 			(other.getName() == null && getName() != null )	) return false;
 		
 		if( (other.getResearcher() != null && !other.getResearcher().equals(getResearcher())) ||
-				(other.getResearcher() == null && getResearcher() != null )	) return false;
+			(other.getResearcher() == null && getResearcher() != null )	) return false;
 
 		return true;
 	}

@@ -16,6 +16,7 @@
 
 package edu.ur.ir.user;
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.order.OrderType;
@@ -27,7 +28,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public interface ExternalAccountTypeService {
+public interface ExternalAccountTypeService extends Serializable{
 	
 	/**
 	 * Get external account types sorted according to the sort information .  

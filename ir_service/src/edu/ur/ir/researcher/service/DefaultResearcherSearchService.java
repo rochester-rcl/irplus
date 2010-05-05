@@ -61,6 +61,9 @@ import edu.ur.ir.search.FacetResultHitComparator;
  */
 public class DefaultResearcherSearchService implements ResearcherSearchService {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = -4377980407262168156L;
+
 	/** Analyzer to use for parsing the queries */
 	private Analyzer analyzer;
 	
