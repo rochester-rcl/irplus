@@ -19,6 +19,7 @@ package edu.ur.ir.oai.metadata.provider.service;
 import java.util.Date;
 
 import edu.ur.ir.oai.OaiUtil;
+import edu.ur.ir.oai.metadata.provider.ResumptionToken;
 
 /**
  * Class to help with resumption token data.  
@@ -27,28 +28,36 @@ import edu.ur.ir.oai.OaiUtil;
  * @author Nathan Sarr
  *
  */
-public class DefaultResumptionToken {
+public class DefaultResumptionToken implements ResumptionToken{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 3833203729450793209L;
+
 	/**  OAI set value */
-	private Long set;
+	private Long set = null;
 
 	/** from date  */
-	private Date from;
+	private Date from = null;
 	
 	/** Until date */
-	private Date until;
+	private Date until = null;
 	
 	/** metadata prefix */
-	private String metadataPrefix;
+	private String metadataPrefix = null;
 	
 	/** start value */
-	private Long lastId;
+	private Long lastId = null;
 
 	/** batch size */
-	private Integer batchSize;
+	private Integer batchSize = null;
 	
 	/** indicates that deleted records should now be sent */
-	private Boolean deleted;
+	private Boolean deleted = null;
+	
+	public static final String DELIMITER = ";";
+	
+	/** indicates that a non null token should be inserted back into the request */
+	private boolean insertToken;
 	
 
 
@@ -148,6 +157,14 @@ public class DefaultResumptionToken {
 		this.deleted = Boolean.valueOf(deleted);
 	}
 	
+	public boolean getInsertToken() {
+		return insertToken;
+	}
+
+	public void setInsertToken(boolean insertToken) {
+		this.insertToken = insertToken;
+	}
+	
 	
 	public String getAsTokenString()
 	{
@@ -161,7 +178,7 @@ public class DefaultResumptionToken {
 		{
 			if( sb.length() > 0)
 			{
-				sb.append("&");
+				sb.append(DELIMITER);
 			}
 			sb.append("from=");
 			sb.append(OaiUtil.getLongDateFormat(from));
@@ -170,7 +187,7 @@ public class DefaultResumptionToken {
 		{
 			if( sb.length() > 0)
 			{
-				sb.append("&");
+				sb.append(DELIMITER);
 			}
 			sb.append("until=");
 			sb.append(OaiUtil.getLongDateFormat(until));
@@ -179,7 +196,7 @@ public class DefaultResumptionToken {
 		{
 			if( sb.length() > 0)
 			{
-				sb.append("&");
+				sb.append(DELIMITER);
 			}
 			sb.append("metadataPrefix=");
 			sb.append(metadataPrefix);
@@ -188,7 +205,7 @@ public class DefaultResumptionToken {
 		{
 			if( sb.length() > 0)
 			{
-				sb.append("&");
+				sb.append(DELIMITER);
 			}
 			sb.append("lastId=");
 			sb.append(lastId);
@@ -197,7 +214,7 @@ public class DefaultResumptionToken {
 		{
 			if( sb.length() > 0)
 			{
-				sb.append("&");
+				sb.append(DELIMITER);
 			}
 			sb.append("batchSize=");
 			sb.append(batchSize);
@@ -206,7 +223,7 @@ public class DefaultResumptionToken {
 		{
 			if( sb.length() > 0)
 			{
-				sb.append("&");
+				sb.append(DELIMITER);
 			}
 			sb.append("deleted=");
 			sb.append(deleted);
@@ -219,7 +236,7 @@ public class DefaultResumptionToken {
 	 * 
 	 * @param resumptionToken
 	 */
-	void parseResumptionToken(String resumptionToken)
+	public void parseResumptionToken(String resumptionToken)
 	{
 		this.set = null;
 		this.setBatchSize(null);
@@ -229,7 +246,7 @@ public class DefaultResumptionToken {
 		this.until = null;
 		this.deleted = null;
 		
-		String[] values = resumptionToken.split("&");
+		String[] values = resumptionToken.split(DELIMITER);
 		for( String aValue : values)
 		{
 			String[] parts = aValue.split("=");
@@ -284,6 +301,14 @@ public class DefaultResumptionToken {
 			throw new IllegalStateException("illegal parameter " + name + " value = " + value);
 		}
 		
+	}
+
+	/**
+	 * @see edu.ur.ir.oai.metadata.provider.ResumptionToken#insertToken()
+	 */
+	public boolean insertToken() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 
