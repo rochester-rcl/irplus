@@ -55,8 +55,8 @@ public class DefaultResumptionTokenTest {
 		Date untilShort = shortDateFormat.parse(strUntilShort);
 		Date untilLong = longDateFormat.parse(strUntilLong);	
 		
-		String token = "set=123&from=" + strFromShort + 
-		"&until=" + strUntilShort + "&metadataPrefix=oai_dc&lastId=33&batchSize=100&deleted=false";
+		String token = "set=123;from=" + strFromShort + 
+		";until=" + strUntilShort + ";metadataPrefix=oai_dc;lastId=33;batchSize=100;deleted=false";
 		DefaultResumptionToken resumptionToken = new DefaultResumptionToken();
 		resumptionToken.parseResumptionToken(token);
 		
@@ -69,8 +69,8 @@ public class DefaultResumptionTokenTest {
 
 	
         // change the dates to long format 
-		token = "set=123&from=" + strFromLong + 
-		"&until=" + strUntilLong + "&metadataPrefix=oai_dc&lastId=33&batchSize=100&deleted=false";
+		token = "set=123;from=" + strFromLong + 
+		";until=" + strUntilLong + ";metadataPrefix=oai_dc;lastId=33;batchSize=100;deleted=false";
 		resumptionToken.parseResumptionToken(token);
 		assert resumptionToken.getBatchSize().equals(100) : "Batch size should equal 100 but equals " + resumptionToken.getBatchSize();
 		assert resumptionToken.getFrom().equals(fromLong) : "from date should equal " + fromLong + " but equals " + resumptionToken.getFrom();
