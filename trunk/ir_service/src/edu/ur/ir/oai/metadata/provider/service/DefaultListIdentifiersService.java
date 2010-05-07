@@ -16,16 +16,33 @@
 
 package edu.ur.ir.oai.metadata.provider.service;
 
+import java.io.StringWriter;
+import java.util.Date;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
+import org.w3c.dom.ls.LSSerializer;
+
+import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
+import edu.ur.ir.oai.OaiUtil;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.NoRecordsMatchException;
-import edu.ur.ir.oai.exception.NoSetHierarchyException;
 import edu.ur.ir.oai.metadata.provider.ListIdentifiersService;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
+import edu.ur.ir.oai.metadata.provider.ResumptionToken;
 
 /**
  * Default implementation of the list identifiers service.
@@ -47,15 +64,27 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	/** Service for dealing with institutional item information */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 	
+	/** Service for dealing with institutional item information */
+	private InstitutionalItemVersionService deletedInstitutionalItemVersionService;
+	
+	/** namespace for the oai url */
+	private String namespaceIdentifier;
+	
+	/** Service to deal with institutional collection information */
+	private InstitutionalCollectionService institutionalCollectionService;
+	
+	/** resumption token */
+	private DefaultResumptionToken resumptionToken;
+
+
 	/**
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.ListIdentifiersService#listIdentifiers(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public String listIdentifiers(String metadataPrefix, String set,
-			String from, String until, String resumptionToken)
+			String from, String until, String strResumptionToken)
 			throws BadResumptionTokenException,
-			CannotDisseminateFormatException, NoRecordsMatchException,
-			NoSetHierarchyException {
+			CannotDisseminateFormatException, NoRecordsMatchException{
 		
 		if( !oaiMetadataServiceProvider.supports(metadataPrefix) )
 		{
@@ -63,36 +92,35 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 		}
 
 		// parse the token if it exists
-		DefaultResumptionToken defaultToken = null;
 		if(resumptionToken != null && !resumptionToken.equals(""))
 		{
-			defaultToken = new DefaultResumptionToken(resumptionToken);
+			resumptionToken = new DefaultResumptionToken(strResumptionToken);
 		}
 		else
 		{
-			defaultToken = new DefaultResumptionToken();
+			resumptionToken = new DefaultResumptionToken();
 			
-			defaultToken.setBatchSize(batchSize);
+			resumptionToken.setBatchSize(batchSize);
 			if( from != null && !from.equals(""))
 			{
-			    defaultToken.setFrom(from);
+				resumptionToken.setFrom(from);
 			}
 			if( set != null && !set.equals(""))
 			{
-				defaultToken.setSet(set);
+				resumptionToken.setSet(set);
 			}
 			if( until != null && !until.equals(""))
 			{
-				defaultToken.setUntil(until);
+				resumptionToken.setUntil(until);
 			}
-			defaultToken.setMetadataPrefix(metadataPrefix);
-			defaultToken.setLastId(0l);
+			resumptionToken.setMetadataPrefix(metadataPrefix);
+			resumptionToken.setLastId(0l);
 			
 		}
 
 		// do batch size plus one - if we retrieve all records then another request must be issued
 		// with resumption token
-		List<InstitutionalItemVersion> versions = institutionalItemVersionService.getItemsIdOrder(defaultToken.getLastId(), batchSize + 1);
+		List<InstitutionalItemVersion> versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), batchSize + 1);
 		int size = versions.size();
 		
 		// we will need to send resumption token
@@ -104,10 +132,29 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 			versions.remove(size - 1);
 		}
 		
-		return listIdentifiers(versions);
-
+		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		 DocumentBuilder builder;
+		 
+		 try {
+			builder = factory.newDocumentBuilder();
+		 } catch (ParserConfigurationException e) {
+			throw new IllegalStateException(e);
+		 }
 		
-		
+		 DOMImplementation impl = builder.getDOMImplementation();
+		 DOMImplementationLS domLs = (DOMImplementationLS)impl.getFeature("LS" , "3.0");
+		 LSSerializer serializer = domLs.createLSSerializer();
+		 LSOutput lsOut= domLs.createLSOutput();
+		 StringWriter stringWriter = new StringWriter();
+		 lsOut.setCharacterStream(stringWriter);
+		 
+		 Document doc = impl.createDocument(null, "ListIdentifiers", null);
+		 // do not output the headers
+		 Element root = doc.getDocumentElement();
+		 serializer.getDomConfig().setParameter("xml-declaration", false);
+		 addIdentifiers(versions, doc);
+		 serializer.write(root, lsOut);
+		 return stringWriter.getBuffer().toString();
 	}
 	
 	/**
@@ -116,13 +163,47 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	 * @param metadataPrefix
 	 * @return
 	 */
-	private String listIdentifiers(List<InstitutionalItemVersion> versions)
+	private void addIdentifiers(List<InstitutionalItemVersion> versions, Document doc )
 	{
-		String value = "";
-		
-		
-		
-		return value;
+		 Element root = doc.getDocumentElement();		 
+		 for(InstitutionalItemVersion version : versions)
+		 {
+			 
+			 // create the header element of the record 
+			 Element header = doc.createElement("header");
+			 root.appendChild(header);
+			 
+			 // identifier element
+			 Element identifier = doc.createElement("identifier");
+			 Text data = doc.createTextNode("oai:" + namespaceIdentifier + ":" + version.getId().toString());
+			 identifier.appendChild(data);
+			 header.appendChild(identifier);
+			 
+			 // datestamp element
+			 Element datestamp = doc.createElement("datestamp");
+			 Date d = version.getDateLastModified();
+			 if( d == null )
+			 {
+				 d = version.getDateOfDeposit();
+			 }
+			 String zuluDateTime = OaiUtil.zuluTime(d);
+			 
+			 data = doc.createTextNode(zuluDateTime);
+			 datestamp.appendChild(data);
+			 header.appendChild(datestamp);
+			 
+			 InstitutionalCollection collection = version.getVersionedInstitutionalItem().getInstitutionalItem().getInstitutionalCollection();
+			 
+			 List<InstitutionalCollection> collections = institutionalCollectionService.getPath(collection);
+			 
+			 for(InstitutionalCollection c : collections)
+			 {
+			     Element setSpec = doc.createElement("setSpec");
+			     data = doc.createTextNode(c.getId().toString());
+			     setSpec.appendChild(data);
+			     header.appendChild(setSpec);
+			 }
+		 }
 	}
 	
 	public int getBatchSize() {
@@ -151,6 +232,34 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
 	
+	public InstitutionalItemVersionService getDeletedInstitutionalItemVersionService() {
+		return deletedInstitutionalItemVersionService;
+	}
+
+	public void setDeletedInstitutionalItemVersionService(
+			InstitutionalItemVersionService deletedInstitutionalItemVersionService) {
+		this.deletedInstitutionalItemVersionService = deletedInstitutionalItemVersionService;
+	}
 	
+	public String getNamespaceIdentifier() {
+		return namespaceIdentifier;
+	}
+
+	public void setNamespaceIdentifier(String namespaceIdentifier) {
+		this.namespaceIdentifier = namespaceIdentifier;
+	}
+
+	public InstitutionalCollectionService getInstitutionalCollectionService() {
+		return institutionalCollectionService;
+	}
+
+	public void setInstitutionalCollectionService(
+			InstitutionalCollectionService institutionalCollectionService) {
+		this.institutionalCollectionService = institutionalCollectionService;
+	}
+	
+	public ResumptionToken getResumptionToken() {
+		return resumptionToken;
+	}
 
 }
