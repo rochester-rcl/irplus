@@ -17,6 +17,7 @@
 
 package edu.ur.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -27,7 +28,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface CrudDAO<T> {
+public interface CrudDAO<T> extends Serializable{
     
     /**
      * Get the Entity by id.  Use this method 

@@ -314,27 +314,6 @@ public interface InstitutionalItemService extends Serializable{
 	 */
 	public List<InstitutionalCollection> getInstitutionalCollectionsSubmittedForGenericItem(Long itemId);
 
-	/**
-	 * Delete institutional item history
-	 * 
-	 * @param deletedInstitutionalItem
-	 */
-	public void deleteInstitutionalItemHistory(DeletedInstitutionalItem entity) ;
-
-	/**
-	 * Delete institutional item history
-	 * 
-	 * @param deletedInstitutionalItem
-	 */
-	public void deleteAllInstitutionalItemHistory();
-
-	/**
-	 * Get Delete info for institutional item 
-	 * 
-	 * @param institutionalItemId Id of institutional item
-	 * @return Information about deleted institutional item
-	 */
-	public DeletedInstitutionalItem getDeleteInfoForInstitutionalItem(Long institutionalItemId);
 	
 	/**
 	 * Set item as private and assign submitted collections user group permissions
@@ -343,14 +322,6 @@ public interface InstitutionalItemService extends Serializable{
 	 * @param collections Collections the item is submitted to
 	 */
 	public void setItemPrivatePermissions(GenericItem item, List<InstitutionalCollection> collections);
-
-	/**
-	 * Get number of deleted institutional items for user
-	 * 
-	 * @param userId Id of user who deleted institutional item
-	 * @return Number of institutional items deleted
-	 */
-	public Long getDeletedInstitutionalItemCountForUser(Long userId);
 
 	/**
 	 * Get the number of publications contributed by given person names
@@ -375,27 +346,7 @@ public interface InstitutionalItemService extends Serializable{
 	 * @param repositoryId
 	 */
 	public void resetAllHandles(int batchSize, Long repositoryId);	
-
-	/**
-	 * Gets a deleted institutional item version by the original institutional item version.
-	 * 
-	 * @param institutionalItemVersionId - the original institutional item version id.
-	 * 
-	 * @return the deleted institutional item version record.
-	 */
-	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersionId(Long institutionalItemVersionId);
-
 	
-	/**
-	 * Get the deleted institutional item version by the original institutional item id and version number.
-	 * 
-	 * @param institutionalItemId - original institutional item id
-	 * @param versionNumber - version number
-	 * 
-	 * @return - the deleted institutional item version record.
-	 */
-	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersion(Long institutionalItemId, int versionNumber);
-
 	/**
 	 * Mark all institutional items for update that have the most current version pointing to the
 	 * generic item id.

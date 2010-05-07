@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.institution.DeletedInstitutionalItem;
+import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -71,6 +72,11 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	/** Service for dealing with user file system. */
 	private InstitutionalItemService institutionalItemService;
 	
+	/** Service for dealing with deleted file system information */
+	private DeletedInstitutionalItemService deletedInstitutionalItemService;
+	
+
+
 	/** Service to deal with institutional collection information */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
@@ -152,7 +158,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 			else 
 			{
 				
-				deleteInfo =  institutionalItemService.getDeleteInfoForInstitutionalItem(institutionalItemId);
+				deleteInfo =  deletedInstitutionalItemService.getDeleteInfoForInstitutionalItem(institutionalItemId);
 				
 				// Check if Institutional item is deleted
 				if (deleteInfo != null) {
@@ -386,5 +392,12 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
 
+	public DeletedInstitutionalItemService getDeletedInstitutionalItemService() {
+		return deletedInstitutionalItemService;
+	}
 
+	public void setDeletedInstitutionalItemService(
+			DeletedInstitutionalItemService deletedInstitutionalItemService) {
+		this.deletedInstitutionalItemService = deletedInstitutionalItemService;
+	}
 }

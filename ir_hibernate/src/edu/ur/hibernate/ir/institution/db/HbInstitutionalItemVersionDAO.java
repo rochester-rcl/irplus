@@ -16,18 +16,17 @@
 
 package edu.ur.hibernate.ir.institution.db;
 
-import java.sql.SQLException;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.HibernateException;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.HibernateCallback;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
@@ -39,7 +38,10 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDAO{
+public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDAO, Serializable{
+	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 666924883180148194L;
 	
 	/** Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<InstitutionalItemVersion> hbCrudDAO;
@@ -113,29 +115,22 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 			final List<Long> personNameIds, 
 			final OrderType orderType)
 	{
-		 List<InstitutionalItemVersionDownloadCount> foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		
+		Query q = null;
+		if( orderType.equals(OrderType.DESCENDING_ORDER))
 		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			    if( orderType.equals(OrderType.DESCENDING_ORDER))
-			    {
-			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdTitleDesc");
-			    }
-		 	    else
-			    {
-			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdTitleAsc");
-			    }
+		    q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getPublicationVersionsByPersonNameIdTitleDesc");
+		}
+		else
+		{
+		    q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getPublicationVersionsByPersonNameIdTitleAsc");
+		}
 			    
-			    q.setParameterList("personNameIds", personNameIds);
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(maxResults);
-			    q.setFetchSize(maxResults);
-			    return q.list();
-			    
-		    }
-	    });
-        return foundItems;	
+		q.setParameterList("personNameIds", personNameIds);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<InstitutionalItemVersionDownloadCount>)q.list();
 	}
 	
 	/**
@@ -148,34 +143,25 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByDownload(final int rowStart,
-			final int maxResults, 
-			final List<Long> personNameIds, 
-			final OrderType orderType)
-	{
-		List<InstitutionalItemVersionDownloadCount> foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			    if( orderType.equals(OrderType.DESCENDING_ORDER))
-			    {
-			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdDownloadDesc");
-			    }
-		 	    else
-			    {
-			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdDownloadAsc");
-			    }
-			    
-			    q.setParameterList("personNameIds", personNameIds);
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(maxResults);
-			    q.setFetchSize(maxResults);
-			    return q.list();
-			    
-		    }
-	    });
-        return foundItems;	
+	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesByDownload(
+			final int rowStart, final int maxResults,
+			final List<Long> personNameIds, final OrderType orderType) {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO.getSessionFactory().getCurrentSession()
+					.getNamedQuery(
+							"getPublicationVersionsByPersonNameIdDownloadDesc");
+		} else {
+			q = hbCrudDAO.getSessionFactory().getCurrentSession()
+					.getNamedQuery(
+							"getPublicationVersionsByPersonNameIdDownloadAsc");
+		}
+
+		q.setParameterList("personNameIds", personNameIds);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<InstitutionalItemVersionDownloadCount>) q.list();
 	}
 
 	/**
@@ -184,8 +170,10 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemVersionByHandleId(java.lang.Long)
 	 */
 	public InstitutionalItemVersion getItemVersionByHandleId(Long handleId) {
-		return (InstitutionalItemVersion)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalItemByHandleId", handleId));
+		
+		Query query = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemByHandleId");
+		query.setParameter(0, handleId);
+		return (InstitutionalItemVersion)query.uniqueResult();
 	}
     
 	/**
@@ -195,7 +183,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	 */
 	public Long getDownloadCountForSponsor(Long sponsorId) {
 		
-		Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getDownloadCountBySponsor");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDownloadCountBySponsor");
 		q.setLong(0, sponsorId);
 	    Long count = (Long)q.uniqueResult();
 	    if( count == null )
@@ -206,37 +194,30 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	}
 	
 	/**
-	 *  (non-Javadoc)
-	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getItemsBySponsorItemNameOrder(int, int, long, edu.ur.order.OrderType)
+	 * (non-Javadoc)
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getItemsBySponsorItemNameOrder(int,
+	 *      int, long, edu.ur.order.OrderType)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemNameOrder(final int rowStart,
-			final int maxResults, final long sponsorId, final OrderType orderType) {
-		 List<InstitutionalItemVersionDownloadCount> foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			    if( orderType.equals(OrderType.DESCENDING_ORDER))
-			    {
-			        q = session.getNamedQuery("getPublicationsForSponsorDesc");
-			    }
-		 	    else
-			    {
-			        q = session.getNamedQuery("getPublicationsForSponsorAsc");
-			    }
-			    
-			    q.setLong("sponsorId", sponsorId);
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(maxResults);
-			    q.setFetchSize(maxResults);
-			    return q.list();
-			    
-		    }
-	    });
-        return foundItems;	
-	}
+	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemNameOrder(
+			final int rowStart, final int maxResults, final long sponsorId,
+			final OrderType orderType) {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO.getSessionFactory().getCurrentSession()
+					.getNamedQuery("getPublicationsForSponsorDesc");
+		} else {
+			q = hbCrudDAO.getSessionFactory().getCurrentSession()
+					.getNamedQuery("getPublicationsForSponsorAsc");
+		}
 
+		q.setLong("sponsorId", sponsorId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<InstitutionalItemVersionDownloadCount>) q.list();
+	}
 	
 	/**
 	 * Get a count of the number of items sponsored by a particular person.
@@ -244,7 +225,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getItemsBySponsorCount(long)
 	 */
 	public Long getItemsBySponsorCount(long sponsorId) {
-        Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getPublicationsForSponsorCount");
+        Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getPublicationsForSponsorCount");
 	    q.setLong("sponsorId", sponsorId);
 	    Long count = (Long)q.uniqueResult();
 	    if( count == null )
@@ -258,36 +239,29 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	/**
 	 * Get items by sponsor item deposit date order.
 	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsBySponsorItemDepositDateOrder(int, int, long, edu.ur.order.OrderType)
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsBySponsorItemDepositDateOrder(int,
+	 *      int, long, edu.ur.order.OrderType)
 	 */
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDepositDateOrder(
-			final int rowStart, final int maxResults, final long sponsorId, final OrderType orderType) {
-		
-		 List<InstitutionalItemVersionDownloadCount> foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			    if( orderType.equals(OrderType.DESCENDING_ORDER))
-			    {
-			        q = session.getNamedQuery("getPublicationsForSponsorDepositDateDesc");
-			    }
-		 	    else
-			    {
-			        q = session.getNamedQuery("getPublicationsForSponsorDepositDateAsc");
-			    }
-			    
-			    q.setLong("sponsorId", sponsorId);
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(maxResults);
-			    q.setFetchSize(maxResults);
-	            return q.list();
-		    }
-	    });
-        return foundItems;	
+			final int rowStart, final int maxResults, final long sponsorId,
+			final OrderType orderType) {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO.getSessionFactory().getCurrentSession()
+					.getNamedQuery("getPublicationsForSponsorDepositDateDesc");
+		} else {
+			q = hbCrudDAO.getSessionFactory().getCurrentSession()
+					.getNamedQuery("getPublicationsForSponsorDepositDateAsc");
+		}
+
+		q.setLong("sponsorId", sponsorId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<InstitutionalItemVersionDownloadCount>) q.list();
 	}
-	
+
 	/**
 	 * Get items by sponsor item deposit download order.
 	 * 
@@ -295,32 +269,29 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	 */
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersionDownloadCount> getItemsBySponsorItemDownloadOrder(
-			final int rowStart, final int maxResults, final long sponsorId, final OrderType orderType) {
-		
-		List<InstitutionalItemVersionDownloadCount> foundItems =  (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			    if( orderType.equals(OrderType.DESCENDING_ORDER))
-			    {
-			        q = session.getNamedQuery("getPublicationsSponsorDownloadCountOrderByCountDesc");
-			    }
-		 	    else
-			    {
-			        q = session.getNamedQuery("getPublicationsSponsorDownloadCountOrderByCountAsc");
-			    }
-			    
-			    q.setLong("sponsorId", sponsorId);
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(maxResults);
-			    q.setFetchSize(maxResults);
-			    return q.list();
-		    }
-	    });
-        return foundItems;	
-	}
+			final int rowStart, final int maxResults, final long sponsorId,
+			final OrderType orderType) {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getPublicationsSponsorDownloadCountOrderByCountDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getPublicationsSponsorDownloadCountOrderByCountAsc");
+		}
 
+		q.setLong("sponsorId", sponsorId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<InstitutionalItemVersionDownloadCount>) q.list();
+	}
 	
 	/**
 	 * Get the download counts for a set of person names.
@@ -328,7 +299,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getDownloadCountByPersonName(java.util.List)
 	 */
 	public Long getDownloadCountByPersonName(List<Long> personNameIds) {
-		Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getDownloadCountByPersonNames");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDownloadCountByPersonNames");
 	    q.setParameterList("personNameIds", personNameIds);
 	    Long count = (Long)q.uniqueResult();
 	    if( count == null )
@@ -341,35 +312,33 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	/**
 	 * Get list of downloads by submission date.
 	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getPublicationVersionsForNamesBySubmissionDate(int, int, java.util.List, edu.ur.order.OrderType)
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getPublicationVersionsForNamesBySubmissionDate(int,
+	 *      int, java.util.List, edu.ur.order.OrderType)
 	 */
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersionDownloadCount> getPublicationVersionsForNamesBySubmissionDate(
-			final int rowStart, final int maxResults, final List<Long> personNameIds,
-			final OrderType orderType) {
-		List<InstitutionalItemVersionDownloadCount> foundItems = (List<InstitutionalItemVersionDownloadCount>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			    if( orderType.equals(OrderType.DESCENDING_ORDER))
-			    {
-			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdSubmissionDateDesc");
-			    }
-		 	    else
-			    {
-			        q = session.getNamedQuery("getPublicationVersionsByPersonNameIdSubmissionDateAsc");
-			    }
-			    
-			    q.setParameterList("personNameIds", personNameIds);
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(maxResults);
-			    q.setFetchSize(maxResults);
-			    return q.list();
-			    
-		    }
-	    });
-        return foundItems;	
+			final int rowStart, final int maxResults,
+			final List<Long> personNameIds, final OrderType orderType) {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getPublicationVersionsByPersonNameIdSubmissionDateDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getPublicationVersionsByPersonNameIdSubmissionDateAsc");
+		}
+
+		q.setParameterList("personNameIds", personNameIds);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<InstitutionalItemVersionDownloadCount>) q.list();
 	}
 	
 	/**
@@ -379,7 +348,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	 */
 	public Date getEarliestDateOfDeposit()
 	{
-		Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("getEarliestDateOfDeposit");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getEarliestDateOfDeposit");
 	    Date ealiestDateOfDepositoy = (Date)q.uniqueResult();
 	    return ealiestDateOfDepositoy;
 	}
@@ -392,8 +361,26 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersion> getInstitutionalItemVersionsByGenericItemId(
 			Long genericItemId) {
-		return (List<InstitutionalItemVersion>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalItemVersionsForGenericItemId", genericItemId);
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionsForGenericItemId");
+		q.setParameter(0, genericItemId);
+		return (List<InstitutionalItemVersion>) q.list();
 	}
+
+	/**
+	 * Get the items ordered by id.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrder(long, int, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersion> getItemsIdOrder(
+			long lastInstitutionalItemVersionId, int maxResults) {
+		
+		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
+		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
+		criteria.addOrder(Order.asc("id"));
+		return criteria.list();
+	}
+
 
 
 }

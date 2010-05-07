@@ -54,6 +54,7 @@
 		    
 		    <class name="edu.ur.ir.handle.service.HandleServiceTest"/>
 		    
+		    <class name="edu.ur.ir.oai.metadata.provider.service.DefaultResumptionTokenTest"/>
 
 		</classes>
 	</test>

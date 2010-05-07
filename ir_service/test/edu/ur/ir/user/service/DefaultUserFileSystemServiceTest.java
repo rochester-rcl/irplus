@@ -429,8 +429,10 @@ public class DefaultUserFileSystemServiceTest {
 			userService.deleteUser(deleteUser, deleteUser);
 			tm.commit(ts);
 			
+			ts = tm.getTransaction(td);
 			assert userService.getUser(user.getId(), false) == null : "User should be null"; 
 			helper.cleanUpRepository();
+			tm.commit(ts);
 		}
 		
 		/**

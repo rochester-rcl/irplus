@@ -15,7 +15,6 @@
 */  
 package edu.ur.ir.oai.metadata.provider.service;
 
-import java.io.File;
 import java.util.Date;
 import java.util.Properties;
 
@@ -28,7 +27,6 @@ import org.testng.annotations.Test;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
-import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
@@ -63,7 +61,6 @@ import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserService;
-import edu.ur.util.FileUtil;
 
 /**
  * Class for testing the dublin core metadata provider.

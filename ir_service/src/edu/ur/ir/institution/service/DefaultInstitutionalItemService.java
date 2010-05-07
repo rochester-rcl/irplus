@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.institution.DeletedInstitutionalItem;
 import edu.ur.ir.institution.DeletedInstitutionalItemDAO;
+import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -65,9 +66,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	/** Service for dealing with low level items   */
 	private ItemService itemService;
 	
-	/** Deleted Institutional item data access */
-	private DeletedInstitutionalItemDAO deletedInstitutionalItemDAO;
-	
 	/** Item security service */
 	private ItemSecurityService itemSecurityService;
 	
@@ -76,15 +74,17 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	
 	/** Reviewable item service */
 	private ReviewableItemService reviewableItemService;
-		
-	/** Deleted Institutional item data access */
-	private DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO;
 	
 	/** Service for dealing with institutional item information */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 	
 	/** Service for dealing with institutional item index processing  */
-	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;	
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+	
+	/** service for dealing with deleted institutional item information */
+	private DeletedInstitutionalItemService deletedInstitutionalItemService;
+
+
 
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemService.class);
@@ -109,7 +109,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		// Delete ResearcherInstitutionalItem referring to this institutional item
 		researcherFileSystemService.deleteResearcherInstitutionalItem(institutionalItem);
 		
-		addDeleteHistory(institutionalItem, deletingUser);
+		deletedInstitutionalItemService.addDeleteHistory(institutionalItem, deletingUser);
 		 
 		institutionalItem.getInstitutionalCollection().removeItem(institutionalItem);
 		 
@@ -144,47 +144,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 
 	}
 	
-	/**
-	 * Adds delete history for item
-	 */
-	public void addDeleteHistory(InstitutionalItem institutionalItem, IrUser deletingUser) {
-		
-		DeletedInstitutionalItem i = new DeletedInstitutionalItem(institutionalItem);
 
-		i.setDeletedBy(deletingUser);
-		i.setDeletedDate(new Date());
-		
-		deletedInstitutionalItemDAO.makePersistent(i);
-		
-	}
-
-	/**
-	 * Delete institutional item history
-	 * 
-	 * @param deletedInstitutionalItem
-	 */
-	public void deleteInstitutionalItemHistory(DeletedInstitutionalItem entity) {
-		deletedInstitutionalItemDAO.makeTransient(entity);
-	}
-
-	/**
-	 * Get Delete info for institutional item 
-	 * 
-	 * @param institutionalItemId Id of institutional item
-	 * @return Information about deleted institutional item
-	 */
-	public DeletedInstitutionalItem getDeleteInfoForInstitutionalItem(Long institutionalItemId) {
-		return deletedInstitutionalItemDAO.getDeleteInfoForInstitutionalItem(institutionalItemId);
-	}
-	
-	/**
-	 * Delete institutional item history
-	 * 
-	 * @param deletedInstitutionalItem
-	 */
-	public void deleteAllInstitutionalItemHistory() {
-		deletedInstitutionalItemDAO.deleteAll();
-	}
 	
 	/**
 	 * Get the institutional item.
@@ -409,24 +369,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		return institutionalItemDAO.getInstitutionalCollectionsForGenericItem(itemId);
 	}
 
-	/**
-	 * Get the deleted institutional item data access object.
-	 * 
-	 * @return
-	 */
-	public DeletedInstitutionalItemDAO getDeletedInstitutionalItemDAO() {
-		return deletedInstitutionalItemDAO;
-	}
-
-	/**
-	 * Set the deleted institutional item data acess object 
-	 * 
-	 * @param deletedInstitutionalItemDAO
-	 */
-	public void setDeletedInstitutionalItemDAO(
-			DeletedInstitutionalItemDAO deletedInstitutionalItemDAO) {
-		this.deletedInstitutionalItemDAO = deletedInstitutionalItemDAO;
-	}
 
 	/**
 	 * Get the number of publications contributed by given person names
@@ -481,14 +423,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		this.reviewableItemService = reviewableItemService;
 	}
 
-	/**
-	 * Get number of deleted institutional items for user
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getDeletedInstitutionalItemCountForUser(Long)
-	 */
-	public Long getDeletedInstitutionalItemCountForUser(Long userId) {
-		return deletedInstitutionalItemDAO.getDeletedInstitutionalItemCountForUser(userId);
-	}
+
 
 	/**
 	 * Get institutional item by generic item id
@@ -603,34 +538,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		
 	}
 
-	/**
-	 * Get the deleted institutional item by the original institutional item version id.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getDeletedVersionByItemVersion(java.lang.Long, int)
-	 */
-	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersion(
-			Long institutionalItemId, int versionNumber) {
-		return deletedInstitutionalItemVersionDAO.get(institutionalItemId, versionNumber);
-	}
-
-	/**
-	 * Get the deleted version by item version id.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getDeletedVersionByItemVersionId(java.lang.Long)
-	 */
-	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersionId(
-			Long institutionalItemVersionId) {
-		return deletedInstitutionalItemVersionDAO.get(institutionalItemVersionId);
-	}
-	
-	public DeletedInstitutionalItemVersionDAO getDeletedInstitutionalItemVersionDAO() {
-		return deletedInstitutionalItemVersionDAO;
-	}
-
-	public void setDeletedInstitutionalItemVersionDAO(
-			DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO) {
-		this.deletedInstitutionalItemVersionDAO = deletedInstitutionalItemVersionDAO;
-	}
 	
 	public InstitutionalItemVersionService getInstitutionalItemVersionService() {
 		return institutionalItemVersionService;
@@ -664,5 +571,16 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public void setInstitutionalItemIndexProcessingRecordService(
 			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
 		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+	
+	public DeletedInstitutionalItemService getDeletedInstitutionalItemService() {
+		return deletedInstitutionalItemService;
+	}
+
+
+
+	public void setDeletedInstitutionalItemService(
+			DeletedInstitutionalItemService deletedInstitutionalItemService) {
+		this.deletedInstitutionalItemService = deletedInstitutionalItemService;
 	}
 }

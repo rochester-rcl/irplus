@@ -37,6 +37,7 @@ import org.testng.annotations.Test;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
+import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
@@ -99,6 +100,10 @@ public class DefaultInstitutionalCollectionSubscriptionServiceTest {
     /** Collection service  */
     InstitutionalCollectionService institutionalCollectionService = 
     	(InstitutionalCollectionService) ctx.getBean("institutionalCollectionService");
+    
+    /** Deleted Institutional Item service  */
+    DeletedInstitutionalItemService deletedInstitutionalItemService = 
+    	(DeletedInstitutionalItemService) ctx.getBean("deletedInstitutionalItemService");
     
 	/** service for dealing with institutional items */
 	InstitutionalItemService institutionalItemService = (InstitutionalItemService)ctx.getBean("institutionalItemService");
@@ -204,7 +209,7 @@ public class DefaultInstitutionalCollectionSubscriptionServiceTest {
 			institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
 			institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem2.getId(), false), user);
 
-			institutionalItemService.deleteAllInstitutionalItemHistory();
+			deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
 			IrUser deleteUser = userService.getUser(user.getUsername());
  		    userService.deleteUser(deleteUser, deleteUser);
 		    helper.cleanUpRepository();

@@ -194,5 +194,23 @@ public interface InstitutionalItemVersionService extends Serializable{
 	 * @param reason - reason the versions were updated.
 	 */
 	public void setAllVersionsAsUpdated(IrUser user, Long genericItemId, String reason);
+	
+	
+	/**
+	 * Get a list of institutional items ordered by institutional item version id ascending.
+	 * 
+	 * 
+	 * @param lastInstitutionalItemVersionId - the last institutional item version id
+	 * to be processed.  Use 0 if no items have yet been processed.  Will grab max results
+	 * of where ids are greater than the given id.
+	 * 
+	 * @param maxResulsts - maximum number of results to fetch
+
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional item version
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrder( long lastInstitutionalItemVersionId,
+			int maxResults);
 
 }

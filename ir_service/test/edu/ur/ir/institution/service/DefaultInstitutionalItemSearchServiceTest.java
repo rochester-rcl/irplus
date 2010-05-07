@@ -35,6 +35,7 @@ import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.FacetSearchHelper;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
+import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -157,7 +158,9 @@ public class DefaultInstitutionalItemSearchServiceTest {
 	/** service for dealing with institutional items */
 	InstitutionalItemService institutionalItemService = (InstitutionalItemService)ctx.getBean("institutionalItemService");
 	
-
+    /** Deleted Institutional Item service  */
+    DeletedInstitutionalItemService deletedInstitutionalItemService = 
+    	(DeletedInstitutionalItemService) ctx.getBean("deletedInstitutionalItemService");
 	
 	/**
 	 * Test searching for an institutional item
@@ -310,7 +313,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 	    // Start new transaction - clean up the data
 		ts = tm.getTransaction(td);
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
-		institutionalItemService.deleteAllInstitutionalItemHistory();
+		deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
 		IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);		
 		helper.cleanUpRepository();
@@ -580,7 +583,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		ts = tm.getTransaction(td);
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem2.getId(), false), user);
-		institutionalItemService.deleteAllInstitutionalItemHistory();
+		deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
 		IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);	
 		helper.cleanUpRepository();
@@ -908,7 +911,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem2.getId(), false), user);
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem3.getId(), false), user);
-		institutionalItemService.deleteAllInstitutionalItemHistory();
+		deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
 		IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);	
 		helper.cleanUpRepository();

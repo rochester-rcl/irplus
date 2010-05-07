@@ -55,7 +55,7 @@
        <property name="emailVerificationMessage" ref="emailVerificationMessage"/>
        <property name="researcherService" ref="researcherService"/>
        <property name="baseWebAppPath" value="${base.web.path}"/>
-       <property name="institutionalItemService" ref="institutionalItemService"/>
+       <property name="deletedInstitutionalItemService" ref="deletedInstitutionalItemService"/>
        <property name="institutionalCollectionSubscriptionService" ref="institutionalCollectionSubscriptionService"/>
        <property name="userGroupService" ref="userGroupService"/>
        <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
@@ -196,15 +196,19 @@
        <property name="institutionalItemVersionService" ref="institutionalItemVersionService"/>
        <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
        <property name="itemService" ref="itemService"/>
-       <property name="deletedInstitutionalItemDAO" ref="deletedInstitutionalItemDAO"/>
-       <property name="deletedInstitutionalItemVersionDAO" ref="deletedInstitutionalItemVersionDAO"/>
+       <property name="deletedInstitutionalItemService" ref="deletedInstitutionalItemService"/>
        <property name="itemSecurityService" ref="itemSecurityService"/>
        <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
        <property name="reviewableItemService" ref="reviewableItemService"/>
    </bean>
    
-
-
+     <!--  Service for helping with institutional items --> 
+   <bean id="deletedInstitutionalItemService" 
+       class="edu.ur.ir.institution.service.DefaultDeletedInstitutionalItemService">
+       <property name="deletedInstitutionalItemDAO" ref="deletedInstitutionalItemDAO"/>
+       <property name="deletedInstitutionalItemVersionDAO" ref="deletedInstitutionalItemVersionDAO"/>
+   </bean>
+   
    <bean id="institutionalCollectionService" 
        class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionService">
        <property name="repositoryService" ref="repositoryService"/>

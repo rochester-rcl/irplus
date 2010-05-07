@@ -213,6 +213,9 @@ public class InstitutionalItemVersionDAOTest {
 		ts = tm.getTransaction(td);
 		InstitutionalItemVersion other = institutionalItemVersionDAO.getById(institutionalItemVersion.getId(), false);
 		assert other.equals(institutionalItemVersion) : "Should be able to find item " + institutionalItemVersion;
+		List<InstitutionalItemVersion> versions = institutionalItemVersionDAO.getInstitutionalItemVersionsByGenericItemId(genericItem.getId());
+		assert versions.size() == 1 : "Versions should have size 1 but has " + versions.size();
+		assert versions.contains(other) : "Versions should contain other but does not other = " + other;
 		tm.commit(ts);
 
 		//create a new transaction

@@ -35,6 +35,7 @@ import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
+import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
@@ -113,6 +114,10 @@ public class DefaultInstitutionalItemServiceTest {
 	.getBean("itemService");
 	
 
+    /** Deleted Institutional Item service  */
+    DeletedInstitutionalItemService deletedInstitutionalItemService = 
+    	(DeletedInstitutionalItemService) ctx.getBean("deletedInstitutionalItemService");
+	
 	/**
 	 * Test deleted institutional item
 	 * 
@@ -153,12 +158,12 @@ public class DefaultInstitutionalItemServiceTest {
 		assert institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false).equals(institutionalItem) : "Institutional item should exist";
         institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
         assert institutionalItemService.getInstitutionalItem(instituionalItemId, false) == null : "Institutional item should not exist";
-        assert institutionalItemService.getDeleteInfoForInstitutionalItem(instituionalItemId) != null : "Delete history for institutional item should exist";
+        assert deletedInstitutionalItemService.getDeleteInfoForInstitutionalItem(instituionalItemId) != null : "Delete history for institutional item should exist";
 		tm.commit(ts);
 		
 	    // Start new transaction - clean up the data
 		ts = tm.getTransaction(td);
-		institutionalItemService.deleteAllInstitutionalItemHistory();
+		deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
 		IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);	
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
@@ -276,7 +281,7 @@ public class DefaultInstitutionalItemServiceTest {
 		securityService.deleteAcl(securityService.getAcl(file));
 		securityService.deleteAcl(securityService.getAcl(collection));
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
-		institutionalItemService.deleteAllInstitutionalItemHistory();
+		deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
 		IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);		
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
