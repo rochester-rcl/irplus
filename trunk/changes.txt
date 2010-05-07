@@ -18,6 +18,11 @@ irplus changes 1.0 to 1.1
 - Added access method for getting contributor publications ordered by submission date
 - Added access method for getting sponsor publications ordered by submission date
 
+[ur_persistence_util]
+=============================
+- Updated HbCrudDAO to depreciate hibernate template and instead use getSessionFactor
+and use the hibernate session.
+
 [ir_metadata]
 ============================
 initial addition for dealing with metadata information
@@ -33,6 +38,8 @@ initial addition for dealing with metadata information
 - Made constructor for ReviewableItem and InstitutionalItem public for performance reasons
 - Added lastDateModified, lastModifiedNote and LastModifiedBy to Institutional item version
 - Added OAI infrastructure and ability for OAI havesting 
+- Updated institutional item version to have modfied by, modified date and modified reason to track changes 
+  this will help with administration and OAI protocol
 
 [ir_service]
 ==================================
@@ -81,7 +88,11 @@ initial addition for dealing with metadata information
   complete submission - greatly enhances performance on larger collections 
 - Added a link back to main group page
 
+- Added code to allow users to see that an institutional item has been deleted
+- Added code to allow users to see that an institutional item could not be found and report
+  if they think this is an error
 
+- Updated text in metadata submission to say primary image file rather than primary file.
 
 ur_tags
 ====================================
