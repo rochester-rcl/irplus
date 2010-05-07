@@ -32,9 +32,9 @@ import org.springframework.util.StringUtils;
 
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
+import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
-import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.item.VersionedItem;
@@ -109,7 +109,7 @@ public class DefaultUserService implements UserService {
 	/** Researcher Service */
 	private ResearcherService researcherService;
 		
-	/* Mail sender */
+	/** Mail sender */
 	private MailSender mailSender;
 
 	/**  Get the logger for this class */
@@ -145,9 +145,6 @@ public class DefaultUserService implements UserService {
 	/** Service for dealing with items. */
 	private ItemService itemService;
 	
-	/** Service for dealing with institutional items. */
-	private InstitutionalItemService institutionalItemService;
-	
 	/** service for dealing with subscriptions */
 	private InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService;
 	
@@ -162,6 +159,10 @@ public class DefaultUserService implements UserService {
 	
 	/** data access for external user accounts */
 	private ExternalUserAccountDAO externalUserAccountDAO;
+	
+	/** service to deal with deleted institutional item information */
+	private DeletedInstitutionalItemService deletedInstitutionalItemService;
+
 
 	/**
 	 * Get the User email if email id exists in the system.
@@ -346,7 +347,7 @@ public class DefaultUserService implements UserService {
 	    }
 	    
  	
-		Long countOfDeletedItems = institutionalItemService.getDeletedInstitutionalItemCountForUser(user.getId());
+		Long countOfDeletedItems = deletedInstitutionalItemService.getDeletedInstitutionalItemCountForUser(user.getId());
 		
 		if (countOfDeletedItems != 0 ) {
 			throw new UserDeletedPublicationException(user);
@@ -1107,12 +1108,6 @@ public class DefaultUserService implements UserService {
 		return userEmailDAO.getUserEmailByToken(token);
 	}
 
-	
-	public void setInstitutionalItemService(
-			InstitutionalItemService institutionalItemService) {
-		this.institutionalItemService = institutionalItemService;
-	}
-
 	/**
 	 * Sort users
 	 * 
@@ -1203,6 +1198,15 @@ public class DefaultUserService implements UserService {
 	public ExternalUserAccount getByExternalUserNameAccountType(
 			String externalUserName, ExternalAccountType externalAccountType) {
 		return externalUserAccountDAO.getByExternalUserNameAccountType(externalUserName, externalAccountType);
+	}
+	
+	public DeletedInstitutionalItemService getDeletedInstitutionalItemService() {
+		return deletedInstitutionalItemService;
+	}
+
+	public void setDeletedInstitutionalItemService(
+			DeletedInstitutionalItemService deletedInstitutionalItemService) {
+		this.deletedInstitutionalItemService = deletedInstitutionalItemService;
 	}
 
 }

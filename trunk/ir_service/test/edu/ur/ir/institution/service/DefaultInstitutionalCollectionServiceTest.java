@@ -34,6 +34,7 @@ import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
+import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
@@ -80,6 +81,10 @@ public class DefaultInstitutionalCollectionServiceTest {
     /** Institutional Item service  */
     InstitutionalItemService institutionalItemService = 
     	(InstitutionalItemService) ctx.getBean("institutionalItemService");
+    
+    /** Deleted Institutional Item service  */
+    DeletedInstitutionalItemService deletedInstitutionalItemService = 
+    	(DeletedInstitutionalItemService) ctx.getBean("deletedInstitutionalItemService");
     
     /** user service */
     UserService userService = (UserService) ctx.getBean("userService");
@@ -254,7 +259,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 
 		
 		helper.cleanUpRepository();
-		institutionalItemService.deleteAllInstitutionalItemHistory();
+		deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
 		IrUser userToDelete = userService.getUser(user.getUsername());
 		userService.deleteUser(userToDelete, userToDelete);
 
@@ -453,7 +458,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 		ts = tm.getTransaction(td);
         	
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
-        institutionalItemService.deleteAllInstitutionalItemHistory();
+        deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
         IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);
         helper.cleanUpRepository();
@@ -522,7 +527,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 		ts = tm.getTransaction(td);
 		
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
-        institutionalItemService.deleteAllInstitutionalItemHistory();
+        deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
         IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);	
         helper.cleanUpRepository();

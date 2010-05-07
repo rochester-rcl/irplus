@@ -397,4 +397,5 @@
 	    where institutionalItemVersion.item.id = ?
 	</query>
 	
+	
 </hibernate-mapping>

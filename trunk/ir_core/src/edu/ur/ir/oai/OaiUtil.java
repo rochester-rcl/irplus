@@ -16,6 +16,7 @@
 
 package edu.ur.ir.oai;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,6 +35,10 @@ public class OaiUtil
 	public static final String GET_RECORD_VERB = "GetRecord";
 	public static final String LIST_IDENTIFIERS_VERB = "ListIndentifiers";
 	public static final String LIST_RECORDS_VERB = "ListRecords";
+	
+	public static final String longFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	public static final String shortFormat = "yyyy-MM-dd";
+
 	
 	/**
 	 * Determine if the oai verb is valid.  This method ignores case.
@@ -66,13 +71,66 @@ public class OaiUtil
 	 */
 	public static String zuluTime(Date d)
 	{
+		SimpleDateFormat longDateFormat = new SimpleDateFormat(longFormat);
 		String strDate = "";
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(d);
 		int utcOffsetInMinutes =  -(calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET)) / (60 * 1000);
 		calendar.add(Calendar.MINUTE, utcOffsetInMinutes);
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-		strDate = dateFormat.format(calendar.getTime());
+		strDate = longDateFormat.format(calendar.getTime());
 		return strDate;
+	}
+	
+	/**
+	 * Get the current time based off of zulu date.
+	 * 
+	 * @param zuluDate - the zulu date time used
+	 * @return the current date time with no offset
+	 */
+	public static Date currentTime(Date zuluDate)
+	{
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(zuluDate);
+		int utcOffsetInMinutes =  (calendar.get(Calendar.ZONE_OFFSET) - calendar.get(Calendar.DST_OFFSET)) / (60 * 1000);
+		calendar.add(Calendar.MINUTE, utcOffsetInMinutes);
+		return calendar.getTime();
+	}
+	
+	/**
+	 * Get the date - throws an illegal state exception if it is not one of the
+	 * acceptable date values.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static Date getDate(String value)
+	{
+		SimpleDateFormat longDateFormat = new SimpleDateFormat(longFormat);
+		SimpleDateFormat shortDateFormat = new SimpleDateFormat(shortFormat);
+
+		Date d = null;
+			try {
+			 d = longDateFormat.parse(value);
+		} catch (ParseException e) {
+			 try {
+				d = shortDateFormat.parse(value);
+			} catch (ParseException e1) {
+				throw new IllegalStateException("Could not parse from date " + value);
+			}
+		}
+		return d;
+	}
+	
+	/**
+	 * Get the date - throws an illegal state exception if it is not one of the
+	 * acceptable date values.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String getLongDateFormat(Date d)
+	{
+		SimpleDateFormat longDateFormat = new SimpleDateFormat(longFormat);
+		return longDateFormat.format(d);
 	}
 }

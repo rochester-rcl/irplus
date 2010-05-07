@@ -17,15 +17,12 @@
 
 package edu.ur.hibernate;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.DetachedCriteria;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import edu.ur.dao.CrudDAO;
@@ -39,9 +36,16 @@ import edu.ur.dao.CrudDAO;
  *
  * @param <T>
  */
-public class HbCrudDAO<T> implements CrudDAO<T>{
+public class HbCrudDAO<T> implements CrudDAO<T>, Serializable{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -4547406037263219068L;
+
+	/** hibernate template */
 	protected HibernateTemplate hibernateTemplate;
+	
+	/** reference to the session factory */
+	protected SessionFactory sessionFactory;
 	
 	/**
 	 * Class Which this object can persist
@@ -73,6 +77,8 @@ public class HbCrudDAO<T> implements CrudDAO<T>{
 	}
 	
 	/**
+	 * @deprecated - this should no longer be used instead use getSessionFactory.getSession().
+	 * @see http://blog.springsource.com/2007/06/26/so-should-you-still-use-springs-hibernatetemplate-andor-jpatemplate/
 	 * Get the hibernate template
 	 * 
 	 * @return hibernat template
@@ -91,6 +97,7 @@ public class HbCrudDAO<T> implements CrudDAO<T>{
      */
     public void setSessionFactory(SessionFactory sessionFactory)
     {
+    	this.sessionFactory = sessionFactory;
     	this.hibernateTemplate = new HibernateTemplate(sessionFactory);
     }
     
@@ -98,41 +105,26 @@ public class HbCrudDAO<T> implements CrudDAO<T>{
     @SuppressWarnings("unchecked")
 	public T getById(Long id, boolean lock) {
         if (lock)
-        	return (T)hibernateTemplate.get(clazz, id, LockMode.UPGRADE);
+        	return (T)sessionFactory.getCurrentSession().get(clazz, id, LockMode.UPGRADE);
         else
-        	return (T)hibernateTemplate.get(clazz, id);
+        	return (T)sessionFactory.getCurrentSession().get(clazz, id);
 	}
 
 	
 	public void makePersistent(T entity) {
-		hibernateTemplate.saveOrUpdate(entity);
+		sessionFactory.getCurrentSession().saveOrUpdate(entity);
 		
 	}
 
 	public void makeTransient(T entity) {
-		hibernateTemplate.delete(entity);
+		sessionFactory.getCurrentSession().delete(entity);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<T> getAll() {
-	    return findByCriteria();
+	    return (List<T>)sessionFactory.getCurrentSession().createCriteria(clazz).list();
 	}
 	
-    /**
-     * Use this inside subclasses as a convenience method.
-     * 
-     * @param criterion
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public List<T> findByCriteria(Criterion... criterion) {
-       	DetachedCriteria dc = DetachedCriteria.forClass(clazz);
-    	for( Criterion c: criterion)
-    	{
-    		dc.add(c);
-    	}
-    	return (List<T>)hibernateTemplate.findByCriteria(dc);
-   }
-    
     /**
      * Helper query for find information found 
      * 
@@ -145,16 +137,20 @@ public class HbCrudDAO<T> implements CrudDAO<T>{
    public List<T> getByQuery(final String queryName, 
 		   final int startRecord, 
 		   final int numRecords) {
-    	return (List<T>) hibernateTemplate.executeFind( new HibernateCallback() 
-    			{
-    		         public Object doInHibernate(Session session)
-    		         {
-    		     	    Query query = session.getNamedQuery(queryName);
-    		     		query.setFirstResult(startRecord);
-    		     		query.setMaxResults(numRecords);
-    		     		query.setFetchSize(numRecords);
-                        return query.list();
-    		         }
-    			});
+    	Query query = sessionFactory.getCurrentSession().getNamedQuery(queryName);
+    	query.setFirstResult(startRecord);
+    	query.setMaxResults(numRecords);
+    	query.setFetchSize(numRecords);
+        return query.list();
+    	
 	}
+    
+	/**
+	 * Allows sub classes to get the session factory
+	 * @return
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
 }

@@ -251,4 +251,16 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 		
 	}
 
+
+	/**
+	 * Get the institutional item versions in id ascending order.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsIdOrder(long, int, edu.ur.order.OrderType)
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrder(
+			long lastInstitutionalItemVersionId, int maxResults) {
+		return institutionalItemVersionDAO.getItemsIdOrder(lastInstitutionalItemVersionId, 
+				maxResults);
+	}
+
 }

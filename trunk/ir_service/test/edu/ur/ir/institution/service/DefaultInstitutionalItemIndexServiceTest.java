@@ -45,6 +45,7 @@ import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
+import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -176,7 +177,9 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	private IndexProcessingTypeService indexProcessingTypeService = 
 		(IndexProcessingTypeService) ctx.getBean("indexProcessingTypeService");
 
-	
+    /** Deleted Institutional Item service  */
+    private DeletedInstitutionalItemService deletedInstitutionalItemService = 
+    	(DeletedInstitutionalItemService) ctx.getBean("deletedInstitutionalItemService");
 	/**
 	 * Executes the query returning the number of hits.
 	 * 
@@ -457,7 +460,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	    // Start new transaction - clean up the data
 		ts = tm.getTransaction(td);
 		institutionalItemService.deleteInstitutionalItem(institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false), user);
-		institutionalItemService.deleteAllInstitutionalItemHistory();
+		deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
 		IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);	
 		helper.cleanUpRepository();
@@ -743,7 +746,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		
 	    // Start new transaction - clean up the data
 		institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(), false), user);
-		institutionalItemService.deleteAllInstitutionalItemHistory();
+		deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
 		IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);	
 		helper.cleanUpRepository();

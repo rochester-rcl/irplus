@@ -33,6 +33,7 @@ import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
+import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemService;
@@ -99,6 +100,9 @@ public class DefaultStatisticsServiceTest {
 	/** service for dealing with institutional items */
 	InstitutionalItemService institutionalItemService = (InstitutionalItemService)ctx.getBean("institutionalItemService");
 
+    /** Deleted Institutional Item service  */
+    DeletedInstitutionalItemService deletedInstitutionalItemService = 
+    	(DeletedInstitutionalItemService) ctx.getBean("deletedInstitutionalItemService");
 	/**
 	 * Test number of downloads
 	 * 
@@ -193,7 +197,7 @@ public class DefaultStatisticsServiceTest {
 
         ts = tm.getTransaction(td);
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(), false), user);
-        institutionalItemService.deleteAllInstitutionalItemHistory();
+        deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
         IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);
         statisticsService.delete(statisticsService.getFileDownloadInfo(downloadInfo1.getId(), false));
@@ -312,7 +316,7 @@ public class DefaultStatisticsServiceTest {
 
         ts = tm.getTransaction(td);
         institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(), false), user);
-        institutionalItemService.deleteAllInstitutionalItemHistory();
+        deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
         IrUser deleteUser = userService.getUser(user.getId(), false);
         userService.deleteUser(deleteUser, deleteUser);
         statisticsService.delete(statisticsService.getFileDownloadInfo(info1.getId(), false));

@@ -16,11 +16,16 @@
 
 package edu.ur.ir.oai.metadata.provider.service;
 
+import java.util.List;
+
+import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.NoRecordsMatchException;
 import edu.ur.ir.oai.exception.NoSetHierarchyException;
 import edu.ur.ir.oai.metadata.provider.ListIdentifiersService;
+import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
 
 /**
  * Default implementation of the list identifiers service.
@@ -35,7 +40,13 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	
 	/**  Default batch size for harvesting */
 	private int batchSize = 100;
-
+	
+	/**  List of oai metadata service providers */
+	private OaiMetadataServiceProvider oaiMetadataServiceProvider;
+	
+	/** Service for dealing with institutional item information */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
 	/**
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.ListIdentifiersService#listIdentifiers(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
@@ -45,8 +56,58 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 			throws BadResumptionTokenException,
 			CannotDisseminateFormatException, NoRecordsMatchException,
 			NoSetHierarchyException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if( !oaiMetadataServiceProvider.supports(metadataPrefix) )
+		{
+			throw new CannotDisseminateFormatException("Format: " + metadataPrefix + " is not supported");
+		}
+
+		// parse the token if it exists
+		DefaultResumptionToken defaultToken = null;
+		if(resumptionToken != null && !resumptionToken.equals(""))
+		{
+			defaultToken = new DefaultResumptionToken(resumptionToken);
+		}
+		else
+		{
+			defaultToken = new DefaultResumptionToken();
+			
+			defaultToken.setBatchSize(batchSize);
+			if( from != null && !from.equals(""))
+			{
+			    defaultToken.setFrom(from);
+			}
+			if( set != null && !set.equals(""))
+			{
+				defaultToken.setSet(set);
+			}
+			if( until != null && !until.equals(""))
+			{
+				defaultToken.setUntil(until);
+			}
+			defaultToken.setMetadataPrefix(metadataPrefix);
+			defaultToken.setLastId(0l);
+			
+		}
+
+		// do batch size plus one - if we retrieve all records then another request must be issued
+		// with resumption token
+		List<InstitutionalItemVersion> versions = institutionalItemVersionService.getItemsIdOrder(defaultToken.getLastId(), batchSize + 1);
+		int size = versions.size();
+		
+		// we will need to send resumption token
+		if( size == (batchSize + 1))
+		{
+			// remove the last item as it should not be sent
+			// this only indicates that there is one more than the batch size
+			// allows
+			versions.remove(size - 1);
+		}
+		
+		return listIdentifiers(versions);
+
+		
+		
 	}
 	
 	/**
@@ -55,9 +116,12 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	 * @param metadataPrefix
 	 * @return
 	 */
-	private String listIdentifiers(String metadataPrefix)
+	private String listIdentifiers(List<InstitutionalItemVersion> versions)
 	{
 		String value = "";
+		
+		
+		
 		return value;
 	}
 	
@@ -68,5 +132,25 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
 	}
+	
+	public OaiMetadataServiceProvider getOaiMetadataServiceProvider() {
+		return oaiMetadataServiceProvider;
+	}
+
+	public void setOaiMetadataServiceProvider(
+			OaiMetadataServiceProvider oaiMetadataServiceProvider) {
+		this.oaiMetadataServiceProvider = oaiMetadataServiceProvider;
+	}
+
+	public InstitutionalItemVersionService getInstitutionalItemVersionService() {
+		return institutionalItemVersionService;
+	}
+
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+	
+	
 
 }

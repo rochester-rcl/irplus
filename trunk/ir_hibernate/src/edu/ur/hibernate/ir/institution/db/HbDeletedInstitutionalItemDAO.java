@@ -33,10 +33,10 @@ import edu.ur.ir.institution.DeletedInstitutionalItemDAO;
  */
 public class HbDeletedInstitutionalItemDAO implements DeletedInstitutionalItemDAO{
 
-
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1822458624569481338L;
+	
+	/**  Helper for persisting information using hibernate.   */
 	private final HbCrudDAO<DeletedInstitutionalItem> hbCrudDAO;
 	
 	/**

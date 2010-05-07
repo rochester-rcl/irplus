@@ -161,8 +161,10 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		userService.deleteUser(deleteUser, deleteUser);
 		tm.commit(ts);
 		
+		ts = tm.getTransaction(td);
 		assert userService.getUser(user.getId(), false) == null : "User should be null";
 		personalItemDeleteRecordDAO.deleteAll();
+		tm.commit(ts);
 		
 	}
 	
@@ -596,8 +598,10 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		userService.deleteUser(user, user);
 		tm.commit(ts);
 		
+		ts = tm.getTransaction(td);
 		assert userService.getUser(user.getId(), false) == null : "User should be null"; 
 		helper.cleanUpRepository();
+		tm.commit(ts);
 	}
 	
 
