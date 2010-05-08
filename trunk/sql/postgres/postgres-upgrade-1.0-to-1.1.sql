@@ -580,7 +580,7 @@ where institutional_item_version.institutional_item_version_id = item_version.in
 ALTER TABLE ir_repository.institutional_item_version ALTER COLUMN date_modified SET NOT NULL;
 
 ALTER TABLE ir_repository.institutional_item_version
-ADD COLUMN  modified_by_user_id BIGINT
+ADD COLUMN  modified_by_user_id BIGINT;
 
 ALTER TABLE ir_repository.institutional_item_version ADD CONSTRAINT modbyuserfk FOREIGN KEY ( modified_by_user_id) REFERENCES ir_user.ir_user(user_id) ;
 
