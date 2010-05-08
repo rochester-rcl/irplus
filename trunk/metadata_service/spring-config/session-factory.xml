@@ -34,7 +34,6 @@
         <property name="mappingResources">
             <set>
                 <value>edu/ur/hibernate/metadata/MetadataType.hbm.xml</value>
-                <value>edu/ur/hibernate/metadata/dc/DublinCoreElement.hbm.xml</value>
             </set>
         </property>
         <property name="hibernateProperties">
