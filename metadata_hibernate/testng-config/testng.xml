@@ -21,8 +21,9 @@
 	<test name="Metadata Hibernate Testing - All">
 		<classes>
 		     <class name="edu.ur.hibernate.metadata.MetadataTypeDAOTest"/>
-		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreElementDAOTest"/>
 		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreTermDAOTest"/>
+		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreEncodingSchemeDAOTest"/>
+
 		</classes>
 	</test>
 	
