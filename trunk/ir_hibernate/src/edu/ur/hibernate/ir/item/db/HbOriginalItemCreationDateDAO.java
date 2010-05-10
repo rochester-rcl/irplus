@@ -33,6 +33,10 @@ import edu.ur.ir.item.OriginalItemCreationDateDAO;
  */
 public class HbOriginalItemCreationDateDAO implements OriginalItemCreationDateDAO{
 	
+	/**  eclipse generated id */
+	private static final long serialVersionUID = 3272740631478860735L;
+	
+	/** hibernate helper*/
 	private final HbCrudDAO<OriginalItemCreationDate> hbCrudDAO;
 
 	/**

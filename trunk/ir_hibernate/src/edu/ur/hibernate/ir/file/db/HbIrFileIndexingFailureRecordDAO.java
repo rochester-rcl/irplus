@@ -27,9 +27,10 @@ import edu.ur.ir.file.IrFileIndexingFailureRecordDAO;
 
 public class HbIrFileIndexingFailureRecordDAO implements IrFileIndexingFailureRecordDAO{
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -5597220663120843105L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<IrFileIndexingFailureRecord> hbCrudDAO;
 
 	/**

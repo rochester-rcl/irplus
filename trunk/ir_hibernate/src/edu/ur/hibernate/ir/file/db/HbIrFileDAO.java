@@ -30,9 +30,10 @@ import edu.ur.ir.file.IrFileDAO;
 
 public class HbIrFileDAO implements IrFileDAO{
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -7946714825439790785L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<IrFile> hbCrudDAO;
 
 	/**

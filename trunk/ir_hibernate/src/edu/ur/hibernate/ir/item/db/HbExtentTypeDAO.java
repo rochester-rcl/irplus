@@ -41,9 +41,10 @@ import edu.ur.ir.item.ExtentTypeDAO;
  */
 public class HbExtentTypeDAO implements ExtentTypeDAO {
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -3896900593325279312L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<ExtentType> hbCrudDAO;
 
 	/**

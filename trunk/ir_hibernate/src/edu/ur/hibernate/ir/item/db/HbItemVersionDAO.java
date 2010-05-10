@@ -34,9 +34,10 @@ import edu.ur.ir.item.ItemVersionDAO;
  */
 public class HbItemVersionDAO implements ItemVersionDAO{
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -7055162835621939185L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<ItemVersion> hbCrudDAO;
 
 	/**

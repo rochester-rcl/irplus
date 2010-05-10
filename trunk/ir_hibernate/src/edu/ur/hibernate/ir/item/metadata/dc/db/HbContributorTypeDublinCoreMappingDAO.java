@@ -37,9 +37,10 @@ import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMappingDAO;
  */
 public class HbContributorTypeDublinCoreMappingDAO implements ContributorTypeDublinCoreMappingDAO{
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 9198877928342664795L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<ContributorTypeDublinCoreMapping> hbCrudDAO;
 	
 	/**

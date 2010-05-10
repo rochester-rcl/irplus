@@ -34,8 +34,11 @@ import edu.ur.ir.item.ItemSponsorDAO;
  */
 public class HbItemSponsorDAO implements ItemSponsorDAO {
 
-	private final HbCrudDAO<ItemSponsor> hbCrudDAO;
+	/** eclipse generated id */
+	private static final long serialVersionUID = 8406000779078048375L;
 
+	/** hibernate helper  */
+	private final HbCrudDAO<ItemSponsor> hbCrudDAO;
 
 	/**
 	 * Default Constructor

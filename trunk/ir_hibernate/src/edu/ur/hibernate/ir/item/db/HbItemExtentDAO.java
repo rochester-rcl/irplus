@@ -34,6 +34,11 @@ import edu.ur.ir.item.ItemExtentDAO;
  */
 public class HbItemExtentDAO implements ItemExtentDAO{
 	
+	/** eclipse generated id  */
+	private static final long serialVersionUID = 5663574956045560884L;
+	
+	
+	/** hibernate helper */
 	private final HbCrudDAO<ItemExtent> hbCrudDAO;
 
 

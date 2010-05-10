@@ -33,6 +33,10 @@ import edu.ur.ir.item.FirstAvailableDateDAO;
  */
 public class HbFirstAvailableDateDAO implements FirstAvailableDateDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -1952621914643725950L;
+	
+	/** hibernate helper class  */
 	private final HbCrudDAO<FirstAvailableDate> hbCrudDAO;
 
 	/**

@@ -25,6 +25,7 @@ public class HbHelper {
 	 * To be used to retireve a single value.  This is a convience method
 	 * and will return a runtime error if more than one object is found
 	 * 
+	 * @deprecated - use the hibernate session uniqueResult instead
 	 * @param list
 	 * @return The found object or null if nothing is in the list
 	 */

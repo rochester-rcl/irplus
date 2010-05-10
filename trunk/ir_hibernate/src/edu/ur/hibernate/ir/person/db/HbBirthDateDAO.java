@@ -33,6 +33,10 @@ import edu.ur.ir.person.BirthDateDAO;
  */
 public class HbBirthDateDAO implements BirthDateDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7232997042568872544L;
+
+	/** hibernate data access object  */
 	private final HbCrudDAO<BirthDate> hbCrudDAO;
 
 	/**

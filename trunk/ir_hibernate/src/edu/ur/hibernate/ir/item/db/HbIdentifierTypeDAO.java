@@ -41,9 +41,10 @@ import edu.ur.ir.item.IdentifierTypeDAO;
  */
 public class HbIdentifierTypeDAO implements IdentifierTypeDAO {
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -8941283937307667712L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<IdentifierType> hbCrudDAO;
 
 	/**

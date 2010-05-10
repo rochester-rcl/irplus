@@ -42,9 +42,10 @@ import edu.ur.ir.news.NewsItem;
  */
 public class HbNewsDAO implements NewsDAO {
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 3662526225500083876L;
+	
+	/**  Helper for persisting information using hibernate.  */	
 	private final HbCrudDAO<NewsItem> hbCrudDAO;
 	
 	/**

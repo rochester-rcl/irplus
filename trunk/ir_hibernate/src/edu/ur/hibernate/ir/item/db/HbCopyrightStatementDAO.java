@@ -39,9 +39,10 @@ import edu.ur.order.OrderType;
  */
 public class HbCopyrightStatementDAO implements CopyrightStatementDAO {
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 2853921942085274351L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<CopyrightStatement> hbCrudDAO;
 	
 	/**

@@ -44,6 +44,10 @@ import edu.ur.order.OrderType;
  */
 public class HbSponsorDAO implements SponsorDAO {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7412609681491549657L;
+	
+	/** hibernate helper */
 	private final HbCrudDAO<Sponsor> hbCrudDAO;
 
 	/**

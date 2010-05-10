@@ -16,7 +16,6 @@
 
 package edu.ur.hibernate.ir.institution.db;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +37,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDAO, Serializable{
+public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDAO{
 	
 	/** eclipse generated id */
 	private static final long serialVersionUID = 666924883180148194L;

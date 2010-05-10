@@ -34,9 +34,10 @@ import edu.ur.ir.institution.VersionedInstitutionalItemDAO;
 public class HbVersionedInstitutionalItemDAO implements VersionedInstitutionalItemDAO{
 
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 3432763787065433867L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<VersionedInstitutionalItem> hbCrudDAO;
 	
 	/**

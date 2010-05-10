@@ -34,6 +34,10 @@ import edu.ur.ir.item.ExternalPublishedItemDAO;
  */
 public class HbExternalPublishedItemDAO implements ExternalPublishedItemDAO {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1136968738283348741L;
+	
+	/** hibernate helper  */
 	private final HbCrudDAO<ExternalPublishedItem> hbCrudDAO;
 
 	/**

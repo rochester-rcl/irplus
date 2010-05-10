@@ -19,9 +19,10 @@ import edu.ur.ir.user.IrUser;
 public class HbInstitutionalCollectionSubscriptionDAO implements InstitutionalCollectionSubscriptionDAO{
 
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -152511656680666524L;
+	
+	/** Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<InstitutionalCollectionSubscription> hbCrudDAO;
 
 	/**

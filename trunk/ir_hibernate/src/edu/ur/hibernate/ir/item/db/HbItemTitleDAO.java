@@ -33,6 +33,10 @@ import edu.ur.ir.item.ItemTitleDAO;
  */
 public class HbItemTitleDAO implements ItemTitleDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -3913386812888597782L;
+	
+	/** hibernate helper  */
 	private final HbCrudDAO<ItemTitle> hbCrudDAO;
 
 	/**

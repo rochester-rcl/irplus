@@ -41,9 +41,10 @@ import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
  */
 public class HbInstitutionalItemIndexProcessingRecordDAO implements InstitutionalItemIndexProcessingRecordDAO{
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -1245600447718553275L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<InstitutionalItemIndexProcessingRecord> hbCrudDAO;
 	
 	/**

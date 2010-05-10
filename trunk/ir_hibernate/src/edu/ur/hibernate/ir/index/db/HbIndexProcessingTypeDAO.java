@@ -34,6 +34,9 @@ import edu.ur.ir.index.IndexProcessingTypeDAO;
  */
 public class HbIndexProcessingTypeDAO implements IndexProcessingTypeDAO{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1651892446128435565L;
+
 	/** Helper for persisting information using hibernate. */
 	private final HbCrudDAO<IndexProcessingType> hbCrudDAO;
 	
