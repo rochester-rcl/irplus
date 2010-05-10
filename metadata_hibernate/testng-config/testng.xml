@@ -16,14 +16,13 @@
 
 <!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
 
-<suite name="ir_hibernate_all">
+<suite name="metadata_hibernate_all">
 
 	<test name="Metadata Hibernate Testing - All">
 		<classes>
 		     <class name="edu.ur.hibernate.metadata.MetadataTypeDAOTest"/>
 		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreTermDAOTest"/>
 		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreEncodingSchemeDAOTest"/>
-
 		</classes>
 	</test>
 	
