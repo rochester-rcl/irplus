@@ -39,9 +39,10 @@ import edu.ur.ir.person.PersonName;
  */
 public class HbGenericItemDAO implements GenericItemDAO{
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -1889366463922904654L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<GenericItem> hbCrudDAO;
 
 

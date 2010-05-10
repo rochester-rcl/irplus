@@ -35,6 +35,9 @@ import edu.ur.ir.file.VersionedFileDAO;
  */
 public class HbVersionedFileDAO implements VersionedFileDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 4483615867091465203L;
+	
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */

@@ -18,10 +18,10 @@ package edu.ur.hibernate.metadata;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.metadata.MetadataType;
 import edu.ur.metadata.MetadataTypeDAO;
 
@@ -33,9 +33,10 @@ import edu.ur.metadata.MetadataTypeDAO;
  */
 public class HbMetadataTypeDAO implements MetadataTypeDAO {
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 3305183134967994571L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<MetadataType> hbCrudDAO;
 	
 	/**
@@ -62,7 +63,7 @@ public class HbMetadataTypeDAO implements MetadataTypeDAO {
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("metadataTypeCount"));
+		return (Long)hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("metadataTypeCount").uniqueResult();
 	}
 
 	/**
@@ -105,8 +106,10 @@ public class HbMetadataTypeDAO implements MetadataTypeDAO {
 	 * @see edu.ur.dao.UniqueNameDAO#findByUniqueName(java.lang.String)
 	 */
 	public MetadataType findByUniqueName(String name) {
-		return (MetadataType) 
-	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getMetadataTypeByName", name));
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMetadataTypeByName");
+		q.setParameter(0, name);
+		return (MetadataType)q.uniqueResult();
 	}
 
 }

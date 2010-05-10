@@ -33,6 +33,9 @@ import edu.ur.ir.file.FileCollaboratorDAO;
  */
 public class HbFileCollaboratorDAO implements FileCollaboratorDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 197525471224770471L;
+	
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */

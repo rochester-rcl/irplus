@@ -38,9 +38,10 @@ import edu.ur.ir.item.ContentTypeDAO;
  */
 public class HbContentTypeDAO implements ContentTypeDAO {
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -7556696613946671279L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<ContentType> hbCrudDAO;
 	
 	/**

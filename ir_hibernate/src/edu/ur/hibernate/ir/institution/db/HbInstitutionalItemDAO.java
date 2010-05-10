@@ -45,11 +45,13 @@ import edu.ur.order.OrderType;
  */
 public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -828719967486672639L;
+	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(HbInstitutionalItemDAO.class);
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<InstitutionalItem> hbCrudDAO;
 	
 	/**

@@ -18,6 +18,9 @@ import edu.ur.ir.handle.HandleNameAuthority;
  */
 public class HbHandleNameAuthorityDAO implements HandleNameAuthorityDAO{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 4061595155359791146L;
+	
 	/**  Helper for persisting information using hibernate. */
 	private final HbCrudDAO<HandleNameAuthority> hbCrudDAO;
 	

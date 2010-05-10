@@ -41,6 +41,10 @@ import edu.ur.ir.item.SeriesDAO;
  */
 public class HbSeriesDAO implements SeriesDAO {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 924106547726882495L;
+	
+	/** hibernate helper */
 	private final HbCrudDAO<Series> hbCrudDAO;
 
 	/**

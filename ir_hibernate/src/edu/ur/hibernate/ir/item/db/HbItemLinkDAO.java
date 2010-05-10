@@ -35,6 +35,10 @@ import edu.ur.ir.item.ItemLinkDAO;
  */
 public class HbItemLinkDAO implements ItemLinkDAO{
 	
+	/** eclipse generated id  */
+	private static final long serialVersionUID = -4385661707118349660L;
+
+	/** hibernate helper  */
 	private final HbCrudDAO<ItemLink> hbCrudDAO;
 
 	/**

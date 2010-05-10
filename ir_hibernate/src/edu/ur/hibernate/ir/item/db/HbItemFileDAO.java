@@ -34,6 +34,10 @@ import edu.ur.ir.item.ItemFileDAO;
  */
 public class HbItemFileDAO implements ItemFileDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7758370554190005246L;
+	
+	/** hibernate helper */
 	private final HbCrudDAO<ItemFile> hbCrudDAO;
 
 	/**

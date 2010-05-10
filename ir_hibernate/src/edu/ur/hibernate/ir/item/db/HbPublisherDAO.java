@@ -40,6 +40,10 @@ import edu.ur.ir.item.PublisherDAO;
  */
 public class HbPublisherDAO implements PublisherDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 6563233578313368149L;
+
+	/** hibernate helper  */
 	private final HbCrudDAO<Publisher> hbCrudDAO;
 
 	/**

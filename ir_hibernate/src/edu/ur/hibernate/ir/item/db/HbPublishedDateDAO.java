@@ -33,6 +33,10 @@ import edu.ur.ir.item.PublishedDateDAO;
  */
 public class HbPublishedDateDAO implements PublishedDateDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7933047802041959483L;
+	
+	/** hibernate helper */
 	private final HbCrudDAO<PublishedDate> hbCrudDAO;
 
 	/**

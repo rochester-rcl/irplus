@@ -41,6 +41,10 @@ import edu.ur.ir.item.LanguageTypeDAO;
  */
 public class HbLanguageTypeDAO implements LanguageTypeDAO {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -2715604545677048653L;
+	
+	/** hibernate helper */
 	private final HbCrudDAO<LanguageType> hbCrudDAO;
 
 	/**

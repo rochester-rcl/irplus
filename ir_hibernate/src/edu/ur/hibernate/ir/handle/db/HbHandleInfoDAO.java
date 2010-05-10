@@ -18,6 +18,9 @@ import edu.ur.ir.handle.HandleInfoDAO;
 public class HbHandleInfoDAO implements HandleInfoDAO{
 
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -6672015070747082325L;
+	
 	/**  Helper for persisting information using hibernate. */
 	private final HbCrudDAO<HandleInfo> hbCrudDAO;
 	

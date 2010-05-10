@@ -33,9 +33,10 @@ import edu.ur.ir.file.FileVersionDAO;
  */
 public class HbFileVersionDAO implements FileVersionDAO {
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 4095692888365210258L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<FileVersion> hbCrudDAO;
 
 	/**

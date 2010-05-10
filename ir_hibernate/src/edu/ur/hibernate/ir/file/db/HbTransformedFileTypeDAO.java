@@ -35,6 +35,10 @@ import edu.ur.ir.file.TransformedFileTypeDAO;
  */
 public class HbTransformedFileTypeDAO implements TransformedFileTypeDAO {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 2173533136453286418L;
+	
+	/** hibernate helper  */
 	private final HbCrudDAO<TransformedFileType> hbCrudDAO;
 
 	/**

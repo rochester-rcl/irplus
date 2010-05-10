@@ -44,6 +44,10 @@ import edu.ur.ir.item.GenericItem;
  */
 public class HbInstitutionalCollectionDAO implements InstitutionalCollectionDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 730692083634319996L;
+	
+	/** hibernate helper */
 	private final HbCrudDAO<InstitutionalCollection> hbCrudDAO;
 	
 	/**
