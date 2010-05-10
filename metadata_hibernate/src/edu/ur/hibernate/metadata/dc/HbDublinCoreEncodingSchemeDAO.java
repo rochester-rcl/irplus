@@ -18,10 +18,10 @@ package edu.ur.hibernate.metadata.dc;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.metadata.dc.DublinCoreEncodingScheme;
 import edu.ur.metadata.dc.DublinCoreEncodingSchemeDAO;
 
@@ -31,9 +31,10 @@ import edu.ur.metadata.dc.DublinCoreEncodingSchemeDAO;
  */
 public class HbDublinCoreEncodingSchemeDAO implements DublinCoreEncodingSchemeDAO{
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -8763629927299397173L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<DublinCoreEncodingScheme> hbCrudDAO;
 	
 	/**
@@ -59,7 +60,7 @@ public class HbDublinCoreEncodingSchemeDAO implements DublinCoreEncodingSchemeDA
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("dublinCoreEncodingSchemeCount"));
+		return (Long) hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("dublinCoreEncodingSchemeCount").uniqueResult();
 	}
 
 	/**
@@ -98,8 +99,9 @@ public class HbDublinCoreEncodingSchemeDAO implements DublinCoreEncodingSchemeDA
 	 * @see edu.ur.dao.UniqueNameDAO#findByUniqueName(java.lang.String)
 	 */
 	public DublinCoreEncodingScheme findByUniqueName(String name) {
-		return (DublinCoreEncodingScheme) 
-	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getDublinCoreEncodingSchemeByName", name));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDublinCoreEncodingSchemeByName");
+		q.setParameter(0, name);
+		return (DublinCoreEncodingScheme)q.uniqueResult();
 	}
 
 

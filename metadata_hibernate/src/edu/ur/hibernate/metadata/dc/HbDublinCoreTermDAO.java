@@ -18,18 +18,19 @@ package edu.ur.hibernate.metadata.dc;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.metadata.dc.DublinCoreTerm;
 import edu.ur.metadata.dc.DublinCoreTermDAO;
 
 public class HbDublinCoreTermDAO implements DublinCoreTermDAO{
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -807065997465252196L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<DublinCoreTerm> hbCrudDAO;
 	
 	/**
@@ -55,7 +56,7 @@ public class HbDublinCoreTermDAO implements DublinCoreTermDAO{
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("dublinCoreTermCount"));
+		return (Long)hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("dublinCoreTermCount").uniqueResult();
 	}
 
 	/**
@@ -94,8 +95,9 @@ public class HbDublinCoreTermDAO implements DublinCoreTermDAO{
 	 * @see edu.ur.dao.UniqueNameDAO#findByUniqueName(java.lang.String)
 	 */
 	public DublinCoreTerm findByUniqueName(String name) {
-		return (DublinCoreTerm) 
-	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getDublinCoreTermByName", name));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDublinCoreTermByName");
+		q.setParameter(0, name);
+		return (DublinCoreTerm)q.uniqueResult();
 	}
 
 }
