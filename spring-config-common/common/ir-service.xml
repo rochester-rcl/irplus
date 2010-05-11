@@ -202,7 +202,7 @@
        <property name="reviewableItemService" ref="reviewableItemService"/>
    </bean>
    
-     <!--  Service for helping with institutional items --> 
+   <!--  Service for helping with deleted institutional items --> 
    <bean id="deletedInstitutionalItemService" 
        class="edu.ur.ir.institution.service.DefaultDeletedInstitutionalItemService">
        <property name="deletedInstitutionalItemDAO" ref="deletedInstitutionalItemDAO"/>
@@ -716,6 +716,17 @@
    </bean>
    
    <!-- ****************************************** --> 
+   <!-- OAI list identifier service -->
+   <!-- ****************************************** --> 
+   <bean id="listIdentifiersService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultListIdentifiersService">
+       <property name="oaiMetadataServiceProvider" ref="oaiMetadataServiceProvider" />
+       <property name="institutionalItemVersionService" ref="institutionalItemVersionService" />
+       <property name="institutionalCollectionService" ref="institutionalCollectionService" />
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
    <!-- OAI harvesting Output Service for the system -->
    <!-- ****************************************** --> 
    <bean id="oaiService" 
@@ -725,6 +736,7 @@
        <property name="institutionalItemService" ref="institutionalItemService" />
        <property name="institutionalItemVersionService" ref="institutionalItemVersionService" />
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="listIdentifiersService" ref="listIdentifiersService"/>
    </bean>
    
 
