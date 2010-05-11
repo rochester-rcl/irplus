@@ -26,11 +26,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.index.IndexProcessingType;
-import edu.ur.ir.institution.DeletedInstitutionalItem;
-import edu.ur.ir.institution.DeletedInstitutionalItemDAO;
 import edu.ur.ir.institution.DeletedInstitutionalItemService;
-import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
-import edu.ur.ir.institution.DeletedInstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemDAO;
