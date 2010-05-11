@@ -33,7 +33,7 @@ public class OaiUtil
 	public static final String LIST_METADATA_FORMATS_VERB = "ListMetadataFormats";
 	public static final String LIST_SETS_VERB = "ListSets";
 	public static final String GET_RECORD_VERB = "GetRecord";
-	public static final String LIST_IDENTIFIERS_VERB = "ListIndentifiers";
+	public static final String LIST_IDENTIFIERS_VERB = "ListIdentifiers";
 	public static final String LIST_RECORDS_VERB = "ListRecords";
 	
 	public static final String longFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";

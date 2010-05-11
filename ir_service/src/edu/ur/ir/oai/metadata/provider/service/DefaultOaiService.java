@@ -26,7 +26,9 @@ import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.IdDoesNotExistException;
 import edu.ur.ir.oai.exception.NoRecordsMatchException;
+import edu.ur.ir.oai.exception.NoSetHierarchyException;
 import edu.ur.ir.oai.metadata.provider.IdentifyService;
+import edu.ur.ir.oai.metadata.provider.ListIdentifiersService;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataProvider;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
 import edu.ur.ir.oai.metadata.provider.OaiService;
@@ -54,6 +56,9 @@ public class DefaultOaiService implements OaiService{
 	/** Service to handle identify information */
 	private IdentifyService identifyService;
 	
+	/** Service to help with listing identifers */
+	private ListIdentifiersService listIdentifiersService;
+
 	/** Service to deal with institutional item information */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 
@@ -93,13 +98,13 @@ public class DefaultOaiService implements OaiService{
 	
 	/**
 	 * List the identifiers in the system.
+	 * @throws NoSetHierarchyException 
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.OaiService#listIdentifiers(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public String listIdentifiers(String metadataPrefix, String set, String from, String until, String resumptionToken) throws BadResumptionTokenException,
-			CannotDisseminateFormatException, NoRecordsMatchException{
-		// TODO Auto-generated method stub
-		return null;
+			CannotDisseminateFormatException, NoRecordsMatchException, NoSetHierarchyException{
+        return listIdentifiersService.listIdentifiers(metadataPrefix, set, from, until, resumptionToken);
 	}
 
 	
@@ -202,4 +207,12 @@ public class DefaultOaiService implements OaiService{
 		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
 
+	public ListIdentifiersService getListIdentifiersService() {
+		return listIdentifiersService;
+	}
+
+	public void setListIdentifiersService(
+			ListIdentifiersService listIdentifiersService) {
+		this.listIdentifiersService = listIdentifiersService;
+	}
 }

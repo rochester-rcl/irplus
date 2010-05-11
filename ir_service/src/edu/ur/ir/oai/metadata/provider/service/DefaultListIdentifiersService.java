@@ -56,16 +56,13 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	private static final long serialVersionUID = 9056980425349175595L;
 	
 	/**  Default batch size for harvesting */
-	private int batchSize = 100;
+	private int batchSize = 500;
 	
 	/**  List of oai metadata service providers */
 	private OaiMetadataServiceProvider oaiMetadataServiceProvider;
 	
 	/** Service for dealing with institutional item information */
 	private InstitutionalItemVersionService institutionalItemVersionService;
-	
-	/** Service for dealing with institutional item information */
-	private InstitutionalItemVersionService deletedInstitutionalItemVersionService;
 	
 	/** namespace for the oai url */
 	private String namespaceIdentifier;
@@ -76,7 +73,6 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	/** resumption token */
 	private DefaultResumptionToken resumptionToken;
 
-
 	/**
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.ListIdentifiersService#listIdentifiers(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
@@ -86,13 +82,32 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 			throws BadResumptionTokenException,
 			CannotDisseminateFormatException, NoRecordsMatchException{
 		
+		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		 DocumentBuilder builder;
+		 
+		 try {
+			builder = factory.newDocumentBuilder();
+		 } catch (ParserConfigurationException e) {
+			throw new IllegalStateException(e);
+		 }
+		
+		 DOMImplementation impl = builder.getDOMImplementation();
+		 DOMImplementationLS domLs = (DOMImplementationLS)impl.getFeature("LS" , "3.0");
+		 LSSerializer serializer = domLs.createLSSerializer();
+		 LSOutput lsOut= domLs.createLSOutput();
+		 StringWriter stringWriter = new StringWriter();
+		 lsOut.setCharacterStream(stringWriter);
+		 
+		 Document doc = impl.createDocument(null, "ListIdentifiers", null);
+
+		
 		if( !oaiMetadataServiceProvider.supports(metadataPrefix) )
 		{
 			throw new CannotDisseminateFormatException("Format: " + metadataPrefix + " is not supported");
 		}
 
 		// parse the token if it exists
-		if(resumptionToken != null && !resumptionToken.equals(""))
+		if(strResumptionToken != null && !strResumptionToken.equals(""))
 		{
 			resumptionToken = new DefaultResumptionToken(strResumptionToken);
 		}
@@ -115,44 +130,48 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 			}
 			resumptionToken.setMetadataPrefix(metadataPrefix);
 			resumptionToken.setLastId(0l);
-			
 		}
 
-		// do batch size plus one - if we retrieve all records then another request must be issued
-		// with resumption token
-		List<InstitutionalItemVersion> versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), batchSize + 1);
-		int size = versions.size();
-		
-		// we will need to send resumption token
-		if( size == (batchSize + 1))
+		boolean doDeleted = resumptionToken.getDeleted();
+		if(!doDeleted)
 		{
-			// remove the last item as it should not be sent
-			// this only indicates that there is one more than the batch size
-			// allows
-			versions.remove(size - 1);
+		    // do batch size plus one - if we retrieve all records then another request must be issued
+		    // with resumption token
+		    List<InstitutionalItemVersion> versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), batchSize + 1);
+		    int size = versions.size();
+		   
+		    // we will need to send resumption token
+		    if( size == (batchSize + 1))
+		    {
+			    // remove the last item as it should not be sent
+			    // this only indicates that there is one more than the batch size
+			    // allows
+			    versions.remove(size - 1);
+			    resumptionToken.setDeleted(Boolean.FALSE);
+		    }
+		    else if( size > 0)
+		    {
+		    	resumptionToken.setDeleted(Boolean.TRUE);
+		    }
+		    else
+		    {
+		    	resumptionToken.setDeleted(Boolean.TRUE);
+		    	doDeleted = true;
+		    }
+		    Long lastId = addIdentifiers(versions, doc);
+		    resumptionToken.setLastId(lastId);
 		}
 		
-		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		 DocumentBuilder builder;
+		if( doDeleted )
+		{
+			// handle getting all the deleted institutional item versions
+		}
 		 
-		 try {
-			builder = factory.newDocumentBuilder();
-		 } catch (ParserConfigurationException e) {
-			throw new IllegalStateException(e);
-		 }
-		
-		 DOMImplementation impl = builder.getDOMImplementation();
-		 DOMImplementationLS domLs = (DOMImplementationLS)impl.getFeature("LS" , "3.0");
-		 LSSerializer serializer = domLs.createLSSerializer();
-		 LSOutput lsOut= domLs.createLSOutput();
-		 StringWriter stringWriter = new StringWriter();
-		 lsOut.setCharacterStream(stringWriter);
+		 addResumptionToken(doc);
 		 
-		 Document doc = impl.createDocument(null, "ListIdentifiers", null);
 		 // do not output the headers
 		 Element root = doc.getDocumentElement();
 		 serializer.getDomConfig().setParameter("xml-declaration", false);
-		 addIdentifiers(versions, doc);
 		 serializer.write(root, lsOut);
 		 return stringWriter.getBuffer().toString();
 	}
@@ -163,11 +182,13 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	 * @param metadataPrefix
 	 * @return
 	 */
-	private void addIdentifiers(List<InstitutionalItemVersion> versions, Document doc )
+	private Long addIdentifiers(List<InstitutionalItemVersion> versions, Document doc )
 	{
+		 Long lastId = -1l;
 		 Element root = doc.getDocumentElement();		 
 		 for(InstitutionalItemVersion version : versions)
 		 {
+			 lastId = version.getId();
 			 
 			 // create the header element of the record 
 			 Element header = doc.createElement("header");
@@ -204,6 +225,17 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 			     header.appendChild(setSpec);
 			 }
 		 }
+		 return lastId;
+	}
+	
+	private void addResumptionToken(Document doc )
+	{
+		 Element root = doc.getDocumentElement();	
+		// create the header element of the record 
+		 Element resumption = doc.createElement("resumptionToken");
+		 Text data = doc.createTextNode(resumptionToken.getAsTokenString());
+		 resumption.appendChild(data);
+		 root.appendChild(resumption);
 	}
 	
 	public int getBatchSize() {
@@ -230,15 +262,6 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	public void setInstitutionalItemVersionService(
 			InstitutionalItemVersionService institutionalItemVersionService) {
 		this.institutionalItemVersionService = institutionalItemVersionService;
-	}
-	
-	public InstitutionalItemVersionService getDeletedInstitutionalItemVersionService() {
-		return deletedInstitutionalItemVersionService;
-	}
-
-	public void setDeletedInstitutionalItemVersionService(
-			InstitutionalItemVersionService deletedInstitutionalItemVersionService) {
-		this.deletedInstitutionalItemVersionService = deletedInstitutionalItemVersionService;
 	}
 	
 	public String getNamespaceIdentifier() {
