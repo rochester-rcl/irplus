@@ -42,11 +42,5 @@ public interface ResumptionToken extends Serializable{
 	 */
 	public void parseResumptionToken(String resumptionToken);
 	
-	/**
-	 * Indicates that the token should be inserted into the request.
-	 * 
-	 * @return
-	 */
-	public boolean insertToken();
-	
+
 }

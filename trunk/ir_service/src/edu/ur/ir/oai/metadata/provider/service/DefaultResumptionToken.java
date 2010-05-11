@@ -52,14 +52,12 @@ public class DefaultResumptionToken implements ResumptionToken{
 	private Integer batchSize = null;
 	
 	/** indicates that deleted records should now be sent */
-	private Boolean deleted = null;
+	private Boolean deleted = Boolean.FALSE;
 	
 	public static final String DELIMITER = ";";
 	
 	/** indicates that a non null token should be inserted back into the request */
 	private boolean insertToken;
-	
-
 
 	/**
 	 * Default constructor
@@ -144,7 +142,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 		this.set = Long.valueOf(set);
 	}
 	
-	public Boolean isDeleted() {
+	public Boolean getDeleted() {
 		return deleted;
 	}
 
@@ -302,15 +300,5 @@ public class DefaultResumptionToken implements ResumptionToken{
 		}
 		
 	}
-
-	/**
-	 * @see edu.ur.ir.oai.metadata.provider.ResumptionToken#insertToken()
-	 */
-	public boolean insertToken() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-
 
 }

@@ -20,8 +20,11 @@ import java.util.Date;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.oai.OaiUtil;
+import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.IdDoesNotExistException;
+import edu.ur.ir.oai.exception.NoRecordsMatchException;
+import edu.ur.ir.oai.exception.NoSetHierarchyException;
 import edu.ur.ir.oai.metadata.provider.OaiService;
 
 /**
@@ -85,6 +88,26 @@ public class Oai_2_0 extends ActionSupport{
 		{
 			oaiOutput = oaiService.identify();
 			return "identify";
+		}
+		if( verb.equalsIgnoreCase(OaiUtil.LIST_IDENTIFIERS_VERB))
+		{
+			
+			try {
+				oaiOutput = oaiService.listIdentifiers(metadataPrefix, set, from, until, resumptionToken);
+			    return "listIdentifiers";
+			} catch (BadResumptionTokenException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CannotDisseminateFormatException e) {
+				return "cannotDisseminateFormat";
+			} catch (NoRecordsMatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSetHierarchyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		return SUCCESS;
 	

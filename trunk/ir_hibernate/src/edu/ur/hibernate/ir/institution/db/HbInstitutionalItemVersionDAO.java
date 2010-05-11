@@ -373,10 +373,10 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersion> getItemsIdOrder(
 			long lastInstitutionalItemVersionId, int maxResults) {
-		
 		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
 		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
 		criteria.addOrder(Order.asc("id"));
+		criteria.setMaxResults(maxResults);
 		return criteria.list();
 	}
 

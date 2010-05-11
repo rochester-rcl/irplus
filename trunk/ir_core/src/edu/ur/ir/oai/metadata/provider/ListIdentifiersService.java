@@ -24,6 +24,8 @@ import edu.ur.ir.oai.exception.NoRecordsMatchException;
 import edu.ur.ir.oai.exception.NoSetHierarchyException;
 
 /**
+ * Service to deal with listing the identifiers.
+ * 
  * @author Nathan Sarr
  *
  */
@@ -32,10 +34,25 @@ public interface ListIdentifiersService extends Serializable{
 	/**
 	 * Get the list identifers as an xml document.
 	 * 
-	 * @return - the list 
+	 * @param metadataPrefix - metadata prefix
+	 * @param set - set to get
+	 * @param from - from start date
+	 * @param until - until date
+	 * @param resumptionToken - resumption token
+	 * 
+	 * @return - list of identifiers
+	 * 
+	 * @throws BadResumptionTokenException
+	 * @throws CannotDisseminateFormatException
+	 * @throws NoRecordsMatchException
+	 * @throws NoSetHierarchyException
 	 */
-	public String listIdentifiers(String metadataPrefix, String set, String from, String until, String resumptionToken)throws BadResumptionTokenException, CannotDisseminateFormatException, NoRecordsMatchException, NoSetHierarchyException ;
-
-
-
+	public String listIdentifiers(String metadataPrefix, 
+			String set, 
+			String from, 
+			String until, 
+			String resumptionToken)throws BadResumptionTokenException, 
+			CannotDisseminateFormatException, 
+			NoRecordsMatchException, 
+			NoSetHierarchyException;
 }
