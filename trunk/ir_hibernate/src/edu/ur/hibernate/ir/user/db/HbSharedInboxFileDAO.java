@@ -41,6 +41,10 @@ import edu.ur.ir.user.SharedInboxFileDAO;
  */
 public class HbSharedInboxFileDAO implements SharedInboxFileDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -1868166571342032403L;
+	
+	/** hibernate helper   */
 	private final HbCrudDAO<SharedInboxFile> hbCrudDAO;
 	
 	/**

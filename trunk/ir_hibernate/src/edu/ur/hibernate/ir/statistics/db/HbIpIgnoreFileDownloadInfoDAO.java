@@ -41,9 +41,10 @@ import edu.ur.ir.statistics.IpIgnoreFileDownloadInfoDAO;
  */
 public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDAO {
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 6559930974830950432L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<IpIgnoreFileDownloadInfo> hbCrudDAO;
 	
 	/**

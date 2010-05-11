@@ -42,9 +42,10 @@ import edu.ur.ir.researcher.ResearcherFileDAO;
  */
 public class HbResearcherFileDAO implements ResearcherFileDAO{
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5004513542989394032L;
+
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<ResearcherFile> hbCrudDAO;
 
 	/**

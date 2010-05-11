@@ -39,9 +39,10 @@ import edu.ur.ir.statistics.IgnoreIpAddressDAO;
  */
 public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id  */
+	private static final long serialVersionUID = 5106488416473298525L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<IgnoreIpAddress> hbCrudDAO;
 	
 	/**

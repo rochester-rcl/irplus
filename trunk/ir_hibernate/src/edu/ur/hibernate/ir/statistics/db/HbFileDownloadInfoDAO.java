@@ -42,9 +42,10 @@ import edu.ur.order.OrderType;
  */
 public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5675351756547973376L;
+
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<FileDownloadInfo> hbCrudDAO;
 	
 	/**

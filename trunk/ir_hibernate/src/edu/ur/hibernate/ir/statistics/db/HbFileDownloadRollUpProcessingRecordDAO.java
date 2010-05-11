@@ -38,9 +38,10 @@ import edu.ur.ir.statistics.FileDownloadRollUpProcessingRecordDAO;
  */
 public class HbFileDownloadRollUpProcessingRecordDAO implements FileDownloadRollUpProcessingRecordDAO{
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1901893330690628009L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<FileDownloadRollUpProcessingRecord> hbCrudDAO;
 	
 	/**

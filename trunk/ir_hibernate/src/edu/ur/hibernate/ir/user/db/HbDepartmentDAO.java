@@ -40,6 +40,10 @@ import edu.ur.ir.user.DepartmentDAO;
  */
 public class HbDepartmentDAO implements DepartmentDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5217627764234900082L;
+	
+	/** hibernate helper  */
 	private final HbCrudDAO<Department> hbCrudDAO;
 	
 	/**

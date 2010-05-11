@@ -34,9 +34,10 @@ import edu.ur.ir.user.ExternalUserAccountDAO;
  */
 public class HbExternalUserAccountDAO implements ExternalUserAccountDAO{
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -539869641706311546L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<ExternalUserAccount> hbCrudDAO;
 	
 	/**

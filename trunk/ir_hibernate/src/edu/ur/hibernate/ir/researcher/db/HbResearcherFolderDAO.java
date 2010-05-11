@@ -40,6 +40,9 @@ import edu.ur.ir.researcher.ResearcherPublication;
  */
 public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -2139557520714885135L;
+
 	/** Logger */
 	private static final Logger log = Logger.getLogger(HbResearcherFolderDAO.class);
 	

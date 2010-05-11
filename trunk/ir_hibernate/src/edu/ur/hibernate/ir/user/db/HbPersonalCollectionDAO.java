@@ -41,12 +41,13 @@ import edu.ur.ir.user.PersonalItem;
  */
 public class HbPersonalCollectionDAO implements PersonalCollectionDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -8590531742101408339L;
+
 	/** Logger */
 	private static final Logger log = Logger.getLogger(HbPersonalCollectionDAO.class);
 
-	/**
-	 * Helper for stroring hibernate information.
-	 */
+	/** Helper for stroring hibernate information. */
 	private final HbCrudDAO<PersonalCollection> hbCrudDAO;
 	
 	

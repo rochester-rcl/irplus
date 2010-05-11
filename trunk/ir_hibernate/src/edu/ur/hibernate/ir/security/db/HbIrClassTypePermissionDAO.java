@@ -35,6 +35,9 @@ import edu.ur.ir.security.IrClassTypePermissionDAO;
  */
 public class HbIrClassTypePermissionDAO implements IrClassTypePermissionDAO{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 780132132307695771L;
+	
 	/** helper for persistence operations */
 	private final HbCrudDAO<IrClassTypePermission> hbCrudDAO;
 	

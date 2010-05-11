@@ -17,9 +17,10 @@ import edu.ur.ir.repository.VersionedLicenseDAO;
  */
 public class HbVersionedLicenseDAO implements VersionedLicenseDAO{
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -6647976311732031528L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<VersionedLicense> hbCrudDAO;
 
 	/**

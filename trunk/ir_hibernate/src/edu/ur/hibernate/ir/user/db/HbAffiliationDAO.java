@@ -40,6 +40,9 @@ import edu.ur.ir.user.AffiliationDAO;
  */
 public class HbAffiliationDAO implements AffiliationDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7289931560567873805L;
+	
 	private final HbCrudDAO<Affiliation> hbCrudDAO;
 	
 	/**

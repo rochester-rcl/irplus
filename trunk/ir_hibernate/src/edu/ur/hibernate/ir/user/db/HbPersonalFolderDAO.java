@@ -37,6 +37,9 @@ import edu.ur.ir.user.PersonalFolderDAO;
  */
 public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1529661878676331576L;
+
 	/** Logger */
 	private static final Logger log = Logger.getLogger(HbPersonalFolderDAO.class);
 	

@@ -34,6 +34,9 @@ import edu.ur.ir.security.IrUserAccessControlEntryDAO;
 public class HbIrUserAccessControlEntryDAO implements 
 IrUserAccessControlEntryDAO 
 {
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7996579141250699790L;
+	
 	/** helper for persistence operations */
 	private final HbCrudDAO<IrUserAccessControlEntry> hbCrudDAO;
 	

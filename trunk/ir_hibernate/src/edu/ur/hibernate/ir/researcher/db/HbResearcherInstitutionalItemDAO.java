@@ -41,6 +41,9 @@ import edu.ur.ir.researcher.ResearcherInstitutionalItemDAO;
  */
 public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutionalItemDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1439886971641958964L;
+
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */
