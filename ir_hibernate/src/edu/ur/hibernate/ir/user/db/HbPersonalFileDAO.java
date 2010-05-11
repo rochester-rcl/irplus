@@ -36,9 +36,10 @@ import edu.ur.ir.user.PersonalFileDAO;
  */
 public class HbPersonalFileDAO implements PersonalFileDAO{
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5154598954233397102L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<PersonalFile> hbCrudDAO;
 
 	/**

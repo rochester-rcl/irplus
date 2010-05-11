@@ -33,9 +33,10 @@ import edu.ur.ir.user.InviteInfoDAO;
  */
 public class HbInviteInfoDAO implements InviteInfoDAO {
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5758222725214280712L;
+	
+	/**  Helper for persisting information using hibernate.  */	
 	private final HbCrudDAO<InviteInfo> hbCrudDAO;
 	
 	/**

@@ -41,9 +41,10 @@ import edu.ur.ir.researcher.ResearcherPublicationDAO;
  */
 public class HbResearcherPublicationDAO implements ResearcherPublicationDAO{
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id  */
+	private static final long serialVersionUID = -5481891957211563285L;
+
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<ResearcherPublication> hbCrudDAO;
 
 	/**  Logger for add files to item action */

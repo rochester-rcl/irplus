@@ -42,6 +42,9 @@ import edu.ur.ir.user.IrUserGroup;
  */
 public class HbIrAclDAO implements IrAclDAO {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 149241236415018110L;
+
 	/** helper for persistence operations */
 	private final HbCrudDAO<IrAcl> hbCrudDAO;
 	

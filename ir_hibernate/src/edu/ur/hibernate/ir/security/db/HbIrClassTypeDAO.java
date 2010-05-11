@@ -35,6 +35,9 @@ import edu.ur.ir.security.IrClassTypeDAO;
  */
 public class HbIrClassTypeDAO implements IrClassTypeDAO {
 	
+	/** eclipse gnerated id */
+	private static final long serialVersionUID = 3869620609269121628L;
+	
 	/** helper for persistence operations */
 	private final HbCrudDAO<IrClassType> hbCrudDAO;
 	

@@ -43,6 +43,10 @@ import edu.ur.ir.user.IrRoleDAO;
  */
 public class HbIrRoleDAO implements IrRoleDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = -5626825096552629162L;
+	
+	/** hibernate helper  */
 	private final HbCrudDAO<IrRole> hbCrudDAO;
 	
 	/**

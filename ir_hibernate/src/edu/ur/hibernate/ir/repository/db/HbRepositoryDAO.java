@@ -36,9 +36,10 @@ import edu.ur.ir.repository.RepositoryDAO;
  */
 public class HbRepositoryDAO implements RepositoryDAO {
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 2628559256158739290L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<Repository> hbCrudDAO;
 
 	/**

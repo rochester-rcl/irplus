@@ -39,9 +39,10 @@ import edu.ur.ir.researcher.ResearcherLinkDAO;
  */
 public class HbResearcherLinkDAO implements ResearcherLinkDAO{
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 8043336684186921114L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<ResearcherLink> hbCrudDAO;
 
 	/**

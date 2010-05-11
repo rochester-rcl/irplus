@@ -40,6 +40,9 @@ import edu.ur.ir.researcher.FieldDAO;
  */
 public class HbFieldDAO implements FieldDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1814388152590889431L;
+	
 	private final HbCrudDAO<Field> hbCrudDAO;
 	
 	/**

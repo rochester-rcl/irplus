@@ -33,9 +33,10 @@ import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
  */
 public class HbPersonalFileDeleteRecordDAO implements PersonalFileDeleteRecordDAO{
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id*/
+	private static final long serialVersionUID = 3499126646933499847L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<PersonalFileDeleteRecord> hbCrudDAO;
 
 	/**

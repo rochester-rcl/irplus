@@ -19,9 +19,10 @@ import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordDAO;
  */
 public class HbUserWorkspaceIndexProcessingRecordDAO implements UserWorkspaceIndexProcessingRecordDAO{
 	
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = -6654151793460435743L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<UserWorkspaceIndexProcessingRecord> hbCrudDAO;
 	
 	/**

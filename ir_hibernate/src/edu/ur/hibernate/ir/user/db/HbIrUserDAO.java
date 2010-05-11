@@ -45,6 +45,10 @@ import edu.ur.order.OrderType;
  */
 public class HbIrUserDAO implements IrUserDAO {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -3904788289887401360L;
+	
+	/** hibernate helper  */
 	private final HbCrudDAO<IrUser> hbCrudDAO;
 	
 	/**

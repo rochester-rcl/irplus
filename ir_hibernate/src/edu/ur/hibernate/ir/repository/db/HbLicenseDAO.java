@@ -17,9 +17,10 @@ import edu.ur.ir.repository.LicenseDAO;
  */
 public class HbLicenseDAO implements LicenseDAO{
 
-	/**
-	 * Helper for persisting information using hibernate. 
-	 */
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5716858535609250492L;
+	
+	/**  Helper for persisting information using hibernate.  */
 	private final HbCrudDAO<License> hbCrudDAO;
 
 	/**

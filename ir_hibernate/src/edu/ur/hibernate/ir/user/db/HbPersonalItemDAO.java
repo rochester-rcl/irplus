@@ -34,6 +34,9 @@ import edu.ur.ir.user.PersonalItemDAO;
  */
 public class HbPersonalItemDAO implements PersonalItemDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 9043983698017205264L;
+
 	/** Logger */
 	private static final Logger log = Logger.getLogger( HbPersonalItemDAO.class);
 	
