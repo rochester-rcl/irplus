@@ -30,7 +30,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public interface InstitutionalItemVersionService extends Serializable{
+public interface InstitutionalItemVersionService extends Serializable {
 
 	/**
 	 * Get an institutional item version by handle id.
@@ -212,5 +212,27 @@ public interface InstitutionalItemVersionService extends Serializable{
 	 */
 	public List<InstitutionalItemVersion> getItemsIdOrder( long lastInstitutionalItemVersionId,
 			int maxResults);
+	
+	/**
+	 * Get a list of institutional items ordered by institutional item version id order ascending.
+	 * 
+	 * @param lastInstitutionalItemVersionId - the last institutional item version id
+	 * to be processed.  Use 0 if no items have yet been processed.  Will grab max results
+	 * of where ids are greater than the given id.
+	 * 
+	 * @param institutional collection - the set to look within
+	 * @param maxResults - maximum number of results
+	 * 
+	 * @return - items greater than the given id and belong to the specified set
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrder( long lastInstitutionalItemVersionId,
+			InstitutionalCollection institutionalCollection, int maxResults);
+	
+	/**
+	 * Get a count of the total number of instituional item versions.
+	 * 
+	 * @return
+	 */
+	public Long getCount();
 
 }

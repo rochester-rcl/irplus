@@ -65,19 +65,21 @@ public class DefaultResumptionTokenTest {
 		assert resumptionToken.getUntil().equals(untilShort) : "until date should equal " + untilShort + " but equals " + resumptionToken.getUntil();
         assert resumptionToken.getLastId().equals(33l) : "last id should = 333 but equals " + resumptionToken.getLastId();
         assert resumptionToken.getMetadataPrefix().equals("oai_dc") : "Should equal oai_dc but equals " + resumptionToken.getMetadataPrefix();
-        assert resumptionToken.getSet().equals(123l) : "set should = 123 but equals " + resumptionToken.getLastId();
+        assert resumptionToken.getSet().equals("123") : "set should = 123 but equals " + resumptionToken.getSet();
+        assert resumptionToken.getLastSetId().equals(123l) : "last set id should equal 123 but equals " +resumptionToken.getLastSetId(); 
 
 	
         // change the dates to long format 
-		token = "set=123;from=" + strFromLong + 
+		token = "set=123:128;from=" + strFromLong + 
 		";until=" + strUntilLong + ";metadataPrefix=oai_dc;lastId=33;batchSize=100;deleted=false";
 		resumptionToken.parseResumptionToken(token);
 		assert resumptionToken.getBatchSize().equals(100) : "Batch size should equal 100 but equals " + resumptionToken.getBatchSize();
 		assert resumptionToken.getFrom().equals(fromLong) : "from date should equal " + fromLong + " but equals " + resumptionToken.getFrom();
 		assert resumptionToken.getUntil().equals(untilLong) : "until date should equal " + untilLong + " but equals " + resumptionToken.getUntil();
         assert resumptionToken.getLastId().equals(33l) : "last id should = 33 but equals " + resumptionToken.getLastId();
-        assert resumptionToken.getSet().equals(123l) : "set should = 123 but equals " + resumptionToken.getLastId();
-
+        assert resumptionToken.getSet().equals("123:128") : "set should = 123:128 but equals " + resumptionToken.getSet();
+        assert resumptionToken.getLastSetId().equals(128l) : "last set id should equal 128 but equals " +resumptionToken.getLastSetId(); 
+        
         assert resumptionToken.getMetadataPrefix().equals("oai_dc") : "Should equal oai_dc but equals " + resumptionToken.getMetadataPrefix();
         
         // make sure token is re-created correctly

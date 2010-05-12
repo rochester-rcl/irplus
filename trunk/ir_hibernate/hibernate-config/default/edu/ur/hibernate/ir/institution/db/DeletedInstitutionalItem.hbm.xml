@@ -48,6 +48,9 @@
 		
 		<property name="institutionalItemId" column="institutional_item_id" type="long"
 			not-null="true" access="field" />
+			
+		<property name="institutionalCollectionId" column="institutional_collection_id" type="long"
+			 access="field" />
 
 		<property name="deletedDate" column="deleted_date" type="timestamp" 
 		          access="field" 

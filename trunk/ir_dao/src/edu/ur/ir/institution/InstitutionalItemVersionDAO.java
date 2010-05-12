@@ -19,6 +19,7 @@ package edu.ur.ir.institution;
 import java.util.Date;
 import java.util.List;
 
+import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 import edu.ur.order.OrderType;
 
@@ -29,8 +30,18 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVersion>{
+public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVersion>, CountableDAO{
 
+	
+	/**
+	 * Get a count of all institutional item versions 
+	 * 
+	 * @param collection - collection the instituional item versions must be within - this includes
+	 * sub collections.
+	 * 
+	 * @return - count of all items within the collections
+	 */
+	public Long getCount(InstitutionalCollection collection);
 	
 	/**
 	 * Get an item version by handle id.
@@ -182,5 +193,120 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 */
 	public List<InstitutionalItemVersion> getItemsIdOrder( long lastInstitutionalItemVersionId,
 			int maxResults);
+	
+	/**
+	 * Get a list of institutional items ordered by institutional item version id order ascending.
+	 * 
+	 * @param lastInstitutionalItemVersionId - the last institutional item version id
+	 * to be processed.  Use 0 if no items have yet been processed.  Will grab max results
+	 * of where ids are greater than the given id.
+	 * 
+	 * @param institutional collection - the set to look within
+	 * @param maxResults - maximum number of results
+	 * 
+	 * @return - items greater than the given id and belong to the specified set
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrder( long lastInstitutionalItemVersionId,
+			InstitutionalCollection institutionalCollection, int maxResults);
+	
+	/**
+	 * Get the items ordered by id  that are greater than or equal to the given modified date.  This will include 
+	 * those items that were modified on the date.Will grab max results
+	 * of where ids are greater than the given id.
+	 * 
+	 * @param lastInstitutionalItemVersionId - last institutional item id.  Use 0 if no items have yet been processed.  Will grab max results
+	 * of where ids are greater than the given id.
+	 * @param fromModifiedDate - starting from modification date
+	 * @param maxResults - maximum number of results to return
+	 * 
+	 * @return list of institutional item versions greater than the given id and greater than or equal to
+	 * the given from deposit date.
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderFromDepositDate(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate, int maxResults); 
+	
+	/**
+	 * Get the items ordered by id  that are greater than or equal to the given modification date.  This will include 
+	 * those items that were modified on the date.  Will grab max results
+	 * of where ids are greater than the given id.
+	 * 
+	 * @param lastInstitutionalItemVersionId - last institutional item id.  Use 0 if no items have yet been processed.  Will grab max results
+	 * of where ids are greater than the given id.
+	 * @param fromModifiedDate - starting from modified date
+	 * @param institutional collection - set the items must belong to 
+	 * @param maxResults - maximum number of results to return
+	 * 
+	 * @return list of institutional item versions greater than the given id and greater than or equal to
+	 * the given from modified date.
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderFromDepositDate(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate, InstitutionalCollection institutionalCollection, int maxResults); 
+	
+	/**
+	 * Get the items ordered by id  that are less than or equal to the given modified date.  
+	 * This will include those items that were modified on the date.  Will grab max results
+	 * of where ids are greater than the given id.
+
+	 * @param lastInstitutionalItemVersionId - last institutional item id that items must be greater than
+	 * @param untilModifiedDate - modified date the items must be less than or equal to
+	 * @param maxResults - maximum number of results to return
+	 * 
+	 * @return - list of items id ordered that are less than or equal to the given date.
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderUntilModifiedDate(
+			long lastInstitutionalItemVersionId, Date untilModifiedDate, int maxResults); 
+	
+	/**
+	 * Get the items ordered by id  that are less than or equal to the given deposit date.  
+	 * This will include those items that were modified on the date.  Will grab max results
+	 * of where ids are greater than the given id.
+
+	 * @param lastInstitutionalItemVersionId
+	 * @param untilModifiedDate - modified date the items must be less than or equal to
+	 * @param institutional collection - set the items must belong to.
+	 * @param maxResults - maximum number of results to return
+	 * 
+	 * @return list of items id ordered that are less than or equal to the given date and belong to 
+	 * the specified set id
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderUntilModifiedDate(
+			long lastInstitutionalItemVersionId, Date untilModifiedDate, InstitutionalCollection institutionalCollection, int maxResults); 
+	
+	/**
+	 * Get the items ordered by id  that are between the given from and until deposit dates.  Will return 
+	 * only items greater than the given last institutional item ids.
+	 *   
+	 * This will include those items that were modified on the given dates.  Will grab max results
+	 * where ids are greater than the given id.
+
+	 * @param lastInstitutionalItemVersionId - id that institutional item versions must be greater than
+     * @param fromModifiedDate - items modified date must be greater than or equal to
+	 * @param untilModifiedDate - items modified date must be less than or equal to
+	 * @param maxResults - maximum number of results to return
+	 * 
+	 * @return - list of items that meet the specified criteria.
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderBetweenModifiedDates(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate, Date untilModifiedDate, int maxResults); 
+	
+	/**
+	 * Get the items ordered by id  that are between the given from and until modified dates.  Will return 
+	 * only items greater than the given last institutional item ids.
+	 *   
+	 * This will include those items that were modified on the given dates.  Will grab max results
+	 * where ids are greater than the given id.
+
+	 * @param lastInstitutionalItemVersionId - id that institutional item versions must be greater than
+     * @param fromModifiedDate - items modified date must be greater than or equal to
+	 * @param untilModifiedDate - items modified date must be less than or equal to
+	 * @param institutional collection - the set the items must belong to
+	 * @param maxResults - maximum number of results to return
+	 * 
+	 * @return - list of items that meet the specified criteria.
+	 */
+
+	public List<InstitutionalItemVersion> getItemsIdOrderBetweenDepositDates(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate, Date untilModifiedDate, InstitutionalCollection institutionalCollection, int maxResults); 
+	
 	
 }

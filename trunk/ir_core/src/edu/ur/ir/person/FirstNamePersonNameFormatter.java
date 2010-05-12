@@ -15,13 +15,18 @@
 */  
 package edu.ur.ir.person;
 
+import java.io.Serializable;
+
 /**
  * Formats a person name first name first
  * 
  * @author Nathan Sarr
  *
  */
-public class FirstNamePersonNameFormatter implements BasicPersonNameFormatter {
+public class FirstNamePersonNameFormatter implements BasicPersonNameFormatter, Serializable {
+
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1153609139111839150L;
 
 	/**
 	 * Format the person name with the first name first.
@@ -29,31 +34,31 @@ public class FirstNamePersonNameFormatter implements BasicPersonNameFormatter {
 	 * @see edu.ur.ir.person.BasicPersonNameFormatter#getNameFormatted(edu.ur.ir.person.PersonName)
 	 */
 	public String getNameFormatted(PersonName personName, boolean includeDates) {
-		String output = "";
+		StringBuffer output = new StringBuffer("");
 		if( personName.getPersonNameTitles() != null )
     	{
     	    for( PersonNameTitle title: personName.getPersonNameTitles())
     	    {
-    		    output += title.getTitle() + " ";
+    		    output.append( title.getTitle() + " ");
     	    }
     	}
     	if( personName.getForename() != null)
     	{
-    		output += personName.getForename() + " ";
+    		output.append(personName.getForename() + " ");
     	}
     	
     	if( personName.getMiddleName() != null)
     	{
-    		output += personName.getMiddleName() + " ";
+    		output.append(personName.getMiddleName() + " ");
     	}
     	if( personName.getSurname() != null)
     	{
-    		output += personName.getSurname() + " ";
+    		output.append(personName.getSurname() + " ");
     	}
     	
     	if( personName.getNumeration() != null )
     	{
-    		output += personName.getNumeration() + " ";
+    		output.append( personName.getNumeration() + " ");
     	}
     	
     	if(includeDates)
@@ -76,21 +81,21 @@ public class FirstNamePersonNameFormatter implements BasicPersonNameFormatter {
     	    
     		if( birthYear > 0 || deathYear > 0 )
     		{
-    		    output += "(";
+    			output.append("(");
     		    if( birthYear > 0)
     		    {
-    			    output += birthYear;
+    		    	output.append(birthYear);
     		    }
-    		    output += " - ";
+    		    output.append(" - ");
     		
     		    if(  deathYear > 0 )
     		    {
-    			    output += deathYear;
+    		    	output.append(deathYear);
     		    }
-    		    output += ")";
+    		    output.append( ")" );
     	    }
     	}
-    	return output;
+    	return output.toString();
 	}
 
 }

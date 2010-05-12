@@ -462,6 +462,7 @@
          	<result name="idDoesNotExist">/pages/oai/id_does_not_exist.jsp</result>
          	<result name="identify">/pages/oai/identify.jsp</result>
          	<result name="success">/pages/oai/ok.jsp</result>
+         	<result name="listIdentifiers">/pages/oai/list_identifiers.jsp</result>
          </action> 
         
     </package>

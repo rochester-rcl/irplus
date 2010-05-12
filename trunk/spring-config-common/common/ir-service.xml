@@ -678,6 +678,14 @@
    <bean id="lastNamePersonNameFormatter" class="edu.ur.ir.person.LastNamePersonNameFormatter"/>
 
    <!-- ****************************************** --> 
+   <!-- Service that provides list sets functionality -->
+   <!-- ****************************************** --> 
+   <bean id="listSetsService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultListSetsService">
+       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
+   </bean>
+
+   <!-- ****************************************** --> 
    <!-- Service that provides dublin core metadata -->
    <!-- ****************************************** --> 
    <bean id="dublinCoreOaiMetadataProvider" 
@@ -685,7 +693,7 @@
        <property name="contributorTypeDublinCoreMappingService" ref="contributorTypeDublinCoreMappingService"/>
        <property name="nameFormatter" ref="lastNamePersonNameFormatter" />
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
-       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
+       <property name="listSetsService" ref="listSetsService"/>
    </bean>
    
    <!-- ****************************************** --> 
@@ -724,6 +732,7 @@
        <property name="institutionalItemVersionService" ref="institutionalItemVersionService" />
        <property name="institutionalCollectionService" ref="institutionalCollectionService" />
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="listSetsService" ref="listSetsService"/>
    </bean>
    
    <!-- ****************************************** --> 
@@ -738,8 +747,5 @@
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
        <property name="listIdentifiersService" ref="listIdentifiersService"/>
    </bean>
-   
-
-
    
 </beans>

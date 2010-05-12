@@ -19,7 +19,6 @@ import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -36,7 +35,6 @@ import org.w3c.dom.ls.LSSerializer;
 
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.institution.InstitutionalCollection;
-import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.CopyrightStatement;
@@ -52,6 +50,7 @@ import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMapping;
 import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMappingService;
 import edu.ur.ir.oai.OaiUtil;
+import edu.ur.ir.oai.metadata.provider.ListSetsService;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataProvider;
 import edu.ur.ir.person.BasicPersonNameFormatter;
 import edu.ur.ir.SimpleDateFormatter;
@@ -79,10 +78,9 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	/** namespace for the oai url */
 	private String namespaceIdentifier;
 	
-	/** Service to deal with institutional collection information */
-	private InstitutionalCollectionService institutionalCollectionService;
-
-
+	/** service to deal with listing set information */
+	private ListSetsService listSetsService;
+	
 
 	/**
 	 * Get the xml output for the item
@@ -168,16 +166,11 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		 header.appendChild(datestamp);
 		 
 		 InstitutionalCollection collection = institutionalItemVersion.getVersionedInstitutionalItem().getInstitutionalItem().getInstitutionalCollection();
-		 
-		 List<InstitutionalCollection> collections = institutionalCollectionService.getPath(collection);
-		 
-		 for(InstitutionalCollection c : collections)
-		 {
-		     Element setSpec = doc.createElement("setSpec");
-		     data = doc.createTextNode(c.getId().toString());
-		     setSpec.appendChild(data);
-		     header.appendChild(setSpec);
-		 }
+		 Element setSpec = doc.createElement("setSpec");
+ 		 data = doc.createTextNode(listSetsService.getSetSpec(collection));
+	     setSpec.appendChild(data);
+	     header.appendChild(setSpec);
+
 	}
 	
 	/**
@@ -643,15 +636,13 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		    oaiDc.appendChild(identifier);
 		}
 	}
-
 	
-	public InstitutionalCollectionService getInstitutionalCollectionService() {
-		return institutionalCollectionService;
+	public ListSetsService getListSetsService() {
+		return listSetsService;
 	}
 
-	public void setInstitutionalCollectionService(
-			InstitutionalCollectionService institutionalCollectionService) {
-		this.institutionalCollectionService = institutionalCollectionService;
+	public void setListSetsService(ListSetsService listSetsService) {
+		this.listSetsService = listSetsService;
 	}
 
 }

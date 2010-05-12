@@ -15,13 +15,18 @@
 */  
 package edu.ur.ir.person;
 
+import java.io.Serializable;
+
 /**
  * Format the person name, last name first.
  * 
  * @author Nathan Sarr
  *
  */
-public class LastNamePersonNameFormatter implements BasicPersonNameFormatter{
+public class LastNamePersonNameFormatter implements BasicPersonNameFormatter, Serializable{
+
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7720831991095283802L;
 
 	/**
 	 * Format the person name with the first name showing.
@@ -29,51 +34,51 @@ public class LastNamePersonNameFormatter implements BasicPersonNameFormatter{
 	 * @see edu.ur.ir.person.BasicPersonNameFormatter#getNameFormatted(edu.ur.ir.person.PersonName, boolean)
 	 */
 	public String getNameFormatted(PersonName personName, boolean includeDates) {
-		String output = "";
+		StringBuffer output = new StringBuffer("");
 		if( personName.getSurname() != null &&  personName.getSurname().trim().length() > 0)
     	{
-    		output += personName.getSurname();
+    		output.append(personName.getSurname());
     	}
 		if( personName.getForename() != null && personName.getForename().trim().length() > 0)
     	{
-			if(output.trim().length() > 0 )
+			if(output.length() > 0 )
 			{
-				output +=", ";
+				output.append(", ");
 			}
-    		output += personName.getForename();
+			output.append(personName.getForename());
     	}
 		if( personName.getMiddleName() != null &&  personName.getMiddleName().trim().length() > 0)
     	{
-			if(output.trim().length() > 0 )
+			if(output.length() > 0 )
 			{
-				output +=", ";
+				output.append(", ");
 			}
-    		output += personName.getMiddleName();
+			output.append(personName.getMiddleName());
     	}
 		if( personName.getNumeration() != null && personName.getNumeration().trim().length() > 0)
     	{
-			if(output.trim().length() > 0 )
+			if(output.length() > 0 )
 			{
-				output +=", ";
+				output.append(", ");
 			}
-    		output += personName.getNumeration();
+			output.append(personName.getNumeration());
     	}
 		if( personName.getPersonNameTitles() != null && personName.getPersonNameTitles().size() > 0)
     	{
-			if(output.trim().length() > 0 )
+			if(output.length() > 0 )
 			{
-				output +=", ";
+				output.append(", ");
 			}
     	    for( PersonNameTitle title: personName.getPersonNameTitles())
     	    {
-    		    output += title.getTitle() + " ";
+    	    	output.append(title.getTitle() + " ");
     	    }
     	}
     	
     	
     	if(includeDates)
     	{
-    		output += " ";
+    		output.append(" ");
     	    BirthDate birthDate = personName.getPersonNameAuthority().getBirthDate();
     	    DeathDate deathDate = personName.getPersonNameAuthority().getDeathDate();
     	    int birthYear = 0;
@@ -92,21 +97,21 @@ public class LastNamePersonNameFormatter implements BasicPersonNameFormatter{
     	    
     		if( birthYear > 0 || deathYear > 0 )
     		{
-    		    output += "(";
+    			output.append("(");
     		    if( birthYear > 0)
     		    {
-    			    output += birthYear;
+    		    	output.append(birthYear);
     		    }
-    		    output += " - ";
+    		    output.append(" - ");
     		
     		    if(  deathYear > 0 )
     		    {
-    			    output += deathYear;
+    		    	output.append(deathYear);
     		    }
-    		    output += ")";
+    		    output.append(")");
     	    }
     	}
-    	return output;
+    	return output.toString();
 	}
 
 }
