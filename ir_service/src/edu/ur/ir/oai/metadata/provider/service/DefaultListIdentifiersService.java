@@ -18,6 +18,7 @@ package edu.ur.ir.oai.metadata.provider.service;
 
 import java.io.StringWriter;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -41,6 +42,7 @@ import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.NoRecordsMatchException;
 import edu.ur.ir.oai.metadata.provider.ListIdentifiersService;
+import edu.ur.ir.oai.metadata.provider.ListSetsService;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
 import edu.ur.ir.oai.metadata.provider.ResumptionToken;
 
@@ -70,6 +72,9 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	/** Service to deal with institutional collection information */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
+	/** service to deal with listing set information */
+	private ListSetsService listSetsService;
+
 	/** resumption token */
 	private DefaultResumptionToken resumptionToken;
 
@@ -135,9 +140,21 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 		boolean doDeleted = resumptionToken.getDeleted();
 		if(!doDeleted)
 		{
+			int completeListSize = 0;
+			List<InstitutionalItemVersion> versions = new LinkedList<InstitutionalItemVersion>();
 		    // do batch size plus one - if we retrieve all records then another request must be issued
 		    // with resumption token
-		    List<InstitutionalItemVersion> versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), batchSize + 1);
+			if( resumptionToken.getSet() == null && resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+			{
+				completeListSize += institutionalItemVersionService.getCount();
+		        versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), batchSize + 1);
+			}
+			else if(  resumptionToken.getSet() != null && resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+			{
+				InstitutionalCollection collection = institutionalCollectionService.getCollection(resumptionToken.getLastSetId(), false);
+				versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), collection,  batchSize + 1);
+			}
+		        
 		    int size = versions.size();
 		   
 		    // we will need to send resumption token
@@ -214,16 +231,10 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 			 header.appendChild(datestamp);
 			 
 			 InstitutionalCollection collection = version.getVersionedInstitutionalItem().getInstitutionalItem().getInstitutionalCollection();
-			 
-			 List<InstitutionalCollection> collections = institutionalCollectionService.getPath(collection);
-			 
-			 for(InstitutionalCollection c : collections)
-			 {
-			     Element setSpec = doc.createElement("setSpec");
-			     data = doc.createTextNode(c.getId().toString());
-			     setSpec.appendChild(data);
-			     header.appendChild(setSpec);
-			 }
+			 Element setSpec = doc.createElement("setSpec");
+			 data = doc.createTextNode(listSetsService.getSetSpec(collection));
+			 setSpec.appendChild(data);
+			 header.appendChild(setSpec);
 		 }
 		 return lastId;
 	}
@@ -283,6 +294,14 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 	
 	public ResumptionToken getResumptionToken() {
 		return resumptionToken;
+	}
+	
+	public ListSetsService getListSetsService() {
+		return listSetsService;
+	}
+
+	public void setListSetsService(ListSetsService listSetsService) {
+		this.listSetsService = listSetsService;
 	}
 
 }

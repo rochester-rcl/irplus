@@ -50,6 +50,9 @@ public class DeletedInstitutionalItem extends BasePersistent{
 	/** Name of the collection the item was deleted from */
 	private String institutionalCollectionName;
 	
+	/** institutional collection this item was deleted from */
+	private Long institutionalCollectionId;
+
 	/** User who withdrew the  version*/
 	private IrUser deletedBy;
 	
@@ -62,6 +65,7 @@ public class DeletedInstitutionalItem extends BasePersistent{
 		institutionalItemId = institutionalItem.getId();
 		institutionalItemName = institutionalItem.getName();
 		institutionalCollectionName = institutionalItem.getInstitutionalCollection().getName();
+		institutionalCollectionId = institutionalItem.getInstitutionalCollection().getId();
 		
 		Set<InstitutionalItemVersion> versions = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions();
 		for(InstitutionalItemVersion version : versions)
@@ -179,6 +183,14 @@ public class DeletedInstitutionalItem extends BasePersistent{
 			Set<DeletedInstitutionalItemVersion> deletedInstitutionalItemVersions) {
 		this.deletedInstitutionalItemVersions = deletedInstitutionalItemVersions;
 	}
+	
+	public Long getInstitutionalCollectionId() {
+		return institutionalCollectionId;
+	}
+
+	public void setInstitutionalCollectionId(Long institutionalCollectionId) {
+		this.institutionalCollectionId = institutionalCollectionId;
+	}
 
 	public int hashCode()
 	{
@@ -199,6 +211,8 @@ public class DeletedInstitutionalItem extends BasePersistent{
 
 		return true;
 	}
+	
+	
 
 	public String toString()
 	{

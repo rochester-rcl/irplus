@@ -86,15 +86,7 @@ public class BirthDate extends BasePersistent{
 		if (!(o instanceof BirthDate)) return false;
 
 		final BirthDate other = (BirthDate) o;
-		
-		if( other == null )
-		{
-			return false;
-		}
-		else
-		{
-		    return year == other.getYear();
-		}
+		return year == other.getYear();
 	}
 
 

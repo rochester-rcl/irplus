@@ -13,24 +13,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */  
-package edu.ur.ir.person;
+
+package edu.ur.ir.oai.metadata.provider;
 
 import java.io.Serializable;
 
+import edu.ur.ir.institution.InstitutionalCollection;
+
 /**
- * Basic formatter for a person name.
- * 
  * @author Nathan Sarr
  *
  */
-public interface BasicPersonNameFormatter extends Serializable{
+public interface ListSetsService extends Serializable{
 	
 	/**
-	 * Get the persons name formatted 
+	 * Returns the set spec structure for a given institutional collection.
 	 * 
-	 * @param personName - name of the person
-	 * @return the person name
+	 * @param institutionalCollection
+	 * @return
 	 */
-	public String getNameFormatted(PersonName personName, boolean includeDates);
+	public String getSetSpec(InstitutionalCollection institutionalCollection);
 
 }

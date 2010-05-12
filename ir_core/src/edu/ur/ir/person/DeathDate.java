@@ -82,15 +82,7 @@ public class DeathDate extends BasePersistent{
 		if (!(o instanceof DeathDate)) return false;
 
 		final DeathDate other = (DeathDate) o;
-		
-		if( other == null )
-		{
-			return false;
-		}
-		else
-		{
-		    return year == other.getYear();
-		}
+		return year == other.getYear();
 	}
 
 

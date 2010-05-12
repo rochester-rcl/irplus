@@ -26,6 +26,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
@@ -366,20 +367,150 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	}
 
 	/**
-	 * Get the items ordered by id.
+	 * Get the items ordered by id that are grater than the last id
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrder(long, int, edu.ur.order.OrderType)
 	 */
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersion> getItemsIdOrder(
 			long lastInstitutionalItemVersionId, int maxResults) {
+		                                                                           
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdOrderedById");
+		q.setParameter("lastId", lastInstitutionalItemVersionId);
+		q.setMaxResults(maxResults);
+		return (List<InstitutionalItemVersion>) q.list();
+	}
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrder(long, java.lang.Long, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersion> getItemsIdOrder(
+			long lastInstitutionalItemVersionId, 
+			InstitutionalCollection institutionalCollection, 
+			int maxResults) {
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdSetOrderedById");
+		q.setParameter("lastId", lastInstitutionalItemVersionId);
+		q.setParameter("leftValue", institutionalCollection.getLeftValue());
+		q.setParameter("rightValue", institutionalCollection.getRightValue());
+		q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
+		q.setMaxResults(maxResults);
+		return (List<InstitutionalItemVersion>) q.list();
+
+	}
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderBetweenDepositDates(long, java.util.Date, java.util.Date, java.lang.Long, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersion> getItemsIdOrderBetweenDepositDates(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate,
+			Date untilModifiedDate, InstitutionalCollection institutionalCollection, int maxResults) {
 		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
 		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
+		criteria.add(Restrictions.between("dateLastModified", fromModifiedDate, untilModifiedDate));
 		criteria.addOrder(Order.asc("id"));
 		criteria.setMaxResults(maxResults);
 		return criteria.list();
 	}
 
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderBetweenModifiedDates(long, java.util.Date, java.util.Date, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersion> getItemsIdOrderBetweenModifiedDates(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate,
+			Date untilModifiedDate, int maxResults) {
+		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
+		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
+		criteria.add(Restrictions.between("dateLastModified", fromModifiedDate, untilModifiedDate));
+		criteria.addOrder(Order.asc("id"));
+		criteria.setMaxResults(maxResults);
+		return criteria.list();
+	}
 
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderFromDepositDate(long, java.util.Date, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersion> getItemsIdOrderFromDepositDate(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate,
+			int maxResults) {
+		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
+		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
+		criteria.add(Restrictions.ge("dateLastModified", fromModifiedDate));
+		criteria.setMaxResults(maxResults);
+		return criteria.list();
+
+	}
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderFromDepositDate(long, java.util.Date, java.lang.Long, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersion> getItemsIdOrderFromDepositDate(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate,
+			InstitutionalCollection institutionalCollection, int maxResults) {
+		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
+		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
+		criteria.add(Restrictions.ge("dateLastModified", fromModifiedDate));
+		criteria.setMaxResults(maxResults);
+		return criteria.list();
+
+	}
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderUntilModifiedDate(long, java.util.Date, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersion> getItemsIdOrderUntilModifiedDate(
+			long lastInstitutionalItemVersionId, Date untilModifiedDate,
+			int maxResults) {
+		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
+		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
+		criteria.add(Restrictions.le("dateLastModified", untilModifiedDate));
+		criteria.setMaxResults(maxResults);
+		return criteria.list();
+
+	}
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderUntilModifiedDate(long, java.util.Date, java.lang.Long, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemVersion> getItemsIdOrderUntilModifiedDate(
+			long lastInstitutionalItemVersionId, Date untilModifiedDate,
+			InstitutionalCollection institutionalCollection, int maxResults) {
+		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
+		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
+		criteria.add(Restrictions.le("dateLastModified", untilModifiedDate));
+		criteria.setMaxResults(maxResults);
+		return criteria.list();
+
+	}
+
+	/**
+	 * Get a count of the total number of institutional item versions.
+	 * 
+	 * @see edu.ur.dao.CountableDAO#getCount()
+	 */
+	public Long getCount() {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionCount");
+		return (Long)q.uniqueResult();
+	}
+
+	/**
+	 * Get all institutional item versions within the collection.  This includes sub collections
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getCount(edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public Long getCount(InstitutionalCollection collection) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionCountByCollection");
+		q.setParameter("leftValue", collection.getLeftValue());
+		q.setParameter("rightValue", collection.getRightValue());
+		q.setParameter("treeRootId", collection.getTreeRoot().getId());
+		return (Long) q.uniqueResult();
+	}
 
 }

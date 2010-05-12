@@ -34,7 +34,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 	private static final long serialVersionUID = 3833203729450793209L;
 
 	/**  OAI set value */
-	private Long set = null;
+	private String set = null;
 
 	/** from date  */
 	private Date from = null;
@@ -54,7 +54,11 @@ public class DefaultResumptionToken implements ResumptionToken{
 	/** indicates that deleted records should now be sent */
 	private Boolean deleted = Boolean.FALSE;
 	
-	public static final String DELIMITER = ";";
+	/** the token delimiter */
+	public static final String TOKEN_DELIMITER = ";";
+	
+	/** the set delimiter */
+	public static final String SET_DELIMITER = ":";
 	
 	/** indicates that a non null token should be inserted back into the request */
 	private boolean insertToken;
@@ -130,16 +134,12 @@ public class DefaultResumptionToken implements ResumptionToken{
 		this.batchSize = batchSize;
 	}
 	
-	public Long getSet() {
+	public String getSet() {
 		return set;
 	}
 
-	public void setSet(Long set) {
-		this.set = set;
-	}
-	
 	public void setSet(String set) {
-		this.set = Long.valueOf(set);
+		this.set = set;
 	}
 	
 	public Boolean getDeleted() {
@@ -163,6 +163,26 @@ public class DefaultResumptionToken implements ResumptionToken{
 		this.insertToken = insertToken;
 	}
 	
+	/**
+	 * Get the last set id.  Returns null
+	 * if the set is null.
+	 * 
+	 * @return the last set id or null if the set is empty
+	 */
+	public Long getLastSetId()
+	{
+		Long value = null;
+		if( set != null )
+		{
+		    String[] parts = set.split(":");
+		    if( parts.length > 0 )
+		    {
+		    	value = Long.valueOf(parts[parts.length - 1]);
+		    }
+		}
+		return value;
+	}
+	
 	
 	public String getAsTokenString()
 	{
@@ -176,7 +196,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 		{
 			if( sb.length() > 0)
 			{
-				sb.append(DELIMITER);
+				sb.append(TOKEN_DELIMITER);
 			}
 			sb.append("from=");
 			sb.append(OaiUtil.getLongDateFormat(from));
@@ -185,7 +205,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 		{
 			if( sb.length() > 0)
 			{
-				sb.append(DELIMITER);
+				sb.append(TOKEN_DELIMITER);
 			}
 			sb.append("until=");
 			sb.append(OaiUtil.getLongDateFormat(until));
@@ -194,7 +214,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 		{
 			if( sb.length() > 0)
 			{
-				sb.append(DELIMITER);
+				sb.append(TOKEN_DELIMITER);
 			}
 			sb.append("metadataPrefix=");
 			sb.append(metadataPrefix);
@@ -203,7 +223,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 		{
 			if( sb.length() > 0)
 			{
-				sb.append(DELIMITER);
+				sb.append(TOKEN_DELIMITER);
 			}
 			sb.append("lastId=");
 			sb.append(lastId);
@@ -212,7 +232,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 		{
 			if( sb.length() > 0)
 			{
-				sb.append(DELIMITER);
+				sb.append(TOKEN_DELIMITER);
 			}
 			sb.append("batchSize=");
 			sb.append(batchSize);
@@ -221,7 +241,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 		{
 			if( sb.length() > 0)
 			{
-				sb.append(DELIMITER);
+				sb.append(TOKEN_DELIMITER);
 			}
 			sb.append("deleted=");
 			sb.append(deleted);
@@ -244,7 +264,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 		this.until = null;
 		this.deleted = null;
 		
-		String[] values = resumptionToken.split(DELIMITER);
+		String[] values = resumptionToken.split(TOKEN_DELIMITER);
 		for( String aValue : values)
 		{
 			String[] parts = aValue.split("=");

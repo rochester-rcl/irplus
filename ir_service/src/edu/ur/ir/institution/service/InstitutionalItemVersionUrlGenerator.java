@@ -1,6 +1,8 @@
 package edu.ur.ir.institution.service;
 
 
+import java.io.Serializable;
+
 import edu.ur.ir.institution.InstitutionalItem;
 
 /**
@@ -11,9 +13,12 @@ import edu.ur.ir.institution.InstitutionalItem;
  * @author Nathan Sarr
  *
  */
-public class InstitutionalItemVersionUrlGenerator 
+public class InstitutionalItemVersionUrlGenerator implements Serializable
 {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 6042212230149968886L;
+
 	/** should already contain the trailing slash(/) */
 	private String baseWebPath;
 
