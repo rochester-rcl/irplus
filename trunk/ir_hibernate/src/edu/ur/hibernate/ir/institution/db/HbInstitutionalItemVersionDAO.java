@@ -19,11 +19,8 @@ package edu.ur.hibernate.ir.institution.db;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -401,64 +398,155 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	}
 
 	/**
+	 * Get items id order between deposit dates 
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderBetweenDepositDates(long, java.util.Date, java.util.Date, java.lang.Long, int)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InstitutionalItemVersion> getItemsIdOrderBetweenDepositDates(
+	public List<InstitutionalItemVersion> getItemsIdOrderBetweenModifiedDates(
 			long lastInstitutionalItemVersionId, Date fromModifiedDate,
-			Date untilModifiedDate, InstitutionalCollection institutionalCollection, int maxResults) {
-		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
-		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
-		criteria.add(Restrictions.between("dateLastModified", fromModifiedDate, untilModifiedDate));
-		criteria.addOrder(Order.asc("id"));
-		criteria.setMaxResults(maxResults);
-		return criteria.list();
+			Date untilModifiedDate, InstitutionalCollection institutionalCollection, int maxResults)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdSetBetweenDatesOrderedById");
+		q.setParameter("lastId", lastInstitutionalItemVersionId);
+		q.setParameter("fromDate", fromModifiedDate);
+		q.setParameter("untilDate",  untilModifiedDate);
+		q.setParameter("leftValue", institutionalCollection.getLeftValue());
+		q.setParameter("rightValue", institutionalCollection.getRightValue());
+		q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
+		q.setMaxResults(maxResults);
+		return (List<InstitutionalItemVersion>) q.list();
+	}
+	
+	/**
+	 * Get a count of the institutional item versions 
+	 * 
+	 * @param fromModifiedDate - from date modification
+	 * @param untilModifiedDate - until date modification
+	 * @param institutionalCollection - collections the items should be within
+	 * 
+	 * @return - count of items found
+	 */
+	public Long getItemsBetweenModifiedDatesCount( Date fromModifiedDate,
+			Date untilModifiedDate, InstitutionalCollection institutionalCollection)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionSetBetweenDatesCount");
+		q.setParameter("fromDate", fromModifiedDate);
+		q.setParameter("untilDate",  untilModifiedDate);
+		q.setParameter("leftValue", institutionalCollection.getLeftValue());
+		q.setParameter("rightValue", institutionalCollection.getRightValue());
+		q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
+		return (Long) q.uniqueResult();
 	}
 
 	/**
+	 * Get items ordered by id with a modification date between the specified dates.
+	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderBetweenModifiedDates(long, java.util.Date, java.util.Date, int)
 	 */
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersion> getItemsIdOrderBetweenModifiedDates(
 			long lastInstitutionalItemVersionId, Date fromModifiedDate,
 			Date untilModifiedDate, int maxResults) {
-		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
-		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
-		criteria.add(Restrictions.between("dateLastModified", fromModifiedDate, untilModifiedDate));
-		criteria.addOrder(Order.asc("id"));
-		criteria.setMaxResults(maxResults);
-		return criteria.list();
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdBetweenDatesOrderedById");
+		q.setParameter("lastId", lastInstitutionalItemVersionId);
+		q.setParameter("fromDate", fromModifiedDate);
+		q.setParameter("untilDate",  untilModifiedDate);
+		q.setMaxResults(maxResults);
+		return (List<InstitutionalItemVersion>) q.list();
+	}
+	
+	/**
+	 * Get a count of institutional item versions between the modified dates.
+	 * 
+	 * @param fromModifiedDate - from date
+	 * @param untilModifiedDate - until date
+	 * 
+	 * @return all items modified between the from date and until date.
+	 */
+	public Long getItemsBetweenModifiedDatesCount( Date fromModifiedDate,
+			Date untilModifiedDate) 
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionBetweenDatesCount");
+		q.setParameter("fromDate", fromModifiedDate);
+		q.setParameter("untilDate",  untilModifiedDate);
+		return (Long) q.uniqueResult();
 	}
 
 	/**
+	 * Get the items id order greater than or equal to the date specified 
+	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderFromDepositDate(long, java.util.Date, int)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InstitutionalItemVersion> getItemsIdOrderFromDepositDate(
+	public List<InstitutionalItemVersion> getItemsIdOrderFromModifiedDate(
 			long lastInstitutionalItemVersionId, Date fromModifiedDate,
 			int maxResults) {
-		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
-		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
-		criteria.add(Restrictions.ge("dateLastModified", fromModifiedDate));
-		criteria.setMaxResults(maxResults);
-		return criteria.list();
-
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdFromDateOrderedById");
+		q.setParameter("lastId", lastInstitutionalItemVersionId);
+		q.setParameter("fromDate", fromModifiedDate);
+		q.setMaxResults(maxResults);
+		return (List<InstitutionalItemVersion>) q.list();
 	}
+	
+	/**
+	 * Get a count of all items added or modified from the specified date.
+	 * 
+	 * @param fromModifiedDate - date the modification or addition should be greather tahn or equal to
+	 * @return
+	 */
+	public Long getItemsFromModifiedDateCount(Date fromModifiedDate) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionFromDateCount");
+		q.setParameter("fromDate", fromModifiedDate);
+		return (Long)q.uniqueResult();
+	}
+	
 
 	/**
-	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderFromDepositDate(long, java.util.Date, java.lang.Long, int)
+	 * Get the institutional items order id that have a modification date greater than or
+	 * equal to the specified from date within the specified collection
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderFromModifiedDate(long, java.util.Date, edu.ur.ir.institution.InstitutionalCollection, int)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InstitutionalItemVersion> getItemsIdOrderFromDepositDate(
-			long lastInstitutionalItemVersionId, Date fromModifiedDate,
-			InstitutionalCollection institutionalCollection, int maxResults) {
-		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
-		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
-		criteria.add(Restrictions.ge("dateLastModified", fromModifiedDate));
-		criteria.setMaxResults(maxResults);
-		return criteria.list();
-
+	public List<InstitutionalItemVersion> getItemsIdOrderFromModifiedDate(
+			long lastInstitutionalItemVersionId, 
+			Date fromModifiedDate,
+			InstitutionalCollection institutionalCollection, 
+			int maxResults) {
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdSetFromDateOrderedById");
+		q.setParameter("lastId", lastInstitutionalItemVersionId);
+		q.setParameter("fromDate", fromModifiedDate);
+		q.setParameter("leftValue", institutionalCollection.getLeftValue());
+		q.setParameter("rightValue", institutionalCollection.getRightValue());
+		q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
+		q.setMaxResults(maxResults);
+		return (List<InstitutionalItemVersion>) q.list();
 	}
+	
+	/**
+	 * Get a count of items within a given collection that have a modification date
+	 * greater than or equal to the specified date.  This includes sub collections.
+	 * 
+	 * @param fromModifiedDate - date the modification or creation must be greater than or equal to
+	 * @param institutionalCollection - the institutional collection they must reside in.  
+	 * 
+	 * @return the count of the number of items found greater than or equal to the specified date and within the specified collection
+	 * or sub collections
+	 */
+	public Long getItemsFromModifiedDateCount(
+			Date fromModifiedDate,
+			InstitutionalCollection institutionalCollection) {
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionSetFromDateCount");
+		q.setParameter("fromDate", fromModifiedDate);
+		q.setParameter("leftValue", institutionalCollection.getLeftValue());
+		q.setParameter("rightValue", institutionalCollection.getRightValue());
+		q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
+		return (Long) q.uniqueResult();
+	}
+
 
 	/**
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderUntilModifiedDate(long, java.util.Date, int)
@@ -467,27 +555,66 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	public List<InstitutionalItemVersion> getItemsIdOrderUntilModifiedDate(
 			long lastInstitutionalItemVersionId, Date untilModifiedDate,
 			int maxResults) {
-		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
-		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
-		criteria.add(Restrictions.le("dateLastModified", untilModifiedDate));
-		criteria.setMaxResults(maxResults);
-		return criteria.list();
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdUntilDateOrderedById");
+		q.setParameter("lastId", lastInstitutionalItemVersionId);
+		q.setParameter("untilDate", untilModifiedDate);
+		q.setMaxResults(maxResults);
+		return (List<InstitutionalItemVersion>) q.list();
 
 	}
+	
+	/**
+	 * Get a count of all items added or modified equal to or before the specified date.
+	 * 
+	 * @param until ModifiedDate - date the modification or addition should be less than or equal to
+	 * @return
+	 */
+	public Long getItemsUntilModifiedDateCount(Date untilModifiedDate) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionUntilDateCount");
+		q.setParameter("untilDate", untilModifiedDate);
+		return (Long)q.uniqueResult();
+	}
+	
 
 	/**
+	 * Get all items that were modified on or before the specified until date.
+	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getItemsIdOrderUntilModifiedDate(long, java.util.Date, java.lang.Long, int)
 	 */
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItemVersion> getItemsIdOrderUntilModifiedDate(
 			long lastInstitutionalItemVersionId, Date untilModifiedDate,
 			InstitutionalCollection institutionalCollection, int maxResults) {
-		Criteria criteria = hbCrudDAO.getSessionFactory().getCurrentSession().createCriteria(InstitutionalItemVersion.class);
-		criteria.add(Restrictions.gt("id", lastInstitutionalItemVersionId));
-		criteria.add(Restrictions.le("dateLastModified", untilModifiedDate));
-		criteria.setMaxResults(maxResults);
-		return criteria.list();
-
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdSetFromDateOrderedById");
+		q.setParameter("lastId", lastInstitutionalItemVersionId);
+		q.setParameter("untilDate", untilModifiedDate);
+		q.setParameter("leftValue", institutionalCollection.getLeftValue());
+		q.setParameter("rightValue", institutionalCollection.getRightValue());
+		q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
+		q.setMaxResults(maxResults);
+		return (List<InstitutionalItemVersion>) q.list();
+	}
+	
+	/**
+	 * Get a count of items within a given collection that have a modification date
+	 * less than or equal to the specified date.  This includes sub collections.
+	 * 
+	 * @param fromModifiedDate - date the modification or creation must be greater than or equal to
+	 * @param institutionalCollection - the institutional collection they must reside in.  
+	 * 
+	 * @return the count of the number of items found less than or equal to the specified date and within the specified collection
+	 * or sub collections
+	 */
+	public Long getItemsUntilModifiedDateCount(
+			Date untilModifiedDate,
+			InstitutionalCollection institutionalCollection) {
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionSetUntilDateCount");
+		q.setParameter("untilDate", untilModifiedDate);
+		q.setParameter("leftValue", institutionalCollection.getLeftValue());
+		q.setParameter("rightValue", institutionalCollection.getRightValue());
+		q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
+		return (Long) q.uniqueResult();
 	}
 
 	/**
@@ -506,11 +633,12 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#getCount(edu.ur.ir.institution.InstitutionalCollection)
 	 */
 	public Long getCount(InstitutionalCollection collection) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionCountByCollection");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionBySetCount");
 		q.setParameter("leftValue", collection.getLeftValue());
 		q.setParameter("rightValue", collection.getRightValue());
 		q.setParameter("treeRootId", collection.getTreeRoot().getId());
 		return (Long) q.uniqueResult();
 	}
+	
 
 }

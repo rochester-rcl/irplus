@@ -104,38 +104,39 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 		 lsOut.setCharacterStream(stringWriter);
 		 
 		 Document doc = impl.createDocument(null, "ListIdentifiers", null);
+		 
+			// parse the token if it exists
+			if(strResumptionToken != null && !strResumptionToken.equals(""))
+			{
+				resumptionToken = new DefaultResumptionToken(strResumptionToken);
+			}
+			else
+			{
+				resumptionToken = new DefaultResumptionToken();
+				
+				resumptionToken.setBatchSize(batchSize);
+				if( from != null && !from.equals(""))
+				{
+					resumptionToken.setFrom(from);
+				}
+				if( set != null && !set.equals(""))
+				{
+					resumptionToken.setSet(set);
+				}
+				if( until != null && !until.equals(""))
+				{
+					resumptionToken.setUntil(until);
+				}
+				resumptionToken.setMetadataPrefix(metadataPrefix);
+				resumptionToken.setLastId(0l);
+			}
 
 		
-		if( !oaiMetadataServiceProvider.supports(metadataPrefix) )
+		if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
 		{
-			throw new CannotDisseminateFormatException("Format: " + metadataPrefix + " is not supported");
+			throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
 		}
 
-		// parse the token if it exists
-		if(strResumptionToken != null && !strResumptionToken.equals(""))
-		{
-			resumptionToken = new DefaultResumptionToken(strResumptionToken);
-		}
-		else
-		{
-			resumptionToken = new DefaultResumptionToken();
-			
-			resumptionToken.setBatchSize(batchSize);
-			if( from != null && !from.equals(""))
-			{
-				resumptionToken.setFrom(from);
-			}
-			if( set != null && !set.equals(""))
-			{
-				resumptionToken.setSet(set);
-			}
-			if( until != null && !until.equals(""))
-			{
-				resumptionToken.setUntil(until);
-			}
-			resumptionToken.setMetadataPrefix(metadataPrefix);
-			resumptionToken.setLastId(0l);
-		}
 
 		boolean doDeleted = resumptionToken.getDeleted();
 		if(!doDeleted)
@@ -144,16 +145,67 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 			List<InstitutionalItemVersion> versions = new LinkedList<InstitutionalItemVersion>();
 		    // do batch size plus one - if we retrieve all records then another request must be issued
 		    // with resumption token
-			if( resumptionToken.getSet() == null && resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+			if( resumptionToken.getSet() == null)
 			{
-				completeListSize += institutionalItemVersionService.getCount();
-		        versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), batchSize + 1);
+				if(resumptionToken.getFrom() == null && resumptionToken.getUntil() == null)
+				{
+				    // no set and no from until set
+				    completeListSize += institutionalItemVersionService.getCount();
+		            versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), batchSize + 1);
+			    }
+				else if(resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+			    {
+				    // no set but from date passed in
+				    completeListSize += institutionalItemVersionService.getItemsFromModifiedDateCount(resumptionToken.getFrom());
+				    versions = institutionalItemVersionService.getItemsIdOrderFromModifiedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), batchSize + 1 );
+			    }
+			    else if( resumptionToken.getFrom() == null && resumptionToken.getUntil() != null )
+			    {
+				    // no set but until date passed in
+				    completeListSize += institutionalItemVersionService.getItemsUntilModifiedDateCount(resumptionToken.getUntil());
+				    versions = institutionalItemVersionService.getItemsIdOrderUntilModifiedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), batchSize + 1 );
+			
+			    }
+			    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+			    {
+				    // no set but from and until passed in
+				    completeListSize += institutionalItemVersionService.getItemsBetweenModifiedDatesCount(resumptionToken.getFrom(), 
+						resumptionToken.getUntil());
+				    versions = institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), 
+						resumptionToken.getFrom(), 
+						resumptionToken.getUntil(), 
+						batchSize + 1);
+			    }
 			}
-			else if(  resumptionToken.getSet() != null && resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+			else if( resumptionToken.getSet() != null) 
 			{
-				InstitutionalCollection collection = institutionalCollectionService.getCollection(resumptionToken.getLastSetId(), false);
-				versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), collection,  batchSize + 1);
+			    InstitutionalCollection collection = institutionalCollectionService.getCollection(resumptionToken.getLastSetId(), false);
+
+				if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+			    {
+				    // set passed in but no from until passed in
+				    completeListSize += institutionalItemVersionService.getCount(collection);
+				    versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), collection,  batchSize + 1);
+			    }
+			    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+			    {
+				    // set and from passed in but no until passed in
+				    completeListSize += institutionalItemVersionService.getItemsFromModifiedDateCount(resumptionToken.getFrom(), collection);
+				    versions =  institutionalItemVersionService.getItemsIdOrderFromModifiedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), collection, batchSize + 1);
+			    }
+			    else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
+			    {
+				    // set and until passed in but no from 
+				    completeListSize += institutionalItemVersionService.getItemsUntilModifiedDateCount(resumptionToken.getUntil(), collection);
+				    versions =  institutionalItemVersionService.getItemsIdOrderUntilModifiedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), collection, batchSize + 1);
+			    }
+			    else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+			    {
+				    completeListSize += institutionalItemVersionService.getItemsBetweenModifiedDatesCount(resumptionToken.getFrom(), resumptionToken.getUntil(), collection);
+				    versions =  institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), resumptionToken.getFrom(), resumptionToken.getUntil(), collection, batchSize + 1);
+			    }
 			}
+			
 		        
 		    int size = versions.size();
 		   
@@ -177,6 +229,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 		    }
 		    Long lastId = addIdentifiers(versions, doc);
 		    resumptionToken.setLastId(lastId);
+		    resumptionToken.setCompleteListSize(completeListSize);
 		}
 		
 		if( doDeleted )
@@ -244,6 +297,10 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 		 Element root = doc.getDocumentElement();	
 		// create the header element of the record 
 		 Element resumption = doc.createElement("resumptionToken");
+		 if( resumptionToken.getCompleteListSize() != null )
+		 {
+		     resumption.setAttribute("completeListSize", resumptionToken.getCompleteListSize().toString());
+		 }
 		 Text data = doc.createTextNode(resumptionToken.getAsTokenString());
 		 resumption.appendChild(data);
 		 root.appendChild(resumption);

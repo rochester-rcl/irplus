@@ -222,7 +222,7 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 * @return list of institutional item versions greater than the given id and greater than or equal to
 	 * the given from deposit date.
 	 */
-	public List<InstitutionalItemVersion> getItemsIdOrderFromDepositDate(
+	public List<InstitutionalItemVersion> getItemsIdOrderFromModifiedDate(
 			long lastInstitutionalItemVersionId, Date fromModifiedDate, int maxResults); 
 	
 	/**
@@ -239,7 +239,7 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 * @return list of institutional item versions greater than the given id and greater than or equal to
 	 * the given from modified date.
 	 */
-	public List<InstitutionalItemVersion> getItemsIdOrderFromDepositDate(
+	public List<InstitutionalItemVersion> getItemsIdOrderFromModifiedDate(
 			long lastInstitutionalItemVersionId, Date fromModifiedDate, InstitutionalCollection institutionalCollection, int maxResults); 
 	
 	/**
@@ -270,7 +270,8 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 * the specified set id
 	 */
 	public List<InstitutionalItemVersion> getItemsIdOrderUntilModifiedDate(
-			long lastInstitutionalItemVersionId, Date untilModifiedDate, InstitutionalCollection institutionalCollection, int maxResults); 
+			long lastInstitutionalItemVersionId, Date untilModifiedDate, 
+			InstitutionalCollection institutionalCollection, int maxResults); 
 	
 	/**
 	 * Get the items ordered by id  that are between the given from and until deposit dates.  Will return 
@@ -305,8 +306,76 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 * @return - list of items that meet the specified criteria.
 	 */
 
-	public List<InstitutionalItemVersion> getItemsIdOrderBetweenDepositDates(
+	public List<InstitutionalItemVersion> getItemsIdOrderBetweenModifiedDates(
 			long lastInstitutionalItemVersionId, Date fromModifiedDate, Date untilModifiedDate, InstitutionalCollection institutionalCollection, int maxResults); 
 	
+	/**
+	 * Get a count of the institutional item versions 
+	 * 
+	 * @param fromModifiedDate - from date modification
+	 * @param untilModifiedDate - until date modification
+	 * @param institutionalCollection - collections the items should be within
+	 * 
+	 * @return - count of items found
+	 */
+	public Long getItemsBetweenModifiedDatesCount( Date fromModifiedDate,
+			Date untilModifiedDate, InstitutionalCollection institutionalCollection);
 	
+	/**
+	 * Get a count of institutional item versions between the modified dates.
+	 * 
+	 * @param fromModifiedDate - from date
+	 * @param untilModifiedDate - until date
+	 * 
+	 * @return all items modified between the from date and until date.
+	 */
+	public Long getItemsBetweenModifiedDatesCount( Date fromModifiedDate,
+			Date untilModifiedDate); 
+	
+	/**
+	 * Get a count of items within a given collection that have a modification date
+	 * greater than or equal to the specified date.  This includes sub collections.
+	 * 
+	 * @param fromModifiedDate - date the modification or creation must be greater than or equal to
+	 * @param institutionalCollection - the institutional collection they must reside in.  
+	 * 
+	 * @return the count of the number of items found greater than the specified date and within the specified collection
+	 * or sub collections
+	 */
+	public Long getItemsFromModifiedDateCount(
+			Date fromModifiedDate,
+			InstitutionalCollection institutionalCollection);
+	
+	/**
+	 * Get a count of items that have a modification date
+	 * greater than or equal to the specified date. 
+	 * 
+	 * @param fromModifiedDate - date the modification or creation must be greater than or equal to
+	 * 
+	 * @return the count of the number of items found greater than the specified date 
+	 */
+	public Long getItemsFromModifiedDateCount(Date fromModifiedDate);
+	
+	
+	/**
+	 * Get a count of all items added or modified equal to or before the specified date.
+	 * 
+	 * @param until ModifiedDate - date the modification or addition should be less than or equal to
+	 * @return
+	 */
+	public Long getItemsUntilModifiedDateCount(Date untilModifiedDate);
+	
+	/**
+	 * Get a count of items within a given collection that have a modification date
+	 * less than or equal to the specified date.  This includes sub collections.
+	 * 
+	 * @param fromModifiedDate - date the modification or creation must be greater than or equal to
+	 * @param institutionalCollection - the institutional collection they must reside in.  
+	 * 
+	 * @return the count of the number of items found less than or equal to the specified date and within the specified collection
+	 * or sub collections
+	 */
+	public Long getItemsUntilModifiedDateCount(
+			Date untilModifiedDate,
+			InstitutionalCollection institutionalCollection);
 }
