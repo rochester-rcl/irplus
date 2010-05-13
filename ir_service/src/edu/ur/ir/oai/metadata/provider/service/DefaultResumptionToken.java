@@ -62,6 +62,11 @@ public class DefaultResumptionToken implements ResumptionToken{
 	
 	/** indicates that a non null token should be inserted back into the request */
 	private boolean insertToken;
+	
+	/** size of the list */
+	private Integer completeListSize = null;
+
+
 
 	/**
 	 * Default constructor
@@ -161,6 +166,14 @@ public class DefaultResumptionToken implements ResumptionToken{
 
 	public void setInsertToken(boolean insertToken) {
 		this.insertToken = insertToken;
+	}
+	
+	public Integer getCompleteListSize() {
+		return completeListSize;
+	}
+
+	public void setCompleteListSize(Integer completeListSize) {
+		this.completeListSize = completeListSize;
 	}
 	
 	/**

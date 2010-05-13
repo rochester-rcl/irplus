@@ -17,6 +17,7 @@
 package edu.ur.ir.institution.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -292,6 +293,139 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 	 */
 	public Long getCount() {
 		return institutionalItemVersionDAO.getCount();
+	}
+
+
+	/**
+	 * Get a count of all institutional item versions within the collection.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getCount(edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public Long getCount(InstitutionalCollection collection) {
+		return institutionalItemVersionDAO.getCount(collection);
+	}
+
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsBetweenModifiedDatesCount(java.util.Date, java.util.Date, edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public Long getItemsBetweenModifiedDatesCount(Date fromModifiedDate,
+			Date untilModifiedDate,
+			InstitutionalCollection institutionalCollection) {
+		return institutionalItemVersionDAO.getItemsBetweenModifiedDatesCount(fromModifiedDate, untilModifiedDate, institutionalCollection);
+	}
+
+
+	/**
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsBetweenModifiedDatesCount(java.util.Date, java.util.Date)
+	 */
+	public Long getItemsBetweenModifiedDatesCount(Date fromModifiedDate,
+			Date untilModifiedDate) {
+		return institutionalItemVersionDAO.getItemsBetweenModifiedDatesCount(fromModifiedDate, untilModifiedDate);
+	}
+
+
+	/**
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsFromModifiedDateCount(java.util.Date, edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public Long getItemsFromModifiedDateCount(Date fromModifiedDate,
+			InstitutionalCollection institutionalCollection) {
+		return institutionalItemVersionDAO.getItemsFromModifiedDateCount(fromModifiedDate, institutionalCollection);
+	}
+
+
+	/**
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsUntilModifiedDateCount(java.util.Date)
+	 */
+	public Long getItemsUntilModifiedDateCount(Date untilModifiedDate) {
+		return institutionalItemVersionDAO.getItemsUntilModifiedDateCount(untilModifiedDate);
+	}
+
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsUntilModifiedDateCount(java.util.Date, edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public Long getItemsUntilModifiedDateCount(Date untilModifiedDate,
+			InstitutionalCollection institutionalCollection) {
+		return institutionalItemVersionDAO.getItemsUntilModifiedDateCount(untilModifiedDate, institutionalCollection);
+	}
+
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsIdOrderFromModifiedDate(long, java.util.Date, int)
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderFromModifiedDate(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate,
+			int maxResults) {
+		return institutionalItemVersionDAO.getItemsIdOrderFromModifiedDate(lastInstitutionalItemVersionId, 
+				fromModifiedDate, maxResults);
+	}
+
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsFromModifiedDateCount(java.util.Date)
+	 */
+	public Long getItemsFromModifiedDateCount(Date fromModifiedDate) {
+		return institutionalItemVersionDAO.getItemsFromModifiedDateCount(fromModifiedDate);
+	}
+
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsIdOrderUntilModifiedDate(long, java.util.Date, int)
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderUntilModifiedDate(
+			long lastInstitutionalItemVersionId, Date untilModifiedDate,
+			int maxResults) {
+		return institutionalItemVersionDAO.getItemsIdOrderUntilModifiedDate(lastInstitutionalItemVersionId, 
+				untilModifiedDate, maxResults);
+	}
+
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsIdOrderBetweenModifiedDates(long, java.util.Date,
+	 *  java.util.Date, int)
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderBetweenModifiedDates(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate,
+			Date untilModifiedDate, int maxResults) {
+		return institutionalItemVersionDAO.getItemsIdOrderBetweenModifiedDates(lastInstitutionalItemVersionId,
+				fromModifiedDate, untilModifiedDate, maxResults);
+	}
+
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsIdOrderFromModifiedDate(long, java.util.Date, edu.ur.ir.institution.InstitutionalCollection, int)
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderFromModifiedDate(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate,
+			InstitutionalCollection institutionalCollection, int maxResults) {
+		return institutionalItemVersionDAO.getItemsIdOrderFromModifiedDate(lastInstitutionalItemVersionId, fromModifiedDate, institutionalCollection, maxResults);
+	}
+
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsIdOrderUntilModifiedDate(long, java.util.Date, edu.ur.ir.institution.InstitutionalCollection, int)
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderUntilModifiedDate(
+			long lastInstitutionalItemVersionId, Date untilModifiedDate,
+			InstitutionalCollection institutionalCollection, int maxResults) {
+		return institutionalItemVersionDAO.getItemsIdOrderUntilModifiedDate(lastInstitutionalItemVersionId, 
+				untilModifiedDate, institutionalCollection, maxResults);
+	}
+
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#getItemsIdOrderBetweenModifiedDates(long, java.util.Date, java.util.Date, edu.ur.ir.institution.InstitutionalCollection, int)
+	 */
+	public List<InstitutionalItemVersion> getItemsIdOrderBetweenModifiedDates(
+			long lastInstitutionalItemVersionId, Date fromModifiedDate,
+			Date untilModifiedDate,
+			InstitutionalCollection institutionalCollection, int maxResults) {
+		return institutionalItemVersionDAO.getItemsIdOrderBetweenModifiedDates(lastInstitutionalItemVersionId, fromModifiedDate, 
+				untilModifiedDate, institutionalCollection, maxResults);
 	}
 
 }

@@ -403,17 +403,73 @@
 	    where institutionalItemVersion.item.id = ?
 	</query>
 	
+		<!--  get institutional item versions by id order with  -->
+	<query name="getInstitutionalItemVersionCount">
+	    select count(*) from InstitutionalItemVersion
+    </query>
+	
 	
 	<!--  get institutional item versions by id order with  -->
 	<query name="getInstitutionalItemVersionByLastIdOrderedById">
 	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 	    
-	    where institutionalItemVersion.id > :lastId
+	    where institutionalItemVersion.id &gt; :lastId
 	    order by institutionalItemVersion.id asc
     </query>
     
-        <!--  get count of institutional item version for a given collection  -->
-	<query name="getInstitutionalItemVersionCountByCollection">
+    
+    <!--  get institutional item versions by id order with between the specified dates -->
+	<query name="getInstitutionalItemVersionByLastIdBetweenDatesOrderedById">
 	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.id &gt; :lastId
+	    and institutionalItemVersion.dateLastModified between :fromDate and :untilDate
+	    order by institutionalItemVersion.id asc
+    </query>
+    
+    
+    <!--  get institutional item versions by id order with a modified 
+              date grater than or equal to the specified date -->
+	<query name="getInstitutionalItemVersionByLastIdFromDateOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.id &gt; :lastId
+	    and institutionalItemVersion.dateLastModified &gt;= :fromDate 
+	    order by institutionalItemVersion.id asc
+    </query>
+    
+       <!--  get a count of institutional item versions with a modified 
+              date grater than or equal to the specified date -->
+	<query name="getInstitutionalItemVersionFromDateCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.dateLastModified &gt;= :fromDate 
+    </query>
+    
+        <!--  get institutional item versions by id order with a modified 
+              date less than or equal to the specified date -->
+	<query name="getInstitutionalItemVersionByLastIdUntilDateOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.id > :lastId
+	    and institutionalItemVersion.dateLastModified &lt;= :untilDate 
+	    order by institutionalItemVersion.id asc
+    </query>
+     
+    
+         <!--  get a count of institutional item versions with a modified 
+              date grater than or equal to the specified date -->
+	<query name="getInstitutionalItemVersionUntilDateCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.dateLastModified &lt;= :untilDate 
+    </query>
+    
+    
+       <!--  get institutional item versions by id order with between the specified dates -->
+	<query name="getInstitutionalItemVersionBetweenDatesCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    where institutionalItemVersion.dateLastModified between :fromDate and :untilDate
+    </query>
+    
+    
+    <!--  get the count of institutional item versions in a collection  -->
+	<query name="getInstitutionalItemVersionBySetCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
 	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
 	    join versionedInstitutionalItem.institutionalItem institutionalItem
 	    join institutionalItem.institutionalCollection institutionalCollection
@@ -432,8 +488,96 @@
 	    and institutionalItemVersion.id > :lastId
 	    order by institutionalItemVersion.id asc
     </query>
+    
+    
+     <!--  get institutional item versions by id order with modification date
+          greater than or equal to the specified date
+           within a given collection  -->
+	<query name="getInstitutionalItemVersionByLastIdSetFromDateOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.id > :lastId
+	    and institutionalItemVersion.dateLastModified >= :fromDate 
+	    order by institutionalItemVersion.id asc
+    </query>
+    
+    
+     <!--  get  count of institutional item versions by id order with modification date
+           greater than or equal to the specified date
+           within a given collection  -->
+	<query name="getInstitutionalItemVersionSetFromDateCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.dateLastModified >= :fromDate 
+    </query>
+    
+    
+        <!--  get institutional item versions by id order with modification date
+          less than or equal to the specified date
+           within a given collection   -->
+	<query name="getInstitutionalItemVersionByLastIdSetUntilDateOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.id > :lastId
+	    and institutionalItemVersion.dateLastModified &lt;= :untilDate 
+	    order by institutionalItemVersion.id asc
+    </query>
+   
+    
+    <!--  get  count of institutional item versions by id order with modification date
+           less than or equal to the specified date
+           within a given collection  -->
+	<query name="getInstitutionalItemVersionSetUntilDateCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.dateLastModified &lt;= :fromDate 
+    </query> 
+    
+    
+    <!--  get institutional item versions by id order with between the specified dates
+           within a given collection  -->
+	<query name="getInstitutionalItemVersionByLastIdSetBetweenDatesOrderedById">
+	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.id > :lastId
+	    and institutionalItemVersion.dateLastModified between :fromDate and :untilDate
+	    order by institutionalItemVersion.id asc
+    </query>
  
  
+     <!--  get institutional item versions count with between the specified dates
+          within a given collection -->
+	<query name="getInstitutionalItemVersionSetBetweenDatesCount">
+	    select count(*) from InstitutionalItemVersion as institutionalItemVersion 
+	    join institutionalItemVersion.versionedInstitutionalItem versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItem institutionalItem
+	    join institutionalItem.institutionalCollection institutionalCollection	    
+	    where institutionalCollection.leftValue  between :leftValue and :rightValue
+	    and institutionalCollection.treeRoot.id = :treeRootId 	    
+	    and institutionalItemVersion.dateLastModified between :fromDate and :untilDate
+    </query>
+ 
+     
 	
 	
 </hibernate-mapping>
