@@ -6,7 +6,6 @@
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <responseDate>${responseDate}</responseDate>
-  <request verb="${verb}" identifier="${identifier}" 
-           metadataPrefix="${metadataPrefix}"  resumptionToken="${resumptionToken}"> <ir:baseUrl/>oai2.action</request>
+  <request verb="${verb}" resumptionToken="${resumptionToken}"> <ir:baseUrl/>oai2.action</request>
       ${oaiOutput}
 </OAI-PMH>
