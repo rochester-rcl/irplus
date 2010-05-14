@@ -29,6 +29,7 @@ import edu.ur.ir.oai.exception.NoRecordsMatchException;
 import edu.ur.ir.oai.exception.NoSetHierarchyException;
 import edu.ur.ir.oai.metadata.provider.IdentifyService;
 import edu.ur.ir.oai.metadata.provider.ListIdentifiersService;
+import edu.ur.ir.oai.metadata.provider.ListSetsService;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataProvider;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
 import edu.ur.ir.oai.metadata.provider.OaiService;
@@ -61,6 +62,9 @@ public class DefaultOaiService implements OaiService{
 
 	/** Service to deal with institutional item information */
 	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+	/** service to deal with listing set information */
+	private ListSetsService listSetsService;
 
 	/**  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(DefaultOaiService.class);
@@ -107,27 +111,6 @@ public class DefaultOaiService implements OaiService{
         return listIdentifiersService.listIdentifiers(metadataPrefix, set, from, until, resumptionToken);
 	}
 
-	
-	/**
-	 * Get the institutional item service.
-	 * 
-	 * @return
-	 */
-	public InstitutionalItemService getInstitutionalItemService() {
-		return institutionalItemService;
-	}
-
-	/**
-	 * Set the institutional item service.
-	 * 
-	 * @param institutionalItemService
-	 */
-	public void setInstitutionalItemService(
-			InstitutionalItemService institutionalItemService) {
-		this.institutionalItemService = institutionalItemService;
-	}
-
-
 	/**
 	 * Parse the oai id.
 	 * 
@@ -151,6 +134,62 @@ public class DefaultOaiService implements OaiService{
 			}
 		}
 		return value;
+	}
+	
+
+
+	/**
+	 * Get the identify response.
+	 * 
+	 * @see edu.ur.ir.oai.metadata.provider.OaiService#identify()
+	 */
+	public String identify() {
+		return identifyService.identify();
+	}
+
+
+	/**
+	 * Get the list of sets in the repository
+	 * 
+	 * @see edu.ur.ir.oai.metadata.provider.OaiService#listSets(java.lang.String)
+	 */
+	public String listSets(String resumptionToken)
+			throws BadResumptionTokenException, NoSetHierarchyException {
+		return listSetsService.listSets(resumptionToken);
+	}
+	
+	public ListSetsService getListSetsService() {
+		return listSetsService;
+	}
+
+	public void setListSetsService(ListSetsService listSetsService) {
+		this.listSetsService = listSetsService;
+	}
+	
+	public IdentifyService getIdentifyService() {
+		return identifyService;
+	}
+
+	public void setIdentifyService(IdentifyService identifyService) {
+		this.identifyService = identifyService;
+	}
+
+	public InstitutionalItemVersionService getInstitutionalItemVersionService() {
+		return institutionalItemVersionService;
+	}
+
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+
+	public ListIdentifiersService getListIdentifiersService() {
+		return listIdentifiersService;
+	}
+
+	public void setListIdentifiersService(
+			ListIdentifiersService listIdentifiersService) {
+		this.listIdentifiersService = listIdentifiersService;
 	}
 	
 	public OaiMetadataServiceProvider getOaiMetadataServiceProvider() {
@@ -179,40 +218,24 @@ public class DefaultOaiService implements OaiService{
 	public void setNamespaceIdentifier(String namespaceIdentifier) {
 		this.namespaceIdentifier = namespaceIdentifier;
 	}
+	
+	/**
+	 * Get the institutional item service.
+	 * 
+	 * @return
+	 */
+	public InstitutionalItemService getInstitutionalItemService() {
+		return institutionalItemService;
+	}
 
 	/**
-	 * Get the identify response.
+	 * Set the institutional item service.
 	 * 
-	 * @see edu.ur.ir.oai.metadata.provider.OaiService#identify()
+	 * @param institutionalItemService
 	 */
-	public String identify() {
-		return identifyService.identify();
+	public void setInstitutionalItemService(
+			InstitutionalItemService institutionalItemService) {
+		this.institutionalItemService = institutionalItemService;
 	}
 
-	
-	public IdentifyService getIdentifyService() {
-		return identifyService;
-	}
-
-	public void setIdentifyService(IdentifyService identifyService) {
-		this.identifyService = identifyService;
-	}
-
-	public InstitutionalItemVersionService getInstitutionalItemVersionService() {
-		return institutionalItemVersionService;
-	}
-
-	public void setInstitutionalItemVersionService(
-			InstitutionalItemVersionService institutionalItemVersionService) {
-		this.institutionalItemVersionService = institutionalItemVersionService;
-	}
-
-	public ListIdentifiersService getListIdentifiersService() {
-		return listIdentifiersService;
-	}
-
-	public void setListIdentifiersService(
-			ListIdentifiersService listIdentifiersService) {
-		this.listIdentifiersService = listIdentifiersService;
-	}
 }

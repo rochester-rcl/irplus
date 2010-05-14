@@ -16,10 +16,24 @@
 
 package edu.ur.ir.oai.metadata.provider.service;
 
+import java.io.StringWriter;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
+import org.w3c.dom.ls.LSSerializer;
 
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
+import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.metadata.provider.ListSetsService;
 
 /**
@@ -36,7 +50,6 @@ public class DefaultListSetsService implements ListSetsService {
 	/** Service to deal with institutional collection information */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
-
 	/**
 	 * Handles returning the correct set spec value
 	 * 
@@ -67,4 +80,64 @@ public class DefaultListSetsService implements ListSetsService {
 		this.institutionalCollectionService = institutionalCollectionService;
 	}
 
+	/**
+	 * List the sets in this repository.
+	 * @throws BadResumptionTokenException 
+	 * 
+	 * @see edu.ur.ir.oai.metadata.provider.ListSetsService#listSets()
+	 */
+	public String listSets(String resumptionToken) throws BadResumptionTokenException {
+		
+		 if( resumptionToken != null && !resumptionToken.trim().equals(""))
+		 {
+			 throw new BadResumptionTokenException("Resumption token is not used " + resumptionToken);
+		 }
+		 
+		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		 DocumentBuilder builder;
+		 
+		 try {
+			builder = factory.newDocumentBuilder();
+		 } catch (ParserConfigurationException e) {
+			throw new IllegalStateException(e);
+		 }
+		
+		 DOMImplementation impl = builder.getDOMImplementation();
+		 DOMImplementationLS domLs = (DOMImplementationLS)impl.getFeature("LS" , "3.0");
+		 LSSerializer serializer = domLs.createLSSerializer();
+		 LSOutput lsOut= domLs.createLSOutput();
+		 StringWriter stringWriter = new StringWriter();
+		 lsOut.setCharacterStream(stringWriter);
+		 
+		 Document doc = impl.createDocument(null, "ListSets", null);
+		 
+		 Element root = doc.getDocumentElement();
+		 
+		 List<InstitutionalCollection> collections = institutionalCollectionService.getAll();
+         for(InstitutionalCollection c : collections)
+         {
+    		 Element set = doc.createElement("set");
+    		 root.appendChild(set);
+    		 
+    		 Element setSpec = doc.createElement("setSpec");
+    		 Text data = doc.createTextNode(this.getSetSpec(c));
+    		 setSpec.appendChild(data);
+    		 
+    		 set.appendChild(setSpec);
+    		 
+    		 
+    		 Element setName = doc.createElement("setName");
+    		 data = doc.createTextNode(c.getName());
+    		 setName.appendChild(data);
+    		 
+    		 set.appendChild(setName);
+         }
+         
+		 
+		 // do not include the xml declaration
+		 serializer.getDomConfig().setParameter("xml-declaration", false);
+		 
+		 serializer.write(root, lsOut);
+		 return stringWriter.getBuffer().toString();
+	}
 }

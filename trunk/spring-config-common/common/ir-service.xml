@@ -746,6 +746,7 @@
        <property name="institutionalItemVersionService" ref="institutionalItemVersionService" />
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
        <property name="listIdentifiersService" ref="listIdentifiersService"/>
+       <property name="listSetsService" ref="listSetsService"/>
    </bean>
    
 </beans>

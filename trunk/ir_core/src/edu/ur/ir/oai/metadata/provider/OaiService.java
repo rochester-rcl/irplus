@@ -59,6 +59,26 @@ public interface OaiService extends Serializable{
 	 * 
 	 * @return a list of identifiers 
 	 */
-	public String listIdentifiers(String metadataPrefix, String set, String from, String until, String resumptionToken) throws BadResumptionTokenException, CannotDisseminateFormatException, NoRecordsMatchException, NoSetHierarchyException ;
+	public String listIdentifiers(String metadataPrefix, 
+			String set, 
+			String from, 
+			String until, 
+			String resumptionToken) throws BadResumptionTokenException,
+			                               CannotDisseminateFormatException,
+			                               NoRecordsMatchException, 
+			                               NoSetHierarchyException ;
 	
+  
+    /**
+     * Get the list of sets in the repository
+     * 
+     * @param resumptionToken - resumption token
+     * 
+     * @return list of sets in the repository.
+     * 
+     * @throws BadResumptionTokenException - if the resumption token is incorrect
+     * @throws NoSetHierarchyException - if this does not support sets
+     */
+    public String listSets(String resumptionToken) throws BadResumptionTokenException, NoSetHierarchyException;
+
 }
