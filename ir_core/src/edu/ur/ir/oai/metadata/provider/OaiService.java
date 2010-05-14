@@ -18,9 +18,11 @@ package edu.ur.ir.oai.metadata.provider;
 
 import java.io.Serializable;
 
+import edu.ur.ir.oai.exception.BadArgumentException;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.IdDoesNotExistException;
+import edu.ur.ir.oai.exception.NoMetadataFormatsException;
 import edu.ur.ir.oai.exception.NoRecordsMatchException;
 import edu.ur.ir.oai.exception.NoSetHierarchyException;
 
@@ -80,5 +82,19 @@ public interface OaiService extends Serializable{
      * @throws NoSetHierarchyException - if this does not support sets
      */
     public String listSets(String resumptionToken) throws BadResumptionTokenException, NoSetHierarchyException;
+    
+	/**
+	 * Interface for listing the metadata formats for a specific identifier
+	 * 
+	 * @param identifier - optional oai identifier for a specific item.
+	 * 
+	 * @return an xml string representing the formats made available by the system
+	 *  
+	 * @throws BadArgumentException - if a bad argument is passed in
+	 * @throws IdDoesNotExistException - if the id does not exist
+	 * @throws NoMetadataFormatsException - no metadata formats exist for the specified id
+	 */
+	public String listMetadataFormats(String identifier) throws BadArgumentException, IdDoesNotExistException, NoMetadataFormatsException;
+
 
 }

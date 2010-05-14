@@ -69,6 +69,10 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	/** Prefix handled by this provider */
 	public static String METADATA_PREFIX = "oai_dc";
 	
+	public static String METADATA_NAMESPACE = "http://www.openarchives.org/OAI/2.0/oai_dc/";
+	
+	public static String SCHEMA = "http://www.openarchives.org/OAI/2.0/oai_dc.xsd";
+	
 	/** Service for dealing with contributor types */
 	private ContributorTypeDublinCoreMappingService contributorTypeDublinCoreMappingService;  
 
@@ -643,6 +647,22 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 
 	public void setListSetsService(ListSetsService listSetsService) {
 		this.listSetsService = listSetsService;
+	}
+
+	/**
+	 * Get the namespace for the provider
+	 * 
+	 * @see edu.ur.ir.oai.metadata.provider.OaiMetadataProvider#getNamespace()
+	 */
+	public String getMetadataNamespace() {
+		return METADATA_NAMESPACE;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.oai.metadata.provider.OaiMetadataProvider#getSchema()
+	 */
+	public String getSchema() {
+		return SCHEMA;
 	}
 
 }

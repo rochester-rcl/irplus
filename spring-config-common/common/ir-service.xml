@@ -684,6 +684,15 @@
        class="edu.ur.ir.oai.metadata.provider.service.DefaultListSetsService">
        <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that provides list formats functionality -->
+   <!-- ****************************************** --> 
+   <bean id="listMetadataFormatsService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultListMetadataFormatsService">
+       <property name="oaiMetadataServiceProvider" ref="oaiMetadataServiceProvider"/>
+       <property name="institutionalItemVersionService" ref="institutionalItemVersionService"/>
+   </bean>
 
    <!-- ****************************************** --> 
    <!-- Service that provides dublin core metadata -->
@@ -747,6 +756,7 @@
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
        <property name="listIdentifiersService" ref="listIdentifiersService"/>
        <property name="listSetsService" ref="listSetsService"/>
+       <property name="listMetadataFormatsService" ref="listMetadataFormatsService"/>
    </bean>
    
 </beans>

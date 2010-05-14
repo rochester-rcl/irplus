@@ -36,6 +36,20 @@ public interface OaiMetadataProvider extends Serializable{
 	public String getMetadataPrefix();
 	
 	/**
+	 * Get the schema for the provider
+	 * 
+	 * @return the schema
+	 */
+	public String getSchema();
+	
+	/**
+	 * Get the namespace for the oai metadata provider.
+	 * 
+	 * @return
+	 */
+	public String getMetadataNamespace();
+	
+	/**
 	 * Returns true if this provider supports the given prefix
 	 * 
 	 * @param metadataPrefix
