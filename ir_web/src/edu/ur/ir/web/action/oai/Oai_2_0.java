@@ -91,7 +91,6 @@ public class Oai_2_0 extends ActionSupport{
 		}
 		if( verb.equalsIgnoreCase(OaiUtil.LIST_IDENTIFIERS_VERB))
 		{
-			
 			try {
 				oaiOutput = oaiService.listIdentifiers(metadataPrefix, set, from, until, resumptionToken);
 			    return "listIdentifiers";
@@ -107,8 +106,21 @@ public class Oai_2_0 extends ActionSupport{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 		}
+		if( verb.equalsIgnoreCase(OaiUtil.LIST_SETS_VERB))
+		{
+			try {
+				oaiOutput = oaiService.listSets(resumptionToken);
+				return "listSets";
+			} catch (BadResumptionTokenException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSetHierarchyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		return SUCCESS;
 	
 	}

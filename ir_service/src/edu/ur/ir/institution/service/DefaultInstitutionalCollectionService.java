@@ -549,5 +549,15 @@ public class DefaultInstitutionalCollectionService implements
 		}
 	}
 
+	/**
+	 * Get all institutional collections in the system.
+	 * 
+	 * @return all institutional collections in the system
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalCollection> getAll() {
+		return (List<InstitutionalCollection>)institutionalCollectionDAO.getAll();
+	}
+
 	
 }

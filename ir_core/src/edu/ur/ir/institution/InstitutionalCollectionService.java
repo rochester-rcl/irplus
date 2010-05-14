@@ -237,4 +237,11 @@ public interface InstitutionalCollectionService extends Serializable{
 	 * @param institutionalCollection Collection whose items has to be set as private
 	 */
 	public void setAllItemsWithinCollectionPrivate(InstitutionalCollection institutionalCollection);
+	
+	/**
+	 * Get all institutional collections in the system.
+	 * 
+	 * @return all institutional collections in the system
+	 */
+	public List<InstitutionalCollection> getAll();
 }
