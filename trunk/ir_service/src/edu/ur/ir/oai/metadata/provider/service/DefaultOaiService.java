@@ -17,18 +17,19 @@
 package edu.ur.ir.oai.metadata.provider.service;
 
 
-import org.apache.log4j.Logger;
-
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
+import edu.ur.ir.oai.exception.BadArgumentException;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.IdDoesNotExistException;
+import edu.ur.ir.oai.exception.NoMetadataFormatsException;
 import edu.ur.ir.oai.exception.NoRecordsMatchException;
 import edu.ur.ir.oai.exception.NoSetHierarchyException;
 import edu.ur.ir.oai.metadata.provider.IdentifyService;
 import edu.ur.ir.oai.metadata.provider.ListIdentifiersService;
+import edu.ur.ir.oai.metadata.provider.ListMetadataFormatsService;
 import edu.ur.ir.oai.metadata.provider.ListSetsService;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataProvider;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
@@ -65,9 +66,9 @@ public class DefaultOaiService implements OaiService{
 	
 	/** service to deal with listing set information */
 	private ListSetsService listSetsService;
-
-	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(DefaultOaiService.class);
+	
+	/** service to list metadata formats */
+	private ListMetadataFormatsService listMetadataFormatsService;
 
 	/**
 	 * Return the get record body as a string.
@@ -81,7 +82,7 @@ public class DefaultOaiService implements OaiService{
 		OaiMetadataProvider oaiMetadataProvider = oaiMetadataServiceProvider.getProvider(metadataPrefix) ;
 		if( oaiMetadataProvider != null )
 		{
-			Long institutionalItemVersionId = getInstitutionalItemVersionId(identifier);
+			Long institutionalItemVersionId = DefaultOaiIdentifierHelper.getInstitutionalItemVersionId(identifier);
 			InstitutionalItemVersion institutionalItemVersion = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
 			
 			if( institutionalItemVersion != null )
@@ -111,30 +112,7 @@ public class DefaultOaiService implements OaiService{
         return listIdentifiersService.listIdentifiers(metadataPrefix, set, from, until, resumptionToken);
 	}
 
-	/**
-	 * Parse the oai id.
-	 * 
-	 * @param oaiId
-	 * @return the unique identifier for the publication.  this returns null if the
-	 * id could not be established.
-	 */
-	private Long getInstitutionalItemVersionId(String oaiId)
-	{
-		String[] values = oaiId.split(":");
-		Long value = null;
-		if( values.length == 3)
-		{
-			try
-			{
-			    value = Long.valueOf(values[2]);
-			}
-			catch(Exception e)
-			{
-				log.error("the oai identifier " + oaiId + " could not be parsed");
-			}
-		}
-		return value;
-	}
+
 	
 
 
@@ -145,6 +123,23 @@ public class DefaultOaiService implements OaiService{
 	 */
 	public String identify() {
 		return identifyService.identify();
+	}
+	
+	/**
+	 * Interface for listing the metadata formats for a specific identifier
+	 * 
+	 * @param identifier - optional oai identifier for a specific item.
+	 * 
+	 * @return an xml string representing the formats made available by the system
+	 *  
+	 * @throws BadArgumentException - if a bad argument is passed in
+	 * @throws IdDoesNotExistException - if the id does not exist
+	 * @throws NoMetadataFormatsException - no metadata formats exist for the specified id
+	 */
+	public String listMetadataFormats(String identifier)
+			throws BadArgumentException, IdDoesNotExistException,
+			NoMetadataFormatsException {
+		return listMetadataFormatsService.listMetadataFormats(identifier);
 	}
 
 
@@ -238,4 +233,12 @@ public class DefaultOaiService implements OaiService{
 		this.institutionalItemService = institutionalItemService;
 	}
 
+	public ListMetadataFormatsService getListMetadataFormatsService() {
+		return listMetadataFormatsService;
+	}
+
+	public void setListMetadataFormatsService(
+			ListMetadataFormatsService listMetadataFormatsService) {
+		this.listMetadataFormatsService = listMetadataFormatsService;
+	}
 }

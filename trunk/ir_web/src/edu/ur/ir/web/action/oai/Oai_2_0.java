@@ -20,9 +20,11 @@ import java.util.Date;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.oai.OaiUtil;
+import edu.ur.ir.oai.exception.BadArgumentException;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.exception.IdDoesNotExistException;
+import edu.ur.ir.oai.exception.NoMetadataFormatsException;
 import edu.ur.ir.oai.exception.NoRecordsMatchException;
 import edu.ur.ir.oai.exception.NoSetHierarchyException;
 import edu.ur.ir.oai.metadata.provider.OaiService;
@@ -72,7 +74,7 @@ public class Oai_2_0 extends ActionSupport{
 		{
 			return "badVerb";
 		}
-		if( verb.equalsIgnoreCase(OaiUtil.GET_RECORD_VERB))
+		else if( verb.equalsIgnoreCase(OaiUtil.GET_RECORD_VERB))
 		{
 			
 			try {
@@ -84,12 +86,12 @@ public class Oai_2_0 extends ActionSupport{
 				return "idDoesNotExist";
 			}
 		}
-		if( verb.equalsIgnoreCase(OaiUtil.IDENTIFY_VERB))
+		else if( verb.equalsIgnoreCase(OaiUtil.IDENTIFY_VERB))
 		{
 			oaiOutput = oaiService.identify();
 			return "identify";
 		}
-		if( verb.equalsIgnoreCase(OaiUtil.LIST_IDENTIFIERS_VERB))
+		else if( verb.equalsIgnoreCase(OaiUtil.LIST_IDENTIFIERS_VERB))
 		{
 			try {
 				oaiOutput = oaiService.listIdentifiers(metadataPrefix, set, from, until, resumptionToken);
@@ -107,7 +109,7 @@ public class Oai_2_0 extends ActionSupport{
 				e.printStackTrace();
 			}
 		}
-		if( verb.equalsIgnoreCase(OaiUtil.LIST_SETS_VERB))
+		else if( verb.equalsIgnoreCase(OaiUtil.LIST_SETS_VERB))
 		{
 			try {
 				oaiOutput = oaiService.listSets(resumptionToken);
@@ -118,6 +120,19 @@ public class Oai_2_0 extends ActionSupport{
 			} catch (NoSetHierarchyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+		}
+		else if( verb.equalsIgnoreCase(OaiUtil.LIST_METADATA_FORMATS_VERB))
+		{
+			try {
+				oaiOutput = oaiService.listMetadataFormats(identifier);
+				return "listMetadataFormats";
+			} catch (BadArgumentException e) {
+				return "badVerb";
+			} catch (IdDoesNotExistException e) {
+				return "idDoesNotExist";
+			} catch (NoMetadataFormatsException e) {
+				return "cannotDisseminateFormat";
 			}
 		}
 		
