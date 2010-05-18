@@ -16,8 +16,6 @@
 
 package edu.ur.ir.oai.metadata.provider;
 
-import java.io.Serializable;
-
 import edu.ur.ir.oai.exception.BadArgumentException;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
@@ -25,13 +23,11 @@ import edu.ur.ir.oai.exception.NoRecordsMatchException;
 import edu.ur.ir.oai.exception.NoSetHierarchyException;
 
 /**
- * Service to deal with listing the identifiers.
- * 
- * @author Nathan Sarr
+ * @author NathanS
  *
  */
-public interface ListIdentifiersService extends Serializable{
-	
+public interface ListRecordsService {
+
 	/**
 	 * Get the list identifers as an xml document.
 	 * 
@@ -48,13 +44,14 @@ public interface ListIdentifiersService extends Serializable{
 	 * @throws NoRecordsMatchException
 	 * @throws NoSetHierarchyException
 	 */
-	public String listIdentifiers(String metadataPrefix, 
+	public String listRecords(String metadataPrefix, 
 			String set, 
 			String from, 
 			String until, 
-			String resumptionToken)throws  BadArgumentException, 
+			String resumptionToken)throws BadArgumentException,
 			BadResumptionTokenException, 
 			CannotDisseminateFormatException, 
 			NoRecordsMatchException, 
 			NoSetHierarchyException;
+	
 }

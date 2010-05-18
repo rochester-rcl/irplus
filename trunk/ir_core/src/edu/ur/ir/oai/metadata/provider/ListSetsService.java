@@ -19,6 +19,7 @@ package edu.ur.ir.oai.metadata.provider;
 import java.io.Serializable;
 
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.oai.exception.BadArgumentException;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.NoSetHierarchyException;
 
@@ -44,6 +45,6 @@ public interface ListSetsService extends Serializable{
 	 * @throws BadResumptionTokenException - if the resumption token is bad
 	 * @throws NoSetHierarchyException - if sets are not supported
 	 */
-	public String listSets(String resumptionToken) throws BadResumptionTokenException, NoSetHierarchyException;
+	public String listSets(String resumptionToken) throws BadArgumentException, BadResumptionTokenException, NoSetHierarchyException;
 
 }

@@ -17,12 +17,14 @@
 package edu.ur.ir.institution.service;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersionDAO;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersionService;
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalCollectionService;
 
 /**
  * Default Implementation of the deleted institutional item Version Service.
@@ -33,9 +35,15 @@ import edu.ur.ir.institution.InstitutionalCollection;
 public class DefaultDeletedInstitutionalItemVersionService implements DeletedInstitutionalItemVersionService 
 {
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 8005806088958591100L;
+
 	/** Deleted Institutional item data access */
 	private DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO;
 	
+	/** service for dealing with institutional collection information */
+	private InstitutionalCollectionService institutionalCollectionService;
+
 
 	/**
 	 * Gets a deleted institutional item version by the original institutional item version.
@@ -48,7 +56,6 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	{
 		return deletedInstitutionalItemVersionDAO.get(institutionalItemVersionId);
 	}
-
 	
 	/**
 	 * Get the deleted institutional item version by the original institutional item id and version number.
@@ -80,8 +87,7 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrder( long lastDeletedInstitutionalItemVersionId,
 			int maxResults)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsIdOrder(lastDeletedInstitutionalItemVersionId, maxResults);
 	}	
 	
 	/**
@@ -99,8 +105,7 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrder( long lastDeletedItemVersionId,
 			InstitutionalCollection institutionalCollection, int maxResults)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsIdOrder(lastDeletedItemVersionId, getCollectionIds(institutionalCollection), maxResults);
 	}	
 	
 	/**
@@ -110,8 +115,7 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	 */
 	public Long getCount()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getCount();
 	}	
 	
 	/**
@@ -124,8 +128,7 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	 */
 	public Long getCount(InstitutionalCollection collection)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getCount(getCollectionIds(collection));
 	}	
 	
 	/**
@@ -139,10 +142,9 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	 * @return - count of items found
 	 */
 	public Long getItemsBetweenDeletedDatesCount( Date fromDeletedDate,
-			Date untilDeletedDate, InstitutionalCollection institutionalCollection)
+			Date untilDeletedDate, InstitutionalCollection collection)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsBetweenDeletedDatesCount(fromDeletedDate, untilDeletedDate, getCollectionIds(collection));
 	}	
 	
 	/**
@@ -156,8 +158,7 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	public Long getItemsBetweenDeletedDatesCount( Date fromDeletedDate,
 			Date untilDeletedDate)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsBetweenDeletedDatesCount(fromDeletedDate, untilDeletedDate);
 	}	
 	
 	/**
@@ -165,16 +166,15 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	 * greater than or equal to the specified date.  This includes sub collections.
 	 * 
 	 * @param fromDeletedDate - date the deletion must be greater than or equal to
-	 * @param institutionalCollection - the institutional collection they must reside in.  
+	 * @param collection - the institutional collection they must reside in.  
 	 * 
 	 * @return the count of the number of items found greater than the specified date and within the specified collection
 	 * or sub collections
 	 */
 	public Long getItemsFromDeletedDateCount( Date fromDeletedDate,
-			InstitutionalCollection institutionalCollection)
+			InstitutionalCollection collection)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsFromDeletedDateCount(fromDeletedDate, getCollectionIds(collection));
 	}	
 	
 	/**
@@ -185,15 +185,14 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	 */
 	public Long getItemsUntilDeletedDateCount(Date untilDeletedDate)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsUntilDeletedDateCount(untilDeletedDate);
 	}	
 	
 	/**
 	 * Get a count of deleted items within a given collection that have a deletion date
 	 * less than or equal to the specified date.  This includes sub collections.
 	 * 
-	 * @param fromDeletedDate - date the deletion must be greater than or equal to
+	 * @param untilDeletedDate - date the deletion must be greater than or equal to
 	 * @param institutionalCollection - the institutional collection they must reside in.  
 	 * 
 	 * @return the count of the number of items found less than or equal to the specified date and within the specified collection
@@ -201,10 +200,9 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	 */
 	public Long getItemsUntilDeletedDateCount(
 			Date untilDeletedDate,
-			InstitutionalCollection institutionalCollection)
+			InstitutionalCollection collection)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsUntilDeletedDateCount(untilDeletedDate, getCollectionIds(collection));
 	}		
 	
 	/**
@@ -223,8 +221,8 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrderFromDeletedDate(
 			long lastDeletedInstitutionalItemVersionId, Date fromDeletedDate, int maxResults) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsIdOrderFromDeletedDate(lastDeletedInstitutionalItemVersionId, 
+				fromDeletedDate, maxResults);
 	}	
 	
 	/**
@@ -237,8 +235,7 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	 */
 	public Long getItemsFromDeletedDateCount(Date fromDeletedDate)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsFromDeletedDateCount(fromDeletedDate);
 	}		
 	
 	/**
@@ -255,8 +252,8 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrderUntilDeletedDate(
 			long lastDeletedInstitutionalItemVersionId, Date untilDeletedDate, int maxResults) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsIdOrderUntilDeletedDate(lastDeletedInstitutionalItemVersionId, 
+				untilDeletedDate, maxResults);
 	}	
 	
 	/**
@@ -276,8 +273,8 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrderBetweenDeletedDates(
 			long lastDeletedInstitutionalItemVersionId, Date fromDeletedDate, Date untilDeletedDate, int maxResults) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsIdOrderBetweenDeletedDates(lastDeletedInstitutionalItemVersionId,
+				fromDeletedDate, untilDeletedDate, maxResults);
 	}	
 	
 	/**
@@ -296,10 +293,10 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	 */
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrderFromDeletedDate(
 			long lastDeletedInstitutionalItemVersionId, Date fromDeletedDate, 
-			InstitutionalCollection institutionalCollection, int maxResults) 
+			InstitutionalCollection collection, int maxResults) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsIdOrderFromDeletedDate(lastDeletedInstitutionalItemVersionId, 
+				fromDeletedDate, getCollectionIds(collection), maxResults);
 	}	
 	
 	/**
@@ -317,10 +314,11 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 	 */
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrderUntilDeletedDate(
 			long lastDeletedInstitutionalItemVersionId, Date untilDeletedDate, 
-			InstitutionalCollection institutionalCollection, int maxResults) 
+			InstitutionalCollection collection, int maxResults) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+	
+		return deletedInstitutionalItemVersionDAO.getItemsIdOrderUntilDeletedDate(lastDeletedInstitutionalItemVersionId, 
+				untilDeletedDate, getCollectionIds(collection), maxResults);
 	}	
 	
 	/**
@@ -341,18 +339,32 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrderBetweenDeletedDates(
 			long lastDeletedInstitutionalItemVersionId, Date fromDeletedDate, Date untilDeletedDate, 
-			InstitutionalCollection institutionalCollection, int maxResults) 
+			InstitutionalCollection collection, int maxResults) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return deletedInstitutionalItemVersionDAO.getItemsIdOrderBetweenDeletedDates(lastDeletedInstitutionalItemVersionId, 
+				fromDeletedDate, untilDeletedDate,  getCollectionIds(collection), maxResults);
 	}	
 
+    /**
+     * Get the collection ids in a list for the parent and all child collections
+     * of the parent.
+     * 
+     * @param parent - parent collection
+     * @return list of ids for all child collections and the parent
+     */
+    private List<Long> getCollectionIds(InstitutionalCollection parent)
+    {
+    	LinkedList<Long> collectionIds = new LinkedList<Long>();
+		List<InstitutionalCollection> children = institutionalCollectionService.getAllChildrenForCollection(parent);
+		collectionIds.add(parent.getId());
+		
+		for( InstitutionalCollection c : children)
+		{
+			collectionIds.add(c.getId());
+		}
+		return collectionIds;
 
-
-	
-
-
-
+    }
 
 	public DeletedInstitutionalItemVersionDAO getDeletedInstitutionalItemVersionDAO() {
 		return deletedInstitutionalItemVersionDAO;
@@ -362,5 +374,13 @@ public class DefaultDeletedInstitutionalItemVersionService implements DeletedIns
 			DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO) {
 		this.deletedInstitutionalItemVersionDAO = deletedInstitutionalItemVersionDAO;
 	}
+	
+	public InstitutionalCollectionService getInstitutionalCollectionService() {
+		return institutionalCollectionService;
+	}
 
+	public void setInstitutionalCollectionService(
+			InstitutionalCollectionService institutionalCollectionService) {
+		this.institutionalCollectionService = institutionalCollectionService;
+	}
 }

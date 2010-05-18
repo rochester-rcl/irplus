@@ -41,6 +41,8 @@ public interface ListMetadataFormatsService extends Serializable{
 	 * @throws IdDoesNotExistException - if the id does not exist
 	 * @throws NoMetadataFormatsException - no metadata formats exist for the specified id
 	 */
-	public String listMetadataFormats(String identifier) throws BadArgumentException, IdDoesNotExistException, NoMetadataFormatsException;
+	public String listMetadataFormats(String identifier) throws BadArgumentException, 
+	    IdDoesNotExistException, 
+	    NoMetadataFormatsException;
 
 }

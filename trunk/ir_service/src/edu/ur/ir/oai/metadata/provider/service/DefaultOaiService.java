@@ -104,11 +104,12 @@ public class DefaultOaiService implements OaiService{
 	/**
 	 * List the identifiers in the system.
 	 * @throws NoSetHierarchyException 
+	 * @throws BadArgumentException 
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.OaiService#listIdentifiers(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public String listIdentifiers(String metadataPrefix, String set, String from, String until, String resumptionToken) throws BadResumptionTokenException,
-			CannotDisseminateFormatException, NoRecordsMatchException, NoSetHierarchyException{
+			CannotDisseminateFormatException, NoRecordsMatchException, NoSetHierarchyException, BadArgumentException{
         return listIdentifiersService.listIdentifiers(metadataPrefix, set, from, until, resumptionToken);
 	}
 
@@ -118,10 +119,11 @@ public class DefaultOaiService implements OaiService{
 
 	/**
 	 * Get the identify response.
+	 * @throws BadArgumentException 
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.OaiService#identify()
 	 */
-	public String identify() {
+	public String identify() throws BadArgumentException {
 		return identifyService.identify();
 	}
 	
@@ -145,11 +147,12 @@ public class DefaultOaiService implements OaiService{
 
 	/**
 	 * Get the list of sets in the repository
+	 * @throws BadArgumentException 
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.OaiService#listSets(java.lang.String)
 	 */
 	public String listSets(String resumptionToken)
-			throws BadResumptionTokenException, NoSetHierarchyException {
+			throws BadResumptionTokenException, NoSetHierarchyException, BadArgumentException {
 		return listSetsService.listSets(resumptionToken);
 	}
 	
