@@ -18,6 +18,8 @@ package edu.ur.ir.oai.metadata.provider;
 
 import java.io.Serializable;
 
+import edu.ur.ir.oai.exception.BadArgumentException;
+
 /**
  * Helps with the identify portion of the oai specification.
  * 
@@ -31,6 +33,6 @@ public interface IdentifyService extends Serializable{
 	 * 
 	 * @return
 	 */
-	public String identify();
+	public String identify() throws BadArgumentException;
 
 }

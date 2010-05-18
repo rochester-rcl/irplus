@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
  * @author Nathan Sarr
  *
  */
-public interface DeletedInstitutionalItemVersionService {
+public interface DeletedInstitutionalItemVersionService extends Serializable {
 	
 	/**
 	 * Gets a deleted institutional item version by the original institutional item version.
