@@ -84,11 +84,17 @@ public class Oai_2_0 extends ActionSupport{
 				return "cannotDisseminateFormat";
 			} catch (IdDoesNotExistException e) {
 				return "idDoesNotExist";
+			} catch (BadArgumentException e) {
+				return "badArguement";
 			}
 		}
 		else if( verb.equalsIgnoreCase(OaiUtil.IDENTIFY_VERB))
 		{
-			oaiOutput = oaiService.identify();
+			try {
+				oaiOutput = oaiService.identify();
+			} catch (BadArgumentException e) {
+				return "badArguement";
+			}
 			return "identify";
 		}
 		else if( verb.equalsIgnoreCase(OaiUtil.LIST_IDENTIFIERS_VERB))
@@ -97,16 +103,15 @@ public class Oai_2_0 extends ActionSupport{
 				oaiOutput = oaiService.listIdentifiers(metadataPrefix, set, from, until, resumptionToken);
 			    return "listIdentifiers";
 			} catch (BadResumptionTokenException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return("badResumptionToken");
 			} catch (CannotDisseminateFormatException e) {
 				return "cannotDisseminateFormat";
 			} catch (NoRecordsMatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return "noRecordsMatch";
 			} catch (NoSetHierarchyException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return "noSetHierarchy";
+			} catch (BadArgumentException e) {
+				return "badArguement";
 			}
 		}
 		else if( verb.equalsIgnoreCase(OaiUtil.LIST_SETS_VERB))
@@ -115,11 +120,11 @@ public class Oai_2_0 extends ActionSupport{
 				oaiOutput = oaiService.listSets(resumptionToken);
 				return "listSets";
 			} catch (BadResumptionTokenException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return("badResumptionToken");
 			} catch (NoSetHierarchyException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return "noSetHierarchy";
+			} catch (BadArgumentException e) {
+				return "badArguement";
 			}
 		}
 		else if( verb.equalsIgnoreCase(OaiUtil.LIST_METADATA_FORMATS_VERB))

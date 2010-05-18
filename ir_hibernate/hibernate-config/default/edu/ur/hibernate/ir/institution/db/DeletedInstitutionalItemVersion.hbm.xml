@@ -70,6 +70,11 @@
 	
 	</class>
 		
+	<!-- count of all institutional items in the system for a repository-->
+	<query name="deletedInstitutionalItemVersionCount">
+	    select count(*) from DeletedInstitutionalItemVersion
+	</query>
+	
 	<query name="getDeleteInstitutionalItemVersionById">
 	    from DeletedInstitutionalItemVersion dv
 	    where dv.institutionalItemVersionId = :instititutionalItemVersionId
@@ -81,6 +86,148 @@
 	    where dv.versionNumber = :versionNumber
 	    and dv.deletedInstitutionalItem.institutionalItemId = :institutionalItemId
 	</query>
+		
+		<!--  get institutional item versions by id order with  -->
+	<query name="getDeletedInstitutionalItemVersionByLastIdOrderedById">
+	    select deletedInstitutionalItemVersion from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 	    
+	    where deletedInstitutionalItemVersion.id &gt; :lastId
+	    order by deletedInstitutionalItemVersion.id asc
+    </query>
+    
+    
+    <!--  get deleted institutional item versions by id order with between the specified dates -->
+	<query name="getDeletedInstitutionalItemVersionByLastIdBetweenDatesOrderedById">
+	    select deletedInstitutionalItemVersion from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.id &gt; :lastId
+	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate between :fromDate and :untilDate
+	    order by deletedInstitutionalItemVersion.id asc
+    </query>
+    
+    
+    <!--  get deleted institutional item versions by id order with a modified 
+              date grater than or equal to the specified date -->
+	<query name="getDeletedInstitutionalItemVersionByLastIdFromDateOrderedById">
+	    select deletedInstitutionalItemVersion from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.id &gt; :lastId
+	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate &gt;= :fromDate 
+	    order by deletedInstitutionalItemVersion.id asc
+    </query>
+    
+    
+    <!--  get a count of institutional item versions with a modified 
+              date grater than or equal to the specified date  -->
+	<query name="getDeletedInstitutionalItemVersionFromDateCount">
+	    select count(*) from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate &gt;= :fromDate 
+    </query>
+   
+    
+    <!--  get institutional item versions by id order with a modified 
+              date less than or equal to the specified date -->
+	<query name="getDeletedInstitutionalItemVersionByLastIdUntilDateOrderedById">
+	    select deletedInstitutionalItemVersion from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.id > :lastId
+	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate &lt;= :untilDate 
+	    order by deletedInstitutionalItemVersion.id asc
+    </query>
+     
+    
+     <!--  get a count of institutional item versions with a modified 
+              date grater than or equal to the specified date  -->
+	<query name="getDeletedInstitutionalItemVersionUntilDateCount">
+	    select count(*) from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate &lt;= :untilDate 
+    </query>
+   
+    
+    <!--  get institutional item versions by id order with between the specified dates -->
+	<query name="getDeletedInstitutionalItemVersionBetweenDatesCount">
+	    select count(*) from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate between :fromDate and :untilDate
+    </query>
+	
 	
 
+
+
+
+	
+	<!--  get the count of institutional item versions in a collection  -->
+	<query name="getDeletedInstitutionalItemVersionBySetCount">
+	    select count(*) from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.institutionalCollectionId in (:collectionIds)  
+    </query>
+    
+    
+    <!--  get institutional item versions by id order for a given institutional collection   -->
+	<query name="getDeletedInstitutionalItemVersionByLastIdSetOrderedById">
+	    select deletedInstitutionalItemVersion from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.institutionalCollectionId in (:collectionIds)  
+	    and deletedInstitutionalItemVersion.id > :lastId
+	    order by deletedInstitutionalItemVersion.id asc
+    </query>
+   
+    
+     <!--  get institutional item versions by id order with modification date
+          greater than or equal to the specified date
+           within a given collection  -->
+	<query name="getDeletedInstitutionalItemVersionByLastIdSetFromDateOrderedById">
+	    select deletedInstitutionalItemVersion from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.institutionalCollectionId in (:collectionIds)     
+	    and deletedInstitutionalItemVersion.id > :lastId
+	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate &gt;= :fromDate 
+	    order by deletedInstitutionalItemVersion.id asc
+    </query>
+    
+    
+     <!--  get  count of institutional item versions by id order with modification date
+           greater than or equal to the specified date
+           within a given collection   -->
+	<query name="getDeletedInstitutionalItemVersionSetFromDateCount">
+	    select count(*) from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.institutionalCollectionId in (:collectionIds)
+	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate &gt;= :fromDate 
+    </query>
+   
+    
+    <!--  get institutional item versions by id order with modification date
+          less than or equal to the specified date  within a given collection   -->
+	<query name="getDeletedInstitutionalItemVersionByLastIdSetUntilDateOrderedById">
+	    select deletedInstitutionalItemVersion from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.institutionalCollectionId in (:collectionIds)  
+	    and deletedInstitutionalItemVersion.id > :lastId
+	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate &lt;= :untilDate 
+	    order by deletedInstitutionalItemVersion.id asc
+    </query>
+   
+    
+    <!--  get  count of institutional item versions by id order with modification date
+           less than or equal to the specified date
+           within a given collection --> 
+	<query name="getDeletedInstitutionalItemVersionSetUntilDateCount">
+	    select count(*) from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.institutionalCollectionId in (:collectionIds)
+	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate &lt;= :fromDate 
+    </query> 
+    
+    
+    <!--  get institutional item versions by id order with between the specified dates
+           within a given collection  -->
+	<query name="getDeletedInstitutionalItemVersionByLastIdSetBetweenDatesOrderedById">
+	    select deletedInstitutionalItemVersion from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.institutionalCollectionId in (:collectionIds)  
+	    and deletedInstitutionalItemVersion.id > :lastId
+	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate between :fromDate and :untilDate
+	    order by deletedInstitutionalItemVersion.id asc
+    </query>
+ 
+ 
+     <!--  get institutional item versions count with between the specified dates
+          within a given collection -->
+	<query name="getDeletedInstitutionalItemVersionSetBetweenDatesCount">
+	    select count(*) from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
+	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.institutionalCollectionId in (:collectionIds)
+	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate between :fromDate and :untilDate
+    </query>
+	
 </hibernate-mapping>

@@ -53,6 +53,9 @@ public class InstitutionalItemVersion extends BasePersistent{
 	/** Date this version or the underlying item was modified */
 	private Timestamp dateLastModified;
 	
+
+
+
 	/** User who modified the the version or underlying item */
 	private IrUser lastModifiedBy;
 	
@@ -443,7 +446,14 @@ public class InstitutionalItemVersion extends BasePersistent{
 		return lastModifiedNote;
 	}
 
-
+	/**
+	 * Set the date this item was last modified.
+	 * 
+	 * @param dateLastModified
+	 */
+	public void setDateLastModified(Timestamp dateLastModified) {
+		this.dateLastModified = dateLastModified;
+	}
 	
 	/**
 	 * Updates the last modified date to now and sets the user who modified

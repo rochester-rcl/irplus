@@ -21,8 +21,6 @@ import java.util.Date;
 import edu.ur.ir.institution.DeletedInstitutionalItem;
 import edu.ur.ir.institution.DeletedInstitutionalItemDAO;
 import edu.ur.ir.institution.DeletedInstitutionalItemService;
-import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
-import edu.ur.ir.institution.DeletedInstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.user.IrUser;
 
@@ -41,8 +39,7 @@ public class DefaultDeletedInstitutionalItemService implements DeletedInstitutio
 	/** Deleted Institutional item data access */
 	private DeletedInstitutionalItemDAO deletedInstitutionalItemDAO;
 	
-	/** Deleted Institutional item data access */
-	private DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO;
+
 	
 	/**
 	 * Adds delete history for item
@@ -112,35 +109,6 @@ public class DefaultDeletedInstitutionalItemService implements DeletedInstitutio
 	 */
 	public Long getDeletedInstitutionalItemCountForUser(Long userId) {
 		return deletedInstitutionalItemDAO.getDeletedInstitutionalItemCountForUser(userId);
-	}
-	
-	/**
-	 * Get the deleted institutional item by the original institutional item version id.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getDeletedVersionByItemVersion(java.lang.Long, int)
-	 */
-	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersion(
-			Long institutionalItemId, int versionNumber) {
-		return deletedInstitutionalItemVersionDAO.get(institutionalItemId, versionNumber);
-	}
-
-	/**
-	 * Get the deleted version by item version id.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemService#getDeletedVersionByItemVersionId(java.lang.Long)
-	 */
-	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersionId(
-			Long institutionalItemVersionId) {
-		return deletedInstitutionalItemVersionDAO.get(institutionalItemVersionId);
-	}
-	
-	public DeletedInstitutionalItemVersionDAO getDeletedInstitutionalItemVersionDAO() {
-		return deletedInstitutionalItemVersionDAO;
-	}
-
-	public void setDeletedInstitutionalItemVersionDAO(
-			DeletedInstitutionalItemVersionDAO deletedInstitutionalItemVersionDAO) {
-		this.deletedInstitutionalItemVersionDAO = deletedInstitutionalItemVersionDAO;
 	}
 
 

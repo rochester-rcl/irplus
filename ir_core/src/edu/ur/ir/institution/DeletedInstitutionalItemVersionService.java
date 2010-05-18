@@ -19,34 +19,33 @@ package edu.ur.ir.institution;
 import java.util.Date;
 import java.util.List;
 
-import edu.ur.dao.CrudDAO;
-
 /**
- * Database access interface for institutional item versions
+ * Service to help deal with deleted institutional item version information.
  * 
  * @author Nathan Sarr
  *
  */
-public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInstitutionalItemVersion>{
+public interface DeletedInstitutionalItemVersionService {
 	
 	/**
-	 * Get Delete info for institutional item version by it's original institutional item version id
+	 * Gets a deleted institutional item version by the original institutional item version.
 	 * 
-	 * @param institutionalItemVersionId Id of institutional item version
-	 * @return Information about deleted institutional item version
+	 * @param institutionalItemVersionId - the original institutional item version id.
+	 * 
+	 * @return the deleted institutional item version record.
 	 */
-	public DeletedInstitutionalItemVersion get(Long institutionalItemVersionId);
+	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersionId(Long institutionalItemVersionId);
+
 	
 	/**
-	 * Get Delete info for institutional item version by it's version number and the
-	 * institutional item id.
+	 * Get the deleted institutional item version by the original institutional item id and version number.
 	 * 
-	 * @param institutionalItemId - id of the institutional item
-	 * @param versionNumber - version number 
+	 * @param institutionalItemId - original institutional item id
+	 * @param versionNumber - version number
 	 * 
-	 * @return - the deleted institutional item version
+	 * @return - the deleted institutional item version record.
 	 */
-	public DeletedInstitutionalItemVersion get(Long institutionalItemId, int versionNumber);
+	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersion(Long institutionalItemId, int versionNumber);
 	
 	/**
 	 * Get a list of deleted institutional items ordered by institutional item version id ascending.
@@ -72,13 +71,13 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 	 * to be processed.  Use 0 if no items have yet been processed.  Will grab max results
 	 * of where ids are greater than the given id.
 	 * 
-	 * @param institutional collection ids - the collections to look within
+	 * @param institutional collection - the set to look within - this includes sub collections
 	 * @param maxResults - maximum number of results
 	 * 
 	 * @return - deleted items greater than the given id and belong to the specified set
 	 */
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrder( long lastDeletedItemVersionId,
-			List<Long> institutionalCollectionIds, int maxResults);
+			InstitutionalCollection institutionalCollection, int maxResults);
 	
 	/**
 	 * Get a count of the total number of deleted institutional item versions.
@@ -90,11 +89,12 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 	/**
 	 * Get a count of deleted institutional item versions within a collection
 	 * 
-	 * @param institutional collection ids - the collections to look within
+	 * @param collection - collection that versions should reside within - this will count items
+	 * within sub collections.
 	 * 
 	 * @return the count
 	 */
-	public Long getCount(List<Long> institutionalCollectionIds);
+	public Long getCount(InstitutionalCollection collection);
 	
 	/**
 	 * Get a count of the deleted institutional item versions that have been deleted
@@ -102,12 +102,12 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 	 * 
 	 * @param fromDeletedDate - from date deleted
 	 * @param untilDeletedDate - until date deleted
-	 * @param institutional collection ids - the collections to look within
+	 * @param institutionalCollection - collections the items should be within
 	 * 
 	 * @return - count of items found
 	 */
 	public Long getItemsBetweenDeletedDatesCount( Date fromDeletedDate,
-			Date untilDeletedDate, List<Long> institutionalCollectionIds);
+			Date untilDeletedDate, InstitutionalCollection institutionalCollection);
 	
 	/**
 	 * Get a count of deleted institutional item versions between the deleted dates.
@@ -125,13 +125,13 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 	 * greater than or equal to the specified date.  This includes sub collections.
 	 * 
 	 * @param fromDeletedDate - date the deletion must be greater than or equal to
-	 * @param institutional collection ids - the collections to look within
+	 * @param institutionalCollection - the institutional collection they must reside in.  
 	 * 
 	 * @return the count of the number of items found greater than the specified date and within the specified collection
 	 * or sub collections
 	 */
 	public Long getItemsFromDeletedDateCount( Date fromDeletedDate,
-			List<Long> institutionalCollectionIds);
+			InstitutionalCollection institutionalCollection);
 	
 	/**
 	 * Get a count of all deleted items  equal to or before the specified date.
@@ -146,14 +146,14 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 	 * less than or equal to the specified date.  This includes sub collections.
 	 * 
 	 * @param fromDeletedDate - date the deletion must be greater than or equal to
-	 * @param institutional collection ids - the collections to look within
+	 * @param institutionalCollection - the institutional collection they must reside in.  
 	 * 
 	 * @return the count of the number of items found less than or equal to the specified date and within the specified collection
 	 * or sub collections
 	 */
 	public Long getItemsUntilDeletedDateCount(
 			Date untilDeletedDate,
-			List<Long> institutionalCollectionIds);
+			InstitutionalCollection institutionalCollection);
 	
 	/**
 	 * Get the deleted items ordered by id  that are greater than or equal to the given deletion date.  This will include 
@@ -221,7 +221,7 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 	 * @param lastDeletedInstitutionalItemVersionId - last institutional item id.  Use 0 if no items have yet been processed.  Will grab max results
 	 * of where ids are greater than the given id.
 	 * @param fromDeletedDate - starting from deleted date
-	 * @param institutional collection ids - the collections to look within
+	 * @param institutional collection - set the items must belong to 
 	 * @param maxResults - maximum number of results to return
 	 * 
 	 * @return list of institutional item versions greater than the given id and greater than or equal to
@@ -229,7 +229,7 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 	 */
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrderFromDeletedDate(
 			long lastDeletedInstitutionalItemVersionId, Date fromDeletedDate, 
-			List<Long> institutionalCollectionIds, int maxResults); 
+			InstitutionalCollection institutionalCollection, int maxResults); 
 	
 	/**
 	 * Get the items ordered by id  that are less than or equal to the given deleted date.  
@@ -238,7 +238,7 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 
 	 * @param lastDeletedInstitutionalItemVersionId
 	 * @param untilDeletedDate - deleted date the items must be less than or equal to
-	 * @param institutional collection ids - the collections to look within
+	 * @param institutional collection - set the items must belong to.
 	 * @param maxResults - maximum number of results to return
 	 * 
 	 * @return list of items id ordered that are less than or equal to the given date and belong to 
@@ -246,7 +246,7 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 	 */
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrderUntilDeletedDate(
 			long lastDeletedInstitutionalItemVersionId, Date untilDeletedDate, 
-			List<Long> institutionalCollectionIds, int maxResults); 
+			InstitutionalCollection institutionalCollection, int maxResults); 
 	
 	/**
 	 * Get the items ordered by id  that are between the given from and until deleted dates.  Will return 
@@ -258,7 +258,7 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 	 * @param lastDeletedInstitutionalItemVersionId - id that institutional item versions must be greater than
      * @param fromDeletedDate - items deleted date must be greater than or equal to
 	 * @param untilDeletedDate - items deleted date must be less than or equal to
-	 * @param institutional collection ids - the collections to look within
+	 * @param institutional collection - the set the items must belong to
 	 * @param maxResults - maximum number of results to return
 	 * 
 	 * @return - list of items that meet the specified criteria.
@@ -266,6 +266,6 @@ public interface DeletedInstitutionalItemVersionDAO extends CrudDAO<DeletedInsti
 
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrderBetweenDeletedDates(
 			long lastDeletedInstitutionalItemVersionId, Date fromDeletedDate, Date untilDeletedDate, 
-			List<Long> institutionalCollectionIds, int maxResults); 
+			InstitutionalCollection institutionalCollection, int maxResults); 
 
 }

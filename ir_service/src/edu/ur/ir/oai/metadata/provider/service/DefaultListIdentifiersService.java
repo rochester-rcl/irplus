@@ -33,6 +33,7 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 
+import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
@@ -77,7 +78,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 
 	/** resumption token */
 	private DefaultResumptionToken resumptionToken;
-
+	
 	/**
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.ListIdentifiersService#listIdentifiers(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
@@ -137,104 +138,22 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 			throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
 		}
 
+		int completeListSize = getCompleteListSize();
 
-		boolean doDeleted = resumptionToken.getDeleted();
-		if(!doDeleted)
+		if(!resumptionToken.getDeleted())
 		{
-			int completeListSize = 0;
-			List<InstitutionalItemVersion> versions = new LinkedList<InstitutionalItemVersion>();
-		    // do batch size plus one - if we retrieve all records then another request must be issued
-		    // with resumption token
-			if( resumptionToken.getSet() == null)
-			{
-				if(resumptionToken.getFrom() == null && resumptionToken.getUntil() == null)
-				{
-				    // no set and no from until set
-				    completeListSize += institutionalItemVersionService.getCount();
-		            versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), batchSize + 1);
-			    }
-				else if(resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
-			    {
-				    // no set but from date passed in
-				    completeListSize += institutionalItemVersionService.getItemsFromModifiedDateCount(resumptionToken.getFrom());
-				    versions = institutionalItemVersionService.getItemsIdOrderFromModifiedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), batchSize + 1 );
-			    }
-			    else if( resumptionToken.getFrom() == null && resumptionToken.getUntil() != null )
-			    {
-				    // no set but until date passed in
-				    completeListSize += institutionalItemVersionService.getItemsUntilModifiedDateCount(resumptionToken.getUntil());
-				    versions = institutionalItemVersionService.getItemsIdOrderUntilModifiedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), batchSize + 1 );
-			
-			    }
-			    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
-			    {
-				    // no set but from and until passed in
-				    completeListSize += institutionalItemVersionService.getItemsBetweenModifiedDatesCount(resumptionToken.getFrom(), 
-						resumptionToken.getUntil());
-				    versions = institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), 
-						resumptionToken.getFrom(), 
-						resumptionToken.getUntil(), 
-						batchSize + 1);
-			    }
-			}
-			else if( resumptionToken.getSet() != null) 
-			{
-			    InstitutionalCollection collection = institutionalCollectionService.getCollection(resumptionToken.getLastSetId(), false);
-
-				if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
-			    {
-				    // set passed in but no from until passed in
-				    completeListSize += institutionalItemVersionService.getCount(collection);
-				    versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), collection,  batchSize + 1);
-			    }
-			    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
-			    {
-				    // set and from passed in but no until passed in
-				    completeListSize += institutionalItemVersionService.getItemsFromModifiedDateCount(resumptionToken.getFrom(), collection);
-				    versions =  institutionalItemVersionService.getItemsIdOrderFromModifiedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), collection, batchSize + 1);
-			    }
-			    else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
-			    {
-				    // set and until passed in but no from 
-				    completeListSize += institutionalItemVersionService.getItemsUntilModifiedDateCount(resumptionToken.getUntil(), collection);
-				    versions =  institutionalItemVersionService.getItemsIdOrderUntilModifiedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), collection, batchSize + 1);
-			    }
-			    else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
-			    {
-				    completeListSize += institutionalItemVersionService.getItemsBetweenModifiedDatesCount(resumptionToken.getFrom(), resumptionToken.getUntil(), collection);
-				    versions =  institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), resumptionToken.getFrom(), resumptionToken.getUntil(), collection, batchSize + 1);
-			    }
-			}
-			
-		        
-		    int size = versions.size();
-		   
-		    // we will need to send resumption token
-		    if( size == (batchSize + 1))
-		    {
-			    // remove the last item as it should not be sent
-			    // this only indicates that there is one more than the batch size
-			    // allows
-			    versions.remove(size - 1);
-			    resumptionToken.setDeleted(Boolean.FALSE);
-		    }
-		    else if( size > 0)
-		    {
-		    	resumptionToken.setDeleted(Boolean.TRUE);
-		    }
-		    else
-		    {
-		    	resumptionToken.setDeleted(Boolean.TRUE);
-		    	doDeleted = true;
-		    }
+			List<InstitutionalItemVersion> versions = getVersions();
 		    Long lastId = addIdentifiers(versions, doc);
 		    resumptionToken.setLastId(lastId);
 		    resumptionToken.setCompleteListSize(completeListSize);
 		}
 		
-		if( doDeleted )
+		if( resumptionToken.getDeleted() )
 		{
-			// handle getting all the deleted institutional item versions
+			List<DeletedInstitutionalItemVersion> versions = getDeletedVersions();
+		    Long lastId = addDeletedIdentifiers(versions, doc);
+		    resumptionToken.setLastId(lastId);
+		    resumptionToken.setCompleteListSize(completeListSize);
 		}
 		 
 		 addResumptionToken(doc);
@@ -289,6 +208,18 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 			 setSpec.appendChild(data);
 			 header.appendChild(setSpec);
 		 }
+		 return lastId;
+	}
+	
+	/**
+	 * A request to list identifiers with only the metadata prefix.
+	 * 
+	 * @param metadataPrefix
+	 * @return
+	 */
+	private Long addDeletedIdentifiers(List<DeletedInstitutionalItemVersion> versions, Document doc )
+	{
+		 Long lastId = -1l;
 		 return lastId;
 	}
 	
@@ -359,6 +290,207 @@ public class DefaultListIdentifiersService implements ListIdentifiersService{
 
 	public void setListSetsService(ListSetsService listSetsService) {
 		this.listSetsService = listSetsService;
+	}
+	
+	/**
+	 * Get a count of the number of items that will be retrieved
+	 * @return
+	 */
+	private int getCompleteListSize()
+	{
+		int completeListSize = 0;
+		if( resumptionToken.getSet() == null)
+		{
+			if(resumptionToken.getFrom() == null && resumptionToken.getUntil() == null)
+			{
+			    // no set and no from until set
+			    completeListSize += institutionalItemVersionService.getCount();
+		    }
+			else if(resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+		    {
+			    // no set but from date passed in
+			    completeListSize += institutionalItemVersionService.getItemsFromModifiedDateCount(resumptionToken.getFrom());
+		    }
+		    else if( resumptionToken.getFrom() == null && resumptionToken.getUntil() != null )
+		    {
+			    // no set but until date passed in
+			    completeListSize += institutionalItemVersionService.getItemsUntilModifiedDateCount(resumptionToken.getUntil());
+		    }
+		    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+		    {
+			    // no set but from and until passed in
+			    completeListSize += institutionalItemVersionService.getItemsBetweenModifiedDatesCount(resumptionToken.getFrom(), 
+					resumptionToken.getUntil());
+		    }
+		}
+		else if( resumptionToken.getSet() != null) 
+		{
+		    InstitutionalCollection collection = institutionalCollectionService.getCollection(resumptionToken.getLastSetId(), false);
+
+			if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+		    {
+			    // set passed in but no from until passed in
+			    completeListSize += institutionalItemVersionService.getCount(collection);
+		    }
+		    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+		    {
+			    // set and from passed in but no until passed in
+			    completeListSize += institutionalItemVersionService.getItemsFromModifiedDateCount(resumptionToken.getFrom(), collection);
+		    }
+		    else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
+		    {
+			    // set and until passed in but no from 
+			    completeListSize += institutionalItemVersionService.getItemsUntilModifiedDateCount(resumptionToken.getUntil(), collection);
+		    }
+		    else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+		    {
+			    completeListSize += institutionalItemVersionService.getItemsBetweenModifiedDatesCount(resumptionToken.getFrom(), resumptionToken.getUntil(), collection);
+		    }
+		}
+		
+		return completeListSize;
+
+	}
+	
+	private List<InstitutionalItemVersion> getVersions()
+	{
+		List<InstitutionalItemVersion> versions = new LinkedList<InstitutionalItemVersion>();
+	    // do batch size plus one - if we retrieve all records then another request must be issued
+	    // with resumption token
+		if( resumptionToken.getSet() == null)
+		{
+			if(resumptionToken.getFrom() == null && resumptionToken.getUntil() == null)
+			{
+	            versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), batchSize + 1);
+		    }
+			else if(resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+		    {
+			    versions = institutionalItemVersionService.getItemsIdOrderFromModifiedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), batchSize + 1 );
+		    }
+		    else if( resumptionToken.getFrom() == null && resumptionToken.getUntil() != null )
+		    {
+			    versions = institutionalItemVersionService.getItemsIdOrderUntilModifiedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), batchSize + 1 );
+		
+		    }
+		    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+		    {
+			    versions = institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), 
+					resumptionToken.getFrom(), 
+					resumptionToken.getUntil(), 
+					batchSize + 1);
+		    }
+		}
+		else if( resumptionToken.getSet() != null) 
+		{
+		    InstitutionalCollection collection = institutionalCollectionService.getCollection(resumptionToken.getLastSetId(), false);
+
+			if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+		    {
+			    versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), collection,  batchSize + 1);
+		    }
+		    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+		    {
+			    versions =  institutionalItemVersionService.getItemsIdOrderFromModifiedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), collection, batchSize + 1);
+		    }
+		    else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
+		    {
+			    versions =  institutionalItemVersionService.getItemsIdOrderUntilModifiedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), collection, batchSize + 1);
+		    }
+		    else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+		    {
+			    versions =  institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), resumptionToken.getFrom(), resumptionToken.getUntil(), collection, batchSize + 1);
+		    }
+		}
+		
+	        
+	    int size = versions.size();
+	   
+	    // we will need to send resumption token
+	    if( size == (batchSize + 1))
+	    {
+		    // remove the last item as it should not be sent
+		    // this only indicates that there is one more than the batch size
+		    // allows
+		    versions.remove(size - 1);
+		    resumptionToken.setDeleted(Boolean.FALSE);
+	    }
+	    else if( size == 0)
+	    {
+	    	resumptionToken.setDeleted(Boolean.TRUE);
+	    }
+	    
+	    return versions;
+	}
+	
+	private List<DeletedInstitutionalItemVersion> getDeletedVersions()
+	{
+		List<DeletedInstitutionalItemVersion> deletedVersions = new LinkedList<DeletedInstitutionalItemVersion>();
+	    // do batch size plus one - if we retrieve all records then another request must be issued
+	    // with resumption token
+		if( resumptionToken.getSet() == null)
+		{
+			if(resumptionToken.getFrom() == null && resumptionToken.getUntil() == null)
+			{
+	            //versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), batchSize + 1);
+		    }
+			else if(resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+		    {
+			    //versions = institutionalItemVersionService.getItemsIdOrderFromModifiedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), batchSize + 1 );
+		    }
+		    else if( resumptionToken.getFrom() == null && resumptionToken.getUntil() != null )
+		    {
+			    //versions = institutionalItemVersionService.getItemsIdOrderUntilModifiedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), batchSize + 1 );
+		
+		    }
+		    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+		    {
+			    //versions = institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), 
+				//	resumptionToken.getFrom(), 
+				//	resumptionToken.getUntil(), 
+				//	batchSize + 1);
+		    }
+		}
+		else if( resumptionToken.getSet() != null) 
+		{
+		    InstitutionalCollection collection = institutionalCollectionService.getCollection(resumptionToken.getLastSetId(), false);
+
+			if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+		    {
+			    //versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), collection,  batchSize + 1);
+		    }
+		    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+		    {
+			    //versions =  institutionalItemVersionService.getItemsIdOrderFromModifiedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), collection, batchSize + 1);
+		    }
+		    else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
+		    {
+			    //versions =  institutionalItemVersionService.getItemsIdOrderUntilModifiedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), collection, batchSize + 1);
+		    }
+		    else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+		    {
+			    //versions =  institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), resumptionToken.getFrom(), resumptionToken.getUntil(), collection, batchSize + 1);
+		    }
+		}
+		
+	        
+	    int size = deletedVersions.size();
+	   
+	    // we will need to send resumption token
+	    if( size == (batchSize + 1))
+	    {
+		    // remove the last item as it should not be sent
+		    // this only indicates that there is one more than the batch size
+		    // allows
+	    	deletedVersions.remove(size - 1);
+		    resumptionToken.setDeleted(Boolean.TRUE);
+	    }
+	    else
+	    {
+	    	// all done processing
+	    	resumptionToken.setInsertToken(Boolean.FALSE);
+	    }
+	    
+	    return deletedVersions;
 	}
 
 }
