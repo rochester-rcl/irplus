@@ -471,6 +471,7 @@ public class DeletedInstitutionalItemVersionDAOTest {
 		itemDAO.makeTransient(itemDAO.getById(genericItemD.getId(), false));
 		itemDAO.makeTransient(itemDAO.getById(genericItemE.getId(), false));
 		itemDAO.makeTransient(itemDAO.getById(genericItemF.getId(), false));
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		repoHelper.cleanUpRepository();
 		
 		tm.commit(ts);	
