@@ -2099,6 +2099,7 @@ CREATE TABLE ir_repository.deleted_institutional_item
 	deleted_institutional_item_id BIGINT PRIMARY KEY,
     institutional_item_id BIGINT NOT NULL,
     institutional_collection_name TEXT,
+    institutional_collection_id BIGINT,
     institutional_item_name TEXT,
     user_id BIGINT NOT NULL,
     deleted_date TIMESTAMP WITH TIME ZONE NOT NULL ,
@@ -2110,6 +2111,12 @@ ALTER TABLE ir_repository.deleted_institutional_item OWNER TO ir_plus;
 -- The deleted institutional item seq
 CREATE SEQUENCE ir_repository.deleted_institutional_item_seq;
 ALTER TABLE ir_repository.deleted_institutional_item_seq OWNER TO ir_plus;
+
+-- Index on the deleted date
+CREATE INDEX institutional_item_deleted_date_idx ON ir_repository.deleted_institutional_item(deleted_date);
+
+-- Index on the collection id
+CREATE INDEX institutional_item_deleted_collection_id_idx ON ir_repository.deleted_institutional_item(institutional_collection_id);
 
 -- ---------------------------------------------
 -- Deleted Institutional Item Version
@@ -2161,10 +2168,12 @@ ALTER TABLE ir_repository.institutional_item_version OWNER TO ir_plus;
 CREATE SEQUENCE ir_repository.institutional_item_version_seq;
 ALTER TABLE ir_repository.institutional_item_version_seq OWNER TO ir_plus;
 
--- Index on the file Name
+-- Index on the file date of deposit
 CREATE INDEX institutional_item_version_deposit_date_idx ON ir_repository.institutional_item_version USING btree 
 (date_of_deposit);
 
+-- Index on the file date modified
+CREATE INDEX institutional_item_version_date_modified_idx ON ir_repository.institutional_item_version(date_modified);
 
 -- ---------------------------------------------
 -- Institutional Item repository License

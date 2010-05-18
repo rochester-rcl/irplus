@@ -59,25 +59,6 @@ public interface DeletedInstitutionalItemService extends Serializable{
 	 */
 	public Long getDeletedInstitutionalItemCountForUser(Long userId);
 	
-	/**
-	 * Gets a deleted institutional item version by the original institutional item version.
-	 * 
-	 * @param institutionalItemVersionId - the original institutional item version id.
-	 * 
-	 * @return the deleted institutional item version record.
-	 */
-	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersionId(Long institutionalItemVersionId);
-
-	
-	/**
-	 * Get the deleted institutional item version by the original institutional item id and version number.
-	 * 
-	 * @param institutionalItemId - original institutional item id
-	 * @param versionNumber - version number
-	 * 
-	 * @return - the deleted institutional item version record.
-	 */
-	public DeletedInstitutionalItemVersion getDeletedVersionByItemVersion(Long institutionalItemId, int versionNumber);
 
 	/**
 	 * Adds delete history for item

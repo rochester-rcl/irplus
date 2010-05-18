@@ -585,7 +585,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	public List<InstitutionalItemVersion> getItemsIdOrderUntilModifiedDate(
 			long lastInstitutionalItemVersionId, Date untilModifiedDate,
 			InstitutionalCollection institutionalCollection, int maxResults) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdSetFromDateOrderedById");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdSetUntilDateOrderedById");
 		q.setParameter("lastId", lastInstitutionalItemVersionId);
 		q.setParameter("untilDate", untilModifiedDate);
 		q.setParameter("leftValue", institutionalCollection.getLeftValue());

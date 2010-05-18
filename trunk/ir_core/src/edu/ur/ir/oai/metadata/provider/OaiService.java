@@ -40,7 +40,8 @@ public interface OaiService extends Serializable{
 	 * 
 	 * @return the body of the record in the specified format
 	 */
-	public String getRecord(String identifier, String metadataPrefix) throws CannotDisseminateFormatException, IdDoesNotExistException;
+	public String getRecord(String identifier, String metadataPrefix) throws CannotDisseminateFormatException, 
+	IdDoesNotExistException, BadArgumentException;
 	
 	/**
 	 * Get the oai namespace identifier.
@@ -54,7 +55,7 @@ public interface OaiService extends Serializable{
 	 * 
 	 * @return an xml document for the identify request
 	 */
-	public String identify();
+	public String identify() throws BadArgumentException;
 	
 	/**
 	 * List the identifiers.
@@ -68,7 +69,8 @@ public interface OaiService extends Serializable{
 			String resumptionToken) throws BadResumptionTokenException,
 			                               CannotDisseminateFormatException,
 			                               NoRecordsMatchException, 
-			                               NoSetHierarchyException ;
+			                               NoSetHierarchyException,
+			                               BadArgumentException;
 	
   
     /**
@@ -81,7 +83,9 @@ public interface OaiService extends Serializable{
      * @throws BadResumptionTokenException - if the resumption token is incorrect
      * @throws NoSetHierarchyException - if this does not support sets
      */
-    public String listSets(String resumptionToken) throws BadResumptionTokenException, NoSetHierarchyException;
+    public String listSets(String resumptionToken) throws BadResumptionTokenException, 
+        NoSetHierarchyException,
+        BadArgumentException;
     
 	/**
 	 * Interface for listing the metadata formats for a specific identifier
@@ -94,7 +98,8 @@ public interface OaiService extends Serializable{
 	 * @throws IdDoesNotExistException - if the id does not exist
 	 * @throws NoMetadataFormatsException - no metadata formats exist for the specified id
 	 */
-	public String listMetadataFormats(String identifier) throws BadArgumentException, IdDoesNotExistException, NoMetadataFormatsException;
+	public String listMetadataFormats(String identifier) throws BadArgumentException, IdDoesNotExistException, 
+	NoMetadataFormatsException;
 
 
 }

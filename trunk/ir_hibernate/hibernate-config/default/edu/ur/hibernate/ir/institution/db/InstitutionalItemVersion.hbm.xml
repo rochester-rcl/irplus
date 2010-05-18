@@ -446,7 +446,7 @@
               date less than or equal to the specified date -->
 	<query name="getInstitutionalItemVersionByLastIdUntilDateOrderedById">
 	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion 
-	    where institutionalItemVersion.id > :lastId
+	    where institutionalItemVersion.id &gt; :lastId
 	    and institutionalItemVersion.dateLastModified &lt;= :untilDate 
 	    order by institutionalItemVersion.id asc
     </query>
@@ -485,7 +485,7 @@
 	    join institutionalItem.institutionalCollection institutionalCollection
 	    where institutionalCollection.leftValue  between :leftValue and :rightValue
 	    and institutionalCollection.treeRoot.id = :treeRootId 	    
-	    and institutionalItemVersion.id > :lastId
+	    and institutionalItemVersion.id &gt; :lastId
 	    order by institutionalItemVersion.id asc
     </query>
     
@@ -500,8 +500,8 @@
 	    join institutionalItem.institutionalCollection institutionalCollection	    
 	    where institutionalCollection.leftValue  between :leftValue and :rightValue
 	    and institutionalCollection.treeRoot.id = :treeRootId 	    
-	    and institutionalItemVersion.id > :lastId
-	    and institutionalItemVersion.dateLastModified >= :fromDate 
+	    and institutionalItemVersion.id &gt; :lastId
+	    and institutionalItemVersion.dateLastModified &gt;= :fromDate 
 	    order by institutionalItemVersion.id asc
     </query>
     
@@ -516,7 +516,7 @@
 	    join institutionalItem.institutionalCollection institutionalCollection	    
 	    where institutionalCollection.leftValue  between :leftValue and :rightValue
 	    and institutionalCollection.treeRoot.id = :treeRootId 	    
-	    and institutionalItemVersion.dateLastModified >= :fromDate 
+	    and institutionalItemVersion.dateLastModified &gt;= :fromDate 
     </query>
     
     
@@ -530,7 +530,7 @@
 	    join institutionalItem.institutionalCollection institutionalCollection	    
 	    where institutionalCollection.leftValue  between :leftValue and :rightValue
 	    and institutionalCollection.treeRoot.id = :treeRootId 	    
-	    and institutionalItemVersion.id > :lastId
+	    and institutionalItemVersion.id &gt; :lastId
 	    and institutionalItemVersion.dateLastModified &lt;= :untilDate 
 	    order by institutionalItemVersion.id asc
     </query>
@@ -546,7 +546,7 @@
 	    join institutionalItem.institutionalCollection institutionalCollection	    
 	    where institutionalCollection.leftValue  between :leftValue and :rightValue
 	    and institutionalCollection.treeRoot.id = :treeRootId 	    
-	    and institutionalItemVersion.dateLastModified &lt;= :fromDate 
+	    and institutionalItemVersion.dateLastModified &lt;= :untilDate 
     </query> 
     
     
@@ -559,7 +559,7 @@
 	    join institutionalItem.institutionalCollection institutionalCollection	    
 	    where institutionalCollection.leftValue  between :leftValue and :rightValue
 	    and institutionalCollection.treeRoot.id = :treeRootId 	    
-	    and institutionalItemVersion.id > :lastId
+	    and institutionalItemVersion.id &gt; :lastId
 	    and institutionalItemVersion.dateLastModified between :fromDate and :untilDate
 	    order by institutionalItemVersion.id asc
     </query>
