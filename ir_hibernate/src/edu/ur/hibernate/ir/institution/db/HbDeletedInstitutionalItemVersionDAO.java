@@ -152,6 +152,7 @@ public class HbDeletedInstitutionalItemVersionDAO implements DeletedInstitutiona
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDeletedInstitutionalItemVersionByLastIdSetOrderedById");
         q.setParameter("lastId", lastDeletedItemVersionId);
         q.setParameterList("collectionIds", institutionalCollectionIds);
+        q.setMaxResults(maxResults);
 		return (List<DeletedInstitutionalItemVersion>)q.list();
 	}
 	
@@ -195,8 +196,8 @@ public class HbDeletedInstitutionalItemVersionDAO implements DeletedInstitutiona
 	{
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDeletedInstitutionalItemVersionSetBetweenDatesCount");
         q.setParameterList("collectionIds", institutionalCollectionIds);
-        q.setParameter(":fromDate", fromDeletedDate);
-        q.setParameter(":untilDate", untilDeletedDate);
+        q.setParameter("fromDate", fromDeletedDate);
+        q.setParameter("untilDate", untilDeletedDate);
 		return (Long)q.uniqueResult();
 	}	
 	
@@ -211,7 +212,7 @@ public class HbDeletedInstitutionalItemVersionDAO implements DeletedInstitutiona
 	public Long getItemsBetweenDeletedDatesCount( Date fromDeletedDate,
 			Date untilDeletedDate)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDeletedInstitutionalItemVersionByLastIdBetweenDatesOrderedById");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDeletedInstitutionalItemVersionBetweenDatesCount");
 		q.setParameter("fromDate", fromDeletedDate);
 		q.setParameter("untilDate",  untilDeletedDate);
 		return (Long) q.uniqueResult();
@@ -231,7 +232,7 @@ public class HbDeletedInstitutionalItemVersionDAO implements DeletedInstitutiona
 	{
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDeletedInstitutionalItemVersionSetFromDateCount");
 	    q.setParameterList("collectionIds", institutionalCollectionIds);
-	    q.setParameter(":fromDate", fromDeletedDate);
+	    q.setParameter("fromDate", fromDeletedDate);
 		return (Long)q.uniqueResult();
 	}	
 	/**

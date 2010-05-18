@@ -207,7 +207,7 @@
 	<query name="getDeletedInstitutionalItemVersionSetUntilDateCount">
 	    select count(*) from DeletedInstitutionalItemVersion as deletedInstitutionalItemVersion 
 	    where deletedInstitutionalItemVersion.deletedInstitutionalItem.institutionalCollectionId in (:collectionIds)
-	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate &lt;= :fromDate 
+	    and deletedInstitutionalItemVersion.deletedInstitutionalItem.deletedDate &lt;= :untilDate 
     </query> 
     
     
