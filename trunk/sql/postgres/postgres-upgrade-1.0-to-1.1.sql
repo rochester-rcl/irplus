@@ -116,6 +116,17 @@ where ir_file.download_count is null;
 DROP TABLE ir_statistics.ir_file_roll_up;
 
 
+-- ----------------------------------------------
+-- ---------------------------------------------
+
+
+-- EVERYTHING BELOW THIS IS NEW FROM LAST RELEASE
+-- 4/26/2010
+
+
+-- ---------------------------------------------
+-- ---------------------------------------------
+
 
 
 -- ----------------------------------------------
@@ -549,6 +560,16 @@ ALTER TABLE ir_repository.deleted_institutional_item ALTER COLUMN institutional_
 
 ALTER TABLE ir_repository.deleted_institutional_item ADD COLUMN institutional_collection_id BIGINT;
 
+-- update the table with values based on collection name
+UPDATE ir_repository.deleted_institutional_item as del_item
+set institutional_collection_id = 
+( select institutional_collection_id 
+  from ir_repository.institutional_collection
+  where del_item.institutional_collection_name = institutional_collection.name);
+  
+ALTER TABLE ir_repository.deleted_institutional_item ALTER COLUMN institutional_collection_id SET NOT NULL;
+CREATE INDEX del_item_collection_id_idx ON ir_repository.deleted_institutional_item(institutional_collection_id);
+
 
 -- Index on the deleted date
 CREATE INDEX institutional_item_deleted_date_idx ON ir_repository.deleted_institutional_item(deleted_date);
@@ -567,7 +588,7 @@ CREATE TABLE ir_repository.deleted_institutional_item_version
 	deleted_institutional_item_id BIGINT NOT NULL,
     institutional_item_version_id BIGINT NOT NULL,
     handle_info_id BIGINT,
-    versionNumber INTEGER NOT NULL,
+    version_number INTEGER NOT NULL,
     version INTEGER,
     FOREIGN KEY (deleted_institutional_item_id) REFERENCES ir_repository.deleted_institutional_item(deleted_institutional_item_id)
 );
@@ -577,13 +598,12 @@ ALTER TABLE ir_repository.deleted_institutional_item_version OWNER TO ir_plus;
 CREATE SEQUENCE ir_repository.deleted_institutional_item_version_seq;
 ALTER TABLE ir_repository.deleted_institutional_item_version_seq OWNER TO ir_plus;
 
--- Index on the file date modified
-CREATE INDEX institutional_item_version_date_modified_idx ON ir_repository.institutional_item_version(date_modified);
-
 
 -- ---------------------------------------------
 -- New columns for institutional item version
 -- ---------------------------------------------
+-- Index on the file date modified
+CREATE INDEX institutional_item_version_date_modified_idx ON ir_repository.institutional_item_version(date_modified);
 
 ALTER TABLE ir_repository.institutional_item_version
 ADD COLUMN date_modified TIMESTAMP WITH TIME ZONE;
