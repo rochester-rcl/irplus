@@ -127,7 +127,7 @@ public class HbDeletedInstitutionalItemVersionDAO implements DeletedInstitutiona
 	public List<DeletedInstitutionalItemVersion> getItemsIdOrder( long lastDeletedInstitutionalItemVersionId,
 			int maxResults)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemVersionByLastIdOrderedById");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDeletedInstitutionalItemVersionByLastIdOrderedById");
 		q.setParameter("lastId", lastDeletedInstitutionalItemVersionId);
 		q.setMaxResults(maxResults);
 		return (List<DeletedInstitutionalItemVersion>) q.list();

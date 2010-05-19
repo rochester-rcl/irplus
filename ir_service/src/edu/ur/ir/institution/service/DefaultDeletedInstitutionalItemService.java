@@ -39,8 +39,6 @@ public class DefaultDeletedInstitutionalItemService implements DeletedInstitutio
 	/** Deleted Institutional item data access */
 	private DeletedInstitutionalItemDAO deletedInstitutionalItemDAO;
 	
-
-	
 	/**
 	 * Adds delete history for item
 	 */

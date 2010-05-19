@@ -29,5 +29,5 @@
                set="${set}"
            </c:if>
            > <ir:baseUrl/>oai2.action</request>
-    ${oaiOutput}
+  <error code="noSetHierarchy">this repository does not support sets</error>
 </OAI-PMH>

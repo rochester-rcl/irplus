@@ -17,6 +17,21 @@
 package edu.ur.ir.oai.metadata.provider.service;
 
 
+import java.io.StringWriter;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
+import org.w3c.dom.ls.LSSerializer;
+
+import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
+import edu.ur.ir.institution.DeletedInstitutionalItemVersionService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
@@ -30,6 +45,7 @@ import edu.ur.ir.oai.exception.NoSetHierarchyException;
 import edu.ur.ir.oai.metadata.provider.IdentifyService;
 import edu.ur.ir.oai.metadata.provider.ListIdentifiersService;
 import edu.ur.ir.oai.metadata.provider.ListMetadataFormatsService;
+import edu.ur.ir.oai.metadata.provider.ListRecordsService;
 import edu.ur.ir.oai.metadata.provider.ListSetsService;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataProvider;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
@@ -64,9 +80,15 @@ public class DefaultOaiService implements OaiService{
 	/** Service to deal with institutional item information */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 	
+	/** Service to deal with deleted institutional item information */
+	private DeletedInstitutionalItemVersionService deletedInstitutionalItemVersionService;
+
 	/** service to deal with listing set information */
 	private ListSetsService listSetsService;
 	
+	/** list records service */
+	private ListRecordsService listRecordsService;
+
 	/** service to list metadata formats */
 	private ListMetadataFormatsService listMetadataFormatsService;
 
@@ -78,27 +100,57 @@ public class DefaultOaiService implements OaiService{
 	public String getRecord(String identifier, String metadataPrefix)
 			throws CannotDisseminateFormatException, IdDoesNotExistException 
 	{
-		String value = null;
+		
 		OaiMetadataProvider oaiMetadataProvider = oaiMetadataServiceProvider.getProvider(metadataPrefix) ;
 		if( oaiMetadataProvider != null )
 		{
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder;
+			 
+			try {
+			    builder = factory.newDocumentBuilder();
+			} catch (ParserConfigurationException e) {
+			    throw new IllegalStateException(e);
+			}
+			
+			DOMImplementation impl = builder.getDOMImplementation();
+			DOMImplementationLS domLs = (DOMImplementationLS)impl.getFeature("LS" , "3.0");
+			LSSerializer serializer = domLs.createLSSerializer();
+			LSOutput lsOut= domLs.createLSOutput();
+			StringWriter stringWriter = new StringWriter();
+			lsOut.setCharacterStream(stringWriter);
+
+			Document doc = impl.createDocument(null, "record", null);
+			Element record = doc.getDocumentElement();
 			Long institutionalItemVersionId = DefaultOaiIdentifierHelper.getInstitutionalItemVersionId(identifier);
 			InstitutionalItemVersion institutionalItemVersion = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
 			
 			if( institutionalItemVersion != null )
 			{
-			    value = oaiMetadataProvider.getXml(institutionalItemVersion);
+			    oaiMetadataProvider.addXml(record, institutionalItemVersion);
 			}
 			else
 			{
-				throw new IdDoesNotExistException("identifier " + identifier + " does not exist");
+				DeletedInstitutionalItemVersion deletedVersion = deletedInstitutionalItemVersionService.getDeletedVersionByItemVersionId(institutionalItemVersionId);
+				if( deletedVersion != null )
+				{
+					 oaiMetadataProvider.addXml(record, deletedVersion);
+				}
+				else
+				{
+				    throw new IdDoesNotExistException("identifier " + identifier + " does not exist");
+				}
 			}
+			
+			serializer.getDomConfig().setParameter("xml-declaration", false);
+			 
+			serializer.write(record, lsOut);
+			return stringWriter.getBuffer().toString();
 		}
 		else
 		{
 			throw new CannotDisseminateFormatException("Format is not supported");
 		}
-		return value;
 	}
 	
 	/**
@@ -114,7 +166,17 @@ public class DefaultOaiService implements OaiService{
 	}
 
 
-	
+	/*List the records
+	 * @see edu.ur.ir.oai.metadata.provider.OaiService#listRecords(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String listRecords(String metadataPrefix, String set, String from,
+			String until, String resumptionToken) throws BadArgumentException,
+			BadResumptionTokenException, CannotDisseminateFormatException,
+			NoRecordsMatchException, NoSetHierarchyException,
+			BadArgumentException {
+		return listRecordsService.listRecords(metadataPrefix, set, from, until, resumptionToken);
+	}
 
 
 	/**
@@ -243,5 +305,22 @@ public class DefaultOaiService implements OaiService{
 	public void setListMetadataFormatsService(
 			ListMetadataFormatsService listMetadataFormatsService) {
 		this.listMetadataFormatsService = listMetadataFormatsService;
+	}
+
+	public ListRecordsService getListRecordsService() {
+		return listRecordsService;
+	}
+
+	public void setListRecordsService(ListRecordsService listRecordsService) {
+		this.listRecordsService = listRecordsService;
+	}
+	
+	public DeletedInstitutionalItemVersionService getDeletedInstitutionalItemVersionService() {
+		return deletedInstitutionalItemVersionService;
+	}
+
+	public void setDeletedInstitutionalItemVersionService(
+			DeletedInstitutionalItemVersionService deletedInstitutionalItemVersionService) {
+		this.deletedInstitutionalItemVersionService = deletedInstitutionalItemVersionService;
 	}
 }

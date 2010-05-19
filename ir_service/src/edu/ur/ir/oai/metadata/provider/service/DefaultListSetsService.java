@@ -140,4 +140,18 @@ public class DefaultListSetsService implements ListSetsService {
 		 serializer.write(root, lsOut);
 		 return stringWriter.getBuffer().toString();
 	}
+
+	/**
+	 * Get the set spec or null if the set spec does not exist.
+	 * 
+	 * @see edu.ur.ir.oai.metadata.provider.ListSetsService#getSetSpec(java.lang.Long)
+	 */
+	public String getSetSpec(Long collectionId) {
+	    InstitutionalCollection collection = institutionalCollectionService.getCollection(collectionId, false);
+        if( collection != null )
+        {
+        	return getSetSpec(collection);
+        }
+		return null;
+	}
 }

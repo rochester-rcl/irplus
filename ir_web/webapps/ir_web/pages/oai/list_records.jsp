@@ -1,4 +1,5 @@
 <jsp:directive.page language="java" contentType="text/xml; charset=UTF-8" pageEncoding="UTF-8" />
+
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -29,5 +30,5 @@
                set="${set}"
            </c:if>
            > <ir:baseUrl/>oai2.action</request>
-    ${oaiOutput}
+      ${oaiOutput}
 </OAI-PMH>

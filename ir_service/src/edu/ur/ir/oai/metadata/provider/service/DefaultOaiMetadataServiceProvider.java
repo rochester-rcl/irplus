@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.w3c.dom.Element;
+
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataProvider;
@@ -65,7 +67,7 @@ public class DefaultOaiMetadataServiceProvider implements OaiMetadataServiceProv
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider#getXml(java.lang.String)
 	 */
-	public String getXml(String metadataPrefix, InstitutionalItemVersion institutionalItemVersion)
+	public void addXml(String metadataPrefix, Element record, InstitutionalItemVersion institutionalItemVersion)
 			throws CannotDisseminateFormatException {
 		
 		if( !supports(metadataPrefix))
@@ -76,10 +78,9 @@ public class DefaultOaiMetadataServiceProvider implements OaiMetadataServiceProv
 		{
 			if( provider.supports(metadataPrefix))
 			{
-				return provider.getXml(institutionalItemVersion);
+				 provider.addXml(record, institutionalItemVersion);
 			}
 		}
-		return "";
 		
 	}
 

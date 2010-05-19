@@ -114,6 +114,24 @@ public class Oai_2_0 extends ActionSupport{
 				return "badArguement";
 			}
 		}
+		else if( verb.equalsIgnoreCase(OaiUtil.LIST_RECORDS_VERB))
+		{
+			try {
+				oaiOutput = oaiService.listRecords(metadataPrefix, set, from, until, resumptionToken);
+				return "listRecords";
+			} catch (BadArgumentException e) {
+				return "badArguement";
+			} catch (BadResumptionTokenException e) {
+				return("badResumptionToken");
+			} catch (CannotDisseminateFormatException e) {
+				return "cannotDisseminateFormat";
+			} catch (NoRecordsMatchException e) {
+				return "noRecordsMatch";
+			} catch (NoSetHierarchyException e) {
+				return "noSetHierarchy";
+			}
+		    
+		}
 		else if( verb.equalsIgnoreCase(OaiUtil.LIST_SETS_VERB))
 		{
 			try {

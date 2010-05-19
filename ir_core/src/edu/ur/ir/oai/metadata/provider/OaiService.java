@@ -73,7 +73,21 @@ public interface OaiService extends Serializable{
 			                               NoSetHierarchyException,
 			                               BadArgumentException;
 	
-  
+	/**
+	 * List the records
+	 * 
+	 * @return a list of records
+	 */
+	public String listRecords(String metadataPrefix, 
+			String set, 
+			String from, 
+			String until, 
+			String resumptionToken) throws BadArgumentException,
+			                               BadResumptionTokenException,
+			                               CannotDisseminateFormatException,
+			                               NoRecordsMatchException, 
+			                               NoSetHierarchyException,
+			                               BadArgumentException;
     /**
      * Get the list of sets in the repository
      * 

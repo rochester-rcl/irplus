@@ -199,8 +199,8 @@ public class DublinCoreMetadataProviderTest {
 
 
 		ts = tm.getTransaction(td);	
-		String xml = provider.getXml(institutionalItem1.getVersionedInstitutionalItem().getCurrentVersion());
-		System.out.println(xml);
+		//String xml = provider.getXml(institutionalItem1.getVersionedInstitutionalItem().getCurrentVersion());
+		//System.out.println(xml);
 		tm.commit(ts);
 		
 		

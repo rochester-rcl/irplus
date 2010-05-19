@@ -18,6 +18,9 @@ package edu.ur.ir.oai.metadata.provider;
 
 import java.io.Serializable;
 
+import org.w3c.dom.Element;
+
+import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 
 /**
@@ -58,11 +61,19 @@ public interface OaiMetadataProvider extends Serializable{
 	public boolean supports(String metadataPrefix);
 	
 	/**
-	 * Get the xml output for a given institutional item version.
+	 * Add the xml output for a given institutional item version.
 	 * 
+	 * @param xml record element to add the information to
 	 * @param institutionalItemVersion - the institutional item version to convert
-	 * @return the XML 
 	 */
-	public String getXml(InstitutionalItemVersion institutionalItemVersion);
+	public void addXml(Element record, InstitutionalItemVersion institutionalItemVersion);
+	
+	/**
+	 * Add the xml output for a deleted institutional item version.
+	 * 
+	 * @param xml element to add the xml to
+	 * @param institutionalItemVersion
+	 */
+	public void addXml(Element record, DeletedInstitutionalItemVersion institutionalItemVersion);
 
 }

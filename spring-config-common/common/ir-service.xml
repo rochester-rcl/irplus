@@ -206,7 +206,13 @@
    <bean id="deletedInstitutionalItemService" 
        class="edu.ur.ir.institution.service.DefaultDeletedInstitutionalItemService">
        <property name="deletedInstitutionalItemDAO" ref="deletedInstitutionalItemDAO"/>
+   </bean>
+   
+   <!--  Service for helping with deleted institutional item versions --> 
+   <bean id="deletedInstitutionalItemVersionService" 
+       class="edu.ur.ir.institution.service.DefaultDeletedInstitutionalItemVersionService">
        <property name="deletedInstitutionalItemVersionDAO" ref="deletedInstitutionalItemVersionDAO"/>
+       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
    </bean>
    
    <bean id="institutionalCollectionService" 
@@ -739,10 +745,12 @@
        class="edu.ur.ir.oai.metadata.provider.service.DefaultListIdentifiersService">
        <property name="oaiMetadataServiceProvider" ref="oaiMetadataServiceProvider" />
        <property name="institutionalItemVersionService" ref="institutionalItemVersionService" />
+       <property name="deletedInstitutionalItemVersionService" ref="deletedInstitutionalItemVersionService" />
        <property name="institutionalCollectionService" ref="institutionalCollectionService" />
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
        <property name="listSetsService" ref="listSetsService"/>
    </bean>
+   
    
    <!-- ****************************************** --> 
    <!-- OAI harvesting Output Service for the system -->
@@ -753,8 +761,10 @@
        <property name="oaiMetadataServiceProvider" ref="oaiMetadataServiceProvider"/>
        <property name="institutionalItemService" ref="institutionalItemService" />
        <property name="institutionalItemVersionService" ref="institutionalItemVersionService" />
+       <property name="deletedInstitutionalItemVersionService" ref="deletedInstitutionalItemVersionService" />
        <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
        <property name="listIdentifiersService" ref="listIdentifiersService"/>
+       <property name="listRecordsService" ref="listIdentifiersService"/>
        <property name="listSetsService" ref="listSetsService"/>
        <property name="listMetadataFormatsService" ref="listMetadataFormatsService"/>
    </bean>

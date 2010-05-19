@@ -33,9 +33,17 @@ public interface ListSetsService extends Serializable{
 	 * Returns the set spec structure for a given institutional collection.
 	 * 
 	 * @param institutionalCollection
-	 * @return
+	 * @return the set spec
 	 */
 	public String getSetSpec(InstitutionalCollection institutionalCollection);
+	
+	/**
+	 * Get the set spec based on the institutional collection id.
+	 * 
+	 * @param institutionalCollectionId
+	 * @return the set spec or null if no set spec exists
+	 */
+	public String getSetSpec(Long institutionalCollectionId);
 	
 	/**
 	 * Return the xml body for listing sets.
