@@ -18,6 +18,8 @@ package edu.ur.ir.oai.metadata.provider;
 import java.io.Serializable;
 import java.util.List;
 
+import org.w3c.dom.Element;
+
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
 
@@ -57,12 +59,13 @@ public interface OaiMetadataServiceProvider extends Serializable{
 	 * Get the given metadata for the given prefix.
 	 * 
 	 * @param metadataPrefix - metadata prefix
+	 * @param record - record element to add the xml to
 	 * @param institutionalItemVersion - institutional item version to get the metadata for
 	 * @return the metadata
 	 * 
 	 * @throws CannotDisseminateFormatException if the metadata is not supported
 	 */
-	public String getXml(String metadataPrefix, InstitutionalItemVersion institutionalItemVersion) throws CannotDisseminateFormatException;
+	public void addXml(String metadataPrefix, Element record, InstitutionalItemVersion institutionalItemVersion) throws CannotDisseminateFormatException;
   
 	/**
 	 * Add a provider to the list of providers.

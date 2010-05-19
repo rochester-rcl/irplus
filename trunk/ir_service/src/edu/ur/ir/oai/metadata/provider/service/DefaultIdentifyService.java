@@ -107,6 +107,7 @@ public class DefaultIdentifyService implements IdentifyService{
 		 
 		 addRepositoryName(doc, root);
 		 addBaseOaiUrl(doc, root);
+		 addProtocol(doc, root);
 		 addAdminEmails(doc, root);
 		 addEarliestDatestamp(doc, root);
 		 addDeleteRecord(doc, root);
@@ -193,7 +194,7 @@ public class DefaultIdentifyService implements IdentifyService{
 	 */
 	private void addDeleteRecord(Document doc, Element root)
 	{
-		 Element deleteRecord = doc.createElement("deleteRecord");
+		 Element deleteRecord = doc.createElement("deletedRecord");
 		 Text data = doc.createTextNode(DELETE_RECORD_PERSISTENT);
 		 deleteRecord.appendChild(data);
 		 root.appendChild(deleteRecord);	
@@ -207,10 +208,24 @@ public class DefaultIdentifyService implements IdentifyService{
 	 */
 	private void addGranularity(Document doc, Element root)
 	{
-		 Element deleteRecord = doc.createElement("granularity");
+		 Element gran = doc.createElement("granularity");
 		 Text data = doc.createTextNode(granularity);
-		 deleteRecord.appendChild(data);
-		 root.appendChild(deleteRecord);	
+		 gran.appendChild(data);
+		 root.appendChild(gran);	
+	}
+	
+	/**
+	 * Add protocol version of the system
+	 * 
+	 * @param doc
+	 * @param root
+	 */
+	private void addProtocol(Document doc, Element root)
+	{
+		 Element protocol = doc.createElement("protocolVersion");
+		 Text data = doc.createTextNode(protocolVersion);
+		 protocol.appendChild(data);
+		 root.appendChild(protocol);	
 	}
 	
 	

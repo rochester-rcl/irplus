@@ -16,6 +16,8 @@
 
 package edu.ur.ir.oai.metadata.provider;
 
+import java.io.Serializable;
+
 import edu.ur.ir.oai.exception.BadArgumentException;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.exception.CannotDisseminateFormatException;
@@ -26,7 +28,7 @@ import edu.ur.ir.oai.exception.NoSetHierarchyException;
  * @author NathanS
  *
  */
-public interface ListRecordsService {
+public interface ListRecordsService extends Serializable{
 
 	/**
 	 * Get the list identifers as an xml document.

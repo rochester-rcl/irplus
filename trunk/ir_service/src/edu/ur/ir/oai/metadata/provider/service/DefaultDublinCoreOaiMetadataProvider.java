@@ -15,25 +15,18 @@
 */  
 package edu.ur.ir.oai.metadata.provider.service;
 
-import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSOutput;
-import org.w3c.dom.ls.LSSerializer;
 
 import edu.ur.ir.handle.HandleInfo;
+import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.item.ContentType;
@@ -84,41 +77,18 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	
 	/** service to deal with listing set information */
 	private ListSetsService listSetsService;
-	
 
 	/**
 	 * Get the xml output for the item
 	 *  
 	 * @see edu.ur.ir.oai.metadata.provider.OaiMetadataProvider#getMetadata(edu.ur.ir.institution.InstitutionalItemVersion)
 	 */
-	public String getXml(InstitutionalItemVersion institutionalItemVersion) {
-		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		 DocumentBuilder builder;
-		 
-		 try {
-			builder = factory.newDocumentBuilder();
-		 } catch (ParserConfigurationException e) {
-			throw new IllegalStateException(e);
-		 }
-		
-		 DOMImplementation impl = builder.getDOMImplementation();
-		 DOMImplementationLS domLs = (DOMImplementationLS)impl.getFeature("LS" , "3.0");
-		 LSSerializer serializer = domLs.createLSSerializer();
-		 LSOutput lsOut= domLs.createLSOutput();
-		 StringWriter stringWriter = new StringWriter();
-		 lsOut.setCharacterStream(stringWriter);
+	public void addXml(Element record, InstitutionalItemVersion institutionalItemVersion) {
 
-		 Document doc = impl.createDocument(null, "record", null);
-		 
+		 Document doc = record.getOwnerDocument();
 		 // create the header
-         createHeader(doc, institutionalItemVersion);
-         createMetadata(doc, institutionalItemVersion);		
-			
-		 Element root = doc.getDocumentElement();
-		 serializer.getDomConfig().setParameter("xml-declaration", false);
-		 
-		 serializer.write(root, lsOut);
-		 return stringWriter.getBuffer().toString();
+         createHeader(doc, record, institutionalItemVersion);
+         createMetadata(doc, record, institutionalItemVersion);		
 	}
 
 	/**
@@ -142,13 +112,11 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	 * @param doc
 	 * @param institutionalItemVersion
 	 */
-	private void createHeader(Document doc, InstitutionalItemVersion institutionalItemVersion)
+	private void createHeader(Document doc, Element record, InstitutionalItemVersion institutionalItemVersion)
 	{
-		 Element root = doc.getDocumentElement();
-		 
 		 // create the header element of the record 
 		 Element header = doc.createElement("header");
-		 root.appendChild(header);
+		 record.appendChild(header);
 		 
 		 // identifier element
 		 Element identifier = doc.createElement("identifier");
@@ -183,13 +151,11 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	 * @param doc  - xml document root
 	 * @param institutionalItemVersion - institutional item version to write
 	 */
-	private void createMetadata(Document doc, InstitutionalItemVersion institutionalItemVersion)
+	private void createMetadata(Document doc, Element record, InstitutionalItemVersion institutionalItemVersion)
 	{
-		 Element root = doc.getDocumentElement();
-		 
 		 // create the header element of the record 
 		 Element metadata = doc.createElement("metadata");
-		 root.appendChild(metadata);
+		 record.appendChild(metadata);
 		 
 		 Element oaiDc = doc.createElement("oai_dc:dc");
 
@@ -441,17 +407,20 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	private void addSubjects(Document doc, Element oaiDc, GenericItem item)
 	{
 	    String itemSubjects = item.getItemKeywords();
-	    StringTokenizer tokenizer = new StringTokenizer(itemSubjects, ";");
-	    while( tokenizer.hasMoreElements())
+	    if( itemSubjects != null )
 	    {
-	    	String value = tokenizer.nextToken();
-	    	if( value != null && !value.equals(""))
-	    	{
-	    	    Element subject = doc.createElement("dc:subject");
-	    	    Text data = doc.createTextNode(value);
-	    	    subject.appendChild(data);
-	    	    oaiDc.appendChild(subject);
-	    	}
+	        StringTokenizer tokenizer = new StringTokenizer(itemSubjects, ";");
+	        while( tokenizer.hasMoreElements())
+	        {
+	    	    String value = tokenizer.nextToken();
+	    	    if( value != null && !value.equals(""))
+	    	    {
+	    	        Element subject = doc.createElement("dc:subject");
+	    	        Text data = doc.createTextNode(value);
+	    	        subject.appendChild(data);
+	    	        oaiDc.appendChild(subject);
+	    	    }
+	        }
 	    }
 		
 	}
@@ -664,5 +633,53 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	public String getSchema() {
 		return SCHEMA;
 	}
+	
+	public void addXml(Element record, DeletedInstitutionalItemVersion institutionalItemVersion)
+	{
+		 Document doc = record.getOwnerDocument();
+		 // create the header
+         createHeader(doc, record, institutionalItemVersion);
+	}
+	
+	/**
+	 * Create the header for the deleted item.
+	 * 
+	 * @param doc
+	 * @param deletedInstitutionalItemVersion
+	 */
+	private void createHeader(Document doc, Element record, DeletedInstitutionalItemVersion institutionalItemVersion)
+	{
+		 // create the header element of the record 
+		 Element header = doc.createElement("header");
+		 record.appendChild(header);
+		 
+		 // identifier element
+		 Element identifier = doc.createElement("identifier");
+		 Text data = doc.createTextNode("oai:" + namespaceIdentifier + ":" + institutionalItemVersion.getInstitutionalItemVersionId().toString());
+		 identifier.appendChild(data);
+		 header.appendChild(identifier);
+		 
+		 // datestamp element
+		 Element datestamp = doc.createElement("datestamp");
+		 Date d = institutionalItemVersion.getDeletedInstitutionalItem().getDeletedDate();
+		 String zuluDateTime = OaiUtil.zuluTime(d);
+		 
+		 data = doc.createTextNode(zuluDateTime);
+		 datestamp.appendChild(data);
+		 header.appendChild(datestamp);
+		 
+		 Long collectionId = institutionalItemVersion.getDeletedInstitutionalItem().getInstitutionalCollectionId();
+		 if( collectionId != null )
+		 {
+		     String setSpecStr = listSetsService.getSetSpec(collectionId);
+		     if( setSpecStr != null )
+		     {
+		         Element setSpec = doc.createElement("setSpec");
+		         data = doc.createTextNode(setSpecStr);
+		         setSpec.appendChild(data);
+		         header.appendChild(setSpec);
+		     }
+		 }
 
+	}
 }
