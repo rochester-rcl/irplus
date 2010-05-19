@@ -2099,7 +2099,7 @@ CREATE TABLE ir_repository.deleted_institutional_item
 	deleted_institutional_item_id BIGINT PRIMARY KEY,
     institutional_item_id BIGINT NOT NULL,
     institutional_collection_name TEXT,
-    institutional_collection_id BIGINT,
+    institutional_collection_id BIGINT NOT NULL,
     institutional_item_name TEXT,
     user_id BIGINT NOT NULL,
     deleted_date TIMESTAMP WITH TIME ZONE NOT NULL ,
