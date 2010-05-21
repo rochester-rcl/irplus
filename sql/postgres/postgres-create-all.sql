@@ -3490,10 +3490,34 @@ ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping OWNER TO ir_plus
 CREATE SEQUENCE ir_metadata_dublin_core.contributor_type_dc_mapping_seq ;
 ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping_seq OWNER TO ir_plus;
 
--- ---------------------------------------------
--- Quartz tables
--- ---------------------------------------------
 
+CREATE TABLE ir_metadata_dublin_core.identifier_type_dc_mapping
+(
+    identifier_type_dc_mapping_id BIGINT PRIMARY KEY,
+    identifier_type_id BIGINT NOT NULL,
+    dublin_core_term_id BIGINT NOT NULL,
+    dublin_core_encoding_scheme_id BIGINT,
+    version INTEGER,
+    UNIQUE(identifier_type_id),
+    FOREIGN KEY (identifier_type_id) REFERENCES ir_item.identifier_type(identifier_type_id),
+    FOREIGN KEY (dublin_core_term_id) REFERENCES metadata.dublin_core_term(dublin_core_term_id),
+    FOREIGN KEY (dublin_core_encoding_scheme_id) REFERENCES metadata.dublin_core_encoding_scheme(dublin_core_encoding_scheme_id)
+);
+
+ALTER TABLE ir_metadata_dublin_core.identifier_type_dc_mapping OWNER TO ir_plus;
+
+-- The contributor type dc mapping sequence
+CREATE SEQUENCE ir_metadata_dublin_core.identifier_type_dc_mapping_seq ;
+ALTER TABLE ir_metadata_dublin_core.identifier_type_dc_mapping_seq OWNER TO ir_plus;
+
+
+-- ----------------------------------------------
+-- **********************************************
+       
+-- Quartz Tables
+
+-- **********************************************
+-- ----------------------------------------------
 
 CREATE TABLE qrtz_job_details
   (
