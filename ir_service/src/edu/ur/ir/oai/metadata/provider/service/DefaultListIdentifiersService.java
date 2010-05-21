@@ -95,11 +95,23 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	public String listIdentifiers(String metadataPrefix, String set,
 			String from, String until, String strResumptionToken)
 			throws BadResumptionTokenException,
-			CannotDisseminateFormatException, NoRecordsMatchException{
+			CannotDisseminateFormatException, NoRecordsMatchException, BadArgumentException{
+		
+        boolean initialRequest = this.initilizeResumptionToken(metadataPrefix, set, from, until, strResumptionToken);
+ 		if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
+		{
+			throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
+		}
+
+		int completeListSize = getCompleteListSize();
+		if( initialRequest && completeListSize <= 0)
+		{
+			throw new NoRecordsMatchException("No records found for request");
+		}
 		
 		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		 DocumentBuilder builder;
-		 boolean initialRequest = false;
+		
 		 
 		 try {
 			builder = factory.newDocumentBuilder();
@@ -115,45 +127,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		 lsOut.setCharacterStream(stringWriter);
 		 
 		 Document doc = impl.createDocument(null, "ListIdentifiers", null);
-		 
-			// parse the token if it exists
-			if(strResumptionToken != null && !strResumptionToken.equals(""))
-			{
-				resumptionToken = new DefaultResumptionToken(strResumptionToken);
-				initialRequest = true;
-			}
-			else
-			{
-				resumptionToken = new DefaultResumptionToken();
-				
-				resumptionToken.setBatchSize(batchSize);
-				if( from != null && !from.equals(""))
-				{
-					resumptionToken.setFrom(from);
-				}
-				if( set != null && !set.equals(""))
-				{
-					resumptionToken.setSet(set);
-				}
-				if( until != null && !until.equals(""))
-				{
-					resumptionToken.setUntil(until);
-				}
-				resumptionToken.setMetadataPrefix(metadataPrefix);
-				resumptionToken.setLastId(0l);
-			}
 
-		
-		if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
-		{
-			throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
-		}
-
-		int completeListSize = getCompleteListSize();
-		if( initialRequest && completeListSize <= 0)
-		{
-			throw new NoRecordsMatchException("No records found for request");
-		}
 
 		if(!resumptionToken.getDeleted())
 		{
@@ -603,9 +577,20 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			BadResumptionTokenException, CannotDisseminateFormatException,
 			NoRecordsMatchException, NoSetHierarchyException {
 		
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	       boolean initialRequest = this.initilizeResumptionToken(metadataPrefix, set, from, until, strResumptionToken);
+	 		if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
+			{
+				throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
+			}
+
+			int completeListSize = getCompleteListSize();
+			if( initialRequest && completeListSize <= 0)
+			{
+				throw new NoRecordsMatchException("No records found for request");
+			}
+		
+		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		 DocumentBuilder builder;
-		 boolean initialRequest = false;
 		 
 		 try {
 			builder = factory.newDocumentBuilder();
@@ -621,44 +606,6 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		 lsOut.setCharacterStream(stringWriter);
 		 
 		 Document doc = impl.createDocument(null, "ListRecords", null);
-		 
-		// parse the token if it exists
-		if(strResumptionToken != null && !strResumptionToken.equals(""))
-		{
-			resumptionToken = new DefaultResumptionToken(strResumptionToken);
-			initialRequest = true;
-		}
-		else
-		{
-			resumptionToken = new DefaultResumptionToken();
-			resumptionToken.setBatchSize(batchSize);
-			if( from != null && !from.equals(""))
-			{
-				resumptionToken.setFrom(from);
-			}
-			if( set != null && !set.equals(""))
-			{
-				resumptionToken.setSet(set);
-			}
-			if( until != null && !until.equals(""))
-			{
-				resumptionToken.setUntil(until);
-			}
-			resumptionToken.setMetadataPrefix(metadataPrefix);
-			resumptionToken.setLastId(0l);
-		}
-
-		
-		if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
-		{
-			throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
-		}
-
-		int completeListSize = getCompleteListSize();
-		if( initialRequest && completeListSize <= 0 )
-		{
-			throw new NoRecordsMatchException("No records found for the request");
-		}
 
 		if(!resumptionToken.getDeleted())
 		{
@@ -735,7 +682,69 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			DeletedInstitutionalItemVersionService deletedInstitutionalItemVersionService) {
 		this.deletedInstitutionalItemVersionService = deletedInstitutionalItemVersionService;
 	}
+	
+	/**
+	 * Initialize the resumption token and determine if this is the initial request.
+	 * 
+	 * @param metadataPrefix
+	 * @param set
+	 * @param from
+	 * @param until
+	 * @param strResumptionToken
+	 * 
+	 * @return true if this is the initial request.
+	 * 
+	 * @throws BadArgumentException
+	 * @throws BadResumptionTokenException
+	 */
+	private boolean initilizeResumptionToken(String metadataPrefix, String set,
+			String from, String until, String strResumptionToken) throws BadArgumentException, BadResumptionTokenException
+	{
+		boolean initialRequest = false;
+		
+		if( metadataPrefix == null || metadataPrefix.equals(""))
+		{
+			throw new BadArgumentException("missing metadata prefix");
+		}
+		
+		// parse the token if it exists
+		if(strResumptionToken != null && !strResumptionToken.equals(""))
+		{
+			resumptionToken = new DefaultResumptionToken(strResumptionToken);
+			
+		}
+		else
+		{
+			initialRequest = true;
+			resumptionToken = new DefaultResumptionToken();
+			
+			resumptionToken.setBatchSize(batchSize);
+			if( from != null && !from.equals(""))
+			{
+				resumptionToken.setFrom(from);
+			}
+			if( set != null && !set.equals(""))
+			{
+				resumptionToken.setSet(set);
+			}
+			if( until != null && !until.equals(""))
+			{
+				resumptionToken.setUntil(until);
+			}
+			resumptionToken.setMetadataPrefix(metadataPrefix);
+			resumptionToken.setLastId(0l);
+		}
+		
+		if( resumptionToken.getFrom() != null && resumptionToken.getUntil() != null )
+		{
+		    if( resumptionToken.getFrom().after(resumptionToken.getUntil()))
+		    {
+		        throw new BadArgumentException("from date greater than until date");
+		    }
+		}
+		
+		return initialRequest;
+	}
 
-
-
+  
 }

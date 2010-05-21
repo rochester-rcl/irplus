@@ -22,6 +22,8 @@ import java.util.Date;
 
 import org.testng.annotations.Test;
 
+import edu.ur.ir.oai.exception.BadResumptionTokenException;
+
 /**
  * Tests for the resumption token class.
  * 
@@ -40,8 +42,9 @@ public class DefaultResumptionTokenTest {
 	/**
 	 * Make sure the resumption token properly parses valid strings
 	 * @throws ParseException 
+	 * @throws BadResumptionTokenException 
 	 */
-	public void resumptionTokenParsingTest() throws ParseException
+	public void resumptionTokenParsingTest() throws ParseException, BadResumptionTokenException
 	{
 		String strFromShort = "1998-10-22";
 		String strFromLong = "2000-01-22T10:25:33Z";

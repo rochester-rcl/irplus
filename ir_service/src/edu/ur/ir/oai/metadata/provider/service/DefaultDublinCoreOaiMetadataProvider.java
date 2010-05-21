@@ -655,6 +655,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		 
 		 // identifier element
 		 Element identifier = doc.createElement("identifier");
+		 header.setAttribute("status", "deleted");
 		 Text data = doc.createTextNode("oai:" + namespaceIdentifier + ":" + institutionalItemVersion.getInstitutionalItemVersionId().toString());
 		 identifier.appendChild(data);
 		 header.appendChild(identifier);

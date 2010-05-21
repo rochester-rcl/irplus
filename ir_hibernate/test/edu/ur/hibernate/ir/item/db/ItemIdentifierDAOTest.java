@@ -66,9 +66,7 @@ public class ItemIdentifierDAOTest {
 	@Test
 	public void baseItemIdentifierDAOTest() throws Exception{
 
-		IdentifierType identType = new IdentifierType();
-		identType.setName("identTypeName");
- 		identType.setDescription("identTypeDescription");
+		IdentifierType identType = new IdentifierType("identTypeName","identTypeDescription" );
  		identifierTypeDAO.makePersistent(identType);
 
 		TransactionStatus ts = tm.getTransaction(td);

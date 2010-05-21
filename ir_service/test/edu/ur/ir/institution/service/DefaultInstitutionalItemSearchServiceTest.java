@@ -235,9 +235,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		c.setContributorType(contributorType1);
 		
 		// create an identifier
-	    IdentifierType identType = new IdentifierType();
-		identType.setName("identTypeName");
- 		identType.setDescription("identTypeDescription");
+	    IdentifierType identType = new IdentifierType("identTypeName", "identTypeDescription");
  		
  		identifierTypeService.save(identType);
  		
@@ -402,9 +400,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		c.setContributorType(contributorType1);
 		
 		// create an identifier
-	    IdentifierType identType = new IdentifierType();
-		identType.setName("identTypeName");
- 		identType.setDescription("identTypeDescription");
+	    IdentifierType identType = new IdentifierType("identTypeName", "identTypeDescription");
  		
  		identifierTypeService.save(identType);
  		
@@ -487,9 +483,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		c2.setContributorType(contributorType1);
 		
 		// create an identifier
-	    IdentifierType identType2 = new IdentifierType();
-		identType2.setName("ISBN");
- 		identType2.setDescription("differentIdentTypeDescription");
+	    IdentifierType identType2 = new IdentifierType("ISBN","differentIdentTypeDescription" );
  		
  		identifierTypeService.save(identType2);
  		
@@ -683,9 +677,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		c.setContributorType(contributorType1);
 		
 		// create an identifier
-	    IdentifierType identType = new IdentifierType();
-		identType.setName("identTypeName");
- 		identType.setDescription("identTypeDescription");
+	    IdentifierType identType = new IdentifierType("identTypeName", "identTypeDescription");
  		
  		identifierTypeService.save(identType);
  		
@@ -768,9 +760,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		c2.setContributorType(contributorType1);
 		
 		// create an identifier
-	    IdentifierType identType2 = new IdentifierType();
-		identType2.setName("ISBN");
- 		identType2.setDescription("differentIdentTypeDescription");
+	    IdentifierType identType2 = new IdentifierType("ISBN", "differentIdentTypeDescription" );
  		
  		identifierTypeService.save(identType2);
  		

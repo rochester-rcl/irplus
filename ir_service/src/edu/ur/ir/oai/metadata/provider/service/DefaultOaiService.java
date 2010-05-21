@@ -98,8 +98,28 @@ public class DefaultOaiService implements OaiService{
 	 * @see edu.ur.ir.oai.metadata.provider.OaiService#getRecord(java.lang.String, java.lang.String)
 	 */
 	public String getRecord(String identifier, String metadataPrefix)
-			throws CannotDisseminateFormatException, IdDoesNotExistException 
+			throws CannotDisseminateFormatException, IdDoesNotExistException, BadArgumentException 
 	{
+		if( identifier == null || identifier.trim().equals(""))
+		{
+			throw new BadArgumentException("missing identifier");
+		}
+		if( metadataPrefix == null || metadataPrefix.equals(""))
+		{
+			throw new BadArgumentException("missing metadata prefix");
+		}
+		
+		Long institutionalItemVersionId = DefaultOaiIdentifierHelper.getInstitutionalItemVersionId(identifier);
+		InstitutionalItemVersion institutionalItemVersion = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
+		DeletedInstitutionalItemVersion deletedVersion = null;
+		if( institutionalItemVersion == null )
+        {
+			deletedVersion = deletedInstitutionalItemVersionService.getDeletedVersionByItemVersionId(institutionalItemVersionId);
+			if( deletedVersion == null )
+			{
+				throw new IdDoesNotExistException("identifier " + identifier + " does not exist");
+			}
+        }
 		
 		OaiMetadataProvider oaiMetadataProvider = oaiMetadataServiceProvider.getProvider(metadataPrefix) ;
 		if( oaiMetadataProvider != null )
@@ -122,8 +142,7 @@ public class DefaultOaiService implements OaiService{
 
 			Document doc = impl.createDocument(null, "record", null);
 			Element record = doc.getDocumentElement();
-			Long institutionalItemVersionId = DefaultOaiIdentifierHelper.getInstitutionalItemVersionId(identifier);
-			InstitutionalItemVersion institutionalItemVersion = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
+			
 			
 			if( institutionalItemVersion != null )
 			{
@@ -131,15 +150,7 @@ public class DefaultOaiService implements OaiService{
 			}
 			else
 			{
-				DeletedInstitutionalItemVersion deletedVersion = deletedInstitutionalItemVersionService.getDeletedVersionByItemVersionId(institutionalItemVersionId);
-				if( deletedVersion != null )
-				{
-					 oaiMetadataProvider.addXml(record, deletedVersion);
-				}
-				else
-				{
-				    throw new IdDoesNotExistException("identifier " + identifier + " does not exist");
-				}
+				oaiMetadataProvider.addXml(record, deletedVersion);
 			}
 			
 			serializer.getDomConfig().setParameter("xml-declaration", false);

@@ -53,11 +53,9 @@ public class DublinCoreEncodingSchemeDAOTest {
 	@Test
 	public void baseDublinCoreEncodingSchemeDAOTest() throws Exception{
 
+		TransactionStatus ts = tm.getTransaction(td);
 		DublinCoreEncodingScheme element = new DublinCoreEncodingScheme("Dublin Core Scheme");
  		element.setDescription("schemeDescription");
- 		
-         
-        TransactionStatus ts = tm.getTransaction(td);
  		dublinCoreEncodingSchemeDAO.makePersistent(element);
  	    tm.commit(ts);
  	    

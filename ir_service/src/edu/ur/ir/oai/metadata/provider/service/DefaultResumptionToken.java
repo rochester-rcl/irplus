@@ -19,6 +19,7 @@ package edu.ur.ir.oai.metadata.provider.service;
 import java.util.Date;
 
 import edu.ur.ir.oai.OaiUtil;
+import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.metadata.provider.ResumptionToken;
 
 /**
@@ -79,8 +80,9 @@ public class DefaultResumptionToken implements ResumptionToken{
 	 * set=227&from=1999-02-03&until=2002-04-01start=2987
 	 * 
 	 * @param values
+	 * @throws BadResumptionTokenException 
 	 */
-	public DefaultResumptionToken(String resumptionToken)
+	public DefaultResumptionToken(String resumptionToken) throws BadResumptionTokenException
 	{
 		parseResumptionToken(resumptionToken);
 	}
@@ -267,7 +269,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 	 * 
 	 * @param resumptionToken
 	 */
-	public void parseResumptionToken(String resumptionToken)
+	public void parseResumptionToken(String resumptionToken) throws BadResumptionTokenException
 	{
 		this.set = null;
 		this.setBatchSize(null);
@@ -295,8 +297,9 @@ public class DefaultResumptionToken implements ResumptionToken{
 	 * 
 	 * @param name - name of the parameter
 	 * @param value - value of the parameter
+	 * @throws BadResumptionTokenException 
 	 */
-	private void assignParts(String name, String value)
+	private void assignParts(String name, String value) throws BadResumptionTokenException
 	{
 	
 		if( name.equals("set"))
@@ -329,7 +332,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 		}
 		else
 		{
-			throw new IllegalStateException("illegal parameter " + name + " value = " + value);
+			throw new BadResumptionTokenException("illegal parameter " + name + " value = " + value);
 		}
 		
 	}

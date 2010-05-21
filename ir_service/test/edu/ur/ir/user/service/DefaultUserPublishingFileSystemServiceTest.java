@@ -246,8 +246,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		ContentType contentType = new ContentType("contentType");
 		contentTypeService.saveContentType(contentType);
 		
-		IdentifierType identifierType = new IdentifierType();
-		identifierType.setName("identifierType");
+		IdentifierType identifierType = new IdentifierType("identifierType");
 		identifierTypeService.save(identifierType);
 		
 		LanguageType languageType = new LanguageType("languageType");

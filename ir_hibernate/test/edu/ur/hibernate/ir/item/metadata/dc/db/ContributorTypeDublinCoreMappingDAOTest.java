@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */  
-package edu.ur.ir.item.metadata.dc.db;
+package edu.ur.hibernate.ir.item.metadata.dc.db;
 
 
 import org.springframework.context.ApplicationContext;
@@ -84,6 +84,16 @@ public class ContributorTypeDublinCoreMappingDAOTest {
  	    
  	    ContributorTypeDublinCoreMapping other = contributorTypeDublinCoreMappingDAO.getById(ctMapping.getId(), false);
  	    assert other.equals(ctMapping) : " Other " + other + "\n should be equal to " + ctMapping;
+ 	    
+ 	    other = contributorTypeDublinCoreMappingDAO.get(ct.getId(), element.getId());
+ 	    assert other.equals(ctMapping) : " Other " + other + "\n should be equal to " + ctMapping;
+ 	    
+ 	    other = contributorTypeDublinCoreMappingDAO.get(ct.getId());
+ 	    assert other.equals(ctMapping) : " Other " + other + "\n should be equal to " + ctMapping;
+ 	    
+ 	    Long count = contributorTypeDublinCoreMappingDAO.getCount();
+ 	    assert count == 1 : "Should find one but found " + count;
+ 	    
  	    tm.commit(ts);
  	    
  	    
@@ -127,7 +137,9 @@ public class ContributorTypeDublinCoreMappingDAOTest {
  	    
  	    ContributorTypeDublinCoreMapping other = contributorTypeDublinCoreMappingDAO.getById(ctMapping.getId(), false);
  	    assert other.equals(ctMapping) : " Other " + other + "\n should be equal to " + ctMapping;
-	    other.setDublinCoreTerm(element2);
+	    
+ 	    // update the contributor type with a different element
+ 	    other.setDublinCoreTerm(element2);
 	    contributorTypeDublinCoreMappingDAO.makePersistent(other);
  	    tm.commit(ts);
  	    

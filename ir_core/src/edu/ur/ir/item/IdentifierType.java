@@ -34,6 +34,33 @@ public class IdentifierType extends CommonPersistent implements UniqueSystemCode
 	private String uniqueSystemCode;
 	
 	/**
+	 * Default constructor
+	 */
+	public IdentifierType(){}
+	
+	/**
+	 * Default constructor.
+	 * 
+	 * @param name - name of the identifier type
+	 */
+	public IdentifierType(String name)
+	{
+		setName(name);
+	}
+	
+	/**
+	 * Create an identifer type with the name and description.
+	 * 
+	 * @param name
+	 * @param description
+	 */
+	public IdentifierType(String name, String description)
+	{
+		setName(name);
+		setDescription(description);
+	}
+	
+	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode()

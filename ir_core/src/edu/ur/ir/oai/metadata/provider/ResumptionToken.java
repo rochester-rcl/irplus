@@ -18,6 +18,8 @@ package edu.ur.ir.oai.metadata.provider;
 
 import java.io.Serializable;
 
+import edu.ur.ir.oai.exception.BadResumptionTokenException;
+
 
 /**
  * Interface for the resumption token.
@@ -39,8 +41,9 @@ public interface ResumptionToken extends Serializable{
 	 * Helper method to parse the resumption token.
 	 * 
 	 * @param resumptionToken
+	 * @throws BadResumptionTokenException 
 	 */
-	public void parseResumptionToken(String resumptionToken);
+	public void parseResumptionToken(String resumptionToken) throws BadResumptionTokenException;
 	
 
 }

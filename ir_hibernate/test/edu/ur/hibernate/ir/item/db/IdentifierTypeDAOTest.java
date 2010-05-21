@@ -56,9 +56,7 @@ public class IdentifierTypeDAOTest {
 	@Test
 	public void baseIdentifierTypeDAOTest() throws Exception{
 		
-		IdentifierType identType = new IdentifierType();
-		identType.setName("identTypeName");
- 		identType.setDescription("identTypeDescription");
+		IdentifierType identType = new IdentifierType("identTypeName","identTypeDescription" );
 
         // Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);

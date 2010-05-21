@@ -106,7 +106,8 @@
 		     <class name="edu.ur.hibernate.ir.handle.db.HandleInfoDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.handle.db.UniqueHandleNameDAOTest"/>
 		     
-		     <class name="edu.ur.ir.item.metadata.dc.db.ContributorTypeDublinCoreMappingDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.ContributorTypeDublinCoreMappingDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.IdentifierTypeDublinCoreMappingDAOTest"/>
 		     
 		</classes>
 	</test>

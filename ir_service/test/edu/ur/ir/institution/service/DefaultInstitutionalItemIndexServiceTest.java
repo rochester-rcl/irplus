@@ -279,9 +279,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		c.setContributorType(contributorType1);
 		
 		// create an identifier
-	    IdentifierType identType = new IdentifierType();
-		identType.setName("identTypeName");
- 		identType.setDescription("identTypeDescription");
+	    IdentifierType identType = new IdentifierType("identTypeName", "identTypeDescription");
  		
  		identifierTypeService.save(identType);
  		
@@ -552,10 +550,8 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		c.setContributorType(contributorType1);
 		
 		// create an identifier
-	    IdentifierType identType = new IdentifierType();
-		identType.setName("identTypeName");
- 		identType.setDescription("identTypeDescription");
- 		
+	    IdentifierType identType = new IdentifierType("identTypeName", "identTypeDescription");
+		
  		identifierTypeService.save(identType);
  		
 		// create a series

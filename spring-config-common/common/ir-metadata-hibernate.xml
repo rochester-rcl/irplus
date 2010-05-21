@@ -42,4 +42,22 @@
        </property>
    </bean>
    
+   <bean id="identifierTypeDublinCoreMappingDAOTarget" 
+       class="edu.ur.hibernate.ir.item.metadata.dc.db.HbIdentifierTypeDublinCoreMappingDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="identifierTypeDublinCoreMappingDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="identifierTypeDublinCoreMappingDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
  </beans>

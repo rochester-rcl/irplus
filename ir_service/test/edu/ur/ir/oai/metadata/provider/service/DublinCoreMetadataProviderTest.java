@@ -159,8 +159,7 @@ public class DublinCoreMetadataProviderTest {
 		externalPublishedItem.setPublisher(publisher);
 		
 		
-		IdentifierType identifier = new IdentifierType();
-		identifier.setName("identifiername");
+		IdentifierType identifier = new IdentifierType("identifiername");
 		item.createLink("name", "url");
 		
 		IrUser owner = new IrUser("name", "password");
