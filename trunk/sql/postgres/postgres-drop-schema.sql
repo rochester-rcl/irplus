@@ -25,6 +25,9 @@
 DROP TABLE ir_metadata_dublin_core.contributor_type_dc_mapping;
 DROP SEQUENCE ir_metadata_dublin_core.contributor_type_dc_mapping_seq;
 
+DROP TABLE ir_metadata_dublin_core.identifier_type_dc_mapping;
+DROP SEQUENCE ir_metadata_dublin_core.identifier_type_dc_mapping_seq;
+
 DROP SCHEMA ir_metadata_dublin_core;
 
 
