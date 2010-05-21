@@ -491,9 +491,7 @@ public class ItemDAOTest {
 
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
-		IdentifierType identifierType = new IdentifierType();
-		identifierType.setName("identTypeName");
- 		identifierType.setDescription("identTypeDescription");
+		IdentifierType identifierType = new IdentifierType("identTypeName", "identTypeDescription");
  		identifierTypeDAO.makePersistent(identifierType);
  
 		GenericItem item = new GenericItem("item1");
