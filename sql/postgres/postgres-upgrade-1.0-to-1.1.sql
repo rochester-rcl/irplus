@@ -621,11 +621,13 @@ ALTER TABLE ir_repository.deleted_institutional_item_version_seq OWNER TO ir_plu
 -- ---------------------------------------------
 -- New columns for institutional item version
 -- ---------------------------------------------
--- Index on the file date modified
-CREATE INDEX institutional_item_version_date_modified_idx ON ir_repository.institutional_item_version(date_modified);
 
 ALTER TABLE ir_repository.institutional_item_version
 ADD COLUMN date_modified TIMESTAMP WITH TIME ZONE;
+
+-- Index on the file date modified
+CREATE INDEX institutional_item_version_date_modified_idx ON ir_repository.institutional_item_version(date_modified);
+
 
 UPDATE ir_repository.institutional_item_version AS item_version 
 SET date_modified = ( SELECT date_of_deposit FROM ir_repository.institutional_item_version 
