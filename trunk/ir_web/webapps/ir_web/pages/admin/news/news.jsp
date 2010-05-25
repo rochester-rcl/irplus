@@ -101,7 +101,7 @@
      
 	        <div id="newNewsItemDialog" >
 	            <div class="hd">News Information</div>
-		        <civ class="bd">
+		        <div class="bd">
 		            <form id="addNewsItem" name="newNewsItemForm" 
 		                 method="post" 
 		                 action="/admin/addNewsItem.action">
