@@ -24,23 +24,23 @@
       is an issue.
  -->
 
-<input type="hidden" id="contributorTypeDcMappingForm_id" name="id" value="${contributorTypeDublinCoreMapping.id}"/>
+<input type="hidden" id="identifierTypeDcMappingForm_id" name="id" value="${identifierTypeDublinCoreMapping.id}"/>
 		               
-<input type="hidden" id="newContributorTypeDublinCoreMapping_new" name="update" value="${update}"/>
-<input type="hidden" id="newContributorTypeDublinCoreMapping_success" name="added" value="${added}"/>
+<input type="hidden" id="newIdentifierTypeDublinCoreMapping_new" name="update" value="${update}"/>
+<input type="hidden" id="newIdentifierTypeDublinCoreMapping_success" name="added" value="${added}"/>
 		              
 <div id="error" class="errorMessage">${message}</div>
 <table class="formTable">    
     <tr>       
-	    <td align="left" class="label">Contributor Type:*</td>
+	    <td align="left" class="label">Identifier Type:*</td>
 		<td align="left" class="input">
-		    <select name="contributorTypeId">
-		        <c:forEach items="${contributorTypes}" var="contributorType">
+		    <select name="identifierTypeId">
+		        <c:forEach items="${identifierTypes}" var="identifierType">
 		            <option 
-		                <c:if test="${contributorTypeDublinCoreMapping.contributorType.id == contributorType.id}">
+		                <c:if test="${identifierTypeDublinCoreMapping.identifierType.id == identifierType.id}">
 		                  selected="true"
 		                </c:if>
-		                value="${contributorType.id}">${contributorType.name}</option>
+		                value="${identifierType.id}">${identifierType.name}</option>
 		        </c:forEach>
 		    </select> 
 		</td>
@@ -51,10 +51,25 @@
 		    <select name="dublinCoreTermId">
 		        <c:forEach items="${dublinCoreTerms}" var="dublinCoreTerm">
 		            <option value="${dublinCoreTerm.id}"
-		             <c:if test="${contributorTypeDublinCoreMapping.dublinCoreTerm.id == dublinCoreTerm.id}">
+		             <c:if test="${identifierTypeDublinCoreMapping.dublinCoreTerm.id == dublinCoreTerm.id}">
 		                  selected="true"
 		              </c:if>
 		            >${dublinCoreTerm.name}</option>
+		        </c:forEach>
+		    </select> 
+		</td>
+	</tr>
+		<tr>       
+	    <td align="left" class="label">Dublin Core Encoding Scheme:*</td>
+		<td align="left" class="input">
+		    <select name="dublinCoreEncodingSchemeId">
+		        <option value="">None</option>
+		        <c:forEach items="${dublinCoreEncodingSchemes}" var="dublinCoreEncodingScheme">
+		            <option value="${dublinCoreEncodingScheme.id}"
+		             <c:if test="${identifierTypeDublinCoreMapping.dublinCoreEncodingScheme.id == dublinCoreEncodingScheme.id}">
+		                  selected="true"
+		              </c:if>
+		            >${dublinCoreEncodingScheme.name}</option>
 		        </c:forEach>
 		    </select> 
 		</td>

@@ -464,6 +464,12 @@
          	<result name="success">/pages/oai/ok.jsp</result>
          	<result name="listIdentifiers">/pages/oai/list_identifiers.jsp</result>
          	<result name="listSets">/pages/oai/list_sets.jsp</result>
+         	<result name="listMetadataFormats">/pages/oai/list_metadata_formats.jsp</result>
+         	<result name="noRecordsMatch">/pages/oai/no_records_match.jsp</result>
+         	<result name="noSetHierarchy">/pages/oai/no_records_match.jsp</result>
+         	<result name="badArgument">/pages/oai/bad_argument.jsp</result>
+         	<result name="badResumptionToken">/pages/oai/bad_resumption_token.jsp</result>
+         	<result name="listRecords">/pages/oai/list_records.jsp</result>
          </action> 
         
     </package>

@@ -46,7 +46,6 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 	
 	/**  Service for dealing with contributor type dublin core mapping */
 	private ContributorTypeDublinCoreMappingService contributorTypeDublinCoreMappingService;
-	
 
 	/** list of contributor type mappings */
 	private List<ContributorTypeDublinCoreMapping> contributorTypeDublinCoreMappings;
@@ -152,7 +151,7 @@ public class ManageContributorTypeDublinCoreMapping extends ActionSupport implem
 		contributorTypeDublinCoreMapping = contributorTypeDublinCoreMappingService.getById(id, false);
 
 		ContributorTypeDublinCoreMapping other = contributorTypeDublinCoreMappingService.get(contributorTypeId);
-		log.debug("other = " + other  + " other.getId().equals(id) = " + other.getId().equals(id));
+		log.debug("other = " + other );
 		
 		if( other == null  || other.getId().equals(id))
 		{
