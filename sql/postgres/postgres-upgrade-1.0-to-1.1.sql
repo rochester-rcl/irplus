@@ -548,6 +548,8 @@ ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping OWNER TO ir_plus
 CREATE SEQUENCE ir_metadata_dublin_core.contributor_type_dc_mapping_seq ;
 ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping_seq OWNER TO ir_plus;
 
+
+-- Create the dublin core identifier type mapping
 CREATE TABLE ir_metadata_dublin_core.identifier_type_dc_mapping
 (
     identifier_type_dc_mapping_id BIGINT PRIMARY KEY,
