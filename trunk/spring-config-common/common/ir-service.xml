@@ -676,6 +676,14 @@
        class="edu.ur.ir.item.metadata.dc.service.DefaultContributorTypeDublinCoreMappingService">
        <property name="contributorTypeDublinCoreMappingDAO" ref="contributorTypeDublinCoreMappingDAO"/>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Identifier type dublin core mapping service -->
+   <!-- ****************************************** --> 
+   <bean id="identifierTypeDublinCoreMappingService" 
+       class="edu.ur.ir.item.metadata.dc.service.DefaultIdentifierTypeDublinCoreMappingService">
+       <property name="identifierTypeDublinCoreMappingDAO" ref="identifierTypeDublinCoreMappingDAO"/>
+   </bean>
 
    <!-- ****************************************** --> 
    <!-- Mappings for name formatters -->

@@ -156,7 +156,9 @@
                 <value>edu/ur/hibernate/ir/handle/db/UniqueHandleName.hbm.xml</value>
                 
                 <value>edu/ur/hibernate/ir/item/metadata/dc/db/ContributorTypeDublinCoreMapping.hbm.xml</value>
-                
+                <value>edu/ur/hibernate/ir/item/metadata/dc/db/IdentifierTypeDublinCoreMapping.hbm.xml</value>
+ 
+                <value>edu/ur/hibernate/metadata/dc/DublinCoreEncodingScheme.hbm.xml</value>
                 <value>edu/ur/hibernate/metadata/dc/DublinCoreTerm.hbm.xml</value>
                 
                 

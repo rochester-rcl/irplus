@@ -285,4 +285,29 @@
             <result name="deleted">/pages/admin/item/metadata/dc/contributor_types/contributor_type_dc_mapping_deleted.jsp</result>
             <result name="get">/pages/admin/item/metadata/dc/contributor_types/contributor_type_dc_mapping_form.jsp</result>
         </action>
+ 
+        <!--  ******************************************************** -->
+        <!--  Identifier type Dublin Core Mapping Actions             -->
+        <!--  ******************************************************** -->
+        <action name="viewIdentifierTypeDublinCoreMappings"
+         class="edu.ur.ir.web.action.item.metadata.dc.ManageIdentifierTypeDublinCoreMapping">
+            <result name="success">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping.jsp</result>
+        </action>
+        
+        <action name="getIdentifierTypeDublinCoreMappings" 
+            class="edu.ur.ir.web.action.item.metadata.dc.ManageIdentifierTypeDublinCoreMapping"
+            method="">
+            <result name="success">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*IdentifierTypeDublinCoreMapping" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.dc.ManageIdentifierTypeDublinCoreMapping">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/dc/identifier_types/identifier_type.jsp</result>
+            <result name="added">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping_form.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping_form.jsp</result>
+        </action>
         
