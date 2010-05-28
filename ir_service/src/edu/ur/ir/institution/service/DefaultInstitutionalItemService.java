@@ -579,4 +579,13 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			DeletedInstitutionalItemService deletedInstitutionalItemService) {
 		this.deletedInstitutionalItemService = deletedInstitutionalItemService;
 	}
+
+	/**
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getInstitutionalItem(java.lang.Long, java.lang.Long)
+	 */
+	public InstitutionalItem getInstitutionalItem(Long collectionId,
+			Long genericItemId) {
+		
+		return institutionalItemDAO.getInstitutionalItem(collectionId, genericItemId);
+	}
 }

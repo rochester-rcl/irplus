@@ -1470,6 +1470,17 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 		
 	}
 	
+	/**
+	 * Remove an accepted license from a user.
+	 * 
+	 * @param license - license to remove
+	 * @return true if the license is removed.
+	 */
+	public boolean removeAcceptedLicense(UserRepositoryLicense license)
+	{
+	    return acceptedLicenses.remove(license);
+	}
+	
     /**
      * Adds a file to the shared file in-box.
      * 

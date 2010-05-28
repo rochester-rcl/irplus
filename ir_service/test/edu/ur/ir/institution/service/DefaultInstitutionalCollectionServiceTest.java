@@ -18,9 +18,11 @@
 package edu.ur.ir.institution.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -33,25 +35,41 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.IrFile;
+import edu.ur.ir.handle.HandleInfo;
+import edu.ur.ir.handle.HandleNameAuthority;
+import edu.ur.ir.handle.HandleService;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
+import edu.ur.ir.repository.License;
+import edu.ur.ir.repository.LicenseService;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.repository.VersionedLicense;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
 import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
+import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
+import edu.ur.ir.user.UserGroupService;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
+import edu.ur.ir.user.UserRepositoryLicense;
 import edu.ur.ir.user.UserService;
 import edu.ur.util.FileUtil;
 
@@ -110,6 +128,25 @@ public class DefaultInstitutionalCollectionServiceTest {
 	/** Item Service */
 	ItemService itemService = (ItemService) ctx
 	.getBean("itemService");
+	
+	/** User data access */
+	UserGroupService userGroupService = (UserGroupService) ctx
+	.getBean("userGroupService");
+	
+	   /** index processing type record service  */
+	IndexProcessingTypeService indexProcessingTypeService = 
+    	(IndexProcessingTypeService) ctx.getBean("indexProcessingTypeService");
+	
+	   /** Institutional Item index processing record service  */
+	InstitutionalItemIndexProcessingRecordService recordProcessingService = 
+    	(InstitutionalItemIndexProcessingRecordService) ctx.getBean("institutionalItemIndexProcessingRecordService");
+	
+	/** Default license service */
+	LicenseService licenseService = (LicenseService) ctx.getBean("licenseService");
+	
+    /** Service for dealing with handles  */
+    HandleService handleService = (HandleService) ctx.getBean("handleService");
+	
 	
 	/**
 	 * Test moving collections to an existing collection
@@ -534,4 +571,375 @@ public class DefaultInstitutionalCollectionServiceTest {
 		tm.commit(ts);	
 
 	}
+	
+	/**
+	 * 
+	 * Use the service to add an item to a collection
+	 * 
+	 * @throws LocationAlreadyExistsException 
+	 * @throws DuplicateNameException 
+	 * @throws CollectionDoesNotAcceptItemsException 
+	 * @throws RepositoryLicenseNotAcceptedException 
+	 * @throws PermissionNotGrantedException 
+	 * @throws UserDeletedPublicationException 
+	 * @throws UserHasPublishedDeleteException 
+	 */
+	public void testAddItemToCollectionWithoutHandleTest() throws LocationAlreadyExistsException, 
+	DuplicateNameException, 
+	PermissionNotGrantedException, 
+	RepositoryLicenseNotAcceptedException, 
+	CollectionDoesNotAcceptItemsException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException
+	{
+
+		// Start the transaction - create the repository
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+
+		// save the repository
+		repo = repositoryService.getRepository(repo.getId(), false);
+		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		
+		UserEmail email = new UserEmail("email");
+		IrUser user = userService.createUser("password", "username", email);
+		
+		institutionalCollectionService.saveCollection(collection);
+		
+		VersionedLicense license = licenseService.createLicense(user, "text", " a license ", "this is a license description");
+	    repo.updateDefaultLicense(user, license.getCurrentVersion());
+	    repositoryService.saveRepository(repo);
+	    
+	    user.addAcceptedLicense(license.getCurrentVersion());
+	    userService.makeUserPersistent(user);
+		
+		IrUserGroup userGroup = new IrUserGroup("directSubmitGroup");
+		userGroup.addUser(user);
+	    userGroupService.save(userGroup);
+	    
+		
+	
+		// set up direct submit permissions
+		IrClassTypePermission directSubmitPermission = 
+			securityService.getPermissionForClass(collection, InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION.getPermission());		
+		List<IrClassTypePermission> permissions = new ArrayList<IrClassTypePermission>();
+		permissions.add(directSubmitPermission);
+		securityService.createPermissions(collection, userGroup, permissions);
+		
+		// create the generic item
+		GenericItem item = new GenericItem("item name");
+		
+		
+		// index processing types
+		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
+		indexProcessingTypeService.save(updateProcessingType);
+		
+		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+		indexProcessingTypeService.save(deleteProcessingType);
+		
+		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
+		indexProcessingTypeService.save(insertProcessingType);
+		tm.commit(ts);
+		
+		
+		
+		ts = tm.getTransaction(td);
+		// create an item user service to add it to collection
+		assert repo.getDefaultLicense() != null;
+		InstitutionalItem institutionalItem = institutionalCollectionService.addItemToCollection(user, item, collection);
+		assert institutionalItem != null : "institutional item should not be null";
+		assert institutionalItem.getInstitutionalCollection().equals(collection) : "institutional item collection should equal " 
+			+ collection + " but equals " + institutionalItem.getInstitutionalCollection();
+		assert institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().getRepositoryLicense().getLicenseVersion().equals(repo.getDefaultLicense().getVersionedLicense().getCurrentVersion()) : 
+			"License should equal " + repo.getDefaultLicense().getVersionedLicense().getCurrentVersion() + " but equals " + institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().getRepositoryLicense().getLicenseVersion();
+		
+		tm.commit(ts);
+		
+		ts = tm.getTransaction(td);
+
+		   /** Institutional Item index processing record service  */
+		List<InstitutionalItemIndexProcessingRecord> processingRecords = recordProcessingService.getAll();
+		for(InstitutionalItemIndexProcessingRecord pr : processingRecords )
+		{
+			recordProcessingService.delete(pr);
+		}
+		
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+		
+		
+		securityService.deletePermissions(collection.getId(), collection.getClass().getName(), userGroup);
+        institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
+        deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
+        userGroupService.delete(userGroupService.get(userGroup.getId(), false));
+        helper.cleanUpRepository();
+        IrUser deleteUser = userService.getUser(user.getId(), false);
+        
+        Set<UserRepositoryLicense> licenses = deleteUser.getAcceptedLicenses();
+        for(UserRepositoryLicense url : licenses)
+        {
+        	deleteUser.removeAcceptedLicense(url);
+        }
+        userService.makeUserPersistent(deleteUser);
+ 		tm.commit(ts);
+
+ 		ts = tm.getTransaction(td);
+        licenseService.delete(licenseService.get(license.getId(), false));
+ 		deleteUser = userService.getUser(user.getId(), false);
+ 		userService.deleteUser(deleteUser, deleteUser);
+ 		tm.commit(ts);
+ 		
+	}
+	
+	/**
+	 * 
+	 * Use the service to add an item to a collection
+	 * 
+	 * @throws LocationAlreadyExistsException 
+	 * @throws DuplicateNameException 
+	 * @throws CollectionDoesNotAcceptItemsException 
+	 * @throws RepositoryLicenseNotAcceptedException 
+	 * @throws PermissionNotGrantedException 
+	 * @throws UserDeletedPublicationException 
+	 * @throws UserHasPublishedDeleteException 
+	 */
+	public void testAddItemToCollectionWithHandleTest() throws LocationAlreadyExistsException, 
+	DuplicateNameException, 
+	PermissionNotGrantedException, 
+	RepositoryLicenseNotAcceptedException, 
+	CollectionDoesNotAcceptItemsException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException
+	{
+
+		// Start the transaction - create the repository
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		
+
+		HandleNameAuthority authority = new HandleNameAuthority("1802");
+		
+
+		// save the repository
+		repo = repositoryService.getRepository(repo.getId(), false);
+		repo.setDefaultHandleNameAuthority(authority);
+		
+		repositoryService.saveRepository(repo);
+		
+		
+		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		
+		UserEmail email = new UserEmail("email");
+		IrUser user = userService.createUser("password", "username", email);
+		
+		institutionalCollectionService.saveCollection(collection);
+	    
+		IrUserGroup userGroup = new IrUserGroup("directSubmitGroup");
+		userGroup.addUser(user);
+	    userGroupService.save(userGroup);
+	    
+		
+	
+		// set up direct submit permissions
+		IrClassTypePermission directSubmitPermission = 
+			securityService.getPermissionForClass(collection, InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION.getPermission());		
+		List<IrClassTypePermission> permissions = new ArrayList<IrClassTypePermission>();
+		permissions.add(directSubmitPermission);
+		securityService.createPermissions(collection, userGroup, permissions);
+		
+		// create the generic item
+		GenericItem item = new GenericItem("item name");
+		
+		
+		// index processing types
+		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
+		indexProcessingTypeService.save(updateProcessingType);
+		
+		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+		indexProcessingTypeService.save(deleteProcessingType);
+		
+		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
+		indexProcessingTypeService.save(insertProcessingType);
+		tm.commit(ts);
+		
+		
+		
+		ts = tm.getTransaction(td);
+		// create an item user service to add it to collection
+		
+		InstitutionalItem institutionalItem = institutionalCollectionService.addItemToCollection(user, item, collection);
+		assert institutionalItem != null : "institutional item should not be null";
+		assert institutionalItem.getInstitutionalCollection().equals(collection) : "institutional item collection should equal " 
+			+ collection + " but equals " + institutionalItem.getInstitutionalCollection();
+		tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+
+		HandleInfo handleInfo = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().getHandleInfo();
+		assert handleInfo != null : "Should have a handle info object";
+		assert handleInfo.getNameAuthority().equals(authority) : "Info authority should equal " + authority + " but equals " + handleInfo.getNameAuthority();
+
+		
+		   /** Institutional Item index processing record service  */
+		List<InstitutionalItemIndexProcessingRecord> processingRecords = recordProcessingService.getAll();
+		for(InstitutionalItemIndexProcessingRecord pr : processingRecords )
+		{
+			recordProcessingService.delete(pr);
+		}
+		
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+		
+		
+		securityService.deletePermissions(collection.getId(), collection.getClass().getName(), userGroup);
+        institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
+        deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
+        IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);	
+        userGroupService.delete(userGroupService.get(userGroup.getId(), false));
+        helper.cleanUpRepository();
+        tm.commit(ts);
+        
+        ts = tm.getTransaction(td);
+		handleService.delete(handleService.getHandleInfo(handleInfo.getId(), false));
+		handleService.delete(handleService.getNameAuthority(authority.getId(), false));
+		tm.commit(ts);
+
+	}
+	
+	/**
+	 * 
+	 * Use the service to add an item to a collection
+	 * 
+	 * @throws LocationAlreadyExistsException 
+	 * @throws DuplicateNameException 
+	 * @throws CollectionDoesNotAcceptItemsException 
+	 * @throws RepositoryLicenseNotAcceptedException 
+	 * @throws PermissionNotGrantedException 
+	 * @throws UserDeletedPublicationException 
+	 * @throws UserHasPublishedDeleteException 
+	 */
+	public void testAddItemToCollectionWithNoPermissions() throws LocationAlreadyExistsException, 
+	DuplicateNameException, 
+	RepositoryLicenseNotAcceptedException, 
+	CollectionDoesNotAcceptItemsException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException
+	{
+
+		// Start the transaction - create the repository
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		
+		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		
+		UserEmail email = new UserEmail("email");
+		IrUser user = userService.createUser("password", "username", email);
+		
+		institutionalCollectionService.saveCollection(collection);
+	    tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+		// create an item user service to add it to collection
+		
+		InstitutionalItem institutionalItem = null;
+		try {
+			// create the generic item
+			GenericItem item = new GenericItem("item name");
+			institutionalItem = institutionalCollectionService.addItemToCollection(user, item, collection);
+			assert false : "this should fail with permission granted exception ";
+		} catch (PermissionNotGrantedException e) {
+		   // swallow error
+		}
+		assert institutionalItem == null : "institutional item should be null";
+		
+		tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+        institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
+        deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
+        IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);	
+        helper.cleanUpRepository();
+        tm.commit(ts);
+	}
+	
+	/**
+	 * 
+	 * Use the service to add an item to a collection when the repository has a license the
+	 * user must accept
+	 * 
+	 * @throws LocationAlreadyExistsException 
+	 * @throws DuplicateNameException 
+	 * @throws CollectionDoesNotAcceptItemsException 
+	 * @throws RepositoryLicenseNotAcceptedException 
+	 * @throws PermissionNotGrantedException 
+	 * @throws UserDeletedPublicationException 
+	 * @throws UserHasPublishedDeleteException 
+	 */
+	public void testAddItemToCollectionWithLicense() throws LocationAlreadyExistsException, 
+	DuplicateNameException, 
+	CollectionDoesNotAcceptItemsException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException, 
+	PermissionNotGrantedException
+	{
+
+		// Start the transaction - create the repository
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		
+		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		
+		UserEmail email = new UserEmail("email");
+		IrUser user = userService.createUser("password", "username", email);
+		
+		institutionalCollectionService.saveCollection(collection);
+	    
+	
+		VersionedLicense license = licenseService.createLicense(user, "text", " a license ", "this is a license description");
+	    repo.updateDefaultLicense(user, license.getCurrentVersion());
+	    repositoryService.saveRepository(repo);
+
+		// create the generic item
+		GenericItem item = new GenericItem("item name");
+		tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+		// create an item user service to add it to collection
+
+	    InstitutionalItem institutionalItem = null;
+		try {
+			institutionalItem = institutionalCollectionService.addItemToCollection(user, item, collection);
+			assert false : "Should not make it here";
+		} catch (RepositoryLicenseNotAcceptedException e) {
+			//swallow error
+		}
+		assert institutionalItem == null : "institutional item should be null";
+		
+		tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+
+        institutionalCollectionService.deleteCollection(institutionalCollectionService.getCollection(collection.getId(),false), user);
+        IrUser deleteUser = userService.getUser(user.getId(), false);
+        helper.cleanUpRepository();
+        licenseService.delete(licenseService.get(license.getId(), false));
+        userService.deleteUser(deleteUser, deleteUser);	
+        tm.commit(ts);
+	}
+	
+	
+	
 }

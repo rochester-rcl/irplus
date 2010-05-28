@@ -16,15 +16,11 @@
 
 package edu.ur.hibernate.ir.handle.db;
 
-import java.util.List;
+import java.math.BigInteger;
 
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.handle.UniqueHandleNameGenerator;
 
 /**
@@ -35,8 +31,11 @@ import edu.ur.ir.handle.UniqueHandleNameGenerator;
  */
 public class HbUniqueHandleNameDAO implements UniqueHandleNameGenerator {
 	
+    /** eclipse generated id */
+	private static final long serialVersionUID = -4898778212292620797L;
+	
+    /** spring session factory */
     SessionFactory sessionFactory;
-    HibernateTemplate hibernateTemplate;
 	
 	/**
 	 * Set the session factory.  
@@ -46,28 +45,17 @@ public class HbUniqueHandleNameDAO implements UniqueHandleNameGenerator {
 	public void setSessionFactory(SessionFactory sessionFactory)
     {
        this.sessionFactory = sessionFactory;
-       this.hibernateTemplate = new HibernateTemplate(sessionFactory);
     }
-	
-
     
     /**
      * Gets the next unique handle name
      * 
      * @see edu.ur.ir.handle.UniqueHandleNameGenerator#nextName()
      */
-    @SuppressWarnings("unchecked")
-	public String nextName() {
-		List value = (List)hibernateTemplate.executeFind(new HibernateCallback() {
-			public Object doInHibernate(Session session) {
-				Query query = session.getNamedQuery("getUniqueHandleName");
-				return query.list();
-			}
-		});
-		
-		Object name = HbHelper.getUnique(value);
-		
-		return name.toString();
+	public String nextName() 
+    {
+	    Query query = sessionFactory.getCurrentSession().getNamedQuery("getUniqueHandleName");
+		return ((BigInteger)query.uniqueResult()).toString();
 	}
 
 }

@@ -28,12 +28,16 @@ import org.springframework.util.StringUtils;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
+import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.ReviewableItem;
 import edu.ur.ir.institution.ReviewableItemDAO;
 import edu.ur.ir.institution.ReviewableItemService;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -69,6 +73,10 @@ public class DefaultReviewableItemService implements ReviewableItemService {
 	/** Service to save institutional item */
 	private InstitutionalItemService institutionalItemService;
 	
+	/** service to deal with institutional collection information */
+	private InstitutionalCollectionService institutionalCollectionService;
+	
+
 	/**
 	 * Get all items pending for review for specified user
 	 * 
@@ -252,4 +260,48 @@ public class DefaultReviewableItemService implements ReviewableItemService {
 			reviewableItemDAO.makeTransient(i);
 		}
 	}
+	
+	/**
+	 * Add the reviewable item to the specified collection.
+	 * 
+	 * @throws CollectionDoesNotAcceptItemsException 
+	 * @throws RepositoryLicenseNotAcceptedException 
+	 * @throws PermissionNotGrantedException 
+	 * @see edu.ur.ir.institution.InstitutionalCollectionService#addReviewableItemToCollection(edu.ur.ir.user.IrUser, edu.ur.ir.item.GenericItem, edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public ReviewableItem addReviewableItemToCollection(IrUser user,
+			GenericItem item, InstitutionalCollection institutionalCollection) throws CollectionDoesNotAcceptItemsException, RepositoryLicenseNotAcceptedException, PermissionNotGrantedException {
+		ReviewableItem reviewableItem = null;
+		if( !institutionalCollectionService.isItemPublishedToCollection(institutionalCollection.getId(), item.getId()))
+		{   
+		    if(institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.REVIEW_SUBMIT_PERMISSION))
+		    { 
+		    	// set the default license if one exists for the repository
+                Repository repository = institutionalCollection.getRepository();
+                if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+    			{
+    				throw new RepositoryLicenseNotAcceptedException(user, repository);
+    			}
+			    reviewableItem = institutionalCollection.addReviewableItem(item);
+			    
+			    saveReviewableItem(reviewableItem);
+			    institutionalCollectionService.sendEmailToReviewer(institutionalCollection, item.getName());
+		    }
+		    else
+		    {
+		    	throw new PermissionNotGrantedException(InstitutionalCollectionSecurityService.REVIEW_SUBMIT_PERMISSION.getPermission());
+		    }
+	    }
+		return reviewableItem;
+	}
+	
+	public InstitutionalCollectionService getInstitutionalCollectionService() {
+		return institutionalCollectionService;
+	}
+
+	public void setInstitutionalCollectionService(
+			InstitutionalCollectionService institutionalCollectionService) {
+		this.institutionalCollectionService = institutionalCollectionService;
+	}
+
 }

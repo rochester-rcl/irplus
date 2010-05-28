@@ -19,7 +19,10 @@ package edu.ur.ir.institution;
 import java.io.Serializable;
 import java.util.List;
 
+import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -244,4 +247,21 @@ public interface InstitutionalCollectionService extends Serializable{
 	 * @return all institutional collections in the system
 	 */
 	public List<InstitutionalCollection> getAll();
+	
+	/**
+	 * Creates an institutional item for the given collection.
+	 * 
+	 * @param user - user adding the item
+	 * @param item - item to add
+	 * @param institutionalCollection - collection to add the item to.
+	 * 
+	 * @return institutional item created
+	 * 
+	 * @throws PermissionNotGrantedException - the user does not have permission to add the item to the collection
+	 * @throws RepositoryLicenseNotAcceptedException - the user has not accepted the repostiory license
+	 * @throws CollectionDoesNotAcceptItemsException 
+	 */
+	public InstitutionalItem addItemToCollection(IrUser user, GenericItem item, InstitutionalCollection institutionalCollection) 
+	    throws PermissionNotGrantedException, RepositoryLicenseNotAcceptedException, CollectionDoesNotAcceptItemsException;
+	
 }

@@ -78,8 +78,8 @@
 	    join institutionalItem.versionedInstitutionalItem as versionedItem
 	    join versionedItem.institutionalItemVersions as version
 	    join version.item as item
-	    where institutionalItem.institutionalCollection.id = ? 
-	    and item.id = ? 
+	    where institutionalItem.institutionalCollection.id = :collectionId 
+	    and item.id = :itemId 
 
 	</query>
 	

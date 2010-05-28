@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -93,4 +95,21 @@ public interface ReviewableItemService extends Serializable{
 	 * 
 	 */
 	public void deleteReviewHistoryForItem(GenericItem item);
+	
+	/**
+	 * Add a reviewable item to the collection.
+	 * 
+	 * @param user - user who is adding the item
+	 * @param item - generic item to add
+	 * @param institutionalCollection - institutional collection to add the item to
+	 * 
+	 * @return created reviewable item
+	 * 
+	 * @throws PermissionNotGrantedException - the user does not have permission to add the item to the collection
+	 * @throws RepositoryLicenseNotAcceptedException - the user has not accepted the repostiory license
+	 * @throws CollectionDoesNotAcceptItemsException 
+	 */
+	public ReviewableItem addReviewableItemToCollection(IrUser user, GenericItem item, InstitutionalCollection institutionalCollection)  throws PermissionNotGrantedException, 
+	RepositoryLicenseNotAcceptedException, 
+	CollectionDoesNotAcceptItemsException;
 }

@@ -41,7 +41,17 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	 * 
 	 * @return True if item is published to the collection else false
 	 */
-	public boolean isItemPublishedToCollection(Long institutionalCollectionId, Long itemVersionId);    
+	public boolean isItemPublishedToCollection(Long institutionalCollectionId, Long itemVersionId);  
+	
+	/**
+	 * Get an institutional item by collection id and generic item id.
+	 * 
+	 * @param collectionId - id of the collection 
+	 * @param genericItemId - the generic item id.
+	 * 
+	 * @return the institutional item
+	 */
+	public InstitutionalItem getInstitutionalItem(Long collectionId, Long genericItemId);
 
 	/**
 	 * Get a list of items that have the specified ids.

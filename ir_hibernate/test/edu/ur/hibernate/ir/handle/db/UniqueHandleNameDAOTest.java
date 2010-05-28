@@ -19,6 +19,7 @@ package edu.ur.hibernate.ir.handle.db;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
@@ -56,10 +57,12 @@ public class UniqueHandleNameDAOTest
 	 */
 	public void baseHandleNameAuthorityDAOTest() throws Exception
 	{
+		TransactionStatus ts = tm.getTransaction(td);
 		String handleName1 = uniqueHandleNameGenerator.nextName();
 		String handleName2 = uniqueHandleNameGenerator.nextName();
 		assert !handleName1.equals(handleName2) : "Handle names should not be the same handleName 1 = " 
 			+ handleName1 + " handleName2= " + handleName2;
+		tm.commit(ts);
 	}
 
 }
