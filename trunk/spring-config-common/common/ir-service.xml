@@ -224,6 +224,10 @@
        <property name="institutionalItemDAO" ref="institutionalItemDAO"/>
        <property name="mailSender" ref="mailSender"/>
        <property name="itemReviewMessage" ref="itemReviewMessage"/>
+       <property name="uniqueHandleNameGenerator" ref="uniqueHandleNameGenerator"/>
+       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+       <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
    </bean>
    
    <bean id="institutionalCollectionSecurityService" 
@@ -547,6 +551,7 @@
 	   <property name="itemRejectedMessage" ref="itemRejectedMessage"/>
 	   <property name="itemAcceptedMessage" ref="itemAcceptedMessage"/>
 	   <property name="institutionalItemService" ref="institutionalItemService"/>
+	   <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
    </bean>
    
    <!-- ****************************************** --> 

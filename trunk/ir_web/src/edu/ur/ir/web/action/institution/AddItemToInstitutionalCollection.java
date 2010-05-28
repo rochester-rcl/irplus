@@ -27,31 +27,26 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.NoIndexFoundException;
-import edu.ur.ir.index.IndexProcessingType;
-import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
-import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
-import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.ReviewableItem;
 import edu.ur.ir.institution.ReviewableItemService;
-import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
-import edu.ur.ir.handle.HandleInfo;
-import edu.ur.ir.handle.HandleNameAuthority;
-import edu.ur.ir.handle.UniqueHandleNameGenerator;
+
 
 /**
  * Action to submit items to institutional collection
@@ -85,7 +80,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	private Long parentCollectionId;
 	
 	/** The parent institutional collection id */
-	private Long parentInstitutionalCollectionId = new Long(0);
+	private Long parentInstitutionalCollectionId = Long.valueOf(0l);
 	
 	/** Institutional Collection service */
 	private InstitutionalCollectionService institutionalCollectionService;
@@ -114,20 +109,8 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	/** Service for dealing with item . */
 	private ItemService itemService;
 	
-	/** service for marking items that need to be indexed */
-	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
-
-	/** index processing type service */
-	private IndexProcessingTypeService indexProcessingTypeService;
-	
 	/** Institutional item service */
 	private InstitutionalItemService institutionalItemService;
-	
-	/** generates unique handle names */
-	private UniqueHandleNameGenerator uniqueHandleNameGenerator;
-	
-	/** url generator for institutional items. */
-	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
 	
 	/** Institutional items created during the submission */
 	private List<InstitutionalItem> institutionalItems = new LinkedList<InstitutionalItem>(); 
@@ -359,11 +342,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	 */
 	public String submitPublication() throws NoIndexFoundException, CollectionDoesNotAcceptItemsException {
 
-		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-		
 		item = itemService.getGenericItem(genericItemId, false);
-
-		
 		IrUser user = null;
 		if( userId != null )
 		{
@@ -383,7 +362,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		List<Long> collectionIds = getSelectedCollectionIdList();
 		List<InstitutionalCollection> privateCollections = new LinkedList<InstitutionalCollection>();
 
-		boolean publicCollectionExist = false;
+		boolean publicCollectionExists = false;
 		boolean isItemPublished = item.isPublishedToSystem();
 		
 		Collection<InstitutionalCollection> collections = institutionalCollectionService.getCollections(collectionIds);
@@ -393,113 +372,79 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		{
 			return SUCCESS;
 		}
-		else
+		
+		// get the private collections and dtermine if a publicly viewable
+		// collection exists
+		for(InstitutionalCollection institutionalCollection : collections)
 		{
-			//user should have never made it this far but just in case
-			//make the user accept the license if the user does not have
-			//the most current license.
-			if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+	        if (institutionalCollection.isPubliclyViewable()) 
+			{
+			    publicCollectionExists = true;
+			} 
+			else 
+			{
+			    privateCollections.add(institutionalCollection);
+			}
+		}
+		
+		// make the item public if there is one public collection and the item
+		// has never been published before
+		boolean setPermissions = !isItemPublished;
+		boolean makePublic = publicCollectionExists;
+		
+		// add the items
+		for(InstitutionalCollection institutionalCollection: collections) 
+		{
+			try 
+			{
+			    if( institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION))
+			    {
+			    	institutionalItems.add(institutionalCollectionService.addItemToCollection(user, item, institutionalCollection));
+			    }
+			    else if(institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.REVIEW_SUBMIT_PERMISSION))
+			    {
+			    	ReviewableItem reviewableItem = reviewableItemService.addReviewableItemToCollection(user, item, institutionalCollection);
+			    	if( reviewableItem != null )
+			    	{
+			    	    reviewableItems.add(reviewableItem);
+			    	}
+			    }
+			    else
+			    {
+			    	return "accessDenied";
+			    }
+			} 
+			catch (PermissionNotGrantedException e) 
+			{
+				return "accessDenied";
+			} 
+			catch (RepositoryLicenseNotAcceptedException e) 
 			{
 				return "acceptLicense";
 			}
 		}
-
 		
-		for(InstitutionalCollection institutionalCollection: collections) {
-			if( !institutionalCollectionService.isItemPublishedToCollection(institutionalCollection.getId(), item.getId()))
-			{   
-				log.debug("Institutional Collection Id: "+ institutionalCollection.getId());
-			
-			    InstitutionalItem institutionalItem = null;
-			    if( institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION))
-			    {
-                    institutionalItem = new InstitutionalItem(institutionalCollection, item);
-                   
-				    if (institutionalCollection.isPubliclyViewable()) 
-				    {
-					    publicCollectionExist = true;
-				    } 
-				    else 
-				    {
-					    privateCollections.add(institutionalCollection);
-				    }
-				
-				    // make the files public if this is the first submit
-				    // and the item going into at least one public collection
-				    if(publicCollectionExist && !isItemPublished )
-				    {
-					    for(ItemFile file:item.getItemFiles()) 
-					    {
-						    file.setPublic(true);
-					    }
-					    item.setPubliclyViewable(true);
-				    }
-				
-				    // set the default license if one exists for the repository
-				    if( repository.getDefaultLicense() != null)
-				    {
-				        institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().addRepositoryLicense(repository.getDefaultLicense(), user);
-				    }
-				    // generates the id and persists the item.
-                    institutionalItemService.saveInstitutionalItem(institutionalItem);
-                    
-				    // add a handle if the handle service is available
-				    HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
-				    log.debug("handle name authority = " + handleNameAuthority);
-				    if( handleNameAuthority != null)
-				    {
-					    this.addHandleInfo(handleNameAuthority, institutionalItem);
-				    }
-				    
-				    // save the item 
-				    institutionalItemService.saveInstitutionalItem(institutionalItem);
-				    institutionalItems.add(institutionalItem);
-				    
-				    // only index if the item was added directly to the collection
-				    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-				    institutionalItemIndexProcessingRecordService.save(item.getId(), processingType);
- 			    }
-			
-			    else if(institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.REVIEW_SUBMIT_PERMISSION))
-			    { 
-				    ReviewableItem reviewableItem = institutionalCollection.addReviewableItem(item);
-				    reviewableItems.add(reviewableItem);
-				    reviewableItemService.saveReviewableItem(reviewableItem);
-				    institutionalCollectionService.sendEmailToReviewer(institutionalCollection, item.getName());
-			    }
-			    else
-			    {
-				    return "accessDenied";
-			    }
-			
-		    }
-			/*
-			 * Assign group permission only when the item is being submitted for the first time and
-			 * If one of the collection(s) are private collection
-			 */
-			if (!publicCollectionExist && !isItemPublished && privateCollections.size() > 0) {
-				institutionalItemService.setItemPrivatePermissions(item, privateCollections);
+		/*
+		 * Assign group permission only when the item is being submitted for the first time 
+		 */
+		if (setPermissions) 
+		{
+			if( makePublic )
+			{
+				 for(ItemFile file:item.getItemFiles()) 
+				 {
+				     file.setPublic(true);
+				 }
+				 item.setPubliclyViewable(true);
+			}
+			else
+			{
+				 institutionalItemService.setItemPrivatePermissions(item, privateCollections);
 			}
 		}
-		
-		
-
 		return SUCCESS;
 	}
-	
 
-	
-	private void addHandleInfo(HandleNameAuthority handleNameAuthority, InstitutionalItem institutionalItem)
-	{
-		String nextHandleName = uniqueHandleNameGenerator.nextName();
-	    InstitutionalItemVersion itemVersion = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
-		
-		String url = institutionalItemVersionUrlGenerator.createUrl(institutionalItem, itemVersion.getVersionNumber());
-		log.debug(" url = " + url);
-		HandleInfo info = new HandleInfo(nextHandleName, url, handleNameAuthority);
-		log.debug( " info = " + info);
-	    itemVersion.setHandleInfo(info);
-	}
 	
 	/**
 	 * Removes the institutional collection from the selected collections list
@@ -771,42 +716,6 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 		this.parentInstitutionalCollectionId = parentInstitutionalCollectionId;
 	}
 	
-	public UniqueHandleNameGenerator getUniqueHandleNameGenerator() {
-		return uniqueHandleNameGenerator;
-	}
-
-	public void setUniqueHandleNameGenerator(
-			UniqueHandleNameGenerator uniqueHandleNameGenerator) {
-		this.uniqueHandleNameGenerator = uniqueHandleNameGenerator;
-	}
-	
-	public InstitutionalItemVersionUrlGenerator getInstitutionalItemVersionUrlGenerator() {
-		return institutionalItemVersionUrlGenerator;
-	}
-
-	public void setInstitutionalItemVersionUrlGenerator(
-			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
-		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
-	}
-
-	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
-		return institutionalItemIndexProcessingRecordService;
-	}
-
-	public void setInstitutionalItemIndexProcessingRecordService(
-			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
-		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
-	}
-
-	public IndexProcessingTypeService getIndexProcessingTypeService() {
-		return indexProcessingTypeService;
-	}
-
-	public void setIndexProcessingTypeService(
-			IndexProcessingTypeService indexProcessingTypeService) {
-		this.indexProcessingTypeService = indexProcessingTypeService;
-	}
-
 	public List<InstitutionalItem> getInstitutionalItems() {
 		return institutionalItems;
 	}

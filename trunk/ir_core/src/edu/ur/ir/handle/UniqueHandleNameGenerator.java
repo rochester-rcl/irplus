@@ -1,5 +1,7 @@
 package edu.ur.ir.handle;
 
+import java.io.Serializable;
+
 /**
  * This interface is guaranteed to return the next unique handle 
  * value so long as it is the only object used to return
@@ -8,7 +10,7 @@ package edu.ur.ir.handle;
  * @author Nathan Sarr
  *
  */
-public interface UniqueHandleNameGenerator {
+public interface UniqueHandleNameGenerator extends Serializable{
 	
 	/**
 	 * Gets the next unique handle name.

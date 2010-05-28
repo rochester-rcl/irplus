@@ -34,6 +34,7 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
@@ -250,11 +251,11 @@ public class DefaultSecurityServiceTest {
 		
 		
 		IrClassTypePermission viewPermission = 
-			securityService.getPermissionForClass(myCollection, "VIEW");
+			securityService.getPermissionForClass(myCollection, InstitutionalCollectionSecurityService.VIEW_PERMISSION.getPermission());
 		assert viewPermission != null : "View permission is null for collection " + myCollection;
 
 		IrClassTypePermission adminPermission = 
-			securityService.getPermissionForClass(myCollection, "ADMINISTRATION");
+			securityService.getPermissionForClass(myCollection, InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION.getPermission());
 		
 		assert adminPermission != null : "Administration permission is null";
 		
@@ -284,8 +285,8 @@ public class DefaultSecurityServiceTest {
 		
 		
 		assert aEntry.getPermissions().size() == 2 : "Should be equal to 2";
-		assert aEntry.getPermissions().contains("VIEW") : "Should be view";
-		assert aEntry.getPermissions().contains("ADMINISTRATION") : "Should be admin";
+		assert aEntry.getPermissions().contains(InstitutionalCollectionSecurityService.VIEW_PERMISSION.getPermission()) : "Should be view";
+		assert aEntry.getPermissions().contains(InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION.getPermission()) : "Should be admin";
 	
 		tm.commit(ts);
 

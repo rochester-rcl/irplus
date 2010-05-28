@@ -121,16 +121,30 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	 */
 	public boolean isItemPublishedToCollection(Long institutionalCollectionId, Long genericItemId)
 	{
-		boolean isItemPublishedToCollection = false;
-		Object[] values = new Object[] {institutionalCollectionId, genericItemId};
-		InstitutionalItem item = (InstitutionalItem) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("isItemPublishedToThisCollection", 
-				values));
-		
-		if (item != null) {
-			isItemPublishedToCollection = true;
+		if (getInstitutionalItem(institutionalCollectionId, genericItemId) != null) 
+		{
+			return true;
 		}
-		
-		return isItemPublishedToCollection;
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Get an institutional item by collection id and generic item id.
+	 * 
+	 * @param collectionId - id of the collection 
+	 * @param genericItemId - the generic item id.
+	 * 
+	 * @return the institutional item
+	 */
+	public InstitutionalItem getInstitutionalItem(Long collectionId, Long genericItemId)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("isItemPublishedToThisCollection");
+		q.setParameter("collectionId",  collectionId);
+		q.setParameter("itemId", genericItemId);
+		return (InstitutionalItem)q.uniqueResult();
 	}
 	
 	/**

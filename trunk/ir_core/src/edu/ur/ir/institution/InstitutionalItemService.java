@@ -356,4 +356,14 @@ public interface InstitutionalItemService extends Serializable{
 	 */
 	public void markAllInstitutionalItemsForIndexing(Long genericItemId, IndexProcessingType processingType);
 	
+	/**
+	 * Get an institutional item by collection id and generic item id.
+	 * 
+	 * @param collectionId - id of the collection 
+	 * @param genericItemId - the generic item id.
+	 * 
+	 * @return the institutional item
+	 */
+	public InstitutionalItem getInstitutionalItem(Long collectionId, Long genericItemId);
+	
 }

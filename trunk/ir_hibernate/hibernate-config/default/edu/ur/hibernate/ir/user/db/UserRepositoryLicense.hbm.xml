@@ -46,11 +46,11 @@
 		<!--  license version for the repository-->
 		<many-to-one class="edu.ur.ir.repository.LicenseVersion" 
 			name="licenseVersion" column="license_version_id" insert="true"
-			update="true" unique="true" access="field"/>			
+			update="true" not-null="true" unique="true" access="field"/>			
 						
 		<!--  user who owns the license-->
 		<many-to-one class="IrUser" 
-			name="user" column="user_id" insert="true"
+			name="user" column="user_id" insert="true" not-null="true"
 			update="true" unique="true" access="field"/>			
 	</class>
 

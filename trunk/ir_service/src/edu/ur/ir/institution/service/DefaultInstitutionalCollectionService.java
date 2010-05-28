@@ -27,6 +27,11 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.handle.HandleInfo;
+import edu.ur.ir.handle.HandleNameAuthority;
+import edu.ur.ir.handle.UniqueHandleNameGenerator;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionDAO;
@@ -34,12 +39,15 @@ import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemDAO;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.Sid;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserGroup;
@@ -80,6 +88,18 @@ public class DefaultInstitutionalCollectionService implements
 	
 	/** Service to send email */
 	private MailSender mailSender;
+	
+	/** generates unique handle names */
+	private UniqueHandleNameGenerator uniqueHandleNameGenerator;
+
+	/** url generator for institutional items. */
+	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
+	
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 	
 	/**
 	 * Delete an institutional collection and all related information within it.
@@ -559,5 +579,126 @@ public class DefaultInstitutionalCollectionService implements
 		return (List<InstitutionalCollection>)institutionalCollectionDAO.getAll();
 	}
 
+
+	/**
+	 * Creates an institutional item for the given collection.
+	 * 
+	 * @param user - user adding the item
+	 * @param item - item to add
+	 * @param institutionalCollection - collection to add the item to.
+	 * 
+	 * @return institutional item created
+	 * 
+	 * @throws PermissionNotGrantedException - the user does not have permission to add the item to the collection
+	 * @throws RepositoryLicenseNotAcceptedException - the user has not accepted the repostiory license
+	 * @throws CollectionDoesNotAcceptItemsException 
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalCollectionService#addItemToCollection(edu.ur.ir.user.IrUser, edu.ur.ir.item.GenericItem, edu.ur.ir.institution.InstitutionalCollection)
+	 */
+	public InstitutionalItem addItemToCollection(IrUser user,
+			GenericItem item,
+			InstitutionalCollection institutionalCollection)
+			throws PermissionNotGrantedException, RepositoryLicenseNotAcceptedException, CollectionDoesNotAcceptItemsException {
+		log.debug("Institutional Collection Id: "+ institutionalCollection.getId());
+		InstitutionalItem institutionalItem = institutionalItemService.getInstitutionalItem(institutionalCollection.getId(), item.getId());
+		if(institutionalItem == null)
+		{   
+   		
+			Repository repository = institutionalCollection.getRepository();
+			if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+			{
+				throw new RepositoryLicenseNotAcceptedException(user, repository);
+			}
+		    if( institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION))
+		    {
+                institutionalItem = new InstitutionalItem(institutionalCollection, item);
+  		        // set the default license if one exists for the repository
+               
+                if( repository.getDefaultLicense() != null)
+			    {
+			        institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().addRepositoryLicense(repository.getDefaultLicense(), user);
+			    }
+			    // generates the id and persists the item.
+                institutionalItemService.saveInstitutionalItem(institutionalItem);
+                
+			    // add a handle if the handle service is available
+			    HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
+			    log.debug("handle name authority = " + handleNameAuthority);
+			    if( handleNameAuthority != null)
+			    {
+				    this.addHandleInfo(handleNameAuthority, institutionalItem);
+			    }
+			    
+			    // save the item 
+			    institutionalItemService.saveInstitutionalItem(institutionalItem);
+			    
+			    // only index if the item was added directly to the collection
+			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+			    institutionalItemIndexProcessingRecordService.save(item.getId(), processingType);
+			}
+		    else
+		    {
+		    	throw new PermissionNotGrantedException(InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION.getPermission());
+		    }
+	    }
+		return institutionalItem;
+	}
 	
+	/**
+	 * Add handle information to the item.
+	 * 
+	 * @param handleNameAuthority
+	 * @param institutionalItem
+	 */
+	private void addHandleInfo(HandleNameAuthority handleNameAuthority, InstitutionalItem institutionalItem)
+	{
+		String nextHandleName = uniqueHandleNameGenerator.nextName();
+	    InstitutionalItemVersion itemVersion = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
+		
+		String url = institutionalItemVersionUrlGenerator.createUrl(institutionalItem, itemVersion.getVersionNumber());
+		log.debug(" url = " + url);
+		HandleInfo info = new HandleInfo(nextHandleName, url, handleNameAuthority);
+		log.debug( " info = " + info);
+	    itemVersion.setHandleInfo(info);
+	}
+
+	public UniqueHandleNameGenerator getUniqueHandleNameGenerator() {
+		return uniqueHandleNameGenerator;
+	}
+
+	public void setUniqueHandleNameGenerator(
+			UniqueHandleNameGenerator uniqueHandleNameGenerator) {
+		this.uniqueHandleNameGenerator = uniqueHandleNameGenerator;
+	}
+
+	public InstitutionalItemVersionUrlGenerator getInstitutionalItemVersionUrlGenerator() {
+		return institutionalItemVersionUrlGenerator;
+	}
+
+	public void setInstitutionalItemVersionUrlGenerator(
+			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
+	}
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	public InstitutionalItemService getInstitutionalItemService() {
+		return institutionalItemService;
+	}
 }
