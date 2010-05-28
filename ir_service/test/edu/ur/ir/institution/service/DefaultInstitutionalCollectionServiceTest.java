@@ -763,25 +763,24 @@ public class DefaultInstitutionalCollectionServiceTest {
 		
 		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
 		indexProcessingTypeService.save(insertProcessingType);
+		InstitutionalItem institutionalItem = institutionalCollectionService.addItemToCollection(user, item, collection);
+
 		tm.commit(ts);
 		
 		
 		
 		ts = tm.getTransaction(td);
 		// create an item user service to add it to collection
-		
-		InstitutionalItem institutionalItem = institutionalCollectionService.addItemToCollection(user, item, collection);
+		institutionalItem = institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false);
 		assert institutionalItem != null : "institutional item should not be null";
 		assert institutionalItem.getInstitutionalCollection().equals(collection) : "institutional item collection should equal " 
 			+ collection + " but equals " + institutionalItem.getInstitutionalCollection();
-		tm.commit(ts);
-		
-		
-		ts = tm.getTransaction(td);
 
 		HandleInfo handleInfo = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion().getHandleInfo();
 		assert handleInfo != null : "Should have a handle info object";
 		assert handleInfo.getNameAuthority().equals(authority) : "Info authority should equal " + authority + " but equals " + handleInfo.getNameAuthority();
+		assert handleInfo.getData() != null : "Data should not be null";
+		assert !handleInfo.getData().equals("") : "Data should not be an empty string";
 
 		
 		   /** Institutional Item index processing record service  */
