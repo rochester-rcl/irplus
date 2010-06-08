@@ -588,6 +588,11 @@ set institutional_collection_id =
   from ir_repository.institutional_collection
   where del_item.institutional_collection_name = institutional_collection.name);
   
+
+UPDATE ir_repository.deleted_institutional_item
+SET institutional_collection_id = -1 
+where deleted_institutional_item.institutional_collection_id is null;
+  
 ALTER TABLE ir_repository.deleted_institutional_item ALTER COLUMN institutional_collection_id SET NOT NULL;
 CREATE INDEX del_item_collection_id_idx ON ir_repository.deleted_institutional_item(institutional_collection_id);
 
