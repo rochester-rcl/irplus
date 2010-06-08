@@ -22,6 +22,7 @@ import java.util.Date;
 
 import org.testng.annotations.Test;
 
+import edu.ur.ir.oai.OaiUtil;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 
 /**
@@ -46,6 +47,7 @@ public class DefaultResumptionTokenTest {
 	 */
 	public void resumptionTokenParsingTest() throws ParseException, BadResumptionTokenException
 	{
+		// these are zulu times and dates
 		String strFromShort = "1998-10-22";
 		String strFromLong = "2000-01-22T10:25:33Z";
 		
@@ -53,10 +55,15 @@ public class DefaultResumptionTokenTest {
 		String strUntilLong = "2001-01-13T10:27:33Z";
 		
 		Date fromShort = shortDateFormat.parse(strFromShort);
+		Date localFromShort = OaiUtil.getLocalTime(fromShort);
 		Date fromLong = longDateFormat.parse(strFromLong);
+		Date localFromLong = OaiUtil.getLocalTime(fromLong);
+		
 		
 		Date untilShort = shortDateFormat.parse(strUntilShort);
+		Date localUntilShort = OaiUtil.getLocalTime(untilShort);
 		Date untilLong = longDateFormat.parse(strUntilLong);	
+		Date localUntilLong = OaiUtil.getLocalTime(untilLong);
 		
 		String token = "set=123;from=" + strFromShort + 
 		";until=" + strUntilShort + ";metadataPrefix=oai_dc;lastId=33;batchSize=100;deleted=false";
@@ -64,8 +71,8 @@ public class DefaultResumptionTokenTest {
 		resumptionToken.parseResumptionToken(token);
 		
 		assert resumptionToken.getBatchSize().equals(100) : "Batch size should equal 100 but equals " + resumptionToken.getBatchSize();
-		assert resumptionToken.getFrom().equals(fromShort) : "from date should equal " + fromShort + " but equals " + resumptionToken.getFrom();
-		assert resumptionToken.getUntil().equals(untilShort) : "until date should equal " + untilShort + " but equals " + resumptionToken.getUntil();
+		assert resumptionToken.getFrom().equals(localFromShort) : "from date should equal " + localFromShort + " but equals " + resumptionToken.getFrom();
+		assert resumptionToken.getUntil().equals(localUntilShort) : "until date should equal " + localUntilShort + " but equals " + resumptionToken.getUntil();
         assert resumptionToken.getLastId().equals(33l) : "last id should = 333 but equals " + resumptionToken.getLastId();
         assert resumptionToken.getMetadataPrefix().equals("oai_dc") : "Should equal oai_dc but equals " + resumptionToken.getMetadataPrefix();
         assert resumptionToken.getSet().equals("123") : "set should = 123 but equals " + resumptionToken.getSet();
@@ -77,8 +84,8 @@ public class DefaultResumptionTokenTest {
 		";until=" + strUntilLong + ";metadataPrefix=oai_dc;lastId=33;batchSize=100;deleted=false";
 		resumptionToken.parseResumptionToken(token);
 		assert resumptionToken.getBatchSize().equals(100) : "Batch size should equal 100 but equals " + resumptionToken.getBatchSize();
-		assert resumptionToken.getFrom().equals(fromLong) : "from date should equal " + fromLong + " but equals " + resumptionToken.getFrom();
-		assert resumptionToken.getUntil().equals(untilLong) : "until date should equal " + untilLong + " but equals " + resumptionToken.getUntil();
+		assert resumptionToken.getFrom().equals(localFromLong) : "from date should equal " + localFromLong + " but equals " + resumptionToken.getFrom();
+		assert resumptionToken.getUntil().equals(localUntilLong) : "until date should equal " + localUntilLong + " but equals " + resumptionToken.getUntil();
         assert resumptionToken.getLastId().equals(33l) : "last id should = 33 but equals " + resumptionToken.getLastId();
         assert resumptionToken.getSet().equals("123:128") : "set should = 123:128 but equals " + resumptionToken.getSet();
         assert resumptionToken.getLastSetId().equals(128l) : "last set id should equal 128 but equals " +resumptionToken.getLastSetId(); 
