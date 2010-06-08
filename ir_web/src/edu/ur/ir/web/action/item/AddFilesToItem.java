@@ -33,6 +33,7 @@ import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.GenericItem;
@@ -227,6 +228,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 				ItemFile itemFile = item.addFile(vf.getCurrentVersion().getIrFile());
 				itemFile.setDescription(vf.getDescription());
 				itemFile.setVersionNumber(vf.getLargestVersion());
+				itemFile.setPublic(item.isPubliclyViewable());
 				itemService.makePersistent(item);
 			}
 		}
