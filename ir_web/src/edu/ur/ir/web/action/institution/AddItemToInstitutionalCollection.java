@@ -37,6 +37,7 @@ import edu.ur.ir.institution.ReviewableItem;
 import edu.ur.ir.institution.ReviewableItemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
+import edu.ur.ir.item.ItemSecurityService;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
@@ -120,9 +121,14 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	
 	/** Service for dealing with reviewable items */
 	private ReviewableItemService reviewableItemService;
+	
+	/** Service for dealing with item information */
+	private ItemSecurityService itemSecurityService;
 
 
 	
+
+
 	/**
 	 * Set the user id.
 	 * 
@@ -341,6 +347,7 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 	 * 
 	 */
 	public String submitPublication() throws NoIndexFoundException, CollectionDoesNotAcceptItemsException {
+		log.debug("submit publication");
 
 		item = itemService.getGenericItem(genericItemId, false);
 		IrUser user = null;
@@ -357,13 +364,11 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			return "accessDenied";
 		}
 		
+		boolean isItemPublished = item.isPublishedToSystem();
 		log.debug("Institutional Collection selectedCollectionIds: "+ selectedCollectionIds);
 		
 		List<Long> collectionIds = getSelectedCollectionIdList();
 		List<InstitutionalCollection> privateCollections = new LinkedList<InstitutionalCollection>();
-
-		boolean publicCollectionExists = false;
-		boolean isItemPublished = item.isPublishedToSystem();
 		
 		Collection<InstitutionalCollection> collections = institutionalCollectionService.getCollections(collectionIds);
 		
@@ -373,24 +378,15 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			return SUCCESS;
 		}
 		
-		// get the private collections and dtermine if a publicly viewable
-		// collection exists
-		for(InstitutionalCollection institutionalCollection : collections)
+		// check for submission privileges first
+		for(InstitutionalCollection institutionalCollection: collections )
 		{
-	        if (institutionalCollection.isPubliclyViewable()) 
+			if( !( institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.DIRECT_SUBMIT_PERMISSION) || 
+				   institutionalCollectionSecurityService.isGranted(institutionalCollection, user, InstitutionalCollectionSecurityService.REVIEW_SUBMIT_PERMISSION) ) )
 			{
-			    publicCollectionExists = true;
-			} 
-			else 
-			{
-			    privateCollections.add(institutionalCollection);
+				return "accessDenied";
 			}
 		}
-		
-		// make the item public if there is one public collection and the item
-		// has never been published before
-		boolean setPermissions = !isItemPublished;
-		boolean makePublic = publicCollectionExists;
 		
 		// add the items
 		for(InstitutionalCollection institutionalCollection: collections) 
@@ -424,22 +420,53 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 			}
 		}
 		
+		boolean publicCollectionExists = false;
+		
+		// get the private collections and dtermine if a publicly viewable
+		// collection exists
+		for(InstitutionalCollection institutionalCollection : collections)
+		{
+	        if (institutionalCollection.isPubliclyViewable()) 
+			{
+			    publicCollectionExists = true;
+			} 
+			else 
+			{
+			    privateCollections.add(institutionalCollection);
+			}
+		}
+		
+		// make the item public if there is one public collection and the item
+		// has never been published before
+		boolean setPermissions = !isItemPublished;
+		boolean makePublic = publicCollectionExists;
+		
 		/*
 		 * Assign group permission only when the item is being submitted for the first time 
 		 */
+		log.debug("Set permissions = " + setPermissions);
+		log.debug("make public = " + makePublic);
 		if (setPermissions) 
 		{
 			if( makePublic )
 			{
+				log.debug("making files and item pubic");
 				 for(ItemFile file:item.getItemFiles()) 
 				 {
 				     file.setPublic(true);
 				 }
 				 item.setPubliclyViewable(true);
+				 itemService.makePersistent(item);
+				 for(InstitutionalCollection collection:collections) 
+				 {
+				     itemSecurityService.assignGroupsToItem(item, collection);
+				 }
+				 
 			}
 			else
 			{
-				 institutionalItemService.setItemPrivatePermissions(item, privateCollections);
+				log.debug("setting permissions as private");
+				institutionalItemService.setItemPrivatePermissions(item, privateCollections);
 			}
 		}
 		return SUCCESS;
@@ -730,6 +757,14 @@ public class AddItemToInstitutionalCollection extends ActionSupport implements
 
 	public void setReviewableItemService(ReviewableItemService reviewableItemService) {
 		this.reviewableItemService = reviewableItemService;
+	}
+	
+	public ItemSecurityService getItemSecurityService() {
+		return itemSecurityService;
+	}
+
+	public void setItemSecurityService(ItemSecurityService itemSecurityService) {
+		this.itemSecurityService = itemSecurityService;
 	}
 
 
