@@ -20,6 +20,8 @@ package edu.ur.ir.item.service;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.item.GenericItem;
@@ -50,6 +52,9 @@ public class DefaultItemSecurityService implements ItemSecurityService {
 	
 	private ItemFileSecurityService itemFileSecurityService;
 	
+	/**  Logger for view personal collections action */
+	private static final Logger log = Logger.getLogger(DefaultItemSecurityService.class);
+	
 
 	/**
 	 * Assign permission to item
@@ -77,6 +82,7 @@ public class DefaultItemSecurityService implements ItemSecurityService {
 		
 		securityService.save(itemAcl);
 	}
+	
 
 	/**
 	 * Assign single permission to item
@@ -110,24 +116,29 @@ public class DefaultItemSecurityService implements ItemSecurityService {
 	 * @see 
 	 */
 	public void assignGroupsToItem(GenericItem item, InstitutionalCollection collection) {
+		log.debug("assigning groups to item");
 		
 		IrAcl collectionAcl = securityService.getAcl(collection);
 		
+		// users who can view the user groups
 		List<IrUserGroup> viewUserGroups = collectionAcl.getIrUserGroupsWithPermission(securityService.getClassTypePermission("edu.ur.ir.institution.InstitutionalCollection", InstitutionalCollectionSecurityService.VIEW_PERMISSION.getPermission())); 
 		
-		List<IrUserGroup> adminUserGroups = collectionAcl.getIrUserGroupsWithPermission(securityService.getClassTypePermission("edu.ur.ir.institution.InstitutionalCollection", InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION.getPermission()));
 		
+		// Access control list for the item
 		IrAcl itemAcl = securityService.getAcl(item);
 		 
+		// if one does not exist create one
 		if (itemAcl == null) {
 			itemAcl = createAcl(item);
 		}
 
+		// user group control entry
 		IrUserGroupAccessControlEntry entry = null;
 	
 		
 		// Add view user groups
 		for (IrUserGroup userGroup : viewUserGroups) {
+			log.debug("adding view to user group " + userGroup);
 			entry = itemAcl.getGroupAccessControlEntry(userGroup);
 			
 			if( entry == null )
@@ -135,7 +146,8 @@ public class DefaultItemSecurityService implements ItemSecurityService {
 				entry = itemAcl.createGroupAccessControlEntry(userGroup);
 			}
 
-		    entry.addPermission(securityService.getClassTypePermission("edu.ur.ir.item.GenericItem", ItemSecurityService.ITEM_METADATA_READ_PERMISSION.getPermission()));						
+		    entry.addPermission(securityService.getClassTypePermission("edu.ur.ir.item.GenericItem", ItemSecurityService.ITEM_METADATA_READ_PERMISSION.getPermission()));	
+		    
 
 			for(ItemFile file : item.getItemFiles()) {
 				itemFileSecurityService.assignItemFilePermission(ItemFileSecurityService.ITEM_FILE_READ_PERMISSION, userGroup, file);
@@ -143,12 +155,17 @@ public class DefaultItemSecurityService implements ItemSecurityService {
 		}
 		
 
+		// users who have admin privileges
+		List<IrUserGroup> adminUserGroups = collectionAcl.getIrUserGroupsWithPermission(securityService.getClassTypePermission("edu.ur.ir.institution.InstitutionalCollection", InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION.getPermission()));
+
 		// Add admin user groups
 		for (IrUserGroup userGroup : adminUserGroups) {
+			log.debug("adding admin to user group " + userGroup);
 			entry = itemAcl.getGroupAccessControlEntry(userGroup);
 			
 			if( entry == null ) {
 				entry = itemAcl.createGroupAccessControlEntry(userGroup);
+				
 			}
 
 			for(IrClassTypePermission permission: securityService.getClassTypePermissions("edu.ur.ir.item.GenericItem")) {
@@ -159,6 +176,8 @@ public class DefaultItemSecurityService implements ItemSecurityService {
 				itemFileSecurityService.assignItemFilePermission(ItemFileSecurityService.ITEM_FILE_READ_PERMISSION, userGroup, file);
 			}
 		}
+		
+		securityService.save(itemAcl);
 
 	}
 
