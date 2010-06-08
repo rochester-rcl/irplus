@@ -223,7 +223,7 @@ public class Oai_2_0 extends ActionSupport{
 	
 	public String getResponseDate() {
 		Date d = new Date();
-		String responseDate = OaiUtil.zuluTime(d);
+		String responseDate = OaiUtil.getZuluTime(d);
 		return responseDate;
 	}
 
