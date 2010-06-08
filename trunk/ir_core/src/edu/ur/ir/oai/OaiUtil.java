@@ -69,7 +69,7 @@ public class OaiUtil
 	 * yyyy-MM-ddTHH:mm:ssZ
 	 * 
 	 */
-	public static String zuluTime(Date d)
+	public static String getZuluTime(Date d)
 	{
 		SimpleDateFormat longDateFormat = new SimpleDateFormat(longFormat);
 		String strDate = "";
@@ -82,16 +82,29 @@ public class OaiUtil
 	}
 	
 	/**
+	 * Parse a zulu date time yyyy-MM-ddTHH:mm:ssZ string into a date object.
+	 * 
+	 * @param d
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Date getZuluTime(String d) throws ParseException
+	{
+		SimpleDateFormat longDateFormat = new SimpleDateFormat(longFormat);
+		return longDateFormat.parse(d);
+	}
+	
+	/**
 	 * Get the current time based off of zulu date.
 	 * 
 	 * @param zuluDate - the zulu date time used
 	 * @return the current date time with no offset
 	 */
-	public static Date currentTime(Date zuluDate)
+	public static Date getLocalTime(Date zuluDate)
 	{
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(zuluDate);
-		int utcOffsetInMinutes =  (calendar.get(Calendar.ZONE_OFFSET) - calendar.get(Calendar.DST_OFFSET)) / (60 * 1000);
+		int utcOffsetInMinutes =  (calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET)) / (60 * 1000);
 		calendar.add(Calendar.MINUTE, utcOffsetInMinutes);
 		return calendar.getTime();
 	}
@@ -132,5 +145,25 @@ public class OaiUtil
 	{
 		SimpleDateFormat longDateFormat = new SimpleDateFormat(longFormat);
 		return longDateFormat.format(d);
+	}
+	
+	public static String removeInvalidXmlChars(String value)
+	{
+		String stripped = value.replaceAll("[^\\u0009\\u000a\\u000d\\u0020-\\ud7ff\\e0000-\\ufffd]", "");
+	    return stripped;
+	}
+	
+	public static void main(String[] args) throws ParseException
+	{
+		Date d = new Date();
+		System.out.println("current time 1 = " + d);
+		String zuluDate = OaiUtil.getZuluTime(d);
+		System.out.println("zulu date = " + zuluDate);
+		
+		SimpleDateFormat longDateFormat = new SimpleDateFormat(longFormat);
+		Date theZuluDate = longDateFormat.parse(zuluDate);
+		Date localTime = OaiUtil.getLocalTime(theZuluDate);
+		
+		System.out.println("Current date time = " + localTime);
 	}
 }

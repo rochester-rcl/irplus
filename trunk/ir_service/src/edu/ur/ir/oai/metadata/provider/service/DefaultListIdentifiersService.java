@@ -64,7 +64,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	private static final long serialVersionUID = 9056980425349175595L;
 	
 	/**  Default batch size for harvesting */
-	private int batchSize = 500;
+	private int batchSize = 100;
 	
 	/**  List of oai metadata service providers */
 	private OaiMetadataServiceProvider oaiMetadataServiceProvider;
@@ -185,7 +185,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			 {
 				 d = version.getDateOfDeposit();
 			 }
-			 String zuluDateTime = OaiUtil.zuluTime(d);
+			 String zuluDateTime = OaiUtil.getZuluTime(d);
 			 
 			 data = doc.createTextNode(zuluDateTime);
 			 datestamp.appendChild(data);
@@ -228,7 +228,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			 // datestamp element
 			 Element datestamp = doc.createElement("datestamp");
 			 Date d = version.getDeletedInstitutionalItem().getDeletedDate();
-			 String zuluDateTime = OaiUtil.zuluTime(d);
+			 String zuluDateTime = OaiUtil.getZuluTime(d);
 			 
 			 data = doc.createTextNode(zuluDateTime);
 			 datestamp.appendChild(data);

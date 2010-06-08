@@ -214,7 +214,8 @@ public class DefaultResumptionToken implements ResumptionToken{
 				sb.append(TOKEN_DELIMITER);
 			}
 			sb.append("from=");
-			sb.append(OaiUtil.getLongDateFormat(from));
+			// convert back to zulu time
+			sb.append(OaiUtil.getZuluTime(from));
 		}
 		if( until != null )
 		{
@@ -223,7 +224,8 @@ public class DefaultResumptionToken implements ResumptionToken{
 				sb.append(TOKEN_DELIMITER);
 			}
 			sb.append("until=");
-			sb.append(OaiUtil.getLongDateFormat(until));
+			// convert back to zulu time
+			sb.append(OaiUtil.getZuluTime(until));
 		}
 		if( metadataPrefix != null )
 		{
@@ -308,11 +310,13 @@ public class DefaultResumptionToken implements ResumptionToken{
 		}
 		else if( name.equals("from"))
 		{
-			this.setFrom(OaiUtil.getDate(value));
+			// convert the UTC/Zulu time to local time
+			this.setFrom(OaiUtil.getLocalTime(OaiUtil.getDate(value)));
 		}
         else if (name.equals("until")) 
         {
-			this.setUntil(OaiUtil.getDate(value));
+        	// convert the UTC/Zulu time to local time
+			this.setUntil(OaiUtil.getLocalTime(OaiUtil.getDate(value)));
 		}
 		else if(name.endsWith("metadataPrefix"))
 		{

@@ -33,6 +33,7 @@ import org.w3c.dom.ls.LSSerializer;
 
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
+import edu.ur.ir.oai.OaiUtil;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.metadata.provider.ListSetsService;
 
@@ -127,7 +128,7 @@ public class DefaultListSetsService implements ListSetsService {
     		 
     		 
     		 Element setName = doc.createElement("setName");
-    		 data = doc.createTextNode(c.getName());
+    		 data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(c.getName()));
     		 setName.appendChild(data);
     		 
     		 set.appendChild(setName);

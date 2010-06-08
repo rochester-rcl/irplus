@@ -114,7 +114,6 @@ public class DefaultItemFileSecurityService implements ItemFileSecurityService {
 	 * @see edu.ur.ir.item.ItemFileSecurityService#assignItemFilePermissions(String[], IrUserGroup, ItemFile)
 	 */
 	public void assignItemFilePermission(ItemFilePermission permission, IrUserGroup userGroup, ItemFile itemFile) {
-
 		IrAcl itemFileAcl = getAcl(itemFile);
 		 
 		if (itemFileAcl == null) {

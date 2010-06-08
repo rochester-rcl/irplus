@@ -181,7 +181,7 @@ public class DefaultIdentifyService implements IdentifyService{
 		 {
 			 d = new Date();
 		 }
-	     Text data = doc.createTextNode(OaiUtil.zuluTime(d));
+	     Text data = doc.createTextNode(OaiUtil.getZuluTime(d));
 	     earliestDateStamp.appendChild(data);
 	     root.appendChild(earliestDateStamp);
 	}
