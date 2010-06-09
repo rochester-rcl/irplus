@@ -58,7 +58,7 @@ public class DefaultReviewableItemService implements ReviewableItemService {
 	/** Access control for collection permissions */
 	private InstitutionalCollectionSecurityService institutionalCollectionSecurityService;
 	
-	/* Mail sender */
+	/** Mail sender */
 	private MailSender mailSender;
 	
 	/** Mail message for admin to verify the user affiliation */

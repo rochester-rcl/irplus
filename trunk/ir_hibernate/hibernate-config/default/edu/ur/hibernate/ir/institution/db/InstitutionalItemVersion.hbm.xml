@@ -142,6 +142,10 @@
 	    select count(*) from InstitutionalItemVersion
 	</query>
 	
+    <!-- ********************************************************* -->
+	<!--  Get all institutional item version publications based on a person-->
+	<!-- ********************************************************* -->
+	
 	<!-- institutional item version contributed by given person name -->
 	<query name="getPublicationVersionsByPersonNameIdTitleAsc">
 	    select new edu.ur.ir.institution.InstitutionalItemVersionDownloadCount( institutionalItemVersion, sum(irFile.downloadCount)) 
@@ -227,14 +231,45 @@
 	    group by institutionalItemVersion, institutionalItemVersion.dateOfDeposit, item.lowerCaseName
 	    order by institutionalItemVersion.dateOfDeposit desc, item.lowerCaseName desc
 	</query>
-	
-	
-	
+
+	<!-- ********************************************************* -->
+	<!--  Get all institutional item version publications based on a handle  -->
+	<!-- ********************************************************* -->
 	<!-- institutional item version for a given handle -->
 	<query name="getInstitutionalItemByHandleId">
 	    select institutionalItemVersion from InstitutionalItemVersion as institutionalItemVersion
 	    where handleInfo.id = ?
 	</query>
+	
+	<!-- ********************************************************* -->
+	<!--  Update versioned items by changes in metadata  -->
+	<!-- ********************************************************* -->
+	<query name="updateItemVersionsForPrimaryContentTypeChange">
+	     update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.primaryContentType as contentType
+	       where contentType.id = :contentTypeId 
+	      )
+	</query>
+	
+	<query name="updateItemVersionsForSecondaryContentTypeChange">
+	     update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.secondaryContentTypes as contentType
+	       where contentType.id = :contentTypeId 
+	      )
+	</query>
+	
 	
 	<!-- ********************************************************* -->
 	<!--  Get all institutional item version publications based on a sponsor  -->
@@ -407,7 +442,13 @@
 	<query name="getInstitutionalItemVersionCount">
 	    select count(*) from InstitutionalItemVersion
     </query>
-	
+    
+    
+    
+    
+	<!-- ********************************************************* -->
+	<!--  These selects are primarily used for OAI harvesting -->
+	<!-- ********************************************************* -->
 	
 	<!--  get institutional item versions by id order with  -->
 	<query name="getInstitutionalItemVersionByLastIdOrderedById">

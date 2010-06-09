@@ -27,6 +27,7 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
+import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
 /**
@@ -638,6 +639,28 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 		q.setParameter("rightValue", collection.getRightValue());
 		q.setParameter("treeRootId", collection.getTreeRoot().getId());
 		return (Long) q.uniqueResult();
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByContentTypeChange(java.lang.Long, java.lang.String)
+	 */
+	public Long setAsModifiedByContentTypeChange(Long contentTypeId, IrUser user,
+			String message) {
+		Long numUpdated = 0l;
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionsForPrimaryContentTypeChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("contentTypeId", contentTypeId);
+        numUpdated = numUpdated + q.executeUpdate();
+        
+        q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionsForSecondaryContentTypeChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("contentTypeId", contentTypeId);
+        numUpdated = numUpdated + q.executeUpdate();
+        
+		return numUpdated;
 	}
 	
 

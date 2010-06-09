@@ -122,6 +122,7 @@ YAHOO.ur.content.type = {
 		
 		var handleSuccess = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -153,10 +154,12 @@ YAHOO.ur.content.type = {
 		        }
 		        myContentTypeTable.submitForm(myContentTypeAction);
 		    }
+	        
 		};
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('content type submission failed ' + o.status + ' status text ' + o.statusText );
 		};
 	
@@ -175,6 +178,7 @@ YAHOO.ur.content.type = {
 		//submit form
 		YAHOO.ur.content.type.newContentTypeDialog.submit = function() 
 		{
+			YAHOO.ur.util.wait.waitDialog.showDialog();
 		    YAHOO.util.Connect.setForm('newContentTypeForm');
 		    	    
 		    if( YAHOO.ur.content.type.newContentTypeDialog.validate() )

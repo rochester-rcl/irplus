@@ -152,7 +152,7 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 		        q.setParameter("rightValue", institutionalCollection.getRightValue());
 			    q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
 			    q.setParameter("processingTypeId", processingType.getId());
-			    return new Long(q.executeUpdate());
+			    return Long.valueOf(q.executeUpdate());
             }
 		});
 	}
@@ -168,9 +168,30 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 		      
 		        Query q = session.getNamedQuery("insertAllItemsForRepository");
 			    q.setParameter("processingTypeId", processingType.getId());
-			    return new Long(q.executeUpdate());
+			    return Long.valueOf(q.executeUpdate());
             }
 		});
+	}
+
+	/**
+	 * Set all items for re-indexing for a given content type
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForContentType(long)
+	 */
+	public Long insertAllItemsForContentType(Long contentTypeId, IndexProcessingType processingType) {
+		Long numCreated = 0l;
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForPrimaryContentType");
+		q.setParameter("contentTypeId", contentTypeId);
+		q.setParameter("processingTypeId", processingType.getId());
+		numCreated += q.executeUpdate();
+		
+		q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForSecondaryContentType");
+		q.setParameter("contentTypeId", contentTypeId);
+		q.setParameter("processingTypeId", processingType.getId());
+		numCreated += q.executeUpdate();
+		
+		return numCreated;
 	}
 
 }
