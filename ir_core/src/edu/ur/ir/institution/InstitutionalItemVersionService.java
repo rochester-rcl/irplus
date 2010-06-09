@@ -415,5 +415,18 @@ public interface InstitutionalItemVersionService extends Serializable {
 	public List<InstitutionalItemVersion> getItemsIdOrderBetweenModifiedDates(
 			long lastInstitutionalItemVersionId, Date fromModifiedDate, Date untilModifiedDate, 
 			InstitutionalCollection institutionalCollection, int maxResults); 
+	
+	
+	/**
+	 * Sets all versions as updated for a content type by a specified user.  
+	 * This should also cause any re-indexing to occur.
+	 * 
+	 * @param contentTypeId - id of the content type being changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated
+	 */
+	public Long setAllVersionsAsUpdatedForContentType(Long contentTypeId, IrUser user, String message);
 
 }

@@ -428,4 +428,15 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 				untilModifiedDate, institutionalCollection, maxResults);
 	}
 
+
+	/**
+	 * Set all institutional item versions as updated that have the specified content type.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForContentType(java.lang.Long, java.lang.Long, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForContentType(Long contentTypeId,
+			IrUser user, String message) {
+		return institutionalItemVersionDAO.setAsModifiedByContentTypeChange(contentTypeId, user, message);
+	}
+
 }

@@ -111,4 +111,14 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
      * @param processingType
      */
     public void processItemsInRepository(IndexProcessingType processingType);
+    
+	/**
+	 * Insert all items for a content type to be re-indexed.
+	 * 
+	 * @param contentTypeId - id of the content type
+	 * @param processingType - processing type 
+	 * 
+	 * @return number of institutional item versions to be re-indexed.
+	 */
+	public Long insertAllItemsForContentType(Long contentTypeId, IndexProcessingType processingType);
 }
