@@ -67,4 +67,14 @@ public interface InstitutionalItemIndexProcessingRecordDAO
 	 * @return - number of records created for processing
 	 */
 	public Long insertAllItemsForRepository(IndexProcessingType processingType);
+	
+	/**
+	 * Set all institutional items to be re-indexed based on the content type id.  This
+	 * should include items that use the content type as a secondary content type.
+	 * 
+	 * @param contentTypeId - id for the content type
+	 * @param processingType - type of processing to complete
+	 * @return number of records created for processing
+	 */
+	public Long insertAllItemsForContentType(Long contentTypeId, IndexProcessingType processingType);
 }

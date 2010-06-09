@@ -21,6 +21,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
 
@@ -378,4 +379,17 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	public Long getItemsUntilModifiedDateCount(
 			Date untilModifiedDate,
 			InstitutionalCollection institutionalCollection);
+	
+	/**
+	 * Updates all versions with the specified content type as modified with current 
+	 * time and the specified message.  This includes both primary content types and
+	 * secondary content types.
+	 * 
+	 * @param contentTypeId - content type id that has changed
+	 * @param user - user making the change
+	 * @param message - message for the change
+	 * 
+	 * @return number of item versions modified
+	 */
+	public Long setAsModifiedByContentTypeChange(Long contentTypeId, IrUser user, String message);
 }
