@@ -105,7 +105,9 @@
         <action name="workspace" class="edu.ur.ir.web.action.user.ViewWorkspace">
             <interceptor-ref name="editStack"/>
             <result name="success">/pages/user/workspace/workspace.jsp</result>
-            <result name="basic_view">/pages/home.jsp</result>
+            <result name="basic_view"  type="redirectAction"> 
+                <param name="actionName">home.action</param> 
+            </result> 
         </action>
         
         <!--  ************************************ -->
