@@ -27,6 +27,7 @@ import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TransformedFile;
 import edu.ur.ir.institution.ReviewableItemService;
+import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.ExternalPublishedItemDAO;
 import edu.ur.ir.item.GenericItem;
@@ -45,6 +46,7 @@ import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.item.VersionedItemDAO;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorDAO;
+import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.ResearcherFileSystemService;
@@ -563,5 +565,26 @@ public class DefaultItemService implements ItemService {
 	public void setResearcherFileSystemService(
 			ResearcherFileSystemService researcherFileSystemService) {
 		this.researcherFileSystemService = researcherFileSystemService;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.item.ItemService#getContentTypeCount(edu.ur.ir.item.ContentType)
+	 */
+	public Long getContentTypeCount(ContentType contentType) {
+		return itemDAO.getContentTypeCount(contentType);
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.item.ItemService#getContributorTypeCount(edu.ur.ir.person.ContributorType)
+	 */
+	public Long getContributorTypeCount(ContributorType contributorType) {
+		return itemDAO.getContributorTypeCount(contributorType);
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.item.ItemService#getSecondaryContentTypeCount(edu.ur.ir.item.ContentType)
+	 */
+	public Long getSecondaryContentTypeCount(ContentType contentType) {
+		return itemDAO.getSecondaryContentTypeCount(contentType);
 	}
 }

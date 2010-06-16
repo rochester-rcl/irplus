@@ -306,6 +306,27 @@
 	    where personName.id = ?
 	</query>
 	
+	<!--  get a count of the number of items that have a specific content type -->
+	<query name="itemContentTypeCount">
+	    select count(*)from GenericItem as item
+	    join item.primaryContentType as contentType
+	    where contentType.id = :contentTypeId 
+	</query>
+	
+	<!--  get a count of the number of items that have a specific secondary content type -->
+	<query name="itemSecondaryContentTypeCount">
+	    select count(*)from GenericItem as item
+	    join item.secondaryContentTypes as contentType
+	    where contentType.id = :contentTypeId 
+	</query>
+	
+	<!--  get a count of the number of items that are attached to a specific contributor type-->
+	<query name="itemContributorTypeCount">
+	    select count(*)from GenericItem as item
+	    join item.contributors as itemContributor
+	    where itemContributor.contributor.contributorType.id = :contributorTypeId 
+	</query>
+	
 	
 	<!-- named query for getting the identifier types that can be applied to an item -->
 	<query name="getPossibleIdentifierTypes">

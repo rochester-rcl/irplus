@@ -27,6 +27,8 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
+import edu.ur.ir.item.ContentType;
+import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -644,20 +646,20 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	/* (non-Javadoc)
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByContentTypeChange(java.lang.Long, java.lang.String)
 	 */
-	public Long setAsModifiedByContentTypeChange(Long contentTypeId, IrUser user,
+	public Long setAsModifiedByContentTypeChange(ContentType contentType, IrUser user,
 			String message) {
 		Long numUpdated = 0l;
 		
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionsForPrimaryContentTypeChange");
         q.setParameter("note", message);
         q.setParameter("user", user);
-        q.setParameter("contentTypeId", contentTypeId);
+        q.setParameter("contentTypeId", contentType.getId());
         numUpdated = numUpdated + q.executeUpdate();
         
         q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionsForSecondaryContentTypeChange");
         q.setParameter("note", message);
         q.setParameter("user", user);
-        q.setParameter("contentTypeId", contentTypeId);
+        q.setParameter("contentTypeId", contentType.getId());
         numUpdated = numUpdated + q.executeUpdate();
         
 		return numUpdated;
@@ -668,14 +670,14 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByContributorTypeChange(java.lang.Long, edu.ur.ir.user.IrUser, java.lang.String)
 	 */
-	public Long setAsModifiedByContributorTypeChange(Long contributorTypeId,
+	public Long setAsModifiedByContributorTypeChange(ContributorType contributorType,
 			IrUser user, String message) {
 		Long numUpdated = 0l;
 		
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForContributorTypeChange");
         q.setParameter("note", message);
         q.setParameter("user", user);
-        q.setParameter("contributorTypeId", contributorTypeId);
+        q.setParameter("contributorTypeId", contributorType.getId());
         numUpdated = numUpdated + q.executeUpdate();
         return numUpdated;
 	}
