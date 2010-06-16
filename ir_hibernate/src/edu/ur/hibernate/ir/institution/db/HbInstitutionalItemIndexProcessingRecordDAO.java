@@ -194,4 +194,19 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 		return numCreated;
 	}
 
+	/**
+	 * Insert all institutional items with associated with a given contributor type.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForContributorType(java.lang.Long, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForContributorType(Long contributorTypeId,
+			IndexProcessingType processingType) {
+        Long numCreated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForContributorType");
+		q.setParameter("contributorTypeId", contributorTypeId);
+		q.setParameter("processingTypeId", processingType.getId());
+		numCreated += q.executeUpdate();
+		return numCreated;
+	}
+
 }

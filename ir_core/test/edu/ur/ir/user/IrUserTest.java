@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Properties;
 
 import org.testng.annotations.Test;
@@ -36,8 +37,8 @@ import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.repository.Repository;
 import edu.ur.util.FileUtil;
 
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.providers.encoding.ShaPasswordEncoder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 
 /**
  * Test the user class
@@ -123,8 +124,8 @@ public class IrUserTest {
 		assert user1.removeRole(role2);
 		assert !user1.getRoles().contains(role2) : "User should not contain " + role2;
 		
-		GrantedAuthority[] authorities = user1.getAuthorities();
-		assert authorities.length == 1;
+		Collection<GrantedAuthority> authorities = user1.getAuthorities();
+		assert authorities.size() == 1;
 	}
 	
 	/**

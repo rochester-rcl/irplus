@@ -429,4 +429,18 @@ public interface InstitutionalItemVersionService extends Serializable {
 	 */
 	public Long setAllVersionsAsUpdatedForContentType(Long contentTypeId, IrUser user, String message);
 
+	
+	/**
+	 * Set all versions as updated for a contributor type changed by a specific user.  This 
+	 * should also cause any re-indexing to occur.
+	 * 
+	 * @param contributorTypeId - the id of the contributor type that has been changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated.
+	 */
+	public Long setAllVersionsAsUpdatedForContributorType(Long contributorTypeId, IrUser user, String message);
+
+
 }

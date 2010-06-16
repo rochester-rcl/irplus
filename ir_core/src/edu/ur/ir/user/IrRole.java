@@ -16,7 +16,7 @@
 
 package edu.ur.ir.user;
 
-import org.springframework.security.GrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 
 
 

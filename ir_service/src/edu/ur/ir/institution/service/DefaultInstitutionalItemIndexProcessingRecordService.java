@@ -260,4 +260,14 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
         return processingRecordDAO.insertAllItemsForContentType(contentTypeId, processingType);
 	}
 
+	/** Insert all institutional items with a current version that has the
+	 * specified contributor type for re-indexing.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForContributorType(java.lang.Long, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForContributorType(Long contributorTypeId,
+			IndexProcessingType processingType) {
+		return  processingRecordDAO.insertAllItemsForContributorType(contributorTypeId, processingType);
+	}
+
 }

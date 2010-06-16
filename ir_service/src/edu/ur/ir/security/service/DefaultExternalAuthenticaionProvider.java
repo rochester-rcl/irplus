@@ -22,11 +22,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.BadCredentialsException;
-import org.springframework.security.SpringSecurityMessageSource;
-import org.springframework.security.providers.AuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.SpringSecurityMessageSource;
+import org.springframework.security.authentication.AuthenticationProvider;
 
 import edu.ur.ir.security.ExternalAuthenticationProvider;
 

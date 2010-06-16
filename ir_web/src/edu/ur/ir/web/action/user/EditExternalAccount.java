@@ -1,8 +1,8 @@
 package edu.ur.ir.web.action.user;
 
 import org.apache.log4j.Logger;
-import org.springframework.security.Authentication;
-import org.springframework.security.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import com.opensymphony.xwork2.ActionSupport;
 

@@ -17,12 +17,14 @@
 
 package edu.ur.ir.user.service;
 
+import java.util.Collection;
+
 import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.DirContextOperations;
-import org.springframework.security.GrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.ldap.search.FilterBasedLdapUserSearch;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import edu.ur.ir.user.ExternalAccountType;
 import edu.ur.ir.user.ExternalAccountTypeService;
@@ -82,7 +84,7 @@ public class DefaultLdapUserService implements LdapUserService  {
 	 */
 	public UserDetails mapUserFromContext(DirContextOperations arg0,
 			String username, 
-			GrantedAuthority[] arg2) 
+			Collection<GrantedAuthority> arg2) 
 	{
 		ExternalAccountType externalAccountType = externalAccountTypeService.get(externalAccountTypeName);
 		ExternalUserAccount externalAccount = userService.getByExternalUserNameAccountType(username, externalAccountType);

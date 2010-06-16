@@ -662,6 +662,23 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
         
 		return numUpdated;
 	}
+
+	/**
+	 * Set all versioned items associated with the contributor type as modified.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByContributorTypeChange(java.lang.Long, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAsModifiedByContributorTypeChange(Long contributorTypeId,
+			IrUser user, String message) {
+		Long numUpdated = 0l;
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForContributorTypeChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("contributorTypeId", contributorTypeId);
+        numUpdated = numUpdated + q.executeUpdate();
+        return numUpdated;
+	}
 	
 
 }

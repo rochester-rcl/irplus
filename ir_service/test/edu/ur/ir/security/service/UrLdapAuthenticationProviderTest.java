@@ -20,7 +20,7 @@ package edu.ur.ir.security.service;
 import java.util.Properties;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;

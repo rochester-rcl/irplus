@@ -439,4 +439,15 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 		return institutionalItemVersionDAO.setAsModifiedByContentTypeChange(contentTypeId, user, message);
 	}
 
+
+	/**
+	 * Set all institutional item versions as updated that have the specified contributor type. 
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForContributorType(java.lang.Long, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForContributorType(
+			Long contributorTypeId, IrUser user, String message) {
+		return institutionalItemVersionDAO.setAsModifiedByContributorTypeChange(contributorTypeId, user, message);
+	}
+
 }

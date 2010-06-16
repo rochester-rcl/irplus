@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.security.providers.ldap.LdapAuthenticator;
+import org.springframework.security.ldap.authentication.LdapAuthenticator;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;

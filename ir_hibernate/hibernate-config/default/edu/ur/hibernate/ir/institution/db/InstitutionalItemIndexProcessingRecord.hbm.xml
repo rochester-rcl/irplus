@@ -134,5 +134,25 @@
 	</query>
 	
 
+	<query name="insertAllItemsForContributorType">
+		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where institutionalItem.id in
+	    ( 
+	       select instItem.id 
+	       from InstitutionalItem as instItem
+	       join instItem.versionedInstitutionalItem as versionedItem
+	       join versionedItem.currentVersion as version
+	       join version.item as item
+	       join item.contributors as itemContributor
+	       where itemContributor.contributor.contributorType.id = :contributorTypeId 
+	    )
+	    and indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	        from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
+	</query>
+
 
 </hibernate-mapping>

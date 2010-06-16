@@ -16,8 +16,8 @@
 
 package edu.ur.ir.security;
 
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 
 /**
  * This interface allows all external authentication methods to be

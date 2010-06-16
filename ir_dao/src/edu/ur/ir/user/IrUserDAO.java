@@ -18,7 +18,7 @@ package edu.ur.ir.user;
 
 import java.util.List;
 
-import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 import edu.ur.dao.CountableDAO;

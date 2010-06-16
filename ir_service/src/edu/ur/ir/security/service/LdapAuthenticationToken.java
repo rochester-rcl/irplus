@@ -17,8 +17,10 @@ limitations under the License.
 */  
 
 
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.providers.AbstractAuthenticationToken;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 /**
  * NOTE: Based on UserAuthenticationToken in spring security.
@@ -59,7 +61,7 @@ public class LdapAuthenticationToken extends AbstractAuthenticationToken {
      * @param credentials
      * @param authorities
      */
-    public LdapAuthenticationToken(Object principal, Object credentials, GrantedAuthority[] authorities) {
+    public LdapAuthenticationToken(Object principal, Object credentials, Collection<GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;

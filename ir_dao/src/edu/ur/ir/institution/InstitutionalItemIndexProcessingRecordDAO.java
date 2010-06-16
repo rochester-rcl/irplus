@@ -77,4 +77,15 @@ public interface InstitutionalItemIndexProcessingRecordDAO
 	 * @return number of records created for processing
 	 */
 	public Long insertAllItemsForContentType(Long contentTypeId, IndexProcessingType processingType);
+	
+	/**
+	 * Sets all institutional items with a current item that has the specified contributor type associated with it 
+	 * to be re-indexed based on the contributor type id.
+	 * 
+	 * @param contributorTypeId - id of the contributor type to be updated
+	 * @param processingType - type of indexing to be performed
+	 * 
+	 * @return - number of items set for re-indexing
+	 */
+	public Long insertAllItemsForContributorType(Long contributorTypeId, IndexProcessingType processingType);
 }
