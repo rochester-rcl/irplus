@@ -21,6 +21,8 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.item.ContentType;
+import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -385,24 +387,24 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 * time and the specified message.  This includes both primary content types and
 	 * secondary content types.
 	 * 
-	 * @param contentTypeId - content type id that has changed
+	 * @param contentType - content type id that has changed
 	 * @param user - user making the change
 	 * @param message - message for the change
 	 * 
 	 * @return number of item versions set as modified
 	 */
-	public Long setAsModifiedByContentTypeChange(Long contentTypeId, IrUser user, String message);
+	public Long setAsModifiedByContentTypeChange(ContentType contentType, IrUser user, String message);
 
 	/**
 	 * Updates all versions with the speicified contributor type as modified with current time and
 	 * specified message.  
 	 * 
-	 * @param contributorTypeId - id of the contributor type modified
+	 * @param contributorType  -  of the contributor type modified
 	 * @param user - user making the change
 	 * @param message - message to set for the changes.
 	 * 
 	 * @return the number of item versions set as modified
 	 */
-	public Long setAsModifiedByContributorTypeChange(Long contributorTypeId, IrUser user, String message);
+	public Long setAsModifiedByContributorTypeChange(ContributorType contributorType, IrUser user, String message);
 
 }
