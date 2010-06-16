@@ -244,10 +244,13 @@ public class SecurityUtilFunctions {
              final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
      		
              if( auth != null) {
-     			 if(auth.getPrincipal() instanceof UserDetails) {
+     			 if(auth.getPrincipal() instanceof UserDetails) 
+     			 {
      				 user = (IrUser)auth.getPrincipal();
      			 }
-             } else {
+             } 
+             else 
+             {
             	 return false;
              }
      		
@@ -256,15 +259,15 @@ public class SecurityUtilFunctions {
             	 if( user.hasRole(IrRole.ADMIN_ROLE))
             	 {
             		 granted = true;
-            		 return granted;
             	 }
-             }
-             
-             Long count = securityService.hasPermission(domainObject, user, permissions);
-             
-             if( count > 0)
-             {
-            	 granted = true;
+            	 else
+            	 {
+            	     Long count = securityService.hasPermission(domainObject, user, permissions);
+                     if( count > 0)
+                     {
+                	     granted = true;
+                     }
+            	 }
              }
 
 		}
