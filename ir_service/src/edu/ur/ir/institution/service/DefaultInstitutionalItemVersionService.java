@@ -28,6 +28,8 @@ import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
+import edu.ur.ir.item.ContentType;
+import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
@@ -434,9 +436,9 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForContentType(java.lang.Long, java.lang.Long, java.lang.String)
 	 */
-	public Long setAllVersionsAsUpdatedForContentType(Long contentTypeId,
+	public Long setAllVersionsAsUpdatedForContentType(ContentType contentType,
 			IrUser user, String message) {
-		return institutionalItemVersionDAO.setAsModifiedByContentTypeChange(contentTypeId, user, message);
+		return institutionalItemVersionDAO.setAsModifiedByContentTypeChange(contentType, user, message);
 	}
 
 
@@ -446,8 +448,8 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForContributorType(java.lang.Long, edu.ur.ir.user.IrUser, java.lang.String)
 	 */
 	public Long setAllVersionsAsUpdatedForContributorType(
-			Long contributorTypeId, IrUser user, String message) {
-		return institutionalItemVersionDAO.setAsModifiedByContributorTypeChange(contributorTypeId, user, message);
+			ContributorType contributorType, IrUser user, String message) {
+		return institutionalItemVersionDAO.setAsModifiedByContributorTypeChange(contributorType, user, message);
 	}
 
 }

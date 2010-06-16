@@ -22,6 +22,7 @@ import java.util.Set;
 
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.person.Contributor;
+import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
 
@@ -166,4 +167,29 @@ public interface ItemService extends Serializable{
 	 * @return - the item version if found otherwise null.
 	 */
 	public ItemVersion getItemVersion(Long id, boolean lock);
+	
+	/**
+	 * Get a count of items that have the specified content type.
+	 * 
+	 * @param contentType - the content type to check
+	 * @return a count of the number of items using the content type
+	 */
+	public Long getContentTypeCount(ContentType contentType);
+	
+	/**
+	 * Get a count of the total number of items that have the specified content type
+	 * attached to it.
+	 * 
+	 * @param contentType - the content type to check for
+	 * @return number of items that have the secondary content type attached.
+	 */
+	public Long getSecondaryContentTypeCount(ContentType contentType);
+	
+	/**
+	 * Get a count of items that have the specified contributor type.
+	 * 
+	 * @param contributorType - the contributor type to check
+	 * @return count of the number of items that have the specified contributor type.
+	 */
+	public Long getContributorTypeCount(ContributorType contributorType);
 }

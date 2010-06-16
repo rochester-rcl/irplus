@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import edu.ur.ir.item.ContentType;
+import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
@@ -421,26 +423,26 @@ public interface InstitutionalItemVersionService extends Serializable {
 	 * Sets all versions as updated for a content type by a specified user.  
 	 * This should also cause any re-indexing to occur.
 	 * 
-	 * @param contentTypeId - id of the content type being changed
+	 * @param contentType - the content type being changed
 	 * @param user - user making the change
 	 * @param message - message to set for the modification
 	 * 
 	 * @return number of records set as updated
 	 */
-	public Long setAllVersionsAsUpdatedForContentType(Long contentTypeId, IrUser user, String message);
+	public Long setAllVersionsAsUpdatedForContentType(ContentType contentType, IrUser user, String message);
 
 	
 	/**
 	 * Set all versions as updated for a contributor type changed by a specific user.  This 
 	 * should also cause any re-indexing to occur.
 	 * 
-	 * @param contributorTypeId - the id of the contributor type that has been changed
+	 * @param contributorType - the contributor type that has been changed
 	 * @param user - user making the change
 	 * @param message - message to set for the modification
 	 * 
 	 * @return number of records set as updated.
 	 */
-	public Long setAllVersionsAsUpdatedForContributorType(Long contributorTypeId, IrUser user, String message);
+	public Long setAllVersionsAsUpdatedForContributorType(ContributorType contributorType, IrUser user, String message);
 
 
 }
