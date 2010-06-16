@@ -19,7 +19,7 @@ package edu.ur.ir.user;
 import java.io.Serializable;
 
 import org.springframework.ldap.core.DirContextOperations;
-import org.springframework.security.userdetails.ldap.UserDetailsContextMapper;
+import org.springframework.security.ldap.userdetails.UserDetailsContextMapper;
 
 /**
  * Helper with ldap related services.

@@ -19,23 +19,26 @@ package edu.ur.ir.security.service;
 
 
 
+import java.util.Collection;
+import java.util.LinkedList;
+
 import org.apache.log4j.Logger;
-import org.springframework.security.AccountExpiredException;
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.AuthenticationServiceException;
-import org.springframework.security.BadCredentialsException;
-import org.springframework.security.DisabledException;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.LockedException;
-import org.springframework.security.SpringSecurityMessageSource;
-import org.springframework.security.ldap.LdapAuthoritiesPopulator;
-import org.springframework.security.providers.AuthenticationProvider;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.providers.ldap.LdapAuthenticator;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.ldap.LdapUserDetailsMapper;
-import org.springframework.security.userdetails.ldap.UserDetailsContextMapper;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.core.SpringSecurityMessageSource;
+import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.ldap.authentication.LdapAuthenticator;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.ldap.userdetails.LdapUserDetailsMapper;
+import org.springframework.security.ldap.userdetails.UserDetailsContextMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.ldap.NamingException;
 import org.springframework.ldap.core.DirContextOperations;
@@ -251,7 +254,7 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
         	
         	// convert to username/password for bind
         	DirContextOperations userData = getAuthenticator().authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            GrantedAuthority[] extraAuthorities = loadUserAuthorities(userData, username, password);
+            Collection<GrantedAuthority> extraAuthorities = loadUserAuthorities(userData, username, password);
             UserDetails user = userDetailsContextMapper.mapUserFromContext(userData, username, extraAuthorities);
 
             if( user != null )
@@ -280,7 +283,7 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
-    protected GrantedAuthority[] loadUserAuthorities(DirContextOperations userData, String username, String password) {
+    protected Collection<GrantedAuthority> loadUserAuthorities(DirContextOperations userData, String username, String password) {
         return getAuthoritiesPopulator().getGrantedAuthorities(userData, username);
     }
 
@@ -317,8 +320,8 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
     //~ Inner Classes ==================================================================================================
 
     private static class NullAuthoritiesPopulator implements LdapAuthoritiesPopulator {
-        public GrantedAuthority[] getGrantedAuthorities(DirContextOperations userDetails, String username) {
-            return new GrantedAuthority[0];
+        public Collection<GrantedAuthority> getGrantedAuthorities(DirContextOperations userDetails, String username) {
+            return new LinkedList<GrantedAuthority>();
         }
     }
 

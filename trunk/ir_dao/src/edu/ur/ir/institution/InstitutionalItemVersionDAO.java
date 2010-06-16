@@ -389,7 +389,20 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 * @param user - user making the change
 	 * @param message - message for the change
 	 * 
-	 * @return number of item versions modified
+	 * @return number of item versions set as modified
 	 */
 	public Long setAsModifiedByContentTypeChange(Long contentTypeId, IrUser user, String message);
+
+	/**
+	 * Updates all versions with the speicified contributor type as modified with current time and
+	 * specified message.  
+	 * 
+	 * @param contributorTypeId - id of the contributor type modified
+	 * @param user - user making the change
+	 * @param message - message to set for the changes.
+	 * 
+	 * @return the number of item versions set as modified
+	 */
+	public Long setAsModifiedByContributorTypeChange(Long contributorTypeId, IrUser user, String message);
+
 }

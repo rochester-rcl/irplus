@@ -25,6 +25,7 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.user.Affiliation;
 import edu.ur.ir.user.AffiliationService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -33,7 +34,7 @@ import edu.ur.ir.web.table.Pager;
  * @author Sharmila Ranganathan
  *
  */
-public class ManageAffiliations extends Pager implements   Preparable{
+public class ManageAffiliations extends Pager implements Preparable, UserIdAware{
 	
 	/** generated version id. */
 	private static final long serialVersionUID = -3229962214403823020L;
@@ -84,6 +85,11 @@ public class ManageAffiliations extends Pager implements   Preparable{
 	/** Row End */
 	private int rowEnd;
 	
+	/** user making the changes */
+	private Long userId;
+	
+
+
 	/** Default constructor */
 	public  ManageAffiliations()
 	{
@@ -333,4 +339,16 @@ public class ManageAffiliations extends Pager implements   Preparable{
 		this.rowEnd = rowEnd;
 	}
 
+	/**
+	 * User editing the data.
+	 * 
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
 }

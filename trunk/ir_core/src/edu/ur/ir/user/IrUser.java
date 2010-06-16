@@ -17,13 +17,15 @@
 package edu.ur.ir.user;
 
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 
@@ -518,12 +520,12 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	}
 
 	/**
-	 * Get the guanted authorities for this user.
+	 * Get the granted authorities for this user.
 	 * 
 	 * @see org.acegisecurity.userdetails.UserDetails#getAuthorities()
 	 */
-	public GrantedAuthority[] getAuthorities() {
-		return getRoles().toArray(new IrRole[0]);
+	public Collection<GrantedAuthority> getAuthorities() {
+		return new LinkedList<GrantedAuthority>(getRoles());
 	}
 
 	/**

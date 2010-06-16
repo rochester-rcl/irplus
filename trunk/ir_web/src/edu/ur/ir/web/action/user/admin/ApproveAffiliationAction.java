@@ -33,6 +33,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -41,7 +42,7 @@ import edu.ur.ir.web.table.Pager;
  * @author Sharmila Ranganathan
  *
  */
-public class ApproveAffiliationAction extends Pager {
+public class ApproveAffiliationAction extends Pager implements UserIdAware {
 
 	/** eclipse generated id */
 	private static final long serialVersionUID = 9223131298401384685L;
@@ -83,6 +84,10 @@ public class ApproveAffiliationAction extends Pager {
 	/** Row End */
 	private int rowEnd;
 	
+	private Long userId;
+	
+
+
 	/** Default constructor */
 	public  ApproveAffiliationAction() {
 		
@@ -330,6 +335,19 @@ public class ApproveAffiliationAction extends Pager {
 		this.rowEnd = rowEnd;
 	}
 
+
+	/**
+	 * Set the user id.
+	 * 
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
 
 
 }

@@ -17,7 +17,7 @@
 
 package edu.ur.ir.security.service;
 
-import org.springframework.security.AccountStatusException;
+import org.springframework.security.authentication.AccountStatusException;
 
 /**
  * 

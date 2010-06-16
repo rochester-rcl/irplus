@@ -241,34 +241,7 @@
 	    where handleInfo.id = ?
 	</query>
 	
-	<!-- ********************************************************* -->
-	<!--  Update versioned items by changes in metadata  -->
-	<!-- ********************************************************* -->
-	<query name="updateItemVersionsForPrimaryContentTypeChange">
-	     update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
-	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
-	     where iiv.id in
-	     ( 
-	       select institutionalItemVersion.id 
-	       from InstitutionalItemVersion as institutionalItemVersion
-	       join institutionalItemVersion.item as item
-	       join item.primaryContentType as contentType
-	       where contentType.id = :contentTypeId 
-	      )
-	</query>
-	
-	<query name="updateItemVersionsForSecondaryContentTypeChange">
-	     update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
-	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
-	     where iiv.id in
-	     ( 
-	       select institutionalItemVersion.id 
-	       from InstitutionalItemVersion as institutionalItemVersion
-	       join institutionalItemVersion.item as item
-	       join item.secondaryContentTypes as contentType
-	       where contentType.id = :contentTypeId 
-	      )
-	</query>
+
 	
 	
 	<!-- ********************************************************* -->
@@ -619,6 +592,49 @@
     </query>
  
      
+		<!-- ********************************************************* -->
+	<!--  Update versioned items by changes in metadata  -->
+	<!-- ********************************************************* -->
 	
+	<!--  content type changes -->
+	<query name="updateItemVersionsForPrimaryContentTypeChange">
+	     update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.primaryContentType as contentType
+	       where contentType.id = :contentTypeId 
+	      )
+	</query>
+	
+	<query name="updateItemVersionsForSecondaryContentTypeChange">
+	     update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.secondaryContentTypes as contentType
+	       where contentType.id = :contentTypeId 
+	      )
+	</query>
+	
+	<!-- contributor type changes -->
+	<query name="updateItemVersionForContributorTypeChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.contributors as itemContributor
+	       where itemContributor.contributor.contributorType.id = :contributorTypeId 
+	      )
+	</query>
 	
 </hibernate-mapping>

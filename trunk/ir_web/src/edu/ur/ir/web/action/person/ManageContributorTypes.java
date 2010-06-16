@@ -22,8 +22,14 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.ContributorTypeService;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -32,7 +38,10 @@ import edu.ur.ir.web.table.Pager;
  * @author Nathan Sarr
  *
  */
-public class ManageContributorTypes extends Pager implements Preparable{
+public class ManageContributorTypes extends Pager implements Preparable, UserIdAware{
+	
+	/** id of the user making the change */
+	private Long userId;
 	
 	/** eclipse generated id */
 	private static final long serialVersionUID = 4662051034268805175L;
@@ -73,6 +82,22 @@ public class ManageContributorTypes extends Pager implements Preparable{
 	/** Row End */
 	private int rowEnd;
 	
+	/** Service for dealing with processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
+	
+
+	/** Service for dealing with institutional item version services */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+	/** Service for user information  */
+	private UserService userService;
+	
+	/**  Service for processing indexing institutional items */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	
+
+
 	/** Default constructor */
 	public  ManageContributorTypes()
 	{
@@ -121,6 +146,11 @@ public class ManageContributorTypes extends Pager implements Preparable{
 		if(other == null || other.getId().equals(contributorType.getId()))
 		{
 			contributorTypeService.save(contributorType);
+		    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForContributorType(contributorType.getId(), indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		    IrUser user = userService.getUser(userId, false);
+		    Long updatedCount = institutionalItemVersionService.setAllVersionsAsUpdatedForContentType(contributorType.getId(),user, "Content Type Updated");
+			log.debug("Total number of records set for re-indxing = " + indexCount);
+			log.debug("Total number of records set as updated = " + updatedCount);
 			added = true;
 		}
 		else
@@ -360,4 +390,29 @@ public class ManageContributorTypes extends Pager implements Preparable{
 		this.rowEnd = rowEnd;
 	}
 
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+	
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+	
+	/**
+	 * Set the user id
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 }

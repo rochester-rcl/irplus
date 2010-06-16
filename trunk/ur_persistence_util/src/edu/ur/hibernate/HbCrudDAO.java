@@ -20,7 +20,7 @@ package edu.ur.hibernate;
 import java.io.Serializable;
 import java.util.List;
 
-import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -105,7 +105,7 @@ public class HbCrudDAO<T> implements CrudDAO<T>, Serializable{
     @SuppressWarnings("unchecked")
 	public T getById(Long id, boolean lock) {
         if (lock)
-        	return (T)sessionFactory.getCurrentSession().get(clazz, id, LockMode.UPGRADE);
+        	return (T)sessionFactory.getCurrentSession().get(clazz, id, LockOptions.UPGRADE);
         else
         	return (T)sessionFactory.getCurrentSession().get(clazz, id);
 	}

@@ -27,7 +27,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.providers.encoding.MessageDigestPasswordEncoder;
+import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
 import org.springframework.util.StringUtils;
 
 import edu.ur.ir.file.FileCollaborator;

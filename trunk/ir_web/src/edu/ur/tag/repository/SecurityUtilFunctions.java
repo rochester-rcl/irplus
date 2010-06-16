@@ -17,9 +17,9 @@
 
 package edu.ur.tag.repository;
 
-import org.springframework.security.Authentication;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.item.GenericItem;

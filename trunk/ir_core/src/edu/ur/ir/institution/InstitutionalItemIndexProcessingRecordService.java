@@ -121,4 +121,15 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
 	 * @return number of institutional item versions to be re-indexed.
 	 */
 	public Long insertAllItemsForContentType(Long contentTypeId, IndexProcessingType processingType);
+
+	/**
+	 * Insert all items for a contributor type to be re-indexed.
+	 * 
+	 * @param contributorTypeId - id of the contributor type
+	 * @param processingType - processing type 
+	 * 
+	 * @return number of institutional item versions to be re-indexed.
+	 */
+	public Long insertAllItemsForContributorType(Long contributorTypeId, IndexProcessingType processingType);
+
 }

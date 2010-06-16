@@ -21,15 +21,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 
-import org.springframework.security.providers.AbstractAuthenticationToken;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import org.springframework.security.ui.AbstractProcessingFilter;
-import org.springframework.security.ui.FilterChainOrder;
-import org.springframework.security.util.TextUtils;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.TextEscapeUtils;
 import org.springframework.util.Assert;
 
 import edu.ur.ir.security.service.LdapAuthenticationToken;
@@ -39,6 +39,7 @@ import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.UserGroupMemberFilter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
@@ -49,7 +50,7 @@ import javax.servlet.http.HttpSession;
  * @author Nathan Sarr
  *
  */
-public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
+public class UrAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter{
 	
 	/**  Logger for managing departments*/
 	private static final Logger log = Logger.getLogger(UrAuthenticationProcessingFilter.class);
@@ -71,6 +72,12 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
     /** set of filters to manage groups */
     private List<UserGroupMemberFilter> groupMemberFilters = new LinkedList<UserGroupMemberFilter>();
     
+    private boolean postOnly = true;
+
+    public UrAuthenticationProcessingFilter() {
+        super("/j_spring_security_check");
+    }
+
 
     //~ Methods ========================================================================================================
 
@@ -83,8 +90,13 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
 		this.userService = userService;
 	}
 
-	public Authentication attemptAuthentication(HttpServletRequest request) throws AuthenticationException {
-        String username = obtainUsername(request);
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+       
+		if (postOnly && !request.getMethod().equals("POST")) {
+            throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
+        }
+
+		String username = obtainUsername(request);
         String password = obtainPassword(request);
         
         if (username == null) {
@@ -125,7 +137,7 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
         HttpSession session = request.getSession(false);
 
         if (session != null || getAllowSessionCreation()) {
-            request.getSession().setAttribute(SPRING_SECURITY_LAST_USERNAME_KEY, TextUtils.escapeEntities(username));
+            request.getSession().setAttribute(SPRING_SECURITY_LAST_USERNAME_KEY, TextEscapeUtils.escapeEntities(username));
         }
 
         AuthenticationException lastException = null;
@@ -164,15 +176,6 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
         
         throw lastException;
         	
-    }
-
-    /**
-     * This filter by default responds to <code>/j_spring_security_check</code>.
-     *
-     * @return the default
-     */
-    public String getDefaultFilterProcessesUrl() {
-        return "/j_spring_security_check";
     }
 
     /**
@@ -236,9 +239,7 @@ public class UrAuthenticationProcessingFilter extends AbstractProcessingFilter {
         this.passwordParameter = passwordParameter;
     }
 
-    public int getOrder() {
-        return FilterChainOrder.AUTHENTICATION_PROCESSING_FILTER;
-    }
+  
 
     String getUsernameParameter() {
         return usernameParameter;

@@ -17,8 +17,10 @@
 
 package edu.ur.ir.security.service;
 
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.ldap.LdapAuthoritiesPopulator;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 import org.springframework.ldap.core.DirContextOperations;
      
 
@@ -35,7 +37,7 @@ public class UrResearchLdapAuthoritiesPopulator implements LdapAuthoritiesPopula
 	/* (non-Javadoc)
 	 * @see org.springframework.security.ldap.LdapAuthoritiesPopulator#getGrantedAuthorities(org.springframework.ldap.core.DirContextOperations, java.lang.String)
 	 */
-	public GrantedAuthority[]getGrantedAuthorities(DirContextOperations userData,
+	public Collection<GrantedAuthority> getGrantedAuthorities(DirContextOperations userData,
 			String username)
 	{
 		return null;

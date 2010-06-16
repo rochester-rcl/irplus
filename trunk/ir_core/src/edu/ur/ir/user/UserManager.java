@@ -16,8 +16,8 @@
 
 package edu.ur.ir.user;
 
-import org.springframework.security.providers.encoding.MessageDigestPasswordEncoder;
-import org.springframework.security.providers.encoding.ShaPasswordEncoder;
+import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 
 /**
  * Class to create users. 

@@ -19,14 +19,16 @@
 package edu.ur.ir.security.service;
 
 
+import java.util.LinkedList;
+
 import org.apache.log4j.Logger;
-import org.springframework.security.Authentication;
-import org.springframework.security.context.SecurityContext;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import edu.ur.ir.security.AuthenticateUserOverrideService;
-import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 
 /**
@@ -57,7 +59,7 @@ public class DefaultAuthenticateUserOverrideService implements AuthenticateUserO
 		log.debug("Authenticating user " + user);
 		
 		// creates authentication object
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getRoles().toArray(new IrRole[0]));
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getPassword(), new LinkedList<GrantedAuthority>(user.getRoles()));
         
         // Places the authentication object in security context
         SecurityContext ctx = SecurityContextHolder.getContext() ;
