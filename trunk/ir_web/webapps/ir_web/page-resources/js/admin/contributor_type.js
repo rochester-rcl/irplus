@@ -120,11 +120,12 @@ YAHOO.ur.contributor.type = {
 		};
 		
 		var handleSuccess = function(o) {
-		
+			YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
+	        	
 		        //get the response from adding a contributor type
 		        var response = eval("("+o.responseText+")");
 		    
@@ -132,6 +133,7 @@ YAHOO.ur.contributor.type = {
 		        // received from the server
 		        if( response.contributorTypeAdded == "false" )
 		        {
+		        	
 		            var contributorTypeNameError = document.getElementById('contributorTypeError');
 	                contributorTypeNameError.innerHTML = '<p id="newContributorTypeForm_nameError">' + response.message + '</p>';
 	                YAHOO.ur.contributor.type.contributorTypeDialog.showDialog();
@@ -148,6 +150,7 @@ YAHOO.ur.contributor.type = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('contributor type submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
@@ -165,6 +168,7 @@ YAHOO.ur.contributor.type = {
 			
 		YAHOO.ur.contributor.type.contributorTypeDialog.submit = function()
 		{  
+			YAHOO.ur.util.wait.waitDialog.showDialog();
 		    YAHOO.util.Connect.setForm('newContributorType');
 		    
 		    if( YAHOO.ur.contributor.type.contributorTypeDialog.validate() )
