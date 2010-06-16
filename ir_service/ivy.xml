@@ -45,6 +45,12 @@
         <dependency org="org.apache.lucene" name="lucene-misc" rev="2.4.1">
             <artifact name="lucene-misc" type="jar"/>
         </dependency>
+        
+        <!-- spring files -->
+        <dependency org="org.springframework" name="spring-context-support" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-context-support" type="jar"/>
+        </dependency>
+        
  
         <!--  quartz files  -->
         <dependency org="org.opensymphony.quartz" name="quartz" rev="1.6.5">

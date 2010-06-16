@@ -1,6 +1,6 @@
 
 
-irplus changes 1.0 to 1.1 
+irplus changes 1.0 to 2.0
 
 
 [Global]
@@ -13,10 +13,14 @@ irplus changes 1.0 to 1.1
 - Updated from xwork-core 2.1.2 to 2.1.6
 - Updated from Ivy 2.1.0-rc1 to 2.1.0
 - Removed JSON library as it was no longer needed [ was used by toJson for researcher ]
-- Updated to pdf box 1.0.0
+- Updated to pdf box 1.1.0
+- Updated to hibernate 3.5.2
+- Updated to Spring 3.0.2 [All packages]
 
 - Added access method for getting contributor publications ordered by submission date
 - Added access method for getting sponsor publications ordered by submission date
+
+- Updated for OAI compatibility
 
 [ur_persistence_util]
 =============================
@@ -45,6 +49,7 @@ initial addition for dealing with metadata information
 ==================================
 - Updated to index series / report number 
 - Updated repository service to include external authtentication enabled flag - 
+
 
 [ir_web]
 =============================

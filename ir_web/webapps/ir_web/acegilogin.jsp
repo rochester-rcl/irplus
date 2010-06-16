@@ -22,9 +22,6 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<%@ page import="org.springframework.security.ui.AbstractProcessingFilter" %>
-<%@ page import="org.springframework.security.ui.webapp.AuthenticationProcessingFilter" %>
-<%@ page import="org.springframework.security.AuthenticationException" %>
 
 
 <!--  document type -->

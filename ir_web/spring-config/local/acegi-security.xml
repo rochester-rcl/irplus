@@ -17,8 +17,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:s="http://www.springframework.org/schema/security"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.1.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
 <!-- ****************************************** --> 
 <!-- Acegi Security                             -->
@@ -28,6 +28,7 @@
   
     <!--  don't filter on the login page -->
     <s:intercept-url pattern="/acegilogin.jsp*" filters="none"/> 
+    <s:custom-filter ref="authenticationProcessingFilter" position="FORM_LOGIN_FILTER"/>
     
     <!-- Secure admin and user paths -->
     <s:intercept-url pattern="/admin/**" access="ROLE_ADMIN, ROLE_COLLECTION_ADMIN" />
@@ -40,47 +41,36 @@
   
   <bean id="authenticationProcessingFilter"
       class="edu.ur.ir.web.spring.security.UrAuthenticationProcessingFilter">
-	    <s:custom-filter position="AUTHENTICATION_PROCESSING_FILTER"/>
-	    <property name="userService" ref="userService"/>
+        <property name="userService" ref="userService"/>
 		<property name="authenticationManager" ref="authenticationManager"/>
-		<property name="authenticationFailureUrl" value="/acegilogin.jsp?login_error=1"/>
-		<property name="defaultTargetUrl" value="/user/workspace.action"/>
+		<property name="authenticationFailureHandler" ref="authenticationFailureHandler"/>
 		<property name="filterProcessesUrl" value="/j_spring_security_check"/>
 		<property name="ldapEnabled" value="${external.authentication.enabled}"/>
   </bean>
   
+  <bean id="authenticationFailureHandler" 
+        class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <property name="defaultFailureUrl" value="/acegilogin.jsp?login_error=1"/>
+  </bean>
+  
   <bean id="authenticationProcessingFilterEntryPoint"
-          class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
-     <property  name="loginFormUrl" value="/acegilogin.jsp"/>
+          class="org.springframework.security.web.authentication.AuthenticationProcessingFilterEntryPoint">
+     <property name="loginFormUrl" value="/acegilogin.jsp"/>
      <property name="forceHttps"  value="false" />
   </bean>
+  
+  <s:authentication-manager alias="authenticationManager">
+    <s:authentication-provider ref="daoAuthenticationProvider"/>
+    <s:authentication-provider ref="ldapAuthProvider"/>
+  </s:authentication-manager>
+  
+ 
 
- 	<bean id="authenticationManager" class="org.springframework.security.providers.ProviderManager">
-		<property name="providers">
-			<list>
-				<ref local="daoAuthenticationProvider"/>
-				<ref local="ldapAuthProvider"/>
-			</list>
-		</property>
-	</bean>
-
-	<bean id="daoAuthenticationProvider" class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
-	    <s:custom-authentication-provider />
+ 	<bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
 		<property name="userDetailsService" ref="irUserDAO"/>
 		<property name="passwordEncoder"><ref bean="passwordEncoder"/></property>
-		<property name="userCache">
-			<bean class="org.springframework.security.providers.dao.cache.EhCacheBasedUserCache">
-				<property name="cache">
-					<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-						<property name="cacheManager">
-							<bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
-						</property>
-						<property name="cacheName" value="userCache"/>
-					</bean>
-				</property>
-			</bean>
-		</property>
 	</bean>
+
 	
 	<!-- context source for connecting to the LDAP directory and loading ldap user information -->
 	<bean id="ldapUserService"
@@ -108,7 +98,7 @@
     </bean> 
     
     <!--  authenticator for LDAP -->
-    <bean id="ldapAuthenticator" class="org.springframework.security.providers.ldap.authenticator.BindAuthenticator">
+    <bean id="ldapAuthenticator" class="org.springframework.security.ldap.authentication.BindAuthenticator">
        <constructor-arg ref="contextSource"/>
        <property name="userSearch" ref="userSearch"/>
     </bean>
@@ -130,11 +120,10 @@
 			</list>
 		</property>
     </bean>
-             
 
 	
 	<!-- This bean is optional; it isn't used by any other bean as it only listens and logs -->
-	<bean id="loggerListener" class="org.springframework.security.event.authentication.LoggerListener"/>
+	<bean id="loggerListener" class="org.springframework.security.authentication.event.LoggerListener"/>
 
 	<!-- Sha Password encoder to use SHA-1 password encoding -->
-    <bean id="passwordEncoder" class="org.springframework.security.providers.encoding.ShaPasswordEncoder"/></beans>
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/></beans>

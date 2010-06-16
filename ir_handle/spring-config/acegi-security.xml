@@ -18,14 +18,14 @@
     xmlns:s="http://www.springframework.org/schema/security"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.1.xsd">
+    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
     <!-- ****************************************** --> 
     <!-- Spring Security                             -->
     <!-- ****************************************** -->  
 
 
-	<bean id="authenticationManager" class="org.springframework.security.providers.ProviderManager">
+	<bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
 		<property name="providers">
 			<list>
 				<ref local="daoAuthenticationProvider"/>
@@ -33,22 +33,9 @@
 		</property>
 	</bean>
 
-	<bean id="daoAuthenticationProvider" class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
-	    <s:custom-authentication-provider />
+	<bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
 		<property name="userDetailsService" ref="irUserDAO"/>
 		<property name="passwordEncoder"><ref bean="passwordEncoder"/></property>
-		<property name="userCache">
-			<bean class="org.springframework.security.providers.dao.cache.EhCacheBasedUserCache">
-				<property name="cache">
-					<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-						<property name="cacheManager">
-							<bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
-						</property>
-						<property name="cacheName" value="userCache"/>
-					</bean>
-				</property>
-			</bean>
-		</property>
 	</bean>
 	
 	<!-- context source for connecting to the LDAP directory and loading ldap user information -->
@@ -80,7 +67,7 @@
     <bean id="ldapAuthProvider"
         class="edu.ur.ir.security.service.UrLdapAuthenticationProvider">
        <constructor-arg>
-           <bean class="org.springframework.security.providers.ldap.authenticator.BindAuthenticator">
+           <bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
                <constructor-arg ref="contextSource"/>
                 <property name="userSearch" ref="userSearch"/>
            </bean>
@@ -91,8 +78,8 @@
 
 	
 	<!-- This bean is optional; it isn't used by any other bean as it only listens and logs -->
-	<bean id="loggerListener" class="org.springframework.security.event.authentication.LoggerListener"/>
+	<bean id="loggerListener" class="org.springframework.security.authentication.event.LoggerListener"/>
 
 	<!-- Sha Password encoder to use SHA-1 password encoding -->
-    <bean id="passwordEncoder" class="org.springframework.security.providers.encoding.ShaPasswordEncoder"/>
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
 </beans>
