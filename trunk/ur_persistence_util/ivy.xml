@@ -38,13 +38,17 @@
         </dependency>
         
         <!-- hiberante files -->
-        <dependency org="org.hibernate" name="hibernate-core" rev="3.3.2.GA" transitive="false">
+        <dependency org="org.hibernate" name="hibernate-core" rev="3.5.2-Final" transitive="false">
             <artifact name="hibernate-core" type="jar"/>
         </dependency>
         
          <!-- spring files -->
-        <dependency org="org.springframework" name="spring" rev="2.5.6" transitive="false">
-            <artifact name="spring" type="jar"/>
+        <dependency org="org.springframework" name="spring-core" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-core" type="jar"/>
+        </dependency>
+        
+        <dependency org="org.springframework" name="spring-orm" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-orm" type="jar"/>
         </dependency>
             
         <!-- test ng files for testing -->

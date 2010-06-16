@@ -76,6 +76,15 @@
         <dependency org="org.apache.tomcat" name="el-api" rev="6.0.14" transitive="false">
             <artifact name="el-api" type="jar"/>
         </dependency>
+        
+        <!-- spring files -->
+        <dependency org="org.springframework" name="spring-web" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-web" type="jar"/>
+        </dependency>
+        
+        <dependency org="org.springframework.security" name="spring-security-config" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-security-config" type="jar"/>
+        </dependency>
 
         <!--  yui download -->
 	    <dependency org="yui" name="yui" rev="2.7.0" transitive="false">
@@ -83,6 +92,9 @@
  	        url="http://yuilibrary.com/downloads/yui2/yui_2.7.0b.zip"/> 
         </dependency>
 
-        
+         <!--  spring security libraries --> 
+        <dependency org="org.springframework.security" name="spring-security-web" rev="3.0.2.RELEASE" transitive="false">
+            <artifact name="spring-security-web" type="jar"/> 
+        </dependency>
     </dependencies>
 </ivy-module>
