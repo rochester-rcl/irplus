@@ -16,6 +16,10 @@
 package edu.ur.ir.web.action.oai;
 
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.struts2.interceptor.ParameterAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -35,7 +39,7 @@ import edu.ur.ir.oai.metadata.provider.OaiService;
  * @author Nathan Sarr
  *
  */
-public class Oai_2_0 extends ActionSupport{
+public class Oai_2_0 extends ActionSupport implements ParameterAware{
 	
 
 	/** eclipse generated id */
@@ -67,9 +71,19 @@ public class Oai_2_0 extends ActionSupport{
 	
 	/** Service to help deal with underlying calls for oai information */
 	private OaiService oaiService;
+	
+	/** parameters passed in */
+	private Map<String, String[]> parameters;
 
 	public String execute()
 	{
+		try {
+			this.checkParameters();
+		} catch (BadArgumentException e) {
+			oaiOutput = e.getMessage();
+			return "badArgument";
+		}
+		
 		if( !OaiUtil.isValidOaiVerb(verb))
 		{
 			return "badVerb";
@@ -81,19 +95,30 @@ public class Oai_2_0 extends ActionSupport{
 				oaiOutput = oaiService.getRecord(identifier, metadataPrefix);
 				return "getRecord";
 			} catch (CannotDisseminateFormatException e) {
+				oaiOutput = e.getMessage();
 				return "cannotDisseminateFormat";
 			} catch (IdDoesNotExistException e) {
+				oaiOutput = e.getMessage();
 				return "idDoesNotExist";
 			} catch (BadArgumentException e) {
-				return "badArguement";
+				oaiOutput = e.getMessage();
+				return "badArgument";
 			}
 		}
 		else if( verb.equalsIgnoreCase(OaiUtil.IDENTIFY_VERB))
 		{
 			try {
-				oaiOutput = oaiService.identify();
+				if(parameters.size() > 1)
+				{
+					oaiOutput = "More than one argument";
+					return "badArgument";
+				}
+				else
+				{
+				    oaiOutput = oaiService.identify();
+				}
 			} catch (BadArgumentException e) {
-				return "badArguement";
+				return "badArgument";
 			}
 			return "identify";
 		}
@@ -103,15 +128,20 @@ public class Oai_2_0 extends ActionSupport{
 				oaiOutput = oaiService.listIdentifiers(metadataPrefix, set, from, until, resumptionToken);
 			    return "listIdentifiers";
 			} catch (BadResumptionTokenException e) {
+				oaiOutput = e.getMessage();
 				return("badResumptionToken");
 			} catch (CannotDisseminateFormatException e) {
+				oaiOutput = e.getMessage();
 				return "cannotDisseminateFormat";
 			} catch (NoRecordsMatchException e) {
+				oaiOutput = e.getMessage();
 				return "noRecordsMatch";
 			} catch (NoSetHierarchyException e) {
+				oaiOutput = e.getMessage();
 				return "noSetHierarchy";
 			} catch (BadArgumentException e) {
-				return "badArguement";
+				oaiOutput = e.getMessage();
+				return "badArgument";
 			}
 		}
 		else if( verb.equalsIgnoreCase(OaiUtil.LIST_RECORDS_VERB))
@@ -120,14 +150,19 @@ public class Oai_2_0 extends ActionSupport{
 				oaiOutput = oaiService.listRecords(metadataPrefix, set, from, until, resumptionToken);
 				return "listRecords";
 			} catch (BadArgumentException e) {
-				return "badArguement";
+				oaiOutput = e.getMessage();
+				return "badArgument";
 			} catch (BadResumptionTokenException e) {
+				oaiOutput = e.getMessage();
 				return("badResumptionToken");
 			} catch (CannotDisseminateFormatException e) {
+				oaiOutput = e.getMessage();
 				return "cannotDisseminateFormat";
 			} catch (NoRecordsMatchException e) {
+				oaiOutput = e.getMessage();
 				return "noRecordsMatch";
 			} catch (NoSetHierarchyException e) {
+				oaiOutput = e.getMessage();
 				return "noSetHierarchy";
 			}
 		    
@@ -138,11 +173,14 @@ public class Oai_2_0 extends ActionSupport{
 				oaiOutput = oaiService.listSets(resumptionToken);
 				return "listSets";
 			} catch (BadResumptionTokenException e) {
+				oaiOutput = e.getMessage();
 				return("badResumptionToken");
 			} catch (NoSetHierarchyException e) {
+				oaiOutput = e.getMessage();
 				return "noSetHierarchy";
 			} catch (BadArgumentException e) {
-				return "badArguement";
+				oaiOutput = e.getMessage();
+				return "badArgument";
 			}
 		}
 		else if( verb.equalsIgnoreCase(OaiUtil.LIST_METADATA_FORMATS_VERB))
@@ -151,10 +189,13 @@ public class Oai_2_0 extends ActionSupport{
 				oaiOutput = oaiService.listMetadataFormats(identifier);
 				return "listMetadataFormats";
 			} catch (BadArgumentException e) {
+				oaiOutput = e.getMessage();
 				return "badVerb";
 			} catch (IdDoesNotExistException e) {
+				oaiOutput = e.getMessage();
 				return "idDoesNotExist";
 			} catch (NoMetadataFormatsException e) {
+				oaiOutput = e.getMessage();
 				return "cannotDisseminateFormat";
 			}
 		}
@@ -233,6 +274,43 @@ public class Oai_2_0 extends ActionSupport{
 
 	public void setOaiService(OaiService oaiService) {
 		this.oaiService = oaiService;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.apache.struts2.interceptor.ParameterAware#setParameters(java.util.Map)
+	 */
+	public void setParameters(Map<String, String[]> parameters) {
+		this.parameters = parameters;
+	}
+	
+	private void checkParameters() throws BadArgumentException
+	{
+		Set<String> keys = parameters.keySet();
+		
+		for(String key : keys)
+		{
+			if( parameters.get(key) == null )
+			{
+				throw new BadArgumentException("parameter " + key + " is null" );
+			}
+			else if( parameters.get(key).length > 1 )
+			{
+				throw new BadArgumentException(" parameter " + key + " appers " 
+						+ parameters.get(key).length 
+						+ " times and should only appear once");
+			}
+		}
+		
+		// if there is a resumption token there should only be the verb remaining
+		if( resumptionToken != null )
+		{
+			if(keys.size() > 2 )
+			{
+				throw new BadArgumentException("Only resumption token and verb should be passed in when using resumption token");
+			}
+		}
+	   
 	}
 
 

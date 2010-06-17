@@ -23,8 +23,12 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.CopyrightStatementService;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 
@@ -34,7 +38,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class ManageCopyrightStatements extends Pager implements Preparable {
+public class ManageCopyrightStatements extends Pager implements Preparable, UserIdAware {
 	
 	/** generated version id. */
 	private static final long serialVersionUID = 5929487586704016172L;
@@ -73,6 +77,17 @@ public class ManageCopyrightStatements extends Pager implements Preparable {
 	/** Row End */
 	private int rowEnd;
 	
+	/** id of the user making the change */
+	private Long userId;
+	
+	/** Service for dealing with institutional item version services */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+	/** Service for user information  */
+	private UserService userService;
+
+
+
 	/** Default constructor */
 	public  ManageCopyrightStatements() 
 	{
@@ -119,6 +134,8 @@ public class ManageCopyrightStatements extends Pager implements Preparable {
 		if( other == null || other.getId().equals(copyrightStatement.getId()))
 		{
 			copyrightStatementService.save(copyrightStatement);
+			IrUser user = userService.getUser(userId, false);
+			institutionalItemVersionService.setAllVersionsAsUpdatedForCopyrightStatement(copyrightStatement, user, message);
 			added = true;
 		}
 		else
@@ -278,4 +295,21 @@ public class ManageCopyrightStatements extends Pager implements Preparable {
 		this.orderType = orderType;
 	}
 
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+
+	/**
+	 * Set the id of the user making the change.
+	 * 
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 }

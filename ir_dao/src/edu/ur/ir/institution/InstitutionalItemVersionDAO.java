@@ -22,6 +22,7 @@ import java.util.List;
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 import edu.ur.ir.item.ContentType;
+import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
@@ -396,15 +397,27 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	public Long setAsModifiedByContentTypeChange(ContentType contentType, IrUser user, String message);
 
 	/**
-	 * Updates all versions with the speicified contributor type as modified with current time and
+	 * Updates all versions with the specified contributor type as modified with current time and
 	 * specified message.  
 	 * 
-	 * @param contributorType  -  of the contributor type modified
+	 * @param contributorType  -  the contributor type modified
 	 * @param user - user making the change
 	 * @param message - message to set for the changes.
 	 * 
 	 * @return the number of item versions set as modified
 	 */
 	public Long setAsModifiedByContributorTypeChange(ContributorType contributorType, IrUser user, String message);
+	
+	/**
+	 * Updates all versions with the specified copyright statement as modified with current time and
+	 * specified message.  
+	 * 
+	 * @param copyrightStatement  -  the copyright statement modified
+	 * @param user - user making the change
+	 * @param message - message to set for the changes.
+	 * 
+	 * @return the number of item versions set as modified
+	 */
+	public Long setAsModifiedByCopyrightStatementChange(CopyrightStatement copyrightStatement, IrUser user, String message);
 
 }

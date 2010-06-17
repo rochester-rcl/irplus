@@ -28,6 +28,7 @@ import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
 import edu.ur.ir.item.ContentType;
+import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
@@ -681,6 +682,22 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
         numUpdated = numUpdated + q.executeUpdate();
         return numUpdated;
 	}
+
+	/**
+	 * Set all versioned items associated with the contributor type as modified.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByCopyrightStatementChange(edu.ur.ir.item.CopyrightStatement, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAsModifiedByCopyrightStatementChange(
+			CopyrightStatement copyrightStatement, IrUser user, String message) {
+		Long numUpdated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForCopyrightChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("copyrightStatementId", copyrightStatement.getId());
+        numUpdated = numUpdated + q.executeUpdate();
+        return numUpdated;	
+    }
 	
 
 }

@@ -98,7 +98,8 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			CannotDisseminateFormatException, NoRecordsMatchException, BadArgumentException{
 		
         boolean initialRequest = this.initilizeResumptionToken(metadataPrefix, set, from, until, strResumptionToken);
- 		if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
+ 		
+        if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
 		{
 			throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
 		}
@@ -702,16 +703,10 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	{
 		boolean initialRequest = false;
 		
-		if( metadataPrefix == null || metadataPrefix.equals(""))
-		{
-			throw new BadArgumentException("missing metadata prefix");
-		}
-		
 		// parse the token if it exists
 		if(strResumptionToken != null && !strResumptionToken.equals(""))
 		{
 			resumptionToken = new DefaultResumptionToken(strResumptionToken);
-			
 		}
 		else
 		{
@@ -741,6 +736,13 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		    {
 		        throw new BadArgumentException("from date greater than until date");
 		    }
+		    resumptionToken.checkFromUntilDates();
+		}
+		
+		
+		if( resumptionToken.getMetadataPrefix() == null || resumptionToken.getMetadataPrefix().equals(""))
+		{
+			throw new BadArgumentException("missing metadata prefix");
 		}
 		
 		return initialRequest;

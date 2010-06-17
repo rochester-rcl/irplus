@@ -29,6 +29,7 @@ import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ContentType;
+import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
@@ -450,6 +451,17 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 	public Long setAllVersionsAsUpdatedForContributorType(
 			ContributorType contributorType, IrUser user, String message) {
 		return institutionalItemVersionDAO.setAsModifiedByContributorTypeChange(contributorType, user, message);
+	}
+
+
+	/**
+	 * Set all institutional item versions as updated taht have the specified copyright statement.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForCopyrightStatement(edu.ur.ir.item.CopyrightStatement, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForCopyrightStatement(
+			CopyrightStatement copyrightStatement, IrUser user, String message) {
+		return institutionalItemVersionDAO.setAsModifiedByCopyrightStatementChange(copyrightStatement, user, message);
 	}
 
 }

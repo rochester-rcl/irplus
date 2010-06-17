@@ -110,16 +110,26 @@ public class DefaultOaiService implements OaiService{
 		}
 		
 		Long institutionalItemVersionId = DefaultOaiIdentifierHelper.getInstitutionalItemVersionId(identifier);
-		InstitutionalItemVersion institutionalItemVersion = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
+		InstitutionalItemVersion institutionalItemVersion = null;
 		DeletedInstitutionalItemVersion deletedVersion = null;
-		if( institutionalItemVersion == null )
-        {
-			deletedVersion = deletedInstitutionalItemVersionService.getDeletedVersionByItemVersionId(institutionalItemVersionId);
-			if( deletedVersion == null )
-			{
-				throw new IdDoesNotExistException("identifier " + identifier + " does not exist");
-			}
-        }
+		
+		if( institutionalItemVersionId != null )
+		{
+		    institutionalItemVersion = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
+			if( institutionalItemVersion == null )
+	        {
+				deletedVersion = deletedInstitutionalItemVersionService.getDeletedVersionByItemVersionId(institutionalItemVersionId);
+				if( deletedVersion == null )
+				{
+					throw new IdDoesNotExistException("identifier " + identifier + " does not exist");
+				}
+	        }
+		}
+		else
+		{
+			throw new IdDoesNotExistException("identifier " + identifier + " does not exist");
+		}
+		
 		
 		OaiMetadataProvider oaiMetadataProvider = oaiMetadataServiceProvider.getProvider(metadataPrefix) ;
 		if( oaiMetadataProvider != null )

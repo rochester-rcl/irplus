@@ -52,9 +52,6 @@ public class InstitutionalItemVersion extends BasePersistent{
 	
 	/** Date this version or the underlying item was modified */
 	private Timestamp dateLastModified;
-	
-
-
 
 	/** User who modified the the version or underlying item */
 	private IrUser lastModifiedBy;

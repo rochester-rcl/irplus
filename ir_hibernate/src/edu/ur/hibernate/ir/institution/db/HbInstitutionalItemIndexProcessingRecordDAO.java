@@ -32,6 +32,8 @@ import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
+import edu.ur.ir.item.ContentType;
+import edu.ur.ir.person.ContributorType;
 
 /**
  * Interface for dealing with institutional item index processing 
@@ -178,16 +180,16 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForContentType(long)
 	 */
-	public Long insertAllItemsForContentType(Long contentTypeId, IndexProcessingType processingType) {
+	public Long insertAllItemsForContentType(ContentType contentType, IndexProcessingType processingType) {
 		Long numCreated = 0l;
 		
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForPrimaryContentType");
-		q.setParameter("contentTypeId", contentTypeId);
+		q.setParameter("contentTypeId", contentType.getId());
 		q.setParameter("processingTypeId", processingType.getId());
 		numCreated += q.executeUpdate();
 		
 		q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForSecondaryContentType");
-		q.setParameter("contentTypeId", contentTypeId);
+		q.setParameter("contentTypeId", contentType.getId());
 		q.setParameter("processingTypeId", processingType.getId());
 		numCreated += q.executeUpdate();
 		
@@ -199,14 +201,15 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForContributorType(java.lang.Long, edu.ur.ir.index.IndexProcessingType)
 	 */
-	public Long insertAllItemsForContributorType(Long contributorTypeId,
+	public Long insertAllItemsForContributorType(ContributorType contributorType,
 			IndexProcessingType processingType) {
         Long numCreated = 0l;
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForContributorType");
-		q.setParameter("contributorTypeId", contributorTypeId);
+		q.setParameter("contributorTypeId", contributorType.getId());
 		q.setParameter("processingTypeId", processingType.getId());
 		numCreated += q.executeUpdate();
 		return numCreated;
 	}
+
 
 }

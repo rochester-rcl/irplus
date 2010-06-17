@@ -73,9 +73,14 @@ public class DefaultListMetadataFormatsService implements ListMetadataFormatsSer
 		 // format output is independent of existence
 		 if(identifier!= null && !identifier.trim().equals("") )
 		 {
+			 InstitutionalItemVersion institutionalItemVersion = null;
 			 Long institutionalItemVersionId = DefaultOaiIdentifierHelper.getInstitutionalItemVersionId(identifier);
-			 InstitutionalItemVersion institutionalItemVersion = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
-		     if( institutionalItemVersion == null )
+			 if( institutionalItemVersionId != null )
+			 {
+			     institutionalItemVersion = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
+			 }
+			 
+			 if( institutionalItemVersion == null )
 		     {
 		    	 throw new IdDoesNotExistException("identifier " + identifier + " does not exist");
 		     }
