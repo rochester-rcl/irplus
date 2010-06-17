@@ -146,7 +146,7 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 		if(other == null || other.getId().equals(contributorType.getId()))
 		{
 			contributorTypeService.save(contributorType);
-		    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForContributorType(contributorType.getId(), indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForContributorType(contributorType, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		    IrUser user = userService.getUser(userId, false);
 		    Long updatedCount = institutionalItemVersionService.setAllVersionsAsUpdatedForContributorType(contributorType, user, "Contributor Type Updated");
 			log.debug("Total number of records set for re-indxing = " + indexCount);

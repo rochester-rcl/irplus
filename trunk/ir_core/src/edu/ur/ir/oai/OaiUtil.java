@@ -22,6 +22,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import edu.ur.ir.oai.exception.BadArgumentException;
+
 /**
  * @author Nathan Sarr
  *
@@ -39,6 +41,8 @@ public class OaiUtil
 	public static final String longFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	public static final String shortFormat = "yyyy-MM-dd";
 
+	/** Determines if the date type is standard or zulu */
+	public enum DateType {NONE, STANDARD, ZULU};
 	
 	/**
 	 * Determine if the oai verb is valid.  This method ignores case.
@@ -116,22 +120,59 @@ public class OaiUtil
 	 * @param value
 	 * @return
 	 */
-	public static Date getDate(String value)
+	public static Date getDate(String value)throws BadArgumentException
 	{
 		SimpleDateFormat longDateFormat = new SimpleDateFormat(longFormat);
 		SimpleDateFormat shortDateFormat = new SimpleDateFormat(shortFormat);
 
 		Date d = null;
-			try {
+		try 
+		{
 			 d = longDateFormat.parse(value);
-		} catch (ParseException e) {
-			 try {
+		}
+		catch (ParseException e) 
+		{	 
+		    try 
+		    {
 				d = shortDateFormat.parse(value);
-			} catch (ParseException e1) {
-				throw new IllegalStateException("Could not parse from date " + value);
+			} 
+		    catch (ParseException e1) 
+		    {
+				throw new BadArgumentException("Could not parse from date " + value);
 			}
 		}
 		return d;
+	}
+	
+	/**
+	 * Determine the date type
+	 * @param value
+	 * @return
+	 */
+	public static DateType getDateType(String value) throws BadArgumentException
+	{
+		DateType dateType = DateType.NONE;
+		SimpleDateFormat longDateFormat = new SimpleDateFormat(longFormat);
+		SimpleDateFormat shortDateFormat = new SimpleDateFormat(shortFormat);
+
+		try 
+		{
+			 longDateFormat.parse(value);
+			 dateType = DateType.ZULU;
+		}
+		catch (ParseException e) 
+		{	 
+		    try 
+		    {
+				shortDateFormat.parse(value);
+				dateType = DateType.STANDARD;
+			} 
+		    catch (ParseException e1) 
+		    {
+		    	throw new BadArgumentException("Could not parse from date " + value);
+			}
+		}
+		return dateType;
 	}
 	
 	/**
@@ -147,6 +188,12 @@ public class OaiUtil
 		return longDateFormat.format(d);
 	}
 	
+	/**
+	 * Removes invalid xml charachters from the specified string.
+	 * 
+	 * @param value - string to replace the characters with
+	 * @return cleaned up string.
+	 */
 	public static String removeInvalidXmlChars(String value)
 	{
 		String stripped = value.replaceAll("[^\\u0009\\u000a\\u000d\\u0020-\\ud7ff\\e0000-\\ufffd]", "");

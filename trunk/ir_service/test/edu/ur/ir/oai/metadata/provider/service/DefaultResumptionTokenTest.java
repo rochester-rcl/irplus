@@ -23,6 +23,7 @@ import java.util.Date;
 import org.testng.annotations.Test;
 
 import edu.ur.ir.oai.OaiUtil;
+import edu.ur.ir.oai.exception.BadArgumentException;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 
 /**
@@ -44,8 +45,9 @@ public class DefaultResumptionTokenTest {
 	 * Make sure the resumption token properly parses valid strings
 	 * @throws ParseException 
 	 * @throws BadResumptionTokenException 
+	 * @throws BadArgumentException 
 	 */
-	public void resumptionTokenParsingTest() throws ParseException, BadResumptionTokenException
+	public void resumptionTokenParsingTest() throws ParseException, BadResumptionTokenException, BadArgumentException
 	{
 		// these are zulu times and dates
 		String strFromShort = "1998-10-22";
@@ -94,11 +96,6 @@ public class DefaultResumptionTokenTest {
         
         // make sure token is re-created correctly
         assert resumptionToken.getAsTokenString().equals(token) : "Token " + token + " should equal " + resumptionToken.getAsTokenString();
-	
-        
-        // try parsing a null token
-        resumptionToken.parseResumptionToken("");
-        assert resumptionToken.getAsTokenString().equals("") : "Resumption token should be empty but is " + resumptionToken.getAsTokenString();
-	}
+ 	}
 
 }

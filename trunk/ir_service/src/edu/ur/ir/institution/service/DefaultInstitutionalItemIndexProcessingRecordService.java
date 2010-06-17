@@ -26,6 +26,8 @@ import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.item.ContentType;
+import edu.ur.ir.person.ContributorType;
 
 /**
  * Implementation of the institutional item index processing record service.
@@ -255,9 +257,9 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForContentType(java.lang.Long, edu.ur.ir.index.IndexProcessingType)
 	 */
-	public Long insertAllItemsForContentType(Long contentTypeId,
+	public Long insertAllItemsForContentType(ContentType contentType,
 			IndexProcessingType processingType) {
-        return processingRecordDAO.insertAllItemsForContentType(contentTypeId, processingType);
+        return processingRecordDAO.insertAllItemsForContentType(contentType, processingType);
 	}
 
 	/** Insert all institutional items with a current version that has the
@@ -265,9 +267,9 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForContributorType(java.lang.Long, edu.ur.ir.index.IndexProcessingType)
 	 */
-	public Long insertAllItemsForContributorType(Long contributorTypeId,
+	public Long insertAllItemsForContributorType(ContributorType contributorType,
 			IndexProcessingType processingType) {
-		return  processingRecordDAO.insertAllItemsForContributorType(contributorTypeId, processingType);
+		return  processingRecordDAO.insertAllItemsForContributorType(contributorType, processingType);
 	}
 
 }

@@ -19,6 +19,8 @@ package edu.ur.ir.oai.metadata.provider.service;
 import java.util.Date;
 
 import edu.ur.ir.oai.OaiUtil;
+import edu.ur.ir.oai.OaiUtil.DateType;
+import edu.ur.ir.oai.exception.BadArgumentException;
 import edu.ur.ir.oai.exception.BadResumptionTokenException;
 import edu.ur.ir.oai.metadata.provider.ResumptionToken;
 
@@ -29,16 +31,24 @@ import edu.ur.ir.oai.metadata.provider.ResumptionToken;
  * @author Nathan Sarr
  *
  */
-public class DefaultResumptionToken implements ResumptionToken{
+public class DefaultResumptionToken implements ResumptionToken
+{
+
 	
 	/** eclipse generated id */
 	private static final long serialVersionUID = 3833203729450793209L;
 
 	/**  OAI set value */
 	private String set = null;
-
+	
 	/** from date  */
 	private Date from = null;
+	
+	/** the from date type */
+	private DateType fromDateType = OaiUtil.DateType.NONE;
+	
+	/** the until date type */
+	private DateType untilDateType = OaiUtil.DateType.NONE;
 	
 	/** Until date */
 	private Date until = null;
@@ -82,7 +92,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 	 * @param values
 	 * @throws BadResumptionTokenException 
 	 */
-	public DefaultResumptionToken(String resumptionToken) throws BadResumptionTokenException
+	public DefaultResumptionToken(String resumptionToken) throws BadResumptionTokenException, BadArgumentException
 	{
 		parseResumptionToken(resumptionToken);
 	}
@@ -108,7 +118,8 @@ public class DefaultResumptionToken implements ResumptionToken{
 		this.from = from;
 	}
 	
-	public void setFrom(String from) {
+	public void setFrom(String from) throws BadArgumentException {
+		this.fromDateType = OaiUtil.getDateType(from);
 		this.from = OaiUtil.getDate(from);
 	}
 
@@ -120,7 +131,8 @@ public class DefaultResumptionToken implements ResumptionToken{
 		this.until = until;
 	}
 	
-	public void setUntil(String until) {
+	public void setUntil(String until) throws BadArgumentException {
+		this.untilDateType = OaiUtil.getDateType(until);
 		this.until = OaiUtil.getDate(until);
 	}
 
@@ -271,7 +283,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 	 * 
 	 * @param resumptionToken
 	 */
-	public void parseResumptionToken(String resumptionToken) throws BadResumptionTokenException
+	public void parseResumptionToken(String resumptionToken) throws BadArgumentException, BadResumptionTokenException
 	{
 		this.set = null;
 		this.setBatchSize(null);
@@ -291,6 +303,22 @@ public class DefaultResumptionToken implements ResumptionToken{
 			    String value = parts[1];
 			    assignParts(name, value);
 			}
+			else 
+			{
+				throw new BadResumptionTokenException("illegal token token string each value should have two parts token =  " + resumptionToken);
+			}
+		}
+	
+	}
+	
+	public void checkFromUntilDates() throws BadArgumentException
+	{
+		if( from != null & until != null)
+		{
+			if( fromDateType != untilDateType )
+			{
+				throw new BadArgumentException("From and Until date types do not have the same granularity");
+			}
 		}
 	}
 	
@@ -301,7 +329,7 @@ public class DefaultResumptionToken implements ResumptionToken{
 	 * @param value - value of the parameter
 	 * @throws BadResumptionTokenException 
 	 */
-	private void assignParts(String name, String value) throws BadResumptionTokenException
+	private void assignParts(String name, String value) throws BadArgumentException, BadResumptionTokenException
 	{
 	
 		if( name.equals("set"))

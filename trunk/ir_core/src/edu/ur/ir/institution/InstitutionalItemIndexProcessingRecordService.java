@@ -20,6 +20,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.item.ContentType;
+import edu.ur.ir.person.ContributorType;
 
 /**
  * 
@@ -115,21 +117,21 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
 	/**
 	 * Insert all items for a content type to be re-indexed.
 	 * 
-	 * @param contentTypeId - id of the content type
+	 * @param contentType -  the content type
 	 * @param processingType - processing type 
 	 * 
 	 * @return number of institutional item versions to be re-indexed.
 	 */
-	public Long insertAllItemsForContentType(Long contentTypeId, IndexProcessingType processingType);
+	public Long insertAllItemsForContentType(ContentType contentType, IndexProcessingType processingType);
 
 	/**
 	 * Insert all items for a contributor type to be re-indexed.
 	 * 
-	 * @param contributorTypeId - id of the contributor type
+	 * @param contributorType - the contributor type
 	 * @param processingType - processing type 
 	 * 
 	 * @return number of institutional item versions to be re-indexed.
 	 */
-	public Long insertAllItemsForContributorType(Long contributorTypeId, IndexProcessingType processingType);
-
+	public Long insertAllItemsForContributorType(ContributorType contributorType, IndexProcessingType processingType);
+	
 }

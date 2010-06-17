@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import edu.ur.ir.item.ContentType;
+import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
@@ -444,5 +445,16 @@ public interface InstitutionalItemVersionService extends Serializable {
 	 */
 	public Long setAllVersionsAsUpdatedForContributorType(ContributorType contributorType, IrUser user, String message);
 
+	/**
+	 * Set all versions as updated for a copyright change made by a specific user.  This 
+	 * should also cause any re-indexing to occur.
+	 * 
+	 * @param copyright - the copyright that has been changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated.
+	 */
+	public Long setAllVersionsAsUpdatedForCopyrightStatement(CopyrightStatement copyright, IrUser user, String message);
 
 }

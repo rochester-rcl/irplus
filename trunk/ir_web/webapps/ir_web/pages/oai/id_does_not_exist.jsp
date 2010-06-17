@@ -6,28 +6,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <responseDate>${responseDate}</responseDate>
-  <request 
-           <c:if test="${verb != null}">
-               verb="${verb}"
-           </c:if> 
-           <c:if test="${identifier != null }">
-               identifier="${identifier}" 
-           </c:if>
-           <c:if test="${metadataPrefix != null }">
-                metadataPrefix="${metadataPrefix}" 
-           </c:if>
-           <c:if test="${resumptionToken != null }"> 
-               resumptionToken="${resumptionToken}"
-           </c:if>
-           <c:if test="${from != null }"> 
-               from="${from}"
-           </c:if>
-           <c:if test="${until != null }"> 
-               until="${until}"
-           </c:if>
-           <c:if test="${set != null }"> 
-               set="${set}"
-           </c:if>
-           > <ir:baseUrl/>oai2.action</request>
+  <request> <ir:baseUrl/>oai2.action</request>
   <error code="idDoesNotExist">No matching identifier could be found</error>
 </OAI-PMH>

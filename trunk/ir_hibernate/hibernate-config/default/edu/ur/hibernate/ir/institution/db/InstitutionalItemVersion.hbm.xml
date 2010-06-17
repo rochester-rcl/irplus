@@ -638,5 +638,16 @@
 	</query>
 	
 	<!--copyright changes -->
+    <query name="updateItemVersionForCopyrightChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       where item.copyrightStatement.id = :copyrightStatementId 
+	      )
+	</query>
 	
 </hibernate-mapping>

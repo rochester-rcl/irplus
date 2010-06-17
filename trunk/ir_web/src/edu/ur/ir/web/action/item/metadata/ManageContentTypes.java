@@ -149,7 +149,7 @@ public class ManageContentTypes extends Pager implements Preparable, UserIdAware
 		if( other == null || other.getId().equals(contentType.getId()))
 		{
 			contentTypeService.saveContentType(contentType);
-		    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForContentType(contentType.getId(), indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForContentType(contentType, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		    IrUser user = userService.getUser(userId, false);
 		    Long updatedCount = institutionalItemVersionService.setAllVersionsAsUpdatedForContentType(contentType ,user, "Content Type Updated");
 			log.debug("Total number of records set for re-indxing = " + indexCount);

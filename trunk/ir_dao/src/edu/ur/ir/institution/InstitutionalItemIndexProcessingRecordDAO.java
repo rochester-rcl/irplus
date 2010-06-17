@@ -21,6 +21,8 @@ import java.util.List;
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.item.ContentType;
+import edu.ur.ir.person.ContributorType;
 
 /**
  * Data access for institutional item index processing record.
@@ -72,20 +74,21 @@ public interface InstitutionalItemIndexProcessingRecordDAO
 	 * Set all institutional items to be re-indexed based on the content type id.  This
 	 * should include items that use the content type as a secondary content type.
 	 * 
-	 * @param contentTypeId - id for the content type
+	 * @param contentType - the content type
 	 * @param processingType - type of processing to complete
 	 * @return number of records created for processing
 	 */
-	public Long insertAllItemsForContentType(Long contentTypeId, IndexProcessingType processingType);
+	public Long insertAllItemsForContentType(ContentType contentType, IndexProcessingType processingType);
 	
 	/**
 	 * Sets all institutional items with a current item that has the specified contributor type associated with it 
 	 * to be re-indexed based on the contributor type id.
 	 * 
-	 * @param contributorTypeId - id of the contributor type to be updated
+	 * @param contributorType - the contributor type to be updated
 	 * @param processingType - type of indexing to be performed
 	 * 
 	 * @return - number of items set for re-indexing
 	 */
-	public Long insertAllItemsForContributorType(Long contributorTypeId, IndexProcessingType processingType);
+	public Long insertAllItemsForContributorType(ContributorType contributorType, IndexProcessingType processingType);
+	
 }

@@ -30,5 +30,5 @@
                set="${set}"
            </c:if>
            > <ir:baseUrl/>oai2.action</request>
-  <error code="cannotDisseminateFormat"/>
+  <error code="cannotDisseminateFormat"> ${oaiOutput}</error>
 </OAI-PMH>
