@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */  
+
 package edu.ur.ir.oai.metadata.provider.service;
 
 import java.text.DateFormat;
@@ -20,11 +21,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
 
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
+import edu.ur.ir.SimpleDateFormatter;
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalCollection;
@@ -40,30 +41,39 @@ import edu.ur.ir.item.ItemTitle;
 import edu.ur.ir.item.LanguageType;
 import edu.ur.ir.item.PublishedDate;
 import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMapping;
+import edu.ur.ir.item.metadata.dc.ContributorTypeDublinCoreMappingService;
+import edu.ur.ir.item.metadata.dc.IdentifierTypeDublinCoreMapping;
+import edu.ur.ir.item.metadata.dc.IdentifierTypeDublinCoreMappingService;
 import edu.ur.ir.oai.OaiUtil;
 import edu.ur.ir.oai.metadata.provider.ListSetsService;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataProvider;
 import edu.ur.ir.person.BasicPersonNameFormatter;
-import edu.ur.ir.SimpleDateFormatter;
 
 /**
- * Dublin core implementation of the oai provider.
+ * This allows qualified dublin core metatadata to be output.
  * 
- * @author Nathan Sarr
+ * @author NathanS
  *
  */
-public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider{
-	
-	/** eclipse generated id */
-	private static final long serialVersionUID = 1080968843728303258L;
+public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataProvider{
+
+	/** eclipse generated id  */
+	private static final long serialVersionUID = -8227691687049064056L;
 
 	/** Prefix handled by this provider */
-	public static String METADATA_PREFIX = "oai_dc";
+	public static String METADATA_PREFIX = "oai_dc_terms";
 	
-	public static String METADATA_NAMESPACE = "http://www.openarchives.org/OAI/2.0/oai_dc/";
+	public static String METADATA_NAMESPACE = "http://urresearch.rochester.edu/OAI/2.0/oai_dc_terms/";
 	
-	public static String SCHEMA = "http://www.openarchives.org/OAI/2.0/oai_dc.xsd";
+	public static String SCHEMA = "http://dublincore.org/schemas/xmls/qdc/2003/04/02/dcterms.xsd";
 	
+	/** Service for dealing with contributor types */
+	private ContributorTypeDublinCoreMappingService contributorTypeDublinCoreMappingService;  
+	
+	/** Service for dealing with dublin core identifier types */
+	private IdentifierTypeDublinCoreMappingService identifierTypeDublinCoreMappingService;
+
 	/** Person name formatter */
 	private BasicPersonNameFormatter nameFormatter;
 	
@@ -156,8 +166,8 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 
 		 oaiDc.setAttribute("xmlns:oai_dc", "http://www.openarchives.org/OAI/2.0/oai_dc/");
 		 oaiDc.setAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+		 oaiDc.setAttribute("xmlns:dcterms", "http://purl.org/dc/terms");
 		 oaiDc.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		 oaiDc.setAttribute("xsi:schemaLocation", "http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd");
 
 		 metadata.appendChild(oaiDc);
 		 
@@ -186,6 +196,15 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		     addExtents(doc, oaiDc, item);
 		 }
 		 
+	}
+	
+	public ContributorTypeDublinCoreMappingService getContributorTypeDublinCoreMappingService() {
+		return contributorTypeDublinCoreMappingService;
+	}
+
+	public void setContributorTypeDublinCoreMappingService(
+			ContributorTypeDublinCoreMappingService contributorTypeDublinCoreMappingService) {
+		this.contributorTypeDublinCoreMappingService = contributorTypeDublinCoreMappingService;
 	}
 	
 	public BasicPersonNameFormatter getNameFormatter() {
@@ -230,7 +249,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	{
 		for(ItemTitle subTitle : item.getSubTitles())
 		 {
-			 Element alternative = doc.createElement("dc:title");
+			 Element alternative = doc.createElement("dcterms:alternative");
 			 Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(subTitle.getFullTitle()));
 			 alternative.appendChild(data);
 			 oaiDc.appendChild(alternative);
@@ -284,7 +303,24 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 			 }
 			
 			 
-		     Element creator   = doc.createElement("dc:creator");
+			 ContributorTypeDublinCoreMapping dcMapping = contributorTypeDublinCoreMappingService.get(itemContributor.getContributor().getContributorType().getId());
+			 Element creator = null;
+			 if( dcMapping != null )
+			 {
+				 if( dcMapping.getDublinCoreTerm().getIsSimpleDublinCoreElement())
+				 {
+			         creator = doc.createElement("dc:" + dcMapping.getDublinCoreTerm().getName());
+				 }
+				 else
+				 {
+					 creator = doc.createElement("dcterms:" + dcMapping.getDublinCoreTerm().getName());
+				 }
+		 
+			 }
+			 else
+			 {
+				 creator  = doc.createElement("dc:creator");
+			 }
 			 Text data = doc.createTextNode( OaiUtil.removeInvalidXmlChars(nameFormatter.getNameFormatted(itemContributor.getContributor().getPersonName(), true)) );
 			 creator.appendChild(data);
 			 oaiDc.appendChild(creator);
@@ -320,7 +356,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	{
 		 if( item.getItemAbstract() != null && !item.getItemAbstract().equalsIgnoreCase(""))
 		 {
-			 Element itemAbstract = doc.createElement("dc:description");
+			 Element itemAbstract = doc.createElement("dcterms:abstract");
 		     Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(item.getItemAbstract()));
 		     itemAbstract.appendChild(data);
 		     oaiDc.appendChild(itemAbstract);
@@ -338,7 +374,28 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	{
 		for(ItemIdentifier itemIdentifier : item.getItemIdentifiers())
 		{
-			Element identifier = doc.createElement("dc:identifier");
+			IdentifierTypeDublinCoreMapping dcMapping = identifierTypeDublinCoreMappingService.get(itemIdentifier.getIdentifierType().getId());
+			Element identifier = null;
+			if( dcMapping != null )
+			{
+				if( dcMapping.getDublinCoreTerm().getIsSimpleDublinCoreElement())
+				{
+					identifier = doc.createElement("dc:" + dcMapping.getDublinCoreTerm().getName());
+				}
+				else
+				{
+					 identifier = doc.createElement("dcterms:" + dcMapping.getDublinCoreTerm().getName());
+				}
+				
+				if( dcMapping.getDublinCoreEncodingScheme() != null )
+				{
+					identifier.setAttribute("xsi:type", "dcterms:" + dcMapping.getDublinCoreEncodingScheme().getName());
+				}
+			}
+			else
+			{
+			    identifier = doc.createElement("dc:identifier");
+			}
 			Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(itemIdentifier.getValue()));
 			identifier.appendChild(data);
 			oaiDc.appendChild(identifier);
@@ -463,7 +520,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		if( item.getReleaseDate() != null )
 		{
 		    Date d = item.getReleaseDate();
-		    Element availableElement = doc.createElement("dc:date");
+		    Element availableElement = doc.createElement("dcterms:available");
 		    DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
 			Text data = doc.createTextNode(dateFormat.format(d));
 	    	availableElement.appendChild(data);
@@ -485,7 +542,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		{
 			if( externalPublishedItem.getCitation() != null )
 			{
-		        Element citationElement = doc.createElement("dc:identifier");
+		        Element citationElement = doc.createElement("dcterms:bibliographicCitation");
 			    Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(externalPublishedItem.getCitation()));
 			    citationElement.appendChild(data);
 	    	    oaiDc.appendChild(citationElement);
@@ -505,7 +562,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		if( item.getDateOfDeposit() != null )
 		{
 		    Date d = item.getDateOfDeposit();
-		    Element acceptedElement = doc.createElement("dc:date");
+		    Element acceptedElement = doc.createElement("dcterms:dateAccepted");
 		    DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
 			Text data = doc.createTextNode(dateFormat.format(d));
 	    	acceptedElement.appendChild(data);
@@ -528,7 +585,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 			PublishedDate publishedDate = externalPublishedItem.getPublishedDate();
 			if( publishedDate != null )
 			{
-		        Element citationElement = doc.createElement("dc:date");
+		        Element citationElement = doc.createElement("dcterms:issued");
 		        SimpleDateFormatter sdf = new SimpleDateFormatter();
 		        Text data = doc.createTextNode(sdf.getDate(publishedDate));
 		        citationElement.appendChild(data);
@@ -549,7 +606,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		if( item.getDateLastModified() != null )
 		{
 		    Date d = item.getDateLastModified();
-		    Element modifiedElement = doc.createElement("dc:date");
+		    Element modifiedElement = doc.createElement("dcterms:modified");
 		    DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
 			Text data = doc.createTextNode(dateFormat.format(d));
 	    	modifiedElement.appendChild(data);
@@ -568,7 +625,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	{
 		for( ItemExtent ie : item.getItemExtents())
 		{
-			Element extentElement = doc.createElement("dc:format");
+			Element extentElement = doc.createElement("dcterms:extent");
 		    Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(ie.getExtentType().getName() + ":" + ie.getValue()));
 		    extentElement.appendChild(data);
     	    oaiDc.appendChild(extentElement);
@@ -588,6 +645,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		{
 			HandleInfo handle = item.getHandleInfo();
 		    Element identifier = doc.createElement("dc:identifier");
+		    identifier.setAttribute("xsi:type", "dcterms:URI");
 		    Text data = doc.createTextNode(handle.getNameAuthority().getAuthorityBaseUrl() + handle.getNameAuthority().getNamingAuthority() + "/" + handle.getLocalName());
 		    identifier.appendChild(data);
 		    oaiDc.appendChild(identifier);
@@ -607,7 +665,7 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		if( item.getReleaseDate() != null )
 		{
 			SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-		    Element dateAvailable = doc.createElement("dc:date");
+		    Element dateAvailable = doc.createElement("dcterms:available");
 		    Text data = doc.createTextNode(df.format(item.getReleaseDate()));
 		    dateAvailable.appendChild(data);
 		    oaiDc.appendChild(dateAvailable);
@@ -687,5 +745,16 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 		 }
 
 	}
+	
+	public IdentifierTypeDublinCoreMappingService getIdentifierTypeDublinCoreMappingService() {
+		return identifierTypeDublinCoreMappingService;
+	}
+
+	public void setIdentifierTypeDublinCoreMappingService(
+			IdentifierTypeDublinCoreMappingService identifierTypeDublinCoreMappingService) {
+		this.identifierTypeDublinCoreMappingService = identifierTypeDublinCoreMappingService;
+	}
+	
+
 
 }

@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import edu.ur.ir.institution.InstitutionalItemVersion;
@@ -39,6 +40,9 @@ public class DefaultOaiMetadataServiceProvider implements OaiMetadataServiceProv
 	
 	/** List of oai metadata providers */
 	private List<OaiMetadataProvider> providers = new LinkedList<OaiMetadataProvider>();
+	
+	/** logger */
+	private static Logger log = Logger.getLogger(DefaultOaiMetadataServiceProvider.class);
 	
 	/**
 	 * @see edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider#getProvider(java.lang.String)
@@ -89,12 +93,13 @@ public class DefaultOaiMetadataServiceProvider implements OaiMetadataServiceProv
 	 * 
 	 * @see edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider#supports(java.lang.String)
 	 */
-	@Override
 	public boolean supports(String metadataPrefix) {
 		for( OaiMetadataProvider provider : providers)
 		{
+			log.debug("Checking if provider " + provider + " supports prefix " + metadataPrefix);
 			if( provider.supports(metadataPrefix))
 			{
+				log.debug("Returning true");
 				return true;
 			}
 		}

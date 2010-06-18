@@ -718,6 +718,13 @@
    <!-- ****************************************** --> 
    <bean id="dublinCoreOaiMetadataProvider" 
        class="edu.ur.ir.oai.metadata.provider.service.DefaultDublinCoreOaiMetadataProvider">
+       <property name="nameFormatter" ref="lastNamePersonNameFormatter" />
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="listSetsService" ref="listSetsService"/>
+   </bean>
+   
+    <bean id="qualifiedDublinCoreOaiMetadataProvider" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultQualifiedDublinCoreMetadataProvider">
        <property name="contributorTypeDublinCoreMappingService" ref="contributorTypeDublinCoreMappingService"/>
        <property name="identifierTypeDublinCoreMappingService" ref="identifierTypeDublinCoreMappingService"/>
        <property name="nameFormatter" ref="lastNamePersonNameFormatter" />
@@ -733,6 +740,7 @@
        <property name="providers">
            <list>
                <ref bean="dublinCoreOaiMetadataProvider"/>
+               <ref bean="qualifiedDublinCoreOaiMetadataProvider"/>
            </list>
        </property>
    </bean>
