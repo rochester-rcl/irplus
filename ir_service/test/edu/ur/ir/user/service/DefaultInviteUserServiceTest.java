@@ -26,7 +26,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -40,6 +39,7 @@ import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
 import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.security.IrClassTypePermission;
@@ -73,8 +73,7 @@ import edu.ur.util.TokenGenerator;
 public class DefaultInviteUserServiceTest {
 
 	/** Application context  for loading information*/
-	ApplicationContext ctx = new ClassPathXmlApplicationContext(
-	"applicationContext.xml");
+	ApplicationContext ctx = ContextHolder.getApplicationContext();
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInviteUserServiceTest.class);
