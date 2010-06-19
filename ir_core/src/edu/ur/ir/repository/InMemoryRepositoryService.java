@@ -45,6 +45,9 @@ import org.apache.log4j.Logger;
 public class InMemoryRepositoryService implements RepositoryService{
 
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7283528544966743132L;
+
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(InMemoryRepositoryService.class);
 	
