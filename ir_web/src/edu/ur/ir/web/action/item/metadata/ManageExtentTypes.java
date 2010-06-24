@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.ExtentTypeService;
 import edu.ur.ir.user.IrRole;
@@ -84,6 +85,11 @@ public class ManageExtentTypes extends Pager implements Preparable, UserIdAware{
 	/** Service for checking user information */
 	private UserService userService;
 	
+	/** Service for dealing with institutional item version services */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+	
+
 	/** Default constructor */
 	public ManageExtentTypes()
 	{
@@ -100,7 +106,7 @@ public class ManageExtentTypes extends Pager implements Preparable, UserIdAware{
 	{
 		log.debug("creating a extent type = " + extentType.getName());
 		IrUser user = userService.getUser(userId, false);
-		if( user == null || (!user.hasRole(IrRole.AUTHOR_ROLE) && !user.hasRole(IrRole.AUTHOR_ROLE)) )
+		if( user == null || !(user.hasRole(IrRole.AUTHOR_ROLE) || user.hasRole(IrRole.ADMIN_ROLE)) )
 		{
 		    return "accessDenied";	
 		}
@@ -139,7 +145,9 @@ public class ManageExtentTypes extends Pager implements Preparable, UserIdAware{
 		// then they are trying to rename it to the same name.
 		if(other == null || other.getId().equals(extentType.getId()))
 		{
+			IrUser user = userService.getUser(userId, false);
 			extentTypeService.saveExtentType(extentType);
+			institutionalItemVersionService.setAllVersionsAsUpdatedForExtentType(extentType, user, "extent type - " + extentType + " updated ");
 			added = true;
 		}
 		else
@@ -325,6 +333,11 @@ public class ManageExtentTypes extends Pager implements Preparable, UserIdAware{
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+	
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
 
 }

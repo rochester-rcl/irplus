@@ -37,6 +37,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.ldap.authentication.LdapAuthenticator;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.ldap.userdetails.LdapUserDetailsMapper;
 import org.springframework.security.ldap.userdetails.UserDetailsContextMapper;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -280,6 +281,10 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
 
         } catch (NamingException ldapAccessFailure) {
             throw new AuthenticationServiceException(ldapAccessFailure.getMessage(), ldapAccessFailure);
+        }
+        catch(UsernameNotFoundException usernameNotFoundException)
+        {
+        	throw new AuthenticationServiceException(usernameNotFoundException.getMessage(), usernameNotFoundException);
         }
     }
 

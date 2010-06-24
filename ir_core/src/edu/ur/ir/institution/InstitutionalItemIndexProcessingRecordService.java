@@ -21,7 +21,13 @@ import java.util.List;
 
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.item.ContentType;
+import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.Series;
+import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.person.ContributorType;
+import edu.ur.ir.person.PersonName;
 
 /**
  * 
@@ -133,5 +139,66 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
 	 * @return number of institutional item versions to be re-indexed.
 	 */
 	public Long insertAllItemsForContributorType(ContributorType contributorType, IndexProcessingType processingType);
+	
+
+	/**
+	 * Insert all items for an identifier type to be re-indexed.
+	 * 
+	 * @param identifierType - the identifier type
+	 * @param processingType - processing type 
+	 * 
+	 * @return number of institutional item versions to be re-indexed.
+	 */
+	public Long insertAllItemsForIdentifierType(IdentifierType identifierType, IndexProcessingType processingType);
+	
+	/**
+	 * Insert all items for a language type to be re-indexed.
+	 * 
+	 * @param languageType - the language type
+	 * @param processingType - processing type 
+	 * 
+	 * @return number of institutional item versions to be re-indexed.
+	 */
+	public Long insertAllItemsForLangaugeType(LanguageType languageType, IndexProcessingType processingType);
+	
+	/**
+	 * Insert all items for a person name to be re-indexed.
+	 * 
+	 * @param person name - the person name
+	 * @param processingType - processing type 
+	 * 
+	 * @return number of institutional item versions to be re-indexed.
+	 */
+	public Long insertAllItemsForPersonName(PersonName personName, IndexProcessingType processingType);
+	
+	/**
+	 * Insert all items for a publisher to be re-indexed.
+	 * 
+	 * @param publisher - the publisher
+	 * @param processingType - processing type 
+	 * 
+	 * @return number of institutional item versions to be re-indexed.
+	 */
+	public Long insertAllItemsForPublisher(Publisher publisher, IndexProcessingType processingType);
+	
+	/**
+	 * Insert all items for a series to be re-indexed.
+	 * 
+	 * @param series - the series
+	 * @param processingType - processing type 
+	 * 
+	 * @return number of institutional item versions to be re-indexed.
+	 */
+	public Long insertAllItemsForSeries(Series series, IndexProcessingType processingType);
+	
+	/**
+	 * Insert all items for a sponsor to be re-indexed.
+	 * 
+	 * @param sponsor - the sponsor
+	 * @param processingType - processing type 
+	 * 
+	 * @return number of institutional item versions to be re-indexed.
+	 */
+	public Long insertAllItemsForSponsor(Sponsor sponsor, IndexProcessingType processingType);
 	
 }

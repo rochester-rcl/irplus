@@ -29,7 +29,14 @@ import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.CopyrightStatement;
+import edu.ur.ir.item.ExtentType;
+import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.Series;
+import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.person.ContributorType;
+import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -691,13 +698,127 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 	public Long setAsModifiedByCopyrightStatementChange(
 			CopyrightStatement copyrightStatement, IrUser user, String message) {
 		Long numUpdated = 0l;
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForCopyrightChange");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForCopyrightStatementChange");
         q.setParameter("note", message);
         q.setParameter("user", user);
         q.setParameter("copyrightStatementId", copyrightStatement.getId());
         numUpdated = numUpdated + q.executeUpdate();
         return numUpdated;	
     }
+
+	/**
+	 * Set all versioned items associated with the extent type as modified.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByExtentTypeChange(edu.ur.ir.item.ExtentType, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAsModifiedByExtentTypeChange(ExtentType extentType,
+			IrUser user, String message) {
+		Long numUpdated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForExtentTypeChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("extentTypeId", extentType.getId());
+        numUpdated = numUpdated + q.executeUpdate();
+        return numUpdated;	
+	}
+
+	/**
+	 *  Set all versioned items associated with the identifier type as modified.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByIdentifierTypeChange(edu.ur.ir.item.IdentifierType, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAsModifiedByIdentifierTypeChange(
+			IdentifierType identifierType, IrUser user, String message) {
+		Long numUpdated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForIdentifierTypeChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("identifierTypeId", identifierType.getId());
+        numUpdated = numUpdated + q.executeUpdate();
+        return numUpdated;	
+	}
+
+	/**
+	 * Set all versioned items associated with the language type as modified.
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByLagnuageTypeChange(edu.ur.ir.item.LanguageType, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAsModifiedByLanguageTypeChange(LanguageType languageType,
+			IrUser user, String message) {
+		Long numUpdated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForLanguageTypeChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("languageTypeId", languageType.getId());
+        numUpdated = numUpdated + q.executeUpdate();
+        return numUpdated;	
+	}
+
+	/**
+	 * Set all versioned items associated with the person name as modified.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByPersonNameChange(edu.ur.ir.person.PersonName, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAsModifiedByPersonNameChange(PersonName personName,
+			IrUser user, String message) {
+		Long numUpdated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForContributorPersonNameChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("personNameId", personName.getId());
+        numUpdated = numUpdated + q.executeUpdate();
+        return numUpdated;	
+	}
+
+	/**
+	 * Set all versioned items associated with the publisher as modified.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByPublisherChange(edu.ur.ir.item.Publisher, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAsModifiedByPublisherChange(Publisher publisher,
+			IrUser user, String message) {
+		Long numUpdated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForPublisherChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("publisherId", publisher.getId());
+        numUpdated = numUpdated + q.executeUpdate();
+        return numUpdated;	
+	}
+
+	/**
+	 * Set all versioned items associated with the series as modified.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedBySeriesChange(edu.ur.ir.item.Series, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAsModifiedBySeriesChange(Series series, IrUser user,
+			String message) {
+		Long numUpdated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForSeriesChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("seriesId", series.getId());
+        numUpdated = numUpdated + q.executeUpdate();
+        return numUpdated;	
+
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedBySponsorChange(edu.ur.ir.item.Sponsor, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAsModifiedBySponsorChange(Sponsor sponsor, IrUser user,
+			String message) {
+		Long numUpdated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForSponsorChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("sponsorId", sponsor.getId());
+        numUpdated = numUpdated + q.executeUpdate();
+        return numUpdated;	
+	}
+	
+	
+	
+	
 	
 
 }

@@ -31,39 +31,25 @@ import edu.ur.ir.person.PersonNameTitleDAO;
 
 public class EditPersonNameTitle extends ActionSupport implements Preparable, Validateable{
 	
-	/**
-	 * Eclipse generated id.
-	 */
+	/**  Eclipse generated id. */
 	private static final long serialVersionUID = -7050953690475661645L;
 
-	/**
-	 * Logger for editing a file database.
-	 */
+	/**  Logger for editing a file database. */
 	private static final Logger log = Logger.getLogger(EditPersonNameTitle.class);
 	
-	/**
-	 * Id of the name of the person to edit.
-	 */
+	/**  Id of the name of the person to edit. */
 	private Long personNameId;
 	
-	/**
-	 * Id of the person name title.
-	 */
+	/**  Id of the person name title. */
 	private Long personNameTitleId;
 	
-	/**
-	 * Data access for the person name title 
-	 */
+	/**  Data access for the person name title  */
 	PersonNameTitleDAO personNameTitleDAO;
 	
-	/**
-	 * Person name title
-	 */
+	/**  Person name title */
 	private PersonNameTitle personNameTitle;
 
-	/**
-	 * Person name data access.
-	 */
+	/**  Person name data access. */
 	private PersonNameDAO personNameDAO;
 	
 	/**

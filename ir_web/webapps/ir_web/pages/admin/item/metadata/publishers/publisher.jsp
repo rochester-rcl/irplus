@@ -50,6 +50,7 @@
  	
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
+ 	<ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="pages/js/ur_table.js"/>
     <ur:js src="page-resources/js/admin/publisher.js"/>
@@ -64,7 +65,7 @@
         <c:import url="/inc/header.jsp"/>
       
         <h3>Edit Publishers</h3>
-  
+         
         <div id="bd">
    
 		    <button id="showPublisher" class="ur_button" 
@@ -77,7 +78,7 @@
 
             <br/>
             <br/>	        
-
+            <div id="newPublishers" ></div>
 	        
       </div>
       <!--  end body div -->
@@ -88,7 +89,7 @@
   </div>
   <!--  End doc div-->
   
-  	        <div id="newPublishers" ></div>
+  	       
 	      
 	        <div id="newPublisherDialog" class="hidden">
                 <div class="hd">Publisher Information</div>
@@ -115,5 +116,13 @@
 		        </div>
 	        </div>
 
+    <!--  wait div -->
+	<div id="wait_dialog_box" class="hidden">
+	    <div class="hd">Processing...</div>
+		<div class="bd">
+		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
+		    <p><img src="${wait}"></img></p>
+		</div>
+	</div>       
 </body>
 </html>

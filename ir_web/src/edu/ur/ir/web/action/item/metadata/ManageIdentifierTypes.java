@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.IdentifierTypeService;
 import edu.ur.ir.user.IrRole;
@@ -83,6 +84,9 @@ public class ManageIdentifierTypes extends Pager implements  Preparable, UserIdA
 	/** Service for checking user information */
 	private UserService userService;
 	
+	/** Service for dealing with institutional item version services */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
 	/** Default constructor */
 	public ManageIdentifierTypes() 
 	{
@@ -100,7 +104,7 @@ public class ManageIdentifierTypes extends Pager implements  Preparable, UserIdA
 	{
 		log.debug("creating a identifier type = " + identifierType.getName());
 		IrUser user = userService.getUser(userId, false);
-		if( user == null || (!user.hasRole(IrRole.AUTHOR_ROLE) && !user.hasRole(IrRole.AUTHOR_ROLE)) )
+		if( user == null || !(user.hasRole(IrRole.AUTHOR_ROLE) || user.hasRole(IrRole.ADMIN_ROLE)) )
 		{
 		    return "accessDenied";	
 		}
@@ -151,7 +155,9 @@ public class ManageIdentifierTypes extends Pager implements  Preparable, UserIdA
 		if(other == null || other.getId().equals(identifierType.getId()))
 		{
 			identifierTypeService.save(identifierType);
-			added = true;
+		    IrUser user = userService.getUser(userId, false);
+		    institutionalItemVersionService.setAllVersionsAsUpdatedForIdentifierType(identifierType ,user, "Identifier Type - " + identifierType + " Updated");
+		    added = true;
 		}
 		else
 		{
@@ -329,5 +335,11 @@ public class ManageIdentifierTypes extends Pager implements  Preparable, UserIdA
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+
 
 }

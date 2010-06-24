@@ -23,7 +23,14 @@ import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.CopyrightStatement;
+import edu.ur.ir.item.ExtentType;
+import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.Series;
+import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.person.ContributorType;
+import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -419,5 +426,89 @@ public interface InstitutionalItemVersionDAO extends CrudDAO<InstitutionalItemVe
 	 * @return the number of item versions set as modified
 	 */
 	public Long setAsModifiedByCopyrightStatementChange(CopyrightStatement copyrightStatement, IrUser user, String message);
+
+	/**
+	 * Updates all versions with the specified extent type as modified with current time and
+	 * specified message.  
+	 * 
+	 * @param extentType  -  the extent type modified
+	 * @param user - user making the change
+	 * @param message - message to set for the changes.
+	 * 
+	 * @return the number of item versions set as modified
+	 */
+	public Long setAsModifiedByExtentTypeChange(ExtentType extentType, IrUser user, String message);
+	
+	/**
+	 * Updates all versions with the specified identifier type as modified with current time and
+	 * specified message.  
+	 * 
+	 * @param identifierType  -  the identifier type modified
+	 * @param user - user making the change
+	 * @param message - message to set for the changes.
+	 * 
+	 * @return the number of item versions set as modified
+	 */
+	public Long setAsModifiedByIdentifierTypeChange(IdentifierType identifierType, IrUser user, String message);
+	
+	/**
+	 * Updates all versions with the specified language type as modified with current time and
+	 * specified message.  
+	 * 
+	 * @param languageType  -  the language type modified
+	 * @param user - user making the change
+	 * @param message - message to set for the changes.
+	 * 
+	 * @return the number of item versions set as modified
+	 */
+	public Long setAsModifiedByLanguageTypeChange(LanguageType languageType, IrUser user, String message);
+	
+	/**
+	 * Updates all versions with the specified person name as modified with current time and
+	 * specified message.  
+	 * 
+	 * @param personName  -  the person name modified
+	 * @param user - user making the change
+	 * @param message - message to set for the changes.
+	 * 
+	 * @return the number of item versions set as modified
+	 */
+	public Long setAsModifiedByPersonNameChange(PersonName personName, IrUser user, String message);
+	
+	/**
+	 * Updates all versions with the specified publisher as modified with current time and
+	 * specified message.  
+	 * 
+	 * @param publisher  -  the publisher modified
+	 * @param user - user making the change
+	 * @param message - message to set for the changes.
+	 * 
+	 * @return the number of item versions set as modified
+	 */
+	public Long setAsModifiedByPublisherChange(Publisher publisher, IrUser user, String message);
+	
+	/**
+	 * Updates all versions with the specified series as modified with current time and
+	 * specified message.  
+	 * 
+	 * @param series  -  the series modified
+	 * @param user - user making the change
+	 * @param message - message to set for the changes.
+	 * 
+	 * @return the number of item versions set as modified
+	 */
+	public Long setAsModifiedBySeriesChange(Series series, IrUser user, String message);
+	
+	/**
+	 * Updates all versions with the specified sponsor as modified with current time and
+	 * specified message.  
+	 * 
+	 * @param sponsor  -  the sponsor modified
+	 * @param user - user making the change
+	 * @param message - message to set for the changes.
+	 * 
+	 * @return the number of item versions set as modified
+	 */
+	public Long setAsModifiedBySponsorChange(Sponsor sponsor, IrUser user, String message);
 
 }

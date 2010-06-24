@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.PublisherService;
 import edu.ur.ir.user.IrRole;
@@ -84,6 +85,10 @@ public class ManagePublishers extends Pager implements Preparable, UserIdAware{
 	/** Service for checking user information */
 	private UserService userService;
 	
+	/** Service for dealing with institutional item version services */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+
 	/** Default constructor */
 	public ManagePublishers() {
 	
@@ -101,7 +106,7 @@ public class ManagePublishers extends Pager implements Preparable, UserIdAware{
 		log.debug("creating a publisher = " + publisher.getName());
 		added = false;
 		IrUser user = userService.getUser(userId, false);
-		if( user == null || (!user.hasRole(IrRole.AUTHOR_ROLE) && !user.hasRole(IrRole.AUTHOR_ROLE)) )
+		if( user == null || !(user.hasRole(IrRole.AUTHOR_ROLE) || user.hasRole(IrRole.ADMIN_ROLE)) )
 		{
 		    return "accessDenied";	
 		}
@@ -128,6 +133,11 @@ public class ManagePublishers extends Pager implements Preparable, UserIdAware{
 	public String update()
 	{
 		log.debug("updateing publisher id = " + publisher.getId());
+		IrUser user = userService.getUser(userId, false);
+		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE) )
+		{
+		    return "accessDenied";	
+		}
 		added = false;
 
 		Publisher other = publisherService.getPublisher(publisher.getName());
@@ -135,6 +145,8 @@ public class ManagePublishers extends Pager implements Preparable, UserIdAware{
 		if( other == null || other.getId().equals(publisher.getId()))
 		{
 			publisherService.savePublisher(publisher);
+			
+		    institutionalItemVersionService.setAllVersionsAsUpdatedForPublisher(publisher ,user, "Publisher - " + publisher + " Updated");			
 			added = true;
 		}
 		else
@@ -155,6 +167,11 @@ public class ManagePublishers extends Pager implements Preparable, UserIdAware{
 	public String delete()
 	{
 		log.debug("Delete publishers called");
+		IrUser user = userService.getUser(userId, false);
+		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE) )
+		{
+		    return "accessDenied";	
+		}
 		if( publisherIds != null )
 		{
 		    for(int index = 0; index < publisherIds.length; index++)
@@ -324,5 +341,11 @@ public class ManagePublishers extends Pager implements Preparable, UserIdAware{
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+
 
 }

@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.SeriesService;
 import edu.ur.ir.user.IrRole;
@@ -84,6 +85,10 @@ public class ManageSeries extends Pager implements Preparable, UserIdAware{
 	/** Service for managing user data  */
 	private UserService userService;
 	
+	/** Service for dealing with institutional item version services */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+
 	/** Default constructor */
 	public ManageSeries() 
 	{
@@ -100,7 +105,7 @@ public class ManageSeries extends Pager implements Preparable, UserIdAware{
 	{
 		IrUser user = userService.getUser(userId, false);
 		
-		if( user == null || (!user.hasRole(IrRole.AUTHOR_ROLE) && !user.hasRole(IrRole.AUTHOR_ROLE)) )
+		if( user == null || !(user.hasRole(IrRole.AUTHOR_ROLE) || user.hasRole(IrRole.ADMIN_ROLE)) )
 		{
 		     return "accessDenied";	
 		}
@@ -131,6 +136,7 @@ public class ManageSeries extends Pager implements Preparable, UserIdAware{
 	public String update()
 	{
 		log.debug("updateing series id = " + series.getId());
+		IrUser user = userService.getUser(userId, false);
 		added = false;
 
 		Series other = seriesService.getSeries(series.getName());
@@ -138,6 +144,8 @@ public class ManageSeries extends Pager implements Preparable, UserIdAware{
 		if( other == null || other.getId().equals(series.getId()))
 		{
 			seriesService.saveSeries(series);
+			
+			institutionalItemVersionService.setAllVersionsAsUpdatedForSeries(series, user, "Series - " + series + " Updated");
 			added = true;
 		}
 		else
@@ -325,5 +333,11 @@ public class ManageSeries extends Pager implements Preparable, UserIdAware{
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
+	
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+
 
 }

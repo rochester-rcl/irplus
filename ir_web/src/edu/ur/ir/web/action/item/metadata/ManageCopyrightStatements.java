@@ -135,7 +135,7 @@ public class ManageCopyrightStatements extends Pager implements Preparable, User
 		{
 			copyrightStatementService.save(copyrightStatement);
 			IrUser user = userService.getUser(userId, false);
-			institutionalItemVersionService.setAllVersionsAsUpdatedForCopyrightStatement(copyrightStatement, user, message);
+			institutionalItemVersionService.setAllVersionsAsUpdatedForCopyrightStatement(copyrightStatement, user, "Copyright Statement " + copyrightStatement +" Change");			
 			added = true;
 		}
 		else

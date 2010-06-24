@@ -23,6 +23,12 @@ import java.util.Set;
 
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.CopyrightStatement;
+import edu.ur.ir.item.ExtentType;
+import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.Series;
+import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
@@ -456,5 +462,90 @@ public interface InstitutionalItemVersionService extends Serializable {
 	 * @return number of records set as updated.
 	 */
 	public Long setAllVersionsAsUpdatedForCopyrightStatement(CopyrightStatement copyright, IrUser user, String message);
+	
+	/**
+	 * Set all versions as updated for an extent type change made by a specific user.  This 
+	 * should also cause any re-indexing to occur.
+	 * 
+	 * @param extent type - the extent type that has been changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated.
+	 */
+	public Long setAllVersionsAsUpdatedForExtentType(ExtentType extentType, IrUser user, String message);
+	
+	/**
+	 * Set all versions as updated for an identifier type change made by a specific user.  This 
+	 * should also cause any re-indexing to occur.
+	 * 
+	 * @param identifier type - the identifier type that has been changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated.
+	 */
+	public Long setAllVersionsAsUpdatedForIdentifierType(IdentifierType identifierType, IrUser user, String message);
+
+	/**
+	 * Set all versions as updated for a language type change made by a specific user.  This 
+	 * should also cause any re-indexing to occur.
+	 * 
+	 * @param language type - the language type that has been changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated.
+	 */
+	public Long setAllVersionsAsUpdatedForLanguageType(LanguageType languageType, IrUser user, String message);
+	
+	/**
+	 * Set all versions as updated for a person name change made by a specific user.  This 
+	 * should also cause any re-indexing to occur.
+	 * 
+	 * @param personName - the language type that has been changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated.
+	 */
+	public Long setAllVersionsAsUpdatedForPersonName(PersonName personName, IrUser user, String message);
+	
+	/**
+	 * Set all versions as updated for a publisher change made by a specific user.  This 
+	 * should also cause any re-indexing to occur.
+	 * 
+	 * @param publisher - the publisher that has been changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated.
+	 */
+	public Long setAllVersionsAsUpdatedForPublisher(Publisher publisher, IrUser user, String message);
+	
+	/**
+	 * Set all versions as updated for a series change made by a specific user.  This 
+	 * should also cause any re-indexing to occur.
+	 * 
+	 * @param  series - the series that has been changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated.
+	 */
+	public Long setAllVersionsAsUpdatedForSeries(Series series, IrUser user, String message);
+	
+	/**
+	 * Set all versions as updated for a sponsor change made by a specific user.  This 
+	 * should also cause any re-indexing to occur.
+	 * 
+	 * @param sponsor - the sponsor that has been changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated.
+	 */
+	public Long setAllVersionsAsUpdatedForSponsor(Sponsor sponsor, IrUser user, String message);
+
 
 }

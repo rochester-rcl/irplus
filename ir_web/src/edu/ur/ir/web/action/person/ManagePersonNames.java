@@ -26,6 +26,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorService;
@@ -122,6 +123,10 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
     
     /** service for dealing with contributors*/
     private ContributorService contributorService;
+    
+	/** Service for dealing with institutional item version services */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+
 
 	/**
 	 * Loads a person for viewing and editing.
@@ -181,12 +186,9 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
 		// get the user making the change
 		IrUser userMakingChange = userService.getUser(userId, false);
 		// user making change to a name that does not belong to them.
-    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE))
+    	if(userMakingChange == null || !(userMakingChange.equals(user) || userMakingChange.hasRole(IrRole.ADMIN_ROLE)))
     	{
-    		if(user == null || !user.equals(userMakingChange))
-    		{
-    			return "accessDenied";
-    		}
+    		return "accessDenied";
     	}
 		
 		
@@ -202,6 +204,11 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
 	    	}
 	    }
 		personService.save(personNameAuthority);
+		
+		if( personName != null )
+		{
+			institutionalItemVersionService.setAllVersionsAsUpdatedForPersonName(personName, userMakingChange, "person name - " + personName + " updated ");
+		}
 		
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		File nameAuthorityFolder = new File(repo.getNameIndexFolder());
@@ -642,6 +649,11 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
 
 	public void setContributorService(ContributorService contributorService) {
 		this.contributorService = contributorService;
+	}
+	
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
 
 }

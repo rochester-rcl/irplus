@@ -111,7 +111,7 @@
       </div>
   </div>
   
-      <!--  wait div -->
+    <!--  wait div -->
 	<div id="wait_dialog_box" class="hidden">
 	    <div class="hd">Processing...</div>
 		<div class="bd">

@@ -161,6 +161,7 @@ YAHOO.ur.person = {
 		
 		var handleSuccess = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    // check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -204,6 +205,7 @@ YAHOO.ur.person = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('person submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
@@ -220,8 +222,9 @@ YAHOO.ur.person = {
 			} );
 		
 		// Submit the form			
-		YAHOO.ur.person.newPersonDialog.submit = function() {
-		
+		YAHOO.ur.person.newPersonDialog.submit = function() 
+		{
+			YAHOO.ur.util.wait.waitDialog.showDialog();
 		    YAHOO.util.Connect.setForm('newPersonForm');
 		    	    
 		    if( YAHOO.ur.person.newPersonDialog.validate() )

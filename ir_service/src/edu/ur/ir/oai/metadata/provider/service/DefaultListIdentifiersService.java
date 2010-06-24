@@ -64,7 +64,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	private static final long serialVersionUID = 9056980425349175595L;
 	
 	/**  Default batch size for harvesting */
-	private int batchSize = 100;
+	private int batchSize = 500;
 	
 	/**  List of oai metadata service providers */
 	private OaiMetadataServiceProvider oaiMetadataServiceProvider;
@@ -134,7 +134,6 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		{
 			List<InstitutionalItemVersion> versions = getVersions();
 		    addIdentifiers(versions, doc);
-		    doDeleted(versions);
 		    resumptionToken.setCompleteListSize(completeListSize);
 		}
 		
@@ -460,17 +459,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			    versions =  institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), resumptionToken.getFrom(), resumptionToken.getUntil(), collection, batchSize + 1);
 		    }
 		}
-	    return versions;
-	}
-	
-	/**
-	 * Check to see if the deletes need to be processed.  Sets
-	 * the resumption Token accordingly
-	 * 
-	 * @param versions
-	 */
-	private void doDeleted(List<InstitutionalItemVersion> versions)
-	{
+		
 	    int size = versions.size();
 		   
 	    // we will need to send resumption token
@@ -488,6 +477,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	    	resumptionToken.setDeleted(Boolean.TRUE);
 	    	resumptionToken.setLastId(0l);
 	    }
+	    return versions;
 	}
 	
 	/**
@@ -612,7 +602,6 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		{
 			List<InstitutionalItemVersion> versions = getVersions();
 		    addRecords(versions, doc, oaiMetadataServiceProvider.getProvider(resumptionToken.getMetadataPrefix()));
-		    doDeleted(versions);
 		    resumptionToken.setCompleteListSize(completeListSize);
 		}
 		
