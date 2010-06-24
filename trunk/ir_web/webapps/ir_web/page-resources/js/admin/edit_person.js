@@ -137,6 +137,7 @@ YAHOO.ur.person.names = {
 		
 		var handleNewPersonNameFormSuccess = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 
 	        // check for the timeout - forward user to login page if timout
 	        // occured
@@ -166,12 +167,14 @@ YAHOO.ur.person.names = {
 		// handle form submission failure
 		var handleNewPersonNameFormFailure = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('person name submission failed ' + o.status  + ' status text ' + o.statusText);
 		};
 	
 		// Adds new person to a user
 		var handleNewPersonForUserFormSuccess = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -200,6 +203,7 @@ YAHOO.ur.person.names = {
 		
 		// handle form sbumission failure
 		var handleNewPersonForUserFormFailure = function(o) {
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('person submission failed ' + o.status  + ' status text ' + o.statusText);
 		};
 	
@@ -217,6 +221,7 @@ YAHOO.ur.person.names = {
 			
 		YAHOO.ur.person.names.newPersonNameDialog.submit = function()
 		{
+			YAHOO.ur.util.wait.waitDialog.showDialog();
 		    YAHOO.util.Connect.setForm('newPersonNameForm');
 		    	    
 		    if( YAHOO.ur.person.names.newPersonNameDialog.validate() )

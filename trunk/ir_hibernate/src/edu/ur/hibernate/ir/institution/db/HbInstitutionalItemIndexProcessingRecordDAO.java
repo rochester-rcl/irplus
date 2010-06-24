@@ -33,7 +33,13 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
 import edu.ur.ir.item.ContentType;
+import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.Series;
+import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.person.ContributorType;
+import edu.ur.ir.person.PersonName;
 
 /**
  * Interface for dealing with institutional item index processing 
@@ -206,6 +212,94 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
         Long numCreated = 0l;
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForContributorType");
 		q.setParameter("contributorTypeId", contributorType.getId());
+		q.setParameter("processingTypeId", processingType.getId());
+		numCreated += q.executeUpdate();
+		return numCreated;
+	}
+
+	/**
+	 * Insert all items for the identifier type.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForIdentifierType(edu.ur.ir.item.IdentifierType, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForIdentifierType(IdentifierType identifierType,
+			IndexProcessingType processingType) {
+	    Long numCreated = 0l;
+	    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForIdentifierType");
+		q.setParameter("identifierTypeId", identifierType.getId());
+		q.setParameter("processingTypeId", processingType.getId());
+		numCreated += q.executeUpdate();
+		return numCreated;
+	}
+
+	/**
+	 * insert all items for a language type.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForLanguageType(edu.ur.ir.item.LanguageType, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForLanguageType(LanguageType languageType,
+			IndexProcessingType processingType) {
+	    Long numCreated = 0l;
+	    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForLanguageType");
+	    q.setParameter("languageTypeId", languageType.getId());
+		q.setParameter("processingTypeId", processingType.getId());
+		numCreated += q.executeUpdate();
+		return numCreated;
+	}
+
+	/**
+	 *  insert all items for a person name
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForPersonName(edu.ur.ir.person.PersonName, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForPersonName(PersonName personName,
+			IndexProcessingType processingType) {
+	    Long numCreated = 0l;
+	    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForContributorPersonName");
+		q.setParameter("personNameId", personName.getId());
+		q.setParameter("processingTypeId", processingType.getId());
+		numCreated += q.executeUpdate();
+		return numCreated;
+	}
+
+	/**
+	 * Insert all items for publisher change.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForPublisher(edu.ur.ir.item.Publisher, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForPublisher(Publisher publisher,
+			IndexProcessingType processingType) {
+	    Long numCreated = 0l;
+	    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForPublisher");
+		q.setParameter("publisherId", publisher.getId());
+		q.setParameter("processingTypeId", processingType.getId());
+		numCreated += q.executeUpdate();
+		return numCreated;
+	}
+
+	/**
+	 * Insert all items for series change.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForSeries(edu.ur.ir.item.Series, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForSeries(Series series,
+			IndexProcessingType processingType) {
+		Long numCreated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForSeries");
+		q.setParameter("seriesId", series.getId());
+		q.setParameter("processingTypeId", processingType.getId());
+		numCreated += q.executeUpdate();
+		return numCreated;
+	}
+
+	/**
+	 * Insert all items for a sponsor change.
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#insertAllItemsForSponsor(edu.ur.ir.item.Sponsor, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForSponsor(Sponsor sponsor,
+			IndexProcessingType processingType) {
+		Long numCreated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForSponsor");
+		q.setParameter("sponsorId", sponsor.getId());
 		q.setParameter("processingTypeId", processingType.getId());
 		numCreated += q.executeUpdate();
 		return numCreated;

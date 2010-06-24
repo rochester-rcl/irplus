@@ -125,6 +125,7 @@ YAHOO.ur.publisher = {
 		
 		var handleSuccess = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    // check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -159,6 +160,7 @@ YAHOO.ur.publisher = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('publisher submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
@@ -183,6 +185,7 @@ YAHOO.ur.publisher = {
 
 		YAHOO.ur.publisher.newPublisherDialog.submit = function() 
 		{   
+			YAHOO.ur.util.wait.waitDialog.showDialog();
 		    YAHOO.util.Connect.setForm('newPublisherForm');
 		    
 		    	    

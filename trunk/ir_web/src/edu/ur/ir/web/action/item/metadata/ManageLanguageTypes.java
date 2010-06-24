@@ -22,8 +22,12 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.LanguageType;
 import edu.ur.ir.item.LanguageTypeService;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.table.Pager;
 
 /**
@@ -32,7 +36,7 @@ import edu.ur.ir.web.table.Pager;
  * @author Nathan Sarr
  *
  */
-public class ManageLanguageTypes extends Pager implements Preparable{
+public class ManageLanguageTypes extends Pager implements Preparable, UserIdAware{
 	
 	
 	/**  Generated version id */
@@ -73,6 +77,15 @@ public class ManageLanguageTypes extends Pager implements Preparable{
 	
 	/** Row End */
 	private int rowEnd;
+	
+	/** Service for dealing with institutional item version services */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+	/** Service for user information  */
+	private UserService userService;
+	
+	/** id of the user making the change */
+	private Long userId;
 	
 	/** Default constructor */
 	public ManageLanguageTypes()
@@ -123,6 +136,8 @@ public class ManageLanguageTypes extends Pager implements Preparable{
 		if(other == null || other.getId().equals(languageType.getId()))
 		{
 			languageTypeService.save(languageType);
+		    IrUser user = userService.getUser(userId, false);
+		    institutionalItemVersionService.setAllVersionsAsUpdatedForLanguageType(languageType ,user, "Language Type - " + languageType + " Updated");			
 			added = true;
 		}
 		else
@@ -299,6 +314,24 @@ public class ManageLanguageTypes extends Pager implements Preparable{
 
 	public void setRowEnd(int rowEnd) {
 		this.rowEnd = rowEnd;
+	}
+
+	/**
+	 * id of the user making the change
+	 * 
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 
 }

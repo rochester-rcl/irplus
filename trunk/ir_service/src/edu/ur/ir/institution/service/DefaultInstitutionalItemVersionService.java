@@ -21,15 +21,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleInfoDAO;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionDAO;
 import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.CopyrightStatement;
+import edu.ur.ir.item.ExtentType;
+import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.Series;
+import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
@@ -54,6 +64,15 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 
 	/** data access for handle information */
 	private HandleInfoDAO handleInfoDAO;
+	
+	/**  Service for processing indexing institutional items */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+	/** Service for dealing with processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
+	
+	/**  Logger for managing content types*/
+	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemVersionService.class);
 
 	
 	/**
@@ -237,6 +256,27 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 
 	public void setHandleInfoDAO(HandleInfoDAO handleInfoDAO) {
 		this.handleInfoDAO = handleInfoDAO;
+	}
+	
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
 
@@ -439,7 +479,11 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 	 */
 	public Long setAllVersionsAsUpdatedForContentType(ContentType contentType,
 			IrUser user, String message) {
-		return institutionalItemVersionDAO.setAsModifiedByContentTypeChange(contentType, user, message);
+	    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForContentType(contentType, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		Long updatedCount = institutionalItemVersionDAO.setAsModifiedByContentTypeChange(contentType, user, message);
+		log.debug("Total number of content type records set as updated = " + updatedCount);
+		log.debug("Total number of content type records set as index = " + indexCount);
+		return updatedCount;
 	}
 
 
@@ -450,18 +494,134 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 	 */
 	public Long setAllVersionsAsUpdatedForContributorType(
 			ContributorType contributorType, IrUser user, String message) {
-		return institutionalItemVersionDAO.setAsModifiedByContributorTypeChange(contributorType, user, message);
+	    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForContributorType(contributorType, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+	    Long updatedCount = institutionalItemVersionDAO.setAsModifiedByContributorTypeChange(contributorType, user, message);
+		log.debug("Total number of contributor type records set as updated = " + updatedCount);
+		log.debug("Total number of contributor type records set as index = " + indexCount);
+		return updatedCount;
 	}
 
 
 	/**
-	 * Set all institutional item versions as updated taht have the specified copyright statement.
+	 * Set all institutional item versions as updated that have the specified copyright statement.
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForCopyrightStatement(edu.ur.ir.item.CopyrightStatement, edu.ur.ir.user.IrUser, java.lang.String)
 	 */
 	public Long setAllVersionsAsUpdatedForCopyrightStatement(
 			CopyrightStatement copyrightStatement, IrUser user, String message) {
-		return institutionalItemVersionDAO.setAsModifiedByCopyrightStatementChange(copyrightStatement, user, message);
+		
+		Long updatedCount = institutionalItemVersionDAO.setAsModifiedByCopyrightStatementChange(copyrightStatement, user, message);
+		log.debug("Total number of copyright statement records set as updated = " + updatedCount);
+		return updatedCount;
+
 	}
+
+
+	/**
+	 * Set all institutional item versions as updated that have the specified extent type
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForExtentType(edu.ur.ir.item.ExtentType, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForExtentType(ExtentType extentType,
+			IrUser user, String message) {
+		Long updatedCount =  institutionalItemVersionDAO.setAsModifiedByExtentTypeChange(extentType, user, message);
+		log.debug("Total number of extent type records set as updated = " + updatedCount);
+		return updatedCount;
+	}
+
+
+	/**
+	 * Set all versions as updated for the identifier type.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForIdentifierType(edu.ur.ir.item.IdentifierType, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForIdentifierType(
+			IdentifierType identifierType, IrUser user, String message) {
+	    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForIdentifierType(identifierType, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+	    Long updatedCount = institutionalItemVersionDAO.setAsModifiedByIdentifierTypeChange(identifierType, user, message);
+	    log.debug("Total number of identifier type records set as updated = " + updatedCount);
+		log.debug("Total number of identifier type records set as index = " + indexCount);
+		return updatedCount;
+	}
+	
+	/**
+	 * Set all versions as updated for the identifier type.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForIdentifierType(edu.ur.ir.item.IdentifierType, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForLanguageType(
+			LanguageType languageType, IrUser user, String message) {
+	    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForLangaugeType(languageType, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+	    Long updatedCount =  institutionalItemVersionDAO.setAsModifiedByLanguageTypeChange(languageType, user, message);
+	    log.debug("Total number of language type records set as updated = " + updatedCount);
+		log.debug("Total number of language type records set as index = " + indexCount);
+		return updatedCount;
+	}
+
+
+	/**
+	 * Set all versions as updated for the person name
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForPersonName(edu.ur.ir.person.PersonName, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForPersonName(PersonName personName,
+			IrUser user, String message) {
+	     Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForPersonName(personName, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		 Long updatedCount =   institutionalItemVersionDAO.setAsModifiedByPersonNameChange(personName, user, message);
+		 log.debug("Total number of person name records set as updated = " + updatedCount);
+		 log.debug("Total number of person name records set as index = " + indexCount);
+		 return updatedCount;
+	}
+
+
+	/**
+	 * Set all versions as updated for the publisher.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForPublisher(edu.ur.ir.item.Publisher, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForPublisher(Publisher publisher,
+			IrUser user, String message) {
+		
+	     Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForPublisher(publisher, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		 Long updatedCount =   institutionalItemVersionDAO.setAsModifiedByPublisherChange(publisher, user, message);
+		 log.debug("Total number of publisher records set as updated = " + updatedCount);
+		 log.debug("Total number of publisher records set as index = " + indexCount);
+		 return updatedCount;
+	}
+
+
+	/**
+	 * Set all versions as updated for the publisher.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForSeries(edu.ur.ir.item.Series, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForSeries(Series series, IrUser user,
+			String message) {
+	     Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForSeries(series, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		 Long updatedCount =   institutionalItemVersionDAO.setAsModifiedBySeriesChange(series, user, message);
+		 log.debug("Total number of series records set as updated = " + updatedCount);
+		 log.debug("Total number of series records set as index = " + indexCount);
+		 return updatedCount;
+
+	}
+
+
+	/**
+	 * Set all versions as updated for the sponsor.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForSponsor(edu.ur.ir.item.Sponsor, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForSponsor(Sponsor sponsor, IrUser user,
+			String message) {
+	     Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForSponsor(sponsor, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		 Long updatedCount =   institutionalItemVersionDAO.setAsModifiedBySponsorChange(sponsor, user, message);
+		 log.debug("Total number of sponsor records set as updated = " + updatedCount);
+		 log.debug("Total number of sponsor records set as index = " + indexCount);
+		 return updatedCount;
+
+	}
+	
+	
+
 
 }

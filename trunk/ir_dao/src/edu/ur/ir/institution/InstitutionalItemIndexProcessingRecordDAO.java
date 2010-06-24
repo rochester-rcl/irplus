@@ -22,7 +22,13 @@ import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.item.ContentType;
+import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.Series;
+import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.person.ContributorType;
+import edu.ur.ir.person.PersonName;
 
 /**
  * Data access for institutional item index processing record.
@@ -82,7 +88,7 @@ public interface InstitutionalItemIndexProcessingRecordDAO
 	
 	/**
 	 * Sets all institutional items with a current item that has the specified contributor type associated with it 
-	 * to be re-indexed based on the contributor type id.
+	 * to be re-indexed based on the contributor type.
 	 * 
 	 * @param contributorType - the contributor type to be updated
 	 * @param processingType - type of indexing to be performed
@@ -90,5 +96,71 @@ public interface InstitutionalItemIndexProcessingRecordDAO
 	 * @return - number of items set for re-indexing
 	 */
 	public Long insertAllItemsForContributorType(ContributorType contributorType, IndexProcessingType processingType);
+
+	/**
+	 * Sets all institutional items with a current item that has the specified identifier type associated with it 
+	 * to be re-indexed based on the identifier type.
+	 * 
+	 * @param identifierType - the identifier type to be updated
+	 * @param processingType - type of indexing to be performed
+	 * 
+	 * @return - number of items set for re-indexing
+	 */
+	public Long insertAllItemsForIdentifierType(IdentifierType identifierType, IndexProcessingType processingType);
 	
+	/**
+	 * Sets all institutional items with a current item that has the specified language type associated with it 
+	 * to be re-indexed based on the language type.
+	 * 
+	 * @param languageType - the language type to be updated
+	 * @param processingType - type of indexing to be performed
+	 * 
+	 * @return - number of items set for re-indexing
+	 */
+	public Long insertAllItemsForLanguageType(LanguageType languageType, IndexProcessingType processingType);
+	
+	/**
+	 * Sets all institutional items with a current item that has the specified person name associated with it 
+	 * to be re-indexed based on the person name.
+	 * 
+	 * @param personName - the person name to be updated
+	 * @param processingType - type of indexing to be performed
+	 * 
+	 * @return - number of items set for re-indexing
+	 */
+	public Long insertAllItemsForPersonName(PersonName personName, IndexProcessingType processingType);
+	
+	/**
+	 * Sets all institutional items with a current item that has the specified publisher associated with it 
+	 * to be re-indexed based on the publisher.
+	 * 
+	 * @param publisher - the publisher to be updated
+	 * @param processingType - type of indexing to be performed
+	 * 
+	 * @return - number of items set for re-indexing
+	 */
+	public Long insertAllItemsForPublisher(Publisher publisher, IndexProcessingType processingType);
+	
+	/**
+	 * Sets all institutional items with a current item that has the specified series associated with it 
+	 * to be re-indexed based on the series.
+	 * 
+	 * @param series - the series to be updated
+	 * @param processingType - type of indexing to be performed
+	 * 
+	 * @return - number of items set for re-indexing
+	 */
+	public Long insertAllItemsForSeries(Series series, IndexProcessingType processingType);
+	
+	/**
+	 * Sets all institutional items with a current item that has the specified sponsor associated with it 
+	 * to be re-indexed based on the sponsor.
+	 * 
+	 * @param sponsor - the sponsor to be updated
+	 * @param processingType - type of indexing to be performed
+	 * 
+	 * @return - number of items set for re-indexing
+	 */
+	public Long insertAllItemsForSponsor(Sponsor sponsor, IndexProcessingType processingType);
+
 }

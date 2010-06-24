@@ -22,8 +22,6 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.ir.index.IndexProcessingTypeService;
-import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.ContributorTypeService;
@@ -82,22 +80,12 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 	/** Row End */
 	private int rowEnd;
 	
-	/** Service for dealing with processing types */
-	private IndexProcessingTypeService indexProcessingTypeService;
-	
-
 	/** Service for dealing with institutional item version services */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 	
 	/** Service for user information  */
 	private UserService userService;
 	
-	/**  Service for processing indexing institutional items */
-	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
-
-	
-
-
 	/** Default constructor */
 	public  ManageContributorTypes()
 	{
@@ -146,11 +134,8 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 		if(other == null || other.getId().equals(contributorType.getId()))
 		{
 			contributorTypeService.save(contributorType);
-		    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForContributorType(contributorType, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		    IrUser user = userService.getUser(userId, false);
-		    Long updatedCount = institutionalItemVersionService.setAllVersionsAsUpdatedForContributorType(contributorType, user, "Contributor Type Updated");
-			log.debug("Total number of records set for re-indxing = " + indexCount);
-			log.debug("Total number of records set as updated = " + updatedCount);
+		    institutionalItemVersionService.setAllVersionsAsUpdatedForContributorType(contributorType, user, "Contributor Type Updated");
 			added = true;
 		}
 		else
@@ -390,10 +375,7 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 		this.rowEnd = rowEnd;
 	}
 
-	public void setIndexProcessingTypeService(
-			IndexProcessingTypeService indexProcessingTypeService) {
-		this.indexProcessingTypeService = indexProcessingTypeService;
-	}
+
 	public void setInstitutionalItemVersionService(
 			InstitutionalItemVersionService institutionalItemVersionService) {
 		this.institutionalItemVersionService = institutionalItemVersionService;
@@ -401,11 +383,6 @@ public class ManageContributorTypes extends Pager implements Preparable, UserIdA
 	
 	public void setUserService(UserService userService) {
 		this.userService = userService;
-	}
-	
-	public void setInstitutionalItemIndexProcessingRecordService(
-			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
-		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
 	}
 	
 	/**

@@ -182,7 +182,7 @@
 			<one-to-many class="edu.ur.ir.item.ItemFile"/>
 		</set>
 		
-		<!--  Files this Item references -->	
+		<!--  Series this Item references -->	
 		<set name="itemReports" 
 		     schema="ir_item" 
 		     cascade="all-delete-orphan" 

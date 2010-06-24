@@ -111,7 +111,7 @@ YAHOO.ur.copyright.statement = {
 		};
 		
 		var handleSuccess = function(o) {
-		
+			YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -146,6 +146,7 @@ YAHOO.ur.copyright.statement = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('copyrigght statement submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
@@ -163,6 +164,7 @@ YAHOO.ur.copyright.statement = {
 			
 		YAHOO.ur.copyright.statement.copyrightStatementDialog.submit = function()
 		{  
+			YAHOO.ur.util.wait.waitDialog.showDialog();
 		    YAHOO.util.Connect.setForm('newCopyrightStatement');
 		    
 		    if( YAHOO.ur.copyright.statement.copyrightStatementDialog.validate() )

@@ -116,6 +116,7 @@ YAHOO.ur.identifier.type =
 	
 	    var handleSuccess = function(o) 
 	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        // check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -143,6 +144,7 @@ YAHOO.ur.identifier.type =
 	
 	    // handle form sbumission failure
 	    var handleFailure = function(o) {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        alert('identifier type submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
@@ -161,6 +163,7 @@ YAHOO.ur.identifier.type =
 		// override the submit function
 		YAHOO.ur.identifier.type.identifierTypeDialog.submit = function()
 		{
+			YAHOO.ur.util.wait.waitDialog.showDialog();
 		    YAHOO.util.Connect.setForm('newIdentifierType');
 	        //based on what we need to do (update or create a 
 	        // new identifier type) based on the action.

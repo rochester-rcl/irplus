@@ -38,13 +38,13 @@
     <tr>
         <td align="left" class="label">ISO 639-2</td>
 		<td align="left" class="input"><input type="text" 
-			id="newLanguageTypeForm_639_2" size="45" 
+			id="newLanguageTypeForm_639_2" size="3" maxlength="3"
 			name="languageType.iso639_2" value="${languageType.iso639_2}"/></td>
     </tr>
     <tr>
         <td align="left" class="label">ISO 639-1</td>
 		<td align="left" class="input"><input type="text" 
-			id="newLanguageTypeForm_639_1" size="45" 
+			id="newLanguageTypeForm_639_1" size="2"  maxlength="2"
 			name="languageType.iso639_1" value="${languageType.iso639_1}"/></td>
     </tr>
     

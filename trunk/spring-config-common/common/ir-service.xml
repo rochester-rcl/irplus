@@ -187,6 +187,8 @@
        <property name="institutionalItemVersionDAO" ref="institutionalItemVersionDAO"/>
        <property name="handleInfoDAO" ref="handleInfoDAO"/>
        <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+       <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
    </bean>
    
    <!--  Service for helping with institutional items --> 

@@ -27,7 +27,13 @@ import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.ContentType;
+import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.Series;
+import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.person.ContributorType;
+import edu.ur.ir.person.PersonName;
 
 /**
  * Implementation of the institutional item index processing record service.
@@ -270,6 +276,65 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	public Long insertAllItemsForContributorType(ContributorType contributorType,
 			IndexProcessingType processingType) {
 		return  processingRecordDAO.insertAllItemsForContributorType(contributorType, processingType);
+	}
+
+	/**
+	 * Insert all institutional items with a current version that has the specified identifier type.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForIdentifierType(edu.ur.ir.item.IdentifierType, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForIdentifierType(IdentifierType identifierType,
+			IndexProcessingType processingType) {
+		return processingRecordDAO.insertAllItemsForIdentifierType(identifierType, processingType);
+	}
+
+	/**
+	 * Insert all items for language type.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForLangaugeType(edu.ur.ir.item.LanguageType, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForLangaugeType(LanguageType languageType,
+			IndexProcessingType processingType) {
+		return processingRecordDAO.insertAllItemsForLanguageType(languageType, processingType);
+	}
+
+	/**
+	 * Insert all items for person name to be re-indexed.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForPersonName(edu.ur.ir.person.PersonName, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForPersonName(PersonName personName,
+			IndexProcessingType processingType) {
+		return processingRecordDAO.insertAllItemsForPersonName(personName, processingType);
+	}
+
+	/**
+	 * Insert all items for publisher to be re-indexed.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForPublisher(edu.ur.ir.item.Publisher, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForPublisher(Publisher publisher,
+			IndexProcessingType processingType) {
+		return processingRecordDAO.insertAllItemsForPublisher(publisher, processingType);
+	}
+
+	/**
+	 * Insert all items for series to be re-indexed.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForSeries(edu.ur.ir.item.Series, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForSeries(Series series,
+			IndexProcessingType processingType) {
+		return processingRecordDAO.insertAllItemsForSeries(series, processingType);
+	}
+
+	/**
+	 *  Insert all items for sponsor to be re-indexed.
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForSponsor(edu.ur.ir.item.Sponsor, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForSponsor(Sponsor sponsor,
+			IndexProcessingType processingType) {
+		return processingRecordDAO.insertAllItemsForSponsor(sponsor, processingType);
 	}
 
 }

@@ -125,6 +125,7 @@ YAHOO.ur.language.type = {
 	
 	    var handleSuccess = function(o) 
 	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        // check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -152,6 +153,7 @@ YAHOO.ur.language.type = {
 	
 	    // handle form sbumission failure
 	    var handleFailure = function(o) {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        alert('language type submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
@@ -177,6 +179,7 @@ YAHOO.ur.language.type = {
         // override the submit of the dialog
         YAHOO.ur.language.type.languageTypeDialog.submit = function()
         {
+        	YAHOO.ur.util.wait.waitDialog.showDialog();
             YAHOO.util.Connect.setForm('newLanguageType');
 	        if( YAHOO.ur.language.type.languageTypeDialog.validate() )
 	        {

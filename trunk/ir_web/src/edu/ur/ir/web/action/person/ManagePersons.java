@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.person.BirthDate;
 import edu.ur.ir.person.Contributor;
@@ -133,6 +134,10 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	/** Row End */
 	private int rowEnd;
 	
+	/** Service for dealing with institutional item version services */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+
 	/** Default constructor */
 	public  ManagePersons() 
 	{
@@ -162,6 +167,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 			    return "accessDenied";	
 			}
 		}
+
 
 		personNameAuthority = new PersonNameAuthority(personName);
 		personNameAuthority.addBirthDate(birthYear);
@@ -276,6 +282,12 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
     	}
 		
 		personService.save(personNameAuthority);
+		
+		
+		if( personName != null )
+		{
+			institutionalItemVersionService.setAllVersionsAsUpdatedForPersonName(personName, userMakingChange, "person name - " + personName + " updated ");
+		}
 
 		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		File nameAuthorityFolder = new File(repo.getNameIndexFolder());
@@ -695,6 +707,12 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	public void setContributorService(ContributorService contributorService) {
 		this.contributorService = contributorService;
 	}
+	
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+
 
 
 }

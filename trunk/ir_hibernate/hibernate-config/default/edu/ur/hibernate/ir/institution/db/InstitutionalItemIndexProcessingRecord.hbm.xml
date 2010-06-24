@@ -151,7 +151,112 @@
 	    )
 	    and indexProcessingType.id = :processingTypeId
 	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	    from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
+	</query>
+	
+    <query name="insertAllItemsForIdentifierType">
+		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where institutionalItem.id in
+	    ( 
+	       select instItem.id 
+	       from InstitutionalItem as instItem
+	       join instItem.versionedInstitutionalItem as versionedItem
+	       join versionedItem.currentVersion as version
+	       join version.item as item
+	       join item.itemIdentifiers as itemIdentifier
+	       where itemIdentifier.identifierType.id = :identifierTypeId
+	    )
+	    and indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	    from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
+	</query>
+	
+    <query name="insertAllItemsForLanguageType">
+		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where institutionalItem.versionedInstitutionalItem.currentVersion.item.languageType.id = :languageTypeId
+	    and indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
 	        from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
 	</query>
+	
+	<query name="insertAllItemsForContributorPersonName">
+		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where institutionalItem.id in
+	    ( 
+	       select instItem.id 
+	       from InstitutionalItem as instItem
+	       join instItem.versionedInstitutionalItem as versionedItem
+	       join versionedItem.currentVersion as version
+	       join version.item as item
+	       join item.contributors as itemContributor
+	       where itemContributor.contributor.personName.id = :personNameId 
+	    )
+	    and indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	    from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
+	</query>
+	
+	<query name="insertAllItemsForPublisher">
+		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where institutionalItem.versionedInstitutionalItem.currentVersion.item.externalPublishedItem.publisher.id = :publisherId
+	    and indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	    from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
+	</query>
+	
+	<query name="insertAllItemsForSeries">
+		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where institutionalItem.id in
+	    ( 
+	       select instItem.id 
+	       from InstitutionalItem as instItem
+	       join instItem.versionedInstitutionalItem as versionedItem
+	       join versionedItem.currentVersion as version
+	       join version.item as item
+	       join item.itemReports as itemReport
+	       where itemReport.series.id = :seriesId 
+	    )
+	    and indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	    from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
+	</query>
+	
+    <query name="insertAllItemsForSponsor">
+		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where institutionalItem.id in
+	    ( 
+	       select instItem.id 
+	       from InstitutionalItem as instItem
+	       join instItem.versionedInstitutionalItem as versionedItem
+	       join versionedItem.currentVersion as version
+	       join version.item as item
+	       join item.itemSponsors as itemSponsor
+	       where itemSponsor.sponsor.id = :sponsorId 
+	    )
+	    and indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	    from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
+	</query>
+	
+	
+
 
 </hibernate-mapping>

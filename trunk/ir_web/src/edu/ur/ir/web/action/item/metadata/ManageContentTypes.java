@@ -22,8 +22,6 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.ir.index.IndexProcessingTypeService;
-import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeService;
@@ -83,25 +81,11 @@ public class ManageContentTypes extends Pager implements Preparable, UserIdAware
 	/** Row End */
 	private int rowEnd;
 	
-	/**  Service for processing indexing institutional items */
-	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
-	
-	/** Service for dealing with processing types */
-	private IndexProcessingTypeService indexProcessingTypeService;
-	
 	/** Service for dealing with institutional item version services */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 	
 	/** Service for user information  */
 	private UserService userService;
-
-
-
-
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
 
 	/** Default constructor */
 	public  ManageContentTypes() 
@@ -149,11 +133,8 @@ public class ManageContentTypes extends Pager implements Preparable, UserIdAware
 		if( other == null || other.getId().equals(contentType.getId()))
 		{
 			contentTypeService.saveContentType(contentType);
-		    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForContentType(contentType, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		    IrUser user = userService.getUser(userId, false);
-		    Long updatedCount = institutionalItemVersionService.setAllVersionsAsUpdatedForContentType(contentType ,user, "Content Type Updated");
-			log.debug("Total number of records set for re-indxing = " + indexCount);
-			log.debug("Total number of records set as updated = " + updatedCount);
+		    institutionalItemVersionService.setAllVersionsAsUpdatedForContentType(contentType ,user, "Content Type - " + contentType + " Updated");			
 		    added = true;
 		}
 		else
@@ -335,15 +316,6 @@ public class ManageContentTypes extends Pager implements Preparable, UserIdAware
 		this.userId = userId;
 	}
 	
-	public void setInstitutionalItemIndexProcessingRecordService(
-			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
-		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
-	}
-
-	public void setIndexProcessingTypeService(
-			IndexProcessingTypeService indexProcessingTypeService) {
-		this.indexProcessingTypeService = indexProcessingTypeService;
-	}
 	public Long getUserId() {
 		return userId;
 	}
@@ -352,4 +324,9 @@ public class ManageContentTypes extends Pager implements Preparable, UserIdAware
 			InstitutionalItemVersionService institutionalItemVersionService) {
 		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
+	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
 }

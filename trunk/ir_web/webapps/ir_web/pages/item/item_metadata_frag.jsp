@@ -301,12 +301,22 @@
 				    <tr>
 				        <td class="previewLabel">Last Updated Note</td>
 			        </tr>
-			            <c:if test="${institutionalItemVersion.lastModifiedNote != null}">
+			        <c:if test="${institutionalItemVersion.lastModifiedNote != null}">
 				            <tr>
 				                <td>
-					            ${institutionalItemVersion.lastModifiedNote}
+					             ${institutionalItemVersion.lastModifiedNote}
 					            </td>
 				            </tr>
+				           <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
+				            <tr>
+				                <td class="previewLabel">Last Updated By</td>
+			                </tr>
+				           <tr>
+				                <td>
+					             ${institutionalItemVersion.lastModifiedBy.firstName}&nbsp; ${institutionalItemVersion.lastModifiedBy.lastName}
+					            </td>
+				            </tr>
+				           </c:if>
 				        </c:if>	
 				    </c:if>				
 				</c:if>

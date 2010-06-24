@@ -124,6 +124,7 @@ YAHOO.ur.sponsor = {
 		
 		var handleSuccess = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    // check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -158,6 +159,7 @@ YAHOO.ur.sponsor = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('sponsor submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
@@ -192,7 +194,9 @@ YAHOO.ur.sponsor = {
 		};
 		
 		// Submit form
-		YAHOO.ur.sponsor.newSponsorDialog.submit = function() {   
+		YAHOO.ur.sponsor.newSponsorDialog.submit = function() 
+		{   
+			YAHOO.ur.util.wait.waitDialog.showDialog();
 		    YAHOO.util.Connect.setForm('newSponsorForm');
 		     	    
 		    if( YAHOO.ur.sponsor.newSponsorDialog.validate() )

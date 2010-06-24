@@ -49,6 +49,7 @@
  	
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
+ 	<ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="pages/js/ur_table.js"/>
     <ur:js src="page-resources/js/admin/identifier_type.js"/>
@@ -110,7 +111,15 @@
 		             </form>
 		         </div>
 	         </div>
-
+	         
+    <!--  wait div -->
+	<div id="wait_dialog_box" class="hidden">
+	    <div class="hd">Processing...</div>
+		<div class="bd">
+		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
+		    <p><img src="${wait}"></img></p>
+		</div>
+	</div>       
 
 </body>
 </html>

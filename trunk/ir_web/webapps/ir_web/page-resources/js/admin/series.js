@@ -126,6 +126,7 @@ YAHOO.ur.series = {
 		
 		var handleSuccess = function(o) 
 		{
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    // check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -160,6 +161,7 @@ YAHOO.ur.series = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
+			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('series submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
@@ -195,6 +197,7 @@ YAHOO.ur.series = {
 		
 		// Submit the form
 		YAHOO.ur.series.newSeriesDialog.submit = function() {
+			YAHOO.ur.util.wait.waitDialog.showDialog();
 			YAHOO.util.Connect.setForm('newSeriesForm');
 		    	    
 		    if( YAHOO.ur.series.newSeriesDialog.validate() )

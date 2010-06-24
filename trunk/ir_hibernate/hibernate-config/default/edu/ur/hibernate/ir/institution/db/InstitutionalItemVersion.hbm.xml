@@ -637,8 +637,22 @@
 	      )
 	</query>
 	
-	<!--copyright changes -->
-    <query name="updateItemVersionForCopyrightChange">
+	<!--extent changes -->
+    <query name="updateItemVersionForExtentTypeChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.itemExtents as itemExtent
+	       where itemExtent.extentType.id = :extentTypeId 
+	      )
+	</query>
+	
+    <!--copyright statement type changes -->
+    <query name="updateItemVersionForCopyrightStatementChange">
 	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
 	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
 	     where iiv.id in
@@ -649,5 +663,89 @@
 	       where item.copyrightStatement.id = :copyrightStatementId 
 	      )
 	</query>
+	
+	<!--identifier type changes -->
+    <query name="updateItemVersionForIdentifierTypeChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.itemIdentifiers as itemIdentifier
+	       where itemIdentifier.identifierType.id = :identifierTypeId 
+	      )
+	</query>
+	
+    <!--language type changes -->
+    <query name="updateItemVersionForLanguageTypeChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       where item.languageType.id = :languageTypeId 
+	      )
+	</query>
+	
+	<!--person name changes -->
+    <query name="updateItemVersionForContributorPersonNameChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.contributors as itemContributor
+	       where itemContributor.contributor.personName.id = :personNameId 
+	      )
+	</query>
+	
+	<!--publisher changes -->
+    <query name="updateItemVersionForPublisherChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       where item.externalPublishedItem.publisher.id = :publisherId 
+	      )
+	</query>
+	
+	
+    <!--series changes -->
+    <query name="updateItemVersionForSeriesChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.itemReports as itemReport
+	       where itemReport.series.id = :seriesId 
+	      )
+	</query>
+	
+	<!--sponsor changes -->
+    <query name="updateItemVersionForSponsorChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       join item.itemSponsors as itemSponsor
+	       where itemSponsor.sponsor.id = :sponsorId 
+	      )
+	</query>
+	
 	
 </hibernate-mapping>

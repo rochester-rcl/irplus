@@ -21,7 +21,9 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
+import com.sun.corba.se.impl.resolver.INSURLOperationImpl;
 
+import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.Sponsor;
 import edu.ur.ir.item.SponsorService;
 import edu.ur.ir.user.IrRole;
@@ -85,6 +87,11 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 	/** Service for checking user information */
 	private UserService userService;
 	
+	/** Service for dealing with institutional item version services */
+	private InstitutionalItemVersionService institutionalItemVersionService;
+	
+
+
 	/** Default constructor */
 	public ManageSponsors()
 	{
@@ -102,7 +109,7 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 		log.debug("creating a sponsor = " + sponsor.getName());
 	
 		IrUser user = userService.getUser(userId, false);
-		if( user == null || (!user.hasRole(IrRole.AUTHOR_ROLE) && !user.hasRole(IrRole.AUTHOR_ROLE)) )
+		if( user == null || !(user.hasRole(IrRole.AUTHOR_ROLE) || user.hasRole(IrRole.ADMIN_ROLE)) )
 		{
 		    return "accessDenied";	
 		}
@@ -138,6 +145,8 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 		if( other == null || other.getId().equals(sponsor.getId()))
 		{
 			sponsorService.save(sponsor);
+			IrUser user = userService.getUser(userId, false);
+			institutionalItemVersionService.setAllVersionsAsUpdatedForSponsor(sponsor, user, "sponsor - " + sponsor + " Updated");
 			added = true;
 		}
 		else
@@ -325,6 +334,11 @@ public class ManageSponsors extends Pager implements Preparable, UserIdAware{
 
 	public void setUserService(UserService userSerice) {
 		this.userService = userSerice;
+	}
+	
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
 
 }
