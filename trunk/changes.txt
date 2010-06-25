@@ -22,6 +22,23 @@ irplus changes 1.0 to 2.0
 
 - Updated for OAI compatibility
 
+- Changing control list in the administration section will cause all institutional items to 
+  reflect the change and cause those items to be indexed if they are the most current institutional
+  item version  the following control lists are included:
+  
+  Content types
+  Contributor types
+  Copyright statements
+  extent types
+  identifier types
+  language types
+  person names
+  publishers
+  series
+  sponsors
+  
+- Updated email messages for collaboration to include DO NOT REPLY note
+
 [ur_persistence_util]
 =============================
 - Updated HbCrudDAO to depreciate hibernate template and instead use getSessionFactor
