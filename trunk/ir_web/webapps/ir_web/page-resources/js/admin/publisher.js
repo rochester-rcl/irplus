@@ -185,12 +185,13 @@ YAHOO.ur.publisher = {
 
 		YAHOO.ur.publisher.newPublisherDialog.submit = function() 
 		{   
-			YAHOO.ur.util.wait.waitDialog.showDialog();
+			
 		    YAHOO.util.Connect.setForm('newPublisherForm');
 		    
 		    	    
 		    if( YAHOO.ur.publisher.newPublisherDialog.validate() )
 		    {
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 		        //based on what we need to do (update or create a 
 		        // new publisher) based on the action.
 	            var action = newPublisherAction;

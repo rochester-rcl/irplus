@@ -224,11 +224,12 @@ YAHOO.ur.person = {
 		// Submit the form			
 		YAHOO.ur.person.newPersonDialog.submit = function() 
 		{
-			YAHOO.ur.util.wait.waitDialog.showDialog();
+			
 		    YAHOO.util.Connect.setForm('newPersonForm');
 		    	    
 		    if( YAHOO.ur.person.newPersonDialog.validate() )
 		    {
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 		        //based on what we need to do (update or create a 
 		        // new person type) based on the action.
 	            var action = newPersonAction;

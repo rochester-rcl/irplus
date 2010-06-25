@@ -196,11 +196,12 @@ YAHOO.ur.sponsor = {
 		// Submit form
 		YAHOO.ur.sponsor.newSponsorDialog.submit = function() 
 		{   
-			YAHOO.ur.util.wait.waitDialog.showDialog();
+			
 		    YAHOO.util.Connect.setForm('newSponsorForm');
 		     	    
 		    if( YAHOO.ur.sponsor.newSponsorDialog.validate() )
 		    {
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 		        //based on what we need to do (update or create a 
 		        // new sponsor) based on the action.
 	            var action = newSponsorAction;

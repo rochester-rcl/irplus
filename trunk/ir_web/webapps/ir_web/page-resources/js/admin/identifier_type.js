@@ -163,19 +163,21 @@ YAHOO.ur.identifier.type =
 		// override the submit function
 		YAHOO.ur.identifier.type.identifierTypeDialog.submit = function()
 		{
-			YAHOO.ur.util.wait.waitDialog.showDialog();
+			
 		    YAHOO.util.Connect.setForm('newIdentifierType');
 	        //based on what we need to do (update or create a 
 	        // new identifier type) based on the action.
             var action = newIdentifierTypeAction;
             if( YAHOO.ur.identifier.type.validate() )
 	        {
+            	YAHOO.ur.util.wait.waitDialog.showDialog();
 	            if( document.newIdentifierType.newIdentifierType.value != 'true')
 	            {
 	                action = updateIdentifierTypeAction;
 	            }
+	            var cObj = YAHOO.util.Connect.asyncRequest('post', action, callback);
 	        }
-            var cObj = YAHOO.util.Connect.asyncRequest('post', action, callback);
+           
 		}
 		
         //center and show the dialog box 

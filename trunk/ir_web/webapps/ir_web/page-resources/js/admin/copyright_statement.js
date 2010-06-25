@@ -164,11 +164,12 @@ YAHOO.ur.copyright.statement = {
 			
 		YAHOO.ur.copyright.statement.copyrightStatementDialog.submit = function()
 		{  
-			YAHOO.ur.util.wait.waitDialog.showDialog();
+			
 		    YAHOO.util.Connect.setForm('newCopyrightStatement');
 		    
 		    if( YAHOO.ur.copyright.statement.copyrightStatementDialog.validate() )
 		    {
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 			    //based on what we need to do (update or create a 
 			    // new copyrigght statement) based on the action.
 		        var action = newCopyrightStatementAction;

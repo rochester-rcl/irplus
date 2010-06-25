@@ -168,11 +168,12 @@ YAHOO.ur.contributor.type = {
 			
 		YAHOO.ur.contributor.type.contributorTypeDialog.submit = function()
 		{  
-			YAHOO.ur.util.wait.waitDialog.showDialog();
+			
 		    YAHOO.util.Connect.setForm('newContributorType');
 		    
 		    if( YAHOO.ur.contributor.type.contributorTypeDialog.validate() )
 		    {
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 			    //based on what we need to do (update or create a 
 			    // new contributor type) based on the action.
 		        var action = newContributorTypeAction;
