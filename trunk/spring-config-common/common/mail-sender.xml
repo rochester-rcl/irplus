@@ -38,6 +38,8 @@
     	<property name="text">
     		<value>
     			<![CDATA[
+    			**DO NOT REPLY TO THIS MESSAGE**
+    			
     			You are invited to collaborate on the document(s) - '%NAME%'. The shared document(s) have been placed in your Shared file inbox.
     			
     			You can login into the system using the link below:
@@ -55,6 +57,8 @@
     	<property name="text">
     		<value>
     			<![CDATA[
+    			**DO NOT REPLY TO THIS MESSAGE**
+    			
     			You have been invited to collaborate on the document(s) - '%NAME%'. 
     			Please click on the link below to register with the system:
     			
@@ -73,6 +77,7 @@
     	<property name="text">
     		<value>
     			<![CDATA[
+    			
     			The document - '%NAME%' has been un-shared with you. You no longer have access to this document.
     			
     			]]>
@@ -87,6 +92,7 @@
     	<property name="text">
     		<value>
     			<![CDATA[
+    			
     			Please click on the following link to change your password:
     			
     			%BASE_WEB_APP_PATH%viewChangePassword.action?token=%TOKEN%
