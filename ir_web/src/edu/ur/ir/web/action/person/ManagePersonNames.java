@@ -146,6 +146,13 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
 	 */
 	public String create() throws NoIndexFoundException
 	{
+		log.debug("Creating a person with person name " + personName);
+		IrUser user = userService.getUser(userId, false);
+		
+		if( user == null || !(user.hasRole(IrRole.ADMIN_ROLE) || user.hasRole(IrRole.AUTHOR_ROLE)) )
+		{
+			return "accessDenied";
+		}
 		personNameAuthority = personService.getAuthority(personId, false);
 		
 		if (personNameAuthority.addName(personName, authoritative))
@@ -156,10 +163,10 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
 			File nameAuthorityFolder = new File(repo.getNameIndexFolder());
 			nameAuthorityIndexService.updateIndex(personNameAuthority, nameAuthorityFolder);
 	
-			IrUser user = userService.getUserByPersonNameAuthority(personId);
+			IrUser userToUpdate = userService.getUserByPersonNameAuthority(personId);
 	
-			if (user != null) {
-			    userIndexService.updateIndex(user, 
+			if (userToUpdate != null) {
+			    userIndexService.updateIndex(userToUpdate, 
 						new File( repo.getUserIndexFolder()) );
 			}
 	
@@ -234,22 +241,29 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
 	public String delete() throws NoIndexFoundException
 	{
 		log.debug("Delete person names called");
-		deleted = true;
+		// get the user making the change
+		IrUser userMakingChange = userService.getUser(userId, false);
 		
 		// user who has the name
 		IrUser user = userService.getUserByPersonNameAuthority(personId);
 		
-		// get the user making the change
-		IrUser userMakingChange = userService.getUser(userId, false);
-		
-		// user making change to a name that does not belong to them.
-    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE))
-    	{
+		if( userMakingChange == null )
+		{
+			return "accessDenied";
+		}
+		else if( !(userMakingChange.hasRole(IrRole.ADMIN_ROLE)) )
+		{
     		if(user == null || !user.equals(userMakingChange))
     		{
     			return "accessDenied";
     		}
     	}
+		
+		deleted = true;
+		
+
+
+	
 		
 		if( personNameIds != null )
 		{

@@ -55,6 +55,8 @@ public class ManageCopyrightStatements extends Pager implements Preparable, User
 	/**  Content type for loading  */
 	private CopyrightStatement copyrightStatement;
 
+
+
 	/** Message that can be displayed to the user. */
 	private String message;
 	
@@ -264,10 +266,6 @@ public class ManageCopyrightStatements extends Pager implements Preparable, User
 		return copyrightStatement;
 	}
 
-	public void setcopyrightStatement(CopyrightStatement copyrightStatement) {
-		this.copyrightStatement = copyrightStatement;
-	}
-
 	public void prepare() throws Exception {
 		if( id != null)
 		{
@@ -298,6 +296,10 @@ public class ManageCopyrightStatements extends Pager implements Preparable, User
 	public void setInstitutionalItemVersionService(
 			InstitutionalItemVersionService institutionalItemVersionService) {
 		this.institutionalItemVersionService = institutionalItemVersionService;
+	}
+	
+	public void setCopyrightStatement(CopyrightStatement copyrightStatement) {
+		this.copyrightStatement = copyrightStatement;
 	}
 
 	/**

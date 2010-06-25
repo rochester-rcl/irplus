@@ -154,20 +154,13 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	{
 		
 		log.debug("Creating a person with person name " + personName);
+		IrUser user = userService.getUser(userId, false);
 		
-		// In user account, to add the names to a user or to assign in admin section
-		if (addToUserId != null) 
+	
+		if( user == null || !(user.hasRole(IrRole.ADMIN_ROLE) || user.hasRole(IrRole.AUTHOR_ROLE)) )
 		{
-			IrUser user = userService.getUser(userId, false);
-			
-			// users who are not administrators can only add person to an account
-			// account
-			if( !addToUserId.equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
-			{
-			    return "accessDenied";	
-			}
+			return "accessDenied";
 		}
-
 
 		personNameAuthority = new PersonNameAuthority(personName);
 		personNameAuthority.addBirthDate(birthYear);
@@ -182,7 +175,6 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		log.debug( " my Name = " + myName + " add to user id = " + addToUserId);
 		// In user account, to add the names to a user
 		if (myName && (addToUserId != null)) {
-			IrUser user = userService.getUser(addToUserId, false);
 			user.setPersonNameAuthority(personNameAuthority);
 			userService.makeUserPersistent(user);
 		    userIndexService.updateIndex(user, 
@@ -242,7 +234,21 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 	 */
 	public String update() throws NoIndexFoundException
 	{
+		
+		
 		log.debug("updateing person = " + personNameAuthority);
+		IrUser user = userService.getUserByPersonNameAuthority(id);
+		
+		// get the user making the change
+		IrUser userMakingChange = userService.getUser(userId, false);
+		// user making change to a name that does not belong to them.
+    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE))
+    	{
+    		if(user == null || !user.equals(userMakingChange))
+    		{
+    			return "accessDenied";
+    		}
+    	}
 		
 	
 		BirthDate bd = personNameAuthority.getBirthDate();
@@ -268,18 +274,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		    dd.setYear(deathYear);
 		}
 
-		IrUser user = userService.getUserByPersonNameAuthority(id);
-		
-		// get the user making the change
-		IrUser userMakingChange = userService.getUser(userId, false);
-		// user making change to a name that does not belong to them.
-    	if(!userMakingChange.hasRole(IrRole.ADMIN_ROLE))
-    	{
-    		if(user == null || !user.equals(userMakingChange))
-    		{
-    			return "accessDenied";
-    		}
-    	}
+
 		
 		personService.save(personNameAuthority);
 		
@@ -334,7 +329,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		    	}
 		    }
 		    
-		    // Delete Person only if the person is not a contributor
+		    // Delete Person only if the person is not a contributor to a given publication
 		    if (!isContributor) {
 		    	IrUser user = userService.getUserByPersonNameAuthority(personNameAuthority.getId());
 			    
@@ -535,8 +530,10 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 
 			if (personNameId != null) {
 				personName = personService.getName(personNameId, false);
-			} else {
-				personName = personNameAuthority.getAuthoritativeName();
+			}
+			else  if( personNameAuthority != null )
+			{
+			    personName = personNameAuthority.getAuthoritativeName();
 			}
 		}
 	}
