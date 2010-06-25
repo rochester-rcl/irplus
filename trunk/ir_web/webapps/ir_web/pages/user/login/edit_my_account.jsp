@@ -76,7 +76,7 @@
 		                <li class="selected"><a href="#tab1"><em>User Information</em></a></li>
 		                <li><a href="#tab2"><em>Emails</em></a></li>
 		                <li><a href="#tab3"><em>Subscriptions</em></a></li>
-		                <li><a href="#tab4"><em>Publication Names</em></a></li>
+		                <li><a href="#tab4"><em>Authoring Names</em></a></li>
 		                <li><a href="#tab5"><em>Accepted Repository Submission Licenses</em></a></li>
 		            </ul>
 		
@@ -211,7 +211,9 @@
 	             
 				<!--  start 4th tab -->
                	 <div id="tab4">
-			          <br/>
+               	 
+               	      <c:if test="${ir:userHasRole('ROLE_ADMIN', '') || ir:userHasRole('ROLE_AUTHOR', '')}">
+			              <br/>
 				    
 					      <button class="ur_button" id="showPersonName" 
 	                          onmouseover="this.className='ur_buttonover';"
@@ -223,13 +225,16 @@
 	                          onmouseout="this.className='ur_button';"
 	                          >Delete Name</button>				              
 				  
-				      <br/>
-				      <br/>
+				          <br/>
+				          <br/>
 					
-					<div id="personNames"></div>
+					    <div id="personNames"></div>
 					
-					<div class="clear">&nbsp;</div>
-					
+					    <div class="clear">&nbsp;</div>
+					</c:if>
+					<c:if test="${!(ir:userHasRole('ROLE_ADMIN', '') || ir:userHasRole('ROLE_AUTHOR', ''))}">
+					   You do not have permissions to add authoring names
+					</c:if>
 				 </div>
 	             <!--  end 4th tab-->
 	             
@@ -341,7 +346,7 @@
 		          
 		         <div class="clear">&nbsp;</div>
 		          
-		         <label for="newPersonNameFormLastName">Last Name:</label><input type="text" 
+		         <label for="newPersonNameFormLastName">Last Name*:</label><input type="text" 
 		              id="newPersonNameFormLastName" 
 		              name="personName.surname" 
 		              value=""/>
