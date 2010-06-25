@@ -165,7 +165,7 @@ YAHOO.ur.extent.type =
 		// override the submit function
 		YAHOO.ur.extent.type.extentTypeDialog.submit = function()
 		{
-			YAHOO.ur.util.wait.waitDialog.showDialog();
+			
 
 		    YAHOO.util.Connect.setForm('newExtentType');
 
@@ -175,6 +175,7 @@ YAHOO.ur.extent.type =
 
             if( YAHOO.ur.extent.type.validate() )
 	        {
+            	YAHOO.ur.util.wait.waitDialog.showDialog();
 
 	            if( document.newExtentType.newExtentType.value != 'true')
 	            {

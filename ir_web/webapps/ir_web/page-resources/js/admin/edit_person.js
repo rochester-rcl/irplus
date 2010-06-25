@@ -221,11 +221,12 @@ YAHOO.ur.person.names = {
 			
 		YAHOO.ur.person.names.newPersonNameDialog.submit = function()
 		{
-			YAHOO.ur.util.wait.waitDialog.showDialog();
+			
 		    YAHOO.util.Connect.setForm('newPersonNameForm');
 		    	    
 		    if( YAHOO.ur.person.names.newPersonNameDialog.validate() )
 		    {
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 				// If person doesnot exist then create person and add to the user
 		    	if (document.getElementById('newPersonNameForm_personId').value == '') {
 		   		 	addPersonForUser();

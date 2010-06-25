@@ -179,10 +179,11 @@ YAHOO.ur.language.type = {
         // override the submit of the dialog
         YAHOO.ur.language.type.languageTypeDialog.submit = function()
         {
-        	YAHOO.ur.util.wait.waitDialog.showDialog();
+        	
             YAHOO.util.Connect.setForm('newLanguageType');
 	        if( YAHOO.ur.language.type.languageTypeDialog.validate() )
 	        {
+	        	YAHOO.ur.util.wait.waitDialog.showDialog();
 	            //based on what we need to do (update or create a 
 	            // new language type) based on the action.
                 var action = newLanguageTypeAction;
@@ -199,7 +200,7 @@ YAHOO.ur.language.type = {
  	    // Validate the entries in the form to require that both first and last name are entered
 	    YAHOO.ur.language.type.languageTypeDialog.validate = function() 
 	    {
-	        name = document.getElementById('newLanguageTypeForm_name');
+	        name = document.getElementById('newLanguageTypeForm_name').value;
 		    if (name == "" || name == null) {
 		        alert('A Language type name must be entered');
 			    return false;

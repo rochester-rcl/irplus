@@ -197,11 +197,12 @@ YAHOO.ur.series = {
 		
 		// Submit the form
 		YAHOO.ur.series.newSeriesDialog.submit = function() {
-			YAHOO.ur.util.wait.waitDialog.showDialog();
+			
 			YAHOO.util.Connect.setForm('newSeriesForm');
 		    	    
 		    if( YAHOO.ur.series.newSeriesDialog.validate() )
 		    {
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 		        //based on what we need to do (update or create a 
 		        // new series) based on the action.
 	            var action = newSeriesAction;

@@ -178,11 +178,12 @@ YAHOO.ur.content.type = {
 		//submit form
 		YAHOO.ur.content.type.newContentTypeDialog.submit = function() 
 		{
-			YAHOO.ur.util.wait.waitDialog.showDialog();
+			
 		    YAHOO.util.Connect.setForm('newContentTypeForm');
 		    	    
 		    if( YAHOO.ur.content.type.newContentTypeDialog.validate() )
 		    {
+		    	YAHOO.ur.util.wait.waitDialog.showDialog();
 		        //based on what we need to do (update or create a 
 		        // new content type) based on the action.
 	            var action = newContentTypeAction;
