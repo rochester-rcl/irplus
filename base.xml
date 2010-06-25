@@ -113,7 +113,7 @@
     <property name="ivy.report.dir" value="${report.dir}/ivy_report" />
 
     <!-- version of ivy to be used -->
-    <property name="ivy.version" value="2.1.0" />
+    <property name="ivy.version" value="2.0.0" />
 
     <!-- set the javac debug mode -->
     <property name="javac.debug.mode" value="on" />
@@ -221,7 +221,7 @@
     <!-- download and place into the default lib folder -->
     <target name="retrieve" depends="ivy-report" 
        description="-->Place the files in location for project">
-       <ivy:retrieve sync="true"/>
+       <ivy:retrieve sync="true" pattern="lib/[module]-[revision].[ext]"/>
     </target>
 	
     <!-- define the base javac complie command to make sure proper settings
