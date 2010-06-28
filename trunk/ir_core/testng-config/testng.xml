@@ -80,6 +80,7 @@
 		    <class name="edu.ur.ir.user.PersonalItemTest"/>
 		    <class name="edu.ur.ir.user.UserEmailTest"/>
 		    <class name="edu.ur.ir.user.InviteInfoTest"/>
+		    <class name="edu.ur.ir.user.ExternalUserAccountTest"/>
 		    
 		    <class name="edu.ur.ir.security.IrClassTypeTest"/>
 		    <class name="edu.ur.ir.security.IrClassTypePermissionTest"/>
