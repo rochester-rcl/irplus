@@ -103,9 +103,9 @@ public class HbIrUserDAO implements IrUserDAO {
 	 * 
 	 * @see edu.ur.UniqueNameDAO#findByUniqueName(java.lang.String)
 	 */
-	public IrUser findByUniqueName(String name) {
+	public IrUser findByUniqueName(String username) {
 		return (IrUser) 
-	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getUserByName", name));
+	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getUserByName", username.toLowerCase()));
 	}
 	
 	/**

@@ -19,6 +19,7 @@ package edu.ur.ir.web.spring.security;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;
@@ -116,7 +117,7 @@ public class UrAuthenticationProcessingFilter extends AbstractAuthenticationProc
         if( ldapEnabled )
         {
         	log.debug("LDAP enabled - adding ldap token");
-        	List<ExternalUserAccount> externalAccounts = userService.getByExternalUserName(username);
+        	Set<ExternalUserAccount> externalAccounts = userService.getByExternalUserName(username);
         	if( externalAccounts.size() > 0 )
         	{
                 authRequests.add(new LdapAuthenticationToken(username, password)); 
