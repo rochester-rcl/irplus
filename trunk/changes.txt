@@ -39,6 +39,11 @@ irplus changes 1.0 to 2.0
   
 - Updated email messages for collaboration to include DO NOT REPLY note
 
+- removed lower_case_user_name / lowerCaseUserName from IrUser - made it so that username is now lower cased
+  upon entry for local system
+
+-  Added flag for case sensitivity for external account types.
+
 [ur_persistence_util]
 =============================
 - Updated HbCrudDAO to depreciate hibernate template and instead use getSessionFactor
