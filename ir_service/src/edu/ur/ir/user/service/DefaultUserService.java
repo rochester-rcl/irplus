@@ -1174,9 +1174,16 @@ public class DefaultUserService implements UserService {
 	 * 
 	 * @see edu.ur.ir.user.UserService#getByExternalUserName(java.lang.String)
 	 */
-	public List<ExternalUserAccount> getByExternalUserName(
+	public Set<ExternalUserAccount> getByExternalUserName(
 			String externalUserName) {
-		return externalUserAccountDAO.getByExternalUserName(externalUserName);
+		HashSet<ExternalUserAccount> accounts = new HashSet<ExternalUserAccount>();
+		accounts.addAll(externalUserAccountDAO.getByExternalUserName(externalUserName));
+		
+		if( !externalUserName.equals(externalUserName.toLowerCase()))
+		{
+		    accounts.addAll(externalUserAccountDAO.getByExternalUserName(externalUserName.toLowerCase()));
+		}
+		return accounts;
 	}
 
 	
@@ -1197,7 +1204,12 @@ public class DefaultUserService implements UserService {
 	 */
 	public ExternalUserAccount getByExternalUserNameAccountType(
 			String externalUserName, ExternalAccountType externalAccountType) {
-		return externalUserAccountDAO.getByExternalUserNameAccountType(externalUserName, externalAccountType);
+		String userName = externalUserName;
+		if( !externalAccountType.getUserNameCaseSensitive() && externalUserName != null)
+		{
+		    userName = externalUserName.toLowerCase();   	
+		}
+		return externalUserAccountDAO.getByExternalUserNameAccountType(userName, externalAccountType);
 	}
 	
 	public DeletedInstitutionalItemService getDeletedInstitutionalItemService() {

@@ -20,6 +20,7 @@ package edu.ur.ir.user.service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -32,6 +33,9 @@ import org.testng.annotations.Test;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
+import edu.ur.ir.user.ExternalAccountType;
+import edu.ur.ir.user.ExternalAccountTypeService;
+import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
@@ -56,6 +60,10 @@ public class DefaultUserServiceTest {
 	
 	/** Repository data access */
 	RepositoryService repositoryService = (RepositoryService) ctx.getBean("repositoryService");
+	
+	/** External account type service */
+	ExternalAccountTypeService externalAccountTypeService = (ExternalAccountTypeService) ctx.getBean("externalAccountTypeService");
+
 
 	/** Platform transaction manager  */
 	PlatformTransactionManager tm = (PlatformTransactionManager)ctx.getBean("transactionManager");
@@ -159,6 +167,94 @@ public class DefaultUserServiceTest {
 		tm.commit(ts);
 		
 		assert userService.getUser(user.getId(), false) == null : "User should be null";
+	}
+	
+	/**
+	 * Test getting users by an external user name - this includes case sensitive and case insensitive 
+	 * accounts.
+	 */
+	public void testGetByExternalUserName()throws UserHasPublishedDeleteException, UserDeletedPublicationException
+	{
+		
+		
+	    // Start the transaction this is for lazy loading
+		TransactionStatus ts = tm.getTransaction(td);
+		
+		ExternalAccountType caseInsensitiveExternalAccountType = new ExternalAccountType("caseInsenstiveType");
+		ExternalAccountType caseSensitiveExternalAccountType = new ExternalAccountType("caseSensitiveType");
+		caseSensitiveExternalAccountType.setUserNameCaseSensitive(true);
+		
+		externalAccountTypeService.save(caseInsensitiveExternalAccountType);
+		externalAccountTypeService.save(caseSensitiveExternalAccountType);
+		
+		UserEmail email = new UserEmail("email");
+		UserEmail email2 = new UserEmail("email2");
+
+		IrUser user = userService.createUser("password","username",email);
+		IrUser user2 = userService.createUser("password2", "username2", email2);
+		
+		user.createExternalUserAccount("userAccount",caseInsensitiveExternalAccountType);
+		ExternalUserAccount externalAccount1 = user.getExternalAccount();
+        user2.createExternalUserAccount("userAccount", caseSensitiveExternalAccountType);
+        ExternalUserAccount externalAccount2 = user2.getExternalAccount();
+		
+        userService.makeUserPersistent(user);
+        userService.makeUserPersistent(user2);
+        
+		tm.commit(ts);
+		
+		// make sure the users exist
+		ts = tm.getTransaction(td);
+		IrUser otherUser = userService.getUser(user.getId(), false);
+		assert otherUser.equals(user) : "Users " + otherUser + 
+		" should be the same as " + user;
+       
+		IrUser otherUser2 = userService.getUser(user.getUsername());
+		
+		assert otherUser.equals(otherUser2):
+			"other user " + otherUser + " should equal " + otherUser2;
+		tm.commit(ts);
+
+		
+        // start a new transaction
+		ts = tm.getTransaction(td);
+		
+		
+		Set<ExternalUserAccount> userAccounts = userService.getByExternalUserName("userAccount");
+		assert userAccounts.size() == 2 : "Should only have two accounts but has " + userAccounts.size();
+		assert userAccounts.contains(externalAccount1) : "user accounts should contain " + externalAccount1 + "but does not";
+		assert userAccounts.contains(externalAccount2) : "user accounts should contain " + externalAccount2 + "but does not";
+		
+		userAccounts = userService.getByExternalUserName("useraccount");
+		assert userAccounts.size() == 1 : "Should only have one account but has " + userAccounts.size();
+		assert userAccounts.contains(externalAccount1) : "Should contain " + externalAccount1 + "but doesn't";
+		
+		
+		ExternalUserAccount account = userService.getByExternalUserNameAccountType("userAccount", caseInsensitiveExternalAccountType);
+		assert account.equals(externalAccount1) : " account " + account + " should equal " + externalAccount1;
+		account = userService.getByExternalUserNameAccountType("useraccount", caseInsensitiveExternalAccountType);
+		assert account.equals(externalAccount1) : " account " + account + " should equal " + externalAccount1;
+
+		account = userService.getByExternalUserNameAccountType("userAccount", caseSensitiveExternalAccountType);
+		assert account.equals(externalAccount2) : " account " + account + " should equal " + externalAccount2;
+
+		account = userService.getByExternalUserNameAccountType("useraccount", caseSensitiveExternalAccountType);
+		assert account == null : "Account should not be found but was found = " + account;
+
+		
+		
+ 		
+		IrUser myUser1 = userService.getUser(user.getId(), false);
+		IrUser myUser2 = userService.getUser(user2.getId(), false);
+		
+		userService.deleteUser(myUser1, myUser1);
+		userService.deleteUser(myUser2, myUser2);
+		
+		externalAccountTypeService.delete(externalAccountTypeService.get(caseInsensitiveExternalAccountType.getId(),false));
+		externalAccountTypeService.delete(externalAccountTypeService.get(caseSensitiveExternalAccountType.getId(),false));
+		
+		tm.commit(ts);
+		
 	}
 	
 

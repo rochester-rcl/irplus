@@ -55,8 +55,8 @@ public class ExternalUserAccount extends BasePersistent{
 			ExternalAccountType externalAuthorizationAccountType)
 	{
 	    setUser(user);
-	    setExternalUserAccountName(externalUserAccountName);
 	    setExternalAccountType(externalAuthorizationAccountType);
+	    setExternalUserAccountName(externalUserAccountName);
 	}
 
 	/**
@@ -87,12 +87,23 @@ public class ExternalUserAccount extends BasePersistent{
 	}
 
 	/**
-	 * Set the external user account name.
+	 * Set the external user account name. If the external account type
+	 * is lower case then the external user account name is automatically 
+	 * lower cased.
 	 * 
 	 * @param externalUserAccountName
 	 */
 	public void setExternalUserAccountName(String externalUserAccountName) {
-		this.externalUserAccountName = externalUserAccountName;
+		if( externalAccountType  != null 
+				&& !externalAccountType.getUserNameCaseSensitive() 
+				&& externalUserAccountName != null)
+		{	
+			this.externalUserAccountName = externalUserAccountName.toLowerCase();
+		}
+		else
+		{
+			this.externalUserAccountName = externalUserAccountName;
+		}
 	}
 
 	/**
@@ -112,6 +123,8 @@ public class ExternalUserAccount extends BasePersistent{
 	public void setExternalAccountType(
 			ExternalAccountType externalAccountType) {
 		this.externalAccountType = externalAccountType;
+		// update user name accordingly
+		setExternalUserAccountName(this.externalUserAccountName);
 	}
 	
 	/**

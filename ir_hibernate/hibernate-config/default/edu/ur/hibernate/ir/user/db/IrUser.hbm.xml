@@ -44,8 +44,6 @@
 		<property name="username" column="username" type="string"
 			not-null="true" access="field" />
 			
-		<property name="lowerCaseUsername" column="lower_case_user_name" type="string"
-			 not-null="true" access="field" />
 
 		<property name="firstName" column="first_name" type="string"
 			access="field" />
@@ -314,13 +312,13 @@
 	<!-- sort by user name asc -->
 	<query name="getUsersByUserNameOrderAsc">
 		select irUser from IrUser as irUser 
-		order by lowerCaseUsername asc
+		order by username asc
 	</query>	
 	
 	<!-- sort by user name desc -->
 	<query name="getUsersByUserNameOrderDesc">
 		select irUser from IrUser as irUser 
-		order by lowerCaseUsername desc
+		order by username desc
 	</query>	
 	
 	<!-- sort by default email asc -->

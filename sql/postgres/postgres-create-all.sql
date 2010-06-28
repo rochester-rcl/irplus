@@ -649,6 +649,7 @@ CREATE TABLE ir_user.external_account_type
 (
     external_account_type_id BIGINT PRIMARY KEY,
     version INTEGER,
+    user_name_case_sensitive BOOLEAN NOT NULL,
     name TEXT NOT NULL,
     description TEXT,
     UNIQUE(name)
@@ -789,8 +790,6 @@ CREATE TABLE ir_user.ir_user
   password_encoding VARCHAR(50),
   default_email_id BIGINT,
   username TEXT NOT NULL,
-  lower_case_user_name TEXT NOT NULL,
-  ldap_user_name TEXT,
   first_name TEXT,
   lower_case_first_name TEXT,
   last_name TEXT,
@@ -823,9 +822,6 @@ ALTER TABLE ir_user.ir_user OWNER TO ir_plus;
 
 -- Index on the user for sorting
 CREATE INDEX user_last_name_idx ON ir_user.ir_user (lower_case_last_name, lower_case_first_name, lower_case_middle_name);
-
--- Index on the user name
-CREATE INDEX user_name_idx ON ir_user.ir_user (lower_case_user_name);
 
 
 -- The user sequence
@@ -2611,11 +2607,11 @@ ALTER TABLE ir_user.ir_user ADD CONSTRAINT user_default_email_id_fkey FOREIGN KE
 -- ---------------------------------------------
 insert into 
 ir_user.ir_user ( user_id, user_password, password_encoding, default_email_id, username, 
-lower_case_user_name, first_name, lower_case_first_name, last_name, lower_case_last_name, 
+first_name, lower_case_first_name, last_name, lower_case_last_name, 
 version, account_expired, account_locked, credentials_expired, 
 force_change_password, affiliation_approved, self_registered, created_date, re_build_user_workspace_index)  
 values (nextval('ir_user.ir_user_seq'), 
-      'd033e22ae348aeb5660fc2140aec35850c4da997', 'SHA-1', null, 'admin', 'admin', 'System', 
+      'd033e22ae348aeb5660fc2140aec35850c4da997', 'SHA-1', null, 'admin', 'System', 
       'system', 'Admin', 'admin', 0, false, 
 
 false, false, false, true, false, date(now()), false);

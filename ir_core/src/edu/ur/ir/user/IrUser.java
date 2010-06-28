@@ -81,10 +81,6 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	/**  User name used by the user.*/
 	private String username;
 	
-	/** lower case value of the user name */
-	private String lowerCaseUsername;
-	
-
 	/**  Encoding used for the password */
 	private String passwordEncoding;
 	
@@ -721,15 +717,16 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 */
 	public void setUsername(String username)
 	{
-		this.username = username;
-		if( this.username == null)
+		if( username != null )
 		{
-			this.lowerCaseUsername = null;
+			this.username = username.toLowerCase();
 		}
 		else
 		{
-			this.lowerCaseUsername = this.username.toLowerCase();
+			this.username = null;
 		}
+		
+		
 	}
 
 	/**
@@ -906,12 +903,12 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 		{
 			folder.removePersonalFile(file);
 			file.setPersonalFolder(null);
-		}
-		
-		IrUser current = folder.getOwner();
-		if(current != null && !current.equals(this))
-		{
-			current.removeRootFile(file);
+			
+			IrUser current = folder.getOwner();
+			if(current != null && !current.equals(this))
+			{
+				current.removeRootFile(file);
+			}
 		}
 		
 		rootFiles.add(file);
@@ -1739,15 +1736,6 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 */
 	public String getLowerCaseMiddleName() {
 		return lowerCaseMiddleName;
-	}
-
-	/**
-	 * Lower case value of the user name.
-	 * 
-	 * @return
-	 */
-	public String getLowerCaseUsername() {
-		return lowerCaseUsername;
 	}
 
 	/**

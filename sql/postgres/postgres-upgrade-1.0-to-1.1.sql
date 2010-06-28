@@ -10,6 +10,7 @@ CREATE TABLE ir_user.external_account_type
     external_account_type_id BIGINT PRIMARY KEY,
     version INTEGER,
     name TEXT NOT NULL,
+    user_name_case_sensitive BOOLEAN NOT NULL,
     description TEXT,
     UNIQUE(name)
 );
@@ -21,8 +22,8 @@ ALTER TABLE ir_user.external_account_type_seq OWNER TO ir_plus;
 
 
 ---  Create the default account type
-insert into ir_user.external_account_type (external_account_type_id, version, name, description)
-values (nextval('ir_user.external_account_type_seq'), 0, 'default_ldap_account', 'The default ldap account');
+insert into ir_user.external_account_type (external_account_type_id, version, name, description, user_name_case_sensitive)
+values (nextval('ir_user.external_account_type_seq'), 0, 'default_ldap_account', 'The default ldap account', false);
 
 -- ---------------------------------------------
 -- This binds an external account type to 
@@ -60,7 +61,7 @@ ALTER TABLE ir_user.external_user_account ADD CONSTRAINT external_user_account_u
 insert into ir_user.external_user_account select
   nextval('ir_user.external_user_account_seq'), 
   external_account_type.external_account_type_id, 
-  ir_user.ldap_user_name,
+  lower(ir_user.ldap_user_name),
   ir_user.user_id
   from ir_user.external_account_type,
        ir_user.ir_user
@@ -649,5 +650,16 @@ ALTER TABLE ir_repository.institutional_item_version ADD CONSTRAINT modbyuserfk 
 
 ALTER TABLE ir_repository.institutional_item_version
 ADD COLUMN modification_note TEXT;
+
+
+-- ---------------------------------------------
+-- Drop column lower case user name 
+-- and make user name lower case
+-- ---------------------------------------------
+
+ALTER TABLE ir_user.ir_user DROP COLUMN lower_case_user_name;
+
+UPDATE ir_user.ir_user set username = lower(username);
+
 
 

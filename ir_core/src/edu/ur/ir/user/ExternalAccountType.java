@@ -30,6 +30,9 @@ public class ExternalAccountType extends CommonPersistent {
 	/** eclipse generated id */
 	private static final long serialVersionUID = 3988403684531611527L;
 	
+	/** Determine if the username is case sensitive */
+	private boolean userNameCaseSensitive = false;
+
 	/**  Constructor */
 	public ExternalAccountType(){};
 	
@@ -64,6 +67,7 @@ public class ExternalAccountType extends CommonPersistent {
 		sb.append(version);
 		sb.append(" name = " );
 		sb.append(name);
+		sb.append(" case sensitive = " + userNameCaseSensitive);
 		sb.append(" description = " );
 		sb.append(description);
 		sb.append("]");
@@ -86,5 +90,13 @@ public class ExternalAccountType extends CommonPersistent {
 			( name == null && other.getName() != null ) ) return false;
 
 		return true;
+	}
+	
+	public boolean getUserNameCaseSensitive() {
+		return userNameCaseSensitive;
+	}
+
+	public void setUserNameCaseSensitive(boolean userNameCaseSensitive) {
+		this.userNameCaseSensitive = userNameCaseSensitive;
 	}
 }

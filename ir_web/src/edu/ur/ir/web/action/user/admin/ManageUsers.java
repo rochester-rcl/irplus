@@ -367,6 +367,11 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		irUser.setAccountLocked(accountLocked);
 		
 		ExternalUserAccount externalUserAccount = irUser.getExternalAccount();
+		
+		// if the id passed in is greater than zero this means
+		// the xternal account type was updated or current - if
+		// the id is less then zero it either does not exist or was
+		// deleted
 		if( externalAccountTypeId > 0 )
 		{
 			ExternalAccountType externalAccountType = externalAccountTypeService.get(externalAccountTypeId, false);

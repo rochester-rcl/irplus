@@ -19,6 +19,7 @@ package edu.ur.ir.user;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -377,14 +378,16 @@ public interface UserService extends UserDetailsService, Serializable {
 	public void save(ExternalUserAccount externalUserAccount);
 	
 	/**
-	 * Get the list of external user accounts for a given user name.
+	 * Get the set of external user accounts for a given user name.  This will include 
+	 * usernames with case sensitive and case in-sensitive accounts.
 	 * 
 	 * @see edu.ur.ir.user.ExternalUserAccountDAO#getByExternalUserName(java.lang.String)
 	 */
-	public List<ExternalUserAccount> getByExternalUserName(String externalUserName);
+	public Set<ExternalUserAccount> getByExternalUserName(String externalUserName);
 	
 	/**
-	 * Get the external user account by the given external user name and external account type.
+	 * Get the external user account by the given external user name and external account type.  This
+	 * method will automatically lower case the name if the external account type is case insensitive.
 	 * 
 	 * @param externalUserName - the external user name
 	 * @param externalAccountType - the external account type used

@@ -44,6 +44,10 @@
 
 		<property name="name" column="name" type="string"
 			not-null="true" access="field" />
+			
+		<property name="userNameCaseSensitive" column="user_name_case_sensitive" type="boolean"
+			not-null="true" access="field" />
+
 
 		<property name="description" column="description" type="string"
 			not-null="false" />
