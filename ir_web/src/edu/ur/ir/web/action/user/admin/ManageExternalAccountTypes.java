@@ -69,7 +69,6 @@ public class ManageExternalAccountTypes extends ActionSupport implements  Prepar
 	/** id of the external account type  */
 	private Long id;
 	
-	
 	/** User id who is making the changes */
 	private Long userId;
 	
@@ -78,6 +77,9 @@ public class ManageExternalAccountTypes extends ActionSupport implements  Prepar
 	
 	/** Used for sorting name based entities */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
+	
+	/** Define case sensitive ase false */
+	boolean caseSensitive = false;
 	
 
 	/**
@@ -99,6 +101,7 @@ public class ManageExternalAccountTypes extends ActionSupport implements  Prepar
 			externalAccountTypeService.get(externalAccountType.getName());
 		if( myExternalAccountType == null)
 		{
+			externalAccountType.setUserNameCaseSensitive(caseSensitive);
 		    externalAccountTypeService.save(externalAccountType);
 		    added = true;
 		}
@@ -148,6 +151,7 @@ public class ManageExternalAccountTypes extends ActionSupport implements  Prepar
 		// then they are trying to rename it to the same name.
 		if(other == null || other.getId().equals(externalAccountType.getId()))
 		{
+			externalAccountType.setUserNameCaseSensitive(caseSensitive);
 			externalAccountTypeService.save(externalAccountType);
 			added = true;
 		}
@@ -179,6 +183,16 @@ public class ManageExternalAccountTypes extends ActionSupport implements  Prepar
 		}
 		deleted = true;
 		return "deleted";
+	}
+	
+	/**
+	 * Set the case sensitive value.
+	 * 
+	 * @param caseSenstive
+	 */
+	public void setCaseSensitive(boolean caseSensitive)
+	{
+	    this.caseSensitive = caseSensitive;	
 	}
 	
 	/**
