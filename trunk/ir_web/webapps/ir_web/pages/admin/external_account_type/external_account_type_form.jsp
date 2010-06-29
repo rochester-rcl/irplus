@@ -21,6 +21,7 @@
       this form will return with error messages in it if there
       is an issue.
  -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <input type="hidden" id="externalAccountTypeForm_id" name="id" value="${externalAccountType.id}"/>
 		               
@@ -34,6 +35,18 @@
 		<td align="left" class="input"><input type="text" 
 		id="externalAccountType_name" name="externalAccountType.name"
 		value="${externalAccountType.name}" size="45"/> </td>
+	</tr>
+	<tr>       
+	    <td align="left" class="label">User Name Case Sensitive:</td>
+		<td align="left" class="input">
+		<input type="checkbox" 
+		id="externalAccountType_case_sensitive" name="caseSensitive"
+		<c:if test="${externalAccountType.userNameCaseSensitive}">
+		   		checked="true"
+		   		
+		</c:if>
+		value="true" /> 
+		</td>
 	</tr>
 	<tr>
 	    <td align="left" class="label">Description:</td>

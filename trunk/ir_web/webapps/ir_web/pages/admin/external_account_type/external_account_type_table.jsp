@@ -9,6 +9,7 @@
 	                    <urstb:tr>
 	                        <urstb:td>Id</urstb:td>
 					        <urstb:td>Name</urstb:td>
+					        <urstb:td>User Name Case Sensitive</urstb:td>
 					        <urstb:td>Description</urstb:td>
 					        <urstb:td>Action</urstb:td>
 	                    </urstb:tr>
@@ -28,6 +29,9 @@
 	                        </urstb:td>
 	                        <urstb:td>
 			                   ${externalAccountType.name}
+	                        </urstb:td>
+	                        <urstb:td>
+			                   ${externalAccountType.userNameCaseSensitive}
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${externalAccountType.description}

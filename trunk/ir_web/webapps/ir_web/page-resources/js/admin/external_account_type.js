@@ -79,6 +79,7 @@ YAHOO.ur.external_account_type =
         document.getElementById('externalAccountType_name').value = "";
         document.getElementById('newExternalAccountTypeForm_description').value = "";
         document.getElementById('externalAccountTypeForm_id').value = "";
+        document.getElementById('externalAccountType_case_sensitive').checked=false;
         document.newExternalAccountTypeForm.newExternalAccountType.value = "true";
     },
     
