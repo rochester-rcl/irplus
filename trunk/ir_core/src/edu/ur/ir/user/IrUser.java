@@ -162,7 +162,11 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	/** represents an external account that a user can be authenticated against */
 	private ExternalUserAccount externalAccount;
 	
+	/** last date the user logged in */
+	private Timestamp lastLoginDate;
 	
+
+
 	/**
 	 * Default Constructor. 
 	 */
@@ -1782,6 +1786,25 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	public void createExternalUserAccount(String externalUserAccountName, ExternalAccountType externalAccountType )
 	{
 		externalAccount = new ExternalUserAccount(this,externalUserAccountName, externalAccountType );
+	}
+	
+	
+	/**
+	 * Date last time user logged into the system.
+	 * 
+	 * @return - last time the user logged into the system
+	 */
+	public Timestamp getLastLoginDate() {
+		return lastLoginDate;
+	}
+
+	/**
+	 * Date the last time the user logged into the system.
+	 * 
+	 * @param lastLoginDate - last time the user logged into the system
+	 */
+	public void setLastLoginDate(Timestamp lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
 	}
 	
 }
