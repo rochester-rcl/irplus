@@ -17,6 +17,8 @@
 
 package edu.ur.ir.web.spring.security;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -158,6 +160,8 @@ public class UrAuthenticationProcessingFilter extends AbstractAuthenticationProc
                     // process the group membership information
                     if( user != null )
                     {
+                    	user.setLastLoginDate(new Timestamp(new Date().getTime()));
+                    	userService.makeUserPersistent(user);
                     	for(UserGroupMemberFilter filter : this.groupMemberFilters)
                     	{
                     		filter.setMembershipStatus(user);
