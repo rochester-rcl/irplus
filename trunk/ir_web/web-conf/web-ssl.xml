@@ -117,5 +117,16 @@
     </user-data-constraint>
   </security-constraint>
   
+  <!--  oai should be a non secure url for OAIster -->
+   <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>ir plus</web-resource-name>
+        <url-pattern>/oai2.action/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+  
     
 </web-app>

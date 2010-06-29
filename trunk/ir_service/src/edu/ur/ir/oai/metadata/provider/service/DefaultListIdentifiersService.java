@@ -25,6 +25,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -63,6 +64,9 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	/** eclipse generated id */
 	private static final long serialVersionUID = 9056980425349175595L;
 	
+	/** logger for this class */
+	private static Logger log = Logger.getLogger(DefaultListIdentifiersService.class);
+	
 	/**  Default batch size for harvesting */
 	private int batchSize = 500;
 	
@@ -99,6 +103,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		
         boolean initialRequest = this.initilizeResumptionToken(metadataPrefix, set, from, until, strResumptionToken);
  		
+        log.debug("resumption token = " + resumptionToken);
         if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
 		{
 			throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
@@ -569,7 +574,8 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			NoRecordsMatchException, NoSetHierarchyException {
 		
 	       boolean initialRequest = this.initilizeResumptionToken(metadataPrefix, set, from, until, strResumptionToken);
-	 		if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
+	       log.debug("resumption token = " + resumptionToken);
+	       if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
 			{
 				throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
 			}
