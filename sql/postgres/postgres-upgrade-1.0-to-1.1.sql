@@ -661,5 +661,7 @@ ALTER TABLE ir_user.ir_user DROP COLUMN lower_case_user_name;
 
 UPDATE ir_user.ir_user set username = lower(username);
 
+ALTER TABLE ir_user.ir_user ADD COLUMN last_login_date TIMESTAMP WITH TIME ZONE;
+
 
 

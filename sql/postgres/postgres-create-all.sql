@@ -797,6 +797,7 @@ CREATE TABLE ir_user.ir_user
   middle_name TEXT,
   lower_case_middle_name TEXT,
   created_date TIMESTAMP WITH TIME ZONE,
+  last_login_date TIMESTAMP WITH TIME ZONE,
   self_registered BOOLEAN,
   phone_number TEXT,
   account_expired BOOLEAN NOT NULL,
