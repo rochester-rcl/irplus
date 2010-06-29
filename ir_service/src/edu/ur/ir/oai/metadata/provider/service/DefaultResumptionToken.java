@@ -120,7 +120,8 @@ public class DefaultResumptionToken implements ResumptionToken
 	
 	public void setFrom(String from) throws BadArgumentException {
 		this.fromDateType = OaiUtil.getDateType(from);
-		this.from = OaiUtil.getDate(from);
+		Date zuluFrom = OaiUtil.getDate(from);
+		this.from = OaiUtil.getLocalTime(zuluFrom);
 	}
 
 	public Date getUntil() {
@@ -133,7 +134,8 @@ public class DefaultResumptionToken implements ResumptionToken
 	
 	public void setUntil(String until) throws BadArgumentException {
 		this.untilDateType = OaiUtil.getDateType(until);
-		this.until = OaiUtil.getDate(until);
+		Date zuluUntil = OaiUtil.getDate(until);
+		this.until = OaiUtil.getLocalTime(zuluUntil);
 	}
 
 
@@ -208,6 +210,31 @@ public class DefaultResumptionToken implements ResumptionToken
 		    }
 		}
 		return value;
+	}
+	
+	public String toString()
+	{
+	
+		StringBuffer sb = new StringBuffer("[set = ");
+		sb.append(set);
+		sb.append(" from = ");
+		sb.append(from);
+		sb.append(" until = ");
+		sb.append(until);
+		sb.append(" metadataPrefix = ");
+		sb.append(metadataPrefix);
+		sb.append(" lastId = ");
+		sb.append(lastId);
+		sb.append(" batchSize = ");
+		sb.append(batchSize);
+		sb.append(" deleted = ");
+		sb.append(deleted);
+		sb.append(" inserToken = ");
+		sb.append(insertToken);
+		sb.append(" completListSize = ");
+		sb.append(completeListSize);
+		sb.append("]");
+		return sb.toString();
 	}
 	
 	
