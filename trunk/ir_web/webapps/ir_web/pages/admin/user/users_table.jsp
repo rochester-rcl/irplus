@@ -82,7 +82,7 @@
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
-	
+	                <urstb:td>Login Date</urstb:td>
 	                <urstb:td>Change password</urstb:td>
 	                <urstb:td>Login as user</urstb:td>
 	                <urstb:td>Delete</urstb:td>
@@ -116,7 +116,10 @@
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${user.defaultEmail.email}
-	                        </urstb:td>	                        
+	                        </urstb:td>	 
+	                        <urstb:td>
+	                             ${user.lastLoginDate}
+	                        </urstb:td>	                           
 	                        <urstb:td>
 		                   		<a href="javascript:YAHOO.ur.user.changePassword('${user.id}');">Change password</a> 
 	                        </urstb:td>
