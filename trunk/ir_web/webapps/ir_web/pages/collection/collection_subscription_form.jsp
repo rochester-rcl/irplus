@@ -18,6 +18,9 @@
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>	
+ <c:url var="collectionRss" value="viewInstitutionalCollectionRss.action">
+	        <c:param name="collectionId" value="${collectionId}"/>
+</c:url>
    <c:if test="${user == null}">
        <p> <a href="<c:url value="/user/workspace.action"/>">Login</a> or <a href="<c:url value="viewUserRegistration.action"/>">Create an Account</a> to subscribe to this collection. </p>
 	</c:if>
