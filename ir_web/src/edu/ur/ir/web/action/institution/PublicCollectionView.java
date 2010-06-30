@@ -144,9 +144,12 @@ public class PublicCollectionView extends ActionSupport {
 		 repository = 
 			 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
 					 false);
-		 
-		institutionalCollection = 
-			institutionalCollectionService.getCollection(collectionId, false);
+		
+		if( collectionId != null )
+		{
+		    institutionalCollection = 
+			    institutionalCollectionService.getCollection(collectionId, false);
+		}
 		
 		if( institutionalCollection != null )
 		{
@@ -155,8 +158,10 @@ public class PublicCollectionView extends ActionSupport {
 		    // get the 10 most recent submissions
 		    mostRecentSubmissions = institutionalItemService.getItemsOrderByDate(0, 5, institutionalCollection, OrderType.DESCENDING_ORDER);
 		    collectionPath = institutionalCollectionService.getPath(institutionalCollection);
+		    return "view";
 		}
-		return "view";
+		return "notFound";
+		
 	}
 
 	/**
