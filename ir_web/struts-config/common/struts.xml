@@ -161,6 +161,7 @@
                 method="viewRss">
                 <interceptor-ref name="editStack" />
                 <result name="view">/pages/collection/collection_rss_feed.jsp</result>
+                <result name="notFound">/pages/collection/collection_not_found.jsp</result>
         </action>
         
         <action name="getInstitutionalCollectionStatistics" 
