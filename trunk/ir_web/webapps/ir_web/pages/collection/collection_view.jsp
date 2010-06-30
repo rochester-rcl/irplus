@@ -208,13 +208,7 @@
                    
                        <div class="contentBoxContent">
 		                    <div id="collection_subscription">
-			                    <input type="hidden" name="userId" id="user_id" value="${user.id}">
-
-		                    	<c:if test="${user == null}">
-									<p> <a href="<c:url value="/user/workspace.action"/>">Login</a> or <a href="<c:url value="viewUserRegistration.action"/>">Create an Account</a> to subscribe to this collection. </p>
-								</c:if>	
-								
-								<p><img src="<c:url value='/page-resources/images/all-images/feed.jpg'/>" alt="RSS Feed"/>&nbsp;<a href="${collectionRss}">${institutionalCollection.name} Recent Submissions</a></p>
+			                    <c:import url="collection_subscription_form.jsp"/>
 							</div>
                        </div>
                    </div>

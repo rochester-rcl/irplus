@@ -204,12 +204,6 @@ YAHOO.ur.public.collection.view =
     init : function()
     {
         YAHOO.ur.public.collection.view.getCollectionPicture( 0, 'INIT');
-        
-        var userId = document.getElementById("user_id").value;
-        if (userId != '') 
-        {
-        	YAHOO.ur.public.collection.view.getUserSubscriptionForThisCollection(userId);
-        }
         YAHOO.ur.public.collection.view.getStatisticsForThisCollection();
     }
 };

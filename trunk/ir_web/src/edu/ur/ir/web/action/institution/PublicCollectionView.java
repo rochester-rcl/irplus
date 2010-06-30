@@ -26,16 +26,20 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.institution.InstitutionalCollection;
+import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.order.OrderType;
 import edu.ur.simple.type.AscendingNameComparator;
 
-public class PublicCollectionView extends ActionSupport {
+public class PublicCollectionView extends ActionSupport implements UserIdAware {
 
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = 7238213751595032189L;
@@ -99,6 +103,21 @@ public class PublicCollectionView extends ActionSupport {
 	/** list of children in name order */
 	private LinkedList<InstitutionalCollection> nameOrderedChildren = new LinkedList<InstitutionalCollection>();
 
+	/** id of the user accessing the collection  */
+	private Long userId;
+	
+	/** User service */
+	private UserService userService;
+	
+	/** Service for dealing with institutional collection subscription service */
+	private InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService;
+
+
+
+
+	/** Indicates whether the user has subscribed to this collection */
+	private boolean isSubscriber;
+	
 	/**
 	 * Get the next picture for a collection.
 	 * 
@@ -122,16 +141,20 @@ public class PublicCollectionView extends ActionSupport {
 			 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
 					 false);
 		 
+		if( collectionId != null )
+		{
 		institutionalCollection = 
 			institutionalCollectionService.getCollection(collectionId, false);
-		
+		}
 		if( institutionalCollection != null )
 		{
 		    // get the 10 most recent submissions
 		    mostRecentSubmissions = institutionalItemService.getItemsOrderByDate(0, 50, institutionalCollection, OrderType.DESCENDING_ORDER);
 		    collectionPath = institutionalCollectionService.getPath(institutionalCollection);
+		    return "view";
 		}
-		return "view";
+		return "notFound";
+		
 	}
 	
 	/**
@@ -144,7 +167,8 @@ public class PublicCollectionView extends ActionSupport {
 		 repository = 
 			 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
 					 false);
-		
+		 
+
 		if( collectionId != null )
 		{
 		    institutionalCollection = 
@@ -153,6 +177,12 @@ public class PublicCollectionView extends ActionSupport {
 		
 		if( institutionalCollection != null )
 		{
+		    if(userId != null)
+		    {
+		    	IrUser user = userService.getUser(userId, false);
+		    	isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(institutionalCollection, user);
+			}
+			
 			nameOrderedChildren.addAll(institutionalCollection.getChildren());
 			Collections.sort(nameOrderedChildren, nameComparator);
 		    // get the 10 most recent submissions
@@ -340,5 +370,35 @@ public class PublicCollectionView extends ActionSupport {
 	public LinkedList<InstitutionalCollection> getNameOrderedChildren() {
 		return nameOrderedChildren;
 	}
+
+	/**
+	 * Set the user id if user exists
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
+	 */
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public Long getUserId() {
+		return userId;
+	}
+
+	public boolean isSubscriber() {
+		return isSubscriber;
+	}
+	
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+	
+	public void setInstitutionalCollectionSubscriptionService(
+			InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService) {
+		this.institutionalCollectionSubscriptionService = institutionalCollectionSubscriptionService;
+	}
+
 
 }
