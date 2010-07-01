@@ -67,5 +67,15 @@ CrudDAO<InstitutionalCollectionSubscription>{
 	 * @return list of unique user id's
 	 */
 	public List<Long> getUniqueSubsciberUserIds();
+	
+	/**
+	 * Get the subscription for the specified user and collection.  Will return null if the user
+	 * does not have a subscription for the collection.
+	 * 
+	 * @param institutionalCollection - instituitonal collection the user should be subscribed to
+	 * @param user - the user 
+	 * @return the subscription if the user is subscribed to the specified collection
+	 */
+	public InstitutionalCollectionSubscription getSubscriptionForUser(InstitutionalCollection institutionalCollection, IrUser user);
 
 }

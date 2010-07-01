@@ -196,7 +196,7 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 		    String startDateStr = simpleDateFormat.format(startDate); 
 		    String endDateStr = simpleDateFormat.format(endDate); 
 		    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, false, "UTF-8");
-		    String subject = "New URResearch Publications for dates: " + startDateStr + " - " + endDateStr;
+		    String subject = "New " + repository.getName() + " Publications for dates: " + startDateStr + " - " + endDateStr;
 		    mimeMessageHelper.setSubject(subject);
 		    mimeMessageHelper.setFrom(fromAddress);
 		    mimeMessageHelper.setTo(user.getDefaultEmail().getEmail());
@@ -354,6 +354,15 @@ public class DefaultInstitutionalCollectionSubscriptionService implements Instit
 
 	public void setFromAddress(String fromAddress) {
 		this.fromAddress = fromAddress;
+	}
+
+	/**
+	 * Return the subscription for the user
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionService#getSubscription(edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.user.IrUser)
+	 */
+	public InstitutionalCollectionSubscription getSubscription(InstitutionalCollection collection, IrUser user) {
+		return institutionalCollectionSubscriptionDAO.getSubscriptionForUser(collection, user);
 	}
 
 }

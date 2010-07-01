@@ -162,7 +162,7 @@ public class DefaultUserService implements UserService {
 	
 	/** service to deal with deleted institutional item information */
 	private DeletedInstitutionalItemService deletedInstitutionalItemService;
-
+	
 
 	/**
 	 * Get the User email if email id exists in the system.
@@ -324,6 +324,13 @@ public class DefaultUserService implements UserService {
 			}
 		}
 		
+	 	
+		Long countOfDeletedItems = deletedInstitutionalItemService.getDeletedInstitutionalItemCountForUser(user.getId());
+		
+		if (countOfDeletedItems != 0 ) {
+			throw new UserDeletedPublicationException(user);
+		}
+		
 		if( user.getResearcher() != null)
 		{
 			Researcher r = user.getResearcher();
@@ -346,12 +353,7 @@ public class DefaultUserService implements UserService {
 	    	userGroupService.save(group);
 	    }
 	    
- 	
-		Long countOfDeletedItems = deletedInstitutionalItemService.getDeletedInstitutionalItemCountForUser(user.getId());
-		
-		if (countOfDeletedItems != 0 ) {
-			throw new UserDeletedPublicationException(user);
-		}
+
 		
 		//remove all the root personal items
 		Set<PersonalItem> personalItems = new HashSet<PersonalItem>();
@@ -1220,6 +1222,7 @@ public class DefaultUserService implements UserService {
 			DeletedInstitutionalItemService deletedInstitutionalItemService) {
 		this.deletedInstitutionalItemService = deletedInstitutionalItemService;
 	}
+
 
 }
 
