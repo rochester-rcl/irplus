@@ -22,14 +22,18 @@ YAHOO.namespace("ur.email");
 
 
 // action to perform when submitting the email form.
-var myEmailAction = basePath + 'admin/getEmails.action';
+var myEmailAction = basePath + 'user/getEmails.action';
+
+
+//actions for adding and removing emails and editing the user information
+var newEmailAction = basePath + 'user/createEmail.action';
+var deleteEmailAction = basePath + 'user/deleteEmail.action';
+var defaultEmailAction = basePath + 'user/setDefaultEmail.action';
+var unsubscribeAction = basePath + 'user/unSubscribeGetSubscriptionTable.action';
+
 
 // actions for adding and removing emails and editing the user information
 var updateUserAction = basePath + 'admin/updateUser.action';
-var newEmailAction = basePath + 'admin/createEmail.action';
-var deleteEmailAction = basePath + 'admin/deleteEmail.action';
-var updateEmailAction = basePath + 'admin/updateEmail.action';
-var defaultEmailAction = basePath + 'admin/setDefaultEmail.action';
 var verifyEmailAction = basePath + 'admin/setVerifiedEmail.action';
 
 // action to perform for searching names
@@ -669,6 +673,9 @@ YAHOO.ur.email = {
 	        YAHOO.ur.email.getNameCallback);
 	},
 	
+	/**
+	 * Function to remove a name from a user
+	 */
 	removeName : function(userId)
 	{
 		
@@ -730,6 +737,73 @@ YAHOO.ur.email = {
 		YAHOO.ur.email.deleteResearcherPageDialog.render();
 	},
 	
+	unsubscribe : function (userId, collectionId)
+	{
+		document.getElementById('subscribeUserId').value = userId;
+		document.getElementById('collectionId').value = collectionId;
+		YAHOO.ur.email.unsubscribeDialog.showDialog();
+	},
+	
+	/**
+	 * Creates a YUI dialog for unsubscribing a user from 
+	 * a subsciprition
+	 *
+	 */
+	createUnsubscribeDialog : function()
+	{
+	
+		// Define various event handlers for Dialog
+		var handleSubmit = function() {
+			YAHOO.util.Connect.setForm('unsubscribe');
+		    //delete the email
+	        var cObj = YAHOO.util.Connect.asyncRequest('post',
+	        unsubscribeAction, callback);
+		};
+		
+			
+		// handle a cancel 
+		var handleCancel = function() {
+		    YAHOO.ur.email.unsubscribeDialog.hide();
+		};
+		
+		var handleSuccess = function(o) {
+			var divToUpdate = document.getElementById('current_subscriptions');
+            divToUpdate.innerHTML = o.responseText;
+            YAHOO.ur.email.unsubscribeDialog.hide();
+ 		};
+		
+		// handle form submission failure
+		var handleFailure = function(o) {
+		    alert('Unsubscribe failed ' + o.status  + ' status text ' + o.statusText);
+		};
+	
+		// Instantiate the Dialog
+		// make it modal - 
+		// it should not start out as visible - it should not be shown until 
+		// delete email button is clicked.
+		YAHOO.ur.email.unsubscribeDialog = new YAHOO.widget.Dialog('unsubscribeDialog', 
+	        { width : "400px",
+			  visible : false, 
+			  modal : true,
+			  buttons : [ { text:'Yes', handler:handleSubmit, isDefault:true },
+						  { text:'No', handler:handleCancel } ]
+			} );
+
+	   	// show and center the sponsor dialog
+        YAHOO.ur.email.unsubscribeDialog.showDialog = function()
+        {
+            YAHOO.ur.email.unsubscribeDialog.center();
+            YAHOO.ur.email.unsubscribeDialog.show();
+        }			
+	   
+		// Wire up the success and failure handlers
+		var callback = { success: handleSuccess, failure: handleFailure };
+				
+				
+		// Render the Dialog
+		YAHOO.ur.email.unsubscribeDialog.render();
+	},
+	
 	/** initialize the page this is called once the dom has
 	 *  been created
 	 */ 
@@ -742,6 +816,7 @@ YAHOO.ur.email = {
 	    YAHOO.ur.email.createDeleteResearcherPageDialog();
 	    YAHOO.util.Event.addListener("search_button", "click", 
 		    YAHOO.ur.email.handleSearchFormSubmit); 
+	    YAHOO.ur.email.createUnsubscribeDialog();
 	    
 	}    	
 }

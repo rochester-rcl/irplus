@@ -20,17 +20,8 @@
  */
 YAHOO.namespace("ur.user.account");
 
-
-// action to perform when submitting the email form.
-var myEmailAction = basePath + 'user/getEmails.action';
-
-// actions for adding and removing emails and editing the user information
-var newEmailAction = basePath + 'user/createEmail.action';
-var deleteEmailAction = basePath + 'user/deleteEmail.action';
-var defaultEmailAction = basePath + 'user/setDefaultEmail.action';
-
+// go to my account
 var myAccountAction = basePath + 'user/myAccount.action';
-
 
 // Action to change password
 var changePasswordAction = basePath + 'user/changeMyPassword.action';
