@@ -129,6 +129,12 @@ public class InstitutionalCollectionSubscriptionDAOTest {
 		count = institutionalCollectionSubscriptionDAO.isSubscriberCount(collection, user);
 		assert count == 1l : "Should have 1 subscriber but has " + count;
 		
+		subscription = institutionalCollectionSubscriptionDAO.getSubscriptionForUser(collection, user);
+		assert subscription != null : "Subscription should not be null";
+		assert subscription.getUser().equals(user) : "subscription user " + subscription.getUser() + " should equal " + user;
+		assert subscription.getInstitutionalCollection().equals(collection) : " subscription collection " + subscription.getInstitutionalCollection() + " should equal " + subscription.getInstitutionalCollection();
+		
+		
 		collection.removeSubscriber(user);
 		institutionalCollectionSubscriptionDAO.makeTransient(subscription);
 		tm.commit(ts);

@@ -204,8 +204,9 @@
 	             <!--  start third tab -->
                	 <div id="tab3">
                	     <h3>Current Subscriptions</h3>
-			         <div id="current_subscriptions"> <c:import url="/pages/admin/user/user_subscription_table.jsp"/> </div>
-					
+			         <div id="current_subscriptions"> 
+			             <c:import url="/pages/admin/user/user_subscription_table.jsp"/> 
+			         </div>
 				 </div>
 	             <!--  end tab 3 -->
 	             
@@ -279,7 +280,7 @@
 	          <div class="hd">Delete Email</div>
 		      <div class="bd">
 		          <form id="deleteEmail" name="deleteEmail" method="POST" 
-		              action="<c:url value="/admin/deleteEmail.action"/>">
+		              action="<c:url value="/user/deleteEmail.action"/>">
 		              
 		              
 		              <div id="deleteEmailError" class="errorMessage"></div>
@@ -399,6 +400,18 @@
 	          </form>
 	      </div>
 	  </div>
+	  
+	  <div id="unsubscribeDialog" class="hidden">
+	      <div class="hd">Unsubscribe</div>
+	      <div class="bd">
+	          <form id="unsubscribe" name="unsubscribe" method="POST">
+	              <input type="hidden" id="subscribeUserId" name="subscribeUserId" value=""/>
+	              <input type="hidden" id="collectionId" name="collectionId" value=""/>
+	              <div id="unsubscribeError" class="errorMessage"></div>
+		          <p>Are you sure you wish to unsubscribe?</p>
+	          </form>
+	      </div>
+	  </div>
 	
 	  <div id="deletePersonNameMessageDialog" class="hidden">
 	      <div class="hd">Delete Name</div>
@@ -412,7 +425,6 @@
 	      <div class="bd">
 	              <div id="emailConfirmationDialogFields">
                   </div>
-	              
 	      </div>
       </div>	
       

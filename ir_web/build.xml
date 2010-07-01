@@ -22,13 +22,14 @@
 <project name="ir_web" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
 	
 	<!-- this automatically sets the YUI libraries to be unzipped  
-		          it does not matter what the value is so long as the 
-			     line is uncommented.
-	     
-	 	   <property name="yui.unzip" value="true"/>
-	 -->	 	 
-	  
-	
+
+	          it does not matter what the value is so long as the 
+		     line is uncommented.
+     
+ 	<property name="yui.unzip" value="true"/>
+ 	-->
+
+
 	<!-- always disable emma -->
 	<property name="emma.enabled" value="false" />
 	

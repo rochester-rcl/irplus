@@ -50,6 +50,9 @@
 	                        <urstb:td>
 		                         ${subscription.institutionalCollection.name}
 	                        </urstb:td>
+					        <urstb:td>
+					            <a href="javascript:YAHOO.ur.email.unsubscribe('${subscription.user.id}', '${subscription.institutionalCollection.id}')">Unsubscribe</a>
+					        </urstb:td>
 	                    </urstb:tr>
 	            </urstb:tbody>
 	        </urstb:table>

@@ -276,5 +276,17 @@
 	    </div>
 	</div>
 
+	  <div id="unsubscribeDialog" class="hidden">
+	      <div class="hd">Unsubscribe</div>
+	      <div class="bd">
+	          <form id="unsubscribe" name="unsubscribe" method="POST" 
+	              action="<c:url value="/user/unsubscribe.action"/>">
+	              
+	              <div id="unsubscribeError" class="errorMessage"></div>
+		          <p>Are you sure you wish to unsubscribe?</p>
+	          </form>
+	      </div>
+	  </div>
+	
 </body>
 </html>
