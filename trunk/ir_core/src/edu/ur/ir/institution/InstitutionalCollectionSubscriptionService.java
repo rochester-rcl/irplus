@@ -102,4 +102,14 @@ public interface InstitutionalCollectionSubscriptionService extends Serializable
 	 * @throws MessagingException
 	 */
 	public void sendSubscriberEmail(IrUser user, Repository repository, Date startDate, Date endDate) throws MessagingException;
+
+    /**
+     * Get a subscription for a given user.  If the user is not subscribed, null will be returned.
+     * 
+     * @param collection - collection the user is subscribed to
+     * @param user - user who is subscribed.
+     * 
+     * @return the subscription or null if there is no subscription
+     */
+    public InstitutionalCollectionSubscription getSubscription(InstitutionalCollection collection, IrUser user);
 }

@@ -2,6 +2,7 @@ package edu.ur.hibernate.ir.institution.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -9,7 +10,9 @@ import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO;
+import edu.ur.ir.institution.InstitutionalItemVersionDownloadCount;
 import edu.ur.ir.user.IrUser;
+import edu.ur.order.OrderType;
 
 /**
  * Hibernate implementation of data access object for institutional collection subscriptions
@@ -122,6 +125,20 @@ public class HbInstitutionalCollectionSubscriptionDAO implements InstitutionalCo
 	@SuppressWarnings("unchecked")
 	public List<Long> getUniqueSubsciberUserIds() {
 		return (List<Long>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getUniqueUserIdsForSubscriptions");
+	}
+
+	/**
+	 * Get the subscriber for the specified user in the given collection.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalCollectionSubscriptionDAO#getSubscriptionForUser(edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.user.IrUser)
+	 */
+	public InstitutionalCollectionSubscription getSubscriptionForUser(
+			InstitutionalCollection institutionalCollection, IrUser user) {
+		Query q =  hbCrudDAO.getSessionFactory().getCurrentSession()
+					.getNamedQuery("getInstitutionalCollectionSubscriptionUser");
+		q.setLong("collectionId", institutionalCollection.getId());
+		q.setLong("userId", user.getId());
+		return (InstitutionalCollectionSubscription)q.uniqueResult();
 	}
 
 }

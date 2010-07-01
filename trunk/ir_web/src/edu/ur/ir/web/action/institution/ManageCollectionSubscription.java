@@ -25,6 +25,7 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
+import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -48,7 +49,8 @@ public class ManageCollectionSubscription extends ActionSupport implements UserI
 	/** Id of the user to subscribe/unsubscribe */
 	private Long subscribeUserId;
 	
-	/** Id of user logged in */
+	/** Id of user logged in or making changes to the data - this may not be the user who the
+	 * data belongs to for example an administrator making changes to a subscription */
 	private Long userId;
 	
 	/** Id of institutional collection */
@@ -72,6 +74,10 @@ public class ManageCollectionSubscription extends ActionSupport implements UserI
 	/** Institutional collection */
 	private InstitutionalCollection collection;
 	
+	/** List of subscriptions for the subscribeUserId */
+	private List<InstitutionalCollectionSubscription> subscriptions;
+	
+
 	/**
 	 * Prepare for action
 	 */
@@ -102,18 +108,27 @@ public class ManageCollectionSubscription extends ActionSupport implements UserI
     		
     	}
 		
-		collection.addSuscriber(subscribeUser);
-		institutionalCollectionService.saveCollection(collection);
+		InstitutionalCollectionSubscription subscription = institutionalCollectionSubscriptionService.getSubscription(collection, subscribeUser);
+		if( subscription == null )
+		{
+			subscription = new InstitutionalCollectionSubscription(collection, user);
+			institutionalCollectionSubscriptionService.save(subscription);
+		}
 
 		if (includeSubCollections) {
 			List<InstitutionalCollection> subCollections = institutionalCollectionService.getAllChildrenForCollection(collection);
 			
 			for (InstitutionalCollection collection : subCollections) {
-				collection.addSuscriber(user);
-				institutionalCollectionService.saveCollection(collection);
+				subscription = institutionalCollectionSubscriptionService.getSubscription(collection, subscribeUser);
+				if( subscription == null )
+				{
+					subscription = new InstitutionalCollectionSubscription(collection, user);
+					institutionalCollectionSubscriptionService.save(subscription);
+				}
 			}
 		}
 		
+		subscriptions = institutionalCollectionSubscriptionService.getAllSubscriptionsForUser(subscribeUser);
 		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(collection, user);
 		return SUCCESS;
 		
@@ -139,10 +154,15 @@ public class ManageCollectionSubscription extends ActionSupport implements UserI
     		return("accessDenied");
     		
     	}
+	    
+		InstitutionalCollectionSubscription subscription = institutionalCollectionSubscriptionService.getSubscription(collection, subscribeUser);
 		
-		collection.removeSubscriber(subscribeUser);
-		institutionalCollectionService.saveCollection(collection);
-
+		if( subscription != null )
+		{
+		    institutionalCollectionSubscriptionService.delete(subscription);
+		}
+	
+		subscriptions = institutionalCollectionSubscriptionService.getAllSubscriptionsForUser(subscribeUser);
 		isSubscriber = institutionalCollectionSubscriptionService.isSubscribed(collection, subscribeUser);
 		log.debug("Is subscriber = " + isSubscriber);
 		
@@ -233,5 +253,10 @@ public class ManageCollectionSubscription extends ActionSupport implements UserI
 	public void setCollection(InstitutionalCollection collection) {
 		this.collection = collection;
 	}
+	
+	public List<InstitutionalCollectionSubscription> getSubscriptions() {
+		return subscriptions;
+	}
+
 
 }

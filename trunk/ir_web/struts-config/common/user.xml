@@ -1010,16 +1010,7 @@
             <result name="added">/pages/user/workspace/add_invite_response.jsp</result>
         </action> 
 
-        <!--  ************************************ -->
-        <!--  Search Email  actions			       -->
-        <!--  ************************************ -->
-                     
-        <action name="emailSearch"
-            class="edu.ur.ir.web.action.user.UserSearch">
-            <interceptor-ref name="crudStack"/>
-            <result name="success">/pages/user/workspace/email_search_table.jsp</result>
-        </action>              
-        
+ 
         <!--  ************************************ -->
         <!--  Change Password  actions			       -->
         <!--  ************************************ -->
@@ -1165,6 +1156,13 @@
             class="edu.ur.ir.web.action.institution.ManageCollectionSubscription">
             <interceptor-ref name="crudStack" />
             <result name="success">/pages/collection/collection_subscription_form.jsp</result>
+        </action>
+        
+        <action name="unSubscribeGetSubscriptionTable"
+            method="unSubscribe" 
+            class="edu.ur.ir.web.action.institution.ManageCollectionSubscription">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/admin/user/user_subscription_table.jsp</result>
         </action>
         
         <action name="getUserSubscription"

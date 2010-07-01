@@ -167,72 +167,7 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		return "added";
 	}
 	
-	/**
-	 * Method to update an existing email.
-	 * 
-	 * @return
-	 */
-	public String update()
-	{
-		log.debug("updating email  = " + email);
 
-		StringBuffer buffer = new StringBuffer();
-		email.setEmail(email.getEmail().trim());
-		
-		UserEmail userEmail = userService.getUserEmailByEmail(email.getEmail());
-
-		if ((userEmail == null) || (emailId.equals(userEmail.getId()))) {
-			
-			//user making the change
-			IrUser changeMakingUser = userService.getUser(userId, false);
-			
-			// if they are not an administrator and trying to change
-			// an account that does not belong to them then deny
-			// access 
-			if( !changeMakingUser.hasRole(IrRole.ADMIN_ROLE) && !changeMakingUser.equals(irUser))
-			{
-				return "accessDenied";
-			}
-
-			if (!email.getEmail().equals(oldEmail)) {
-			    String emailToken = TokenGenerator.getToken();
-				email.setToken(emailToken);
-				email.setVerified(false);
-				
-				// send email With URL to verify email
-				userService.sendEmailForEmailVerification(emailToken, email.getEmail(), irUser.getUsername());
-
-				buffer.append("An email is sent to the address - " + email.getEmail() 
-					+ ". Please follow the URL in the email to verify this email address.");
-			} 
-			
-			if( defaultEmail)
-		    {
-				if (email.isVerified()) {
-			    	if (irUser.changeDefaultEmail(email.getId()))
-			    	{
-			    		log.debug("Default email changed!");
-			    	}
-			    	else
-			    	{
-			    		log.debug("DIDN't change!");
-			    	}
-				} else {
-					buffer.append(
-							"The email Id - " + email.getEmail() + " cannot be set as Default email until its verified.");
-
-				}
-		    }
-			
-			emailVerificationMessage = buffer.toString();
-			userService.makeUserPersistent(irUser);
-			added = true;
-		} else {
-			addFieldError("emailExistError", 
-					"This Email already exists in the system. Email: " + email.getEmail());
-		}
-	    return "added";
-	}
 	
 	/**
 	 * Method to change the verification of an email - setting it to unverified will

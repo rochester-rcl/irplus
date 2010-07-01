@@ -70,12 +70,19 @@
         where subscription.institutionalCollection.id = ?
 	</query>  
 	
-	<!--  get the count of subscribers for a collection should return 1 or 0 
+	<!--  get the count for a user subscribed to  a collection will return 1 or 0 
 		      1 indicates subscribed 0 indicates not subscribed -->
 	<query name="getInstitutionalCollectionSubscriptionCountUser" >
 	    select count(*) from InstitutionalCollectionSubscription subscription
         where subscription.institutionalCollection.id = ?
         and subscription.user.id = ?
+	</query>  
+	
+	<!--  get the subscription for a user for a collection if it exists -->
+	<query name="getInstitutionalCollectionSubscriptionUser" >
+	    select subscription from InstitutionalCollectionSubscription subscription
+        where subscription.institutionalCollection.id = :collectionId
+        and subscription.user.id = :userId
 	</query>  
 	
 	<!--  get the count of subscribers for a collection -->
