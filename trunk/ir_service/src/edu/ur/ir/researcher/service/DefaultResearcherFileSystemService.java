@@ -268,7 +268,7 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 	 * @see edu.ur.ir.researcher.ResearcherService#deleteFolder(ResearcherFolder)
 	 */
 	public void deleteFolder(ResearcherFolder researcherFolder) {
-		/*
+		
 		List<ResearcherFile> researcherFiles = researcherFolderDAO.getAllFilesForFolder(researcherFolder);
 		log.debug("researcherFiles="+researcherFiles);
 		List<ResearcherPublication> researcherPublications = researcherFolderDAO.getAllPublicationsForFolder(researcherFolder);
@@ -276,7 +276,8 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		List<ResearcherLink> researcherLinks = researcherFolderDAO.getAllLinksForFolder(researcherFolder);
 		log.debug("researcherLinks="+researcherLinks);
 		
-		
+		// deleting files and researcher publications 
+		// require special checking
 		for( ResearcherFile aFile : researcherFiles)
 		{
 		    deleteFile(aFile);
@@ -287,12 +288,8 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		    deletePublication(aPublication);
 		}
 		
-		for( ResearcherLink aLink : researcherLinks)
-		{
-		    deleteLink(aLink);
-		}
 		log.debug("Deleted all contents");
-		*/
+		
 		researcherFolderDAO.makeTransient(researcherFolder);
 
 	}

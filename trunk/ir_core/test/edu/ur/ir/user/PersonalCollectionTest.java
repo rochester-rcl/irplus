@@ -270,8 +270,10 @@ public class PersonalCollectionTest {
 		
 		// create the root collection
 		PersonalCollection personalCollection1 = new PersonalCollection(u, "personalCollection1");
-		PersonalItem personalItem = personalCollection1.addVersionedItem(versionedItem);
+		PersonalItem personalItem = new PersonalItem(u, versionedItem);
 		personalItem.setId(44l);
+		personalCollection1.addItem(personalItem);
+		
 		
 		assert personalCollection1.getPersonalItems().contains(personalItem) : "Personal collection "
 			+ " should have personal collection " + personalItem;

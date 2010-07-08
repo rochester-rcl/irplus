@@ -119,7 +119,7 @@
 		<set name="rootFolders" 
 		     optimistic-lock="false"
 		     inverse="true" 
-		     cascade="all-delete-orphan" 
+		     cascade="all" 
 		     where="researcher_folder_id = root_researcher_folder_id"
 		     access="field"
 			 order-by="name" 
@@ -133,7 +133,7 @@
         <!--  Root Researcher Files -->
 		<set name="rootFiles" inverse="true" 
 		     optimistic-lock="false"
-		     cascade="all-delete-orphan" 
+		     cascade="all" 
 		     where="researcher_folder_id is null"
 		     access="field"
 			 lazy="true"
@@ -146,7 +146,7 @@
 		<!--  Root Researcher publications -->
 		<set name="rootPublications" inverse="true" 
 		     optimistic-lock="false"
-		     cascade="all-delete-orphan" 
+		     cascade="all" 
 		     where="researcher_folder_id is null"
 		     access="field"
 			 lazy="true"
@@ -159,7 +159,7 @@
 		<!--  Root Researcher institutional items -->
 		<set name="rootInstitutionalItems" inverse="true" 
 		     optimistic-lock="false"
-		     cascade="all-delete-orphan" 
+		     cascade="all" 
 		     where="researcher_folder_id is null"
 		     access="field"
 			 lazy="true"
@@ -172,7 +172,7 @@
 		<!--  Root Researcher Links -->
 		<set name="rootLinks" inverse="true" 
 		     optimistic-lock="false"
-		     cascade="all-delete-orphan" 
+		     cascade="all" 
 		     where="researcher_folder_id is null"
 		     access="field"
 			 lazy="true"
@@ -185,7 +185,7 @@
 		<!--  set of links for this researcher -->
         <list name="personalLinks" 
              optimistic-lock="false"
-             cascade="all-delete-orphan"
+             cascade="all, delete-orphan"
 		     access="field"
 		     table="researcher_personal_link"
 		     schema="ir_researcher"

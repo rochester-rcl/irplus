@@ -534,8 +534,6 @@ public class DefaultUserWorkspaceIndexServiceTest {
 			throw new RuntimeException(e);
 		}
 
-		PersonalItem deleteItem = userPublishingFileSystemService.getPersonalItem(personalItem.getId(), false);
-		userPublishingFileSystemService.deletePersonalItem(deleteItem, deleteItem.getOwner(), "TESTING");
 
 		userService.deleteUser(user, user);
 		

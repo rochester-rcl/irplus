@@ -128,6 +128,9 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 
 	/** Indicates if the user is an author */
 	private boolean collectionAdminRole = false;
+	
+	/** Indicates if the user is an author */
+	private boolean collaboratorRole = false;
 
     /** Phone number of the user */
 	private String phoneNumber;
@@ -285,7 +288,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		}
 
 		setDepartments();
-		updateAffilation();
+		updateAffiliation();
 		updateRoles();
 				    
 		// Force the user to change password after login
@@ -396,10 +399,8 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 				
 		setDepartments();
 			    	
-		//update the affilation for the user
-		updateAffilation();
-			    
-		// roles can override affilation settings
+		//update the affiliation for the user
+		updateAffiliation();
 		updateRoles();
 				
 		userService.makeUserPersistent(irUser);
@@ -453,11 +454,17 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		message = "The following user could not be deleted because they have published into the system :";
 		
 		deleted = true;
-		if( id != null ) 
+		if( irUser != null ) 
 		{
 
             IrUser user = userService.getUser(id, false);
             IrUser admin = userService.getUser(adminUserId, false);
+            
+            if( !admin.hasRole(IrRole.ADMIN_ROLE))
+            {
+            	return "accessDenied";
+            }
+            
  			try 
  			{
 			    userService.deleteUser(user, admin);
@@ -832,6 +839,10 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	public void setResearcherRole(boolean researcherRole) {
 		this.researcherRole = researcherRole;
 	}
+	
+	public void setCollaboratorRole(boolean collaboratorRole) {
+		this.collaboratorRole = collaboratorRole;
+	}
 
 	public boolean isAuthorRole() {
 		return authorRole;
@@ -876,35 +887,17 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	}
 	
 	/**
-	 * Updates the affilation for the user
+	 * Updates the affiliation for the user
 	 */
-	private void updateAffilation() throws NoIndexFoundException
+	private void updateAffiliation() throws NoIndexFoundException
 	{
 		Affiliation affiliation = affiliationService.getAffiliation(affiliationId, false); 
 
-		
-		if (irUser.getAffiliation() == null || 
-				!irUser.getAffiliation().equals(affiliation)) {
-			
-	    	/** Assign the role for the affiliation */
-			if (affiliation.getAuthor()) {
-				irUser.addRole(roleService.getRole(IrRole.AUTHOR_ROLE));
-				authorRole = true;
-			} else {
-				irUser.removeRole(IrRole.AUTHOR_ROLE);
-			}
-				
-			if (affiliation.getResearcher()) {
-				irUser.addRole(roleService.getRole(IrRole.RESEARCHER_ROLE));
-				researcherRole = true;
-				// Create researcher object only if the user has no researcher object.
-				// Sometimes user might have researcher object if the user is a admin 
-				if (irUser.getResearcher() == null) {
-					irUser.createResearcher();
-				}
-			} else {
-				irUser.removeRole(IrRole.RESEARCHER_ROLE);
-			}
+		// affilation changed
+		if (irUser.getAffiliation() == null ||  !irUser.getAffiliation().equals(affiliation)) 
+		{		
+			// send notification to user about affiliation change
+			userService.sendAffiliationConfirmationEmail(irUser, affiliation);
     	}
     	
     	irUser.setAffiliation(affiliation);
@@ -964,6 +957,15 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		else
 		{
 			irUser.removeRole(IrRole.COLLECTION_ADMIN_ROLE);
+		}
+		
+		if( collaboratorRole )
+		{
+			irUser.addRole(roleService.getRole(IrRole.COLLABORATOR_ROLE));
+		}
+		else
+		{
+			irUser.removeRole(roleService.getRole(IrRole.COLLABORATOR_ROLE));
 		}
 
 	}

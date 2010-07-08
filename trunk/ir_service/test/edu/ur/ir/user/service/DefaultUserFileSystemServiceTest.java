@@ -252,7 +252,7 @@ public class DefaultUserFileSystemServiceTest {
 			
 			tm.commit(ts);
 			
-			// new transaction - create two new folders
+			// new transaction - create two new folders and a personal file
 			ts = tm.getTransaction(td);
 			
 			PersonalFolder myFolder = userFileSystemService.createNewFolder(user, "myFolder1");
@@ -262,8 +262,6 @@ public class DefaultUserFileSystemServiceTest {
 				"myFolder2");
 		
 		    assert destination != null : "folder should be created";
-			
-			assert destination != null : "folder should be created";
 			assert user.getRootFolder(destination.getName()) != null : 
 				"Should be able to find folder " + destination;
 			
@@ -282,13 +280,13 @@ public class DefaultUserFileSystemServiceTest {
 	        List<PersonalFolder> foldersToMove = new LinkedList<PersonalFolder>();
 	        foldersToMove.add(myFolder);
 	        
+	        // move the folder into other folder
 	        userFileSystemService.moveFolderSystemInformation(destination, 
 	        		foldersToMove, null);
 	        
 	        tm.commit(ts);
 	     
-	        //new transaction
-	        // make sure the folder was moved.
+	        //new transaction - make sure the folder was moved.
 			ts = tm.getTransaction(td);
 			IrUser otherUser2 = userService.getUser(user.getUsername());
 			PersonalFolder theDestination = user.getRootFolder(destination.getName());
@@ -301,12 +299,20 @@ public class DefaultUserFileSystemServiceTest {
 			assert newChild.getFile(pf.getName()) != null : "File " + pf.getName() 
 			+ "was not found ";
 			
-			// move the file now to the folder above
+			// move the file now to the folder above (parent folder)
 			List<PersonalFile> filesToMove = new LinkedList<PersonalFile>();
 	        filesToMove.add(pf);
 	        
-			userFileSystemService.moveFolderSystemInformation(destination, 
+	        //move the file to the parent folder
+			userFileSystemService.moveFolderSystemInformation(theDestination, 
 					null, filesToMove);
+			tm.commit(ts);
+			
+			
+			// make sure move occured
+			ts = tm.getTransaction(td);
+			destination = userFileSystemService.getPersonalFolder(destination.getId(), false);
+			assert destination.getFiles().contains(pf) : "Destination folder " + destination + " should have file " + pf;
 			tm.commit(ts);
 			
 			

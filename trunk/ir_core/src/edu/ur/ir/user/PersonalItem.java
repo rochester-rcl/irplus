@@ -195,8 +195,7 @@ DescriptionAware, FileSystem{
 	public int hashCode()
 	{
 		int value = 0;
-		value += getFullPath() == null ? 0 : getFullPath().hashCode();
-		value += getOwner() == null ? 0 : getOwner().hashCode();
+		value += getId() == null ? 0 : getId().hashCode();
 		return value;
 	}
 	
@@ -214,12 +213,6 @@ DescriptionAware, FileSystem{
         
 		if( ( id != null && !id.equals(other.getId()) ) ||
 			( id == null && other.getId() != null ) ) return false;
-		
-		if( ( owner != null && !owner.equals(other.getOwner()) ) ||
-			( owner == null && other.getOwner() != null ) ) return false;
-		
-		if( ( getFullPath() != null && !getFullPath().equals(other.getFullPath()) ) ||
-			( getFullPath() == null && other.getFullPath() != null ) ) return false;
 		
 		return true;
 	}

@@ -238,8 +238,11 @@ public class IrUserTest {
 		GenericItem item = new GenericItem("myItem");
 	    VersionedItem versionedItem = new VersionedItem(user, item);
 	    
-		PersonalItem personalItem = user.createRootPersonalItem(versionedItem);
-		personalItem.setId(35l);
+	    PersonalItem personalItem = new PersonalItem(user, versionedItem);
+	    personalItem.setId(35l);
+	    
+		user.addRootItem(personalItem);
+		
 		
 		assert user.getRootPersonalItem("myItem").equals(personalItem) :
 			" user should have personalItem " + personalItem;

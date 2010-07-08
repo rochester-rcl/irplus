@@ -242,6 +242,8 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	public void makeTransient(PersonalFolder entity) {
 		
 		log.debug("deleting folder " + entity);
+		hbCrudDAO.makeTransient(entity);
+		/**
 		
 		Long[] values = new Long[]{entity.getTreeRoot().getId(), entity.getLeftValue(), entity.getRightValue()};
 		
@@ -280,6 +282,7 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 		    		" where left value between " + entity.getLeftValue() + 
 		    		" and " + entity.getRightValue());
 		}
+		*/
 		
 	}
 

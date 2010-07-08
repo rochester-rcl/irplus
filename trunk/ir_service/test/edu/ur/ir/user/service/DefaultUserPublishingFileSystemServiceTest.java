@@ -577,14 +577,18 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		ts = tm.getTransaction(td);
 		// move the item now to the collection above
 		List<PersonalItem> itemsToMove = new LinkedList<PersonalItem>();
-		itemsToMove.add(userPublishingFileSystemService.getPersonalItem(it.getId(),false));
+		PersonalItem pi = userPublishingFileSystemService.getPersonalItem(it.getId(),false);
+		assert pi != null : "Should be able to find personal item";
+		itemsToMove.add(pi);
 		userPublishingFileSystemService.moveCollectionSystemInformation(userService.getUser(user.getId(), false), 
 				null, itemsToMove);
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
 		// make sure the item has been moved
-		it = userPublishingFileSystemService.getPersonalItem(it.getId(), false);
+		Long itId = it.getId();
+		it = userPublishingFileSystemService.getPersonalItem(itId, false);
+		assert it != null : "Should be able to find " + itId;
 		assert it.getPersonalCollection() == null : "PersonalItem should no longer have a parent collection " + 
 		it.getPersonalCollection();
 		user = userService.getUser(user.getId(), false);

@@ -233,7 +233,7 @@ public class DefaultInviteUserService implements InviteUserService {
 					file.getId());
 		
 		if (personalFile != null) {
-			userFileSystemService.makePersonalFileTransient(personalFile, unsharingUser, "UN-SHAREING FILE");
+			userFileSystemService.delete(personalFile, unsharingUser, "UN-SHAREING FILE");
 		}
 		
 		// Remove the personal file from user if the file is in the shared file inbox

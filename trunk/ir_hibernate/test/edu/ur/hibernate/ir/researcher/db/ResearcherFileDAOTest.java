@@ -193,6 +193,7 @@ public class ResearcherFileDAOTest {
 		
 		// clean up
 		ts = tm.getTransaction(td);
+		researcherFileDAO.makeTransient(researcherFileDAO.getById(rf.getId(), false));
 		fileDAO.makeTransient(fileDAO.getById(irFile.getId(), false));
 		researcherDAO.makeTransient(researcherDAO.getById(researcher.getId(), false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
@@ -319,6 +320,7 @@ public class ResearcherFileDAOTest {
 		
         // clean up
 		ts = tm.getTransaction(td);
+		researcherFileDAO.makeTransient(researcherFileDAO.getById(rfile.getId(), false));
 		fileDAO.makeTransient(fileDAO.getById(irFile.getId(), false));
 		researcherDAO.makeTransient(researcherDAO.getById(researcher.getId(), false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
@@ -412,6 +414,7 @@ public class ResearcherFileDAOTest {
 		
         // clean up
 		ts = tm.getTransaction(td);
+		researcherFileDAO.makeTransient(researcherFileDAO.getById(rfile.getId(), false));
 		fileDAO.makeTransient(fileDAO.getById(irFile.getId(), false));
 	    researcherDAO.makeTransient(researcherDAO.getById(researcher.getId(), false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));

@@ -100,7 +100,7 @@ public class DefaultResearcherService implements ResearcherService{
 		}
 		
 		
-		// delete the researcher's root files
+		// delete the researcher's root publications
 		LinkedList<ResearcherPublication> rootPublications = new LinkedList<ResearcherPublication>();
 		rootPublications.addAll(researcher.getRootPublications());
 		for(ResearcherPublication publication : rootPublications)
@@ -108,15 +108,6 @@ public class DefaultResearcherService implements ResearcherService{
 			researcher.removeRootPublication(publication);
 			researcherFileSystemService.deletePublication(publication);
 		    
-		}
-
-		// delete the researcher's root links
-		LinkedList<ResearcherLink> rootLinks = new LinkedList<ResearcherLink>();
-		rootLinks.addAll(researcher.getRootLinks());
-		for(ResearcherLink link : rootLinks)
-		{
-			researcher.removeRootLink(link);
-			researcherFileSystemService.deleteLink(link);
 		}
 
 		// Delete researcher's root folders
