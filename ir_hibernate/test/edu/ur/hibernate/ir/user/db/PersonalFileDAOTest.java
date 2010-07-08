@@ -188,6 +188,7 @@ public class PersonalFileDAOTest {
 		
 		// clean up
 		ts = tm.getTransaction(td);
+		personalFileDAO.makeTransient(personalFileDAO.getById(pf.getId(), false));
 		versionedFileDAO.makeTransient(versionedFileDAO.getById(versionedFile.getId(), false));
 		fileDAO.makeTransient(fileDAO.getById(irFileId, false));
 
@@ -285,6 +286,7 @@ public class PersonalFileDAOTest {
 		
         // clean up
 		ts = tm.getTransaction(td);
+		personalFileDAO.makeTransient(personalFileDAO.getById(pfile.getId(), false));
 		versionedFileDAO.makeTransient(versionedFileDAO.getById(versionedFile.getId(), false));
 		fileDAO.makeTransient(fileDAO.getById(irFileId, false));
 		
@@ -365,6 +367,7 @@ public class PersonalFileDAOTest {
 		
         // clean up
 		ts = tm.getTransaction(td);
+		personalFileDAO.makeTransient(personalFileDAO.getById(pfile.getId(), false));
 		versionedFileDAO.makeTransient(versionedFileDAO.getById(versionedFile.getId(), false));
 		fileDAO.makeTransient(fileDAO.getById(irFileId, false));
 	    

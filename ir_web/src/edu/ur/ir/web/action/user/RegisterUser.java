@@ -606,20 +606,37 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		}
 			    
 		updateUserDepartments();
-
 		IrRole role = roleService.getRole("ROLE_USER");
 		irUser.addRole(role);
-		    	
 		Affiliation affiliation = affiliationService.getAffiliation(affiliationId, false); 
 		irUser.setAffiliation(affiliation);
-
 		irUser.setAffiliationApproved(!affiliation.isNeedsApproval());
-		    	
 		userService.makeUserPersistent(irUser);
 		    	
-		if (affiliation.isNeedsApproval()) {
+		if (affiliation.isNeedsApproval()) 
+		{
 		    userService.sendAffiliationVerificationEmailForUser(irUser);
 		    userService.sendPendingAffiliationEmailForUser(irUser);
+		}
+		else
+		{
+			/** Assign the role for the affiliation */
+			if (affiliation.getAuthor()) 
+			{
+				irUser.addRole(roleService.getRole(IrRole.AUTHOR_ROLE));
+			}
+				
+			if (affiliation.getResearcher()) 
+			{
+				irUser.addRole(roleService.getRole(IrRole.RESEARCHER_ROLE));
+				// Create researcher object only if the user has no researcher object.
+				// Sometimes user might have researcher object if the user is an admin.
+				if (irUser.getResearcher() == null) 
+				{
+					irUser.createResearcher();
+				}
+			}
+			userService.makeUserPersistent(irUser);
 		}
 		
 		/* Setup Email verification if the user chooses to add a different Email then

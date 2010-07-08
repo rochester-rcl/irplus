@@ -20,7 +20,6 @@ package edu.ur.ir.user.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,14 +29,11 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
 import org.springframework.util.StringUtils;
 
-import edu.ur.ir.file.FileCollaborator;
-import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
-import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
@@ -53,13 +49,10 @@ import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalFile;
-import edu.ur.ir.user.PersonalFileDeleteRecord;
 import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.PersonalItem;
-import edu.ur.ir.user.PersonalItemDeleteRecord;
 import edu.ur.ir.user.PersonalItemDeleteRecordDAO;
-import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserEmailDAO;
@@ -313,7 +306,6 @@ public class DefaultUserService implements UserService {
 		List<GenericItem> items = 
 			itemService.getAllItemsForUser(irUserDAO.getById(user.getId(), false));
 		
-		
 		//now delete all the generic items for this user that have not been published
 		// Delete  items
 		for( GenericItem item: items)
@@ -331,20 +323,50 @@ public class DefaultUserService implements UserService {
 			throw new UserDeletedPublicationException(user);
 		}
 		
-		if( user.getResearcher() != null)
-		{
-			Researcher r = user.getResearcher();
-			researcherService.deleteResearcher(r);
+        this.deleteUserSubscriptions(user);
+        this.deleteUserGroups(user);
+        this.deleteResearcher(user);
+  	    this.deleteRootItems(user, deletingUser);
+        this.deletePersonalCollections(user, deletingUser);
+		this.deleteRootFiles(user, deletingUser);
+		this.deleteRootFolders(user, deletingUser);
+		
+
+		
+		try {
+			userFileSystemService.deleteIndexFolder(user);
+		} catch (IOException e) {
+		    log.error(e);
 		}
-		
+		irUserDAO.makeTransient(user);
+		return true;
+	}
+	
+	/**
+	 * Delete all the subscriptions for the user.
+	 * 
+	 * @param user - user to delete the subscriptions from
+	 */
+	private void deleteUserSubscriptions(IrUser user)
+	{
+		log.debug("deleting user subscriptions");
 		List<InstitutionalCollectionSubscription> subscriptions = institutionalCollectionSubscriptionService.getAllSubscriptionsForUser(user);
-		
 		for(InstitutionalCollectionSubscription subscription : subscriptions)
 		{
 			institutionalCollectionSubscriptionService.delete(subscription);
 		}
+		log.debug("done deleting subscriptions");
 		
-
+	}
+	
+	/**
+	 * Delete the user groups for the user.
+	 * 
+	 * @param user - user to delete the groups from
+	 */
+	private void deleteUserGroups(IrUser user)
+	{
+		log.debug("deleting user groups");
 		//remove the user from all groups
 	    List<IrUserGroup> groups = userGroupService.getUserGroupsForUser(user.getId());
 	    for(IrUserGroup group : groups)
@@ -352,9 +374,35 @@ public class DefaultUserService implements UserService {
 	    	group.removeUser(user);
 	    	userGroupService.save(group);
 	    }
+	    log.debug("DONE deleting user groups");
 	    
-
-		
+	}
+	
+	/**
+	 * Delete the researcher for the user.
+	 * 
+	 * @param user
+	 */
+	private void deleteResearcher(IrUser user)
+	{
+		log.debug("deleting researcher info");
+		if( user.getResearcher() != null)
+		{
+			Researcher r = user.getResearcher();
+			researcherService.deleteResearcher(r);
+		}
+		log.debug("DONE deleting researcher info");
+	}
+	
+	/**
+	 * Delete root items for the user.
+	 * 
+	 * @param user
+	 * @param deletingUser
+	 */
+	private void deleteRootItems(IrUser user, IrUser deletingUser)
+	{
+		log.debug("deleting root items");
 		//remove all the root personal items
 		Set<PersonalItem> personalItems = new HashSet<PersonalItem>();
 		personalItems.addAll(user.getRootPersonalItems());
@@ -364,10 +412,18 @@ public class DefaultUserService implements UserService {
 			user.removeRootPersonalItem(pi);
 			userPublishingFileSystemService.deletePersonalItem(pi, deletingUser, "USER BEING DELETED");
 		}
-		
-
-		
-		
+		log.debug("done deleting root items");
+	}
+	
+	/**
+	 * Delete the users personal collections.
+	 * 
+	 * @param user
+	 * @param deletingUser
+	 */
+	private void deletePersonalCollections(IrUser user, IrUser deletingUser)
+	{
+		log.debug("deleting personal collections");
 		//delete all the personal collections for the user
 		//this should cascade down to item version
 		Set<PersonalCollection> personalCollections = new HashSet<PersonalCollection>();
@@ -376,99 +432,53 @@ public class DefaultUserService implements UserService {
 		{
 			//set delete records for all items
 			List<PersonalItem> collectionItems = userPublishingFileSystemService.getAllItemsForCollection(pc);
-			
 			for(PersonalItem personalItem : collectionItems)
 			{
-				PersonalItemDeleteRecord personalItemDeleteRecord = new PersonalItemDeleteRecord(deletingUser.getId(),
-						personalItem.getId(),
-						personalItem.getFullPath(), 
-						personalItem.getDescription());
-				personalItemDeleteRecord.setDeleteReason("DELETING USER");
-				personalItemDeleteRecordDAO.makePersistent(personalItemDeleteRecord);
+				PersonalCollection parent = personalItem.getPersonalCollection();
+				parent.removePersonalItem(personalItem);
+				userPublishingFileSystemService.deletePersonalItem(personalItem, deletingUser, "USER BEING DELETED");
 			}
 			
 			user.removeRootPersonalCollection(pc);
+			userPublishingFileSystemService.deletePersonalCollection(pc, deletingUser, "USER BEING DELETED");
 		}
 		
-		// delete all versioned items
-		List<VersionedItem> versionedItems = itemService.getAllVersionedItemsForUser(user); 
-		for(VersionedItem item : versionedItems)
-		{
-			itemService.deleteVersionedItem(item);
-		}
-
-		List<VersionedFile> versionedFiles = new LinkedList<VersionedFile>();
-
+		
+		log.debug("DONE deleting personal collections");
+	}
+	
+	/**
+	 * Delete the root files for the user.
+	 * 
+	 * @param user
+	 * @param deletingUser
+	 */
+	private void deleteRootFiles(IrUser user, IrUser deletingUser)
+	{
+		log.debug("Delete root files");
 		// delete the users root files
 		Set<PersonalFile> personalFiles = new HashSet<PersonalFile>();
 		personalFiles.addAll(user.getRootFiles());
 		for(PersonalFile pf : personalFiles)
 		{
-		    versionedFiles.add(pf.getVersionedFile());
-	        user.removeRootFile(pf);
+			user.removeRootFile(pf);
+			userFileSystemService.delete(pf, deletingUser, "DELETING USER");
+	       
 		}
-		
-		// delete the users shared inbox files
-		Set<SharedInboxFile> sharedInboxFiles = new HashSet<SharedInboxFile>();
-		sharedInboxFiles.addAll(user.getSharedInboxFiles());
-		for(SharedInboxFile  sif : sharedInboxFiles)
-		{
-			versionedFiles.add(sif.getVersionedFile());
-			user.removeFromSharedFileInbox(sif);
-		}
-		
+		log.debug("DONE deleting root files");
+	}
+	
+	private void deleteRootFolders(IrUser user, IrUser deletingUser)
+	{
+		log.debug("delete Root folders");
 		Set<PersonalFolder> rootFolders = new HashSet<PersonalFolder>();
 		rootFolders.addAll(user.getRootFolders());
 		// get all of the users root folders
 		for(PersonalFolder rootFolder : rootFolders)
 		{
-			//set delete records for all items
-			List<PersonalFile> folderFiles = userFileSystemService.getAllFilesForFolder(rootFolder);
-			
-			for(PersonalFile folderFile : folderFiles)
-			{
-				PersonalFileDeleteRecord personalFileDeleteRecord = new PersonalFileDeleteRecord(deletingUser.getId(),
-						folderFile.getId(),
-						folderFile.getFullPath(), 
-						folderFile.getDescription());
-				personalFileDeleteRecord.setDeleteReason("DELETING USER");
-				personalFileDeleteRecordDAO.makePersistent(personalFileDeleteRecord);
-			}
-			
-			versionedFiles.addAll(userFileSystemService.getAllVersionedFilesForFolder(rootFolder));
-		    user.removeRootFolder(rootFolder);
+			userFileSystemService.deletePersonalFolder(rootFolder, deletingUser, "DELETING USER");
 		}
-		
-		// Delete acl and collaborators for versioned files 
-		for( VersionedFile aFile : versionedFiles)
-		{	
-			 //Delete versioned file only if the file owner is the user that is being deleted.
-			 //Otherwise just unshare the file for this user
-			 
-			if (aFile.getOwner().equals(user)) {
-				for(FileCollaborator collaborator : aFile.getCollaborators())
-				{
-				    inviteUserService.unshareFile(collaborator, deletingUser);
-				}
-			    userFileSystemService.deleteAclForVersionedFile(aFile, user);
-			    repositoryService.deleteVersionedFile(aFile);
-			} else {
-				// un-share the file that is shared with this user
-				FileCollaborator collaborator = aFile.getCollaborator(user);
-				if( collaborator != null)
-				{
-				    inviteUserService.unshareFile(collaborator, deletingUser);
-				}
-			}
-		}
-		
-		try {
-			userFileSystemService.deleteIndexFolder(user);
-		} catch (IOException e) {
-		    log.error(e);
-		}
-		irUserDAO.makeTransient(user);
-		return true;
+		log.debug("done deleting root folders");
 	}
 
 	/**

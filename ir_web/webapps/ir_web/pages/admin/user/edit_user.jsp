@@ -107,8 +107,11 @@
                     </c:url>
                     <a href="${reIndexUrl}">Re Index User Workspace</a>  
                     <br/>
-                    <strong> File system size : </strong> <ir:fileSizeDisplay sizeInBytes="${fileSystemSize}"/>
-					
+                    <br/>
+                    <strong>File system size : </strong> <ir:fileSizeDisplay sizeInBytes="${fileSystemSize}"/>
+                    <br/>
+                    <br/>
+					<strong>Last Login : </strong> ${irUser.lastLoginDate}
 					<form id="editUser" name="editUserForm" method="post" 
 		             	 action="<c:url value="/admin/updateUser.action"/>">
 	                	

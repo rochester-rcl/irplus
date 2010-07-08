@@ -17,6 +17,7 @@
 
 package edu.ur.ir.user.service;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -30,17 +31,31 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
+import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
+import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.ir.file.IrFile;
+import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.ItemFile;
+import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
+import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.user.ExternalAccountType;
 import edu.ur.ir.user.ExternalAccountTypeService;
 import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.PersonalFile;
+import edu.ur.ir.user.PersonalItem;
+import edu.ur.ir.user.PersonalItemDeleteRecordDAO;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
+import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
+import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.util.FileUtil;
 
 /**
  * Test the service methods for the default user services.
@@ -80,6 +95,16 @@ public class DefaultUserServiceTest {
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserServiceTest.class);
+	
+	/** User data access */
+	UserPublishingFileSystemService userPublishingFileSystemService = 
+		(UserPublishingFileSystemService) ctx.getBean("userPublishingFileSystemService");
+
+	/** delete item data access object  */
+	PersonalItemDeleteRecordDAO personalItemDeleteRecordDAO = (PersonalItemDeleteRecordDAO)ctx.getBean("personalItemDeleteRecordDAO");
+
+	UserFileSystemService userFileSystemService = (UserFileSystemService) ctx.getBean("userFileSystemService");
+	
 	
 	/**
 	 * Test creating a user
@@ -255,6 +280,67 @@ public class DefaultUserServiceTest {
 		
 		tm.commit(ts);
 		
+	}
+	
+	/**
+	 * Delete a user with a file that is in a publication from a workspace
+	 * @throws UserDeletedPublicationException 
+	 * @throws UserHasPublishedDeleteException 
+	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
+	 * @throws DuplicateNameException 
+	 */
+	public void testDeleteUserWithFilePublicationWorkspace() throws UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, IllegalFileSystemNameException, DuplicateNameException
+	{
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+		// save the repository
+		tm.commit(ts);
+		
+		UserEmail email = new UserEmail("email");
+
+        // Start the transaction 
+		ts = tm.getTransaction(td);
+		IrUser user = userService.createUser("password", "username", email);
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		assert f != null : "File should not be null";
+		assert user.getId() != null : "User id should not be null";
+		assert repo.getFileDatabase().getId() != null : "File database id should not be null";
+		
+		PersonalFile pf = userFileSystemService.addFileToUser(repo, f, user, "a file", "a file");
+
+		tm.commit(ts);
+		
+		// new transaction
+		ts = tm.getTransaction(td);
+		PersonalItem personalItem = userPublishingFileSystemService.createRootPersonalItem(user, "articles", "rootCollection");
+		GenericItem item1 = personalItem.getVersionedItem().getCurrentVersion().getItem();
+		ItemFile itemFile = item1.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
+		userPublishingFileSystemService.makePersonalItemPersistent(personalItem);
+		tm.commit(ts);
+		
+        //new transaction
+		ts = tm.getTransaction(td);
+		PersonalItem otherPersonalItem = userPublishingFileSystemService.getPersonalItem(personalItem.getId(), false);
+		assert otherPersonalItem.getVersionedItem().getCurrentVersion().getItem().equals(item1) : "Should be equal to item1";
+		assert otherPersonalItem.getVersionedItem().getCurrentVersion().getItem().getItemFiles().size() == 1 : "Should have one file but has " +  otherPersonalItem.getVersionedItem().getCurrentVersion().getItem().getItemFiles().size();
+		assert otherPersonalItem.getVersionedItem().getCurrentVersion().getItem().getItemFile(itemFile.getId()) != null : "Should be able to find file " + itemFile;
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+		userService.deleteUser(deleteUser, deleteUser);
+		helper.cleanUpRepository();
+		tm.commit(ts);	
 	}
 	
 

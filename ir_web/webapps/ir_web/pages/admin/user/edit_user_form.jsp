@@ -215,8 +215,19 @@
 		     <c:if test='${ir:checkUserHasRole(irUser, "ROLE_COLLECTION_ADMIN", "")}'> 
                 checked="true" 
              </c:if>
-              name="collectionAdminRole" value="true" id="editUserForm_isCollectionAdmin"/>Collection Administrator
+              name="collectionAdminRole" value="true" id="editUserForm_isCollectionAdmin"/> Collection Administrator
  		</td>
-	</tr>  
+	</tr> 
+	
+	<tr>
+		<td class="label" colspan="2"> 
+		 <input type="checkbox"	
+		     onclick="YAHOO.ur.email.autoCheckRoles(this);"
+		     <c:if test='${ir:checkUserHasRole(irUser, "ROLE_COLLABORATOR", "")}'> 
+                checked="true" 
+             </c:if>
+              name="collaboratorRole" value="true" id="editUserForm_isCollaborator"/> Collaborator Only
+ 		</td>
+	</tr>   
         
 </table>	

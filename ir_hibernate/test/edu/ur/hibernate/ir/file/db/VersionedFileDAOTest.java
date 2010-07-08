@@ -47,6 +47,7 @@ import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.PersonalFile;
+import edu.ur.ir.user.PersonalFileDAO;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.util.FileUtil;
 
@@ -72,6 +73,10 @@ public class VersionedFileDAOTest {
 	/** versioned file relational data access  */
 	VersionedFileDAO versionedIrFileDAO = (VersionedFileDAO) ctx
 			.getBean("versionedFileDAO");
+	
+	/** versioned file relational data access  */
+	PersonalFileDAO personalFileDAO = (PersonalFileDAO) ctx
+			.getBean("personalFileDAO");
 
 	/** file collaborator data access  */
 	FileCollaboratorDAO fileCollaboratorDAO = (FileCollaboratorDAO) ctx
@@ -438,10 +443,13 @@ public class VersionedFileDAOTest {
 		
 		// Start the transaction 
         ts = tm.getTransaction(td);
+	    
+        personalFileDAO.makeTransient(personalFileDAO.getById(pf.getId(), false));
         versionedIrFileDAO.makeTransient(versionedIrFileDAO.getById(versionedFile.getId(), false));
 		fileDAO.makeTransient(fileDAO.getById(irFileId, false));
-	    
-		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+
+        userDAO.makeTransient(userDAO.getById(user.getId(), false));
+
 		repoHelper.cleanUpRepository();
 		tm.commit(ts);	
 		

@@ -176,7 +176,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 		 addDateAvailable(doc, oaiDc, item);
 		 addHandle(doc, oaiDc, institutionalItemVersion);
 		 
-		 if( item.isPubliclyViewable() && !item.isEmbargoed())
+		 if( item.isPubliclyViewable() && !item.isEmbargoed() && !institutionalItemVersion.isWithdrawn())
 		 {
 		     addAlternativeTitles(doc, oaiDc, item);
 		     addType(doc, oaiDc, item);

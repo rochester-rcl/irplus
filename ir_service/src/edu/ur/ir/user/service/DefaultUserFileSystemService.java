@@ -433,11 +433,20 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	public void delete(PersonalFile pf, IrUser deletingUser, String deleteReason)
 	{
 		VersionedFile versionedFile = pf.getVersionedFile();
-		makePersonalFileTransient(pf, deletingUser, deleteReason);
+		
+		// create a delete record 
+		PersonalFileDeleteRecord personalFileDeleteRecord = new PersonalFileDeleteRecord(deletingUser.getId(),
+				pf.getId(),
+				pf.getFullPath(), 
+				pf.getDescription());
+		personalFileDeleteRecord.setDeleteReason(deleteReason);
+		personalFileDeleteRecordDAO.makePersistent(personalFileDeleteRecord);
+		
+		personalFileDAO.makeTransient(pf);
 		
 		// Delete versioned file only if requested by its owner
 		if (pf.getOwner().equals(versionedFile.getOwner())) {
-		
+			
 			// unshare users with whom this file is currently shared with
 			Set<FileCollaborator> fileCollaborators = new HashSet<FileCollaborator>();
 			fileCollaborators.addAll(versionedFile.getCollaborators());
@@ -523,6 +532,17 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 		for( PersonalFile aFile : personalFiles)
 		{
 		    delete(aFile, deletingUser, deleteReason);
+		}
+		
+		if( personalFolder.getIsRoot())
+		{
+			IrUser owner = personalFolder.getOwner();
+			owner.removeRootFolder(personalFolder);
+		}
+		else
+		{
+			PersonalFolder parent = personalFolder.getParent();
+			parent.removeChild(personalFolder);
 		}
 
 		personalFolderDAO.makeTransient(personalFolder);
@@ -758,25 +778,6 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	}
 
 
-	/**
-	 * Delete personal file
-	 * 
-	 * @param personalFile
-	 * @param deletingUser
-	 * 
-	 * @see edu.ur.ir.user.service.UserService#makePersonalFileTransient(PersonalFile personalFile, IrUser deletingUser)
-	 */
-	public void makePersonalFileTransient(PersonalFile personalFile, IrUser deletingUser, String deleteReason) {
-		// create a delete record
-		PersonalFileDeleteRecord deleteRecord = new PersonalFileDeleteRecord(deletingUser.getId(), 
-				personalFile.getId(), 
-				personalFile.getFullPath(), 
-				personalFile.getDescription());
-		deleteRecord.setDeleteReason(deleteReason);
-		personalFileDeleteRecordDAO.makePersistent(deleteRecord);
-		personalFileDAO.makeTransient(personalFile);
-	}
-	
 	/**
 	 * Save personal file
 	 * 

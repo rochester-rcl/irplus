@@ -292,15 +292,10 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 		
 		List<PersonalItem> personalItems = personalCollectionDAO.getAllItemsForCollection(personalCollection);
 		
-		// create delete records for all personal items
+		//delete records for all personal items
 		for(PersonalItem personalItem : personalItems)
 		{
-			PersonalItemDeleteRecord personalItemDeleteRecord = new PersonalItemDeleteRecord(deletingUser.getId(),
-					personalItem.getId(),
-					personalItem.getFullPath(), 
-					personalItem.getDescription());
-			personalItemDeleteRecord.setDeleteReason(deleteReason);
-			personalItemDeleteRecordDAO.makePersistent(personalItemDeleteRecord);
+			deletePersonalItem(personalItem, deletingUser, deleteReason);
 		}
 		
 		personalCollectionDAO.makeTransient(personalCollection);
@@ -323,6 +318,7 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 	 * @see edu.ur.ir.user.UserPublishingFileSystemService#deletePersonalItem(edu.ur.ir.user.PersonalItem, edu.ur.ir.user.IrUser, java.lang.String)
 	 */
 	public void deletePersonalItem(PersonalItem personalItem, IrUser deletingUser, String deleteReason) {
+		
 		// create a delete record
 		PersonalItemDeleteRecord personalItemDeleteRecord = new PersonalItemDeleteRecord(deletingUser.getId(),
 				personalItem.getId(),
@@ -517,6 +513,7 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 		
 		if( notMoved.size() == 0)
 		{
+			log.debug("saving user " + user);
 			irUserDAO.makePersistent(user);
 		}
 		

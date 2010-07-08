@@ -110,31 +110,35 @@ public class ApproveAffiliationAction extends Pager implements UserIdAware {
 		Affiliation affiliation = null;
 		Researcher researcher = null;
 		
-		for(int i=0;i<userIds.size();i++) {
+		for(int i=0;i<userIds.size();i++) 
+		{
 			user = userService.getUser(userIds.get(i), false);
 			affiliation = affiliationService.getAffiliation(new Long(tokenizer.nextToken()), false);
 			user.setAffiliation(affiliation);
 			
 			/** Assign the role for the affiliation */
-			if (affiliation.getAuthor()) {
+			if (affiliation.getAuthor()) 
+			{
 				user.addRole(roleService.getRole(IrRole.AUTHOR_ROLE));
 			}
 				
-			if (affiliation.getResearcher()) {
+			if (affiliation.getResearcher()) 
+			{
 				user.addRole(roleService.getRole(IrRole.RESEARCHER_ROLE));
 				// Create researcher object only if the user has no researcher object.
 				// Sometimes user might have researcher object if the user is an admin.
-				if (user.getResearcher() == null) {
+				if (user.getResearcher() == null) 
+				{
 					researcher = user.createResearcher();
 				}
-			}
-			
+			}			
 
 			user.setAffiliationApproved(true);
 			userService.makeUserPersistent(user);
 			
 			// Add researcher to index
-			if (researcher != null) {
+			if (researcher != null) 
+			{
 				Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
 						false);
 				

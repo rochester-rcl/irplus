@@ -60,9 +60,10 @@
 			name="parent" column="parent_id" insert="true"
 			update="true" access="field"/>
 			
-		<!--  Children collections -->
+		<!--  Children collections - cannot cascade the delete orphan because child
+		collections can be promoted to root  -->
 		<set name="children" inverse="true" 
-		    cascade="all, delete-orphan"
+		    cascade="all"
 		    access="field"
 		    optimistic-lock="false"
 			fetch="subselect"
@@ -79,10 +80,11 @@
 			update="true" 
 			access="field"/>
 		
-		<!--  Children items -->
+		<!--  Children items - cannot cascade the delete orphan because child
+		collections can be promoted to root  -->
 		<set name="personalItems" 
 		    inverse="true" 
-		    cascade="all, delete-orphan" 
+		    cascade="all" 
 		    optimistic-lock="false"
 		    access="field" 
 		    lazy="true" 

@@ -172,7 +172,7 @@
 		<set name="acceptedLicenses" access="field" 
 		     optimistic-lock="false"
 		     inverse="true" 
-		     cascade="all-delete-orphan"
+		     cascade="all, delete-orphan"
 			 lazy="true"
 			 fetch="subselect">
 			<key column="user_id" not-null="true" />
@@ -184,7 +184,7 @@
 		     optimistic-lock="false" 
 		     access="field" 
 		     inverse="true" 
-		     cascade="all-delete-orphan"
+		     cascade="all, delete-orphan"
 			 lazy="true"
 			 fetch="subselect">
 			<key column="shared_with_user_id" not-null="true" />
@@ -194,7 +194,7 @@
         <!--  Root Personal Folders -->
 		<set name="rootFolders" inverse="true" 
 		     optimistic-lock="false"
-		     cascade="all-delete-orphan" 
+		     cascade="all" 
 		     where="personal_folder_id = root_personal_folder_id"
 		     access="field"
 			 order-by="name" 
@@ -208,7 +208,7 @@
 		<!--  Root Personal Files -->
 		<set name="rootFiles" inverse="true" 
 		     optimistic-lock="false"
-		     cascade="all-delete-orphan" 
+		     cascade="all" 
 		     where="personal_folder_id is null"
 		     access="field"
 			 lazy="true"
@@ -221,7 +221,7 @@
 		<!--  Root Personal Collections -->
 		<set name="rootPersonalCollections" inverse="true" 
 		     optimistic-lock="false"
-		     cascade="all-delete-orphan" 
+		     cascade="all" 
 		     where="personal_collection_id = root_personal_collection_id"
 		     access="field"
 			 order-by="name" 
@@ -235,7 +235,7 @@
 		<!--  Root Personal Items -->
 		<set name="rootPersonalItems" inverse="true" 
 		     optimistic-lock="false"
-		     cascade="all-delete-orphan" 
+		     cascade="all" 
 		     where="personal_collection_id is null"
 		     access="field"
 			 lazy="true"

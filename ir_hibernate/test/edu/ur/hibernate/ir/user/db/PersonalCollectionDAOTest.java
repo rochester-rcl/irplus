@@ -524,10 +524,9 @@ public class PersonalCollectionDAOTest {
 		
 		// delete the collection
 		user = other.getOwner();
-		// remove the personal collection from user otherwise a hibernate exception will occur.
 		assert user.removeRootPersonalCollection(personalCollection) : "Collection should be removed " 
 			+ personalCollection;
-		userDAO.makePersistent(user);
+		personalCollectionDAO.makeTransient(other);
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);

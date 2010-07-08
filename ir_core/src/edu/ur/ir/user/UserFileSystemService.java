@@ -306,16 +306,6 @@ public interface UserFileSystemService extends Serializable{
 
 	
 	/**
-	 * Delete personal file record from the database - this does not physically remove the file
-	 * from the file system.
-	 * 
-	 * @param personalFile - personal file being deleted
-	 * @param deletingUser - user performing the delete
-	 * @param deleteReason - system reason why the file was deleted (Unshared, folder deleted ...)
-	 */
-	public void makePersonalFileTransient(PersonalFile personalFile, IrUser deletingUser, String deleteReason);	
-
-	/**
 	 * Save personal file
 	 * 
 	 * @param personalFile personal file to be saved
