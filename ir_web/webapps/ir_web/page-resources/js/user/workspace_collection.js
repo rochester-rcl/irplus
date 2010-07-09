@@ -399,7 +399,7 @@ YAHOO.ur.personal.collection =
 	        var data = this.getData();
 		    if (data.collectionName == "" ) 
 		    {
-		        alert('You must enter a collection name');
+		        alert('You must enter a folder name');
 			    return false;
 		    } 
 		    else 
@@ -681,7 +681,7 @@ YAHOO.ur.personal.collection =
 	    if (!urUtil.checkForNoSelections(document.myCollections.collectionIds) &&
 	        !urUtil.checkForNoSelections(document.myCollections.itemIds))
 		{
-		    alert('Please select at least one checkbox next to the collections or publications you wish to move.');
+		    alert('Please select at least one checkbox next to the folders or publications you wish to move.');
 	    } 
 	    else
 	    {
@@ -726,7 +726,7 @@ YAHOO.ur.personal.collection =
 	        if (!urUtil.checkForNoSelections(document.myCollections.collectionIds) &&
 	            !urUtil.checkForNoSelections(document.myCollections.itemIds))
 		    {
-		        alert('Please select at least one checkbox next to the collections or publications you wish to delete.');
+		        alert('Please select at least one checkbox next to the folders or publications you wish to delete.');
 	        } 
 	        else
 	        {
