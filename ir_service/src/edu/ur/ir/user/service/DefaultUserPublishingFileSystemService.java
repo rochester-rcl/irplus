@@ -298,6 +298,17 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 			deletePersonalItem(personalItem, deletingUser, deleteReason);
 		}
 		
+		if( personalCollection.isRoot() )
+		{
+			IrUser parentUser = personalCollection.getOwner();
+			parentUser.removeRootPersonalCollection(personalCollection);
+		}
+		else
+		{
+			PersonalCollection parentCollection = personalCollection.getParent();
+			parentCollection.removeChild(personalCollection);
+		}
+		
 		personalCollectionDAO.makeTransient(personalCollection);
 		
 	}
