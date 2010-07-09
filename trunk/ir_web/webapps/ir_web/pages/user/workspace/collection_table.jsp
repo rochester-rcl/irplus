@@ -48,13 +48,6 @@
 
     <table width="100%">
         <tr>
-            <td align="left">
-                <select onchange="javascript:YAHOO.ur.personal.collection.executeCheckboxAction(this.options[this.selectedIndex].value);">
-                    <option value="action" id="collection_checkbox_action_set"  selected="selected">Action on checked folders and publications ...</option>
-                    <option value="delete">Delete</option>
-                    <option value="move">Move</option>
-	            </select>
-	        </td>
 	        <td align="right">
  		        <button class="ur_button" 
  		            onclick="javascript:YAHOO.ur.personal.collection.newCollectionDialog.showDialog();"
@@ -67,6 +60,18 @@
 	                onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
 	                id="addItemButton"><span class="packageAddBtnImg">&nbsp;</span>Create Publication</button>
+	           
+	           <button class="ur_button" 
+	        	    onclick="javascript:YAHOO.ur.personal.collection.executeMoveAction();" 
+	                onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';"
+	                id="addItemButton"><span class="pageWhiteGoBtnImg">&nbsp;</span>Move</button>
+	           
+	           <button class="ur_button" 
+	        	    onclick="javascript:YAHOO.ur.personal.collection.executeDeleteAction();" 
+	                onmouseover="this.className='ur_buttonover';"
+ 		            onmouseout="this.className='ur_button';"
+	                id="addItemButton"><span class="deleteBtnImg">&nbsp;</span>Delete</button>
 
 	        </td>
         </tr>
