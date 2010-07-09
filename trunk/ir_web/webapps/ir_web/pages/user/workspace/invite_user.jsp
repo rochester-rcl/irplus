@@ -180,18 +180,27 @@
 
 		        </div>
 	            <!--  end first tab -->
-	                  
-	                  
-              	
 
 	       </div>
-	       <!--  end tabs -->
+	       <!--  end content -->
+	   
+	   </div>
+	   <!-- end tabs -->
+	   
+	  </div>
+      <!--  end body div -->
+      
+      <!--  this is the footer of the page -->
+      <c:import url="/inc/footer.jsp"/>
+  
+  </div>
+  <!--  End doc div-->
 
 	        <div id="editPermissionsDialog" class="hidden">
                 <div class="hd">Edit Permissions</div>
                 <div class="bd">
                     <form id="editPermissions" name="editPermissionsForm" 
-		                    method="post" action="<c:url value="/user/editPermissions.action"/>"
+		                    method="post" action="<c:url value="/user/editPermissions.action"/>">
 		            	<div id="editPermissionsDialogFields">
 		            	    <c:import url="edit_permissions_form.jsp"/>
 	                  	</div>
@@ -204,7 +213,7 @@
 			     <div class="hd">Delete?</div>
 			     <div class="bd">
 			        <form id="unshareConfirmationForm" name="unshareForm" 
-		                    method="post" action="<c:url value="/user/deleteCollaborator.action"/>"
+		                    method="post" action="<c:url value="/user/deleteCollaborator.action"/>">
 		            	<input type="hidden" id="unshareForm_fileCollaboratorId" name="fileCollaboratorId">
 		            	<input type="hidden" id="unshareForm_personalFileId" name="personalFileId">
 		            	<input type="hidden" id="unshareForm_parentFolderId" name="parentFolderId" value="${parentFolderId}" >
@@ -222,7 +231,7 @@
 			     <div class="hd">Delete?</div>
 			     <div class="bd">
 			        <form id="unsharePendingInviteeConfirmationForm" name="unsharePendingInviteeForm" 
-		                    method="post" action="<c:url value="/user/deletePendingInvitee.action"/>"
+		                    method="post" action="<c:url value="/user/deletePendingInvitee.action"/>">
 		            	<input type="hidden" id="unsharePendingInviteeForm_inviteInfoId" name="inviteInfoId">
 		            	<input type="hidden" id="unsharePendingInviteeForm_personalFileId" name="personalFileId">
 		            	<input type="hidden" id="unsharePendingInviteeForm_share_file_ids" name="shareFileIds" value="${shareFileIds}"/>
@@ -237,7 +246,7 @@
 			     <div class="hd">Remove?</div>
 			     <div class="bd">
 			        <form id="remove_file_form" name="removeFileForm" 
-		                    method="post" action="<c:url value="/user/removeFile.action"/>"
+		                    method="post" action="<c:url value="/user/removeFile.action"/>">
 		            	<input type="hidden" id="remove_file_form_personal_file_id" name="personalFileId">
 		            	<input type="hidden" id="removeFileForm_share_file_ids" name="shareFileIds" value="${shareFileIds}"/>
 			         <p>Do you want to remove the file?</p>
@@ -246,14 +255,7 @@
 			</div>
 			<!--  end remove file  dialog -->			
 						      
-      </div>
-      <!--  end body div -->
-      
-      <!--  this is the footer of the page -->
-      <c:import url="/inc/footer.jsp"/>
-  
-  </div>
-  <!--  End doc div-->
+
   
    <!--  wait div -->
    <div id="wait_dialog_box" class="hidden">

@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import edu.ur.ir.file.FileCollaborator;
@@ -113,6 +114,16 @@ public interface InviteUserService extends Serializable{
 	 */
 	public Set<SharedInboxFile> shareFileForUserWithToken(Long userId, String token) 
 	    throws FileSharingException;
+	
+	/**
+	 * Get all invite info information for a sepcified email.
+	 * 
+	 * @param email - email to get
+	 * @return the list of invite info objects
+	 * 
+	 * @throws FileSharingException if the user tries to share a file with themselves
+	 */
+	public List<InviteInfo> findInviteInfoByEmail(String email);
 	
 	/**
 	 * Save versioned file 

@@ -337,6 +337,8 @@ public class DefaultInviteUserService implements InviteUserService {
 		
 		return inboxFiles;
 	}
+	
+	
 
 	/**
 	 * Share file for user with the specified email. 
@@ -404,7 +406,17 @@ public class DefaultInviteUserService implements InviteUserService {
 	public InviteInfo findInviteInfoByToken(String token){
 		InviteInfo inviteUser = inviteInfoDAO.findInviteInfoForToken(token);
 		return inviteUser;
-		
+	}
+	
+	/**
+	 * Get the invite info information by email address.
+	 * 
+	 * @param email - email to find invite info information for.
+	 * @return - all invite infos found
+	 */
+	public List<InviteInfo> findInviteInfoByEmail(String email)
+	{
+		return inviteInfoDAO.getInviteInfoByEmail(email);
 	}
 	
 	public void setMailSender(MailSender mailSender) {

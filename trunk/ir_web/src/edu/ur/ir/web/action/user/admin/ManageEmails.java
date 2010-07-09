@@ -28,6 +28,8 @@ import com.opensymphony.xwork2.Preparable;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.FileSharingException;
+import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserEmail;
@@ -93,6 +95,11 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	/** Message about email verification */
 	private String emailVerificationMessage;
 	
+	/** Service for inviting users */
+	private InviteUserService inviteUserService;
+	
+
+
 	/**
 	 * Prepares for the action
 	 * 
@@ -174,8 +181,9 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	 * cause the user to get a new email to verify.
 	 * 
 	 * @return
+	 * @throws FileSharingException 
 	 */
-	public String setVerified()
+	public String setVerified() throws FileSharingException
 	{
 		log.debug("verifing email with id = " + emailId);
 
@@ -193,6 +201,8 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		userEmail.setVerified(true);
 		userService.makeUserEmailPersistent(userEmail);
 		emails = userEmail.getIrUser().getUserEmails();
+		inviteUserService.sharePendingFilesForEmail(irUser.getId(), userEmail.getEmail());
+
 		return "viewEmails";
 	}
 	
@@ -501,6 +511,11 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	
+	public void setInviteUserService(InviteUserService inviteUserService) {
+		this.inviteUserService = inviteUserService;
+	}
+
 
 }
 
