@@ -226,7 +226,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
     }
     
 	/**
-	 * Method to create a new user type.
+	 * Method to create a new user.
 	 * 
 	 * Create a new user type
 	 * @throws NoIndexFoundException 

@@ -29,6 +29,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
 import org.springframework.util.StringUtils;
 
+import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollectionSubscription;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
@@ -53,6 +54,7 @@ import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.PersonalItemDeleteRecordDAO;
+import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserEmailDAO;
@@ -326,6 +328,7 @@ public class DefaultUserService implements UserService {
         this.deleteUserSubscriptions(user);
         this.deleteUserGroups(user);
         this.deleteResearcher(user);
+        this.deleteSharedFiles(user, deletingUser);
   	    this.deleteRootItems(user, deletingUser);
         this.deletePersonalCollections(user, deletingUser);
 		this.deleteRootFiles(user, deletingUser);
@@ -392,6 +395,27 @@ public class DefaultUserService implements UserService {
 			researcherService.deleteResearcher(r);
 		}
 		log.debug("DONE deleting researcher info");
+	}
+	
+	/**
+	 * Delete the users shared files.
+	 * 
+	 * @param user - user to delete the shared files 
+	 */
+	private void deleteSharedFiles(IrUser user, IrUser deletingUser)
+	{
+		// delete the users shared inbox files
+		Set<SharedInboxFile> sharedInboxFiles = new HashSet<SharedInboxFile>();
+		sharedInboxFiles.addAll(user.getSharedInboxFiles());
+		for(SharedInboxFile  sif : sharedInboxFiles)
+		{
+			user.removeFromSharedFileInbox(sif);
+			FileCollaborator collaborator = sif.getVersionedFile().getCollaborator(user);
+			if( collaborator != null)
+			{
+			    inviteUserService.unshareFile(collaborator, deletingUser);
+			}
+		}
 	}
 	
 	/**

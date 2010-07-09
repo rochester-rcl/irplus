@@ -667,6 +667,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 			}
 			
 			inviteUserService.shareFileForUserWithToken(irUser.getId(), token);
+			inviteUserService.sharePendingFilesForEmail(irUser.getId(), inviteInfo.getEmail());
 			
 			returnVal = "successInvite";
 		} 
