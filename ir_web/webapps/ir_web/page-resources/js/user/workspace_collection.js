@@ -707,6 +707,9 @@ YAHOO.ur.personal.collection =
 	    
 	    var handleCancel = function() 
 	    {
+	    	// uncheck all collections
+	    	checked = document.myCollections.checkAllSetting.checked = false;
+	    	YAHOO.ur.personal.collection.setCheckboxes();
 		    this.hide();
 	    };
 
@@ -738,25 +741,25 @@ YAHOO.ur.personal.collection =
 	    // Render the Dialog
 	    YAHOO.ur.personal.collection.deleteCollection.render();
     },
-
+    
     /**
-     * execute the action based on the selected value for
-     * personal collections and items
+     * Delete the checked collections and publications
      */
-    executeCheckboxAction : function(action)
+    executeDeleteAction : function()
     {
-        var resetSelected = document.getElementById("collection_checkbox_action_set");
-        if( action == "delete" )
-        {
-            YAHOO.ur.personal.collection.deleteCollection.showDialog();
-            resetSelected.selected = true;
-        }
-        if( action == "move" )
-        {
-            YAHOO.ur.personal.collection.moveCollectionData();
-            resetSelected.selected = true;
-        }
-        YAHOO.ur.shared.file.inbox.getSharedFilesCount();
+    	 YAHOO.ur.personal.collection.deleteCollection.showDialog();
+         resetSelected.selected = true;
+         YAHOO.ur.shared.file.inbox.getSharedFilesCount();
+    },
+    
+    /**
+     * Move the selected collections and publications
+     */
+    executeMoveAction : function()
+    {
+    	 YAHOO.ur.personal.collection.moveCollectionData();
+         resetSelected.selected = true;
+         YAHOO.ur.shared.file.inbox.getSharedFilesCount();
     },
 
 
