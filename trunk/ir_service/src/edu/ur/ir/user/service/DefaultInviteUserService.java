@@ -41,6 +41,8 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFileDAO;
+import edu.ur.ir.user.PersonalFileDeleteRecord;
+import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserEmail;
@@ -104,6 +106,10 @@ public class DefaultInviteUserService implements InviteUserService {
 	/** Role service class */
 	private RoleService roleService;
 	
+	/** captures information about deleting information */
+	private PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO;
+	
+
 	/**
 	 * Persistent method for invite info
 	 * 
@@ -233,7 +239,14 @@ public class DefaultInviteUserService implements InviteUserService {
 					file.getId());
 		
 		if (personalFile != null) {
-			userFileSystemService.delete(personalFile, unsharingUser, "UN-SHAREING FILE");
+			// create a delete record 
+			PersonalFileDeleteRecord personalFileDeleteRecord = new PersonalFileDeleteRecord(unsharingUser.getId(),
+					personalFile.getId(),
+					personalFile.getFullPath(), 
+					personalFile.getDescription());
+			personalFileDeleteRecord.setDeleteReason("UN-SHAREING FILE");
+			personalFileDeleteRecordDAO.makePersistent(personalFileDeleteRecord);
+			personalFileDAO.makeTransient(personalFile);
 		}
 		
 		// Remove the personal file from user if the file is in the shared file inbox
@@ -552,5 +565,15 @@ public class DefaultInviteUserService implements InviteUserService {
 
 		securityService.deletePermissions(vf.getId(), CgLibHelper.cleanClassName(vf.getClass().getName()), fileCollaborator.getCollaborator());
 	}
+	
+	public PersonalFileDeleteRecordDAO getPersonalFileDeleteRecordDAO() {
+		return personalFileDeleteRecordDAO;
+	}
+
+	public void setPersonalFileDeleteRecordDAO(
+			PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO) {
+		this.personalFileDeleteRecordDAO = personalFileDeleteRecordDAO;
+	}
+
 
 }

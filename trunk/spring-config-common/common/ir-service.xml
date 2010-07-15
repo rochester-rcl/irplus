@@ -327,6 +327,7 @@
        <property name="userFileSystemService" ref="userFileSystemService"/>
        <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="roleService" ref="roleService"/>
+       <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
    </bean>
      
    <!-- ****************************************** --> 
