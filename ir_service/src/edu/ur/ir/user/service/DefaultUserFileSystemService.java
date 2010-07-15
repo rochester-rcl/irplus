@@ -442,6 +442,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 		personalFileDeleteRecord.setDeleteReason(deleteReason);
 		personalFileDeleteRecordDAO.makePersistent(personalFileDeleteRecord);
 		
+		// delete the personal file
 		personalFileDAO.makeTransient(pf);
 		
 		// Delete versioned file only if requested by its owner
@@ -1020,7 +1021,6 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 		IrUser user = inboxFile.getSharedWithUser();
 		user.removeFromSharedFileInbox(inboxFile);
 		sharedInboxFileDAO.makeTransient(inboxFile);
-		
 	}
 
 	/** Save the inbox file
