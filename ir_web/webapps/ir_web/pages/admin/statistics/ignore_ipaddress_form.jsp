@@ -22,6 +22,7 @@
       is an issue.
  -->
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 		<!--  represents a successful submission -->
 		<input type="hidden" id="newIgnoreIpAddressForm_success" 
@@ -49,6 +50,16 @@
 			    id="newIgnoreIpAddressForm_name" 
 			    name="ignoreIpAddress.name" 
 			    value="${ignoreIpAddress.name}" size="45"/> </td>
+			</tr>
+			<tr>       
+	            <td align="left" class="label">Store counts:</td>
+	            <td align="left" class="input">
+	                <input type="checkbox"  id="newIgnoreIpAddressForm_storeCounts" name="storeCounts" value="true" 
+	                <c:if test="${ignoreIpAddress.storeCounts == true}"> 
+	              	checked = "true"
+	              </c:if> 
+	                />
+	            </td>
 			</tr>
 			<tr>
 			    <td align="left" class="label">Description:</td>
