@@ -93,6 +93,7 @@ YAHOO.ur.ignore.ipaddress = {
 		document.getElementById('newIgnoreIpAddressForm_fromAddress4').value = "";
 		document.getElementById('newIgnoreIpAddressForm_toAddress4').value = "";
 		document.getElementById('newIgnoreIpAddressForm_id').value = "";
+		document.getElementById("newIgnoreIpAddressForm_storeCounts").checked = false;
 		document.newIgnoreIpAddressForm.newIgnoreIpAddress.value = "true";
 	},
 	

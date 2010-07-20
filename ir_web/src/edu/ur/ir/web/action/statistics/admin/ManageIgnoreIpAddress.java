@@ -90,6 +90,8 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	/** Quartz scheduler instance to schedule jobs  */
 	private Scheduler quartzScheduler;
 	
+	private boolean storeCounts = false;
+	
 	/** Default constructor */
 	public  ManageIgnoreIpAddress()
 	{
@@ -110,6 +112,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 		IgnoreIpAddress other = ignoreIpAddressService.getIgnoreIpAddress(ignoreIpAddress);
 		if( other == null)
 		{
+			ignoreIpAddress.setStoreCounts(storeCounts);
 		    ignoreIpAddressService.saveIgnoreIpAddress(ignoreIpAddress);
 		    downloadStatisticsService.updateAllRepositoryFileRollUpCounts();
 		    added = true;
@@ -137,6 +140,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 		
 		if( other == null || other.getId().equals(ignoreIpAddress.getId()))
 		{
+			ignoreIpAddress.setStoreCounts(storeCounts);
 			ignoreIpAddressService.saveIgnoreIpAddress(ignoreIpAddress);
 			downloadStatisticsService.updateAllRepositoryFileRollUpCounts();
 			added = true;
@@ -371,6 +375,16 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
+	}
+
+
+	public boolean getStoreCounts() {
+		return storeCounts;
+	}
+
+
+	public void setStoreCounts(boolean storeCounts) {
+		this.storeCounts = storeCounts;
 	}
 
 }

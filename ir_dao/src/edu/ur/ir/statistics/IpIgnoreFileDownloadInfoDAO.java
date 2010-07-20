@@ -21,6 +21,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.order.OrderType;
 
 /**
  * 
@@ -60,5 +61,41 @@ CrudDAO<IpIgnoreFileDownloadInfo> {
 	 * @return count of ignored download info values that should no longer be ignored.
 	 */
 	public Long getIgnoreInfoNowAcceptableCount();
+	
+
+	/**
+	 * Get the download counts for ignore addresses ordered by download count - this is a
+	 * grouping by ip address.
+	 * 
+	 * @param start - start position
+	 * @param maxResults - maximum number of results
+	 * @param orderType - sort type to (ascending descending
+	 * @return grouping of ignored ip addresses odered by d
+	 */
+	public List<IpDownloadCount> getIpIgnoreOrderByDownloadCounts(int start,
+			int maxResults, OrderType orderType);
+	
+	/**
+	 * Delete the counts from the ingore table that should not be stored 
+	 * 
+	 * @return - number of records deleted
+	 */
+	public Long deleteIgnoreCounts();
+	
+	/**
+	 * Move the  counts that should be included back to the file download infos
+	 * 
+	 * @param list of ids of ipIgnoreFileDownload infos to be moved
+	 * @return number of records moved
+	 */
+	public Long insertIntoFileDownloadInfoCounts(List<Long> ipIgnoreIds);
+	
+	/**
+	 * Delete the ingored download infos with the specified set of ids.
+	 * 
+	 * @param ids - list of ids to delete
+	 * @return - the number of ignored download info objects deleted
+	 */
+	public Long delete(List<Long> ids);
 
 }

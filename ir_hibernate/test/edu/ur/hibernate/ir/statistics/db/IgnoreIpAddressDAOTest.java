@@ -83,22 +83,24 @@ public class IgnoreIpAddressDAOTest {
 		 TransactionStatus ts = tm.getTransaction(td);
 
 		 IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,1, 10);
+		 ip1.setStoreCounts(true);
 	     ignoreIpAddressDAO.makePersistent(ip1);
 
 	     IgnoreIpAddress ip2 = new IgnoreIpAddress(123,0,0,5, 5);
+	     ip2.setStoreCounts(true);
 	     ignoreIpAddressDAO.makePersistent(ip2);
 	     tm.commit(ts);
 
 	 	 // check to make sure the ip address counts are correct
 	 	 ts = tm.getTransaction(td);
 	 	 
-	 	 long count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 5);  
+	 	 long count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 5, true);  
 	 	 assert count == 2l : "count equals " + count;
 	 	 
-	 	 count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 7);  
+	 	 count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 7, true);  
 	 	 assert count == 1l : "count equals " + count;
 	 	 
-	 	 count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 11);  
+	 	 count = ignoreIpAddressDAO.getIgnoreCountForIp(123, 0, 0, 11, true);  
 	 	 assert count == 0l : "count equals " + count;
 	 	 
 	 	 

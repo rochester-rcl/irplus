@@ -119,6 +119,18 @@ public interface DownloadStatisticsService extends Serializable{
 	 */
 	public List<FileDownloadRollUpProcessingRecord> getDownloadRollUpProcessingRecords(int start, int maxResults);
 	
+	
+	/**
+	 * This retrieves a rollup of download counts for a specified ip address
+	 * 
+	 * @param rowStart - row to start at
+	 * @param maxResults - maximum number of results to return.
+	 * @param sort ascending or decending based on ip address
+	 * 
+	 * @return  the list of download counts per ip-address
+	 */
+	public List<IpDownloadCount> getIpIgnoreOrderByDownloadCounts(int start, int maxResults, OrderType sortType);
+	
 	/**
 	 * Update all repository counts for ir files in the system.
 	 * 

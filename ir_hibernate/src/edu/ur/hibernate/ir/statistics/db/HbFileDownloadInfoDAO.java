@@ -170,10 +170,51 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 	}
 
 	
+	/**
+	 * Get a sum of downlod coungs grouped by IP address order by download count.
+	 * 
+	 * @see edu.ur.ir.statistics.FileDownloadInfoDAO#getIpOrderByDownloadCount(int, int, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
 	public List<IpDownloadCount> getIpOrderByDownloadCount(int rowStart,
-			int numberOfResultsToShow, OrderType sortType) {
-		// TODO Auto-generated method stub
-		return null;
+			int maxResults, OrderType orderType) {
+		
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getDownloadInfoCountSumDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getDownloadInfoCountSumAsc");
+		}
+
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IpDownloadCount>) q.list();
+	}
+
+	public Long deleteIgnoreCounts() {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deleteIgnoredFileDownloadInfoCounts");
+	    return new Long(q.executeUpdate());
+	}
+
+	public Long insertIntoIgnoreFileDownloadInfoCounts(List<Long> fileInfoIds) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertIntoIgnoreFileDownloadInfo");
+		q.setParameterList("ids", fileInfoIds);
+	    return new Long(q.executeUpdate());
+	}
+
+	public Long delete(List<Long> ids) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deleteFromFileDownloadInfoByIds");
+		q.setParameterList("ids", ids);
+	    return new Long(q.executeUpdate());
 	}
 	
 }

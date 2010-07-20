@@ -3387,6 +3387,7 @@ CREATE TABLE ir_statistics.ip_address_ignore
 (
     ip_address_ignore_id BIGINT PRIMARY KEY,
     name TEXT,
+    store_counts BOOLEAN NOT NULL,
     description TEXT,
     from_ip_address_part1 INTEGER,
     from_ip_address_part2 INTEGER,
