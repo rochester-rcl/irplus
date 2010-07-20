@@ -50,7 +50,7 @@
 
 
         <!-- hibernate files -->
-        <dependency org="org.hibernate" name="hibernate-core" rev="3.5.2-Final" transitive="false">
+        <dependency org="org.hibernate" name="hibernate-core" rev="3.5.3-Final" transitive="false">
             <artifact name="hibernate-core" type="jar"/>
         </dependency>
 
