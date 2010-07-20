@@ -16,8 +16,10 @@
 
 package edu.ur.hibernate.ir.statistics.db;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
@@ -28,6 +30,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
+import edu.ur.ir.statistics.FileDownloadInfo;
+import edu.ur.ir.statistics.FileDownloadInfoDAO;
 import edu.ur.ir.statistics.IgnoreIpAddress;
 import edu.ur.ir.statistics.IgnoreIpAddressDAO;
 import edu.ur.ir.statistics.IpIgnoreFileDownloadInfo;
@@ -46,18 +50,24 @@ public class IpIgnoreFileDownloadInfoDAOTest {
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 
+	/** deals with ingore ip file downloads */
 	IpIgnoreFileDownloadInfoDAO ipIgnorefileDownloadInfoDAO = (IpIgnoreFileDownloadInfoDAO) ctx
 	.getBean("ipIgnoreFileDownloadInfoDAO");
 	
+	/** transaction manager for transactions */
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
 	.getBean("transactionManager");
 	
+	/** transaction definition used by transaction manager */
     TransactionDefinition td = new DefaultTransactionDefinition(
 	TransactionDefinition.PROPAGATION_REQUIRED);
     
 	/** Data access for ignore ip address class */
 	IgnoreIpAddressDAO ignoreIpAddressDAO = (IgnoreIpAddressDAO) ctx
 	.getBean("ignoreIpAddressDAO");
+	
+	FileDownloadInfoDAO fileDownloadInfoDAO = (FileDownloadInfoDAO) ctx
+	.getBean("fileDownloadInfoDAO");
 
 	/**
 	 * Test download info persistance
@@ -128,5 +138,110 @@ public class IpIgnoreFileDownloadInfoDAOTest {
  	    ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip2.getId(), false));
         tm.commit(ts);
 
+	}
+	
+	/**
+	 * Test deleting ignored downloads from the ignore download info table.
+	 * 
+	 * @throws ParseException 
+	 */
+	@Test
+	public void deleteIngoredDownloadsTest() throws ParseException
+	{
+		 TransactionStatus ts = tm.getTransaction(td);
+
+		 
+		 IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,9, 10);
+		 ip1.setStoreCounts(false);
+	     ignoreIpAddressDAO.makePersistent(ip1);
+
+	     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
+		 Date d = simpleDateFormat.parse("1/1/2008");
+		    
+		 IpIgnoreFileDownloadInfo downloadInfo1 = new IpIgnoreFileDownloadInfo("123.0.0.1", 1l,d);
+	     downloadInfo1.setDownloadCount(1);
+	        
+	     IpIgnoreFileDownloadInfo downloadInfo2 = new IpIgnoreFileDownloadInfo("123.0.0.10", 1l,d);
+	     downloadInfo2.setDownloadCount(2);
+	        
+	        
+	     ipIgnorefileDownloadInfoDAO.makePersistent(downloadInfo1);
+	     ipIgnorefileDownloadInfoDAO.makePersistent(downloadInfo2);
+	     tm.commit(ts);
+
+	 	 // check to make sure the ip address counts are correct
+	 	 ts = tm.getTransaction(td);
+	 	 
+	 	 Long numDeleted = ipIgnorefileDownloadInfoDAO.deleteIgnoreCounts();
+	 	 assert numDeleted == 1l : "Should have deleted one record but deleted " + numDeleted;
+	 	 assert ipIgnorefileDownloadInfoDAO.getById(downloadInfo2.getId(), false) == null : "should not be able to find " + downloadInfo2;
+	 	 assert ipIgnorefileDownloadInfoDAO.getById(downloadInfo1.getId(), false) != null : "Should be able to find " + downloadInfo2;
+	 	 
+	 	 tm.commit(ts);
+	     
+	 	 
+	 	 ts = tm.getTransaction(td);
+	     ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip1.getId(), false));
+	     ipIgnorefileDownloadInfoDAO.makeTransient(ipIgnorefileDownloadInfoDAO.getById(downloadInfo1.getId(), false));
+		 tm.commit(ts);
+	}
+
+	
+	/**
+	 * Test moving ignored downloads from the file download info table to the IpIngoredFileDownloadInfoTable.
+	 * 
+	 * @throws ParseException 
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void moveToIngoredTest() throws ParseException
+	{
+		 TransactionStatus ts = tm.getTransaction(td);
+
+		 
+		 IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,9, 10);
+		 ip1.setStoreCounts(true);
+	     ignoreIpAddressDAO.makePersistent(ip1);
+
+	     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
+		 Date d = simpleDateFormat.parse("1/1/2008");
+		    
+		 IpIgnoreFileDownloadInfo downloadInfo1 = new IpIgnoreFileDownloadInfo("123.0.0.1", 1l,d);
+	     downloadInfo1.setDownloadCount(1);
+	        
+	     IpIgnoreFileDownloadInfo downloadInfo2 = new IpIgnoreFileDownloadInfo("123.0.0.10", 1l,d);
+	     downloadInfo2.setDownloadCount(2);
+	        
+	        
+	     ipIgnorefileDownloadInfoDAO.makePersistent(downloadInfo1);
+	     ipIgnorefileDownloadInfoDAO.makePersistent(downloadInfo2);
+	     tm.commit(ts);
+
+	 	 // check to make sure the ip address counts are correct
+	 	 ts = tm.getTransaction(td);
+	 	 
+	 	 List<Long> ids = new LinkedList<Long>();
+	 	 ids.add(downloadInfo2.getId());
+	 	 Long numMoved = ipIgnorefileDownloadInfoDAO.insertIntoFileDownloadInfoCounts(ids);
+	 	 assert numMoved == 1l : "Should have moved one record but moved " + numMoved;
+	 	 
+	 	 // delete the infos deleted
+	 	 Long numDeleted = ipIgnorefileDownloadInfoDAO.delete(ids);
+	 	 assert numDeleted == 1l : "Should have deleted one record but deleted " + numDeleted;
+	 	
+	 	 List<FileDownloadInfo> downloadInfos = fileDownloadInfoDAO.getAll();
+	 	 
+	 	 assert downloadInfos.size() == 1: "Should be able to find one download info";
+	 	 FileDownloadInfo downloadInfo = downloadInfos.get(0);
+	 	 assert downloadInfo.getIpAddress().equals(downloadInfo2.getIpAddress()) : "download Address " + 
+	 	 downloadInfo.getIpAddress() + " should equal old ignore download address " + downloadInfo2.getIpAddress();
+	 	 tm.commit(ts);
+	     
+	 	 
+	 	 ts = tm.getTransaction(td);
+	     ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip1.getId(), false));
+	     fileDownloadInfoDAO.makeTransient(fileDownloadInfoDAO.getById(downloadInfo.getId(), false));
+	     ipIgnorefileDownloadInfoDAO.makeTransient(ipIgnorefileDownloadInfoDAO.getById(downloadInfo1.getId(), false));
+		 tm.commit(ts);
 	}
 }

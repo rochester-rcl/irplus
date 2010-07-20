@@ -42,6 +42,9 @@
 			
 		<property name="name" column="name" type="string"
 			access="field" />
+			
+		<property name="storeCounts" column="store_counts" type="boolean"
+			access="field" />
 		
 		<property name="description" column="description" type="string"
 			access="field" />
@@ -92,6 +95,7 @@
 		and ignore.fromAddress2 = :part2
 		and ignore.fromAddress3 = :part3
 		and :part4 between ignore.fromAddress4 and ignore.toAddress4
+		and storeCounts = :storeCount
 	</query>
 	
 	<!-- named query for getting ip address count -->

@@ -29,8 +29,10 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.statistics.IpDownloadCount;
 import edu.ur.ir.statistics.IpIgnoreFileDownloadInfo;
 import edu.ur.ir.statistics.IpIgnoreFileDownloadInfoDAO;
+import edu.ur.order.OrderType;
 
 
 /**
@@ -122,6 +124,47 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 
 	public Long getIgnoreInfoNowAcceptableCount() {
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAcceptableFileDownloadsIgnoredCount"));
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<IpDownloadCount> getIpIgnoreOrderByDownloadCounts(int start,
+			int maxResults, OrderType orderType) {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getDownloadInfoIngoreCountSumDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getDownloadInfoIngoreCountSumAsc");
+		}
+
+		q.setFirstResult(start);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IpDownloadCount>) q.list();
+	}
+
+	public Long deleteIgnoreCounts() {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deleteNoStoreDownloadCounts");
+	    return new Long(q.executeUpdate());
+	}
+
+	public Long insertIntoFileDownloadInfoCounts(List<Long> ipIgnoreIds) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertIntoFileDownloadInfo");
+		q.setParameterList("ids", ipIgnoreIds);
+	    return new Long(q.executeUpdate());
+	}
+
+	public Long delete(List<Long> ids) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deleteFromIngoredIpIgnoreByIds");
+		q.setParameterList("ids", ids);
+	    return new Long(q.executeUpdate());
 	}
 
 }

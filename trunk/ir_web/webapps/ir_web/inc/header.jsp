@@ -88,8 +88,25 @@
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFileStorage.action"/>"><span class="menu_text">File Storage</span></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewHandleNameAuthorities.action"/>"><span class="menu_text">Handle Name Authorities</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIdentifierTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewIdentifierTypes"/></span></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIgnoreIpAddresses.action" />"><span class="menu_text"><fmt:message key="menu.ignoreIpAddress"/></span></a></li>
+                                
+                                
+                                
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewInstitutionalCollections.action" />"><span class="menu_text">Institutional Collections</span></a></li>
+                                
+                                <li class="yuimenuitem">
+                                    <a class="yuimenuitemlabel">IP Address / Statistics</a>
+
+                                    <div id="ipstats" class="yuimenu">
+                                        <div class="bd">                    
+                                            <ul>
+                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIgnoreIpAddresses.action" />"><span class="menu_text"><fmt:message key="menu.ignoreIpAddress"/></span></a></li>
+                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIdentifierTypeDublinCoreMappings.action" />"><span class="menu_text">Download Counts By IP Address</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>                    
+                                </li>
+                                
+                                
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewLanguageTypes.action"/>" ><span class="menu_text"><fmt:message key="menu.viewLanguageTypes"/></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewTopMediaTypes.action" />"><span class="menu_text"><fmt:message key="menu.viewTopMediaTypes"/></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewNewsItems.action"/>"><span class="menu_text"><fmt:message key="menu.viewNewsItem"/></span></a></li>

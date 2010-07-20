@@ -664,4 +664,15 @@ UPDATE ir_user.ir_user set username = lower(username);
 ALTER TABLE ir_user.ir_user ADD COLUMN last_login_date TIMESTAMP WITH TIME ZONE;
 
 
+-- ---------------------------------------------
+-- Add flag to store / not store addresses to ignore
+-- set to true to maintain default functionality
+-- set column to not null
+-- ---------------------------------------------
+ALTER TABLE ir_statistics.ip_address_ignore ADD COLUMN store_counts BOOLEAN;
+UPDATE ir_statistics.ip_address_ignore set store_counts = true;
+ALTER TABLE ir_statistics.ip_address_ignore ALTER COLUMN store_counts SET NOT NULL;
+
+
+
 

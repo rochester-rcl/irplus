@@ -45,9 +45,9 @@ public class IgnoreIpAddress extends CommonPersistent {
 	/** TO Ip address part 4 */
 	private int toAddress4;
 	
-	/** determine if the ignore ip address should be stored in
-	 * the ignore table*/
-	private boolean store = false;
+	/** determine if the ignore ip address should be stored persistently
+	 *  if this is set to false the ip address should not be stored*/
+	private boolean storeCounts = false;
 
 
 	/**
@@ -59,11 +59,11 @@ public class IgnoreIpAddress extends CommonPersistent {
 	 * Constructor with ip address
 	 */
 	public IgnoreIpAddress(int fromAddress1, int fromAddress2, int fromAddress3, int fromAddress4, int toAddress4) {
-		this.fromAddress1 = fromAddress1;
-		this.fromAddress2 = fromAddress2;
-		this.fromAddress3 = fromAddress3;
-		this.fromAddress4 = fromAddress4;
-		this.toAddress4 = toAddress4;
+		setFromAddress1(fromAddress1);
+		setFromAddress2(fromAddress2);
+		setFromAddress3(fromAddress3);
+		setFromAddress4(fromAddress4);
+		setToAddress4(toAddress4);
 	}
 
 	public int getFromAddress1() {
@@ -106,16 +106,16 @@ public class IgnoreIpAddress extends CommonPersistent {
 		this.toAddress4 = toAddress4;
 	}
 	
-	public boolean isStore() {
-		return store;
+	public boolean isStoreCounts() {
+		return storeCounts;
 	}
 
-	public void setStore(boolean store) {
-		this.store = store;
+	public void setStoreCounts(boolean store) {
+		this.storeCounts = store;
 	}
 	
-	public boolean getStore(){
-		return store;
+	public boolean getStoreCounts(){
+		return storeCounts;
 	}
 
 
@@ -157,7 +157,7 @@ public class IgnoreIpAddress extends CommonPersistent {
 		sb.append(" toAddress4 = ");
 		sb.append(toAddress4);
 		sb.append(" store = ");
-		sb.append(store);
+		sb.append(storeCounts);
 		sb.append("]");
 		return sb.toString();
 	}

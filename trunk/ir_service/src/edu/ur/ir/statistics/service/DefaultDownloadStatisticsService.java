@@ -185,12 +185,21 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 */
 	public void processFileDownload(String ipAddress, IrFile irFile)
 	{
-		long count = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress);		
-		boolean isIgnoreAddress = (count > 0);
+		long ignoreKeepCount = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress, true);		
+		long ignoreDoNotKeepCount = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress, false);	
+		
+		boolean isIgnoreAddress = (ignoreKeepCount > 0) || (ignoreDoNotKeepCount > 0) ;
 		
 		if( isIgnoreAddress )
 		{
-			addIgnoreFileDownloadInfo(ipAddress, irFile);
+			if( ignoreDoNotKeepCount > 0 )
+			{
+			    // always check ignore and do not store first
+			}
+			else
+			{
+				addIgnoreFileDownloadInfo(ipAddress, irFile);
+			}
 		}
 		else
 		{
@@ -489,6 +498,12 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 
 	public List<IpDownloadCount> getIpOrderByDownloadCount(int rowStart,
 			int numberOfResultsToShow, OrderType sortType) {
+		return fileDownloadInfoDAO.getIpOrderByDownloadCount(rowStart, numberOfResultsToShow, sortType);
+	}
+
+
+	public List<IpDownloadCount> getIpIgnoreOrderByDownloadCounts(int start,
+			int maxResults, OrderType sortType) {
 		// TODO Auto-generated method stub
 		return null;
 	}

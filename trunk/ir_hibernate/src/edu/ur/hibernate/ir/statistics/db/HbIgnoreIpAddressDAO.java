@@ -159,7 +159,7 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
 	 * @param ipAddress
 	 * @return the count of times this address was found to be within a given ingore range
 	 */
-	public Long getIgnoreCountForIp(String ipAddress)
+	public Long getIgnoreCountForIp(String ipAddress, boolean storeCount)
 	{
         StringTokenizer token = new StringTokenizer(ipAddress, ".");
 		
@@ -168,7 +168,7 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
 		Integer ipAddressPart3 = Integer.parseInt(token.nextToken());
 		Integer ipAddressPart4 = Integer.parseInt(token.nextToken());
 		
-		return getIgnoreCountForIp(ipAddressPart1, ipAddressPart2, ipAddressPart3, ipAddressPart4);
+		return getIgnoreCountForIp(ipAddressPart1, ipAddressPart2, ipAddressPart3, ipAddressPart4, storeCount);
 	}
 	
 	/**
@@ -188,21 +188,17 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
 	public Long getIgnoreCountForIp(final Integer part1, 
 			final Integer part2,
 			final Integer part3, 
-			final Integer part4)
+			final Integer part4, 
+			final boolean storeCount)
 	{
-		Long count = (Long)hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-		        Query q = session.getNamedQuery("getIgnoreCountForIp");
-			    q.setParameter("part1", part1);
-			    q.setParameter("part2", part2);
-			    q.setParameter("part3", part3);
-			    q.setParameter("part4", part4);
-	            return q.uniqueResult();
-            }
-        });
-
-        return count;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getIgnoreCountForIp");
+		q.setParameter("part1", part1);
+		q.setParameter("part2", part2);
+		q.setParameter("part3", part3);
+		q.setParameter("part4", part4);
+		q.setParameter("storeCount", storeCount);
+	    return (Long)q.uniqueResult();
 	}
+
+
 }
