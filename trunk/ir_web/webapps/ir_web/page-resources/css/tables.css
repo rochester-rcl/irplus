@@ -132,12 +132,15 @@ table.baseTable {
 	border-collapse: collapse; 
 }
 
-/* this is for the file upload table */
-.uploadFile table
+/* upload buttons for the upload file table */
+.upload_buttons
 {
-	align: center;
-	padding: 10px;
-	
+    float: right;
+}
+
+.uploadFile
+{
+	float: right;
 }
 
 .uploadFile td, th

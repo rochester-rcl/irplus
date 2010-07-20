@@ -38,7 +38,7 @@ YAHOO.ur.file.upload =
         for(var i = 0; i < numToAdd; i++)
         {
             table = document.createElement('table');
-            table.className="formTable, uploadFile";
+            table.className="uploadFile";
             table.id = 'file_upload_table_' + id;
         
             rowCount = 0;
@@ -47,7 +47,7 @@ YAHOO.ur.file.upload =
 	        var fileInput = document.createElement('input');
 	        fileInput.type = 'file';
 	        fileInput.name = 'file';
-	        fileInput.size = '100';
+	        fileInput.size = '135';
 
             var tableRow1 = table.insertRow(rowCount);
             var tableCell1 = tableRow1.insertCell(0);
