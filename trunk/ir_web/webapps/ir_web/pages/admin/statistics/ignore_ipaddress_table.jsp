@@ -48,6 +48,7 @@
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+					 <urstb:td>Store Counts</urstb:td>
 					<urstb:td>From</urstb:td>
 					<urstb:td>To</urstb:td>
 					<urstb:td>Description</urstb:td>
@@ -71,6 +72,9 @@
 	                        </urstb:td>
 	                        <urstb:td>
 			                   <a href="javascript:YAHOO.ur.ignore.ipaddress.editIgnoreIpAddress(${ignoreIpAddress.id});">${ignoreIpAddress.name}</a>
+	                        </urstb:td>
+	                        <urstb:td>
+	                             ${ignoreIpAddress.storeCounts}
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${ignoreIpAddress.fromAddress1}.${ignoreIpAddress.fromAddress2}.${ignoreIpAddress.fromAddress3}.${ignoreIpAddress.fromAddress4}
