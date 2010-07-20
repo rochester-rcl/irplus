@@ -107,6 +107,7 @@
                                     &nbsp;<a href="${editCollection}">(Edit Collection)</a>
                                 </c:if>
                     </h3>
+                    <c:if test="${user != null && ir:userHasRole('ROLE_ADMIN', 'OR')}">
                     <c:url var="oaiIdentifiersSetUrl" value="/oai2.action">
 			            <c:param name="verb" value="ListIdentifiers"/>
 			            <c:param name="metadataPrefix" value="oai_dc"/>
@@ -118,6 +119,7 @@
 			            <c:param name="set" value="${institutionalCollection.id}"/>
 			       </c:url>
 			       <h3><a href="${oaiIdentifiersSetUrl}">List OAI Identifiers</a> / <a href="${oaiRecordsSetUrl}">List OAI Records</a></h3>
+                   </c:if>
                 </div>
                 <!--  create the first column -->
                 <div class="yui-g">
