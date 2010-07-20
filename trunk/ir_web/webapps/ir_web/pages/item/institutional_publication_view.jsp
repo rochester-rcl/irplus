@@ -252,8 +252,9 @@
 			     </c:url>
 				 <div class="errorMessage"> <h3>${message} 
 				     <c:if test="${user == null}">
-				         - (You can try <a href="${viewRestricted}">Logging In</a>) </h3>
+				         - (You can try <a href="${viewRestricted}">Logging In</a>) 
 				     </c:if>
+				     </h3>
 				 </div> 
 			</c:if>
 			
