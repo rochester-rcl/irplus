@@ -257,12 +257,14 @@
 				 </div> 
 			</c:if>
 			
+			<c:if test="${user != null && ir:userHasRole('ROLE_ADMIN', 'OR')}">
 			<c:url var="oaiDcUrl" value="/oai2.action">
 			    <c:param name="verb" value="GetRecord"/>
 			    <c:param name="identifier" value="oai:${oaiNamespaceIdentifier}:${institutionalItemVersion.id}"/>
 			    <c:param name="metadataPrefix" value="oai_dc"/>
 			</c:url>
 			<h3><a href="${oaiDcUrl}">Get OAI Dublin Core Record</a></h3>
+			</c:if>
 			  <!-- *************************  All versions Start *************************  -->
             <c:if test="${institutionalItem != null}">
               
