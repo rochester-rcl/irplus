@@ -202,19 +202,15 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 
 	public Long deleteIgnoreCounts() {
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deleteIgnoredFileDownloadInfoCounts");
-	    return new Long(q.executeUpdate());
+	    return Long.valueOf(q.executeUpdate());
 	}
 
-	public Long insertIntoIgnoreFileDownloadInfoCounts(List<Long> fileInfoIds) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertIntoIgnoreFileDownloadInfo");
-		q.setParameterList("ids", fileInfoIds);
-	    return new Long(q.executeUpdate());
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.statistics.FileDownloadInfoDAO#getGroupByIpAddressCount()
+	 */
+	public Long getGroupByIpAddressCount() {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getDownloadInfoIpSumCount");
+		return (Long)q.uniqueResult();
 	}
 
-	public Long delete(List<Long> ids) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deleteFromFileDownloadInfoByIds");
-		q.setParameterList("ids", ids);
-	    return new Long(q.executeUpdate());
-	}
-	
 }

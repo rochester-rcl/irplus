@@ -152,19 +152,9 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 
 	public Long deleteIgnoreCounts() {
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deleteNoStoreDownloadCounts");
-	    return new Long(q.executeUpdate());
+	    return Long.valueOf(q.executeUpdate());
 	}
 
-	public Long insertIntoFileDownloadInfoCounts(List<Long> ipIgnoreIds) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertIntoFileDownloadInfo");
-		q.setParameterList("ids", ipIgnoreIds);
-	    return new Long(q.executeUpdate());
-	}
 
-	public Long delete(List<Long> ids) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deleteFromIngoredIpIgnoreByIds");
-		q.setParameterList("ids", ids);
-	    return new Long(q.executeUpdate());
-	}
 
 }
