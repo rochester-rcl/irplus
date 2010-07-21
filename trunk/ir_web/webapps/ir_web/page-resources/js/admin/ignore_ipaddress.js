@@ -93,7 +93,7 @@ YAHOO.ur.ignore.ipaddress = {
 		document.getElementById('newIgnoreIpAddressForm_fromAddress4').value = "";
 		document.getElementById('newIgnoreIpAddressForm_toAddress4').value = "";
 		document.getElementById('newIgnoreIpAddressForm_id').value = "";
-		document.getElementById("newIgnoreIpAddressForm_storeCounts").checked = false;
+		document.getElementById("newIgnoreIpAddressForm_storeCounts").checked = true;
 		document.newIgnoreIpAddressForm.newIgnoreIpAddress.value = "true";
 	},
 	
@@ -397,6 +397,7 @@ YAHOO.ur.ignore.ipaddress = {
 	    YAHOO.ur.ignore.ipaddress.getIgnoreIpAddresses(0,1,1,'asc');
 	    YAHOO.ur.ignore.ipaddress.createNewIgnoreIpAddressDialog();
 	    YAHOO.ur.ignore.ipaddress.createDeleteIgnoreIpAddressDialog();
+	    document.getElementById("newIgnoreIpAddressForm_storeCounts").checked = true;
 	}
 	
 }	
