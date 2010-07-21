@@ -100,7 +100,8 @@
                                         <div class="bd">                    
                                             <ul>
                                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIgnoreIpAddresses.action" />"><span class="menu_text"><fmt:message key="menu.ignoreIpAddress"/></span></a></li>
-                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIdentifierTypeDublinCoreMappings.action" />"><span class="menu_text">Download Counts By IP Address</span></a></li>
+                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewDownloadCountsByIp.action" />"><span class="menu_text">Download Counts By IP Address</span></a></li>
+                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIgnoreDownloadCountsByIp.action" />"><span class="menu_text">Ignore Download Counts By IP Address</span></a></li>
                                             </ul>
                                         </div>
                                     </div>                    

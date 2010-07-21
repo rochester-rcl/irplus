@@ -76,6 +76,14 @@ CrudDAO<IpIgnoreFileDownloadInfo> {
 			int maxResults, OrderType orderType);
 	
 	/**
+	 * Get a count of the number of results that would be produced
+	 * by grouping the IgnoreDownloadInfos by ip address.
+	 * 
+	 * @return number of results by grouping ignore download infos by ip address
+	 */
+	public Long getGroupByIgnoreIpAddressCount();
+	
+	/**
 	 * Delete the counts from the ingore table that should not be stored 
 	 * 
 	 * @return - number of records deleted

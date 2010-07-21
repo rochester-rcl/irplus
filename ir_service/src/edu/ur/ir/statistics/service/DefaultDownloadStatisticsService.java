@@ -528,4 +528,19 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 		return fileDownloadInfoDAO.getGroupByIpAddressCount();
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getGroupByIgnoreIpAddressCount()
+	 */
+	public Long getGroupByIgnoreIpAddressCount() {
+		return ipIgnoreFileDownloadInfoDAO.getGroupByIgnoreIpAddressCount();
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getIgnoreIpOrderByDownloadCount(int, int, edu.ur.order.OrderType)
+	 */
+	public List<IpDownloadCount> getIgnoreIpOrderByDownloadCount(int start,
+			int maxResults, OrderType orderType) {
+		return ipIgnoreFileDownloadInfoDAO.getIpIgnoreOrderByDownloadCounts(start, maxResults, orderType);
+	}
+
 }
