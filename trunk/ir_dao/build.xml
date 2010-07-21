@@ -47,6 +47,7 @@
 	    <echo message="project.version = ${project.version}"/>
 	    <echo message="dist.dir = ${dist.dir}"/>
 	    <echo message="report.dir = ${report.dir}"/>
+    	<echo message="ivy.dir = ${ivy.dir}"/>
     </target>
 
 
@@ -66,7 +67,7 @@
 	</target>
 
 	<!-- compile the java source files -->
-    <target name="build" depends="retrieve, copy-resources" xmlns:ext="http://edu.ur/d1/ext">
+    <target name="build" depends="clean, retrieve, copy-resources" xmlns:ext="http://edu.ur/d1/ext">
         <mkdir dir="${build.dir}/classes"/>
         <ext:javac srcdir="${src.dir}"
 			 destdir="${build.dir}/classes"
