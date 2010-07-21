@@ -208,6 +208,11 @@
             <result name="get">/pages/admin/statistics/ignore_ipaddress_form.jsp</result>
         </action>   
         
+        <action name="viewDownloadCountsByIp"
+                class="edu.ur.ir.web.action.statistics.admin.ViewDownloadCountsByIp">
+                <result name="success">/pages/admin/statistics/ip_download_counts/ip_download_counts.jsp</result>
+        </action>
+        
         
         <!--  ************************************ -->
         <!--  Repository License Actions           -->

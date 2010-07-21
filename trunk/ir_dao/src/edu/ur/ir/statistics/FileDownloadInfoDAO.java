@@ -84,6 +84,13 @@ CrudDAO<FileDownloadInfo> {
 	public List<IpDownloadCount> getIpOrderByDownloadCount(int rowStart, 
     		int numberOfResultsToShow, OrderType sortType);
 	
+	/**
+	 * Get a count of the number of results that would be produced
+	 * by grouping the DownloadInfos by ip address.
+	 * 
+	 * @return number of results by grouping download infos by ip address
+	 */
+	public Long getGroupByIpAddressCount();
 
 	/**
 	 * Delete the counts that should not be stored
@@ -92,19 +99,4 @@ CrudDAO<FileDownloadInfo> {
 	 */
 	public Long deleteIgnoreCounts();
 	
-	/**
-	 * Insert the file infos into ignore file donwload infos
-	 * 
-	 * @param fileInfoIds - ids to be moved
-	 * @return number of records moved
-	 */
-	public Long insertIntoIgnoreFileDownloadInfoCounts(List<Long> fileInfoIds);
-	
-	/**
-	 * Delete the file download infos with the specified set of ids.
-	 * 
-	 * @param ids - list of ids to delete
-	 * @return - the number of file download info objects deleted
-	 */
-	public Long delete(List<Long> ids);
 }

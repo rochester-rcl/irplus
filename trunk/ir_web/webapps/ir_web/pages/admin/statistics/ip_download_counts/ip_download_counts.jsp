@@ -21,6 +21,7 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
 <!--  document type -->
 <c:import url="/inc/doctype-frag.jsp"/>
@@ -57,12 +58,78 @@
     <!--  yahoo doc 2 template creates a page 950 pixles wide -->
     <div id="doc2">
       
-        <!--  this is the header of the page -->
-        <c:import url="/inc/header.jsp"/>
-      
-        <h3>Downloads by IP Address</h3>
-  
+ 
         <div id="bd">
+            <!--  this is the header of the page -->
+            <c:import url="/inc/header.jsp"/>
+      
+            <h3>Downloads by IP Address</h3>
+            
+            <c:if test="${totalHits > 0}">
+                <c:import url="ip_download_counts_pager.jsp"/>
+            </c:if>
+            
+ 			<div class="dataTable">
+							                 
+			    <urstb:table width="100%">
+				    <urstb:thead>
+					    <urstb:tr>
+					        <urstb:td>IP Address</urstb:td>
+					        
+					        <c:url var="sortAscendingUrl" value="/admin/viewDownloadCountsByIp.action">
+							    <c:param name="rowStart" value="${rowStart}"/>
+								<c:param name="startPageNumber" value="${startPageNumber}"/>
+								<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+								<c:param name="sortElement" value="name"/>		
+								<c:param name="sortType" value="asc"/>
+							</c:url>
+					                     
+					        <c:url var="sortDescendingUrl" value="/admin/viewDownloadCountsByIp.action">
+							    <c:param name="rowStart" value="${rowStart}"/>
+								<c:param name="startPageNumber" value="${startPageNumber}"/>
+								<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+								<c:param name="sortElement" value="name"/>		
+								<c:param name="sortType" value="desc"/>
+							</c:url>
+					                    
+					        <urstb:tdHeadSort  height="33"
+					            useHref="true"
+					            hrefVar="href"
+                                currentSortAction="${sortType}"
+                                ascendingSortAction="${sortAscendingUrl}"
+                                descendingSortAction="${sortDescendingUrl}">
+                                <a href="${href}">Download Count</a>                                              
+                                            <urstb:thImgSort
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+					                   
+						</urstb:tr>
+			        </urstb:thead>
+					<urstb:tbody var="downloadCount" 
+						         oddRowClass="odd"
+						         evenRowClass="even"
+						         currentRowClassVar="rowClass"
+						         collection="${downloadCounts}">
+				        <urstb:tr cssClass="${rowClass}"
+						          onMouseOver="this.className='highlight'"
+						          onMouseOut="this.className='${rowClass}'">
+						                        
+						          
+						    <urstb:td>
+						     ${downloadCount.ipAddress}                      
+						    </urstb:td>
+						                        
+						    <urstb:td>
+						     ${downloadCount.downloadCount}
+						    </urstb:td>
+						</urstb:tr>
+			        </urstb:tbody>
+				</urstb:table>
+			</div>	           
+  
+            <c:if test="${totalHits > 0}">
+                <c:import url="ip_download_counts_pager.jsp"/>
+            </c:if>
 	    </div>
         <!--  end body div -->
       

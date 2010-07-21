@@ -19,7 +19,6 @@ package edu.ur.hibernate.ir.statistics.db;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
@@ -34,7 +33,6 @@ import edu.ur.ir.statistics.FileDownloadInfo;
 import edu.ur.ir.statistics.FileDownloadInfoDAO;
 import edu.ur.ir.statistics.IgnoreIpAddress;
 import edu.ur.ir.statistics.IgnoreIpAddressDAO;
-import edu.ur.ir.statistics.IpIgnoreFileDownloadInfo;
 import edu.ur.ir.statistics.IpIgnoreFileDownloadInfoDAO;
 
 
@@ -184,65 +182,6 @@ public class FileDownloadInfoDAOTest {
 	 	 ts = tm.getTransaction(td);
 	     ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip1.getId(), false));
 	     fileDownloadInfoDAO.makeTransient(fileDownloadInfoDAO.getById(downloadInfo1.getId(), false));
-		 tm.commit(ts);
-	}
-
-	
-	/**
-	 * Test moving ignored downloads from the file download info table to the IpIngoredFileDownloadInfoTable.
-	 * 
-	 * @throws ParseException 
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void moveToIngoredTest() throws ParseException
-	{
-		 TransactionStatus ts = tm.getTransaction(td);
-
-		 
-		 IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,9, 10);
-		 ip1.setStoreCounts(true);
-	     ignoreIpAddressDAO.makePersistent(ip1);
-
-	     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
-		 Date d = simpleDateFormat.parse("1/1/2008");
-		    
-	     FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.0.0.1", 1l,d);
-	     downloadInfo1.setDownloadCount(1);
-	        
-	     FileDownloadInfo downloadInfo2 = new FileDownloadInfo("123.0.0.10", 1l,d);
-	     downloadInfo2.setDownloadCount(2);
-	        
-	        
-	     fileDownloadInfoDAO.makePersistent(downloadInfo1);
-	     fileDownloadInfoDAO.makePersistent(downloadInfo2);
-	     tm.commit(ts);
-
-	 	 // check to make sure the ip address counts are correct
-	 	 ts = tm.getTransaction(td);
-	 	 
-	 	 List<Long> ids = new LinkedList<Long>();
-	 	 ids.add(downloadInfo2.getId());
-	 	 Long numMoved = fileDownloadInfoDAO.insertIntoIgnoreFileDownloadInfoCounts(ids);
-	 	 assert numMoved == 1l : "Should have moved one record but moved " + numMoved;
-	 	 
-	 	 // delete the infos deleted
-	 	 Long numDeleted = fileDownloadInfoDAO.delete(ids);
-	 	 assert numDeleted == 1l : "Should have deleted one record but deleted " + numDeleted;
-	 	
-	 	 List<IpIgnoreFileDownloadInfo> ignoreInfos = ipIgnorefileDownloadInfoDAO.getAll();
-	 	 
-	 	 assert ignoreInfos.size() == 1: "Should be able to find one download info";
-	 	 IpIgnoreFileDownloadInfo ignoreInfo = ignoreInfos.get(0);
-	 	 assert ignoreInfo.getIpAddress().equals(downloadInfo2.getIpAddress()) : "ignore Address " + 
-	 	 ignoreInfo.getIpAddress() + " should equal old download address " + downloadInfo2.getIpAddress();
-	 	 tm.commit(ts);
-	     
-	 	 
-	 	 ts = tm.getTransaction(td);
-	     ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip1.getId(), false));
-	     fileDownloadInfoDAO.makeTransient(fileDownloadInfoDAO.getById(downloadInfo1.getId(), false));
-	     ipIgnorefileDownloadInfoDAO.makeTransient(ipIgnorefileDownloadInfoDAO.getById(ignoreInfo.getId(), false));
 		 tm.commit(ts);
 	}
 	
