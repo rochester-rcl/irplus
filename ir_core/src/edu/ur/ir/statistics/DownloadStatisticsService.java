@@ -263,4 +263,27 @@ public interface DownloadStatisticsService extends Serializable{
 	 */
 	public List<IpDownloadCount> getIpOrderByDownloadCount(int rowStart, 
     		int numberOfResultsToShow, OrderType sortType);
+	
+	/**
+	 * Get the count of results for groping file download infos by ip address.
+	 * 
+	 * @return the number of results found
+	 */
+	public Long getGroupByIpAddressCount();
+	
+	/**
+	 * Delete the counts that should not be stored because they should be ignored 
+	 * and not stored from the file download info table.
+	 * 
+	 * @return number of records deleted
+	 */
+	public Long deleteNoStoreFileDownloadInfoCounts();
+	
+	/**
+	 * Delete the counts that should not be stored because they should be ignored 
+	 * and not stored from the ignore table.
+	 * 
+	 * @return number of records deleted
+	 */
+	public Long deleteNoStoreIgnoreDownloadInfoCounts();
 }

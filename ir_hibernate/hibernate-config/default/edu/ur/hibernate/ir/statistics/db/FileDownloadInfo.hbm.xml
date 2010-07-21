@@ -104,20 +104,6 @@
 	             fileDownloadInfo.downloadDate desc
 	</query>
 	
-	<!-- named query to move file downloads that should be ingored but kept into the ignore table (storeCounts = true) -->
-	<query name="insertIntoIgnoreFileDownloadInfo">
-	    insert into IpIgnoreFileDownloadInfo(ipAddress, ipAddressPart1, ipAddressPart2, ipAddressPart3, ipAddressPart4, irFileId, downloadCount, downloadDate)
-	    select fileDownloadInfo.ipAddress, fileDownloadInfo.ipAddressPart1, 
-	       fileDownloadInfo.ipAddressPart2, fileDownloadInfo.ipAddressPart3, fileDownloadInfo.ipAddressPart4, fileDownloadInfo.irFileId,
-	       fileDownloadInfo.downloadCount, fileDownloadInfo.downloadDate
-	       from FileDownloadInfo as fileDownloadInfo 
-		   where fileDownloadInfo.id in(:ids)
-	</query>
-	
-	<query name="deleteFromFileDownloadInfoByIds">
-	     delete from FileDownloadInfo fileDownloadInfo 
-		 where fileDownloadInfo.id in(:ids)
-	</query>
 	
 	<!--  named query to delete download counts that should not be kept (store counts = false) -->
 	<query name="deleteIgnoredFileDownloadInfoCounts">
@@ -146,6 +132,12 @@
 		from FileDownloadInfo fileDownloadInfo 
 		group by fileDownloadInfo.ipAddress
 		order by sum(fileDownloadInfo.downloadCount) asc
+	</query>
+	
+     <!-- named query for getting a count of the number of results that would be produced for the grouping by filedownload ip address -->
+	<query name="getDownloadInfoIpSumCount">
+		select count(distinct fileDownloadInfo.ipAddress ) 
+		from FileDownloadInfo fileDownloadInfo 
 	</query>
 	
 	<!-- named query for getting a count of all the downloads in the repository -->

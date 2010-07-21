@@ -117,21 +117,6 @@
 		order by sum(ipIgnoreFileDownloadInfo.downloadCount) desc
 	</query>
 	
-    <!-- named query to move ignored file downloads into the file download table (ok counts) -->
-	<query name="insertIntoFileDownloadInfo">
-	    insert into FileDownloadInfo(ipAddress, ipAddressPart1, ipAddressPart2, ipAddressPart3, ipAddressPart4, irFileId, downloadCount, downloadDate)
-	    select ipIgnoreFileDownloadInfo.ipAddress, ipIgnoreFileDownloadInfo.ipAddressPart1, 
-	       ipIgnoreFileDownloadInfo.ipAddressPart2, ipIgnoreFileDownloadInfo.ipAddressPart3, ipIgnoreFileDownloadInfo.ipAddressPart4, ipIgnoreFileDownloadInfo.irFileId,
-	       ipIgnoreFileDownloadInfo.downloadCount, ipIgnoreFileDownloadInfo.downloadDate
-	       from IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo 
-		   where ipIgnoreFileDownloadInfo.id in (:ids)
-	</query>
-	
-	<!-- named query to move ignored file downloads into the file download table (ok counts) -->
-	<query name="deleteFromIngoredIpIgnoreByIds">
-	    delete from IpIgnoreFileDownloadInfo ipIgnoreFileDownloadInfo 
-		where ipIgnoreFileDownloadInfo.id in (:ids)
-	</query>
 	
 	<!--  named query to delete download counts that should not be kept (store counts = false) -->
 	<query name="deleteNoStoreDownloadCounts">

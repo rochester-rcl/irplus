@@ -82,20 +82,4 @@ CrudDAO<IpIgnoreFileDownloadInfo> {
 	 */
 	public Long deleteIgnoreCounts();
 	
-	/**
-	 * Move the  counts that should be included back to the file download infos
-	 * 
-	 * @param list of ids of ipIgnoreFileDownload infos to be moved
-	 * @return number of records moved
-	 */
-	public Long insertIntoFileDownloadInfoCounts(List<Long> ipIgnoreIds);
-	
-	/**
-	 * Delete the ingored download infos with the specified set of ids.
-	 * 
-	 * @param ids - list of ids to delete
-	 * @return - the number of ignored download info objects deleted
-	 */
-	public Long delete(List<Long> ids);
-
 }

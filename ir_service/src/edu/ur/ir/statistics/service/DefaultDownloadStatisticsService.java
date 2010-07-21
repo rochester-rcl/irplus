@@ -503,9 +503,29 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 
 
 	public List<IpDownloadCount> getIpIgnoreOrderByDownloadCounts(int start,
-			int maxResults, OrderType sortType) {
-		// TODO Auto-generated method stub
-		return null;
+			int maxResults, OrderType orderType) {
+		return ipIgnoreFileDownloadInfoDAO.getIpIgnoreOrderByDownloadCounts(start, maxResults, orderType);
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#deleteNoStoreFileDownloadInfoCounts()
+	 */
+	public Long deleteNoStoreFileDownloadInfoCounts() {
+		return fileDownloadInfoDAO.deleteIgnoreCounts();
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#deleteNoStoreIgnoreDownloadInfoCounts()
+	 */
+	public Long deleteNoStoreIgnoreDownloadInfoCounts() {
+		return ipIgnoreFileDownloadInfoDAO.deleteIgnoreCounts();
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.statistics.DownloadStatisticsService#getGroupByIpAddressCount()
+	 */
+	public Long getGroupByIpAddressCount() {
+		return fileDownloadInfoDAO.getGroupByIpAddressCount();
 	}
 
 }

@@ -97,9 +97,16 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		    throw new JobExecutionException("Unable to retrieve target bean that is to be used as a job source", e1);
 		}
 		
+		// delete counts that should not be kept
+		deleteAllCountsToIgnoreNoStore(errorEmailService, tm, td, downloadStatisticsService);
 		
+		// remove the counts that should be kept but stored in the ignore table
 		removeIgnoreCountsFromDownloadInfo(errorEmailService, tm, td, downloadStatisticsService, batchSize);
+		
+		// move any counts that were in-correctly set as ignore but have now been established as ok
 		removeOkCountsFromIgnoreDownloadInfo(errorEmailService, tm, td, downloadStatisticsService, batchSize);
+		
+		// roll up the counts
 		updateAllRepositoryCounts(errorEmailService, tm, td, downloadStatisticsService);
 		
 		TransactionStatus ts = null;
@@ -146,6 +153,8 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 	}
 	
 	/**
+	 * This will move the counts that should be ignored if they should be kept. 
+	 * 
 	 * @param errorEmailService
 	 * @param tm
 	 * @param td
@@ -313,6 +322,48 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			log.error("Problem preparing records for processing", e);
 			errorEmailService.sendError(e);
 			throw new JobExecutionException("Problem preparing records for processing");
+		}
+		finally
+		{
+			if( ts != null )
+			{
+				if( tm != null )
+				{
+				    tm.commit(ts);
+				}
+			}
+		}
+
+	}
+	
+	/**
+	 * Delete all counts that should be ignored and not kept - this includes from the file info and
+	 * the ignore table.
+	 * 
+	 * @param errorEmailService
+	 * @param tm
+	 * @param td
+	 * @param downloadStatisticsService
+	 * @throws JobExecutionException
+	 */
+	private void deleteAllCountsToIgnoreNoStore(ErrorEmailService errorEmailService,
+			PlatformTransactionManager tm,
+			TransactionDefinition td,
+			DownloadStatisticsService downloadStatisticsService) throws JobExecutionException
+	{
+		TransactionStatus ts = null;
+		try
+		{
+			ts = tm.getTransaction(td);
+			Long fileInfoDeleteCount = downloadStatisticsService.deleteNoStoreFileDownloadInfoCounts();
+			Long ignoreInfoDeleteCount = downloadStatisticsService.deleteNoStoreIgnoreDownloadInfoCounts();
+			log.debug("deleted from file info " + fileInfoDeleteCount + " deleted from ignore info " + ignoreInfoDeleteCount);
+		}
+		catch(Exception e)
+		{
+			log.error("Problem deleting ignore records", e);
+			errorEmailService.sendError(e);
+			throw new JobExecutionException("Problem deleting ignore counts");
 		}
 		finally
 		{
