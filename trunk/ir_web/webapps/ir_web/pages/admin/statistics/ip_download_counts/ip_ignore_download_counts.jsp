@@ -58,15 +58,16 @@
 
     <!--  yahoo doc 2 template creates a page 950 pixles wide -->
     <div id="doc2">
-       
-       <!--  this is the header of the page -->
-       <c:import url="/inc/header.jsp"/>    
-       <h3>Downloads by IP Address</h3>
       
+        <!--  this is the header of the page -->
+        <c:import url="/inc/header.jsp"/>
+        <h3>Ignored Downloads by IP Address</h3>
+         
         <div id="bd">
+           
             
             <c:if test="${totalHits > 0}">
-                <c:import url="ip_download_counts_pager.jsp"/>
+                <c:import url="ip_ignore_download_counts_pager.jsp"/>
             </c:if>
             
  			<div class="dataTable">
@@ -76,7 +77,7 @@
 					    <urstb:tr>
 					        <urstb:td>IP Address</urstb:td>
 					        
-					        <c:url var="sortAscendingUrl" value="/admin/viewDownloadCountsByIp.action">
+					        <c:url var="sortAscendingUrl" value="/admin/viewIgnoreDownloadCountsByIp.action">
 							    <c:param name="rowStart" value="${rowStart}"/>
 								<c:param name="startPageNumber" value="${startPageNumber}"/>
 								<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
@@ -84,7 +85,7 @@
 								<c:param name="sortType" value="asc"/>
 							</c:url>
 					                     
-					        <c:url var="sortDescendingUrl" value="/admin/viewDownloadCountsByIp.action">
+					        <c:url var="sortDescendingUrl" value="/admin/viewIgnoreDownloadCountsByIp.action">
 							    <c:param name="rowStart" value="${rowStart}"/>
 								<c:param name="startPageNumber" value="${startPageNumber}"/>
 								<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
@@ -128,7 +129,7 @@
 			</div>	           
   
             <c:if test="${totalHits > 0}">
-                <c:import url="ip_download_counts_pager.jsp"/>
+                <c:import url="ip_ignore_download_counts_pager.jsp"/>
             </c:if>
 	    </div>
         <!--  end body div -->

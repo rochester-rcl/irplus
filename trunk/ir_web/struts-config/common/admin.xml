@@ -213,6 +213,11 @@
                 <result name="success">/pages/admin/statistics/ip_download_counts/ip_download_counts.jsp</result>
         </action>
         
+         <action name="viewIgnoreDownloadCountsByIp"
+                class="edu.ur.ir.web.action.statistics.admin.ViewIgnoreDownloadCountsByIp">
+                <result name="success">/pages/admin/statistics/ip_download_counts/ip_ignore_download_counts.jsp</result>
+        </action>
+        
         
         <!--  ************************************ -->
         <!--  Repository License Actions           -->

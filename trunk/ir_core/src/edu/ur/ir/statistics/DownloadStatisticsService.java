@@ -272,6 +272,25 @@ public interface DownloadStatisticsService extends Serializable{
 	public Long getGroupByIpAddressCount();
 	
 	/**
+	 * Get the list of ignored ipaddress summed by download ordered by download count (asc/desc) 
+	 * 
+	 * @param rowStart - start position in paged set
+	 * @param numberOfResultsToShow - end position in paged set
+	 * @param sortType - Order by (asc/desc)
+	 * 
+	 * @return List of ignored ip download counts for the specified information.
+	 */
+	public List<IpDownloadCount> getIgnoreIpOrderByDownloadCount(int rowStart, 
+    		int numberOfResultsToShow, OrderType sortType);
+	
+	/**
+	 * Get the count of results for groping file ignored download infos by ip address.
+	 * 
+	 * @return the number of results found
+	 */
+	public Long getGroupByIgnoreIpAddressCount();
+	
+	/**
 	 * Delete the counts that should not be stored because they should be ignored 
 	 * and not stored from the file download info table.
 	 * 

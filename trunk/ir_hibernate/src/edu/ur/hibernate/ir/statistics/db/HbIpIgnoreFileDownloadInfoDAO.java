@@ -135,13 +135,13 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getDownloadInfoIngoreCountSumDesc");
+							"getDownloadInfoIgnoreCountSumDesc");
 		} else {
 			q = hbCrudDAO
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getDownloadInfoIngoreCountSumAsc");
+							"getDownloadInfoIgnoreCountSumAsc");
 		}
 
 		q.setFirstResult(start);
@@ -153,6 +153,14 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 	public Long deleteIgnoreCounts() {
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deleteNoStoreDownloadCounts");
 	    return Long.valueOf(q.executeUpdate());
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.ur.ir.statistics.IpIgnoreFileDownloadInfoDAO#getGroupByIgnoreIpAddressCount()
+	 */
+	public Long getGroupByIgnoreIpAddressCount() {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getIgnoreDownloadInfoIpSumCount");
+		return (Long)q.uniqueResult();
 	}
 
 
