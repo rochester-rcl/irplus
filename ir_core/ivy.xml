@@ -69,16 +69,16 @@
         </dependency>
         
         <!-- pdf box jars  -->     
-         <dependency org="org.apache.pdfbox" name="pdfbox" rev="1.1.0" transitive="false">
+         <dependency org="org.apache.pdfbox" name="pdfbox" rev="1.2.1" transitive="false">
 	        <artifact name="pdfbox" type="jar"/> 
         </dependency>
         
-         <dependency org="org.apache.pdfbox" name="fontbox" rev="1.1.0" transitive="false">
+         <dependency org="org.apache.pdfbox" name="fontbox" rev="1.2.1" transitive="false">
 	        <artifact name="fontbox" type="jar"/> 
         </dependency>
         
-        <dependency org="org.apache.pdfbox" name="jempbox" rev="1.1.0" transitive="false">
-	        <artifact name="jempbox" type="jar" url="http://repo1.maven.org/maven2/org/apache/pdfbox/jempbox/1.1.0/jempbox-1.1.0.jar"/> 
+        <dependency org="org.apache.pdfbox" name="jempbox" rev="1.2.1" transitive="false">
+	        <artifact name="jempbox" type="jar" url="http://repo1.maven.org/maven2/org/apache/pdfbox/jempbox/1.2.1/jempbox-1.2.1.jar"/> 
         </dependency>
         
           
