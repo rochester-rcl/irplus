@@ -56,8 +56,8 @@
 	            <td align="left" class="input">
 	                <input type="checkbox"  id="newIgnoreIpAddressForm_storeCounts" name="storeCounts" value="true" 
 	                <c:if test="${ignoreIpAddress.storeCounts == true}"> 
-	              	checked = "true"
-	              </c:if> 
+	              	    checked = "true"
+	                </c:if> 
 	                />
 	            </td>
 			</tr>
