@@ -108,7 +108,9 @@
                <button type="button" class="ur_button" 
 	              onmouseover="this.className='ur_buttonover';"
  		          onmouseout="this.className='ur_button';"
- 		          onclick="javascript:YAHOO.ur.file.upload.addFileSets(1, false)">Add Another</button>
+ 		          onclick="javascript:YAHOO.ur.file.upload.addUserEnteredCount()">Add </button>
+ 		          
+ 		          <input type="text" id="numFilesToAdd" size="2"/> <strong>More</strong>
  		       </div> 
  		        
                <br/>

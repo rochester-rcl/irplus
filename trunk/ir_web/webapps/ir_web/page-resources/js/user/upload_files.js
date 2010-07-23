@@ -24,6 +24,21 @@ YAHOO.namespace("ur.file.upload");
 
 YAHOO.ur.file.upload = 
 {
+		
+    addUserEnteredCount : function()
+    {
+	    var num = parseInt(document.getElementById("numFilesToAdd").value);
+	   
+	    if( !isNaN(num) && num > 0)
+	    {
+	    	 YAHOO.ur.file.upload.addFileSets(num, false);
+	    }
+	    else
+	    {
+	    	alert("You must enter a number greater than 0 ");
+	    }
+    },
+
     /**
      * Add a file set for files to be uploaded
      */
@@ -69,8 +84,8 @@ YAHOO.ur.file.upload =
 	        tableCell5 = tableRow3.insertCell(0);
 
 	        var descriptionInput = document.createElement('textarea');
-	        descriptionInput.rows = 1;
-	        descriptionInput.cols = 50;
+	        descriptionInput.rows = 2;
+	        descriptionInput.cols = 130;
 	        descriptionInput.name = 'userFileDescription';
 	        tableCell2.colSpan='2';
 	        
@@ -156,6 +171,7 @@ YAHOO.ur.file.upload =
         // submit the form once the page is loaded
         // create the first file set once the page is 
         // loaded.
+	    document.getElementById("numFilesToAdd").value = 1;
         YAHOO.ur.file.upload.addFileSets(1, true);
         YAHOO.ur.file.upload.createWaitDialog();
     }
