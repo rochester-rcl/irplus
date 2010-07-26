@@ -119,19 +119,9 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 	 * 
 	 * @return
 	 */
-	public String exectue()
+	public String execute()
 	{
-		return SUCCESS;
-	}
-	
-	/**
-	 * Get the table of personal collections and items.
-	 * 
-	 * @return
-	 */
-	public String getTable()
-	{
-		log.debug("getTableCalled");
+		log.debug("execute called");
 		createCollectionFileSystem();
 		return SUCCESS;
 	}
@@ -172,6 +162,7 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 	 */
 	private void createCollectionFileSystem()
 	{
+		log.debug("create collection file system called");
 		
 		// don't hit the database unless we need to
 		if(parentCollectionId != null && parentCollectionId > 0)
