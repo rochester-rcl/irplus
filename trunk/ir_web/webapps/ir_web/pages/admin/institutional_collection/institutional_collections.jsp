@@ -83,14 +83,7 @@
             
                 <h3>Institutional Collection Administration</h3>
             
-              <div id="newInstitutionalCollections">
-    	          <form id="institutionalCollections" name="institutionalCollections">
-	              <input type="hidden" 
-	                  id="institutionalCollections_parentCollectionId" 
-	                  name="parentCollectionId" 
-	                 value="${parentCollectionId}"/>
-	              </form>
-	          </div>
+                <c:import url="institutional_collections_table.jsp"/>
     
            
             </div>

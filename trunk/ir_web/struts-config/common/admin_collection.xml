@@ -57,17 +57,16 @@
         </action>
         
         <action name="getInstitutionalCollections"
-            method="getTable"
             class="edu.ur.ir.web.action.institution.ManageInstitutionalCollections">
             <interceptor-ref name="editStack"/>
-            <result name="success">/pages/admin/institutional_collection/institutional_collections_table.jsp</result>
+            <result name="success">/pages/admin/institutional_collection/institutional_collections.jsp</result>
         </action>
 
         <action name="deleteInstitutionalCollections"
             method="deleteCollectionSystemObjects"
             class="edu.ur.ir.web.action.institution.ManageInstitutionalCollections">
             <interceptor-ref name="editStack"/>
-            <result name="success">/pages/admin/institutional_collection/institutional_collections_table.jsp</result>
+            <result name="success">/pages/admin/institutional_collection/institutional_collections.jsp</result>
         </action>
         
         <!--  ****************************************** -->

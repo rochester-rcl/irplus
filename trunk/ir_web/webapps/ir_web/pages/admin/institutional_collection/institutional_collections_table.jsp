@@ -75,11 +75,19 @@
 </c:if>
 
 <div class="dataTable">
-	<ur:basicForm method="POST" id="institutionalCollections" name="institutionalCollections" >
+	<form method="POST" id="institutionalCollections" name="institutionalCollections" >
 	   
-	   /<ur:a href="admin/viewInstitutionalCollections.action">${repository.name}</ur:a>/
+	   
+	   /<a href="<c:url value="/admin/viewInstitutionalCollections.action"/>">${repository.name}</a>/
            <c:forEach var="collection" items="${collectionPath}">
-               <ur:a href="javascript:YAHOO.ur.institution.getCollectionById('${collection.id}', 0, 1,1, 'asc')">${collection.name}</ur:a>/
+              <c:url var="browseUrl" value="/admin/getInstitutionalCollections.action">
+		           <c:param name="rowStart" value="0"/>
+			       <c:param name="startPageNumber" value="1"/>
+			       <c:param name="currentPageNumber" value="1"/>
+			       <c:param name="sortType" value="asc"/>
+			       <c:param name="parentCollectionId" value="${collection.id}"/>		
+		       </c:url>
+               <a href="${browseUrl}">${collection.name}</a>/
            </c:forEach>
 	    
            <input type="hidden" id="institutionalCollections_parentCollectionId" 
@@ -94,15 +102,33 @@
 	    <urstb:table width="100%">
 	        <urstb:thead>
 	            <urstb:tr>
-					<urstb:td><ur:checkbox name="checkAllSetting" 
+					<urstb:td><input type="checkbox" name="checkAllSetting" 
 								value="off" onClick="YAHOO.ur.institution.setCheckboxes();"/></urstb:td>         
 	                <urstb:td>Id</urstb:td>
              
+                    <c:url var="browseAscUrl" value="/admin/getInstitutionalCollections.action">
+		                <c:param name="rowStart" value="${rowStart}"/>
+			            <c:param name="startPageNumber" value="${startPageNumber}"/>
+			            <c:param name="currentPageNumber" value="${currentPageNumber}"/>
+			            <c:param name="sortType" value="asc"/>
+			            <c:param name="parentCollectionId" value="${parentCollectionId}"/>		
+		            </c:url>
+		            
+		            <c:url var="browseDescUrl" value="/admin/getInstitutionalCollections.action">
+		                <c:param name="rowStart" value="${rowStart}"/>
+			            <c:param name="startPageNumber" value="${startPageNumber}"/>
+			            <c:param name="currentPageNumber" value="${currentPageNumber}"/>
+			            <c:param name="sortType" value="desc"/>
+			            <c:param name="parentCollectionId" value="${parentCollectionId}"/>		
+		            </c:url>
+             
 	                <urstb:tdHeadSort  height="33"
+	                    useHref="true"
+					    hrefVar="href"
 	                    currentSortAction="${sortType}"
-	                    ascendingSortAction="javascript:YAHOO.ur.institution.getCollectionById('${parentCollectionId}', ${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'asc');"
-	                    descendingSortAction="javascript:YAHOO.ur.institution.getCollectionById('${parentCollectionId}', ${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'desc');">
-	                    <u>Name</u>                                              
+	                    ascendingSortAction="${browseAscUrl}"
+	                    descendingSortAction="${browseDescUrl}">
+	                    <a href="${href}"><u>Name</u></a>                                              
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
@@ -122,14 +148,21 @@
 	                        onMouseOut="this.className='${rowClass}'">
 	                        <urstb:td>
 				                <ir:acl hasPermission="ADMINISTRATION" domainObject="${institutionalCollection}">
-					                <ur:checkbox name="collectionIds" value="${institutionalCollection.id}"/>
+					                <input type="checkbox" name="collectionIds" value="${institutionalCollection.id}"/>
 				                 </ir:acl>
 	                        </urstb:td>
 	                        <urstb:td>
 		                        ${institutionalCollection.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.institution.getCollectionById('${institutionalCollection.id}', 0, 1, 1, '${sortType}')">${institutionalCollection.name}</a>
+	                           <c:url var="browseChildUrl" value="/admin/getInstitutionalCollections.action">
+		                           <c:param name="rowStart" value="0"/>
+			                       <c:param name="startPageNumber" value="1"/>
+			                       <c:param name="currentPageNumber" value="1"/>
+			                       <c:param name="sortType" value="${sortType}"/>
+			                       <c:param name="parentCollectionId" value="${institutionalCollection.id}"/>		
+		                       </c:url>
+			                   <a href="${browseChildUrl}">${institutionalCollection.name}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 		                   		${institutionalCollection.path}
@@ -145,7 +178,7 @@
 	                    </urstb:tr>
 	            </urstb:tbody>
 	        </urstb:table>
-		</ur:basicForm>
+		</form>
 </div>	
 
 <c:if test="${totalHits > 0}">

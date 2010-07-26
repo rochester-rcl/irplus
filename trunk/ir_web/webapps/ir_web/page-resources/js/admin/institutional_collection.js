@@ -60,47 +60,6 @@ YAHOO.ur.institution = {
 	    document.newCollectionForm.collectionName.value = "";
     }, 
     
-    /**
-     *  Function that retireves colection information
-     *  based on the given collection id.
-     *
-     *  The folder id used to get the collection.
-     */
-    getCollectionById: function(collectionId, rowStart, startPageNumber, currentPageNumber, order)
-    {
-         //This call back updates the html when a new collection is
-         //retrieved.
- 
-        var callback =
-        {
-            success: function(o) 
-            {
-                // check for the timeout - forward user to login page if timout
-	            // occured
-	            if( !urUtil.checkTimeOut(o.responseText) )
-	            {
-                    var divToUpdate = document.getElementById('newInstitutionalCollections');
-                    divToUpdate.innerHTML = o.responseText; 
-                    YAHOO.ur.institution.insertHiddenParentCollectionId(); 
-                } 
-            },
-	
-	        failure: function(o) 
-	        {
-	            alert('Get personal collection Failure ' 
-	            + o.status + ' status text ' 
-	            + o.statusText );
-	        }
-        };
-        
-        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getInstitutionalCollectionsAction +"?parentCollectionId="+ 
-            collectionId + '&rowStart=' + rowStart 
-	        					+ '&startPageNumber=' + startPageNumber 
-	        					+ '&currentPageNumber=' + currentPageNumber 
-	        					+ '&sortType=' + order 
-	        					+ '&bustcache='+new Date().getTime(), callback, null);
-    },
     
     /**
      * This creates a hidden field appends it to the form for
@@ -241,8 +200,8 @@ YAHOO.ur.institution = {
 
         // Define various event handlers for Dialog
 	    var handleYes = function() {
-	        var parentInput = document.getElementById('newCollectionForm_parentCollectionId');
-		    institutionalCollectionTable.submitForm(deleteInstiutionalCollectionsAction);
+	        document.institutionalCollections.action = deleteInstiutionalCollectionsAction;
+	        document.institutionalCollections.submit();
 		    this.hide();
 	    };
 	
@@ -314,7 +273,6 @@ YAHOO.ur.institution = {
         this is called once the dom has been created */    
     init : function() {
         var parentCollectionId = document.getElementById('institutionalCollections_parentCollectionId').value
-        YAHOO.ur.institution.getCollectionById(parentCollectionId, 0, 1, 1, 'asc');
         YAHOO.ur.institution.createNewCollectionDialog();
         YAHOO.ur.institution.createCollectionDeleteConfirmDialog();
         YAHOO.ur.institution.createErrorDialog();
