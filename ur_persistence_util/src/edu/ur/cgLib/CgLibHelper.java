@@ -27,10 +27,10 @@ public class CgLibHelper
 {
 	
 	/**
-	 * Cleans up the class name removing the CGLIB and
+	 * Cleans up the class name removing the CGLIB or javassist and
 	 * everything that follows.
 	 * 
-	 * @param name
+	 * @param name - class name
 	 * @return the class name or null if the object is null.
 	 */
 	public static String cleanClassName(String name)
