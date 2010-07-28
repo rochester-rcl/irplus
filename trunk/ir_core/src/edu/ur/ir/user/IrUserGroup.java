@@ -31,6 +31,7 @@ import edu.ur.persistent.CommonPersistent;
  */
 public class IrUserGroup extends CommonPersistent implements Sid{
 	
+	/** type for this secure id */
 	public static final String GROUP_SID_TYPE = "GROUP_SID_TYPE";
 	
 	/**  Eclipse generated id. */
@@ -71,7 +72,8 @@ public class IrUserGroup extends CommonPersistent implements Sid{
 	/**
 	 * Get the users for this group.
 	 * 
-	 * @return
+	 * @return the users that are part of this group - as
+	 * an unmodifiable list.
 	 */
 	public Set<IrUser> getUsers() {
 		return Collections.unmodifiableSet(users);
@@ -80,7 +82,7 @@ public class IrUserGroup extends CommonPersistent implements Sid{
 	/**
 	 * Add the user to this group.
 	 * 
-	 * @param user
+	 * @param user - user to add to the group
 	 */
 	public void addUser(IrUser user)
 	{
@@ -93,8 +95,7 @@ public class IrUserGroup extends CommonPersistent implements Sid{
 	 */
 	public boolean removeUser(IrUser user)
 	{
-		boolean removed = users.remove(user);
-		return removed;
+		return users.remove(user);
 	}
 	
 	/**
@@ -113,8 +114,7 @@ public class IrUserGroup extends CommonPersistent implements Sid{
 	 */
 	public boolean removeAdministrator(IrUser user)
 	{
-		boolean removed = administrators.remove(user);
-		return removed;
+		return administrators.remove(user);
 	}
 	
 	/**
@@ -182,10 +182,21 @@ public class IrUserGroup extends CommonPersistent implements Sid{
 		return GROUP_SID_TYPE;
 	}
 
+	/**
+	 * Get the list of group administrators - people who can
+	 * administer the list.
+	 * 
+	 * @return an Unmodifiable list of administrators
+	 */
 	public Set<IrUser> getAdministrators() {
 		return Collections.unmodifiableSet(administrators);
 	}
 
+	/**
+	 * Set the list of administrators who can administer the list.
+	 * 
+	 * @param administrators
+	 */
 	void setAdministrators(Set<IrUser> administrators) {
 		this.administrators = administrators;
 	}
