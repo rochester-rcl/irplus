@@ -40,7 +40,7 @@ public class ViewDownloadCountsByIp extends Pager{
 
 	/** type of sort [ ascending | descending ] 
 	 *  this is for incoming requests */
-	private String sortType = "asc";
+	private String sortType = "desc";
 
 	/** Total number of ip addresses to ignore  */
 	private int totalHits;
