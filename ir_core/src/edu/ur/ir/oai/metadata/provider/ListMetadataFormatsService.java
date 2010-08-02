@@ -23,7 +23,7 @@ import edu.ur.ir.oai.exception.IdDoesNotExistException;
 import edu.ur.ir.oai.exception.NoMetadataFormatsException;
 
 /**
- * Service to send a response for the metadata formats supported.
+ * Service to send an XML response for the metadata formats supported.
  * 
  * @author Nathan Sarr
  *
