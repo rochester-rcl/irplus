@@ -16,8 +16,10 @@
 package edu.ur.ir.oai.metadata.provider.service;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
@@ -128,6 +130,21 @@ public class DefaultOaiMetadataServiceProvider implements OaiMetadataServiceProv
 	 */
 	public void setProviders(List<OaiMetadataProvider> providers) {
 		this.providers = providers;
+	}
+
+	/**
+	 * Return the list of supported format prefixes.
+	 * 
+	 * @see edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider#getSupportedFormats()
+	 */
+	public Set<String> getSupportedMetadataPrefixes() {
+		HashSet<String> formats = new HashSet<String>();
+		for(OaiMetadataProvider provider : providers )
+		{
+			formats.add(provider.getMetadataPrefix());
+		}
+		
+		return formats;
 	}
 	
 }
