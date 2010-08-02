@@ -17,6 +17,7 @@ package edu.ur.ir.oai.metadata.provider;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import org.w3c.dom.Element;
 
@@ -34,15 +35,22 @@ public interface OaiMetadataServiceProvider extends Serializable{
 	/**
 	 * List of providers.
 	 * 
-	 * @return
+	 * @return list of providers stored 
 	 */
 	public List<OaiMetadataProvider> getProviders();
+	
+	/**
+	 * List of supported formats 
+	 * 
+	 * @return - list of supported formats
+	 */
+	public Set<String> getSupportedMetadataPrefixes();
 	
 	/**
 	 * Determine if this supports the given metadata prefix.
 	 * 
 	 * @param metadataPrfix
-	 * @return
+	 * @return true if the format is supported
 	 */
 	public boolean supports(String metadataPrefix);
 	
@@ -81,6 +89,4 @@ public interface OaiMetadataServiceProvider extends Serializable{
 	 */
 	public void removeProvider(OaiMetadataProvider provider);
 	
-
-
 }
