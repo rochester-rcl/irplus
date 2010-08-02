@@ -11,9 +11,9 @@ irplus changes 1.0 to 2.0
 - Updated from freemarker 2.1.14 to 2.1.15
 - Updated from ognl 2.6.11 to 2.7.3
 - Updated from xwork-core 2.1.2 to 2.1.6
-- Updated from Ivy 2.1.0-rc1 to 2.1.0
+- Updated from Ivy 2.1.0-rc1 to 2.2.0-rc1
 - Removed JSON library as it was no longer needed [ was used by toJson for researcher ]
-- Updated to pdf box 1.1.0
+- Updated to pdf box 1.2.1
 - Updated to hibernate 3.5.2
 - Updated to Spring 3.0.2 [All packages]
 
@@ -45,6 +45,11 @@ irplus changes 1.0 to 2.0
 - Added flag for case sensitivity for external account types.
 
 - Added last login date to check for account usage
+
+- Updated statistics to set a no store option.  This means that the counts will not be stored - this may be appropriate
+when users do not want to store google download information in the ignore table
+
+- Added ability for users to view download counts by IP address
 
 [ur_persistence_util]
 =============================
@@ -127,6 +132,10 @@ initial addition for dealing with metadata information
 them to report if they think this is an error
 
 - Updated to allow users to unsubscribe from their local account
+
+- Moved buttons over on file upload to make it quicker/easier to add another and upload after using the browse button
+
+- Added ability for user to set the number o fnew file upload boxes to create.
 
 ur_tags
 ====================================
