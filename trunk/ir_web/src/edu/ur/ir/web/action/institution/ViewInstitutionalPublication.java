@@ -18,6 +18,7 @@ package edu.ur.ir.web.action.institution;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -34,6 +35,7 @@ import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.item.ItemSecurityService;
+import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
 import edu.ur.ir.oai.metadata.provider.OaiService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrRole;
@@ -74,7 +76,6 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	
 	/** Service for dealing with deleted file system information */
 	private DeletedInstitutionalItemService deletedInstitutionalItemService;
-	
 
 
 	/** Service to deal with institutional collection information */
@@ -115,11 +116,19 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	/** Service to deal with oai information */
 	private OaiService oaiService;
 	
+	/** Service to provide meta-data information */
+	private OaiMetadataServiceProvider oaiMetadataServiceProvider;
+	
+
+
 	/** Service for dealing with institutional item version inforamtion */
 	private InstitutionalItemVersionService institutionalItemVersionService;
+	
 
 
 	/**
+	 * Loads the institutional item.
+	 * 
 	 * Prepare for action
 	 */
 	public String execute(){
@@ -259,6 +268,16 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	}
 	
 	/**
+	 * Get the set of metadata prefixes.
+	 * 
+	 * @return - a set of metadata prefixes.
+	 */
+	public Set<String> getMetadataPrefixes()
+	{
+		return oaiMetadataServiceProvider.getSupportedMetadataPrefixes();
+	}
+	
+	/**
 	 * Returns the oai namespace identifier.
 	 * 
 	 * @return
@@ -268,22 +287,47 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 		return oaiService.getNamespaceIdentifier();
 	}
 
+	/**
+	 * The institutional item id.
+	 * 
+	 * @return - id of the institutional item
+	 */
 	public Long getInstitutionalItemId() {
 		return institutionalItemId;
 	}
 
+	/**
+	 * Set the institutional item id.
+	 * 
+	 * @param institutionalItemId
+	 */
 	public void setInstitutionalItemId(Long institutionalItemId) {
 		this.institutionalItemId = institutionalItemId;
 	}
 
+	/**
+	 * The version number of the institutional item.
+	 * 
+	 * @return - the version number of the institutional item.
+	 */
 	public Integer getVersionNumber() {
 		return versionNumber;
 	}
 
+	/**
+	 * Set the version number of the institutional item.
+	 * 
+	 * @param versionNumber - version number of the institutional item
+	 */
 	public void setVersionNumber(Integer versionNumber) {
 		this.versionNumber = versionNumber;
 	}
 
+	/**
+	 * Get the loaded institutional item.
+	 * 
+	 * @return
+	 */
 	public InstitutionalItem getInstitutionalItem() {
 		return institutionalItem;
 	}
@@ -399,5 +443,15 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 	public void setDeletedInstitutionalItemService(
 			DeletedInstitutionalItemService deletedInstitutionalItemService) {
 		this.deletedInstitutionalItemService = deletedInstitutionalItemService;
+	}
+	
+	/**
+	 * Set the oai metadata provider.
+	 * 
+	 * @param oaiMetadataServiceProvider
+	 */
+	public void setOaiMetadataServiceProvider(
+			OaiMetadataServiceProvider oaiMetadataServiceProvider) {
+		this.oaiMetadataServiceProvider = oaiMetadataServiceProvider;
 	}
 }

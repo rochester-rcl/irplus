@@ -18,6 +18,7 @@
 
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -259,75 +260,85 @@
 			</c:if>
 			
 			<c:if test="${user != null && ir:userHasRole('ROLE_ADMIN', 'OR')}">
-			<c:url var="oaiDcUrl" value="/oai2.action">
-			    <c:param name="verb" value="GetRecord"/>
-			    <c:param name="identifier" value="oai:${oaiNamespaceIdentifier}:${institutionalItemVersion.id}"/>
-			    <c:param name="metadataPrefix" value="oai_dc"/>
-			</c:url>
-			<h3><a href="${oaiDcUrl}">Get OAI Dublin Core Record</a></h3>
+			<c:forEach items="${metadataPrefixes}" var="prefix">
+			    <c:url var="oaiDcUrl" value="/oai2.action">
+			        <c:param name="verb" value="GetRecord"/>
+			        <c:param name="identifier" value="oai:${oaiNamespaceIdentifier}:${institutionalItemVersion.id}"/>
+			        <c:param name="metadataPrefix" value="${prefix}"/>
+			    </c:url>
+			    <h3><a href="${oaiDcUrl}">Get OAI Record - Metadata Prefix: ${prefix}</a></h3>
+			</c:forEach>
 			</c:if>
+			
 			  <!-- *************************  All versions Start *************************  -->
             <c:if test="${institutionalItem != null}">
               
               <h3>All Versions</h3>
-          
-              <table class="simpleTable">
-                  <thead>
-                      <tr>    
-	                      <th>
-	                          Thumbnail
-	                      </th>
-	                      <th>
-	                          Name
-	                      </th>
-	                      <th>
-	                          Publication Version
-	                      </th>
-	                      <th>
-	                          Created Date
-	                      </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <c:forEach var="version" varStatus="status" items="${institutionalItem.versionedInstitutionalItem.institutionalItemVersions}">
-                      <c:if test="${ (status.count % 2) == 0}">
-                          <c:set value="even" var="rowType"/>
-                      </c:if>
-                      <c:if test="${ (status.count % 2) == 1}">
-                          <c:set value="odd" var="rowType"/>
-                      </c:if>
-                      <tr>
-                          <c:if test="${version.item.publiclyViewable || (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '') || showPublication}">
-                          <td class="${rowType}">
-                              <c:if test="${ir:hasThumbnail(version.item.primaryImageFile.irFile)}">
-                                  <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${version.item.primaryImageFile}" var="url"/>
-                                  <c:if test="${url != null}">
-                                      <img height="66px" width="100px" src="${url}"/></a>
-                                  </c:if>
+              
+              <div class="dataTable">
+              <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td> Thumbnail </urstb:td>
+                          <urstb:td> Name </urstb:td>
+                          <urstb:td> Version </urstb:td>
+                          <urstb:td> Created Date </urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="version" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${institutionalItem.versionedInstitutionalItem.institutionalItemVersions}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                             <c:if test="${version.item.publiclyViewable || (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '') || showPublication}">
+                                 <c:if test="${ir:hasThumbnail(version.item.primaryImageFile.irFile)}">
+                                     <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${version.item.primaryImageFile}" var="url"/>
+                                        <c:if test="${url != null}">
+                                            <img height="66px" width="100px" src="${url}"/></a>
+                                        </c:if>
+                                 </c:if>
                               </c:if>
-                          </td>
-                          <td class="${rowType}">${version.item.fullName}
-                          	<c:if test="${version.withdrawn}">
-                          		<div class="errorMessage">(withdrawn on ${version.withdrawnToken.date})</div>
+                          </urstb:td>
+                        
+                          <urstb:td>
+                            <c:if test="${version.item.publiclyViewable || (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '') || showPublication}">
+                                ${version.item.fullName}
+                          	    <c:if test="${version.withdrawn}">
+                          		    <div class="errorMessage">(withdrawn on ${version.withdrawnToken.date})</div>
+                          	    </c:if>
                           	</c:if>
-                          </td>
-                          <c:url var="publicationVersionDownloadUrl" value="institutionalPublicationPublicView.action">
-	                          <c:param name="institutionalItemId" value="${institutionalItem.id}"/>
-	                          <c:param name="versionNumber" value="${version.versionNumber}"/>
-	                      </c:url>
-                          <td class="${rowType}"><a href="${publicationVersionDownloadUrl}">${version.versionNumber}</a></td>
-                          <td class="${rowType}">${version.dateOfDeposit}</td>
-                          </c:if>
-                          <c:if test="${!version.item.publiclyViewable && !(institutionalItem.owner == user) && !ir:userHasRole('ROLE_ADMIN', '') && !showPublication}">
-                              <td class="${rowType}" colspan="4">
-                                  The version of this item is restricted
-                              </td>
-                          </c:if>
+                          	<c:if test="${!version.item.publiclyViewable && !(institutionalItem.owner == user) && !ir:userHasRole('ROLE_ADMIN', '') && !showPublication}">
+                                 The version of this item is restricted
+                            </c:if>
+                          </urstb:td>
 
-                     </tr>
-                     </c:forEach>  
-                 </tbody>  
-             </table>
+                          <urstb:td>
+                            <c:if test="${version.item.publiclyViewable || (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '') || showPublication}">
+                        
+                                <c:url var="publicationVersionDownloadUrl" value="institutionalPublicationPublicView.action">
+	                                <c:param name="institutionalItemId" value="${institutionalItem.id}"/>
+	                                <c:param name="versionNumber" value="${version.versionNumber}"/>
+	                            </c:url>
+	                            <a href="${publicationVersionDownloadUrl}">${version.versionNumber}</a>
+	                        </c:if>
+                          </urstb:td>                        
+                          <urstb:td>
+                            <c:if test="${version.item.publiclyViewable || (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '') || showPublication}">
+                        
+                                ${version.dateOfDeposit}
+                            </c:if>
+                          </urstb:td>
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+          </div>
+  
 			<!-- *************************  All versions End *************************  -->       	        
 			</c:if>
        	        
