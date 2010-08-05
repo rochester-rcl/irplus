@@ -154,7 +154,7 @@
 
 	              	<div id="renameFileDialogFields">
 	              	    <c:import url="/pages/user/workspace/rename_file_form.jsp"/>
-	              	<div>		             
+	              	</div>		             
 		         </p>
 		     </form>		          
 		 </div>

@@ -21,6 +21,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
 
             <!-- This is only to top level properties information -->
@@ -150,109 +151,114 @@
               </c:if>
               
               <h3>Sharing</h3>
-          
-              <table class="simpleTable">
-                  <thead>
-                  <tr>    
-	                  <th>
-	                      Name
-	                  </th>
-	                  <th>
-	                      User Name
-	                  </th>
-	                  <th>
-	                      Email
-	                  </th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                      <c:forEach var="collaborator" varStatus="status" 
-                         items="${personalFile.versionedFile.collaborators}">
-                      <c:if test="${ (status.count % 2) == 0}">
-                          <c:set value="even" var="rowType"/>
-                      </c:if>
-                      <c:if test="${ (status.count % 2) == 1}">
-                          <c:set value="odd" var="rowType"/>
-                      </c:if>
-                      <tr>
-                          <td class="${rowType}">${collaborator.collaborator.firstName} ${collaborator.collaborator.lastName}</td>
-                          <td class="${rowType}">${collaborator.collaborator.username}</td>
-                          <td class="${rowType}">${collaborator.collaborator.defaultEmail.email}</td>
-                      </tr>
-                  
-                      </c:forEach>  
-                  </tbody>  
-              </table>
+              
+              <div class="dataTable">
+              <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td> Name </urstb:td>
+                          <urstb:td> User Name </urstb:td>
+                          <urstb:td> Email </urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="collaborator" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${personalFile.versionedFile.collaborators}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                          ${collaborator.collaborator.firstName} &nbsp; ${collaborator.collaborator.lastName}
+                          </urstb:td>
+                        
+                          <urstb:td>
+                          ${collaborator.collaborator.username}
+                          </urstb:td>
+
+                          <urstb:td>
+                          ${collaborator.collaborator.defaultEmail.email}
+                          </urstb:td>                        
+
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+              </div>
+     
+	          <h3>All File Versions</h3>
 	     
-              <h3>All File Versions</h3>
-          
-          
-              <table class="simpleTable">
-                  <thead>
-                      <tr>    
-	                      <th>
-	                          Thumbnail
-	                      </th>
-	                      <th>
-	                          Name
-	                      </th>
-	                      <th>
-	                          Description
-	                      </th>
-	                      <th>
-	                          File Version
-	                      </th>
-	                      <th>
-	                          Checksum
-	                      </th>
-	                      <th>
-	                          Created Date
-	                      </th>
-	                      <th>
-	                          Created By
-	                      </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <c:forEach var="version" varStatus="status" items="${personalFile.versionedFile.versions}">
-                      <c:if test="${ (status.count % 2) == 0}">
-                          <c:set value="even" var="rowType"/>
-                      </c:if>
-                      <c:if test="${ (status.count % 2) == 1}">
-                          <c:set value="odd" var="rowType"/>
-                      </c:if>
-                      <tr>
-                          <td class="${rowType}">
-                              
-                              <c:if test='${ir:hasThumbnail(version.irFile)}'>
+	          <div class="dataTable">
+              <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td>Thumbnail</urstb:td>
+                          <urstb:td>Name</urstb:td>
+                          <urstb:td>Description</urstb:td>
+                          <urstb:td>File Version</urstb:td>
+                          <urstb:td>Checksum</urstb:td>
+                          <urstb:td>Created Date</urstb:td>
+                          <urstb:td>Created By</urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="version" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${personalFile.versionedFile.versions}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                             <c:if test='${ir:hasThumbnail(version.irFile)}'>
                                   <c:url var="url" value="/user/personalFileThumbnailDownloader.action">
                                       <c:param name="personalFileId" value="${personalFile.id}"/>
                                       <c:param name="versionNumber" value="${version.versionNumber}"/>
                                   </c:url>
                                   <img height="66px" width="100px" src="${url}"/>
                              </c:if>
-                          </td>
-                          <c:url var="personalFileDownloadUrl" value="/user/personalFileDownload.action">
-	                          <c:param name="personalFileId" value="${personalFile.id}"/>
-	                          <c:param name="versionNumber" value="${version.versionNumber}"/>
-	                      </c:url>
-	                      <td class="${rowType}"><a href="${personalFileDownloadUrl}">${version.irFile.nameWithExtension}</a></td>
-	                      <td class="${rowType}">${version.irFile.description}</td>
-                          <td class="${rowType}">${version.versionNumber}</td>
-                          <td class="${rowType}">
+                          </urstb:td>
+                        
+                          <urstb:td>
+                              <c:url var="personalFileDownloadUrl" value="/user/personalFileDownload.action">
+	                              <c:param name="personalFileId" value="${personalFile.id}"/>
+	                              <c:param name="versionNumber" value="${version.versionNumber}"/>
+	                          </c:url>
+	                          <a href="${personalFileDownloadUrl}">${version.irFile.nameWithExtension}</a>
+                          </urstb:td>
+
+                          <urstb:td>
+                              ${version.irFile.description}
+                          </urstb:td>                        
+
+                          <urstb:td>
+                              ${version.versionNumber}
+                          </urstb:td>                        
+
+                          <urstb:td>
                               <c:forEach var="fileInfoChecksum"
                                   items="${version.irFile.fileInfo.fileInfoChecksums}">
                                       ${fileInfoChecksum.checksum} - ${fileInfoChecksum.algorithmType}
                               </c:forEach>
-                          
-                          </td>
-                          <td class="${rowType}">${version.irFile.fileInfo.createdDate}</td>
-                          <td class="${rowType}">${version.versionCreator.username}</td>
-                     </tr>
-                     </c:forEach>  
-                 </tbody>  
-             </table>
-          
+                          </urstb:td>                        
+
+                          <urstb:td>
+                              ${version.irFile.fileInfo.createdDate}
+                          </urstb:td>                        
+
+                          <urstb:td>
+                              ${version.versionCreator.firstName} &nbsp; ${version.versionCreator.lastName}
+                          </urstb:td>                        
+
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+              </div>
+              
              <c:url var="addNewFileVersion" value="/user/viewNewFileVersionUpload.action">
                  <c:param name="personalFileId" value="${personalFile.id}"/>
              </c:url>
