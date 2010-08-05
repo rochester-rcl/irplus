@@ -63,28 +63,32 @@
 	    </tr>
 	    <tr>
 		    <td width="400px" align="left" valign="top">
-		        <table class="simpleTable" width="400px">
+		        <div class="dataTable">
+		        <table width="400px">
 			        <thead>
 				        <tr>
-					        <th>Collections &amp; Items to Move</th>
+					        <td>Collections</td>
 				        </tr>
 			        </thead>
 			        <tbody>
-				        <c:forEach items="${collectionsToMove}" var="collection">
-					        <tr>
-						        <td><span class="worldBtnImg">&nbsp;</span>${collection.name}</td>
-					        </tr>
-				        </c:forEach>
-
-				        <c:forEach items="${itemsToMove}" var="item">
-					        <tr>
-						        <td><span class="packageBtnImg">&nbsp;</span>${item.name}</td>
+				        <c:forEach items="${collectionsToMove}"  varStatus="status" var="collection">
+				          <c:if test="${ (status.count % 2) == 0}">
+                              <c:set value="even" var="rowType"/>
+                              <c:set value="this.className='even'" var="onmouseout"/>
+                          </c:if>
+                          <c:if test="${ (status.count % 2) == 1}">
+                              <c:set value="odd" var="rowType"/>
+                               <c:set value="this.className='odd'" var="onmouseout"/>
+                          </c:if>
+					        <tr onmouseout="${onmouseout}" onmouseover="this.className='highlight'" class="${rowType}">
+						        <td ><span class="worldBtnImg">&nbsp;</span>${collection.name}</td>
 					        </tr>
 				        </c:forEach>
 			        </tbody>
 		        </table>
+		        </div>
 		    </td>
-		    <td width="100px" align="center">
+		    <td width="100px" valign="top" align="center">
 		
 		        <button class="ur_button" id="move_button"
 			            onclick="javascript:YAHOO.ur.institution.moveCollection();"
@@ -103,26 +107,32 @@
 	              <input type="hidden" name="parentCollectionId" value="${parentCollectionId}" /> 
 	
 	               <c:forEach items="${collectionsToMove}" var="collection">
+	                  
 	                   <input type="hidden" value="${collection.id}" name="collectionIds" />
                    </c:forEach> 
- 
-                   <c:forEach items="${itemsToMove}" var="item">
-	                   <input type="hidden" value="${item.id}" name="itemIds" />
-                   </c:forEach>
     
 	               <!-- set to indicate a success full move -->
 	               <input type="hidden" id="action_success" value="${actionSuccess}" name="actionSuccess"/>
                </form>
-               <table class="simpleTable" width="400px">
+               <div class="dataTable">
+               <table  width="400px">
 	               <thead>
 		               <tr>
-			               <th class="thItemFolder">Destination</th>
+			               <td>Destination</td>
 		               </tr>
 	               </thead>
 	               <tbody>
-		           <c:forEach items="${currentDestinationContents}"
+		           <c:forEach varStatus="status" items="${currentDestinationContents}"
 			              var="fileSystemObject">
-			           <tr>
+			               <c:if test="${ (status.count % 2) == 0}">
+                              <c:set value="even" var="rowType"/>
+                              <c:set value="this.className='even'" var="onmouseout"/>
+                          </c:if>
+                          <c:if test="${ (status.count % 2) == 1}">
+                              <c:set value="odd" var="rowType"/>
+                               <c:set value="this.className='odd'" var="onmouseout"/>
+                          </c:if>
+			           <tr onmouseout="${onmouseout}" onmouseover="this.className='highlight'" class="${rowType}">
 				           <c:if test="${ir:canMoveToCollection(collectionsToMove, fileSystemObject)}">
 					            <td><span class="worldBtnImg"></span><a
 						            href="javascript:YAHOO.ur.institution.getMoveCollection(${fileSystemObject.id});">${fileSystemObject.name}</a></td>
@@ -135,6 +145,7 @@
 		           </c:forEach>
 	               </tbody>
                </table>
+               </div>
 		   </td>
 	   </tr>
    </table>
