@@ -78,6 +78,7 @@ public class DeleteNewsPicture extends ActionSupport implements Preparable {
 			IrFile picture = repositoryService.getIrFile(pictureId, false);
 		    newsService.removeNewsItemPicture(newsItem, picture);
 		}
+		newsItem = newsService.getNewsItem(newsItemId, false);
 		
 		return SUCCESS;
 	}
@@ -107,15 +108,6 @@ public class DeleteNewsPicture extends ActionSupport implements Preparable {
 	 */
 	public NewsItem getNewsItem() {
 		return newsItem;
-	}
-
-	/**
-	 * Set the news item to delete the picture from.
-	 * 
-	 * @param newsItem
-	 */
-	public void setNewsItem(NewsItem newsItem) {
-		this.newsItem = newsItem;
 	}
 
 	/**

@@ -73,7 +73,7 @@
             <!--  set up tabs for editing news -->
 	        <div id="edit-news-tabs" class="yui-navset">
 	            <ul class="yui-nav">
-                    <li class="selected"><a href="#tab1"><em>News Information & Article</em></a></li>
+                    <li class="selected"><a href="#tab1"><em>News Information &amp; Article</em></a></li>
                     <li><a href="#tab2"><em>News Pictures</em></a></li>
                 </ul>
 
@@ -150,8 +150,6 @@
  		                      onmouseout="this.className='ur_button';"
  		                               id="showUploadPicture">Upload Picture</button> 
 	                      <br/>
-	                     
-
 	                      
 	                      <div id="news_item_pictures">
 	                          <c:import url="/pages/admin/news/news_pictures_frag.jsp"/>

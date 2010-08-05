@@ -19,21 +19,24 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
+<%@ taglib prefix="ur" uri="ur-tags"%>
 
 <h3>Primary Picture</h3>
 <c:if test="${newsItem.primaryPicture != null }">
-	<table class="simpleTable">
+    <div class="dataTable">
+	<table width="100%">
 		<thead>
 			<tr>
-				<th>Thumbnail</th>
-				<th>Picture URL</th>
-				<th>Delete</th>
+				<td>Thumbnail</td>
+				<td>Picture URL</td>
+				<td>Action</td>
 			</tr>
 		</thead>
 		<tbody>
-			<c:set value="even" var="rowType" />
-			<tr>
-				<td class="${rowType}">
+			
+			<tr class="even">
+				<td>
 				 <c:if test="${ir:hasThumbnail(newsItem.primaryPicture)}">
                      <c:url var="url" value="/newsThumbnailDownloader.action">
                          <c:param name="newsItemId" value="${newsItem.id}"/>
@@ -50,64 +53,68 @@
 				<td class="${rowType}">${pictureUrl}</td>
 				<td class="${rowType}">
 				<button class="ur_button"
-					onmouseover="this.className='ur_buttonover';"
-					onmouseout="this.className='ur_button';"
+					onmouseover="this.className='ur_buttonover'"
+					onmouseout="this.className='ur_button'"
 					onclick="javascript:YAHOO.ur.edit.news.confirmPictureDelete(${newsItem.id}, ${newsItem.primaryPicture.id}, 'true');"
-					id="showFolder">Delete Picture</button>
+					id="showFolder">Delete</button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
+	</div>
 </c:if>
 
 
 <h3>Pictures</h3>
-<c:if test="${numberOfNewsPictures > 0}">
-<table class="simpleTable">
-	<thead>
-		<tr>
-			<th>Thumbnail</th>
-			<th>Picture URL</th>
-			<th>Delete</th>
-		</tr>
-	</thead>
-	<tbody>
+<c:if test="${!ur:isEmpty(newsItem.pictures)}">
+ <div class="dataTable">
+              <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td>Thumbnail</urstb:td>
+                          <urstb:td>Picture URL</urstb:td>
+                          <urstb:td>Action</urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="irFile" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${newsItem.pictures}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                          <c:if test="${ir:hasThumbnail(irFile)}">
+                              <c:url var="url" value="/newsThumbnailDownloader.action">
+                                  <c:param name="newsItemId" value="${newsItem.id}"/>
+                                  <c:param name="irFileId" value="${irFile.id}"/>
+                              </c:url>
+                              <img height="66px" width="100px" src="${url}"/>
+                          </c:if>
+                          </urstb:td>
+                        
+                          <urstb:td>
+                              <c:url var="pictureUrl" value="/downloadNewsItemsPicture.action">
+					              <c:param name="newsItemId" value="${newsItem.id}" />
+					              <c:param name="irFileId" value="${irFile.id}" />
+				              </c:url>
+                              ${pictureUrl}
+                          </urstb:td>
 
-		<c:forEach var="irFile" varStatus="status"
-			items="${newsItem.pictures}">
-			<c:if test="${ (status.count % 2) == 0}">
-				<c:set value="even" var="rowType" />
-			</c:if>
-			<c:if test="${ (status.count % 2) == 1}">
-				<c:set value="odd" var="rowType" />
-			</c:if>
+                          <urstb:td>
+                          <button class="ur_button"
+					              onmouseover="this.className='ur_buttonover';"
+					              onmouseout="this.className='ur_button';"
+					              onclick="javascript:YAHOO.ur.edit.news.confirmPictureDelete(${newsItem.id}, ${irFile.id}, false);"
+					              id="showFolder">Delete</button>
+                          </urstb:td>                        
 
-			<tr>
-				<td class="${rowType}">
-					<c:if test="${ir:hasThumbnail(irFile)}">
-                        <c:url var="url" value="/newsThumbnailDownloader.action">
-                            <c:param name="newsItemId" value="${newsItem.id}"/>
-                            <c:param name="irFileId" value="${irFile.id}"/>
-                        </c:url>
-                        <img height="66px" width="100px" src="${url}"/>
-                    </c:if>
-                    
-				</td>
-				<c:url var="pictureUrl" value="/downloadNewsItemsPicture.action">
-					<c:param name="newsItemId" value="${newsItem.id}" />
-					<c:param name="irFileId" value="${irFile.id}" />
-				</c:url>
-				<td class="${rowType}">${pictureUrl}</td>
-				<td class="${rowType}">
-				<button class="ur_button"
-					onmouseover="this.className=''ur_buttonover';"
-					onmouseout="this.className=''ur_button';"
-					onclick="javascript:YAHOO.ur.edit.news.confirmPictureDelete(${newsItem.id}, ${irFile.id}, false);"
-					id="showFolder">Delete Picture</button>
-				</td>
-			</tr>
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+              </div>
 
-		</c:forEach>
-	</tbody>
-</table>
 </c:if>
