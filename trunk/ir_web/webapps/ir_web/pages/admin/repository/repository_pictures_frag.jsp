@@ -19,58 +19,48 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
-<table class="simpleTable">
-                      <thead>
-                          <tr>    
-	                          <th>
-	                              Thumbnail
-	                          </th>
-	                          <th>
-	                              Description
-	                          </th>
-	                          <th>
-	                              Created Date
-	                          </th>
-	                          <th>
-	                              Created By
-	                          </th>
-	                          <th>
-	                              Delete
-	                          </th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <c:forEach var="irFile" varStatus="status" items="${repository.pictures}">
-                              <c:if test="${ (status.count % 2) == 0}">
-                                  <c:set value="even" var="rowType"/>
-                              </c:if>
-                              <c:if test="${ (status.count % 2) == 1}">
-                                  <c:set value="odd" var="rowType"/>
-                              </c:if>
-                         
-                           <tr>
-                               <td class="${rowType}">
-                                   <c:if test="${ir:hasThumbnail(irFile)}">
-                                       <c:url var="url" value="/repositoryThumbnailDownloader.action">
-                                           <c:param name="irFileId" value="${irFile.id}"/>
-                                       </c:url>
-                                       <img height="66px" width="100px" src="${url}"/>
-                                   </c:if>
-                               </td>
-     
-                               <td class="${rowType}">${irFile.description}</td>
-                               <td class="${rowType}">${irFile.fileInfo.createdDate}</td>
-                               <td class="${rowType}">${irFile.owner.username}</td>
-                               <td class="${rowType}">
- 		                              <button class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';"
- 		                               onclick="javascript:YAHOO.ur.repository.confirmPictureDelete(${irFile.id});"
- 		                               id="showFolder">Delete Picture</button> 
-	                           </td>
-                           </tr>
-                  
-                           </c:forEach>  
-                       </tbody>  
-                   </table>
+
+<div class="dataTable">
+	                       <urstb:table width="100%">
+	                           <urstb:thead>
+	                               <urstb:tr>
+					                   <urstb:td>Thumbnail</urstb:td>         
+	                                   <urstb:td>Description</urstb:td>
+	                                   <urstb:td>Created Date</urstb:td>
+	                                   <urstb:td>Created By</urstb:td>
+	                                   <urstb:td>Delete</urstb:td>
+	                               </urstb:tr>
+	                           </urstb:thead>
+	                           <urstb:tbody
+	                                var="irFile" 
+	                                oddRowClass="odd"
+	                                evenRowClass="even"
+	                                currentRowClassVar="rowClass"
+	                                collection="${repository.pictures}">
+	                                <urstb:tr  cssClass="${rowClass}"
+	                                    onMouseOver="this.className='highlight'"
+	                                    onMouseOut="this.className='${rowClass}'">
+	                                    <urstb:td>
+	                                       <c:if test="${ir:hasThumbnail(irFile)}">
+                                               <c:url var="url" value="/repositoryThumbnailDownloader.action">
+                                                   <c:param name="irFileId" value="${irFile.id}"/>
+                                               </c:url>
+                                               <img height="66px" width="100px" src="${url}"/>
+                                           </c:if>
+	                                    </urstb:td>
+	                                    <urstb:td>${irFile.description}</urstb:td>
+	                                    <urstb:td>${irFile.fileInfo.createdDate}</urstb:td>
+	                                    <urstb:td>${irFile.owner.username}</urstb:td>
+	                                    <urstb:td>
+	                                        <button class="ur_button" 
+ 		                                    onmouseover="this.className='ur_buttonover';"
+ 		                                    onmouseout="this.className='ur_button';"
+ 		                                    onclick="javascript:YAHOO.ur.repository.confirmPictureDelete(${irFile.id});"
+ 		                                    id="showFolder">Delete Picture</button> 
+	                                    </urstb:td>
+	                               </urstb:tr>
+	                           </urstb:tbody>
+	                       </urstb:table>
+                           </div>	
