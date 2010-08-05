@@ -281,49 +281,7 @@
                        <br/>
             
                        <div id="repository_pictures">
-                          <table class="simpleTable">
-                              <thead>
-                                  <tr>    
-	                                  <th> Thumbnail </th>
-	                                  <th> Description </th>
-	                                  <th> Created Date </th>
-	                                  <th> Created By </th>
-	                                  <th> Delete </th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                              <c:forEach var="irFile" varStatus="status" items="${repository.pictures}">
-                                     <c:if test="${ (status.count % 2) == 0}">
-                                         <c:set value="even" var="rowType"/>
-                                     </c:if>
-                                     <c:if test="${ (status.count % 2) == 1}">
-                                         <c:set value="odd" var="rowType"/>
-                                     </c:if>
-                         
-                                   <tr>
-                                       <td class="${rowType}">
-                                           <c:if test="${ir:hasThumbnail(irFile)}">
-                                               <c:url var="url" value="/repositoryThumbnailDownloader.action">
-                                                   <c:param name="irFileId" value="${irFile.id}"/>
-                                               </c:url>
-                                               <img height="66px" width="100px" src="${url}"/>
-                                           </c:if>
-                                       </td>
-     
-                                      <td class="${rowType}">${irFile.description}</td>
-                                      <td class="${rowType}">${irFile.fileInfo.createdDate}</td>
-                                      <td class="${rowType}">${irFile.owner.username}</td>
-                                      <td class="${rowType}">
- 		                                  <button class="ur_button" 
- 		                                    onmouseover="this.className='ur_buttonover';"
- 		                                    onmouseout="this.className='ur_button';"
- 		                                    onclick="javascript:YAHOO.ur.repository.confirmPictureDelete(${irFile.id});"
- 		                                    id="showFolder">Delete Picture</button> 
-	                                  </td>
-                                  </tr>
-                              </c:forEach>  
-                              </tbody>  
-                            </table>
+                           <c:import url="repository_pictures_frag.jsp"/>
                         </div>
                     </c:if>
 				   </div>
