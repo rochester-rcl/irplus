@@ -18,9 +18,10 @@ package edu.ur.ir.file;
 
 import java.io.File;
 import java.io.IOException;
+import org.apache.commons.io.FileUtils;;
 
 /**
- * Default implementation of creating temporary files for use in the system for
+ * Default implementation for creating temporary files for use in the system for
  * processing.
  * 
  * @author Nathan Sarr
@@ -28,6 +29,7 @@ import java.io.IOException;
  */
 public class DefaultTemporaryFileCreator implements TemporaryFileCreator{
 	
+	/** temporary directory to create */
 	private String temporaryDirectory;
 	
 	/**
@@ -40,10 +42,7 @@ public class DefaultTemporaryFileCreator implements TemporaryFileCreator{
 		
 		if( !tempDir.exists())
 		{
-			if(!tempDir.mkdir())
-			{
-				throw new RuntimeException("Could not create the specified directory");
-			}
+			FileUtils.forceMkdir(tempDir);
 		}
 
 		if( !tempDir.isDirectory())
@@ -65,12 +64,18 @@ public class DefaultTemporaryFileCreator implements TemporaryFileCreator{
 		return f;
 	}
 
+	/**
+	 * Get the temporary directory location as a string.
+	 * 
+	 * @see edu.ur.ir.file.TemporaryFileCreator#getTemporaryDirectory()
+	 */
 	public String getTemporaryDirectory() {
 		return temporaryDirectory;
 	}
 
 	/**
 	 * Creates a temporary directory for 
+	 * 
 	 * @see edu.ur.ir.file.TemporaryFileCreator#setTemporaryDirecotry(java.lang.String)
 	 */
 	public void setTemporaryDirectory(String directory) {
