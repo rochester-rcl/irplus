@@ -67,7 +67,7 @@
 
 <h3>Pictures</h3>
 <c:if test="${!ur:isEmpty(newsItem.pictures)}">
- <div class="dataTable">
+     <div class="dataTable">
               <urstb:table width="100%">
                   <urstb:thead>
                       <urstb:tr>

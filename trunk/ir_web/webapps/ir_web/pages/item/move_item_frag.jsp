@@ -21,6 +21,7 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
 
 	<c:forEach items="${itemsToMove}" var="item">
@@ -57,28 +58,32 @@
 	    </tr>
 	    <tr>
 		    <td width="400px" align="left" valign="top">
-		        <table class="simpleTable" width="400px">
-			        <thead>
-				        <tr>
-					        <th>Collections &amp; Publications to Move</th>
-				        </tr>
-			        </thead>
-			        <tbody>
-				        <c:forEach items="${collectionsToMove}" var="collection">
-					        <tr>
-						        <td><span class="worldBtnImg">&nbsp;</span>${collection.name}</td>
-					        </tr>
-				        </c:forEach>
-
-				        <c:forEach items="${itemsToMove}" var="item">
-					        <tr>
-						        <td><span class="packageBtnImg">&nbsp;</span>${item.name}</td>
-					        </tr>
-				        </c:forEach>
-			        </tbody>
-		        </table>
+		    <div class="dataTable">
+               <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td>Publications to Move</urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="item" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${itemsToMove}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                              <span class="packageBtnImg">&nbsp;</span>${item.name}
+                          </urstb:td>
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+              </div>
 		    </td>
-		    <td width="100px" align="center">
+		    <td width="100px" align="center" valign="top">
 		
 		        <button class="ur_button" id="move_button"
 			            onclick="javascript:YAHOO.ur.institutional.item.move.moveCollection();"
@@ -102,35 +107,35 @@
 	               <!-- set to indicate a success full move -->
 	               <input type="hidden" id="action_success" value="${actionSuccess}" name="actionSuccess"/>
                </form>
-               <table class="simpleTable" width="400px">
-	               <thead>
-		               <tr>
-			               <th class="thItemFolder">Destination</th>
-		               </tr>
-	               </thead>
-	               <tbody>
-		           <c:forEach items="${currentDestinationContents}"
-			              var="fileSystemObject">
-			           <tr>
-			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'institutionalCollection'}">
-						            <td><span class="worldBtnImg">&nbsp;</span><a
-							            href="javascript:YAHOO.ur.institutional.item.move.getMoveCollection(${fileSystemObject.id});">${fileSystemObject.name}</a></td>
-					       </c:if>
-			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'institutionalItem'}">
-					           <c:if test="${!ir:isInstitutionalPublicationToBeMoved(itemsToMove, fileSystemObject)}">
-						            <td><span class="packageBtnImg">&nbsp;</span>${fileSystemObject.name}</td>
-						       </c:if>
-					           <c:if test="${ir:isInstitutionalPublicationToBeMoved(itemsToMove, fileSystemObject)}">
-						            <td  class="errorMessage"><span class="packageBtnImg">&nbsp;</span>${fileSystemObject.name} [Moving]</td>
-						       </c:if>						       
-					       </c:if>					       
-			           </tr>
-		           </c:forEach>
-	               </tbody>
-               </table>
-		   </td>
-	   </tr>
-   </table>
+               
+               <div class="dataTable">
+               <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td>Destination</urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="fileSystemObject" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${currentDestinationContents}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                              <c:if test="${fileSystemObject.fileSystemType.type == 'institutionalCollection'}">
+						            <span class="worldBtnImg">&nbsp;</span><a
+							            href="javascript:YAHOO.ur.institutional.item.move.getMoveCollection(${fileSystemObject.id});">${fileSystemObject.name}</a>
+					           </c:if>
+                          </urstb:td>
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+              </div>
+               
 
 <div id="move_error" class="hidden">
 <ir:printError key="moveError" errors="${fieldErrors}"></ir:printError>
