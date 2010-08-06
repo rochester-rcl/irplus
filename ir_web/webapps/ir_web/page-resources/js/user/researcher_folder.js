@@ -198,6 +198,9 @@ YAHOO.ur.researcher.folder = {
 	     
 	     var linkIds = document.getElementsByName('linkIds');
 	     urUtil.setCheckboxes(linkIds, checked);
+	     
+	     var linkIds = document.getElementsByName('itemIds');
+	     urUtil.setCheckboxes(linkIds, checked);
 	},
 	
 	// create a dialog to confirm the deletion of folders.
