@@ -22,6 +22,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
 <!--  document type -->
 <c:import url="/inc/doctype-frag.jsp"/>
@@ -102,53 +103,53 @@
         	
         	
         	<strong> All versions </strong>
-        	<div class="clear">&nbsp;</div>
-        	
-              <table class="simpleTable">
-                  <thead>
-                      <tr>    
-	                      <th>
-	                          Name
-	                      </th>
-	                      <th>
-	                          Version Number
-	                      </th>
-	                      <th>
-	                          Published To Collections
-	                      </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-        
-                      <c:forEach var="info" varStatus="status" items="${itemVersionInfo}">
-                      <c:if test="${ (status.count % 2) == 0}">
-                          <c:set value="even" var="rowType"/>
-                      </c:if>
-                      <c:if test="${ (status.count % 2) == 1}">
-                          <c:set value="odd" var="rowType"/>
-                      </c:if>
-                      <tr>
-                          <td class="${rowType}">${info.version.item.name} </td>
-                          <c:url var="itemPreviewUrl" value="/user/viewPersonalItemVersion.action">
-	                          <c:param name="genericItemId" value="${info.version.item.id}"/>
-	                          <c:param name="personalItemId" value="${personalItem.id}"/>
-	                      </c:url>
-                          <td class="${rowType}"><a href="${itemPreviewUrl}">${info.version.versionNumber}</a></td>
-                          <td class="${rowType}">
- 	                          		<c:forEach var="collection" items="${info.collections}">
-		                          		 <c:url var="collectionUrl" value="/viewInstitutionalCollection.action">
-		                          		     <c:param name="collectionId" value="${collection.id}"/>
-		                          		 </c:url>
-		                          		 <a href="${collectionUrl}">${collection.path}${collection.name}</a> <br/>
-	                          		</c:forEach>
-                          
-                          </td>
-                     </tr>
-                     </c:forEach>  
-                 </tbody>  
-             </table>                     
+        	<br/>
+        	<br/>
+        	<div class="dataTable">
+              <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td>Name</urstb:td>
+                          <urstb:td>Version Number</urstb:td>
+                          <urstb:td>Published To Collections</urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="info" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${itemVersionInfo}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                              ${info.version.item.name} 
+                          </urstb:td>
+                        
+                          <urstb:td>
+                             <c:url var="itemPreviewUrl" value="/user/viewPersonalItemVersion.action">
+	                              <c:param name="genericItemId" value="${info.version.item.id}"/>
+	                              <c:param name="personalItemId" value="${personalItem.id}"/>
+	                          </c:url>
+	                          <a href="${itemPreviewUrl}">${info.version.versionNumber}</a>
+                          </urstb:td>
 
-             <!-- end the file properties div -->
+                          <urstb:td>
+                              <c:forEach var="collection" items="${info.collections}">
+		                          <c:url var="collectionUrl" value="/viewInstitutionalCollection.action">
+		                              <c:param name="collectionId" value="${collection.id}"/>
+		                          </c:url>
+		                          <a href="${collectionUrl}">${collection.path}${collection.name}</a> <br/>
+	                          </c:forEach>
+                          </urstb:td>                        
+
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+              </div>
+              <!-- end the file properties div -->
             
 	    </div>
 	    <!--  end body tag -->

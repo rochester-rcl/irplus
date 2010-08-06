@@ -30,7 +30,7 @@
 <html>
 <head>
 
-    <title>Move Personal Folders and Files</title>
+    <title>Move Folders and Files</title>
     <c:import url="/inc/meta-frag.jsp" />
 
     <!-- Core + Skin CSS -->
@@ -64,7 +64,7 @@
     <div id="doc2"><!--  this is the header of the page --> 
         <c:import url="/inc/header.jsp" /> 
 
-        <h3>Move Personal Folder Information</h3>
+        <h3>Move Folders and Files</h3>
 
         <!--  this is the body regin of the page -->
         <div id="bd">

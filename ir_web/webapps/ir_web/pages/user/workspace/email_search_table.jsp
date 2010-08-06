@@ -18,6 +18,7 @@
 
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
 
 <c:if test="${totalHits > 0}">
@@ -26,27 +27,40 @@
 </c:if>
   
 
-
-<table class="simpleTable">
-    <tr>
-        <th>Last Name</th>
-        <th>First Name</th>
-        <th>Email</th>
-    </tr>
-    <c:forEach items="${users}" var="userObject">
-        <tr>
-             <td>${userObject.lastName}</td>
-             <td> ${userObject.firstName}</td>
-             <td>
-	             <c:forEach items="${userObject.userEmails}" var="emailObject">
-	             	 <a href="javascript:YAHOO.ur.invite.search.showInvite('${emailObject.email}')"> ${emailObject.email} </a> &nbsp;&nbsp;&nbsp;
-				 </c:forEach>  
-			 </td>
-        </tr>
-    </c:forEach>
-
-</table>
-
+<div class="dataTable">
+              <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td>Last Name</urstb:td>
+                          <urstb:td>First Name</urstb:td>
+                          <urstb:td>Email</urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="fileSystemObject" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${currentDestinationContents}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                            ${userObject.lastName}
+                          </urstb:td>
+                           <urstb:td>
+                            ${userObject.firstName}
+                          </urstb:td>
+                           <urstb:td>
+                             <c:forEach items="${userObject.userEmails}" var="emailObject">
+	             	            <a href="javascript:YAHOO.ur.invite.search.showInvite('${emailObject.email}')"> ${emailObject.email} </a> &nbsp;&nbsp;&nbsp;
+				             </c:forEach>  
+                          </urstb:td>
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+              </div>
 
 <c:if test="${totalHits > 0}">
 	<c:import url="user_email_search_pager.jsp"/>
