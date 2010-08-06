@@ -21,6 +21,7 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
  
     <c:url var="cancelUrl" value="/user/workspace.action">
         <c:param name="parentFolderId" value="${parentFolderId}"/>
@@ -52,28 +53,32 @@
 	    </tr>
 	    <tr>
 		    <td width="400px" align="left" valign="top">
-		        <table class="simpleTable" width="400px">
-			        <thead>
-				        <tr>
-					        <th>Files to Move</th>
-				        </tr>
-			        </thead>
-			        <tbody>
-				        <c:forEach items="${foldersToMove}" var="folder">
-					        <tr>
-						        <td><span class="folderBtnImg">&nbsp;</span>${folder.name}</td>
-					        </tr>
-				        </c:forEach>
-
-				        <c:forEach items="${filesToMove}" var="file">
-					        <tr>
-						        <td><ir:fileTypeImg cssClass="tableImg" versionedFile="${file.versionedFile}"/>${file.name}</td>
-					        </tr>
-				        </c:forEach>
-			        </tbody>
-		        </table>
+		    <div class="dataTable">
+              <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td>Shared Files to Move</urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="file" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${filesToMove}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                                <ir:fileTypeImg cssClass="tableImg" versionedFile="${file.versionedFile}"/>${file.name}
+                          </urstb:td>
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+              </div>
 		    </td>
-		    <td width="100px" align="center">
+		    <td width="100px" align="center" valign="top">
 		
 		        <button class="ur_button" id="move_button"
 			            onclick="javascript:YAHOO.ur.shared.file.move.moveFile();"
@@ -95,27 +100,38 @@
 	               <!-- set to indicate a success full move -->
 	               <input type="hidden" id="action_success" value="${actionSuccess}" name="actionSuccess"/>
                </form>
-               <table class="simpleTable" width="400px">
-	               <thead>
-		               <tr>
-			               <th class="thItemFolder">Destination</th>
-		               </tr>
-	               </thead>
-	               <tbody>
-		           <c:forEach items="${currentDestinationContents}"
-			              var="fileSystemObject">
-			           <tr>
-			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-						            <td><span class="folderBtnImg"></span><a
-							            href="javascript:YAHOO.ur.shared.file.move.getMoveFolder(${fileSystemObject.id});">${fileSystemObject.name}</a></td>
-					       </c:if>
-			           	   <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
-						            <td><ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/>${fileSystemObject.name}</td>
-					       </c:if>					       
-			           </tr>
-		           </c:forEach>
-	               </tbody>
-               </table>
+               
+               
+               <div class="dataTable">
+              <urstb:table width="100%">
+                  <urstb:thead>
+                      <urstb:tr>
+                          <urstb:td>Destination</urstb:td>
+                      </urstb:tr>
+                  </urstb:thead>
+                  <urstb:tbody
+                      var="fileSystemObject" 
+                      oddRowClass="odd"
+                      evenRowClass="even"
+                      currentRowClassVar="rowClass"
+                      collection="${currentDestinationContents}">
+                      <urstb:tr 
+                          cssClass="${rowClass}"
+                          onMouseOver="this.className='highlight'"
+                          onMouseOut="this.className='${rowClass}'">
+                          <urstb:td>
+                              <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
+						            <span class="folderBtnImg"></span><a
+							            href="javascript:YAHOO.ur.shared.file.move.getMoveFolder(${fileSystemObject.id});">${fileSystemObject.name}</a>
+					           </c:if>
+			           	       <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
+						            <ir:fileTypeImg cssClass="tableImg" versionedFile="${fileSystemObject.versionedFile}"/>${fileSystemObject.name}
+					           </c:if>		
+                          </urstb:td>
+                      </urstb:tr>
+                  </urstb:tbody>
+              </urstb:table>
+              </div>
 		   </td>
 	   </tr>
    </table>
