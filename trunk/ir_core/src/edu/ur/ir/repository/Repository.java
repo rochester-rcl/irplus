@@ -174,7 +174,8 @@ public class Repository extends CommonPersistent {
 	}
 	
 	/**
-	 * Create a top level collection in this repository.
+	 * Create a top level collection in this repository.  This removes all white space on 
+	 * the left and right sides of the name.
 	 * 
 	 * @param name to give the repository.
 	 * @throws DuplicateNameException 
@@ -184,8 +185,7 @@ public class Repository extends CommonPersistent {
 	 */
 	public InstitutionalCollection createInstitutionalCollection(String name) throws DuplicateNameException
 	{
-		InstitutionalCollection irCollection = new InstitutionalCollection(this, name);
-		irCollection.setName(name);
+		InstitutionalCollection irCollection = new InstitutionalCollection(this, name.trim());
 		addInstitutionalCollection(irCollection);
 		institutionalCollections.add(irCollection);
 		return irCollection;
@@ -214,7 +214,7 @@ public class Repository extends CommonPersistent {
 	{
 		for( InstitutionalCollection c : institutionalCollections)
 		{
-			if( c.getName().equalsIgnoreCase(name))
+			if( c.getName().equalsIgnoreCase(name.trim()))
 			{
 				return c;
 		    }
