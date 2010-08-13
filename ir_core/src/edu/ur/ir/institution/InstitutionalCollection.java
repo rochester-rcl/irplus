@@ -264,9 +264,49 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * 
 	 * @param name
 	 */
-	public void setName(String name)
+	void setName(String name)
 	{
 		this.name = name;
+	}
+	
+	/**
+	 * Re-name the institutional collection.  This updates
+	 * the path of all child collections.
+	 * 
+	 * @param name - name to give the collection
+	 * 
+	 * @throws DuplicateNameException - if the collection name already exists at the given level
+	 */
+	public void reName(String name) throws DuplicateNameException
+	{
+		InstitutionalCollection parent = getParent();
+		if(parent == null)
+    	{
+    		if(getRepository().getInstitutionalCollection(name) == null)
+    		{
+    			setName(name);
+    			updatePaths(getPath());
+    		}
+    		else
+    		{
+    			throw new DuplicateNameException("A collection with the name " + name +
+						" already exists at the root", name );
+    		}
+    	}
+    	else
+    	{
+    		if( parent.getChild(name) == null )
+    		{
+    			setName(name);
+    			updatePaths(getPath());
+    		}
+    		else
+    		{
+    			throw new DuplicateNameException("A collection with the name " + name +
+						" already exists", name );
+    		}
+    	}
+		
 	}
 	
 	/**

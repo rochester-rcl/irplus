@@ -183,29 +183,11 @@ s	 */
 		//name change
 		if( !collection.getName().equals(collectionName))
         {
-        	if( collection.getParent() == null)
-        	{
-        		if(collection.getRepository().getInstitutionalCollection(collectionName) == null)
-        		{
-        			collection.setName(collectionName);
-        		}
-        		else
-        		{
-        			actionSuccess = false;
-        		}
-        	}
-        	else
-        	{
-        		InstitutionalCollection parent = collection.getParent();
-        		if( parent.getChild(collectionName) == null )
-        		{
-        			collection.setName(collectionName);
-        		}
-        		else
-        		{
-        			actionSuccess = false;
-        		}
-        	}
+			try {
+				collection.reName(collectionName);
+			} catch (DuplicateNameException e) {
+				actionSuccess = false;
+			}
         }
         
 		log.debug( "action success = " + actionSuccess);
