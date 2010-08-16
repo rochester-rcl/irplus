@@ -16,6 +16,7 @@
 
 package edu.ur.ir.web.action;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -33,8 +34,11 @@ import edu.ur.ir.repository.Repository;
  * @author Nathan Sarr
  *
  */
-public class RandomRepositoryPictureHelper implements Comparator<IrFile>
+public class RandomRepositoryPictureHelper implements Comparator<IrFile>, Serializable
 {
+	/** eclipse generated id */
+	private static final long serialVersionUID = 1564716557466623811L;
+
 	/**  Current picture location */
 	private int currentRepositoryPictureLocation;
 	

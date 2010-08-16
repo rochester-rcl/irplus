@@ -31,6 +31,8 @@ import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.news.NewsItem;
+import edu.ur.ir.news.NewsService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
@@ -117,6 +119,26 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 	/** researchers found */
 	private List<Researcher> researchers = new LinkedList<Researcher>();
 	
+	/** total number of researchers in the system */
+	private int researcherCount;
+
+	/**  List of news items to show */
+	private List<NewsItem> newsItems = new LinkedList<NewsItem>();
+	
+	/** helper to get news item information. */
+	private DateOrderNewsItemHelper newsItemHelper = new DateOrderNewsItemHelper();
+	
+	/** current news item location when dealing with news items */
+	private int currentNewsItemLocation = 0;
+	
+	/** service to deal with news information */
+	private NewsService newsService;
+	
+	/** count of news items */
+	private int newsItemCount;
+	
+
+
 	/**
 	 * Prepare the ur published object
 	 * 
@@ -153,6 +175,12 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
         // get the first set of researchers
         researchers = researcherPictureHelper.getResearchers(RandomResearcherPictureHelper.INIT, researcherService, currentResearcherLocation);
         currentResearcherLocation = researcherPictureHelper.getCurrentResearcherLocation();
+        researcherCount = researcherPictureHelper.getResearcherCount();
+        
+        //get the first set of news items
+        newsItems = newsItemHelper.getNewsItems(DateOrderNewsItemHelper.INIT, newsService, currentNewsItemLocation);
+        currentNewsItemLocation = newsItemHelper.getCurrentLocation();
+        newsItemCount = newsItemHelper.getNewsItemCount();
         
 		return SUCCESS;
     }
@@ -259,5 +287,26 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 		return numberOfUsers;
 	}
 
+	
+	public List<NewsItem> getNewsItems() {
+		return newsItems;
+	}
+	
+
+	public int getCurrentNewsItemLocation() {
+		return currentNewsItemLocation;
+	}
+
+	public void setNewsService(NewsService newsService) {
+		this.newsService = newsService;
+	}
+
+	public int getResearcherCount() {
+		return researcherCount;
+	}
+	
+	public int getNewsItemCount() {
+		return newsItemCount;
+	}
 
 }

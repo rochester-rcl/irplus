@@ -54,6 +54,7 @@
 	</table>
 	</c:forEach>
 	
+	<c:if test="${researcherCount > 2}">
 	<table class="buttonTable">
 	    <tr>
 	        <td class="leftButton">
@@ -70,6 +71,7 @@
 	        </td>
 	     </tr>
 	</table>
+	</c:if>
 </c:if>
 
 

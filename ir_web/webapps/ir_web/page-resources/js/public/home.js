@@ -76,7 +76,7 @@ YAHOO.ur.public.home =
      *         PREV for previous news item
      * numNewsItemsToGet = number of news item to retrieve at once
      */
-    getNewsItems : function(currentLocation, type, numNewsItemsToGet)
+    getNewsItems : function(currentLocation, type)
     {
        // action for getting the picture
        var getNewsAction =  basePath + 'getNewsItems.action';
@@ -105,9 +105,8 @@ YAHOO.ur.public.home =
 	
 	   // get the next news item
        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getNewsAction +"?currentLocation="+ 
+            getNewsAction +"?currentNewsItemLocation="+ 
             currentLocation +'&type='+ type +
-            '&numNewsItems=' + numNewsItemsToGet +
             '&bustcache='+new Date().getTime(), 
             {success: handleSuccess, failure: handleFailure}, null);
     }, 
@@ -148,18 +147,6 @@ YAHOO.ur.public.home =
             getResearcherPictureAction +"?currentResearcherLocation="+ 
             currentLocation +'&type='+ type +'&bustcache='+new Date().getTime(), 
         {success: handleSuccess, failure: handleFailure}, null);
-    },
-    
-
-    /**
-     * Init the javascript
-     */
-    init : function()
-    {
-        YAHOO.ur.public.home.getNewsItems(0, 'INIT', 2);
     }
     
 };
-
-// initialize the code once the dom is ready
-YAHOO.util.Event.onDOMReady(YAHOO.ur.public.home.init);

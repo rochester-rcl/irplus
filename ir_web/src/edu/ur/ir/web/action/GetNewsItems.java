@@ -17,10 +17,8 @@
 
 package edu.ur.ir.web.action;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -39,29 +37,18 @@ public class GetNewsItems extends ActionSupport{
 	
 	/**  Eclipse generated id */
 	private static final long serialVersionUID = -4925446526690331640L;
-
-	// this if when the page is first initalized
-	public static final String INIT = "INIT";
-	
-	// get the next picture
-	public static final String NEXT = "NEXT";
-	
-	// get the previous picture
-	public static final String PREV = "PREV";
 	
 	/**  Logger for file upload */
 	private static final Logger log = Logger.getLogger(GetNewsItems.class);
 	
-	/** news service for gettting news items */
+	/** news service for getting news items */
 	private NewsService newsService;
-	
-	/**  Number of news items to grab */
-	private int numNewsItems = 1;
 	
 	/**  List of news items to show */
 	private List<NewsItem> newsItems = new LinkedList<NewsItem>();
-	
-	private int newsItemsSize = 0;
+
+	/** helper for getting news items */
+	private DateOrderNewsItemHelper newsHelper = new DateOrderNewsItemHelper();
 	
 	/**
 	 * Determine if the user is initializing wants the next or previous
@@ -70,7 +57,11 @@ public class GetNewsItems extends ActionSupport{
 	private String type;
 	
 	/**  Current news location */
-	private int currentLocation;
+	private int currentNewsItemLocation;
+	
+	/** total count of available news items */
+	private int newsItemCount;
+
 	
 	/**
      * Allows a file to be downloaded
@@ -78,132 +69,12 @@ public class GetNewsItems extends ActionSupport{
      * @return {@link #SUCCESS}
      */
     public String execute() throws Exception {
-    	
-    	if( log.isDebugEnabled())
-    	{
-    		log.debug("Next researcher Picture");
-    	}
-    	Date d = new Date();
-    	int newsItemCount = newsService.getAvailableNewsItemsCount(d).intValue();
-    	
-    	if( newsItemCount > 0 )
-    	{
-    		// we can grab them all at once
-    		if(  newsItemCount == 1 || newsItemCount == 2)
-    		{
-    			currentLocation = 0;
-    			newsItems.addAll(newsService.getAvailableNewsItems(d,0, 2));
-    			System.out.println("number of news items = " + newsItems.size());
-    		}
-    		else if ( type.equals(INIT))
-     	    {
-    			
-     		    Random random = new Random();
-     		    currentLocation = random.nextInt(newsItemCount);
-     		    
-     		   System.out.println( "init current Location = " + currentLocation  );
-     		    
-     		    // if past last position
-         	    if ((currentLocation + 1) >= newsItemCount) {
-         	    	// get last researcher
-         	    	System.out.println( "init A fetching = " + currentLocation  );
-         	    	newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 1));
-         	    	
-         	    	// reset current location to start
-         	    	currentLocation = 0;
-         	    	
-         	    	System.out.println( "init B fetching = " + currentLocation  );
-         	    	// get first researcher
-         	    	newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 1));
-         	       
-         	    } else {
-         	    	// otherwise in middle of list
-         	    	newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 2));
-         	    	currentLocation = currentLocation + 1;
-         	    }
-         	   System.out.println( "init final INIT Location = " + currentLocation  );
-         	    
-     	    }
-    		else if( type.equals(NEXT))
-    	    {
-    			System.out.println( "NEXT = " + currentLocation  );
-    			// end of list - just showed last researcher
-    			if( (currentLocation + 1) >= newsItemCount )
-    			{
-    				currentLocation = 0;
-    				System.out.println( "NEXT A fetching = " + currentLocation  );
-     			    newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 2));
-     		        currentLocation = currentLocation + 1;
-    			}
-    		    else
-    		    {
-    		    	System.out.println("NEXT - 1 = " + currentLocation  );
-    			    // can't grab both at once  one at very end and one at the beginning
-    			    if( (currentLocation + 2) == newsItemCount)
-    			    {
-    			    	currentLocation = currentLocation + 1;
-    			    	System.out.println( "NEXT B fetching = " + currentLocation  );
-    			    	newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 1));
-    			    	currentLocation = 0;
-    			    	System.out.println( "NEXT C fetching = " + currentLocation  );
-             	    	newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 1));
-    			    }
-    			    else
-    			    {
-    			    	currentLocation = currentLocation + 1;
-    			    	System.out.println("NEXT D fetching = " + currentLocation  );
-    			    	newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 2));
-    			    	currentLocation = currentLocation + 1;
-    			    }
-     		    }
-    			System.out.println( "NEXT End current = " + currentLocation  );
-    	    }
-    		else if( type.equals(PREV))
-    	    {
-    			System.out.println( "PREV = " + currentLocation  );
-    			
-    			// at position 0 get - so very last and 0 are loaded
-    			// get two before very last
-    	    	if (currentLocation == 0) {
-    	    		currentLocation = newsItemCount - 3;
-    	    		System.out.println("PREV A fetching = " + currentLocation);
-    	    		newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 2));
-    	    		currentLocation = currentLocation + 1;
-    	    	} 
-    	    	// position 0 and 1 are loaded - so get very last two
-    	    	if( currentLocation == 1)
-    	    	{
-    	    		currentLocation = newsItemCount - 2;
-    	    		newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 2));
-    	    		currentLocation = currentLocation + 1;
-    	    	}
-    	    	// 1 and 2 are loaded - get very last and first
-    	    	else if ( currentLocation ==  2 ) 
-    	    	{
-    	    		currentLocation = newsItemCount - 1;
-    	    		System.out.println("PREV B fetching = " + currentLocation);
-    	    		newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 1));
-    	    		currentLocation = 0;
-    	    		System.out.println("PREV C fetching = " + currentLocation);
-    	    		newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 1));
-    	    	}
-    	    	// at position grab last 2 from current positions
-    	    	else 
-    		    {
-    			    currentLocation = currentLocation - 3;
-    			    System.out.println("PREV E fetching = " + currentLocation);
-    			    //get the last 2
-    			    newsItems.addAll(newsService.getAvailableNewsItems(d,currentLocation, 2));
-    			    currentLocation = currentLocation + 1;
-    		    }
-    	    	System.out.println( "PREV End current = " + currentLocation  );
-    		   
-    	    }
-    	}
+    	log.debug("Get news items");
+    	newsItems = newsHelper.getNewsItems(type, newsService, currentNewsItemLocation);
+    	currentNewsItemLocation = newsHelper.getCurrentLocation();
+    	newsItemCount = newsHelper.getNewsItemCount();
     	return SUCCESS;
     }
-	
- 
 
 	public NewsService getNewsService() {
 		return newsService;
@@ -213,14 +84,7 @@ public class GetNewsItems extends ActionSupport{
 		this.newsService = newsService;
 	}
 
-	public int getNumNewsItems() {
-		return numNewsItems;
-	}
-
-	public void setNumNewsItems(int numNewsItems) {
-		this.numNewsItems = numNewsItems;
-	}
-
+	
 	public List<NewsItem> getNewsItems() {
 		return newsItems;
 	}
@@ -236,17 +100,18 @@ public class GetNewsItems extends ActionSupport{
 	public void setType(String type) {
 		this.type = type;
 	}
-
-	public int getCurrentLocation() {
-		return currentLocation;
+	
+	public int getCurrentNewsItemLocation() {
+		return currentNewsItemLocation;
 	}
 
-	public void setCurrentLocation(int currentLocation) {
-		this.currentLocation = currentLocation;
+	public void setCurrentNewsItemLocation(int currentNewsItemLocation) {
+		this.currentNewsItemLocation = currentNewsItemLocation;
+	}
+	
+	public int getNewsItemCount() {
+		return newsItemCount;
 	}
 
-	public int getNewsItemsSize() {
-		return newsItemsSize;
-	}
 
 }
