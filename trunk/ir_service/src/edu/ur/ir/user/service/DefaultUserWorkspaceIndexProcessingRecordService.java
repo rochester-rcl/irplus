@@ -55,6 +55,11 @@ UserWorkspaceIndexProcessingRecordService
 	private static final Logger log = Logger.getLogger(DefaultUserWorkspaceIndexProcessingRecordService.class);
 
 
+	/**
+	 * Re- index all of the users items.  This creates a new index folder.
+	 * 
+	 * @see edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService#reIndexAllUserItems(edu.ur.ir.user.IrUser, edu.ur.ir.index.IndexProcessingType)
+	 */
 	public void reIndexAllUserItems(IrUser user, IndexProcessingType processingType) throws IOException {
 		
 		if( user.getReBuildUserWorkspaceIndex())
