@@ -62,6 +62,9 @@ public class NextResearcherPicture extends ActionSupport {
 	/** researchers found */
 	private List<Researcher> researchers = new LinkedList<Researcher>();
 	
+	/** total number of researchers in the system */
+	private Long researcherCount;
+
 	/**
      * Gets the next ir file to be downloaded
      *
@@ -77,7 +80,7 @@ public class NextResearcherPicture extends ActionSupport {
     	// get the first set of researchers
         researchers = researcherPictureHelper.getResearchers(type, researcherService, currentResearcherLocation);
         currentResearcherLocation = researcherPictureHelper.getCurrentResearcherLocation();
-  
+        researcherCount = researcherService.getPublicResearcherCount();
         return SUCCESS;
     }
    
@@ -102,16 +105,13 @@ public class NextResearcherPicture extends ActionSupport {
 		return researcherService;
 	}
 
-
 	public void setResearcherService(ResearcherService researcherService) {
 		this.researcherService = researcherService;
 	}
 
-
 	public List<Researcher> getResearchers() {
 		return researchers;
 	}
-
 
 	public void setResearchers(List<Researcher> researchers) {
 		this.researchers = researchers;
@@ -120,4 +120,9 @@ public class NextResearcherPicture extends ActionSupport {
 	public int  getResearchersCount() {
 		return researchers.size();
 	}
+	
+	public Long getResearcherCount() {
+		return researcherCount;
+	}
+
 }

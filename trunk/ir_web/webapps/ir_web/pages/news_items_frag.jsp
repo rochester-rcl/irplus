@@ -47,22 +47,24 @@
            
 </c:forEach>
     </table>
+    <c:if test="${newsItemCount > 2}">
     <table class="buttonTable">
         <tr>
             <td class="leftButton">
                        <button class="ur_button" 
 	                           onmouseover="this.className='ur_buttonover';"
  		                       onmouseout="this.className='ur_button';"
- 		                       onclick="javascript:YAHOO.ur.public.home.getNewsItems(${currentLocation}, 'PREV', 2);">&lt; Previous</button>
+ 		                       onclick="javascript:YAHOO.ur.public.home.getNewsItems(${currentNewsItemLocation}, 'PREV');">&lt; Previous</button>
  		    </td>
  		    <td class="rightButton">
  		               <button class="ur_button" 
 	                           onmouseover="this.className='ur_buttonover';"
  		                       onmouseout="this.className='ur_button';"
- 		                       onclick="javascript:YAHOO.ur.public.home.getNewsItems(${currentLocation}, 'NEXT', 2);">Next &gt;</button>
+ 		                       onclick="javascript:YAHOO.ur.public.home.getNewsItems(${currentNewsItemLocation}, 'NEXT');">Next &gt;</button>
              </td>
          </tr>
     </table>
+    </c:if>
 </c:if>
     
 

@@ -16,6 +16,7 @@
 
 package edu.ur.ir.web.action;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -33,8 +34,11 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class RandomResearcherPictureHelper {
+public class RandomResearcherPictureHelper implements Serializable{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 6799145112720922666L;
+
 	/** determine what the user is trying to do */
 	// this if when the page is first initalized
 	public static final String INIT = "INIT";
@@ -48,9 +52,12 @@ public class RandomResearcherPictureHelper {
 	/** current researcher location */
 	private int currentResearcherLocation = 0;
 	
-	/** total number of researchers */
+	/** count of available researchers  */
 	private int researcherCount;
 	
+	
+
+
 	/**  Logger for file upload */
 	private static final Logger log = Logger.getLogger(RandomResearcherPictureHelper.class);
 	
@@ -58,7 +65,8 @@ public class RandomResearcherPictureHelper {
 	 * Get the next researchers to be shown.
 	 * 
 	 * @param type - NEXT/PREV/INIT
-	 * @param researcherService
+	 * @param researcherService - service to help deal with researchers
+	 * @param location - current location in the current list
 	 * @return
 	 */
 	public List<Researcher> getResearchers(String type, ResearcherService researcherService, int location)
@@ -187,12 +195,13 @@ public class RandomResearcherPictureHelper {
 		return researchers;
 	}
 
-	public int getResearcherCount() {
-		return researcherCount;
-	}
-
 	public int getCurrentResearcherLocation() {
 		return currentResearcherLocation;
 	}
 
+	public int getResearcherCount() {
+		return researcherCount;
+	}
+
+	
 }

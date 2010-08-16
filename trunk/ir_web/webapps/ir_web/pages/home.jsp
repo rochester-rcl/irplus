@@ -156,6 +156,19 @@
             
                 <!--  Start the second column -->
                 <div class="yui-u">
+                    <!--  only show news items if they exist -->
+                    <c:if test="${!ur:isEmpty(newsItems)}">
+                        <div class="contentContainer">
+                            <div class="contentBoxTitle">
+                                <p>News</p>
+                            </div>
+                            <div id="news_items" class="contentBoxContent">
+                                <c:import url="news_items_frag.jsp"/>
+                            </div>
+                        </div>
+                     </c:if>
+                    
+                     <c:if test="${numRepositoryPictures > 1}">
                      <div class="contentContainer">
                         <div class="contentBoxTitle">
                             <p>Images</p>
@@ -167,7 +180,9 @@
                             </div>
                         </div>
                     </div>
+                    </c:if>
                     
+                   <c:if test="${!ur:isEmpty(researchers)}">
                    <div class="contentContainer">
                         <div class="contentBoxTitle">
                             <p>Researchers</p>
@@ -178,16 +193,10 @@
                             </div>
                         </div>
                     </div>
+                    </c:if>
                     
                    
-                    
-                    <div class="contentContainer">
-                        <div class="contentBoxTitle">
-                            <p>News</p>
-                        </div>
-                        <div id="news_items" class="contentBoxContent">
-                        </div>
-                    </div>
+                   
                     
                     <div class="contentContainer">
                        <div class="contentBoxTitle">
