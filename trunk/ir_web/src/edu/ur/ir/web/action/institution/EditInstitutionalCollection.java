@@ -28,9 +28,12 @@ import com.opensymphony.xwork2.ActionSupport;
 
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
+import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.security.IrAcl;
@@ -109,6 +112,14 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 	/** permissions that can be given to a collection */
 	private List<IrClassTypePermission> permissions = new LinkedList<IrClassTypePermission>();
 	
+	/** service for marking items that need to be indexed */
+	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
+
+
+
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
+	
 	/**
 	 * Create a new institutional collection 
 	 * 
@@ -134,7 +145,7 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 				 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
 						 false);
 			try {
-				collection = repository.createInstitutionalCollection(collectionName);
+				collection = repository.createInstitutionalCollection(collectionName.trim());
 				repositoryService.saveRepository(repository);
 				actionSuccess = true;
 			   
@@ -154,7 +165,7 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 			try {
 				if( user.hasRole(IrRole.ADMIN_ROLE) || institutionalCollectionSecurityService.hasPermission(parent, user, InstitutionalCollectionSecurityService.ADMINISTRATION_PERMISSION) > 0 )
 				{
-				    collection = parent.createChild(collectionName);
+				    collection = parent.createChild(collectionName.trim());
 				    institutionalCollectionService.saveCollection(parent);
 				    institutionalCollectionSecurityService.giveAdminPermissionsToParentCollections(collection);
 				    actionSuccess = true;
@@ -181,23 +192,20 @@ s	 */
         
 		actionSuccess = true;
 		//name change
-		if( !collection.getName().equals(collectionName))
+		if( !collection.getName().equals(collectionName.trim()))
         {
 			try {
-				collection.reName(collectionName);
+				collection.reName(collectionName.trim());
+				log.debug("success saving insitutional collection " + collection);
+	            collection.setDescription(collectionDescription);	
+	            institutionalCollectionService.saveCollection(collection);
+	            //re-index the contents of the institutional collection
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				institutionalItemIndexProcessingRecordService.processItemsInCollection( collection, processingType);
 			} catch (DuplicateNameException e) {
 				actionSuccess = false;
 			}
         }
-        
-		log.debug( "action success = " + actionSuccess);
-		if( actionSuccess )
-		{
-			log.debug("success saving insitutional collection " + collection);
-            collection.setDescription(collectionDescription);	
-            institutionalCollectionService.saveCollection(collection);
-		}
-		
         return "update";
 	}
 	
@@ -479,5 +487,14 @@ s	 */
 		this.userService = userService;
 	}
 
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
 
 }
