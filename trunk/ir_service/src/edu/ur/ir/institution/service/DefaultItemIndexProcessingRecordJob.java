@@ -156,6 +156,12 @@ public class DefaultItemIndexProcessingRecordJob implements StatefulJob{
 		        	        log.error("Can't process record type " + record.getIndexProcessingType() + " for item " + i);
 		                 }
 		            }
+		            else
+		            {
+		            	// item does not exist - delete the record
+		            	institutionalItemIndexService.deleteItem(record.getInstitutionalItemId(), f);
+		            	processingRecordService.delete(record);
+		            }
 			    }
 		        tm.commit(ts);
 		    }

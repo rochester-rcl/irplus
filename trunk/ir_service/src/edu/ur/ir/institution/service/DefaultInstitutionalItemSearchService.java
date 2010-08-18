@@ -97,12 +97,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	 DefaultInstitutionalItemIndexService.SERIES_ANALYZED,
 	 DefaultInstitutionalItemIndexService.CITATION,
 	 DefaultInstitutionalItemIndexService.CONTENT_TYPES_ANALYZED,
-	 DefaultInstitutionalItemIndexService.COLLECTION_LEFT_VALUE,
-	 DefaultInstitutionalItemIndexService.COLLECTION_RIGHT_VALUE,
-	 DefaultInstitutionalItemIndexService.COLLECTION_NAME};
-	
-	
-	
+	 DefaultInstitutionalItemIndexService.COLLECTION_NAME_ANALYZED};
 	
 	/**
 	 * Get the facets and results
@@ -127,13 +122,8 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		IndexSearcher searcher = new IndexSearcher(indexFolder);
 		IndexReader reader = searcher.getIndexReader();
 		
-
-		
 		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
-		
-		
-		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// execute the main query - we will use this to extract data to determine the facet searches
 		// the search helper MUST BE SET TO FALSE if diacritic based searches are to work
@@ -143,10 +133,12 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		if( log.isDebugEnabled() )
 		{
 			log.debug("main query = " + executedQuery );
+			log.debug("main query parsed = " + mainQuery + " maxNumberOfMainQueryHits = " + maxNumberOfMainQueryHits );
 		}
 		
 		
 		TopDocs topDocs = searcher.search(mainQuery,  maxNumberOfMainQueryHits);
+		
 		// determine the set of data we should use to determine facets
 		HashMap<String, HashMap<String, FacetResult>> possibleFacets = this.generateFacetSearches(
 				topDocs, 
@@ -157,8 +149,10 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		QueryWrapperFilter mainQueryWrapper = new QueryWrapperFilter(mainQuery);
 		log.debug("executeSearchWithFacets 1 query = " + mainQuery);
 		DocIdSet mainQueryBits = mainQueryWrapper.getDocIdSet(reader);
-		OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
+		OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), reader.maxDoc());
 		
+		
+		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		
 		// process the data and determine the facets
         FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
@@ -358,9 +352,11 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			    
 			    DocIdSet subQueryBits = subQueryWrapper.getDocIdSet(reader);
 			
-			    OpenBitSetDISI subQuerybitSet = new OpenBitSetDISI(subQueryBits.iterator(), maxNumberOfMainQueryHits);
+			    OpenBitSetDISI subQuerybitSet = new OpenBitSetDISI(subQueryBits.iterator(), reader.maxDoc());
 
 			    count = getFacetHitCount(mainQueryBitSet, subQuerybitSet);
+			    
+			    log.debug("count = " + count);
 		    }
 			else
 			{
@@ -378,7 +374,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		return fields;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Execute the search with a set of facet filters
+	 * 
 	 * @see edu.ur.ir.repository.InstitutionalItemSearchService#executeSearchWithFacets(java.lang.String, java.util.Set, java.lang.String, int, int, int)
 	 */
 	public FacetSearchHelper executeSearchWithFacets(
@@ -392,7 +390,9 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			int idsToCollectStartPosition)
 			throws CorruptIndexException, IOException, ParseException {
 
-		log.debug("orginal query 3 = " + mainQueryString);
+		log.debug("orignal query 3 = " + mainQueryString);
+		
+		// return if the main query is invalid
 		if( searchDirectoryIsEmpty(indexFolder) || isInvalidQuery(mainQueryString))
 		{
 			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
@@ -403,8 +403,6 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
-		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
-		
 		// execute the main query - we will use this to extract data to determine the facet searches
 		// the search helper MUST BE SET TO FALSE if diacritic based searches are to work
 		// putting a * following a diacritic does not work
@@ -414,7 +412,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		{
 			log.debug("parsed query = " +  executedQuery.trim());
 		}
-		Query mainQuery = parser.parse( executedQuery);
+		Query mainQuery = parser.parse(executedQuery);
 
 		
 		//create a filter for the main query
@@ -422,9 +420,8 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		
 	    // get the bitset for main query
 		DocIdSet mainQueryBits = mainQueryWrapper.getDocIdSet(reader);
-		OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
+		OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), reader.maxDoc());
 		TopDocs hits = null;
-		
 		if( filters.size() > 0 )
 		{
 		    // create a filter that will match the main query plus all other filters
@@ -439,7 +436,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		    DocIdSet filterQueryBits = filter.getDocIdSet(reader);
 		    
 		    
-		    OpenBitSetDISI filterBitSet = new OpenBitSetDISI(filterQueryBits.iterator(), maxNumberOfMainQueryHits);
+		    OpenBitSetDISI filterBitSet = new OpenBitSetDISI(filterQueryBits.iterator(), reader.maxDoc());
 		    mainQueryBitSet.and(filterBitSet);
 		    
 		    hits = searcher.search(mainQuery, filter, maxNumberOfMainQueryHits);
@@ -455,7 +452,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		// determine the set of data we should use to determine facets
 		HashMap<String, HashMap<String, FacetResult>> possibleFacets = this.generateFacetSearches(hits, numberOfHitsToProcessForFacets, numberOfResultsToCollectForFacets, searcher);
 
-
+		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
         FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
         		reader, 
         		mainQueryBitSet, 
@@ -501,8 +498,6 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
-		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
-		
 		// execute the main query - we will use this to extract data to determine the facet searches
 		// the search helper MUST BE SET TO FALSE if diacritic based searches are to work
 		// putting a * following a diacritic does not work
@@ -518,7 +513,6 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		
 	    // get the bitset for main query
 		DocIdSet mainQueryBits = mainQueryWrapper.getDocIdSet(reader);
-		TopDocs hits = null;
 		
 		List<Filter> luceneFilters = new LinkedList<Filter>();
 	
@@ -541,18 +535,18 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		DocIdSet filterQueryBits = filter.getDocIdSet(reader);
 		 
 		// apply the facets and include them in the main query bit set
-	    OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
-	    OpenBitSetDISI filterBitSet = new OpenBitSetDISI(filterQueryBits.iterator(), maxNumberOfMainQueryHits);
+	    OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), reader.maxDoc());
+	    OpenBitSetDISI filterBitSet = new OpenBitSetDISI(filterQueryBits.iterator(), reader.maxDoc());
 	    mainQueryBitSet.and(filterBitSet);
 	    
-	    hits = searcher.search(mainQuery, filter, maxNumberOfMainQueryHits);
-	    log.debug(" executeSearchWithFacets 4 = mainQuery = " + mainQuery + " filter = " + filter);	    
+	    TopDocs hits = searcher.search(mainQuery, filter, maxNumberOfMainQueryHits);
+	    log.debug(" executeSearchWithFacets 4 = mainQuery = " + mainQuery + " filter = " + filter + "maxNumberOfMainQueryHits = " + maxNumberOfMainQueryHits);	    
 
 		
 		// determine the set of data we should use to determine facets
 		HashMap<String, HashMap<String, FacetResult>> possibleFacets = this.generateFacetSearches(hits, numberOfHitsToProcessForFacets, numberOfResultsToCollectForFacets, searcher);
 
-
+		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
         FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
         		reader, 
         		mainQueryBitSet, 
@@ -710,8 +704,6 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 			}
 		}
 		
-		
-		
 		facetResults.put(LANGUAGE_MAP, finalLanguageFacets);
 		
 		// get the format and create a facet for each format
@@ -853,9 +845,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		QueryParser parser = new MultiFieldQueryParser(fields, analyzer, getBoostedFields());
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
-		
-		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
-		
+
 		// execute the main query - we will use this to extract data to determine the facet searches
 		// the search helper MUST BE SET TO FALSE if diacritic based searches are to work
 		// putting a * following a diacritic does not work
@@ -881,14 +871,12 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		DocIdSet filterQueryBits = chainedFilter.getDocIdSet(reader);
 		
 		 // apply the filters for the collection root and range
-	    OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), maxNumberOfMainQueryHits);
-	    OpenBitSetDISI filterBitSet = new OpenBitSetDISI(filterQueryBits.iterator(), maxNumberOfMainQueryHits);
+	    OpenBitSetDISI mainQueryBitSet = new OpenBitSetDISI(mainQueryBits.iterator(), reader.maxDoc());
+	    OpenBitSetDISI filterBitSet = new OpenBitSetDISI(filterQueryBits.iterator(), reader.maxDoc());
 	    mainQueryBitSet.and(filterBitSet);
 		 
 		log.debug(" executeSearchWithFacets 5 = mainQuery = " + mainQuery + " filter = " + chainedFilter);	    
-		 
-		TopDocs hits = null;
-		hits = searcher.search(mainQuery, chainedFilter, maxNumberOfMainQueryHits);
+		TopDocs hits = searcher.search(mainQuery, chainedFilter, maxNumberOfMainQueryHits);
 		
 		// determine the set of data we should use to determine facets
 		HashMap<String, HashMap<String, FacetResult>> possibleFacets = this.generateFacetSearches(hits, 
@@ -896,6 +884,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 				numberOfResultsToCollectForFacets,
 				searcher);
 
+		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
 		// process the data and determine the facets
         FacetSearchHelper helper = processPossibleFacets(possibleFacets, 
         		reader, 
@@ -969,8 +958,4 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		
 		return boosts;
 	}
-
-	
-	
-
 }
