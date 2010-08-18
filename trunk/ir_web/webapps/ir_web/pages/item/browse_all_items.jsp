@@ -407,7 +407,7 @@
 						    
 						    <div class="dataTable">
 							
-					        <urstb:table>
+					        <urstb:table width="100%">
 					            <urstb:thead>
 					                    <urstb:td>Thumbnail</urstb:td>
 					                    <urstb:td>Name</urstb:td>
