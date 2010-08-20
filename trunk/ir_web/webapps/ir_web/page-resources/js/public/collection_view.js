@@ -21,6 +21,10 @@ YAHOO.namespace("ur.public.collection.view");
 
 YAHOO.ur.public.collection.view = 
 {
+	/**
+	 * Get the next collection picture based on 
+	 * users selection
+	 */
     getCollectionPicture : function(currentLocation, type)
     {
         // action for getting the picture
@@ -52,13 +56,16 @@ YAHOO.ur.public.collection.view =
 	
 	    //Get the next picture
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getCollectionPictureAction +"?currentLocation="+ 
+            getCollectionPictureAction +"?currentPictureLocation="+ 
             currentLocation +'&type='+ type +
             '&collectionId=' + collectionId +
             '&bustcache='+new Date().getTime(), 
             {success: handleSuccess, failure: handleFailure}, null);
     },
     
+    /**
+     * Subscribe to a given collection
+     */
     subscribe : function(userId) {
     	 // action for getting the picture
         var subscribeToCollectionAction =  basePath + 'user/subscribeToCollection.action';
@@ -93,6 +100,9 @@ YAHOO.ur.public.collection.view =
             {success: handleSuccess, failure: handleFailure}, null);
     },
 
+    /**
+     * Unsubscribe to a given collection
+     */
     unsubscribe : function(userId) {
     	 // action for getting the picture
         var unSubscribeFromCollectionAction =  basePath + 'user/unSubscribeFromCollection.action';
@@ -127,6 +137,9 @@ YAHOO.ur.public.collection.view =
             {success: handleSuccess, failure: handleFailure}, null);
     },
     
+    /**
+     * Determine if the user is subscribed to a given collection.
+     */
     getUserSubscriptionForThisCollection : function(userId) 
     {
     	 // action for getting the picture
@@ -160,54 +173,5 @@ YAHOO.ur.public.collection.view =
             getUserSubscriptionAction + "?collectionId=" + collectionId + "&subscribeUserId=" + userId
             + '&bustcache='+new Date().getTime(), 
             {success: handleSuccess, failure: handleFailure}, null);    	
-    },
-    
-    getStatisticsForThisCollection : function() 
-    {
-
-    	 // action for getting the statistics
-        var getStatisticsAction =  basePath + 'getInstitutionalCollectionStatistics.action';
-
-        var collectionId = document.getElementById('current_collection_id').value;
-   
-        // Success action on getting the statistics
-        var handleSuccess = function(o) 
-        {
-			// check for the timeout - forward user to login page if timout
-	        // occured
-	        if( !urUtil.checkTimeOut(o.responseText) )
-	        {               
-        	    //get the response statistics
-		        var response = o.responseText;
-                var divToUpdate = document.getElementById('statistics_div');
-                divToUpdate.innerHTML = response;
-            }
-        };
-    
-        // Faiure action on getting a statistics
-        var handleFailure = function(o) 
-	    {
-        	if( o.status != 0 )
-	        {
-	            alert('Could not get stats ' 
-	                + o.status + ' status text ' + o.statusText );
-	        }
-	    };
-	
-	    //Get the statistics
-        var transaction = YAHOO.util.Connect.asyncRequest('GET', 
-            getStatisticsAction + "?collectionId=" + collectionId 
-            + '&bustcache=' + new Date().getTime(), 
-            {success: handleSuccess, failure: handleFailure}, null);    	
-    },
-    
-    init : function()
-    {
-        YAHOO.ur.public.collection.view.getCollectionPicture( 0, 'INIT');
-        YAHOO.ur.public.collection.view.getStatisticsForThisCollection();
     }
 };
-
-
-// initialize the code once the dom is ready
-YAHOO.util.Event.onDOMReady(YAHOO.ur.public.collection.view.init);

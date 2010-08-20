@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -36,6 +37,7 @@ import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.action.institution.InstitutionalCollectionPictureHelper.PictureFileLocation;
 import edu.ur.order.OrderType;
 import edu.ur.simple.type.AscendingNameComparator;
 
@@ -55,9 +57,6 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 	
 	/** Id of the collection */
 	private Long collectionId;
-	
-	/** Get the picture at the specified location */
-	int pictureLoctation;
 	
 	/** set of institutional collections that are the path for the current 
 	 * institutional collection
@@ -112,24 +111,19 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 	/** Service for dealing with institutional collection subscription service */
 	private InstitutionalCollectionSubscriptionService institutionalCollectionSubscriptionService;
 
-
-
-
 	/** Indicates whether the user has subscribed to this collection */
 	private boolean isSubscriber;
 	
-	/**
-	 * Get the next picture for a collection.
-	 * 
-	 * @return - next collection picture
-	 */
-	public String getNextPicture()
-	{
-		log.debug("get picture called");
-		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
-		return SUCCESS;
-	}
+	/**  Ir file that should be shown for picture. */
+	private IrFile irPictureFile;
 	
+	/**  Current picture location */
+	private int currentPictureLocation;
+
+	/** number of collection pictures */
+	private int numCollectionPictures = 0;
+	
+
 	/**
 	 * Get the rss feed.
 	 * 
@@ -137,6 +131,7 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 	 */
 	public String viewRss()
 	{
+		log.debug("veiwRss called");
 		repository = 
 			 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
 					 false);
@@ -164,6 +159,7 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 	 */
 	public String view()
 	{
+		log.debug("view called");
 		 repository = 
 			 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
 					 false);
@@ -188,32 +184,29 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 		    // get the 10 most recent submissions
 		    mostRecentSubmissions = institutionalItemService.getItemsOrderByDate(0, 5, institutionalCollection, OrderType.DESCENDING_ORDER);
 		    collectionPath = institutionalCollectionService.getPath(institutionalCollection);
+		    
+			institutionalItemCount = institutionalCollectionService.getInstitutionalItemCountForCollectionAndChildren(institutionalCollection);
+			institutionalItemsCountForACollection = institutionalCollectionService.getInstitutionalItemCountForCollection(institutionalCollection); 
+			subcollectionCount = institutionalCollection.getChildCount();
+			allSubcollectionCount =institutionalCollectionService.getTotalSubcollectionCount(institutionalCollection); 
+			fileDownloadCountForCollection = downloadStatisticsService.getNumberOfDownloadsForCollection(institutionalCollection);
+			fileDownloadCountForCollectionAndItsChildren = downloadStatisticsService.getNumberOfDownloadsForCollectionAndItsChildren(institutionalCollection);
+		    
+	        InstitutionalCollectionPictureHelper institutionalCollectionPictureHelper = new InstitutionalCollectionPictureHelper();
+	        PictureFileLocation locationInfo = institutionalCollectionPictureHelper.nextPicture(institutionalCollection, 0, InstitutionalCollectionPictureHelper.INIT);
+	        if( locationInfo != null )
+	        {
+	        	numCollectionPictures = locationInfo.getNumPictures();
+	        	irPictureFile = locationInfo.getIrFile();
+	        	currentPictureLocation = locationInfo.getCurrentLocation();
+	        }
+			
 		    return "view";
 		}
 		return "notFound";
 		
 	}
 
-	/**
-	 * Load statistics for collections
-	 * 
-	 * @return
-	 */
-	public String getInstitutionalCollectionStatistic() {
-
-		institutionalCollection = 
-			institutionalCollectionService.getCollection(collectionId, false);
-		
-		institutionalItemCount = institutionalCollectionService.getInstitutionalItemCountForCollectionAndChildren(institutionalCollection);
-		institutionalItemsCountForACollection = institutionalCollectionService.getInstitutionalItemCountForCollection(institutionalCollection); 
-		subcollectionCount = institutionalCollection.getChildCount();
-		allSubcollectionCount =institutionalCollectionService.getTotalSubcollectionCount(institutionalCollection); 
-		fileDownloadCountForCollection = downloadStatisticsService.getNumberOfDownloadsForCollection(institutionalCollection);
-		fileDownloadCountForCollectionAndItsChildren = downloadStatisticsService.getNumberOfDownloadsForCollectionAndItsChildren(institutionalCollection);
-		
-		return SUCCESS;
-	}
-	
 	/**
 	 * Repository service to access repository and institutional information.
 	 * 
@@ -400,5 +393,31 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 		this.institutionalCollectionSubscriptionService = institutionalCollectionSubscriptionService;
 	}
 
+	/**
+	 * Picture for the institutional collection
+	 * @return
+	 */
+	public IrFile getIrPictureFile() {
+		return irPictureFile;
+	}
+
+	public int getNumCollectionPictures() {
+		return numCollectionPictures;
+	}
+	
+	public int getCurrentPictureLocation() {
+		return currentPictureLocation;
+	}
+	
+	public boolean getShowStats()
+	{
+		return 
+		institutionalItemCount != 0 ||
+		institutionalItemsCountForACollection != 0 ||
+		subcollectionCount != 0 ||
+		allSubcollectionCount != 0 ||
+		fileDownloadCountForCollection != 0 ||
+		fileDownloadCountForCollectionAndItsChildren != 0;
+	}
 
 }

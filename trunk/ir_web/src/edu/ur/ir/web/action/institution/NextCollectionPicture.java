@@ -16,9 +16,7 @@
 
 package edu.ur.ir.web.action.institution;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
@@ -27,39 +25,28 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
-import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.web.action.institution.InstitutionalCollectionPictureHelper.PictureFileLocation;
 
+/**
+ * Get the next picture in the set of pictures.
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public class NextCollectionPicture extends ActionSupport implements
 Comparator<IrFile>{
 	
 	/** Eclipse generated Id */
 	private static final long serialVersionUID = 470760718471391384L;
 	
-	/** determine what the user is trying to do */
-	
-	// this if when the page is first initalized
-	public static final String INIT = "INIT";
-	
-	// get the next picture
-	public static final String NEXT = "NEXT";
-	
-	// get the previous picture
-	public static final String PREV = "PREV";
-	
 	/**  Logger for file upload */
 	private static final Logger log = Logger.getLogger(NextCollectionPicture.class);
-	
-	/**  The institutional collection*/
-	private InstitutionalCollection institutionalCollection;
 
-	/** Service for dealing with repository */
-	private RepositoryService repositoryService;
-	
 	/** id of the collection we want to look at  */
 	private Long collectionId;
 	
-	/**  Ir file that should be shown. */
-	private IrFile irFile;
+	/**  Ir file that should be shown for picture. */
+	private IrFile irPictureFile;
 	
 	/**
 	 * Determine if the user is initializing wants the next or previous
@@ -68,13 +55,15 @@ Comparator<IrFile>{
 	private String type;
 	
 	/**  Current picture location */
-	private int currentLocation;
+	private int currentPictureLocation;
 	
+
+
 	/** Institutional Collection service */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
 	/** number of collection pictures */
-	private int numCollectionPictures;
+	private int numCollectionPictures = 0;
 
 	/**
      * Gets the next ir file to be downloaded
@@ -88,58 +77,16 @@ Comparator<IrFile>{
     		log.debug("Next Collection Picture");
     	}
 	  
-		institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
-       
-		if( institutionalCollection != null )
-		{
-		    LinkedList<IrFile> pictures = new LinkedList<IrFile>(institutionalCollection.getPictures());
-        
-		   
-		    
-            // sort the pictures to assure order
-            Collections.sort(pictures, this);
-        
-            // always put the primary picture first
-            IrFile primaryPicture = institutionalCollection.getPrimaryPicture();
-		    if(primaryPicture!= null)
-		    {
-		        pictures.addFirst(primaryPicture);
-		    }
-		    numCollectionPictures = pictures.size();
-		    
-            if( pictures != null && pictures.size() > 0 )
-            {
-        	    if( pictures.size() == 1 )
-        	    {
-        		    currentLocation = 0;
-        	    }
-        	    else if( type.equals(NEXT))
-        	    {
-        		    if( (currentLocation + 1) >= pictures.size())
-        		    {
-        			    currentLocation = 0;
-        		    }
-        		    else
-        		    {
-        			    currentLocation += 1;
-        		    }
-        	    }
-        	    else if( type.equals(PREV))
-        	    {
-        		    if( (currentLocation -1 ) < 0 )
-        		    {
-        			    currentLocation = pictures.size() - 1;
-        		    }
-        		    else
-        		    {
-        			    currentLocation -= 1;
-        		    }
-        	    }
-        	    
-        	    irFile = pictures.get(currentLocation);
-            }
-           
+		InstitutionalCollection institutionalCollection = institutionalCollectionService.getCollection(collectionId, false);
+        InstitutionalCollectionPictureHelper institutionalCollectionPictureHelper = new InstitutionalCollectionPictureHelper();
+        PictureFileLocation locationInfo = institutionalCollectionPictureHelper.nextPicture(institutionalCollection, currentPictureLocation, type);
+        if( locationInfo != null )
+        {
+        	numCollectionPictures = locationInfo.getNumPictures();
+        	irPictureFile = locationInfo.getIrFile();
+        	currentPictureLocation = locationInfo.getCurrentLocation();
         }
+		
         
         return SUCCESS;
     }
@@ -154,48 +101,27 @@ Comparator<IrFile>{
     	if( o1.getId().equals(o2.getId())) return 0;
     	else if( o1.getId() > o2.getId() ) return 1;
     	else  return -1;
-    		
     }
-
-	public RepositoryService getRepositoryService() {
-		return repositoryService;
-	}
-
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
-	}
-
-	public String getType() {
-		return type;
-	}
 
 	public void setType(String type) {
 		this.type = type;
 	}
 
-	public int getCurrentLocation() {
-		return currentLocation;
+	public int getCurrentPictureLocation() {
+		return currentPictureLocation;
 	}
-
-	public void setCurrentLocation(int currentLocation) {
-		this.currentLocation = currentLocation;
+	
+	public void setCurrentPictureLocation(int currentPictureLocation) {
+		this.currentPictureLocation = currentPictureLocation;
 	}
-
-
-	public IrFile getIrFile() {
-		return irFile;
+	
+	public IrFile getIrPictureFile() {
+		return irPictureFile;
 	}
-
-
-	public void setIrFile(IrFile irFile) {
-		this.irFile = irFile;
-	}
-
 
 	public Long getCollectionId() {
 		return collectionId;
 	}
-
 
 	public void setCollectionId(Long collectionId) {
 		this.collectionId = collectionId;
@@ -205,11 +131,9 @@ Comparator<IrFile>{
 		return numCollectionPictures;
 	}
 
-
 	public InstitutionalCollectionService getInstitutionalCollectionService() {
 		return institutionalCollectionService;
 	}
-
 
 	public void setInstitutionalCollectionService(
 			InstitutionalCollectionService institutionalCollectionService) {

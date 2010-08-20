@@ -19,9 +19,9 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<c:if test="${irFile.id > 0}">
+<c:if test="${irPictureFile.id > 0}">
     <c:url var="pictureUrl" value="/downloadCollectionPicture.action">
-        <c:param name="irFileId" value="${irFile.id}"/>
+        <c:param name="irFileId" value="${irPictureFile.id}"/>
         <c:param name="collectionId" value="${collectionId}"/>
     </c:url>
     
@@ -34,18 +34,18 @@
                 <button class="ur_button" 
 	                onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
- 		            onclick="javascript:YAHOO.ur.public.collection.view.getCollectionPicture(${currentLocation}, 'PREV');">&lt; Previous</button>
+ 		            onclick="javascript:YAHOO.ur.public.collection.view.getCollectionPicture(${currentPictureLocation}, 'PREV');">&lt; Previous</button>
  		    </td>
  		    <td class="rightButton">
  		        <button class="ur_button" 
 	                onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
- 		            onclick="javascript:YAHOO.ur.public.collection.view.getCollectionPicture(${currentLocation}, 'NEXT');">Next &gt;</button>
+ 		            onclick="javascript:YAHOO.ur.public.collection.view.getCollectionPicture(${currentPictureLocation}, 'NEXT');">Next &gt;</button>
             </td>
          </tr>
     </table>
     </c:if>
 </c:if>
-<c:if test="${irFile == null }">
+<c:if test="${irPictureFile == null }">
     <p>There are no pictures to display</p>
 </c:if>

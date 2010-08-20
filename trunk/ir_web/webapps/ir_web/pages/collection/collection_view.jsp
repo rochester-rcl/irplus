@@ -152,7 +152,7 @@
                        </div>
                    </div>
                    
-                   
+                   <c:if test="${!ir:isStringEmpty(institutionalCollection.description)}">
                    <div class="contentContainer">
                        <div class="contentBoxTitle">
                            <p>About Collection</p>
@@ -162,7 +162,9 @@
                            <p>${institutionalCollection.description}</p>
                        </div>
                    </div>
+                   </c:if>
                     
+                   <c:if test="${!ur:isEmpty(nameOrderedChildren)}">
                    <div class="contentContainer">
                         <div class="contentBoxTitle">
                             <p>Sub Collections</p>
@@ -197,6 +199,7 @@
                             </c:if>
                         </div>
                    </div>
+                   </c:if>
                     
                 </div>
                 <!--  end the first column -->
@@ -215,15 +218,19 @@
                        </div>
                    </div>
                     
+                    <c:if test="${numCollectionPictures > 0 }">
                     <div class="contentContainer">
                         <div class="contentBoxTitle">
                             <p>Pictures</p>
                         </div>
                    
                         <div class="contentBoxContentPicture" id="collection_picture">
+                            <c:import url="next_collection_picture_frag.jsp"/>
                         </div>
                     </div>
+                    </c:if>
                     
+                    <c:if test="${! ur:isEmpty(institutionalCollection.links)}">
                      <div class="contentContainer">
                        <div class="contentBoxTitle">
                            <p>Links</p>
@@ -238,7 +245,9 @@
                            </p>
                        </div>
                    </div>
+                   </c:if>
                     
+                    <c:if test="${! ur:isEmpty(mostRecentSubmissions)}">
                     <div class="contentContainer">
                        <div class="contentBoxTitle">
                            <p>Recent Submissions</p>
@@ -258,16 +267,19 @@
                            </p>
                        </div>
                    </div>
+                   </c:if> 
                    
+                   <c:if test="${showStats}">
                    <div class="contentContainer">
                        <div class="contentBoxTitle">
                            <p>Statistics</p>
                        </div>
                    
                        <div class="contentBoxContent">
-						<div id="statistics_div"></div>
+						  <c:import url="collection_statistics_view.jsp"/>
                        </div>
                    </div>
+                   </c:if>
                 </div>
                 <!--  end the second column -->
                 
