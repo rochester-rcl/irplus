@@ -135,7 +135,14 @@ them to report if they think this is an error
 
 - Moved buttons over on file upload to make it quicker/easier to add another and upload after using the browse button
 
-- Added ability for user to set the number o fnew file upload boxes to create.
+- Added ability for user to set the number of new file upload boxes to create.
+
+- Updating a collection name will trim white space on the name.  Also causes a re-index of all items within the named collection
+
+- Updated collection pages to no longer show content boxes when there is no content - instead the content from other boxes are shifted
+up.
+
+- News is now shown at the top right when there are news items to be shown.
 
 ur_tags
 ====================================
