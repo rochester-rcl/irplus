@@ -231,7 +231,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 	 */
 	private void addTitle(Document doc, Element oaiDc, GenericItem item)
 	{
-		 Element title = doc.createElement("dc:title");
+		 Element title = doc.createElement("dcterms:title");
 		 Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars((item.getFullName())));
 		 title.appendChild(data);
 		 oaiDc.appendChild(title);
@@ -267,7 +267,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 	{
 		if( item.getPrimaryContentType() != null )
 		{
-		     Element type = doc.createElement("dc:type");
+		     Element type = doc.createElement("dcterms:type");
 		     Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(item.getPrimaryContentType().getName()));
 		     type.appendChild(data);
 		     oaiDc.appendChild(type);
@@ -275,7 +275,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 		 
 		 for(ContentType secType : item.getSecondaryContentTypes())
 		 {
-			 Element secondaryType = doc.createElement("dc:type");
+			 Element secondaryType = doc.createElement("dcterms:type");
 			 Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(secType.getName()));
 			 secondaryType.appendChild(data);
 			 oaiDc.appendChild(secondaryType);
@@ -307,19 +307,12 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 			 Element creator = null;
 			 if( dcMapping != null )
 			 {
-				 if( dcMapping.getDublinCoreTerm().getIsSimpleDublinCoreElement())
-				 {
-			         creator = doc.createElement("dc:" + dcMapping.getDublinCoreTerm().getName());
-				 }
-				 else
-				 {
+	
 					 creator = doc.createElement("dcterms:" + dcMapping.getDublinCoreTerm().getName());
-				 }
-		 
 			 }
 			 else
 			 {
-				 creator  = doc.createElement("dc:creator");
+				 creator  = doc.createElement("dcterms:creator");
 			 }
 			 Text data = doc.createTextNode( OaiUtil.removeInvalidXmlChars(nameFormatter.getNameFormatted(itemContributor.getContributor().getPersonName(), true)) );
 			 creator.appendChild(data);
@@ -338,7 +331,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 	{
 		 if( item.getDescription() != null && !item.getDescription().equalsIgnoreCase(""))
 		 {
-			 Element description = doc.createElement("dc:description");
+			 Element description = doc.createElement("dcterms:description");
 		     Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(item.getDescription()));
 		     description.appendChild(data);
 		     oaiDc.appendChild(description);
@@ -378,15 +371,8 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 			Element identifier = null;
 			if( dcMapping != null )
 			{
-				if( dcMapping.getDublinCoreTerm().getIsSimpleDublinCoreElement())
-				{
-					identifier = doc.createElement("dc:" + dcMapping.getDublinCoreTerm().getName());
-				}
-				else
-				{
-					 identifier = doc.createElement("dcterms:" + dcMapping.getDublinCoreTerm().getName());
-				}
 				
+				identifier = doc.createElement("dcterms:" + dcMapping.getDublinCoreTerm().getName());
 				if( dcMapping.getDublinCoreEncodingScheme() != null )
 				{
 					identifier.setAttribute("xsi:type", "dcterms:" + dcMapping.getDublinCoreEncodingScheme().getName());
@@ -394,7 +380,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 			}
 			else
 			{
-			    identifier = doc.createElement("dc:identifier");
+			    identifier = doc.createElement("dcterms:identifier");
 			}
 			Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(itemIdentifier.getValue()));
 			identifier.appendChild(data);
@@ -416,21 +402,21 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 	    {
 	        if( languageType.getIso639_2() != null && !languageType.getIso639_2().equals(""))
 	        {
-	            Element language = doc.createElement("dc:language");
+	            Element language = doc.createElement("dcterms:language");
 	            Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(languageType.getIso639_2()));
 	            language.appendChild(data);
 	            oaiDc.appendChild(language);
 	        }
 	        else if( languageType.getIso639_1() != null && !languageType.getIso639_1().equals(""))
 	        {
-	            Element language = doc.createElement("dc:language");
+	            Element language = doc.createElement("dcterms:language");
 	            Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(languageType.getIso639_1()));
 	            language.appendChild(data);
 	            oaiDc.appendChild(language);
 	        }
 	        else if( languageType.getName()!= null && !languageType.getName().equals(""))
 	        {
-	            Element language = doc.createElement("dc:language");
+	            Element language = doc.createElement("dcterms:language");
 	            Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(languageType.getName()));
 	            language.appendChild(data);
 	            oaiDc.appendChild(language);
@@ -456,7 +442,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 	    	    String value = tokenizer.nextToken();
 	    	    if( value != null && !value.equals(""))
 	    	    {
-	    	        Element subject = doc.createElement("dc:subject");
+	    	        Element subject = doc.createElement("dcterms:subject");
 	    	        Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(value));
 	    	        subject.appendChild(data);
 	    	        oaiDc.appendChild(subject);
@@ -481,7 +467,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 	    	Publisher pub = externalPublishedItem.getPublisher();
 	    	if( pub != null )
 	    	{
-	    		 Element publisher = doc.createElement("dc:publisher");
+	    		 Element publisher = doc.createElement("dcterms:publisher");
 		    	 Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(pub.getName()));
 		    	 publisher.appendChild(data);
 		    	 oaiDc.appendChild(publisher);
@@ -501,7 +487,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 		CopyrightStatement copyrightStatement = item.getCopyrightStatement();
 		if( copyrightStatement != null )
 		{
-			Element rightsElement = doc.createElement("dc:rights");
+			Element rightsElement = doc.createElement("dcterms:rights");
 			Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(copyrightStatement.getText()));
 	    	rightsElement.appendChild(data);
 	    	oaiDc.appendChild(rightsElement);
@@ -644,7 +630,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 		if( item.getHandleInfo() != null )
 		{
 			HandleInfo handle = item.getHandleInfo();
-		    Element identifier = doc.createElement("dc:identifier");
+		    Element identifier = doc.createElement("dcterms:identifier");
 		    identifier.setAttribute("xsi:type", "dcterms:URI");
 		    Text data = doc.createTextNode(handle.getNameAuthority().getAuthorityBaseUrl() + handle.getNameAuthority().getNamingAuthority() + "/" + handle.getLocalName());
 		    identifier.appendChild(data);
