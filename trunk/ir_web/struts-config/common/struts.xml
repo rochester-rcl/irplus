@@ -164,13 +164,6 @@
                 <result name="notFound">/pages/collection/collection_not_found.jsp</result>
         </action>
         
-        <action name="getInstitutionalCollectionStatistics" 
-                class="edu.ur.ir.web.action.institution.PublicCollectionView"
-                method="getInstitutionalCollectionStatistic">
-                <interceptor-ref name="editStack" />
-                <result name="success">/pages/collection/collection_statistics_view.jsp</result>
-        </action>
-        
         <!-- Collection pictures action -->
         <action name="downloadCollectionPicture"
             class="edu.ur.ir.web.action.institution.CollectionPictureFileDownload">
