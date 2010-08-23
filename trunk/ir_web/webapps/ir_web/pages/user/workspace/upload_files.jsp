@@ -53,9 +53,7 @@
     <ur:js src="page-resources/js/user/upload_files.js"/>
 </head>
 
-<body>
- 
- <body class="yui-skin-sam">
+<body class="yui-skin-sam">
 
     <!--  yahoo doc 2 template creates a page 950 pixles wide -->
     <div id="doc2">

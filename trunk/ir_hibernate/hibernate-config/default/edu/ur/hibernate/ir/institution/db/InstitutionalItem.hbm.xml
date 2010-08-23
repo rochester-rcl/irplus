@@ -20,7 +20,7 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for a personal versioned file.
+	Mapping for a institutional item
 	
 	@author Nathan Sarr
 -->

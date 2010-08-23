@@ -56,6 +56,11 @@
          <c:url var="browseSponsors" value="/browseSponsorNames.action"/>
          <c:url var="searchRepositoryItems" value="/startSearchRepositoryItems.action"/>
 		 <script type="text/javascript">
+
+		  function updateUrl()
+		  {
+			  document.contentType.submit();
+		  }
     
           function handleBrowseClick(e) {  
                window.location='${browseRepositoryItems}';
@@ -110,6 +115,7 @@
             	
             	 <h3> Browse/Search: ${repository.name}</h3>
 		        
+		        
 		        <!--  set up tabs for editing news -->
 		        <div id="all-items-tabs" class="yui-navset">
 		            <ul class="yui-nav">
@@ -146,6 +152,33 @@
 		                  
 				         <c:if test='${viewType == "browse"}'>
 				         
+				        
+				         <form name="contentType" action="${browseRepositoryItems}" method="get">
+				             <input type="hidden" name="rowStart" value="0"/>
+			                 <input type="hidden" name="startPageNumber" value="1"/>
+			                 <input type="hidden" name="currentPageNumber" value="1"/>
+			                 <input type="hidden" name="sortElement" value="${sortElement}"/>		
+			                 <input type="hidden" name="sortType" value="${sortType}"/>	
+			                 <input type="hidden" name="selectedAlpha" value="${alpha}"/>
+				         Filter By Content Type:
+				         <select name="contentTypeId" onchange="javascript:updateUrl();">
+				            <c:if test="${contentTypeId == -1}">
+				                <option  value="-1" selected="selected">All</option>
+				            </c:if>
+				            <c:if test="${contentTypeId != -1}">
+				                <option value="-1">All</option>
+				            </c:if>
+						    <c:forEach items="${contentTypes}" var="contentType">
+						        <c:if test="${contentType.id == contentTypeId}">
+						            <option  selected="selected" value="${contentType.id}">${contentType.name}</option>
+						        </c:if>
+						        <c:if test="${contentType.id != contentTypeId}">
+						            <option value="${contentType.id}">${contentType.name}</option>
+						        </c:if>
+						    </c:forEach>
+						 </select>
+						 </form>
+				         
 				         <div class="center">
 				              <c:import url="browse_all_items_alpha_list.jsp"/>
 				         </div>
@@ -155,6 +188,8 @@
 				         <c:import url="browse_all_items_pager.jsp"/>
 						
 						
+
+
 						<div class="dataTable">
 							             
 					        <urstb:table width="100%">
@@ -168,6 +203,7 @@
 											 <c:param name="sortElement" value="name"/>		
 											 <c:param name="sortType" value="asc"/>
 											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+											 <c:param name="contentTypeId" value="${contentTypeId}"/>	
 										</c:url>
 					                     
 					                    <c:url var="sortDescendingNameUrl" value="/browseRepositoryItems.action">
@@ -177,6 +213,7 @@
 											<c:param name="sortElement" value="name"/>		
 											<c:param name="sortType" value="desc"/>
 											<c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+											<c:param name="contentTypeId" value="${contentTypeId}"/>	
 										</c:url>
 					                    
 					                    <c:set var="nameSort" value="none"/>

@@ -48,9 +48,23 @@ public interface InstitutionalItemService extends Serializable{
 	 * Get a count of all institutional items - this is for the
 	 * specified repository - usually the system will have only one repository
 	 * 
+	 * @param repositoryId - id of the repository
+	 * 
 	 * @return count of all items in a specified repository
 	 */
 	public Long getCount(Long repositoryId);
+	
+	/**
+	 * Get a count of all institutional items for the repository
+	 * with the specified content type id
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @param contentTypeId - id of the content type
+	 * 
+	 * @return count of all items in a specified repository
+	 */
+	public Long getCount(Long repositoryId, Long contentTypeId);
+
 	
 	/**
 	 * Get a count of all institutional items in the specified repository with
@@ -58,9 +72,23 @@ public interface InstitutionalItemService extends Serializable{
 	 * 
 	 * @param repositoryId - id of the repository
 	 * @param nameFirstChar - first character in the name of the item
+	 * 
 	 * @return count of items found
 	 */
 	public Long getCount(Long repositoryId, char nameFirstChar);
+	
+	/**
+	 * Get a count of all institutional items in the specified repository with
+	 * specified first character and content type id 
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @param nameFirstChar - first character in the name of the item
+	 * @param contentTypeId - id of the content type
+	 * 
+	 * @return count of items found
+	 */
+	public Long getCount(Long repositoryId, char nameFirstChar, Long contentTypeId);
+
 	
 	/**
 	 * Get a count of all institutional items in the specified repository with
@@ -74,6 +102,20 @@ public interface InstitutionalItemService extends Serializable{
 	 */
 	public Long getCount(Long repositoryId, char nameFirstCharRange, char namelastCharRange);
 	
+
+	/**
+	 * Get a count of all institutional items in the specified repository with
+	 * specified first characters and content type id
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @param nameFirstCharRange - first character in range
+	 * @param nameLastCharRange - last character in the range
+	 * @param contentTypeId - id of the content type
+	 * 
+	 * @return count of titles found that have a first character in the specified range
+	 */
+	public Long getCount(Long repositoryId, char nameFirstCharRange, char namelastCharRange, Long contentTypeId);
+
 	
 	/**
 	 * Get a count of all institutional items in the specified collection with
@@ -84,10 +126,24 @@ public interface InstitutionalItemService extends Serializable{
 	 * @return count of items found
 	 */
 	public Long getCount(InstitutionalCollection collection, char nameFirstChar);
+
+	/**
+	 * Get a count of all institutional items in the specified collection with
+	 * specified first character in the title and has the specified content type.  
+	 * THIS INCLUDES items in child collections 
+	 * 
+	 * @param institutional collection - parent collection
+	 * @param nameFirstChar - first character in the name of the item
+	 * @param contentTypeId - id of the content type
+	 * 
+	 * @return count of items found
+	 */
+	public Long getCount(InstitutionalCollection collection, char nameFirstChar, Long contentTypeId);
+
 	
 	/**
 	 * Get a count of all institutional items in the specified collection with
-	 * specified first character -  THIS INCLUDES items in child collections 
+	 * specified first character in the given character range -  THIS INCLUDES items in child collections 
 	 * 
 	 * @param institutional collection - parent collection
 	 * @param nameFirstCharRange - first character in range
@@ -97,6 +153,20 @@ public interface InstitutionalItemService extends Serializable{
 	 */
 	public Long getCount(InstitutionalCollection collection, char nameFirstCharRange, char nameLastCharRange);
 	
+
+	/**
+	 * Get a count of all institutional items in the specified collection with
+	 * specified first character in the given character range with the given content type id-  THIS INCLUDES items in child collections 
+	 * 
+	 * @param institutional collection - parent collection
+	 * @param nameFirstCharRange - first character in range
+	 * @param nameLastCharRange - last character in the range
+	 * 
+	 * @return count of titles found that have a first character in the specified range
+	 */
+	public Long getCount(InstitutionalCollection collection, 
+			char nameFirstCharRange, char nameLastCharRange, Long contentTypeId);
+
 	
 	/**
 	 * Get a list of items for a specified repository by between the that have titles
@@ -118,8 +188,28 @@ public interface InstitutionalItemService extends Serializable{
 			char lastChar,
 			OrderType orderType);
 	
-
-
+	/**
+	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters with the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsBetweenChar(final int rowStart,
+			int maxResults, 
+			Long repositoryId,
+			char firstChar,
+			char lastChar,
+			Long contentTypeId,
+			OrderType orderType);
+	
 	
 	/**
 	 * Get a list of items for a specified repository.
@@ -127,12 +217,27 @@ public interface InstitutionalItemService extends Serializable{
 	 * @param rowStart - Start row to fetch the data from
 	 * @param rowEnd -  End row to get data
 	 * @param repositoryId - id of the repository to get items 
-	 * @param propertyName - The property to sort on
 	 * @param orderType - The order to sort by (ascending/descending)
 	 * 
 	 * @return List of institutional items
 	 */
 	public List<InstitutionalItem> getRepositoryItemsOrderByName(int rowStart, int rowEnd, Long repositoryId, 
+			OrderType orderType) ;	
+
+	
+	/**
+	 * Get a list of items for a specified repository with the given content type id.
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsOrderByName(int rowStart, int maxResults, Long repositoryId, 
+			Long contentTypeId, 
 			OrderType orderType) ;	
     
     /**
@@ -195,6 +300,26 @@ public interface InstitutionalItemService extends Serializable{
 			Long repositoryId,
 			char firstChar,
 			OrderType orderType);
+	
+	/**
+	 * Get a list of items for a specified repository by first character of the name and
+	 * the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsByChar(int rowStart,
+			int maxResults, 
+			Long repositoryId,
+			Long contentTypeId,
+			char firstChar,
+			OrderType orderType);
 		
 
 	
@@ -202,7 +327,7 @@ public interface InstitutionalItemService extends Serializable{
 	 * Get the list of items for the specified collection.  This includes items in sub collections
 	 * 
 	 * @param rowStart - Start row to fetch the data from
-	 * @param rowEnd -  maximum number of results to return
+	 * @param maxResults -  maximum number of results to return
 	 * @param collectionId - id of the collection to get items 
 	 * @param orderType - The order to sort by (ascending/descending)
 	 * 
@@ -213,8 +338,28 @@ public interface InstitutionalItemService extends Serializable{
 			InstitutionalCollection collection, 
 			OrderType orderType) ;
 	
+
 	/**
-	 * Get the list of item ids for the specified collection.  This includes items in sub collections
+	 * Get the list of items for the specified collection with the given 
+	 * content type id.  This includes items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults -  maximum number of results to return
+	 * @param collection - the collection to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getCollectionItemsOrderByName(int rowStart, 
+			int maxResults, 
+			InstitutionalCollection collection, 
+			Long contentTypeId,
+			OrderType orderType) ;
+
+	
+	/**
+	 * Get the list of item ids for the specified collection.  This includes items in child collections
 	 * 
 	 * @param rowStart - Start row to fetch the data from
 	 * @param rowEnd -  maximum number of results to return
@@ -227,6 +372,7 @@ public interface InstitutionalItemService extends Serializable{
 			int maxResults, 
 			InstitutionalCollection collection, 
 			OrderType orderType) ;
+	
 	
 	/**
 	 * Get a list of items for a specified collection by first character of the name.  
@@ -243,6 +389,28 @@ public interface InstitutionalItemService extends Serializable{
 	public List<InstitutionalItem> getCollectionItemsByChar(final int rowStart,
 			int maxResults, 
 			InstitutionalCollection institutionalCollection,
+			char firstChar,
+			OrderType orderType);
+	
+	
+	/**
+	 * Get a list of items for a specified collection by first character of the name 
+	 * and the specified content type.  
+	 * This INCLUDES items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param Institutionalcollection - parent collection
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getCollectionItemsByChar(final int rowStart,
+			int maxResults, 
+			InstitutionalCollection collection,
+			Long contentTypeId,
 			char firstChar,
 			OrderType orderType);
 	
@@ -267,13 +435,50 @@ public interface InstitutionalItemService extends Serializable{
 			char lastChar,
 			OrderType orderType);
 	
+	/**
+	 * Get a list of items for a specified collection by titles
+	 * that start between the specified first character in the name and the given content
+	 * type.  This INCLUDES items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param Institutional Collection - parent collection 
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getCollectionItemsBetweenChar(int rowStart,
+			int maxResults, 
+			InstitutionalCollection collection,
+			Long contentTypeId,
+			char firstChar,
+			char lastChar,
+			OrderType orderType);
+	
 
 	/**
 	 * Get a count of institutional items in a collection and its children.
 	 * 
+	 * @param collection - collection to start counting from
+	 * 
 	 * @return Items within the specified collection and its sub collection
 	 */
 	public Long getCountForCollectionAndChildren(InstitutionalCollection collection);
+
+	/**
+	 * Get a count of institutional items in a collection and its children with
+	 * the specified content type.
+	 * 
+	 * @param collection - collection to start counting from
+	 * @param contentTypeId - id of the content type 
+	 * 
+	 * @return Items within the specified collection and its sub collection
+	 */
+	public Long getCount(InstitutionalCollection collection, Long contentTypeId);
+
 	
 	/**
 	 * Get subset of all item published between the given start and end dates for the given collection.
@@ -302,7 +507,7 @@ public interface InstitutionalItemService extends Serializable{
 	/**
 	 * Get a count of distinct institutional items in the repository.
 	 * 
-	 * @return
+	 * @return count of distinct institutional items for the entire system
 	 */
 	public Long getDistinctInstitutionalItemCount();
 	

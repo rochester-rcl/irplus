@@ -71,6 +71,17 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	public Long getCount(Long repositoryId);
 	
 	/**
+	 * Get a  count of institutional items with the given content type id.
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @param contentTypeId - content type
+	 * 
+	 * @return the count of institutional items with the content type in the specified
+	 * repository.
+	 */
+	public Long getCount(Long repositoryId, Long contentTypeId);
+	
+	/**
 	 * Get a count of all items by a collection id.
 	 * 
 	 * @param collectionId - id of the collection
@@ -78,6 +89,66 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	 */
 	public Long getCount(InstitutionalCollection collection);
 	
+	/**
+	 * Get a count of institutional items within a collection 
+	 * @param collection
+	 * @param contentTypeId
+	 * @return
+	 */
+	public Long getCount(InstitutionalCollection collection, Long contentTypeId);
+	
+	/**
+	 * Get a count of institutional items with the specified repository id
+	 * has a name starting with the first character and the specified content type id.
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @param nameFirstChar - name of the first character
+	 * @param contentTypeId - specified content type id
+	 * 
+	 * @return the count of items with the specified criteria
+	 */
+	public Long getCount(Long repositoryId, char nameFirstChar,
+			Long contentTypeId);
+	
+	/**
+	 * Get a count of all items within the specified repository with a name
+	 * first character starting between the given character range and the content type id.
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @param nameFirstCharRange - starting character range
+	 * @param namelastCharRange - ending character range
+	 * @param contentTypeId - id of the content type
+	 * 
+	 * @return the count of items 
+	 */
+	public Long getCount(Long repositoryId, char nameFirstCharRange,
+			char namelastCharRange, Long contentTypeId);
+	
+	/**
+	 * Get a count of all items within the specified collection, has the specified first character 
+	 * and a given content type id.  This includes a count of items within sub collections.
+	 * 
+	 * @param collection - collection items must be within sub collections
+	 * @param nameFirstChar - name starts with the specified first character
+	 * @param contentTypeId - id of the content type
+	 * 
+	 * @return count of items 
+	 */
+	public Long getCount(InstitutionalCollection collection,
+			char nameFirstChar, Long contentTypeId);
+	
+	/**
+	 * Get a count of all institutional items in the specified collection with
+	 * specified first character in the given character range with the given content type id-  THIS INCLUDES items in child collections 
+	 * 
+	 * @param institutional collection - parent collection
+	 * @param nameFirstCharRange - first character in range
+	 * @param nameLastCharRange - last character in the range
+	 * 
+	 * @return count of titles found that have a first character in the specified range
+	 */
+	public Long getCount(InstitutionalCollection collection,
+			char nameFirstCharRange, char nameLastCharRange, Long contentTypeId);
 	
 	/**
 	 * Get a list of items for a specified repository by first character of the name
@@ -95,6 +166,23 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			final Long repositoryId,
 			final char firstChar,
 			final OrderType orderType);
+	
+	/**
+	 * Get a list of items for a specified repository by first character of the name and
+	 * the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsByChar(int rowStart,
+			int maxResults, Long repositoryId, Long contentTypeId,
+			char firstChar, OrderType orderType);
 	
 	/**
 	 * Get a list of items for a specified repository by between the that have titles
@@ -117,6 +205,24 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			final OrderType orderType);
 	
 	/**
+	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters with the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsBetweenChar(int rowStart,
+			int maxResults, Long repositoryId, char firstChar, char lastChar,
+			Long contentTypeId, OrderType orderType);
+	
+	/**
 	 * Get a list of items for a specified repository by name.
 	 * 
 	 * @param rowStart - Start row to fetch the data from
@@ -130,6 +236,22 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			final int maxResults, 
 			final Long repositoryId, 
 			final OrderType orderType);
+	
+	/**
+	 * Get a list of items for a specified repository with the given content type id.
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param propertyName - The property to sort on
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsOrderByName(int rowStart,
+			int maxResults, Long repositoryId, Long contentTypeId,
+			OrderType orderType);
 	
 	/**
 	 * Get a list of items for a specified collection by first character of the name
@@ -149,6 +271,24 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			InstitutionalCollection institutionalCollection,
 			char firstChar,
 			OrderType orderType);
+	
+	/**
+	 * Get a list of items for a specified collection by first character of the name
+	 * 
+	 * NOTE: This search includes all items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param institutional collection - the institutional collection 
+	 * @param contentTypeId - id of the content type 
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getCollectionItemsByChar(int rowStart,
+			int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, char firstChar, OrderType orderType);
 	
 	/**
 	 * Get a list of items for a specified repository by between the that have titles
@@ -173,6 +313,27 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			OrderType orderType);
 	
 	/**
+	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters
+	 * 
+	 * NOTE: This search includes all items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param collection - the institutional collection 
+	 * @param contentTypeId - content type id the items must have
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return list of items matching the specified criteria
+	 */
+	public List<InstitutionalItem> getCollectionItemsBetweenChar(int rowStart,
+			int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, char firstChar, char lastChar,
+			OrderType orderType);
+	
+	/**
 	 * Get a list of items for a specified collection ordered by name.
 	 * 
 	 * NOTE: This search includes all items in child collections
@@ -188,6 +349,24 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 			int maxResults, 
 			InstitutionalCollection collection, 
 			OrderType orderType);
+	
+	/**
+	 * Get the list of items for the specified collection with the given 
+	 * content type id.  This includes items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults -  maximum number of results to return
+	 * @param collection - the collection to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getCollectionItemsByName(int, int, edu.ur.ir.institution.InstitutionalCollection, java.lang.Long, edu.ur.order.OrderType)
+	 */
+	public List<InstitutionalItem> getCollectionItemsByName(int rowStart,
+			int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, OrderType orderType);
 	
 	/**
 	 * Get a list of item ids for a specified collection ordered by id.

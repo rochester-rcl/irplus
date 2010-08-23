@@ -66,7 +66,12 @@
              <c:param name="collectionId" value="${institutionalCollection.id}"/>
          </c:url>
 		 <script type="text/javascript">
-    
+
+		  function updateUrl()
+		  {
+			  document.contentType.submit();
+		  }
+		  
           function handleBrowseClick(e) {  
                window.location='${browseCollectionItems}';
           }
@@ -172,6 +177,32 @@
 				              <c:import url="browse_collection_items_alpha_list.jsp"/>
 				         </div>
 				
+				       <form name="contentType" action="${browseRepositoryItems}" method="">
+				             <input type="hidden" name="rowStart" value="0"/>
+			                 <input type="hidden" name="startPageNumber" value="1"/>
+			                 <input type="hidden" name="currentPageNumber" value="1"/>
+			                 <input type="hidden" name="sortElement" value="${sortElement}"/>		
+			                 <input type="hidden" name="sortType" value="${sortType}"/>	
+			                 <input type="hidden" name="selectedAlpha" value="${alpha}"/>
+			                 <input type="hidden" name="collectionId" value="${institutionalCollection.id}"/>
+				         Filter By Content Type:
+				         <select name="contentTypeId" onchange="javascript:updateUrl();">
+				            <c:if test="${contentTypeId == -1}">
+				                <option  value="-1" selected="selected">All</option>
+				            </c:if>
+				            <c:if test="${contentTypeId != -1}">
+				                <option value="-1">All</option>
+				            </c:if>
+						    <c:forEach items="${contentTypes}" var="contentType">
+						        <c:if test="${contentType.id == contentTypeId}">
+						            <option  selected="selected" value="${contentType.id}">${contentType.name}</option>
+						        </c:if>
+						        <c:if test="${contentType.id != contentTypeId}">
+						            <option value="${contentType.id}">${contentType.name}</option>
+						        </c:if>
+						    </c:forEach>
+						 </select>
+						 </form>
 				         <c:if test="${totalHits > 0}">
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  
@@ -193,6 +224,7 @@
 											 <c:param name="sortType" value="asc"/>
 											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
 											 <c:param name="collectionId" value="${institutionalCollection.id}"/>
+											 <c:param name="contentTypeId" value="${contentTypeId}"/>	
 										</c:url>
 					                     
 					                    <c:url var="sortDescendingNameUrl" value="/browseCollectionItems.action">
@@ -202,7 +234,8 @@
 											<c:param name="sortElement" value="name"/>		
 											<c:param name="sortType" value="desc"/>
 											<c:param name="selectedAlpha" value="${selectedAlpha}"/>
-											<c:param name="collectionId" value="${institutionalCollection.id}"/>	
+											<c:param name="collectionId" value="${institutionalCollection.id}"/>
+											<c:param name="contentTypeId" value="${contentTypeId}"/>		
 										</c:url>
 					                    
 					                    <c:set var="nameSort" value="none"/>
