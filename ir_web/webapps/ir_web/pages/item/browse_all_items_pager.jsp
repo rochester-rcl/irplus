@@ -38,7 +38,8 @@
 			       <c:param name="currentPageNumber" value="1"/>
 			       <c:param name="sortElement" value="${sortElement}"/>		
 			       <c:param name="sortType" value="${sortType}"/>
-			       <c:param name="selectedAlpha" value="${selectedAlpha}"/>																					
+			       <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+			       <c:param name="contentTypeId" value="${contentTypeId}"/>																					
 		      </c:url>										
 		 
 		      <a href="${browseUrl}">First</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -51,7 +52,8 @@
 					<c:param name="currentPageNumber" value="${currentPageNumber - 1}"/>
 					<c:param name="sortElement" value="${sortElement}"/>		
 					<c:param name="sortType" value="${sortType}"/>	
-					<c:param name="selectedAlpha" value="${selectedAlpha}"/>																				
+					<c:param name="selectedAlpha" value="${selectedAlpha}"/>
+					<c:param name="contentTypeId" value="${contentTypeId}"/>																					
 			</c:url>	
 									
 			<&nbsp;<a href="${browseUrl}">Previous</a> &nbsp;&nbsp;
@@ -63,7 +65,8 @@
 				       <c:param name="currentPageNumber" value="${startPageNumberForPreviousSet}"/>
 				       <c:param name="sortElement" value="${sortElement}"/>		
 				       <c:param name="sortType" value="${sortType}"/>
-				       <c:param name="selectedAlpha" value="${selectedAlpha}"/>																			
+				       <c:param name="selectedAlpha" value="${selectedAlpha}"/>
+				       <c:param name="contentTypeId" value="${contentTypeId}"/>																				
 			      </c:url>										
 			 
 			      &nbsp;<a href="${browseUrl}">....</a> &nbsp;&nbsp;
@@ -78,7 +81,8 @@
 					 <c:param name="currentPageNumber" value="${pageNumber}"/>
 					 <c:param name="sortElement" value="${sortElement}"/>		
 					 <c:param name="sortType" value="${sortType}"/>		
-					 <c:param name="selectedAlpha" value="${selectedAlpha}"/>												
+					 <c:param name="selectedAlpha" value="${selectedAlpha}"/>
+					 <c:param name="contentTypeId" value="${contentTypeId}"/>													
 				 </c:url>		
 																			
 				 <a href="${browseUrl}">${pageNumber}</a>&nbsp;&nbsp;
@@ -97,7 +101,8 @@
 					<c:param name="currentPageNumber" value="${startPageNumberForNextSet}"/>	
 					<c:param name="sortElement" value="${sortElement}"/>		
 					<c:param name="sortType" value="${sortType}"/>		
-					<c:param name="selectedAlpha" value="${selectedAlpha}"/>															
+					<c:param name="selectedAlpha" value="${selectedAlpha}"/>
+					<c:param name="contentTypeId" value="${contentTypeId}"/>																
 			    </c:url>										
 				<a href="${browseUrl}">....</a>&nbsp;&nbsp;&nbsp;
 	        </ur:moreNext>
@@ -108,7 +113,8 @@
 				<c:param name="currentPageNumber" value="${currentPageNumber + 1}"/>	
 				<c:param name="sortElement" value="${sortElement}"/>		
 				<c:param name="sortType" value="${sortType}"/>	
-				<c:param name="selectedAlpha" value="${selectedAlpha}"/>																		
+				<c:param name="selectedAlpha" value="${selectedAlpha}"/>
+				<c:param name="contentTypeId" value="${contentTypeId}"/>																			
 			</c:url>	
 
 		     <a href="${browseUrl}">Next</a>&nbsp;> &nbsp;&nbsp;
@@ -121,7 +127,8 @@
 					<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 					<c:param name="sortElement" value="${sortElement}"/>		
 					<c:param name="sortType" value="${sortType}"/>	
-					<c:param name="selectedAlpha" value="${selectedAlpha}"/>																		
+					<c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+					<c:param name="contentTypeId" value="${contentTypeId}"/>																		
 			    </c:url>										
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="${browseUrl}">Last</a> 
 			</ur:lastPage>	

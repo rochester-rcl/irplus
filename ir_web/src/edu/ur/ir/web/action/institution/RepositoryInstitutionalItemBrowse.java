@@ -23,6 +23,8 @@ import org.apache.log4j.Logger;
 
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.item.ContentType;
+import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 
@@ -46,6 +48,7 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 			"K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 	};
 	
+	
 	/** Service for dealing with repositories */
 	private RepositoryService repositoryService;
 	
@@ -68,22 +71,27 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 	/** name of the element to sort on 
 	 *   this is for incoming requests */
 	private String sortElement = "name";
+	
+	/** the content type id to sort on -1 indicates no content type */
+	private long contentTypeId = -1l;
 
 	/** Total number of institutional items*/
 	private int totalHits;
 	
 	/** Row End */
 	private int rowEnd;
-	
-	/** parent id of the collection */
-	private long parentCollectionId = 0l;
-	
+		
 	/** Indicates this is a browse */
 	private String viewType = "browse";
 	
 	/** repository object */
 	private Repository repository;
 	
+	/** service for dealing with content types */
+	private ContentTypeService contentTypeService;
+	
+	
+
 	/** Default constructor */
 	public RepositoryInstitutionalItemBrowse()
 	{
@@ -108,23 +116,48 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		log.debug("selected Alpha = " + selectedAlpha);
 		rowEnd = rowStart + numberOfResultsToShow;
-		if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
+		
+		if( contentTypeId == -1l )
 		{
-		    
-		    institutionalItems = institutionalItemService.getRepositoryItemsOrderByName(rowStart, 
+			log.debug("Viewing all items with no content types");
+		    if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
+		    {
+		        institutionalItems = institutionalItemService.getRepositoryItemsOrderByName(rowStart, 
 		    		numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, OrderType.getOrderType(sortType));
-		    totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID).intValue();
-		}
-		else if (selectedAlpha.equals("0-9"))
-		{
-			institutionalItems = institutionalItemService.getRepositoryItemsBetweenChar(rowStart, numberOfResultsToShow, 
+		        totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID).intValue();
+		    }
+		    else if (selectedAlpha.equals("0-9"))
+		    {
+			    institutionalItems = institutionalItemService.getRepositoryItemsBetweenChar(rowStart, numberOfResultsToShow, 
 					Repository.DEFAULT_REPOSITORY_ID, '0', '9', OrderType.getOrderType(sortType));
-			totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, '0', '9').intValue();
+			    totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, '0', '9').intValue();
+		    }
+		    else
+		    {
+			    institutionalItems = institutionalItemService.getRepositoryItemsByChar(rowStart, numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+			    totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0)).intValue();
+		    }
 		}
 		else
 		{
-			institutionalItems = institutionalItemService.getRepositoryItemsByChar(rowStart, numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
-			totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0)).intValue();
+			log.debug("Viewing all items with content type id " + contentTypeId);
+			if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
+		    {
+		        institutionalItems = institutionalItemService.getRepositoryItemsOrderByName(rowStart, 
+		    		numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, contentTypeId, OrderType.getOrderType(sortType));
+		        totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, contentTypeId).intValue();
+		    }
+		    else if (selectedAlpha.equals("0-9"))
+		    {
+			    institutionalItems = institutionalItemService.getRepositoryItemsBetweenChar(rowStart, numberOfResultsToShow, 
+					Repository.DEFAULT_REPOSITORY_ID, '0', '9', contentTypeId, OrderType.getOrderType(sortType));
+			    totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, '0', '9', contentTypeId).intValue();
+		    }
+		    else
+		    {
+			    institutionalItems = institutionalItemService.getRepositoryItemsByChar(rowStart, numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, contentTypeId, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+			    totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0), contentTypeId).intValue();
+		    }
 		}
 		
 		if(rowEnd > totalHits)
@@ -133,6 +166,16 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 		}
 		
 		return SUCCESS;
+	}
+	
+	/**
+	 * Get a list of content types.
+	 * 
+	 * @return list of content types
+	 */
+	public List<ContentType> getContentTypes()
+	{
+		return contentTypeService.getAllContentTypeByNameOrder();
 	}
 	
 	/**
@@ -179,14 +222,6 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 		this.institutionalItemService = institutionalItemService;
 	}
 
-	public long getParentCollectionId() {
-		return parentCollectionId;
-	}
-
-	public void setParentCollectionId(long parentCollectionId) {
-		this.parentCollectionId = parentCollectionId;
-	}
-
 	public String[] getAlphaList() {
 		return alphaList;
 	}
@@ -227,6 +262,16 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 		this.repositoryService = repositoryService;
 	}
 
+	public long getContentTypeId() {
+		return contentTypeId;
+	}
 
+	public void setContentTypeId(long contentTypeId) {
+		this.contentTypeId = contentTypeId;
+	}
+
+	public void setContentTypeService(ContentTypeService contentTypeService) {
+		this.contentTypeService = contentTypeService;
+	}
 
 }

@@ -466,7 +466,19 @@
          	<result name="badResumptionToken">/pages/oai/bad_resumption_token.jsp</result>
          	<result name="listRecords">/pages/oai/list_records.jsp</result>
          </action> 
-        
+         
+        <!--  ************************************ -->
+        <!--    General repository stats           -->
+        <!--  ************************************ -->
+        <action name="viewRepositoryStatistics" 
+                class="edu.ur.ir.web.action.institution.RepositoryStatistics">
+         	<result name="success">/pages/repository_statistics.jsp</result>
+        </action>
+        <action name="viewCollectionStatistics" 
+                class="edu.ur.ir.web.action.institution.InstitutionalCollectionStatistics">
+         	<result name="success">/pages/collection/collection_statistics.jsp</result>
+        </action> 
+         
     </package>
          
         

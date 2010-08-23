@@ -195,9 +195,6 @@
                     </div>
                     </c:if>
                     
-                   
-                   
-                    
                     <div class="contentContainer">
                        <div class="contentBoxTitle">
                            <p>Statistics </p>
@@ -215,8 +212,9 @@
                                     Number of file downloads : ${numberOfFileDownloads}<br/><br/>
                                 </c:if>
                                 <c:if test="${numberOfUsers > 0}">
-                                    Number of members : ${numberOfUsers}<br/>
+                                    Number of members : ${numberOfUsers}<br/><br/>
                                 </c:if>
+                                <a href="<c:url value="/viewRepositoryStatistics.action"/>">View All Repository Statistics</a>  
                           </p>
                       </div>
                    </div>

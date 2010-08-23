@@ -51,6 +51,10 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
+/**
+ * @author ideazoft
+ *
+ */
 public class DefaultInstitutionalItemService implements InstitutionalItemService {
 	
 	/** eclipse generated id */
@@ -334,7 +338,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			char nameFirstCharRange, char nameLastCharRange) {
 		return institutionalItemDAO.getCount(collection, nameFirstCharRange, nameLastCharRange);
 	}
-
 	
 	/**
 	 * @see edu.ur.ir.institution.InstitutionalItemService#getCountForCollectionAndChildren(edu.ur.ir.institution.InstitutionalCollection)
@@ -353,8 +356,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		return institutionalItemDAO.getDistinctInstitutionalItemCount();
 	}
 
-
-
 	/**
 	 * Get a institutional collections  the generic item exists in
 	 * 
@@ -364,7 +365,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public List<InstitutionalCollection> getInstitutionalCollectionsSubmittedForGenericItem(Long itemId) {
 		return institutionalItemDAO.getInstitutionalCollectionsForGenericItem(itemId);
 	}
-
 
 	/**
 	 * Get the number of publications contributed by given person names
@@ -385,8 +385,8 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 * @param item Item to be assigned private permission
 	 * @param collections Collections the item is submitted to
 	 */
-	public void setItemPrivatePermissions(GenericItem item, List<InstitutionalCollection> collections) {
-		
+	public void setItemPrivatePermissions(GenericItem item, List<InstitutionalCollection> collections) 
+	{
 		item.setPubliclyViewable(false);
 		
 		for(ItemFile file:item.getItemFiles()) {
@@ -398,7 +398,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		for(InstitutionalCollection collection:collections) {
 			itemSecurityService.assignGroupsToItem(item, collection);
 		}
-		
 	}
 
 	/**
@@ -418,8 +417,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public void setReviewableItemService(ReviewableItemService reviewableItemService) {
 		this.reviewableItemService = reviewableItemService;
 	}
-
-
 
 	/**
 	 * Get institutional item by generic item id
@@ -472,7 +469,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		this.researcherFileSystemService = researcherFileSystemService;
 	}
 
-
 	/**
 	 * Get the list of institutional item ids in the collection.
 	 * 
@@ -482,8 +478,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			InstitutionalCollection collection, OrderType orderType) {
 		return institutionalItemDAO.getCollectionItemsIds(rowStart, maxResults, collection, orderType);
 	}
-	
-
 	
 	/**
 	 * Reset all handles in the system.
@@ -535,10 +529,20 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	}
 
 	
+	/**
+	 * Service for institutional item version data.
+	 * 
+	 * @return institutional item service
+	 */
 	public InstitutionalItemVersionService getInstitutionalItemVersionService() {
 		return institutionalItemVersionService;
 	}
 
+	/**
+	 * Service for institutional item version data.
+	 * 
+	 * @param institutionalItemVersionService
+	 */
 	public void setInstitutionalItemVersionService(
 			InstitutionalItemVersionService institutionalItemVersionService) {
 		this.institutionalItemVersionService = institutionalItemVersionService;
@@ -560,6 +564,11 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	}
 
 
+	/**
+	 * Service for processing institutional item records.
+	 * 
+	 * @return InstitutionalItemIndexProcessingRecordService
+	 */
 	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
 		return institutionalItemIndexProcessingRecordService;
 	}
@@ -573,8 +582,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		return deletedInstitutionalItemService;
 	}
 
-
-
 	public void setDeletedInstitutionalItemService(
 			DeletedInstitutionalItemService deletedInstitutionalItemService) {
 		this.deletedInstitutionalItemService = deletedInstitutionalItemService;
@@ -587,5 +594,242 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			Long genericItemId) {
 		
 		return institutionalItemDAO.getInstitutionalItem(collectionId, genericItemId);
+	}
+
+
+	/**
+	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters
+	 * 
+	 * NOTE: This search includes all items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param collection - the institutional collection 
+	 * @param contentTypeId - content type id the items must have
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return list of items matching the specified criteria
+	 */
+	public List<InstitutionalItem> getCollectionItemsBetweenChar(int rowStart,
+			int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, char firstChar, char lastChar,
+			OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsBetweenChar(rowStart, maxResults, collection, 
+				contentTypeId, firstChar, lastChar, orderType);
+	}
+
+	/**
+	 * Get a list of items for a specified collection by first character of the name 
+	 * and the specified content type.  
+	 * This INCLUDES items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param Institutionalcollection - parent collection
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getCollectionItemsByChar(int, int, edu.ur.ir.institution.InstitutionalCollection, java.lang.Long, char, edu.ur.order.OrderType)
+	 */
+	public List<InstitutionalItem> getCollectionItemsByChar(int rowStart,
+			int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, char firstChar, OrderType orderType) {
+		
+		return institutionalItemDAO.getCollectionItemsByChar(rowStart, 
+				maxResults, 
+				collection, 
+				contentTypeId, 
+				firstChar, 
+				orderType);
+	}
+
+	/**
+	 * Get the list of items for the specified collection with the given 
+	 * content type id.  This includes items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults -  maximum number of results to return
+	 * @param collection - the collection to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getCollectionItemsByName(int, int, edu.ur.ir.institution.InstitutionalCollection, java.lang.Long, edu.ur.order.OrderType)
+	 */
+	public List<InstitutionalItem> getCollectionItemsOrderByName(int rowStart,
+			int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsByName(rowStart, 
+				maxResults, 
+				collection, 
+				contentTypeId, 
+				orderType);
+	}
+
+	/**
+	 * Get a  count of institutional items with the given content type id.
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @param contentTypeId - content type
+	 * 
+	 * @return the count of institutional items with the content type in the specified
+	 * repository.
+	 */
+	public Long getCount(Long repositoryId, Long contentTypeId) {
+		return institutionalItemDAO.getCount(repositoryId, contentTypeId);
+	}
+
+	/**
+	 * Get a count of institutional items with the specified repository id
+	 * has a name starting with the first character and the specified content type id.
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @param nameFirstChar - name of the first character
+	 * @param contentTypeId - specified content type id
+	 * 
+	 * @return the count of items with the specified criteria
+	 */
+	public Long getCount(Long repositoryId, char nameFirstChar,
+			Long contentTypeId) {
+		return institutionalItemDAO.getCount( repositoryId, nameFirstChar, contentTypeId);
+	}
+
+
+	/**
+	 * Get a count of all items within the specified repository with a name
+	 * first character starting between the given character range and the content type id.
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @param nameFirstCharRange - starting character range for the first letter of the title
+	 * @param namelastCharRange - ending character range for the first letter of the title
+	 * @param contentTypeId - id of the content type
+	 * 
+	 * @return the count of items 
+	 */
+	public Long getCount(Long repositoryId, char nameFirstCharRange,
+			char nameLastCharRange, Long contentTypeId) {
+		return institutionalItemDAO.getCount(repositoryId, nameFirstCharRange, nameLastCharRange, contentTypeId);
+	}
+
+
+
+	/**
+	 * Get a count of all items within the specified collection, has the specified first character 
+	 * and a given content type id.  This includes a count of items within sub collections.
+	 * 
+	 * @param collection - collection items must be within sub collections
+	 * @param nameFirstChar - name starts with the specified first character
+	 * @param contentTypeId - id of the content type
+	 * 
+	 * @return count of items 
+	 */
+	public Long getCount(InstitutionalCollection collection,
+			char nameFirstChar, Long contentTypeId) {
+		return institutionalItemDAO.getCount(collection, nameFirstChar, contentTypeId);
+	}
+
+
+
+	/**
+	 * Get a count of all institutional items in the specified collection with
+	 * specified first character in the given character range with the given content type id-  THIS INCLUDES items in child collections 
+	 * 
+	 * @param institutional collection - parent collection
+	 * @param nameFirstCharRange - first character in range
+	 * @param nameLastCharRange - last character in the range
+	 * 
+	 * @return count of titles found that have a first character in the specified range
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getCount(edu.ur.ir.institution.InstitutionalCollection, char, char, java.lang.Long)
+	 */
+	public Long getCount(InstitutionalCollection collection,
+			char nameFirstCharRange, char nameLastCharRange, Long contentTypeId) {
+		return institutionalItemDAO.getCount(collection, nameFirstCharRange, nameLastCharRange, contentTypeId);
+	}
+
+
+
+	/**
+	 * Get a count of institutional items in a collection and its children with
+	 * the specified content type.
+	 * 
+	 * @param collection - collection to start counting from
+	 * @param contentTypeId - id of the content type 
+	 * 
+	 * @return Items within the specified collection and its sub collection
+	 */
+	public Long getCount(InstitutionalCollection collection, Long contentTypeId) {
+		return institutionalItemDAO.getCount(collection, contentTypeId);
+	}
+
+
+
+	/**
+	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters with the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsBetweenChar(int rowStart,
+			int maxResults, Long repositoryId, char firstChar, char lastChar,
+			Long contentTypeId, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsBetweenChar(rowStart, maxResults, repositoryId, 
+				firstChar, lastChar, contentTypeId, orderType);
+	}
+
+
+
+	/**
+	 * Get a list of items for a specified repository by first character of the name and
+	 * the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsByChar(int rowStart,
+			int maxResults, Long repositoryId, Long contentTypeId,
+			char firstChar, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsByChar(rowStart, maxResults, 
+				repositoryId, contentTypeId, firstChar, orderType);
+	}
+
+
+
+	/**
+	 * Get a list of items for a specified repository with the given content type id.
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsOrderByName(int rowStart,
+			int maxResults, Long repositoryId, Long contentTypeId,
+			OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsOrderByName(rowStart, maxResults, 
+				repositoryId, contentTypeId, orderType);
 	}
 }

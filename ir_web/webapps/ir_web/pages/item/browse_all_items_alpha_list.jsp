@@ -28,7 +28,8 @@
 			<c:param name="currentPageNumber" value="1"/>
 			<c:param name="sortElement" value="${sortElement}"/>		
 			<c:param name="sortType" value="${sortType}"/>	
-			<c:param name="selectedAlpha" value="${alpha}"/>																	
+			<c:param name="selectedAlpha" value="${alpha}"/>
+			<c:param name="contentTypeId" value="${contentTypeId}"/>																	
 		</c:url>
 		<a href="${alphaUrl}"><strong>${alpha}</strong></a>
     </c:if>

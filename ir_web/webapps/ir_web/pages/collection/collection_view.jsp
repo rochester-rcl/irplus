@@ -276,7 +276,27 @@
                        </div>
                    
                        <div class="contentBoxContent">
-						  <c:import url="collection_statistics_view.jsp"/>
+						     <table class="baseTable">
+                                 <c:if test="${allSubcollectionCount > 0}">
+   	                                 <tr><td>Number of sub-collections for this collection: ${allSubcollectionCount}</td></tr>
+   	                             </c:if>
+   	                             <c:if test="${institutionalItemsCountForACollection > 0}">
+   	                                 <tr> <td>Number of Publications in this collection : ${institutionalItemsCountForACollection}</td></tr>
+                                 </c:if>
+                                 <c:if test="${institutionalItemCount > 0}">
+                                     <tr> <td>Number of Publications in this collection and its sub-collections : ${institutionalItemCount}</td></tr>
+                                 </c:if>
+                                 <c:if test="${fileDownloadCountForCollection > 0}">
+                                     <tr> <td>Number of file downloads in this collection : ${fileDownloadCountForCollection}</td></tr>
+                                 </c:if>
+                                 <c:if test="${fileDownloadCountForCollectionAndItsChildren > 0}">
+                                     <tr> <td>Number of file downloads in this collection and its sub-collections : ${fileDownloadCountForCollectionAndItsChildren}</td></tr>
+                                 </c:if>
+                                 <c:url value="/viewCollectionStatistics.action" var="collectionStatsUrl">
+                                     <c:param name="collectionId" value="${collectionId}"/>
+                                 </c:url>
+                                    <tr><td><a href="${collectionStatsUrl}">View Collection Statistics</a></td></tr>
+                             </table>
                        </div>
                    </div>
                    </c:if>

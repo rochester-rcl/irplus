@@ -24,6 +24,8 @@ import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
+import edu.ur.ir.item.ContentType;
+import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
@@ -88,6 +90,12 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 	/** institutional repository  */
 	private Repository repository;
 	
+	/** service for dealing with content types */
+	private ContentTypeService contentTypeService;
+	
+	/** the content type id to sort on -1 indicates no content type */
+	private long contentTypeId = -1l;
+
 	/** Default constructor */
 	public CollectionInstitutionalItemBrowse()
 	{
@@ -120,24 +128,53 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		log.debug("selected Alpha = " + selectedAlpha);
 		rowEnd = rowStart + numberOfResultsToShow;
 		log.debug("looking at collection " + institutionalCollection);
-		if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
+		
+		
+		if( contentTypeId == -1l )
 		{
+			if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
+		    {
 		    
-		    institutionalItems = institutionalItemService.getCollectionItemsOrderByName(rowStart, 
+		        institutionalItems = institutionalItemService.getCollectionItemsOrderByName(rowStart, 
 		    		numberOfResultsToShow, institutionalCollection, OrderType.getOrderType(sortType));
-		    totalHits = institutionalItemService.getCountForCollectionAndChildren(institutionalCollection).intValue();
-		}
-		else if (selectedAlpha.equals("0-9"))
-		{
-			institutionalItems = institutionalItemService.getCollectionItemsBetweenChar(rowStart, numberOfResultsToShow, 
+		        totalHits = institutionalItemService.getCountForCollectionAndChildren(institutionalCollection).intValue();
+		    }
+		    else if (selectedAlpha.equals("0-9"))
+		    {
+			    institutionalItems = institutionalItemService.getCollectionItemsBetweenChar(rowStart, numberOfResultsToShow, 
 					institutionalCollection, '0', '9', OrderType.getOrderType(sortType));
-			totalHits = institutionalItemService.getCount(institutionalCollection, '0', '9').intValue();
+			    totalHits = institutionalItemService.getCount(institutionalCollection, '0', '9').intValue();
+		    }
+		    else
+		    {
+			    institutionalItems = institutionalItemService.getCollectionItemsByChar(rowStart, numberOfResultsToShow, institutionalCollection, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+			    log.debug("test hits = " + institutionalItemService.getCount(institutionalCollection, selectedAlpha.charAt(0)).intValue());
+			    totalHits = institutionalItemService.getCount(institutionalCollection, selectedAlpha.charAt(0)).intValue();
+		    }
 		}
 		else
 		{
-			institutionalItems = institutionalItemService.getCollectionItemsByChar(rowStart, numberOfResultsToShow, institutionalCollection, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
-			log.debug("test hits = " + institutionalItemService.getCount(institutionalCollection, selectedAlpha.charAt(0)).intValue());
-			totalHits = institutionalItemService.getCount(institutionalCollection, selectedAlpha.charAt(0)).intValue();
+		    if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
+		    {
+		    
+		        institutionalItems = institutionalItemService.getCollectionItemsOrderByName(rowStart, 
+		    		numberOfResultsToShow, institutionalCollection, contentTypeId, OrderType.getOrderType(sortType));
+		        
+		        totalHits = institutionalItemService.getCount(institutionalCollection, contentTypeId).intValue();
+		    }
+		    else if (selectedAlpha.equals("0-9"))
+		    {
+			    institutionalItems = institutionalItemService.getCollectionItemsBetweenChar(rowStart, numberOfResultsToShow, 
+					institutionalCollection, contentTypeId, '0', '9', OrderType.getOrderType(sortType));
+			    totalHits = institutionalItemService.getCount(institutionalCollection, '0', '9', contentTypeId).intValue();
+		    }
+		    else
+		    {
+			    institutionalItems = institutionalItemService.getCollectionItemsByChar(rowStart, numberOfResultsToShow, 
+			    		institutionalCollection, contentTypeId, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+			    log.debug("test hits = " + institutionalItemService.getCount(institutionalCollection, selectedAlpha.charAt(0), contentTypeId).intValue());
+			    totalHits = institutionalItemService.getCount(institutionalCollection, selectedAlpha.charAt(0), contentTypeId).intValue();
+		    }
 		}
 		
 		log.debug("institutionalItems size = " + institutionalItems.size());
@@ -257,6 +294,28 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 
 	public void setRepository(Repository repository) {
 		this.repository = repository;
+	}
+	
+	/**
+	 * Get a list of content types.
+	 * 
+	 * @return list of content types
+	 */
+	public List<ContentType> getContentTypes()
+	{
+		return contentTypeService.getAllContentTypeByNameOrder();
+	}
+	
+	public void setContentTypeService(ContentTypeService contentTypeService) {
+		this.contentTypeService = contentTypeService;
+	}
+
+	public long getContentTypeId() {
+		return contentTypeId;
+	}
+
+	public void setContentTypeId(long contentTypeId) {
+		this.contentTypeId = contentTypeId;
 	}
 
 }

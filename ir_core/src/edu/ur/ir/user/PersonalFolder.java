@@ -254,8 +254,10 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	/**
 	 * Rename this personal folder.
 	 * 
-	 * @param name
-	 * @throws DuplicateNameException
+	 * @param name - new name to give the personal folder
+	 * @throws DuplicateNameException - if the name already exists in as a file or folder at the current
+	 * level of the folder structure
+	 * @throws IllegalFileSystemNameException - if the name contains illegal characters within the name
 	 */
 	public void reName(String name) throws DuplicateNameException, IllegalFileSystemNameException
 	{

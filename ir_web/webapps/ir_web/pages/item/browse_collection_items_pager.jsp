@@ -39,7 +39,8 @@
 			       <c:param name="sortElement" value="${sortElement}"/>		
 			       <c:param name="sortType" value="${sortType}"/>
 			       <c:param name="collectionId" value="${institutionalCollection.id}"/>
-			       <c:param name="selectedAlpha" value="${selectedAlpha}"/>																					
+			       <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+			       <c:param name="contentTypeId" value="${contentTypeId}"/>																					
 		      </c:url>										
 		 
 		      <a href="${browseUrl}">First</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -53,7 +54,8 @@
 					<c:param name="sortElement" value="${sortElement}"/>		
 					<c:param name="sortType" value="${sortType}"/>	
 					<c:param name="collectionId" value="${institutionalCollection.id}"/>
-					<c:param name="selectedAlpha" value="${selectedAlpha}"/>																				
+					<c:param name="selectedAlpha" value="${selectedAlpha}"/>
+					<c:param name="contentTypeId" value="${contentTypeId}"/>																					
 			</c:url>	
 			<&nbsp;<a href="${browseUrl}">Previous</a> &nbsp;&nbsp;
 			<ur:morePrevious>
@@ -64,7 +66,8 @@
 						<c:param name="sortElement" value="${sortElement}"/>		
 						<c:param name="sortType" value="${sortType}"/>	
 						<c:param name="collectionId" value="${institutionalCollection.id}"/>
-						<c:param name="selectedAlpha" value="${selectedAlpha}"/>																				
+						<c:param name="selectedAlpha" value="${selectedAlpha}"/>
+						<c:param name="contentTypeId" value="${contentTypeId}"/>																					
 			      </c:url>										
 			 
 			      &nbsp;<a href="${browseUrl}">....</a> &nbsp;&nbsp;
@@ -80,7 +83,8 @@
 					 <c:param name="sortElement" value="${sortElement}"/>		
 					 <c:param name="sortType" value="${sortType}"/>		
 					 <c:param name="collectionId" value="${institutionalCollection.id}"/>
-					 <c:param name="selectedAlpha" value="${selectedAlpha}"/>												
+					 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+					 <c:param name="contentTypeId" value="${contentTypeId}"/>												
 				 </c:url>		
 																			
 				 <a href="${browseUrl}">${pageNumber}</a>&nbsp;&nbsp;
@@ -100,7 +104,8 @@
 					<c:param name="sortElement" value="${sortElement}"/>		
 					<c:param name="sortType" value="${sortType}"/>	
 					<c:param name="selectedAlpha" value="${selectedAlpha}"/>	
-					<c:param name="collectionId" value="${institutionalCollection.id}"/>																	
+					<c:param name="collectionId" value="${institutionalCollection.id}"/>	
+					<c:param name="contentTypeId" value="${contentTypeId}"/>																	
 			    </c:url>										
 				<a href="${browseUrl}">....</a>&nbsp;&nbsp;&nbsp;
 	        </ur:moreNext>
@@ -112,7 +117,8 @@
 				<c:param name="sortElement" value="${sortElement}"/>		
 				<c:param name="sortType" value="${sortType}"/>	
 				<c:param name="selectedAlpha" value="${selectedAlpha}"/>	
-				<c:param name="collectionId" value="${institutionalCollection.id}"/>																	
+				<c:param name="collectionId" value="${institutionalCollection.id}"/>	
+				<c:param name="contentTypeId" value="${contentTypeId}"/>																	
 			</c:url>	
 		    <a href="${browseUrl}">Next</a>&nbsp;> &nbsp;&nbsp;
 	    </ur:nextPage>
@@ -125,7 +131,8 @@
 					<c:param name="sortElement" value="${sortElement}"/>		
 					<c:param name="sortType" value="${sortType}"/>	
 					<c:param name="selectedAlpha" value="${selectedAlpha}"/>
-					<c:param name="collectionId" value="${institutionalCollection.id}"/>																		
+					<c:param name="collectionId" value="${institutionalCollection.id}"/>
+					<c:param name="contentTypeId" value="${contentTypeId}"/>																			
 			    </c:url>										
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="${browseUrl}">Last</a> 
 			</ur:lastPage>	

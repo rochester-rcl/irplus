@@ -41,6 +41,12 @@ import edu.ur.ir.web.action.institution.InstitutionalCollectionPictureHelper.Pic
 import edu.ur.order.OrderType;
 import edu.ur.simple.type.AscendingNameComparator;
 
+/**
+ * Loads data for public view of institutional collection information
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public class PublicCollectionView extends ActionSupport implements UserIdAware {
 
 	/**  Eclipse generated id */
@@ -50,7 +56,7 @@ public class PublicCollectionView extends ActionSupport implements UserIdAware {
 	private static final Logger log = Logger.getLogger(PublicCollectionView.class);
 
 	/** Repository service for dealing with institutional repository information */
-	RepositoryService repositoryService;
+	private RepositoryService repositoryService;
 	
 	/** Id of the collection */
 	private InstitutionalCollection institutionalCollection;
