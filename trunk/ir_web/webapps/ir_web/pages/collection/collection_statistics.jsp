@@ -82,23 +82,43 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-            
-                <h3>General Collection Information: ${collection.name}</h3>
+                <c:url var="pathCollectionUrl" value="/viewInstitutionalCollection.action">
+                    <c:param name="collectionId" value="${institutionalCollection.id}"/>
+                </c:url>
+              
+                <h3>General Collection Information: <a href="${pathCollectionUrl}">${institutionalCollection.name}</a></h3>
    	            <strong>Number of sub-collections for this collection:</strong> ${allSubcollectionCount}<br/><br/>
    	            <strong>Number of Publications in this collection:</strong> ${institutionalItemsCountForACollection}<br/><br/>
                 <strong>Number of Publications in this collection and its sub-collections:</strong> ${institutionalItemCount}<br/><br/>
                 <strong>Number of file downloads in this collection:</strong> ${fileDownloadCountForCollection}<br/><br/>
                 <strong>Number of file downloads in this collection and its sub-collections:</strong> ${fileDownloadCountForCollectionAndItsChildren}<br/><br/>
                 
+                <c:if test="${!ur:isEmpty(contentTypeCounts)}">
                 <h3>Content Type Counts</h3>
                 <c:forEach var="contentTypeCount" items="${contentTypeCounts}">
                     <c:if test="${contentTypeCount.count > 0 }">
-                    <strong>${contentTypeCount.contentType.name}:</strong> ${contentTypeCount.count} <br/><br/>
+                        <c:url var="browseUrl" value="/browseCollectionItems.action">
+		                    <c:param name="rowStart" value="0"/>
+			                <c:param name="startPageNumber" value="1"/>
+			                <c:param name="currentPageNumber" value="1"/>
+			                <c:param name="collectionId" value="${institutionalCollection.id}"/>
+			                <c:param name="contentTypeId" value="${contentTypeCount.contentType.id}"/>																					
+		                </c:url>
+                    <strong>${contentTypeCount.contentType.name}:</strong> <a href="${browseUrl}">${contentTypeCount.count}</a> <br/><br/>
                     </c:if>
                 </c:forEach>
+                </c:if>
                 
+                <c:if test="${sponsorCount > 0}">
                 <h3>Sponsor Count</h3>
-                <strong>Sponsor Count: ${sponsorCount}</strong>
+                <c:url var="sponsorUrl" value="/browseCollectionSponsorNames.action">
+		            <c:param name="rowStart" value="0"/>
+			        <c:param name="startPageNumber" value="1"/>
+			        <c:param name="currentPageNumber" value="1"/>
+			        <c:param name="collectionId" value="${institutionalCollection.id}"/>		
+		         </c:url>
+                <strong>Sponsor Count:</strong> <a href="${sponsorUrl}">${sponsorCount}</a>
+                </c:if>
             </div>
             <!--  end the body tag --> 
 

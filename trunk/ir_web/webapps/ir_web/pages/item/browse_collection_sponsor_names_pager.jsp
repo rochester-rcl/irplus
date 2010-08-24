@@ -32,7 +32,7 @@
 		 numberOfResultsToShow="${numberOfResultsToShow}" >	
 
 		<ur:firstPage>
-	          <c:url var="browseUrl" value="/browseSponsorNames.action">
+	          <c:url var="browseUrl" value="/browseCollectionSponsorNames.action">
 		           <c:param name="rowStart" value="0"/>
 			       <c:param name="startPageNumber" value="1"/>
 			       <c:param name="currentPageNumber" value="1"/>
@@ -46,7 +46,7 @@
 		</ur:firstPage>
 				
 		<ur:previousPage>
-		    <c:url var="browseUrl" value="/browseSponsorNames.action">
+		    <c:url var="browseUrl" value="/browseCollectionSponsorNames.action">
 	                <c:param name="rowStart" value="${rowStart}"/>
 					<c:param name="startPageNumber" value="${prevousPageStartPageNumber}"/>
 					<c:param name="currentPageNumber" value="${currentPageNumber - 1}"/>
@@ -59,7 +59,7 @@
 			<&nbsp;<a href="${browseUrl}">Previous</a> &nbsp;&nbsp;
 
 			<ur:morePrevious>
-		          <c:url var="browseUrl" value="/browseSponsorNames.action">
+		          <c:url var="browseUrl" value="/browseCollectionSponsorNames.action">
 			           <c:param name="rowStart" value="${rowStart}"/>
 				       <c:param name="startPageNumber" value="${startPageNumberForPreviousSet}"/>
 				       <c:param name="currentPageNumber" value="${startPageNumberForPreviousSet}"/>
@@ -75,7 +75,7 @@
 								
 		<ur:forEachPage var="pageNumber">
 		    <c:if test="${pageNumber != currentPageNumber}">
-			     <c:url var="browseUrl" value="/browseSponsorNames.action">
+			     <c:url var="browseUrl" value="/browseCollectionSponsorNames.action">
 				     <c:param name="rowStart" value="${rowStart}"/>
 					 <c:param name="startPageNumber" value="${startPageNumber}"/>
 					 <c:param name="currentPageNumber" value="${pageNumber}"/>
@@ -95,7 +95,7 @@
 															
 		<ur:nextPage>
 	       <ur:moreNext>
-		        <c:url var="browseUrl" value="/browseSponsorNames.action">
+		        <c:url var="browseUrl" value="/browseCollectionSponsorNames.action">
 				    <c:param name="rowStart" value="${nextSetRowStart}"/>
 					<c:param name="startPageNumber" value="${startPageNumberForNextSet}"/>
 					<c:param name="currentPageNumber" value="${startPageNumberForNextSet}"/>	
@@ -107,7 +107,7 @@
 				<a href="${browseUrl}">....</a>&nbsp;&nbsp;&nbsp;
 	        </ur:moreNext>
 		
-		    <c:url var="browseUrl" value="/browseSponsorNames.action">
+		    <c:url var="browseUrl" value="/browseCollectionSponsorNames.action">
 			    <c:param name="rowStart" value="${rowStart}"/>
 				<c:param name="startPageNumber" value="${nextPageStartPageNumber}"/>
 				<c:param name="currentPageNumber" value="${currentPageNumber + 1}"/>	
@@ -121,7 +121,7 @@
 	    </ur:nextPage>
 
 	       <ur:lastPage>
-		        <c:url var="browseUrl" value="/browseSponsorNames.action">
+		        <c:url var="browseUrl" value="/browseCollectionSponsorNames.action">
 				    <c:param name="rowStart" value="${rowstartForLastPage}"/>
 					<c:param name="startPageNumber" value="${startPageNumber}"/>
 					<c:param name="currentPageNumber" value="${currentPageNumber}"/>	

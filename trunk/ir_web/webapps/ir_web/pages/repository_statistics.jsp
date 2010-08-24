@@ -27,7 +27,7 @@
 
 <html>
     <head>
-        <title>${repository.name} Institutional Repository</title>
+        <title>${repository.name} Repository Statistics</title>
         
         <c:import url="/inc/meta-frag.jsp"/>
         
@@ -82,23 +82,38 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-            
-                <h3>General Repository Information</h3>
+                <h3>General Repository Information: <a href="home.action">${repository.name}</a></h3>
                 <strong>Number of collections:</strong> ${numberOfCollections}<br/><br/>
                 <strong>Number of publications:</strong> ${numberOfPublications}<br/><br/>
                 <strong>Number of file downloads:</strong> ${numberOfFileDownloads}<br/><br/>
                 <strong>Number of members:</strong> ${numberOfUsers}<br/><br/>
-                <strong>Number of public researchers:</strong> ${numberOfResearchers}<br/><br/>
+                <strong>Number of researchers:</strong> ${numberOfResearchers}<br/><br/>
+                <strong>Number of public researchers:</strong> ${numberOfPublicResearchers}<br/><br/>
                 
+                <c:if test="${!ur:isEmpty(contentTypeCounts)}">
                 <h3>Repository Content Type Counts</h3>
                 <c:forEach var="contentTypeCount" items="${contentTypeCounts}">
                     <c:if test="${contentTypeCount.count > 0 }">
-                    <strong>${contentTypeCount.contentType.name}:</strong> ${contentTypeCount.count} <br/><br/>
+                        <c:url var="browseUrl" value="/browseRepositoryItems.action">
+		                    <c:param name="rowStart" value="0"/>
+			                <c:param name="startPageNumber" value="1"/>
+			                <c:param name="currentPageNumber" value="1"/>
+			                <c:param name="contentTypeId" value="${contentTypeCount.contentType.id}"/>																					
+		                </c:url>
+                    <strong>${contentTypeCount.contentType.name}:</strong> <a href="${browseUrl}">${contentTypeCount.count} </a><br/><br/>
                     </c:if>
                 </c:forEach>
+                </c:if> 
                 
+                <c:if test="${sponsorCount > 0}">
                 <h3>Sponsor Count</h3>
-                <strong>Sponsor Count: ${sponsorCount}</strong>
+                <c:url var="sponsorUrl" value="/browseSponsorNames.action">
+		            <c:param name="rowStart" value="0"/>
+			        <c:param name="startPageNumber" value="1"/>
+			        <c:param name="currentPageNumber" value="1"/>
+		         </c:url>
+                <strong>Sponsor Count:</strong><a href="${sponsorUrl}">${sponsorCount}</a>
+                </c:if>
             </div>
             <!--  end the body tag --> 
 

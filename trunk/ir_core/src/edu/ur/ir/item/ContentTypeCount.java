@@ -1,12 +1,14 @@
 package edu.ur.ir.item;
 
+import edu.ur.simple.type.NameAware;
+
 /**
  * Class to help with counting for a content type.
  * 
  * @author Nathan Sarr
  *
  */
-public class ContentTypeCount {
+public class ContentTypeCount implements NameAware {
 	
 	/** content type  */
 	private ContentType contentType;
@@ -42,6 +44,15 @@ public class ContentTypeCount {
 	 */
 	public Long getCount() {
 		return count;
+	}
+
+	/**
+	 * Return the name of the content type
+	 * 
+	 * @see edu.ur.simple.type.NameAware#getName()
+	 */
+	public String getName() {
+		return contentType.getName();
 	}
 
 }

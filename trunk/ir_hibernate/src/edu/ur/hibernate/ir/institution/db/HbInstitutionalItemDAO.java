@@ -192,9 +192,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final Long repositoryId, 
 			final OrderType orderType) 
 	{
-		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
-			
-			foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 			{
 			    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 			    {
@@ -237,9 +235,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final char firstChar,
 			final OrderType orderType) 
 	{
-		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
-			
-			foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 			{
 			    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 			    {
@@ -284,9 +280,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final char lastChar,
 			final OrderType orderType)
 	{
-		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
-		
-		foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -320,9 +314,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final InstitutionalCollection collection, final OrderType orderType)
 	{
 	
-		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
-		
-			foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 			{
 			    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 			    {
@@ -380,7 +372,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	 */
 	public Long getCount(Long repositoryId, char nameFirstChar)
 	{
-		Object[] values = new Object[]{repositoryId, new Character(Character.toLowerCase(nameFirstChar))};
+		Object[] values = new Object[]{repositoryId, Character.valueOf(Character.toLowerCase(nameFirstChar))};
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemCountForRepositoryByChar", values));
 	}
 	
@@ -397,8 +389,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	public Long getCount(Long repositoryId, char nameFirstCharRange, char namelastCharRange)
 	{
 		Object[] values = new Object[]{repositoryId, 
-				new Character(Character.toLowerCase(nameFirstCharRange)),
-				new Character(Character.toLowerCase(namelastCharRange))};
+				Character.valueOf(Character.toLowerCase(nameFirstCharRange)),
+				Character.valueOf(Character.toLowerCase(namelastCharRange))};
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemCountForRepositoryByCharRange", values));
 	}
 	
@@ -443,9 +435,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final char firstChar,
 			final char lastChar, 
 			final OrderType orderType) {
-		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
 		
-		foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		List<InstitutionalItem>  foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -483,9 +474,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 			final InstitutionalCollection collection,
 			final char firstChar, 
 			final OrderType orderType) {
-		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
 		
-		foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -521,7 +511,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 				collection.getLeftValue(),
 				collection.getRightValue(),
 				collection.getTreeRoot().getId(),
-				new Character(Character.toLowerCase(nameFirstChar))};
+				Character.valueOf(Character.toLowerCase(nameFirstChar))};
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemCountForCollectionByChar", values));
 
 	}
@@ -536,8 +526,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 				collection.getLeftValue(),
 				collection.getRightValue(),
 				collection.getTreeRoot().getId(),
-				new Character(Character.toLowerCase(nameFirstCharRange)),
-				new Character(Character.toLowerCase(namelastCharRange))};
+				Character.valueOf(Character.toLowerCase(nameFirstCharRange)),
+				Character.valueOf(Character.toLowerCase(namelastCharRange))};
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemCountForCollectionByCharRange", values));
 	}
 
@@ -606,9 +596,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItem> getItemsOrderByDate(final int rowStart, final int maxResults,
 			final InstitutionalCollection collection, final OrderType orderType) {
-		List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
 		
-		foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -640,10 +629,9 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	@SuppressWarnings("unchecked")
 	public List<InstitutionalItem> getItems(final InstitutionalCollection collection,
 			final Date startDate, final Date endDate) {
-        List<InstitutionalItem> foundItems = new LinkedList<InstitutionalItem>();
 		log.debug("Trying dates " + startDate + " and " + endDate);
 
-        foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<InstitutionalItem> foundItems = (List<InstitutionalItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -669,9 +657,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	@SuppressWarnings("unchecked")
 	public List<Long> getCollectionItemsIds(final int rowStart, final int maxResults,
 			final InstitutionalCollection collection, final OrderType orderType) {
-		List<Long> foundIds = new LinkedList<Long>();
-		
-		foundIds = (List<Long>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<Long> foundIds = (List<Long>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -736,8 +722,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		q.setParameter("leftVal", collection.getLeftValue());
 		q.setParameter("rightVal", collection.getRightValue());
 		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", new Character(Character.toLowerCase(firstChar)));
-		q.setParameter("lastChar", new Character(Character.toLowerCase(lastChar)));
+		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
 		q.setParameter("contentTypeId", contentTypeId);
 		q.setFirstResult(rowStart);
 	    q.setMaxResults(maxResults);
@@ -782,7 +768,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		q.setParameter("leftVal", collection.getLeftValue());
 		q.setParameter("rightVal", collection.getRightValue());
 		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", new Character(Character.toLowerCase(firstChar)));
+		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
 		q.setParameter("contentTypeId", contentTypeId);
 		q.setFirstResult(rowStart);
 	    q.setMaxResults(maxResults);
@@ -862,7 +848,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		Query q = session.getNamedQuery("institutionalItemCountContentTypeForRepositoryByChar");
 		q.setParameter("repositoryId", repositoryId);
 		q.setParameter("contentTypeId", contentTypeId);
-		q.setParameter("char", new Character(Character.toLowerCase(firstChar)));
+		q.setParameter("char", Character.valueOf(Character.toLowerCase(firstChar)));
 		return (Long)q.uniqueResult();
 	}
 
@@ -884,8 +870,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		Query q = session.getNamedQuery("institutionalItemCountForRepositoryContentTypeByCharRange");
 		q.setParameter("repositoryId", repositoryId);
 		q.setParameter("contentTypeId", contentTypeId);
-		q.setParameter("firstChar", new Character(Character.toLowerCase(nameFirstCharRange)));
-		q.setParameter("secondChar", new Character(Character.toLowerCase(namelastCharRange)));
+		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(nameFirstCharRange)));
+		q.setParameter("secondChar", Character.valueOf(Character.toLowerCase(namelastCharRange)));
 		return (Long)q.uniqueResult();
 	}
 
@@ -907,7 +893,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		q.setParameter("rightVal", collection.getRightValue());
 		q.setParameter("contentTypeId", contentTypeId);
 		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", new Character(Character.toLowerCase(nameFirstChar)));
+		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(nameFirstChar)));
 		return (Long)q.uniqueResult();
 	}
 	
@@ -930,8 +916,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		q.setParameter("rightVal", collection.getRightValue());
 		q.setParameter("contentTypeId", contentTypeId);
 		q.setParameter("rootId", collection.getTreeRoot().getId());
-		q.setParameter("firstChar", new Character(Character.toLowerCase(nameFirstCharRange)));
-		q.setParameter("lastChar", new Character(Character.toLowerCase(nameLastCharRange)));
+		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(nameFirstCharRange)));
+		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(nameLastCharRange)));
 		return (Long)q.uniqueResult();
 	}
 
@@ -985,8 +971,8 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	    }
 	    
 	    q.setParameter("repositoryId", repositoryId);
-		q.setParameter("firstChar", new Character(Character.toLowerCase(firstChar)));
-		q.setParameter("lastChar", new Character(Character.toLowerCase(lastChar)));
+		q.setParameter("firstChar",Character.valueOf(Character.toLowerCase(firstChar)));
+		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
 		q.setParameter("contentTypeId", contentTypeId);
 		q.setFirstResult(rowStart);
 	    q.setMaxResults(maxResults);
@@ -1023,7 +1009,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	    }
 	    
 	    q.setParameter("repositoryId", repositoryId);
-		q.setParameter("char", new Character(Character.toLowerCase(firstChar)));
+		q.setParameter("char", Character.valueOf(Character.toLowerCase(firstChar)));
 		q.setParameter("contentTypeId", contentTypeId);
 		q.setFirstResult(rowStart);
 	    q.setMaxResults(maxResults);

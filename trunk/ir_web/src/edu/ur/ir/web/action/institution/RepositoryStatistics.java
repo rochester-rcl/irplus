@@ -1,8 +1,8 @@
 package edu.ur.ir.web.action.institution;
 
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -13,9 +13,11 @@ import edu.ur.ir.item.ContentTypeCount;
 import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.item.SponsorService;
 import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.user.UserService;
+import edu.ur.simple.type.AscendingNameComparator;
 
 /**
  * Allows the viewing of repository information.
@@ -41,6 +43,9 @@ public class RepositoryStatistics extends ActionSupport{
 	private Long numberOfUsers;
 	
 	/** number of researchers */
+	private Long numberOfPublicResearchers;
+	
+	/** number of researchers  */
 	private Long numberOfResearchers;
 	
 	/** Institutional Item data access */
@@ -59,7 +64,7 @@ public class RepositoryStatistics extends ActionSupport{
 	private ResearcherService researcherService;
 	
 	/** get a count of content types */
-	private Set<ContentTypeCount> contentTypeCounts = new HashSet<ContentTypeCount>();
+	private List<ContentTypeCount> contentTypeCounts = new LinkedList<ContentTypeCount>();
 	
 	/** service to get content type information */
 	private ContentTypeService contentTypeService;
@@ -70,6 +75,15 @@ public class RepositoryStatistics extends ActionSupport{
 	/** count for the name of the sponsors */
 	private Long sponsorCount;
 	
+	/** repository for the system  */
+	private Repository repository;
+	
+	/** service for dealing with repository information */
+	private RepositoryService repositoryService;
+	
+	/** Used for sorting name based entities */
+	private AscendingNameComparator nameComparator = new AscendingNameComparator();
+
 	/**
      * Get the statistics information
      *
@@ -83,15 +97,22 @@ public class RepositoryStatistics extends ActionSupport{
 	    numberOfPublications = institutionalItemService.getDistinctInstitutionalItemCount();
 	    numberOfFileDownloads = downloadStatisticsService.getNumberOfDownloadsForAllCollections();
 	    numberOfUsers = userService.getUserCount();
-	    numberOfResearchers = researcherService.getPublicResearcherCount();
+	    numberOfResearchers = researcherService.getResearcherCount();
+	    numberOfPublicResearchers = researcherService.getPublicResearcherCount();
 	    
 	    List<ContentType> contentTypes = contentTypeService.getAllContentTypeByNameOrder();
 	    
+	    repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 	    for(ContentType c : contentTypes)
 	    {
 	    	Long count = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, c.getId());
-	    	contentTypeCounts.add(new ContentTypeCount(c, count));
+	    	if( count > 0 )
+	    	{
+	    	    contentTypeCounts.add(new ContentTypeCount(c, count));
+	    	}
 	    }
+	    
+	    Collections.sort(contentTypeCounts, nameComparator);
 	    
 	    sponsorCount = sponsorService.getCount();
 	    return SUCCESS;
@@ -122,7 +143,7 @@ public class RepositoryStatistics extends ActionSupport{
 	}
 
 
-	public Set<ContentTypeCount> getContentTypeCounts() {
+	public List<ContentTypeCount> getContentTypeCounts() {
 		return contentTypeCounts;
 	}
 
@@ -168,5 +189,16 @@ public class RepositoryStatistics extends ActionSupport{
 		this.sponsorService = sponsorService;
 	}
 
+	public Repository getRepository() {
+		return repository;
+	}
+	
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+	
+	public Long getNumberOfPublicResearchers() {
+		return numberOfPublicResearchers;
+	}
 
 }
