@@ -173,11 +173,7 @@
 		                  <div class="clear">&nbsp;</div>
 				         <c:if test='${viewType == "browse"}'>
 				         
-				         <div class="center">
-				              <c:import url="browse_collection_items_alpha_list.jsp"/>
-				         </div>
-				
-				       <form name="contentType" action="${browseRepositoryItems}" method="">
+				         <form name="contentType" action="${browseRepositoryItems}" method="">
 				             <input type="hidden" name="rowStart" value="0"/>
 			                 <input type="hidden" name="startPageNumber" value="1"/>
 			                 <input type="hidden" name="currentPageNumber" value="1"/>
@@ -203,6 +199,12 @@
 						    </c:forEach>
 						 </select>
 						 </form>
+				         
+				         <div class="center">
+				              <c:import url="browse_collection_items_alpha_list.jsp"/>
+				         </div>
+				
+				       
 				         <c:if test="${totalHits > 0}">
 				         	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				         </c:if>  

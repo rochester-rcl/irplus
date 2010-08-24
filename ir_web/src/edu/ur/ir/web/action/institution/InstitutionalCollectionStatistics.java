@@ -1,8 +1,8 @@
 package edu.ur.ir.web.action.institution;
 
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -14,6 +14,7 @@ import edu.ur.ir.item.ContentTypeCount;
 import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.item.SponsorService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
+import edu.ur.simple.type.AscendingNameComparator;
 
 /**
  * Allows users to view the institutional collection statistics
@@ -29,8 +30,6 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 	/** Institutional Collection service */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
-
-
 	/** id of the institutional collection  */
 	private Long collectionId;
 	
@@ -59,7 +58,7 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 	private Long fileDownloadCountForCollectionAndItsChildren; 
 	
 	/** get a count of content types */
-	private Set<ContentTypeCount> contentTypeCounts = new HashSet<ContentTypeCount>();
+	private List<ContentTypeCount> contentTypeCounts = new LinkedList<ContentTypeCount>();
 	
 	/** service to get content type information */
 	private ContentTypeService contentTypeService;
@@ -72,6 +71,9 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 	
 	/** Service for dealing with institutional items */
 	private InstitutionalItemService institutionalItemService;
+	
+	/** Used for sorting name based entities */
+	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 
 	
 	/**
@@ -101,8 +103,12 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 		    for(ContentType c : contentTypes)
 		    {
 		    	Long count = institutionalItemService.getCount(institutionalCollection, c.getId());
-		    	contentTypeCounts.add(new ContentTypeCount(c, count));
+		    	if( count > 0 )
+		    	{
+		    	    contentTypeCounts.add(new ContentTypeCount(c, count));
+		    	}
 		    }
+		    Collections.sort(contentTypeCounts, nameComparator);
 		    
 		    sponsorCount = sponsorService.getCount(institutionalCollection);
         }
@@ -165,7 +171,7 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 		this.downloadStatisticsService = downloadStatisticsService;
 	}
 
-	public Set<ContentTypeCount> getContentTypeCounts() {
+	public List<ContentTypeCount> getContentTypeCounts() {
 		return contentTypeCounts;
 	}
 
