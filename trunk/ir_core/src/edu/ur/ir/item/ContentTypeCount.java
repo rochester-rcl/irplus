@@ -16,6 +16,9 @@ public class ContentTypeCount implements NameAware {
 	/** count value for the content type */
 	private Long count;
 	
+	/** package proctected constructor */
+	ContentTypeCount(){};
+	
 	/**
 	 * Create a count for content types..
 	 * 

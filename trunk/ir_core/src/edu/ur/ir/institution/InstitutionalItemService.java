@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.item.ContentTypeCount;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.user.IrUser;
@@ -64,7 +65,27 @@ public interface InstitutionalItemService extends Serializable{
 	 * @return count of all items in a specified repository
 	 */
 	public Long getCount(Long repositoryId, Long contentTypeId);
+	
+	/**
+	 * Get a list of of repository content types with counts for the number
+	 * of items within the repository. 
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @return - list of content type counts
+	 */
+	public List<ContentTypeCount> getRepositoryContentTypeCount(Long repositoryId);
 
+	
+	/**
+	 * Get a list of of repository content types with counts for the number
+	 * of items within the repository. 
+	 * 
+	 * @param collection - institutional collection
+	 * @return - list of content type counts
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getRepositoryContentTypeCount()
+	 */
+	public List<ContentTypeCount> getCollectionContentTypeCount(InstitutionalCollection collection);
 	
 	/**
 	 * Get a count of all institutional items in the specified repository with
@@ -570,5 +591,7 @@ public interface InstitutionalItemService extends Serializable{
 	 * @return the institutional item
 	 */
 	public InstitutionalItem getInstitutionalItem(Long collectionId, Long genericItemId);
+	
+	
 	
 }

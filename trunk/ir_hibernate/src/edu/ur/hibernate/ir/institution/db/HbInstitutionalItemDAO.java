@@ -35,6 +35,7 @@ import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemDAO;
+import edu.ur.ir.item.ContentTypeCount;
 import edu.ur.order.OrderType;
 
 /**
@@ -1053,6 +1054,42 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	    q.setFetchSize(maxResults);
         return q.list();
 		
+	}
+
+	/**
+	 * Get a list of of repository content types with counts for the number
+	 * of items within the repository.  This will return only those
+	 * items that have a count greater than 0.
+	 * 
+	 * @return - list of content type counts
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getRepositoryContentTypeCount()
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ContentTypeCount> getRepositoryContentTypeCount(Long repositoryId) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = session.getNamedQuery("getRepositoryItemsSumByContentType");
+		q.setParameter("repositoryId", repositoryId);
+        return q.list();
+	}
+	
+	/**
+	 * Get a list of of repository content types with counts for the number
+	 * of items within the repository. 
+	 * 
+	 * @param collection - institutional collection
+	 * @return - list of content type counts
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getRepositoryContentTypeCount()
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ContentTypeCount> getCollectionContentTypeCount(InstitutionalCollection collection)
+	{
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = session.getNamedQuery("getCollectionItemsSumByContentType");
+		q.setParameter("leftVal", collection.getLeftValue());
+		q.setParameter("rightVal", collection.getRightValue());
+		q.setParameter("rootId", collection.getTreeRoot().getId());
+		return q.list();
 	}
 
 	

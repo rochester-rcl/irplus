@@ -98,16 +98,8 @@ public class InstitutionalCollectionStatistics extends ActionSupport{
 		    fileDownloadCountForCollection = downloadStatisticsService.getNumberOfDownloadsForCollection(institutionalCollection);
 		    fileDownloadCountForCollectionAndItsChildren = downloadStatisticsService.getNumberOfDownloadsForCollectionAndItsChildren(institutionalCollection);
 
-		    List<ContentType> contentTypes = contentTypeService.getAllContentTypeByNameOrder();
-		    
-		    for(ContentType c : contentTypes)
-		    {
-		    	Long count = institutionalItemService.getCount(institutionalCollection, c.getId());
-		    	if( count > 0 )
-		    	{
-		    	    contentTypeCounts.add(new ContentTypeCount(c, count));
-		    	}
-		    }
+		    contentTypeCounts = institutionalItemService.getCollectionContentTypeCount(institutionalCollection);
+		   
 		    Collections.sort(contentTypeCounts, nameComparator);
 		    
 		    sponsorCount = sponsorService.getCount(institutionalCollection);

@@ -64,9 +64,6 @@
 		<property name="publishedToSystem" column="published" type="boolean"
 			not-null="true" access="field"/>
 			
-		<property name="thesis" column="thesis" type="boolean"
-			not-null="true" access="field"/>
-			
 		<property name="locked" column="locked_for_review" type="boolean"
 			not-null="true" access="field"/>
 

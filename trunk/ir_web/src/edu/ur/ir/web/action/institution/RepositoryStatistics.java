@@ -100,18 +100,7 @@ public class RepositoryStatistics extends ActionSupport{
 	    numberOfResearchers = researcherService.getResearcherCount();
 	    numberOfPublicResearchers = researcherService.getPublicResearcherCount();
 	    
-	    List<ContentType> contentTypes = contentTypeService.getAllContentTypeByNameOrder();
-	    
-	    repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-	    for(ContentType c : contentTypes)
-	    {
-	    	Long count = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, c.getId());
-	    	if( count > 0 )
-	    	{
-	    	    contentTypeCounts.add(new ContentTypeCount(c, count));
-	    	}
-	    }
-	    
+	    contentTypeCounts = institutionalItemService.getRepositoryContentTypeCount(Repository.DEFAULT_REPOSITORY_ID);
 	    Collections.sort(contentTypeCounts, nameComparator);
 	    
 	    sponsorCount = sponsorService.getCount();

@@ -569,16 +569,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			
 			ContentType contentType = null;
 			
-			if( type.equals("Thesis") )
-			{
-				genericItem.setThesis(true);
-			}
-			else if( type.equalsIgnoreCase("Thesis, Technical Report"))
-			{
-				genericItem.setThesis(true);
-			    contentType = contentTypeService.getByUniqueSystemCode("TECHNICAL_REPORT");
-			}
-			else if( type.equalsIgnoreCase("Article"))
+            if( type.equalsIgnoreCase("Article"))
 			{
 			    contentType = contentTypeService.getByUniqueSystemCode("ARTICLE");
 				

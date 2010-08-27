@@ -265,10 +265,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	/** Id of institutional item being edited */
 	private Long institutionalItemId;
 	
-	/** Indicates whether the publication is a thesis */
-	private boolean thesis;
-	
-
 	/** index processing type service */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
@@ -488,7 +484,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		item.setDescription(itemDescription);
 		item.setItemAbstract(itemAbstract);
 		item.setItemKeywords(keywords);
-		item.setThesis(thesis);
 
 		if (releaseDay != 0 && releaseMonth != 0 && releaseYear != 0) {
 			GregorianCalendar c = new GregorianCalendar(releaseYear, releaseMonth - 1, releaseDay);
@@ -1396,14 +1391,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 
 	public void setInstitutionalItemId(Long institutionalItemId) {
 		this.institutionalItemId = institutionalItemId;
-	}
-
-	public boolean isThesis() {
-		return thesis;
-	}
-
-	public void setThesis(boolean thesis) {
-		this.thesis = thesis;
 	}
 
 	public Long[] getTypeIds() {

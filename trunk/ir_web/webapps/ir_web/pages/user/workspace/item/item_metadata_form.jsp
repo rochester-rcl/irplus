@@ -117,23 +117,6 @@
 	           ${item.owner.firstName}&nbsp;${item.owner.lastName}
 	      </td>
 	      </tr>  
-
-		  <tr>
-		  <td class="rowBorder">
-	          <label for="itemForm_Submitter" >Thesis</label>
-	      </td>
-	      </tr>    
-	
-		  <tr>
-	      <td>
-	           <input type="checkbox" name="thesis" value="true"
-	           <c:if test="${item.thesis}">
-	           		checked
-	           	</c:if>  	
-	           	/>	Thesis
-	           
-	      </td>
-	      </tr>  
 	      	      	
 		  <tr>
 		  <td class="rowBorder">

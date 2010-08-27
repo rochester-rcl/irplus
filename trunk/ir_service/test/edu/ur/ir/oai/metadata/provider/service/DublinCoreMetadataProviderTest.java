@@ -174,7 +174,6 @@ public class DublinCoreMetadataProviderTest {
 		item.setExternalPublishedItem(externalPublishedItem);
 		item.setFirstAvailableDate(new FirstAvailableDate(1, 30, 2008));
 		item.setId(10l);
-		item.setThesis(false);
 		item.setItemAbstract("itemAbstract");
 		item.setCopyrightStatement(copyrightStatement);
 		
