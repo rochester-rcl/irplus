@@ -21,6 +21,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.ir.item.ContentTypeCount;
 import edu.ur.order.OrderType;
 
 
@@ -513,4 +514,25 @@ public interface InstitutionalItemDAO extends CrudDAO<InstitutionalItem>, Counta
 	 * @return - the items between the given start and end date 
 	 */
 	public List<InstitutionalItem> getItems(InstitutionalCollection collection, Date startDate, Date endDate);
+	
+	/**
+	 * Get a list of of repository content types with counts for the number
+	 * of items within the repository.  This will return only those
+	 * items that have a count greater than 0.
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @return - list of content type counts
+	 */
+	public List<ContentTypeCount> getRepositoryContentTypeCount(Long repositoryId);
+	
+	/**
+	 * Get a list of of repository content types with counts for the number
+	 * of items within the repository. 
+	 * 
+	 * @param collection - institutional collection
+	 * @return - list of content type counts
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getRepositoryContentTypeCount()
+	 */
+	public List<ContentTypeCount> getCollectionContentTypeCount(InstitutionalCollection collection);
 }

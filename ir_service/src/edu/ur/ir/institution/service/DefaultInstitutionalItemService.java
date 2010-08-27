@@ -36,6 +36,7 @@ import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.institution.ReviewableItemService;
 import edu.ur.ir.institution.VersionedInstitutionalItem;
+import edu.ur.ir.item.ContentTypeCount;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemSecurityService;
@@ -831,5 +832,33 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			OrderType orderType) {
 		return institutionalItemDAO.getRepositoryItemsOrderByName(rowStart, maxResults, 
 				repositoryId, contentTypeId, orderType);
+	}
+
+
+
+	/**
+	 * Get a list of of repository content types with counts for the number
+	 * of items within the repository.  
+	 * 
+	 * @param repositoryId - id of the repository
+	 * @return - list of content type counts
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getRepositoryContentTypeCount()
+	 */
+	public List<ContentTypeCount> getRepositoryContentTypeCount(Long repositoryId) {
+		return institutionalItemDAO.getRepositoryContentTypeCount(repositoryId);
+	}
+	
+	/**
+	 * Get a list of of repository content types with counts for the number
+	 * of items within the repository. 
+	 * 
+	 * @param collection - institutional collection
+	 * @return - list of content type counts
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemService#getRepositoryContentTypeCount()
+	 */
+	public List<ContentTypeCount> getCollectionContentTypeCount(InstitutionalCollection collection) {
+		return institutionalItemDAO.getCollectionContentTypeCount(collection);
 	}
 }

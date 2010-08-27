@@ -340,7 +340,6 @@ public class ItemTest {
 		item.setExternalPublishedItem(externalPublishedItem);
 		item.setFirstAvailableDate(new FirstAvailableDate(1, 30, 2008));
 		item.setId(10l);
-		item.setThesis(false);
 		item.setItemAbstract("itemAbstract");
 		item.addFile(irFile);
 		
@@ -372,7 +371,6 @@ public class ItemTest {
 		assert clonedItem.getExternalPublishedItem().equals(item.getExternalPublishedItem()) : "ExternalPublishedItem should be equal";
 		assert clonedItem.getFirstAvailableDate().equals(item.getFirstAvailableDate()) : "FirstAvailableDate should be equal cloned = " + clonedItem.getFirstAvailableDate() + " original = " + item.getFirstAvailableDate();
 		assert !item.getId().equals(clonedItem.getId()) : "Id should not be equal";
-		assert clonedItem.getIsThesis() == (item.getIsThesis()) : "Thesis should be equal";
 		assert clonedItem.getItemAbstract().equals(item.getItemAbstract()) : "Item Abstract should be equal";
 		assert clonedItem.getItemFile("my test file").getIrFile().equals(item.getItemFile("my test file").getIrFile()) : "Item files should be equal";
 		assert clonedItem.getItemIdentifiers().equals(item.getItemIdentifiers()) : "Item Identifiers should be equal";

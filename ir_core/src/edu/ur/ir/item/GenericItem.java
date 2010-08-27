@@ -128,9 +128,6 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	/** Set of sub titles for item */
 	private Set<ItemTitle> subTitles = new HashSet<ItemTitle>();
 	
-	/** indicates this item is a thesis  */
-	private boolean thesis = false;
-	
 	/** indicates whether the item is locked for review */
 	private boolean locked = false;
 	
@@ -1227,33 +1224,6 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		this.publishedToSystem = publishedToSystem;
 	}
 
-
-	/**
-	 * Return true if this is a thesis.
-	 * 
-	 * @return
-	 */
-	public boolean getIsThesis() {
-		return thesis;
-	}
-	
-	/**
-	 * Return thesis boolean
-	 * @return
-	 */
-	public boolean getThesis()
-	{
-		return thesis;
-	}
-
-	/**
-	 * Set this item as a publication.
-	 * 
-	 * @param isThesis
-	 */
-	public void setThesis(boolean isThesis) {
-		this.thesis = isThesis;
-	}
 
 	/**
 	 * Owner of the item.
