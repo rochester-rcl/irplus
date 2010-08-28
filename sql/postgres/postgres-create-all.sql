@@ -1440,7 +1440,6 @@ CREATE TABLE ir_item.item
   keywords TEXT,
   version INTEGER,
   published BOOLEAN NOT NULL,
-  thesis BOOLEAN,
   locked_for_review BOOLEAN,
   publicly_viewable BOOLEAN, 
   primary_image_item_file_id BIGINT,
