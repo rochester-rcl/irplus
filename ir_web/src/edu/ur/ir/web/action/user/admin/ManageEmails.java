@@ -201,7 +201,11 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		userEmail.setVerified(true);
 		userService.makeUserEmailPersistent(userEmail);
 		emails = userEmail.getIrUser().getUserEmails();
-		inviteUserService.sharePendingFilesForEmail(irUser.getId(), userEmail.getEmail());
+		
+		log.debug("invite user service = " + inviteUserService);
+		log.debug("user id = " + userEmail.getIrUser().getId());
+		log.debug(" user email = " + userEmail.getEmail() );
+		inviteUserService.sharePendingFilesForEmail(userEmail.getIrUser().getId(), userEmail.getEmail());
 
 		return "viewEmails";
 	}
