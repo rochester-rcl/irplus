@@ -45,7 +45,7 @@
 	    <echo message="project.version = ${project.version}"/>
 	    <echo message="dist.dir = ${dist.dir}"/>
 	    <echo message="report.dir = ${report.dir}"/>
-    	
+    	<echo message="ivy.dir = ${ivy.dir}"/>
     	<echo message="${spring.config.data.source.test}"/>
     	<echo message="${spring.config.common.config}"/>
     	<echo message="${spring.project.config}"/>
