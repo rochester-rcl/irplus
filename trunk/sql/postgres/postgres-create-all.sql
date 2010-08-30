@@ -1488,6 +1488,7 @@ CREATE TABLE ir_item.item_content_type
 (
     item_content_type_id BIGINT NOT NULL PRIMARY KEY,
     item_id BIGINT NOT NULL,
+    is_primary BOOLEAN NOT NULL,
     content_type_id BIGINT NOT NULL,
     UNIQUE(item_id, content_type_id ),
     FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type (content_type_id),

@@ -130,7 +130,7 @@
 	      			<option value = "0"> Select </option>
 	      		<c:forEach items="${contentTypes}" var="contentType">
 	      			<option value = "${contentType.id}"
-	      			<c:if test="${item.primaryContentType.id == contentType.id}">
+	      			<c:if test="${item.primaryItemContentType.contentType.id == contentType.id}">
 	      				selected
 	      			</c:if>
 	      			> ${contentType.name}</option>

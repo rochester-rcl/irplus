@@ -673,21 +673,70 @@ ALTER TABLE ir_statistics.ip_address_ignore ADD COLUMN store_counts BOOLEAN;
 UPDATE ir_statistics.ip_address_ignore set store_counts = true;
 ALTER TABLE ir_statistics.ip_address_ignore ALTER COLUMN store_counts SET NOT NULL;
 
+
+
+-- ---------------------------------------------
+-- Move thesis into the item content type table
+-- ---------------------------------------------
+
+-- insert into the content type the thesis type
+insert into 
+ir_item.content_type ( content_type_id, version, name, description, unique_system_code) 
+values (nextval('ir_item.content_type_seq'), 0, 'Thesis', null, 'THESIS');
+
+
+-- update items where the content type is null
+update ir_item.item set content_type_id = (select content_type.content_type_id from
+ir_item.content_type where content_type.name = 'Thesis')
+where item.thesis = true
+and item.content_type_id is null;
+
+
+-- updates all items where there already is a primary content type
+-- and that primary content type is not a thesis already 
+-- created from the prior select
+insert into ir_item.item_content_type (item_id, content_type_id)
+select item.item_id, content_type.content_type_id
+ from ir_item.item,
+     ir_item.content_type
+ where item.thesis = true
+ and item.content_type_id != ( select content_type.content_type_id from
+   ir_item.content_type where content_type.name = 'Thesis' )
+ and 0 = ( select count(*) 
+           from ir_item.item_content_type 
+           where item_content_type.item_id = item.item_id
+           and item_content_type.content_type_id = (select content_type.content_type_id from
+                                                    ir_item.content_type where content_type.name = 'Thesis')
+          )
+ and content_type.content_type_id = (select content_type.content_type_id from
+ ir_item.content_type where content_type.name = 'Thesis');
+
+ -- remove thesis check box
+ALTER TABLE ir_item.item DROP COLUMN thesis;
 -- ---------------------------------------------
 -- Fix the item_content_type table
+-- to now hold both the primary and secondary 
+-- content types
 -- ----------------------------------------------- 
-
--- add the new id column
+ 
+ -- add the new id column
 ALTER TABLE ir_item.item_content_type ADD COLUMN item_content_type_id BIGINT;
 
 -- create the new sequence
 CREATE SEQUENCE ir_item.item_content_type_seq ;
 ALTER TABLE ir_item.item_content_type_seq OWNER TO ir_plus;
 
--- update all items with a new id
-UPDATE ir_item.item_content_type SET item_content_type_id = nextval('ir_item.content_type_seq');
 
-ALTER TABLE ir_item.item_content_type ALTER COLUMN store_counts SET NOT NULL;
+-- update all items with a new id
+UPDATE ir_item.item_content_type SET item_content_type_id = nextval('ir_item.item_content_type_seq');
+
+-- add the primary
+ALTER TABLE ir_item.item_content_type ADD COLUMN is_primary BOOLEAN;
+
+UPDATE ir_item.item_content_type SET is_primary = false;
+
+ALTER TABLE ir_item.item_content_type ALTER COLUMN is_primary SET NOT NULL;
+
 
 -- drop the old primary key constraint
 ALTER TABLE ir_item.item_content_type DROP CONSTRAINT item_content_type_pkey;
@@ -696,6 +745,16 @@ ALTER TABLE ir_item.item_content_type DROP CONSTRAINT item_content_type_pkey;
 ALTER TABLE ir_item.item_content_type ADD PRIMARY KEY(item_content_type_id);
 
 -- add the unique constraint
-ALTER TABLE ir_item.item_content_type ADD CONSTRAINT UNIQUE(item_id, content_type_id);
+ALTER TABLE ir_item.item_content_type ADD CONSTRAINT item_content_type_item_id_key UNIQUE(item_id, content_type_id);
 
 
+-- insert all of the primary content types
+insert into ir_item.item_content_type (item_content_type_id, item_id, content_type_id, is_primary)
+select nextval('ir_item.item_content_type_seq'), item.item_id, item.content_type_id, true
+from ir_item.item
+where item.content_type_id is not null;
+
+
+ -- remove content type id
+ALTER TABLE ir_item.item DROP COLUMN content_type_id;
+ 

@@ -872,7 +872,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		q.setParameter("repositoryId", repositoryId);
 		q.setParameter("contentTypeId", contentTypeId);
 		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(nameFirstCharRange)));
-		q.setParameter("secondChar", Character.valueOf(Character.toLowerCase(namelastCharRange)));
+		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(namelastCharRange)));
 		return (Long)q.uniqueResult();
 	}
 

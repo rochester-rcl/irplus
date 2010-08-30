@@ -26,10 +26,10 @@
 <select id="itemForm_type" name="typeIds" multiple="true" size="10" />
 	<option value="0">Select</option>
 	<c:forEach items="${contentTypes}" var="contentType">
-		<c:if test="${item.primaryContentType.id != contentType.id}">
+		<c:if test="${item.primaryItemContentType.contentType.id != contentType.id}">
 			<option value = "${contentType.id}"
-			<c:forEach items="${item.secondaryContentTypes}" var="selectedType">
-				<c:if test="${selectedType.id == contentType.id}">
+			<c:forEach items="${item.allNonPrimaryItemContentTypes}" var="selectedType">
+				<c:if test="${selectedType.contentType.id == contentType.id}">
 					selected
 				</c:if>
 			</c:forEach>

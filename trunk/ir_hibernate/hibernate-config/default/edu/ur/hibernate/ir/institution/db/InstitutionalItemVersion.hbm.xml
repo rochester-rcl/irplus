@@ -596,8 +596,7 @@
 	<!--  Update versioned items by changes in metadata  -->
 	<!-- ********************************************************* -->
 	
-	<!--  content type changes -->
-	<query name="updateItemVersionsForPrimaryContentTypeChange">
+	<query name="updateItemVersionsForContentTypeChange">
 	     update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
 	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
 	     where iiv.id in
@@ -605,21 +604,8 @@
 	       select institutionalItemVersion.id 
 	       from InstitutionalItemVersion as institutionalItemVersion
 	       join institutionalItemVersion.item as item
-	       join item.primaryContentType as contentType
-	       where contentType.id = :contentTypeId 
-	      )
-	</query>
-	
-	<query name="updateItemVersionsForSecondaryContentTypeChange">
-	     update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
-	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
-	     where iiv.id in
-	     ( 
-	       select institutionalItemVersion.id 
-	       from InstitutionalItemVersion as institutionalItemVersion
-	       join institutionalItemVersion.item as item
-	       join item.secondaryContentTypes as contentType
-	       where contentType.id = :contentTypeId 
+	       join item.itemContentTypes as itemContentType
+	       where itemContentType.contentType.id = :contentTypeId 
 	      )
 	</query>
 	

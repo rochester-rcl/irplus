@@ -31,38 +31,29 @@
     <!-- ********************************************************* -->
 	<query name="getRepositoryItemsSumByContentType">
 	    select new edu.ur.ir.item.ContentTypeCount (contentType, count(contentType.id)) 
-		from InstitutionalItem as institutionalItem,
-		     ContentType as contentType
+		from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         join itemContentType.contentType as contentType
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = contentType.id 
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = contentType.id
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
 	    group by contentType.id
 	</query>
 	
-	
-    <!-- ********************************************************* -->
+	    <!-- ********************************************************* -->
     <!-- Get a count of all collections institutional items within the repository that have a count greater than 0  -->
     <!-- ********************************************************* -->
     <query name="getCollectionItemsSumByContentType">
 	    select new edu.ur.ir.item.ContentTypeCount (contentType, count(contentType.id)) 
-		from InstitutionalItem as institutionalItem,
-		     ContentType as contentType
+		from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         join itemContentType.contentType as contentType
 	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = contentType.id
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = contentType.id
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
 	    group by contentType.id
 	</query>
 	
@@ -73,43 +64,37 @@
 	<!-- ********************************************************* -->
 	
 	<query name="getRepositoryItemsContentTypeCount">
-	    select count(*) from InstitutionalItem as institutionalItem
+	    select count(*) 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId  
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and itemContentType.contentType.id = :contentTypeId
 	</query>
 	
 	<query name="getRepositoryItemsContentTypeByNameOrderAsc">
-	    select institutionalItem from InstitutionalItem as institutionalItem
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getRepositoryItemsContentTypeByNameOrderDesc">
-	   select institutionalItem from InstitutionalItem as institutionalItem 	   
+	   select institutionalItem  
+	   from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
@@ -119,46 +104,40 @@
 	<!-- By character  -->
 	<!-- ********************************************************* -->
 	<query name="institutionalItemCountContentTypeForRepositoryByChar">
-	    select count(*) from InstitutionalItem as institutionalItem
+	    select count(*) 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :char
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and  item.nameFirstChar = :char
+	    and itemContentType.contentType.id = :contentTypeId
 	</query>
 	
 	<query name="getRepositoryItemsContentTypeByCharOrderAsc">
-	    select institutionalItem from InstitutionalItem as institutionalItem 	  
+	    select institutionalItem  
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :char
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and  item.nameFirstChar = :char
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getRepositoryItemsContentTypeByCharOrderDesc">
-	   select institutionalItem from InstitutionalItem as institutionalItem 	   
+	    select institutionalItem 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :char
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and  item.nameFirstChar = :char
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
@@ -167,46 +146,40 @@
 	<!-- By character RANGE  -->
 	<!-- ********************************************************* -->
 	<query name="institutionalItemCountForRepositoryContentTypeByCharRange">
-	    select count(*) from InstitutionalItem as institutionalItem
+	    select count(*)   
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId	    
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :secondChar
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
 	</query>
 	
 	<query name="getRepositoryItemsContentTypeByCharRangeOrderAsc">
-	    select institutionalItem from InstitutionalItem as institutionalItem 	  
-	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    select institutionalItem 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId	    
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getRepositoryItemsContentTypeByCharRangeOrderDesc">
-	   select institutionalItem from InstitutionalItem as institutionalItem 	   
-	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	   select institutionalItem 
+	   from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId	    
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
@@ -216,47 +189,41 @@
 	<!-- ********************************************************* -->
 
 	<query name="getInstitutionalCollectionItemsContentTypeCount">
-	    select count(*) from InstitutionalItem as institutionalItem 	    
+	    select count(*) 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType	    
 	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and itemContentType.contentType.id = :contentTypeId
 	</query>
 
 
 	<query name="getInstitutionalCollectionItemsContentTypeByNameOrderAsc">
-	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    select institutionalItem 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType	    
 	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 		
     <query name="getInstitutionalCollectionItemsContentTypeByNameOrderDesc">
-	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    select institutionalItem 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType	    
 	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
-	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
@@ -265,49 +232,43 @@
 	<!-- count of all institutional items in the system for a collection by letter-->
 	<!-- ********************************************************* -->
 	<query name="institutionalItemCountForCollectionContentTypeByChar">
-	    select  count(*) from InstitutionalItem as institutionalItem 	    
+	    select  count(*) 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType		    
 	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and item.nameFirstChar = :firstChar
+	    and itemContentType.contentType.id = :contentTypeId
 	</query>
 	
 	<query name="getInstitutionalCollectionItemsContentTypeByCharOrderAsc">
-	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    select institutionalItem 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType		    
 	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and item.nameFirstChar = :firstChar
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getInstitutionalCollectionItemsContentTypeByCharOrderDesc">
-	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    select institutionalItem  
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType		    
 	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and item.nameFirstChar = :firstChar
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
@@ -316,50 +277,47 @@
 	<!-- By character RANGE  -->
 	<!-- ********************************************************* -->
 	<query name="institutionalItemCountForCollectionContentTypeByCharRange">
-	    select  count(*) from InstitutionalItem as institutionalItem 	    
-	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    select  count(*) 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType		  	    
+	    where institutionalItem.institutionalCollection.leftValue between :leftVal and :rightVal
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
 	</query>
 	
 	<query name="getCollectionItemsContentTypeByCharRangeOrderAsc">
-	    select institutionalItem from InstitutionalItem as institutionalItem 	    
-	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    select institutionalItem 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType		  	    
+	    where institutionalItem.institutionalCollection.leftValue between :leftVal and :rightVal
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
-	    and (institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getCollectionItemsContentTypeByCharRangeOrderDesc">
-	    select institutionalItem from InstitutionalItem as institutionalItem 	    
-	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
-	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
-	    and ( institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    or institutionalItem.versionedInstitutionalItem.currentVersion.item.id = 
-	    ( 
-	         select item.id from GenericItem as item	    
-	         join item.secondaryContentTypes as secondaryContentType
-	         where secondaryContentType.id = :contentTypeId
-	         and item.id = institutionalItem.versionedInstitutionalItem.currentVersion.item.id 
-	    ) )
+	    select institutionalItem 
+	    from  InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType		  	    
+	    where institutionalItem.institutionalCollection.leftValue between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
+
+	
+
 	
 </hibernate-mapping>

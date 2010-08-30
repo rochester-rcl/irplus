@@ -78,21 +78,21 @@
 				    </c:forEach>
 				</c:if>
 				
-				<c:if test="${item.primaryContentType != null}">
+				<c:if test="${item.primaryItemContentType != null}">
 				    <tr>
 				        <td class="previewLabel"> Primary Item Type:  </td>
 				    </tr>
 				    <tr>
-				        <td> ${item.primaryContentType.name} </td>											
+				        <td> ${item.primaryItemContentType.contentType.name} </td>											
 				    </tr>
 				</c:if>
-				<c:if test="${!ur:isEmpty(item.secondaryContentTypes)}">
+				<c:if test="${!ur:isEmpty(item.allNonPrimaryItemContentTypes)}">
 				    <tr>
 				        <td class="previewLabel"> Secondary Item Type(s): </td>
 				    </tr>
-				    <c:forEach items="${item.secondaryContentTypes}" var="contentType">
+				    <c:forEach items="${item.allNonPrimaryItemContentTypes}" var="itemContentType">
 				        <tr>
-				            <td>${contentType.name} </td>
+				            <td>${itemContentType.contentType.name} </td>
 				        </tr>
 				    </c:forEach>
 				</c:if>

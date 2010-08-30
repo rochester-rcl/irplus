@@ -189,16 +189,10 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	public Long insertAllItemsForContentType(ContentType contentType, IndexProcessingType processingType) {
 		Long numCreated = 0l;
 		
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForPrimaryContentType");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForContentType");
 		q.setParameter("contentTypeId", contentType.getId());
 		q.setParameter("processingTypeId", processingType.getId());
 		numCreated += q.executeUpdate();
-		
-		q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForSecondaryContentType");
-		q.setParameter("contentTypeId", contentType.getId());
-		q.setParameter("processingTypeId", processingType.getId());
-		numCreated += q.executeUpdate();
-		
 		return numCreated;
 	}
 

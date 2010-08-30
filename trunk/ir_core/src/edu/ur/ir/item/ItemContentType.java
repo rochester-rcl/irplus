@@ -21,7 +21,7 @@ public class ItemContentType extends BasePersistent{
 	private ContentType contentType;
 	
 	/** true indicates if this is the primary content type  */
-	private boolean primary;
+	private boolean primary = false;
 
 	/** Package protected constructor  */
 	ItemContentType(){};
@@ -82,6 +82,16 @@ public class ItemContentType extends BasePersistent{
 	 */
 	void setPrimary(boolean primary) {
 		this.primary = primary;
+	}
+	
+	/**
+	 * Returns true if this is the primary content type.
+	 * 
+	 * @return
+	 */
+	public boolean isPrimary()
+	{
+		return getPrimary();
 	}
 	
 	/**
