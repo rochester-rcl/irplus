@@ -49,6 +49,18 @@ public class ContentType extends CommonPersistent{
 	}
 	
 	/**
+	 * Create a content type with the given name and description.
+	 * 
+	 * @param name - name of the content type
+	 * @param description - description of the content type
+	 */
+	public ContentType(String name, String description)
+	{
+		this(name);
+		setDescription(description);
+	}
+	
+	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode()

@@ -1293,6 +1293,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		}
 	}
 	
+	
 	/**
 	 * Add the sponsor to the item and return the created item sponsor.
 	 * 
@@ -1639,6 +1640,19 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	public Set<ItemContentType> getItemContentTypes() {
 		return Collections.unmodifiableSet(itemContentTypes);
 	}
+	
+	/**
+	 * Return all non primary content types.
+	 * 
+	 * @return set of non primary content types
+	 */
+	public Set<ItemContentType> getAllNonPrimaryItemContentTypes()
+	{
+		Set<ItemContentType> contentTypes = new HashSet<ItemContentType>();
+		contentTypes.addAll(itemContentTypes);
+		contentTypes.remove(this.getPrimaryItemContentType());
+		return Collections.unmodifiableSet(contentTypes);
+	}
 
 	/**
 	 * Set the secondary content types for this item.
@@ -1664,7 +1678,6 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 			}
 		}
 		return null;
-		
 	}
 
 

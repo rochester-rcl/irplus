@@ -658,13 +658,7 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
 			String message) {
 		Long numUpdated = 0l;
 		
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionsForPrimaryContentTypeChange");
-        q.setParameter("note", message);
-        q.setParameter("user", user);
-        q.setParameter("contentTypeId", contentType.getId());
-        numUpdated = numUpdated + q.executeUpdate();
-        
-        q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionsForSecondaryContentTypeChange");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionsForContentTypeChange");
         q.setParameter("note", message);
         q.setParameter("user", user);
         q.setParameter("contentTypeId", contentType.getId());

@@ -27,7 +27,6 @@ import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.TransformedFile;
 import edu.ur.ir.institution.ReviewableItemService;
-import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.ExternalPublishedItemDAO;
 import edu.ur.ir.item.GenericItem;
@@ -568,23 +567,10 @@ public class DefaultItemService implements ItemService {
 	}
 
 	/* (non-Javadoc)
-	 * @see edu.ur.ir.item.ItemService#getContentTypeCount(edu.ur.ir.item.ContentType)
-	 */
-	public Long getContentTypeCount(ContentType contentType) {
-		return itemDAO.getContentTypeCount(contentType);
-	}
-
-	/* (non-Javadoc)
 	 * @see edu.ur.ir.item.ItemService#getContributorTypeCount(edu.ur.ir.person.ContributorType)
 	 */
 	public Long getContributorTypeCount(ContributorType contributorType) {
 		return itemDAO.getContributorTypeCount(contributorType);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.ur.ir.item.ItemService#getSecondaryContentTypeCount(edu.ur.ir.item.ContentType)
-	 */
-	public Long getSecondaryContentTypeCount(ContentType contentType) {
-		return itemDAO.getSecondaryContentTypeCount(contentType);
-	}
 }

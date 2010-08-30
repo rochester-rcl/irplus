@@ -126,14 +126,6 @@
 			access="field"
 			unique="true"/>
 			
-	    <!-- Content type for the item-->
-		<many-to-one class="ContentType" 
-			name="primaryContentType" 
-			access="field"
-			column="content_type_id" 
-			insert="true"
-			unique="true"/>
-			
 		<!-- Externally published information  -->
 		<many-to-one class="ExternalPublishedItem" 
 			name="externalPublishedItem" 
@@ -156,14 +148,16 @@
 			<one-to-many class="ItemSponsor"/>
 		</set>
 
-		<!-- types for this item -->
-		<set name="secondaryContentTypes" 
-		     table="ir_item.item_content_type" 
-		     access="field" 
-		     lazy="true"
-		     fetch="subselect">
-			<key column="item_id" />
-			<many-to-many column="content_type_id" class="edu.ur.ir.item.ContentType"/>
+	   <!--  identifiers for this Item -->	
+		<set name="itemContentTypes" 
+		    schema="ir_item" 
+		    inverse="true" 
+		    cascade="all-delete-orphan" 
+		    access="field" 
+		    fetch="subselect"
+		    lazy="true">
+			<key column="item_id" not-null="true"/>
+			<one-to-many class="ItemContentType"/>
 		</set>
 					
 		<!--  Files this Item references -->	
@@ -301,20 +295,6 @@
 	    join itemContributor.contributor as contributor
 	    join contributor.personName as personName
 	    where personName.id = ?
-	</query>
-	
-	<!--  get a count of the number of items that have a specific content type -->
-	<query name="itemContentTypeCount">
-	    select count(*)from GenericItem as item
-	    join item.primaryContentType as contentType
-	    where contentType.id = :contentTypeId 
-	</query>
-	
-	<!--  get a count of the number of items that have a specific secondary content type -->
-	<query name="itemSecondaryContentTypeCount">
-	    select count(*)from GenericItem as item
-	    join item.secondaryContentTypes as contentType
-	    where contentType.id = :contentTypeId 
 	</query>
 	
 	<!--  get a count of the number of items that are attached to a specific contributor type-->

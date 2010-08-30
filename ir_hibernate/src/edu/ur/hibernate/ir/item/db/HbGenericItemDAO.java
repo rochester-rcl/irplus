@@ -25,7 +25,6 @@ import org.hibernate.criterion.Order;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
-import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.GenericItemDAO;
@@ -211,17 +210,6 @@ public class HbGenericItemDAO implements GenericItemDAO{
 	}
 
 	/**
-	 * Get a count of the number of items containing the content types.
-	 * 
-	 * @see edu.ur.ir.item.GenericItemDAO#getContentTypeCount(edu.ur.ir.item.ContentType)
-	 */
-	public Long getContentTypeCount(ContentType contentType) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemContentTypeCount");
-        q.setParameter("contentTypeId", contentType.getId());
-        return((Integer)q.uniqueResult()).longValue();
-  }
-
-	/**
 	 * Get a count of the number of items containg the contirbutor type
 	 * @see edu.ur.ir.item.GenericItemDAO#getContributorTypeCount(edu.ur.ir.person.ContributorType)
 	 */
@@ -230,15 +218,5 @@ public class HbGenericItemDAO implements GenericItemDAO{
         q.setParameter("contributorTypeId", contributorType.getId());
         return((Integer)q.uniqueResult()).longValue();
 	}
-
-	/* (non-Javadoc)
-	 * @see edu.ur.ir.item.GenericItemDAO#getSecondaryContentTypeCount(edu.ur.ir.item.ContentType)
-	 */
-	public Long getSecondaryContentTypeCount(ContentType contentType) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemSecondaryContentTypeCount");
-        q.setParameter("contentTypeId", contentType.getId());
-        return((Integer)q.uniqueResult()).longValue();
-	}
-
 
 }

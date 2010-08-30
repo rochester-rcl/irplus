@@ -101,33 +101,18 @@
 	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
 	        from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
 	</query>
+
 	
-	<query name="insertAllItemsForPrimaryContentType">
+	<query name="insertAllItemsForContentType">
 		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
 	    select institutionalItem.id, indexProcessingType, current_timestamp() 
-	    from InstitutionalItem institutionalItem,
-	         IndexProcessingType indexProcessingType
-	    where institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryContentType.id = :contentTypeId
-	    and indexProcessingType.id = :processingTypeId
-	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
-	        from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
-	</query>
-	
-	<query name="insertAllItemsForSecondaryContentType">
-		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
-	    select institutionalItem.id, indexProcessingType, current_timestamp() 
-	    from InstitutionalItem institutionalItem,
-	         IndexProcessingType indexProcessingType
-	    where institutionalItem.id in
-	    ( 
-	       select instItem.id 
-	       from InstitutionalItem as instItem
-	       join instItem.versionedInstitutionalItem as versionedItem
-	       join versionedItem.currentVersion as version
-	       join version.item as item
-	       join item.secondaryContentTypes as contentType
-	       where contentType.id = :contentTypeId 
-	    )
+	    from IndexProcessingType as indexProcessingType, 
+	         InstitutionalItem as institutionalItem
+	         join institutionalItem.versionedInstitutionalItem as versionedItem
+	         join versionedItem.currentVersion as version
+	         join version.item as item
+	         join item.itemContentTypes as itemContentType
+	         where itemContentType.contentType.id = :contentTypeId 
 	    and indexProcessingType.id = :processingTypeId
 	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
 	        from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
