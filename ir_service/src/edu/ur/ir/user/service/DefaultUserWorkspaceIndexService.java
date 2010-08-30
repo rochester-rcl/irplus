@@ -45,8 +45,8 @@ import edu.ur.ir.file.IrFileIndexingFailureRecord;
 import edu.ur.ir.file.IrFileIndexingFailureRecordDAO;
 import edu.ur.ir.index.FileTextExtractor;
 import edu.ur.ir.index.FileTextExtractorService;
-import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.ItemContentType;
 import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.item.ItemExtent;
 import edu.ur.ir.item.ItemFile;
@@ -1262,19 +1262,12 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	private String getContentTypes(GenericItem genericItem)
 	{
 		StringBuffer sb = new StringBuffer();
-		ContentType primaryContentType = genericItem.getPrimaryContentType();
-		
-		if (primaryContentType != null ) {
-			sb.append(" " + primaryContentType.getName() + " ");
-		}
-		
-		Set<ContentType> types = genericItem.getSecondaryContentTypes();
+
+		Set<ItemContentType> types = genericItem.getItemContentTypes();
 		if (types != null && types.size() > 0) {
-			sb.append(SEPERATOR);
-		
-			for(ContentType c : types)
+			for(ItemContentType c : types)
 			{
-				sb.append(" " + c.getName() + " ");
+				sb.append(" " + c.getContentType().getName() + " ");
 				
 				sb.append(SEPERATOR);
 				

@@ -71,6 +71,8 @@ public class ItemTest {
 		ContentType contentType = new ContentType();
 		contentType.setName("Book");
 		
+		ItemContentType itemContentType = new ItemContentType(item, contentType);
+		
 		item.setPrimaryContentType(contentType);
 		
 		IdentifierType identifierType = new IdentifierType();
@@ -86,8 +88,8 @@ public class ItemTest {
 		assert item.getLeadingNameArticles().equals("articles") :  "item articles should = articles but equals " + item.getLeadingNameArticles();
        
 		
-		assert item.getPrimaryContentType().equals(contentType) : "content type should equal " + contentType + 
-		"but equals " + item.getPrimaryContentType();
+		assert item.getPrimaryItemContentType().equals(itemContentType) : "content type should equal " + itemContentType + 
+		"but equals " + item.getPrimaryItemContentType();
 		
 		assert item.getItemIdentifiers().contains(itemIdentifier) : "Item should contain item identifier";
 		assert item.removeItemIdentifier(itemIdentifier) : "Identifier should be removed";
@@ -361,7 +363,7 @@ public class ItemTest {
 		
 		assert clonedItem.getName().equals(item.getName()) : "Item name should be equal";
 		assert clonedItem.getDescription().equals(item.getDescription()) : "Item Description should be equal";
-		assert clonedItem.getPrimaryContentType().equals(item.getPrimaryContentType()) : "Item Content type should be equal";
+		assert clonedItem.getPrimaryItemContentType().equals(item.getPrimaryItemContentType()) : "Item Content type should be equal";
 		
 		for(ItemContributor c : item.getContributors())
 		{

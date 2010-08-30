@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for an Item identifier.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.item">
+	<class name="ItemContentType" schema="ir_item" table="item_content_type"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="item_content_type_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_item.item_content_type_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+		
+		<property name="primary" column="is_primary" type="boolean"
+			not-null="true" access="field" />
+	
+		<!--  Item this identifier belongs to-->
+		<many-to-one class="GenericItem"
+			name="item" column="item_id" insert="true"
+			update="true" access="field"/>
+		
+		<!--  Type of identifier this is -->
+		<many-to-one class="ContentType"
+			name="contentType" column="content_type_id" insert="true"
+			update="true" access="field"/>
+	 </class>
+		
+
+	
+</hibernate-mapping>
