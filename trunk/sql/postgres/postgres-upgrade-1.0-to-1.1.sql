@@ -673,6 +673,29 @@ ALTER TABLE ir_statistics.ip_address_ignore ADD COLUMN store_counts BOOLEAN;
 UPDATE ir_statistics.ip_address_ignore set store_counts = true;
 ALTER TABLE ir_statistics.ip_address_ignore ALTER COLUMN store_counts SET NOT NULL;
 
+-- ---------------------------------------------
+-- Fix the item_content_type table
+-- ----------------------------------------------- 
 
+-- add the new id column
+ALTER TABLE ir_item.item_content_type ADD COLUMN item_content_type_id BIGINT;
+
+-- create the new sequence
+CREATE SEQUENCE ir_item.item_content_type_seq ;
+ALTER TABLE ir_item.item_content_type_seq OWNER TO ir_plus;
+
+-- update all items with a new id
+UPDATE ir_item.item_content_type SET item_content_type_id = nextval('ir_item.content_type_seq');
+
+ALTER TABLE ir_item.item_content_type ALTER COLUMN store_counts SET NOT NULL;
+
+-- drop the old primary key constraint
+ALTER TABLE ir_item.item_content_type DROP CONSTRAINT item_content_type_pkey;
+
+-- add the new primary key
+ALTER TABLE ir_item.item_content_type ADD PRIMARY KEY(item_content_type_id);
+
+-- add the unique constraint
+ALTER TABLE ir_item.item_content_type ADD CONSTRAINT UNIQUE(item_id, content_type_id);
 
 

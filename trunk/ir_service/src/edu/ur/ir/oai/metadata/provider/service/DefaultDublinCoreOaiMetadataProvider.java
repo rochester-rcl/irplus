@@ -29,10 +29,10 @@ import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.institution.DeletedInstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemVersion;
-import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.ItemContentType;
 import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.item.ItemExtent;
 import edu.ur.ir.item.ItemIdentifier;
@@ -246,18 +246,10 @@ public class DefaultDublinCoreOaiMetadataProvider implements OaiMetadataProvider
 	 */
 	private void addType(Document doc, Element oaiDc, GenericItem item)
 	{
-		if( item.getPrimaryContentType() != null )
-		{
-		     Element type = doc.createElement("dc:type");
-		     Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(item.getPrimaryContentType().getName()));
-		     type.appendChild(data);
-		     oaiDc.appendChild(type);
-		}
-		 
-		 for(ContentType secType : item.getSecondaryContentTypes())
+		 for(ItemContentType itemContentType : item.getItemContentTypes())
 		 {
 			 Element secondaryType = doc.createElement("dc:type");
-			 Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(secType.getName()));
+			 Text data = doc.createTextNode(OaiUtil.removeInvalidXmlChars(itemContentType.getContentType().getName()));
 			 secondaryType.appendChild(data);
 			 oaiDc.appendChild(secondaryType);
 		 }		 

@@ -438,7 +438,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	    {
 		    item.setPrimaryContentType(primaryType);
 	    }
-		item.removeAllSecondaryContentTypes();
+		item.removeAllNonPrimaryContentTypes();
 		itemService.makePersistent(item);
 
 		// Add secondary types
@@ -448,7 +448,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 					ContentType contentType = contentTypeService.getContentType(typeIds[i], false);
 					if( contentType != null )
 					{
-					    item.addSecondaryContentType(contentType);
+					    item.addContentType(contentType);
 					}
 				}
 			}
@@ -520,7 +520,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		item.removeAllItemSubTitles();
 		item.removeAllItemExtents();
 		item.removeAllItemSponsors();
-		item.removeAllSecondaryContentTypes();
+		item.removeAllNonPrimaryContentTypes();
 
 		ExternalPublishedItem oldPublishedData = null;
 		
@@ -594,7 +594,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			for (int i =0; i < typeIds.length; i++ ) {
 				if (typeIds[i] != 0) {
 					ContentType contentType = contentTypeService.getContentType(typeIds[i], false);
-					item.addSecondaryContentType(contentType);
+					item.addContentType(contentType);
 				}
 			}
 		}

@@ -169,7 +169,7 @@ public class DublinCoreMetadataProviderTest {
 				
 		item.setDescription("description");
 		item.setPrimaryContentType(contentType);
-		item.addSecondaryContentType(secondContentType);
+		item.addContentType(secondContentType);
 		item.addContributor(contributor);
 		item.setExternalPublishedItem(externalPublishedItem);
 		item.setFirstAvailableDate(new FirstAvailableDate(1, 30, 2008));

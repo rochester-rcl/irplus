@@ -239,6 +239,7 @@ DROP SEQUENCE ir_item.series_seq;
 DROP SEQUENCE ir_item.sponsor_seq;
 DROP SEQUENCE ir_item.extent_type_seq;
 DROP SEQUENCE ir_item.item_extent_seq;
+DROP SEQUENCE ir_item.item_content_type_seq;
 
 DROP SCHEMA ir_item;
 

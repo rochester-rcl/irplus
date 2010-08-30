@@ -641,17 +641,17 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			
 			if( contentType != null)
 			{
-				if(genericItem.getPrimaryContentType() == null)
+				if(genericItem.getPrimaryItemContentType() == null)
 				{
 					log.debug("adding primary content type " + contentType);
 					genericItem.setPrimaryContentType(contentType);
 				}
 				else
 				{
-					if( !genericItem.getPrimaryContentType().equals(contentType))
+					if( !genericItem.getPrimaryItemContentType().equals(contentType))
 					{
 						log.debug("adding secondary content type " + contentType);
-					    genericItem.addSecondaryContentType(contentType);
+					    genericItem.addContentType(contentType);
 					}
 				}
 			}

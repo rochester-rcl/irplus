@@ -46,6 +46,7 @@ import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.GenericItemDAO;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.IdentifierTypeDAO;
+import edu.ur.ir.item.ItemContentType;
 import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemIdentifier;
@@ -169,7 +170,7 @@ public class ItemDAOTest {
 
 		GenericItem item = new GenericItem("the", "item1");
 		
-		item.setPrimaryContentType(contentTypeDAO.getById(ct.getId(), false));
+		ItemContentType itemContentType = item.setPrimaryContentType(contentTypeDAO.getById(ct.getId(), false));
 		item.setLanguageType(languageTypeDAO.getById(lt.getId(), false));
 		itemDAO.makePersistent(item);
 		
@@ -186,7 +187,7 @@ public class ItemDAOTest {
 		"the item by id";
 		
 		assert other.equals(item) : "GenericItem should be equal";
-		assert other.getPrimaryContentType().equals(ct) : "Content types should be equal";
+		assert other.getPrimaryItemContentType().equals(itemContentType) : other.getPrimaryItemContentType() + " Content type should be equal to " + itemContentType;
 		assert other.getLanguageType().equals(lt) : "Langauge types should be equal";
 		assert item.getName().equals("item1") : " should equal item1 but equal " + item.getName();
 		assert item.getLeadingNameArticles().equals("the") : " should equal the but equals " + item.getLeadingNameArticles();

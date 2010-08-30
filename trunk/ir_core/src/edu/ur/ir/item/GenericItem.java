@@ -86,11 +86,8 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	/**  People who have contributed to this item. */
 	private List<ItemContributor> contributors = new LinkedList<ItemContributor>();
 	
-	/**  The content type for this item. For example Book, Music piece, etc. */
-	private ContentType primaryContentType;
-	
-	/**  The secondary content type for this item. For example Book, Music piece, etc. */
-	private Set<ContentType> secondaryContentTypes = new HashSet<ContentType>();
+	/**  The content types for this item. For example Book, Music piece, etc. */
+	private Set<ItemContentType> itemContentTypes = new HashSet<ItemContentType>();
 	
 	/**  Language used by this item. */
 	private LanguageType languageType;
@@ -1048,16 +1045,6 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	}
 	
 	/**
-	 * Remove all item secondary content types.
-	 * 
-	 */
-	public void removeAllSecondaryContentTypes()
-	{
-		secondaryContentTypes.clear();
-		
-	}
-	
-	/**
 	 * Remove the item identifier.
 	 * 
 	 * @param itemIdentifier
@@ -1290,6 +1277,23 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	}
 	
 	/**
+	 * Remove all non primary content types from the list
+	 */
+	public void removeAllNonPrimaryContentTypes()
+	{
+		HashSet<ItemContentType> contentTypes = new HashSet<ItemContentType>();
+		contentTypes.addAll(itemContentTypes);	
+		
+		for(ItemContentType ict : contentTypes)
+		{
+			if( !ict.getPrimary() )
+			{
+			    removeItemContentType(ict);	
+			}
+		}
+	}
+	
+	/**
 	 * Add the sponsor to the item and return the created item sponsor.
 	 * 
 	 * @param sponsor
@@ -1322,7 +1326,6 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		newItem.setItemKeywords(this.getItemKeywords());
 		newItem.setLanguageType(this.getLanguageType());
 		newItem.setOwner(this.getOwner());
-		newItem.setPrimaryContentType(this.getPrimaryContentType());
 		newItem.setPrimaryImageFile(this.getPrimaryImageFile());
 		newItem.setCopyrightStatement(this.getCopyrightStatement());
 		
@@ -1378,8 +1381,18 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		}
 
 		// Copy information
-		for(ContentType oldType:this.getSecondaryContentTypes()) {
-			newItem.addSecondaryContentType(oldType);
+		for(ItemContentType oldType:this.getItemContentTypes() ) {
+			
+			if( !oldType.getPrimary() )
+			{
+			    newItem.addContentType(oldType.getContentType());
+			}
+			else
+			{
+				newItem.setPrimaryContentType(oldType.getContentType());
+			}
+			
+			
 		}
 		
 		// Copy reports
@@ -1623,8 +1636,8 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * 
 	 * @return content types
 	 */
-	public Set<ContentType> getSecondaryContentTypes() {
-		return Collections.unmodifiableSet(secondaryContentTypes);
+	public Set<ItemContentType> getItemContentTypes() {
+		return Collections.unmodifiableSet(itemContentTypes);
 	}
 
 	/**
@@ -1632,8 +1645,8 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * 
 	 * @param secondaryContentTypes
 	 */
-	public void setSecondaryContentTypes(Set<ContentType> secondaryContentTypes) {
-		this.secondaryContentTypes = secondaryContentTypes;
+	void setItemContentTypes(Set<ItemContentType> itemContentTypes) {
+		this.itemContentTypes = itemContentTypes;
 	}
 
 	/**
@@ -1641,28 +1654,93 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * 
 	 * @return primary content type.
 	 */
-	public ContentType getPrimaryContentType() {
-		return primaryContentType;
+	public ItemContentType getPrimaryItemContentType() {
+		
+		for(ItemContentType ict : itemContentTypes )
+		{
+			if( ict.getPrimary() )
+			{
+				return ict;
+			}
+		}
+		return null;
+		
 	}
 
+
 	/**
-	 * Set the primary content type for this item.
+	 * Add a content type to this item.
 	 * 
-	 * @param primaryContentType
+	 * @param c
+	 * @param primary 
 	 */
-	public void setPrimaryContentType(ContentType primaryContentType) {
-		this.primaryContentType = primaryContentType;
+	public ItemContentType addContentType(ContentType c) {
+		ItemContentType ict = new ItemContentType(this, c);
+		if( !itemContentTypes.contains(ict) )
+		{
+			itemContentTypes.add(ict);
+		}
+		else
+		{
+			ict = this.getItemContentType(c);
+		}
+		
+		return ict;
 	}
 	
 	/**
-	 * Add a secondary content type to this item.
+	 * Remove the specified item content type.
 	 * 
-	 * @param c
+	 * @param itemContentType - content type to remove
+	 * @return true if the item content type is removed.
 	 */
-	public void addSecondaryContentType(ContentType c) {
-		secondaryContentTypes.add(c);
+	public boolean removeItemContentType(ItemContentType itemContentType)
+	{
+		return itemContentTypes.remove(itemContentType); 
+	}
+	
+	/**
+	 * Set the content type as primary.  If there is another
+	 * primary content type, it is removed from the list.
+	 * 
+	 * @param ict
+	 */
+	public ItemContentType setPrimaryContentType(ContentType contentType)
+	{
+		ItemContentType ict = this.getItemContentType(contentType);
+
+		if(ict == null)
+		{
+			ict = new ItemContentType( this, contentType);
+			ict.setPrimary(true);
+			removeItemContentType(getPrimaryItemContentType());
+		    itemContentTypes.add(ict);
+		}
+		else if(!ict.getPrimary())
+		{
+			removeItemContentType(getPrimaryItemContentType());
+			ict.setPrimary(true);
+		}
+		return ict;
 	}
 
+	/**
+	 * Get the item content type
+	 * 
+	 * @param contentType
+	 * @return
+	 */
+	public ItemContentType getItemContentType(ContentType contentType)
+	{
+		for(ItemContentType ict : itemContentTypes)
+		{
+			if( ict.getContentType().equals(contentType))
+			{
+				return ict;
+			}
+		}
+		return null;
+	}
 	/**
 	 * Get the set of item sponsors.
 	 * 

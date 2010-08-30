@@ -39,6 +39,7 @@ import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.IdentifierTypeService;
+import edu.ur.ir.item.ItemContentType;
 import edu.ur.ir.item.ItemIdentifier;
 import edu.ur.ir.item.ItemReport;
 import edu.ur.ir.item.ItemSponsor;
@@ -268,7 +269,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		PersonalItem personalItem = userPublishingFileSystemService.createRootPersonalItem(user, "articles", "rootCollection");
 		GenericItem item1 = personalItem.getVersionedItem().getCurrentVersion().getItem();
 		item1.setName("item1");
-		item1.setPrimaryContentType(contentType);
+		ItemContentType primaryItemContentType = item1.setPrimaryContentType(contentType);
 		ItemReport report = item1.addReport(series, "reportNumber");
 		
 		ItemIdentifier itemIdentifier = item1.addItemIdentifier("111", identifierType);
@@ -295,7 +296,7 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		PersonalItem otherPersonalItem = userPublishingFileSystemService.getPersonalItem(personalItem.getId(), false);
 		GenericItem otherItem = otherPersonalItem.getVersionedItem().getCurrentVersion().getItem();
 		assert otherItem.equals(item1) : "Should be equal to item1";
-		assert otherItem.getPrimaryContentType().equals(contentType) : "Content type should be equal";
+		assert otherItem.getPrimaryItemContentType().equals(primaryItemContentType) : "Content type should be equal";
 		assert otherItem.getLanguageType().equals(languageType) : "Language type should be equal";
 		
 		assert otherItem.getItemIdentifiers().contains(itemIdentifier): "Identifier type should be equal";

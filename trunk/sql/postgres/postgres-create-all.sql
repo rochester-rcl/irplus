@@ -1486,14 +1486,17 @@ KEY (item_id) REFERENCES ir_item.item(item_id);
 -- ---------------------------------------------
 CREATE TABLE ir_item.item_content_type
 (
+    item_content_type_id BIGINT NOT NULL PRIMARY KEY,
     item_id BIGINT NOT NULL,
     content_type_id BIGINT NOT NULL,
-    Primary key(item_id, content_type_id ),
+    UNIQUE(item_id, content_type_id ),
     FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type (content_type_id),
     FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id) 
 );
 ALTER TABLE ir_item.item_content_type OWNER TO ir_plus;
             
+CREATE SEQUENCE ir_item.item_content_type_seq ;
+ALTER TABLE ir_item.item_content_type_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 -- Item Sponsor table
 -- ---------------------------------------------

@@ -45,8 +45,8 @@ import edu.ur.ir.index.FileTextExtractorService;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexService;
 import edu.ur.ir.institution.InstitutionalItemService;
-import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.ItemContentType;
 import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemIdentifier;
@@ -798,22 +798,15 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	private String getContentTypes(GenericItem genericItem)
 	{
 		StringBuffer sb = new StringBuffer();
-		ContentType primaryContentType = genericItem.getPrimaryContentType();
 		
-		if (primaryContentType != null ) {
-			sb.append(" " + primaryContentType.getName() + " ");
-		}
 		
-		Set<ContentType> types = genericItem.getSecondaryContentTypes();
+		Set<ItemContentType> types = genericItem.getItemContentTypes();
 		if (types != null && types.size() > 0) {
-			sb.append(SEPERATOR);
 		
-			for(ContentType c : types)
+			for(ItemContentType c : types)
 			{
-				sb.append(" " + c.getName() + " ");
-				
+				sb.append(" " + c.getContentType().getName() + " ");
 				sb.append(SEPERATOR);
-				
 			}
 		}
 		
@@ -832,18 +825,12 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	{
 		LinkedList<String> contents = new LinkedList<String>();
 		
-		ContentType primaryContentType = genericItem.getPrimaryContentType();
-		
-		if (primaryContentType != null ) {
-			contents.add(primaryContentType.getName());
-		}
-		
-		Set<ContentType> types = genericItem.getSecondaryContentTypes();
+		Set<ItemContentType> types = genericItem.getItemContentTypes();
 		if (types != null && types.size() > 0) {
 			
-			for(ContentType c : types)
+			for(ItemContentType c : types)
 			{
-				contents.add(c.getName());
+				contents.add(c.getContentType().getName());
 			}
 		}
 		return contents;
