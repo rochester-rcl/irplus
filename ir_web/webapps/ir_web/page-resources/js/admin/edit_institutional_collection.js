@@ -906,7 +906,7 @@ YAHOO.ur.edit.institution.collection = {
 	    };
 	    
 	    // action to perform move
-	    var action =  basePath + 'admin/moveCollectionLinkUp.action?collectionId=' + collectionId + '&linkId=' + linkId;
+	    var action =  basePath + 'admin/moveCollectionLinkUp.action?collectionId=' + collectionId + '&linkId=' + linkId + '&bustcache='+new Date().getTime();
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
             action, 
@@ -938,7 +938,7 @@ YAHOO.ur.edit.institution.collection = {
 	    };
 	    
 	    // action to perform for searching names
-        var action =  basePath + 'admin/moveCollectionLinkDown.action?collectionId=' + collectionId + '&linkId=' + linkId;
+        var action =  basePath + 'admin/moveCollectionLinkDown.action?collectionId=' + collectionId + '&linkId=' + linkId + '&bustcache='+new Date().getTime();
             
         var transaction = YAHOO.util.Connect.asyncRequest('GET', 
             action, 
