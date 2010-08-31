@@ -43,7 +43,7 @@ public class ItemContentTypeDAOTest {
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 			
 	/** Identifier relational data access */
-	ContentTypeDAO ContentTypeDAO = (ContentTypeDAO) ctx.getBean("contentTypeDAO");
+	ContentTypeDAO contentTypeDAO = (ContentTypeDAO) ctx.getBean("contentTypeDAO");
 			
 	/** Item content type relatioanal data access. */
 	ItemContentTypeDAO itemContentTypeDAO = (ItemContentTypeDAO) ctx.getBean("itemContentTypeDAO");		
@@ -64,19 +64,20 @@ public class ItemContentTypeDAOTest {
 	 */
 	@Test
 	public void baseItemContentTypeDAOTest() throws Exception{
-
-		ContentType contentType = new ContentType("contentTypeName","contentTypeDescription" );
- 		ContentTypeDAO.makePersistent(contentType);
-
 		TransactionStatus ts = tm.getTransaction(td);
+		//commit the transaction 
+		
+		ContentType contentType = new ContentType("contentTypeName","contentTypeDescription" );
+ 		contentTypeDAO.makePersistent(contentType);
+
+		
 		GenericItem item = new GenericItem("item2");
 		itemDAO.makePersistent(item);
 		
-        //commit the transaction 
-		tm.commit(ts);
-		
-		ItemContentType itemContentType = item.setPrimaryContentType(contentType);
+     	ItemContentType itemContentType = item.setPrimaryContentType(contentType);
 		itemContentTypeDAO.makePersistent(itemContentType);
+		
+		tm.commit(ts);
 		
         // Start the transaction 
 		ts = tm.getTransaction(td);
@@ -86,13 +87,16 @@ public class ItemContentTypeDAOTest {
         
         tm.commit(ts);
         
+        ts = tm.getTransaction(td);
         itemContentTypeDAO.makeTransient(itemContentType);
         assert itemContentTypeDAO.getById(itemContentType.getId(), false) == null : "Should not find the item content type " + itemContentType; 
+        contentTypeDAO.makeTransient(contentTypeDAO.getById(contentType.getId(), false));
         
-        ContentTypeDAO.makeTransient(ContentTypeDAO.getById(itemContentType.getId(), false));
-        
+        assert contentTypeDAO.getById(contentType.getId(), false) == null : " Should not be able to find content type " + contentType;
 		// delete the item
 		itemDAO.makeTransient(itemDAO.getById(item.getId(), false));
+		tm.commit(ts);
+	        
 	}
 	
 }
