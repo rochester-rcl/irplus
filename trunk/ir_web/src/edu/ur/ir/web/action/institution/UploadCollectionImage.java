@@ -104,6 +104,7 @@ public class UploadCollectionImage extends ActionSupport implements UserIdAware{
 			IrFile primaryPicture = institutionalCollection.getPrimaryPicture();
 			if( primaryPicture != null)
 			{
+				institutionalCollection.setPrimaryPicture(null);
 				repositoryService.deleteIrFile(primaryPicture);
 			}
 			
