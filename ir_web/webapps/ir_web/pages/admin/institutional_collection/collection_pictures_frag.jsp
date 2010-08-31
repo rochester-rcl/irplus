@@ -42,8 +42,9 @@
                         <c:param name="collectionId" value="${collection.id}"/>
                         <c:param name="irFileId" value="${collection.primaryPicture.id}"/>
                      </c:url>
-                     <img height="66px" width="100px" src="${url}"/>
+                     <img height="66px" width="100px" src="${url}"/><br/>
                  </c:if>
+                 File Location: ${collection.primaryPicture.fileInfo.fullPath}
 				</td>
 				<td class="${rowType}">
 				<button class="ur_button"
@@ -92,7 +93,9 @@ There is currently no primary picture.
                                        <c:param name="irFileId" value="${irFile.id}"/>
                                    </c:url>
                                    <img height="66px" width="100px" src="${url}"/>
+                                   <br/>
                                </c:if>
+                               File Location: ${collection.primaryPicture.fileInfo.fullPath}
                           </urstb:td>
 
                           <urstb:td >
