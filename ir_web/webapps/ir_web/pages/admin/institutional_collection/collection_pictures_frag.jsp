@@ -95,7 +95,7 @@ There is currently no primary picture.
                                    <img height="66px" width="100px" src="${url}"/>
                                    <br/>
                                </c:if>
-                               File Location: ${collection.primaryPicture.fileInfo.fullPath}
+                               File Location: ${irFile.fileInfo.fullPath}
                           </urstb:td>
 
                           <urstb:td >
