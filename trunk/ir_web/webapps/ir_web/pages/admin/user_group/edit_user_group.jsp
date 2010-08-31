@@ -136,7 +136,7 @@
 	                                     </form>
 	                                 </td>
 	                             </tr>
-	                         </c:if>
+	                        
                              <tr>
                                  <td><br/><br/></td>
                              </tr>
@@ -150,6 +150,7 @@
                                      <div id="users_search_results_div"></div>
                                  </td>
                              </tr>
+                             </c:if>
                          </table>
 	                 </div>
 	                 <!--  End second tab -->
@@ -185,14 +186,20 @@
                          </table>
 	                 </div>
 	                 <!--  End third tab -->
+	                 
+	                 
 	             </div>
-                 <!-- end tabs -->
+                  <!-- end tab content -->
+                 
+             </div>
+             <!--  end tabs -->
 	        
+	         <!--  this is the footer of the page -->
+             <c:import url="/inc/footer.jsp"/>
       </div>
       <!--  end body div -->
       
-      <!--  this is the footer of the page -->
-      <c:import url="/inc/footer.jsp"/>
+ 
   
   </div>
   <!--  End doc div-->
