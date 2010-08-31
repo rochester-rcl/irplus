@@ -79,6 +79,7 @@ public class ManageCollectionLinks extends ActionSupport {
 		try
 		{
 		    link = collection.addLink(linkName, linkUrl);
+		    link.setDescription(linkDescription);
 		    institutionalCollectionService.saveCollection(collection);
 		    linkAdded = true;
 		}
