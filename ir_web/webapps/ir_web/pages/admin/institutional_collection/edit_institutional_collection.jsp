@@ -112,7 +112,7 @@
                      <li ><a href="#tab3"><em>Permissions &amp; Groups</em></a></li>
                      <li><a href="#tab4"><em>Subscribers</em></a></li>
                      <li><a href="#tab5"><em>Statistics</em></a></li>
-                     <li><a href="#tab6"><em>Department Links</em></a></li>
+                     <li><a href="#tab6"><em>Links</em></a></li>
                  </ul>
 
                  <div class="yui-content">
