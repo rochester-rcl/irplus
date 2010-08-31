@@ -27,6 +27,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.file.IrFile;
 import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.handle.UniqueHandleNameGenerator;
@@ -120,6 +121,22 @@ public class DefaultInstitutionalCollectionService implements
 			 {
 				 institutionalItemService.deleteInstitutionalItem(item, deletingUser);
 			 }
+			 
+			// delete the primary pictures and secondary pictures
+			IrFile primaryPicture = child.getPrimaryPicture();
+			if( primaryPicture != null )
+			{
+			    child.setPrimaryPicture(null);
+				repositoryService.deleteIrFile(primaryPicture);
+			}
+			
+			List<IrFile> pictures = new LinkedList<IrFile>();
+		    pictures.addAll(child.getPictures());
+		    for(IrFile file : pictures)
+		    {
+		         child.removePicture(file);
+				 repositoryService.deleteIrFile(file);
+			}
 		}
 
 		LinkedList<InstitutionalItem> items = new LinkedList<InstitutionalItem>();
@@ -139,6 +156,22 @@ public class DefaultInstitutionalCollectionService implements
 	    {
 	        collection.getParent().removeChild(collection);
 	    }
+	    
+		// delete the primary pictures and secondary pictures
+		IrFile primaryPicture = collection.getPrimaryPicture();
+		if( primaryPicture != null )
+		{
+		    collection.setPrimaryPicture(null);
+			repositoryService.deleteIrFile(primaryPicture);
+		}
+		
+		List<IrFile> pictures = new LinkedList<IrFile>();
+	    pictures.addAll(collection.getPictures());
+	    for(IrFile file : pictures)
+	    {
+	        collection.removePicture(file);
+			repositoryService.deleteIrFile(file);
+		}
 	    
 	    institutionalCollectionDAO.makeTransient(collection);
 	    
