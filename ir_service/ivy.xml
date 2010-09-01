@@ -53,7 +53,7 @@
         
  
         <!--  quartz files  -->
-        <dependency org="org.opensymphony.quartz" name="quartz" rev="1.6.5">
+        <dependency org="org.quartz-scheduler" name="quartz" rev="1.8.3" transitive="false">
             <artifact name="quartz" type="jar"/>
         </dependency>
         
