@@ -40,20 +40,35 @@
            <bean class="org.springframework.scheduling.quartz.SpringBeanJobFactory"/>
        </property>
        
-       <!--  data source defined for the application -->
+       <!--  data source defined for the application 
        <property name="dataSource" ref="dataSource" />
+       -->
        
-       <property name="configLocation" value="classpath:quartz.properties"/>
-       
-       <!-- location of xml file -->
-       <property name="jobSchedulingDataLocation" value="quartz_jobs.xml"/>
-       
-       <!-- overwrite existing jobs-->
-       <property name="overwriteExistingJobs" value="true"/>
-       
-       <!--  transaction manager  -->
-       <property name="transactionManager" ref="transactionManager" />
-       
+       <!--  quartz attributes, configurable --> 
+       <property name="quartzProperties"> 
+            <value> 
+                org.quartz.scheduler.instanceName = DefaultQuartzScheduler
+                org.quartz.scheduler.rmi.export = false
+                org.quartz.scheduler.rmi.proxy = false
+                org.quartz.scheduler.wrapJobExecutionInUserTransaction = false
+
+                org.quartz.threadPool.class = org.quartz.simpl.SimpleThreadPool
+                org.quartz.threadPool.threadCount = 10
+                org.quartz.threadPool.threadPriority = 5
+                org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread = true
+
+                org.quartz.jobStore.misfireThreshold = 60000
+
+                org.quartz.jobStore.class = org.quartz.simpl.RAMJobStore
+                
+                org.quartz.plugin.jobInitializer.class = org.quartz.plugins.xml.XMLSchedulingDataProcessorPlugin
+                org.quartz.plugin.jobInitializer.fileNames = quartz_jobs.xml
+                org.quartz.plugin.jobInitializer.failOnFileNotFound = true
+                org.quartz.plugin.jobInitializer.wrapInUserTransaction = false
+            </value> 
+       </property> 
+  
+        
        <!--  key for the application context for referencing the application context -->
        <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
        
