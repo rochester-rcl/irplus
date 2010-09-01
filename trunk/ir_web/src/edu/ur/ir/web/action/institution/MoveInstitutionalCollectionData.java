@@ -202,7 +202,7 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 		
 		log.debug( "destination id = " + destinationId);
 		
-		// moving this collection into another collection
+		// moving this collection and items into another collection
 		if( !destinationId.equals(InstitutionalCollectionService.ROOT_COLLECTION_ID))
 		{
 		    destination = 
@@ -212,12 +212,6 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 				institutionalCollectionService.moveCollectionInformation(destination, 
 						collectionsToMove, itemsToMove);
 			
-			if( collectionsToMove.size() > 0 )
-			{
-				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-				institutionalItemIndexProcessingRecordService.processItemsInCollection( destination.getTreeRoot(), processingType);
-			}
-			
 			for( InstitutionalItem i : itemsToMove)
 			{
 				// set item to be updated in index
@@ -225,7 +219,8 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 				institutionalItemIndexProcessingRecordService.save(i.getId(), processingType);
 			}
 		}
-		// moving to root of repository
+		// moving collections to root of repository - only collections can be at the
+		// root of the repository - items are not allowed.
 		else
 		{
 			if(itemsToMove.size() > 0 )
@@ -239,35 +234,28 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 			{
 			    collectionsNotMoved = institutionalCollectionService.moveCollectionInformation(repository, 
 						collectionsToMove);
-				for(InstitutionalCollection c : collectionsToMove)
-				{
-					IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-					institutionalItemIndexProcessingRecordService.processItemsInCollection( c, processingType);
-				}
-
 			}
 		}
 		
-		// re-index only those items in collections
-		// where the tree root is different
-		for(InstitutionalCollection c : oldRoots)
+	    // re-index all items within collections that are moved
+		for(InstitutionalCollection c : collectionsToMove)
 		{
-		    if( c.getTreeRoot() == null || destination == null || (!c.getTreeRoot().equals(destination.getTreeRoot())))
-		    {
-			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-				institutionalItemIndexProcessingRecordService.processItemsInCollection( c.getTreeRoot(), processingType);
-		    }
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+			institutionalItemIndexProcessingRecordService.processItemsInCollection( c, processingType);
 		}
 		
 		if( collectionsNotMoved.size() > 0 )
 		{
 			String message = getText("collectionNamesAlreadyExist");
 			actionSuccess = false;
+			StringBuffer sb = new StringBuffer();
+			sb.append(message);
 			for(InstitutionalCollection collection : collectionsNotMoved)
 			{
-			    message = message + " " + collection.getName();
+			    sb.append(" ");
+			    sb.append(collection.getName());
 			}
-			addFieldError("moveError", message);
+			addFieldError("moveError", sb.toString());
 		}
 		
 		
