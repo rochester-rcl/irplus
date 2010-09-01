@@ -381,28 +381,31 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		{
 		    InstitutionalCollection collection = institutionalCollectionService.getCollection(resumptionToken.getLastSetId(), false);
 
-			if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+		    if( collection != null )
 		    {
-			    // set passed in but no from until passed in
-			    completeListSize += institutionalItemVersionService.getCount(collection);
-			    completeListSize += deletedInstitutionalItemVersionService.getCount(collection);
-		    }
-		    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
-		    {
-			    // set and from passed in but no until passed in
-			    completeListSize += institutionalItemVersionService.getItemsFromModifiedDateCount(resumptionToken.getFrom(), collection);
-			    completeListSize += deletedInstitutionalItemVersionService.getItemsFromDeletedDateCount(resumptionToken.getFrom(), collection);
-		    }
-		    else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
-		    {
-			    // set and until passed in but no from 
-			    completeListSize += institutionalItemVersionService.getItemsUntilModifiedDateCount(resumptionToken.getUntil(), collection);
-			    completeListSize += deletedInstitutionalItemVersionService.getItemsUntilDeletedDateCount(resumptionToken.getUntil(), collection);
-		    }
-		    else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
-		    {
-			    completeListSize += institutionalItemVersionService.getItemsBetweenModifiedDatesCount(resumptionToken.getFrom(), resumptionToken.getUntil(), collection);
-			    completeListSize += deletedInstitutionalItemVersionService.getItemsBetweenDeletedDatesCount(resumptionToken.getFrom(), resumptionToken.getUntil(), collection);
+			    if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+		        {
+			        // set passed in but no from until passed in
+			        completeListSize += institutionalItemVersionService.getCount(collection);
+			        completeListSize += deletedInstitutionalItemVersionService.getCount(collection);
+		        }
+		        else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+		        {
+			        // set and from passed in but no until passed in
+			        completeListSize += institutionalItemVersionService.getItemsFromModifiedDateCount(resumptionToken.getFrom(), collection);
+			        completeListSize += deletedInstitutionalItemVersionService.getItemsFromDeletedDateCount(resumptionToken.getFrom(), collection);
+		        }
+		        else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
+		        {
+			        // set and until passed in but no from 
+			        completeListSize += institutionalItemVersionService.getItemsUntilModifiedDateCount(resumptionToken.getUntil(), collection);
+			        completeListSize += deletedInstitutionalItemVersionService.getItemsUntilDeletedDateCount(resumptionToken.getUntil(), collection);
+		        }
+		        else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+		        {
+			        completeListSize += institutionalItemVersionService.getItemsBetweenModifiedDatesCount(resumptionToken.getFrom(), resumptionToken.getUntil(), collection);
+			        completeListSize += deletedInstitutionalItemVersionService.getItemsBetweenDeletedDatesCount(resumptionToken.getFrom(), resumptionToken.getUntil(), collection);
+		        }
 		    }
 		}
 		
@@ -447,21 +450,24 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		{
 		    InstitutionalCollection collection = institutionalCollectionService.getCollection(resumptionToken.getLastSetId(), false);
 
-			if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+		    if( collection != null )
 		    {
-			    versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), collection,  batchSize + 1);
-		    }
-		    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
-		    {
-			    versions =  institutionalItemVersionService.getItemsIdOrderFromModifiedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), collection, batchSize + 1);
-		    }
-		    else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
-		    {
-			    versions =  institutionalItemVersionService.getItemsIdOrderUntilModifiedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), collection, batchSize + 1);
-		    }
-		    else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
-		    {
-			    versions =  institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), resumptionToken.getFrom(), resumptionToken.getUntil(), collection, batchSize + 1);
+			    if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+		        {
+			        versions = institutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), collection,  batchSize + 1);
+		        }
+		        else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+		        {
+			        versions =  institutionalItemVersionService.getItemsIdOrderFromModifiedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), collection, batchSize + 1);
+		        }
+		        else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
+		        {
+			        versions =  institutionalItemVersionService.getItemsIdOrderUntilModifiedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), collection, batchSize + 1);
+		        }
+		        else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+		        {
+			        versions =  institutionalItemVersionService.getItemsIdOrderBetweenModifiedDates(resumptionToken.getLastId(), resumptionToken.getFrom(), resumptionToken.getUntil(), collection, batchSize + 1);
+		        }
 		    }
 		}
 		
@@ -522,21 +528,24 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		{
 		    InstitutionalCollection collection = institutionalCollectionService.getCollection(resumptionToken.getLastSetId(), false);
 
-			if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+		    if( collection != null )
 		    {
-				deletedVersions = deletedInstitutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), collection,  batchSize + 1);
-		    }
-		    else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
-		    {
-		    	deletedVersions =  deletedInstitutionalItemVersionService.getItemsIdOrderFromDeletedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), collection, batchSize + 1);
-		    }
-		    else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
-		    {
-		    	deletedVersions =  deletedInstitutionalItemVersionService.getItemsIdOrderUntilDeletedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), collection, batchSize + 1);
-		    }
-		    else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
-		    {
-		    	deletedVersions =  deletedInstitutionalItemVersionService.getItemsIdOrderBetweenDeletedDates(resumptionToken.getLastId(), resumptionToken.getFrom(), resumptionToken.getUntil(), collection, batchSize + 1);
+			    if( resumptionToken.getFrom() == null && resumptionToken.getUntil() == null )
+		        {
+				    deletedVersions = deletedInstitutionalItemVersionService.getItemsIdOrder(resumptionToken.getLastId(), collection,  batchSize + 1);
+		        }
+		        else if( resumptionToken.getFrom() != null && resumptionToken.getUntil() == null)
+		        {
+		    	    deletedVersions =  deletedInstitutionalItemVersionService.getItemsIdOrderFromDeletedDate(resumptionToken.getLastId(), resumptionToken.getFrom(), collection, batchSize + 1);
+		        }
+		        else if(resumptionToken.getFrom() == null && resumptionToken.getUntil() != null)
+		        {
+		    	    deletedVersions =  deletedInstitutionalItemVersionService.getItemsIdOrderUntilDeletedDate(resumptionToken.getLastId(), resumptionToken.getUntil(), collection, batchSize + 1);
+		        }
+		        else if(resumptionToken.getSet() != null && resumptionToken.getFrom() != null && resumptionToken.getUntil() != null)
+		        {
+		    	    deletedVersions =  deletedInstitutionalItemVersionService.getItemsIdOrderBetweenDeletedDates(resumptionToken.getLastId(), resumptionToken.getFrom(), resumptionToken.getUntil(), collection, batchSize + 1);
+		        }
 		    }
 		}
 		
