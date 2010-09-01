@@ -1716,25 +1716,36 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * Set the content type as primary.  If there is another
 	 * primary content type, it is removed from the list.
 	 * 
-	 * @param ict
+	 * @param content type
+	 * @return the newley created item content type.  If content type is
+	 * null the primary content type is removed if one exists and null
+	 * is returned
 	 */
 	public ItemContentType setPrimaryContentType(ContentType contentType)
 	{
-		ItemContentType ict = this.getItemContentType(contentType);
+		if( contentType == null )
+		{
+			removeItemContentType(getPrimaryItemContentType());
+			return null;
+		}		
+		else
+		{
+		    ItemContentType ict = this.getItemContentType(contentType);
 
-		if(ict == null)
-		{
-			ict = new ItemContentType( this, contentType);
-			ict.setPrimary(true);
-			removeItemContentType(getPrimaryItemContentType());
-		    itemContentTypes.add(ict);
+		    if(ict == null)
+		    {
+			    ict = new ItemContentType( this, contentType);
+			    ict.setPrimary(true);
+			    removeItemContentType(getPrimaryItemContentType());
+		        itemContentTypes.add(ict);
+		    }
+		    else if(!ict.getPrimary())
+		    {
+			    removeItemContentType(getPrimaryItemContentType());
+			    ict.setPrimary(true);
+		    }
+		    return ict;
 		}
-		else if(!ict.getPrimary())
-		{
-			removeItemContentType(getPrimaryItemContentType());
-			ict.setPrimary(true);
-		}
-		return ict;
 	}
 
 	/**
