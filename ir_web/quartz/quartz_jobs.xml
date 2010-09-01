@@ -1,19 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE quartz PUBLIC
-	"-//Quartz Enterprise Job Scheduler//DTD Job Scheduling Data 1.5//EN"
-	"http://www.quartzscheduler.org/dtd/job_scheduling_data_1_5.dtd">
+<job-scheduling-data xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+  version="1.8">
 
-<quartz xmlns="http://www.opensymphony.com/quartz/JobSchedulingData"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://www.quartzscheduler.org/ns/quartz
-                      http://www.opensymphony.com/quartz/xml/job_scheduling_data_1_5.xsd"
-                    version="1.5">
-                    
+   <schedule>          
     <!--  this job is for sending subscrption emails to users who
           have subscribed to collections -->
     
     <job>
-        <job-detail>
             <name>SubscriptionEmailer</name>
             <group>DEFAULT</group>
             <description>
@@ -24,11 +19,11 @@
             </job-class>
             <volatility>false</volatility>
             <durability>true</durability>
-            <recover>true</recover>
-        </job-detail>
-    
-    
-        <trigger>
+            <recover>false</recover>
+    </job>
+   
+   <!-- run every day at 1 am -->
+   <trigger>
             <cron>
                 <name>subscriptionTrigger</name>
                 <group>DEFAULT</group>
@@ -37,13 +32,12 @@
                 
                 <cron-expression>0 0 1 ? * SUN-SAT</cron-expression>
             </cron>
-        </trigger>
-    </job>
+   </trigger>
+   
    
     
    <!--  this job is for indexing existing changed items and updating/deleting/inserting them into the index -->
    <job>
-        <job-detail>
             <name>InstitutionalItemIndexer</name>
             <group>DEFAULT</group>
             <description>
@@ -55,11 +49,11 @@
             </job-class>
             <volatility>false</volatility>
             <durability>true</durability>
-            <recover>true</recover>
-        </job-detail>
-    
-        <!--  run every 5 minutes -->
-        <trigger>
+            <recover>false</recover>
+     </job>
+      
+     <!--  run every 5 minutes -->
+     <trigger>
             <cron>
                 <name>institutionalItemIndexer</name>
                 <group>DEFAULT</group>
@@ -67,13 +61,12 @@
                 <job-group>DEFAULT</job-group>
                 <cron-expression>0 0/5 * * * ?</cron-expression>
             </cron>
-        </trigger>
-    </job>
+     </trigger>
+   
     
        <!--  this job is for indexing uswer workspace information
         items and updating/deleting/inserting them into the index -->
-   <job>
-        <job-detail>
+     <job>
             <name>UserWorkspaceItemIndexer</name>
             <group>DEFAULT</group>
             <description>
@@ -85,20 +78,20 @@
             </job-class>
             <volatility>false</volatility>
             <durability>true</durability>
-            <recover>true</recover>
-        </job-detail>
+            <recover>false</recover>
+     </job>
     
-        <!--  run every 5 seconds -->
+        <!--  run every 30 seconds -->
         <trigger>
             <cron>
                 <name>userWorkspaceItemIndexer</name>
                 <group>DEFAULT</group>
                 <job-name>UserWorkspaceItemIndexer</job-name>
                 <job-group>DEFAULT</job-group>
-                <cron-expression>0/5 * * * * ?</cron-expression>
+                <cron-expression>0/30 * * * * ?</cron-expression>
             </cron>
         </trigger>
-    </job>
-  
-</quartz>
+    
+  </schedule>       
+</job-scheduling-data>
 
