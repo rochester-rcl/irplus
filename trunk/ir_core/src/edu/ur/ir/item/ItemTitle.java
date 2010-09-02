@@ -127,8 +127,8 @@ public class ItemTitle extends BasePersistent  {
 		if( ( leadingArticles != null && !leadingArticles.equals(other.getLeadingArticles()) ) ||
 			( leadingArticles == null && other.getLeadingArticles() != null ) ) return false;
 		
-		if( ( item != null && !item.equals(other.getTitle())) ||
-			( item == null && other.getTitle() != null ) ) return false;
+		if( ( item != null && !item.equals(other.getItem())) ||
+			( item == null && other.getItem() != null ) ) return false;
 
 		return true;
 	}
@@ -148,7 +148,7 @@ public class ItemTitle extends BasePersistent  {
 	 * @param title
 	 */
 	public void setTitle(String title) {
-		this.title = title;
+		this.title = title.trim();
 		if(title.length() > 0)
 		{
 		    this.titleFirstChar = Character.toLowerCase(title.charAt(0));
@@ -187,7 +187,14 @@ public class ItemTitle extends BasePersistent  {
 	 * @param leadingArticles
 	 */
 	public void setLeadingArticles(String leadingArticles) {
-		this.leadingArticles = leadingArticles;
+		if( leadingArticles != null )
+		{
+		    this.leadingArticles = leadingArticles.trim();
+		}
+		else
+		{
+			this.leadingArticles = null;
+		}
 	}
 
 	public String getLowerCaseTitle() {

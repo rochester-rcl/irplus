@@ -58,18 +58,23 @@ public abstract class CommonPersistent extends BasePersistent
         this.description = description;
     }
 
+    /**
+     * Get the name 
+     * 
+     * @see edu.ur.simple.type.NameAware#getName()
+     */
     public String getName()
     {
         return name;
     }
 
     /**
-     * Get the name.
+     * Set the name.  this performs a trim on the name 
      *
      * @param name
      */
     public void setName(String name)
     {
-        this.name = name;
+        this.name = name.trim();
     }
 }

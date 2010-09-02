@@ -122,8 +122,8 @@ public class Repository extends CommonPersistent {
      */
     public Repository(String name, FileDatabase fileDatabase)
     {
-    	this.name = name;
-    	this.fileDatabase = fileDatabase;
+    	setName(name);
+    	setFileDatabase(fileDatabase);
     }
     
 	/**

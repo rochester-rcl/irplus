@@ -74,7 +74,7 @@ public class TopMediaType extends CommonPersistent
 	 */
 	public SubType createSubType(String name) throws DuplicateNameException
 	{
-		if( this.getSubType(name) != null )
+		if( this.getSubType(name.trim()) != null )
 		{
 			throw new DuplicateNameException("Top media type " + this + " already contains sub type", name );
 		}

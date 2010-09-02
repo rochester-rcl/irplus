@@ -204,10 +204,20 @@ public class ItemFile extends CommonPersistent implements ItemObject {
 		this.description = description;
 	}
 
+	/**
+	 * Determine if this file is public.
+	 * 
+	 * @return - true if this item file is public
+	 */
 	public boolean isPublic() {
 		return isPublic;
 	}
 
+	/**
+	 * Set this item file as public.
+	 * 
+	 * @param isPublic
+	 */
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}

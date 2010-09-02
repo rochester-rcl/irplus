@@ -51,7 +51,7 @@ public class DefaultFileServer extends CommonPersistent implements FileServer{
 	 * 
 	 * @param name
 	 */
-	public DefaultFileServer(String name){this.name = name;}
+	public DefaultFileServer(String name){setName(name);}
 	
 	
 	/**
@@ -168,7 +168,7 @@ public class DefaultFileServer extends CommonPersistent implements FileServer{
 		if (fileDatabases.contains(fd)) {
 
 			// make sure the new folder name does not exist
-			File f = new File(fd.getPath() + newName);
+			File f = new File(fd.getPath() + newName.trim());
 			if (!f.exists()) {
 				if (!FileSystemManager.renameFile(
 						new File(fd.getFullPath()), new File(fd.getPath()
@@ -252,7 +252,7 @@ public class DefaultFileServer extends CommonPersistent implements FileServer{
 	 */
 	public boolean deleteDatabase(String name)
 	{
-		DefaultFileDatabase fd = getFileDatabase(name);
+		DefaultFileDatabase fd = getFileDatabase(name.trim());
 		boolean removed = false;
 		
 		if( fileDatabases.contains(fd))
