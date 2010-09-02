@@ -325,6 +325,14 @@
 		
 	</target>
 	
+	
+	<!-- copy the custom testing code over any specific custom production changes -->
+	<target name="do-testing-custom-build" if="build.custom" depends="do-custom-build">
+		<copy todir="${production.staging.dir}/webapp/" overwrite="true">
+				<fileset dir="${custom.build.dir}/ir_web_testing/webapps"/>
+		</copy>
+	</target>
+	
 	<!-- create the production build -->
 	<target name="prepare-production-staging" depends="build, clean-production-staging, move-yui">
 		
@@ -384,6 +392,18 @@
 	<!--     Make sure the production configuration files have been set properly -->
 	<target name="publish-local" depends="do-custom-build" description="-->build production war file">		
 		<war destfile="../ir_plus.war" webxml="${production.web.xml}">
+		    <webinf dir="${production.staging.dir}/web-inf"/>
+			<fileset dir="${production.staging.dir}/webapp/${project.name}"/>			   
+			<classes dir="${production.staging.dir}/classes"/>
+			<lib dir="${production.staging.dir}/lib"/>				      
+		</war>		
+	</target>
+	
+	<!-- publish the distribution jar file to the local repository -->
+	<!-- this sets production settings.  -->
+	<!--     Make sure the production configuration files have been set properly -->
+	<target name="publish-local-testing" depends="do-testing-custom-build" description="-->build pre-production war file">		
+		<war destfile="../ir_plus_testing.war" webxml="${production.web.xml}">
 		    <webinf dir="${production.staging.dir}/web-inf"/>
 			<fileset dir="${production.staging.dir}/webapp/${project.name}"/>			   
 			<classes dir="${production.staging.dir}/classes"/>
