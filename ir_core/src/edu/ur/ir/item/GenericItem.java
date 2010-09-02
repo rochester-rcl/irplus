@@ -170,7 +170,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 */
 	public void setName(String name)
 	{
-		this.name = name;
+		this.name = name.trim();
 		if(name.length() > 0)
 		{
 		    this.nameFirstChar = Character.toLowerCase(name.charAt(0));
@@ -1842,7 +1842,14 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * @param leadingNameArticles
 	 */
 	public void setLeadingNameArticles(String leadingNameArticles) {
-		this.leadingNameArticles = leadingNameArticles;
+		if( leadingNameArticles != null )
+		{
+		    this.leadingNameArticles = leadingNameArticles.trim();
+		}
+		else
+		{
+			this.leadingNameArticles = null;
+		}
 	}
 
 	public char getNameFirstChar() {

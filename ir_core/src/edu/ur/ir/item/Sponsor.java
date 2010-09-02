@@ -33,12 +33,10 @@ public class Sponsor extends CommonPersistent {
 	/** first character of the sponsor */
 	private char sponsorFirstChar;
 	
-
-
 	/**
 	 * Default constructor
 	 */
-	public Sponsor(){}
+	Sponsor(){}
 	
 	/**
 	 * Constructor.
@@ -57,7 +55,7 @@ public class Sponsor extends CommonPersistent {
 	 */
 	public void setName(String name)
 	{
-		this.name = name;
+		this.name = name.trim();
 		if(name.length() > 0)
 		{
 		    this.sponsorFirstChar = Character.toLowerCase(name.charAt(0));

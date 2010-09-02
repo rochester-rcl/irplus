@@ -164,8 +164,7 @@ public class DublinCoreMetadataProviderTest {
 		
 		IrUser owner = new IrUser("name", "password");
 		
-		Sponsor sponsor = new Sponsor();
-		sponsor.setName("sponserer");
+		Sponsor sponsor = new Sponsor("sponserer");
 				
 		item.setDescription("description");
 		item.setPrimaryContentType(contentType);

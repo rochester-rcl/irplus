@@ -75,10 +75,20 @@ public class CopyrightStatement extends CommonPersistent{
 		return true;
 	}
 
+	/**
+	 * Get the text of the copyright statement.
+	 * 
+	 * @return - the text of the copyright statement
+	 */
 	public String getText() {
 		return text;
 	}
 
+	/**
+	 * Set the text fo the copyright statement
+	 * 
+	 * @param text
+	 */
 	public void setText(String text) {
 		this.text = text;
 	}

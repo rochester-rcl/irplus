@@ -109,6 +109,17 @@ public class IrUserGroup extends CommonPersistent implements Sid{
 	}
 	
 	/**
+	 * Sets the name but also trims all white space to the left and right
+	 * sides of the group name.
+	 * 
+	 * @see edu.ur.persistent.CommonPersistent#setName(java.lang.String)
+	 */
+	public void setName(String name)
+	{
+	    this.name = name.trim();	
+	}
+	
+	/**
 	 * Remove user from this group 
 	 * @param user
 	 */

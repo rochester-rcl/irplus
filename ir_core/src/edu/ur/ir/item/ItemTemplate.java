@@ -108,7 +108,7 @@ public class ItemTemplate extends CommonPersistent {
 	 */
 	public ItemTemplate(String name)
 	{
-		this.name = name;
+		setName(name);
 	}
 	
 	/**

@@ -54,10 +54,10 @@ public class InstitutionalCollectionLink extends CommonPersistent implements Ord
 	 */
 	public InstitutionalCollectionLink(String name, String url, int order, InstitutionalCollection collection)
 	{
-		this.name = name;
-		this.url = url;
-		this.order = order;
-		this.institutionalCollection = collection;
+		setName(name);
+		setUrl(url);
+		setOrder(order);
+		setInstitutionalCollection(collection);
 	}
 	
 	
