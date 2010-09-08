@@ -16,20 +16,11 @@
 
 package edu.ur.hibernate.ir.institution.db;
 
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.orm.hibernate3.HibernateCallback;
 
-import edu.ur.dao.CriteriaHelper;
-import edu.ur.hibernate.CriteriaBuilder;
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.ir.institution.ReviewableItem;
 import edu.ur.ir.institution.ReviewableItemDAO;
@@ -65,48 +56,6 @@ public class HbReviewableItemDAO implements ReviewableItemDAO {
     {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
-
-	@SuppressWarnings("unchecked")
-	public List<ReviewableItem> getReviewableItems(
-			final List<CriteriaHelper> criteriaHelpers, final Long parentCollectionId,
-			final int rowStart, final int rowEnd) {
-		List<ReviewableItem> items = (List<ReviewableItem>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-                Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-                criteria.createCriteria("institutionalCollection").add(Restrictions.idEq(parentCollectionId));
-                CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
-                criteriaBuilder.execute(criteria, criteriaHelpers);
-                criteria.setFirstResult(rowStart);
-                criteria.setMaxResults(rowEnd - rowStart);
-                return criteria.list();
-            }
-        });
-
-        return items;
-	}
-
-	
-	/**
-	 * Get a count of reviewable items for the given criteria.
-	 * 
-	 * @see edu.ur.ir.institution.ReviewableItemDAO#getReviewableItemsCount(java.util.List, java.lang.Long)
-	 */
-	public Integer getReviewableItemsCount(
-			final List<CriteriaHelper> criteriaHelpers, final Long parentCollectionId) {
-	   	Integer count = (Integer) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-            	Criteria criteria = session.createCriteria(hbCrudDAO.getClazz());
-            	CriteriaBuilder criteriaBuilder = new CriteriaBuilder();
-                criteriaBuilder.executeWithFiltersOnly(criteria, criteriaHelpers);
-                criteria.createCriteria("institutionalCollection").add(Restrictions.idEq(parentCollectionId));
-                return criteria.setProjection(Projections.rowCount()).uniqueResult();
-            }
-        });
-    	
-    	return count;
-	}
 
 	
 	/**

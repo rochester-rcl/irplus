@@ -18,7 +18,6 @@ package edu.ur.ir.institution;
 
 import java.util.List;
 
-import edu.ur.dao.CriteriaHelper;
 import edu.ur.dao.CrudDAO;
 import edu.ur.ir.institution.ReviewableItem;
 
@@ -32,35 +31,7 @@ import edu.ur.ir.institution.ReviewableItem;
 public interface ReviewableItemDAO extends CrudDAO<ReviewableItem>
 {
 	
- 	/**
-	 * Get reviewable items sorting according to the sort and filter information 
-	 * 
-	 * Sort is applied based on the order of sort information in the list (1st to last).
-	 * Starts at the specified row start location and stops at specified row end.
-	 * 
-	 * @param sortInformation - the sort information 
-	 * @param filterInformation - filter requirements
-     * @param parentCollectionId - the id of the parent reviewable collection.
-	 * @param rowStart - start position in paged set
-	 * @param rowEnd - end position in paged set
-	 * @return List of items containing the specified information.
-	 */
-	public List<ReviewableItem> getReviewableItems( final List<CriteriaHelper> criteriaHelpers,
-			final Long parentCollectionId,
-			final int rowStart, final int rowEnd);
 	
-	
-    /**
-     * Get a count of items with given filter list for the 
-     * specified reviewable collection 
-     *  
-     * @param filters - list of filters to apply to the object
-     * @param parentCollectionId - the parent reviewable collection id of the items
-     * @return - the number of folders found
-     */
-    public Integer getReviewableItemsCount(final List<CriteriaHelper> criteriaHelpers, 
-    		final Long parentCollectionId);
-
     /**
 	 * Get all review pending items
 	 * 
