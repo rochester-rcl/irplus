@@ -237,12 +237,7 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 			}
 		}
 		
-	    // re-index all items within collections that are moved
-		for(InstitutionalCollection c : collectionsToMove)
-		{
-			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-			institutionalItemIndexProcessingRecordService.processItemsInCollection( c, processingType);
-		}
+	    
 		
 		if( collectionsNotMoved.size() > 0 )
 		{
@@ -256,6 +251,15 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 			    sb.append(collection.getName());
 			}
 			addFieldError("moveError", sb.toString());
+		}
+		else
+		{
+			// re-index all items within collections that are moved
+			for(InstitutionalCollection c : collectionsToMove)
+			{
+				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				institutionalItemIndexProcessingRecordService.processItemsInCollection( c, processingType);
+			}
 		}
 		
 		

@@ -96,11 +96,12 @@ public class InstitutionalItem extends BasePersistent implements FileSystem{
 	}
 
 	/**
-	 * Set the ir collection.
+	 * Set the institutional collection.  Use this only for performance cases
+	 * otherwise use addInstitutionalItem in InstitutionalCollection
 	 * 
 	 * @param institutionalCollection
 	 */
-	void setInstitutionalCollection(InstitutionalCollection institutionalCollection) {
+	public void setInstitutionalCollection(InstitutionalCollection institutionalCollection) {
 		this.institutionalCollection = institutionalCollection;
 	}
 

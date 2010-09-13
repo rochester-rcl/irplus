@@ -334,19 +334,24 @@ public class DefaultInstitutionalCollectionService implements
 		    }
 		}
 		
-		if( itemsToMove != null && collectionsNotMoved.size() == 0)
-		{
-		    for( InstitutionalItem item : itemsToMove)
-		    {
-		    	log.debug("Adding file " + item + " to destination " + destination);
-		        destination.addItem(item);
-		    }
-		}
-		
 		if( collectionsNotMoved.size() == 0)
 		{
-		    institutionalCollectionDAO.makePersistent(destination);
-		  
+			if( itemsToMove != null )
+			{
+				if(!destination.allowsChildren() )
+				{
+					throw new CollectionDoesNotAcceptItemsException("This collection " + destination + " does not allow items");
+				}
+				for( InstitutionalItem item : itemsToMove)
+			    {
+			    	log.debug("Adding institutional item " + item + " to destination " + destination);
+			    	item.setInstitutionalCollection(destination);
+			    	institutionalItemService.saveInstitutionalItem(item);	
+			    }
+			}
+	
+			institutionalCollectionDAO.makePersistent(destination);
+		    
 		    if( collectionsToMove != null)
 		    {
 		        for(InstitutionalCollection movedCollection : collectionsToMove)
