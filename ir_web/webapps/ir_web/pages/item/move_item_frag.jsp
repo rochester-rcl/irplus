@@ -136,7 +136,9 @@
               </urstb:table>
               </div>
                
-
+</td>
+</tr>
+</table>
 <div id="move_error" class="hidden">
 <ir:printError key="moveError" errors="${fieldErrors}"></ir:printError>
 </div>
