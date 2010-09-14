@@ -87,20 +87,25 @@ public class UnLockVersionedFile extends ActionSupport implements UserIdAware {
 		
 		VersionedFile versionedFile =  personalFile.getVersionedFile();
 		
-		if( repositoryService.canUnlockFile(versionedFile, user) )
+		// only attempt to unlock the file if it is locked
+		if( versionedFile.isLocked())
 		{
-		    boolean unlocked = repositoryService.unlockVersionedFile(versionedFile, user);
-		    if(!unlocked)
+		    if( repositoryService.canUnlockFile(versionedFile, user) )
 		    {
-		    	throw new IllegalStateException("User : " + user 
+		        boolean unlocked = repositoryService.unlockVersionedFile(versionedFile, user);
+		        if(!unlocked)
+		        {
+		    	    throw new IllegalStateException("User : " + user 
 		    				+ " could not un lock Versioned File :" + versionedFile );
+		        }
 		    }
+		    else
+			{
+				lockObtained = false;
+				returnStatus = UN_LOCK_NOT_ALLOWED;
+			}
 		}
-		else
-		{
-			lockObtained = false;
-			returnStatus = UN_LOCK_NOT_ALLOWED;
-		}
+		
 		
 		return SUCCESS;
 	}
