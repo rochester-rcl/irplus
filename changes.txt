@@ -144,6 +144,14 @@ up.
 
 - News is now shown at the top right when there are news items to be shown.
 
+- Lock and Edit option now should work correctly in IE/Fire Fox/ Chrome and Safari
+
+- Unlocking an already unlocked file no loger requests an unlock.  User interface is now updated
+
+- Moving links within the collection admin tab now works correctly in IE
+
+- Deleting images for the repository and collection correctly deletes files from the file system
+
 ur_tags
 ====================================
 - Fixed pager tag to always output at least one page even when there is no data
