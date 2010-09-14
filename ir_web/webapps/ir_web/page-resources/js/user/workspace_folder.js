@@ -72,7 +72,7 @@ YAHOO.ur.folder =
         {
             document.getElementById('myFolders_parentFolderId').value = folderId;
             var folderId = document.getElementById("myFolders_parentFolderId").value;
-            YAHOO.ur.folder.getFolderById(folderId); 
+            YAHOO.ur.folder.getFolderById(folderId, -1); 
             YAHOO.ur.folder.insertHiddenParentFolderId();
         }
     },
@@ -103,16 +103,19 @@ YAHOO.ur.folder =
         document.getElementById('folder_sort_element').value = sortElement;
         var folderId = document.getElementById("myFolders_parentFolderId").value;
         YAHOO.ur.util.wait.waitDialog.showDialog();
-        YAHOO.ur.folder.getFolderById(folderId); 
+        YAHOO.ur.folder.getFolderById(folderId, -1); 
     },
     
     /**
      *  Function that retireves folder information
-     *  based on the given folder id.
+     *  based on the given folder id.  If a file id is passed in
+     *  then the brower location will be pointed to for the file download.  
+     *  This is required to work for all browsers Safari/IE/Chrome/Fire Fox.
      *
-     *  The folder id used to get the folder.
+     *  folderId - The folder id used to get the folder.
+     *  fileId - id of the file a -1 indicates no file id 
      */
-    getFolderById : function(folderId)
+    getFolderById : function(folderId, fileId)
     {
     	
 		// handle a successful return
@@ -140,7 +143,16 @@ YAHOO.ur.folder =
 	                // history failed
 	            }
 	            
-	            YAHOO.ur.shared.file.inbox.getSharedFilesCount();
+	            // only call this if we do not need to download a file
+	            // otherwise a javascript error will occur when chaning the window location
+	            if( fileId == -1 )
+	            {
+	                YAHOO.ur.shared.file.inbox.getSharedFilesCount();
+	            }
+	            else
+	            {
+	            	window.location.href= basePath + 'user/personalFileDownload.action' + '?personalFileId=' +fileId;
+	            }
 	            YAHOO.ur.util.wait.waitDialog.hide();
 	        }
 	    };
@@ -245,7 +257,7 @@ YAHOO.ur.folder =
 	                YAHOO.ur.folder.clearFolderForm();
 	            }
 	            var folderId = document.getElementById("myFolders_parentFolderId").value;
-                YAHOO.ur.folder.getFolderById(folderId); 
+                YAHOO.ur.folder.getFolderById(folderId, -1); 
 	        }
 	    };
 	
@@ -705,16 +717,17 @@ YAHOO.ur.folder =
 	    
 	            if( response.lockStatus == 'LOCK_OBTAINED')
 	            {
-	                //allow user to download the file
-	                window.location = basePath + 'user/personalFileDownload.action' + '?personalFileId=' +response.personalFileId ;
 	                var folderId = document.getElementById("myFolders_parentFolderId").value;
-	                YAHOO.ur.folder.getFolderById(folderId); 
+	                YAHOO.ur.folder.getFolderById(folderId, response.personalFileId); 
+	            	
+
+	                
 	            }
 	            else if( response.lockStatus == 'LOCKED_BY_USER')
 	            {
 	                alert('Folder already locked by ' + response.lockUsername);
 	                var folderId = document.getElementById("myFolders_parentFolderId").value;
-	                YAHOO.ur.folder.getFolderById(folderId); 
+	                YAHOO.ur.folder.getFolderById(folderId, -1); 
 	            }
 	            else if( response.lockStatus == 'LOCK_NOT_ALLOWED')
 	            {
@@ -763,7 +776,7 @@ YAHOO.ur.folder =
 	            if( response.unLockStatus == 'UN_LOCKED_BY_USER')
 	            {
 	                var folderId = document.getElementById("myFolders_parentFolderId").value;
-	                YAHOO.ur.folder.getFolderById(folderId); 
+	                YAHOO.ur.folder.getFolderById(folderId, -1); 
 	            }
 	            else if( response.unLockStatus == 'UN_LOCK_NOT_ALLOWED')
 	            {
@@ -856,7 +869,7 @@ YAHOO.ur.folder =
 	           
 	                    YAHOO.ur.folder.clearSingleFileUploadForm();
 	                    var folderId = document.getElementById("myFolders_parentFolderId").value;
-		                YAHOO.ur.folder.getFolderById(folderId); 
+		                YAHOO.ur.folder.getFolderById(folderId, -1); 
 	        	    	YAHOO.ur.util.wait.waitDialog.hide();
 	                }
 	            }
@@ -1052,7 +1065,7 @@ YAHOO.ur.folder =
 	                else 
 	                {
 	                    var folderId = document.getElementById("myFolders_parentFolderId").value;
-	                    YAHOO.ur.folder.getFolderById(folderId); 
+	                    YAHOO.ur.folder.getFolderById(folderId, -1); 
 	                }
 	    	    	YAHOO.ur.util.wait.waitDialog.hide();
 	            }
@@ -1315,7 +1328,7 @@ YAHOO.ur.folder =
 	            	YAHOO.ur.folder.renameFileDialog.hide();
 	                YAHOO.ur.folder.clearFileRenameForm();
 	                var folderId = document.getElementById("myFolders_parentFolderId").value;
-	                YAHOO.ur.folder.getFolderById(folderId); 
+	                YAHOO.ur.folder.getFolderById(folderId, -1); 
 	            }
 	        }
 
@@ -1434,7 +1447,7 @@ YAHOO.ur.folder =
     init : function()
     {
         var parentFolderId = document.getElementById('myFolders_parentFolderId').value
-        YAHOO.ur.folder.getFolderById(parentFolderId);
+        YAHOO.ur.folder.getFolderById(parentFolderId, -1);
         YAHOO.ur.folder.createNewFolderDialog();
         YAHOO.ur.folder.createFolderDeleteConfirmDialog();
         YAHOO.ur.folder.singleFileUpload();
