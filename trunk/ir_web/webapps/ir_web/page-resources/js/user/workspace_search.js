@@ -61,7 +61,7 @@ YAHOO.ur.workspace.search =
      */
     showFolder : function(folderId)
     {
-        YAHOO.ur.folder.getFolderById(folderId);
+        YAHOO.ur.folder.getFolderById(folderId, -1);
         YAHOO.ur.user.workspace.setActiveIndex("FOLDER");
     },
     

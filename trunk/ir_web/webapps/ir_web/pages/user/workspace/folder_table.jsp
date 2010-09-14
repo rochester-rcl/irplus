@@ -33,7 +33,7 @@
            <strong>Path:&nbsp;/
 	          <span class="folderBtnImg">&nbsp;</span>
 	          <c:if test="${parentFolderId != 0}">
-                   <a href="javascript:YAHOO.ur.folder.getFolderById('0')">${user.username}</a>&nbsp;/
+                   <a href="javascript:YAHOO.ur.folder.getFolderById(0, -1)">${user.username}</a>&nbsp;/
                </c:if>
                <c:if test="${parentFolderId == 0}">
                    ${user.username}&nbsp;/
@@ -42,7 +42,7 @@
                <c:forEach var="folder" items="${folderPath}">
                <span class="folderBtnImg">&nbsp;</span>
                    <c:if test="${folder.id != parentFolderId}">
-                       <a href="javascript:YAHOO.ur.folder.getFolderById('${folder.id}')">${folder.name}</a>&nbsp;/
+                       <a href="javascript:YAHOO.ur.folder.getFolderById(${folder.id}, -1)">${folder.name}</a>&nbsp;/
                    </c:if>
                    <c:if test="${folder.id == parentFolderId}">
                        ${folder.name}&nbsp;/
@@ -220,7 +220,7 @@
                         </urstb:td>
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                            <a href="javascript:YAHOO.ur.folder.getFolderById('${fileSystemObject.id}')"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
+	                            <a href="javascript:YAHOO.ur.folder.getFolderById(${fileSystemObject.id}, -1)"><ur:maxText numChars="50" text="${fileSystemObject.name}"/></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 	                        </c:if>
 	                         <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
 		                        <c:url var="personalFileDownloadUrl" value="/user/personalFileDownload.action">
