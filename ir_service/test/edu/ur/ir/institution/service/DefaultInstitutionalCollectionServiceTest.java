@@ -51,7 +51,6 @@ import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemService;
-import edu.ur.ir.repository.License;
 import edu.ur.ir.repository.LicenseService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;

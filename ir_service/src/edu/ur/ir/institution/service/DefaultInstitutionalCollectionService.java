@@ -28,9 +28,7 @@ import org.springframework.util.StringUtils;
 
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.ir.file.IrFile;
-import edu.ur.ir.handle.HandleInfo;
 import edu.ur.ir.handle.HandleNameAuthority;
-import edu.ur.ir.handle.UniqueHandleNameGenerator;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.CollectionDoesNotAcceptItemsException;
@@ -90,12 +88,6 @@ public class DefaultInstitutionalCollectionService implements
 	/** Service to send email */
 	private MailSender mailSender;
 	
-	/** generates unique handle names */
-	private UniqueHandleNameGenerator uniqueHandleNameGenerator;
-
-	/** url generator for institutional items. */
-	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
-	
 	/** service for marking items that need to be indexed */
 	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
 
@@ -119,6 +111,7 @@ public class DefaultInstitutionalCollectionService implements
 			 items.addAll(child.getItems());
 			 for(InstitutionalItem item : items)
 			 {
+				 child.removeItem(item);
 				 institutionalItemService.deleteInstitutionalItem(item, deletingUser);
 			 }
 			 
@@ -143,7 +136,9 @@ public class DefaultInstitutionalCollectionService implements
 		items.addAll(collection.getItems());
 		for(InstitutionalItem item : items)
 		{
+			collection.removeItem(item);
 			institutionalItemService.deleteInstitutionalItem(item, deletingUser);
+			
 		}
 
 		// delete security for parent
@@ -664,11 +659,8 @@ public class DefaultInstitutionalCollectionService implements
 			    log.debug("handle name authority = " + handleNameAuthority);
 			    if( handleNameAuthority != null)
 			    {
-				    this.addHandleInfo(handleNameAuthority, institutionalItem);
+			    	institutionalItemService.addHandle(handleNameAuthority,  institutionalItem.getVersionedInstitutionalItem().getCurrentVersion());
 			    }
-			    
-			    // save the item 
-			    institutionalItemService.saveInstitutionalItem(institutionalItem);
 			    
 			    // only index if the item was added directly to the collection
 			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
@@ -680,42 +672,6 @@ public class DefaultInstitutionalCollectionService implements
 		    }
 	    }
 		return institutionalItem;
-	}
-	
-	/**
-	 * Add handle information to the item.
-	 * 
-	 * @param handleNameAuthority
-	 * @param institutionalItem
-	 */
-	private void addHandleInfo(HandleNameAuthority handleNameAuthority, InstitutionalItem institutionalItem)
-	{
-		String nextHandleName = uniqueHandleNameGenerator.nextName();
-	    InstitutionalItemVersion itemVersion = institutionalItem.getVersionedInstitutionalItem().getCurrentVersion();
-		
-		String url = institutionalItemVersionUrlGenerator.createUrl(institutionalItem, itemVersion.getVersionNumber());
-		log.debug(" url = " + url);
-		HandleInfo info = new HandleInfo(nextHandleName, url, handleNameAuthority);
-		log.debug( " info = " + info);
-	    itemVersion.setHandleInfo(info);
-	}
-
-	public UniqueHandleNameGenerator getUniqueHandleNameGenerator() {
-		return uniqueHandleNameGenerator;
-	}
-
-	public void setUniqueHandleNameGenerator(
-			UniqueHandleNameGenerator uniqueHandleNameGenerator) {
-		this.uniqueHandleNameGenerator = uniqueHandleNameGenerator;
-	}
-
-	public InstitutionalItemVersionUrlGenerator getInstitutionalItemVersionUrlGenerator() {
-		return institutionalItemVersionUrlGenerator;
-	}
-
-	public void setInstitutionalItemVersionUrlGenerator(
-			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
-		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
 	}
 
 	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {

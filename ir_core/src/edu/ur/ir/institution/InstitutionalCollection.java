@@ -312,7 +312,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	/**
 	 * Add an item to this collection.  If the item exists
 	 * in a different collection, it is removed from that 
-	 * collection.
+	 * collection and a new parent is set.
 	 * 
 	 * @throws  CollectionDoesNotAcceptItemsException if allowsItems = false
 	 * 
@@ -335,22 +335,19 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	}
 	
 	/**
-	 * Remove and item from the collection
-	 * and sets it's collection to null.
+	 * Remove and item from the collection.  This does NOT
+	 * change the parent collection of the item.  This is the
+	 * callers responsibility.
+	 * 
 	 * 
 	 * @param item
 	 * @return true if the item is removed.
 	 */
 	public boolean removeItem(InstitutionalItem item)
 	{
-		boolean removed = false;
-		if( items.contains(item))
-		{
-			removed = items.remove(item);
-		}
-		item.setInstitutionalCollection(null);
-		return removed;
+		return items.remove(item);
 	}
+	
 	
 	/**
 	 * Find an item based on the name.  If

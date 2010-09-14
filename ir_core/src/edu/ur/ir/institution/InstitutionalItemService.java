@@ -21,10 +21,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import edu.ur.ir.handle.HandleNameAuthority;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.item.ContentTypeCount;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.ItemVersion;
 import edu.ur.ir.person.PersonName;
+import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -591,6 +594,23 @@ public interface InstitutionalItemService extends Serializable{
 	 * @return the institutional item
 	 */
 	public InstitutionalItem getInstitutionalItem(Long collectionId, Long genericItemId);
+	
+	/**
+	 * Add a handle to the specified version.  Will not add a handle if one already
+	 * exists.
+	 * 
+	 * @param itemVersion - item version to add the new handle to
+	 */
+	public void addHandle(HandleNameAuthority handleNameAuthority, InstitutionalItemVersion itemVersion);
+	
+	/**
+	 * Add a new version to an existing institutional item.
+	 * 
+	 * @param institutionalItem - item to add a new version to 
+	 * @param version - item version to add to the item
+	 * @throws RepositoryLicenseNotAcceptedException - thrown if the user has not accepted the repository license
+	 */
+	public void addNewVersionToItem(IrUser user, InstitutionalItem institutionalItem, ItemVersion version) throws RepositoryLicenseNotAcceptedException;
 	
 	
 	

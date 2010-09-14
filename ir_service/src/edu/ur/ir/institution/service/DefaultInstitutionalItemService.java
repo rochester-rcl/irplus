@@ -20,12 +20,17 @@ package edu.ur.ir.institution.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import edu.ur.ir.handle.HandleInfo;
+import edu.ur.ir.handle.HandleNameAuthority;
+import edu.ur.ir.handle.UniqueHandleNameGenerator;
 import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.DeletedInstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
@@ -41,7 +46,10 @@ import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemSecurityService;
 import edu.ur.ir.item.ItemService;
+import edu.ur.ir.item.ItemVersion;
 import edu.ur.ir.person.PersonName;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
 import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
@@ -84,12 +92,23 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	
 	/** service for dealing with deleted institutional item information */
 	private DeletedInstitutionalItemService deletedInstitutionalItemService;
-
-
+	
+	/** index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemService.class);
 	
+	/** generates unique handle names */
+	private UniqueHandleNameGenerator uniqueHandleNameGenerator;
+	
+	/** url generator for institutional items. */
+	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
+	
+
+
+
+
 	/**
 	 * Delete an institutional item and all files that are not connected to other resources
 	 * 
@@ -109,11 +128,7 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 		
 		// Delete ResearcherInstitutionalItem referring to this institutional item
 		researcherFileSystemService.deleteResearcherInstitutionalItem(institutionalItem);
-		
 		deletedInstitutionalItemService.addDeleteHistory(institutionalItem, deletingUser);
-		 
-		institutionalItem.getInstitutionalCollection().removeItem(institutionalItem);
-		 
 		institutionalItemDAO.makeTransient(institutionalItem);
 
 		// Check to see if generic item can be deleted
@@ -143,6 +158,78 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 			 }
 		}
 
+	}
+	
+	/**
+	 * Add a new version to an existing institutional item.
+	 * 
+	 * @param institutionalItem - item to add a new version to 
+	 * @param version - item version to add to the item
+	 * @throws RepositoryLicenseNotAcceptedException - thrown if the user has not accepted the repository license
+	 */
+	public void addNewVersionToItem(IrUser user, InstitutionalItem institutionalItem, ItemVersion version) throws RepositoryLicenseNotAcceptedException
+	{
+		
+		InstitutionalItemVersion institutionalItemVersion = institutionalItem.getVersionedInstitutionalItem().addNewVersion(version.getItem());
+		
+		Repository repository = institutionalItem.getInstitutionalCollection().getRepository();
+		if( repository.getDefaultLicense() != null && user.getAcceptedLicense(repository.getDefaultLicense()) == null)
+		{
+			throw new RepositoryLicenseNotAcceptedException(user, repository);
+		}
+		
+        if( repository.getDefaultLicense() != null)
+	    {
+        	institutionalItemVersion.addRepositoryLicense(repository.getDefaultLicense(), user);
+	    }
+        
+	    // generates the id and persists the item.
+        saveInstitutionalItem(institutionalItem);
+        
+	    // add a handle if the handle service is available
+	    HandleNameAuthority handleNameAuthority = repository.getDefaultHandleNameAuthority();
+	    log.debug("handle name authority = " + handleNameAuthority);
+	    if( handleNameAuthority != null)
+	    {
+	    	this.addHandle(handleNameAuthority, institutionalItemVersion);
+	    }
+		institutionalItemVersionService.saveInstitutionalItemVersion(institutionalItemVersion);
+		
+		/**
+		 * If item is not yet published and the collection being published to is private
+		 * then set item as private and assign the collection's user group permissions to item
+		 */
+		if (!version.getItem().isPublishedToSystem() && !institutionalItem.getInstitutionalCollection().isPubliclyViewable()) {
+			List<InstitutionalCollection> collections = new LinkedList<InstitutionalCollection>();
+			collections.add(institutionalItem.getInstitutionalCollection());
+			setItemPrivatePermissions(version.getItem(), collections);
+		}
+		
+		
+		// set item to be updated in index
+		IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+		institutionalItemIndexProcessingRecordService.save(institutionalItem.getId(), processingType);
+	}
+	
+	/**
+	 * Add a handle to the specified version.  Will not add a handle if one already
+	 * exists.
+	 * 
+	 * @param itemVersion - item version to add the new handle to
+	 */
+	public void addHandle(HandleNameAuthority handleNameAuthority, InstitutionalItemVersion itemVersion)
+	{
+		if(itemVersion.getHandleInfo() == null )
+		{
+			String nextHandleName = uniqueHandleNameGenerator.nextName();
+			String url = institutionalItemVersionUrlGenerator.createUrl(itemVersion.getVersionedInstitutionalItem().getInstitutionalItem(), itemVersion.getVersionNumber());
+			log.debug(" url = " + url);
+			HandleInfo info = new HandleInfo(nextHandleName, url, handleNameAuthority);
+			log.debug( " info = " + info);
+		    itemVersion.setHandleInfo(info);
+		    institutionalItemVersionService.saveInstitutionalItemVersion(itemVersion);
+		}
+		
 	}
 	
 
@@ -860,5 +947,62 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	 */
 	public List<ContentTypeCount> getCollectionContentTypeCount(InstitutionalCollection collection) {
 		return institutionalItemDAO.getCollectionContentTypeCount(collection);
+	}
+	
+	/**
+	 * Service to handle index processing types.
+	 * 
+	 * @return service to handle index processing types
+	 */
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+	/**
+	 * Set the index processing type service.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+	
+	/**
+	 * Get the unique handle name generator.
+	 * 
+	 * @return the unique handle name generator
+	 */
+	public UniqueHandleNameGenerator getUniqueHandleNameGenerator() {
+		return uniqueHandleNameGenerator;
+	}
+
+	/**
+	 * Set the unique handle name generator.
+	 * 
+	 * @param uniqueHandleNameGenerator
+	 */
+	public void setUniqueHandleNameGenerator(
+			UniqueHandleNameGenerator uniqueHandleNameGenerator) {
+		this.uniqueHandleNameGenerator = uniqueHandleNameGenerator;
+	}
+	
+	/**
+	 * Generates urls for institutional item versions.
+	 * 
+	 * @return the institutional item version url generator
+	 */
+	public InstitutionalItemVersionUrlGenerator getInstitutionalItemVersionUrlGenerator() {
+		return institutionalItemVersionUrlGenerator;
+	}
+
+	/**
+	 * Set the institutional item version url generator.
+	 * 
+	 * @param institutionalItemVersionUrlGenerator
+	 */
+	public void setInstitutionalItemVersionUrlGenerator(
+			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
 	}
 }
