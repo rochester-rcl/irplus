@@ -152,6 +152,9 @@ up.
 
 - Deleting images for the repository and collection correctly deletes files from the file system
 
+- Performance for Deleting and moving items has been improved - hibernate no longer need to load the collection items prior 
+  to deleting/moving an item [ Deleting a large collection would still be slow ]
+
 ur_tags
 ====================================
 - Fixed pager tag to always output at least one page even when there is no data
