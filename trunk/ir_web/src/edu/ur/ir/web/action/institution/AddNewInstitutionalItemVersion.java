@@ -31,11 +31,13 @@ import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
+import edu.ur.ir.institution.InstitutionalItemSearchService;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.item.ItemVersion;
+import edu.ur.ir.repository.RepositoryLicenseNotAcceptedException;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
@@ -174,27 +176,14 @@ public class AddNewInstitutionalItemVersion  extends ActionSupport implements Us
 			}
 		}
 		
-		
 		ItemVersion version = itemService.getItemVersion(itemVersionId, false);
 		
-		InstitutionalItemVersion institutionalItemVersion = institutionalItem.getVersionedInstitutionalItem().addNewVersion(version.getItem());
-		
-		institutionalItemVersionService.saveInstitutionalItemVersion(institutionalItemVersion);
-		
-		/**
-		 * If item is not yet published and the collection being published to is private
-		 * then set item as private and assign the collection's user group permissions to item
-		 */
-		if (!version.getItem().isPublishedToSystem() && !institutionalItem.getInstitutionalCollection().isPubliclyViewable()) {
-			List<InstitutionalCollection> collections = new LinkedList<InstitutionalCollection>();
-			collections.add(institutionalItem.getInstitutionalCollection());
-			institutionalItemService.setItemPrivatePermissions(version.getItem(), collections);
+		try {
+			institutionalItemService.addNewVersionToItem(user, institutionalItem, version);
+		} catch (RepositoryLicenseNotAcceptedException e) {
+			return ERROR;
 		}
-		
-		
-		// set item to be updated in index
-		IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-		institutionalItemIndexProcessingRecordService.save(institutionalItem.getId(), processingType);
+
 		return SUCCESS;
 	}
 

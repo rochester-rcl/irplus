@@ -202,6 +202,9 @@
        <property name="itemSecurityService" ref="itemSecurityService"/>
        <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
        <property name="reviewableItemService" ref="reviewableItemService"/>
+       <property name="uniqueHandleNameGenerator" ref="uniqueHandleNameGenerator"/>
+       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
    </bean>
    
    <!--  Service for helping with deleted institutional items --> 
@@ -226,8 +229,6 @@
        <property name="institutionalItemDAO" ref="institutionalItemDAO"/>
        <property name="mailSender" ref="mailSender"/>
        <property name="itemReviewMessage" ref="itemReviewMessage"/>
-       <property name="uniqueHandleNameGenerator" ref="uniqueHandleNameGenerator"/>
-       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
        <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
        <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
    </bean>
