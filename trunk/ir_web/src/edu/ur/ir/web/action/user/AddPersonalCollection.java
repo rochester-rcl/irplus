@@ -22,11 +22,13 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 
 /**
@@ -71,6 +73,12 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 	
 	/** Service for dealing with user file system. */
 	private UserPublishingFileSystemService userPublishingFileSystemService;
+	
+	/** process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+
+	/** service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
 
 	
 	/**
@@ -82,6 +90,8 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 				parentCollectionId);
 		collectionAdded = false;
 		IrUser thisUser = userService.getUser(userId, true);
+		
+		PersonalCollection personalCollection = null;
 		
 		// user must be an author to use this aspect
 		if( !thisUser.hasRole(IrRole.AUTHOR_ROLE))
@@ -97,10 +107,11 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 		     {
 				 try 
 				 {
-					 PersonalCollection personalCollection = 
+					 personalCollection = 
 						 thisUser.createRootPersonalCollection(collectionName);
 			         personalCollection.setDescription(collectionDescription);
 					 userService.makeUserPersistent(thisUser);
+					 
 					 collectionAdded = true;
 				 }
 				 catch(DuplicateNameException e)
@@ -123,7 +134,7 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 			{
 				try 
 				{
-					PersonalCollection personalCollection = 
+					personalCollection = 
 						collection.createChild(collectionName);
 					personalCollection.setDescription(collectionDescription);
 					userPublishingFileSystemService.makePersonalCollectionPersistent(collection);
@@ -139,6 +150,11 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 			collectionMessage = getText("personalCollectionAlreadyExists", 
 					new String[]{collectionName});
 			addFieldError("personalCollectionAlreadyExists", collectionMessage);
+		}
+		else if( personalCollection != null)
+		{
+			userWorkspaceIndexProcessingRecordService.save(personalCollection.getOwner().getId(), personalCollection, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 		}
         return "added";
 	}
@@ -156,7 +172,6 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 		
 		PersonalCollection other = null;
 		
-		
 		if( parentCollectionId == null || parentCollectionId == 0L)
 		{
 			other = userPublishingFileSystemService.getRootPersonalCollection(collectionName, userId);
@@ -169,7 +184,7 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 		// make sure name does not already exist
 		if( other == null)
 		{
-			PersonalCollection existingCollection = 
+			PersonalCollection  existingCollection = 
 				userPublishingFileSystemService.getPersonalCollection(updateCollectionId, true);
 			
 			if( !existingCollection.getOwner().getId().equals(userId))
@@ -181,6 +196,8 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 				existingCollection.reName(collectionName);
 				existingCollection.setDescription(collectionDescription);
 				userPublishingFileSystemService.makePersonalCollectionPersistent(existingCollection);
+				userWorkspaceIndexProcessingRecordService.save(existingCollection.getOwner().getId(), existingCollection, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 				collectionAdded = true;
 			} catch (DuplicateNameException e) {
 				collectionAdded = false;
@@ -197,6 +214,8 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 			//it was found by name so we don't need to add it.
 			other.setDescription(collectionDescription);
 			userPublishingFileSystemService.makePersonalCollectionPersistent(other);
+			userWorkspaceIndexProcessingRecordService.save(other.getOwner().getId(), other, 
+	    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 			collectionAdded = true;
 		}
 
@@ -205,6 +224,7 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 			collectionMessage = getText("personalCollectionAlreadyExists", new String[]{collectionName});
 			addFieldError("personalCollectionAlreadyExists", collectionMessage);
 		}
+
         return "added";
 		
 	}
@@ -311,7 +331,6 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 		return collectionMessage;
 	}
 
-
 	/**
 	 * Determine if the collection was added.
 	 * 
@@ -348,10 +367,34 @@ public class AddPersonalCollection extends ActionSupport implements UserIdAware{
 		return userPublishingFileSystemService;
 	}
 
+	/**
+	 * Set the user publishing file system service.
+	 * 
+	 * @param userPublishingFileSystemService
+	 */
 	public void setUserPublishingFileSystemService(
 			UserPublishingFileSystemService userPublishingFileSystemService) {
 		this.userPublishingFileSystemService = userPublishingFileSystemService;
 	}
 
+	/**
+	 * Service for dealing with workspace indexing.
+	 * 
+	 * @param userWorkspaceIndexProcessingRecordService
+	 */
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+	
+	/**
+	 * Service to help with dealing with index processing types.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
 
 }

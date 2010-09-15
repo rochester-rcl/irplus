@@ -162,6 +162,8 @@ public class ViewPersonalCollections extends ActionSupport implements
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
 			    }
 			    
+			    userWorkspaceIndexProcessingRecordService.save(pc.getOwner().getId(), pc, 
+		    			indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
 			    // set delete records for the personal items
 			    userPublishingFileSystemService.deletePersonalCollection(pc, pc.getOwner(), "OWNER DELETING PERSONAL COLLECTION - " + pc.getFullPath());
 		    }
