@@ -73,7 +73,7 @@
                                 <span class="packageBtnImg">&nbsp;</span><a href="${personalItemPreviewUrl}">${fileSystemObject.name}</a>
                             </c:if>	
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
-                                <<span class="worldBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.workspace.search.showFolder('${fileSystemObject.id}')">${fileSystemObject.name}</a>
+                                <span class="folderBtnImg">&nbsp;</span><a href="javascript:YAHOO.ur.workspace.search.showCollection(${fileSystemObject.id})">${fileSystemObject.name}</a>
                             </c:if>                        
                         </urstb:td>
                         <urstb:td>
@@ -87,6 +87,9 @@
 	                            /Shared File Inbox${fileSystemObject.path}
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
+	                            /My Publications${fileSystemObject.path}
+	                        </c:if>
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
 	                            /My Publications${fileSystemObject.path}
 	                        </c:if>
                         </urstb:td>
@@ -103,6 +106,9 @@
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
 	                            <a href="javascript:YAHOO.ur.workspace.search.showCollection('${fileSystemObject.personalCollection.id}')">Open Collection</a>
+	                        </c:if>
+	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
+	                            <a href="javascript:YAHOO.ur.workspace.search.showCollection(${fileSystemObject.id})">Open Collection</a>
 	                        </c:if>
                         </urstb:td>
                     </urstb:tr>
