@@ -166,7 +166,7 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	{
 		if( log.isDebugEnabled() )
 		{
-			log.debug("Searching for researcher folder " + name);
+			log.debug("Searching for researcher folder " + name.trim());
 		}
 		ResearcherFolder ResearcherFolder = null;
 		boolean found = false;
@@ -175,7 +175,7 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 		while( iter.hasNext() && !found)
 		{
 			ResearcherFolder c = iter.next();
-			if( c.getName().equalsIgnoreCase(name))
+			if( c.getName().equalsIgnoreCase(name.trim()))
 			{
 				ResearcherFolder = c;
 				found = true;
