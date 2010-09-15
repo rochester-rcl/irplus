@@ -216,7 +216,7 @@ public class Researcher extends BasePersistent{
 	{
 		for(ResearcherFolder f: rootFolders )
 		{
-			if( f.getName().equalsIgnoreCase(name))
+			if( f.getName().equalsIgnoreCase(name.trim()))
 			{
 				return f;
 			}
