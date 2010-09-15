@@ -103,10 +103,12 @@ UserWorkspaceIndexProcessingRecordService
 		
 		for(PersonalCollection pc : personalCollections)
 		{
+			save(user.getId(), pc, processingType);
 			for( PersonalItem personalItem : pc.getPersonalItems())
 			{
 				save(user.getId(), personalItem, processingType);
 			}
+			
 		}
 	}
 

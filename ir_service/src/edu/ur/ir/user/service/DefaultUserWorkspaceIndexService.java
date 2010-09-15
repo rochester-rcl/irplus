@@ -58,6 +58,7 @@ import edu.ur.ir.item.ItemTitle;
 import edu.ur.ir.person.PersonName;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.PersonalItem;
@@ -129,6 +130,13 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	public static final String PERSONAL_FOLDER_DESCRIPTION = "personal_folder_description";
 	
 	public static final String PERSONAL_FOLDER_ID = "personal_folder_id";
+	
+	
+	public static final String PERSONAL_COLLECTION_NAME = "personal_collection_name";
+	
+	public static final String PERSONAL_COLLECTION_DESCRIPTION = "personal_collection_description";
+	
+	public static final String PERSONAL_COLLECTION_ID = "personal_collection_id";
 	
 	
 	
@@ -560,6 +568,121 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 				doc);
 
 	}
+	
+	/**
+	 * Add the folder to the users index. 
+	 * 
+	 * @throws LocationAlreadyExistsException 
+	 * @throws IOException 
+	 * 
+	 * @see edu.ur.ir.user.UserWorkspaceIndexService#addToIndex(java.io.File, edu.ur.ir.user.PersonalFolder)
+	 */
+	public void addToIndex(Repository repository, PersonalCollection personalCollection) throws LocationAlreadyExistsException, IOException{
+		File personalIndexFolder = this.getPersonalIndexFolder(personalCollection.getOwner(), repository);
+		
+		Document doc = new Document();
+		doc.add(new Field(PERSONAL_COLLECTION_NAME, 
+				personalCollection.getName(), 
+				Field.Store.YES, 
+				Field.Index.ANALYZED));
+		
+		String description = "";
+		if( personalCollection.getDescription() != null )
+		{
+			description = personalCollection.getDescription();
+		}
+		
+		doc.add(new Field(PERSONAL_COLLECTION_DESCRIPTION, 
+				description, 
+				Field.Store.YES, 
+				Field.Index.ANALYZED));
+		
+		doc.add(new Field(PERSONAL_COLLECTION_ID, 
+				NumberTools.longToString(personalCollection.getId()), 
+				Field.Store.YES, 
+				Field.Index.NOT_ANALYZED));
+		
+		doc.add(new Field(TYPE, 
+				personalCollection.getFileSystemType().getType(), 
+				Field.Store.YES, 
+				Field.Index.ANALYZED));
+		
+		writeDocument(personalIndexFolder.getAbsolutePath(), 
+				doc);
+
+	}
+
+	/**
+	 * Delete the collection from the index.
+	 * 
+	 * @see edu.ur.ir.user.UserWorkspaceIndexService#deleteFromIndex(edu.ur.ir.user.PersonalFolder)
+	 */
+	public void deleteCollectionFromIndex(IrUser user, Long personalCollectionId) {
+		
+		// if the user does not have an index folder
+		// don't need to do anything.
+		String info = user.getPersonalIndexFolder();
+		File personalIndexFolder = null;
+		
+		// if the user does not have an index folder
+		// don't need to do anything.
+		if( info == null || personalCollectionId == null)
+		{
+			return;
+		}
+		else
+		{
+			personalIndexFolder = new File(info);
+			if( !personalIndexFolder.exists())
+			{
+				return;
+			}
+		}
+		
+		Directory directory = null;
+		IndexWriter writer = null;
+		try {
+			
+			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
+			writer = getWriter(directory);
+			Term term = new Term(PERSONAL_COLLECTION_ID, NumberTools.longToString(personalCollectionId));
+			writer.deleteDocuments(term);
+			writer.close();
+		} catch (Exception e) {
+			log.error(e);
+			errorEmailService.sendError(e);
+		}
+		finally
+		{
+			if (writer != null) {
+			    try {
+				    writer.close();
+			    } catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    writer = null;
+		    try {
+				IndexWriter.unlock(directory);
+			} 
+	    	catch (IOException e1)
+	    	{
+				log.error(e1);
+			}
+		    
+		    if( directory != null )
+		    {
+		    	try
+		    	{
+		    		directory.close();
+		    	}
+		    	catch (Exception e) {
+				    log.error(e);
+			    }
+		    }
+		    directory = null;
+		}
+	}
 
 	/**
 	 * Delete the folder from the index.
@@ -645,6 +768,20 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	public void updateIndex(Repository repository, PersonalFolder personalFolder) throws LocationAlreadyExistsException, IOException{
 		deleteFolderFromIndex(personalFolder.getOwner(), personalFolder.getId());
 		addToIndex(repository, personalFolder);
+	}
+	
+	/**
+	 * Update the index with the personal collection. Will create a folder location for the user if one does not yet exist.
+	 * 
+	 * @throws LocationAlreadyExistsException - if the folder location already exists
+	 * @throws IOException 
+	 * @throws NoIndexFoundException 
+	 * 
+	 * @see edu.ur.ir.user.UserWorkspaceIndexService#updateIndex(java.io.File, edu.ur.ir.user.PersonalFolder)
+	 */
+	public void updateIndex(Repository repository, PersonalCollection personalCollection) throws LocationAlreadyExistsException, IOException{
+		deleteFolderFromIndex(personalCollection.getOwner(), personalCollection.getId());
+		addToIndex(repository, personalCollection);
 	}
 
 	

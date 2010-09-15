@@ -24,6 +24,7 @@ import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.PersonalItem;
@@ -233,6 +234,10 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 		{
 		    userWorkspaceIndexService.deleteItemFromIndex(user, workspaceItemId);
 		}
+		if(fileSystemType.equals(FileSystemType.PERSONAL_COLLECTION))
+		{
+		    userWorkspaceIndexService.deleteCollectionFromIndex(user, workspaceItemId);
+		}
 	}
 	
 	/**
@@ -303,6 +308,18 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			    processDelete(record, user, userWorkspaceIndexService);
 			}
 		}
+		if(fileSystemType.equals(FileSystemType.PERSONAL_COLLECTION))
+		{
+			PersonalCollection collection = userPublishingFileSystemService.getPersonalCollection(workspaceItemId, false);
+			if( collection != null )
+			{
+			    userWorkspaceIndexService.updateIndex(repository, collection);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
+		}
 	}
 	
 	/**
@@ -367,6 +384,18 @@ public class DefaultProcessFileSystemObjectsJob implements StatefulJob{
 			if( item != null )
 			{
 		        userWorkspaceIndexService.addToIndex(repository, item);
+			}
+			else
+			{
+			    processDelete(record, user, userWorkspaceIndexService);
+			}
+		}
+		if(fileSystemType.equals(FileSystemType.PERSONAL_COLLECTION))
+		{
+			PersonalCollection collection = userPublishingFileSystemService.getPersonalCollection(workspaceItemId, false);
+			if( collection != null )
+			{
+		        userWorkspaceIndexService.addToIndex(repository, collection);
 			}
 			else
 			{

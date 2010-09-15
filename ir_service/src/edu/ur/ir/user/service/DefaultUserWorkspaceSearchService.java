@@ -71,6 +71,8 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 			DefaultUserWorkspaceIndexService.TYPE,
 			DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_DESCRIPTION,
 			DefaultUserWorkspaceIndexService.PERSONAL_FOLDER_NAME,
+			DefaultUserWorkspaceIndexService.PERSONAL_COLLECTION_DESCRIPTION,
+			DefaultUserWorkspaceIndexService.PERSONAL_COLLECTION_NAME,
 			DefaultUserWorkspaceIndexService.COLLABORATORS,
 			DefaultUserWorkspaceIndexService.PERSONAL_ITEM_ABSTRACT,
 			DefaultUserWorkspaceIndexService.PERSONAL_ITEM_CITATION,
@@ -213,6 +215,12 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 			log.debug( "personal id = " + document.get(DefaultUserWorkspaceIndexService.PERSONAL_ITEM_ID));
 			Long personalItemId = NumberTools.stringToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_ITEM_ID));
 			fileSystem = userPublishingFileSystemService.getPersonalItem(personalItemId, false);
+		}
+		if( type.equals(FileSystemType.PERSONAL_COLLECTION.getType()))
+		{
+			log.debug( "personal collection id = " + document.get(DefaultUserWorkspaceIndexService.PERSONAL_COLLECTION_ID));
+			Long personalCollectionId = NumberTools.stringToLong(document.get(DefaultUserWorkspaceIndexService.PERSONAL_COLLECTION_ID));
+			fileSystem = userPublishingFileSystemService.getPersonalCollection(personalCollectionId, false);
 		}
 
 		

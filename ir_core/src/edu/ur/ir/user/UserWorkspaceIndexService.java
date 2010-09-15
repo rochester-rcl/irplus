@@ -50,6 +50,7 @@ public interface UserWorkspaceIndexService extends Serializable{
 	 * @throws IOException - if location cannot be created and it needs to be.
 	 */
 	public void updateIndex(Repository repository, PersonalFile personalFile) throws LocationAlreadyExistsException, IOException;
+
 	
 	/**
 	 * Delete the personal file in the index.
@@ -62,28 +63,56 @@ public interface UserWorkspaceIndexService extends Serializable{
 	/**
 	 * Add the personal folder to the index.  Will create a folder if one does not already exist
 	 * 
-	 * @param personalFile
+	 * @param personalFolder - folder to add
 	 * @throws LocationAlreadyExistsException - if the folder already exists
 	 * @throws IOException - if folder location needs to be created an cannot be created
 	 */
 	public void addToIndex(Repository repository, PersonalFolder personalFolder) throws LocationAlreadyExistsException, IOException;
 	
 	/**
+	 * Add the personal collection to the index.  Will create a folder if one does not already exist
+	 * 
+	 * @param personalCollection - personal collection
+	 * @throws LocationAlreadyExistsException - if the folder already exists
+	 * @throws IOException - if folder location needs to be created an cannot be created
+	 */
+	public void addToIndex(Repository repository, PersonalCollection personalCollection) throws LocationAlreadyExistsException, IOException;
+	
+	
+	/**
 	 * Update the personal folder in the index.  Will create the folder location for the user if one does not already
 	 * exist
 	 * 
-	 * @param personalFile
+	 * @param personalFolder - folder to update
 	 * @throws LocationAlreadyExistsException - if the folder location already exists when trying to create a new folder.
 	 * @throws IOException - if location cannot be created and it needs to be
 	 */
 	public void updateIndex(Repository repository, PersonalFolder personalFolder) throws LocationAlreadyExistsException, IOException;
 	
 	/**
+	 * Update the personal collection in the index.  Will create the folder location for the user if one does not already
+	 * exist
+	 * 
+	 * @param personalCollection - collection to update
+	 * @throws LocationAlreadyExistsException - if the folder location already exists when trying to create a new folder.
+	 * @throws IOException - if location cannot be created and it needs to be
+	 */
+	public void updateIndex(Repository repository, PersonalCollection personalcollection) throws LocationAlreadyExistsException, IOException;
+
+	
+	/**
 	 * Delete the personal folder from the index.
 	 * 
-	 * @param personalFile
+	 * @param personalFolderId - id of the folder to remove
 	 */
 	public void deleteFolderFromIndex(IrUser user, Long personalFolderId);
+	
+	/**
+	 * Delete the personal collection from the index.
+	 * 
+	 * @param personalCollectionId - id of the collection to remove
+	 */
+	public void deleteCollectionFromIndex(IrUser user, Long personalCollectionId);
 	
 	/**
 	 * Add the shared inbox file  to the index. Will create the location if one already exists
