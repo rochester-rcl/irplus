@@ -243,13 +243,14 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	}
 	
 	/**
-	 * Name of the collection.
+	 * Name of the folder.  Will trim the name if it
+	 * has extra spaces on the left or right
 	 * 
 	 * @param name
 	 */
 	public void setName(String name)
 	{
-		this.name = name;
+		this.name = name.trim();
 	}
 	
 	/**
