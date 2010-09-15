@@ -229,6 +229,7 @@
        <property name="institutionalItemDAO" ref="institutionalItemDAO"/>
        <property name="mailSender" ref="mailSender"/>
        <property name="itemReviewMessage" ref="itemReviewMessage"/>
+       <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
        <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
    </bean>

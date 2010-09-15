@@ -239,10 +239,12 @@
     	<property name="text">
     		<value>
     			<![CDATA[
-    			Dear %FIRSTNAME% %LASTNAME%,
+    			Dear Reviewer,
     			
     			Publication - %ITEMNAME% needs to be reviewed to complete the submission process.
     			Please login to the system and review the publication.
+    			
+    			%BASE_WEB_APP_PATH%admin/viewReviewPendingItems.action
     			
     			Thanks!
     			]]>

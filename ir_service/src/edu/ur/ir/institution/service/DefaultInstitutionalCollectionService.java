@@ -17,6 +17,7 @@
 
 package edu.ur.ir.institution.service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -94,6 +95,10 @@ public class DefaultInstitutionalCollectionService implements
 	/** index processing type service */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
+	/** Base path for the web app  */
+	private String baseWebAppPath;
+
+
 	/**
 	 * Delete an institutional collection and all related information within it.
 	 * 
@@ -394,10 +399,20 @@ public class DefaultInstitutionalCollectionService implements
 		return collectionsNotMoved;
 	}
 	
+	/**
+	 * Get the repository service.
+	 * 
+	 * @return repository service
+	 */
 	public RepositoryService getRepositoryService() {
 		return repositoryService;
 	}
 
+	/**
+	 * Set the repository service to be used.
+	 * 
+	 * @param repositoryService - repository service
+	 */
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
 	}
@@ -439,10 +454,20 @@ public class DefaultInstitutionalCollectionService implements
 		this.institutionalItemDAO = institutionalItemDAO;
 	}
 
+	/**
+	 * Get the institutional collection security service.
+	 * 
+	 * @return
+	 */
 	public InstitutionalCollectionSecurityService getInstitutionalCollectionSecurityService() {
 		return institutionalCollectionSecurityService;
 	}
 
+	/**
+	 * Set the institutional colleciton security service.
+	 * 
+	 * @param institutionalCollectionSecurityService
+	 */
 	public void setInstitutionalCollectionSecurityService(
 			InstitutionalCollectionSecurityService institutionalCollectionSecurityService) {
 		this.institutionalCollectionSecurityService = institutionalCollectionSecurityService;
@@ -523,40 +548,71 @@ public class DefaultInstitutionalCollectionService implements
 	 */
 	public void sendEmailToReviewer(InstitutionalCollection institutionalCollection, String itemName) {
 		
+		log.debug("Sending reviewrs emails");
 		Set<Sid> sids = institutionalCollectionSecurityService.getSidsWithPermission(institutionalCollection, InstitutionalCollectionSecurityService.REVIEWER_PERMISSION);
+        List<String> toAddresses = new ArrayList<String>();
 		
-		for(Sid sid:sids) {
-			for(IrUser user : ((IrUserGroup)sid).getUsers()) {
-				SimpleMailMessage message = new SimpleMailMessage(itemReviewMessage);
-				message.setTo(user.getDefaultEmail().getEmail());
-				String text = message.getText();
-				text = StringUtils.replace(text, "%FIRSTNAME%", user.getFirstName());
-				text = StringUtils.replace(text, "%LASTNAME%", user.getLastName());
-				text = StringUtils.replace(text, "%ITEMNAME%", itemName);
-				message.setText(text);
+        log.debug("Sids size is " + sids.size());
+        if(sids.size() > 0 )
+        {
+		    for (Sid sid:sids) {
+			    for(IrUser user : ((IrUserGroup)sid).getUsers()) 
+			    {
+			        toAddresses.add((String)(user.getDefaultEmail().getEmail()));
+			    }
+		    }
+
+		    SimpleMailMessage message = new SimpleMailMessage(itemReviewMessage);
+		    message.setTo(toAddresses.toArray(new String[0]));
+				
+		    String text = message.getText();
 		
-				try {
-					mailSender.send(message);
-				} catch (Exception e) {
-					log.error(e.getMessage());
-					throw new IllegalStateException(e);
-				}
-			}
-		}
+		    text = StringUtils.replace(text, "%ITEMNAME%", itemName);
+		    text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
+		    message.setText(text);
+		
+		    try {
+			    mailSender.send(message);
+		    } catch (Exception e) {
+			    log.error(e.getMessage());
+			    throw new IllegalStateException(e);
+		    }
+        }
+		
 	}
 
+	/**
+	 * Get the item review message.  This is the message that will be sent to the reviewers
+	 * 
+	 * @return - item review message
+	 */
 	public SimpleMailMessage getItemReviewMessage() {
 		return itemReviewMessage;
 	}
 
+	/**
+	 * Set the item review message.  This is the message that will be sent to reviewers.
+	 * 
+	 * @param itemReviewMessage
+	 */
 	public void setItemReviewMessage(SimpleMailMessage itemReviewMessage) {
 		this.itemReviewMessage = itemReviewMessage;
 	}
 
+	/**
+	 * Used to send emails out of the system.
+	 * 
+	 * @return
+	 */
 	public MailSender getMailSender() {
 		return mailSender;
 	}
 
+	/**
+	 * Mail sender used to send emails out.
+	 * 
+	 * @param mailSender
+	 */
 	public void setMailSender(MailSender mailSender) {
 		this.mailSender = mailSender;
 	}
@@ -674,25 +730,68 @@ public class DefaultInstitutionalCollectionService implements
 		return institutionalItem;
 	}
 
+	/**
+	 * Service to deal with institutional item indexing.
+	 * 
+	 * @return
+	 */
 	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
 		return institutionalItemIndexProcessingRecordService;
 	}
 
+	/**
+	 * Service used to create records for institutional item indexing.
+	 * 
+	 * @param institutionalItemIndexProcessingRecordService
+	 */
 	public void setInstitutionalItemIndexProcessingRecordService(
 			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
 		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
 	}
 
+	/**
+	 * Service used for classification of index processing types.
+	 * 
+	 * @return index processing type service.
+	 */
 	public IndexProcessingTypeService getIndexProcessingTypeService() {
 		return indexProcessingTypeService;
 	}
 
+	/**
+	 * Set the index processing type service.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
+	/**
+	 * Get the institutional item service.
+	 * 
+	 * @return
+	 */
 	public InstitutionalItemService getInstitutionalItemService() {
 		return institutionalItemService;
+	}
+	
+	/**
+	 * Get the base web app path being used.
+	 * 
+	 * @return - base web app path
+	 */
+	public String getBaseWebAppPath() {
+		return baseWebAppPath;
+	}
+
+	/**
+	 * Set the base web app path.
+	 * 
+	 * @param baseWebAppPath
+	 */
+	public void setBaseWebAppPath(String baseWebAppPath) {
+		this.baseWebAppPath = baseWebAppPath;
 	}
 }
