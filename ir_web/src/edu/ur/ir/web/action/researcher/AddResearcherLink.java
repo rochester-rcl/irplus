@@ -197,7 +197,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 			}
 			existingLink.setName(linkName);
 			existingLink.setDescription(linkDescription);
-			existingLink.setLink(linkUrl);
+			existingLink.setUrl(linkUrl);
 			researcherFileSystemService.saveResearcherLink(existingLink);
 			added = true;
 		}
@@ -205,7 +205,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 		else if(other.getId().equals(linkId))
 		{
 			other.setDescription(linkDescription);
-			other.setLink(linkUrl);
+			other.setUrl(linkUrl);
 			researcherFileSystemService.saveResearcherLink(other);
 			added = true;
 		}

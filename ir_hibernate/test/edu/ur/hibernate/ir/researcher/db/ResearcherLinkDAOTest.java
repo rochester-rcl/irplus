@@ -115,7 +115,7 @@ public class ResearcherLinkDAOTest {
 		
 		ts = tm.getTransaction(td);
 		ResearcherLink other = researcherLinkDAO.getById(researcherLink.getId(), false);
-		assert other.getLink() != null : "Link should be found";
+		assert other.getUrl() != null : "Link should be found";
 		assert other.getResearcher() != null : "Researcher should not be null";
 		assert other.equals(researcherLink) : "The researcher link " + researcherLink + " should be found";
 		tm.commit(ts);

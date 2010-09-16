@@ -120,12 +120,12 @@ YAHOO.ur.researcher.link = {
  	    // Validate the entries in the form to require that both first and last name are entered
 	   YAHOO.ur.researcher.link.newLinkDialog.validate = function() {
 	        var data = this.getData();
-		    if (data.linkName == "" ) 
+		    if (urUtil.trim(data.linkName) == "" ) 
 		    {
 		        alert("A link name must be entered");
 			    return false;
 		    } 
-		    if (data.linkUrl == "" ) 
+		    if (urUtil.trim(data.linkUrl) == "" ) 
 		    {
 		        alert("A link URL must be entered");
 			    return false;
