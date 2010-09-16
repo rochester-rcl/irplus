@@ -384,12 +384,17 @@ YAHOO.ur.researcher.folder = {
 	 	// Validate the entries in the form to require that both first and last name are entered
 		YAHOO.ur.researcher.folder.newLinkDialog.validate = function() {
 		    var data = this.getData();
-			if (data.linkName == "" ) {
+			if (urUtil.trim(data.linkName) == "" ) {
 			    alert("A link name must be entered");
 				return false;
-			} else {
-				return true;
-			}
+			} 
+			if (urUtil.trim(data.linkUrl) == "" ) {
+			    alert("A url must be entered");
+				return false;
+			} 
+			
+			return true;
+			
 		};
 	
 		// Wire up the success and failure handlers
@@ -463,11 +468,6 @@ YAHOO.ur.researcher.folder = {
 			        var response = o.responseText;
 			        var contentArea = document.getElementById('newResearcherFolders');
 			        contentArea.innerHTML = o.responseText; 
-			    
-			        //show buttons that  make sense
-		            var buttonsDiv = document.getElementById("files_folders_buttons");
-		            buttonsDiv.style.visibility = 'visible';
-		        
 		            YAHOO.ur.researcher.folder.insertHiddenParentFolderId();
 		        }
 		    },

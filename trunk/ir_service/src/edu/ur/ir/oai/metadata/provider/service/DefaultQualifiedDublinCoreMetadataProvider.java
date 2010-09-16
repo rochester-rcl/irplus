@@ -62,7 +62,7 @@ public class DefaultQualifiedDublinCoreMetadataProvider implements OaiMetadataPr
 	private static final long serialVersionUID = -8227691687049064056L;
 
 	/** Prefix handled by this provider */
-	public static String METADATA_PREFIX = "oai_dc_terms";
+	public static String METADATA_PREFIX = "dcterms";
 	
 	public static String METADATA_NAMESPACE = "http://urresearch.rochester.edu/OAI/2.0/oai_dc_terms/";
 	

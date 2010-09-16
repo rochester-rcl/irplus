@@ -290,7 +290,7 @@ public class ResearcherFolderXmlTag extends SimpleTagSupport{
             
             // url to personal publication
 			Element url = doc.createElement("url");
-			data = doc.createTextNode(l.getUrl().toString());
+			data = doc.createTextNode(l.getUrl());
 			url.appendChild(data);
 			link.appendChild(url);
 	

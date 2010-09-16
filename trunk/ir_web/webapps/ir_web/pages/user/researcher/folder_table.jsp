@@ -187,7 +187,7 @@
 		                	</c:if>		  
 		                	
 		                	<c:if test="${fileSystemObject.fileSystemType.type == 'researcherLink'}">
-		                    	 <a href="${fileSystemObject.link}" target="_blank"><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
+		                    	 <a href="${fileSystemObject.url}" target="_blank"><ur:maxText numChars="50" text="${fileSystemObject.name}"></ur:maxText></a><c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
 		                	</c:if>	 
 		                		
 							<c:if test="${fileSystemObject.fileSystemType.type == 'researcherInstitutionalItem'}">

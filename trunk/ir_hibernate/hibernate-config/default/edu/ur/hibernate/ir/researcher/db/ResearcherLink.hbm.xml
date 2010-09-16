@@ -46,7 +46,7 @@
 		<property name="description" column="description" type="string"
 			not-null="false" access="field" />
 		
-        <property name="link" column="url" type="string"
+        <property name="url" column="url" type="string"
 			not-null="true" access="field" />
         
         <!--  The researcher folder -->

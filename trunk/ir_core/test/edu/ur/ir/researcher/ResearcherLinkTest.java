@@ -43,7 +43,7 @@ public class ResearcherLinkTest {
 		Researcher researcher = new Researcher(user); 
 
 		ResearcherLink researcherLink = new ResearcherLink(researcher, "www.google.com");
-		assert researcherLink.getLink().equals("www.google.com") : "Should be equal to - www.google.com";
+		assert researcherLink.getUrl().equals("www.google.com") : "Should be equal to - www.google.com";
 		
 	    assert researcherLink.getResearcher().equals(researcher): "Researchers should be equal";
 	}

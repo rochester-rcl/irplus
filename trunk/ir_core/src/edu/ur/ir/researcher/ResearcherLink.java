@@ -16,12 +16,10 @@
 
 package edu.ur.ir.researcher;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
-import edu.ur.net.UrlAware;
 import edu.ur.persistent.CommonPersistent;
 
 /**
@@ -32,13 +30,13 @@ import edu.ur.persistent.CommonPersistent;
  * @author Sharmila Ranganathan
  *
  */
-public class ResearcherLink extends CommonPersistent implements UrlAware, FileSystem{
+public class ResearcherLink extends CommonPersistent implements FileSystem{
 	
 	/** Eclipse generated id */
 	private static final long serialVersionUID = 3144484183634385274L;
 
 	/**  Link  */
-	private String link;
+	private String url;
 	
 	/**  researcher folder the link belongs to. */
 	private ResearcherFolder parentFolder;
@@ -64,7 +62,7 @@ public class ResearcherLink extends CommonPersistent implements UrlAware, FileSy
 	ResearcherLink(Researcher researcher, String link)
 	{
 		setResearcher(researcher);
-		setLink(link);
+		setUrl(link);
 	}
 	
 	/**
@@ -81,7 +79,7 @@ public class ResearcherLink extends CommonPersistent implements UrlAware, FileSy
 		}
 		
 		setResearcher(researcher);
-		setLink(link);
+		setUrl(link);
 		setParentFolder(parentFolder);
 	}
 
@@ -125,7 +123,7 @@ public class ResearcherLink extends CommonPersistent implements UrlAware, FileSy
 		sb.append(" name = ");
 		sb.append(name);
 		sb.append(" link = ");
-		sb.append(link);
+		sb.append(url);
 		sb.append("]");
 		return sb.toString();
 	}
@@ -205,21 +203,12 @@ public class ResearcherLink extends CommonPersistent implements UrlAware, FileSy
 		return fileSystemType;
 	}
 	
-	public String getLink() {
-		return link;
+	public String getUrl() {
+		return url;
 	}
 	
-	/**
-	 * The url for this link.
-	 * 
-	 * @see edu.ur.net.UrlAware#getUrl()
-	 */
-	public URL getUrl() throws MalformedURLException {
-		return new URL(link);
-	}
-
-	public void setLink(String link) {
-		this.link = link;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public ResearcherFolder getParentFolder() {
