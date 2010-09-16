@@ -41,6 +41,13 @@
 				    </c:url>
 				    <a href="${itemFileDownload}">
 	                 ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
+		            <br/>
+		            <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
+		                Download Status:
+		                <c:if test="${object.public}"><span class="greenMessage">Publicly Viewable</span></c:if>
+		                <c:if test="${!object.public}"><span class="errorMessage">Restricted</span></c:if>
+		            </c:if> 
+		       
 		        </c:if>
 		        <c:if test="${!object.public && institutionalItem.owner != user && !ir:hasPermission('ITEM_FILE_READ',object) }">
 		            <c:url var="restrictedAccess" value="/user/institutionalPublicationPublicView.action">

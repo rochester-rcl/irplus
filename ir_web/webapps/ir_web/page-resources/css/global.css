@@ -121,6 +121,13 @@ strong
 	color: red;
 }
 
+/* main class for error messages */
+.greenMessage
+{
+	font-weight: bold;
+	color: green;
+}
+
 .center
 {
 	text-align: center;

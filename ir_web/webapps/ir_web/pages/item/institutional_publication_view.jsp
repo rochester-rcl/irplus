@@ -79,7 +79,12 @@
 				<!-- Begin - Display the Item preview -->
 				
 				<h3>${institutionalItemVersion.item.fullName}</h3>
-				 
+				<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
+		                Item Status:
+		                <c:if test="${institutionalItemVersion.item.publiclyViewable}"><span class="greenMessage">Publicly Viewable</span></c:if>
+		                <c:if test="${!institutionalItemVersion.item.publiclyViewable}"><span class="errorMessage">Restricted</span></c:if>
+		        </c:if> 
+		        
 				<c:if test="${institutionalItemVersion.handleInfo != null}">
 				    <h3 class="errorMessage">URL to cite or link to: <a href="${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}">${institutionalItemVersion.handleInfo.nameAuthority.authorityBaseUrl}${institutionalItemVersion.handleInfo.nameAuthority.namingAuthority}/${institutionalItemVersion.handleInfo.localName}</a></h3>
 				</c:if>
