@@ -25,6 +25,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -82,9 +83,19 @@ public class ReinstateInstitutionalPublication extends ActionSupport implements 
 				Set<InstitutionalItemVersion> versions = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions();
 				for (InstitutionalItemVersion version : versions) {
 					version.reInstate(user, reinstateReason);
+					Set<ItemFile> files = version.getItem().getItemFiles();
+					for( ItemFile f : files )
+				    {
+				    	f.setPublic(true);
+				    }
 				}
 			} else {
 				institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(versionNumber).reInstate(user, reinstateReason);
+				Set<ItemFile> files = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(versionNumber).getItem().getItemFiles();
+			    for( ItemFile f : files )
+			    {
+			    	f.setPublic(true);
+			    }
 			}
 			
 			log.debug("Reinstate = " + institutionalItem.getVersionedInstitutionalItem().getCurrentVersion());

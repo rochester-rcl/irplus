@@ -25,6 +25,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -90,9 +91,19 @@ public class WithdrawInstitutionalPublication extends ActionSupport implements U
 				Set<InstitutionalItemVersion> versions = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions();
 				for (InstitutionalItemVersion version : versions) {
 					version.withdraw(user, withdrawReason, showMetadata);
+					Set<ItemFile> files = version.getItem().getItemFiles();
+					for( ItemFile f : files )
+				    {
+				    	f.setPublic(false);
+				    }
 				}
 			} else {
 				institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(versionNumber).withdraw(user, withdrawReason, showMetadata);
+			    Set<ItemFile> files = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(versionNumber).getItem().getItemFiles();
+			    for( ItemFile f : files )
+			    {
+			    	f.setPublic(false);
+			    }
 			}
 			
 			institutionalItemService.saveInstitutionalItem(institutionalItem);
