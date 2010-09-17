@@ -81,8 +81,10 @@
 				<h3>${institutionalItemVersion.item.fullName}</h3>
 				<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
 		                Item Status:
-		                <c:if test="${institutionalItemVersion.item.publiclyViewable}"><span class="greenMessage">Publicly Viewable</span></c:if>
-		                <c:if test="${!institutionalItemVersion.item.publiclyViewable}"><span class="errorMessage">Restricted</span></c:if>
+		                <c:if test="${institutionalItemVersion.item.publiclyViewable && !institutionalItemVersion.item.embargoed}"><span class="greenMessage">Publicly Viewable</span></c:if>
+		                <c:if test="${!institutionalItemVersion.item.publiclyViewable && !institutionalItemVersion.item.embargoed}"><span class="errorMessage">Restricted</span></c:if>
+		                <c:if test="${institutionalItemVersion.item.publiclyViewable && institutionalItemVersion.item.embargoed}"><span class="errorMessage">Embargoed </span> / <span class="greenMessage">Publicly Viewable Following Embargo</span></c:if>
+		                <c:if test="${!institutionalItemVersion.item.publiclyViewable && institutionalItemVersion.item.embargoed}"><span class="errorMessage">Embargoed / Restricted Following Embargo</span></c:if>
 		        </c:if> 
 		        
 				<c:if test="${institutionalItemVersion.handleInfo != null}">

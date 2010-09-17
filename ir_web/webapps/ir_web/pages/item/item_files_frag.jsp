@@ -44,8 +44,10 @@
 		            <br/>
 		            <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
 		                Download Status:
-		                <c:if test="${object.public}"><span class="greenMessage">Publicly Viewable</span></c:if>
-		                <c:if test="${!object.public}"><span class="errorMessage">Restricted</span></c:if>
+		                <c:if test="${object.public && !object.item.embargoed}"><span class="greenMessage">Publicly Viewable</span></c:if>
+		                <c:if test="${!object.public && !object.item.embargoed}"><span class="errorMessage">Restricted</span></c:if>
+		                <c:if test="${!object.public && object.item.embargoed}"><span class="errorMessage">Embargoed / Restricted After Embargo</span></c:if>
+		                <c:if test="${object.public && object.item.embargoed}"><span class="errorMessage">Embargoed</span> / <span class="greenMessage">Publicly Viewable After Embargo</span></c:if>
 		            </c:if> 
 		       
 		        </c:if>
