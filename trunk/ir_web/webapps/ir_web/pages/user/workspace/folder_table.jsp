@@ -73,6 +73,7 @@
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
 	                       id="addFilesButton"><span class="pageCopyBtnImg">&nbsp;</span>Add Files</button>
+	          </c:if>
 	               <button class="ur_button" 
 	                       onclick="YAHOO.ur.folder.moveFolderData();"
 	                       onmouseover="this.className='ur_buttonover';"
@@ -83,6 +84,8 @@
 	                       onmouseover="this.className='ur_buttonover';"
  		                   onmouseout="this.className='ur_button';"
 	                       id="deleteButton"><span class="deleteBtnImg">&nbsp;</span>Delete</button>
+	                       
+	          <c:if test='${ir:userHasRole("ROLE_AUTHOR", "OR")}'>
 	               <button class="ur_button" 
 	                       onclick="YAHOO.ur.folder.inviteUser();"
 	                       onmouseover="this.className='ur_buttonover';"
