@@ -71,7 +71,10 @@
                
                <p>A university-based, long-term, digital repository for the management,
                   dissemination and stewardship of digital materials. </p>
-                  
+               
+               <h3>IR+ Project Site</h3>
+               <p>Development and news can be found here: <a href="http://code.google.com/p/irplus/">IR+ Project</a></p>
+               
                <h3>Icons</h3>
                <p>A majority of the icons are from <a href="http://www.famfamfam.com/">http://www.famfamfam.com/</a> - a great site for icons</p>
             </div>
