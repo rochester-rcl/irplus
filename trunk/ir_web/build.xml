@@ -318,10 +318,13 @@
 		    <fileset dir="${custom.build.dir}/ir_web/spring-config/local"/>
 		</copy>
 		<copy todir="${production.staging.dir}/lib/" overwrite="true" 
-			file="${custom.build.dir}/ir_service/ir_service_custom/ir_service_custom-1.0.jar"/>
+			file="${custom.build.dir}/ir_service/ir_service_custom/ir_service_custom-2.0.jar"/>
 		
 		<copy todir="${production.staging.dir}/web-inf/" overwrite="true" 
-					file="${custom.build.dir}/properties/production/ir_plus.properties"/>
+		    file="${custom.build.dir}/properties/production/ir_plus.properties"/>
+		
+		<copy todir="${production.staging.dir}/classes" overwrite="true"
+			file="${custom.build.dir}/log4j-config/log4j.xml"/>
 		
 	</target>
 	
