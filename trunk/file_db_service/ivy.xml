@@ -28,6 +28,6 @@
 <ivy-module version="2.0">
     <info organisation="file_db_service" module="file_db_service"/>
     <dependencies>
-        <dependency org="file_db_hibernate" name="file_db_hibernate" rev="1.0" changing="true" />
+        <dependency org="file_db_hibernate" name="file_db_hibernate" rev="2.0" changing="true" />
     </dependencies>
 </ivy-module>

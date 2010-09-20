@@ -26,7 +26,7 @@
     <info organisation="metadata_hibernate" module="metadata_hibernate"/>
     <dependencies>
 
-        <dependency org="metadata_dao" name="metadata_dao" rev="1.0" />
+        <dependency org="metadata_dao" name="metadata_dao" rev="2.0" />
         
         <!-- commons dbcp files -->
         <dependency org="commons-dbcp" name="commons-dbcp" rev="1.2.2" transitive="false">
