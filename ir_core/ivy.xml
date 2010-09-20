@@ -28,10 +28,10 @@
     
        
         <!--  file database dependency -->
-        <dependency org="file_db" name="file_db" rev="1.0" changing="true"/>
+        <dependency org="file_db" name="file_db" rev="2.0" changing="true"/>
       
         <!--  file database dependency -->
-        <dependency org="metadata" name="metadata" rev="1.0" changing="true"/>
+        <dependency org="metadata" name="metadata" rev="2.0" changing="true"/>
 
 
         <!-- javax mail libaries -->

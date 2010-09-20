@@ -28,7 +28,7 @@
     <info organisation="ir_handle" module="ir_service"/>
     <dependencies>
 
-        <dependency org="ir_service" name="ir_service" rev="1.0" />
+        <dependency org="ir_service" name="ir_service" rev="2.0" />
         
     </dependencies>
 </ivy-module>
