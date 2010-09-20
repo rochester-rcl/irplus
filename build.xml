@@ -22,7 +22,7 @@
 	<property name="target" value="publish-local"/>
 	
 	<!-- current version of the project - also see base.xml to see version for all sub projects -->
-	<property name="version" value="1.0"/>
+	<property name="version" value="2.0"/>
 	
 	<!-- full distribution project name for downloading as a zip file -->
 	<property name="project.name" value="ir_plus"/>
