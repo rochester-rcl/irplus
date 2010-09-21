@@ -164,7 +164,10 @@ public class Home extends ActionSupport implements Preparable, UserIdAware{
 		numberOfUsers = userService.getUserCount();
 		
 		// get and sort the institutional collections
-		institutionalCollections.addAll(repository.getInstitutionalCollections());
+		if( repository != null )
+		{
+		    institutionalCollections.addAll(repository.getInstitutionalCollections());
+		}
 		Collections.sort(institutionalCollections, nameComparator);
 		
 		// get the first repository image
