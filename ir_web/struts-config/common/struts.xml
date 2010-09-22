@@ -97,11 +97,11 @@
         
         <!-- Help action -->
         <action name="help">
-            <result type="redirect">/pages/user-help.jsp</result>
+            <result type="redirect">/pages/help/user-help.pdf</result>
         </action>
         
         <action name="admin-help">
-            <result type="redirect">/pages/admin-help.jsp</result>
+            <result type="redirect">/pages/help/admin-help.pdf</result>
         </action>
         
         <!-- Help action -->
