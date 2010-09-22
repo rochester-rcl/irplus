@@ -71,7 +71,7 @@
 		    <fileset dir="${log4j.production.appender}"/>
 	        <fileset dir="${spring.config.common.config}"/>
 	        <fileset dir="${spring.project.config}"/>
-	        <fileset dir="${properties.config.local}"/>
+	        <fileset dir="${properties.config.production}"/>
 		</copy>
 	</target>
 
