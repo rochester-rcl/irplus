@@ -133,6 +133,7 @@
 	                                         action="javascript:YAHOO.ur.usergroup.edit.userSearch(0, 1, 1);">
 	                                         Search: <input type="text" size="50" id="user_query" name="query" value=""/>
 	                                         <input type="hidden" name="id" value="${userGroup.id}"/>
+	                                         <input type="submit" value="search"/>
 	                                     </form>
 	                                 </td>
 	                             </tr>
