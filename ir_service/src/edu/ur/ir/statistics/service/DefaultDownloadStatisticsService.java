@@ -185,10 +185,19 @@ public class DefaultDownloadStatisticsService implements DownloadStatisticsServi
 	 */
 	public void processFileDownload(String ipAddress, IrFile irFile)
 	{
+		
 		long ignoreKeepCount = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress, true);		
 		long ignoreDoNotKeepCount = ignoreIpAddressDAO.getIgnoreCountForIp(ipAddress, false);	
 		
 		boolean isIgnoreAddress = (ignoreKeepCount > 0) || (ignoreDoNotKeepCount > 0) ;
+		
+		if(log.isDebugEnabled())
+		{
+			log.debug("ipAddress = " + ipAddress);
+		    log.debug("ignoreKeepCount = " + ignoreKeepCount);	
+		    log.debug("ignoreDoNotKeepCount = " + ignoreDoNotKeepCount);	
+		    log.debug("isIgnoreAddress = " + isIgnoreAddress);
+		}
 		
 		if( isIgnoreAddress )
 		{
