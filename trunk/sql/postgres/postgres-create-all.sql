@@ -2797,7 +2797,7 @@ ALTER TABLE ir_user.invite_permissions OWNER TO ir_plus;
 -- versioned file permissions
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'), 
-  ir_security.class_type.class_type_id, 'VIEW','The user can download the file but not upload new versions',0
+  ir_security.class_type.class_type_id, 'VIEW','The user can only download the file',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.file.VersionedFile';
 
