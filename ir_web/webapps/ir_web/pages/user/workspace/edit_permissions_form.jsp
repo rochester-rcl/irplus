@@ -33,7 +33,10 @@
 		<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		key="emptyPermissions"/></p>         
   
+  <table>
   <c:forEach var="classTypePermission" items="${classTypePermissions}">
+      <tr>
+          <td>
       <input type="checkbox" name="selectedPermissions" id="${classTypePermission.name}" value="${classTypePermission.id}" 
           onclick="YAHOO.ur.invite.autoCheckPermission(this, selectedPermissions);"
       
@@ -45,7 +48,10 @@
 		
 		</c:forEach>      
        />
+       </td>
+       <td>
       ${classTypePermission.description}
-	  <div class="clear">&nbsp;</div>
-
+      </td>
+   </tr>
   </c:forEach>
+  </table>
