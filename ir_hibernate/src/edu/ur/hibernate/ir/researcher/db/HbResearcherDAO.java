@@ -72,7 +72,8 @@ public class HbResearcherDAO implements ResearcherDAO {
     }
 
 	/**
-	 * Get a count of the researchers.
+	 * Get a count of the researchers.  This includes researchers
+	 * who have set their pages to private or public
 	 * 
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
@@ -110,6 +111,8 @@ public class HbResearcherDAO implements ResearcherDAO {
 	
 
 	/**
+	 * This will return all researchers including those who have set their researcher pages to private.
+	 * 
 	 * Get researchers starting from the specified row and end at specified row.
      * The rows will be sorted by the specified parameter in given order.
 	 *  
@@ -141,6 +144,8 @@ public class HbResearcherDAO implements ResearcherDAO {
 	}
 	
 	/**
+	 * This returns only researchers who have set their page to public.
+	 * 
 	 * Get researchers starting from the specified row and end at specified row.
      * The rows will be sorted by the specified parameter in given order.
 	 *  
