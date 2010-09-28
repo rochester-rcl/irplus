@@ -252,7 +252,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	 * Initialize the invite user page with permissions
 	 */
 	public String execute() {
-		classTypePermissions = securityService.getClassTypePermissions(VersionedFile.class.getName());
+		classTypePermissions = this.orderPermissionsList(securityService.getClassTypePermissions(VersionedFile.class.getName()));
 	    return SUCCESS;
 	}
 	
@@ -532,8 +532,9 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		collaboratorPermissions = securityService.getPermissions(fileCollaborator.getVersionedFile(), 
 				  fileCollaborator.getCollaborator());
 		
-		classTypePermissions = securityService.getClassTypePermissions(
-				  CgLibHelper.cleanClassName(fileCollaborator.getVersionedFile().getClass().getName()));
+		
+		classTypePermissions = this.orderPermissionsList(securityService.getClassTypePermissions(
+				  CgLibHelper.cleanClassName(fileCollaborator.getVersionedFile().getClass().getName())));
 			
 		  return SUCCESS;
 		
@@ -589,6 +590,51 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	
 		return "added";
 		
+	}
+	
+	/**
+	 * Order the permissions in a perdictable manner.
+	 * 
+	 * @param permissionsToOrder
+	 * @return
+	 */
+	private List<IrClassTypePermission> orderPermissionsList(List<IrClassTypePermission> permissionsToOrder)
+	{
+		List<IrClassTypePermission> orderedPermissions = new LinkedList<IrClassTypePermission>();
+		IrClassTypePermission view = null;
+		IrClassTypePermission edit = null;
+		IrClassTypePermission share = null;
+		
+		for(IrClassTypePermission permission : permissionsToOrder)
+		{
+			if( permission.getName().equals("VIEW"))
+			{
+				view = permission;
+			}
+			else if( permission.getName().equals("EDIT"))
+			{
+				edit = permission;
+			}
+			else if( permission.getName().equals("SHARE"))
+			{
+				 share = permission;
+			}
+		}
+		
+		if( view != null )
+		{
+			orderedPermissions.add(view);
+		}
+		if( edit != null )
+		{
+			orderedPermissions.add(edit);
+		}
+		if( share != null )
+		{
+			orderedPermissions.add(share);
+		}
+		
+		return orderedPermissions;
 	}
 	
 	/**
