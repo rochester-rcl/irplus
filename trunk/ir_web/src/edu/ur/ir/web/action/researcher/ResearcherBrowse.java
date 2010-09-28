@@ -84,8 +84,9 @@ public class ResearcherBrowse extends Pager {
 
 		OrderType orderType= OrderType.getOrderType(sortType);
 		log.debug("order type = " + orderType);
-		researchers = researcherService.getResearchersByLastFirstName(rowStart, numberOfResultsToShow, orderType);
-		totalHits = researcherService.getAllResearchers().size();
+		
+		researchers = researcherService.getPublicResearchersByLastFirstName(rowStart, numberOfResultsToShow, orderType);
+		totalHits = researcherService.getPublicResearcherCount().intValue();
 		
 		if(rowEnd > totalHits)
 		{
