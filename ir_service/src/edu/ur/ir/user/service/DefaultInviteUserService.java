@@ -246,6 +246,15 @@ public class DefaultInviteUserService implements InviteUserService {
 					personalFile.getDescription());
 			personalFileDeleteRecord.setDeleteReason("UN-SHAREING FILE");
 			personalFileDeleteRecordDAO.makePersistent(personalFileDeleteRecord);
+			
+			if(personalFile.getPersonalFolder() != null)
+			{
+				personalFile.getPersonalFolder().removePersonalFile(personalFile);
+			}
+			else
+			{
+			    personalFile.getOwner().removeRootFile(personalFile);
+			}
 			personalFileDAO.makeTransient(personalFile);
 		}
 		
