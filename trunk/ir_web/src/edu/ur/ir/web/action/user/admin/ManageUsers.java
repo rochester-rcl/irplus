@@ -468,6 +468,9 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
  			try 
  			{
 			    userService.deleteUser(user, admin);
+			    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+			    userIndexService.deleteFromIndex(user.getId(), 
+						new File( repository.getUserIndexFolder()) );
 			} 
  			catch (UserHasPublishedDeleteException e) 
  			{
@@ -483,10 +486,9 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 				log.error("user has published", e);
 			}
  			
- 			Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+ 			
  		
-			userIndexService.deleteFromIndex(user.getId(), 
-							new File( repository.getUserIndexFolder()) );
+			
 		}
 
 		
