@@ -331,20 +331,12 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	/**
 	 * Remove a file from the personal folder
 	 * 
-	 * @param item
-	 * @return true if the item is added.
+	 * @param personalFile to remove from the folder
+	 * @return true if the personal file is removed
 	 */
 	public boolean removePersonalFile(PersonalFile pf)
 	{
-		boolean removed = false;
-		if( files.contains(pf))
-		{
-			PersonalFile personalFile = getFile(pf.getName());
-			removed = files.remove(pf);
-			pf.setPersonalFolder(null);
-			personalFile.setPersonalFolder(null);
-		}
-		return removed;
+		return files.remove(pf);
 	}
 	
 	/**
