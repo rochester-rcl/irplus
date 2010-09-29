@@ -20,9 +20,8 @@
 <!--  footer  -->
 <div id="ft">
  
-    <ul id="bottomNav" class="basicNav">
-        <li><a href="<c:url value="/help.action"/>">User Help</a>&nbsp;|&nbsp;</li>
-        <li><a href="<c:url value="/admin-help.action"/>">Administration Help</a>&nbsp;|&nbsp;</li>
+   <ul id="bottomNav" class="basicNav">
+        <li><a href="<c:url value="/help.action"/>">Help</a>&nbsp;|&nbsp;</li>
         <li><a href="<c:url value="/contactUs.action"/>">Contact Us</a>&nbsp;|&nbsp;</li>
         <li><a href="<c:url value="/about.action"/>">About</a>&nbsp;|&nbsp;</li>
         <li><a href="<c:url value="/privacyPolicy.action"/>">Privacy Policy</a></li>
