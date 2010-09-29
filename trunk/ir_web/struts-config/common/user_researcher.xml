@@ -84,7 +84,7 @@
         	method="setResearcherPagePermission">
         	<interceptor-ref name="editStack"/>
         	<result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="no-op"/>
+           <result name="success">/pages/user/researcher/researcher_page_status.jsp</result>
         </action>
         
         <!--  ************************************ -->
