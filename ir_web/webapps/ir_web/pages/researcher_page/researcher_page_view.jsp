@@ -91,7 +91,7 @@
  				
 				 <input type="hidden" id="researcher_id" value="${researcher.id}"/>
 				  <c:if test="${researcher != null && (!researcher.public)}">
-	                	<h3 class="errorMessage">The researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName} is private.</h3>
+	                	<h2 class="errorMessage">The researcher page of ${researcher.user.firstName}&nbsp;${researcher.user.lastName} is OFF.</h2>
                   </c:if>
 
                 <c:if test="${researcher == null}">

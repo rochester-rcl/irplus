@@ -79,28 +79,12 @@
             <!--  this is the body of the page -->
             <div id="bd">
             
-            <h3>${researcher.user.firstName}&nbsp;${researcher.user.lastName}&nbsp;Researcher page (<a href="viewResearcherPage.action?researcherId=${researcher.id}">Preview Page</a>) &nbsp;: 
-		        	<input type="radio" name="isPublic" onclick="javascript:YAHOO.ur.edit.researcher.changePublicValue(false);"
-	            		<c:if test="${!researcher.public}">
-	            			checked
-	            		</c:if>
-	            	> Hidden </input> 
-	            	
-	            	<input type="radio" name="isPublic" onclick="javascript:YAHOO.ur.edit.researcher.changePublicValue(true);"
-	            		<c:if test="${researcher.public}">
-	            			checked
-	            		</c:if>
-	            	> Public </input>
-	        </h3>
+            <div id="researcher_page_status">
+                <c:import url="researcher_page_status.jsp"/>
+	        </div>
     
             <!--  set up tabs for the researcher -->
 	        <div id="researcher-properties-tabs" class="yui-navset">
-		        <div id="publi" align="left">
-		        	
-	            	
-	            </div>
-
-	            
 	             <ul class="yui-nav">
                      <li class="selected"><a href="#tab1"><em>Personal Information</em></a></li>
                      <li ><a href="#tab2"><em>Research</em></a></li>
@@ -458,14 +442,32 @@
        </div>
        <!--  end the new folder dialog -->
  
-       <!--  move folder dialog -->
-      <div id="deleteFileFolderConfirmDialog" class="hidden">
+       <!--  delete folder dialog -->
+       <div id="deleteFileFolderConfirmDialog" class="hidden">
           <div class="hd">Remove from Researcher Page?</div>
           <div class="bd">
               <p>Do you want to remove the selected items from your researcher page?</p>
           </div>
-      </div>
-      <!--  end move folder dialog -->
+       </div>
+       <!--  end delete folder dialog -->
+       
+       <!--  public page confirm dialog -->
+       <div id="confirmPublicDialog" class="hidden">
+          <div class="hd">Turn Researcher Page ON</div>
+          <div class="bd">
+              <p>This will make your page available to the public and search engines</p>
+          </div>
+       </div>
+       <!--  end public page confirm dialog -->
+       
+        <!--  private page confirm dialog -->
+       <div id="confirmPrivateDialog" class="hidden">
+          <div class="hd">Turn Researcher Page OFF</div>
+          <div class="bd">
+              <p>This will make your page hidden from the public</p>
+          </div>
+       </div>
+       <!--  end private page confirm dialog -->
 
         <div id="newLinkDialog" class="hidden">
             <div class="hd">Link Information</div>

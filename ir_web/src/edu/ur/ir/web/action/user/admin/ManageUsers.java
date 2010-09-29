@@ -300,13 +300,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		userIndexService.addToIndex(irUser, 
 							new File( repository.getUserIndexFolder()) );
 		
-		if (irUser.getResearcher() != null) {
-			
-			researcherIndexService.addToIndex(irUser.getResearcher(), 
-					new File(repository.getResearcherIndexFolder()) );
-			researcherIndexService.optimize(new File(repository.getResearcherIndexFolder()));
-		}
-				    
+		
 		if (emailPassword) {
 		    userService.sendAccountCreationEmailToUser(irUser, password);
 		}
@@ -411,8 +405,11 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		
 		if (irUser.getResearcher() != null) {
 			
-			researcherIndexService.updateIndex(irUser.getResearcher(), 
-					new File(repository.getResearcherIndexFolder()) );
+			if( irUser.getResearcher().isPublic() )
+			{
+			    researcherIndexService.updateIndex(irUser.getResearcher(), 
+					    new File(repository.getResearcherIndexFolder()) );
+			}
 		}
 
 		added = true;
