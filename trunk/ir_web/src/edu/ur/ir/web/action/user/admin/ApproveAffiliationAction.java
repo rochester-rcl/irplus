@@ -135,19 +135,6 @@ public class ApproveAffiliationAction extends Pager implements UserIdAware {
 
 			user.setAffiliationApproved(true);
 			userService.makeUserPersistent(user);
-			
-			// Add researcher to index
-			if (researcher != null) 
-			{
-				Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
-						false);
-				
-				researcherIndexService.addToIndex(researcher, 
-						new File(repository.getResearcherIndexFolder()) );
-				
-				researcherIndexService.optimize(new File(repository.getResearcherIndexFolder()));
-			}
-
 
 			userService.sendAffiliationConfirmationEmail(user, affiliation);
 		}

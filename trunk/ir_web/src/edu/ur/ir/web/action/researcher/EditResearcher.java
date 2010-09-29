@@ -239,8 +239,10 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 	 * Sets the researcher page public / hidden
 	 * 
 	 * @return
+	 * @throws NoIndexFoundException 
 	 */
-	public String setResearcherPagePermission() {
+	public String setResearcherPagePermission() throws NoIndexFoundException {
+		
 		
 		log.debug("isPublic::"+isPublic);
 		if (userId != null) {
@@ -257,10 +259,26 @@ public class EditResearcher extends ActionSupport implements UserIdAware, Prepar
 		{
 			return "accessDenied";
 		}
-		researcher.setPublic(isPublic);
 		
+		researcher.setPublic(isPublic);
 		researcherService.saveResearcher(researcher);
 		
+		// index the researcher information 
+		Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID,
+				false);
+
+		if( researcher.isPublic() )
+		{
+		    researcherIndexService.updateIndex(researcher, 
+				        new File(repository.getResearcherIndexFolder()) );
+		    researcherIndexService.optimize( new File(repository.getResearcherIndexFolder()));
+		}
+	  	else
+		{
+			researcherIndexService.deleteFromIndex(researcher.getId(), 
+				    new File(repository.getResearcherIndexFolder()) );
+			researcherIndexService.optimize( new File(repository.getResearcherIndexFolder()));
+		}
 		return SUCCESS;
 		
 	}

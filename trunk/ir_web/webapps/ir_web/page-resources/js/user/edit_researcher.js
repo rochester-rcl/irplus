@@ -326,6 +326,8 @@ YAHOO.ur.edit.researcher =
 		    YAHOO.ur.edit.researcher.newDepartmentDialog, true);
 	},
 	
+
+	
 	/**
 	 * Creates a YUI new researcher modal dialog for when a user wants to  
 	 * upload a picture.
@@ -660,20 +662,154 @@ YAHOO.ur.edit.researcher =
 		YAHOO.ur.edit.researcher.errorDialog.render();
 	},
 	
-	/*
-	 *  Sets the researcher page public/hidden
+	/**
+	 * Creates a YUI  modal dialog for when a user wants to change
+	 * their page status to public
+	 *
 	 */
-	changePublicValue : function(publicValue) {
+	createConfirmPublicDialog : function() 
+	{
+		// Define various event handlers for Dialog
+		var handleSubmit = function() 
+		{
+			this.submit();
+		};
+			
+		// handle a cancel of the adding department dialog
+		var handleCancel = function() 
+		{
+			 var off = document.getElementById('researcher_page_off');
+			 off.checked = true;
+			 YAHOO.ur.edit.researcher.confirmPublicDialog.hide();
+		};
+		
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		
+	        	var divToUpdate = document.getElementById('researcher_page_status');
+	            divToUpdate.innerHTML = o.responseText; 
+		    }
+	        YAHOO.ur.edit.researcher.confirmPublicDialog.hide();
+		};
+		
+		// handle form sbumission failure
+		var handleFailure = function(o) {
+		    alert('change to public researcher page status failed ' + o.status);
+		};
 	
-		var setResearcherPagePermissionAction = 
-	       basePath + 'user/setResearcherPagePermission.action';
+		// Instantiate the Dialog
+		// make it modal - 
+		// it should not start out as visible - it should not be shown until 
+		// new department button is clicked.
+		YAHOO.ur.edit.researcher.confirmPublicDialog = new YAHOO.widget.Dialog('confirmPublicDialog', 
+	        { width : "500px",
+			  visible : false, 
+			  modal : true,
+			  buttons : [ { text:'Ok', handler:handleSubmit, isDefault:true },
+						  { text:'Cancel', handler:handleCancel } ]
+			} );
 		
-		/*
-		 *  Set the researcher page public/hidden
-		 */
-	    var transaction = YAHOO.util.Connect.asyncRequest('POST', 
-	        setResearcherPagePermissionAction + '?public='+ publicValue + '&researcherId=' + researcherId, null);
+		// show and center the department dialog
+	    YAHOO.ur.edit.researcher.confirmPublicDialog.showDialog = function()
+	    {
+	        YAHOO.ur.edit.researcher.confirmPublicDialog.show();
+	        YAHOO.ur.edit.researcher.confirmPublicDialog.center();
+	    }
+	    
+	    // submit to make public
+	    YAHOO.ur.edit.researcher.confirmPublicDialog.submit = function()
+	    {
+	    	var setResearcherPagePermissionAction = 
+			       basePath + 'user/setResearcherPagePermission.action';
+				
+	    	var cObj = YAHOO.util.Connect.asyncRequest('post',
+	    			setResearcherPagePermissionAction, callback, 'public=true' );
+	    }	    
+	
+		// Wire up the success and failure handlers
+		var callback = { success: handleSuccess, failure: handleFailure };
+				
+		// Render the Dialog
+		YAHOO.ur.edit.researcher.confirmPublicDialog.render();
+	 
+	},
+	
+	/**
+	 * Creates a YUI  modal dialog for when a user wants to change
+	 * their page status to public
+	 *
+	 */
+	createConfirmPrivateDialog : function() 
+	{
+		// Define various event handlers for Dialog
+		var handleSubmit = function() 
+		{
+			this.submit();
+		};
+			
+		// handle a cancel of the adding department dialog
+		var handleCancel = function() 
+		{
+			 var on = document.getElementById('researcher_page_on');
+			 on.checked = true;
+			 YAHOO.ur.edit.researcher.confirmPrivateDialog.hide();
+		};
 		
+		var handleSuccess = function(o) 
+		{
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		
+	        	var divToUpdate = document.getElementById('researcher_page_status');
+	            divToUpdate.innerHTML = o.responseText; 
+		    }
+	        YAHOO.ur.edit.researcher.confirmPrivateDialog.hide();
+		};
+		
+		// handle form sbumission failure
+		var handleFailure = function(o) {
+		    alert('change to private researcher page status failed ' + o.status);
+		};
+	
+		// Instantiate the Dialog
+		// make it modal - 
+		// it should not start out as visible - it should not be shown until 
+		// new department button is clicked.
+		YAHOO.ur.edit.researcher.confirmPrivateDialog = new YAHOO.widget.Dialog('confirmPrivateDialog', 
+	        { width : "500px",
+			  visible : false, 
+			  modal : true,
+			  buttons : [ { text:'Ok', handler:handleSubmit, isDefault:true },
+						  { text:'Cancel', handler:handleCancel } ]
+			} );
+		
+		// show and center the dialog
+	    YAHOO.ur.edit.researcher.confirmPrivateDialog.showDialog = function()
+	    {
+	        YAHOO.ur.edit.researcher.confirmPrivateDialog.show();
+	        YAHOO.ur.edit.researcher.confirmPrivateDialog.center();
+	    }
+	    
+	    // submit to make public
+	    YAHOO.ur.edit.researcher.confirmPrivateDialog.submit = function()
+	    {
+	    	var setResearcherPagePermissionAction = 
+			       basePath + 'user/setResearcherPagePermission.action';
+				
+	    	var cObj = YAHOO.util.Connect.asyncRequest('post',
+	    			setResearcherPagePermissionAction, callback, 'public=false' );
+	    }	    
+	
+		// Wire up the success and failure handlers
+		var callback = { success: handleSuccess, failure: handleFailure };
+				
+		// Render the Dialog
+		YAHOO.ur.edit.researcher.confirmPrivateDialog.render();
+	 
 	},
 	
 	/*
@@ -769,7 +905,8 @@ YAHOO.ur.edit.researcher =
 	    YAHOO.ur.edit.researcher.createPictureUploadDialog();
 	    YAHOO.ur.edit.researcher.createNewDepartmentDialog();
 	    YAHOO.ur.edit.researcher.createNewFieldDialog();
-	    
+	    YAHOO.ur.edit.researcher.createConfirmPublicDialog();
+	    YAHOO.ur.edit.researcher.createConfirmPrivateDialog();
 		
 	    researcherId = document.getElementById("researcherId").value;
 	    YAHOO.ur.edit.researcher.getResearcherPictures(researcherId);
