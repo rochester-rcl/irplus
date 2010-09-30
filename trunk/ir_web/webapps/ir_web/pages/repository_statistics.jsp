@@ -82,13 +82,12 @@
             
             <!--  this is the body regin of the page -->
             <div id="bd">
-                <h3>General Repository Information: <a href="home.action">${repository.name}</a></h3>
+                <h3>General Repository Information: <a href="<c:url value="/home.action"/>">${repository.name}</a></h3>
                 <strong>Number of collections:</strong> ${numberOfCollections}<br/><br/>
-                <strong>Number of publications:</strong> ${numberOfPublications}<br/><br/>
+                <strong>Number of publications:</strong> <a href="<c:url value="/browseRepositoryItems.action"/>">${numberOfPublications}</a><br/><br/>
                 <strong>Number of file downloads:</strong> ${numberOfFileDownloads}<br/><br/>
                 <strong>Number of members:</strong> ${numberOfUsers}<br/><br/>
-                <strong>Number of researchers:</strong> ${numberOfResearchers}<br/><br/>
-                <strong>Number of public researchers:</strong> ${numberOfPublicResearchers}<br/><br/>
+                <strong>Number of public researchers:</strong> <a href="<c:url value="/viewResearcherBrowse.action"/>">${numberOfPublicResearchers}</a><br/><br/>
                 
                 <c:if test="${!ur:isEmpty(contentTypeCounts)}">
                 <h3>Repository Content Type Counts</h3>
