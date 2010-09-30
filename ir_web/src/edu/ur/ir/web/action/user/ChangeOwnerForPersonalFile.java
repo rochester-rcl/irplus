@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.UserFileSystemService;
@@ -59,6 +60,8 @@ public class ChangeOwnerForPersonalFile extends ActionSupport implements UserIdA
 	/** reason for access denied if access is denied */
 	private String reason;
 
+	/** security service to deal with files */
+	private SecurityService securityService;
 
 
 
@@ -70,7 +73,6 @@ public class ChangeOwnerForPersonalFile extends ActionSupport implements UserIdA
 	public String execute() {
 		
 		log.debug("Change owner Personal file::" + personalFileId);
-		
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
 		
 		// user must be an owner of the file
@@ -81,10 +83,11 @@ public class ChangeOwnerForPersonalFile extends ActionSupport implements UserIdA
 		}
 		
 		IrUser newOwner = userService.getUser(newOwnerId, false);
-		
 		personalFile.getVersionedFile().changeOwner(newOwner);
-
 		userFileSystemService.makePersonalFilePersistent(personalFile);
+		securityService.assignOwnerPermissions(personalFile.getVersionedFile(), newOwner);
+		
+		// set the permissions for this user as the owner.
 		
 		return SUCCESS;
 	}
@@ -158,5 +161,10 @@ public class ChangeOwnerForPersonalFile extends ActionSupport implements UserIdA
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
+
 
 }
