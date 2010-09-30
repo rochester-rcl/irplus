@@ -77,7 +77,7 @@
                       <td>${personalFile.versionedFile.currentVersion.irFile.fileInfo.createdDate}</td>
                   </tr>
                   <tr>
-                      <td><strong>File Onwer:&nbsp;</strong></td>
+                      <td><strong>File Owner:&nbsp;</strong></td>
                       <td>${personalFile.versionedFile.owner.firstName}&nbsp;${personalFile.versionedFile.owner.lastName}</td>
                   </tr>
                   <tr>
