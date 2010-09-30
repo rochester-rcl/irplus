@@ -37,6 +37,7 @@
   <c:forEach var="classTypePermission" items="${classTypePermissions}">
       <tr>
           <td>
+          <p></p>
       <input type="checkbox" name="selectedPermissions" id="${classTypePermission.name}" value="${classTypePermission.id}" 
           onclick="YAHOO.ur.invite.autoCheckPermission(this, selectedPermissions);"
       
@@ -48,9 +49,10 @@
 		
 		</c:forEach>      
        />
-       </td>
-       <td>
+       
+      
       ${classTypePermission.description}
+      </p>
       </td>
    </tr>
   </c:forEach>
