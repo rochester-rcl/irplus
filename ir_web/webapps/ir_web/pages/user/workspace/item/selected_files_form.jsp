@@ -81,7 +81,7 @@
 				
 				<td class="tdItemFileRightBorder" width="75%">
 					 <c:if test="${itemFileVersion.itemObject.type == 'FILE'}">
-                     	<ir:fileTypeImg cssClass="tableImg" irFile="${itemFileVersion.itemObject.irFile}"/> <ur:maxText numChars="35" text="${itemFileVersion.itemObject.irFile.name}"></ur:maxText>
+                     	<ir:fileTypeImg cssClass="tableImg" irFile="${itemFileVersion.itemObject.irFile}"/> <ur:maxText numChars="35" text="${itemFileVersion.itemObject.irFile.nameWithExtension}"></ur:maxText>&nbsp;
 				      	   <select id="file_version" name="version_${itemFileVersion.itemObject.id}" onChange="javascript:YAHOO.ur.item.changeFileVersion(this, '${itemFileVersion.itemObject.id}');" /> 
 				      	   
 					      		<c:forEach var="version" items="${itemFileVersion.versions}" >
