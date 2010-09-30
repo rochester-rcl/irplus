@@ -40,7 +40,7 @@
 		
 		
 		        <div id="destination_path">
-		            Move To Location: /<ur:a href="javascript:YAHOO.ur.shared.file.move.getMoveFolder('0');">My Files</ur:a>/
+		            Move To Location: /<ur:a href="javascript:YAHOO.ur.shared.file.move.getMoveFolder('0');">${user.username}</ur:a>/
 		            <c:forEach var="folder" items="${destinationPath}">
 			            <ur:a href="javascript:YAHOO.ur.shared.file.move.getMoveFolder('${folder.id}')">${folder.name}</ur:a>/
                     </c:forEach>
