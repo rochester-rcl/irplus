@@ -78,10 +78,10 @@
                         </urstb:td>
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFile'}">
-                               /My Files${fileSystemObject.path}
+                               /${user.username}${fileSystemObject.path}
                             </c:if>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                           /My Files${fileSystemObject.path}
+	                           /${user.username}${fileSystemObject.path}
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'sharedInboxFile'}">
 	                            /Shared File Inbox${fileSystemObject.path}
@@ -105,10 +105,10 @@
 	                            <a href="javascript:YAHOO.ur.shared.file.inbox.getSharedFiles();YAHOO.ur.user.workspace.setActiveIndex('FILE_INBOX') ">Inbox</a>
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
-	                            <a href="javascript:YAHOO.ur.workspace.search.showCollection('${fileSystemObject.personalCollection.id}')">Open Collection</a>
+	                            <a href="javascript:YAHOO.ur.workspace.search.showCollection('${fileSystemObject.personalCollection.id}')">Open Folder</a>
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
-	                            <a href="javascript:YAHOO.ur.workspace.search.showCollection(${fileSystemObject.id})">Open Collection</a>
+	                            <a href="javascript:YAHOO.ur.workspace.search.showCollection(${fileSystemObject.id})">Open Folder</a>
 	                        </c:if>
                         </urstb:td>
                     </urstb:tr>
