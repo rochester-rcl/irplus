@@ -84,7 +84,12 @@
 					            <c:set value="0" var="modOdd"/>
 					        </c:if>
 				        </c:forEach>
-
+				        
+                        <c:if test="${ur:isEmpty(collectionsToMove)}">
+                             <c:set value="1" var="modEven"/>
+					         <c:set value="0" var="modOdd"/>
+                        </c:if>
+				        
 				        <c:forEach items="${itemsToMove}" varStatus="status" var="item">
 				            <c:if test="${ (status.count % 2) == modEven}">
                                 <c:set value="even" var="rowType"/>
