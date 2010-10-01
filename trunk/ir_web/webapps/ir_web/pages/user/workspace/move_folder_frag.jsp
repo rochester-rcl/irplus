@@ -82,6 +82,11 @@
 					            <c:set value="0" var="modOdd"/>
 					        </c:if>
 				        </c:forEach>
+                        
+                        <c:if test="${ur:isEmpty(foldersToMove)}">
+                             <c:set value="1" var="modEven"/>
+					         <c:set value="0" var="modOdd"/>
+                        </c:if>
 
 				        <c:forEach items="${filesToMove}"  varStatus="status" var="file">
 				            <c:if test="${ (status.count % 2) == modEven}">
