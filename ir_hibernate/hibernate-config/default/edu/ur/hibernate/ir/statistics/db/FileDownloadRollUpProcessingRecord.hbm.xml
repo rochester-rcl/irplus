@@ -59,10 +59,9 @@
 	<!--  this inserts all files to be reprocessed  -->
 	<query name="insertAllRepositoryFileIds">
 	    insert into FileDownloadRollUpProcessingRecord (irFileId, createdDate )
-	    select irFileId, current_timestamp()
-	    from FileDownloadInfo
-		where irFileId not in( select rollUpRecord.irFileId from FileDownloadRollUpProcessingRecord as rollUpRecord)
-		group by irFileId
+	    select irFile.id, current_timestamp()
+	    from IrFile irFile
+		where irFile.id not in( select rollUpRecord.irFileId from FileDownloadRollUpProcessingRecord as rollUpRecord)
 	</query>
 	
 		

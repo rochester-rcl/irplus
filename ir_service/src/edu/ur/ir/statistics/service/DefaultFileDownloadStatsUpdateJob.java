@@ -150,6 +150,11 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			}
 				
 		}
+		
+		if( log.isDebugEnabled())
+		{
+			log.debug("completed processing");
+		}
 	}
 	
 	/**
@@ -221,7 +226,10 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 				}
 			}
 		}
-		
+		if(log.isDebugEnabled())
+		{
+		   log.debug("removeIgnoreCountsFromDownloadInfo completed" );
+		}
 		return totalProcessed;
 	}
 	
@@ -255,6 +263,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		    	if(log.isDebugEnabled())
 				{
 					log.debug(" removeOkCountsFromIgnoreDownloadInfo total processed = " + totalProcessed + " batch Size = " + batchSize);
+				    log.debug("okCounts size = " + okCounts.size());
 				}
 				for( IpIgnoreFileDownloadInfo okInfo : okCounts)
 			    {
@@ -294,6 +303,10 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			}
 		}
 		
+		if(log.isDebugEnabled())
+		{
+		    log.debug("removeOkCountsFromIgnoreDownloadInfo completed");
+		}
 		return totalProcessed;
 	}
 	
@@ -315,7 +328,16 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		try
 		{
 			ts = tm.getTransaction(td);
+			if(log.isDebugEnabled())
+			{
+			    log.debug("updateAllRepositoryCounts start");
+			}
 			downloadStatisticsService.updateAllRepositoryFileRollUpCounts();
+			
+			if(log.isDebugEnabled())
+			{
+				log.debug("updateAllRepositoryCounts after update");
+			}
 		}
 		catch(Exception e)
 		{
@@ -325,13 +347,18 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		}
 		finally
 		{
-			if( ts != null )
+			if( ts != null && !ts.isCompleted())
 			{
 				if( tm != null )
 				{
 				    tm.commit(ts);
 				}
 			}
+		}
+		
+		if(log.isDebugEnabled())
+		{
+		    log.debug("updateAllRepositoryCounts completed");
 		}
 
 	}
@@ -354,10 +381,19 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		TransactionStatus ts = null;
 		try
 		{
+			if( log.isDebugEnabled() )
+			{
+				log.debug("start deleteAllCountsToIgnoreNoStore");
+			}
+			
 			ts = tm.getTransaction(td);
 			Long fileInfoDeleteCount = downloadStatisticsService.deleteNoStoreFileDownloadInfoCounts();
 			Long ignoreInfoDeleteCount = downloadStatisticsService.deleteNoStoreIgnoreDownloadInfoCounts();
-			log.debug("deleted from file info " + fileInfoDeleteCount + " deleted from ignore info " + ignoreInfoDeleteCount);
+			
+			if( log.isDebugEnabled())
+			{
+			    log.debug("deleted from file info " + fileInfoDeleteCount + " deleted from ignore info " + ignoreInfoDeleteCount);
+			}
 		}
 		catch(Exception e)
 		{
@@ -367,7 +403,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		}
 		finally
 		{
-			if( ts != null )
+			if( ts != null && !ts.isCompleted())
 			{
 				if( tm != null )
 				{
@@ -375,6 +411,8 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 				}
 			}
 		}
+		
+		
 
 	}
 
