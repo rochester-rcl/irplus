@@ -94,46 +94,6 @@ public class FileDownloadRollUpProcessingRecordDAOTest
 	    tm.commit(ts);
 	}
 	
-	/**
-	 * Test insert from file download info DAO
-	 */
-	@Test
-	public void insertCountsWithIngoreDAOTest() throws Exception{
 
-	    TransactionStatus ts = tm.getTransaction(td);
-	    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy");
-	    Date d = simpleDateFormat.parse("1/1/2008");
-        FileDownloadInfo downloadInfo1 = new FileDownloadInfo("123.0.0.1", 1l,d);
-        downloadInfo1.setDownloadCount(1);
-        fileDownloadInfoDAO.makePersistent(downloadInfo1);
-        
-        // create an ignore address
-	    IgnoreIpAddress ip1 = new IgnoreIpAddress(123,0,0,7, 7);
-        ignoreIpAddressDAO.makePersistent(ip1);
-        
-        // create a download for the same ir file but different ip address
-        FileDownloadInfo downloadInfo2 = new FileDownloadInfo("123.0.0.7", 2l,d);
-        downloadInfo2.setDownloadCount(1);
-        fileDownloadInfoDAO.makePersistent(downloadInfo2);
- 	    tm.commit(ts);
- 	    
- 	    // create a new insert
- 	    ts = tm.getTransaction(td);
- 	    long count = fileDownloadRollUpProcessingRecordDAO.updateAllRepositoryDownloadCounts();
- 	    assert count == 2l : "Count should equal two but equals " + count;
- 
- 	    tm.commit(ts);
- 	    
- 	    
- 	    ts = tm.getTransaction(td);
- 	    // clean up
- 	    fileDownloadRollUpProcessingRecordDAO.makeTransient(fileDownloadRollUpProcessingRecordDAO.getByIrFileId(downloadInfo1.getIrFileId()));
- 	    fileDownloadRollUpProcessingRecordDAO.makeTransient(fileDownloadRollUpProcessingRecordDAO.getByIrFileId(downloadInfo2.getIrFileId()));
-
- 	    fileDownloadInfoDAO.makeTransient(fileDownloadInfoDAO.getById(downloadInfo1.getId(), false));
-        fileDownloadInfoDAO.makeTransient(fileDownloadInfoDAO.getById(downloadInfo2.getId(), false));
-    	ignoreIpAddressDAO.makeTransient(ignoreIpAddressDAO.getById(ip1.getId(), false));
-	    tm.commit(ts);
-	}
 	
 }
