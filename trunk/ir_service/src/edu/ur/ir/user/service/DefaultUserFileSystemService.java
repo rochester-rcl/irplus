@@ -440,10 +440,11 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 				pf.getFullPath(), 
 				pf.getDescription());
 		personalFileDeleteRecord.setDeleteReason(deleteReason);
-		personalFileDeleteRecordDAO.makePersistent(personalFileDeleteRecord);
+		
 		
 		// delete the personal file
 		personalFileDAO.makeTransient(pf);
+		personalFileDeleteRecordDAO.makePersistent(personalFileDeleteRecord);
 		
 		// Delete versioned file only if requested by its owner
 		if (pf.getOwner().equals(versionedFile.getOwner())) {
