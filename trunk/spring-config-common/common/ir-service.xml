@@ -760,7 +760,7 @@
        <property name="baseOaiUrl" value="${base.oai.url}" />
        <property name="adminEmails">
            <list>
-               <value>nsarr@library.rochester.edu</value>
+               <value>${oai.admin.email}</value>
            </list>
        </property>
    </bean>
