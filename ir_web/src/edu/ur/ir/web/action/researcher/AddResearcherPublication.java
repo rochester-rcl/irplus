@@ -338,9 +338,18 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 			
 			if (fileSystem.getFileSystemType().equals(FileSystemType.RESEARCHER_PUBLICATION)) {
 				log.debug("getting personal item for generic item " + ((ResearcherPublication)fileSystem).getPublication());
+				
+					
 				PersonalItem pi = userPublishingFileSystemService.getPersonalItem( ((ResearcherPublication)fileSystem).getPublication() );
-				VersionedItem vi = pi.getVersionedItem();
-				researcherItemFileSystemVersion = new ResearcherItemFileSystemVersion(fileSystem, vi);
+				if( pi != null )
+				{
+				    VersionedItem vi = pi.getVersionedItem();
+				    researcherItemFileSystemVersion = new ResearcherItemFileSystemVersion(fileSystem, vi);
+				}
+				else
+				{
+					researcherItemFileSystemVersion = new ResearcherItemFileSystemVersion(fileSystem, null);
+				}
 			} else {
 				researcherItemFileSystemVersion = new ResearcherItemFileSystemVersion(fileSystem, null);
 			}
