@@ -231,8 +231,8 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		researcherPublicationDAO.makeTransient(rp);
 		log.debug("itemService.getItemVersionCount(item)::"+itemService.getItemVersionCount(item));
 		log.debug("getResearcherPublicationCount(item)item)::"+getResearcherPublicationCount(item));
-		// Check if generic item is used in ItemVersion or researcher page 
-		if ((itemService.getItemVersionCount(item) == 0)
+		// Check if generic item is used in ItemVersion / researcher page  or is published
+		if ( !item.isPublishedToSystem() && (itemService.getItemVersionCount(item) == 0)
 				&& (getResearcherPublicationCount(item) == 0)) {
 			
 			log.debug("Delete item");
