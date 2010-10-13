@@ -109,6 +109,10 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 		// roll up the counts
 		updateAllRepositoryCounts(errorEmailService, tm, td, downloadStatisticsService);
 		
+		// this is kept intentionally small if a failure occurs
+		// only the currently selected records will not be processed
+		int rollUpProcessingRecordBatchSize = 5;
+		
 		TransactionStatus ts = null;
 		try
 		{
@@ -116,7 +120,7 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 			do
 			{
 				ts = tm.getTransaction(td);
-			    records =  downloadStatisticsService.getDownloadRollUpProcessingRecords(0, batchSize);
+			    records =  downloadStatisticsService.getDownloadRollUpProcessingRecords(0, rollUpProcessingRecordBatchSize);
 			    log.debug("processing " + records.size() + " records ");
 			    for( FileDownloadRollUpProcessingRecord record : records )
 			    {
@@ -130,13 +134,29 @@ public class DefaultFileDownloadStatsUpdateJob implements StatefulJob{
 				     }
 				     downloadStatisticsService.delete(record);
 			    }
-			    tm.commit(ts);
+			    
+			    try
+			    {
+			        tm.commit(ts);
+			    }
+			    catch(Exception e)
+			    {
+			    	 // just delete the records
+			    	 ts = tm.getTransaction(td);
+			    	 log.error("failure processing records - processing NOT stopped", e);
+					 errorEmailService.sendError(e);
+			    	 for( FileDownloadRollUpProcessingRecord record : records )
+					 {
+			    		 downloadStatisticsService.delete(record);
+					 }
+			    	 tm.commit(ts);
+			    }
 			}
 			while(records.size() > 0);
 		}
 		catch(Exception e)
 		{
-		 	log.error("failure processing records", e);
+		 	log.error("failure processing records - processing failed!", e);
 			errorEmailService.sendError(e);
 		}
 		finally
