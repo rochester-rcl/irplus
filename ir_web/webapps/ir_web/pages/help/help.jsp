@@ -64,8 +64,8 @@
             <!--  this is the body regin of the page -->
             <div id="bd">
                <h3>Manuals</h3>
-               <a href="<c:url value="user-help.pdf"/>">User Manual</a> <br/>
-               <a href="<c:url value="admin-help.pdf"/>">Administrator Manual</a><br/>
+               <a target="_blank" href="<c:url value="user-help.pdf"/>">User Manual</a> <br/>
+               <a target="_blank" href="<c:url value="admin-help.pdf"/>">Administrator Manual</a><br/>
                
                <h3>YouTube Instructional Videos</h3> 
                <a target="_blank" href="http://www.youtube.com/watch?v=8ru4gCOuOrE">Authoring Video</a><br/>
