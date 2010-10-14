@@ -284,7 +284,7 @@ public class UrLdapAuthenticationProvider implements AuthenticationProvider {
         }
         catch(UsernameNotFoundException usernameNotFoundException)
         {
-        	throw new AuthenticationServiceException(usernameNotFoundException.getMessage(), usernameNotFoundException);
+        	throw new BadCredentialsException(usernameNotFoundException.getMessage(), usernameNotFoundException);
         }
     }
 
