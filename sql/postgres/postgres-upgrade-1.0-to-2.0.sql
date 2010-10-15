@@ -776,4 +776,8 @@ DROP TABLE qrtz_job_details;
 DROP TABLE qrtz_calendars;
 
 
-
+CREATE INDEX file_download_info_ip_address_idx
+  ON ir_statistics.file_download_info(ip_address);
+  
+CREATE INDEX ip_ignore_ip_address_idx
+  ON ir_statistics.file_download_info(ip_address);  

@@ -3382,6 +3382,9 @@ CREATE INDEX file_download_info_ip_part_idx
   
 CREATE INDEX ir_file_id_idx
   ON ir_statistics.file_download_info(ir_file_id);
+  
+CREATE INDEX file_download_info_ip_address_idx
+  ON ir_statistics.file_download_info(ip_address);
 
 -- ---------------------------------------------
 -- IP address table
@@ -3462,7 +3465,8 @@ CREATE INDEX ip_ignore_file_download_info_ip_part_idx
 CREATE INDEX ip_ignore_ir_file_id_idx
   ON ir_statistics.file_download_info(ir_file_id);
   
-  
+CREATE INDEX ip_ignore_ip_address_idx
+  ON ir_statistics.file_download_info(ip_address);  
 
 -- ----------------------------------------------
 -- **********************************************
