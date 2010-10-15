@@ -68,7 +68,7 @@ public class ViewIgnoreDownloadCountsByIp  extends Pager{
 	public String execute()
 	{
 		rowEnd = rowStart + numberOfResultsToShow;
-		downloadCounts = downloadStatisticsService.getIgnoreIpOrderByDownloadCount(rowEnd, numberOfResultsToShow, OrderType.getOrderType(sortType));
+		downloadCounts = downloadStatisticsService.getIgnoreIpOrderByDownloadCount(rowStart, numberOfResultsToShow, OrderType.getOrderType(sortType));
 		totalHits = downloadStatisticsService.getGroupByIgnoreIpAddressCount().intValue();
 		
 		if(rowEnd > totalHits)

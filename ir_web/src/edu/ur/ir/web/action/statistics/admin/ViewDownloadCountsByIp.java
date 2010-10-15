@@ -70,7 +70,7 @@ public class ViewDownloadCountsByIp extends Pager{
 	public String execute()
 	{
 		rowEnd = rowStart + numberOfResultsToShow;
-		downloadCounts = downloadStatisticsService.getIpOrderByDownloadCount(rowEnd, numberOfResultsToShow, OrderType.getOrderType(sortType));
+		downloadCounts = downloadStatisticsService.getIpOrderByDownloadCount(rowStart, numberOfResultsToShow, OrderType.getOrderType(sortType));
 		totalHits = downloadStatisticsService.getGroupByIpAddressCount().intValue();
 		
 		if(rowEnd > totalHits)
