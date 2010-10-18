@@ -1,0 +1,39 @@
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+        <!--  ************************************ -->
+        <!--  Handle Actions            -->
+        <!--  ************************************ -->
+        <action name="viewHandleNameAuthorities">
+            <result name="success">/pages/admin/handle/handle_name_authority.jsp</result>
+        </action>
+        
+        <action name="getHandleNameAuthorities" 
+            class="edu.ur.ir.web.action.handle.ManageHandleNameAuthority"
+            method="viewHandleNameAuthorities">
+            <result name="success">/pages/admin/handle/handle_name_authority_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*HandleNameAuthority" 
+            method="{1}"
+            class="edu.ur.ir.web.action.handle.ManageHandleNameAuthority">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/handle/handle_name_authority.jsp</result>
+            <result name="added">/pages/admin/handle/handle_name_authority_form.jsp</result>
+            <result name="deleted">/pages/admin/handle/handle_name_authority_deleted.jsp</result>
+            <result name="get">/pages/admin/handle/handle_name_authority_form.jsp</result>
+        </action>
