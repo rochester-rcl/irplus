@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	
+	Mapping for folder information
+	
+	@author Nathan Sarr
+	
+-->
+<hibernate-mapping package="edu.ur.file.db">
+	<class name="TreeFolderInfo" table="file_system.folder"
+		lazy="true">
+
+		
+		<!-- Common id property. -->
+		<id name="id" type="long" column="folder_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">file_system.folder_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="displayName" column="display_name" type="string"
+			not-null="false" access="field" />
+
+		<property name="name" column="folder_name" type="string"
+			not-null="true" access="field" />
+
+		<property name="leftValue" column="left_value" type="long"
+			not-null="true" access="field" />
+			
+		<property name="rightValue" column="right_value" type="long"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+			
+		<property name="path" column="path" type="string"
+			not-null="false" access="field" />
+		
+		<property name="exists" column="exists" type="boolean"
+			not-null="true" />
+			
+		<!--  Parent Folder -->
+		<many-to-one class="TreeFolderInfo"
+			name="parent" column="parent_id" insert="true"
+			update="true" access="field"/>
+			
+	    <!--  Root Folder of entire tree-->
+		<many-to-one class="TreeFolderInfo"
+			name="treeRoot" 
+			not-null="true"
+			column="root_folder_id" 
+			insert="true"
+			update="true" 
+			access="field"/>
+			
+		<!--  Children folders -->
+		<set name="children" 
+		    inverse="true" 
+		    cascade="all" 
+		    access="field"
+			order-by="display_name" 
+			lazy="true"
+			fetch="subselect">
+			<key column="parent_id"/>
+			<one-to-many class="TreeFolderInfo"/>
+		</set>
+		
+		<!--  Children files -->
+		<set name="files" 
+		    inverse="true" 
+		    cascade="all" 
+		    access="field"
+		    optimistic-lock="false" 
+		    lazy="true"
+		    fetch="subselect">
+			<key column="folder_id" not-null="true"/>
+			<one-to-many class="edu.ur.file.db.DefaultFileInfo"/>
+		</set>
+		
+		<!--  Parent File Database - this is the top level root for all folders 
+		      underneath it -->
+		<many-to-one class="DefaultFileDatabase"
+		    optimistic-lock="false"
+			name="fileDatabase" 
+			column="file_database_id" 
+			insert="true"
+			update="true" 
+			unique="true"/>
+		
+	</class>
+		
+	<!--  Get a count of folders in the system -->
+	<query name="folderCount">
+	    select count(*) from TreeFolderInfo
+	</query>
+	
+	<!-- Gets all folders for the specified database-->
+	<query name="getFoldersInDatabase">
+	    from TreeFolderInfo as tree 	    
+	    where tree.fileDatabase.id = ?
+	    order by tree.displayName
+	</query>
+	
+	
+	<!-- Gets the entire tree for the selected node so it is loaded into memory-->
+	<query name="getTreeForNode">
+	    from TreeFolderInfo as tree 	    
+	    where tree.leftValue between ? and ?
+	    and tree.treeRoot.id = ?
+	    order by tree.leftValue
+	</query>
+	
+    <!-- Gets the all nodes within the specified tree that are not within the child tree
+         Specified.  This stays within the root folder-->
+	<query name="getAllNodesNotInChildTree">
+	    from TreeFolderInfo as tree 	    
+	    where tree.leftValue not between ? and ?
+	    and tree.treeRoot.id = ?
+	    order by tree.displayName
+	</query>
+	
+	<!-- Gets the all folders for the specified database except the specified folder and
+	     all it's children  -->
+	<query name="getAllNodesNotInChildTreeDb">
+	    from TreeFolderInfo as tree 	    
+	    where ( tree.leftValue not between ? and ? 
+	    and tree.treeRoot.id = ? 
+	    and tree.fileDatabase.id = ?)
+	    or ( tree.fileDatabase.id = ? and tree.treeRoot.id != ? )
+	    order by tree.displayName
+	</query>
+
+    <!--  Get all nodes that have a left or right value greater than the
+           specified value -->	
+	<query name="getAllNodesValueGreaterEqual">
+	   from TreeFolderInfo as tree
+	   where ( tree.leftValue >= ?
+	   or tree.rightValue >= ? )
+	   and tree.treeRoot.id = ?
+	</query>
+	
+	<!-- Find a root folder with the specified name in the specified file datbase  -->	
+	<query name="findRootByDisplayName">
+	   from TreeFolderInfo as tree
+	   where tree.id = tree.treeRoot.id
+	   and tree.displayName = ?
+	   and tree.fileDatabase.id = ?
+	</query>
+    
+    <!-- Find a  folder with the specified name in the specified folder  -->	
+	<query name="findByDisplayName">
+	   from TreeFolderInfo as tree
+	   where tree.displayName = ?
+	   and tree.parent.id = ?
+	</query>
+	
+	<!-- named query for getting all folders ordered by name -->
+    <query name="getTreeFolderInfoByDisplayName">from TreeFolderInfo order by 
+       displayName </query>
+    
+    <!-- named query for getting all folder ordered by name -->
+    <query name="getTreeFolderInfoByFolderName">from TreeFolderInfo as 
+        TreeFolderInfo where
+		TreeFolderInfo.name = ?</query>
+		
+    <!-- named query for getting a count of all files  -->
+    <query name="getFolderFileCount">select count(*) as n
+        from TreeFolderInfo as folder
+        left outer join folder.files as files
+        where folder.id = ?</query>
+		
+   
+ 	
+</hibernate-mapping>

@@ -1,0 +1,163 @@
+
+
+irplus changes 1.0 to 2.0
+
+
+[Global]
+=============================
+- Updated from spring ldap 1.2.1 to spring ldap 1.3.0
+- Updated from Apache POI-3.5beta6 - POI-3.6
+- Updated from Struts 2.1.6 to 2.1.8.1
+- Updated from freemarker 2.1.14 to 2.1.15
+- Updated from ognl 2.6.11 to 2.7.3
+- Updated from xwork-core 2.1.2 to 2.1.6
+- Updated from Ivy 2.1.0-rc1 to 2.2.0-rc1
+- Removed JSON library as it was no longer needed [ was used by toJson for researcher ]
+- Updated to pdf box 1.2.1
+- Updated to hibernate 3.5.2
+- Updated to Spring 3.0.2 [All packages]
+
+- Added access method for getting contributor publications ordered by submission date
+- Added access method for getting sponsor publications ordered by submission date
+
+- Updated for OAI compatibility
+
+- Changing control list in the administration section will cause all institutional items to 
+  reflect the change and cause those items to be indexed if they are the most current institutional
+  item version  the following control lists are included:
+  
+  Content types
+  Contributor types
+  Copyright statements
+  extent types
+  identifier types
+  language types
+  person names
+  publishers
+  series
+  sponsors
+  
+- Updated email messages for collaboration to include DO NOT REPLY note
+
+- removed lower_case_user_name / lowerCaseUserName from IrUser - made it so that username is now lower cased
+  upon entry for local system
+
+- Added flag for case sensitivity for external account types.
+
+- Added last login date to check for account usage
+
+- Updated statistics to set a no store option.  This means that the counts will not be stored - this may be appropriate
+when users do not want to store google download information in the ignore table
+
+- Added ability for users to view download counts by IP address
+
+[ur_persistence_util]
+=============================
+- Updated HbCrudDAO to depreciate hibernate template and instead use getSessionFactor
+and use the hibernate session.
+
+[ir_metadata]
+============================
+initial addition for dealing with metadata information
+
+[ir_core]
+=============================
+- Added interface for group membership filter -  edu.ur.ir.user.UserGroupMemberFilter
+- Added methods to Researcher and Researcher Folder to check for existing file/personal 
+  publication/Institutional Publication
+- Removed the toJson method calls from researcher classes as they are no longer needed
+- Added Exception if trying to add an item to a collection that does not allow items to be added 
+  to add item and add reviewable item
+- Made constructor for ReviewableItem and InstitutionalItem public for performance reasons
+- Added lastDateModified, lastModifiedNote and LastModifiedBy to Institutional item version
+- Added OAI infrastructure and ability for OAI havesting 
+- Updated institutional item version to have modfied by, modified date and modified reason to track changes 
+  this will help with administration and OAI protocol
+
+[ir_service]
+==================================
+- Updated to index series / report number 
+- Updated repository service to include external authtentication enabled flag - 
+
+
+[ir_web]
+=============================
+- Fixed issue where researcher could not add a new field
+- Fixed issue where researcher id was missing or interrupted
+- Updated collection and researcher page to show link descriptions
+- Updated workspace to have buttons and no select drop down at the top of page - increases visibility
+- Updated drop down file / folder buttons to include move
+- Updated researcher page to have preview and public/private following the researcher page title
+- Login page - set focus on user name
+- Moved buttons on researcher workspace folder to right hand side - same as file workspace
+- Fixed so error no longer occurs when trying to add the same publication twice to a folder
+- Fixed so that after adding an institutional publication the user is taken to the folder the publication
+  was added to
+- Fixed home page to allow google to more easily index the site.  This is for institutional collection listing,
+  researcher pages listing, images.
+- Fixed researcher page to use unordered lists for non-javascript based browsers/search engines.  This allows
+  the page to be indexed
+- Added tag to draw the researcher tree for as an unordered list
+- Fixed deleting a person name that has been attached to a contributor record that does not have any publications
+- Added statistics to show number of members
+- Updated to only require last name for person names
+- XML output for contributor pages
+- XML output for researcher pages
+- Removed ur:div tag from all jsp pages - provided no extra benefit
+- ldap.enbabled has been changed to external.authentication.enabled
+- Added music icon for music files to xr_sprites.gif
+- Fixed researcher folder tag to output the file name and extension
+- Added sponsor listing which shows all items created by a given sponsor
+- Added paging for contributor pages
+- Updated statistics for more accuracy if an item has been published in more than one collection
+- Updated sponsor page with sponsor icon
+- Fixed contributor page to show full item name - was missing articles (The, a, etc.)
+- Fixed researcher data page to allow researchers to add new departments
+- Added tag to determine if publication contains a abstract or description and displays accordingly
+- Added RSS to contributor pages
+- Added Date Submitted column to contributor pages
+- Added RSS to collection pages
+- Added RSS icon
+- Made it so adding an item to an institutional collection only saves the item and does not load all items to
+  complete submission - greatly enhances performance on larger collections 
+- Added a link back to main group page
+
+- Added code to allow users to see that an institutional item has been deleted
+- Added code to allow users to see that an institutional item could not be found and report
+  if they think this is an error
+
+- Updated text in metadata submission to say primary image file rather than primary file.
+
+-Updated code to allow users to see that an institutional collection could not be found and allow
+them to report if they think this is an error
+
+- Updated to allow users to unsubscribe from their local account
+
+- Moved buttons over on file upload to make it quicker/easier to add another and upload after using the browse button
+
+- Added ability for user to set the number of new file upload boxes to create.
+
+- Updating a collection name will trim white space on the name.  Also causes a re-index of all items within the named collection
+
+- Updated collection pages to no longer show content boxes when there is no content - instead the content from other boxes are shifted
+up.
+
+- News is now shown at the top right when there are news items to be shown.
+
+- Lock and Edit option now should work correctly in IE/Fire Fox/ Chrome and Safari
+
+- Unlocking an already unlocked file no loger requests an unlock.  User interface is now updated
+
+- Moving links within the collection admin tab now works correctly in IE
+
+- Deleting images for the repository and collection correctly deletes files from the file system
+
+- Performance for Deleting and moving items has been improved - hibernate no longer need to load the collection items prior 
+  to deleting/moving an item [ Deleting a large collection would still be slow ]
+
+ur_tags
+====================================
+- Fixed pager tag to always output at least one page even when there is no data
+
+
+
