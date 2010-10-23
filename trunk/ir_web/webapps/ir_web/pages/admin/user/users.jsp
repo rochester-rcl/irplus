@@ -55,6 +55,14 @@
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
 	<ur:js src="pages/js/ur_table.js"/>
 	<ur:js src="page-resources/js/admin/user.js"/>
+	
+	<script type="text/javascript">
+
+		  function updateUrl()
+		  {
+			  document.userRoleAffiliationType.submit();
+		  }
+    </script>
      
 </head>
 
@@ -84,8 +92,54 @@
 					     <button id="showUser" class="ur_button" 
 			 		         onmouseover="this.className='ur_buttonover';"
 			 		         onmouseout="this.className='ur_button';">New User</button> 
+				       
+				       <form name="userRoleAffiliationType" action="<c:url value="/admin/viewUsers.action"/>" method="get">
+				             <input type="hidden" name="rowStart" value="0"/>
+			                 <input type="hidden" name="startPageNumber" value="1"/>
+			                 <input type="hidden" name="currentPageNumber" value="1"/>
+			                 <input type="hidden" name="sortElement" value="${sortElement}"/>		
+			                 <input type="hidden" name="sortType" value="${sortType}"/>	
+			                 
+				         Filter By Role:
+				         <select name="roleId" onchange="javascript:updateUrl();">
+				            <c:if test="${roleId == -1}">
+				                <option  value="-1" selected="selected">Any</option>
+				            </c:if>
+				            <c:if test="${roleId != -1}">
+				                <option value="-1">Any</option>
+				            </c:if>
+						    <c:forEach items="${roles}" var="role">
+						        <c:if test="${role.id == roleId}">
+						            <option  selected="selected" value="${role.id}">${role.name}</option>
+						        </c:if>
+						        <c:if test="${role.id != roleId}">
+						            <option value="${role.id}">${role.name}</option>
+						        </c:if>
+						    </c:forEach>
+						 </select>
+						 and affiliation
+						 <select name="affiliationId" onchange="javascript:updateUrl();">
+				            <c:if test="${affiliationId == -1}">
+				                <option  value="-1" selected="selected">Any</option>
+				            </c:if>
+				            <c:if test="${affiliationId != -1}">
+				                <option value="-1">Any</option>
+				            </c:if>
+						    <c:forEach items="${affiliations}" var="affiliation">
+						        <c:if test="${affiliation.id == affiliationId}">
+						            <option  selected="selected" value="${affiliation.id}">${affiliation.name}</option>
+						        </c:if>
+						        <c:if test="${affiliation.id != affiliationId}">
+						            <option value="${affiliation.id}">${affiliation.name}</option>
+						        </c:if>
+						    </c:forEach>
+						 </select>
+						 
+						 </form>
 				         
-				      <div id="newUsers"></div>
+				      <div id="newUsers">
+				          <c:import url="users_table.jsp"/>
+				      </div>
 				</div>
 
 	            <div id="tab2">

@@ -68,14 +68,14 @@ CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
 	 * Get users whose affiliation approval is pending 
 	 * 
 	 * @param rowStart - start position
-	 * @param numberOfResultsToShow - number of rows to grab.
+	 * @param maxResults - number of rows to grab.
 	 * @param sortType - sort order(Asc/desc)
 	 * 
 	 * @return the list of users found.
 	 */
 
 	public List<IrUser> getUsersPendingAffiliationApprovals(final int rowStart, 
-    		final int numberOfResultsToShow, final String sortType) ;
+    		final int maxResults, final String sortType) ;
 	
 	/**
 	 * Get the user having the specified role Id
@@ -94,16 +94,188 @@ CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
 	 */
 	public IrUser getUserByPersonNameAuthority(Long personNameAuthorityId);	
 	
+	
 	/**
-	 * Get a list of users for a specified sort criteria.
+	 * Get users by last name order.
 	 * 
-	 * @param rowStart - Start row to fetch the data from
-	 * @param numberOfResultsToShow - maximum number of results to fetch
-	 * @param sortElement - column to sort on 
-	 * @param orderType - The order to sort by (ascending/descending)
+	 * @param rowStart - Start row to fetch the data
+	 * @param maxResults - maximum number of results to fetch
+	 * @param orderType - ascending/descending order
 	 * 
-	 * @return List of institutional items
+	 * @return users last name order
 	 */
-	public List<IrUser> getUsers(final int rowStart, 
-    		final int numberOfResultsToShow, final String sortElement, final OrderType orderType);
+	public List<IrUser> getUsersByLastNameOrder(final int rowStart, 
+    		final int maxResults, final OrderType orderType);
+	
+
+	/**
+	 * Get users by user name order
+	 * 
+	 * @param rowStart Start row to fetch the data
+	 * @param maxResults - maximum number of results to fetch
+	 * @param orderType - order ascending/descending
+	 * @return
+	 */
+	public List<IrUser> getUsersByUsernameOrder(final int rowStart, 
+    		final int maxResults, final OrderType orderType);
+	
+	/**
+	 * Get users by email order
+	 * 
+	 * @param rowStart Start row to fetch the data
+	 * @param maxResults - maximum number of results to fetch
+	 * @param orderType - order ascending/descending
+	 * @return
+	 */
+	public List<IrUser> getUsersByEmailOrder(final int rowStart, 
+    		final int maxResults, final OrderType orderType);
+
+	/**
+	 * Get a count of users with a specified role.
+	 * 
+	 * @param roleId -  the role id
+	 * @return count of users by role
+	 */
+	public Long getUserByRoleCount(Long roleId);
+
+
+	/**
+	 * Get a list of users ordered by last name, first name by role
+	 * 
+	 * @param roleId - the role id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleFullNameOrder(Long roleId, int rowStart, 
+    		int maxResults, OrderType orderType);
+	
+	/**
+	 * Get a list of users ordered with a specified role by Username
+	 * 
+	 * @param roleId - the role id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleUsernameOrder(Long roleId, int rowStart, 
+    		int maxResults, OrderType orderType);
+	
+	/**
+	 * Get a list of users ordered by username for the specified role
+	 * 
+	 * @param roleId - the role id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleEmailOrder(Long roleId, int rowStart, 
+    		int maxResults, OrderType orderType);
+	
+	/**
+	 * Get a count of users with a specified affiliation.
+	 * 
+	 * @param affiliationId -  the affiliation id
+	 * @return count of users by affiliation
+	 */
+	public Long getUserByAffilationCount(Long affilationId);
+
+
+	/**
+	 * Get a list of users ordered by last name, first name by affiliation
+	 * 
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByAffiliationFullNameOrder(Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType);
+	
+	/**
+	 * Get a list of users ordered with a specified role by Username by affiliation
+	 * 
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByAffiliationUsernameOrder(Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType);
+	
+	/**
+	 * Get a list of users ordered by username for the specified affiliation
+	 * 
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByAffiliationEmailOrder(Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType);
+	
+	
+	/**
+	 * Get a count of users with a specified affiliation and role.
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId -  the affiliation id
+	 * @return count of users by affiliation
+	 */
+	public Long getUserByRoleAffilationCount(Long roleId, Long affilationId);
+
+
+	/**
+	 * Get a list of users ordered by last name, first name by role and affiliation
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleAffiliationFullNameOrder(Long roleId, Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType);
+	
+	/**
+	 * Get a list of users ordered with a specified role by Username by role and affiliation
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleAffiliationUsernameOrder(Long roleId, Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType);
+	
+	/**
+	 * Get a list of users ordered by username for the specified role affiliation
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleAffiliationEmailOrder(Long roleId, Long affiliationId, int rowStart, 
+			int maxResults, OrderType orderType);
 }

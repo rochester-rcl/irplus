@@ -18,7 +18,9 @@ package edu.ur.ir.user;
 
 import java.util.List;
 
+import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.order.OrderType;
 
 
 /**
@@ -27,7 +29,7 @@ import edu.ur.dao.CrudDAO;
  * @author Sharmila Ranganathan
  *
  */
-public interface InviteInfoDAO extends CrudDAO<InviteInfo> {
+public interface InviteInfoDAO extends CrudDAO<InviteInfo>, CountableDAO {
 	
 	/**
 	 * Find the Invite information for a specified token
@@ -44,5 +46,17 @@ public interface InviteInfoDAO extends CrudDAO<InviteInfo> {
 	 * @return List of invite information
 	 */
 	public List<InviteInfo> getInviteInfoByEmail(String email);
+		
+	/**
+	 * Get the list of invite infos ordered by inviteor
+	 * 
+	 * @param rowStart - start position in the list
+	 * @param maxResults - maximum number of results to retrieve
+	 * @param orderType - ascending/descending order
+	 * 
+	 * @return list of invite infos found
+	 */
+	public List<InviteInfo> getInviteInfosOrderByInviteor(int rowStart,
+			int maxResults, OrderType orderType);
 	
 }

@@ -35,9 +35,6 @@ var viewEditUserAction = basePath + 'admin/userEditView.action';
 // Action for admin to login as any user
 var loginAsUserAction = basePath + 'admin/loginAsUser.action';
 
-// object to hold the specified users data.
-var myUserTable = new YAHOO.ur.table.Table('myUsers', 'newUsers');
-
 
 /**
  * sponsor namespace
@@ -360,8 +357,6 @@ YAHOO.ur.user = {
 		var handleSuccess = function(o) {
 	        YAHOO.ur.user.changePasswordDialog.hide();
 	        YAHOO.ur.user.clearChangePasswordForm();
-	
-		    myUserTable.submitForm(myUserAction);
 		};
 		
 		// handle form submission failure
@@ -674,7 +669,6 @@ YAHOO.ur.user = {
 	 */ 
 	init : function() 
 	{
-	    YAHOO.ur.user.getUsers(0,1,1,'lastName','asc');
 	    YAHOO.ur.user.createErrorDialog();
 	    YAHOO.ur.user.createNewUserDialog();
 	    YAHOO.ur.user.createDeleteUserDialog();

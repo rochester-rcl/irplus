@@ -1143,17 +1143,55 @@ public class DefaultUserService implements UserService {
 	public UserEmail getUserEmailByToken(String token) {
 		return userEmailDAO.getUserEmailByToken(token);
 	}
+	
+	/**
+	 * Get users by last name order.
+	 * 
+	 * @param rowStart - Start row to fetch the data
+	 * @param maxResults - maximum number of results to fetch
+	 * @param orderType - ascending/descending order
+	 * 
+	 * @return users last name order
+	 */
+	public List<IrUser> getUsersByLastNameOrder(final int rowStart, 
+    		final int maxResults, final OrderType orderType)
+    {
+		return irUserDAO.getUsersByLastNameOrder(rowStart, maxResults, orderType);
+    }
+	
 
 	/**
-	 * Sort users
+	 * Get users by user name order
 	 * 
-	 * @see edu.ur.ir.user.UserService#getUsers(int, int, String, String)
+	 * @param rowStart Start row to fetch the data
+	 * @param maxResults - maximum number of results to fetch
+	 * @param orderType - order ascending/descending
+	 * @return
 	 */
-	public List<IrUser> getUsers(int rowStart, 
-    		int numberOfResultsToShow, String sortElement, OrderType orderType) {
-		return irUserDAO.getUsers(rowStart, 
-	    		numberOfResultsToShow, sortElement, orderType);
-	}
+	public List<IrUser> getUsersByUsernameOrder(final int rowStart, 
+    		final int maxResults, final OrderType orderType)
+    {
+	    return irUserDAO.getUsersByUsernameOrder(rowStart, maxResults, orderType);	
+    }
+	
+	/**
+	 * Get users by email order
+	 * 
+	 * @param rowStart Start row to fetch the data
+	 * @param maxResults - maximum number of results to fetch
+	 * @param orderType - order ascending/descending
+	 * @return
+	 */
+	public List<IrUser> getUsersByEmailOrder(final int rowStart, 
+    		final int maxResults, final OrderType orderType)
+    {
+		return irUserDAO.getUsersByEmailOrder(rowStart, maxResults, orderType);
+    }
+	
+	
+	
+	
+	
 
 	public InstitutionalCollectionSubscriptionService getInstitutionalCollectionSubscriptionService() {
 		return institutionalCollectionSubscriptionService;
@@ -1256,6 +1294,197 @@ public class DefaultUserService implements UserService {
 			DeletedInstitutionalItemService deletedInstitutionalItemService) {
 		this.deletedInstitutionalItemService = deletedInstitutionalItemService;
 	}
+	
+	/**
+	 * Get a count of users with a specified role.
+	 * 
+	 * @param roleId -  the role id
+	 * @return count of users by role
+	 */
+	public Long getUserByRoleCount(Long roleId)
+	{
+		return irUserDAO.getUserByRoleCount(roleId);
+	}
+
+
+	/**
+	 * Get a list of users ordered by last name, first name by role
+	 * 
+	 * @param roleId - the role id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleFullNameOrder(Long roleId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+	    return irUserDAO.getUsersByRoleFullNameOrder(roleId, rowStart, maxResults, orderType)	;
+    }
+	
+	/**
+	 * Get a list of users ordered with a specified role by Username
+	 * 
+	 * @param roleId - the role id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleUsernameOrder(Long roleId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		return irUserDAO.getUsersByRoleUsernameOrder(roleId, rowStart, maxResults, orderType);
+    }
+	
+	/**
+	 * Get a list of users ordered by username for the specified role
+	 * 
+	 * @param roleId - the role id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleEmailOrder(Long roleId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+	    return irUserDAO.getUsersByRoleEmailOrder(roleId, rowStart, maxResults, orderType);	
+    }
+	
+	/**
+	 * Get a count of users with a specified affiliation.
+	 * 
+	 * @param affiliationId -  the affiliation id
+	 * @return count of users by affiliation
+	 */
+	public Long getUserByAffilationCount(Long affilationId)
+	{
+		return irUserDAO.getUserByAffilationCount(affilationId);
+	}
+
+
+	/**
+	 * Get a list of users ordered by last name, first name by affiliation
+	 * 
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByAffiliationFullNameOrder(Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+	    return irUserDAO.getUsersByAffiliationFullNameOrder(affiliationId, rowStart, maxResults, orderType);	
+    }
+	
+	/**
+	 * Get a list of users ordered with a specified role by Username by affiliation
+	 * 
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByAffiliationUsernameOrder(Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		return irUserDAO.getUsersByAffiliationUsernameOrder(affiliationId, rowStart, maxResults, orderType);
+    }
+	
+	/**
+	 * Get a list of users ordered by username for the specified affiliation
+	 * 
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByAffiliationEmailOrder(Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+	    return irUserDAO.getUsersByAffiliationEmailOrder(affiliationId, rowStart, maxResults, orderType);	
+    }
+	
+	
+	/**
+	 * Get a count of users with a specified affiliation and role.
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId -  the affiliation id
+	 * @return count of users by affiliation
+	 */
+	public Long getUserByRoleAffilationCount(Long roleId, Long affilationId)
+	{
+		return irUserDAO.getUserByRoleAffilationCount(roleId, affilationId);
+	}
+
+
+	/**
+	 * Get a list of users ordered by last name, first name by role and affiliation
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleAffiliationFullNameOrder(Long roleId, Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+	    return irUserDAO.getUsersByRoleAffiliationFullNameOrder(roleId, affiliationId, rowStart, maxResults, orderType);	
+    }
+	
+	/**
+	 * Get a list of users ordered with a specified role by Username by role and affiliation
+	 * 
+	 * @param roleId - the role
+	 * @param affiliationId - the affiliationId
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleAffiliationUsernameOrder(Long roleId, Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		return irUserDAO.getUsersByRoleAffiliationUsernameOrder(roleId, affiliationId, rowStart, maxResults, orderType);
+    }
+	
+	/**
+	 * Get a list of users ordered by username for the specified role affiliation
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	public List<IrUser> getUsersByRoleAffiliationEmailOrder(Long roleId, Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+	    return irUserDAO.getUsersByRoleAffiliationEmailOrder(roleId, affiliationId, rowStart, maxResults, orderType);	
+    }
+	
+	
+	
+	
+	
+	
 
 
 }

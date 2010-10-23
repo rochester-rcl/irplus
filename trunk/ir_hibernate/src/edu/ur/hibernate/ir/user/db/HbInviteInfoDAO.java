@@ -18,12 +18,14 @@ package edu.ur.hibernate.ir.user.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.InviteInfoDAO;
+import edu.ur.order.OrderType;
 
 /**
  * Persistence for invite information
@@ -92,6 +94,50 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	@SuppressWarnings("unchecked")
 	public List<InviteInfo> getInviteInfoByEmail(String email) {
 		return hbCrudDAO.getHibernateTemplate().findByNamedQuery("findInviteInfoForEmail", email);
+	}
+	
+	
+	/**
+	 * Get the list of invite infos ordered by inviteor
+	 * 
+	 * @param rowStart - start position in the list
+	 * @param maxResults - maximum number of results to retrieve
+	 * @param orderType - ascending/decending order
+	 * 
+	 * @return list of invitees found
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InviteInfo> getInviteInfosOrderByInviteor(int rowStart,
+			int maxResults, OrderType orderType) {
+		
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getInviteInfosOrderByInvitorDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getInviteInfosOrderByInvitorAsc");
+		}
+
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<InviteInfo>) q.list();
+	}
+
+	/**
+	 * Get a count of invite infos in the system.
+	 * 
+	 * @see edu.ur.dao.CountableDAO#getCount()
+	 */
+	public Long getCount() {
+		return (Long)hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("inviteInfoCount").uniqueResult();
 	}
 
 }
