@@ -268,37 +268,530 @@ public class HbIrUserDAO implements IrUserDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<IrUser> getUsers(final int rowStart, 
-    		final int numberOfResultsToShow, final String sortElement, final OrderType orderType) {
+    		final int numberOfResultsToShow, final String sortElement, final OrderType orderType) 
+    {
 		
-		List<IrUser> users = new LinkedList<IrUser>();
-		
-		users = (List<IrUser>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
-		{
-		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
-		    {
-		        Query q = null;
-			    if( sortElement.equalsIgnoreCase("lastName") && orderType.equals(OrderType.ASCENDING_ORDER))
-			    {
-			        q = session.getNamedQuery("getUsersByLastNameOrderAsc");
-			    } else if ( sortElement.equalsIgnoreCase("lastName") && orderType.equals(OrderType.DESCENDING_ORDER)){
-			        q = session.getNamedQuery("getUsersByLastNameOrderDesc");
-			    } else if ( sortElement.equalsIgnoreCase("username") && orderType.equals(OrderType.ASCENDING_ORDER)){
-			        q = session.getNamedQuery("getUsersByUserNameOrderAsc");
-			    } else if ( sortElement.equalsIgnoreCase("username") && orderType.equals(OrderType.DESCENDING_ORDER)){
-			        q = session.getNamedQuery("getUsersByUserNameOrderDesc");
-			    } else if ( sortElement.equalsIgnoreCase("email") && orderType.equals(OrderType.ASCENDING_ORDER)){
-			        q = session.getNamedQuery("getUsersByEmailOrderAsc");
-			    } else if ( sortElement.equalsIgnoreCase("email") && orderType.equals(OrderType.DESCENDING_ORDER)){
-			        q = session.getNamedQuery("getUsersByEmailOrderDesc");
-			    }
+	    Query q = null;
+	    Session session = hbCrudDAO.getSessionFactory() .getCurrentSession();
+	    if( sortElement.equalsIgnoreCase("lastName") && orderType.equals(OrderType.ASCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getUsersByLastNameOrderAsc");
+	    } 
+	    else if ( sortElement.equalsIgnoreCase("lastName") && orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getUsersByLastNameOrderDesc");
+	    } 
+	    else if ( sortElement.equalsIgnoreCase("username") && orderType.equals(OrderType.ASCENDING_ORDER))
+	    {
+		    q = session.getNamedQuery("getUsersByUserNameOrderAsc");
+	    } 
+	    else if ( sortElement.equalsIgnoreCase("username") && orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getUsersByUserNameOrderDesc");
+	    } 
+	    else if ( sortElement.equalsIgnoreCase("email") && orderType.equals(OrderType.ASCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getUsersByEmailOrderAsc");
+	    } 
+	    else if ( sortElement.equalsIgnoreCase("email") && orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getUsersByEmailOrderDesc");
+	    }
 			    
-			    q.setFirstResult(rowStart);
-			    q.setMaxResults(numberOfResultsToShow);
-			    q.setFetchSize(numberOfResultsToShow);
-	            return q.list();
-		    }
-	    });
-		return users;	
-		
+	    q.setFirstResult(rowStart);
+	    q.setMaxResults(numberOfResultsToShow);
+		q.setFetchSize(numberOfResultsToShow);
+	    return q.list();
 	}
+	
+	
+	
+	
+	
+	/**
+	 * Get a list of users by last name order
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param numberOfResultsToShow - maximum number of results to fetch
+	 * @param sortElement - column to sort on 
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByLastNameOrder(final int rowStart, 
+    		final int numberOfResultsToShow,  final OrderType orderType) 
+    {
+		
+	    Query q = null;
+	    Session session = hbCrudDAO.getSessionFactory() .getCurrentSession();
+	    if( orderType.equals(OrderType.ASCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getUsersByLastNameOrderAsc");
+	    } 
+	    else 
+	    {
+	        q = session.getNamedQuery("getUsersByLastNameOrderDesc");
+	    } 
+	    
+	    
+	    
+	    
+	    
+	    
+			    
+	    q.setFirstResult(rowStart);
+	    q.setMaxResults(numberOfResultsToShow);
+		q.setFetchSize(numberOfResultsToShow);
+	    return q.list();
+	}
+	
+	/**
+	 * Get a list of users by last name order
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param numberOfResultsToShow - maximum number of results to fetch
+	 * @param sortElement - column to sort on 
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByUsernameOrder(final int rowStart, 
+    		final int numberOfResultsToShow,  final OrderType orderType) 
+    {
+		Query q = null;
+	    Session session = hbCrudDAO.getSessionFactory() .getCurrentSession();
+	    
+	    if(orderType.equals(OrderType.ASCENDING_ORDER))
+	    {
+		    q = session.getNamedQuery("getUsersByUserNameOrderAsc");
+	    } 
+	    else
+	    {
+	        q = session.getNamedQuery("getUsersByUserNameOrderDesc");
+	    } 
+	    
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(numberOfResultsToShow);
+		q.setFetchSize(numberOfResultsToShow);
+	    return q.list();	
+    }
+	
+	/**
+	 * Get a list of users by last name order
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param numberOfResultsToShow - maximum number of results to fetch
+	 * @param sortElement - column to sort on 
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByEmailOrder(final int rowStart, 
+    		final int numberOfResultsToShow,  final OrderType orderType) 
+    {
+		Query q = null;
+	    Session session = hbCrudDAO.getSessionFactory() .getCurrentSession();
+	    
+	    if( orderType.equals(OrderType.ASCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getUsersByEmailOrderAsc");
+	    } 
+	    else 
+	    {
+	        q = session.getNamedQuery("getUsersByEmailOrderDesc");
+	    }
+	    
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(numberOfResultsToShow);
+		q.setFetchSize(numberOfResultsToShow);
+	    return q.list();	
+    }
+	
+	
+	
+	/**
+	 * Get a count of users with a specified role.
+	 * 
+	 * @param role -  the role
+	 * @return count of users by role
+	 */
+	public Long getUserByRoleCount(Long roleId)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession()
+		.getNamedQuery("getUserByRoleCount");
+		q.setParameter("roleId", roleId);
+		return (Long)q.uniqueResult();
+	}
+
+
+	/**
+	 * Get a list of users ordered by last name, first name by role
+	 * 
+	 * @param roleId - the role id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByRoleFullNameOrder(Long roleId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByRoleOrderByNameDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByRoleOrderByNameAsc");
+		}
+
+		q.setParameter("roleId", roleId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IrUser>) q.list();	
+    }
+	
+	/**
+	 * Get a list of users ordered with a specified role by Username
+	 * 
+	 * @param roleId - the role id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByRoleUsernameOrder(Long roleId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByRoleOrderByUsernameDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByRoleOrderByUsernameAsc");
+		}
+
+		q.setParameter("roleId", roleId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IrUser>) q.list();	
+		
+    }
+	
+	/**
+	 * Get a list of users ordered by username for the specified role
+	 * 
+	 * @param roleId - the role id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByRoleEmailOrder(Long roleId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUsersByRoleOrderByEmailDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUsersByRoleOrderByEmailAsc");
+		}
+
+		q.setParameter("roleId", roleId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IrUser>) q.list();	
+
+		
+    }
+	
+	/**
+	 * Get a count of users with a specified affiliation.
+	 * 
+	 * @param affiliation -  the affiliation
+	 * @return count of users by affiliation
+	 */
+	public Long getUserByAffilationCount(Long affiliationId)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession()
+		.getNamedQuery("getUserByAffiliationCount");
+		q.setParameter("affiliationId", affiliationId);
+		return (Long)q.uniqueResult();
+	}
+
+
+	/**
+	 * Get a list of users ordered by last name, first name by affiliation
+	 * 
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByAffiliationFullNameOrder(Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByAffiliationOrderByNameDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByAffiliationOrderByNameAsc");
+		}
+
+		q.setParameter("affiliationId", affiliationId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IrUser>) q.list();	
+    }
+	
+	/**
+	 * Get a list of users ordered with a specified role by Username by affiliation
+	 * 
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByAffiliationUsernameOrder(Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByAffilationOrderByUsernameDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByAffilationOrderByUsernameAsc");
+		}
+
+		q.setParameter("affiliationId", affiliationId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IrUser>) q.list();	
+    }
+	
+	/**
+	 * Get a list of users ordered by username for the specified affiliation
+	 * 
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByAffiliationEmailOrder(Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUsersByAffilationOrderByEmailDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUsersByAffilationOrderByEmailAsc");
+		}
+
+		q.setParameter("affiliationId", affiliationId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IrUser>) q.list();	
+    }
+	
+	
+	/**
+	 * Get a count of users with a specified affiliation and role.
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId -  the affiliation id
+	 * @return count of users by affiliation
+	 */
+	public Long getUserByRoleAffilationCount(Long roleId, Long affiliationId)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession()
+		.getNamedQuery("getUserByAffiliationRoleCount");
+		q.setParameter("affiliationId", affiliationId);
+		q.setParameter("roleId", roleId);
+		return (Long)q.uniqueResult();
+	}
+
+
+	/**
+	 * Get a list of users ordered by last name, first name by role and affiliation
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByRoleAffiliationFullNameOrder(Long roleId, Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByAffiliationRoleOrderByNameDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByAffiliationRoleOrderByNameAsc");
+		}
+
+		q.setParameter("affiliationId", affiliationId);
+		q.setParameter("roleId", roleId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IrUser>) q.list();	
+
+    }
+	
+	/**
+	 * Get a list of users ordered with a specified role by Username by role and affiliation
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId - the affiliationId
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByRoleAffiliationUsernameOrder(Long roleId, Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByAffilationORolerderByUsernameDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"getUserByAffilationORolerderByUsernameAsc");
+		}
+
+		q.setParameter("affiliationId", affiliationId);
+		q.setParameter("roleId", roleId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IrUser>) q.list();	
+    }
+	
+	/**
+	 * Get a list of users ordered by username for the specified role affiliation
+	 * 
+	 * @param roleId - the role id
+	 * @param affiliationId - the affiliation id
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param sortType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of users
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IrUser> getUsersByRoleAffiliationEmailOrder(Long roleId,Long affiliationId, int rowStart, 
+    		int maxResults, OrderType orderType)
+    {
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"etUsersByAffilationRoleOrderByEmailDesc");
+		} else {
+			q = hbCrudDAO
+					.getSessionFactory()
+					.getCurrentSession()
+					.getNamedQuery(
+							"etUsersByAffilationRoleOrderByEmailAsc");
+		}
+
+		q.setParameter("affiliationId", affiliationId);
+		q.setParameter("roleId", roleId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return (List<IrUser>) q.list();	
+    }
+	
 }

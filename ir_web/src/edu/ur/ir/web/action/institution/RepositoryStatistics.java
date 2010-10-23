@@ -8,12 +8,9 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemService;
-import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeCount;
-import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.item.SponsorService;
 import edu.ur.ir.repository.Repository;
-import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.user.UserService;
@@ -66,9 +63,6 @@ public class RepositoryStatistics extends ActionSupport{
 	/** get a count of content types */
 	private List<ContentTypeCount> contentTypeCounts = new LinkedList<ContentTypeCount>();
 	
-	/** service to get content type information */
-	private ContentTypeService contentTypeService;
-	
 	/** Service for sponsor information */
 	private SponsorService sponsorService;
 
@@ -77,10 +71,7 @@ public class RepositoryStatistics extends ActionSupport{
 	
 	/** repository for the system  */
 	private Repository repository;
-	
-	/** service for dealing with repository information */
-	private RepositoryService repositoryService;
-	
+		
 	/** Used for sorting name based entities */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
 
@@ -164,12 +155,6 @@ public class RepositoryStatistics extends ActionSupport{
 		this.researcherService = researcherService;
 	}
 
-
-	public void setContentTypeService(ContentTypeService contentTypeService) {
-		this.contentTypeService = contentTypeService;
-	}
-	
-
 	public Long getSponsorCount() {
 		return sponsorCount;
 	}
@@ -180,10 +165,6 @@ public class RepositoryStatistics extends ActionSupport{
 
 	public Repository getRepository() {
 		return repository;
-	}
-	
-	public void setRepositoryService(RepositoryService repositoryService) {
-		this.repositoryService = repositoryService;
 	}
 	
 	public Long getNumberOfPublicResearchers() {

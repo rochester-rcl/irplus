@@ -48,6 +48,7 @@ import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.order.OrderType;
 
 
 /**
@@ -582,6 +583,31 @@ public class DefaultInviteUserService implements InviteUserService {
 	public void setPersonalFileDeleteRecordDAO(
 			PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO) {
 		this.personalFileDeleteRecordDAO = personalFileDeleteRecordDAO;
+	}
+
+	/**
+	 * Get the list of invite infos ordered by inviteor
+	 * 
+	 * @param rowStart - start position in the list
+	 * @param maxResults - maximum number of results to retrieve
+	 * @param orderType - ascending/descending order
+	 * 
+	 * @return list of invite infos found
+	 */
+	public List<InviteInfo> getInviteInfosOrderByInviteor(int rowStart,
+			int maxResults, OrderType orderType)
+	{
+		return inviteInfoDAO.getInviteInfosOrderByInviteor(rowStart, maxResults, orderType);
+	}
+	
+	/**
+	 * Get a count of invite info objects
+	 * 
+	 * @return count of invite info objects
+	 */
+	public Long getInviteInfoCount()
+	{
+		return inviteInfoDAO.getCount();
 	}
 
 

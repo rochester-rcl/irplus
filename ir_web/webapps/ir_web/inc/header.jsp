@@ -79,7 +79,9 @@
                                         </div>
                                     </div>                    
                                 </li>
-                                
+                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
+                                    <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewInviteInfos.action"/>"><span class="menu_text">Invite Information</span></a></li>
+                                </c:if>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExtentTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewExtentTypes" /></span></a></li>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
                                     <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExternalAccountTypes.action"/>"><span class="menu_text">External Account Types</span></a></li>

@@ -75,5 +75,22 @@
  
     <!-- named query for getting invite information for given email -->
     <query name="findInviteInfoForEmail">from InviteInfo inviteInfo where inviteInfo.email like ? </query> 
+    
+    	<!--  Get a count of roles in the system -->
+	<query name="inviteInfoCount">
+	    select count(*) from InviteInfo
+	</query>
+	
+		<!-- sort by last name asc -->
+	<query name="getInviteInfosOrderByInvitorAsc">
+		select inviteInfo from InviteInfo as inviteInfo
+		order by inviteInfo.user.lowerCaseLastName asc, inviteInfo.user.lowerCaseFirstName asc, inviteInfo.user.lowerCaseMiddleName asc
+	</query>	
+
+	<!-- sort by last name desc -->
+	<query name="getInviteInfosOrderByInvitorDesc">
+		select inviteInfo from InviteInfo as inviteInfo
+		order by inviteInfo.user.lowerCaseLastName desc, inviteInfo.user.lowerCaseFirstName desc, inviteInfo.user.lowerCaseMiddleName desc
+	</query>	
 	
 </hibernate-mapping>

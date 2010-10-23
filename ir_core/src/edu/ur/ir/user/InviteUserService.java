@@ -22,6 +22,7 @@ import java.util.Set;
 
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
+import edu.ur.order.OrderType;
 
 /**
  * Service interface for inviting a user
@@ -159,4 +160,24 @@ public interface InviteUserService extends Serializable{
 	 * @param inboxFile
 	 */
 	public void deleteSharedInboxFile(SharedInboxFile inboxFile) ;
+	
+	/**
+	 * Get the list of invite infos ordered by inviteor
+	 * 
+	 * @param rowStart - start position in the list
+	 * @param maxResults - maximum number of results to retrieve
+	 * @param orderType - ascending/descending order
+	 * 
+	 * @return list of invite infos found
+	 */
+	public List<InviteInfo> getInviteInfosOrderByInviteor(int rowStart,
+			int maxResults, OrderType orderType);
+	
+	/**
+	 * Get a count of invite info objects
+	 * 
+	 * @return count of invite info objects
+	 */
+	public Long getInviteInfoCount();
+	
 }
