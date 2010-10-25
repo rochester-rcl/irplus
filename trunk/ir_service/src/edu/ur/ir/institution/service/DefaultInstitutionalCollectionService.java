@@ -720,7 +720,7 @@ public class DefaultInstitutionalCollectionService implements
 			    
 			    // only index if the item was added directly to the collection
 			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-			    institutionalItemIndexProcessingRecordService.save(item.getId(), processingType);
+			    institutionalItemIndexProcessingRecordService.save(institutionalItem.getId(), processingType);
 			}
 		    else
 		    {
