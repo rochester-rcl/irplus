@@ -653,7 +653,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		}
 		
 		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
-		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "Item Medatadata Modified");
+		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "Item Metadata Modified");
 
 		return SUCCESS;
 	}
