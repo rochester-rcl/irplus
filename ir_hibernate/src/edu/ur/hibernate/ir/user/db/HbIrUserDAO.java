@@ -777,13 +777,13 @@ public class HbIrUserDAO implements IrUserDAO {
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"etUsersByAffilationRoleOrderByEmailDesc");
+							"getUsersByAffilationRoleOrderByEmailDesc");
 		} else {
 			q = hbCrudDAO
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"etUsersByAffilationRoleOrderByEmailAsc");
+							"getUsersByAffilationRoleOrderByEmailAsc");
 		}
 
 		q.setParameter("affiliationId", affiliationId);
