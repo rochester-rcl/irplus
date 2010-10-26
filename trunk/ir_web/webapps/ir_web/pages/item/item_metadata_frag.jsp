@@ -298,28 +298,28 @@
 					    ${institutionalItemVersion.dateLastModified}
 					    </td>
 				    </tr>
-				    <tr>
-				        <td class="previewLabel">Last Updated Note</td>
-			        </tr>
-			        <c:if test="${institutionalItemVersion.lastModifiedNote != null}">
-				            <tr>
-				                <td>
-					             ${institutionalItemVersion.lastModifiedNote}
-					            </td>
-				            </tr>
-				           <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
-				            <tr>
-				                <td class="previewLabel">Last Updated By</td>
-			                </tr>
-				           <tr>
-				                <td>
-					             ${institutionalItemVersion.lastModifiedBy.firstName}&nbsp; ${institutionalItemVersion.lastModifiedBy.lastName}
-					            </td>
-				            </tr>
+				    <c:if test="${user != null && institutionalItem.owner == user || (ir:userHasRole('ROLE_ADMIN', '')) }">
+		                   <c:if test="${institutionalItemVersion.lastModifiedNote != null}">
+			                    <tr>
+				                   <td class="previewLabel">Last Updated Note</td>
+			                    </tr>
+				                <tr>
+				                    <td>
+					                 ${institutionalItemVersion.lastModifiedNote}
+					                </td>
+				                </tr>
+				            </c:if>
+				                <tr>
+				                    <td class="previewLabel">Last Updated By</td>
+			                    </tr>
+				                <tr>
+				                    <td>
+					                 ${institutionalItemVersion.lastModifiedBy.firstName}&nbsp; ${institutionalItemVersion.lastModifiedBy.lastName}
+					                </td>
+				                </tr>
 				           </c:if>
 				        </c:if>	
 				    </c:if>				
-				</c:if>
 				
 				<tr>
 				    <td class="previewLabel">Submitter:</td>
