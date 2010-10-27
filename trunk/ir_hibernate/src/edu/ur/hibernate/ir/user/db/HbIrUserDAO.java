@@ -544,7 +544,7 @@ public class HbIrUserDAO implements IrUserDAO {
 	 * @param affiliation -  the affiliation
 	 * @return count of users by affiliation
 	 */
-	public Long getUserByAffilationCount(Long affiliationId)
+	public Long getUserByAffiliationCount(Long affiliationId)
 	{
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession()
 		.getNamedQuery("getUserByAffiliationCount");
@@ -609,13 +609,13 @@ public class HbIrUserDAO implements IrUserDAO {
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getUserByAffilationOrderByUsernameDesc");
+							"getUserByAffiliationOrderByUsernameDesc");
 		} else {
 			q = hbCrudDAO
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getUserByAffilationOrderByUsernameAsc");
+							"getUserByAffiliationOrderByUsernameAsc");
 		}
 
 		q.setParameter("affiliationId", affiliationId);
@@ -645,13 +645,13 @@ public class HbIrUserDAO implements IrUserDAO {
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getUsersByAffilationOrderByEmailDesc");
+							"getUsersByAffiliationOrderByEmailDesc");
 		} else {
 			q = hbCrudDAO
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getUsersByAffilationOrderByEmailAsc");
+							"getUsersByAffiliationOrderByEmailAsc");
 		}
 
 		q.setParameter("affiliationId", affiliationId);
@@ -669,7 +669,7 @@ public class HbIrUserDAO implements IrUserDAO {
 	 * @param affiliationId -  the affiliation id
 	 * @return count of users by affiliation
 	 */
-	public Long getUserByRoleAffilationCount(Long roleId, Long affiliationId)
+	public Long getUserByRoleAffiliationCount(Long roleId, Long affiliationId)
 	{
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession()
 		.getNamedQuery("getUserByAffiliationRoleCount");
@@ -739,13 +739,13 @@ public class HbIrUserDAO implements IrUserDAO {
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getUserByAffilationORolerderByUsernameDesc");
+							"getUserByAffiliationRoleOrderByUsernameDesc");
 		} else {
 			q = hbCrudDAO
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getUserByAffilationORolerderByUsernameAsc");
+							"getUserByAffiliationRoleOrderByUsernameAsc");
 		}
 
 		q.setParameter("affiliationId", affiliationId);
@@ -777,13 +777,13 @@ public class HbIrUserDAO implements IrUserDAO {
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getUsersByAffilationRoleOrderByEmailDesc");
+							"getUsersByAffiliationRoleOrderByEmailDesc");
 		} else {
 			q = hbCrudDAO
 					.getSessionFactory()
 					.getCurrentSession()
 					.getNamedQuery(
-							"getUsersByAffilationRoleOrderByEmailAsc");
+							"getUsersByAffiliationRoleOrderByEmailAsc");
 		}
 
 		q.setParameter("affiliationId", affiliationId);

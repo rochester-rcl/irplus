@@ -1361,9 +1361,9 @@ public class DefaultUserService implements UserService {
 	 * @param affiliationId -  the affiliation id
 	 * @return count of users by affiliation
 	 */
-	public Long getUserByAffilationCount(Long affilationId)
+	public Long getUserByAffiliationCount(Long affilationId)
 	{
-		return irUserDAO.getUserByAffilationCount(affilationId);
+		return irUserDAO.getUserByAffiliationCount(affilationId);
 	}
 
 
@@ -1423,9 +1423,9 @@ public class DefaultUserService implements UserService {
 	 * @param affiliationId -  the affiliation id
 	 * @return count of users by affiliation
 	 */
-	public Long getUserByRoleAffilationCount(Long roleId, Long affilationId)
+	public Long getUserByRoleAffiliationCount(Long roleId, Long affilationId)
 	{
-		return irUserDAO.getUserByRoleAffilationCount(roleId, affilationId);
+		return irUserDAO.getUserByRoleAffiliationCount(roleId, affilationId);
 	}
 
 

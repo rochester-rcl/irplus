@@ -438,35 +438,35 @@
 	</query>	
 	
 	<!-- named query for getting a user by affiliation ordered by  name -->
-	<query name="getUserByAffilationOrderByNameDesc">
+	<query name="getUserByAffiliationOrderByNameDesc">
 		select irUser from IrUser as irUser 
 		where irUser.affiliation.id = :affiliationId
 		order by irUser.lowerCaseLastName desc, irUser.lowerCaseFirstName desc, irUser.lowerCaseMiddleName desc
 	</query>	
 	
 	<!-- named query for getting a user by affiliation ordered by username -->
-	<query name="getUserByAffilationOrderByUsernameAsc">
+	<query name="getUserByAffiliationOrderByUsernameAsc">
 		select irUser from IrUser as irUser 
 		where irUser.affiliation.id = :affiliationId
 		order by irUser.username asc
 	</query>	
 	
 	<!-- named query for getting a user by affiliation ordered by username -->
-	<query name="getUserByAffilationOrderByUsernameDesc">
+	<query name="getUserByAffiliationOrderByUsernameDesc">
 		select irUser from IrUser as irUser 
 		where irUser.affiliation.id = :affiliationId
 		order by irUser.username desc
 	</query>	
 		
 	<!-- named query for getting a user by affiliation ordered by default email asc -->
-	<query name="getUsersByAffilationOrderByEmailAsc">
+	<query name="getUsersByAffiliationOrderByEmailAsc">
 		select irUser from IrUser as irUser 
 		where irUser.affiliation.id = :affiliationId
 		order by irUser.defaultEmail.email asc
 	</query>	
 	
 	<!-- named query for getting a user by affiliation order by email desc -->
-	<query name="getUsersByAffilationOrderByEmailDesc">
+	<query name="getUsersByAffiliationOrderByEmailDesc">
 		select irUser from IrUser as irUser 
 		where irUser.affiliation.id = :affiliationId
 		order by irUser.defaultEmail.email desc
@@ -493,7 +493,7 @@
 	</query>	
 	
 	<!-- named query for getting a user by role ordered by  name -->
-	<query name="getUserByAffilationRoleOrderByNameDesc">
+	<query name="getUserByAffiliationRoleOrderByNameDesc">
 		select irUser from IrUser as irUser
 		join irUser.roles as role
 		where role.id = :roleId
@@ -502,7 +502,7 @@
 	</query>	
 	
 	<!-- named query for getting a user by role ordered by username -->
-	<query name="getUserByAffilationORolerderByUsernameAsc">
+	<query name="getUserByAffiliationRoleOrderByUsernameAsc">
 		select irUser from IrUser as irUser 
 		join irUser.roles as role
 		where role.id = :roleId
@@ -511,7 +511,7 @@
 	</query>	
 	
 	<!-- named query for getting a user by role ordered by username -->
-	<query name="getUserByAffilationRoleOrderByUsernameDesc">
+	<query name="getUserByAffiliationRoleOrderByUsernameDesc">
 		select irUser from IrUser as irUser
 		join irUser.roles as role
 		where role.id = :roleId
@@ -520,7 +520,7 @@
 	</query>	
 		
 	<!-- named query for getting a user by role ordered by default email asc -->
-	<query name="getUsersByAffilationRoleOrderByEmailAsc">
+	<query name="getUsersByAffiliationRoleOrderByEmailAsc">
 		select irUser from IrUser as irUser
 		join irUser.roles as role
 		where role.id = :roleId
@@ -529,7 +529,7 @@
 	</query>	
 	
 	<!-- named query for getting a user by role order by email desc -->
-	<query name="getUsersByAffilationRoleOrderByEmailDesc">
+	<query name="getUsersByAffiliationRoleOrderByEmailDesc">
 		select irUser from IrUser as irUser 
 		join irUser.roles as role
 		where role.id = :roleId

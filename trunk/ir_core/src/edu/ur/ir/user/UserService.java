@@ -476,7 +476,7 @@ public interface UserService extends UserDetailsService, Serializable {
 	 * @param affiliationId -  the affiliation id
 	 * @return count of users by affiliation
 	 */
-	public Long getUserByAffilationCount(Long affilationId);
+	public Long getUserByAffiliationCount(Long affilationId);
 
 
 	/**
@@ -526,7 +526,7 @@ public interface UserService extends UserDetailsService, Serializable {
 	 * @param affiliationId -  the affiliation id
 	 * @return count of users by affiliation
 	 */
-	public Long getUserByRoleAffilationCount(Long roleId, Long affiliationId);
+	public Long getUserByRoleAffiliationCount(Long roleId, Long affiliationId);
 
 
 	/**
