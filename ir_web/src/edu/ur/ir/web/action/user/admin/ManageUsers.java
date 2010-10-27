@@ -555,7 +555,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	    	else if(affiliationId > 0 && roleId == -1)
 	    	{
 	    		users = userService.getUsersByAffiliationFullNameOrder(affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByAffilationCount(affiliationId).intValue();
+	    		totalHits = userService.getUserByAffiliationCount(affiliationId).intValue();
 	    	}
 	    	else if(affiliationId == -1 && roleId > 0 )
 	    	{
@@ -565,7 +565,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	    	else if(affiliationId > 0 && roleId > 0 )
 	    	{
 	    		users = userService.getUsersByRoleAffiliationFullNameOrder(roleId, affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    	    totalHits = userService.getUserByRoleAffilationCount(roleId, affiliationId).intValue();
+	    	    totalHits = userService.getUserByRoleAffiliationCount(roleId, affiliationId).intValue();
 	    	}
 	    
 	    } 
@@ -579,7 +579,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	    	else if(affiliationId > 0 && roleId == -1)
 	    	{
 	    		users = userService.getUsersByAffiliationUsernameOrder(affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    	    totalHits = userService.getUserByAffilationCount(affiliationId).intValue();
+	    	    totalHits = userService.getUserByAffiliationCount(affiliationId).intValue();
 	    	}
 	    	else if(affiliationId == -1 && roleId > 0 )
 	    	{
@@ -589,7 +589,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	    	else if(affiliationId > 0 && roleId > 0 )
 	    	{
 	    		users = userService.getUsersByRoleAffiliationUsernameOrder(roleId, affiliationId, totalHits, numberOfResultsToShow, orderType);
-	    	    totalHits = userService.getUserByRoleAffilationCount(roleId, affiliationId).intValue();
+	    	    totalHits = userService.getUserByRoleAffiliationCount(roleId, affiliationId).intValue();
 	    	}
 	    } 
 	    else if ( sortElement.equalsIgnoreCase("email") )
@@ -602,7 +602,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	    	else if(affiliationId > 0 && roleId == -1)
 	    	{
 	    		users = userService.getUsersByAffiliationEmailOrder(affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByAffilationCount(affiliationId).intValue();
+	    		totalHits = userService.getUserByAffiliationCount(affiliationId).intValue();
 	    	}
 	    	else if(affiliationId == -1 && roleId > 0 )
 	    	{
@@ -612,7 +612,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	    	else if(affiliationId > 0 && roleId > 0)
 	    	{
 	    		users = userService.getUsersByRoleAffiliationEmailOrder(roleId, affiliationId, rowStart, numberOfResultsToShow, orderType);	    		
-	    		totalHits = userService.getUserByRoleAffilationCount(roleId, affiliationId).intValue();
+	    		totalHits = userService.getUserByRoleAffiliationCount(roleId, affiliationId).intValue();
 	    	}
 	    }		
 		

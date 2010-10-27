@@ -184,7 +184,7 @@ CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
 	 * @param affiliationId -  the affiliation id
 	 * @return count of users by affiliation
 	 */
-	public Long getUserByAffilationCount(Long affilationId);
+	public Long getUserByAffiliationCount(Long affilationId);
 
 
 	/**
@@ -234,7 +234,7 @@ CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
 	 * @param affiliationId -  the affiliation id
 	 * @return count of users by affiliation
 	 */
-	public Long getUserByRoleAffilationCount(Long roleId, Long affilationId);
+	public Long getUserByRoleAffiliationCount(Long roleId, Long affilationId);
 
 
 	/**
