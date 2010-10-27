@@ -89,7 +89,7 @@
         <!--  yui download -->
 	    <dependency org="yui" name="yui" rev="2.7.0" transitive="false">
 	        <artifact name="yui" type="zip"
- 	        url="http://yuilibrary.com/downloads/yui2/yui_2.7.0b.zip"/> 
+ 	        url="http://yuilibrary.com/downloads/yui2/yui_2.7.0r1.zip"/> 
         </dependency>
 
          <!--  spring security libraries --> 
