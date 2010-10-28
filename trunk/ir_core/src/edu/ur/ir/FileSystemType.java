@@ -48,6 +48,8 @@ public class FileSystemType implements Serializable, Orderable{
 	public static final FileSystemType RESEARCHER_PUBLICATION = new FileSystemType("researcherPublication", 1);
 	public static final FileSystemType RESEARCHER_LINK = new FileSystemType("researcherLink", 1);
 	public static final FileSystemType RESEARCHER_INSTITUTIONAL_ITEM = new FileSystemType("researcherInstitutionalItem", 1);
+	public static final FileSystemType GROUP_FILE = new FileSystemType("groupFile", 1);
+	public static final FileSystemType GROUP_FOLDER = new FileSystemType("groupFolder", 10);
 
 	
 	/**
