@@ -206,6 +206,12 @@ s	 */
 				actionSuccess = false;
 			}
         }
+		else
+		{
+			// description change
+			collection.setDescription(collectionDescription);
+			institutionalCollectionService.saveCollection(collection);
+		}
         return "update";
 	}
 	
