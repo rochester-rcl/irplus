@@ -718,23 +718,6 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 		return fileSystemType;
 	}
 
-	/**
-	 * Always returns -1
-	 * 
-	 * @see edu.ur.ir.FileSystem#getVersionNumber()
-	 */
-	public int getVersionNumber() {
-		return -1;
-	}
-
-	/**
-	 * This is not a versioned entity
-	 * @see edu.ur.ir.FileSystem#getVersioned()
-	 */
-	public boolean getVersioned() {
-		return false;
-	}
-
 	@Override
 	protected void setRoot(PreOrderTreeSetNodeBase root) {
 		this.treeRoot = (PersonalFolder)root;

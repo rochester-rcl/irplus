@@ -51,10 +51,9 @@ import edu.ur.tree.PreOrderTreeSetNodeBase;
  * @author Nathan Sarr
  *
  */
-@SuppressWarnings("unchecked")
 public class InstitutionalCollection extends PreOrderTreeSetNodeBase implements
 Serializable, LongPersistentId, PersistentVersioned,
-DescriptionAware, NameAware, Comparable, FileSystem
+DescriptionAware, NameAware, Comparable<InstitutionalCollection>, FileSystem
 {
 	/** Logger */
 	private static final Logger log = Logger.getLogger(InstitutionalCollection.class);
@@ -203,22 +202,27 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	}
 	
 	/**
+	 * Get the children for this institutional collection.  This returns an
+	 * unmodifiable set.
+	 * 
 	 * @see edu.ur.tree.PreOrderTreeSetNodeBase#getChildren()
 	 */
-	@Override
 	public Set<InstitutionalCollection> getChildren() {
 		return Collections.unmodifiableSet(new TreeSet<InstitutionalCollection>(children));
 	}
 
 	/**
+	 * Get the parent for the institutional collection.
+	 * 
 	 * @see edu.ur.tree.PreOrderTreeSetNodeBase#getParent()
 	 */
-	@Override
 	public InstitutionalCollection getParent() {
 		return (InstitutionalCollection)parent;
 	}
 	
 	/**
+	 * Get the unique id for this collection.
+	 * 
 	 * @see edu.ur.persistent.LongPersistentId#getId()
 	 */
 	public Long getId() {
@@ -226,6 +230,8 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	}
 
 	/**
+	 * Get the version number for this collection.
+	 * 
 	 * @see edu.ur.persistent.PersistentVersioned#getVersion()
 	 */
 	public int getVersion() {
@@ -402,7 +408,6 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * 
 	 * @see edu.ur.tree.PreOrderTreeSetNodeBase#getRoot()
 	 */
-	@Override
 	public InstitutionalCollection getTreeRoot() {
 		return treeRoot;
 	}
@@ -657,6 +662,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	{
 		int value = 0;
 		value += name == null ? 0 : name.hashCode();
+		value += repository == null ? 0 : repository.hashCode();
 		value += getPath() == null? 0 : getPath().hashCode();
 		return value;
 	}
@@ -756,7 +762,7 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(Object other) {
+	public int compareTo(InstitutionalCollection other) {
 		InstitutionalCollection c = (InstitutionalCollection)other;
 		return this.getName().compareTo(c.getName());
 	}
