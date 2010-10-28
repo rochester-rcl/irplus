@@ -240,7 +240,7 @@
                            <p>
                            <br/>
                            <c:forEach var="link" items="${institutionalCollection.links}">
-                           <a href="${link.url}">${link.name}</a> <c:if test="${link.description != null}"> <br> ${link.description} </c:if> <br/><br/>
+                           <a target="_blank" href="${link.url}">${link.name}</a> <c:if test="${link.description != null}"> <br> ${link.description} </c:if> <br/><br/>
                            </c:forEach>
                            </p>
                        </div>
