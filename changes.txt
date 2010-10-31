@@ -2,12 +2,26 @@ IR+ changes 2.0 to 2.x
 ==============================
 - Updated Approve affiliations - removed unneeded variables and imports
 - added last login date to user search results table 
-- updated to allow filtering by role and affilation 
+- updated to allow filtering by role and affiliation 
+- Updated to allow administrators to view invite table
+- Updated to Lucene version 2.9.3
 
+IR+ 2.0.2 to 2.0.3
+=============================
+- Fixed issue with updating a collection description
+
+IR+ 2.0.1 to 2.0.2
+=============================
+- Fixed security issue for YUI library
+
+
+IR+ Changes 2.0 to 2.0.1
+==============================
+Fixed issue with incorrect indexing of institutional items on submission
 
 
 IR+ changes 1.0 to 2.0
-
+===============================
 
 [Global]
 =============================
