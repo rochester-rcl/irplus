@@ -46,6 +46,8 @@
 						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 						<c:param name="sortElement" value="username"/>		
 						<c:param name="sortType" value="asc"/>
+						<c:param name="roleId" value="${roleId}"/>
+						<c:param name="affiliationId" value="${affiliationId}"/>
 				    </c:url>
 				    
 				    <c:url var="usernameSortDesc" value="/admin/viewUsers.action">
@@ -54,6 +56,8 @@
 						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 						<c:param name="sortElement" value="username"/>		
 						<c:param name="sortType" value="desc"/>
+						<c:param name="roleId" value="${roleId}"/>
+						<c:param name="affiliationId" value="${affiliationId}"/>
 				    </c:url>
 	                
 	                <c:set var="userNameSort" value="none"/>
@@ -81,6 +85,8 @@
 						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 						<c:param name="sortElement" value="lastName"/>		
 						<c:param name="sortType" value="asc"/>
+						<c:param name="roleId" value="${roleId}"/>
+						<c:param name="affiliationId" value="${affiliationId}"/>
 				    </c:url>
 				    
 				    <c:url var="lastNameSortDesc" value="/admin/viewUsers.action">
@@ -89,6 +95,8 @@
 						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 						<c:param name="sortElement" value="lastName"/>		
 						<c:param name="sortType" value="desc"/>
+						<c:param name="roleId" value="${roleId}"/>
+						<c:param name="affiliationId" value="${affiliationId}"/>
 				    </c:url>
 	                
 	                <c:set var="lastNameSort" value="none"/>
@@ -116,6 +124,8 @@
 						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 						<c:param name="sortElement" value="email"/>		
 						<c:param name="sortType" value="asc"/>
+						<c:param name="roleId" value="${roleId}"/>
+						<c:param name="affiliationId" value="${affiliationId}"/>
 				    </c:url>
 				    
 				    <c:url var="emailSortDesc" value="/admin/viewUsers.action">
@@ -124,6 +134,8 @@
 						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
 						<c:param name="sortElement" value="email"/>		
 						<c:param name="sortType" value="desc"/>
+						<c:param name="roleId" value="${roleId}"/>
+						<c:param name="affiliationId" value="${affiliationId}"/>
 				    </c:url>
                     
 	                <c:set var="emailSort" value="none"/>
