@@ -167,6 +167,7 @@
         <!--  User Affiliation Actions                         -->
         <!--  ************************************ -->
          <action name="viewPendingApproval">
+            <interceptor-ref name="crudStack" />
             <result name="success">/pages/admin/user/affiliation/approve_affiliation.jsp</result>
         </action>
         
