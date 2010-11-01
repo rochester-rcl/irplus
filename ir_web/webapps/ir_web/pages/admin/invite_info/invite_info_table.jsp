@@ -25,6 +25,7 @@
 	<c:import url="invite_info_pager.jsp"/>
 </c:if>
 
+</br>
 <div class="dataTable">
 	<form method="post" id="inviteInfo">
 	             
