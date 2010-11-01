@@ -14,11 +14,24 @@
    limitations under the License.
 -->   
 
+
+ 
+        <!--  ************************************ -->
+        <!--  View Invite Information                       -->
+        <!--  ************************************ -->
+        <action name="viewInviteInfos"
+                class="edu.ur.ir.web.action.user.admin.ManageInviteInfo"
+                method="viewInviteInfos">
+                <interceptor-ref name="crudStack" />
+                <result name="success">/pages/admin/invite_info/invite_info.jsp</result>
+        </action>
         
         <!--  ************************************ -->
         <!--  User Actions                         -->
         <!--  ************************************ -->
-         <action name="viewUsers" class="edu.ur.ir.web.action.user.admin.ManageUsers">
+         <action name="viewUsers" 
+                 class="edu.ur.ir.web.action.user.admin.ManageUsers"
+                 method="viewUsers">
             <result name="success">/pages/admin/user/users.jsp</result>
         </action>
         
