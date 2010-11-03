@@ -32,11 +32,11 @@
         <dependency org="ur_tags" name="ur_tags" rev="2.0" transitive="false" changing="true"/>
         
         <!--  struts 2 files and dependencies -->
-        <dependency org="org.apache.struts" name="struts2-core" rev="2.1.8.1" transitive="false">
+        <dependency org="org.apache.struts" name="struts2-core" rev="2.2.1" transitive="false">
             <artifact name="struts2-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.apache.struts" name="struts2-spring-plugin" rev="2.1.8.1" transitive="false">
+        <dependency org="org.apache.struts" name="struts2-spring-plugin" rev="2.2.1" transitive="false">
             <artifact name="struts2-spring-plugin" type="jar"/>
         </dependency>
         
