@@ -40,27 +40,23 @@
         </dependency>
  
         <!--  POI dependencies -->
-        <dependency org="org.apache.poi" name="poi" rev="3.6" transitive="false">
+        <dependency org="org.apache.poi" name="poi" rev="3.7" transitive="false">
             <artifact name="poi" type="jar" />
-        </dependency>
-        
-        <dependency org="org.apache.poi" name="poi-contrib" rev="3.6" transitive="false">
-            <artifact name="poi-contrib" type="jar" />
         </dependency>
         
          <dependency org="org.apache.poi" name="openxml4j" rev="1.0-beta" transitive="false">
             <artifact name="openxml4j" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-scratchpad" rev="3.6" transitive="false">
+        <dependency org="org.apache.poi" name="poi-scratchpad" rev="3.7" transitive="false">
             <artifact name="poi-scratchpad" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-ooxml" rev="3.6" transitive="false">
+        <dependency org="org.apache.poi" name="poi-ooxml" rev="3.7" transitive="false">
             <artifact name="poi-ooxml" type="jar" />
         </dependency>
         
-        <dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.6" transitive="false">
+        <dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="3.7" transitive="false">
             <artifact name="poi-ooxml-schemas" type="jar" />
         </dependency>
         
