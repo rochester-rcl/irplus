@@ -8,7 +8,7 @@ IR+ changes 2.0 to 2.x
 - Updated to load user id when going to approve user affiliations - fixes menu bar
 - Updated to Struts 2.2.1
 - Updated to YUI 2.8.2 r1
-
+- Updated to PDF box 1.3.1
 
 IR+ 2.0.2 to 2.0.3
 =============================
