@@ -5,6 +5,10 @@ IR+ changes 2.0 to 2.x
 - updated to allow filtering by role and affiliation 
 - Updated to allow administrators to view invite table
 - Updated to Lucene version 2.9.3
+- Updated to load user id when going to approve user affiliations - fixes menu bar
+- Updated to Struts 2.2.1
+- Updated to YUI 2.8.2 r1
+
 
 IR+ 2.0.2 to 2.0.3
 =============================
