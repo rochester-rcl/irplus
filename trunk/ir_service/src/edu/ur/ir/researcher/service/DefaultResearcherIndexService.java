@@ -476,12 +476,9 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	}
 	
 	/**
-	 * All methods should use this to obtain a writer on the directory.  This will return 
-	 * a null writer if the index is locked.  A while loop can be set up to determine if an index
-	 * writer is available for the specified directory. This ensures that only one writer is writing to a 
-	 * users index at once.
+	 * All methods should use this to obtain a writer on the directory.  
 	 * 
-	 * @param directory
+	 * @param directory - that holds the index
 	 * @return - writer that will not overwrite an existing directory if it exists.  This will create a directory if 
 	 * one does not yet exist.
 	 * 
