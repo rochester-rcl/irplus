@@ -1,10 +1,7 @@
 #labels Featured
-= Welcome to IR Plus =
-
-
-
-
 = Why IR+ ? =
 
 
-http://code.google.com/p/irplus/w/list
+
+
+Page Listing: http://code.google.com/p/irplus/w/list
