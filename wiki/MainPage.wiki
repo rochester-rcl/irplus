@@ -15,3 +15,6 @@
 <wiki:gadget url="http://www.ohloh.net/p/128252/widgets/project_cocomo.xml" height="240" border="0"/>
 
 <wiki:gadget url="http://www.ohloh.net/p/128252/widgets/project_basic_stats.xml" height="220" border="1"/>
+
+
+http://code.google.com/p/irplus/w/list
