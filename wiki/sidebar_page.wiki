@@ -1,6 +1,4 @@
-#summary One-sentence summary of this page.
-
-= Introduction =
+= Menu =
 
 Add your content here.
 
