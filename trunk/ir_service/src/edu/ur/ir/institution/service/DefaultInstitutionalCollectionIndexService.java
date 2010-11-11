@@ -118,22 +118,29 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 		}
 		finally 
 		{
-			if (writer != null) {
-			    try {
+			if (writer != null) 
+			{
+			    try 
+			    {
 				    writer.close();
-			    } catch (Exception e) {
+			    }
+			    catch (Exception e) 
+			    {
 				    log.error(e);
+				    try
+				    {
+				    	if( IndexWriter.isLocked(directory))
+						{
+				            IndexWriter.unlock(directory);
+						}
+			     	}
+			    	catch (IOException e1)
+			    	{
+						log.error(e1);
+					}
 			    }
 		    }
 		    writer = null;
-		    try {
-				IndexWriter.unlock(directory);
-			} 
-	    	catch (IOException e1)
-	    	{
-				log.error(e1);
-			}
-		    
 		    if( directory != null )
 		    {
 		    	try
@@ -147,7 +154,6 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 		    directory = null;
 		    docs = null;
 		}
-		
 	}
 
 	/**
@@ -158,7 +164,7 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalCollectionIndexService#addToIndex(edu.ur.ir.institution.InstitutionalCollection, java.io.File)
 	 */
-	public void addToIndex(InstitutionalCollection collection,
+	public void add(InstitutionalCollection collection,
 			File collectionIndexFolder) throws NoIndexFoundException {
 		if( log.isDebugEnabled() )
 		{
@@ -180,7 +186,7 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 	 * @param collectionIndexFolder  - folder location of the collection index
 	 * @see edu.ur.ir.institution.InstitutionalCollectionIndexService#deleteFromIndex(java.lang.Long, java.io.File)
 	 */
-	public void deleteFromIndex(Long collectionId, File collectionIndexFolder) {
+	public void delete(Long collectionId, File collectionIndexFolder) {
 		if( log.isDebugEnabled() )
 		{
 			log.debug("deleting collection id : " + collectionId + " from index folder " + collectionIndexFolder.getAbsolutePath());
@@ -206,21 +212,27 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 			errorEmailService.sendError(e);
 		}
 		finally {
-			if (writer != null) {
-			    try {
-				    writer.close();
-			    } catch (Exception e) {
-				    log.error(e);
-			    }
+			try 
+		    {
+			    writer.close();
+		    }
+		    catch (Exception e) 
+		    {
+			    log.error(e);
+			    try
+			    {
+			    	if( IndexWriter.isLocked(directory))
+					{
+			            IndexWriter.unlock(directory);
+					}
+		     	}
+		    	catch (IOException e1)
+		    	{
+					log.error(e1);
+				}
 		    }
 		    writer = null;
-		    try {
-				IndexWriter.unlock(directory);
-			} 
-	    	catch (IOException e1)
-	    	{
-				log.error(e1);
-			}
+		    
 		    
 		    if( directory != null )
 		    {
@@ -260,21 +272,28 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 		finally 
         {
 		    if (writer != null) {
-			    try {
+		    	try 
+			    {
 				    writer.close();
-			    } catch (Exception e) {
+			    }
+			    catch (Exception e) 
+			    {
 				    log.error(e);
+				    try
+				    {
+				    	if( IndexWriter.isLocked(directory))
+						{
+				            IndexWriter.unlock(directory);
+						}
+			     	}
+			    	catch (IOException e1)
+			    	{
+						log.error(e1);
+					}
 			    }
 		    }
 		    writer = null;
-		    try 
-		    {
-				IndexWriter.unlock(directory);
-			} 
-	    	catch (IOException e1)
-	    	{
-				log.error(e1);
-			}
+		    
 		    if( directory != null )
 		    {
 		    	try
@@ -297,14 +316,14 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 	 * @param collectionIndexFolder - folder which holds the institutional collection index.
 	 * @see edu.ur.ir.institution.InstitutionalCollectionIndexService#updateIndex(edu.ur.ir.institution.InstitutionalCollection, java.io.File)
 	 */
-	public void updateIndex(InstitutionalCollection collection,
+	public void update(InstitutionalCollection collection,
 			File collectionIndexFolder) throws NoIndexFoundException {
 		if( log.isDebugEnabled() )
 		{
 			log.debug("updating index for institutional collection : " + collection + " in index folder " + collectionIndexFolder.getAbsolutePath());
 		}
-		deleteFromIndex(collection.getId(), collectionIndexFolder);
-		addToIndex(collection, collectionIndexFolder);
+		delete(collection.getId(), collectionIndexFolder);
+		add(collection, collectionIndexFolder);
 		
 	}
 	
@@ -406,7 +425,7 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 		Directory directory = null;
 		IndexWriter writer = null;
 		try {
-			FSDirectory.open(new File(directoryPath));
+			directory = FSDirectory.open(new File(directoryPath));
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
@@ -416,22 +435,26 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 		}
 		finally
 		{
-			if (writer != null) {
-			    try {
-				    writer.close();
-			    } catch (Exception e) {
-				    log.error(e);
-			    }
+			try 
+		    {
+			    writer.close();
+		    }
+		    catch (Exception e) 
+		    {
+			    log.error(e);
+			    try
+			    {
+			    	if( IndexWriter.isLocked(directory))
+					{
+			            IndexWriter.unlock(directory);
+					}
+		     	}
+		    	catch (IOException e1)
+		    	{
+					log.error(e1);
+				}
 		    }
 		    writer = null;
-		    try {
-				IndexWriter.unlock(directory);
-			} 
-	    	catch (IOException e1)
-	    	{
-				log.error(e1);
-			}
-		    
 		    if( directory != null )
 		    {
 		    	try
@@ -440,6 +463,7 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 		    	}
 		    	catch (Exception e) {
 				    log.error(e);
+				    
 			    }
 		    }
 		    directory = null;

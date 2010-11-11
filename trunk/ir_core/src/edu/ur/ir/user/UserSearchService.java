@@ -21,6 +21,12 @@ import java.io.Serializable;
 
 import edu.ur.ir.SearchResults;
 
+/**
+ * Service for accessing user information using a serarch.
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public interface UserSearchService extends Serializable{
 	
 	/**

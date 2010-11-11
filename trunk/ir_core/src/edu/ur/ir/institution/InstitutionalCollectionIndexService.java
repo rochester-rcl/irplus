@@ -36,7 +36,7 @@ public interface InstitutionalCollectionIndexService extends Serializable{
 	 * @param collection - institutional collection to add.
 	 * @param collectionIndexFolder - folder which holds the institutional collection index.
 	 */
-	public void addToIndex(InstitutionalCollection collection, File collectionIndexFolder) throws NoIndexFoundException;
+	public void add(InstitutionalCollection collection, File collectionIndexFolder) throws NoIndexFoundException;
 	
 	/**
 	 * Update the institutional collection to the index.
@@ -44,7 +44,7 @@ public interface InstitutionalCollectionIndexService extends Serializable{
 	 * @param collection - institutional collection to add.
 	 * @param collectionIndexFolder - folder which holds the institutional collection index.
 	 */
-	public void updateIndex(InstitutionalCollection collection, File collectionIndexFolder) throws NoIndexFoundException;
+	public void update(InstitutionalCollection collection, File collectionIndexFolder) throws NoIndexFoundException;
 	
 	/**
 	 * Delete the collection in the index.
@@ -52,7 +52,7 @@ public interface InstitutionalCollectionIndexService extends Serializable{
 	 * @param collectionId - id of the collection
 	 * @param collectionIndexFolder  - folder location of the collection index
 	 */
-	public void deleteFromIndex(Long collectionId, File collectionIndexFolder);
+	public void delete(Long collectionId, File collectionIndexFolder);
 	
 	/**
 	 * Re-index the specified collections.  This can be used to re-index 

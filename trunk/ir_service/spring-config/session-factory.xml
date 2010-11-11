@@ -53,6 +53,7 @@
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemRepositoryLicense.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemIndexProcessingRecord.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/DeletedInstitutionalItemVersion.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemByContentType.hbm.xml</value>
                 
                 
                 <value>edu/ur/hibernate/ir/item/db/GenericItem.hbm.xml</value>
