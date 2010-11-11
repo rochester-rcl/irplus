@@ -91,8 +91,7 @@ public class Repository extends CommonPersistent {
 	private String userWorkspaceIndexFolder;
 	
 	/** Folder to hold collection index information */
-	private String collectionIndexFolder;
-	
+	private String institutionalCollectionIndexFolder;
 
 	/** group index folder */
 	private String userGroupIndexFolder;
@@ -496,8 +495,8 @@ public class Repository extends CommonPersistent {
 	 * 
 	 * @return collection index folder location
 	 */
-	public String getCollectionIndexFolder() {
-		return collectionIndexFolder;
+	public String getInstitutionalCollectionIndexFolder() {
+		return institutionalCollectionIndexFolder;
 	}
 
 	/**
@@ -505,8 +504,8 @@ public class Repository extends CommonPersistent {
 	 * 
 	 * @param collectionIndexFolder
 	 */
-	public void setCollectionIndexFolder(String collectionIndexFolder) {
-		this.collectionIndexFolder = collectionIndexFolder;
+	public void setInstitutionalCollectionIndexFolder(String institutionalCollectionIndexFolder) {
+		this.institutionalCollectionIndexFolder = institutionalCollectionIndexFolder;
 	}
 
 	/**

@@ -1,0 +1,1 @@
+ALTER TABLE ir_repository.repository ADD COLUMN institutional_collection_index_folder TEXT;
