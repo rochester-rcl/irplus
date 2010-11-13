@@ -19,7 +19,7 @@
 <suite name="ir_service">
 	<test name="UR IR Service Test">
 		<classes>
-			<class name="edu.ur.ir.institution.service.DefaultInstitutionalCollectionIndexServiceTest"/>
+			<class name="edu.ur.ir.user.service.UserGroupIndexServiceTest"/>
 		</classes>
 	</test>
 </suite>

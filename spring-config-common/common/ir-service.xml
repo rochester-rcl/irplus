@@ -115,6 +115,20 @@
        <property name="irUserGroupDAO" ref="irUserGroupDAO"/>
    </bean>
    
+    <!--  Service for helping searching for user groups --> 
+    <bean id="userGroupSearchService" 
+       class="edu.ur.ir.user.service.DefaultUserGroupSearchService">
+       <property name="userGroupService" ref="userGroupService"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+   </bean>
+ 
+ 
+    <bean id="userGroupIndexService" 
+       class="edu.ur.ir.user.service.DefaultUserGroupIndexService">
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
+   </bean>
+   
    <!-- ****************************************** --> 
    <!-- Item related services -->
    <!-- ****************************************** --> 

@@ -1,4 +1,4 @@
-package edu.ur.ir.institution.service;
+package edu.ur.ir.user.service;
 
 import java.io.File;
 import java.util.Properties;
@@ -10,30 +10,29 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
-
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.SearchResults;
-import edu.ur.ir.institution.InstitutionalCollection;
-import edu.ur.ir.institution.InstitutionalCollectionIndexService;
-import edu.ur.ir.institution.InstitutionalCollectionSearchService;
-import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
 import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
+import edu.ur.ir.user.IrUserGroup;
+import edu.ur.ir.user.UserGroupIndexService;
+import edu.ur.ir.user.UserGroupSearchService;
+import edu.ur.ir.user.UserGroupService;
 
 /**
- * Test the institutional collection index service.
+ * Testing for user group indexing.
  * 
  * @author Nathan Sarr
  *
  */
 @Test(groups = { "baseTests" }, enabled = true)
-public class DefaultInstitutionalCollectionIndexServiceTest {
-	
+public class UserGroupIndexServiceTest {
+
 	/** Application context  for loading information*/
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 
@@ -47,8 +46,8 @@ public class DefaultInstitutionalCollectionIndexServiceTest {
 	TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
 	
     /** Collection service  */
-    InstitutionalCollectionService institutionalCollectionService = 
-    	(InstitutionalCollectionService) ctx.getBean("institutionalCollectionService");
+    UserGroupService userGroupService = 
+    	(UserGroupService) ctx.getBean("userGroupService");
 	
 	/** Properties file with testing specific information. */
 	PropertiesLoader propertiesLoader = new PropertiesLoader();
@@ -57,10 +56,10 @@ public class DefaultInstitutionalCollectionIndexServiceTest {
 	Properties properties = propertiesLoader.getProperties();
 	
 	/** service to deal with searching institutional collection information */
-	InstitutionalCollectionSearchService institutionalCollectionSearchService = (InstitutionalCollectionSearchService) ctx.getBean("institutionalCollectionSearchService");
+	UserGroupSearchService userGroupSearchService = (UserGroupSearchService) ctx.getBean("userGroupSearchService");
 	
 	/** institutional collection index service */
-	InstitutionalCollectionIndexService institutionalCollectionIndexService = (InstitutionalCollectionIndexService) ctx.getBean("institutionalCollectionIndexService");
+	UserGroupIndexService userGroupIndexService = (UserGroupIndexService) ctx.getBean("userGroupIndexService");
 	
 	/**
 	 * Test indexing an institutional item
@@ -78,41 +77,40 @@ public class DefaultInstitutionalCollectionIndexServiceTest {
 		// save the repository
 		
 		repo = repositoryService.getRepository(repo.getId(), false);
-		InstitutionalCollection collection = repo.createInstitutionalCollection("nate collection");
-		collection.setDescription("my description");
-		institutionalCollectionService.saveCollection(collection);
+		IrUserGroup userGroup = new IrUserGroup("nate group", "cool users");
+		userGroupService.save(userGroup);
 		
         // add the item to the index
 		tm.commit(ts);
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalCollectionIndexService.add(collection, new File(repo.getInstitutionalCollectionIndexFolder()));
+        userGroupIndexService.add(userGroup, new File(repo.getUserGroupIndexFolder()));
 	
 		// search the document and make sure we can find the stored data
 		try {
-			SearchResults<InstitutionalCollection> results = 
-				institutionalCollectionSearchService.search(new File(repo.getInstitutionalCollectionIndexFolder()), "Nate Collection", 0, 10);
+			SearchResults<IrUserGroup> results = 
+				userGroupSearchService.search(new File(repo.getUserGroupIndexFolder()), "Nate Group", 0, 10);
 			assert results.getObjects().size() == 1 : "Hit count should equal 1 but equals " + results.getObjects().size() 
-			+ " for finding " + DefaultInstitutionalCollectionIndexService.NAME;
+			+ " for finding " + DefaultUserGroupIndexService.NAME;
 			
 			results = 
-				institutionalCollectionSearchService.search(new File(repo.getInstitutionalCollectionIndexFolder()), "my description", 0, 10);
+				userGroupSearchService.search(new File(repo.getUserGroupIndexFolder()), "cool users", 0, 10);
 			assert results.getObjects().size() == 1 : "Hit count should equal 1 but equals " + results.getObjects().size() 
-			+ " for finding " + DefaultInstitutionalCollectionIndexService.DESCRIPTION;
+			+ " for finding " + DefaultUserGroupIndexService.DESCRIPTION;
 			
 		
-		institutionalCollectionIndexService.delete(collection.getId(), new File(repo.getInstitutionalCollectionIndexFolder()));
+		userGroupIndexService.delete(userGroup.getId(), new File(repo.getUserGroupIndexFolder()));
 
 		results = 
-			institutionalCollectionSearchService.search(new File(repo.getInstitutionalCollectionIndexFolder()), "Nate Collection", 0, 10);
+			userGroupSearchService.search(new File(repo.getUserGroupIndexFolder()), "Nate Collection", 0, 10);
 		assert results.getObjects().size() == 0 : "Hit count should equal 1 but equals " + results.getObjects().size() 
-		+ " for finding " + DefaultInstitutionalCollectionIndexService.NAME;
+		+ " for finding " + DefaultUserGroupIndexService.NAME;
 		
 		results = 
-			institutionalCollectionSearchService.search(new File(repo.getInstitutionalCollectionIndexFolder()), "my Collection", 0, 10);
+			userGroupSearchService.search(new File(repo.getUserGroupIndexFolder()), "my Collection", 0, 10);
 		assert results.getObjects().size() == 0 : "Hit count should equal 1 but equals " + results.getObjects().size() 
-		+ " for finding " + DefaultInstitutionalCollectionIndexService.DESCRIPTION;
+		+ " for finding " + DefaultUserGroupIndexService.DESCRIPTION;
 		
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -121,8 +119,9 @@ public class DefaultInstitutionalCollectionIndexServiceTest {
 		
 	    // Start new transaction - clean up the data
 		ts = tm.getTransaction(td);
+		userGroupService.delete(userGroupService.get(userGroup.getId(), false));
 		helper.cleanUpRepository();
 		tm.commit(ts);	
 	}
-
+	
 }

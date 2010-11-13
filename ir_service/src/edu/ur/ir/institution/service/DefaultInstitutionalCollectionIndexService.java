@@ -482,9 +482,7 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 	 */
 	private IndexWriter getWriter(Directory directory) throws CorruptIndexException, LockObtainFailedException, IOException
 	{
-		IndexWriter writer = null;
-	    writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
-		return writer;
+	    return new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 	}
 	
 	/**

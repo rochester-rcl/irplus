@@ -418,6 +418,18 @@ public class DefaultRepositoryService implements RepositoryService {
 			File f = new File(repository.getUserWorkspaceIndexFolder());
 			FileUtils.deleteQuietly(f);
 		}
+		
+		if( repository.getInstitutionalCollectionIndexFolder() != null)
+		{
+			File f = new File(repository.getInstitutionalCollectionIndexFolder());
+			FileUtils.deleteQuietly(f);
+		}
+		
+		if( repository.getUserGroupIndexFolder() != null)
+		{
+			File f = new File(repository.getUserGroupIndexFolder());
+			FileUtils.deleteQuietly(f);
+		}
 		repositoryDAO.makeTransient(repository);
 		
 	}
