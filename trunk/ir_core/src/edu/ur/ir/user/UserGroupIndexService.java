@@ -17,6 +17,7 @@
 package edu.ur.ir.user;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.NoIndexFoundException;
@@ -27,15 +28,15 @@ import edu.ur.ir.NoIndexFoundException;
  * @author Nathan Sarr
  *
  */
-public interface UserGroupIndexService {
+public interface UserGroupIndexService extends Serializable {
 	
 	/**
-	 * Add the institutional collection to the index.
+	 * Add the user group to the index.
 	 * 
 	 * @param userGroup - user group to add.
 	 * @param userGroupIndexFolder - folder that holds the user group index.
 	 */
-	public void addToIndex(IrUserGroup userGroup, File userGroupIndexFolder) throws NoIndexFoundException;
+	public void add(IrUserGroup userGroup, File userGroupIndexFolder) throws NoIndexFoundException;
 	
 	/**
 	 * Update the user group in the index.
@@ -43,7 +44,7 @@ public interface UserGroupIndexService {
 	 * @param userGroup - userGroup to add.
 	 * @param userGroupIndexFolder - folder which holds the user groups.
 	 */
-	public void updateIndex(IrUserGroup userGroup, File userGroupIndexFolder) throws NoIndexFoundException;
+	public void update(IrUserGroup userGroup, File userGroupIndexFolder) throws NoIndexFoundException;
 	
 	/**
 	 * Delete the user group in the index.
@@ -51,10 +52,10 @@ public interface UserGroupIndexService {
 	 * @param userGroupId - id of the user
 	 * @param userIndexFolder  - folder location of the collection index
 	 */
-	public void deleteFromIndex(Long userGroupId, File userGroupIndexFolder);
+	public void delete(Long userGroupId, File userGroupIndexFolder);
 	
 	/**
-	 * Re-index the specified collections.  This can be used to re-index 
+	 * Re-index the specified user groups.  This can be used to re-index 
 	 * all user groups
 	 * 
 	 * @param userGroups - user groups to re index
