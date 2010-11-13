@@ -48,7 +48,7 @@
             <artifact name="freemarker" type="jar"/>
         </dependency>
 
-        <dependency org="ognl" name="ognl" rev="2.7.3" transitive="false">
+        <dependency org="ognl" name="ognl" rev="3.0" transitive="false">
             <artifact name="ognl" type="jar"/>
         </dependency>
         
