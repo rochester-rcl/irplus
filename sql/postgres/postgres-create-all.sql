@@ -1871,6 +1871,7 @@ CREATE TABLE ir_repository.repository
   researcher_index_folder TEXT,
   user_workspace_index_folder TEXT,
   institutional_collection_index_folder TEXT,
+  user_group_index_folder TEXT,
   default_handle_authority_id BIGINT,
   last_email_subscriber_process_sent_date TIMESTAMP WITH TIME ZONE,
   UNIQUE (name),
