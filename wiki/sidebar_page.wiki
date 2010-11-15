@@ -1,2 +1,3 @@
 = Menu =
+[http://code.google.com/p/irplus/wiki/MainPage Main Page]
 [http://code.google.com/p/irplus/w/list Page Listing]
