@@ -1,3 +1,4 @@
 === Menu ===
- * [http://code.google.com/p/irplus/wiki/MainPage Main Page]
+ * [http://code.google.com/p/irplus/wiki/MainPage Why IR+]
+ * [http://code.google.com/p/irplus/wiki/DevelopmentAndTesting Development and Testing]
  * [http://code.google.com/p/irplus/w/list Page Listing]
