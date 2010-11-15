@@ -44,7 +44,7 @@
             <artifact name="commons-fileupload" type="jar"/>
         </dependency>
         
-        <dependency org="org.freemarker" name="freemarker" rev="2.3.15" transitive="false">
+        <dependency org="org.freemarker" name="freemarker" rev="2.3.16" transitive="false">
             <artifact name="freemarker" type="jar"/>
         </dependency>
 
