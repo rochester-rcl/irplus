@@ -7,7 +7,7 @@ Institutional repositories were created as a way for organizations to provide us
 
 === What makes IR+ special ===
 
-IR+ is a fully functional institutional repository.  IR+ is a standalone system that has *several major features* not offered by any other repository.  These features make the repository relevant to those that we want to be the core consumers of the institutional repository including Faculty, Graudate Students and Staff.  These features include:
+IR+ is a fully functional institutional repository.  IR+ is a standalone system that has *several major features* not offered by any other repositories.  These features make the repository relevant to those that we want to be the core consumers of the institutional repository including Faculty, Graudate Students and Staff.  These features include:
 
  * Personal Private Workspaces
  * Portfolio Pages
