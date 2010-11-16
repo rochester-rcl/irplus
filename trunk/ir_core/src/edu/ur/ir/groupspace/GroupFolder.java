@@ -61,8 +61,6 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	private GroupSpace groupSpace;
 
 
-
-
 	/**
 	 * This is the conceptual path to the item.
 	 * The base path plus the root of the tree 
@@ -104,7 +102,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	{
 		setName(name);
 		setTreeRoot(this);
-		setPath( PATH_SEPERATOR );
+		setPath(PATH_SEPERATOR);
 		setOwner(owner);
 		setGroupSpace(groupSpace);
 	}

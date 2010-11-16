@@ -107,6 +107,8 @@
 			
 			<class name="edu.ur.ir.handle.NamingAuthorityTest"/>
 			<class name="edu.ur.ir.handle.HandleInfoTest"/>
+			
+			<class name="edu.ur.ir.groupspace.GroupSpaceTest"/>
 		</classes>
 	</test>
 </suite>
