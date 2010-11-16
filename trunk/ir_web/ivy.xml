@@ -78,11 +78,11 @@
         </dependency>
         
         <!-- spring files -->
-        <dependency org="org.springframework" name="spring-web" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-web" rev="3.0.5.RELEASE" transitive="false">
             <artifact name="spring-web" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework.security" name="spring-security-config" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework.security" name="spring-security-config" rev="3.0.4.RELEASE" transitive="false">
             <artifact name="spring-security-config" type="jar"/>
         </dependency>
 
@@ -93,7 +93,7 @@
         </dependency>
 
          <!--  spring security libraries --> 
-        <dependency org="org.springframework.security" name="spring-security-web" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework.security" name="spring-security-web" rev="3.0.4.RELEASE" transitive="false">
             <artifact name="spring-security-web" type="jar"/> 
         </dependency>
     </dependencies>

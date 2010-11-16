@@ -79,23 +79,23 @@
         
           
         <!-- spring files -->
-        <dependency org="org.springframework" name="spring-core" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-core" rev="3.0.5.RELEASE" transitive="false">
             <artifact name="spring-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-context" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-context" rev="3.0.5.RELEASE" transitive="false">
             <artifact name="spring-context" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-beans" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-beans" rev="3.0.5.RELEASE" transitive="false">
             <artifact name="spring-beans" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-asm" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-asm" rev="3.0.5.RELEASE" transitive="false">
             <artifact name="spring-asm" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-expression" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-expression" rev="3.0.5.RELEASE" transitive="false">
             <artifact name="spring-expression" type="jar"/>
         </dependency>
         
@@ -107,11 +107,11 @@
 
 
         <!--  spring security libraries --> 
-        <dependency org="org.springframework.security" name="spring-security-core" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework.security" name="spring-security-core" rev="3.0.4.RELEASE" transitive="false">
             <artifact name="spring-security-core" type="jar"/> 
         </dependency>
         
-        <dependency org="org.springframework.security" name="spring-security-ldap" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework.security" name="spring-security-ldap" rev="3.0.4.RELEASE" transitive="false">
             <artifact name="spring-security-ldap" type="jar"/> 
         </dependency>
 

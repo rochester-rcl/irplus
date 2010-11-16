@@ -47,7 +47,7 @@
         </dependency>
         
         <!-- spring files -->
-        <dependency org="org.springframework" name="spring-context-support" rev="3.0.2.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-context-support" rev="3.0.5.RELEASE" transitive="false">
             <artifact name="spring-context-support" type="jar"/>
         </dependency>
         
