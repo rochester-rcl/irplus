@@ -21,6 +21,7 @@ import java.util.Set;
 
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
+import edu.ur.simple.type.DescriptionAware;
 import edu.ur.simple.type.NameAware;
 
 
@@ -31,7 +32,7 @@ import edu.ur.simple.type.NameAware;
  * @author Nathan Sarr
  *
  */
-public class GroupSpace extends BasePersistent implements NameAware {
+public class GroupSpace extends BasePersistent implements NameAware, DescriptionAware {
 	
 	/** eclipse generated id */
 	private static final long serialVersionUID = -6440204761384913224L;
@@ -47,6 +48,9 @@ public class GroupSpace extends BasePersistent implements NameAware {
 	
 	/** Owner of the group space */
 	private IrUser owner;
+	
+	/** Description of the group space */
+	private String description;
 
 	/**  Package protected workspace  */
 	GroupSpace(){}
@@ -60,8 +64,23 @@ public class GroupSpace extends BasePersistent implements NameAware {
     public GroupSpace(String name, IrUser owner)
     {
     	setName(name);
+    	setOwner(owner);
     	rootFolder = new GroupFolder(this, name, owner);
     }
+    
+    /**
+     * Create a group space with the given name.
+     * 
+     * @param name - name of the group space
+     * @param owner - owner of the group space
+     * @param description - description of the group space
+     */
+    public GroupSpace(String name, IrUser owner, String description)
+    {
+    	this(name,owner);
+    	setDescription(description);
+    }
+    
     
 	/**
 	 * Get the name of the workspace
@@ -132,6 +151,73 @@ public class GroupSpace extends BasePersistent implements NameAware {
 	 */
 	void setOwner(IrUser owner) {
 		this.owner = owner;
+	}
+	
+	/**
+	 * Hash code is based on the name of
+	 * the group space
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode()
+	{
+		int value = 0;
+		value += name == null ? 0 : name.hashCode();
+		return value;
+	}
+	
+	/**
+	 * Equals is tested based on name ignoring case 
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof GroupSpace)) return false;
+
+		final GroupSpace other = (GroupSpace) o;
+
+		if( ( name != null && !name.equalsIgnoreCase(other.getName()) ) ||
+			( name == null && other.getName() != null ) ) return false;
+
+		return true;
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer("[ Group folder id = ");
+		sb.append(id);
+		sb.append( " name = ");
+		sb.append(name);
+		sb.append(" description = ");
+		sb.append(description);
+		sb.append( " path = ");
+		sb.append("]");
+		return sb.toString();
+	}
+
+	/**
+	 * Set the description of the group space.
+	 * 
+	 * @see edu.ur.simple.type.DescriptionAware#getDescription()
+	 */
+	public String getDescription() {
+		return description;
+	}
+	
+	/**
+	 * Set the description of the group space.
+	 * 
+	 * @param description
+	 */
+	public void setDescription(String description)
+	{
+		this.description = description;
 	}
 
 }
