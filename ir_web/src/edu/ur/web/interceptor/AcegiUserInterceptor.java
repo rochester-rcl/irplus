@@ -116,11 +116,21 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 	}
 
 
+	/**
+	 * Get the user service to access information.
+	 * 
+	 * @return
+	 */
 	public UserService getUserService() {
 		return userService;
 	}
 
 
+	/**
+	 * Set the user service to access information.
+	 * 
+	 * @param userService
+	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
