@@ -44,8 +44,6 @@ import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.util.FileUploadInfo;
 
-import org.apache.commons.io.FilenameUtils;
-
 /**
  * Add personal files to the specified folder.
  * 
@@ -108,8 +106,6 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 	/** service to create thumbnails  */
 	private ThumbnailTransformerService thumbnailTransformerService;
 
-
-
 	/**
 	 * Set the user id.
 	 * 
@@ -119,6 +115,16 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		this.userId = userId;
 	}
 	
+	public String execute()
+	{
+		IrUser user = userService.getUser(userId, false);
+		//only authoring roles can add personal files
+		if( !user.hasRole(IrRole.AUTHOR_ROLE))
+		{
+			return("accessDenied");
+		}
+		return SUCCESS;
+	}
 	
 	/**
 	 * Upload the specified files.
@@ -132,6 +138,12 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
 		log.debug("Upload files called");
 		IrUser user = userService.getUser(userId, false);
 		
+		//only authoring roles can add personal files
+		if( !user.hasRole(IrRole.AUTHOR_ROLE))
+		{
+			return("accessDenied");
+		}
+		
 		if( personalFolder != null && !personalFolder.getOwner().getId().equals(userId))
     	{
 			//destination does not belong to user
@@ -139,23 +151,6 @@ public class AddPersonalFiles extends ActionSupport implements UserIdAware, Prep
     		return("accessDenied");
     		
     	}
-		
-		//only authoring roles can add personal files
-		if( !user.hasRole(IrRole.AUTHOR_ROLE)  )
-		{
-			for( int index = 0; index < file.length; index++)
-			{
-				
-				
-				String theFileName = FilenameUtils.getName(fileFileName[index]);
-				
-				FileUploadInfo fileUploadInfo = new FileUploadInfo(theFileName, 
-						userFileDescription[index]);
-				filesNotAdded.add(fileUploadInfo);
-			}
-			return INPUT;
-		}
-			
 		
 		LinkedList<PersonalFile> addedFiles = new LinkedList<PersonalFile>();
 		

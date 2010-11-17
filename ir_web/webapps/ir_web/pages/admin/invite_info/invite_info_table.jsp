@@ -34,6 +34,7 @@
 	            <urstb:tr>
 					<urstb:td>Inviting User</urstb:td>
 					<urstb:td>Invited User Email</urstb:td>
+					<urstb:td>Created Date</urstb:td>
 					<urstb:td>Invite Token</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>
@@ -52,6 +53,9 @@
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${inviteInfo.email}
+	                        </urstb:td>
+	                        <urstb:td>
+	                             ${inviteInfo.createdDate}
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${inviteInfo.token}

@@ -97,6 +97,11 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 			{
 	            ((UserIdAware) action).setUserId(user.getId());
 			}
+			else
+			{
+				// make sure user id is cleared out
+				((UserIdAware) action).setUserId(null);
+			}
 	    }
 		
 		invocation.getInvocationContext().getSession().put("user", user);
