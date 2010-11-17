@@ -16,6 +16,8 @@
 
 package edu.ur.ir.user;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,6 +54,11 @@ public class InviteInfo extends BasePersistent {
 	/* Permissions given to the user */
 	private Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
 	
+	/* date the invite info was created */
+	private Timestamp createdDate;
+
+
+
 	/**
 	 * Default Constructor
 	 */
@@ -63,6 +70,7 @@ public class InviteInfo extends BasePersistent {
 	public InviteInfo(IrUser user, Set<VersionedFile> versionedFile) {
 		setUser(user);
 		setFiles(versionedFile);
+		this.createdDate = new Timestamp(new Date().getTime());
 	}
 
 	/**
@@ -71,6 +79,7 @@ public class InviteInfo extends BasePersistent {
 	public InviteInfo(IrUser user, VersionedFile versionedFile) {
 		setUser(user);
 		addFile(versionedFile);
+		this.createdDate = new Timestamp(new Date().getTime());
 	}
 	/**
 	 * Get the Email ID
@@ -145,6 +154,25 @@ public class InviteInfo extends BasePersistent {
 	}
 	
 	/**
+	 * Date the record was created.
+	 * 
+	 * @return - date the record was created.
+	 */
+	public Timestamp getCreatedDate() {
+		return createdDate;
+	}
+	
+
+	/**
+	 * Set the date created.
+	 * 
+	 * @param dateCreated
+	 */
+	void setCreatedDate(Timestamp createdDate) {
+		this.createdDate = createdDate;
+	}
+	
+	/**
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object o)
@@ -161,7 +189,7 @@ public class InviteInfo extends BasePersistent {
 			( email == null && other.getEmail() != null ) ) return false;
 
 		if( ( permissions != null && !permissions.equals(other.getPermissions()) ) ||
-				( permissions == null && other.getPermissions() != null ) ) return false;
+			( permissions == null && other.getPermissions() != null ) ) return false;
 		
 		return true;
 	}
@@ -248,6 +276,11 @@ public class InviteInfo extends BasePersistent {
 		return files.remove(file);
 	}
 	
+	/**
+	 * To string of the invite info.
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer("[ invite info id = ");

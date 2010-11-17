@@ -6,11 +6,19 @@ IR+ changes 2.0 to 2.x
 - Updated to allow administrators to view invite table
 - Updated to Lucene version 2.9.3
 - Updated to load user id when going to approve user affiliations - fixes menu bar
-- Updated to Struts 2.2.1
 - Updated to YUI 2.8.2 r1
 - Updated to PDF box 1.3.1
 - Updated to POI 3.7 
 - Updated to ivy 2.2.0
+- Updated to hibernate 3.6.0 Final
+- Added updated date to invite info
+- Added indexing capabilities for collections
+- Added indexing capabilities for user groups
+- Changed upload files to return access denied rather than files not uploaded for non-authoring users.
+
+IR+ 2.0.3 to 2.0.4
+===========================
+Updated to Struts 2.2.1 for security issue
 
 IR+ 2.0.2 to 2.0.3
 =============================

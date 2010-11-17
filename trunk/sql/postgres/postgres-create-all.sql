@@ -2647,6 +2647,7 @@ CREATE TABLE ir_user.invite_info
   token TEXT NOT NULL,
   email TEXT NOT NULL,
   user_id BIGINT NOT NULL,
+  created_date NOT NULL TIMESTAMP WITH TIME ZONE,
   FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id) 
 );
 ALTER TABLE ir_user.invite_info OWNER TO ir_plus;
