@@ -18,6 +18,7 @@ package edu.ur.ir.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * This is an interface for creating temporary files.  The
@@ -28,7 +29,7 @@ import java.io.IOException;
  * @author Nathan Sarr
  *
  */
-public interface TemporaryFileCreator {
+public interface TemporaryFileCreator extends Serializable {
 	
 	
 	/**
