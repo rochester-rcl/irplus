@@ -36,6 +36,8 @@
 					<urstb:td>Invited User Email</urstb:td>
 					<urstb:td>Created Date</urstb:td>
 					<urstb:td>Invite Token</urstb:td>
+					<urstb:td>Files</urstb:td>
+					<urstb:td>Action</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>
 	            <urstb:tbody
@@ -59,6 +61,14 @@
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${inviteInfo.token}
+	                        </urstb:td>
+	                        <urstb:td>
+	                           <c:forEach items="${inviteInfo.files}"  var="file">
+	                                 ${file.nameWithExtension}"<br/>
+	                           </c:forEach>
+	                        </urstb:td>
+	                        <urstb:td>
+	                            <a href="javascript:YAHOO.ur.invite_info.deleteInvite(${inviteInfo.id});">delete</a>
 	                        </urstb:td>
 	                    </urstb:tr>
 	            </urstb:tbody>
