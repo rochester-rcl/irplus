@@ -64,7 +64,7 @@
 	                        </urstb:td>
 	                        <urstb:td>
 	                           <c:forEach items="${inviteInfo.files}"  var="file">
-	                                 ${file.nameWithExtension}"<br/>
+	                                 ${file.nameWithExtension}<br/>
 	                           </c:forEach>
 	                        </urstb:td>
 	                        <urstb:td>
