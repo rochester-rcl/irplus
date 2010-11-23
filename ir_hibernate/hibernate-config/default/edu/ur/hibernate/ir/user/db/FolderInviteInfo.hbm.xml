@@ -20,19 +20,19 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for invite information
+	Mapping for folder information
 	
-	@author Sharmila Ranganathan
+	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.user">
-	<class name="InviteInfo" table="ir_user.invite_info"
+	<class name="FolderInviteInfo" table="ir_user.folder_invite_info"
 		lazy="true">
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="invite_info_id"
+		<id name="id" type="long" column="folder_invite_info_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_user.invite_info_seq</param>
+				<param name="sequence">ir_user.folder_invite_info_seq</param>
 			</generator>
 		</id>
 
@@ -42,58 +42,42 @@
 		
 	    <property name="email" column="email" type="string"
 			not-null="true" access="field" />
-
-		<property name="token" column="token" type="string"
-			not-null="true" access="field" />
 			
 		<property name="createdDate" column="created_date" type="timestamp"
 			not-null="true" access="field" />
 
-		<!--  user sending the invitation -->
-		<many-to-one class="IrUser" 
-			name="user" column="user_id" insert="true"
+		<!--  folder being shared with email address -->
+		<many-to-one class="PersonalFolder" 
+			name="personalFolder" column="personal_folder_id" insert="true"
 			update="false" unique="true" access="field"/>
 			
-		<!-- files to share -->
-		<set name="files" 
-		     table="ir_user.invite_files" 
-		     access="field" >
-			<key column="invite_info_id" />
-			<many-to-many column="versioned_file_id" class="edu.ur.ir.file.VersionedFile"/>
-		</set>
-
 		<!-- permissions on files -->
 		<set name="permissions" 
-		     table="ir_user.invite_permissions" 
+		     table="ir_user.folder_invite_permissions" 
 		     access="field" >
-			<key column="invite_info_id" />
+			<key column="folder_invite_info_id" />
 			<many-to-many column="class_type_permission_id" class="edu.ur.ir.security.IrClassTypePermission"/>
 		</set>
-			
-
     </class>
 		
-    <!-- named query for getting invite information for given token-->
-    <query name="findInviteInfoForToken">from InviteInfo inviteInfo where inviteInfo.token = :token </query> 
- 
     <!-- named query for getting invite information for given email -->
-    <query name="findInviteInfoForEmail">from InviteInfo inviteInfo where lower(inviteInfo.email) = :email </query> 
+    <query name="findFolderInviteInfoForEmail">from FolderInviteInfo inviteInfo where lower(inviteInfo.email) = :email </query> 
     
     	<!--  Get a count of roles in the system -->
-	<query name="inviteInfoCount">
-	    select count(*) from InviteInfo
+	<query name="folderInviteInfoCount">
+	    select count(*) from FolderInviteInfo
 	</query>
 	
 		<!-- sort by last name asc -->
-	<query name="getInviteInfosOrderByInvitorAsc">
-		select inviteInfo from InviteInfo as inviteInfo
-		order by inviteInfo.user.lowerCaseLastName asc, inviteInfo.user.lowerCaseFirstName asc, inviteInfo.user.lowerCaseMiddleName asc
+	<query name="getFolderInviteInfosOrderByInvitorAsc">
+		select inviteInfo from FolderInviteInfo as inviteInfo
+		order by inviteInfo.personalFolder.owner.lowerCaseLastName asc, inviteInfo.personalFolder.owner.lowerCaseFirstName asc, inviteInfo.personalFolder.owner.lowerCaseMiddleName asc
 	</query>	
 
 	<!-- sort by last name desc -->
-	<query name="getInviteInfosOrderByInvitorDesc">
-		select inviteInfo from InviteInfo as inviteInfo
-		order by inviteInfo.user.lowerCaseLastName desc, inviteInfo.user.lowerCaseFirstName desc, inviteInfo.user.lowerCaseMiddleName desc
+	<query name="getFolderInviteInfosOrderByInvitorDesc">
+		select inviteInfo from FolderInviteInfo as inviteInfo
+		order by inviteInfo.personalFolder.owner.lowerCaseLastName desc, inviteInfo.personalFolder.owner.lowerCaseFirstName desc, inviteInfo.personalFolder.owner.lowerCaseMiddleName desc
 	</query>	
 	
 </hibernate-mapping>

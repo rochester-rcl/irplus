@@ -215,7 +215,29 @@
                <prop key="make*">PROPAGATION_REQUIRED</prop>
            </props>
        </property>
-   </bean>      
+   </bean> 
+   
+   <!-- ****************************************** --> 
+   <!-- Folder Invite Info						   -->
+   <!-- ****************************************** --> 
+
+   <bean id="folderInviteInfoDAOTarget" 
+       class="edu.ur.hibernate.ir.user.db.HbFolderInviteInfoDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="folderInviteInfoDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="folderInviteInfoDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>           
  
    <!-- ****************************************** --> 
    <!-- Affiliation									-->

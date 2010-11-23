@@ -22,7 +22,6 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.InviteInfoDAO;
 import edu.ur.order.OrderType;
@@ -65,22 +64,44 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 */
 	public InviteInfo findInviteInfoForToken(String token)
 	{
-		return (InviteInfo) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("findInviteInfoForToken", token));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findInviteInfoForToken");
+		q.setParameter("token", token);
+		return (InviteInfo) q.uniqueResult();
 	}
 
+	/**
+	 * Get all invite info information.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
 	@SuppressWarnings("unchecked")
 	public List getAll() {
 		return hbCrudDAO.getAll();
 	}
 
+	/**
+	 * Get the invite info by id.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
+	 */
 	public InviteInfo getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
+	/**
+	 * Make the invite info persistent.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
+	 */
 	public void makePersistent(InviteInfo entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
+	/**
+	 * Make the invite info transient.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
+	 */
 	public void makeTransient(InviteInfo entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
@@ -93,7 +114,9 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<InviteInfo> getInviteInfoByEmail(String email) {
-		return hbCrudDAO.getHibernateTemplate().findByNamedQuery("findInviteInfoForEmail", email);
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findInviteInfoForEmail");
+		q.setParameter("email", email.trim().toLowerCase());
+		return q.list();
 	}
 	
 	

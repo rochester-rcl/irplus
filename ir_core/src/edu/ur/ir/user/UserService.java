@@ -316,14 +316,6 @@ public interface UserService extends UserDetailsService, Serializable {
 	public void sendPendingAffiliationEmailForUser(IrUser user);
 
 	/**
-	 * Get the User email if email  exists in the system.
-	 * 
-	 * @param email Email to verify
-	 * @return Email if email exists in the system else return null
-	 */
-	public UserEmail getUserEmailByEmail(String email) ;
-
-	/**
 	 * Get user having the specified person name authority
 	 * 
 	 * @param personNameAuthorityId Id of person name authority
