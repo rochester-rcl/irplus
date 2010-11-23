@@ -2,6 +2,7 @@
 
 === Our Production System Specs ===
 
+ * Server: SunFire V245
  * RAM: 8GB
   * 4 GB given to JAVA
  * OS: Solaris 
