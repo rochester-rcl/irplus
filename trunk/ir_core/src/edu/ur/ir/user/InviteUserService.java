@@ -127,6 +127,13 @@ public interface InviteUserService extends Serializable{
 	public List<InviteInfo> findInviteInfoByEmail(String email);
 	
 	/**
+	 * Delete the specified invite information.
+	 * 
+	 * @param inviteInfo - invite info to delete
+	 */
+	public void delete(InviteInfo inviteInfo);
+	
+	/**
 	 * Save versioned file 
 	 * 
 	 * @param versionedFile file to be saved

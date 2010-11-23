@@ -48,6 +48,10 @@ public class ManageInviteInfo extends Pager implements UserIdAware{
 	
 	/** service for accessing user information */
 	private UserService userService;
+	
+	/** id of the invite info to delete  */
+	private Long inviteInfoId;
+
 
 	public ManageInviteInfo()
 	{
@@ -84,6 +88,30 @@ public class ManageInviteInfo extends Pager implements UserIdAware{
 		return SUCCESS;
 	}
 	
+	/**
+	 * Delete the invite info.
+	 * 
+	 * @return success
+	 */
+	public String delete()
+	{
+		InviteInfo info = inviteUserService.getInviteInfoById(inviteInfoId, false);
+		if( info != null )
+		{
+		    inviteUserService.delete(info);
+		}
+		return SUCCESS;
+	}
+	
+
+	/**
+	 * Set the invite info id to delete.
+	 * 
+	 * @param inviteInfoId
+	 */
+	public void setInviteInfoId(Long inviteInfoId) {
+		this.inviteInfoId = inviteInfoId;
+	}
 	
 	/**
 	 * Get the total hits.

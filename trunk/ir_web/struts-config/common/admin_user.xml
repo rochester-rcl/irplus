@@ -26,6 +26,13 @@
                 <result name="success">/pages/admin/invite_info/invite_info.jsp</result>
         </action>
         
+        <action name="deleteInviteInfo"
+                class="edu.ur.ir.web.action.user.admin.ManageInviteInfo"
+                method="delete">
+                <interceptor-ref name="crudStack" />
+                <result name="success">/pages/admin/invite_info/invite_info.jsp</result>
+        </action>
+        
         <!--  ************************************ -->
         <!--  User Actions                         -->
         <!--  ************************************ -->

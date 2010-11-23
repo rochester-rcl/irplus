@@ -51,6 +51,7 @@
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
+ 	<ur:js src="page-resources/js/admin/invite_info.js"/>
 </head>
 
 <body class="yui-skin-sam">
@@ -73,6 +74,14 @@
   
   </div>
   <!--  End doc div-->
+  
+  <div id="deleteInviteInfoDialog" class="hidden">
+	<div class="hd">Delete affiliations</div>
+	<div class="bd">
+		<input type="hidden" id="deleteId" value="">
+		<p>Are you sure you wish to delete the invite information?</p>
+	</div>
+  </div>
 
 </body>
 </html>

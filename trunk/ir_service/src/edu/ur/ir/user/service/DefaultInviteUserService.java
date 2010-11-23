@@ -610,5 +610,14 @@ public class DefaultInviteUserService implements InviteUserService {
 		return inviteInfoDAO.getCount();
 	}
 
+	/**
+	 * Delete the invite info object.
+	 * 
+	 * @see edu.ur.ir.user.InviteUserService#delete(edu.ur.ir.user.InviteInfo)
+	 */
+	public void delete(InviteInfo inviteInfo) {
+		inviteInfoDAO.makeTransient(inviteInfo);
+	}
+
 
 }
