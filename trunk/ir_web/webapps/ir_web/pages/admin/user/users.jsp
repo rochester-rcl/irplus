@@ -92,7 +92,8 @@
 					     <button id="showUser" class="ur_button" 
 			 		         onmouseover="this.className='ur_buttonover';"
 			 		         onmouseout="this.className='ur_button';">New User</button> 
-				       
+				       <br/>
+				       <br/>
 				       <form name="userRoleAffiliationType" action="<c:url value="/admin/viewUsers.action"/>" method="get">
 				             <input type="hidden" name="rowStart" value="0"/>
 			                 <input type="hidden" name="startPageNumber" value="1"/>
