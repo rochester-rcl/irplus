@@ -42,11 +42,10 @@ public class FolderInviteInfo extends BasePersistent
 	private String email;
 	
 	/* date the invite info was created */
-	private Timestamp dateCreated;
+	private Timestamp createdDate;
 	
 	/* Permissions given to the collaborator */
 	private Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
-
 
 	/** Default constructor for the folder invite info */
     public FolderInviteInfo(){}
@@ -60,8 +59,8 @@ public class FolderInviteInfo extends BasePersistent
 	public FolderInviteInfo(PersonalFolder personalFolder, String email, Set<IrClassTypePermission> permissions)
 	{
 		this.personalFolder = personalFolder;
-		this.email = email;
-		this.dateCreated = new Timestamp(new Date().getTime());
+		this.email = email.trim();
+		this.createdDate = new Timestamp(new Date().getTime());
 		this.permissions = permissions;
 	}
 	
@@ -107,8 +106,8 @@ public class FolderInviteInfo extends BasePersistent
 	 * 
 	 * @return - date the invite info was created
 	 */
-	public Timestamp getDateCreated() {
-		return dateCreated;
+	public Timestamp getCreatedDate() {
+		return createdDate;
 	}
 	
 	/**

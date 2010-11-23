@@ -88,6 +88,7 @@
              <class name="edu.ur.hibernate.ir.user.db.PersonalItemDeleteRecordDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.PersonalFileDeleteRecordDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.ExternalAccountTypeDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.FolderInviteInfoDAOTest"/>
              
              <class name="edu.ur.hibernate.ir.file.db.IrFileDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.file.db.VersionedFileDAOTest"/> 

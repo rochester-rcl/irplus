@@ -33,6 +33,9 @@ public class UserEmail extends BasePersistent {
 	/** Holds the user Email */
 	private String email;
 	
+	/** lower case version of the email  */
+	private String lowerCaseEmail;
+
 	/**  IrUser */
 	private IrUser irUser;
 
@@ -51,7 +54,7 @@ public class UserEmail extends BasePersistent {
 	 * Default constructor
 	 */
 	public UserEmail(String email){
-		this.email = email;
+		setEmail(email);
 	};
 	
 	/**
@@ -69,7 +72,8 @@ public class UserEmail extends BasePersistent {
 	 * @param email Email id that has to be set
 	 */
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = email.trim();
+		this.lowerCaseEmail = email.toLowerCase(); 
 	}
 	
 
@@ -99,8 +103,8 @@ public class UserEmail extends BasePersistent {
 
 		final UserEmail other = (UserEmail) o;
 
-		if( ( email != null && !email.equals(other.getEmail()) ) ||
-			( email == null && other.getEmail() != null ) ) return false;
+		if( ( lowerCaseEmail != null && !lowerCaseEmail.equals(other.getLowerCaseEmail()) ) ||
+			( lowerCaseEmail == null && other.getLowerCaseEmail() != null ) ) return false;
 		return true;
 	}
 
@@ -112,8 +116,7 @@ public class UserEmail extends BasePersistent {
     public int hashCode()
     {
     	int hash = 0;
-    	hash += email == null ? 0 : email.hashCode();
-    	hash += irUser== null ? 0 : irUser.hashCode();
+    	hash += lowerCaseEmail == null ? 0 : lowerCaseEmail.hashCode();
     	return hash;
     }
 
@@ -133,20 +136,50 @@ public class UserEmail extends BasePersistent {
 		return  sb.toString();
 	}
 
+	/**
+	 * Set to true if the email is verified.
+	 * 
+	 * @return
+	 */
 	public boolean isVerified() {
 		return isVerified;
 	}
 
+	/**
+	 * Sets the email as verified.
+	 * 
+	 * @param isVerified
+	 */
 	public void setVerified(boolean isVerified) {
 		this.isVerified = isVerified;
 	}
 
+	/**
+	 * Get the token to verify the email.
+	 * 
+	 * @return
+	 */
 	public String getToken() {
 		return token;
 	}
 
+	/**
+	 * Set the email to verify the token.
+	 * 
+	 * @param token
+	 */
 	public void setToken(String token) {
 		this.token = token;
 	}
+	
+	/**
+	 * Get the lower case version of the email.
+	 * 
+	 * @return - lower case version of the email
+	 */
+	public String getLowerCaseEmail() {
+		return lowerCaseEmail;
+	}
+	
 
 }

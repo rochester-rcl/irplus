@@ -2582,15 +2582,17 @@ ALTER TABLE ir_user.personal_item_seq OWNER TO ir_plus;
 
 CREATE TABLE ir_user.user_email
 (
-  user_email_id bigint PRIMARY KEY,
-  user_id bigint NOT NULL,
-  version integer,
-  email text,
-  isVerified boolean NOT NULL,
-  token text,
+  user_email_id BIGINT PRIMARY KEY,
+  user_id BIGINT NOT NULL,
+  version INTEGER,
+  email TEXT NOT NULL,
+  lower_case_email TEXT NOT NULL,
+  isVerified BOOLEAN NOT NULL,
+  token TEXT,
   FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
   UNIQUE (user_id, user_email_id),
-  UNIQUE (email)
+  UNIQUE (email),
+  UNIQUE (lower_case_email)
 ) ; 
 ALTER TABLE ir_user.user_email OWNER TO ir_plus;
 
@@ -2622,9 +2624,9 @@ values (nextval('ir_user.ir_user_seq'),
 
 false, false, false, true, false, date(now()), false);
 
-insert into ir_user.user_email(user_email_id, version, email, user_id, isVerified) values 
+insert into ir_user.user_email(user_email_id, version, email, lower_case_email, user_id, isVerified) values 
 
-(nextval('ir_user.user_email_seq'), 1, 'test@abc.com', 
+(nextval('ir_user.user_email_seq'), 1, 'test@abc.com', 'test@abc.com',
 
 currval('ir_user.ir_user_seq'), true);
 
@@ -2647,7 +2649,7 @@ CREATE TABLE ir_user.invite_info
   token TEXT NOT NULL,
   email TEXT NOT NULL,
   user_id BIGINT NOT NULL,
-  created_date NOT NULL TIMESTAMP WITH TIME ZONE,
+  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
   FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id) 
 );
 ALTER TABLE ir_user.invite_info OWNER TO ir_plus;
@@ -2693,13 +2695,24 @@ CREATE SEQUENCE ir_user.shared_inbox_file_seq ;
 ALTER TABLE ir_user.shared_inbox_file_seq OWNER TO ir_plus;
 
 
+-- ---------------------------------------------
+-- Invite info for folder data
+-- ---------------------------------------------
 
+CREATE TABLE ir_user.folder_invite_info
+(
+  folder_invite_info_id BIGINT PRIMARY KEY,
+  version INTEGER,
+  email TEXT NOT NULL,
+  personal_folder_id BIGINT NOT NULL,
+  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  FOREIGN KEY (personal_folder_id) REFERENCES ir_user.personal_folder (personal_folder_id) 
+);
+ALTER TABLE ir_user.folder_invite_info OWNER TO ir_plus;
 
-
-
-
-
-
+-- The folder invite info sequence
+CREATE SEQUENCE ir_user.folder_invite_info_seq;
+ALTER TABLE ir_user.folder_invite_info_seq OWNER TO ir_plus;
 
 
 
@@ -2792,6 +2805,21 @@ CREATE TABLE ir_user.invite_permissions
     FOREIGN KEY (class_type_permission_id) REFERENCES ir_security.class_type_permission(class_type_permission_id)
 );
 ALTER TABLE ir_user.invite_permissions OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Folder invite permission
+-- ---------------------------------------------
+
+CREATE TABLE ir_user.folder_invite_permissions
+(
+    folder_invite_info_id BIGINT NOT NULL, 
+    class_type_permission_id BIGINT NOT NULL,
+    PRIMARY KEY (folder_invite_info_id, class_type_permission_id),
+    FOREIGN KEY (folder_invite_info_id) REFERENCES ir_user.folder_invite_info(folder_invite_info_id),
+    FOREIGN KEY (class_type_permission_id) REFERENCES ir_security.class_type_permission(class_type_permission_id)
+);
+ALTER TABLE ir_user.folder_invite_permissions OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Insert values for Class type permission

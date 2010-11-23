@@ -42,7 +42,8 @@ DROP TABLE ir_security.user_control_entry;
 DROP TABLE ir_security.user_group_control_entry_permission;
 DROP TABLE ir_security.user_group_control_entry;
 DROP TABLE ir_security.acl;
-ALTER TABLE ir_user.invite_permissions DROP CONSTRAINT  invite_permissions_class_type_permission_id_fkey;
+ALTER TABLE ir_user.invite_permissions DROP CONSTRAINT invite_permissions_class_type_permission_id_fkey;
+ALTER TABLE ir_user.folder_invite_permissions DROP CONSTRAINT folder_invite_permissions_class_type_permission_id_fkey;
 DROP TABLE ir_security.class_type_permission;
 DROP TABLE ir_security.class_type;
 
@@ -143,10 +144,12 @@ DROP TABLE ir_user.personal_item_delete_record;
 DROP TABLE ir_user.user_workspace_index_processing_record;
 DROP TABLE ir_user.user_department;
 DROP TABLE ir_user.invite_permissions;
+DROP TABLE ir_user.folder_invite_permissions;
 DROP TABLE ir_user.invite_files;
 DROP TABLE ir_user.personal_item;
 DROP TABLE ir_user.personal_collection;
 DROP TABLE ir_user.personal_file;
+DROP TABLE ir_user.folder_invite_info;
 DROP TABLE ir_user.personal_folder;
 DROP TABLE ir_user.user_role;
 
@@ -177,6 +180,7 @@ DROP SEQUENCE ir_user.affiliation_seq;
 DROP SEQUENCE ir_user.department_seq;
 DROP SEQUENCE ir_user.user_email_seq;
 DROP SEQUENCE ir_user.invite_info_seq;
+DROP SEQUENCE ir_user.folder_invite_info_seq;
 DROP SEQUENCE ir_user.shared_inbox_file_seq;
 
 
