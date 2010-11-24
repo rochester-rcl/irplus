@@ -68,7 +68,6 @@ YAHOO.ur.invite_info =
 		    //center and show the delete dialog
 			YAHOO.ur.invite_info.deleteInviteInfoDialog.showDialog = function()
 		    {
-				alert('1');
 				YAHOO.ur.invite_info.deleteInviteInfoDialog.center();
 				YAHOO.ur.invite_info.deleteInviteInfoDialog.show();
 		    }
