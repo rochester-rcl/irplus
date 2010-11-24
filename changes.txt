@@ -4,6 +4,8 @@ IR+ changes 2.0 to 2.x
 - added last login date to user search results table 
 - updated to allow filtering by role and affiliation 
 - Updated to allow administrators to view invite table
+   - allows administrators to delete an invite
+   - allows administrators to see list of named files shared
 - Updated to Lucene version 2.9.3
 - Updated to load user id when going to approve user affiliations - fixes menu bar
 - Updated to YUI 2.8.2 r1
@@ -16,6 +18,7 @@ IR+ changes 2.0 to 2.x
 - Added indexing capabilities for user groups
 - Changed upload files to return access denied rather than files not uploaded for non-authoring users.
 - Updated to Spring 3.0.5
+
 
 
 IR+ 2.0.3 to 2.0.4
