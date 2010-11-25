@@ -16,8 +16,10 @@
 
 package edu.ur.ir.web.action.institution;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -182,12 +184,15 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 		
         // add the old tree roots they will need to be re-indexed
 		// because their left and right values will be changed.
-        LinkedList<InstitutionalCollection> oldRoots = new LinkedList<InstitutionalCollection>();
+        Set<Long> rootIds = new HashSet<Long>();
         for(InstitutionalCollection c : collectionsToMove)
         {
-        	if(!oldRoots.contains(c.getTreeRoot()))
+        	// we do not need to add a collection that is currently a root
+        	// and becoming a sub collection as all items within the given
+        	// root will be re-indexed
+        	if( !c.isRoot() )
         	{
-        		oldRoots.add(c.getTreeRoot());
+        		rootIds.add(c.getTreeRoot().getId());
         	}
         }
         
@@ -205,8 +210,11 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 		// moving this collection and items into another collection
 		if( !destinationId.equals(InstitutionalCollectionService.ROOT_COLLECTION_ID))
 		{
+			
 		    destination = 
 		    	institutionalCollectionService.getCollection(destinationId, false);
+		    
+		    rootIds.add(destination.getTreeRoot().getId());
 		    
 			collectionsNotMoved = 
 				institutionalCollectionService.moveCollectionInformation(destination, 
@@ -232,6 +240,10 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 			}
 			else
 			{
+				for(InstitutionalCollection c : collectionsToMove )
+				{
+					rootIds.add(c.getId());
+				}
 			    collectionsNotMoved = institutionalCollectionService.moveCollectionInformation(repository, 
 						collectionsToMove);
 			}
@@ -252,14 +264,18 @@ public class MoveInstitutionalCollectionData extends ActionSupport{
 			}
 			addFieldError("moveError", sb.toString());
 		}
-		else
+		else if (collectionsToMove.size() > 0 )
 		{
-			// re-index all items within collections that are moved
-			for(InstitutionalCollection c : collectionsToMove)
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+
+			// re-index all items within collection roots 
+			for(Long id : rootIds)
 			{
-				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+			    InstitutionalCollection c = institutionalCollectionService.getCollection(id, false);	
 				institutionalItemIndexProcessingRecordService.processItemsInCollection( c, processingType);
 			}
+			
+			
 		}
 		
 		
