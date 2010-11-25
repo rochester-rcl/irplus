@@ -18,6 +18,7 @@ IR+ changes 2.0 to 2.x
 - Added indexing capabilities for user groups
 - Changed upload files to return access denied rather than files not uploaded for non-authoring users.
 - Updated to Spring 3.0.5
+- Updated to re-index all items within a collection tree if a new collection is added
 
 
 

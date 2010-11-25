@@ -168,6 +168,9 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 				    collection = parent.createChild(collectionName.trim());
 				    institutionalCollectionService.saveCollection(parent);
 				    institutionalCollectionSecurityService.giveAdminPermissionsToParentCollections(collection);
+		            //re-index the root as all root left and right values have been updated
+					IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
+				    institutionalItemIndexProcessingRecordService.processItemsInCollection( collection.getTreeRoot(), processingType);
 				    actionSuccess = true;
 				}
 			} catch (DuplicateNameException e) {
