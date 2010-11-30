@@ -19,7 +19,9 @@ IR+ changes 2.0 to 2.x
 - Changed upload files to return access denied rather than files not uploaded for non-authoring users.
 - Updated to Spring 3.0.5
 - Updated to re-index all items within a collection tree if a new collection is added
-
+- Updated email to have a new column - lower case email to allow comparison by the lower case email
+  address
+- Updated file properties to show emails that are shared with but users have not yet created an account
 
 
 IR+ 2.0.3 to 2.0.4
