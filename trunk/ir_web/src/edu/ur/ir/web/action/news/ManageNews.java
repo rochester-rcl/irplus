@@ -17,6 +17,7 @@
 package edu.ur.ir.web.action.news;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -358,24 +359,41 @@ public class ManageNews extends Pager implements  Preparable{
 	 * Read the article from the file so a user can edit it.
 	 * 
 	 * @return - the file read
+	 * @throws IOException 
 	 * @throws IOException
 	 */
-	private String readArticleFromFile() throws IOException
+	private String readArticleFromFile() throws IOException 
 	{
-		FileReader reader = new FileReader(newsItem.getArticle().getFullPath());
-		char[] characters = new char[1024];
-		 StringBuffer sb = new StringBuffer();
-		int count = 0;
-		while (count != -1)
-        {
-            count = reader.read(characters, 0, characters.length);
-            // write out those same bytes
-            if( count > 0 )
-            {
-                sb.append(characters, 0, count);
-            }
-        }
 		
+		FileReader reader = null;
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+		    reader = new FileReader(newsItem.getArticle().getFullPath());
+		    char[] characters = new char[1024];
+		    
+		    int count = 0;
+		    while (count != -1)
+            {
+                count = reader.read(characters, 0, characters.length);
+                // write out those same bytes
+                if( count > 0 )
+                {
+                    sb.append(characters, 0, count);
+                }
+            }
+		}
+		finally
+		{
+			if( reader != null )
+			{
+				try {
+					reader.close();
+				} catch (IOException e) {
+					reader = null;
+				}
+			}
+		}
 		return sb.toString();
 	}
 
