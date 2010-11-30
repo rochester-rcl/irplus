@@ -17,7 +17,6 @@
 package edu.ur.ir.web.action.news;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
