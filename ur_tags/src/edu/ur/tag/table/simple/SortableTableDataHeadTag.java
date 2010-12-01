@@ -84,14 +84,7 @@ public class SortableTableDataHeadTag extends TableDataTag {
 			o.print(">");
 			if( body != null )
 			{
-				if( useHref )
-				{
-			        body.invoke(null);
-				}
-				else
-				{
-					 body.invoke(null);
-				}
+			    body.invoke(null);
 			}
 			o.print("</td>");
 

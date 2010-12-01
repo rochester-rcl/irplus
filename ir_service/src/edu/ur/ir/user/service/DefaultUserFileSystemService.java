@@ -193,7 +193,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	
 	
 	/**
-	 * Get the personal folders within the parent folder.
+	 * Get the personal folders within the parent folder. This only returns the first level of children.
 	 * 
 	 * @see edu.ur.ir.user.UserFileSystemService#getPersonalFolders(java.util.List, java.lang.Long, java.lang.Long, int, int)
 	 */
@@ -488,7 +488,7 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	}
 	
 	/**
-	 * Get sub folders within parent folder for a user 
+	 * Get sub folders within parent folder for a user. This only returns the first level of children. 
 	 * 
 	 * @see edu.ur.ir.user.UserFileSystemService#getPersonalFoldersForUser(java.util.Long, java.lang.Long)
 	 */
@@ -1039,6 +1039,17 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 	 */
 	public List<PersonalFile> getAllFilesForFolder(PersonalFolder personalFolder) {
 		return personalFolderDAO.getAllFilesForFolder(personalFolder);
+	}
+	
+	/**
+	 * This returns all folders for the specified parent folder.  This
+	 * includes all children including those within sub folders.
+	 * 
+	 * @param personalFolder - to get all children folders from
+	 * @return list of all children folders
+	 */
+	public List<PersonalFolder> getAllChildrenForFolder(PersonalFolder personalFolder){
+		return personalFolderDAO.getAllChildrenForFolder(personalFolder);
 	}
 
 	/**

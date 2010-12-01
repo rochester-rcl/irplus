@@ -104,14 +104,46 @@
 			<key column="personal_folder_id" not-null="true"/>
 			<one-to-many class="PersonalFile"/>
 		</set>
+		
+		<!--  Folder auto share information -->
+		<set name="autoShareInfos" 
+		    optimistic-lock="false"
+		    inverse="true" 
+		    cascade="all, delete-orphan" 
+		    access="field" 
+		    lazy="true"
+		    fetch="subselect">
+			<key column="personal_folder_id" not-null="true"/>
+			<one-to-many class="FolderAutoShareInfo"/>
+		</set>
+		
+		<!--  Folder auto share information emails - when users shared with have not
+		      yet created accounts -->
+		<set name="folderInviteInfos" 
+		    optimistic-lock="false"
+		    inverse="true" 
+		    cascade="all, delete-orphan" 
+		    access="field" 
+		    lazy="true"
+		    fetch="subselect">
+			<key column="personal_folder_id" not-null="true"/>
+			<one-to-many class="FolderInviteInfo"/>
+		</set>
 
 	</class>
 		
 	<!--  All files for the specified folder including files in sub folders -->
 	<query name="getAllPersonalFilesForFolder">
 	    from PersonalFile as personalFile
-	    where  personalFile.personalFolder.leftValue between ? and ?
-	    and personalFile.personalFolder.treeRoot.id = ?
+	    where  personalFile.personalFolder.leftValue between :leftValue and :rightValue
+	    and personalFile.personalFolder.treeRoot.id = :rootId
+	</query>
+	
+    <!--  All children folders for the specified folder including sub folders -->
+	<query name="getAllChildrenFoldersForFolder">
+	    from PersonalFolder as personalFolder
+	    where personalFolder.leftValue between :leftValue and :rightValue
+	    and personalFolder.treeRoot.id = :rootId
 	</query>
 	
     <!--  All versioned files for the specified folder including 

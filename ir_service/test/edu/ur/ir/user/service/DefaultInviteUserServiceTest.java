@@ -20,6 +20,7 @@ package edu.ur.ir.user.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -38,11 +39,14 @@ import edu.ur.file.db.LocationAlreadyExistsException;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
+import edu.ur.ir.index.IndexProcessingType;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
 import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.InviteInfo;
@@ -53,6 +57,7 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFileDAO;
+import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserDeletedPublicationException;
@@ -60,6 +65,8 @@ import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecord;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.util.FileUtil;
 import edu.ur.util.TokenGenerator;
 
@@ -120,11 +127,19 @@ public class DefaultInviteUserServiceTest {
 		.getBean("versionedFileDAO");
     
     RoleService roleService= (RoleService) ctx
-	.getBean("roleService");    
+	.getBean("roleService");  
+    
+    /** index processing type record service  */
+	IndexProcessingTypeService indexProcessingTypeService = 
+    	(IndexProcessingTypeService) ctx.getBean("indexProcessingTypeService");
+	
+    /** User index processing record service  */
+	UserWorkspaceIndexProcessingRecordService recordProcessingService = 
+    	(UserWorkspaceIndexProcessingRecordService) ctx.getBean("userWorkspaceIndexProcessingRecordService");
 
-	public void InviteUserTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException {
+	public void inviteShareFileTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException {
 		// determine if we should be sending emails 
-		boolean sendEmail = new Boolean(properties.getProperty("send_emails")).booleanValue();
+		boolean sendEmail = Boolean.valueOf(properties.getProperty("send_emails")).booleanValue();
 
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
@@ -289,18 +304,14 @@ public class DefaultInviteUserServiceTest {
      * @throws UserHasPublishedDeleteException 
      * @throws LocationAlreadyExistsException 
      */
-	public void newEmailInviteUserTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException {
+	public void sharePendingFilesForEmailTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException {
 
 		// Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);
 
 		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
 		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
-		// save the repository
-		tm.commit(ts);
-		
-        // Start the transaction 
-		ts = tm.getTransaction(td);
+
 
 		String userEmail1 = properties.getProperty("user_1_email");
 		UserEmail email = new UserEmail(userEmail1);
@@ -322,9 +333,7 @@ public class DefaultInviteUserServiceTest {
 		File f = testUtil.creatFile(directory, "testFile", 
 		"Hello  - irFile This is text in a file - VersionedFileDAO test");
 		
-		PersonalFile pf = null;
-		
-		pf = userFileSystemService.addFileToUser(repo, f, user, 
+		PersonalFile pf = userFileSystemService.addFileToUser(repo, f, user, 
 				    "test file", "description");
 		
 		
@@ -338,6 +347,7 @@ public class DefaultInviteUserServiceTest {
 		 * That email Id does not exist in the system. 
 		 * So a token is created and email sent to the address with the link to login/register.
 		 */
+		pf = userFileSystemService.getPersonalFile(pf.getId(), false);
         VersionedFile vf = pf.getVersionedFile();
         
 		Set<VersionedFile>  versionedFiles = new HashSet<VersionedFile>();
@@ -347,10 +357,12 @@ public class DefaultInviteUserServiceTest {
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
 		permissions.add(securityService.getClassTypePermission(VersionedFile.class.getName(),InviteUserService.VIEW_PERMISSION));
 		
+		
+		String userEmail3 = properties.getProperty("user_3_email");
 		InviteInfo inviteInfo
 			= new InviteInfo(user, versionedFiles);
 	
-		inviteInfo.setEmail("new_email@yahoo.com");
+		inviteInfo.setEmail(userEmail3);
 		inviteInfo.setInviteMessage("inviteMessage");
 		
 		inviteInfo.setToken(TokenGenerator.getToken());
@@ -368,7 +380,7 @@ public class DefaultInviteUserServiceTest {
 		ts = tm.getTransaction(td);
 
 		// User1 adds new email address "new_email@yahoo.com"
-		UserEmail userEmail = new UserEmail("new_email@yahoo.com");
+		UserEmail userEmail = new UserEmail(userEmail3);
 		user1.addUserEmail(userEmail, false);
 		
 		userService.makeUserPersistent(user1);
@@ -404,6 +416,172 @@ public class DefaultInviteUserServiceTest {
 		helper.cleanUpRepository();
 		tm.commit(ts);
 		
+	}
+	
+	/**
+	 * This will test inviting users who are part of the system and users who are not part of the system.
+	 * 
+	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
+	 * @throws DuplicateNameException 
+	 * @throws FileSharingException 
+	 * @throws UserDeletedPublicationException 
+	 * @throws UserHasPublishedDeleteException 
+	 * @throws PermissionNotGrantedException 
+	 */
+	public void inviteUsersTest() throws LocationAlreadyExistsException, 
+	    DuplicateNameException, IllegalFileSystemNameException, FileSharingException,
+	    UserHasPublishedDeleteException, UserDeletedPublicationException, PermissionNotGrantedException
+	{
+		// determine if we should be sending emails 
+		// if not do not try this test
+		boolean sendEmail = Boolean.valueOf(properties.getProperty("send_emails")).booleanValue();
+		if( !sendEmail )
+		{
+			return;
+		}
+		
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
+
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+
+
+		// create the sharing user
+		String userEmail1 = properties.getProperty("user_1_email");
+		UserEmail email = new UserEmail(userEmail1);
+		IrUser user = userService.createUser("password", "username", email);
+		
+		// create the non-existing user
+		String userEmail2 = properties.getProperty("user_2_email");
+		
+		// create the existing user
+		String userEmail3 = properties.getProperty("user_3_email");
+		UserEmail email3 = new UserEmail(userEmail3);
+		email3.setVerified(true);
+		IrUser user3 = userService.createUser("password3", "username3", email3);
+		
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		// add file to user
+		PersonalFile pf  = userFileSystemService.addFileToUser(repo, f, user, 
+				    "test file", "description");
+		
+		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
+		indexProcessingTypeService.save(updateProcessingType);
+		
+		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+		indexProcessingTypeService.save(deleteProcessingType);
+		
+		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
+		indexProcessingTypeService.save(insertProcessingType);
+        tm.commit(ts);
+
+        
+		//Start a transaction 
+		ts = tm.getTransaction(td);
+		
+		// create permissions to give user
+		// Create the list of permissions
+		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),InviteUserService.VIEW_PERMISSION);
+		permissions.add(view);
+
+		// create the role
+		IrRole role = new IrRole();
+		role.setName(IrRole.COLLABORATOR_ROLE);
+		roleService.makeRolePersistent(role);
+		
+		// create list of emails to give user
+		LinkedList<String> emails = new LinkedList<String>();
+		emails.add(userEmail2);
+		emails.add(userEmail3);
+		
+		/* User shares the file with email address "new_email@yahoo.com".
+		 * That email Id does not exist in the system. 
+		 * So a token is created and email sent to the address with the link to login/register.
+		 */
+		List<PersonalFile> personalFiles = new LinkedList<PersonalFile>();
+		personalFiles.add(userFileSystemService.getPersonalFile(pf.getId(), false));
+		
+		inviteUserService.inviteUsers(user, emails, permissions, personalFiles, "test message");
+        VersionedFile vf = pf.getVersionedFile();
+        
+		Set<VersionedFile>  versionedFiles = new HashSet<VersionedFile>();
+		versionedFiles.add(vf);
+
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAll();
+		for( UserWorkspaceIndexProcessingRecord record : records )
+		{
+			recordProcessingService.delete(record);
+		}
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+		tm.commit(ts);
+
+		ts = tm.getTransaction(td);
+		List<InviteInfo> infos = inviteUserService.getInviteInfo(userEmail2);
+		assert infos.size() == 1 : "Should have one invite info";
+		InviteInfo info = infos.get(0);
+		assert info.getPermissions().contains(view);
+		
+		user3 = userService.getUser(user3.getId(), false);
+		assert user3.getSharedInboxFile(vf) != null : "User should have shared inbox file";
+		assert user3.getRole(IrRole.COLLABORATOR_ROLE) != null : "User should have collaborator role";
+		tm.commit(ts);
+		
+
+		// Start a transaction 
+		ts = tm.getTransaction(td);
+		IrUser deleteUser = userService.getUser(user.getId(), false); 
+		userService.deleteUser(deleteUser,deleteUser);
+		
+		IrUser deleteUser3 = userService.getUser(user3.getId(), false); 
+		userService.deleteUser(deleteUser3,deleteUser3);
+		
+		roleService.deleteRole(roleService.getRole(role.getId(), false));
+		
+		tm.commit(ts);
+		
+	    // Start new transaction
+		ts = tm.getTransaction(td);
+		assert userService.getUser(user.getId(), false) == null : "User should be null";
+		assert userService.getUser(user3.getId(), false) == null : "User 3 should be null";
+		assert roleService.getRole(role.getId(), false) == null : "Role should be null";
+		helper.cleanUpRepository();
+		tm.commit(ts);
+	}
+	
+	/**
+	 * Test the auto share of folders.
+	 * @throws LocationAlreadyExistsException 
+	 * @throws IllegalFileSystemNameException 
+	 * @throws DuplicateNameException 
+	 * @throws PermissionNotGrantedException 
+	 * @throws FileSharingException 
+	 * @throws UserDeletedPublicationException 
+	 * @throws UserHasPublishedDeleteException 
+	 */
+	public void autoShareFoldersTest() throws LocationAlreadyExistsException, 
+	    DuplicateNameException, 
+	    IllegalFileSystemNameException, 
+	    FileSharingException, 
+	    PermissionNotGrantedException, 
+	    UserHasPublishedDeleteException, 
+	    UserDeletedPublicationException
+	{
+
 	}
 
 }

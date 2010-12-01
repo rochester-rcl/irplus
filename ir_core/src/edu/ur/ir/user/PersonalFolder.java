@@ -31,6 +31,7 @@ import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
 import edu.ur.ir.file.VersionedFile;
+import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.persistent.LongPersistentId;
 import edu.ur.persistent.PersistentVersioned;
 import edu.ur.simple.type.DescriptionAware;
@@ -58,37 +59,45 @@ public class PersonalFolder extends PreOrderTreeSetNodeBase implements
 Serializable,  LongPersistentId, PersistentVersioned,
 DescriptionAware, NameAware, Comparable, FileSystem{
 	
-	/** Logger */
+	/* Logger */
 	private static final Logger log = Logger.getLogger(PersonalFolder.class);
 	
-	/**  Children of this PersonalFolder */
+	/*  Children of this PersonalFolder */
 	private Set<PersonalFolder> children = new HashSet<PersonalFolder>();
 	
-	/**  The owner this folder belongs to */
+	/*  The owner this folder belongs to */
 	private IrUser owner;
 	
-	/**  The id of the folder  */
+	/*  The id of the folder  */
 	private Long id;
 	
-	/**  Name of the personal folder */
+	/*  Name of the personal folder */
 	private String name;
 	
-	/** Description of the folder */
+	/* Description of the folder */
 	private String description;
 	
-	/**  Version of the data read from the database.  */
+	/*  Version of the data read from the database.  */
 	private int version;
 	
-	/**  Files in this personal folder. This is a set of versioned files. */
+	/*  Files in this personal folder. This is a set of versioned files. */
 	private Set<PersonalFile> files = new HashSet<PersonalFile>();
 	
-	/** Root of the entire folder tree. */
+	/* Root of the entire folder tree. */
 	private PersonalFolder treeRoot;
 	
-	/**  The type of object this represents */
+	/*  The type of object this represents */
 	private FileSystemType fileSystemType = FileSystemType.PERSONAL_FOLDER;
 	
-	/**
+	/* Auto share information for a folder  */
+	private Set<FolderAutoShareInfo> autoShareInfos = new HashSet<FolderAutoShareInfo>();
+
+	/* set of invite infos for auto sharing folder information  */
+	private Set<FolderInviteInfo> folderInviteInfos = new HashSet<FolderInviteInfo>();
+	
+
+
+	/*
 	 * This is the conceptual path to the folder.
 	 * The base path plus the root of the tree 
 	 * down to itself.
@@ -151,6 +160,8 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 * 
 	 * This is <b>NOT</b>  a recursive operation and only searches
 	 * the current list of children.
+	 * 
+	 * The search is case insensitive
 	 * 
 	 * @param name of the child personal folder.
 	 * @return the found personal folder.
@@ -711,15 +722,113 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 		this.owner = user;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Get the file system type.
+	 * 
 	 * @see edu.ur.ir.FileSystem#getType()
 	 */
 	public FileSystemType getFileSystemType() {
 		return fileSystemType;
 	}
 
-	@Override
+	/**
+	 * Set the root personal folder.
+	 * 
+	 * @see edu.ur.tree.PreOrderTreeSetNodeBase#setRoot(edu.ur.tree.PreOrderTreeSetNodeBase)
+	 */
 	protected void setRoot(PreOrderTreeSetNodeBase root) {
 		this.treeRoot = (PersonalFolder)root;
 	}
+	
+	/**
+	 * Get the auto share information for this folder.  This is an
+	 * unmodifiable set.
+	 * 
+	 * @return - auto share information for this folder.
+	 */
+	public Set<FolderAutoShareInfo> getAutoShareInfos() {
+		return Collections.unmodifiableSet(autoShareInfos);
+	}
+	
+	/**
+	 * Creates an auto share info object with the specified permissions and collaborator.
+	 * 
+	 * @param permissions - set of permissions for auto sharing
+	 * @param collaborator - collaborator to give auto sharing to
+	 * 
+	 * @return - created folder autoshare information.
+
+	 * @throws FileSharingException - if auto shared to owner of folder (sharing with yourself)
+	 */
+	public FolderAutoShareInfo createAutoShareInfo(Set<IrClassTypePermission> permissions, 
+			IrUser collaborator) throws FileSharingException
+	{
+		if( collaborator.equals(owner))
+		{
+			throw new FileSharingException("Cann't set auto share with yourself");
+		}
+		FolderAutoShareInfo autoShareInfo = new FolderAutoShareInfo(this, permissions, collaborator);
+	    autoShareInfos.add(autoShareInfo);
+		return autoShareInfo;
+	}
+	
+	/**
+	 * Remove the auto share information.
+	 * 
+	 * @param info - auto share information to remove
+	 * @return true if the auto share information is removed.
+	 */
+	public boolean removeAutoShareInfo(FolderAutoShareInfo info)
+	{
+		return autoShareInfos.remove(info);
+	}
+	
+	/**
+	 * Get the folder auto sharing information for a given collaborator.
+	 * 
+	 * @param collaborator - collaborator to get the autosharing for
+	 * @return - the auto share information or null if the information is not found.
+	 */
+	public FolderAutoShareInfo getAutoShareInfo(IrUser collaborator)
+	{
+		for(FolderAutoShareInfo autoShareInfo : autoShareInfos)
+		{
+			if( autoShareInfo.getCollaborator().equals(collaborator))
+			{
+				return autoShareInfo;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get the folder invite info information.  This returns an
+	 * unmodifiable set.
+	 * 
+	 * @return - folder invite information
+	 */
+	public Set<FolderInviteInfo> getFolderInviteInfos() {
+		return Collections.unmodifiableSet(folderInviteInfos);
+	}
+
+	/**
+	 * Set the folder invite information.
+	 * 
+	 * @param folderInviteInfo
+	 */
+	void setFolderInviteInfo(Set<FolderInviteInfo> folderInviteInfo) {
+		this.folderInviteInfos = folderInviteInfo;
+	}
+	
+	/**
+	 * Remove the invite info.
+	 * 
+	 * @param inviteInfo - invite info to remove
+	 * @return - true if the invite info was removed.
+	 */
+	public boolean removeFolderInviteInfo(FolderInviteInfo inviteInfo)
+	{
+		return folderInviteInfos.remove(inviteInfo);
+	}
+
 }
