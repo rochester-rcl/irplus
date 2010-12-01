@@ -2822,6 +2822,37 @@ CREATE TABLE ir_user.folder_invite_permissions
 ALTER TABLE ir_user.folder_invite_permissions OWNER TO ir_plus;
 
 -- ---------------------------------------------
+-- Auto share information
+-- ---------------------------------------------
+CREATE TABLE ir_user.folder_auto_share_info
+(
+    folder_auto_share_info_id BIGINT PRIMARY KEY,
+    personal_folder_id BIGINT NOT NULL REFERENCES ir_user.personal_folder(personal_folder_id),
+    user_id BIGINT NOT NULL REFERENCES ir_user.ir_user(user_id),
+    created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    version INTEGER,
+    UNIQUE(personal_folder_id, user_id)
+);
+ALTER TABLE ir_user.folder_auto_share_info OWNER TO ir_plus;
+
+-- The auto share sequence
+CREATE SEQUENCE ir_user.folder_auto_share_info_seq ;
+ALTER TABLE ir_user.folder_auto_share_info_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Auto share folder permissions 
+-- ---------------------------------------------
+
+CREATE TABLE ir_user.folder_auto_share_permissions
+(
+    folder_auto_share_info_id BIGINT NOT NULL REFERENCES ir_user.folder_auto_share_info(folder_auto_share_info_id), 
+    class_type_permission_id BIGINT NOT NULL REFERENCES ir_security.class_type_permission(class_type_permission_id),
+    PRIMARY KEY (folder_auto_share_info_id, class_type_permission_id)
+);
+ALTER TABLE ir_user.folder_auto_share_permissions OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
 -- Insert values for Class type permission
 -- ---------------------------------------------
 

@@ -17,7 +17,9 @@
 
 package edu.ur.ir.user.service;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,29 +29,39 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.util.StringUtils;
 
 import edu.ur.cgLib.CgLibHelper;
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.file.FileCollaborator;
 import edu.ur.ir.file.FileCollaboratorDAO;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
+import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.security.IrAcl;
+import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.FileSharingException;
+import edu.ur.ir.user.FolderAutoShareInfo;
+import edu.ur.ir.user.FolderAutoShareInfoDAO;
+import edu.ur.ir.user.FolderInviteInfo;
+import edu.ur.ir.user.FolderInviteInfoDAO;
 import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.InviteInfoDAO;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.PersonalFile;
 import edu.ur.ir.user.PersonalFileDAO;
 import edu.ur.ir.user.PersonalFileDeleteRecord;
 import edu.ur.ir.user.PersonalFileDeleteRecordDAO;
+import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.SharedInboxFile;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.order.OrderType;
-
+import edu.ur.util.TokenGenerator;
 
 /**
  * Service for inviting user
@@ -92,24 +104,36 @@ public class DefaultInviteUserService implements InviteUserService {
 	/* Data access for file collaborator */
 	private FileCollaboratorDAO fileCollaboratorDAO;
 	
-	/* Data access for user */
-	private IrUserDAO irUserDAO;
-
 	/* Data access for ACL */
 	private SecurityService securityService;
 	
-	/** Service for dealing with user file system */
+	/* Service for dealing with user file system */
 	private UserFileSystemService userFileSystemService;
 	
-	/** Base path for the web app  */
+	/* Base path for the web app  */
 	private String baseWebAppPath;
 	
-	/** Role service class */
+	/* Role service class */
 	private RoleService roleService;
 	
-	/** captures information about deleting information */
+	/* captures information about deleting information */
 	private PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO;
+
+	/* invite information for folders  */
+	private FolderInviteInfoDAO folderInviteInfoDAO;
 	
+	/* auto share information for folders  */
+	private FolderAutoShareInfoDAO folderAutoShareInfoDAO;
+	
+	/* service for creating workspace index processing records */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
+	
+	/* service for accessing index processing types */
+	private IndexProcessingTypeService indexProcessingTypeService;
+	
+	/*  Service for sending an email when an error occurs */
+	private ErrorEmailService errorEmailService;
+
 
 	/**
 	 * Persistent method for invite info
@@ -187,18 +211,171 @@ public class DefaultInviteUserService implements InviteUserService {
 		message.setText(text);
 		sendEmail(message);
 	}
+	
+	
+	/**
+	 * Based on the inviting user returns only the files that can be shared.
+	 * 
+	 * @param invitingUser
+	 * @param personalFilesToShare
+	 * 
+	 * @return - list of files that can be shared for the given user.
+	 */
+	public List<PersonalFile> getOnlyShareableFiles(IrUser invitingUser, Collection<PersonalFile> personalFilesToShare)
+	{
+		// only add files that the user can share
+		List<PersonalFile> actualFilesToShare = new LinkedList<PersonalFile>();
+		for( PersonalFile pf : personalFilesToShare)
+		{
+			IrAcl acl = securityService.getAcl(pf.getVersionedFile(), invitingUser);
+			if( acl != null && acl.isGranted(InviteUserService.SHARE_PERMISSION, invitingUser, false))
+			{
+				actualFilesToShare.add(pf);
+			}
+		}
+		return actualFilesToShare;
+	}
+
+	/**
+	 * Invite the specified users with the given emails.  This will determine if the emails
+	 * already exist for a user in the system.  If the user already exists in the system, the file is
+	 * automatically added to the users workspace.  
+	 * 
+	 * @param emails - list of emails to share with  
+	 * @param permissions - permissions to give the files.
+	 * @param personalFilesToShare - files to share
+	 * @param inviteMessage - message to send to users
+	 * 
+	 * @return list of emails that were found to be invalid or could not be sent a message
+	 * @throws FileSharingException - if the user tries to share with themselves 
+	 * @throws PermissionNotGrantedException - if the user does not have permissions to share one or more of the files passed in
+	 */
+	public List<String> inviteUsers(IrUser invitingUser, 
+			List<String> emails, 
+			Set<IrClassTypePermission> permissions, 
+			List<PersonalFile> personalFilesToShare, 
+			String inviteMessage) throws FileSharingException, PermissionNotGrantedException
+	{
+		List<String> emailsNotSent = new LinkedList<String>();
+		// do not let user share with themselves
+		for(String email : emails)
+		{
+			email = email.trim();
+			// Check if user exist in the system
+			IrUser invitedUser = userService.getUserForVerifiedEmail(email);
+			//check if the user is sharing the file with themselves
+			if (invitingUser.equals(invitedUser)) {
+				throw new FileSharingException("Cannot share with yourself");
+			}	
+		}
+		
+		// only add files that the user can share
+		for( PersonalFile pf : personalFilesToShare)
+		{
+			IrAcl acl = securityService.getAcl(pf.getVersionedFile(), invitingUser);
+			if( acl == null || !acl.isGranted(InviteUserService.SHARE_PERMISSION, invitingUser, false))
+			{
+				throw new PermissionNotGrantedException("User " + invitingUser + "does not have permissions to share file " + pf.getVersionedFile());
+			}
+		}
+		
+		// only invite users who are not the current user
+		for(String email : emails)
+		{
+			log.debug("checking email " + email);
+			IrUser invitedUser = userService.getUserForVerifiedEmail(email);
+			Set<VersionedFile>  versionedFiles = new HashSet<VersionedFile>();
+			for(PersonalFile pf : personalFilesToShare)
+			{
+				VersionedFile versionedFile = pf.getVersionedFile();
+				
+				//check if the file is already shared with this user 
+				//AND 
+				//check if email is already sent to this Id for sharing and the user has not created the account yet
+				if ((versionedFile.getCollaborator(invitedUser) == null) && (!versionedFile.getInviteeEmails().contains(email))) 
+				{
+					versionedFiles.add(versionedFile);
+				}
+			}
+		
+			InviteInfo inviteInfo = new InviteInfo(invitingUser, versionedFiles);
+			inviteInfo.setEmail(email);
+			inviteInfo.setInviteMessage(inviteMessage);
+			
+			log.debug("invitied user = " + invitedUser);
+			/* If user exist in the system then share the file and send email*/
+			if (invitedUser != null) 
+			{
+				
+				// If the shared user has no Author or collaborator or researcher or admin role, then assign collaborator role
+				if (!invitedUser.hasRole(IrRole.AUTHOR_ROLE) && !invitedUser.hasRole(IrRole.COLLABORATOR_ROLE) 
+						&& !invitedUser.hasRole(IrRole.RESEARCHER_ROLE) && !invitedUser.hasRole(IrRole.ADMIN_ROLE)) 
+				{
+					invitedUser.addRole(roleService.getRole(IrRole.COLLABORATOR_ROLE));
+					userService.makeUserPersistent(invitedUser);
+				}
+
+				for (VersionedFile file : versionedFiles) {
+					try 
+					{
+						SharedInboxFile sif = shareFile(invitingUser, invitedUser, file);
+						userFileSystemService.makeSharedInboxFilePersistent(sif);
+						userWorkspaceIndexProcessingRecordService.save(sif.getSharedWithUser().getId(), sif, 
+				    	indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+					} 
+					catch (FileSharingException e1)
+					{
+						throw new IllegalStateException("This should never happen", e1);
+					}
+					
+					// Create permissions for the file that is being shared
+					securityService.createPermissions(file, invitedUser, permissions);
+				}
+
+				try 
+				{
+					sendEmailToExistingUser(inviteInfo);
+				} 
+				catch(IllegalStateException e) 
+				{
+					emailsNotSent.add(email);
+				}
+			} 
+			else 
+			{
+				/* If user does not exist in the system then get a token and send email with the token */
+				inviteInfo.setToken(TokenGenerator.getToken());
+				inviteInfo.setPermissions(permissions);
+
+				try 
+				{
+					sendEmailToNotExistingUser(inviteInfo);
+					makeInviteInfoPersistent(inviteInfo);
+				} 
+				catch(IllegalStateException e) 
+				{
+					emailsNotSent.add(email);
+				}
+			}
+		}
+		return emailsNotSent;
+	}
 
 	/**
 	 * Sends email
 	 * 
 	 * @param message Email message 
 	 */
-	private void sendEmail(SimpleMailMessage message) {
-		try {
+	private void sendEmail(SimpleMailMessage message) 
+	{
+		try 
+		{
 			log.debug("Before send email");
 			mailSender.send(message);
 			log.debug("after send email");
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			log.error(e.getMessage());
 			throw new IllegalStateException(e);
 		}
@@ -211,7 +388,8 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * @see edu.ur.ir.user.InviteUserService#shareFile(IrUser, VersionedFile)
 	 */
 	public SharedInboxFile shareFile(IrUser invitingUser, 
-			IrUser invitedUser, VersionedFile versionedFile) throws FileSharingException {
+			IrUser invitedUser, VersionedFile versionedFile) throws FileSharingException 
+	{
 		
 		log.debug("Share file " + versionedFile.toString() + " with user " + invitedUser.toString());
 
@@ -229,7 +407,8 @@ public class DefaultInviteUserService implements InviteUserService {
 	 *  
 	 * @param fileCollaborator List of users to remove the file from
 	 */
-	public void unshareFile(FileCollaborator fileCollaborator, IrUser unsharingUser){
+	public void unshareFile(FileCollaborator fileCollaborator, IrUser unsharingUser)
+	{
 		IrUser collaborator = fileCollaborator.getCollaborator();
 		VersionedFile file = fileCollaborator.getVersionedFile();
 		log.debug("UnShare file " + file.toString() + " with user " + collaborator);
@@ -239,7 +418,8 @@ public class DefaultInviteUserService implements InviteUserService {
 		= personalFileDAO.getFileForUserWithSpecifiedVersionedFile(collaborator.getId(), 
 					file.getId());
 		
-		if (personalFile != null) {
+		if (personalFile != null) 
+		{
 			// create a delete record 
 			PersonalFileDeleteRecord personalFileDeleteRecord = new PersonalFileDeleteRecord(unsharingUser.getId(),
 					personalFile.getId(),
@@ -446,48 +626,20 @@ public class DefaultInviteUserService implements InviteUserService {
 		this.mailSender = mailSender;
 	}
 
-	public InviteInfoDAO getInviteInfoDAO() {
-		return inviteInfoDAO;
-	}
-
 	public void setInviteInfoDAO(InviteInfoDAO inviteInfoDAO) {
 		this.inviteInfoDAO = inviteInfoDAO;
-	}
-
-	public IrUserDAO getIrUserDAO() {
-		return irUserDAO;
-	}
-
-	public void setIrUserDAO(IrUserDAO irUserDAO) {
-		this.irUserDAO = irUserDAO;
-	}
-
-	public PersonalFileDAO getPersonalFileDAO() {
-		return personalFileDAO;
 	}
 
 	public void setPersonalFileDAO(PersonalFileDAO personalFileDAO) {
 		this.personalFileDAO = personalFileDAO;
 	}
 
-	public UserService getUserService() {
-		return userService;
-	}
-
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 
-	public VersionedFileDAO getVersionedFileDAO() {
-		return versionedFileDAO;
-	}
-
 	public void setVersionedFileDAO(VersionedFileDAO versionedFileDAO) {
 		this.versionedFileDAO = versionedFileDAO;
-	}
-
-	public FileCollaboratorDAO getFileCollaboratorDAO() {
-		return fileCollaboratorDAO;
 	}
 
 	public void setFileCollaboratorDAO(FileCollaboratorDAO fileCollaboratorDAO) {
@@ -510,16 +662,8 @@ public class DefaultInviteUserService implements InviteUserService {
 		this.unShareMailMessage = unShareMailMessage;
 	}
 
-	public SecurityService getSecurityService() {
-		return securityService;
-	}
-
 	public void setSecurityService(SecurityService securityService) {
 		this.securityService = securityService;
-	}
-
-	public UserFileSystemService getUserFileSystemService() {
-		return userFileSystemService;
 	}
 
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
@@ -576,10 +720,6 @@ public class DefaultInviteUserService implements InviteUserService {
 		securityService.deletePermissions(vf.getId(), CgLibHelper.cleanClassName(vf.getClass().getName()), fileCollaborator.getCollaborator());
 	}
 	
-	public PersonalFileDeleteRecordDAO getPersonalFileDeleteRecordDAO() {
-		return personalFileDeleteRecordDAO;
-	}
-
 	public void setPersonalFileDeleteRecordDAO(
 			PersonalFileDeleteRecordDAO personalFileDeleteRecordDAO) {
 		this.personalFileDeleteRecordDAO = personalFileDeleteRecordDAO;
@@ -618,6 +758,201 @@ public class DefaultInviteUserService implements InviteUserService {
 	public void delete(InviteInfo inviteInfo) {
 		inviteInfoDAO.makeTransient(inviteInfo);
 	}
+	
+	/**
+	 * Will set the personal folder to auto share with the given email.  This
+	 * will first check to see if the user already exists in the system.
+	 * 
+	 * @param email - to share with.
+	 * @param personalFolder - personal folder to auto share files when added to.
+	 * @param cascade - cascade down to sub folders
+	 * @throws FileSharingException - if the user tries sharing with themselves
+	 * 
+	 * @throws PermissionNotGrantedException 
+	 */
+	public void autoShareFolder(String email, PersonalFolder personalFolder, Set<IrClassTypePermission> permissions, boolean cascade) throws FileSharingException
+	{
+		IrUser user = userService.getUserByEmail(email);
+		 List<String> emails = new LinkedList<String>();
+         emails.add(email);
+		if( user == null )
+		{
+		    FolderInviteInfo inviteInfo = new FolderInviteInfo(personalFolder, email, permissions);	
+		    save(inviteInfo);
+		}
+		else
+		{
+			if( user.equals(personalFolder.getOwner()))
+			{
+				throw new FileSharingException("Cannot share folder with yourself");
+			}
+			else
+			{
+				 // only create the record if the folder does not already contain the 
+				 // informations
+				 FolderAutoShareInfo shareInfo  = personalFolder.getAutoShareInfo(user);
+				 if( shareInfo == null )
+				 {
+			         shareInfo = new FolderAutoShareInfo(personalFolder, permissions, user);
+				     save(shareInfo);
+				 }
+			}
+		}
+		
+		 // cascade share permissions to all sub folders and files
+		 // that can be shared
+		 if( cascade )
+		 {
+			 // take care of folders
+		     List<PersonalFolder> folders = userFileSystemService.getAllChildrenForFolder(personalFolder);
+		     for(PersonalFolder f : folders)
+		     {
+		    	 if( user == null )
+		    	 {
+		    		FolderInviteInfo inviteInfo = new FolderInviteInfo(f, email, permissions);	
+		 		    save(inviteInfo);
+		    	 }
+		    	 else
+		    	 {
+		    		 FolderAutoShareInfo shareInfo  = f.getAutoShareInfo(user);
+		    		 if( shareInfo == null )
+					 {
+				         shareInfo = new FolderAutoShareInfo(f, permissions, user);
+					     save(shareInfo);
+					 }
+		    	 }
+		     }
+		    
+		     // take care of files
+		     List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), userFileSystemService.getAllFilesForFolder(personalFolder));
+		     if( files.size() > 0 )
+		     {
+		        
+		    	 try {
+					inviteUsers(personalFolder.getOwner(), emails, permissions, files, null);
+				} catch (PermissionNotGrantedException e) {
+					log.error(e);
+					errorEmailService.sendError(e);
+				}
+		     }
+		 }
+		 else
+		 {
+		     List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), personalFolder.getFiles());
+		     try {
+				inviteUsers(personalFolder.getOwner(), emails, permissions, files, null);
+			} catch (PermissionNotGrantedException e) {
+				log.error(e);
+				errorEmailService.sendError(e);
+			}
+		 }
+	}
+	
+	/**
+	 * Get the invites made by a particular user.
+	 * 
+	 * @param user - invites made by a given user
+	 * @return - all invites made by the user or an empty list if no invites found
+	 */
+	public List<InviteInfo> getInvitesMadeByUser(IrUser user)
+	{
+		return inviteInfoDAO.getInvitesMadeByUser(user);
+	}
 
+	/**
+	 * Delete the specified folder invite information.
+	 * 
+	 * @see edu.ur.ir.user.InviteUserService#delete(edu.ur.ir.user.FolderInviteInfo)
+	 */
+	public void delete(FolderInviteInfo inviteInfo) {
+		folderInviteInfoDAO.makePersistent(inviteInfo);
+	}
 
+	/**
+	 * Save the specified folder information.
+	 * 
+	 * @see edu.ur.ir.user.InviteUserService#save(edu.ur.ir.user.FolderInviteInfo)
+	 */
+	public void save(FolderInviteInfo inviteInfo) {
+		folderInviteInfoDAO.makeTransient(inviteInfo);
+	}
+	
+	/**
+	 * Set the folder invite information.
+	 * 
+	 * @param folderInviteInfoDAO
+	 */
+	public void setFolderInviteInfoDAO(FolderInviteInfoDAO folderInviteInfoDAO) {
+		this.folderInviteInfoDAO = folderInviteInfoDAO;
+	}
+
+	/**
+	 * Set the folder auto share information.
+	 * 
+	 * @param folderAutoShareInfoDAO
+	 */
+	public void setFolderAutoShareInfoDAO(
+			FolderAutoShareInfoDAO folderAutoShareInfoDAO) {
+		this.folderAutoShareInfoDAO = folderAutoShareInfoDAO;
+	}
+
+	/**
+	 * Save the folder auto share info.
+	 * 
+	 * @param autoShareInfo - folder auto share information
+	 */
+	public void save(FolderAutoShareInfo autoShareInfo)
+	{
+		folderAutoShareInfoDAO.makePersistent(autoShareInfo);
+	}
+	
+	/**
+	 * Delete the folder auto share information.
+	 * 
+	 * @param autoShareInfo - folder auto share information
+	 */
+	public void delete(FolderAutoShareInfo autoShareInfo)
+	{
+		folderAutoShareInfoDAO.makeTransient(autoShareInfo);
+	}
+	
+	/**
+	 * Set the email error service.
+	 * 
+	 * @param errorEmailService
+	 */
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
+	}
+	
+	/**
+	 * Get invite information by email.
+	 * 
+	 * @param email - email to get the invite information for
+	 * @return the invite information
+	 */
+	public List<InviteInfo> getInviteInfo(String email)
+	{
+		return inviteInfoDAO.getInviteInfoByEmail(email);
+	}
+	
+	/**
+	 * Set the user workspace index processing record service.
+	 * 
+	 * @param userWorkspaceIndexProcessingRecordService
+	 */
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	/**
+	 * Set the index processing type service.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
 }

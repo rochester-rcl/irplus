@@ -24,6 +24,7 @@ import org.hibernate.SessionFactory;
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.InviteInfoDAO;
+import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
 /**
@@ -161,6 +162,20 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 */
 	public Long getCount() {
 		return (Long)hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("inviteInfoCount").uniqueResult();
+	}
+	
+	/**
+	 * Get the invites made by a particular user.
+	 * 
+	 * @param user - invites made by a given user
+	 * @return - all invites made by the user or an empty list if no invites found
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InviteInfo> getInvitesMadeByUser(IrUser user)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInviteInfoMadeByUser");
+		q.setParameter("userId",user.getId());
+		return q.list();
 	}
 
 }

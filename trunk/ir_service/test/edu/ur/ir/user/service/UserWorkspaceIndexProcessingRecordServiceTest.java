@@ -28,7 +28,7 @@ public class UserWorkspaceIndexProcessingRecordServiceTest {
 	/** Spring application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 	
-    /** Institutional Item index processing record service  */
+    /** User index processing record service  */
 	UserWorkspaceIndexProcessingRecordService recordProcessingService = 
     	(UserWorkspaceIndexProcessingRecordService) ctx.getBean("userWorkspaceIndexProcessingRecordService");
 

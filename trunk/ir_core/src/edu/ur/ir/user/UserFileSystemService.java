@@ -465,7 +465,16 @@ public interface UserFileSystemService extends Serializable{
 	 * @return all files within a folder and its sub folder
 	 */
     public List<PersonalFile> getAllFilesForFolder(PersonalFolder personalFolder);
-
+    
+	/**
+	 * This returns all folders for the specified parent folder.  This
+	 * includes all children including those within sub folders.
+	 * 
+	 * @param personalFolder - to get all children folders from
+	 * @return list of all children folders
+	 */
+	public List<PersonalFolder> getAllChildrenForFolder(PersonalFolder personalFolder);
+	
 	/**
 	 * Get shared inbox files for specified user and ids
 	 * 

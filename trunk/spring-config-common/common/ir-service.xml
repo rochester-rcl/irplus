@@ -345,7 +345,6 @@
    <bean id="inviteUserService" 
        class="edu.ur.ir.user.service.DefaultInviteUserService">
 	   <property name="inviteInfoDAO" ref="inviteInfoDAO"/>
-       <property name="irUserDAO" ref="irUserDAO"/>
        <property name="personalFileDAO" ref="personalFileDAO"/>
        <property name="userService" ref="userService"/>
        <property name="fileCollaboratorDAO" ref="fileCollaboratorDAO"/>
@@ -359,6 +358,11 @@
        <property name="baseWebAppPath" value="${base.web.path}"/>
        <property name="roleService" ref="roleService"/>
        <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
+       <property name="folderInviteInfoDAO" ref="folderInviteInfoDAO"/>
+       <property name="folderAutoShareInfoDAO" ref="folderAutoShareInfoDAO"/>
+       <property name="userWorkspaceIndexProcessingRecordService" ref="userWorkspaceIndexProcessingRecordService"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
      
    <!-- ****************************************** --> 

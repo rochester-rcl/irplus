@@ -59,4 +59,11 @@ public interface InviteInfoDAO extends CrudDAO<InviteInfo>, CountableDAO {
 	public List<InviteInfo> getInviteInfosOrderByInviteor(int rowStart,
 			int maxResults, OrderType orderType);
 	
+	/**
+	 * Get the invites made by a particular user.
+	 * 
+	 * @param user - invites made by a given user
+	 * @return - all invites made by the user or an empty list if no invites found
+	 */
+	public List<InviteInfo> getInvitesMadeByUser(IrUser user);
 }

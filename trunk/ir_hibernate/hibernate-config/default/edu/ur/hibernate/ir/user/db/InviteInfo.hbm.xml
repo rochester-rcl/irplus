@@ -79,6 +79,9 @@
     <!-- named query for getting invite information for given email -->
     <query name="findInviteInfoForEmail">from InviteInfo inviteInfo where lower(inviteInfo.email) = :email </query> 
     
+    <!-- named query for getting invite information made by a given user -->
+    <query name="getInviteInfoMadeByUser">from InviteInfo inviteInfo where user.id = :userId </query> 
+    
     	<!--  Get a count of roles in the system -->
 	<query name="inviteInfoCount">
 	    select count(*) from InviteInfo
