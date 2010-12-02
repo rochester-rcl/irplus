@@ -56,7 +56,6 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="page-resources/js/user/invite_user.js"/>
-    <ur:js src="page-resources/js/user/email_search.js"/>
     
  	<script type="text/javascript">
        	var myTabs = new YAHOO.widget.TabView("invite-user-tabs");
