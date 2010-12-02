@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--  
    Copyright 2008 University of Rochester
 
@@ -41,8 +40,8 @@
                 <value>edu/ur/hibernate/ir/repository/db/RetiredRepositoryLicense.hbm.xml</value>
                 
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollection.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollectionSubscription.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollectionLink.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/institution/db/InstitutionalCollectionSubscription.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalItem.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/InstitutionalItemVersion.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/institution/db/ReviewableItem.hbm.xml</value>
@@ -80,7 +79,7 @@
                 <value>edu/ur/hibernate/ir/item/db/ItemSponsor.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/CopyrightStatement.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/db/ItemContentType.hbm.xml</value>
-                
+
                 
                 <value>edu/ur/hibernate/ir/person/db/PersonNameAuthority.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/person/db/PersonName.hbm.xml</value>
@@ -99,7 +98,6 @@
                 <value>edu/ur/hibernate/ir/researcher/db/ResearcherPersonalLink.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/researcher/db/ResearcherInstitutionalItem.hbm.xml</value>
                 
-               
                 <value>edu/ur/hibernate/ir/user/db/IrUserGroup.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/IrUser.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/IrRole.hbm.xml</value>
