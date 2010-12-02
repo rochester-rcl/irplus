@@ -273,7 +273,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	 * Send Invite for a user to collaborate on a document
 	 */
 	public String sendInvite() {
-		inviteSent = false;
+		inviteSent = true;
 		if (selectedPermissions.size() == 0) {
 			inviteErrorMessage = getText("emptyPermissions");
 			return "added";
@@ -323,6 +323,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			if (invitingUser.equals(invitedUser)) {
 				if( !errorSet )
 				{
+					inviteSent = false;
 				    inviteErrorMessage = getText("sharingWithYourself") + " ";
 				    errorSet = true;
 				}
@@ -335,6 +336,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 		
 		if( emailsToInvite.size() == 0 && !errorSet )
 		{
+			inviteSent = false;
 			inviteErrorMessage = "No emails entered for sharing ";
 			return "added";
 		}
@@ -342,8 +344,10 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	    try 
 	    {
 			List<String> badEmails = inviteUserService.inviteUsers(invitingUser, emailsToInvite, permissions, personalFilesToShare, inviteMessage);
+			
 			for(String email : badEmails)
 			{
+				inviteSent = false;
 				inviteErrorMessage += getText("emailNotSent", new String[]{email}) +" ";
 			}
 		} 
@@ -351,6 +355,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 	    {
 			if( !errorSet )
 			{
+				inviteSent = false;
 			    inviteErrorMessage = getText("sharingWithYourself") + " ";
 			    errorSet = true;
 			}
