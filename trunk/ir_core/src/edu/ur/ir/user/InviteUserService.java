@@ -249,7 +249,7 @@ public interface InviteUserService extends Serializable{
 	 * 
 	 * @throws PermissionNotGrantedException 
 	 */
-	public void autoShareFolder(String email, 
+	public void autoShareFolder(List<String> emails, 
 			PersonalFolder personalFolder, 
 			Set<IrClassTypePermission> permissions, 
 			boolean cascade) throws FileSharingException;

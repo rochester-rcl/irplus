@@ -173,7 +173,10 @@ public class DefaultInviteUserService implements InviteUserService {
 		
 		text = StringUtils.replace(text, "%NAME%", names.toString());
 		text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
-		text = text.concat(inviteInfo.getInviteMessage());
+		if( inviteInfo.getInviteMessage() != null )
+		{
+		    text = text.concat(inviteInfo.getInviteMessage());
+		}
 		message.setText(text);
 		sendEmail(message);
 	}
@@ -207,7 +210,10 @@ public class DefaultInviteUserService implements InviteUserService {
 		text = StringUtils.replace(text, "%NAME%", names.toString());
 		text = StringUtils.replace(text, "%TOKEN%", inviteInfo.getToken());
 		text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
-		text = text.concat(inviteInfo.getInviteMessage());
+		if( inviteInfo.getInviteMessage() != null )
+		{
+		    text = text.concat(inviteInfo.getInviteMessage());
+		}
 		message.setText(text);
 		sendEmail(message);
 	}
@@ -770,24 +776,32 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * 
 	 * @throws PermissionNotGrantedException 
 	 */
-	public void autoShareFolder(String email, PersonalFolder personalFolder, Set<IrClassTypePermission> permissions, boolean cascade) throws FileSharingException
+	public void autoShareFolder(List<String> emails, PersonalFolder personalFolder, Set<IrClassTypePermission> permissions, boolean cascade) throws FileSharingException
 	{
-		IrUser user = userService.getUserByEmail(email);
-		 List<String> emails = new LinkedList<String>();
-         emails.add(email);
-		if( user == null )
+		for(String email : emails)
 		{
-		    FolderInviteInfo inviteInfo = new FolderInviteInfo(personalFolder, email, permissions);	
-		    save(inviteInfo);
-		}
-		else
-		{
-			if( user.equals(personalFolder.getOwner()))
+			IrUser user = userService.getUserByEmail(email);
+			if( user != null )
 			{
-				throw new FileSharingException("Cannot share folder with yourself");
+				if( user.equals(personalFolder.getOwner()))
+				{
+					throw new FileSharingException("Cannot share folder with yourself");
+				}
 			}
-			else
-			{
+		}
+		
+		// add the share information to folders
+		for( String email : emails)
+		{
+		    IrUser user = userService.getUserByEmail(email);
+		    
+		    if( user == null )
+		    {
+		        FolderInviteInfo inviteInfo = new FolderInviteInfo(personalFolder, email, permissions);	
+		        save(inviteInfo);
+		    }
+		    else
+		    {
 				 // only create the record if the folder does not already contain the 
 				 // informations
 				 FolderAutoShareInfo shareInfo  = personalFolder.getAutoShareInfo(user);
@@ -796,56 +810,64 @@ public class DefaultInviteUserService implements InviteUserService {
 			         shareInfo = new FolderAutoShareInfo(personalFolder, permissions, user);
 				     save(shareInfo);
 				 }
-			}
+			
+		    }
+		     // cascade share permissions to all sub folders 
+		     if( cascade )
+		     {
+			     // take care of folders
+		         List<PersonalFolder> folders = userFileSystemService.getAllChildrenForFolder(personalFolder);
+		         for(PersonalFolder f : folders)
+		         {
+		    	     if( user == null )
+		    	     {
+		    		    FolderInviteInfo inviteInfo = new FolderInviteInfo(f, email, permissions);	
+		 		        save(inviteInfo);
+		    	     }
+		    	     else
+		    	     {
+		    		     FolderAutoShareInfo shareInfo  = f.getAutoShareInfo(user);
+		    		     if( shareInfo == null )
+					     {
+				             shareInfo = new FolderAutoShareInfo(f, permissions, user);
+					         save(shareInfo);
+					     }
+		    	     }
+		         }
+		     }
 		}
-		
-		 // cascade share permissions to all sub folders and files
-		 // that can be shared
-		 if( cascade )
-		 {
-			 // take care of folders
-		     List<PersonalFolder> folders = userFileSystemService.getAllChildrenForFolder(personalFolder);
-		     for(PersonalFolder f : folders)
-		     {
-		    	 if( user == null )
-		    	 {
-		    		FolderInviteInfo inviteInfo = new FolderInviteInfo(f, email, permissions);	
-		 		    save(inviteInfo);
-		    	 }
-		    	 else
-		    	 {
-		    		 FolderAutoShareInfo shareInfo  = f.getAutoShareInfo(user);
-		    		 if( shareInfo == null )
-					 {
-				         shareInfo = new FolderAutoShareInfo(f, permissions, user);
-					     save(shareInfo);
-					 }
-		    	 }
+		if( cascade )
+		{
+			// take care of files in all folders and sub folders
+	         List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), userFileSystemService.getAllFilesForFolder(personalFolder));
+	         if( files.size() > 0 )
+	         {
+	        
+	    	     try 
+	    	     {
+				     inviteUsers(personalFolder.getOwner(), emails, permissions, files, null);
+			     } 
+	    	     catch (PermissionNotGrantedException e)
+	    	     {
+				    log.error(e);
+				    errorEmailService.sendError(e);
+			     }
+	         }
+		}
+		else
+		{
+			// only share files in the given folder
+			List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), personalFolder.getFiles());
+	         try 
+	         {
+			     inviteUsers(personalFolder.getOwner(), emails, permissions, files, null);
+		     } 
+	         catch (PermissionNotGrantedException e) 
+	         {
+			    log.error(e);
+			    errorEmailService.sendError(e);
 		     }
-		    
-		     // take care of files
-		     List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), userFileSystemService.getAllFilesForFolder(personalFolder));
-		     if( files.size() > 0 )
-		     {
-		        
-		    	 try {
-					inviteUsers(personalFolder.getOwner(), emails, permissions, files, null);
-				} catch (PermissionNotGrantedException e) {
-					log.error(e);
-					errorEmailService.sendError(e);
-				}
-		     }
-		 }
-		 else
-		 {
-		     List<PersonalFile> files = getOnlyShareableFiles(personalFolder.getOwner(), personalFolder.getFiles());
-		     try {
-				inviteUsers(personalFolder.getOwner(), emails, permissions, files, null);
-			} catch (PermissionNotGrantedException e) {
-				log.error(e);
-				errorEmailService.sendError(e);
-			}
-		 }
+		}
 	}
 	
 	/**
@@ -874,7 +896,7 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * @see edu.ur.ir.user.InviteUserService#save(edu.ur.ir.user.FolderInviteInfo)
 	 */
 	public void save(FolderInviteInfo inviteInfo) {
-		folderInviteInfoDAO.makeTransient(inviteInfo);
+		folderInviteInfoDAO.makePersistent(inviteInfo);
 	}
 	
 	/**
