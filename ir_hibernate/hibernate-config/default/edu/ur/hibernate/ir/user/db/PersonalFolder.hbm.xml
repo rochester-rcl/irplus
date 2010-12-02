@@ -142,7 +142,8 @@
     <!--  All children folders for the specified folder including sub folders -->
 	<query name="getAllChildrenFoldersForFolder">
 	    from PersonalFolder as personalFolder
-	    where personalFolder.leftValue between :leftValue and :rightValue
+	    where personalFolder.leftValue &gt; :leftValue 
+	    and  personalFolder.rightValue &lt; :rightValue
 	    and personalFolder.treeRoot.id = :rootId
 	</query>
 	

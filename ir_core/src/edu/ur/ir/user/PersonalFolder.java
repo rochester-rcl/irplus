@@ -802,6 +802,24 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	}
 	
 	/**
+	 * Get the folder auto sharing invite information for a given email
+	 * 
+	 * @param email - email to search for
+	 * @return - the invite information or null if the information is not found.
+	 */
+	public FolderInviteInfo getFolderInviteInfo(String email)
+	{
+		for(FolderInviteInfo inviteInfo : folderInviteInfos)
+		{
+			if( inviteInfo.getEmail().equalsIgnoreCase(email))
+			{
+				return inviteInfo;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * Get the folder invite info information.  This returns an
 	 * unmodifiable set.
 	 * 

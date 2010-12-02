@@ -49,6 +49,8 @@ import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.FileSharingException;
+import edu.ur.ir.user.FolderAutoShareInfo;
+import edu.ur.ir.user.FolderInviteInfo;
 import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.InviteInfoDAO;
 import edu.ur.ir.user.InviteUserService;
@@ -517,9 +519,6 @@ public class DefaultInviteUserServiceTest {
 		inviteUserService.inviteUsers(user, emails, permissions, personalFiles, "test message");
         VersionedFile vf = pf.getVersionedFile();
         
-		Set<VersionedFile>  versionedFiles = new HashSet<VersionedFile>();
-		versionedFiles.add(vf);
-
 		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAll();
 		for( UserWorkspaceIndexProcessingRecord record : records )
 		{
@@ -565,6 +564,7 @@ public class DefaultInviteUserServiceTest {
 	
 	/**
 	 * Test the auto share of folders.
+	 * 
 	 * @throws LocationAlreadyExistsException 
 	 * @throws IllegalFileSystemNameException 
 	 * @throws DuplicateNameException 
@@ -581,7 +581,153 @@ public class DefaultInviteUserServiceTest {
 	    UserHasPublishedDeleteException, 
 	    UserDeletedPublicationException
 	{
+		// determine if we should be sending emails 
+		// if not do not try this test
+		boolean sendEmail = Boolean.valueOf(properties.getProperty("send_emails")).booleanValue();
+		if( !sendEmail )
+		{
+			return;
+		}
+		
+		// Start the transaction 
+		TransactionStatus ts = tm.getTransaction(td);
 
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+
+
+		// create the sharing user
+		String userEmail1 = properties.getProperty("user_1_email");
+		UserEmail email = new UserEmail(userEmail1);
+		IrUser user = userService.createUser("password", "username", email);
+		
+		// create the non-existing user
+		String userEmail2 = properties.getProperty("user_2_email");
+		
+		// create the existing user
+		String userEmail3 = properties.getProperty("user_3_email");
+		UserEmail email3 = new UserEmail(userEmail3);
+		email3.setVerified(true);
+		IrUser user3 = userService.createUser("password3", "username3", email3);
+		
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		// create a root folder and sub folder
+		PersonalFolder rootFolder = user.createRootFolder("root folder");
+		PersonalFolder subFolder = rootFolder.createChild("sub folder");
+		
+		userService.makeUserPersistent(user);
+		
+		
+		// add file to user
+		PersonalFile pf = userFileSystemService.addFileToUser(repo, f, subFolder, "test file", "description");
+		
+		IndexProcessingType updateProcessingType = new IndexProcessingType(IndexProcessingTypeService.UPDATE);
+		indexProcessingTypeService.save(updateProcessingType);
+		
+		IndexProcessingType deleteProcessingType = new IndexProcessingType(IndexProcessingTypeService.DELETE);
+		indexProcessingTypeService.save(deleteProcessingType);
+		
+		IndexProcessingType insertProcessingType =  new IndexProcessingType(IndexProcessingTypeService.INSERT);
+		indexProcessingTypeService.save(insertProcessingType);
+        tm.commit(ts);
+
+        
+		//Start a transaction 
+		ts = tm.getTransaction(td);
+		
+		// create permissions to give user
+		// Create the list of permissions
+		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		IrClassTypePermission view = securityService.getClassTypePermission(VersionedFile.class.getName(),InviteUserService.VIEW_PERMISSION);
+		permissions.add(view);
+
+		// create the role
+		IrRole role = new IrRole();
+		role.setName(IrRole.COLLABORATOR_ROLE);
+		roleService.makeRolePersistent(role);
+		
+		// create list of emails to give user
+		LinkedList<String> emails = new LinkedList<String>();
+		emails.add(userEmail2);
+		emails.add(userEmail3);
+		
+		/* User shares the file with email address "new_email@yahoo.com".
+		 * That email Id does not exist in the system. 
+		 * So a token is created and email sent to the address with the link to login/register.
+		 */
+		
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		inviteUserService.autoShareFolder(emails, rootFolder, permissions, true);
+        VersionedFile vf = pf.getVersionedFile();
+  
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAll();
+		for( UserWorkspaceIndexProcessingRecord record : records )
+		{
+			recordProcessingService.delete(record);
+		}
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.DELETE));
+		indexProcessingTypeService.delete(indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
+		tm.commit(ts);
+
+		ts = tm.getTransaction(td);
+		List<InviteInfo> infos = inviteUserService.getInviteInfo(userEmail2);
+		assert infos.size() == 1 : "Should have one invite info";
+		InviteInfo info = infos.get(0);
+		assert info.getPermissions().contains(view);
+		
+		user3 = userService.getUser(user3.getId(), false);
+		assert user3.getSharedInboxFile(vf) != null : "User should have shared inbox file";
+		assert user3.getRole(IrRole.COLLABORATOR_ROLE) != null : "User should have collaborator role";
+		
+		rootFolder = userFileSystemService.getPersonalFolder(rootFolder.getId(), false);
+		subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+		
+		Set<FolderAutoShareInfo> rootShares = rootFolder.getAutoShareInfos();
+		assert rootShares.size() == 1 : "Should have one share but has " + rootShares.size();
+		assert rootFolder.getAutoShareInfo(user3) != null : "Should have share for user " + user3;
+		Set<FolderAutoShareInfo> subShares = subFolder.getAutoShareInfos();
+		assert subShares.size() == 1 : "Should have one share but has " + subShares.size();
+		assert subFolder.getAutoShareInfo(user3) != null : "Should have share for user " + user3;
+		
+		Set<FolderInviteInfo> rootInvites = rootFolder.getFolderInviteInfos();
+		assert rootInvites.size() == 1 : "Should have one invite but has " + rootInvites.size();
+		assert rootFolder.getFolderInviteInfo(userEmail2) != null : "Should find invite for user email 2";
+		Set<FolderInviteInfo> subInvites = subFolder.getFolderInviteInfos();
+		assert subInvites.size() == 1 : "Should have one invite but has " + subInvites.size();
+		assert subFolder.getFolderInviteInfo(userEmail2) != null : "Should find invite for user email 2";
+		tm.commit(ts);
+		
+
+		// Start a transaction 
+		ts = tm.getTransaction(td);
+		IrUser deleteUser = userService.getUser(user.getId(), false); 
+		userService.deleteUser(deleteUser,deleteUser);
+		
+		IrUser deleteUser3 = userService.getUser(user3.getId(), false); 
+		userService.deleteUser(deleteUser3,deleteUser3);
+		
+		roleService.deleteRole(roleService.getRole(role.getId(), false));
+		
+		tm.commit(ts);
+		
+	    // Start new transaction
+		ts = tm.getTransaction(td);
+		assert userService.getUser(user.getId(), false) == null : "User should be null";
+		assert userService.getUser(user3.getId(), false) == null : "User 3 should be null";
+		assert roleService.getRole(role.getId(), false) == null : "Role should be null";
+		helper.cleanUpRepository();
+		tm.commit(ts);
 	}
 
 }
