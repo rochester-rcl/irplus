@@ -136,7 +136,8 @@ YAHOO.ur.folder =
 	            // this will store the folder Id in the URL
 	            try 
 	            {
-	                YAHOO.util.History.navigate( "personalFolderModule", folderId );
+	            	// do not remove the string conversion on folder id otherwise an error occurs
+	                YAHOO.util.History.navigate( "personalFolderModule", folderId + "" );
 	            } 
 	            catch ( e ) 
 	            {
@@ -1456,8 +1457,7 @@ YAHOO.ur.folder =
         YAHOO.ur.folder.createFileRenameDialog();
         
         // register the history system
-        YAHOO.util.History.register("personalFolderModule", personalFolderState, 
-        YAHOO.ur.folder.personalFolderStateChangeHandler);
+        YAHOO.util.History.register("personalFolderModule", personalFolderState, YAHOO.ur.folder.personalFolderStateChangeHandler);
     }
 };
 
