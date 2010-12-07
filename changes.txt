@@ -22,7 +22,18 @@ IR+ changes 2.0 to 2.x
 - Updated email to have a new column - lower case email to allow comparison by the lower case email
   address
 - Updated file properties to show emails that are shared with but users have not yet created an account
+- fixed to make back button work in personal files/folders workspace
 
+[ur_persistence_util]
+=============================
+- Removed getAll from HbCrudDAO and moved it into its own interface.  Removed method from all
+DAO classes that did not have a client using the method.
+
+
+IR+ 2.0.4 to 2.0.5
+============================
+- Updated to download new version of YUI as old version no longer exists 
+[Thanks to Paul Hoffman and Fenway Libraries Online] 
 
 IR+ 2.0.3 to 2.0.4
 ===========================
