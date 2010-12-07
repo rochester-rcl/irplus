@@ -16,8 +16,6 @@
 
 package edu.ur.hibernate.ir.institution.db;
 
-import java.util.List;
-
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -74,10 +72,4 @@ public class HbVersionedInstitutionalItemDAO implements VersionedInstitutionalIt
 	public void makeTransient(VersionedInstitutionalItem entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
-
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 }

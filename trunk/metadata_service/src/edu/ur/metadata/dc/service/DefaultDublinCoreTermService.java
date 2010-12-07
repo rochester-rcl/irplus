@@ -28,7 +28,10 @@ import edu.ur.metadata.dc.DublinCoreTermService;
  */
 public class DefaultDublinCoreTermService implements DublinCoreTermService{
 
-    /** Data access for dublin core term information  */
+    /** eclipse generated id */
+	private static final long serialVersionUID = -1352154122244143484L;
+	
+	/** Data access for dublin core term information  */
     private DublinCoreTermDAO dublinCoreTermDAO;
     
 

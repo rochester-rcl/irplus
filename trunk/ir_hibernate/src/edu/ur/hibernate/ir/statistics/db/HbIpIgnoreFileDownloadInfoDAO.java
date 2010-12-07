@@ -85,10 +85,6 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("ipIgnoreFileDownloadInfoCount"));
 	}
 
-	public List<IpIgnoreFileDownloadInfo> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	public IpIgnoreFileDownloadInfo getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

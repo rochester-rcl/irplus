@@ -77,10 +77,4 @@ public class HbExternalPublishedItemDAO implements ExternalPublishedItemDAO {
 	public void makeTransient(ExternalPublishedItem entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
-
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 }

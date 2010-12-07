@@ -74,13 +74,6 @@ public class HbResearcherFileDAO implements ResearcherFileDAO{
 		return (Long)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irFileCount"));
 	}
-	
-	/**
-	 * Return all ResearcherFile
-	 */
-	public List<ResearcherFile> getAll() {
-		return hbCrudDAO.getAll();
-	}
 
 	/**
 	 * Return ResearcherFile by id

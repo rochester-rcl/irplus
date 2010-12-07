@@ -17,6 +17,7 @@ package edu.ur.ir.item.metadata.dc;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.dao.ListAllDAO;
 
 /**
  * Interface for creating a mapping between a contributor type and a dublin core mapping.
@@ -24,7 +25,7 @@ import edu.ur.dao.CrudDAO;
  * @author Nathan Sarr
  *
  */
-public interface ContributorTypeDublinCoreMappingDAO extends CountableDAO, CrudDAO<ContributorTypeDublinCoreMapping>{
+public interface ContributorTypeDublinCoreMappingDAO extends CountableDAO, CrudDAO<ContributorTypeDublinCoreMapping>, ListAllDAO{
 	
 	/**
 	 * Get the mapping by contributor type id

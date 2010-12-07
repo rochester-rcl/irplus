@@ -46,16 +46,6 @@ public class DefaultFieldService implements FieldService{
 		return fieldDAO.findByUniqueName(name);
 	}
 
-	/**
-	 * Get all fields.
-	 * 
-	 * @see edu.ur.ir.researcher.Field#getAllFields()
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Field> getAllFields() {
-		return fieldDAO.getAll();
-	}
-
 	/** 
 	 * Get all fields ordered by name.
 	 * 

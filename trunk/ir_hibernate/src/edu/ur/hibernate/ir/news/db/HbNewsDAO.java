@@ -107,16 +107,6 @@ public class HbNewsDAO implements NewsDAO {
 	}
 
 	/**
-	 * Get all news items.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	/**
 	 * Get a news item by id.
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)

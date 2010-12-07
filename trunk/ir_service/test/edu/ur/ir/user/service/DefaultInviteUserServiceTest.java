@@ -519,7 +519,7 @@ public class DefaultInviteUserServiceTest {
 		inviteUserService.inviteUsers(user, emails, permissions, personalFiles, "test message");
         VersionedFile vf = pf.getVersionedFile();
         
-		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAll();
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
 		for( UserWorkspaceIndexProcessingRecord record : records )
 		{
 			recordProcessingService.delete(record);
@@ -670,7 +670,7 @@ public class DefaultInviteUserServiceTest {
 		inviteUserService.autoShareFolder(emails, rootFolder, permissions, true);
         VersionedFile vf = pf.getVersionedFile();
   
-		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAll();
+		List<UserWorkspaceIndexProcessingRecord> records = recordProcessingService.getAllOrderByIdDate();
 		for( UserWorkspaceIndexProcessingRecord record : records )
 		{
 			recordProcessingService.delete(record);

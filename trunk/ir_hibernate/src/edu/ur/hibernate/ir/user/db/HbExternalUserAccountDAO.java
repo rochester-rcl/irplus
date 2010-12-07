@@ -56,16 +56,6 @@ public class HbExternalUserAccountDAO implements ExternalUserAccountDAO{
     {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
-
-	/**
-	 * Get all user external accounts.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	public List<ExternalUserAccount> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	
 	/**
 	 * 

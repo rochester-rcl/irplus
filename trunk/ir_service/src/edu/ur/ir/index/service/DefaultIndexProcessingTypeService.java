@@ -16,8 +16,6 @@
 
 package edu.ur.ir.index.service;
 
-import java.util.List;
-
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.index.IndexProcessingTypeDAO;
@@ -63,16 +61,6 @@ public class DefaultIndexProcessingTypeService implements IndexProcessingTypeSer
 	 */
 	public IndexProcessingType get(Long id, boolean lock) {
 		return indexProcessingTypeDAO.getById(id, lock);
-	}
-
-	
-	/**
-	 * 
-	 * @see edu.ur.ir.index.IndexProcessingTypeService#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List<IndexProcessingType> getAll() {
-		return (List<IndexProcessingType>)indexProcessingTypeDAO.getAll();
 	}
 
 	

@@ -45,12 +45,7 @@ public class HbHandleInfoDAO implements HandleInfoDAO{
 		return (Long)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("handleInfoCount"));
 	}
-
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
+	
 	/**
 	 * Get the handle by id.
 	 * 

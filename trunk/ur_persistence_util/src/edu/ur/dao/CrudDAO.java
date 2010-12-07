@@ -18,7 +18,6 @@
 package edu.ur.dao;
 
 import java.io.Serializable;
-import java.util.List;
 
 
 /**
@@ -54,11 +53,5 @@ public interface CrudDAO<T> extends Serializable{
      */
      public void makeTransient(T entity);
     
-    /**
-     * Get all of the existing Entities
-     * 
-     * @return all of the entities the list is unordered.
-     */
-     @SuppressWarnings("unchecked")
-	public List getAll();
+ 
 }

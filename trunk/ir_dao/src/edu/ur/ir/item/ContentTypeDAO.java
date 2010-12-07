@@ -20,6 +20,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.UniqueNameDAO;
 import edu.ur.dao.UniqueSystemCodeDAO;
@@ -32,7 +33,7 @@ import edu.ur.dao.UniqueSystemCodeDAO;
  *
  */
 public interface ContentTypeDAO extends CountableDAO, 
-CrudDAO<ContentType>, NameListDAO, UniqueNameDAO<ContentType>, UniqueSystemCodeDAO<ContentType>
+CrudDAO<ContentType>, NameListDAO, UniqueNameDAO<ContentType>, UniqueSystemCodeDAO<ContentType>, ListAllDAO
 {
 	/**
 	 * Get the list of content types.

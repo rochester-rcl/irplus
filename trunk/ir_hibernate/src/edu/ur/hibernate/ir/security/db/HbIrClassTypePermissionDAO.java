@@ -111,17 +111,6 @@ public class HbIrClassTypePermissionDAO implements IrClassTypePermissionDAO{
 		return (IrClassTypePermission) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getIrClassTypePermissionByNameAndClass", 
 				values));
 	}
-
-	/**
-	 * Get all of the class type permissions.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	
 	/**
 	 * Get the class type permission by id.

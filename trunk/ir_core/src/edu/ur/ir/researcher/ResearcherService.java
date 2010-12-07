@@ -54,16 +54,7 @@ public interface ResearcherService extends Serializable{
 	 */
 	public void saveResearcher(Researcher researcher) ;
 
-    /**
-     * Get all the researchers.
-     * 
-     * @return all researchers
-     */
-	public List<Researcher> getAllResearchers();
-	
-
-	
-	/**
+ 	/**
 	 * Get all researchers having researcher page public
 	 *  
      * @return List of researchers found

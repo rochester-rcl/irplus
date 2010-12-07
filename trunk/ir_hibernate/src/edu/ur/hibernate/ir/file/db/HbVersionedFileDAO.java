@@ -101,10 +101,6 @@ public class HbVersionedFileDAO implements VersionedFileDAO {
 	  	return (List<VersionedFile>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getVersionedIrFileByName", name);
 	}
 
-	public List<VersionedFile> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	public VersionedFile getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

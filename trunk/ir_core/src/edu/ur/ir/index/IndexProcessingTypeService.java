@@ -18,7 +18,6 @@
 package edu.ur.ir.index;
 
 import java.io.Serializable;
-import java.util.List;
 
 
 /**
@@ -76,11 +75,4 @@ public interface IndexProcessingTypeService  extends Serializable {
      */
     public void save(IndexProcessingType indexProcessingType);
  
-	/**
-	 * Get all index processing types
-	 * 
-	 * @return List of all index processing types
-	 */
-	public List<IndexProcessingType> getAll();
-	
 }

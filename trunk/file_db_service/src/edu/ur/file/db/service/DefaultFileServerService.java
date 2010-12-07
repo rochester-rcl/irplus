@@ -55,6 +55,9 @@ import edu.ur.file.db.TreeFolderInfoDAO;
  */
 public class DefaultFileServerService implements FileServerService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7485322616249733422L;
+
 	/** Data access for file servers in the database  */
 	private FileServerDAO fileServerDAO;
 
@@ -342,7 +345,7 @@ public class DefaultFileServerService implements FileServerService{
 	 */
 	@SuppressWarnings("unchecked")
 	public List<DefaultFileServer> getAllFileServers() {
-		return fileServerDAO.getAll();
+		return (List<DefaultFileServer>)fileServerDAO.getAll();
 	}
 
 	/**
@@ -772,8 +775,7 @@ public class DefaultFileServerService implements FileServerService{
 	 * @see edu.ur.file.db.FileServerService#getFileDatabases()
 	 */
 	@SuppressWarnings("unchecked")
-	public List<FileDatabase> getFileDatabases() {
-		
+	public List<FileDatabase> getFileDatabases() {	
 		return fileDatabaseDAO.getAll();
 	}
 

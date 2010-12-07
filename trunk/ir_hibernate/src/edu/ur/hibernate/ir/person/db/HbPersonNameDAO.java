@@ -47,6 +47,9 @@ import edu.ur.order.OrderType;
  */
 public class HbPersonNameDAO  implements PersonNameDAO {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = -4929168805622244755L;
+	
 	/** Helper for persisting information using hibernate.*/
 	private final HbCrudDAO<PersonName> hbCrudDAO;
 
@@ -217,14 +220,6 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	public Long getCount() {
 		return (Long)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personNameCount"));
-	}
-
-	
-	/**
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	public List<PersonName> getAll() {
-		return hbCrudDAO.getAll();
 	}
 
 	/**

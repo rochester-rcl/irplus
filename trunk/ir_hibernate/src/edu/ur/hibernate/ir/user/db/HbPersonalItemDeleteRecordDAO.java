@@ -60,10 +60,6 @@ public class HbPersonalItemDeleteRecordDAO implements PersonalItemDeleteRecordDA
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personalItemDeleteRecordCount"));
 	}
 
-	public List<PersonalItemDeleteRecord> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	public PersonalItemDeleteRecord getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

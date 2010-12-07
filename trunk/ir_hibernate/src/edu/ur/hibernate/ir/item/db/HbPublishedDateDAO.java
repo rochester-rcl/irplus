@@ -16,8 +16,6 @@
 
 package edu.ur.hibernate.ir.item.db;
 
-import java.util.List;
-
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -75,10 +73,5 @@ public class HbPublishedDateDAO implements PublishedDateDAO{
 
 	public void makeTransient(PublishedDate entity) {
 		hbCrudDAO.makeTransient(entity);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
 	}
 }

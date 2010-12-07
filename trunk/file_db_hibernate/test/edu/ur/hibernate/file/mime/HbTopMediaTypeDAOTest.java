@@ -83,8 +83,6 @@ public class HbTopMediaTypeDAOTest {
 		TopMediaType otherByName = topMediaTypeDAO.findByUniqueName(t2.getName());
 		assert otherByName.equals(t2) : "Should be able to find by name";
 		
-		// make sure you get them all back
-		assert  topMediaTypeDAO.getAll().size() == 2 : "size should be 2 but is " + topMediaTypeDAO.getAll().size();
 		
 		// test deleting data
 		topMediaTypeDAO.makeTransient(t1);

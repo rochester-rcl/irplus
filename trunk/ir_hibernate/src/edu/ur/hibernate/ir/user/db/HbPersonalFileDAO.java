@@ -69,14 +69,6 @@ public class HbPersonalFileDAO implements PersonalFileDAO{
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irFileCount"));
 	}
 
-
-	/**
-	 * Return all PersonalFile
-	 */
-	public List<PersonalFile> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	/**
 	 * Return PersonalFile by id
 	 */

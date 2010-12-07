@@ -76,13 +76,6 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
     public void save(InstitutionalItemIndexProcessingRecord institutionalItemIndexProcessingRecord);
  
 	/**
-	 * Get all institutional item index processing records
-	 * 
-	 * @return List of all index processing types
-	 */
-	public List<InstitutionalItemIndexProcessingRecord> getAll();
-	
-	/**
 	 * Get the processing record by item id and processing type.
 	 * 
 	 * @param itemId - id of the item

@@ -49,16 +49,6 @@ public class DefaultUserGroupService implements UserGroupService {
 	}
 
 	/**
-	 * Get all user groups.
-	 * 
-	 * @see edu.ur.ir.user.UserGroupService#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List<IrUserGroup> getAll() {
-		return irUserGroupDAO.getAll();
-	}
-
-	/**
 	 * Get all user groups name order.
 	 * 
 	 * @see edu.ur.ir.user.UserGroupService#getAllNameOrder()

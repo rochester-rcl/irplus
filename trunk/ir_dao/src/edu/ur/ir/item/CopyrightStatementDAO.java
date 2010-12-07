@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.UniqueNameDAO;
 import edu.ur.order.OrderType;
 
@@ -14,7 +15,7 @@ import edu.ur.order.OrderType;
  *
  */
 public interface CopyrightStatementDAO extends CountableDAO, 
-CrudDAO<CopyrightStatement>, UniqueNameDAO<CopyrightStatement>{
+CrudDAO<CopyrightStatement>, UniqueNameDAO<CopyrightStatement>, ListAllDAO{
 	
 	/**
 	 * Get the list of copyright statements ordered by name.

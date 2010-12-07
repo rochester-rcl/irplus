@@ -180,11 +180,6 @@ public class HbGenericItemDAO implements GenericItemDAO{
 		hbCrudDAO.makeTransient(entity);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	public Long getContributionCountByPersonName(PersonName personName) {
 		return (Long)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemContributionByPersonNameCount", personName.getId()) );

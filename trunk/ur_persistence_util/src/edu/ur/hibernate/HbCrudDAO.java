@@ -26,6 +26,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import edu.ur.dao.CrudDAO;
+import edu.ur.dao.ListAllDAO;
 
 
 /**
@@ -36,7 +37,7 @@ import edu.ur.dao.CrudDAO;
  *
  * @param <T>
  */
-public class HbCrudDAO<T> implements CrudDAO<T>, Serializable{
+public class HbCrudDAO<T> implements CrudDAO<T>, ListAllDAO, Serializable{
 	
 	/** eclipse generated id */
 	private static final long serialVersionUID = -4547406037263219068L;

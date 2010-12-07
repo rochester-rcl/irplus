@@ -74,11 +74,6 @@ public class HbItemVersionDAO implements ItemVersionDAO{
 		hbCrudDAO.makeTransient(entity);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-	
 	/**
 	 * Get the list of ItemVersions that has this specified IrFile
 	 * 	

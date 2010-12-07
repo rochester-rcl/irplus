@@ -81,11 +81,6 @@ public class HbResearcherDAO implements ResearcherDAO {
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("researcherCount"));
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	public Researcher getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

@@ -75,10 +75,6 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("fileDownloadInfoCount"));
 	}
 	
-	public List<FileDownloadInfo> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	public FileDownloadInfo getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

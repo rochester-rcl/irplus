@@ -41,6 +41,9 @@ import edu.ur.hibernate.HbHelper;
  */
 public class HbSubTypeDAO implements SubTypeDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 6346766289834658725L;
+	
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */
@@ -110,16 +113,6 @@ public class HbSubTypeDAO implements SubTypeDAO{
 		Object[] values = {name, topMediaTypeId};
 		return (SubType) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getSubTypeByName", values));
-	}
-
-	/**
-	 * Get all sub types.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
 	}
 
 	/**

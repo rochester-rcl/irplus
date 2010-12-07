@@ -103,16 +103,6 @@ public class DefaultIgnoreIpAddressService implements IgnoreIpAddressService{
 	}
 
 	/**
-	 * Get all Ignore ip addresses.
-	 * 
-	 * @see edu.ur.ir.statistics.IgnoreIpAddressService#getAllIgnoreIpAddress()
-	 */
-	@SuppressWarnings("unchecked")
-	public List<IgnoreIpAddress> getAllIgnoreIpAddress() { 
-		return (List<IgnoreIpAddress>) ignoreIpAddressDAO.getAll();
-	}
-
-	/**
 	 * Get ip address for specified range
 	 * 
 	 * @see edu.ur.ir.statistics.IgnoreIpAddressService#getIgnoreIpAddress(IgnoreIpAddress)

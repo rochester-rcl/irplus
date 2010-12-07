@@ -67,18 +67,6 @@ IrRoleAccessControlEntryDAO {
 	public Long getCount() {
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irRoleAccessEntryCount"));
 	}
-
-	
-	/**
-	 * Get all role access control entries.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	
 	/**
 	 * Get the role access cotnrol entry by id.
