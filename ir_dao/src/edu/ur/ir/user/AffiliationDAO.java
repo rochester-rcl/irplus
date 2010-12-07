@@ -20,6 +20,7 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.UniqueNameDAO;
 
@@ -30,7 +31,7 @@ import edu.ur.dao.UniqueNameDAO;
  *
  */
 public interface AffiliationDAO extends CountableDAO, 
-CrudDAO<Affiliation>, NameListDAO, UniqueNameDAO<Affiliation>
+CrudDAO<Affiliation>, NameListDAO, UniqueNameDAO<Affiliation>, ListAllDAO
 {
    
 	/**

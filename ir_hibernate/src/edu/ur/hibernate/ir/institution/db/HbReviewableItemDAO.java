@@ -57,18 +57,6 @@ public class HbReviewableItemDAO implements ReviewableItemDAO {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
 
-	
-	/**
-	 * Return all reviewable items.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	
 	/**
 	 * Get an reviewable item by it's id.
 	 * 

@@ -41,6 +41,9 @@ import edu.ur.hibernate.HbHelper;
  */
 public class HbSubTypeExtensionDAO implements SubTypeExtensionDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -9178204905470253275L;
+	
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */
@@ -109,16 +112,6 @@ public class HbSubTypeExtensionDAO implements SubTypeExtensionDAO{
 	public SubTypeExtension findByUniqueName(String name) {
 		return (SubTypeExtension) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getSubTypeExtensionByName", name));
-	}
-
-	/**
-	 * Get all subtype extensions.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
 	}
 
 	/**

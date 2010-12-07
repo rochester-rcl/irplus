@@ -37,6 +37,9 @@ import edu.ur.hibernate.HbHelper;
  */
 public class HbDefaultFileDatabaseDAO implements FileDatabaseDAO{
 	
+	/** eclipse generated id. */
+	private static final long serialVersionUID = 408333848976757952L;
+	
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */

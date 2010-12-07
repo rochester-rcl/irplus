@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.UniqueNameDAO;
 import edu.ur.ir.user.IrUser;
@@ -35,7 +36,7 @@ import edu.ur.order.OrderType;
  *
  */
 public interface IrUserDAO extends CountableDAO, 
-CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService
+CrudDAO<IrUser>, NameListDAO, UniqueNameDAO<IrUser>, UserDetailsService, ListAllDAO
 {
  
     

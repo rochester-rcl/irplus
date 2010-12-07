@@ -55,16 +55,6 @@ public class HbFolderAutoShareInfoDAO implements FolderAutoShareInfoDAO{
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
 
-
-	/**
-	 * Get all folder information.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	public List<FolderAutoShareInfo> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	/**
 	 * Get the folder auto share by id.
 	 * 

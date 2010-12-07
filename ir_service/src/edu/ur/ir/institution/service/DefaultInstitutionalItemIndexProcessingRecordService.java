@@ -79,16 +79,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	}
 
 	/**
-	 * Get all institutional item index processing records.
-	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List<InstitutionalItemIndexProcessingRecord> getAll() {
-		return processingRecordDAO.getAll();
-	}
-
-	/**
 	 * Get all processing records ordered by item id and updated date
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#getAllOrderByItemIdUpdatedDate()

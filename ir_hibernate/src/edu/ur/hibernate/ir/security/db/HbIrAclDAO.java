@@ -138,17 +138,6 @@ public class HbIrAclDAO implements IrAclDAO {
 		}
 		return acl;
 	}
-
-	/**
-	 * Get all acls
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	
 	/**
 	 * Get the acl by id.

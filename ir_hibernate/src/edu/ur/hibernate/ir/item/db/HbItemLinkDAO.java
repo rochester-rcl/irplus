@@ -100,8 +100,4 @@ public class HbItemLinkDAO implements ItemLinkDAO{
 		hbCrudDAO.makeTransient(entity);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
 }

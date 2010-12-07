@@ -71,13 +71,6 @@ public class HbResearcherInstitutionalItemDAO implements ResearcherInstitutional
     }
 	
 	/**
-	 * Return all ResearcherInstitutionalItems in the system
-	 */
-	public List<ResearcherInstitutionalItem> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	/**
 	 * Return ResearcherInstitutionalItem by id
 	 */
 	public ResearcherInstitutionalItem getById(Long id, boolean lock) {

@@ -17,8 +17,6 @@
 
 package edu.ur.hibernate.ir.index.db;
 
-import java.util.List;
-
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -60,10 +58,6 @@ public class HbIndexProcessingTypeDAO implements IndexProcessingTypeDAO{
 	
 	public Long getCount() {
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("indexProcessingTypeCount"));
-	}
-
-	public List<IndexProcessingType> getAll() {
-		return hbCrudDAO.getAll();
 	}
 
 	public IndexProcessingType getById(Long id, boolean lock) {

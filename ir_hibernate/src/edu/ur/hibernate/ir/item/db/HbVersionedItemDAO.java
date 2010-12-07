@@ -78,11 +78,6 @@ public class HbVersionedItemDAO implements VersionedItemDAO{
 	}
 
 	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	@SuppressWarnings("unchecked")
 	public List<VersionedItem> getAllNameOrder() {
 		DetachedCriteria dc = DetachedCriteria.forClass(VersionedItem.class);
     	dc.addOrder(Order.asc("name"));

@@ -73,18 +73,6 @@ public class HbSharedInboxFileDAO implements SharedInboxFileDAO{
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("sharedInboxFileCount"));
 	}
 
-	
-	/**
-	 * Return all personal inbox files in the system.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	
 	/**
 	 * Get the personal file inbox by id.
 	 * 

@@ -206,17 +206,6 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 		hbCrudDAO.getHibernateTemplate().findByNamedQuery("getPersonalFolderPath", values);
 	}
 	
-
-	/**
-	 * Get all personal folders in the system.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	/**
 	 * Get all personal folders by id.
 	 * 

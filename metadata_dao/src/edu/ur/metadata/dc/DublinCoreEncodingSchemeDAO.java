@@ -18,6 +18,7 @@ package edu.ur.metadata.dc;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.UniqueNameDAO;
 
 /**
@@ -27,4 +28,4 @@ import edu.ur.dao.UniqueNameDAO;
  *
  */
 public interface DublinCoreEncodingSchemeDAO extends CountableDAO, 
-CrudDAO<DublinCoreEncodingScheme>, UniqueNameDAO<DublinCoreEncodingScheme>{}
+CrudDAO<DublinCoreEncodingScheme>, UniqueNameDAO<DublinCoreEncodingScheme>, ListAllDAO{}

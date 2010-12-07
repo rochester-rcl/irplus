@@ -16,8 +16,6 @@
 
 package edu.ur.hibernate.ir.item.db;
 
-import java.util.List;
-
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -54,15 +52,6 @@ public class HbItemContentTypeDAO implements ItemContentTypeDAO {
     {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
-
-	/**
-	 * Get all the item content types.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	public List<ItemContentType> getAll() {
-		return hbCrudDAO.getAll();
-	}
 
 	/**
 	 * Get the item content type by id.

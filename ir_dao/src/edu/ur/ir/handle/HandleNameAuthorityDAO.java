@@ -2,6 +2,7 @@ package edu.ur.ir.handle;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.UniqueNameDAO;
 
 
@@ -12,4 +13,4 @@ import edu.ur.dao.UniqueNameDAO;
  *
  */
 public interface HandleNameAuthorityDAO extends CountableDAO, CrudDAO<HandleNameAuthority>, 
-UniqueNameDAO<HandleNameAuthority>{}
+UniqueNameDAO<HandleNameAuthority>, ListAllDAO{}

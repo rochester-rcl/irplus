@@ -102,15 +102,6 @@ public class HbFolderInviteInfoDAO implements FolderInviteInfoDAO {
 	}
 
 	/**
-	 * Get all of the folder invite information.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	public List<FolderInviteInfo> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	/**
 	 * Get the invite info by id
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */

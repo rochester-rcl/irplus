@@ -69,13 +69,6 @@ public class HbResearcherPublicationDAO implements ResearcherPublicationDAO{
     }
 	
 	/**
-	 * Return all ResearcherPublications in the system
-	 */
-	public List<ResearcherPublication> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	/**
 	 * Return ResearcherPublication by id
 	 */
 	public ResearcherPublication getById(Long id, boolean lock) {

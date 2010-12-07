@@ -102,11 +102,6 @@ public class HbFieldDAO implements FieldDAO {
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFieldByName", name));
 	}
 
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	public Field getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

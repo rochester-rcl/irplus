@@ -71,16 +71,6 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	}
 
 	/**
-	 * Get all invite info information.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	/**
 	 * Get the invite info by id.
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)

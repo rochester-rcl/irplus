@@ -79,10 +79,6 @@ public class HbFileCollaboratorDAO implements FileCollaboratorDAO {
 	}
 	
 
-	public List<FileCollaborator> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	public FileCollaborator getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

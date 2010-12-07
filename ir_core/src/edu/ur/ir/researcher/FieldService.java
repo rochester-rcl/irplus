@@ -66,13 +66,6 @@ public interface FieldService extends Serializable{
     		final int numberOfResultsToShow, final String sortType);
 
 	/**
-	 * Get all  fields.
-	 * 
-	 * @return
-	 */
-	public List<Field> getAllFields();
-
-	/**
 	 * Get a Field by id.
 	 * 
 	 * @param id - id of the Field

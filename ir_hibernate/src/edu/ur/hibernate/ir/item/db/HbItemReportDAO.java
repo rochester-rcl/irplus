@@ -16,8 +16,6 @@
 
 package edu.ur.hibernate.ir.item.db;
 
-import java.util.List;
-
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -65,17 +63,6 @@ public class HbItemReportDAO implements ItemReportDAO {
 		return hbCrudDAO.getById(id, lock);
 	}
 
-
-	/**
-	 * Get all item report
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	public List<ItemReport> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	
 	/**
 	 * Get a item report by id.
 	 * 

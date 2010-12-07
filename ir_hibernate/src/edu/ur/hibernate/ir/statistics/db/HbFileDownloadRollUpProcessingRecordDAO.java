@@ -73,10 +73,6 @@ public class HbFileDownloadRollUpProcessingRecordDAO implements FileDownloadRoll
 		});
 	}
 
-	public List<FileDownloadRollUpProcessingRecord> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	public FileDownloadRollUpProcessingRecord getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

@@ -35,6 +35,8 @@ import edu.ur.ir.person.ContributorDAO;
  */
 public class HbContributorDAO implements ContributorDAO{
 	
+	/** eclipse generated id. */
+	private static final long serialVersionUID = 1475362787137379446L;
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */
@@ -86,12 +88,6 @@ public class HbContributorDAO implements ContributorDAO{
 	public List<Contributor> getAllForName(Long personNameId)
 	{
 		return (List<Contributor>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllContributorForName", personNameId);
-	}
-
-
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
 	}
 
 	public Contributor getById(Long id, boolean lock) {

@@ -82,14 +82,6 @@ public interface MimeTypeService extends BasicMimeTypeService {
 	 */
 
 	public TopMediaType getTopMediaType(String name);
-	
-	/**
-	 * Get all media types in the system.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAllTopMediaType();
 
 	/**
 	 * Get the top media type by id.
@@ -145,13 +137,6 @@ public interface MimeTypeService extends BasicMimeTypeService {
 	 */
 	public SubTypeExtension getSubTypeExtension(String name);
 
-	/**
-	 * Get all subtype extensions.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAllSubTypeExtensions();
 
 	/**
 	 * Get the sub type extension by id.
@@ -212,13 +197,6 @@ public interface MimeTypeService extends BasicMimeTypeService {
 
 	public SubType getSubType(String name, Long topMediaTypeId);
 
-
-	/**
-	 * Get all sub types.
-	 * 
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAllSubTypes();
 
 	/**
 	 * Get a sub type by id.

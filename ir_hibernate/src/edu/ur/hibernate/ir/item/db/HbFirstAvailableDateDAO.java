@@ -76,9 +76,4 @@ public class HbFirstAvailableDateDAO implements FirstAvailableDateDAO{
 	public void makeTransient(FirstAvailableDate entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
-
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
 }

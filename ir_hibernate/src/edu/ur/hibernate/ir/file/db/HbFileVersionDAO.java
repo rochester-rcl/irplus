@@ -67,13 +67,6 @@ public class HbFileVersionDAO implements FileVersionDAO {
 	}
 
 	/**
-	 * Return all versions
-	 */
-	public List<FileVersion> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	/**
 	 * Return Version by id
 	 */
 	public FileVersion getById(Long id, boolean lock) {

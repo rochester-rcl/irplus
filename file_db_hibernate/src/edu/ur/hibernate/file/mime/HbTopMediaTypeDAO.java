@@ -40,6 +40,9 @@ import edu.ur.hibernate.HbHelper;
  */
 public class HbTopMediaTypeDAO implements TopMediaTypeDAO{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 7548325646698651995L;
+	
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */
@@ -108,17 +111,6 @@ public class HbTopMediaTypeDAO implements TopMediaTypeDAO{
 	public TopMediaType findByUniqueName(String name) {
 		return (TopMediaType) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getTopMeidaTypeByName", name));
-	}
-
-
-	/**
-	 * Get all media types in the system.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
 	}
 
 	/**

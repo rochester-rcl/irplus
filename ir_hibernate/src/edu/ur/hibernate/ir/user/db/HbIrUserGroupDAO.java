@@ -104,11 +104,6 @@ public class HbIrUserGroupDAO implements IrUserGroupDAO{
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getGroupByName", name));
 	}
 
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	public IrUserGroup getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

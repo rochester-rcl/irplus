@@ -83,15 +83,6 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	}
 
 	/**
-	 * Get all processing records.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	public List<InstitutionalItemIndexProcessingRecord> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
-	/**
 	 * Get the record by id.
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)

@@ -66,17 +66,6 @@ IrUserAccessControlEntryDAO
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irUserAccessEntryCount"));
 	}
 
-	
-	/**
-	 * Get all user access control entries.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getAll()
-	 */
-	@SuppressWarnings("unchecked")
-	public List getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	/**
 	 * Get the user access control entry by id.
 	 * 

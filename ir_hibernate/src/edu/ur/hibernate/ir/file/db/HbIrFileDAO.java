@@ -94,14 +94,6 @@ public class HbIrFileDAO implements IrFileDAO{
 	  	return (List<IrFile>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getIrFileByName", name);
 	}
 
-
-	/**
-	 * Return all IrFile
-	 */
-	public List<IrFile> getAll() {
-		return hbCrudDAO.getAll();
-	}
-
 	/**
 	 * Return IrFile by id
 	 */

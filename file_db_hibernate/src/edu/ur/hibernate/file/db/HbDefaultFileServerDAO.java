@@ -36,6 +36,9 @@ import edu.ur.hibernate.HbHelper;
  */
 public class HbDefaultFileServerDAO implements FileServerDAO{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5501358709497834203L;
+	
 	private final HbCrudDAO<DefaultFileServer> hbCrudDAO;
 	
 	/**
