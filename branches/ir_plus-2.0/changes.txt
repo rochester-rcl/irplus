@@ -1,3 +1,8 @@
+IR+ 2.0.4 to 2.0.5
+============================
+- Updated to download new version of YUI as old version no longer exists 
+[Thanks to Paul Hoffman and Fenway Libraries Online] 
+
 IR+ 2.0.3 to 2.0.4
 =============================
 - Updated to deal with Struts 2 security issue
