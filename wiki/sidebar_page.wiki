@@ -2,4 +2,5 @@
  * [http://code.google.com/p/irplus/wiki/MainPage Why IR+]
  * [http://code.google.com/p/irplus/wiki/DevelopmentAndTesting Development and Testing]
  * [http://code.google.com/p/irplus/wiki/ProductionSystem Production System]
+ * [http://code.google.com/p/irplus/wiki/UpcommingFeatures Next IR+ Major Features]
  * [http://code.google.com/p/irplus/w/list Page Listing]
