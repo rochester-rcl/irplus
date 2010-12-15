@@ -61,7 +61,10 @@
 		                        ${personName.id}
 	                        </urstb:td>
 	                        <urstb:td>
-			                   <a href="javascript:YAHOO.ur.person.names.editPersonName('${personName.personNameAuthority.id}',
+			                   ${personName.forename}
+	                        </urstb:td>
+	                        <urstb:td>
+	                        <a href="javascript:YAHOO.ur.person.names.editPersonName('${personName.personNameAuthority.id}',
 			                   '${personName.id}',
 			                   '${personName.surname}', 
 			                   '${personName.forename}', 
@@ -69,10 +72,8 @@
 			                   '${personName.familyName}', 
 			                   '${personName.initials}',
 			                   '${personName.numeration}',
-			                   '${personNameAuthority.authoritativeName.id}');">${personName.forename}</a>
-	                        </urstb:td>
-	                        <urstb:td>
-		                   		${personName.surname}
+			                   '${personNameAuthority.authoritativeName.id}');">
+		                   		${personName.surname}</a>
 	                        </urstb:td>
 	                        <urstb:td>
 	                             ${personName.middleName}
