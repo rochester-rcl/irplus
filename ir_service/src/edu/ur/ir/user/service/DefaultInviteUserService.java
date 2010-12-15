@@ -563,7 +563,7 @@ public class DefaultInviteUserService implements InviteUserService {
 		
 		List<InviteInfo> invites = inviteInfoDAO.getInviteInfoByEmail(email);
 		
-		if ((invites != null) && (invites.size() > 0)) {
+		if ( invites.size() > 0) {
 			// If the shared user has no Author or collaborator or researcher or admin role, then assign collaborator role
 			if (!invitedUser.hasRole(IrRole.AUTHOR_ROLE) && !invitedUser.hasRole(IrRole.COLLABORATOR_ROLE) 
 					&& !invitedUser.hasRole(IrRole.RESEARCHER_ROLE) && !invitedUser.hasRole(IrRole.ADMIN_ROLE)) {
@@ -797,41 +797,46 @@ public class DefaultInviteUserService implements InviteUserService {
 		    
 		    if( user == null )
 		    {
-		        FolderInviteInfo inviteInfo = new FolderInviteInfo(personalFolder, email, permissions);	
+		    	FolderInviteInfo inviteInfo = personalFolder.createInviteInfo(permissions, email);
 		        save(inviteInfo);
 		    }
 		    else
 		    {
-				 // only create the record if the folder does not already contain the 
-				 // informations
-				 FolderAutoShareInfo shareInfo  = personalFolder.getAutoShareInfo(user);
-				 if( shareInfo == null )
-				 {
-			         shareInfo = new FolderAutoShareInfo(personalFolder, permissions, user);
-				     save(shareInfo);
-				 }
-			
+				 FolderAutoShareInfo shareInfo  = personalFolder.createAutoShareInfo(permissions, user);
+				 save(shareInfo);
 		    }
-		     // cascade share permissions to all sub folders 
-		     if( cascade )
-		     {
+		    if( log.isDebugEnabled() )
+		    {
+		        log.debug("Cascade = " + cascade);
+		    }
+		    
+		    // cascade share permissions to all sub folders 
+		    if( cascade )
+		    {
 			     // take care of folders
 		         List<PersonalFolder> folders = userFileSystemService.getAllChildrenForFolder(personalFolder);
+		         if( log.isDebugEnabled())
+		         {
+		        	 log.debug("Number of folders to be processed = " + folders.size());
+		        	 log.debug(" user = " + user);
+		        	 log.debug(" email = " + email );
+		         }
 		         for(PersonalFolder f : folders)
 		         {
+		        	 if( log.isDebugEnabled())
+		        	 {
+		        	     log.debug("Sharing folder " + f);
+		        	 }
 		    	     if( user == null )
 		    	     {
-		    		    FolderInviteInfo inviteInfo = new FolderInviteInfo(f, email, permissions);	
-		 		        save(inviteInfo);
+		    	    	
+		    	    	 FolderInviteInfo inviteInfo = personalFolder.createInviteInfo(permissions, email);
+		 		         save(inviteInfo);
 		    	     }
 		    	     else
 		    	     {
-		    		     FolderAutoShareInfo shareInfo  = f.getAutoShareInfo(user);
-		    		     if( shareInfo == null )
-					     {
-				             shareInfo = new FolderAutoShareInfo(f, permissions, user);
-					         save(shareInfo);
-					     }
+		    		     FolderAutoShareInfo shareInfo  = f.createAutoShareInfo(permissions, user);
+					     save(shareInfo);
 		    	     }
 		         }
 		     }
@@ -976,5 +981,30 @@ public class DefaultInviteUserService implements InviteUserService {
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	/**
+	 * Get the folder invite info by id.
+	 * 
+	 * @param id - id of the folder invite info
+	 * @param lock - upgrade the lock mode.
+	 * 
+	 * @return - the folder invite info if found.
+	 */
+	public FolderInviteInfo getFolderInviteInfoById(Long id, boolean lock) {
+		return this.folderInviteInfoDAO.getById(id, lock);
+	}
+	
+	/**
+	 * Get the folder auto share info by id.
+	 * 
+	 * @param id - id of the folder auto share info
+	 * @param lock - upgrade the lock mode.
+	 * 
+	 * @return - the folder auto share info if found.
+	 */
+	public FolderAutoShareInfo getFolderAutoShareInfoById(Long id, boolean lock)
+	{
+		return this.folderAutoShareInfoDAO.getById(id, lock);
 	}
 }

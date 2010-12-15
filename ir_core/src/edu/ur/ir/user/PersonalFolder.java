@@ -767,9 +767,44 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 		{
 			throw new FileSharingException("Cann't set auto share with yourself");
 		}
-		FolderAutoShareInfo autoShareInfo = new FolderAutoShareInfo(this, permissions, collaborator);
+		FolderAutoShareInfo autoShareInfo = getAutoShareInfo(collaborator);
+		if( autoShareInfo != null )
+		{
+			autoShareInfo.setPermissions(permissions);  
+		}
+		else
+		{
+			autoShareInfo = new FolderAutoShareInfo(this, permissions, collaborator);
+		}
 	    autoShareInfos.add(autoShareInfo);
 		return autoShareInfo;
+	}
+	
+	/**
+	 * Create an invite info object for this folder.
+	 * 
+	 * @param permissions - permissions for the folder
+	 * @param email - email to add
+	 * @return - the created invite info or the updated existing one if it exists.
+	 * @throws FileSharingException
+	 */
+	public FolderInviteInfo createInviteInfo(Set<IrClassTypePermission> permissions, String email)
+	    throws FileSharingException
+	{
+		if(owner.getUserEmail(email) != null )
+		{
+			throw new FileSharingException("Cann't set auto share with yourself");
+		}
+		FolderInviteInfo inviteInfo = getFolderInviteInfo(email);
+		if( inviteInfo != null )
+		{
+			inviteInfo.setPermissions(permissions);
+		}
+		else
+		{
+		    inviteInfo = new FolderInviteInfo(this, email, permissions);
+		}
+		return inviteInfo;
 	}
 	
 	/**

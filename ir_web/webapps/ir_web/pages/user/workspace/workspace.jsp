@@ -77,8 +77,11 @@
 
 
 <body id="body" class="yui-skin-sam">
-    <iframe id="yui-history-iframe" src="path-to-existing-asset"></iframe>
+
+    
+    <iframe id="yui-history-iframe" src="page-resources/yui/assets/blank.html"></iframe>
     <input id="yui-history-field" type="hidden">
+    
     <script type="text/javascript">
         try
         {
@@ -86,7 +89,17 @@
         }
         catch(e)
         {
-            // history only works with grade A browsers
+        	 // The only exception that gets thrown here is when the browser is
+            // not supported (Opera, or not A-grade) Degrade gracefully.
+            // Note that we have two options here to degrade gracefully:
+            //   1) Call initializeNavigationBar. The page will use Ajax/DHTML,
+            //      but the back/forward buttons will not work.
+            //   2) Initialize our module. The page will not use Ajax/DHTML,
+            //      but the back/forward buttons will work. This is what we
+            //      chose to do here:
+
+
+            // do nothing
         }
     </script>
 
