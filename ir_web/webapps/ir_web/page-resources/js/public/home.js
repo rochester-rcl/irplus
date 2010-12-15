@@ -147,6 +147,15 @@ YAHOO.ur.public.home =
             getResearcherPictureAction +"?currentResearcherLocation="+ 
             currentLocation +'&type='+ type +'&bustcache='+new Date().getTime(), 
         {success: handleSuccess, failure: handleFailure}, null);
+    },
+    
+    init : function() 
+    {
+    	var search = document.getElementById('search');
+        search.focus();
     }
     
 };
+
+//initialize the code once the dom is ready
+YAHOO.util.Event.onDOMReady(YAHOO.ur.public.home.init);
