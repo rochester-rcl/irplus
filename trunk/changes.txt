@@ -21,8 +21,10 @@ IR+ changes 2.0 to 2.x
 - Updated to re-index all items within a collection tree if a new collection is added
 - Updated email to have a new column - lower case email to allow comparison by the lower case email
   address
-- Updated file properties to show emails that are shared with but users have not yet created an account
+- Updated file properties page to show emails that are shared with but users have not yet created an account
 - fixed to make back button work in personal files/folders workspace
+- Updated home page to set focus on search box
+- Updated Search / Browse page to set focus on search box
 
 [ur_persistence_util]
 =============================
