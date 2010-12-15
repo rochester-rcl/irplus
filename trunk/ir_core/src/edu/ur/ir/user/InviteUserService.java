@@ -180,6 +180,26 @@ public interface InviteUserService extends Serializable{
 	 */
 	public InviteInfo getInviteInfoById(Long id, boolean lock);
 	
+	/**
+	 * Get the folder invite info by id.
+	 * 
+	 * @param id - id of the folder invite info
+	 * @param lock - upgrade the lock mode.
+	 * 
+	 * @return - the folder invite info if found.
+	 */
+	public FolderInviteInfo getFolderInviteInfoById(Long id, boolean lock);
+	
+	/**
+	 * Get the folder auto share info by id.
+	 * 
+	 * @param id - id of the folder auto share info
+	 * @param lock - upgrade the lock mode.
+	 * 
+	 * @return - the folder auto share info if found.
+	 */
+	public FolderAutoShareInfo getFolderAutoShareInfoById(Long id, boolean lock);
+	
 
 	/**
 	 * Share file for user with the specified email. 

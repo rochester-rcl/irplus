@@ -48,8 +48,10 @@
 
 		<!--  folder being shared with email address -->
 		<many-to-one class="PersonalFolder" 
-			name="personalFolder" column="personal_folder_id" insert="true"
-			update="false" unique="true" access="field"/>
+			name="personalFolder" 
+			column="personal_folder_id" 
+			unique="true" 
+			access="field"/>
 			
 		<!-- permissions on files -->
 		<set name="permissions" 
