@@ -100,6 +100,7 @@ public class ManageInviteInfo extends Pager implements UserIdAware{
 		{
 		    inviteUserService.delete(info);
 		}
+		viewInviteInfos();
 		return SUCCESS;
 	}
 	
