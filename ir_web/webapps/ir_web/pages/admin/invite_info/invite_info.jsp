@@ -76,9 +76,13 @@
   <!--  End doc div-->
   
   <div id="deleteInviteInfoDialog" class="hidden">
-	<div class="hd">Delete affiliations</div>
+	<div class="hd">Delete Invite Information</div>
 	<div class="bd">
 		<input type="hidden" id="deleteId" value="">
+		<input type="hidden" id="rowStart" value="${rowStart}">
+		<input type="hidden" id="startPageNumber" value="${startPageNumber}">
+		<input type="hidden" id="currentPageNumber" value="${currentPageNumber}">
+		<input type="hidden" id="sortType" value="${sortType}">
 		<p>Are you sure you wish to delete the invite information?</p>
 	</div>
   </div>
