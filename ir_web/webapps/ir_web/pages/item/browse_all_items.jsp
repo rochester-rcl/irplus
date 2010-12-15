@@ -94,6 +94,9 @@
 
 	            var tab3 = myTabs.getTab(3);
 	            tab3.addListener('click', handleBrowseSponsorsClick);
+
+	            var search = document.getElementById('search');
+	            search.focus();
           }
           
           // initialize the code once the dom is ready
@@ -298,7 +301,7 @@
 	               	    <br/>
 	               	     <c:url var="searchRepositoryItems" value="/searchRepositoryItems.action"/>
 						<form method="GET" action="${searchRepositoryItems}">
-						    Search: <input type="text" name="query" size="50"/><br/><br/>
+						    Search: <input type="text" name="query" size="50" id="search" /><br/><br/>
 						    <button type="submit" class="ur_button" 
 		                               onmouseover="this.className='ur_buttonover';"
 	 		                           onmouseout="this.className='ur_button';">Search</button>
