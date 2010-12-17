@@ -1127,6 +1127,14 @@
             <result name="accessDenied">/accessDenied.jsp</result>
         </action>
         
+        <!--  special action for a user who is editing their own name in their account section -->
+        <action name="userInitialCreatePerson" 
+            method="create"
+            class="edu.ur.ir.web.action.person.ManagePersons">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/user/login/add_authoring_name_form_frag.jsp</result>
+        </action>
+        
         <!--  ************************************ -->
         <!--  Person Edit/Name Actions             -->
         <!--  ************************************ -->
