@@ -54,10 +54,10 @@ import edu.ur.tree.PreOrderTreeSetNodeBase;
  * @author Nathan Sarr
  *
  */
-@SuppressWarnings("unchecked")
+
 public class PersonalFolder extends PreOrderTreeSetNodeBase implements
 Serializable,  LongPersistentId, PersistentVersioned,
-DescriptionAware, NameAware, Comparable, FileSystem{
+DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 	
 	/* Logger */
 	private static final Logger log = Logger.getLogger(PersonalFolder.class);
@@ -699,9 +699,8 @@ DescriptionAware, NameAware, Comparable, FileSystem{
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(Object other) {
-		PersonalFolder c = (PersonalFolder)other;
-		return this.getName().compareTo(c.getName());
+	public int compareTo(PersonalFolder other) {
+		return this.getName().compareTo(other.getName());
 	}
 
 	/**
