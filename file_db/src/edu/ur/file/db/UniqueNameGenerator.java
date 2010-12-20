@@ -15,6 +15,8 @@
 */
 package edu.ur.file.db;
 
+import java.io.Serializable;
+
 /**
  * Interface for getting unique string names.  This
  * should never return the same string value more than
@@ -23,7 +25,7 @@ package edu.ur.file.db;
  * @author Nathan Sarr
  *
  */
-public interface UniqueNameGenerator {
+public interface UniqueNameGenerator extends Serializable {
 	
 	/**
 	 * Get the next name.
