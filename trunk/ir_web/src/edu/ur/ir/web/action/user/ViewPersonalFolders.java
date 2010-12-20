@@ -109,6 +109,9 @@ public class ViewPersonalFolders extends ActionSupport implements
 	/**  Logger for vierw workspace action */
 	private static final Logger log = Logger.getLogger(ViewPersonalFolders.class);
 	
+	/** Parent personal folder */
+	private PersonalFolder parentFolder;
+
 
 	/**
 	 * Get folder table
@@ -212,6 +215,7 @@ public class ViewPersonalFolders extends ActionSupport implements
 		user = userService.getUser(userId, false);
 		if(parentFolderId != null && parentFolderId > 0)
 		{
+			parentFolder = userFileSystemService.getPersonalFolder(parentFolderId, false);
 		    folderPath = userFileSystemService.getPersonalFolderPath(parentFolderId);
 		}
 		Collection<PersonalFolder> myPersonalFolders = userFileSystemService.getPersonalFoldersForUser(userId, parentFolderId);
@@ -306,8 +310,7 @@ public class ViewPersonalFolders extends ActionSupport implements
 	}
 	
 	
-	@SuppressWarnings("unchecked")
-	public Collection getFileSystem() {
+	public Collection<FileSystem> getFileSystem() {
 		return fileSystem;
 	}
 
@@ -331,10 +334,6 @@ public class ViewPersonalFolders extends ActionSupport implements
 
 	public IrUser getUser() {
 		return user;
-	}
-
-	public UserFileSystemService getUserFileSystemService() {
-		return userFileSystemService;
 	}
 
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
@@ -382,23 +381,22 @@ public class ViewPersonalFolders extends ActionSupport implements
 		this.userId = userId;
 	}
 
-	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
-		return userWorkspaceIndexProcessingRecordService;
-	}
 
 	public void setUserWorkspaceIndexProcessingRecordService(
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
-	public IndexProcessingTypeService getIndexProcessingTypeService() {
-		return indexProcessingTypeService;
-	}
 
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
+	
+	public PersonalFolder getParentFolder() {
+		return parentFolder;
+	}
+
 	
 
 }
