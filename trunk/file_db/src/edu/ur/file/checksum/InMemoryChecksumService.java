@@ -27,6 +27,9 @@ import java.util.List;
  */
 public class InMemoryChecksumService implements ChecksumService{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 3135204315419392200L;
+	
 	private LinkedList<ChecksumCalculator> checksumCalculators = 
 		    new LinkedList<ChecksumCalculator>();
 	

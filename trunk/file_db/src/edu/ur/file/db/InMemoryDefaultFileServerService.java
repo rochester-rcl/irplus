@@ -34,6 +34,9 @@ import edu.ur.file.IllegalFileSystemNameException;
  */
 public class InMemoryDefaultFileServerService implements FileServerService{
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 3326983029826624366L;
+	
 	/**In memory set of file servers. */
 	private Set<DefaultFileServer> fileServers = new HashSet<DefaultFileServer>();
 	
@@ -87,7 +90,7 @@ public class InMemoryDefaultFileServerService implements FileServerService{
 		
 		if(fileDatabase == null)
 		{
-			throw new IllegalStateException("File database with id = " + fileDatabase + " does not exist");
+			throw new IllegalStateException("File database does not exist");
 		}
 		
 		info = fileDatabase.addFile(f, uniqueName);
@@ -104,11 +107,11 @@ public class InMemoryDefaultFileServerService implements FileServerService{
 	public boolean deleteFile(String uniqueFileName) {
 
 		DefaultFileInfo fileInfo = findFile(uniqueFileName, false);
-		TreeFolderInfo folder = fileInfo.getFolderInfo();
 		boolean removed = false;
 		
 		if( fileInfo != null )
 		{
+			TreeFolderInfo folder = fileInfo.getFolderInfo();
 		    folder.removeFileInfo(fileInfo);
 			removed = true;
 		}
@@ -123,11 +126,11 @@ public class InMemoryDefaultFileServerService implements FileServerService{
 	 */
 	public boolean deleteFile(FileInfo fileInfo) {
 		DefaultFileInfo info = (DefaultFileInfo)fileInfo;
-		TreeFolderInfo folder = info.getFolderInfo();
 		boolean removed = false;
 		
 		if( fileInfo != null )
 		{
+			TreeFolderInfo folder = info.getFolderInfo();
 		    folder.removeFileInfo(info);
 			removed = true;
 		}
