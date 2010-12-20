@@ -32,6 +32,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Version;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -179,8 +180,8 @@ public class DefaultPowerPointXmlTextExtractorTest {
 	 */
 	private int executeQuery(String field, String queryString, Directory dir)
 			throws CorruptIndexException, IOException, ParseException {
-		IndexSearcher searcher = new IndexSearcher(dir);
-		QueryParser parser = new QueryParser(field, new StandardWithISOLatin1AccentFilter());
+		IndexSearcher searcher = new IndexSearcher(dir, true);
+		QueryParser parser = new QueryParser(Version.LUCENE_29, field, new StandardWithISOLatin1AccentFilter());
 		Query q1 = parser.parse(queryString);
 
 		TopDocs hits = searcher.search(q1, 1000);

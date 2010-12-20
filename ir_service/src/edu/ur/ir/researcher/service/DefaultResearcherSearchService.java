@@ -43,8 +43,10 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.OpenBitSet;
 import org.apache.lucene.util.OpenBitSetDISI;
+import org.apache.lucene.util.Version;
 
 import edu.ur.ir.FacetSearchHelper;
 import edu.ur.ir.SearchHelper;
@@ -106,9 +108,10 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
 		}
 		
-		IndexSearcher searcher = new IndexSearcher(indexFolder);
+		FSDirectory directory = FSDirectory.open(new File(indexFolder));
+		IndexSearcher searcher = new IndexSearcher(directory, true);
 		IndexReader reader = searcher.getIndexReader();
-		QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
+		QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, fields, analyzer);
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
 		
@@ -278,7 +281,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 	{
 		for(FacetResult f : facets )
 		{
-			QueryParser subQueryParser = new QueryParser(f.getField(), analyzer);
+			QueryParser subQueryParser = new QueryParser(Version.LUCENE_29, f.getField(), analyzer);
 			subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			String fixedQuery = SearchHelper.prepareFacetSearchString(f.getFacetName(), false);
 			fixedQuery = "\"" + fixedQuery + "\"";
@@ -328,9 +331,10 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 			return new FacetSearchHelper(new HashSet<Long>(), 0, new HashMap<String, Collection<FacetResult>>(), mainQueryString);
 		}
 		
-		IndexSearcher searcher = new IndexSearcher(indexFolder);
+		FSDirectory directory = FSDirectory.open(new File(indexFolder));
+		IndexSearcher searcher = new IndexSearcher(directory, true);
 		IndexReader reader = searcher.getIndexReader();
-		QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
+		QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, fields, analyzer);
 		parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		
 		HashMap<String, Collection<FacetResult>> facetResults = new HashMap<String, Collection<FacetResult>>();
@@ -422,7 +426,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 			{
 				log.debug("adding filter for field " + filter.getField() + " and query " + filter.getQuery());
 			}
-		    QueryParser subQueryParser = new QueryParser(filter.getField(), analyzer);
+		    QueryParser subQueryParser = new QueryParser(Version.LUCENE_29, filter.getField(), analyzer);
 		    subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
 		    String fixedQuery = SearchHelper.prepareFacetSearchString(filter.getQuery(), false);
 		    fixedQuery = "\"" + fixedQuery + "\"";

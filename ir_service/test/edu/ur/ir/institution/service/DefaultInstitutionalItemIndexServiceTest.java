@@ -31,6 +31,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -195,8 +196,9 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	 */
 	private int executeQuery(String field, String queryString, Directory dir)
 			throws CorruptIndexException, IOException, ParseException {
-		IndexSearcher searcher = new IndexSearcher(dir);
-		QueryParser parser = new QueryParser(field, new StandardAnalyzer());
+		
+		IndexSearcher searcher = new IndexSearcher(dir, true);
+		QueryParser parser = new QueryParser(Version.LUCENE_29, field, new StandardAnalyzer(Version.LUCENE_29));
 		Query q1 = parser.parse(queryString);
 		TopDocs hits = searcher.search(q1, 1000);
 		int hitCount = hits.totalHits;
@@ -340,7 +342,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder());
+			lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -435,7 +437,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		institutionalItemIndexService.deleteItem(institutionalItem.getId(), new File(repo.getInstitutionalItemIndexFolder()));
 		
 		try {
-			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder());
+			lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -610,7 +612,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 
 		Directory lucenDirectory;
 		try {
-			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder());
+			lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}
@@ -720,7 +722,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		
 		try {
 			repo = helper.getRepository();
-			lucenDirectory = FSDirectory.getDirectory(repo.getInstitutionalItemIndexFolder());
+			lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
 		} catch (IOException e1) {
 			throw new RuntimeException(e1);
 		}

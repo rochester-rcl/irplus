@@ -43,7 +43,7 @@
         </dependency>
 
          <!-- lucene files-->
-        <dependency org="org.apache.lucene" name="lucene-misc" rev="2.9.3">
+        <dependency org="org.apache.lucene" name="lucene-misc" rev="2.9.4">
             <artifact name="lucene-misc" type="jar"/>
         </dependency>
         

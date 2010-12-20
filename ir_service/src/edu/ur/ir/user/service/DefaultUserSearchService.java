@@ -29,6 +29,8 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
 import edu.ur.ir.SearchHelper;
 import edu.ur.ir.SearchResults;
@@ -80,8 +82,9 @@ public class DefaultUserSearchService implements UserSearchService{
 		String indexFolder = userIndexFolder.getAbsolutePath();
 		IndexSearcher searcher = null;
 		try {
-			searcher = new IndexSearcher(indexFolder);
-			QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
+			FSDirectory directory = FSDirectory.open(new File(indexFolder));
+			searcher = new IndexSearcher(directory, false);
+			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, fields, analyzer);
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			
 			Query luceneQuery = parser.parse(query);
