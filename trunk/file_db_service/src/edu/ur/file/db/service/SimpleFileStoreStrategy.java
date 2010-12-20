@@ -31,8 +31,11 @@ import edu.ur.file.db.DefaultFileInfo;
  *
  */
 public class SimpleFileStoreStrategy implements DefaultDatabaseFileStoreStrategy{
-
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 6555242280905123330L;
+
+
 	/**
 	 * Stores the file directly into the file database.
 	 * @throws IllegalFileSystemNameException 

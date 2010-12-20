@@ -37,8 +37,10 @@ import edu.ur.file.db.UniqueNameGenerator;
  * @author Nathan Sarr
  *
  */
-public class MaxFilesStoreStrategy implements 
-    DefaultDatabaseFileStoreStrategy{
+public class MaxFilesStoreStrategy implements DefaultDatabaseFileStoreStrategy{
+
+	/** eclipse generated id */
+	private static final long serialVersionUID = -648554397366560994L;
 
 	/** Tree folder info database access  */
 	private TreeFolderInfoDAO treeFolderInfoDAO;

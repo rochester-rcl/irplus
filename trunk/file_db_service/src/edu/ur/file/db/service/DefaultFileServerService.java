@@ -406,11 +406,11 @@ public class DefaultFileServerService implements FileServerService{
 	public boolean deleteFile(String uniqueFileName) {
 		
 		DefaultFileInfo fileInfo = (DefaultFileInfo)fileInfoDAO.findByUniqueName(uniqueFileName);
-		TreeFolderInfo folder = fileInfo.getFolderInfo();
 		boolean removed = false;
 		
 		if( fileInfo != null )
 		{
+			TreeFolderInfo folder = fileInfo.getFolderInfo();
 		    try
 		    {
 		    	folder.removeFileInfo(fileInfo);
