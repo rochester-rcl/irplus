@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 - 2010 University of Rochester
+   Copyright 2008-2010 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,28 +14,27 @@
    limitations under the License.
 */  
 
-
-package edu.ur.ir.user;
+package edu.ur.ir.ir_import.service;
 
 import java.io.File;
-import java.io.Serializable;
+
+import edu.ur.ir.ir_import.ContributorTypeImportService;
 
 /**
- * This will re-index all users
+ * Default implementation of the contributor type import service.
  * 
  * @author Nathan Sarr
  *
  */
-public interface ReIndexUserService extends Serializable{
-	
-	/**
-	 * Re-Index the users in the institutional repository
-	 * 
-	 * @param batchSize - number of users to index at a time
-	 * @param userIndexFolder - location of the user index
-	 * @return total number of users processed.
-	 */
-	public int reIndexUsers(int batchSize, File userIndexFolder);
+public class DefaultContributorTypeImportService implements ContributorTypeImportService {
 
+	/** eclipse generated id */
+	private static final long serialVersionUID = 5401217224610838141L;
+
+	@Override
+	public void contributorTypeImport(File xmlFile) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -210,7 +210,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
+			directory = FSDirectory.open(institutionalItemIndex); 
 			if( overwriteExistingIndex )
 			{
 			    writer = getWriterOverwriteExisting(directory);
@@ -288,7 +288,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	    
 		try 
 		{
-			directory = FSDirectory.getDirectory(institutionalItemIndex.getAbsolutePath());
+			directory = FSDirectory.open(institutionalItemIndex);
 			writer = getWriter(directory);
 			Term term = new Term(ID, NumberTools.longToString(id));
 			writer.deleteDocuments(term);
@@ -342,7 +342,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 		if (institutionalItemIndex == null) {
 			throw new NoIndexFoundException("Institutional item index folder not found ");
 		} 
-		writeDocument(institutionalItemIndex.getAbsolutePath(),	getDocument(institutionalItem, true ));
+		writeDocument(institutionalItemIndex,	getDocument(institutionalItem, true ));
 	}
 	
 	/**
@@ -659,13 +659,13 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	 * @param directoryPath - location where the directory exists.
 	 * @param documents - documents to add to the directory.
 	 */
-	private void writeDocument(String directoryPath, Document document)
+	private void writeDocument(File path, Document document)
 	{
 		IndexWriter writer = null;
 		Directory directory = null;
 		try 
 		{
-		    directory = FSDirectory.getDirectory(directoryPath);
+		    directory = FSDirectory.open(path);
 			writer = getWriter(directory);
 		    writer.addDocument(document);
 			writer.commit();

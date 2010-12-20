@@ -60,7 +60,7 @@ public class RepositoryBasedTestHelper {
 	
 	public RepositoryBasedTestHelper(ApplicationContext ctx)
 	{
-		this.ctx = ctx;
+		 this.ctx = ctx;
 		 repositoryService = (RepositoryService)ctx.getBean("repositoryService");
 		 fileServerService = (DefaultFileServerService)ctx.getBean("fileServerService");
 		 personalFileDeleteRecordDAO = (PersonalFileDeleteRecordDAO)ctx.getBean("personalFileDeleteRecordDAO");

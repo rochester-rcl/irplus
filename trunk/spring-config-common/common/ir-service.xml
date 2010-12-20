@@ -422,6 +422,13 @@
        <property name="nameAuthorityIndexService" ref="nameAuthorityIndexService"/>
    </bean>
    
+   <bean id="reIndexInstitutionalCollectionService" 
+       class="edu.ur.ir.institution.service.DefaultReIndexInstitutionalCollectionService">
+       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
+       <property name="institutionalCollectionIndexService" ref="institutionalCollectionIndexService"/>
+   </bean>
+   
+   
    <bean id="userIndexService" 
        class="edu.ur.ir.user.service.DefaultUserIndexService">
        <property name="analyzer" ref="defaultTextAnalyzer"/>
