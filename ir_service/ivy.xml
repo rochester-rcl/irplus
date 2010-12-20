@@ -30,11 +30,12 @@
 
         <dependency org="ir_hibernate" name="ir_hibernate" rev="2.0" changing="true" />
         
-         <!--  digester dependency -->    
+        <!--  digester dependency -->    
         <dependency org="commons-digester" name="commons-digester" rev="2.0" transitive="false">
             <artifact name="commons-digester" type="jar"/>
         </dependency>
         
+
   
         <!-- ehcahce -->
         <dependency org="net.sf.ehcache" name="ehcache" rev="1.6.0" transitive="false">
