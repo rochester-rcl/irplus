@@ -187,7 +187,7 @@
                                        </c:if>
                                    </td>
                                    <td>
-                                       <p><strong><a href="${institutionalCollectionUrl}">${child.name}</a></strong></p>
+                                       <p><strong><a href="${institutionalCollectionUrl}">${child.name}</a> </strong><ur:maxText numChars="100" text="${child.description}"></ur:maxText></p>
                                     </td>
                                 </tr>
                             </c:forEach>
