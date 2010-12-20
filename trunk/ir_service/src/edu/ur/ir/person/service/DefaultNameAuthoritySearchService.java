@@ -30,6 +30,8 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.SearchHelper;
@@ -111,8 +113,9 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 		
 		IndexSearcher searcher = null;
 		try {
-			searcher = new IndexSearcher(indexFolder);
-			QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
+			FSDirectory directory = FSDirectory.open(new File(indexFolder));
+			searcher = new IndexSearcher(directory, true);
+			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, fields, analyzer);
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			
 			Query luceneQuery = parser.parse(query);
