@@ -46,6 +46,8 @@
     <ur:js src="page-resources/yui/button/button-min.js"/>
     <ur:js src="page-resources/yui/container/container-min.js"/>
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
+ 	<ur:js src="page-resources/yui/tabview/tabview-min.js"/>
+ 	
     
     <ur:js src="pages/js/base_path.js"/>
     <ur:js src="page-resources/js/util/ur_util.js"/>
@@ -80,12 +82,57 @@
             
             <!--  this is the body region of the page -->
             <div id="bd">
-            
                 <h3>Institutional Collection Administration</h3>
-            
-                <c:import url="institutional_collections_table.jsp"/>
-    
-           
+                <c:url var="browseCollections" value="/admin/viewInstitutionalCollections.action">
+                    <c:param name="parentCollectionId" value="${parentCollectionId}"/>
+                </c:url>
+                <c:url var="searchCollections" value="/admin/searchInstitutionalCollections.action"/>
+                
+                <!--  set up tabs for the workspace -->
+                <div id="collection-tabs" class="yui-navset">
+	                <ul class="yui-nav">
+	                 <c:if test='${viewType == "browse"}'>
+		                    <li class="selected"><a href="${browseCollections}"><em>Browse</em></a></li>
+		                    <li><a href="#tab2"><em>Search</em></a></li>
+		               </c:if>
+		               <c:if test='${viewType == "search"}'>
+		                    <li><a href="${browseCollections}"><em>Browse</em></a></li>
+		                    <li class="selected"><a href="#tab2"><em>Search</em></a></li>
+		               </c:if>
+	                </ul>
+	                
+	                
+	                <div class="yui-content">
+	                    <!--  first tab -->
+	                    <div id="tab1">
+                            <c:import url="institutional_collections_table.jsp"/>
+                        </div>
+                        <!--  end first tab -->
+                        
+                        <!--  Second tab -->
+                        <div id="tab2">
+                            <form method="post" 
+                                  id="collection_search_form" 
+                                  name="collectionSearchForm" 
+                                  action="${searchCollections}" >
+	            		
+	            		     <br/>
+						         Search Collections : <input type="text" name="query" size="50"/>
+						         <button id="search_user" class="ur_button" type="submit"
+		                                 onmouseover="this.className='ur_buttonover';"
+		                                 onmouseout="this.className='ur_button';">Search</button>
+					        </form>
+					        <br/>
+	                        <br/>
+	                        <c:if test='${viewType == "search" && !searchInit}'>
+					            <c:import url="institutional_collection_search_table.jsp"/>
+					        </c:if>
+                        </div>
+                    </div>
+                    <!--  end tabs -->
+                    
+                </div>  
+                <!--  tabs -->    
             </div>
             <!--  end the body tag --> 
 

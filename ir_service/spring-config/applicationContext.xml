@@ -94,6 +94,11 @@
    <import resource="ir-service.xml"/>
   
    <!-- ****************************************** --> 
+   <!-- Export/Import services  -->
+   <!-- ****************************************** --> 
+   <import resource="ir-export-import-service.xml"/>
+
+   <!-- ****************************************** --> 
    <!-- File Service  -->
    <!-- ****************************************** --> 
    <import resource="file-db-service.xml"/>

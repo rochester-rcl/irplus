@@ -17,12 +17,7 @@
 
 package edu.ur.ir.institution.service;
 
-
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-
-
+import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.quartz.JobDetail;
@@ -38,73 +33,64 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import edu.ur.ir.ErrorEmailService;
-import edu.ur.ir.institution.InstitutionalCollectionSubscriptionService;
+import edu.ur.ir.institution.ReIndexInstitutionalCollectionService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
-import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.UserService;
 
 
 /**
- * This is used to send emails for the Job.  This is a stateful job
- * so only a single instance will be running at once.
+ * Class for re-indexing institutional collections.
  * 
  * @author Nathan Sarr
  *
  */
-public class DefaultSubscriptionEmailJob implements StatefulJob{
-	 
+public class InstitutionalCollectionIndexProcessingJob implements StatefulJob{
+	
 	/** Application context from spring  */
 	public static final String APPLICATION_CONTEXT_KEY = "applicationContext";
 	 
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(DefaultSubscriptionEmailJob.class);
+	private static final Logger log = Logger.getLogger(InstitutionalCollectionIndexProcessingJob.class);
+	
 
-
-	/**
-	 * Sends emails to all subscribers with notes about new publications added
-	 * to institutional collections.
-	 * 
-	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
-	 */
-	public void execute(JobExecutionContext arg0) throws JobExecutionException 
+	@Override
+	public void execute(JobExecutionContext context) throws JobExecutionException 
 	{
-
-        JobDetail jobDetail = arg0.getJobDetail();
+        JobDetail jobDetail = context.getJobDetail();
 		String beanName = jobDetail.getName();
-		  
+		
 		if (log.isDebugEnabled()) 
 		{
 		    log.info ("Running SpringBeanDelegatingJob - Job Name ["+jobDetail.getName()+"], Group Name ["+jobDetail.getGroup()+"]");
 		    log.info ("Delegating to bean ["+beanName+"]");
 		}
-		  
+		
+	
 		ApplicationContext applicationContext = null;
 		  
 		try 
 		{
-		    applicationContext = (ApplicationContext) arg0.getScheduler().getContext().get(APPLICATION_CONTEXT_KEY);
+		    applicationContext = (ApplicationContext) context.getScheduler().getContext().get(APPLICATION_CONTEXT_KEY);
 		} 
 		catch (SchedulerException e2) 
 		{
 		    throw new JobExecutionException("problem with the Scheduler", e2);
 		}
 		  
-		InstitutionalCollectionSubscriptionService subscriptionService = null;
-		UserService userService = null;
 		RepositoryService repositoryService = null;
+		ReIndexInstitutionalCollectionService reIndexInstitutionalCollectionService = null;
+		ErrorEmailService errorEmailService;
 		PlatformTransactionManager tm = null;
 		TransactionDefinition td = null;
-		ErrorEmailService errorEmailService;
 		try
 		{
-		    subscriptionService = (InstitutionalCollectionSubscriptionService)applicationContext.getBean("institutionalCollectionSubscriptionService");
-			userService = (UserService)applicationContext.getBean("userService");
 			repositoryService = (RepositoryService) applicationContext.getBean("repositoryService");
+			reIndexInstitutionalCollectionService = (ReIndexInstitutionalCollectionService) applicationContext.getBean("reIndexInstitutionalCollectionService");
+			errorEmailService = (ErrorEmailService)applicationContext.getBean("errorEmailService");
+
 			tm = (PlatformTransactionManager) applicationContext.getBean("transactionManager");
 			td = new DefaultTransactionDefinition(
 					TransactionDefinition.PROPAGATION_REQUIRED);
-			errorEmailService = (ErrorEmailService)applicationContext.getBean("errorEmailService");
 		}
 		catch(BeansException e1)
 		{
@@ -113,55 +99,33 @@ public class DefaultSubscriptionEmailJob implements StatefulJob{
 		
 		// start a new transaction
 		TransactionStatus ts = null;
-		
 		try
 		{
 		    ts = tm.getTransaction(td);
 		    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
-		    if( repository != null)
+		    if( repository != null )
 		    {
-			    log.debug("repository is suspended subscription emails " + subscriptionService.getUniqueSubsciberUserIds());
+		 	    log.debug("re indexing collections for repository " + repository);
+			    repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+			    int count = reIndexInstitutionalCollectionService.reIndex(new File(repository.getInstitutionalCollectionIndexFolder()));
+			    log.debug(" Number of collections re-indexed = " + count);
 		    }
-		
-		    if( repository != null && !repository.isSuspendSuscriptionEmails())
-		    {
-			    List<Long> uniqueSubscriberIds = subscriptionService.getUniqueSubsciberUserIds();
-			
-			    // make the end date today
-			    Timestamp endDate = new Timestamp(new Date().getTime());
-		        for( Long id : uniqueSubscriberIds )
-		        {
-		            IrUser user = userService.getUser(id, false);
-			
-				    try 
-				    {
-				        subscriptionService.sendSubscriberEmail(user, repository, repository.getLastSubscriptionProcessEmailDate(), endDate );
-				    } 
-				    catch (Exception e) 
-				    {
-				       log.error("email problem with user = " + user, e);
-				       errorEmailService.sendError(e);
-			        }
-		       }
-		
-		       repository.setLastSubscriptionProcessEmailDate(endDate);
-		       repositoryService.saveRepository(repository);
-		   
-		    }
+		}
+		catch(Exception e)
+		{
+			errorEmailService.sendError(e);
 		}
 		finally
 		{
-			if( ts != null )
+			if( ts != null)
 			{
 				if( tm != null )
 				{
-			        tm.commit(ts);
+		            tm.commit(ts);
 				}
 			}
 		}
-		   
-		
 	}
 
 }

@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 - 2010 University of Rochester
+   Copyright 2008-2010 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,28 +14,31 @@
    limitations under the License.
 */  
 
-
-package edu.ur.ir.user;
+package edu.ur.ir.ir_export;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collection;
+import edu.ur.ir.person.ContributorType;
 
 /**
- * This will re-index all users
+ * Service to export contributor type information.
  * 
  * @author Nathan Sarr
  *
  */
-public interface ReIndexUserService extends Serializable{
+public interface ContributorTypeExportService extends Serializable{
 	
-	/**
-	 * Re-Index the users in the institutional repository
+	/** 
+	 * Create the xml file for the set of collections.
 	 * 
-	 * @param batchSize - number of users to index at a time
-	 * @param userIndexFolder - location of the user index
-	 * @return total number of users processed.
+	 * @param xmlFile - file to write the xml to
+	 * @param contributor types - set of contributor types to export
+	 * 
+	 * @throws IOException - if writing to the file fails.
 	 */
-	public int reIndexUsers(int batchSize, File userIndexFolder);
+	public void createXmlFile(File xmlFile, Collection<ContributorType> contributorTypes) throws IOException;
 
 
 }

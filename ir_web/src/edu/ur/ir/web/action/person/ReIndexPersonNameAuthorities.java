@@ -1,3 +1,20 @@
+/**  
+   Copyright 2008 - 2010 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
+
 package edu.ur.ir.web.action.person;
 
 import org.apache.log4j.Logger;
@@ -8,7 +25,6 @@ import org.quartz.TriggerUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.ur.ir.web.action.researcher.ReIndexResearchers;
 
 /**
  * Re index the person name authorities.
@@ -26,19 +42,19 @@ public class ReIndexPersonNameAuthorities extends ActionSupport{
 	private Scheduler quartzScheduler;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(ReIndexResearchers.class);
+	private static final Logger log = Logger.getLogger(ReIndexPersonNameAuthorities.class);
 	
 	/** Default Batch Size */
 	private int batchSize = 25;
 	
 	public String execute() throws Exception
 	{
-		log.debug("re index users called");
+		log.debug("re index person names called");
 		//create the job detail
 		JobDetail jobDetail = new JobDetail("reIndexPersonNameAuthoritiesJob", Scheduler.DEFAULT_GROUP, 
 				edu.ur.ir.person.service.DefaultReIndexPersonNameAuthoritiesJob.class);
 		
-		jobDetail.getJobDataMap().put("batchSize", new Integer(batchSize));
+		jobDetail.getJobDataMap().put("batchSize", Integer.valueOf(batchSize));
 		
 		//create a trigger that fires once right away
 		Trigger trigger = TriggerUtils.makeImmediateTrigger(0,0);

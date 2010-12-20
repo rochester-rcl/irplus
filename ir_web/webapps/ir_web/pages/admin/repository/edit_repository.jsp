@@ -220,6 +220,18 @@
                                      </td>
                                  </tr>
                                  <tr>
+                                     <td class="label"> Institutional Collection Index Folder Location: </td>
+                                     <td class="input" colspan="2">
+                                         <input size="80" name="institutionalCollectionIndexFolder" value="${repository.institutionalCollectionIndexFolder}"/>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td class="label"> User Group Index Folder Location: </td>
+                                     <td class="input" colspan="2">
+                                         <input size="80" name="userGroupIndexFolder" value="${repository.userGroupIndexFolder}"/>
+                                     </td>
+                                 </tr>
+                                 <tr>
                                      <td class="buttons" colspan="3" >
                              
                                          <c:if test="${repository == null}">
@@ -237,11 +249,19 @@
    
                        <c:if test="${repository != null}">
                            Last subscription process email date: ${repository.lastSubscriptionProcessEmailDate}
+                           
+                           
                            <br/>
                            <br/>
                            
                            <c:url var="reIndexItemsUrl" value="/admin/reIndexInstitutionalItems.action"/>
                            <a href="${reIndexItemsUrl}">Re-Index Institutional Items</a>
+                           
+                           <br/>
+                           <br/>
+
+                           <c:url var="reIndexItemsUrl" value="/admin/reIndexInstitutionalCollections.action"/>
+                           <a href="${reIndexItemsUrl}">Re-Index Institutional Collections</a>
                            
                            <br/>
                            <br/>

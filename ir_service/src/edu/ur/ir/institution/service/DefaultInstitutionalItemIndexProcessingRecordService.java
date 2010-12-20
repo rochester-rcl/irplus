@@ -1,4 +1,3 @@
-package edu.ur.ir.institution.service;
 /**  
 Copyright 2008 University of Rochester
 
@@ -14,6 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */  
+
+
+package edu.ur.ir.institution.service;
 
 import java.util.List;
 
