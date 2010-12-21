@@ -16,6 +16,7 @@
 
 package edu.ur.ir.search;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -23,9 +24,12 @@ import java.util.Comparator;
  * 
  * @author NathanS
  */
-public class FacetResultHitComparator implements Comparator<FacetResult>{
+public class FacetResultHitComparator implements Comparator<FacetResult>, Serializable{
 
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 627536677155798599L;
+
 	public int compare(FacetResult arg0, FacetResult arg1) {
 		if (arg1.getHits() < arg0.getHits()) {
 			return -1;

@@ -33,16 +33,16 @@ public class HandleInfo extends BasePersistent{
 	public static final String URL_DATA_TYPE = "URL";
 	
 	/** 24 hours - default time to live */
-	public static final Integer DEFAULT_TIME_TO_LIVE = new Integer(86400);
+	public static final Integer DEFAULT_TIME_TO_LIVE = Integer.valueOf(86400);
 	
 	/** default integer index */
-	public static final Integer DEFAULT_INDEX = new Integer(100);
+	public static final Integer DEFAULT_INDEX = Integer.valueOf(100);
 	
 	/**  relative time to live */
-	public static final Integer RELATIVE_TIME_TO_LIVE_TYPE = new Integer(100);
+	public static final Integer RELATIVE_TIME_TO_LIVE_TYPE = Integer.valueOf(100);
 	
 	/** time stamp value  */
-	public static final Integer DEFAULT_TIMESTAMP_VALUE = new Integer(100);
+	public static final Integer DEFAULT_TIMESTAMP_VALUE = Integer.valueOf(100);
 	
 	/** default references */
 	public static final String DEFAULT_REFERENCES = "";
