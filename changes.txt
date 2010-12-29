@@ -28,6 +28,8 @@ IR+ changes 2.0 to 2.x
 - Added search interface to institutional collection admin section
 - Added job to allow administrators option to re-index all institutional collections
 - Updated collection page to show description of sub collections
+- Updated collections indexing to occur on new collection creation or updating of collection
+- Added Group workspaces admin option in administration drop down
 
 
 [ur_persistence_util]
