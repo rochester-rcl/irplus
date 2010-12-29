@@ -90,3 +90,26 @@ CREATE TABLE ir_user.folder_auto_share_permissions
     PRIMARY KEY (folder_auto_share_info_id, class_type_permission_id)
 );
 ALTER TABLE ir_user.folder_auto_share_permissions OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Create a schema to hold group space information
+-- ---------------------------------------------
+
+CREATE SCHEMA ir_group_space AUTHORIZATION ir_plus;
+
+CREATE TABLE ir_group_space.group_space
+(
+  group_space_id BIGINT PRIMARY KEY,
+  name TEXT NOT NULL,
+  lower_case_name TEXT NOT NULL,
+  description TEXT,
+  date_created DATE,
+  version INTEGER,
+  UNIQUE (lower_case_name)
+);
+ALTER TABLE ir_group_space.group_space OWNER TO ir_plus;
+
+-- The group space sequence
+CREATE SEQUENCE ir_group_space.group_space_seq ;
+ALTER TABLE ir_group_space.group_space_seq OWNER TO ir_plus;
