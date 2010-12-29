@@ -54,9 +54,6 @@
 
  	<ur:js src="page-resources/js/admin/edit_institutional_collection.js"/>
  	<ur:js src="page-resources/js/admin/add_group_to_collection.js"/>
- 	
- 	
- 	
     
     <!--  Style for dialog boxes -->
     <style>
@@ -104,7 +101,7 @@
             </div>
             
             
-            <!--  set up tabs for the workspace -->
+            <!--  set up tabs for the collection -->
 	        <div id="collection-properties-tabs" class="yui-navset">
 	             <ul class="yui-nav">
                      <li class="selected"><a href="#tab1"><em>Collection Information</em></a></li>

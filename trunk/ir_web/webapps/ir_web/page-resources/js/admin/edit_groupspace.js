@@ -1,4 +1,4 @@
-/**  
+/*
    Copyright 2008-2010 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,28 +12,28 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/  
-
-package edu.ur.ir.groupspace;
-
-import org.testng.annotations.Test;
+*/
 
 /**
- * Testing for group spaces.
- * 
- * @author Nathan Sarr
- *
+ * This code is for dealing with adding and removing group spaces
  */
-@Test(groups = { "baseTests" }, enabled = true)
-public class GroupSpaceTest {
-	
-	/**
-	 * Base tests for group work spaces.
-	 */
-	public void baseGroupSpaceTest()
-	{
-		GroupSpace groupSpace = new GroupSpace("test group","group description");
-	    assert groupSpace.getName().equals("test group") : " group name should equal test group but equals " + groupSpace.getName();
-	}
+YAHOO.namespace("ur.edit.groupspace");
 
+//actions for adding,updating and removing content types
+var getGroupSpaceAction = basePath + 'admin/getGroupSpace.action';
+/**
+ * content type namespace
+ */
+YAHOO.ur.edit.groupspace = 
+{
+		// initialize the page
+		// this is called once the dom has
+		// been created
+		init : function() 
+		{
+	        var myTabs = new YAHOO.widget.TabView("groupSpacePropertiesTabs");
+		}
 }
+
+//initialize the code once the dom is ready
+YAHOO.util.Event.onDOMReady(YAHOO.ur.edit.groupspace.init);

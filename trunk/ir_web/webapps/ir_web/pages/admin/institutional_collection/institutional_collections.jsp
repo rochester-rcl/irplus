@@ -83,20 +83,17 @@
             <!--  this is the body region of the page -->
             <div id="bd">
                 <h3>Institutional Collection Administration</h3>
-                <c:url var="browseCollections" value="/admin/viewInstitutionalCollections.action">
-                    <c:param name="parentCollectionId" value="${parentCollectionId}"/>
-                </c:url>
                 <c:url var="searchCollections" value="/admin/searchInstitutionalCollections.action"/>
                 
                 <!--  set up tabs for the workspace -->
                 <div id="collection-tabs" class="yui-navset">
 	                <ul class="yui-nav">
 	                 <c:if test='${viewType == "browse"}'>
-		                    <li class="selected"><a href="${browseCollections}"><em>Browse</em></a></li>
+		                    <li class="selected"><a href="#tab1"><em>Browse</em></a></li>
 		                    <li><a href="#tab2"><em>Search</em></a></li>
 		               </c:if>
 		               <c:if test='${viewType == "search"}'>
-		                    <li><a href="${browseCollections}"><em>Browse</em></a></li>
+		                    <li><a href="#tab1"><em>Browse</em></a></li>
 		                    <li class="selected"><a href="#tab2"><em>Search</em></a></li>
 		               </c:if>
 	                </ul>
@@ -115,7 +112,7 @@
                                   id="collection_search_form" 
                                   name="collectionSearchForm" 
                                   action="${searchCollections}" >
-	            		
+	            		          <input type="hidden" name="parentCollectionId" value="${parentCollectionId}"/>
 	            		     <br/>
 						         Search Collections : <input type="text" name="query" size="50"/>
 						         <button id="search_user" class="ur_button" type="submit"

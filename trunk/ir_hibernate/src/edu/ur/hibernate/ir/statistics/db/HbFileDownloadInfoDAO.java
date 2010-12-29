@@ -138,9 +138,8 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 	@SuppressWarnings("unchecked")
 	public List<FileDownloadInfo> getDownloadInfoIgnored(final int rowStart,
 			final int maxResults) {
-		List<FileDownloadInfo> foundItems = new LinkedList<FileDownloadInfo>();
 		
-		foundItems = (List<FileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<FileDownloadInfo> foundItems = (List<FileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {

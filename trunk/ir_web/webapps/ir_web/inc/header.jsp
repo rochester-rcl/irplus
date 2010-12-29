@@ -88,6 +88,7 @@
                                 </c:if>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFields.action" />"><span class="menu_text"><fmt:message key="menu.fields"/></span></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewFileStorage.action"/>"><span class="menu_text">File Storage</span></a></li>
+				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewGroupSpaces.action"/>"><span class="menu_text">Group Spaces</span></a></li>
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewHandleNameAuthorities.action"/>"><span class="menu_text">Handle Name Authorities</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewIdentifierTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewIdentifierTypes"/></span></a></li>
                                 

@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for group space.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.groupspace">
+	<class name="GroupSpace" schema="ir_group_space"
+	    table="group_space"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="group_space_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_group_space.group_space_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. This is for database transactions -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+	
+	    <property name="name" column="name" type="string"
+			not-null="true" access="field" />
+			
+		<property name="lowerCaseName" column="lower_case_name" type="string"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+			
+		<property name="createdDate" column="date_created" type="timestamp" 
+		          access="field" 
+		          not-null="true"/>
+			
+		
+	</class>
+		
+	<!--  Get a count of groupspaces in the system -->
+	<query name="groupSpaceCount">
+	    select count(*) from GroupSpace
+	</query>
+	
+	<!-- named query for getting a groupspace by name -->
+	<query name="getGroupSpaceByName">
+		from GroupSpace as groupSpace where
+		groupSpace.lowerCaseName = :lowerCaseName
+	</query>
+
+	<!--  Get groupspaces name order ascending-->
+	<query name="groupSpaceByNameAsc">
+	    select groupSpace from GroupSpace as groupSpace
+		order by groupSpace.name asc
+	</query>
+
+	<!--  Get groupspaces name order descending -->
+	<query name="groupSpaceByNameDesc">
+	    select groupSpace from GroupSpace as groupSpace
+		order by groupSpace.name desc
+	</query>	
+</hibernate-mapping>

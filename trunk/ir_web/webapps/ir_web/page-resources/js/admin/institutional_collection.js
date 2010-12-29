@@ -269,7 +269,8 @@ YAHOO.ur.institution = {
      *  Handle a user selecting the browse 
      */
     handleBrowseClick : function(e) {  
-        window.location = viewInstitutionalCollectionAction;
+    	var parentId = document.getElementById('newCollectionForm_parentCollectionId').value;
+        window.location = getInstitutionalCollectionsAction + '?parentCollectionId='+parentId;
     },
 
     

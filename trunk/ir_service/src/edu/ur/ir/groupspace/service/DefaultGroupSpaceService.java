@@ -14,29 +14,45 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.groupspace;
+package edu.ur.ir.groupspace.service;
 
-import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.exception.DuplicateNameException;
+import edu.ur.ir.groupspace.GroupSpace;
+import edu.ur.ir.groupspace.GroupSpaceDAO;
+import edu.ur.ir.groupspace.GroupSpaceService;
 import edu.ur.order.OrderType;
 
 /**
- * Service to help manage group spaces.
+ * Default implementation of the group space service.
  * 
  * @author Nathan Sarr
  *
  */
-public interface GroupSpaceService extends Serializable{
+public class DefaultGroupSpaceService implements GroupSpaceService {
 	
+	/* eclipse generated id */
+	private static final long serialVersionUID = 1L;
+	
+	/* group space data access object  */
+	private GroupSpaceDAO groupSpaceDAO;
+
 	/**
 	 * Save the group space to the system.
 	 * 
 	 * @param groupSpace - group space to add to the system.
 	 * @throws DuplicateNameException - if the group space already exists 
 	 */
-	public void save(GroupSpace groupSpace) throws DuplicateNameException;
+	public void save(GroupSpace groupSpace) throws DuplicateNameException
+	{
+		GroupSpace other = groupSpaceDAO.findByUniqueName(groupSpace.getName());
+		if( other != null && !other.getId().equals(groupSpace.getId()))
+		{
+			throw new DuplicateNameException("Duplicate name error " + groupSpace.getName());
+		}
+		groupSpaceDAO.makePersistent(groupSpace);
+	}
 	
 	
     /**
@@ -44,14 +60,20 @@ public interface GroupSpaceService extends Serializable{
      * 
      * @param groupSpace
      */
-    public void delete(GroupSpace groupSpace);
+    public void delete(GroupSpace groupSpace)
+    {
+    	groupSpaceDAO.makeTransient(groupSpace);
+    }
     
     /**
      * Get a count of the group spaces in the system.
      * 
      * @return - count of group spaces in the system
      */
-    public Long getCount();
+    public Long getCount()
+    {
+    	return groupSpaceDAO.getCount();
+    }
     
     /**
      * Get the group space based on id.
@@ -61,8 +83,20 @@ public interface GroupSpaceService extends Serializable{
      * 
      * @return - upgrade the lock
      */
-    public GroupSpace get(Long id, boolean lock);
+    public GroupSpace get(Long id, boolean lock)
+    {
+    	return groupSpaceDAO.getById(id, lock);
+    }
     
+	/**
+	 * Set the group space data access object.
+	 * 
+	 * @param groupSpaceDAO
+	 */
+	public void setGroupSpaceDAO(GroupSpaceDAO groupSpaceDAO) {
+		this.groupSpaceDAO = groupSpaceDAO;
+	}
+	
 	/**
 	 * Get the list of group spaces ordered by name.
 	 * 
@@ -73,6 +107,10 @@ public interface GroupSpaceService extends Serializable{
 	 * 
 	 * @return list of group spaces found.
 	 */
-	public List<GroupSpace> getGroupspacesNameOrder(int rowStart, int numberOfResultsToShow, OrderType orderType);
+	public List<GroupSpace> getGroupspacesNameOrder(int rowStart, int numberOfResultsToShow, OrderType orderType)
+	{
+		return groupSpaceDAO.getGroupspacesNameOrder(rowStart, numberOfResultsToShow, orderType);
+	}
+
 
 }

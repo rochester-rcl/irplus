@@ -17,7 +17,6 @@
 package edu.ur.hibernate.ir.person.db;
 
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -250,9 +249,8 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	public List<PersonName> getCollectionPersonNamesBetweenChar(final int rowStart,
 			final int maxResults, final InstitutionalCollection collection, final char firstChar,
 			final char lastChar, final OrderType orderType) {
-		List<PersonName> personNames = new LinkedList<PersonName>();
 		
-		personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<PersonName> personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -287,9 +285,8 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	public List<PersonName> getCollectionPersonNamesByChar(final int rowStart,
 			final int maxResults, final InstitutionalCollection collection,
 			final char firstChar, final OrderType orderType) {
-        List<PersonName> personNames = new LinkedList<PersonName>();
 		
-		personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+         List<PersonName> personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -323,9 +320,8 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	public List<PersonName> getCollectionPersonNamesByLastName(final int rowStart,
 			final int maxResults, final InstitutionalCollection collection,
 			final OrderType orderType) {
-		List<PersonName> personNames = new LinkedList<PersonName>();
 		
-		personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<PersonName> personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -356,14 +352,14 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	 * @see edu.ur.ir.person.PersonNameDAO#getCount(char)
 	 */
 	public Long getCount(char nameFirstChar) {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("allPersonNameByChar", new Character(Character.toLowerCase(nameFirstChar))));
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("allPersonNameByChar", Character.valueOf(Character.toLowerCase(nameFirstChar))));
 	}
 
 	/**
 	 * @see edu.ur.ir.person.PersonNameDAO#getCount(char, char)
 	 */
 	public Long getCount(char lastNameFirstCharRange, char lastNamelastCharRange) {
-		Object[] values = new Object[]{new Character(Character.toLowerCase(lastNameFirstCharRange)), new Character(Character.toLowerCase(lastNamelastCharRange))};
+		Object[] values = new Object[]{Character.valueOf(Character.toLowerCase(lastNameFirstCharRange)), Character.valueOf(Character.toLowerCase(lastNamelastCharRange))};
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personNameCountByCharRange", values));
 	}
 
@@ -373,7 +369,7 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	public Long getCount(InstitutionalCollection collection,
 			char lastNameFirstChar) {
 		Object[] values = new Object[]{collection.getLeftValue(), collection.getRightValue(), 
-				collection.getTreeRoot().getId(), new Character(Character.toLowerCase(lastNameFirstChar))};
+				collection.getTreeRoot().getId(), Character.valueOf(Character.toLowerCase(lastNameFirstChar))};
 
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personCollectionNameCountByChar", values));
 
@@ -385,7 +381,7 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	public Long getCount(InstitutionalCollection collection,
 			char lastNameFirstCharRange, char lastNamelastCharRange) {
 		Object[] values = new Object[]{collection.getLeftValue(), collection.getRightValue(), 
-				collection.getTreeRoot().getId(), new Character(Character.toLowerCase(lastNameFirstCharRange)), new Character(Character.toLowerCase(lastNamelastCharRange))};
+				collection.getTreeRoot().getId(), Character.valueOf(Character.toLowerCase(lastNameFirstCharRange)), Character.valueOf(Character.toLowerCase(lastNamelastCharRange))};
 
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personCollectionNameCountByCharRange", values));
 	}
@@ -396,9 +392,8 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	@SuppressWarnings("unchecked")
 	public List<PersonName> getPersonNamesBetweenChar(final int rowStart,
 			final int maxResults, final char firstChar, final char lastChar, final OrderType orderType) {
-		List<PersonName> personNames = new LinkedList<PersonName>();
 		
-		personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<PersonName> personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
@@ -428,9 +423,8 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	@SuppressWarnings("unchecked")
 	public List<PersonName> getPersonNamesByChar(final int rowStart, final int maxResults,
 			final char firstChar, final OrderType orderType) {
-		List<PersonName> personNames = new LinkedList<PersonName>();
 		
-		personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		 List<PersonName> personNames = (List<PersonName>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {
