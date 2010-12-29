@@ -16,8 +16,6 @@
 
 package edu.ur.hibernate.ir.file.db;
 
-import java.util.List;
-
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;

@@ -836,4 +836,13 @@
        <property name="listMetadataFormatsService" ref="listMetadataFormatsService"/>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Group workspace service -->
+   <!-- ****************************************** --> 
+   <bean id="groupSpaceService"
+         class="edu.ur.ir.groupspace.service.DefaultGroupSpaceService">
+         <property name="groupSpaceDAO" ref="groupSpaceDAO"/>
+   </bean>
+   
+   
 </beans>

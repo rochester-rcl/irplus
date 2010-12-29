@@ -36,7 +36,7 @@ public class ReIndexUsers extends ActionSupport{
 		JobDetail jobDetail = new JobDetail("reIndexUsersJob", Scheduler.DEFAULT_GROUP, 
 				edu.ur.ir.user.service.DefaultReIndexUsersJob.class);
 		
-		jobDetail.getJobDataMap().put("batchSize", new Integer(batchSize));
+		jobDetail.getJobDataMap().put("batchSize", Integer.valueOf(batchSize));
 		
 		//create a trigger that fires once right away
 		Trigger trigger = TriggerUtils.makeImmediateTrigger(0,0);

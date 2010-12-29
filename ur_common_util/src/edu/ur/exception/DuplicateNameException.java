@@ -40,9 +40,20 @@ public class DuplicateNameException extends Exception
      */
     public DuplicateNameException(String message, String name)
     {
-        super(message);
+        this(message);
         this.name = name;
     }
+    
+    /**
+     * Message for duplicated name exception.
+     *
+     * @param message
+     */
+    public DuplicateNameException(String message)
+    {
+        super(message);
+    }
+
 
     /**
      * Name that was duplicated

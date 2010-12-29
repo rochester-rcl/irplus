@@ -100,9 +100,8 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 	@SuppressWarnings("unchecked")
 	public List<IpIgnoreFileDownloadInfo> getIgnoreInfoNowAcceptable(final int rowStart,
 			final int maxResults) {
-        List<IpIgnoreFileDownloadInfo> foundItems = new LinkedList<IpIgnoreFileDownloadInfo>();
 		
-		foundItems = (List<IpIgnoreFileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+         List<IpIgnoreFileDownloadInfo> foundItems = (List<IpIgnoreFileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {

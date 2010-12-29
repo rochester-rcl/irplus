@@ -344,8 +344,8 @@ public class DefaultCollectionExporter implements CollectionExporter{
 
 	    public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
 	    	DspaceCollection collection = new DspaceCollection();
-	    	collection.communityId = new Long(rs.getInt("community_id"));
-	    	collection.id = new Long(rs.getInt("collection_id"));
+	    	collection.communityId = Long.valueOf(rs.getInt("community_id"));
+	    	collection.id = Long.valueOf(rs.getInt("collection_id"));
 	        collection.copyright = rs.getString("copyright_text");
 	        collection.shortDescription = rs.getString("short_description");
 	        collection.name = rs.getString("name");

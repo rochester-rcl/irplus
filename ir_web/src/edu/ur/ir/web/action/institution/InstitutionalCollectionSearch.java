@@ -68,6 +68,10 @@ public class InstitutionalCollectionSearch extends Pager{
 	
 	/* indicates this the first time the user viewing the search */
 	private boolean searchInit = false;
+	
+	/* current parent collection id */
+	private Long parentCollectionId;
+
 
 
 	/**
@@ -206,6 +210,12 @@ public class InstitutionalCollectionSearch extends Pager{
 		return viewType;
 	}
 
+	public Long getParentCollectionId() {
+		return parentCollectionId;
+	}
 
+	public void setParentCollectionId(Long parentCollectionId) {
+		this.parentCollectionId = parentCollectionId;
+	}
 
 }

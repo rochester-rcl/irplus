@@ -16,7 +16,9 @@
 
 package edu.ur.ir.groupspace;
 
+import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Set;
 
 import edu.ur.ir.user.IrUser;
@@ -34,23 +36,27 @@ import edu.ur.simple.type.NameAware;
  */
 public class GroupSpace extends BasePersistent implements NameAware, DescriptionAware {
 	
-	/** eclipse generated id */
+	/* eclipse generated id */
 	private static final long serialVersionUID = -6440204761384913224L;
 
-	/**  Name of the group space */
+	/*  Name of the group space */
 	private String name;
 	
-	/** root folder for the group space  */
+	/* lower case value of the name */
+	private String lowerCaseName;
+
+	/* root folder for the group space  */
 	private GroupFolder rootFolder;
 	
-	/** set of managers for this group space */
-	private Set<IrUser> managers;
+	/* Owners of the group space */
+	private Set<IrUser> owners;
 	
-	/** Owner of the group space */
-	private IrUser owner;
-	
-	/** Description of the group space */
+	/* Description of the group space */
 	private String description;
+	
+	/* date this record was created */
+	private Timestamp createdDate;
+
 
 	/**  Package protected workspace  */
 	GroupSpace(){}
@@ -61,11 +67,10 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
      * @param name - name of the group space
      * @param owner - owner of the group space
      */
-    public GroupSpace(String name, IrUser owner)
+    public GroupSpace(String name)
     {
     	setName(name);
-    	setOwner(owner);
-    	rootFolder = new GroupFolder(this, name, owner);
+    	createdDate = new Timestamp(new Date().getTime());
     }
     
     /**
@@ -75,9 +80,9 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
      * @param owner - owner of the group space
      * @param description - description of the group space
      */
-    public GroupSpace(String name, IrUser owner, String description)
+    public GroupSpace(String name, String description)
     {
-    	this(name,owner);
+    	this(name);
     	setDescription(description);
     }
     
@@ -96,7 +101,8 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @param name
 	 */
 	void setName(String name) {
-		this.name = name;
+		this.name = name.trim();
+		lowerCaseName = this.name.toLowerCase();
 	}
 
 	/**
@@ -116,32 +122,14 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	void setRootFolder(GroupFolder rootFolder) {
 		this.rootFolder = rootFolder;
 	}
-
-	/**
-	 * Get the managers for the group. 
-	 * 
-	 * @return Unmodifiable set of managers
-	 */
-	public Set<IrUser> getManagers() {
-		return Collections.unmodifiableSet(managers);
-	}
-
-	/**
-	 * Set of managers of the group.
-	 * 
-	 * @param managers
-	 */
-	void setManagers(Set<IrUser> managers) {
-		this.managers = managers;
-	}
 	
 	/**
 	 * Owner of the group space.
 	 * 
 	 * @return
 	 */
-	public IrUser getOwner() {
-		return owner;
+	public Set<IrUser> getOwners() {
+		return Collections.unmodifiableSet(owners);
 	}
 
 	/**
@@ -149,8 +137,29 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * 
 	 * @param owner
 	 */
-	void setOwner(IrUser owner) {
-		this.owner = owner;
+	void setOwners(Set<IrUser> owners) {
+		this.owners = owners;
+	}
+	
+	/**
+	 * Remove a group owner.
+	 * 
+	 * @param owner - owner of the group
+	 * @return true if the owner is removed
+	 */
+	public boolean removeOwner(IrUser owner)
+	{
+		return owners.remove(owner);
+	}
+	
+	/**
+	 * Add an owner to the list of owners.
+	 * 
+	 * @param owner
+	 */
+	public void addOwner(IrUser owner)
+	{
+		owners.add(owner);
 	}
 	
 	/**
@@ -178,8 +187,8 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 
 		final GroupSpace other = (GroupSpace) o;
 
-		if( ( name != null && !name.equalsIgnoreCase(other.getName()) ) ||
-			( name == null && other.getName() != null ) ) return false;
+		if( ( lowerCaseName != null && !lowerCaseName.equalsIgnoreCase(other.getLowerCaseName()) ) ||
+			( lowerCaseName == null && other.getLowerCaseName() != null ) ) return false;
 
 		return true;
 	}
@@ -218,6 +227,24 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	public void setDescription(String description)
 	{
 		this.description = description;
+	}
+	
+	/**
+	 * Get the date the group was created.
+	 * 
+	 * @return - date the record was created.
+	 */ 
+	public Timestamp getCreatedDate() {
+		return createdDate;
+	}
+	
+	/**
+	 * Lower case name value
+	 * 
+	 * @return lower case value of the name
+	 */
+	public String getLowerCaseName() {
+		return lowerCaseName;
 	}
 
 }

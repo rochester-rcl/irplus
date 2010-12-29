@@ -23,6 +23,11 @@
             <result name="success">/pages/admin/institutional_collection/institutional_collections.jsp</result>
         </action>
         
+        <action name="searchInstitutionalCollections" 
+            class="edu.ur.ir.web.action.institution.InstitutionalCollectionSearch">
+            <result name="success">/pages/admin/institutional_collection/institutional_collections.jsp</result>
+        </action>
+        
         <action name="editInstitutionalCollectionViewPermission" 
             class="edu.ur.ir.web.action.institution.EditInstitutionalCollectionPermission"
             method="setPubliclyViewableStatus">
