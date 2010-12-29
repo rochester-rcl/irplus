@@ -434,6 +434,13 @@ DROP SEQUENCE metadata.dublin_core_encoding_scheme_seq;
 DROP SCHEMA metadata;
 
 
+-- ---------------------------------------------
+-- Drop Group spaces tables/schema
+-- ---------------------------------------------
 
+DROP TABLE ir_group_space.group_space;
 
+DROP SEQUENCE ir_group_space.group_space_seq;
+
+DROP SCHEMA ir_group_space;
 
