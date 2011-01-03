@@ -31,7 +31,7 @@ public class FileSystemType implements Serializable, Orderable{
 	/** eclipse genreated id */
 	private static final long serialVersionUID = -7485498621126903978L;
 
-	/** Represents a file type */
+	/** Represents a file and folder types */
 	public static final FileSystemType FILE = new FileSystemType("file", 1);
 	public static final FileSystemType FOLDER = new FileSystemType("folder", 10);
 	public static final FileSystemType PERSONAL_FILE = new FileSystemType("personalFile", 1);

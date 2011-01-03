@@ -19,8 +19,12 @@ package edu.ur.ir.groupspace;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
+import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
+import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
 import edu.ur.simple.type.DescriptionAware;
@@ -28,8 +32,7 @@ import edu.ur.simple.type.NameAware;
 
 
 /**
- * Represents a space for a group of people to 
- * collaborate on a shared folder structure
+ * Represents a space for a group of people to collaborate on a shared folder structure
  * 
  * @author Nathan Sarr
  *
@@ -45,18 +48,20 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	/* lower case value of the name */
 	private String lowerCaseName;
 
-	/* root folder for the group space  */
-	private GroupFolder rootFolder;
-	
 	/* Owners of the group space */
 	private Set<IrUser> owners;
 	
 	/* Description of the group space */
 	private String description;
 	
+	/*  Root Folder for this person. */
+	private Set<GroupFolder> rootFolders = new HashSet<GroupFolder>();
+	
+	/*  Root files for this person.  */
+	private Set<GroupFile> rootFiles = new HashSet<GroupFile>();
+	
 	/* date this record was created */
 	private Timestamp createdDate;
-
 
 	/**  Package protected workspace  */
 	GroupSpace(){}
@@ -66,8 +71,9 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
      * 
      * @param name - name of the group space
      * @param owner - owner of the group space
+     * @throws IllegalFileSystemNameException 
      */
-    public GroupSpace(String name)
+    public GroupSpace(String name) 
     {
     	setName(name);
     	createdDate = new Timestamp(new Date().getTime());
@@ -79,16 +85,17 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
      * @param name - name of the group space
      * @param owner - owner of the group space
      * @param description - description of the group space
+     * @throws IllegalFileSystemNameException 
      */
-    public GroupSpace(String name, String description)
+    public GroupSpace(String name, String description) 
     {
     	this(name);
     	setDescription(description);
     }
     
-    
 	/**
 	 * Get the name of the workspace
+	 * 
 	 * @return
 	 */
 	public String getName() {
@@ -100,33 +107,15 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * 
 	 * @param name
 	 */
-	void setName(String name) {
+	public void setName(String name) {
 		this.name = name.trim();
 		lowerCaseName = this.name.toLowerCase();
-	}
-
-	/**
-	 * Get the root folder of the group.
-	 * 
-	 * @return root folder of the group
-	 */
-	public GroupFolder getRootFolder() {
-		return rootFolder;
-	}
-
-	/**
-	 * Set the root folder for the group.
-	 * 
-	 * @param rootFolder
-	 */
-	void setRootFolder(GroupFolder rootFolder) {
-		this.rootFolder = rootFolder;
 	}
 	
 	/**
 	 * Owner of the group space.
 	 * 
-	 * @return
+	 * @return owners of the group space
 	 */
 	public Set<IrUser> getOwners() {
 		return Collections.unmodifiableSet(owners);
@@ -245,6 +234,267 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 */
 	public String getLowerCaseName() {
 		return lowerCaseName;
+	}
+	
+	/**
+	 * Remove a folder from this set of root folders.
+	 * 
+	 * @param folder
+	 * @return true if the folder is removed.
+	 * 
+	 */
+	public boolean removeRootFolder(GroupFolder rootFolder)
+	{
+		return rootFolders.remove(rootFolder);
+	}
+	
+	/**
+	 * Remove the group file from this group.
+	 * 
+	 * @param groupFile
+	 * @return true if the file is removed.
+	 */
+	public boolean removeRootFile(GroupFile groupFile)
+	{
+		return rootFiles.remove(groupFile);
+	}
+	
+	/**
+	 * Creates the root folder by name if it does not exist.  The 
+	 * name should not be null or the name of an existing root
+	 * folder for this group.
+	 * 
+	 * @param name of root folder to create.
+	 * @return Created Folder if it does not already exist
+	 * @throws DuplicateNameException 
+	 * 
+	 * @throws IllegalArgumentException if the name of the folder 
+	 * already exists or the name is null.
+	 */
+	public GroupFolder createRootFolder(IrUser owner, String name) throws DuplicateNameException, IllegalFileSystemNameException
+	{
+		if( name == null)
+		{
+			throw new IllegalArgumentException("Name cannot be null");
+		}
+		
+		if( !isVaildPersonalFileSystemName(name))
+		{
+			throw new DuplicateNameException("A file or folder with name " + name +
+			" already exists ", name );
+        }
+		
+		GroupFolder f = new GroupFolder(this, owner, name);
+		rootFolders.add(f);
+		return f;
+	}
+	
+	/**
+	 * Adds an existing folder to the root of this group.
+	 * If the folder was a child of an existing folder.  It
+	 * is removed from its parents list.
+	 * 
+	 * @param folder - to add as a root
+	 * @throws DuplicateNameException 
+	 */
+	public void addRootFolder(GroupFolder folder) throws DuplicateNameException
+	{
+		if( !isVaildPersonalFileSystemName(folder.getName()))
+        {
+        	throw new DuplicateNameException("A file or folder with name " + folder.getName() +
+        			" already exists in this folder", folder.getName());
+        }
+		
+		GroupFolder parent = folder.getParent();
+		if(parent != null)
+		{
+		    parent.removeChild(folder);
+		}
+		rootFolders.add(folder);
+	}
+	
+	/**
+	 * Set of root folders for this group.
+	 * 
+	 * @return Unmodifiable set of root folders
+	 */
+	public Set<GroupFolder> getRootFolders() {
+		return Collections.unmodifiableSet(rootFolders);
+	}
+
+	/**
+	 * The set of root folders owned by this group.
+	 * 
+	 * @param rootFolders
+	 */
+	void setFolders(Set<GroupFolder> rootFolders) {
+		this.rootFolders = rootFolders;
+	}
+	
+	/**
+	 * Get a root folder by name.  The comparison
+	 * is case insensitive.
+	 * 
+	 * @param name - name of the folder to return
+	 * @return The folder if found otherwise null.
+	 */
+	public GroupFolder getRootFolder(String name)
+	{
+		for(GroupFolder f: rootFolders )
+		{
+			if( f.getName().equalsIgnoreCase(name))
+			{
+				return f;
+			}
+		}
+		return null;
+	}
+	
+		
+	/**
+	 * Get a group file by name.
+	 * 
+	 * @param name
+	 * @return the found file
+	 */
+	public GroupFile getRootFile(String nameWithExtension)
+	{
+		for(GroupFile pvf: rootFiles )
+		{
+			if( pvf.getVersionedFile().getNameWithExtension().equalsIgnoreCase(nameWithExtension))
+			{
+				return pvf;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Adds an existing file to the root of this group.
+	 * If the file was a child of an existing folder.  It
+	 * is removed from the old folders file list.
+	 * 
+	 * @param file - to add as a root file
+	 */
+	public void addRootFile(GroupFile file) throws DuplicateNameException
+	{
+		if( !isVaildPersonalFileSystemName(file.getVersionedFile().getNameWithExtension()))
+        {
+        	throw new DuplicateNameException("A file or folder with name " + file.getName() +
+        			" already exists in this folder", file.getName());
+        }
+		
+		GroupFolder folder = file.getGroupFolder();
+		if( folder != null )
+		{
+			folder.removeGroupFile(file);
+			file.setGroupFolder(null);
+			
+			GroupSpace current = folder.getGroupSpace();
+			if(current != null && !current.equals(this))
+			{
+				current.removeRootFile(file);
+			}
+		}
+		
+		rootFiles.add(file);
+		
+	}
+	
+	/**
+	 * Create a root group file.  
+	 * 
+	 * @param group file to add to the root.	
+	 * @return created file
+	 * 
+	 * @throws DuplicateNameException - if the file name already exists as a root file
+	 */
+	public GroupFile createRootFile(VersionedFile vf)throws DuplicateNameException
+	{
+        if( !isVaildPersonalFileSystemName(vf.getNameWithExtension()) )
+        {
+        	throw new DuplicateNameException("A file or folder with name " + vf.getName() +
+        			" already exists in this folder", vf.getName());
+        }
+        
+        
+		GroupFile pvf = new GroupFile(vf, this);
+		rootFiles.add(pvf);
+		return pvf;
+		
+	}
+
+	/**
+	 * Returns an unmodifiable set of root folders.
+	 * 
+	 * @return
+	 */
+	public Set<GroupFile> getRootFiles() {
+		return Collections.unmodifiableSet(rootFiles);
+	}
+
+	/**
+	 * Set the root files for this group.
+	 * 
+	 * @param rootFiles
+	 */
+	void setRootFiles(Set<GroupFile> rootFiles) {
+		this.rootFiles = rootFiles;
+	}
+	
+	/**
+	 * Get root file by name.
+	 * 
+	 * @param name - name of the file to return
+	 * @return The file if found otherwise null.
+	 */
+	public GroupFile getRootGroupFile(String name)
+	{
+		for(GroupFile gf: rootFiles )
+		{
+			if( gf.getName().equals(name))
+			{
+				return gf;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get root file by id.
+	 * 
+	 * @param id - id of the file to return
+	 * @return The file if found otherwise null.
+	 */
+	public GroupFile getRootGroupFile(Long id)
+	{
+		for(GroupFile gf: rootFiles )
+		{
+			if( gf.getId().equals(id))
+			{
+				return gf;
+			}
+		}
+		return null;
+	}
+
+	
+	/**
+	 * Returns true if the name is ok to add to a file or folder
+	 * 
+	 * @param name of the file or folder.  If it is a file, it should contain
+	 * the extension.
+	 * 
+	 * @return true if the name does not exist.  This is case insensitive.
+	 */
+	private boolean isVaildPersonalFileSystemName(String name)
+	{
+		boolean ok = false;
+		if( getRootFolder(name) == null && getRootFile(name) == null)
+		{
+			ok = true;
+		}
+		return ok;
 	}
 
 }

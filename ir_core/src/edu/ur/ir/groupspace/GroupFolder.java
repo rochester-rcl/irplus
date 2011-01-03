@@ -18,10 +18,17 @@ package edu.ur.ir.groupspace;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
+import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
+import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.LongPersistentId;
 import edu.ur.persistent.PersistentVersioned;
@@ -39,30 +46,35 @@ public class GroupFolder extends PreOrderTreeSetNodeBase implements
 Serializable, LongPersistentId, PersistentVersioned,
 DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 
-	/** eclipse generated id */
+	/* eclipse generated id */
 	private static final long serialVersionUID = 5447153628861451307L;
 	
-	/** name of the folder */
+	/* Logger */
+	private static final Logger log = Logger.getLogger(GroupFolder.class);
+	
+	/* name of the folder */
 	private String name;
 	
-	/** set of children folders */
-	private Set<GroupFolder> children;
+	/* set of children folders */
+	private Set<GroupFolder> children = new HashSet<GroupFolder>();
 	
-	/** description for the group folder */
+	/* description for the group folder */
 	private String description;
 	
-	/**  Root of the entire tree. */
+	/*  Root of the entire tree. */
 	private GroupFolder treeRoot;
 	
-	/** user who created the folder */
+	/* user who created the folder */
 	private IrUser owner;
 	
-	/** group that owns the folder */
+	/* group that owns the folder */
 	private GroupSpace groupSpace;
+	
+	/*  Files in this personal folder. This is a set of versioned files. */
+	private Set<GroupFile> files = new HashSet<GroupFile>();
 
-
-	/**
-	 * This is the conceptual path to the item.
+	/*
+	 * This is the conceptual path to the group folder.
 	 * The base path plus the root of the tree 
 	 * down to itself.
 	 * For example if you have a root folder named FOO and
@@ -79,10 +91,10 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 */
 	private String path;
 	
-	/** Unique id of the group folder. */
+	/* Unique id of the group folder. */
 	private Long id;
 	
-	/**  Version of the database data read from the database. */
+	/*  Version of the database data read from the database. */
 	private int version;
 	
 	/**
@@ -96,17 +108,78 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	/**
 	 * Create a group folder with the given name.
 	 * 
-	 * @param name
+	 * @param groupSpace - parent group space
+	 * @param name - name of the folder
+	 * 
+	 * @throws IllegalFileSystemNameException - if name contains illegal file system characters
 	 */
-	public GroupFolder(GroupSpace groupSpace, String name, IrUser owner)
+	GroupFolder(GroupSpace groupSpace, IrUser owner, String name) throws IllegalFileSystemNameException
 	{
 		setName(name);
 		setTreeRoot(this);
 		setPath(PATH_SEPERATOR);
-		setOwner(owner);
 		setGroupSpace(groupSpace);
+		setOwner(owner);
 	}
+	
+	/**
+	 * Set the parent of this personal folder.  Results
+	 * in setting path and all children paths.
+	 * 
+	 * @param parent
+	 */
+	void setParent(GroupFolder parent) {
+		if(parent == null)
+		{
+			path = PATH_SEPERATOR ;
+		}
+		super.setParent(parent);
+	}
+	
+	/**
+	 * Adds an existing personal file to this folder.  This allows
+	 * a personal file to be moved from one location to another.
+	 * 
+	 * @param pf - personal file to add
+	 * @throws DuplicateNameException - if the file already exits
+	 */
+	public void addGroupFile(GroupFile gf) throws DuplicateNameException
+	{
+		if( !isVaildFileSystemName(gf.getVersionedFile().getNameWithExtension()))
+		{
+			throw new DuplicateNameException("Personal file with the name " + gf.getVersionedFile().getNameWithExtension() +
+				" already exists", gf.getVersionedFile().getNameWithExtension());
+		}
+		if( gf.getGroupFolder() != null)
+		{
+		    gf.getGroupFolder().removeGroupFile(gf);
+		}
+		
+		gf.setOwner(this.getOwner());
+		gf.setGroupFolder(this);
+		files.add(gf);
+	}
+	
+	/**
+	 * Add a versioned file to this folder.  this creates a 
+	 * new group file record.
+	 * 
+	 * @param vf
+	 */
+	public GroupFile addVersionedFile(VersionedFile vf) throws DuplicateNameException
+	{
+		 if( !isVaildFileSystemName(vf.getNameWithExtension()))
+		 {
+			 throw new DuplicateNameException("A file or folder with the name " + vf.getNameWithExtension() +
+						" already exists in this folder", vf.getNameWithExtension());
+		 }
 
+         GroupFile pf = new GroupFile(vf, this);
+		 files.add(pf);
+		 return pf;
+	}
+	
+	
 	/**
 	 * Returns the group folder type.
 	 * 
@@ -158,9 +231,176 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @param name
 	 */
-	void setName(String name) {
+	void setName(String name) throws IllegalFileSystemNameException {
 		this.name = name;
 	}
+	
+	/**
+	 * Rename this group folder.
+	 * 
+	 * @param name - new name to give the folder
+	 * @throws DuplicateNameException - if the name already exists in as a file or folder at the current
+	 * level of the folder structure
+	 * @throws IllegalFileSystemNameException - if the name contains illegal characters within the name
+	 */
+	public void reName(String name) throws DuplicateNameException, IllegalFileSystemNameException
+	{
+		GroupFolder parent = getParent();
+		if( parent != null )
+		{
+			if( !parent.isVaildFileSystemName(name) )
+			{
+				throw new DuplicateNameException("A file or folder with the name " + name +
+						" already exists in this folder", name );
+			}
+		}
+		setName(name);
+		this.updatePaths(getPath());
+	}
+	
+	/**
+	 * Returns true if the name is ok to add to a file or folder
+	 * 
+	 * @param name of the file or folder.  If it is a file, it should contain
+	 * the extension.
+	 * 
+	 * @return true if the name does not exist.  This is case insensitive.
+	 */
+	public boolean isVaildFileSystemName(String name)
+	{
+		boolean ok = false;
+		if( getChild(name) == null && getFile(name) == null)
+		{
+			ok = true;
+		}
+		return ok;
+	}
+	
+	/**
+	 * Find a file based on the name.  If
+	 * no file is found a null object is returned.  This
+	 * is case in-sensitive
+	 * 
+	 * @param name of the file including the extension
+	 * @return the found file
+	 */
+	public GroupFile getFile(String nameWithExtension)
+	{
+		for(GroupFile gf : files)
+		{
+			if( gf.getVersionedFile().getNameWithExtension().equalsIgnoreCase(nameWithExtension))
+			{
+				return gf;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Remove the child from the set of children. 
+	 * Renumbers the tree to be correct.
+	 * 
+	 * @param child
+	 * @return true if the child is removed.
+	 */
+	public boolean removeChild(GroupFolder child)
+	{
+		boolean removed = false;
+		
+		if( children.remove(child) )
+		{
+			log.debug("removing child " + child);
+			removed = true;
+			
+			// re-number the tree
+			cleanUpTree(child.getTreeSize(), child.getRightValue());
+			log.debug( "child removed tree values = " + this);
+			child.setParent(null);
+	    }
+		return removed;
+	}
+	
+	/**
+	 * Add a child folder to this personal folder's set of children.
+	 * 
+	 * @param child to add
+	 */
+	public void addChild(GroupFolder child) throws DuplicateNameException
+	{
+		if( child.equals(this))
+		{
+			throw new IllegalStateException("cannot add a personal folder to " +
+					"itself as a child");
+		}
+		if(!isVaildFileSystemName(child.getName()))
+		{
+			throw new DuplicateNameException("Folder with the name " + 
+					child.getName() + " already exists ", child.getName());
+		}
+		if (!child.isRoot()) {
+			GroupFolder childParent = child.getParent();
+			childParent.removeChild(child);
+		}
+
+		makeRoomInTree(child);
+		child.setParent(this);
+		child.setOwner(owner);
+		child.setTreeRoot(getTreeRoot());
+		children.add(child);
+	}
+	
+	/**
+	 * Create a new child folder for this 
+	 * folder.
+	 * 
+	 * @param name of the child folder.
+	 * @return the created folder
+	 * 
+	 * @throws IllegalArgumentException if a name of a folder that
+	 * already exists is passed in.
+	 */
+	public GroupFolder createChild(String name) throws DuplicateNameException, IllegalFileSystemNameException
+	{
+	    GroupFolder c = new GroupFolder();
+		c.setName(name);
+		addChild(c);
+		return c;
+	}
+	
+	/**
+	 * Find a Folder based on the name.  If
+	 * no Folder is found a null object is returned.
+	 * 
+	 * This is <b>NOT</b>  a recursive operation and only searches
+	 * the current list of children.
+	 * 
+	 * The search is case insensitive
+	 * 
+	 * @param name of the child personal folder.
+	 * @return the found personal folder.
+	 */
+	public GroupFolder getChild(String name)
+	{
+		if( log.isDebugEnabled() )
+		{
+			log.debug("Searching for group folder " + name);
+		}
+		
+		boolean found = false;
+		Iterator<GroupFolder> iter = children.iterator();
+		
+		while( iter.hasNext() && !found)
+		{
+			GroupFolder c = iter.next();
+			if( c.getName().equalsIgnoreCase(name))
+			{
+				return c;
+		    }
+		}
+	    // not found
+		return null;
+	}	
 	
 	/**
 	 * Get the path of the group folder plus the name and
@@ -340,6 +580,17 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 		value += name == null ? 0 : name.hashCode();
 		value += getPath() == null? 0 : getPath().hashCode();
 		return value;
+	}
+	
+	/**
+	 * Remove a file from the personal folder
+	 * 
+	 * @param personalFile to remove from the folder
+	 * @return true if the personal file is removed
+	 */
+	public boolean removeGroupFile(GroupFile gf)
+	{
+		return files.remove(gf);
 	}
 	
 	/**

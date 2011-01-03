@@ -30,23 +30,33 @@ import edu.ur.persistent.BasePersistent;
  */
 public class GroupFile extends BasePersistent implements FileSystem{
 
-	/**   eclipse generated id */
+	/*   eclipse generated id */
 	private static final long serialVersionUID = 1399705843691737746L;
 	
-	/** group folder this file belongs to  */
+	/* group folder this file belongs to  */
 	private GroupFolder groupFolder;
 	
-	/** Versioned file to link to. */
+	/* Versioned file to link to. */
 	private VersionedFile versionedFile;
 	
-	/** owner of the group file */
+	/* owner of the group file */
 	private IrUser owner;
+	
+	/* Group space this file belongs to */
+	private GroupSpace groupSpace;
  
 
 	/**
      * Package protected constructor
      */
     GroupFile(){}
+    
+    public GroupFile(VersionedFile versionedFile, GroupSpace groupSpace)
+    {
+    	setOwner(owner);
+    	setVersionedFile(versionedFile);
+    	setGroupSpace(groupSpace);
+    }
     
     /**
      * Default constructor.
@@ -56,10 +66,9 @@ public class GroupFile extends BasePersistent implements FileSystem{
      * @param versionedFile - versioned file wrapped by this group file
      * @param groupFolder 
      */
-    public GroupFile(IrUser owner, VersionedFile versionedFile, GroupFolder groupFolder)
+    public GroupFile( VersionedFile versionedFile, GroupFolder groupFolder)
     {
-    	setOwner(owner);
-    	setVersionedFile(versionedFile);
+    	this(versionedFile, groupFolder.getGroupSpace());
     	setGroupFolder(groupFolder);
     }
 
@@ -153,6 +162,24 @@ public class GroupFile extends BasePersistent implements FileSystem{
 	 */
 	public void setOwner(IrUser owner) {
 		this.owner = owner;
+	}
+
+	/**
+	 * Get the group space.
+	 * 
+	 * @return
+	 */
+	public GroupSpace getGroupSpace() {
+		return groupSpace;
+	}
+
+	/**
+	 * Set the group space.
+	 * 
+	 * @param groupSpace
+	 */
+	public void setGroupSpace(GroupSpace groupSpace) {
+		this.groupSpace = groupSpace;
 	}
 	
 
