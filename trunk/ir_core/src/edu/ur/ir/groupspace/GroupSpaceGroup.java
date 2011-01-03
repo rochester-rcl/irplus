@@ -1,5 +1,5 @@
-<!--  
-   Copyright 2008 University of Rochester
+/**  
+   Copyright 2008-2010 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,14 +12,30 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
--->   
+*/  
 
-<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+package edu.ur.ir.groupspace;
 
-<suite name="ur_research">
-	<test name="UR IR Core Test">
-		<classes>
-		   <class name="edu.ur.ir.groupspace.GroupFolderTest"/>
-		</classes>
-	</test>
-</suite>
+import java.util.List;
+
+import edu.ur.ir.user.IrUser;
+/**
+ * Represents a group of users within a group space.
+ * 
+ * @author Nathan Sarr
+ *
+ */
+public class GroupSpaceGroup {
+	
+	/* list of users in the group */
+	private List<IrUser> users;
+
+	public List<IrUser> getUsers() {
+		return users;
+	}
+
+	void setUsers(List<IrUser> users) {
+		this.users = users;
+	}
+
+}

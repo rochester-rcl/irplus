@@ -70,9 +70,12 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	/* id of the groupspace to edit */
 	private Long id;
 
-	/** Message that can be displayed to the user. */
+	/* Message that can be displayed to the user. */
 	private String message;
 
+	/**
+	 * Default constructor
+	 */
 	public ManageGroupSpaces()
 	{
 		numberOfResultsToShow = 25;
@@ -128,10 +131,9 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 		{
 			return "accessDenied";
 		}
-
-		groupSpace = new GroupSpace(name, description);
 		try 
 		{
+			groupSpace = new GroupSpace(name, description);
 		    groupSpaceService.save(groupSpace);
 		} 
 		catch (DuplicateNameException e) 
@@ -146,7 +148,20 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	
 	public String update()
 	{
-		log.debug("updating group space with name = " + name);
+		log.debug("updating group space  = " + name + " id = " + id);
+		groupSpace = groupSpaceService.get(id, false);
+		
+		try {
+			groupSpace.setName(name);
+			groupSpace.setDescription(description);
+			groupSpaceService.save(groupSpace);
+		} catch (DuplicateNameException e) {
+			success = false;
+			message = getText("groupSpaceNameError", 
+					new String[]{groupSpace.getName()});
+			addFieldError("groupSpaceAlreadyExists", message);
+		} 
+		
 		return SUCCESS;
 
 	}
@@ -260,7 +275,5 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
 
 }
