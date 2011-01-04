@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -101,8 +100,6 @@ public class PersonalFolderDAOTest {
 	UniqueNameGenerator uniqueNameGenerator = (UniqueNameGenerator) 
 	ctx.getBean("uniqueNameGenerator");
 	
-	/** Logger */
-	private static final Logger log = Logger.getLogger(PersonalFolderDAOTest.class);
 	
 	/**
 	 * Setup for testing
@@ -124,6 +121,7 @@ public class PersonalFolderDAOTest {
 
 	/**
 	 * Test personal folder persistence
+	 * 
 	 * @throws DuplicateNameException 
 	 * 
 	*/
@@ -658,12 +656,13 @@ public class PersonalFolderDAOTest {
 	
 	/**
 	 * Test moving personal folders accross two different root folders.
+	 * 
+	 * @throws DuplicateNameException 
+	 * @throws IllegalFileSystemNameException 
 	 */
 	@Test
-	public void moveFoldersTest()
+	public void movePersonalFoldersTest() throws DuplicateNameException, IllegalFileSystemNameException
 	{
-		try
-		{
 		TransactionStatus ts = tm.getTransaction(td);
 		UserEmail userEmail = new UserEmail("user@email");
 
@@ -705,13 +704,6 @@ public class PersonalFolderDAOTest {
 		personalFolderDAO.makeTransient(personalFolderDAO.getById(folderC.getId(), true));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		tm.commit(ts);
-		}
-		catch(Exception e)
-		{
-			
-			log.debug("failure", e);
-			throw new RuntimeException(e);
-		}
 	}
 	
 	

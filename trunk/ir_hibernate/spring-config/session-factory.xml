@@ -121,6 +121,8 @@
                 <value>edu/ur/hibernate/ir/user/db/FolderAutoShareInfo.hbm.xml</value>
                          
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupSpace.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/groupspace/db/GroupFolder.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/groupspace/db/GroupFile.hbm.xml</value>
                                 
                 <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrClassTypePermission.hbm.xml</value>

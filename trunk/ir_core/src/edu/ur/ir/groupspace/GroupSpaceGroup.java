@@ -19,16 +19,27 @@ package edu.ur.ir.groupspace;
 import java.util.List;
 
 import edu.ur.ir.user.IrUser;
+import edu.ur.persistent.CommonPersistent;
 /**
  * Represents a group of users within a group space.
  * 
  * @author Nathan Sarr
  *
  */
-public class GroupSpaceGroup {
+public class GroupSpaceGroup extends CommonPersistent{
 	
+	/* eclipse generated id */
+	private static final long serialVersionUID = 186970723642439395L;
+
 	/* list of users in the group */
 	private List<IrUser> users;
+		
+	GroupSpaceGroup(){}
+	
+	public GroupSpaceGroup(String name)
+	{
+		setName(name);
+	}
 
 	public List<IrUser> getUsers() {
 		return users;
@@ -37,5 +48,7 @@ public class GroupSpaceGroup {
 	void setUsers(List<IrUser> users) {
 		this.users = users;
 	}
+	
+	
 
 }

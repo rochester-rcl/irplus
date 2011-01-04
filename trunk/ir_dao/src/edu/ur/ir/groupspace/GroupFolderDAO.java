@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008-2010 University of Rochester
+   Copyright 2008-2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package edu.ur.ir.groupspace;
 
+import edu.ur.dao.CrudDAO;
+
 /**
- * Represents a public page that can be displayed for the group.
+ * Interface for persisting group folder information
  * 
  * @author Nathan Sarr
  *
  */
-public class GroupPage {
-
-}
+public interface GroupFolderDAO extends CrudDAO<GroupFolder>{}

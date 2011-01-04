@@ -197,7 +197,6 @@
 		     cascade="all" 
 		     where="personal_folder_id = root_personal_folder_id"
 		     access="field"
-			 order-by="name" 
 			 lazy="true"
 			 schema="ir_user"
 			 fetch="subselect">
