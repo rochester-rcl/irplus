@@ -21,7 +21,7 @@
 <beans>
 
    <!-- ****************************************** --> 
-   <!-- Item information  -->
+   <!-- Group space information  -->
    <!-- ****************************************** --> 
    
    <bean id="groupSpaceDAOTarget" 
@@ -41,4 +41,50 @@
            </props>
        </property>
    </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Group folder information  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="groupFolderDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupFolderDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="groupFolderDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupFolderDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   
+   <!-- ****************************************** --> 
+   <!-- Group file information  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="groupFileDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupFileDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="groupFileDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupFileDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
 </beans>

@@ -19,7 +19,6 @@ package edu.ur.ir.groupspace;
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
 import edu.ur.ir.file.VersionedFile;
-import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
 
 /**
@@ -30,7 +29,7 @@ import edu.ur.persistent.BasePersistent;
  */
 public class GroupFile extends BasePersistent implements FileSystem{
 
-	/*   eclipse generated id */
+	/* eclipse generated id */
 	private static final long serialVersionUID = 1399705843691737746L;
 	
 	/* group folder this file belongs to  */
@@ -38,9 +37,6 @@ public class GroupFile extends BasePersistent implements FileSystem{
 	
 	/* Versioned file to link to. */
 	private VersionedFile versionedFile;
-	
-	/* owner of the group file */
-	private IrUser owner;
 	
 	/* Group space this file belongs to */
 	private GroupSpace groupSpace;
@@ -51,9 +47,14 @@ public class GroupFile extends BasePersistent implements FileSystem{
      */
     GroupFile(){}
     
+    /**
+     * Default constructor.
+     * 
+     * @param versionedFile
+     * @param groupSpace
+     */
     public GroupFile(VersionedFile versionedFile, GroupSpace groupSpace)
     {
-    	setOwner(owner);
     	setVersionedFile(versionedFile);
     	setGroupSpace(groupSpace);
     }
@@ -142,27 +143,10 @@ public class GroupFile extends BasePersistent implements FileSystem{
 	 * Set the version
 	 * @param versionedFile
 	 */
-	public void setVersionedFile(VersionedFile versionedFile) {
+	void setVersionedFile(VersionedFile versionedFile) {
 		this.versionedFile = versionedFile;
 	}
 	
-	/**
-	 * Get the owner of the group file.
-	 * 
-	 * @return owner ofthe group file
-	 */
-	public IrUser getOwner() {
-	    return owner;
-	}
-
-	/**
-	 * Set the owner of the group file.
-	 * 
-	 * @param owner
-	 */
-	public void setOwner(IrUser owner) {
-		this.owner = owner;
-	}
 
 	/**
 	 * Get the group space.
@@ -182,5 +166,55 @@ public class GroupFile extends BasePersistent implements FileSystem{
 		this.groupSpace = groupSpace;
 	}
 	
+	/**
+	 * Get the full path for the group file.
+	 * 
+	 * @return
+	 */
+	public String getFullPath()
+	{
+		if( versionedFile == null )
+		{
+			throw new IllegalStateException(toString());
+		}
+		return getPath() + versionedFile.getNameWithExtension();
+	}
+	
+	/**
+	 * Hash code method.
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode()
+	{
+		int hashCode = 0;
+		hashCode += groupSpace == null ? 0 : groupSpace.hashCode();
+		hashCode += getFullPath() == null ? 0 : getFullPath().hashCode();
+		return hashCode;
+	}
+
+	
+	/**
+	 * Equals 
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object o)
+	{
+		if( this == o ) return true;
+		
+		if( !(o instanceof GroupFile ) ) return false;
+		final GroupFile other = (GroupFile)o;
+		
+
+		if( (other.getGroupSpace() != null && !other.getGroupSpace().equals(groupSpace)) ||
+			(other.getGroupSpace() == null && groupSpace != null )) return false;
+		
+		if( (other.getFullPath() != null && !other.getFullPath().equals(getFullPath())) ||
+			(other.getFullPath() == null && getFullPath() != null )	) return false;
+		
+		return true;
+			
+	}	
 
 }

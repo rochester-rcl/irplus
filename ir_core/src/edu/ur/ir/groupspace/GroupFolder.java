@@ -155,7 +155,6 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 		    gf.getGroupFolder().removeGroupFile(gf);
 		}
 		
-		gf.setOwner(this.getOwner());
 		gf.setGroupFolder(this);
 		files.add(gf);
 	}
@@ -345,7 +344,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 
 		makeRoomInTree(child);
 		child.setParent(this);
-		child.setOwner(owner);
+		child.setGroupSpace(this.groupSpace);
 		child.setTreeRoot(getTreeRoot());
 		children.add(child);
 	}
@@ -360,9 +359,10 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * @throws IllegalArgumentException if a name of a folder that
 	 * already exists is passed in.
 	 */
-	public GroupFolder createChild(String name) throws DuplicateNameException, IllegalFileSystemNameException
+	public GroupFolder createChild(String name, IrUser owner) throws DuplicateNameException, IllegalFileSystemNameException
 	{
 	    GroupFolder c = new GroupFolder();
+	    c.setOwner(owner);
 		c.setName(name);
 		addChild(c);
 		return c;

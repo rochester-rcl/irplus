@@ -23,6 +23,6 @@ package edu.ur.ir.groupspace;
  * @author Nathan Sarr
  *
  */
-public class GroupProject {
+public class GroupProjectPage {
 
 }

@@ -49,8 +49,8 @@ public class GroupFolderTest
 		
 		try
 		{
-			groupFolder.createChild("folder1");
-			groupFolder.createChild("FoldeR1");
+			groupFolder.createChild("folder1", u);
+			groupFolder.createChild("FoldeR1", u);
 		    assert false : "This should fail before this with a " +
 		    		"duplicate name exception";
 		}
@@ -87,7 +87,7 @@ public class GroupFolderTest
 		// add second child child
 		try
 		{
-		    groupFolder2 = groupFolder1.createChild("groupFolder2");
+		    groupFolder2 = groupFolder1.createChild("groupFolder2", u);
 		}
 		catch(Exception e)
 		{
@@ -114,7 +114,7 @@ public class GroupFolderTest
 		// add second child child
 		try
 		{
-		    groupFolder3 = groupFolder1.createChild("groupFolder3");
+		    groupFolder3 = groupFolder1.createChild("groupFolder3",u);
 		}
 		catch(Exception e)
 		{
@@ -149,7 +149,7 @@ public class GroupFolderTest
 		// add sub folder
 		try
 		{
-		    personalSubFolder1 = groupFolder2.createChild("personalSubFolder1");
+		    personalSubFolder1 = groupFolder2.createChild("personalSubFolder1",u);
 		}
 		catch(Exception e)
 		{
@@ -193,7 +193,7 @@ public class GroupFolderTest
 		GroupFolder personalSubFolder2 = null;
 		try
 		{
-		    personalSubFolder2 = groupFolder3.createChild("personalSubFolder2");
+		    personalSubFolder2 = groupFolder3.createChild("personalSubFolder2",u);
 		}
 		catch(Exception e)
 		{
@@ -254,16 +254,16 @@ public class GroupFolderTest
 		try
 		{
 		    // add first child
-		    groupFolder2 = groupFolder1.createChild("groupFolder2");
+		    groupFolder2 = groupFolder1.createChild("groupFolder2", u);
 				
 		    // add second child child
-		    groupFolder3 = groupFolder1.createChild("groupFolder3");
+		    groupFolder3 = groupFolder1.createChild("groupFolder3",u);
 			
 		    // add sub collection
-		    personalSubFolder1 = groupFolder2.createChild("personalSubFolder1");
+		    personalSubFolder1 = groupFolder2.createChild("personalSubFolder1",u);
 		
 		    // add sub collection
-		    personalSubFolder2 = groupFolder3.createChild("personalSubFolder2");
+		    personalSubFolder2 = groupFolder3.createChild("personalSubFolder2",u);
 		}
 		catch(Exception e)
 		{
@@ -499,16 +499,16 @@ public class GroupFolderTest
 		{
 
 		    // add first child
-		    groupFolder2 = groupFolder1.createChild("groupFolder2");
+		    groupFolder2 = groupFolder1.createChild("groupFolder2",u);
 				
 		    // add second child child
-		    groupFolder3 = groupFolder1.createChild("groupFolder3");
+		    groupFolder3 = groupFolder1.createChild("groupFolder3",u);
 			
 		    // add sub folder
-		    personalSubFolder1 = groupFolder2.createChild("personalSubFolder1");
+		    personalSubFolder1 = groupFolder2.createChild("personalSubFolder1",u);
 		
 		    // add sub folder
-		    personalSubFolder2 = groupFolder3.createChild("personalSubFolder2");
+		    personalSubFolder2 = groupFolder3.createChild("personalSubFolder2",u);
 		}
 		catch(Exception e)
 		{
@@ -634,16 +634,16 @@ public class GroupFolderTest
 		try
 		{
 		    // add first child
-		    groupFolder2 = groupFolder1.createChild("groupFolder2");
+		    groupFolder2 = groupFolder1.createChild("groupFolder2",u);
 				
 		    // add second child child
-		    groupFolder3 = groupFolder1.createChild("groupFolder3");
+		    groupFolder3 = groupFolder1.createChild("groupFolder3",u);
 			
 		    // add sub folder
-		    personalSubFolder1 = groupFolder2.createChild("personalSubFolder1");
+		    personalSubFolder1 = groupFolder2.createChild("personalSubFolder1",u);
 		
 		    // add sub folder
-		    personalSubFolder2 = groupFolder3.createChild("personalSubFolder2");
+		    personalSubFolder2 = groupFolder3.createChild("personalSubFolder2",u);
 		}
 		catch(Exception e)
 		{
@@ -722,7 +722,7 @@ public class GroupFolderTest
 			+ "equal /nates_folder/ but equals " + groupFolder1.getFullPath();
 		
 		// add first child
-		GroupFolder groupFolder2 = groupFolder1.createChild("groupFolder2");
+		GroupFolder groupFolder2 = groupFolder1.createChild("groupFolder2",u);
 		
 		
 		assert groupFolder2.getFullPath().equals("/nates_folder/groupFolder2/") : "Path should "
@@ -731,7 +731,7 @@ public class GroupFolderTest
 		assert groupFolder2.getPath().equals("/nates_folder/") : "Path should "
 			    + "equal /nates_folder/ but equals " + groupFolder2.getPath();
 
-		GroupFolder groupFolder3 = groupFolder1.createChild("groupFolder3");
+		GroupFolder groupFolder3 = groupFolder1.createChild("groupFolder3",u);
 				
 		assert groupFolder3.getPath().equals("/nates_folder/") : "Path should "
 			+ "equal /nates_folder/ but equals " + groupFolder3.getPath();
@@ -741,7 +741,7 @@ public class GroupFolderTest
 
 		
 	
-		GroupFolder personalSubFolder1 =groupFolder2.createChild("personalSubFolder1");
+		GroupFolder personalSubFolder1 =groupFolder2.createChild("personalSubFolder1",u);
 	
 		
 		assert personalSubFolder1.getPath().equals("/nates_folder/groupFolder2/") : "Path should "
@@ -753,7 +753,7 @@ public class GroupFolderTest
 
 
 		// add sub collection
-		GroupFolder personalSubFolder2 = groupFolder3.createChild("personalSubFolder2");
+		GroupFolder personalSubFolder2 = groupFolder3.createChild("personalSubFolder2",u);
 
 		assert personalSubFolder2.getPath().equals("/nates_folder/groupFolder3/") : "Path should "
 			+ "equal /nates_folder/groupFolder3/ but equals " + personalSubFolder2.getPath();

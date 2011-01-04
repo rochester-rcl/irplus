@@ -3540,6 +3540,10 @@ CREATE INDEX ip_ignore_ip_address_idx
 
 CREATE SCHEMA ir_metadata_dublin_core AUTHORIZATION ir_plus;
 
+-- ---------------------------------------------
+-- contributor type dublin core mapping
+-- ---------------------------------------------
+
 CREATE TABLE ir_metadata_dublin_core.contributor_type_dc_mapping
 (
     contributor_type_dc_mapping_id BIGINT PRIMARY KEY,
@@ -3557,7 +3561,9 @@ ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping OWNER TO ir_plus
 CREATE SEQUENCE ir_metadata_dublin_core.contributor_type_dc_mapping_seq ;
 ALTER TABLE ir_metadata_dublin_core.contributor_type_dc_mapping_seq OWNER TO ir_plus;
 
-
+-- ---------------------------------------------
+-- metadata identifier type dublin core mapping
+-- ---------------------------------------------
 CREATE TABLE ir_metadata_dublin_core.identifier_type_dc_mapping
 (
     identifier_type_dc_mapping_id BIGINT PRIMARY KEY,
@@ -3578,12 +3584,23 @@ CREATE SEQUENCE ir_metadata_dublin_core.identifier_type_dc_mapping_seq ;
 ALTER TABLE ir_metadata_dublin_core.identifier_type_dc_mapping_seq OWNER TO ir_plus;
 
 
--- ---------------------------------------------
--- Create a schema to hold group space information
--- ---------------------------------------------
+
+-- ----------------------------------------------
+-- **********************************************
+       
+-- Group space schema  
+
+-- **********************************************
+-- ----------------------------------------------
+
+
 
 CREATE SCHEMA ir_group_space AUTHORIZATION ir_plus;
 
+
+-- ---------------------------------------------
+-- group space information
+-- ---------------------------------------------
 CREATE TABLE ir_group_space.group_space
 (
   group_space_id BIGINT PRIMARY KEY,
@@ -3599,3 +3616,59 @@ ALTER TABLE ir_group_space.group_space OWNER TO ir_plus;
 -- The group space sequence
 CREATE SEQUENCE ir_group_space.group_space_seq ;
 ALTER TABLE ir_group_space.group_space_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- group space folder information
+-- ---------------------------------------------
+
+CREATE TABLE ir_group_space.group_folder
+(
+  group_folder_id BIGINT PRIMARY KEY,
+  root_group_folder_id BIGINT NOT NULL,
+  parent_id BIGINT,
+  group_space_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  left_value BIGINT NOT NULL,
+  right_value BIGINT NOT NULL,
+  name TEXT NOT NULL,
+  path TEXT NOT NULL,
+  description TEXT,
+  version INTEGER,
+  FOREIGN KEY (parent_id) REFERENCES ir_group_space.group_folder (group_folder_id),
+  FOREIGN KEY (root_group_folder_id) REFERENCES ir_group_space.group_folder (group_folder_id),
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
+  UNIQUE (parent_id, name),
+  UNIQUE (group_space_id, path, name)
+);
+ALTER TABLE ir_group_space.group_folder OWNER TO ir_plus;
+
+-- The group folder sequence
+CREATE SEQUENCE ir_group_space.group_folder_seq ;
+ALTER TABLE ir_group_space.group_folder_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Group file Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_space.group_file
+(
+    group_file_id BIGINT PRIMARY KEY,
+    group_folder_id BIGINT,
+    user_id BIGINT NOT NULL,
+    group_space_id BIGINT NOT NULL,
+    versioned_file_id BIGINT NOT NULL,
+    version INTEGER,
+    FOREIGN KEY (group_folder_id) REFERENCES ir_group_space.group_folder (group_folder_id),
+    FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file (versioned_file_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
+    FOREIGN KEY (group_space_id) REFERENCES ir_group_space.group_space (group_space_id),
+
+    UNIQUE(group_space_id, group_folder_id, versioned_file_id)
+);
+ALTER TABLE ir_group_space.group_file OWNER TO ir_plus;
+
+-- The ir file sequence
+CREATE SEQUENCE ir_group_space.group_file_seq;
+ALTER TABLE ir_group_space.group_file_seq OWNER TO ir_plus;
+

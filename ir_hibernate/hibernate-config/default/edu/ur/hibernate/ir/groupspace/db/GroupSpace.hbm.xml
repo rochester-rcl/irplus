@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!--  
-   Copyright 2008 University of Rochester
+   Copyright 2008 - 2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -54,6 +54,31 @@
 		          access="field" 
 		          not-null="true"/>
 			
+		<!--  Root Group Folders -->
+		<set name="rootFolders" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all" 
+		     where="group_folder_id = root_group_folder_id"
+		     access="field" 
+			 lazy="true"
+			 schema="ir_group_space"
+			 fetch="subselect">
+			<key column="group_space_id"/>
+			<one-to-many class="GroupFolder"/>
+		</set>
+		
+		<!--  Root Group Files -->
+		<set name="rootFiles" inverse="true" 
+		     optimistic-lock="false"
+		     cascade="all" 
+		     where="group_folder_id is null"
+		     access="field"
+			 lazy="true"
+			 schema="ir_group_space"
+			 fetch="subselect">
+			<key column="group_space_id"/>
+			<one-to-many class="GroupFile"/>
+		</set>
 		
 	</class>
 		

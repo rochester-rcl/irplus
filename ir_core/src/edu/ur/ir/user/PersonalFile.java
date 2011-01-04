@@ -121,9 +121,8 @@ public class PersonalFile extends BasePersistent implements FileSystem{
 	public int hashCode()
 	{
 		int hashCode = 0;
-		hashCode += getName() == null ? 0 : getName().hashCode();
 		hashCode += owner == null ? 0 : owner.hashCode();
-		hashCode += personalFolder == null ? 0 : personalFolder.hashCode();
+		hashCode += getFullPath() == null ? 0 : getFullPath().hashCode();
 		return hashCode;
 	}
 	
