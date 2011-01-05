@@ -3661,12 +3661,55 @@ CREATE TABLE ir_group_space.group_file
     FOREIGN KEY (group_folder_id) REFERENCES ir_group_space.group_folder (group_folder_id),
     FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file (versioned_file_id),
     FOREIGN KEY (group_space_id) REFERENCES ir_group_space.group_space (group_space_id),
-
     UNIQUE(group_space_id, group_folder_id, versioned_file_id)
 );
 ALTER TABLE ir_group_space.group_file OWNER TO ir_plus;
 
--- The ir file sequence
+-- The group file sequence
 CREATE SEQUENCE ir_group_space.group_file_seq;
 ALTER TABLE ir_group_space.group_file_seq OWNER TO ir_plus;
 
+-- ---------------------------------------------
+-- Group space owner Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_space.group_space_owner
+(
+    group_space_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    FOREIGN KEY (group_space_id) REFERENCES ir_group_space.group_space (group_space_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
+    UNIQUE(group_space_id, user_id)
+);
+ALTER TABLE ir_group_space.group_space_owner OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Group space group Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_space.group_space_group
+(
+    group_space_group_id BIGINT PRIMARY KEY,
+    group_space_id BIGINT NOT NULL,
+    name TEXT NOT NULL,
+    lower_case_name TEXT NOT NULL,
+    description TEXT,
+    FOREIGN KEY (group_space_id) REFERENCES ir_group_space.group_space (group_space_id)
+);
+ALTER TABLE ir_group_space.group_space_group OWNER TO ir_plus;
+
+-- The group file sequence
+CREATE SEQUENCE ir_group_space.group_space_group_seq;
+ALTER TABLE ir_group_space.group_space_group_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Group space group membership Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_space.group_space_group_members
+(
+    group_space_group_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    FOREIGN KEY (group_space_group_id) REFERENCES ir_group_space.group_space_group (group_space_group_id),
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
+    PRIMARY KEY(group_space_group_id, user_id)
+);
+ALTER TABLE ir_group_space.group_space_group_members OWNER TO ir_plus;
