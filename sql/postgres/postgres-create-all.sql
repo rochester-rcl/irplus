@@ -3655,13 +3655,11 @@ CREATE TABLE ir_group_space.group_file
 (
     group_file_id BIGINT PRIMARY KEY,
     group_folder_id BIGINT,
-    user_id BIGINT NOT NULL,
     group_space_id BIGINT NOT NULL,
     versioned_file_id BIGINT NOT NULL,
     version INTEGER,
     FOREIGN KEY (group_folder_id) REFERENCES ir_group_space.group_folder (group_folder_id),
     FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file (versioned_file_id),
-    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
     FOREIGN KEY (group_space_id) REFERENCES ir_group_space.group_space (group_space_id),
 
     UNIQUE(group_space_id, group_folder_id, versioned_file_id)

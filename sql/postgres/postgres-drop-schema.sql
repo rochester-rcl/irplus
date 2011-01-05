@@ -22,9 +22,12 @@
 -- Drop Group spaces tables/schema
 -- ---------------------------------------------
 
+DROP TABLE ir_group_space.group_file;
 DROP TABLE ir_group_space.group_folder;
 DROP TABLE ir_group_space.group_space;
 
+
+DROP SEQUENCE ir_group_space.group_file_seq;
 DROP SEQUENCE ir_group_space.group_space_seq;
 DROP SEQUENCE ir_group_space.group_folder_seq;
 
