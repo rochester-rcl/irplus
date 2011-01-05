@@ -80,6 +80,19 @@
 			<one-to-many class="GroupFile"/>
 		</set>
 		
+	    <!-- users that own this group space -->
+		<set name="owners" 
+		    optimistic-lock="false"
+		    schema="ir_group_space"
+		    table="group_space_owner"  
+		    cascade="save-update" 
+		    access="field" 
+		    lazy="true"
+		    fetch="subselect">
+			<key column="group_space_id" not-null="true"/>
+			<many-to-many column="user_id" unique="true" class="edu.ur.ir.user.IrUser"/>
+		</set>
+		
 	</class>
 		
 	<!--  Get a count of groupspaces in the system -->
@@ -96,12 +109,12 @@
 	<!--  Get groupspaces name order ascending-->
 	<query name="groupSpaceByNameAsc">
 	    select groupSpace from GroupSpace as groupSpace
-		order by groupSpace.name asc
+		order by groupSpace.lowerCaseName asc
 	</query>
 
 	<!--  Get groupspaces name order descending -->
 	<query name="groupSpaceByNameDesc">
 	    select groupSpace from GroupSpace as groupSpace
-		order by groupSpace.name desc
+		order by groupSpace.lowerCaseName desc
 	</query>	
 </hibernate-mapping>

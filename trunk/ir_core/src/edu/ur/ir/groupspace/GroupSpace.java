@@ -49,7 +49,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	private String lowerCaseName;
 
 	/* Owners of the group space */
-	private Set<IrUser> owners;
+	private Set<IrUser> owners = new HashSet<IrUser>();
 	
 	/* Description of the group space */
 	private String description;
@@ -119,6 +119,17 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 */
 	public Set<IrUser> getOwners() {
 		return Collections.unmodifiableSet(owners);
+	}
+	
+	/**
+	 * Determine if the user is an owner of this group space.
+	 * 
+	 * @param user - user to determine if they are an owner of the group space.
+	 * @return - true if the user is an owner of the group space.
+	 */
+	public boolean getIsOwner(IrUser user)
+	{
+		return owners.contains(user);
 	}
 
 	/**

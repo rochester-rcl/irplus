@@ -27,6 +27,10 @@ import org.testng.annotations.Test;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.ir.groupspace.GroupSpace;
 import edu.ur.ir.groupspace.GroupSpaceDAO;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.IrUserDAO;
+import edu.ur.ir.user.UserEmail;
+import edu.ur.ir.user.UserManager;
 
 /**
  * Group space data access object test.
@@ -49,8 +53,12 @@ public class GroupSpaceDAOTest {
     TransactionDefinition td = new DefaultTransactionDefinition(
 	TransactionDefinition.PROPAGATION_REQUIRED);
 	
+    /** User data access */
+    IrUserDAO userDAO= (IrUserDAO) ctx.getBean("irUserDAO");
+
+    
 	/**
-	 * Test content type persistance
+	 * Test group space persistence
 	 */
 	@Test
 	public void simpleGroupSpaceDAOTest() throws Exception{
@@ -71,5 +79,45 @@ public class GroupSpaceDAOTest {
         groupSpaceDAO.makeTransient(other);
         assert  groupSpaceDAO.getById(other.getId(), false) == null : "Should no longer be able to find groupSpace";
 	    tm.commit(ts);
+	}
+	
+	/**
+	 * Test adding onwer to group spaces
+	 */
+	@Test
+	public void addGroupSpaceOwnerDAOTest() throws Exception{
+
+         
+        TransactionStatus ts = tm.getTransaction(td);
+		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
+		
+        // create a user who has their own folder
+  		UserManager userManager = new UserManager();
+		IrUser user = userManager.createUser("passowrd", "userName");
+		UserEmail userEmail = new UserEmail("user@email");
+		user.addUserEmail(userEmail, true);
+		user.setAccountExpired(true);
+		user.setAccountLocked(true);
+		user.setCredentialsExpired(true);
+		
+		// create the user and their folder.
+		userDAO.makePersistent(user);
+		
+		groupSpace.addOwner(user);
+		
+        groupSpaceDAO.makePersistent(groupSpace);
+ 	    tm.commit(ts);
+ 	    
+ 	    ts = tm.getTransaction(td);
+ 		GroupSpace other = groupSpaceDAO.getById(groupSpace.getId(), false);
+ 		assert other.getIsOwner(user) : "User " + user + " should be owner of project but is not";
+        tm.commit(ts);        
+
+ 	    ts = tm.getTransaction(td);
+ 	    other = groupSpaceDAO.getById(groupSpace.getId(), false);
+        groupSpaceDAO.makeTransient(other);
+        assert  groupSpaceDAO.getById(other.getId(), false) == null : "Should no longer be able to find groupSpace";
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+        tm.commit(ts);
 	}
 }
