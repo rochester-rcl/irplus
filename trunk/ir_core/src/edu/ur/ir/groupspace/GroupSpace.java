@@ -60,6 +60,9 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	/*  Root files for this person.  */
 	private Set<GroupFile> rootFiles = new HashSet<GroupFile>();
 	
+	/* list of groups for this group space */
+	private Set<GroupSpaceGroup> groups = new HashSet<GroupSpaceGroup>();
+
 	/* date this record was created */
 	private Timestamp createdDate;
 
@@ -199,13 +202,12 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 */
 	public String toString()
 	{
-		StringBuffer sb = new StringBuffer("[ Group folder id = ");
+		StringBuffer sb = new StringBuffer("[ Group space id = ");
 		sb.append(id);
 		sb.append( " name = ");
 		sb.append(name);
 		sb.append(" description = ");
 		sb.append(description);
-		sb.append( " path = ");
 		sb.append("]");
 		return sb.toString();
 	}
@@ -507,5 +509,73 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 		}
 		return ok;
 	}
+	
+	/**
+	 * Get a group by name.
+	 * 
+	 * @param name - name of the group
+	 * @return group if found otherwise null
+	 */
+	public GroupSpaceGroup getGroup(String name)
+	{
+	    for(GroupSpaceGroup group : groups)
+	    {
+	    	if( group.getName().equalsIgnoreCase(name))
+	    	{
+	    		return group;
+	    	}
+	    }
+	    return null;
+	}
+	
+	/**
+	 * @param name - name to create the group with
+	 * @param description - description of the group
+	 * @return - created group
+	 * @throws DuplicateNameException - if a group with the given name exists regardless of case 
+	 */
+	public GroupSpaceGroup createGroup(String name, String description) throws DuplicateNameException
+	{
+		if( getGroup(name) != null )
+		{
+			throw new DuplicateNameException(name);
+		}
+		GroupSpaceGroup group = new GroupSpaceGroup(this, name, description);
+		groups.add(group);
+		return group;
+
+	}
+	
+	/**
+	 * Create a group with the specified name for this group.
+	 * 
+	 * @param name - name to create the group with
+	 * @return the created group.
+	 * @throws DuplicateNameException - if a group with the given name exists regardless of case 
+	 */
+	public GroupSpaceGroup createGroup(String name) throws DuplicateNameException
+	{
+		return createGroup(name, null);
+	}
+	
+	/**
+	 * Get the groups for this group space.  This returns an
+	 * unmodifiable set.
+	 * 
+	 * @return list of groups 
+	 */
+	public Set<GroupSpaceGroup> getGroups() {
+		return Collections.unmodifiableSet(groups);
+	}
+
+	/**
+	 * Set the groups for this space.
+	 * 
+	 * @param groups
+	 */
+	void setGroups(Set<GroupSpaceGroup> groups) {
+		this.groups = groups;
+	}
+
 
 }
