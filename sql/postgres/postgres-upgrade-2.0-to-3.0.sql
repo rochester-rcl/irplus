@@ -135,13 +135,14 @@ CREATE TABLE ir_group_space.group_folder
   FOREIGN KEY (root_group_folder_id) REFERENCES ir_group_space.group_folder (group_folder_id),
   FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
   UNIQUE (parent_id, name),
-  UNIQUE (group_id, path, name)
+  UNIQUE (group_space_id, path, name)
 );
 ALTER TABLE ir_group_space.group_folder OWNER TO ir_plus;
 
 -- The group folder sequence
 CREATE SEQUENCE ir_group_space.group_folder_seq ;
 ALTER TABLE ir_group_space.group_folder_seq OWNER TO ir_plus;
+
 
 -- ---------------------------------------------
 -- Group file Information
