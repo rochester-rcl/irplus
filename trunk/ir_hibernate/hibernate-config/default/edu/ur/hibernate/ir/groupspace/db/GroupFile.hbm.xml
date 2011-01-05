@@ -56,7 +56,7 @@
         <!--  The group folder -->
         <many-to-one name="groupFolder" class="GroupFolder" 
               unique="true" 
-              column="personal_folder_id" 
+              column="group_folder_id" 
               cascade="save-update"
               access="field"/>
 

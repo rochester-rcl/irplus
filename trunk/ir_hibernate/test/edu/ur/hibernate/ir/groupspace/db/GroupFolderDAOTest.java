@@ -86,6 +86,7 @@ public class GroupFolderDAOTest {
 	UniqueNameGenerator uniqueNameGenerator = (UniqueNameGenerator) 
 	ctx.getBean("uniqueNameGenerator");
 	
+	/** Group space data access */
 	GroupSpaceDAO groupSpaceDAO = (GroupSpaceDAO) ctx
 	.getBean("groupSpaceDAO");
 	
