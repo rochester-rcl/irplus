@@ -16,10 +16,13 @@
 
 package edu.ur.ir.groupspace;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.CommonPersistent;
+
 /**
  * Represents a group of users within a group space.
  * 
@@ -32,23 +35,150 @@ public class GroupSpaceGroup extends CommonPersistent{
 	private static final long serialVersionUID = 186970723642439395L;
 
 	/* list of users in the group */
-	private List<IrUser> users;
-		
+	private Set<IrUser> users = new HashSet<IrUser>();
+	
+	/* Owning group Space  */
+	private GroupSpace groupSpace;
+	
+	/* lower case name value */
+	private String lowerCaseName;
+
+	/**
+	 * Package protected constructor
+	 */
 	GroupSpaceGroup(){}
 	
-	public GroupSpaceGroup(String name)
+	/**
+	 * Create a group space with the given name.
+	 * 
+	 * @param name
+	 */
+	public GroupSpaceGroup(GroupSpace groupSpace, String name)
 	{
+		this.groupSpace = groupSpace;
 		setName(name);
 	}
-
-	public List<IrUser> getUsers() {
-		return users;
+	
+	/**
+	 * Create a group space with the given name and description.
+	 * 
+	 * @param groupSpace
+	 * @param name
+	 * @param description
+	 */
+	public GroupSpaceGroup(GroupSpace groupSpace, String name, String description)
+	{
+		this(groupSpace, name);
+		setDescription(description);
 	}
 
-	void setUsers(List<IrUser> users) {
+	/**
+	 * Get the list of users in this group space.
+	 * 
+	 * @return
+	 */
+	public Set<IrUser> getUsers() {
+		return Collections.unmodifiableSet(users);
+	}
+
+	/**
+	 * Set the users in this group space group.
+	 * 
+	 * @param users
+	 */
+	void setUsers(Set<IrUser> users) {
 		this.users = users;
 	}
 	
+	/**
+	 * Get the group space.
+	 * 
+	 * @return
+	 */
+	public GroupSpace getGroupSpace() {
+		return groupSpace;
+	}
+
+	/**
+	 * Set the group space.
+	 * 
+	 * @param groupSpace
+	 */
+	void setGroupSpace(GroupSpace groupSpace) {
+		this.groupSpace = groupSpace;
+	}
+
+	/**
+	 * Get the lower case name value.
+	 * 
+	 * @return
+	 */
+	public String getLowerCaseName() {
+		return lowerCaseName;
+	}
 	
+	/**
+	 * Set the name - also sets the lower case name value.
+	 * 
+	 * @see edu.ur.persistent.CommonPersistent#setName(java.lang.String)
+	 */
+	public void setName(String name)
+	{
+		super.setName(name);
+		this.lowerCaseName = name.toLowerCase();
+	}
+	
+	
+	/**
+	 * Hash code is based on the name of
+	 * the group space
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode()
+	{
+		int value = 0;
+		value += name == null ? 0 : name.hashCode();
+		value += groupSpace == null ? 0 : groupSpace.hashCode();
+		return value;
+	}
+	
+	/**
+	 * Equals is tested based on name ignoring case 
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof GroupSpaceGroup)) return false;
+
+		final GroupSpaceGroup other = (GroupSpaceGroup) o;
+
+		if( ( lowerCaseName != null && !lowerCaseName.equalsIgnoreCase(other.getLowerCaseName()) ) ||
+			( lowerCaseName == null && other.getLowerCaseName() != null ) ) return false;
+
+		if( ( groupSpace != null && !groupSpace.equals(other.getGroupSpace()) ) ||
+			( groupSpace == null && other.getGroupSpace() != null ) ) return false;
+
+		return true;
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer("[ Group space id = ");
+		sb.append(id);
+		sb.append( " name = ");
+		sb.append(name);
+		sb.append(" description = ");
+		sb.append(description);
+		sb.append("]");
+		return sb.toString();
+	}
+
 
 }
