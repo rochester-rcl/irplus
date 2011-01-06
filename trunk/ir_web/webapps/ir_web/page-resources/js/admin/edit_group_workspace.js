@@ -20,7 +20,7 @@
 YAHOO.namespace("ur.edit.groupspace");
 
 //actions for adding,updating and removing content types
-var getGroupSpaceAction = basePath + 'admin/getGroupSpace.action';
+var getGroupSpaceAction = basePath + 'admin/getGroupWorkspace.action';
 /**
  * content type namespace
  */
@@ -31,7 +31,7 @@ YAHOO.ur.edit.groupspace =
 		// been created
 		init : function() 
 		{
-	        var myTabs = new YAHOO.widget.TabView("groupSpacePropertiesTabs");
+	        var myTabs = new YAHOO.widget.TabView("groupWorkspacePropertiesTabs");
 		}
 }
 

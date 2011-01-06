@@ -28,23 +28,23 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public interface GroupSpaceService extends Serializable{
+public interface GroupWorkspaceService extends Serializable{
 	
 	/**
 	 * Save the group space to the system.
 	 * 
-	 * @param groupSpace - group space to add to the system.
+	 * @param groupWorkspace - group space to add to the system.
 	 * @throws DuplicateNameException - if the group space already exists 
 	 */
-	public void save(GroupSpace groupSpace) throws DuplicateNameException;
+	public void save(GroupWorkspace groupWorkspace) throws DuplicateNameException;
 	
 	
     /**
      * Delete the group space from the system.
      * 
-     * @param groupSpace
+     * @param groupWorkspace
      */
-    public void delete(GroupSpace groupSpace);
+    public void delete(GroupWorkspace groupWorkspace);
     
     /**
      * Get a count of the group spaces in the system.
@@ -61,7 +61,7 @@ public interface GroupSpaceService extends Serializable{
      * 
      * @return - upgrade the lock
      */
-    public GroupSpace get(Long id, boolean lock);
+    public GroupWorkspace get(Long id, boolean lock);
     
 	/**
 	 * Get the list of group spaces ordered by name.
@@ -73,6 +73,6 @@ public interface GroupSpaceService extends Serializable{
 	 * 
 	 * @return list of group spaces found.
 	 */
-	public List<GroupSpace> getGroupspacesNameOrder(int rowStart, int numberOfResultsToShow, OrderType orderType);
+	public List<GroupWorkspace> getGroupWorkspacesNameOrder(int rowStart, int numberOfResultsToShow, OrderType orderType);
 
 }

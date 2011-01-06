@@ -14,14 +14,33 @@
    limitations under the License.
 */  
 
+
 package edu.ur.ir.groupspace;
 
+import java.util.List;
+
+import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
+import edu.ur.dao.UniqueNameDAO;
+import edu.ur.order.OrderType;
 
 /**
- * Interface for persisting group folder information
+ * Data access Interface for dealing with group space information.
  * 
  * @author Nathan Sarr
  *
  */
-public interface GroupFolderDAO extends CrudDAO<GroupFolder>{}
+public interface GroupWorkspaceDAO extends CrudDAO<GroupWorkspace>, CountableDAO, UniqueNameDAO<GroupWorkspace>
+{
+	/**
+	 * Get the list of group spaces.
+	 * 
+	 * 
+	 * @param rowStart - start position
+	 * @param numberOfResultsToShow - number of rows to grab.
+	 * @param sortType - Order (Desc/Asc) 
+	 * 
+	 * @return list of groupspaces found.
+	 */
+	public List<GroupWorkspace> getGroupWorkspacesNameOrder(int rowStart, int numberOfResultsToShow, OrderType orderType);
+}

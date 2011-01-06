@@ -19,28 +19,22 @@ package edu.ur.hibernate.ir.groupspace.db;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.groupspace.GroupFolder;
-import edu.ur.ir.groupspace.GroupFolderDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
+import edu.ur.ir.groupspace.GroupWorkspaceFileDAO;
 
-/**
- * Persistent storage for group folder data.
- * 
- * @author Nathan Sarr
- *
- */
-public class HbGroupFolderDAO implements GroupFolderDAO{
+public class HbGroupWorkspaceFileDAO implements GroupWorkspaceFileDAO{
 
-	/** eclipse generated id*/
-	private static final long serialVersionUID = 7151402796946586912L;
+	/** eclipse generated id */
+	private static final long serialVersionUID = -8181551931356055781L;
 	
 	/** hibernate helper  */
-	private final HbCrudDAO<GroupFolder> hbCrudDAO;
+	private final HbCrudDAO<GroupWorkspaceFile> hbCrudDAO;
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbGroupFolderDAO() {
-		hbCrudDAO = new HbCrudDAO<GroupFolder>(GroupFolder.class);
+	public HbGroupWorkspaceFileDAO() {
+		hbCrudDAO = new HbCrudDAO<GroupWorkspaceFile>(GroupWorkspaceFile.class);
 	}
 	
 	/**
@@ -58,7 +52,7 @@ public class HbGroupFolderDAO implements GroupFolderDAO{
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */
-	public GroupFolder getById(Long id, boolean lock) {
+	public GroupWorkspaceFile getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
@@ -67,7 +61,7 @@ public class HbGroupFolderDAO implements GroupFolderDAO{
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
 	 */
-	public void makePersistent(GroupFolder entity) {
+	public void makePersistent(GroupWorkspaceFile entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
@@ -76,7 +70,7 @@ public class HbGroupFolderDAO implements GroupFolderDAO{
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
-	public void makeTransient(GroupFolder entity) {
+	public void makeTransient(GroupWorkspaceFile entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 

@@ -30,7 +30,7 @@
 <html>
 
 <head>
-    <title>Group Spaces</title>
+    <title>Group Workspaces</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -54,7 +54,7 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/util/wait_dialog.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
- 	<ur:js src="page-resources/js/admin/groupspaces.js"/>
+ 	<ur:js src="page-resources/js/admin/group_workspaces.js"/>
 </head>
 
 <body class="yui-skin-sam">
@@ -69,14 +69,14 @@
   
         <div id="bd">
       
-		    <button id="showGroupSpace" 
+		    <button id="showGroupWorkspace" 
 		            class="ur_button" 
  		            onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';">New Group Workspace</button> 
 	        <br/>
 	        <br/>
-	        <div id="groupSpaceTable">
-	            <c:import url="groupspace_table.jsp"/>
+	        <div id="groupWorkspaceTable">
+	            <c:import url="group_workspace_table.jsp"/>
 	        </div>
 	
       </div>
@@ -89,25 +89,25 @@
   <!--  End doc div-->
   
   <!-- form for groupsaces -->
-  <div id="newGroupSpaceDialog" class="hidden">
+  <div id="newGroupWorkspaceDialog" class="hidden">
       <div class="hd">Group Workspace Information</div>
       <div class="bd">
-          <form id="addGroupSpace" 
-                            name="newGroupSapceForm" 
+          <form id="addGroupWorkspace" 
+                            name="newGroupWorkspaceForm" 
 		                    method="post"
-		                    action="/admin/createGroupSpace.action">
-	          <div id="groupSpaceDialogFields">
-	              <c:import url="groupspace_form.jsp"/>
+		                    action="/admin/createGroupWorkspace.action">
+	          <div id="groupWorkspaceDialogFields">
+	              <c:import url="group_workspace_form.jsp"/>
 	          </div>
 	      </form>
       </div>
   </div>
   
-  <div id="deleteGroupSpaceDialog" class="hidden">
+  <div id="deleteGroupWorkspaceDialog" class="hidden">
       <div class="hd">Delete Group Workspace</div>
 		<div class="bd">
-		    <form id="deleteGroupSpaceForm" name="deleteGroupSpace" method="post" 
-		                action="/admin/deleteGroupSpace.action">
+		    <form id="deleteGroupWorkspaceForm" name="deleteGroupWorkspace" method="post" 
+		                action="/admin/deleteGroupWorkspace.action">
 			   <p>Are you sure you wish to delete the selected group workspace?</p>
 			   <input type="hidden" id="deleteId" name="id" value=""/>
 		    </form>

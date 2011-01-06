@@ -8,4 +8,4 @@ import java.io.Serializable;
  * @author Nathan Sarr
  *
  */
-public interface GroupFileSystemService extends Serializable{}
+public interface GroupWorkspaceFileSystemService extends Serializable{}

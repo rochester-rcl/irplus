@@ -24,8 +24,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.groupspace.GroupSpace;
-import edu.ur.ir.groupspace.GroupSpaceDAO;
+import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceDAO;
 import edu.ur.order.OrderType;
 
 /**
@@ -34,20 +34,20 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class HbGroupSpaceDAO implements GroupSpaceDAO
+public class HbGroupWorkspaceDAO implements GroupWorkspaceDAO
 {
 
 	/** eclipse generated id*/
 	private static final long serialVersionUID = -7945008201300712513L;
 	
 	/** hibernate helper  */
-	private final HbCrudDAO<GroupSpace> hbCrudDAO;
+	private final HbCrudDAO<GroupWorkspace> hbCrudDAO;
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbGroupSpaceDAO() {
-		hbCrudDAO = new HbCrudDAO<GroupSpace>(GroupSpace.class);
+	public HbGroupWorkspaceDAO() {
+		hbCrudDAO = new HbCrudDAO<GroupWorkspace>(GroupWorkspace.class);
 	}
 	
 	/**
@@ -65,7 +65,7 @@ public class HbGroupSpaceDAO implements GroupSpaceDAO
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */
-	public GroupSpace getById(Long id, boolean lock) {
+	public GroupWorkspace getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
@@ -74,7 +74,7 @@ public class HbGroupSpaceDAO implements GroupSpaceDAO
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
 	 */
-	public void makePersistent(GroupSpace entity) {
+	public void makePersistent(GroupWorkspace entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
@@ -83,7 +83,7 @@ public class HbGroupSpaceDAO implements GroupSpaceDAO
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
-	public void makeTransient(GroupSpace entity) {
+	public void makeTransient(GroupWorkspace entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 
@@ -102,10 +102,10 @@ public class HbGroupSpaceDAO implements GroupSpaceDAO
 	 * 
 	 * @see edu.ur.dao.UniqueNameDAO#findByUniqueName(java.lang.String)
 	 */
-	public GroupSpace findByUniqueName(String name) {
+	public GroupWorkspace findByUniqueName(String name) {
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupSpaceByName");
 		q.setParameter("lowerCaseName", name.toLowerCase());
-		return (GroupSpace)q.uniqueResult();
+		return (GroupWorkspace)q.uniqueResult();
 	}
 	
 	/**
@@ -119,7 +119,7 @@ public class HbGroupSpaceDAO implements GroupSpaceDAO
 	 * @return list of group spaces found.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<GroupSpace> getGroupspacesNameOrder(int rowStart, int numberOfResultsToShow, OrderType orderType)
+	public List<GroupWorkspace> getGroupWorkspacesNameOrder(int rowStart, int numberOfResultsToShow, OrderType orderType)
 	{	
 	    Query q = null;
 	    Session session = hbCrudDAO.getSessionFactory() .getCurrentSession();

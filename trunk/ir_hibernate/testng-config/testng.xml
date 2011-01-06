@@ -112,9 +112,9 @@
 		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.ContributorTypeDublinCoreMappingDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.IdentifierTypeDublinCoreMappingDAOTest"/>
 		     
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupFolderDAOTest"/>
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupSpaceDAOTest"/>
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupFileDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceFolderDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceFileDAOTest"/>
 
 		</classes>
 	</test>

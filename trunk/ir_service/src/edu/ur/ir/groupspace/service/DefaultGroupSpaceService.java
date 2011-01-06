@@ -19,9 +19,9 @@ package edu.ur.ir.groupspace.service;
 import java.util.List;
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.groupspace.GroupSpace;
-import edu.ur.ir.groupspace.GroupSpaceDAO;
-import edu.ur.ir.groupspace.GroupSpaceService;
+import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.order.OrderType;
 
 /**
@@ -30,13 +30,13 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class DefaultGroupSpaceService implements GroupSpaceService {
+public class DefaultGroupSpaceService implements GroupWorkspaceService {
 	
 	/* eclipse generated id */
 	private static final long serialVersionUID = 1L;
 	
 	/* group space data access object  */
-	private GroupSpaceDAO groupSpaceDAO;
+	private GroupWorkspaceDAO groupWorkspaceDAO;
 
 	/**
 	 * Save the group space to the system.
@@ -44,14 +44,14 @@ public class DefaultGroupSpaceService implements GroupSpaceService {
 	 * @param groupSpace - group space to add to the system.
 	 * @throws DuplicateNameException - if the group space already exists 
 	 */
-	public void save(GroupSpace groupSpace) throws DuplicateNameException
+	public void save(GroupWorkspace groupSpace) throws DuplicateNameException
 	{
-		GroupSpace other = groupSpaceDAO.findByUniqueName(groupSpace.getName());
+		GroupWorkspace other = groupWorkspaceDAO.findByUniqueName(groupSpace.getName());
 		if( other != null && !other.getId().equals(groupSpace.getId()))
 		{
 			throw new DuplicateNameException("Duplicate name error " + groupSpace.getName());
 		}
-		groupSpaceDAO.makePersistent(groupSpace);
+		groupWorkspaceDAO.makePersistent(groupSpace);
 	}
 	
 	
@@ -60,9 +60,9 @@ public class DefaultGroupSpaceService implements GroupSpaceService {
      * 
      * @param groupSpace
      */
-    public void delete(GroupSpace groupSpace)
+    public void delete(GroupWorkspace groupSpace)
     {
-    	groupSpaceDAO.makeTransient(groupSpace);
+    	groupWorkspaceDAO.makeTransient(groupSpace);
     }
     
     /**
@@ -72,7 +72,7 @@ public class DefaultGroupSpaceService implements GroupSpaceService {
      */
     public Long getCount()
     {
-    	return groupSpaceDAO.getCount();
+    	return groupWorkspaceDAO.getCount();
     }
     
     /**
@@ -83,18 +83,18 @@ public class DefaultGroupSpaceService implements GroupSpaceService {
      * 
      * @return - upgrade the lock
      */
-    public GroupSpace get(Long id, boolean lock)
+    public GroupWorkspace get(Long id, boolean lock)
     {
-    	return groupSpaceDAO.getById(id, lock);
+    	return groupWorkspaceDAO.getById(id, lock);
     }
     
 	/**
 	 * Set the group space data access object.
 	 * 
-	 * @param groupSpaceDAO
+	 * @param groupWorkspaceDAO
 	 */
-	public void setGroupSpaceDAO(GroupSpaceDAO groupSpaceDAO) {
-		this.groupSpaceDAO = groupSpaceDAO;
+	public void setGroupWorkspaceDAO(GroupWorkspaceDAO groupWorkspaceDAO) {
+		this.groupWorkspaceDAO = groupWorkspaceDAO;
 	}
 	
 	/**
@@ -107,9 +107,9 @@ public class DefaultGroupSpaceService implements GroupSpaceService {
 	 * 
 	 * @return list of group spaces found.
 	 */
-	public List<GroupSpace> getGroupspacesNameOrder(int rowStart, int numberOfResultsToShow, OrderType orderType)
+	public List<GroupWorkspace> getGroupWorkspacesNameOrder(int rowStart, int numberOfResultsToShow, OrderType orderType)
 	{
-		return groupSpaceDAO.getGroupspacesNameOrder(rowStart, numberOfResultsToShow, orderType);
+		return groupWorkspaceDAO.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, orderType);
 	}
 
 

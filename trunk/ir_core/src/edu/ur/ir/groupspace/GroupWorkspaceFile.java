@@ -27,25 +27,25 @@ import edu.ur.persistent.BasePersistent;
  * @author Nathan Sarr
  *
  */
-public class GroupFile extends BasePersistent implements FileSystem{
+public class GroupWorkspaceFile extends BasePersistent implements FileSystem{
 
 	/* eclipse generated id */
 	private static final long serialVersionUID = 1399705843691737746L;
 	
 	/* group folder this file belongs to  */
-	private GroupFolder groupFolder;
+	private GroupWorkspaceFolder groupWorkspaceFolder;
 	
 	/* Versioned file to link to. */
 	private VersionedFile versionedFile;
 	
 	/* Group space this file belongs to */
-	private GroupSpace groupSpace;
+	private GroupWorkspace groupWorkspace;
  
 
 	/**
      * Package protected constructor
      */
-    GroupFile(){}
+    GroupWorkspaceFile(){}
     
     /**
      * Default constructor.
@@ -53,24 +53,24 @@ public class GroupFile extends BasePersistent implements FileSystem{
      * @param versionedFile
      * @param groupSpace
      */
-    public GroupFile(VersionedFile versionedFile, GroupSpace groupSpace)
+    public GroupWorkspaceFile(VersionedFile versionedFile, GroupWorkspace groupSpace)
     {
     	setVersionedFile(versionedFile);
-    	setGroupSpace(groupSpace);
+    	setGroupWorkspace(groupSpace);
     }
     
     /**
      * Default constructor.
      * 
      * @param owner - owner of the group file 
-     * @param groupSpace - group space the file belongs to
+     * @param groupWorkspace - group space the file belongs to
      * @param versionedFile - versioned file wrapped by this group file
      * @param groupFolder 
      */
-    public GroupFile( VersionedFile versionedFile, GroupFolder groupFolder)
+    public GroupWorkspaceFile( VersionedFile versionedFile, GroupWorkspaceFolder groupFolder)
     {
-    	this(versionedFile, groupFolder.getGroupSpace());
-    	setGroupFolder(groupFolder);
+    	this(versionedFile, groupFolder.getGroupWorkspace());
+    	setGroupWorkspaceFolder(groupFolder);
     }
 
 	/**
@@ -87,9 +87,9 @@ public class GroupFile extends BasePersistent implements FileSystem{
 	 */
 	public String getPath() {
 		String path = null;
-		if(groupFolder != null)
+		if(groupWorkspaceFolder != null)
 		{
-			path = groupFolder.getFullPath();
+			path = groupWorkspaceFolder.getFullPath();
 		}
 		
 		return path;
@@ -118,8 +118,8 @@ public class GroupFile extends BasePersistent implements FileSystem{
 	 * 
 	 * @return
 	 */
-	public GroupFolder getGroupFolder() {
-		return groupFolder;
+	public GroupWorkspaceFolder getGroupWorkspaceFolder() {
+		return groupWorkspaceFolder;
 	}
 
 	/**
@@ -127,8 +127,8 @@ public class GroupFile extends BasePersistent implements FileSystem{
 	 * 
 	 * @param groupFolder
 	 */
-	public void setGroupFolder(GroupFolder groupFolder) {
-		this.groupFolder = groupFolder;
+	public void setGroupWorkspaceFolder(GroupWorkspaceFolder groupFolder) {
+		this.groupWorkspaceFolder = groupFolder;
 	}
 	
 	/**
@@ -153,8 +153,8 @@ public class GroupFile extends BasePersistent implements FileSystem{
 	 * 
 	 * @return
 	 */
-	public GroupSpace getGroupSpace() {
-		return groupSpace;
+	public GroupWorkspace getGroupWorkspace() {
+		return groupWorkspace;
 	}
 
 	/**
@@ -162,8 +162,8 @@ public class GroupFile extends BasePersistent implements FileSystem{
 	 * 
 	 * @param groupSpace
 	 */
-	public void setGroupSpace(GroupSpace groupSpace) {
-		this.groupSpace = groupSpace;
+	public void setGroupWorkspace(GroupWorkspace groupSpace) {
+		this.groupWorkspace = groupSpace;
 	}
 	
 	/**
@@ -188,7 +188,7 @@ public class GroupFile extends BasePersistent implements FileSystem{
 	public int hashCode()
 	{
 		int hashCode = 0;
-		hashCode += groupSpace == null ? 0 : groupSpace.hashCode();
+		hashCode += groupWorkspace == null ? 0 : groupWorkspace.hashCode();
 		hashCode += getFullPath() == null ? 0 : getFullPath().hashCode();
 		return hashCode;
 	}
@@ -203,12 +203,12 @@ public class GroupFile extends BasePersistent implements FileSystem{
 	{
 		if( this == o ) return true;
 		
-		if( !(o instanceof GroupFile ) ) return false;
-		final GroupFile other = (GroupFile)o;
+		if( !(o instanceof GroupWorkspaceFile ) ) return false;
+		final GroupWorkspaceFile other = (GroupWorkspaceFile)o;
 		
 
-		if( (other.getGroupSpace() != null && !other.getGroupSpace().equals(groupSpace)) ||
-			(other.getGroupSpace() == null && groupSpace != null )) return false;
+		if( (other.getGroupWorkspace() != null && !other.getGroupWorkspace().equals(groupWorkspace)) ||
+			(other.getGroupWorkspace() == null && groupWorkspace != null )) return false;
 		
 		if( (other.getFullPath() != null && !other.getFullPath().equals(getFullPath())) ||
 			(other.getFullPath() == null && getFullPath() != null )	) return false;

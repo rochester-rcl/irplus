@@ -38,12 +38,12 @@ import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
-import edu.ur.ir.groupspace.GroupFile;
-import edu.ur.ir.groupspace.GroupFileDAO;
-import edu.ur.ir.groupspace.GroupFolder;
-import edu.ur.ir.groupspace.GroupFolderDAO;
-import edu.ur.ir.groupspace.GroupSpace;
-import edu.ur.ir.groupspace.GroupSpaceDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
+import edu.ur.ir.groupspace.GroupWorkspaceFileDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
+import edu.ur.ir.groupspace.GroupWorkspaceFolderDAO;
+import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceDAO;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
@@ -57,7 +57,7 @@ import edu.ur.util.FileUtil;
  *
  */
 @Test(groups = { "baseTests" }, enabled = true)
-public class GroupFileDAOTest {
+public class GroupWorkspaceFileDAOTest {
 	
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
@@ -85,12 +85,12 @@ public class GroupFileDAOTest {
 	.getBean("irFileDAO");
     
     /** Personal file relational data access  */
-    GroupFileDAO groupFileDAO= (GroupFileDAO) ctx
-	.getBean("groupFileDAO");
+    GroupWorkspaceFileDAO groupWorkspaceFileDAO= (GroupWorkspaceFileDAO) ctx
+	.getBean("groupWorkspaceFileDAO");
     
     /** Personal folder relational data access  */
-    GroupFolderDAO groupFolderDAO= (GroupFolderDAO) ctx
-	.getBean("groupFolderDAO");
+    GroupWorkspaceFolderDAO groupWorkspaceFolderDAO= (GroupWorkspaceFolderDAO) ctx
+	.getBean("groupWorkspaceFolderDAO");
     
     /** Versioned file data access */
     VersionedFileDAO versionedFileDAO= (VersionedFileDAO) ctx
@@ -101,8 +101,8 @@ public class GroupFileDAOTest {
 	ctx.getBean("uniqueNameGenerator");
 	
 	/** Group space data access */
-	GroupSpaceDAO groupSpaceDAO = (GroupSpaceDAO) ctx
-	.getBean("groupSpaceDAO");
+	GroupWorkspaceDAO groupWorkspaceDAO = (GroupWorkspaceDAO) ctx
+	.getBean("groupWorkspaceDAO");
 
 
 	
@@ -164,30 +164,30 @@ public class GroupFileDAOTest {
 		VersionedFile versionedFile = new VersionedFile(user, info, "test file");
 
 		
-		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
 		
-		GroupFile gf = groupSpace.createRootFile(versionedFile);
+		GroupWorkspaceFile gf = groupSpace.createRootFile(versionedFile);
 		// create the user and their folder.
-		groupSpaceDAO.makePersistent(groupSpace);
+		groupWorkspaceDAO.makePersistent(groupSpace);
 		tm.commit(ts);
 		
 		// clean up
 		ts = tm.getTransaction(td);
-		groupSpace = groupSpaceDAO.getById(groupSpace.getId(), false);
+		groupSpace = groupWorkspaceDAO.getById(groupSpace.getId(), false);
 		Long irFileId = versionedFile.getCurrentVersion().getIrFile().getId();
-		Set<GroupFile> files = groupSpace.getRootFiles();
+		Set<GroupWorkspaceFile> files = groupSpace.getRootFiles();
 		
 		assert files.size() == 1 : "Files size = " + files.size() + " but should equal 1";
 
 		
-		assert groupFileDAO.getById(gf.getId(), false) != null: "Should be able to find personal file " + gf;
+		assert groupWorkspaceFileDAO.getById(gf.getId(), false) != null: "Should be able to find personal file " + gf;
 
-		groupFileDAO.makeTransient(groupFileDAO.getById(gf.getId(), false));
+		groupWorkspaceFileDAO.makeTransient(groupWorkspaceFileDAO.getById(gf.getId(), false));
 		versionedFileDAO.makeTransient(versionedFileDAO.getById(versionedFile.getId(), false));
 		fileDAO.makeTransient(fileDAO.getById(irFileId, false));
 
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
-		groupSpaceDAO.makeTransient(groupSpaceDAO.getById(groupSpace.getId(), false));
+		groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
 		repoHelper.cleanUpRepository();
 		tm.commit(ts);	
 
@@ -251,16 +251,16 @@ public class GroupFileDAOTest {
 		userDAO.makePersistent(user);
 
 		
-		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
-		GroupFolder groupFolder = groupSpace.createRootFolder(user, "FolderName");
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
+		GroupWorkspaceFolder groupFolder = groupSpace.createRootFolder(user, "FolderName");
 
-		GroupFile gfile = null;
+		GroupWorkspaceFile gfile = null;
 		gfile= groupFolder.addVersionedFile(versionedFile);
 		
 		assert gfile != null : "pFile should not be null";
 
 		
-		groupSpaceDAO.makePersistent(groupSpace);
+		groupWorkspaceDAO.makePersistent(groupSpace);
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
@@ -273,15 +273,15 @@ public class GroupFileDAOTest {
 		assert groupSpace.removeRootFolder(groupFolder) : " Folder should be removed from user " 
 			+ groupFolder;
 		
-		groupSpaceDAO.makePersistent(groupSpace);
+		groupWorkspaceDAO.makePersistent(groupSpace);
 		tm.commit(ts);
 		
         // clean up
 		ts = tm.getTransaction(td);
-		groupFileDAO.makeTransient(groupFileDAO.getById(gfile.getId(), false));
+		groupWorkspaceFileDAO.makeTransient(groupWorkspaceFileDAO.getById(gfile.getId(), false));
 		versionedFileDAO.makeTransient(versionedFileDAO.getById(versionedFile.getId(), false));
 		fileDAO.makeTransient(fileDAO.getById(irFileId, false));
-		groupSpaceDAO.makeTransient(groupSpaceDAO.getById(groupSpace.getId(), false));
+		groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
 		
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		repoHelper.cleanUpRepository();
@@ -348,10 +348,10 @@ public class GroupFileDAOTest {
 		userDAO.makePersistent(user);
 		
 
-		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
-		GroupFile gfile= groupSpace.createRootFile(versionedFile);
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
+		GroupWorkspaceFile gfile= groupSpace.createRootFile(versionedFile);
 
-		groupSpaceDAO.makePersistent(groupSpace);
+		groupWorkspaceDAO.makePersistent(groupSpace);
 		
 		
 		Long irFileId = versionedFile.getCurrentVersion().getIrFile().getId();
@@ -359,18 +359,18 @@ public class GroupFileDAOTest {
 	    
 		assert groupSpace.removeRootFile(gfile) : " File should be removed from group " + gfile;
 		
-		groupSpaceDAO.makePersistent(groupSpace);
+		groupWorkspaceDAO.makePersistent(groupSpace);
 		tm.commit(ts);
 		
 		
         // clean up
 		ts = tm.getTransaction(td);
-		groupFileDAO.makeTransient(groupFileDAO.getById(gfile.getId(), false));
+		groupWorkspaceFileDAO.makeTransient(groupWorkspaceFileDAO.getById(gfile.getId(), false));
 		versionedFileDAO.makeTransient(versionedFileDAO.getById(versionedFile.getId(), false));
 		fileDAO.makeTransient(fileDAO.getById(irFileId, false));
 	    
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
-		groupSpaceDAO.makeTransient(groupSpaceDAO.getById(groupSpace.getId(), false));
+		groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
 		repoHelper.cleanUpRepository();
 		tm.commit(ts);	
 
