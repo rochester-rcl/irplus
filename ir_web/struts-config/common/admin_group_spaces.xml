@@ -18,19 +18,19 @@
        <!--  ************************************ -->
        <!-- Group spaces actions                  -->
        <!--  ************************************ -->
-       <action name="viewGroupSpaces" 
-            class="edu.ur.ir.web.action.groupspace.ManageGroupSpaces">
+       <action name="viewGroupWorkspaces" 
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaces">
             <interceptor-ref name="editStack"/>
-            <result name="success">/pages/admin/groupspace/groupspaces.jsp</result>
+            <result name="success">/pages/admin/groupspace/group_workspaces.jsp</result>
         </action>
        
         <!--  This handles update, save and delete -->
-        <action name="*GroupSpace" 
+        <action name="*GroupWorkspace" 
             method="{1}"
-            class="edu.ur.ir.web.action.groupspace.ManageGroupSpaces">
+            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaces">
             <interceptor-ref name="crudStack" />
-            <result name="input">/pages/admin/groupspace/groupspace.jsp</result>
-            <result name="added">/pages/admin/groupspace/groupspace_form.jsp</result>
-            <result name="deleted">/pages/admin/groupspace/groupspace_table.jsp</result>
-            <result name="get">/pages/admin/groupspace/edit_groupspace.jsp</result>
+            <result name="input">/pages/admin/groupspace/group_workspace.jsp</result>
+            <result name="added">/pages/admin/groupspace/group_workspace_form.jsp</result>
+            <result name="deleted">/pages/admin/groupspace/group_workspace_table.jsp</result>
+            <result name="get">/pages/admin/groupspace/edit_group_workspace.jsp</result>
         </action>
