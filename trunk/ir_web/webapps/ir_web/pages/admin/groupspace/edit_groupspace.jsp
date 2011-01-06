@@ -29,7 +29,7 @@
 <html>
 
 <head>
-    <title>Group Space: ${groupSpace.name}</title>
+    <title>Group Workspace: ${groupSpace.name}</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -65,12 +65,12 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3><a href="<c:url value="/admin/viewGroupSpaces.action"/>">Group Spaces</a> &gt; Editing: ${groupSpace.name}</h3>
+        <h3><a href="<c:url value="/admin/viewGroupSpaces.action"/>">Group Workspaces</a> &gt; Editing: ${groupSpace.name}</h3>
   
         <div id="bd">
             <div id="groupSpacePropertiesTabs" class="yui-navset">
 	             <ul class="yui-nav">
-                     <li class="selected"><a href="#tab1"><em>Group Space Information</em></a></li>
+                     <li class="selected"><a href="#tab1"><em>Group Workspace Information</em></a></li>
                      <li><a href="#tab2"><em>Owner(s)</em></a></li>
                      <li ><a href="#tab3"><em>Group(s)</em></a></li>
                  </ul>
@@ -79,7 +79,7 @@
                      <!--  first tab -->
                      <div id="tab1">
                          <form id="editGroupSpaceInformation" name="groupspaceInformation" method="post" 
-                             action="/admin">
+                             action="/admin/update">
                             <input type="hidden" id="groupSpaceId" 
                                   name="id" value="${groupSpace.id}" />
                             <table class="formTable">

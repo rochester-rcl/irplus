@@ -65,14 +65,14 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>Group Spaces</h3>
+        <h3>Group Workspaces</h3>
   
         <div id="bd">
       
 		    <button id="showGroupSpace" 
 		            class="ur_button" 
  		            onmouseover="this.className='ur_buttonover';"
- 		            onmouseout="this.className='ur_button';">New Group Space</button> 
+ 		            onmouseout="this.className='ur_button';">New Group Workspace</button> 
 	        <br/>
 	        <br/>
 	        <div id="groupSpaceTable">
@@ -90,7 +90,7 @@
   
   <!-- form for groupsaces -->
   <div id="newGroupSpaceDialog" class="hidden">
-      <div class="hd">Group Space Information</div>
+      <div class="hd">Group Workspace Information</div>
       <div class="bd">
           <form id="addGroupSpace" 
                             name="newGroupSapceForm" 
@@ -104,11 +104,11 @@
   </div>
   
   <div id="deleteGroupSpaceDialog" class="hidden">
-      <div class="hd">Delete Group Space</div>
+      <div class="hd">Delete Group Workspace</div>
 		<div class="bd">
 		    <form id="deleteGroupSpaceForm" name="deleteGroupSpace" method="post" 
 		                action="/admin/deleteGroupSpace.action">
-			   <p>Are you sure you wish to delete the selected groupspace?</p>
+			   <p>Are you sure you wish to delete the selected group workspace?</p>
 			   <input type="hidden" id="deleteId" name="id" value=""/>
 		    </form>
 		</div>
