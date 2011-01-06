@@ -19,7 +19,7 @@
 <suite name="ur_research">
 	<test name="UR IR Core Test">
 		<classes>
-		   <class name="edu.ur.ir.groupspace.GroupFolderTest"/>
+		   <class name="edu.ur.ir.groupspace.GroupWorkspaceFileTest"/>
 		</classes>
 	</test>
 </suite>
