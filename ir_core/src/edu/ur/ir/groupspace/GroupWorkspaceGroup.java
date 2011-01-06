@@ -29,7 +29,7 @@ import edu.ur.persistent.CommonPersistent;
  * @author Nathan Sarr
  *
  */
-public class GroupSpaceGroup extends CommonPersistent{
+public class GroupWorkspaceGroup extends CommonPersistent{
 	
 	/* eclipse generated id */
 	private static final long serialVersionUID = 186970723642439395L;
@@ -38,7 +38,7 @@ public class GroupSpaceGroup extends CommonPersistent{
 	private Set<IrUser> users = new HashSet<IrUser>();
 	
 	/* Owning group Space  */
-	private GroupSpace groupSpace;
+	private GroupWorkspace groupWorkspace;
 	
 	/* lower case name value */
 	private String lowerCaseName;
@@ -46,16 +46,16 @@ public class GroupSpaceGroup extends CommonPersistent{
 	/**
 	 * Package protected constructor
 	 */
-	GroupSpaceGroup(){}
+	GroupWorkspaceGroup(){}
 	
 	/**
 	 * Create a group space with the given name.
 	 * 
 	 * @param name
 	 */
-	public GroupSpaceGroup(GroupSpace groupSpace, String name)
+	public GroupWorkspaceGroup(GroupWorkspace groupSpace, String name)
 	{
-		this.groupSpace = groupSpace;
+		this.groupWorkspace = groupSpace;
 		setName(name);
 	}
 	
@@ -66,7 +66,7 @@ public class GroupSpaceGroup extends CommonPersistent{
 	 * @param name
 	 * @param description
 	 */
-	public GroupSpaceGroup(GroupSpace groupSpace, String name, String description)
+	public GroupWorkspaceGroup(GroupWorkspace groupSpace, String name, String description)
 	{
 		this(groupSpace, name);
 		setDescription(description);
@@ -95,8 +95,8 @@ public class GroupSpaceGroup extends CommonPersistent{
 	 * 
 	 * @return
 	 */
-	public GroupSpace getGroupSpace() {
-		return groupSpace;
+	public GroupWorkspace getGroupWorkspace() {
+		return groupWorkspace;
 	}
 
 	/**
@@ -104,8 +104,8 @@ public class GroupSpaceGroup extends CommonPersistent{
 	 * 
 	 * @param groupSpace
 	 */
-	void setGroupSpace(GroupSpace groupSpace) {
-		this.groupSpace = groupSpace;
+	void setGroupWorkspace(GroupWorkspace groupSpace) {
+		this.groupWorkspace = groupSpace;
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class GroupSpaceGroup extends CommonPersistent{
 	{
 		int value = 0;
 		value += name == null ? 0 : name.hashCode();
-		value += groupSpace == null ? 0 : groupSpace.hashCode();
+		value += groupWorkspace == null ? 0 : groupWorkspace.hashCode();
 		return value;
 	}
 	
@@ -151,15 +151,15 @@ public class GroupSpaceGroup extends CommonPersistent{
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof GroupSpaceGroup)) return false;
+		if (!(o instanceof GroupWorkspaceGroup)) return false;
 
-		final GroupSpaceGroup other = (GroupSpaceGroup) o;
+		final GroupWorkspaceGroup other = (GroupWorkspaceGroup) o;
 
 		if( ( lowerCaseName != null && !lowerCaseName.equalsIgnoreCase(other.getLowerCaseName()) ) ||
 			( lowerCaseName == null && other.getLowerCaseName() != null ) ) return false;
 
-		if( ( groupSpace != null && !groupSpace.equals(other.getGroupSpace()) ) ||
-			( groupSpace == null && other.getGroupSpace() != null ) ) return false;
+		if( ( groupWorkspace != null && !groupWorkspace.equals(other.getGroupWorkspace()) ) ||
+			( groupWorkspace == null && other.getGroupWorkspace() != null ) ) return false;
 
 		return true;
 	}

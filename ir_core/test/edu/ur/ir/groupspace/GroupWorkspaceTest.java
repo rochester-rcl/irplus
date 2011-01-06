@@ -33,7 +33,6 @@ import edu.ur.ir.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.user.IrUser;
 import edu.ur.util.FileUtil;
 
-
 /**
  * Testing for group spaces.
  * 
@@ -41,15 +40,32 @@ import edu.ur.util.FileUtil;
  *
  */
 @Test(groups = { "baseTests" }, enabled = true)
-public class GroupFileTest {
-
+public class GroupWorkspaceTest {
+	
+	
 	/** Properties file with testing specific information. */
 	PropertiesLoader propertiesLoader = new PropertiesLoader();
 	
 	/** Get the properties file  */
 	Properties properties = propertiesLoader.getProperties();
+
+	/**
+	 * Base tests for group work spaces.
+	 * @throws IllegalFileSystemNameException 
+	 */
+	public void baseGroupSpaceTest() throws IllegalFileSystemNameException
+	{
+		GroupWorkspace groupSpace = new GroupWorkspace("test group","group description");
+	    assert groupSpace.getName().equals("test group") : " group name should equal test group but equals " + groupSpace.getName();
+	}
 	
-	public void basicGroupFileTest() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException
+	/**
+	 * Test adding a file to a group space.
+	 * 
+	 * @throws DuplicateNameException 
+	 * @throws LocationAlreadyExistsException 
+	 */
+	public void testAddFile() throws DuplicateNameException, IllegalFileSystemNameException, LocationAlreadyExistsException
 	{
 		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper();
 		Repository repo = repoHelper.createRepository("localFileServer", 
@@ -59,8 +75,6 @@ public class GroupFileTest {
 				properties.getProperty("a_repo_path"),
 				"default_folder");
 		
-		GroupSpace groupSpace = new GroupSpace("test group","group description");
-
 		// create the first file to store in the temporary folder
 		String tempDirectory = properties.getProperty("ir_core_temp_directory");
 		File directory = new File(tempDirectory);
@@ -71,7 +85,7 @@ public class GroupFileTest {
 
 		// create the first file to store in the temporary folder
 		File f = testUtil.creatFile(directory, "testFile",
-				"Hello  - versionedIrFile This is text in a file"); 
+				"Hello  - user versionedFile This is text in a file"); 
 		
 		// get the file database 
 		FileDatabase fd = repo.getFileDatabase();
@@ -80,21 +94,42 @@ public class GroupFileTest {
 		FileInfo fileInfo1 = fd.addFile(f, "newFile1");
 		fileInfo1.setDisplayName("displayName1");
 		
-		// create the owner of the folders
-		IrUser user = new IrUser("user", "password");
-		
 		// create a new versioned file
-		VersionedFile vif = new VersionedFile(user, fileInfo1, "displayName1");
+		IrUser user = new IrUser("username", "password");
+		VersionedFile vf = new VersionedFile(user, fileInfo1, "displayName1");
+		GroupWorkspace groupSpace = new GroupWorkspace("test group","group description");
 		
-		GroupFolder groupFolder = groupSpace.createRootFolder(user, "testFolder");
-		GroupFile groupFile = new GroupFile(vif, groupFolder);
-		
-		assert groupFile.getPath().equals("/testFolder/") : "Path equals " + groupFile.getPath();
-		assert groupFile.getFullPath().equals("/testFolder/displayName1");
+		groupSpace.createRootFile(vf);
+		GroupWorkspaceFile rootFile = groupSpace.getRootFile(vf.getName());
+		assert rootFile != null : "Group file should be found ";
+		assert groupSpace.removeRootFile(rootFile) : "Group file " + rootFile + " should be removed";
+		assert groupSpace.getRootFile(rootFile.getName()) == null : "Should no longer find group file";
 		
 		repoHelper.cleanUpRepository();
-
 	}
-
+	
+	/**
+	 * Test adding a folder to the group as a root
+	 * 
+	 * @throws DuplicateNameException 
+	 */
+	public void testAddFolder() throws DuplicateNameException, IllegalFileSystemNameException
+	{
+		IrUser user = new IrUser();
+		user.setUsername("aUser");
+		GroupWorkspace groupSpace = new GroupWorkspace("test group","group description");
+		GroupWorkspaceFolder groupFolder = groupSpace.createRootFolder(user, "rootFolder");
+		
+		assert groupFolder.getOwner().equals(user) : "Owner of folder should equal " +
+		user + " but equals " + groupFolder.getOwner();
+		
+		assert groupFolder.getFullPath().equals("/rootFolder/") : 
+			"Path Should equal /rootFolder/ but is: " + groupFolder.getFullPath();
+		
+		assert groupSpace.getRootFolder(groupFolder.getName()).equals(groupFolder) : 
+			"Should find group folder " + groupFolder;
+		assert groupSpace.removeRootFolder(groupFolder) : "Should be able to remove " + groupFolder;
+		assert user.getRootFolder(groupFolder.getName()) == null : "Root folder should be removed";
+	}
 
 }

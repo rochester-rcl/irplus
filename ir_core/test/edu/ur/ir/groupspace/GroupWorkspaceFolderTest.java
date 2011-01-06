@@ -26,7 +26,7 @@ import edu.ur.util.FileUtil;
  *
  */
 @Test(groups = { "baseTests" }, enabled = true)
-public class GroupFolderTest 
+public class GroupWorkspaceFolderTest 
 {
 	
 	/** Properties file with testing specific information. */
@@ -41,8 +41,8 @@ public class GroupFolderTest
 	public void testDuplicateFolders()  throws IllegalFileSystemNameException
 	{
 		IrUser u = new IrUser("user", "password");
-		GroupSpace groupSpace = new GroupSpace("group" , "test group");
-        GroupFolder groupFolder = new GroupFolder(groupSpace, u, "myFolder");
+		GroupWorkspace groupSpace = new GroupWorkspace("group" , "test group");
+        GroupWorkspaceFolder groupFolder = new GroupWorkspaceFolder(groupSpace, u, "myFolder");
 		
         groupFolder.setDescription("myDescription");
 		
@@ -66,9 +66,9 @@ public class GroupFolderTest
 	public void testAddChildren() throws IllegalFileSystemNameException
 	{
 		IrUser u = new IrUser("nate", "password");
-		GroupSpace groupSpace = new GroupSpace("group" , "test group");
+		GroupWorkspace groupSpace = new GroupWorkspace("group" , "test group");
 		// create the root colleciton
-		GroupFolder groupFolder1 = new GroupFolder(groupSpace, u, "nates_folder");
+		GroupWorkspaceFolder groupFolder1 = new GroupWorkspaceFolder(groupSpace, u, "nates_folder");
 		
 		assert groupFolder1.getLeftValue() == 1 : "Left value should equal 1 but equals " + groupFolder1.getLeftValue();
 		assert groupFolder1.getRightValue() == 2 : "Right value should equal 2 but equals " + groupFolder1.getRightValue();
@@ -83,7 +83,7 @@ public class GroupFolderTest
 			+ "equal /nates_folder/ but equals " + groupFolder1.getFullPath();
 		
 		// add first child
-		GroupFolder groupFolder2 = null;
+		GroupWorkspaceFolder groupFolder2 = null;
 		// add second child child
 		try
 		{
@@ -110,7 +110,7 @@ public class GroupFolderTest
 		assert groupFolder2.getRightValue() == 3 : "Collection 2 right value should equal 3 but is " 
 			+ groupFolder2.getRightValue();
 		
-		GroupFolder groupFolder3 = null;
+		GroupWorkspaceFolder groupFolder3 = null;
 		// add second child child
 		try
 		{
@@ -145,7 +145,7 @@ public class GroupFolderTest
 		assert groupFolder3.getRightValue() == 5 : "Collection 3 right value should equal 5 but is " 
 			+ groupFolder3.getRightValue();
 
-		GroupFolder personalSubFolder1 = null;
+		GroupWorkspaceFolder personalSubFolder1 = null;
 		// add sub folder
 		try
 		{
@@ -190,7 +190,7 @@ public class GroupFolderTest
 
 
 		// add sub collection
-		GroupFolder personalSubFolder2 = null;
+		GroupWorkspaceFolder personalSubFolder2 = null;
 		try
 		{
 		    personalSubFolder2 = groupFolder3.createChild("personalSubFolder2",u);
@@ -242,15 +242,15 @@ public class GroupFolderTest
 	{
 		// create the owner of the folders
 		IrUser u = new IrUser("nate", "password");
-		GroupSpace groupSpace = new GroupSpace("group" , "test group");
+		GroupWorkspace groupSpace = new GroupWorkspace("group" , "test group");
 		// create the root colleciton
-		GroupFolder groupFolder1 = new GroupFolder(groupSpace, u, "groupFolder1");
+		GroupWorkspaceFolder groupFolder1 = new GroupWorkspaceFolder(groupSpace, u, "groupFolder1");
 		
 		
-		GroupFolder groupFolder2 = null;
-		GroupFolder groupFolder3 = null;
-		GroupFolder personalSubFolder1 = null;
-		GroupFolder personalSubFolder2 = null;
+		GroupWorkspaceFolder groupFolder2 = null;
+		GroupWorkspaceFolder groupFolder3 = null;
+		GroupWorkspaceFolder personalSubFolder1 = null;
+		GroupWorkspaceFolder personalSubFolder2 = null;
 		try
 		{
 		    // add first child
@@ -362,11 +362,11 @@ public class GroupFolderTest
 		// create a new versioned file
 		VersionedFile vif = new VersionedFile(u, fileInfo1, "displayName1");
 		
-		GroupSpace groupSpace = new GroupSpace("group" , "test group");
+		GroupWorkspace groupSpace = new GroupWorkspace("group" , "test group");
 		// create the root colleciton
-		GroupFolder groupFolder1 = new GroupFolder(groupSpace, u, "groupFolder1");
+		GroupWorkspaceFolder groupFolder1 = new GroupWorkspaceFolder(groupSpace, u, "groupFolder1");
 		
-		GroupFile gf = null;
+		GroupWorkspaceFile gf = null;
 		
 		try
 		{
@@ -439,12 +439,12 @@ public class GroupFolderTest
 		// create a new versioned file
 		VersionedFile vif = new VersionedFile(u, fileInfo1, "displayName1");
 		
-		GroupSpace groupSpace = new GroupSpace("group" , "test group");
+		GroupWorkspace groupSpace = new GroupWorkspace("group" , "test group");
 
 		// create the root colleciton
-		GroupFolder groupFolder1 = new GroupFolder(groupSpace, u, "groupFolder1");
+		GroupWorkspaceFolder groupFolder1 = new GroupWorkspaceFolder(groupSpace, u, "groupFolder1");
 
-		GroupFile gf = null;
+		GroupWorkspaceFile gf = null;
 		try
 		{
 		    gf = groupFolder1.addVersionedFile(vif);
@@ -457,7 +457,7 @@ public class GroupFolderTest
 		assert groupFolder1.getFile("displayName1").getVersionedFile().equals(vif) : 
 			"Versioned file should be found";
 		
-		GroupFolder groupFolder2 = new GroupFolder(groupSpace, u, "groupFolder2");
+		GroupWorkspaceFolder groupFolder2 = new GroupWorkspaceFolder(groupSpace, u, "groupFolder2");
 
 		try
 		{
@@ -486,15 +486,15 @@ public class GroupFolderTest
 		// create the owner of the folders
 		IrUser u = new IrUser("nate", "password");
 		
-		GroupSpace groupSpace = new GroupSpace("group" , "test group");
+		GroupWorkspace groupSpace = new GroupWorkspace("group" , "test group");
 
 		// create the root colleciton
-		GroupFolder groupFolder1 = new GroupFolder(groupSpace, u, "groupFolder1");
+		GroupWorkspaceFolder groupFolder1 = new GroupWorkspaceFolder(groupSpace, u, "groupFolder1");
 		
-		GroupFolder groupFolder2 = null;
-		GroupFolder groupFolder3 = null;
-		GroupFolder personalSubFolder1 = null;
-		GroupFolder personalSubFolder2 = null;
+		GroupWorkspaceFolder groupFolder2 = null;
+		GroupWorkspaceFolder groupFolder3 = null;
+		GroupWorkspaceFolder personalSubFolder1 = null;
+		GroupWorkspaceFolder personalSubFolder2 = null;
 		try
 		{
 
@@ -621,15 +621,15 @@ public class GroupFolderTest
 		// create the owner of the folders
 		IrUser u = new IrUser("nate", "password");
 		
-		GroupSpace groupSpace = new GroupSpace("group" , "test group");
+		GroupWorkspace groupSpace = new GroupWorkspace("group" , "test group");
 
 		// create the root collection
-		GroupFolder groupFolder1 = new GroupFolder(groupSpace, u, "groupFolder1");
+		GroupWorkspaceFolder groupFolder1 = new GroupWorkspaceFolder(groupSpace, u, "groupFolder1");
 		
-		GroupFolder groupFolder2 = null;
-		GroupFolder groupFolder3 = null;
-		GroupFolder personalSubFolder1 = null;
-		GroupFolder personalSubFolder2 = null;
+		GroupWorkspaceFolder groupFolder2 = null;
+		GroupWorkspaceFolder groupFolder3 = null;
+		GroupWorkspaceFolder personalSubFolder1 = null;
+		GroupWorkspaceFolder personalSubFolder2 = null;
 		
 		try
 		{
@@ -705,11 +705,11 @@ public class GroupFolderTest
 	public void testReNameFolder() throws DuplicateNameException,  IllegalFileSystemNameException
 	{
 		IrUser u = new IrUser("nate", "password");
-		GroupSpace groupSpace = new GroupSpace("group" , "test group");
+		GroupWorkspace groupSpace = new GroupWorkspace("group" , "test group");
 
 		
 		// create the root colleciton
-		GroupFolder groupFolder1 = new GroupFolder(groupSpace, u, "nates_folder");
+		GroupWorkspaceFolder groupFolder1 = new GroupWorkspaceFolder(groupSpace, u, "nates_folder");
 		
 		
 		assert groupFolder1.getOwner().equals(u) : "users should be the same";
@@ -722,7 +722,7 @@ public class GroupFolderTest
 			+ "equal /nates_folder/ but equals " + groupFolder1.getFullPath();
 		
 		// add first child
-		GroupFolder groupFolder2 = groupFolder1.createChild("groupFolder2",u);
+		GroupWorkspaceFolder groupFolder2 = groupFolder1.createChild("groupFolder2",u);
 		
 		
 		assert groupFolder2.getFullPath().equals("/nates_folder/groupFolder2/") : "Path should "
@@ -731,7 +731,7 @@ public class GroupFolderTest
 		assert groupFolder2.getPath().equals("/nates_folder/") : "Path should "
 			    + "equal /nates_folder/ but equals " + groupFolder2.getPath();
 
-		GroupFolder groupFolder3 = groupFolder1.createChild("groupFolder3",u);
+		GroupWorkspaceFolder groupFolder3 = groupFolder1.createChild("groupFolder3",u);
 				
 		assert groupFolder3.getPath().equals("/nates_folder/") : "Path should "
 			+ "equal /nates_folder/ but equals " + groupFolder3.getPath();
@@ -741,7 +741,7 @@ public class GroupFolderTest
 
 		
 	
-		GroupFolder personalSubFolder1 =groupFolder2.createChild("personalSubFolder1",u);
+		GroupWorkspaceFolder personalSubFolder1 =groupFolder2.createChild("personalSubFolder1",u);
 	
 		
 		assert personalSubFolder1.getPath().equals("/nates_folder/groupFolder2/") : "Path should "
@@ -753,7 +753,7 @@ public class GroupFolderTest
 
 
 		// add sub collection
-		GroupFolder personalSubFolder2 = groupFolder3.createChild("personalSubFolder2",u);
+		GroupWorkspaceFolder personalSubFolder2 = groupFolder3.createChild("personalSubFolder2",u);
 
 		assert personalSubFolder2.getPath().equals("/nates_folder/groupFolder3/") : "Path should "
 			+ "equal /nates_folder/groupFolder3/ but equals " + personalSubFolder2.getPath();

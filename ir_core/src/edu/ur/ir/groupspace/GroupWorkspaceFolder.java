@@ -42,36 +42,36 @@ import edu.ur.tree.PreOrderTreeSetNodeBase;
  * @author Nathan Sarr
  *
  */
-public class GroupFolder extends PreOrderTreeSetNodeBase implements
+public class GroupWorkspaceFolder extends PreOrderTreeSetNodeBase implements
 Serializable, LongPersistentId, PersistentVersioned,
-DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
+DescriptionAware, NameAware, Comparable<GroupWorkspaceFolder>, FileSystem{
 
 	/* eclipse generated id */
 	private static final long serialVersionUID = 5447153628861451307L;
 	
 	/* Logger */
-	private static final Logger log = Logger.getLogger(GroupFolder.class);
+	private static final Logger log = Logger.getLogger(GroupWorkspaceFolder.class);
 	
 	/* name of the folder */
 	private String name;
 	
 	/* set of children folders */
-	private Set<GroupFolder> children = new HashSet<GroupFolder>();
+	private Set<GroupWorkspaceFolder> children = new HashSet<GroupWorkspaceFolder>();
 	
 	/* description for the group folder */
 	private String description;
 	
 	/*  Root of the entire tree. */
-	private GroupFolder treeRoot;
+	private GroupWorkspaceFolder treeRoot;
 	
 	/* user who created the folder */
 	private IrUser owner;
 	
 	/* group that owns the folder */
-	private GroupSpace groupSpace;
+	private GroupWorkspace groupWorkspace;
 	
 	/*  Files in this personal folder. This is a set of versioned files. */
-	private Set<GroupFile> files = new HashSet<GroupFile>();
+	private Set<GroupWorkspaceFile> files = new HashSet<GroupWorkspaceFile>();
 
 	/*
 	 * This is the conceptual path to the group folder.
@@ -100,7 +100,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	/**
 	 * Package protected constructor
 	 */
-	GroupFolder()
+	GroupWorkspaceFolder()
 	{
 		this.treeRoot = this;	
 	}
@@ -113,12 +113,12 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @throws IllegalFileSystemNameException - if name contains illegal file system characters
 	 */
-	GroupFolder(GroupSpace groupSpace, IrUser owner, String name) throws IllegalFileSystemNameException
+	GroupWorkspaceFolder(GroupWorkspace groupSpace, IrUser owner, String name) throws IllegalFileSystemNameException
 	{
 		setName(name);
 		setTreeRoot(this);
 		setPath(PATH_SEPERATOR);
-		setGroupSpace(groupSpace);
+		setGroupWorkspace(groupSpace);
 		setOwner(owner);
 	}
 	
@@ -128,7 +128,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @param parent
 	 */
-	void setParent(GroupFolder parent) {
+	void setParent(GroupWorkspaceFolder parent) {
 		if(parent == null)
 		{
 			path = PATH_SEPERATOR ;
@@ -143,19 +143,19 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * @param pf - personal file to add
 	 * @throws DuplicateNameException - if the file already exits
 	 */
-	public void addGroupFile(GroupFile gf) throws DuplicateNameException
+	public void addGroupFile(GroupWorkspaceFile gf) throws DuplicateNameException
 	{
 		if( !isVaildFileSystemName(gf.getVersionedFile().getNameWithExtension()))
 		{
 			throw new DuplicateNameException("Personal file with the name " + gf.getVersionedFile().getNameWithExtension() +
 				" already exists", gf.getVersionedFile().getNameWithExtension());
 		}
-		if( gf.getGroupFolder() != null)
+		if( gf.getGroupWorkspaceFolder() != null)
 		{
-		    gf.getGroupFolder().removeGroupFile(gf);
+		    gf.getGroupWorkspaceFolder().removeGroupFile(gf);
 		}
 		
-		gf.setGroupFolder(this);
+		gf.setGroupWorkspaceFolder(this);
 		files.add(gf);
 	}
 	
@@ -165,7 +165,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @param vf
 	 */
-	public GroupFile addVersionedFile(VersionedFile vf) throws DuplicateNameException
+	public GroupWorkspaceFile addVersionedFile(VersionedFile vf) throws DuplicateNameException
 	{
 		 if( !isVaildFileSystemName(vf.getNameWithExtension()))
 		 {
@@ -173,7 +173,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 						" already exists in this folder", vf.getNameWithExtension());
 		 }
 
-         GroupFile pf = new GroupFile(vf, this);
+         GroupWorkspaceFile pf = new GroupWorkspaceFile(vf, this);
 		 files.add(pf);
 		 return pf;
 	}
@@ -244,7 +244,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 */
 	public void reName(String name) throws DuplicateNameException, IllegalFileSystemNameException
 	{
-		GroupFolder parent = getParent();
+		GroupWorkspaceFolder parent = getParent();
 		if( parent != null )
 		{
 			if( !parent.isVaildFileSystemName(name) )
@@ -283,9 +283,9 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * @param name of the file including the extension
 	 * @return the found file
 	 */
-	public GroupFile getFile(String nameWithExtension)
+	public GroupWorkspaceFile getFile(String nameWithExtension)
 	{
-		for(GroupFile gf : files)
+		for(GroupWorkspaceFile gf : files)
 		{
 			if( gf.getVersionedFile().getNameWithExtension().equalsIgnoreCase(nameWithExtension))
 			{
@@ -303,7 +303,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * @param child
 	 * @return true if the child is removed.
 	 */
-	public boolean removeChild(GroupFolder child)
+	public boolean removeChild(GroupWorkspaceFolder child)
 	{
 		boolean removed = false;
 		
@@ -325,7 +325,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @param child to add
 	 */
-	public void addChild(GroupFolder child) throws DuplicateNameException
+	public void addChild(GroupWorkspaceFolder child) throws DuplicateNameException
 	{
 		if( child.equals(this))
 		{
@@ -338,13 +338,13 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 					child.getName() + " already exists ", child.getName());
 		}
 		if (!child.isRoot()) {
-			GroupFolder childParent = child.getParent();
+			GroupWorkspaceFolder childParent = child.getParent();
 			childParent.removeChild(child);
 		}
 
 		makeRoomInTree(child);
 		child.setParent(this);
-		child.setGroupSpace(this.groupSpace);
+		child.setGroupWorkspace(this.groupWorkspace);
 		child.setTreeRoot(getTreeRoot());
 		children.add(child);
 	}
@@ -359,9 +359,9 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * @throws IllegalArgumentException if a name of a folder that
 	 * already exists is passed in.
 	 */
-	public GroupFolder createChild(String name, IrUser owner) throws DuplicateNameException, IllegalFileSystemNameException
+	public GroupWorkspaceFolder createChild(String name, IrUser owner) throws DuplicateNameException, IllegalFileSystemNameException
 	{
-	    GroupFolder c = new GroupFolder();
+	    GroupWorkspaceFolder c = new GroupWorkspaceFolder();
 	    c.setOwner(owner);
 		c.setName(name);
 		addChild(c);
@@ -380,7 +380,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * @param name of the child personal folder.
 	 * @return the found personal folder.
 	 */
-	public GroupFolder getChild(String name)
+	public GroupWorkspaceFolder getChild(String name)
 	{
 		if( log.isDebugEnabled() )
 		{
@@ -388,11 +388,11 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 		}
 		
 		boolean found = false;
-		Iterator<GroupFolder> iter = children.iterator();
+		Iterator<GroupWorkspaceFolder> iter = children.iterator();
 		
 		while( iter.hasNext() && !found)
 		{
-			GroupFolder c = iter.next();
+			GroupWorkspaceFolder c = iter.next();
 			if( c.getName().equalsIgnoreCase(name))
 			{
 				return c;
@@ -468,7 +468,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * Get the direct children of this folder
 	 * @see edu.ur.tree.PreOrderTreeSetNodeBase#getChildren()
 	 */
-	public Set<GroupFolder> getChildren() {
+	public Set<GroupWorkspaceFolder> getChildren() {
 		return Collections.unmodifiableSet(children);
 	}
 	
@@ -477,7 +477,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @param children
 	 */
-	void setChildren(Set<GroupFolder> children)
+	void setChildren(Set<GroupWorkspaceFolder> children)
 	{
 		this.children = children;
 	}
@@ -487,8 +487,8 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @see edu.ur.tree.PreOrderTreeSetNodeBase#getParent()
 	 */
-	public GroupFolder getParent() {
-		return (GroupFolder) parent;
+	public GroupWorkspaceFolder getParent() {
+		return (GroupWorkspaceFolder) parent;
 	}
 
 	/**
@@ -497,7 +497,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * @see edu.ur.tree.PreOrderTreeSetNodeBase#setRoot(edu.ur.tree.PreOrderTreeSetNodeBase)
 	 */
 	protected void setRoot(PreOrderTreeSetNodeBase root) {
-		this.treeRoot = (GroupFolder)root;
+		this.treeRoot = (GroupWorkspaceFolder)root;
 	}
 
 	/**
@@ -507,7 +507,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 */
 	protected void updatePaths(String path) {
 		setPath(path);
-		for(GroupFolder folder: children)
+		for(GroupWorkspaceFolder folder: children)
 		{
 			folder.updatePaths(getFullPath());
 		}
@@ -544,8 +544,8 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * Compares objects based on their names.
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(GroupFolder other) {
-		GroupFolder c = (GroupFolder)other;
+	public int compareTo(GroupWorkspaceFolder other) {
+		GroupWorkspaceFolder c = (GroupWorkspaceFolder)other;
 		return this.getName().compareTo(c.getName());
 	}
 	
@@ -554,7 +554,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @see edu.ur.tree.PreOrderTreeSetNodeBase#getRoot()
 	 */
-	public GroupFolder getTreeRoot() {
+	public GroupWorkspaceFolder getTreeRoot() {
 		return treeRoot;
 	}
 	
@@ -563,7 +563,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @param treeRoot
 	 */
-	public void setTreeRoot(GroupFolder treeRoot) {
+	public void setTreeRoot(GroupWorkspaceFolder treeRoot) {
 		this.treeRoot = treeRoot;
 	}
 	
@@ -588,7 +588,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * @param personalFile to remove from the folder
 	 * @return true if the personal file is removed
 	 */
-	public boolean removeGroupFile(GroupFile gf)
+	public boolean removeGroupFile(GroupWorkspaceFile gf)
 	{
 		return files.remove(gf);
 	}
@@ -602,9 +602,9 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof GroupFolder)) return false;
+		if (!(o instanceof GroupWorkspaceFolder)) return false;
 
-		final GroupFolder other = (GroupFolder) o;
+		final GroupWorkspaceFolder other = (GroupWorkspaceFolder) o;
 
 		if( ( name != null && !name.equals(other.getName()) ) ||
 			( name == null && other.getName() != null ) ) return false;
@@ -660,8 +660,8 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @return - group space that contains the folder
 	 */
-	public GroupSpace getGroupSpace() {
-		return groupSpace;
+	public GroupWorkspace getGroupWorkspace() {
+		return groupWorkspace;
 	}
 
 	/**
@@ -669,7 +669,7 @@ DescriptionAware, NameAware, Comparable<GroupFolder>, FileSystem{
 	 * 
 	 * @param groupSpace that contains the folder
 	 */
-	public void setGroupSpace(GroupSpace groupSpace) {
-		this.groupSpace = groupSpace;
+	public void setGroupWorkspace(GroupWorkspace groupSpace) {
+		this.groupWorkspace = groupSpace;
 	}
 }

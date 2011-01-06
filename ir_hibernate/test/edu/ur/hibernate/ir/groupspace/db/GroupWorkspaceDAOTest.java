@@ -25,8 +25,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
-import edu.ur.ir.groupspace.GroupSpace;
-import edu.ur.ir.groupspace.GroupSpaceDAO;
+import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserEmail;
@@ -39,13 +39,13 @@ import edu.ur.ir.user.UserManager;
  *
  */
 @Test(groups = { "baseTests" }, enabled = true)
-public class GroupSpaceDAOTest {
+public class GroupWorkspaceDAOTest {
 	
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 
-	GroupSpaceDAO groupSpaceDAO = (GroupSpaceDAO) ctx
-	.getBean("groupSpaceDAO");
+	GroupWorkspaceDAO groupWorkspaceDAO = (GroupWorkspaceDAO) ctx
+	.getBean("groupWorkspaceDAO");
 	
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
 	.getBean("transactionManager");
@@ -61,23 +61,23 @@ public class GroupSpaceDAOTest {
 	 * Test group space persistence
 	 */
 	@Test
-	public void simpleGroupSpaceDAOTest() throws Exception{
+	public void simpleGroupWorkspaceDAOTest() throws Exception{
 
-		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
          
         TransactionStatus ts = tm.getTransaction(td);
- 		groupSpaceDAO.makePersistent(groupSpace);
+ 		groupWorkspaceDAO.makePersistent(groupSpace);
  	    tm.commit(ts);
  	    
  	    ts = tm.getTransaction(td);
- 		GroupSpace other = groupSpaceDAO.getById(groupSpace.getId(), false);
+ 		GroupWorkspace other = groupWorkspaceDAO.getById(groupSpace.getId(), false);
         assert other.equals(groupSpace) : "Group space " + other + " should equal " + groupSpace;
         tm.commit(ts);        
 
  	    ts = tm.getTransaction(td);
- 	    other = groupSpaceDAO.getById(groupSpace.getId(), false);
-        groupSpaceDAO.makeTransient(other);
-        assert  groupSpaceDAO.getById(other.getId(), false) == null : "Should no longer be able to find groupSpace";
+ 	    other = groupWorkspaceDAO.getById(groupSpace.getId(), false);
+        groupWorkspaceDAO.makeTransient(other);
+        assert  groupWorkspaceDAO.getById(other.getId(), false) == null : "Should no longer be able to find groupSpace";
 	    tm.commit(ts);
 	}
 	
@@ -85,11 +85,11 @@ public class GroupSpaceDAOTest {
 	 * Test adding onwer to group spaces
 	 */
 	@Test
-	public void addGroupSpaceOwnerDAOTest() throws Exception{
+	public void addGroupWorkspaceOwnerDAOTest() throws Exception{
 
          
         TransactionStatus ts = tm.getTransaction(td);
-		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
 		
         // create a user who has their own folder
   		UserManager userManager = new UserManager();
@@ -105,18 +105,18 @@ public class GroupSpaceDAOTest {
 		
 		groupSpace.addOwner(user);
 		
-        groupSpaceDAO.makePersistent(groupSpace);
+        groupWorkspaceDAO.makePersistent(groupSpace);
  	    tm.commit(ts);
  	    
  	    ts = tm.getTransaction(td);
- 		GroupSpace other = groupSpaceDAO.getById(groupSpace.getId(), false);
+ 		GroupWorkspace other = groupWorkspaceDAO.getById(groupSpace.getId(), false);
  		assert other.getIsOwner(user) : "User " + user + " should be owner of project but is not";
         tm.commit(ts);        
 
  	    ts = tm.getTransaction(td);
- 	    other = groupSpaceDAO.getById(groupSpace.getId(), false);
-        groupSpaceDAO.makeTransient(other);
-        assert  groupSpaceDAO.getById(other.getId(), false) == null : "Should no longer be able to find groupSpace";
+ 	    other = groupWorkspaceDAO.getById(groupSpace.getId(), false);
+        groupWorkspaceDAO.makeTransient(other);
+        assert  groupWorkspaceDAO.getById(other.getId(), false) == null : "Should no longer be able to find groupSpace";
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
         tm.commit(ts);
 	}

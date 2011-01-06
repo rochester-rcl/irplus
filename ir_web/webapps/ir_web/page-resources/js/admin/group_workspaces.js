@@ -20,10 +20,10 @@
 YAHOO.namespace("ur.groupspace");
 
 //actions for adding,updating and removing content types
-var updateGroupSpaceAction = basePath + 'admin/updateGroupSpace.action';
-var newGroupSpaceAction = basePath + 'admin/createGroupSpace.action';
-var deleteGroupSpaceAction = basePath + 'admin/deleteGroupSpace.action';
-var getGroupSpaceAction = basePath + 'admin/getGroupSpace.action';
+var updateGroupWorkspaceAction = basePath + 'admin/updateGroupWorkspace.action';
+var newGroupWorkspaceAction = basePath + 'admin/createGroupWorkspace.action';
+var deleteGroupWorkspaceAction = basePath + 'admin/deleteGroupWorkspace.action';
+var getGroupWorkspaceAction = basePath + 'admin/getGroupWorkspace.action';
 /**
  * content type namespace
  */
@@ -33,17 +33,17 @@ YAHOO.ur.groupspace = {
 	  * clear out any form data messages or input
 	  * in the groupspace form
 	  */
-	clearGroupSpaceForm : function()
+	clearGroupWorkspaceForm : function()
 	{
 	    
 	    // clear out any errors
-        var div = document.getElementById('groupspaceError');
+        var div = document.getElementById('groupWorkspaceError');
         div.innerHTML = "";
 	    
-	    document.getElementById('groupSpaceName').value = "";
-		document.getElementById('groupSpaceDescription').value = "";
-		document.getElementById('groupSpaceId').value = "";
-		document.addGroupSpace.newGroupSpace.value = "true";
+	    document.getElementById('groupWorkspaceName').value = "";
+		document.getElementById('groupWorkspaceDescription').value = "";
+		document.getElementById('groupWorkspaceId').value = "";
+		document.addGroupWorkspace.newGroupWorkspace.value = "true";
 	},
 	
 	
@@ -52,7 +52,7 @@ YAHOO.ur.groupspace = {
 	 * a new groupspace
 	 *
 	 */
-	createCreateGroupSpaceDialog : function()
+	createCreateGroupWorkspaceDialog : function()
 	{
 	    
 		// Define various event handlers for Dialog
@@ -65,8 +65,8 @@ YAHOO.ur.groupspace = {
 		// handle a cancel of the adding content type dialog
 		var handleCancel = function() 
 		{
-		    YAHOO.ur.groupspace.newGroupSpaceDialog.hide();
-		    YAHOO.ur.groupspace.clearGroupSpaceForm();
+		    YAHOO.ur.groupspace.newGroupWorkspaceDialog.hide();
+		    YAHOO.ur.groupspace.clearGroupWorkspaceForm();
 		};
 		
 		var handleSuccess = function(o) 
@@ -77,8 +77,7 @@ YAHOO.ur.groupspace = {
 	        {
 		        //get the response from adding a content type
 		        var response = o.responseText;
-		        var groupspaceForm = document.getElementById('groupSpaceDialogFields');
-		    
+		        var groupspaceForm = document.getElementById('groupWorkspaceDialogFields');
 		        // update the form fields with the response.  This updates
 		        // the form, if there was an issue, update the form with
 		        // the error messages.
@@ -86,18 +85,17 @@ YAHOO.ur.groupspace = {
 		    
 		        // determine if the add/edit was a success
 		        var success = document.getElementById("success").value;
-		    
 		  
 		        //if the content type was not added then show the user the error message.
 		        // received from the server
 		        if( success == "false" )
 		        {
-	                YAHOO.ur.groupspace.newGroupSpaceDialog.showDialog();
+	                YAHOO.ur.groupspace.newGroupWorkspaceDialog.showDialog();
 		        }
 		        else
 		        {
-		        	var id = document.getElementById('groupSpaceId').value;
-		        	window.location = getGroupSpaceAction+ '?id=' + id;
+		        	var id = document.getElementById('groupWorkspaceId').value;
+		        	window.location = getGroupWorkspaceAction+ '?id=' + id;
 		        }
 		    }
 	        
@@ -106,14 +104,14 @@ YAHOO.ur.groupspace = {
 		// handle form sbumission failure
 		var handleFailure = function(o) {
 			YAHOO.ur.util.wait.waitDialog.hide();
-		    alert('groupspace submission failed ' + o.status + ' status text ' + o.statusText );
+		    alert('group workspace submission failed ' + o.status + ' status text ' + o.statusText );
 		};
 	
 		// Instantiate the Dialog
 		// make it modal - 
 		// it should not start out as visible - it should not be shown until 
 		// new content type button is clicked.
-		YAHOO.ur.groupspace.newGroupSpaceDialog = new YAHOO.widget.Dialog('newGroupSpaceDialog', 
+		YAHOO.ur.groupspace.newGroupWorkspaceDialog = new YAHOO.widget.Dialog('newGroupWorkspaceDialog', 
 	        { width : "500px",
 			  visible : false, 
 			  modal : true,
@@ -122,21 +120,21 @@ YAHOO.ur.groupspace = {
 			} );
 			
 		//submit form
-		YAHOO.ur.groupspace.newGroupSpaceDialog.submit = function() 
+		YAHOO.ur.groupspace.newGroupWorkspaceDialog.submit = function() 
 		{
-		    YAHOO.util.Connect.setForm('addGroupSpace');
-		    if( YAHOO.ur.groupspace.newGroupSpaceDialog.validate() )
+		    YAHOO.util.Connect.setForm('addGroupWorkspace');
+		    if( YAHOO.ur.groupspace.newGroupWorkspaceDialog.validate() )
 		    {
 	            var cObj = YAHOO.util.Connect.asyncRequest('post',
-	            		newGroupSpaceAction, callback);
+	            		newGroupWorkspaceAction, callback);
 	        }
 	     }		
 
 	    
 	 	// Validate the entries in the form to require that both first and last name are entered
-		YAHOO.ur.groupspace.newGroupSpaceDialog.validate = function() 
+		YAHOO.ur.groupspace.newGroupWorkspaceDialog.validate = function() 
 		{
-		    var name = document.getElementById('groupSpaceName').value;
+		    var name = document.getElementById('groupWorkspaceName').value;
 			if (name == "" || name == null) {
 			    alert('A name must be entered');
 				return false;
@@ -150,20 +148,20 @@ YAHOO.ur.groupspace = {
 				
 				
 		// Render the Dialog
-		YAHOO.ur.groupspace.newGroupSpaceDialog.render();			
+		YAHOO.ur.groupspace.newGroupWorkspaceDialog.render();			
 			
 	    // show and center the dialog box
-	    YAHOO.ur.groupspace.newGroupSpaceDialog.showDialog = function()
+	    YAHOO.ur.groupspace.newGroupWorkspaceDialog.showDialog = function()
 	    {
-	        YAHOO.ur.groupspace.newGroupSpaceDialog.center();
-	        YAHOO.ur.groupspace.newGroupSpaceDialog.show()
+	        YAHOO.ur.groupspace.newGroupWorkspaceDialog.center();
+	        YAHOO.ur.groupspace.newGroupWorkspaceDialog.show()
 	    }
 
 	
 	    // listener for showing the dialog when clicked.
-		YAHOO.util.Event.addListener("showGroupSpace", "click", 
-		    YAHOO.ur.groupspace.newGroupSpaceDialog.showDialog, 
-		    YAHOO.ur.groupspace.newGroupSpaceDialog, true);
+		YAHOO.util.Event.addListener("showGroupWorkspace", "click", 
+		    YAHOO.ur.groupspace.newGroupWorkspaceDialog.showDialog, 
+		    YAHOO.ur.groupspace.newGroupWorkspaceDialog, true);
 		    
 	},
 	
@@ -172,24 +170,24 @@ YAHOO.ur.groupspace = {
 	 * a content type
 	 *
 	 */
-	createDeleteGroupSpaceDialog :function()
+	createDeleteGroupWorkspaceDialog :function()
 	{
 	    
 		// Define various event handlers for Dialog
 		var handleSubmit = function() 
 		{
-		    YAHOO.util.Connect.setForm('deleteGroupSpaceForm');
+		    YAHOO.util.Connect.setForm('deleteGroupWorkspaceForm');
 		    
 		    //delete the content type
 	        var cObj = YAHOO.util.Connect.asyncRequest('post',
-	        		deleteGroupSpaceAction, callback);
+	        		deleteGroupWorkspaceAction, callback);
 		};
 		
 			
 		// handle a cancel of deleting content type dialog
 		var handleCancel = function() 
 		{
-			YAHOO.ur.groupspace.deleteGroupSpaceDialog.hide();
+			YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.hide();
 		};
 		
 		var handleSuccess = function(o) 
@@ -198,23 +196,23 @@ YAHOO.ur.groupspace = {
 	        // occurred
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
-		        var div = document.getElementById('groupSpaceTable');
+		        var div = document.getElementById('groupWorkspaceTable');
 		        div.innerHTML = o.responseText;
-		        YAHOO.ur.groupspace.deleteGroupSpaceDialog.hide();
+		        YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.hide();
 		    }
 		};
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-			YAHOO.ur.groupspace.deleteGroupSpaceDialog.hide();
-		    alert('delete group space failed ' + o.status + ' status text ' + o.statusText);
+			YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.hide();
+		    alert('delete group workspace failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog
 		// make it modal - 
 		// it should not start out as visible - it should not be shown until 
 		// new content type button is clicked.
-		YAHOO.ur.groupspace.deleteGroupSpaceDialog = new YAHOO.widget.Dialog('deleteGroupSpaceDialog', 
+		YAHOO.ur.groupspace.deleteGroupWorkspaceDialog = new YAHOO.widget.Dialog('deleteGroupWorkspaceDialog', 
 	        { width : "500px",
 			  visible : false, 
 			  modal : true,
@@ -223,25 +221,25 @@ YAHOO.ur.groupspace = {
 			} );
 			
 	    // show and center the delete dialog
-		YAHOO.ur.groupspace.deleteGroupSpaceDialog.showDialog = function()
+		YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.showDialog = function()
 	    {
-			YAHOO.ur.groupspace.deleteGroupSpaceDialog.center();
-			YAHOO.ur.groupspace.deleteGroupSpaceDialog.show();
+			YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.center();
+			YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.show();
 	    }
 	    
 		// Wire up the success and failure handlers
 		var callback = { success: handleSuccess, failure: handleFailure };
 				
 		// Render the Dialog
-		YAHOO.ur.groupspace.deleteGroupSpaceDialog.render();
+		YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.render();
 
 	},
 	
 	// delete the group space with the given id
-	deleteGroupSpace : function(id)
+	deleteGroupWorkspace : function(id)
 	{
 		document.getElementById('deleteId').value=id;
-		YAHOO.ur.groupspace.deleteGroupSpaceDialog.showDialog();
+		YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.showDialog();
 	},
 	
 	// initialize the page
@@ -249,8 +247,8 @@ YAHOO.ur.groupspace = {
 	// been created
 	init : function() 
 	{
-	    YAHOO.ur.groupspace.createCreateGroupSpaceDialog();
-	    YAHOO.ur.groupspace.createDeleteGroupSpaceDialog();
+	    YAHOO.ur.groupspace.createCreateGroupWorkspaceDialog();
+	    YAHOO.ur.groupspace.createDeleteGroupWorkspaceDialog();
   	}
 	
 }	

@@ -19,22 +19,28 @@ package edu.ur.hibernate.ir.groupspace.db;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.groupspace.GroupFile;
-import edu.ur.ir.groupspace.GroupFileDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
+import edu.ur.ir.groupspace.GroupWorkspaceFolderDAO;
 
-public class HbGroupFileDAO implements GroupFileDAO{
+/**
+ * Persistent storage for group folder data.
+ * 
+ * @author Nathan Sarr
+ *
+ */
+public class HbGroupWorkspaceFolderDAO implements GroupWorkspaceFolderDAO{
 
-	/** eclipse generated id */
-	private static final long serialVersionUID = -8181551931356055781L;
+	/** eclipse generated id*/
+	private static final long serialVersionUID = 7151402796946586912L;
 	
 	/** hibernate helper  */
-	private final HbCrudDAO<GroupFile> hbCrudDAO;
+	private final HbCrudDAO<GroupWorkspaceFolder> hbCrudDAO;
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbGroupFileDAO() {
-		hbCrudDAO = new HbCrudDAO<GroupFile>(GroupFile.class);
+	public HbGroupWorkspaceFolderDAO() {
+		hbCrudDAO = new HbCrudDAO<GroupWorkspaceFolder>(GroupWorkspaceFolder.class);
 	}
 	
 	/**
@@ -52,7 +58,7 @@ public class HbGroupFileDAO implements GroupFileDAO{
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */
-	public GroupFile getById(Long id, boolean lock) {
+	public GroupWorkspaceFolder getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
@@ -61,7 +67,7 @@ public class HbGroupFileDAO implements GroupFileDAO{
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
 	 */
-	public void makePersistent(GroupFile entity) {
+	public void makePersistent(GroupWorkspaceFolder entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
@@ -70,7 +76,7 @@ public class HbGroupFileDAO implements GroupFileDAO{
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
-	public void makeTransient(GroupFile entity) {
+	public void makeTransient(GroupWorkspaceFolder entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 

@@ -33,10 +33,10 @@ import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.hibernate.ir.test.helper.PropertiesLoader;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.file.VersionedFileDAO;
-import edu.ur.ir.groupspace.GroupFolder;
-import edu.ur.ir.groupspace.GroupFolderDAO;
-import edu.ur.ir.groupspace.GroupSpace;
-import edu.ur.ir.groupspace.GroupSpaceDAO;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
+import edu.ur.ir.groupspace.GroupWorkspaceFolderDAO;
+import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserEmail;
@@ -48,7 +48,7 @@ import edu.ur.ir.user.UserManager;
  * @author Nathan Sarr
  *
  */
-public class GroupFolderDAOTest {
+public class GroupWorkspaceFolderDAOTest {
 	
 	/** Properties file with testing specific information. */
 	PropertiesLoader propertiesLoader = new PropertiesLoader();
@@ -68,8 +68,8 @@ public class GroupFolderDAOTest {
 			TransactionDefinition.PROPAGATION_REQUIRED);
 	
 	/** Group folder data access */
-	GroupFolderDAO groupFolderDAO = (GroupFolderDAO) ctx
-	.getBean("groupFolderDAO");
+	GroupWorkspaceFolderDAO groupWorkspaceFolderDAO = (GroupWorkspaceFolderDAO) ctx
+	.getBean("groupWorkspaceFolderDAO");
 
     /** User data access */
     IrUserDAO userDAO= (IrUserDAO) ctx.getBean("irUserDAO");
@@ -87,8 +87,8 @@ public class GroupFolderDAOTest {
 	ctx.getBean("uniqueNameGenerator");
 	
 	/** Group space data access */
-	GroupSpaceDAO groupSpaceDAO = (GroupSpaceDAO) ctx
-	.getBean("groupSpaceDAO");
+	GroupWorkspaceDAO groupWorkspaceDAO = (GroupWorkspaceDAO) ctx
+	.getBean("groupWorkspaceDAO");
 	
 	
 	/**
@@ -111,35 +111,35 @@ public class GroupFolderDAOTest {
 		user.setAccountLocked(true);
 		user.setCredentialsExpired(true);
 		
-		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
-		groupSpaceDAO.makePersistent(groupSpace);
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
+		groupWorkspaceDAO.makePersistent(groupSpace);
         
 		// create the user and their folder.
 		userDAO.makePersistent(user);
-		GroupFolder groupFolder = groupSpace.createRootFolder(user, "topFolder");
-		groupFolderDAO.makePersistent(groupFolder);
+		GroupWorkspaceFolder groupFolder = groupSpace.createRootFolder(user, "topFolder");
+		groupWorkspaceFolderDAO.makePersistent(groupFolder);
 		tm.commit(ts);
 		
         // Start the transaction 
         ts = tm.getTransaction(td);
 
-        assert groupFolderDAO.getById(groupFolder.getId(), false) != null : "Should be able to find "
+        assert groupWorkspaceFolderDAO.getById(groupFolder.getId(), false) != null : "Should be able to find "
 			+ " group Folder " + groupFolder;
 
-		assert groupFolderDAO.getById(groupFolder.getId(), false).equals(groupFolder) : 
+		assert groupWorkspaceFolderDAO.getById(groupFolder.getId(), false).equals(groupFolder) : 
 			"Folders should be equal";
 		
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
-		groupFolderDAO.makeTransient(groupFolderDAO.getById(groupFolder.getId(), false));
+		groupWorkspaceFolderDAO.makeTransient(groupWorkspaceFolderDAO.getById(groupFolder.getId(), false));
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
-		assert groupFolderDAO.getById(groupFolder.getId(), false) == null: 
+		assert groupWorkspaceFolderDAO.getById(groupFolder.getId(), false) == null: 
 			"Should not be able to find group folder";
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
-        groupSpaceDAO.makeTransient(groupSpaceDAO.getById(groupSpace.getId(), false));
+        groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
 
 		tm.commit(ts);
 	}
@@ -164,14 +164,14 @@ public class GroupFolderDAOTest {
 		user.setAccountLocked(true);
 		user.setCredentialsExpired(true);
 
-		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
-		groupSpaceDAO.makePersistent(groupSpace);
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
+		groupWorkspaceDAO.makePersistent(groupSpace);
 
 		
 		// create the user and their folder.
 		userDAO.makePersistent(user);
-		GroupFolder groupFolder1 = groupSpace.createRootFolder(user, "topFolder");
-		groupFolderDAO.makePersistent(groupFolder1);
+		GroupWorkspaceFolder groupFolder1 = groupSpace.createRootFolder(user, "topFolder");
+		groupWorkspaceFolderDAO.makePersistent(groupFolder1);
 		
 		// make sure parent starts out with 1 and 2 left/right values.
 		assert groupFolder1.getLeftValue() == 1L : "Left value should be 1 but is " + 
@@ -180,7 +180,7 @@ public class GroupFolderDAOTest {
 		assert groupFolder1.getRightValue() == 2L : "Right value should be 2 but is " + 
 		groupFolder1.getRightValue();
 
-		GroupFolder groupFolder2 = groupSpace.createRootFolder(user, "topFolder2");
+		GroupWorkspaceFolder groupFolder2 = groupSpace.createRootFolder(user, "topFolder2");
 		
 		assert groupFolder2.getLeftValue() == 1L : "Left value should be 1 but is " + 
 		groupFolder2.getLeftValue();
@@ -189,7 +189,7 @@ public class GroupFolderDAOTest {
 		groupFolder2.getRightValue();
 		
 		// add a child
-		GroupFolder childFolder1 = null;
+		GroupWorkspaceFolder childFolder1 = null;
 		try
 		{
 		    childFolder1 = groupFolder1.createChild("childFolder1", user);
@@ -213,7 +213,7 @@ public class GroupFolderDAOTest {
 		
 		
 		// add another child
-		 GroupFolder childFolder2 = null;
+		 GroupWorkspaceFolder childFolder2 = null;
 		try
 		{
 		   childFolder2 = groupFolder1.createChild("child2",user);
@@ -243,7 +243,7 @@ public class GroupFolderDAOTest {
 		
 		
 		// add another child
-		GroupFolder subFolder1 = null;
+		GroupWorkspaceFolder subFolder1 = null;
 		try
 		{
 		    subFolder1 = childFolder1.createChild("subFolder1",user);
@@ -279,7 +279,7 @@ public class GroupFolderDAOTest {
 		childFolder2.getRightValue();
 		
 		// add another child
-		 GroupFolder subFolder2 = null;
+		 GroupWorkspaceFolder subFolder2 = null;
 		try
 		{
 		    subFolder2 = childFolder1.createChild("subFolder2",user);
@@ -324,8 +324,8 @@ public class GroupFolderDAOTest {
 
 
 		// persist the tree
-		groupFolderDAO.makePersistent(groupFolder1);
-		groupFolderDAO.makePersistent(groupFolder2);
+		groupWorkspaceFolderDAO.makePersistent(groupFolder1);
+		groupWorkspaceFolderDAO.makePersistent(groupFolder2);
 
 	    tm.commit(ts);
         
@@ -335,12 +335,12 @@ public class GroupFolderDAOTest {
         ts = tm.getTransaction(td);
         
 		// make sure object has been persisted
-		GroupFolder other = groupFolderDAO.getById(groupFolder1.getId(), false);
+		GroupWorkspaceFolder other = groupWorkspaceFolderDAO.getById(groupFolder1.getId(), false);
 		assert other != null : "GroupFolder should be found";
 		assert other.equals(groupFolder1) : "GroupFolder should be the same as is1 ";
 
 		// make sure types are correct
-		GroupFolder other2 = groupFolderDAO.getById(groupFolder2.getId(), false);
+		GroupWorkspaceFolder other2 = groupWorkspaceFolderDAO.getById(groupFolder2.getId(), false);
 		assert !other.equals(other2) : "GroupFolder should be different";
 
 		assert other.getChild(childFolder1.getName()).equals(
@@ -368,7 +368,7 @@ public class GroupFolderDAOTest {
 
 		//GroupFolder myRoot = groupFolderDAO.getById(groupFolder1.getId(), false);
 		// make sure object has been persisted
-		GroupFolder akaSubTreeFolderInfo1 = groupFolderDAO.getById(subFolder1.getId(), false);
+		GroupWorkspaceFolder akaSubTreeFolderInfo1 = groupWorkspaceFolderDAO.getById(subFolder1.getId(), false);
 		
 		assert akaSubTreeFolderInfo1.getLeftValue() == 3L : "Left value should be 5 but is " + 
 		akaSubTreeFolderInfo1.getLeftValue();
@@ -379,7 +379,7 @@ public class GroupFolderDAOTest {
 		assert !akaSubTreeFolderInfo1.isRoot(): "Should not be root folder";
 		
 		
-		GroupFolder akaSubTreeParent = akaSubTreeFolderInfo1.getParent();
+		GroupWorkspaceFolder akaSubTreeParent = akaSubTreeFolderInfo1.getParent();
 		
 		assert akaSubTreeParent.getLeftValue() == 2L : "Left value should be 2 but is " + 
 		childFolder1.getLeftValue();
@@ -387,7 +387,7 @@ public class GroupFolderDAOTest {
 		assert akaSubTreeParent.getRightValue() == 7L : "Right value should be 7 but is " + 
 		childFolder1.getRightValue();
 		
-		GroupFolder akaRoot =  akaSubTreeParent.getParent();
+		GroupWorkspaceFolder akaRoot =  akaSubTreeParent.getParent();
 		
 		assert akaRoot.getLeftValue() == 1L : "Left value should be 1 but is " + 
 		groupFolder1.getLeftValue();
@@ -395,7 +395,7 @@ public class GroupFolderDAOTest {
 		assert akaRoot.getRightValue() == 10L : "Right value should be 10 but is " + 
 		groupFolder1.getRightValue();
 		
-		GroupFolder subSubTreeFolderInfo1 = null;
+		GroupWorkspaceFolder subSubTreeFolderInfo1 = null;
 		try
 		{
 		    subSubTreeFolderInfo1 = 
@@ -424,7 +424,7 @@ public class GroupFolderDAOTest {
 		assert akaSubTreeFolderInfo1.getTreeRoot().getRightValue() == 12L : "Right value should be 12 but is " + 
 		akaSubTreeFolderInfo1.getTreeRoot().getRightValue();
 		
-		groupFolderDAO.makePersistent(akaSubTreeFolderInfo1.getTreeRoot());
+		groupWorkspaceFolderDAO.makePersistent(akaSubTreeFolderInfo1.getTreeRoot());
 		// commit the transaction - this block is only needed when lazy loading
 		// must occur in testing
 		tm.commit(ts);
@@ -434,7 +434,7 @@ public class GroupFolderDAOTest {
 		// Start the transaction this is for lazy loading
 		ts = tm.getTransaction(td);
 		
-		GroupFolder topFolder = groupFolderDAO.getById(groupFolder1.getId(), true);
+		GroupWorkspaceFolder topFolder = groupWorkspaceFolderDAO.getById(groupFolder1.getId(), true);
 		
 		assert topFolder.getLeftValue() == 1L : "Left value should be 1 but is " + 
 		groupFolder1.getLeftValue();
@@ -443,7 +443,7 @@ public class GroupFolderDAOTest {
 		groupFolder1.getRightValue();
 		
 		// test deleting an object
-		groupFolderDAO.makeTransient(topFolder);
+		groupWorkspaceFolderDAO.makeTransient(topFolder);
 		tm.commit(ts);
 		
 
@@ -451,21 +451,21 @@ public class GroupFolderDAOTest {
         // Start the transaction this is for lazy loading
         ts = tm.getTransaction(td);
         
-		assert groupFolderDAO.getById(groupFolder1.getId(), true) == null : "Should not find  TreeFolderInfo1";
-		assert groupFolderDAO.getById(groupFolder2.getId(), true).equals(
+		assert groupWorkspaceFolderDAO.getById(groupFolder1.getId(), true) == null : "Should not find  TreeFolderInfo1";
+		assert groupWorkspaceFolderDAO.getById(groupFolder2.getId(), true).equals(
 				groupFolder2) : "should find TreeFolderInfo2";
 		tm.commit(ts);
 		
 		
 		ts = tm.getTransaction(td);
 		// clean up the rest
-		groupFolderDAO.makeTransient(groupFolderDAO.getById(groupFolder2.getId(), true));
+		groupWorkspaceFolderDAO.makeTransient(groupWorkspaceFolderDAO.getById(groupFolder2.getId(), true));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
-        groupSpaceDAO.makeTransient(groupSpaceDAO.getById(groupSpace.getId(), false));
+        groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
 		tm.commit(ts);
 
 		ts = tm.getTransaction(td);
-		assert groupFolderDAO.getById(groupFolder2.getId(), false) == null : "should not find TreeFolderInfo2";
+		assert groupWorkspaceFolderDAO.getById(groupFolder2.getId(), false) == null : "should not find TreeFolderInfo2";
 		tm.commit(ts);
 
 	}
@@ -491,26 +491,26 @@ public class GroupFolderDAOTest {
 		user.setAccountLocked(true);
 		user.setCredentialsExpired(true);
 		
-		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
-		groupSpaceDAO.makePersistent(groupSpace);
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
+		groupWorkspaceDAO.makePersistent(groupSpace);
 		
 		// persist the user.
 		userDAO.makePersistent(user);
 		
-		GroupFolder folderA = groupSpace.createRootFolder(user, "Folder A");
-		GroupFolder folderC = groupSpace.createRootFolder(user, "Folder C");
+		GroupWorkspaceFolder folderA = groupSpace.createRootFolder(user, "Folder A");
+		GroupWorkspaceFolder folderC = groupSpace.createRootFolder(user, "Folder C");
 		
-		GroupFolder folderA1 = folderA.createChild("Folder A1", user);
+		GroupWorkspaceFolder folderA1 = folderA.createChild("Folder A1", user);
 		
 		
-		GroupFolder folderAA1 = folderA1.createChild("Folder AA1", user);
-		GroupFolder folderAA2 = folderA1.createChild("Folder AA2", user);
+		GroupWorkspaceFolder folderAA1 = folderA1.createChild("Folder AA1", user);
+		GroupWorkspaceFolder folderAA2 = folderA1.createChild("Folder AA2", user);
 		
 		folderC.createChild("Folder C1", user);
 
 		// save folder c first because it is the new parent
-		groupFolderDAO.makePersistent(folderC);
-		groupFolderDAO.makePersistent(folderA);
+		groupWorkspaceFolderDAO.makePersistent(folderC);
+		groupWorkspaceFolderDAO.makePersistent(folderA);
 		
 		folderC.addChild(folderA1);
 		tm.commit(ts);
@@ -521,10 +521,10 @@ public class GroupFolderDAOTest {
 		folderC + " but is " + folderAA2.getTreeRoot();
 		
 		ts = tm.getTransaction(td);
-		groupFolderDAO.makeTransient(groupFolderDAO.getById(folderA.getId(), true));
-		groupFolderDAO.makeTransient(groupFolderDAO.getById(folderC.getId(), true));
+		groupWorkspaceFolderDAO.makeTransient(groupWorkspaceFolderDAO.getById(folderA.getId(), true));
+		groupWorkspaceFolderDAO.makeTransient(groupWorkspaceFolderDAO.getById(folderC.getId(), true));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
-		groupSpaceDAO.makeTransient(groupSpaceDAO.getById(groupSpace.getId(), false));
+		groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
 		tm.commit(ts);
 	}
 	
@@ -550,39 +550,39 @@ public class GroupFolderDAOTest {
 		user.setCredentialsExpired(true);
 		
 		
-		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
-		groupSpaceDAO.makePersistent(groupSpace);
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
+		groupWorkspaceDAO.makePersistent(groupSpace);
 
 		// persist user.
 		userDAO.makePersistent(user);
-		GroupFolder groupFolder = groupSpace.createRootFolder(user, "topFolder");
-		groupFolderDAO.makePersistent(groupFolder);
+		GroupWorkspaceFolder groupFolder = groupSpace.createRootFolder(user, "topFolder");
+		groupWorkspaceFolderDAO.makePersistent(groupFolder);
 		
-		GroupFolder groupFolder1 = groupSpace.createRootFolder(user, "topFolder1");
-		groupFolderDAO.makePersistent(groupFolder1);
+		GroupWorkspaceFolder groupFolder1 = groupSpace.createRootFolder(user, "topFolder1");
+		groupWorkspaceFolderDAO.makePersistent(groupFolder1);
 
 		tm.commit(ts);
 		
 		
 		// Start the transaction 
         ts = tm.getTransaction(td);
-        groupSpace = groupSpaceDAO.getById(groupSpace.getId(), false);
+        groupSpace = groupWorkspaceDAO.getById(groupSpace.getId(), false);
         assert groupSpace.getRootFolders().size() == 2 : "Should be equal to 2 but equals " + groupSpace.getRootFolders().size();
 		tm.commit(ts);
 
         ts = tm.getTransaction(td);
-		groupFolderDAO.makeTransient(groupFolderDAO.getById(groupFolder.getId(), false));
-		groupFolderDAO.makeTransient(groupFolderDAO.getById(groupFolder1.getId(), false));
+		groupWorkspaceFolderDAO.makeTransient(groupWorkspaceFolderDAO.getById(groupFolder.getId(), false));
+		groupWorkspaceFolderDAO.makeTransient(groupWorkspaceFolderDAO.getById(groupFolder1.getId(), false));
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
-		assert groupFolderDAO.getById(groupFolder.getId(), false) == null: 
+		assert groupWorkspaceFolderDAO.getById(groupFolder.getId(), false) == null: 
 			"Should not be able to find personal folder";
-		assert groupFolderDAO.getById(groupFolder1.getId(), false) == null: 
+		assert groupWorkspaceFolderDAO.getById(groupFolder1.getId(), false) == null: 
 			"Should not be able to find personal folder";
 
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
-		groupSpaceDAO.makeTransient(groupSpaceDAO.getById(groupSpace.getId(), false));
+		groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
 
 		tm.commit(ts);
 		
@@ -607,23 +607,23 @@ public class GroupFolderDAOTest {
 		user.setAccountLocked(true);
 		user.setCredentialsExpired(true);
 		
-		GroupSpace groupSpace = new GroupSpace("grouName", "groupDescription");
-		groupSpaceDAO.makePersistent(groupSpace);
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
+		groupWorkspaceDAO.makePersistent(groupSpace);
 
 		// create the user and their folder.
 		userDAO.makePersistent(user);
-		GroupFolder groupFolder = groupSpace.createRootFolder(user, "topFolder");
-		groupFolderDAO.makePersistent(groupFolder);
+		GroupWorkspaceFolder groupFolder = groupSpace.createRootFolder(user, "topFolder");
+		groupWorkspaceFolderDAO.makePersistent(groupFolder);
 		
-		GroupFolder groupFolder1 = null;
-		GroupFolder groupFolder2 = null;
+		GroupWorkspaceFolder groupFolder1 = null;
+		GroupWorkspaceFolder groupFolder2 = null;
 		try
 		{
 		    groupFolder1 = groupFolder.createChild("subFolder1",user);
-		    groupFolderDAO.makePersistent(groupFolder1);
+		    groupWorkspaceFolderDAO.makePersistent(groupFolder1);
 		
 		    groupFolder2 = groupFolder.createChild("subFolder2",user);
-		    groupFolderDAO.makePersistent(groupFolder2);
+		    groupWorkspaceFolderDAO.makePersistent(groupFolder2);
 		}
 		catch(Exception e)
 		{
@@ -633,24 +633,24 @@ public class GroupFolderDAOTest {
 		
 		// Start the transaction 
         ts = tm.getTransaction(td);
-        groupSpace = groupSpaceDAO.getById(groupSpace.getId(), false);
+        groupSpace = groupWorkspaceDAO.getById(groupSpace.getId(), false);
         assert groupSpace.getRootFolders().size() == 1 : "Should be equal to 1 but equals " + groupSpace.getRootFolders().size();
 		tm.commit(ts);
 
         ts = tm.getTransaction(td);
-		groupFolderDAO.makeTransient(groupFolderDAO.getById(groupFolder1.getId(), false));
-		groupFolderDAO.makeTransient(groupFolderDAO.getById(groupFolder2.getId(), false));
-		groupFolderDAO.makeTransient(groupFolderDAO.getById(groupFolder.getId(), false));
+		groupWorkspaceFolderDAO.makeTransient(groupWorkspaceFolderDAO.getById(groupFolder1.getId(), false));
+		groupWorkspaceFolderDAO.makeTransient(groupWorkspaceFolderDAO.getById(groupFolder2.getId(), false));
+		groupWorkspaceFolderDAO.makeTransient(groupWorkspaceFolderDAO.getById(groupFolder.getId(), false));
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
-		assert groupFolderDAO.getById(groupFolder.getId(), false) == null: 
+		assert groupWorkspaceFolderDAO.getById(groupFolder.getId(), false) == null: 
 			"Should not be able to find personal folder";
-		assert groupFolderDAO.getById(groupFolder1.getId(), false) == null: 
+		assert groupWorkspaceFolderDAO.getById(groupFolder1.getId(), false) == null: 
 			"Should not be able to find personal folder";
 
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
-		groupSpaceDAO.makeTransient(groupSpaceDAO.getById(groupSpace.getId(), false));
+		groupWorkspaceDAO.makeTransient(groupWorkspaceDAO.getById(groupSpace.getId(), false));
 		
 		tm.commit(ts);
 		

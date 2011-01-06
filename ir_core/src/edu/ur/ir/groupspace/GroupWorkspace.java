@@ -37,7 +37,7 @@ import edu.ur.simple.type.NameAware;
  * @author Nathan Sarr
  *
  */
-public class GroupSpace extends BasePersistent implements NameAware, DescriptionAware {
+public class GroupWorkspace extends BasePersistent implements NameAware, DescriptionAware {
 	
 	/* eclipse generated id */
 	private static final long serialVersionUID = -6440204761384913224L;
@@ -55,19 +55,19 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	private String description;
 	
 	/*  Root Folder for this person. */
-	private Set<GroupFolder> rootFolders = new HashSet<GroupFolder>();
+	private Set<GroupWorkspaceFolder> rootFolders = new HashSet<GroupWorkspaceFolder>();
 	
 	/*  Root files for this person.  */
-	private Set<GroupFile> rootFiles = new HashSet<GroupFile>();
+	private Set<GroupWorkspaceFile> rootFiles = new HashSet<GroupWorkspaceFile>();
 	
 	/* list of groups for this group space */
-	private Set<GroupSpaceGroup> groups = new HashSet<GroupSpaceGroup>();
+	private Set<GroupWorkspaceGroup> groups = new HashSet<GroupWorkspaceGroup>();
 
 	/* date this record was created */
 	private Timestamp createdDate;
 
 	/**  Package protected workspace  */
-	GroupSpace(){}
+	GroupWorkspace(){}
 	
     /**
      * Create a group space with the given name.
@@ -76,7 +76,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
      * @param owner - owner of the group space
      * @throws IllegalFileSystemNameException 
      */
-    public GroupSpace(String name) 
+    public GroupWorkspace(String name) 
     {
     	setName(name);
     	createdDate = new Timestamp(new Date().getTime());
@@ -90,7 +90,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
      * @param description - description of the group space
      * @throws IllegalFileSystemNameException 
      */
-    public GroupSpace(String name, String description) 
+    public GroupWorkspace(String name, String description) 
     {
     	this(name);
     	setDescription(description);
@@ -186,9 +186,9 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof GroupSpace)) return false;
+		if (!(o instanceof GroupWorkspace)) return false;
 
-		final GroupSpace other = (GroupSpace) o;
+		final GroupWorkspace other = (GroupWorkspace) o;
 
 		if( ( lowerCaseName != null && !lowerCaseName.equalsIgnoreCase(other.getLowerCaseName()) ) ||
 			( lowerCaseName == null && other.getLowerCaseName() != null ) ) return false;
@@ -256,7 +256,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @return true if the folder is removed.
 	 * 
 	 */
-	public boolean removeRootFolder(GroupFolder rootFolder)
+	public boolean removeRootFolder(GroupWorkspaceFolder rootFolder)
 	{
 		return rootFolders.remove(rootFolder);
 	}
@@ -267,7 +267,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @param groupFile
 	 * @return true if the file is removed.
 	 */
-	public boolean removeRootFile(GroupFile groupFile)
+	public boolean removeRootFile(GroupWorkspaceFile groupFile)
 	{
 		return rootFiles.remove(groupFile);
 	}
@@ -284,7 +284,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @throws IllegalArgumentException if the name of the folder 
 	 * already exists or the name is null.
 	 */
-	public GroupFolder createRootFolder(IrUser owner, String name) throws DuplicateNameException, IllegalFileSystemNameException
+	public GroupWorkspaceFolder createRootFolder(IrUser owner, String name) throws DuplicateNameException, IllegalFileSystemNameException
 	{
 		if( name == null)
 		{
@@ -297,7 +297,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 			" already exists ", name );
         }
 		
-		GroupFolder f = new GroupFolder(this, owner, name);
+		GroupWorkspaceFolder f = new GroupWorkspaceFolder(this, owner, name);
 		rootFolders.add(f);
 		return f;
 	}
@@ -310,7 +310,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @param folder - to add as a root
 	 * @throws DuplicateNameException 
 	 */
-	public void addRootFolder(GroupFolder folder) throws DuplicateNameException
+	public void addRootFolder(GroupWorkspaceFolder folder) throws DuplicateNameException
 	{
 		if( !isVaildPersonalFileSystemName(folder.getName()))
         {
@@ -318,7 +318,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
         			" already exists in this folder", folder.getName());
         }
 		
-		GroupFolder parent = folder.getParent();
+		GroupWorkspaceFolder parent = folder.getParent();
 		if(parent != null)
 		{
 		    parent.removeChild(folder);
@@ -331,7 +331,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * 
 	 * @return Unmodifiable set of root folders
 	 */
-	public Set<GroupFolder> getRootFolders() {
+	public Set<GroupWorkspaceFolder> getRootFolders() {
 		return Collections.unmodifiableSet(rootFolders);
 	}
 
@@ -340,7 +340,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * 
 	 * @param rootFolders
 	 */
-	void setFolders(Set<GroupFolder> rootFolders) {
+	void setFolders(Set<GroupWorkspaceFolder> rootFolders) {
 		this.rootFolders = rootFolders;
 	}
 	
@@ -351,9 +351,9 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @param name - name of the folder to return
 	 * @return The folder if found otherwise null.
 	 */
-	public GroupFolder getRootFolder(String name)
+	public GroupWorkspaceFolder getRootFolder(String name)
 	{
-		for(GroupFolder f: rootFolders )
+		for(GroupWorkspaceFolder f: rootFolders )
 		{
 			if( f.getName().equalsIgnoreCase(name))
 			{
@@ -370,9 +370,9 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @param name
 	 * @return the found file
 	 */
-	public GroupFile getRootFile(String nameWithExtension)
+	public GroupWorkspaceFile getRootFile(String nameWithExtension)
 	{
-		for(GroupFile pvf: rootFiles )
+		for(GroupWorkspaceFile pvf: rootFiles )
 		{
 			if( pvf.getVersionedFile().getNameWithExtension().equalsIgnoreCase(nameWithExtension))
 			{
@@ -389,7 +389,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * 
 	 * @param file - to add as a root file
 	 */
-	public void addRootFile(GroupFile file) throws DuplicateNameException
+	public void addRootFile(GroupWorkspaceFile file) throws DuplicateNameException
 	{
 		if( !isVaildPersonalFileSystemName(file.getVersionedFile().getNameWithExtension()))
         {
@@ -397,13 +397,13 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
         			" already exists in this folder", file.getName());
         }
 		
-		GroupFolder folder = file.getGroupFolder();
+		GroupWorkspaceFolder folder = file.getGroupWorkspaceFolder();
 		if( folder != null )
 		{
 			folder.removeGroupFile(file);
-			file.setGroupFolder(null);
+			file.setGroupWorkspaceFolder(null);
 			
-			GroupSpace current = folder.getGroupSpace();
+			GroupWorkspace current = folder.getGroupWorkspace();
 			if(current != null && !current.equals(this))
 			{
 				current.removeRootFile(file);
@@ -422,7 +422,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * 
 	 * @throws DuplicateNameException - if the file name already exists as a root file
 	 */
-	public GroupFile createRootFile(VersionedFile vf)throws DuplicateNameException
+	public GroupWorkspaceFile createRootFile(VersionedFile vf)throws DuplicateNameException
 	{
         if( !isVaildPersonalFileSystemName(vf.getNameWithExtension()) )
         {
@@ -431,7 +431,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
         }
         
         
-		GroupFile pvf = new GroupFile(vf, this);
+		GroupWorkspaceFile pvf = new GroupWorkspaceFile(vf, this);
 		rootFiles.add(pvf);
 		return pvf;
 		
@@ -442,7 +442,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * 
 	 * @return
 	 */
-	public Set<GroupFile> getRootFiles() {
+	public Set<GroupWorkspaceFile> getRootFiles() {
 		return Collections.unmodifiableSet(rootFiles);
 	}
 
@@ -451,7 +451,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * 
 	 * @param rootFiles
 	 */
-	void setRootFiles(Set<GroupFile> rootFiles) {
+	void setRootFiles(Set<GroupWorkspaceFile> rootFiles) {
 		this.rootFiles = rootFiles;
 	}
 	
@@ -461,9 +461,9 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @param name - name of the file to return
 	 * @return The file if found otherwise null.
 	 */
-	public GroupFile getRootGroupFile(String name)
+	public GroupWorkspaceFile getRootGroupFile(String name)
 	{
-		for(GroupFile gf: rootFiles )
+		for(GroupWorkspaceFile gf: rootFiles )
 		{
 			if( gf.getName().equals(name))
 			{
@@ -479,9 +479,9 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @param id - id of the file to return
 	 * @return The file if found otherwise null.
 	 */
-	public GroupFile getRootGroupFile(Long id)
+	public GroupWorkspaceFile getRootGroupFile(Long id)
 	{
-		for(GroupFile gf: rootFiles )
+		for(GroupWorkspaceFile gf: rootFiles )
 		{
 			if( gf.getId().equals(id))
 			{
@@ -516,9 +516,9 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @param name - name of the group
 	 * @return group if found otherwise null
 	 */
-	public GroupSpaceGroup getGroup(String name)
+	public GroupWorkspaceGroup getGroup(String name)
 	{
-	    for(GroupSpaceGroup group : groups)
+	    for(GroupWorkspaceGroup group : groups)
 	    {
 	    	if( group.getName().equalsIgnoreCase(name))
 	    	{
@@ -534,13 +534,13 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @return - created group
 	 * @throws DuplicateNameException - if a group with the given name exists regardless of case 
 	 */
-	public GroupSpaceGroup createGroup(String name, String description) throws DuplicateNameException
+	public GroupWorkspaceGroup createGroup(String name, String description) throws DuplicateNameException
 	{
 		if( getGroup(name) != null )
 		{
 			throw new DuplicateNameException(name);
 		}
-		GroupSpaceGroup group = new GroupSpaceGroup(this, name, description);
+		GroupWorkspaceGroup group = new GroupWorkspaceGroup(this, name, description);
 		groups.add(group);
 		return group;
 
@@ -553,7 +553,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * @return the created group.
 	 * @throws DuplicateNameException - if a group with the given name exists regardless of case 
 	 */
-	public GroupSpaceGroup createGroup(String name) throws DuplicateNameException
+	public GroupWorkspaceGroup createGroup(String name) throws DuplicateNameException
 	{
 		return createGroup(name, null);
 	}
@@ -564,7 +564,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * 
 	 * @return list of groups 
 	 */
-	public Set<GroupSpaceGroup> getGroups() {
+	public Set<GroupWorkspaceGroup> getGroups() {
 		return Collections.unmodifiableSet(groups);
 	}
 
@@ -573,7 +573,7 @@ public class GroupSpace extends BasePersistent implements NameAware, Description
 	 * 
 	 * @param groups
 	 */
-	void setGroups(Set<GroupSpaceGroup> groups) {
+	void setGroups(Set<GroupWorkspaceGroup> groups) {
 		this.groups = groups;
 	}
 

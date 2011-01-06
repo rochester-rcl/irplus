@@ -84,7 +84,7 @@
 	<import resource="ir-news-hibernate.xml"/>  
 	<import resource="ir-researcher-hibernate.xml"/>
 	<import resource="ir-statistics-hibernate.xml"/>	
-	<import resource="ir-group-space-hibernate.xml"/>
+	<import resource="ir-group-workspace-hibernate.xml"/>
 	
 	<!-- ****************************************** --> 
     <!-- Handle db/service classes -->

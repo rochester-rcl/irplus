@@ -29,26 +29,26 @@
 				<urstb:td>Action</urstb:td>
             </urstb:tr>
 		</urstb:thead>
-		<urstb:tbody var="groupSpace" 
+		<urstb:tbody var="groupWorkspace" 
 					 oddRowClass="odd"
 					 evenRowClass="even"
 					 currentRowClassVar="rowClass"
-					 collection="${groupSpaces}">
+					 collection="${groupWorkspaces}">
 		    <urstb:tr cssClass="${rowClass}"
 					  onMouseOver="this.className='highlight'"
 					  onMouseOut="this.className='${rowClass}'">
 						                        
 					  <urstb:td>
-					      ${groupSpace.name}
+					      ${groupWorkspace.name}
 					  </urstb:td>
 					  <urstb:td>
-						  ${groupSpace.description}
+						  ${groupWorkspace.description}
 					  </urstb:td>
 					  <urstb:td>
-						    <c:url value="/admin/getGroupSpace.action" var="editGroupSpaceUrl">
-						        <c:param name="id" value="${groupSpace.id}"/>
+						    <c:url value="/admin/getGroupWorkspace.action" var="editGroupWorkspaceUrl">
+						        <c:param name="id" value="${groupWorkspace.id}"/>
 						    </c:url>
-						    <a href="${editGroupSpaceUrl}">Edit</a>/<a href="javascript:YAHOO.ur.groupspace.deleteGroupSpace(${groupSpace.id});">Delete</a>
+						    <a href="${editGroupWorkspaceUrl}">Edit</a>/<a href="javascript:YAHOO.ur.groupspace.deleteGroupWorkspace(${groupWorkspace.id});">Delete</a>
 					  </urstb:td>
 			</urstb:tr>
 	    </urstb:tbody>

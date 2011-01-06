@@ -839,9 +839,9 @@
    <!-- ****************************************** --> 
    <!-- Group workspace service -->
    <!-- ****************************************** --> 
-   <bean id="groupSpaceService"
+   <bean id="groupWorkspaceService"
          class="edu.ur.ir.groupspace.service.DefaultGroupSpaceService">
-         <property name="groupSpaceDAO" ref="groupSpaceDAO"/>
+         <property name="groupWorkspaceDAO" ref="groupWorkspaceDAO"/>
    </bean>
    
    

@@ -24,15 +24,15 @@
    <!-- Group space information  -->
    <!-- ****************************************** --> 
    
-   <bean id="groupSpaceDAOTarget" 
-       class="edu.ur.hibernate.ir.groupspace.db.HbGroupSpaceDAO">
+   <bean id="groupWorkspaceDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceDAO">
        <property name="sessionFactory" ref="sessionFactory"/>
    </bean>
      
-   <bean id="groupSpaceDAO" 
+   <bean id="groupWorkspaceDAO" 
        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
        <property name="transactionManager" ref="transactionManager"/>
-       <property name="target" ref="groupSpaceDAOTarget"/>
+       <property name="target" ref="groupWorkspaceDAOTarget"/>
        <property name="transactionAttributes">
            <props>
                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
@@ -46,15 +46,15 @@
    <!-- Group folder information  -->
    <!-- ****************************************** --> 
    
-   <bean id="groupFolderDAOTarget" 
-       class="edu.ur.hibernate.ir.groupspace.db.HbGroupFolderDAO">
+   <bean id="groupWorkspaceFolderDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceFolderDAO">
        <property name="sessionFactory" ref="sessionFactory"/>
    </bean>
      
-   <bean id="groupFolderDAO" 
+   <bean id="groupWorkspaceFolderDAO" 
        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
        <property name="transactionManager" ref="transactionManager"/>
-       <property name="target" ref="groupFolderDAOTarget"/>
+       <property name="target" ref="groupWorkspaceFolderDAOTarget"/>
        <property name="transactionAttributes">
            <props>
                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
@@ -69,15 +69,15 @@
    <!-- Group file information  -->
    <!-- ****************************************** --> 
    
-   <bean id="groupFileDAOTarget" 
-       class="edu.ur.hibernate.ir.groupspace.db.HbGroupFileDAO">
+   <bean id="groupWorkspaceFileDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceFileDAO">
        <property name="sessionFactory" ref="sessionFactory"/>
    </bean>
      
-   <bean id="groupFileDAO" 
+   <bean id="groupWorkspaceFileDAO" 
        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
        <property name="transactionManager" ref="transactionManager"/>
-       <property name="target" ref="groupFileDAOTarget"/>
+       <property name="target" ref="groupWorkspaceFileDAOTarget"/>
        <property name="transactionAttributes">
            <props>
                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>

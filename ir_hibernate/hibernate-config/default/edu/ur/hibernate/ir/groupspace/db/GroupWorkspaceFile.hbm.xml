@@ -26,15 +26,15 @@
 -->
 <hibernate-mapping package="edu.ur.ir.groupspace">
 
-	<class name="GroupFile" schema="ir_group_space" table="group_file"
+	<class name="GroupWorkspaceFile" schema="ir_group_workspace" table="group_workspace_file"
 		lazy="true">
 
         <cache usage="nonstrict-read-write" />
 		<!-- Common id property. -->
-		<id name="id" type="long" column="group_file_id"
+		<id name="id" type="long" column="group_workspace_file_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_group_space.group_file_seq</param>
+				<param name="sequence">ir_group_workspace.group_workspace_file_seq</param>
 			</generator>
 		</id>
 
@@ -54,22 +54,20 @@
               access="field"/>
         
         <!--  The group folder -->
-        <many-to-one name="groupFolder" class="GroupFolder" 
+        <many-to-one name="groupWorkspaceFolder" class="GroupWorkspaceFolder" 
               unique="true" 
-              column="group_folder_id" 
+              column="group_workspace_folder_id" 
               cascade="save-update"
               access="field"/>
 
               
         <!-- Group This file belongs to -->
-		<many-to-one class="GroupSpace" 
-			name="groupSpace" 
-			column="group_space_id" 
+		<many-to-one class="GroupWorkspace" 
+			name="groupWorkspace" 
+			column="group_workspace_id" 
 			insert="true"
 			update="true" 
 			unique="true"/>
-        
-        
 	</class>
 	
 	

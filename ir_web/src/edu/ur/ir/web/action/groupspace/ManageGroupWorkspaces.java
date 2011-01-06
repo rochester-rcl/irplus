@@ -20,8 +20,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.groupspace.GroupSpace;
-import edu.ur.ir.groupspace.GroupSpaceService;
+import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
@@ -35,7 +35,7 @@ import edu.ur.order.OrderType;
  * @author Nathan Sarr
  *
  */
-public class ManageGroupSpaces extends Pager implements UserIdAware {
+public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 
 	/** eclipse generated id */
 	private static final long serialVersionUID = 5292140116837950036L;
@@ -47,10 +47,10 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	private String description;
 	
 	/* Logger */
-	private static final Logger log = Logger.getLogger(ManageGroupSpaces.class);
+	private static final Logger log = Logger.getLogger(ManageGroupWorkspaces.class);
 	
 	/* service for dealing with group space information */
-	private GroupSpaceService groupSpaceService;
+	private GroupWorkspaceService groupWorkspaceService;
 
 	/* id of the user trying to make changes */
 	private Long userId;
@@ -59,13 +59,13 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	private UserService userService;
 	
 	/* Group space object */
-	private GroupSpace groupSpace;
+	private GroupWorkspace groupWorkspace;
 
 	/* indicates successful action */
 	private boolean success = true;
 	
 	/* list of groupspaces */
-	private List<GroupSpace> groupSpaces;
+	private List<GroupWorkspace> groupSpaces;
 
 	/* id of the groupspace to edit */
 	private Long id;
@@ -76,7 +76,7 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	/**
 	 * Default constructor
 	 */
-	public ManageGroupSpaces()
+	public ManageGroupWorkspaces()
 	{
 		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
@@ -89,7 +89,7 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	 */
 	public String execute()
 	{
-		groupSpaces = groupSpaceService.getGroupspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+		groupSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 		return SUCCESS;
 	}
 	
@@ -100,7 +100,7 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	 */
 	public String get()
 	{
-		groupSpace = groupSpaceService.get(id, false);
+		groupWorkspace = groupWorkspaceService.get(id, false);
 	    return "get";
 	}
 	
@@ -111,9 +111,9 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	 */
 	public String delete()
 	{
-		groupSpace = groupSpaceService.get(id,false);
-		groupSpaceService.delete(groupSpace);
-		groupSpaces = groupSpaceService.getGroupspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+		groupWorkspace = groupWorkspaceService.get(id,false);
+		groupWorkspaceService.delete(groupWorkspace);
+		groupSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 		return "deleted";
 	}
 	
@@ -133,15 +133,15 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 		}
 		try 
 		{
-			groupSpace = new GroupSpace(name, description);
-		    groupSpaceService.save(groupSpace);
+			groupWorkspace = new GroupWorkspace(name, description);
+		    groupWorkspaceService.save(groupWorkspace);
 		} 
 		catch (DuplicateNameException e) 
 		{
 			success = false;
-			message = getText("groupSpaceNameError", 
-					new String[]{groupSpace.getName()});
-			addFieldError("groupSpaceAlreadyExists", message);
+			message = getText("groupWorkspaceNameError", 
+					new String[]{groupWorkspace.getName()});
+			addFieldError("groupWorkspaceAlreadyExists", message);
 		}
         return "added";
 	}
@@ -149,16 +149,16 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	public String update()
 	{
 		log.debug("updating group space  = " + name + " id = " + id);
-		groupSpace = groupSpaceService.get(id, false);
+		groupWorkspace = groupWorkspaceService.get(id, false);
 		
 		try {
-			groupSpace.setName(name);
-			groupSpace.setDescription(description);
-			groupSpaceService.save(groupSpace);
+			groupWorkspace.setName(name);
+			groupWorkspace.setDescription(description);
+			groupWorkspaceService.save(groupWorkspace);
 		} catch (DuplicateNameException e) {
 			success = false;
 			message = getText("groupSpaceNameError", 
-					new String[]{groupSpace.getName()});
+					new String[]{groupWorkspace.getName()});
 			addFieldError("groupSpaceAlreadyExists", message);
 		} 
 		
@@ -173,7 +173,7 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	 * @see edu.ur.ir.web.table.Pager#getTotalHits()
 	 */
 	public int getTotalHits() {
-		return groupSpaceService.getCount().intValue();
+		return groupWorkspaceService.getCount().intValue();
 	}
 
 	/**
@@ -235,8 +235,8 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	 * 
 	 * @param groupSpaceService
 	 */
-	public void setGroupSpaceService(GroupSpaceService groupSpaceService) {
-		this.groupSpaceService = groupSpaceService;
+	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
+		this.groupWorkspaceService = groupWorkspaceService;
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	 * 
 	 * @return
 	 */
-	public List<GroupSpace> getGroupSpaces() 
+	public List<GroupWorkspace> getGroupWorkspaces() 
 	{
 		return groupSpaces;
 	}
@@ -263,8 +263,8 @@ public class ManageGroupSpaces extends Pager implements UserIdAware {
 	 * 
 	 * @return
 	 */
-	public GroupSpace getGroupSpace() {
-		return groupSpace;
+	public GroupWorkspace getGroupWorkspace() {
+		return groupWorkspace;
 	}
 
 	/**

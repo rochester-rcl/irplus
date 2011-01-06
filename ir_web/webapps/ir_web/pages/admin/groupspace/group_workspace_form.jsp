@@ -23,34 +23,34 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 		       
 		<!--  if editing an id must be passed -->     
-	    <input type="hidden" id="groupSpaceId"
-		        name="id" value="${groupSpace.id}"/>
+	    <input type="hidden" id="groupWorkspaceId"
+		        name="id" value="${groupWorkspace.id}"/>
 		               
-	    <input type="hidden" id="newGroupspace"
-		        name="newGroupspace" value="true"/>
+	    <input type="hidden" id="newGroupWorkspace"
+		        name="newGroupWorkspace" value="true"/>
 		
 		<input type="hidden" id="success" name="success" value="${success}"/>       
 		
-		<div id="groupSpaceError">
+		<div id="groupWorkspaceError">
 	        <!--  get the error messages from fieldErrors -->
 		    <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-		    key="groupSpace.name"/></p>
+		    key="groupWorkspace.name"/></p>
 		    <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-		    key="groupSpaceAlreadyExists"/></p>
+		    key="groupWorkspaceAlreadyExists"/></p>
 		</div>
 		
 	    <table class="formTable">    
 		    <tr>       
 	            <td align="left" class="label">Name:*</td>
 	            <td align="left" class="input"><input type="text" 
-			    id="groupSpaceName" 
+			    id="groupWorkspaceName" 
 			    name="name" 
-			    value="${groupSpace.name}" size="45"/> </td>
+			    value="${groupWorkspace.name}" size="45"/> </td>
 			</tr>
 			<tr>
 			    <td align="left" class="label">Description:</td>
 			    <td align="left" colspan="2" class="input"> <textarea name="description" 
-	                id="groupSpaceDescription" cols="42" rows="4">${groupSpace.description}</textarea>
+	                id="groupWorkspaceDescription" cols="42" rows="4">${groupWorkspace.description}</textarea>
 	            </td>
 			</tr>
 	    </table>

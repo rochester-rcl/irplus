@@ -54,7 +54,7 @@
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
- 	<ur:js src="page-resources/js/admin/edit_groupspace.js"/>
+ 	<ur:js src="page-resources/js/admin/edit_group_workspace.js"/>
 </head>
 
 <body class="yui-skin-sam">
@@ -65,10 +65,10 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3><a href="<c:url value="/admin/viewGroupSpaces.action"/>">Group Workspaces</a> &gt; Editing: ${groupSpace.name}</h3>
+        <h3><a href="<c:url value="/admin/viewGroupWorkspaces.action"/>">Group Workspaces</a> &gt; Editing: ${groupWorkspace.name}</h3>
   
         <div id="bd">
-            <div id="groupSpacePropertiesTabs" class="yui-navset">
+            <div id="groupWorkspacePropertiesTabs" class="yui-navset">
 	             <ul class="yui-nav">
                      <li class="selected"><a href="#tab1"><em>Group Workspace Information</em></a></li>
                      <li><a href="#tab2"><em>Owner(s)</em></a></li>
@@ -78,10 +78,10 @@
                  <div class="yui-content">
                      <!--  first tab -->
                      <div id="tab1">
-                         <form id="editGroupSpaceInformation" name="groupspaceInformation" method="post" 
+                         <form id="editGroupWorkspaceInformation" name="groupWorkspaceInformation" method="post" 
                              action="/admin/update">
-                            <input type="hidden" id="groupSpaceId" 
-                                  name="id" value="${groupSpace.id}" />
+                            <input type="hidden" id="groupWorkspaceId" 
+                                  name="id" value="${groupWorkspace.id}" />
                             <table class="formTable">
                                 <tr>
                                     <td class="label">
@@ -89,7 +89,7 @@
                                     </td>
                                     <td class="input">
                                         <input type="text" size="75" name="name" 
-                                               value="<c:out value='${groupSpace.name}'/>"/>
+                                               value="<c:out value='${groupWorkspace.name}'/>"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -100,7 +100,7 @@
                                 <tr>
                                     <td class="input" colspan="2">
                                         <textarea name="description" 
-                                        rows="20" cols="75"><c:out value='${groupSpace.description}'/></textarea>
+                                        rows="20" cols="75"><c:out value='${groupWorkspace.description}'/></textarea>
                                     </td>
                                 </tr>
                                 <tr>

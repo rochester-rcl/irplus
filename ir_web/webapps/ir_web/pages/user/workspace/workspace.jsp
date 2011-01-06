@@ -114,7 +114,7 @@
         <!--  this is the body regin of the page -->
         <div id="bd">
                 
-            <h3> Workspace for: ${user.firstName}&nbsp;${user.lastName}</h3>
+            <h3> Workspace: ${user.firstName}&nbsp;${user.lastName}</h3>
 
 	        <!--  set up tabs for the workspace -->
 	        <div id="workspace-tabs" class="yui-navset">
