@@ -16,18 +16,13 @@ limitations under the License.
 
 package edu.ur.hibernate.ir.institution.db;
 
-import java.sql.SQLException;
 import java.util.List;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.HibernateCallback;
 
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.institution.InstitutionalCollection;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecord;
@@ -78,8 +73,11 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordDAO#getAllOrderByItemIdUpdatedDate()
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate() {
-		return (List<InstitutionalItemIndexProcessingRecord>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getInstitutionalItemIndexProcessingRecordOrderByIdDate");
+	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate(int rowStart, int maxResults) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInstitutionalItemIndexProcessingRecordOrderByIdDate");
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		return q.list();
 	}
 
 	/**
@@ -115,7 +113,8 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("institutionalItemIndexProcessingRecordCount"));
+		 Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("institutionalItemIndexProcessingRecordCount");
+		 return (Long)q.uniqueResult();
 	}
 
 	/**
@@ -125,9 +124,10 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	 */
 	public InstitutionalItemIndexProcessingRecord get(Long itemId,
 			IndexProcessingType processingType) {
-		
-		Object[] values = {itemId, processingType.getId()};
-		return (InstitutionalItemIndexProcessingRecord) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("instItemProcessingRecByItemIdProcessingType", values));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("instItemProcessingRecByItemIdProcessingType");
+		q.setParameter("itemId", itemId);
+		q.setParameter("processingTypeId", processingType.getId());
+		return (InstitutionalItemIndexProcessingRecord)q.uniqueResult();
 	}
 
 	
@@ -139,38 +139,23 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 	public Long insertAllItemsForCollection(
 			final InstitutionalCollection institutionalCollection,
 			final IndexProcessingType processingType) {
-		
-		
-		return (Long) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-		      
-		        Query q = session.getNamedQuery("insertAllItemsForCollection");
-		       
-		        q.setParameter("leftValue", institutionalCollection.getLeftValue());
-		        q.setParameter("rightValue", institutionalCollection.getRightValue());
-			    q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
-			    q.setParameter("processingTypeId", processingType.getId());
-			    return Long.valueOf(q.executeUpdate());
-            }
-		});
-	}
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForCollection");
+		q.setParameter("leftValue", institutionalCollection.getLeftValue());
+		q.setParameter("rightValue", institutionalCollection.getRightValue());
+		q.setParameter("treeRootId", institutionalCollection.getTreeRoot().getId());
+		q.setParameter("processingTypeId", processingType.getId());
+		return Long.valueOf(q.executeUpdate());
+ 	}
 	
 	/**
 	 * Insert all items for a repository
 	 * 
 	 */
-	public Long insertAllItemsForRepository(final IndexProcessingType processingType) {
-		return (Long) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() {
-            public Object doInHibernate(Session session)
-                    throws HibernateException, SQLException {
-		      
-		        Query q = session.getNamedQuery("insertAllItemsForRepository");
-			    q.setParameter("processingTypeId", processingType.getId());
-			    return Long.valueOf(q.executeUpdate());
-            }
-		});
-	}
+	public Long insertAllItemsForRepository(final IndexProcessingType processingType) {		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("insertAllItemsForRepository");
+		q.setParameter("processingTypeId", processingType.getId());
+		return Long.valueOf(q.executeUpdate());
+ 	}
 
 	/**
 	 * Set all items for re-indexing for a given content type
@@ -289,6 +274,21 @@ public class HbInstitutionalItemIndexProcessingRecordDAO implements Institutiona
 		numCreated += q.executeUpdate();
 		return numCreated;
 	}
+	
+	/**
+	 * Get all institutional item index processing records for a given index processing type.
+	 * 
+	 * @return list of records found
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemIndexProcessingRecord> getAllByProcessingTypeUpdatedDate(Long processingTypeId)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("instItemProcessingRecByProcessingType");
+		q.setParameter("processingTypeId", processingTypeId);
+		return q.list();
+
+	}
+
 
 
 }

@@ -65,7 +65,7 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 	private boolean success = true;
 	
 	/* list of groupspaces */
-	private List<GroupWorkspace> groupSpaces;
+	private List<GroupWorkspace> groupWorkSpaces;
 
 	/* id of the groupspace to edit */
 	private Long id;
@@ -89,7 +89,7 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 	 */
 	public String execute()
 	{
-		groupSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+		groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 		return SUCCESS;
 	}
 	
@@ -113,7 +113,7 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 	{
 		groupWorkspace = groupWorkspaceService.get(id,false);
 		groupWorkspaceService.delete(groupWorkspace);
-		groupSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
+		groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 		return "deleted";
 	}
 	
@@ -146,23 +146,32 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
         return "added";
 	}
 	
-	public String update()
+	/**
+	 * Update the group workspace.
+	 * 
+	 * @return success if the update is successful
+	 * @throws DuplicateNameException - if a duplicate name error occurs
+	 */
+	public String update() throws DuplicateNameException
 	{
 		log.debug("updating group space  = " + name + " id = " + id);
 		groupWorkspace = groupWorkspaceService.get(id, false);
-		
-		try {
+		GroupWorkspace other = groupWorkspaceService.get(name);
+		if( other == null )
+		{
 			groupWorkspace.setName(name);
 			groupWorkspace.setDescription(description);
 			groupWorkspaceService.save(groupWorkspace);
-		} catch (DuplicateNameException e) {
-			success = false;
+		}
+		else
+		{
 			message = getText("groupSpaceNameError", 
 					new String[]{groupWorkspace.getName()});
-			addFieldError("groupSpaceAlreadyExists", message);
-		} 
+			    addFieldError("groupWorkspaceAlreadyExists", message);
+			success = false;
+		}
 		
-		return SUCCESS;
+		return "get";
 
 	}
 	
@@ -255,7 +264,7 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 	 */
 	public List<GroupWorkspace> getGroupWorkspaces() 
 	{
-		return groupSpaces;
+		return groupWorkSpaces;
 	}
 	
 	/**

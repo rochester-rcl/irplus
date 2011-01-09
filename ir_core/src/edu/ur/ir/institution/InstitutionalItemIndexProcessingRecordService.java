@@ -41,9 +41,22 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
 	/**
 	 * Get all institutional item index processing records ordered by item id then processing date.
 	 * 
-	 * @return
+	 * @param rowStart - start position
+	 * @param maxResults - maximum number of results
+	 * 
+	 * @return all index processing records ordered by updated date
 	 */
-	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate();
+	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate(int rowStart, int maxResults);
+
+	/**
+	 * Get all institutional item index processing records for a given index processing type.
+	 * 
+	 * @param processingTypeId - id of the processing type
+	 * 
+	 * @return list of records found
+	 */
+	public List<InstitutionalItemIndexProcessingRecord> getAllByProcessingTypeUpdatedDate(Long processingTypeId);
+
 	
 	/**
      * Get a count of institutional item index processing records
@@ -110,8 +123,9 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
      * Add all items within the repository to be processed.
      * 
      * @param processingType
+     * @param create - if true will insert a delete index processing record to re-create the index
      */
-    public void processItemsInRepository(IndexProcessingType processingType);
+    public void processItemsInRepository(IndexProcessingType processingType, boolean create);
     
 	/**
 	 * Insert all items for a content type to be re-indexed.

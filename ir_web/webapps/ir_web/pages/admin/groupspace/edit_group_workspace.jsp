@@ -78,8 +78,12 @@
                  <div class="yui-content">
                      <!--  first tab -->
                      <div id="tab1">
+                         <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		                                    key="groupWorkspace.name"/></p>
+		                 <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
+		                                      key="groupWorkspaceAlreadyExists"/></p>
                          <form id="editGroupWorkspaceInformation" name="groupWorkspaceInformation" method="post" 
-                             action="/admin/update">
+                             action="<c:url value="/admin/updateGroupWorkspace.action"/>">
                             <input type="hidden" id="groupWorkspaceId" 
                                   name="id" value="${groupWorkspace.id}" />
                             <table class="formTable">

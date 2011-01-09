@@ -31,9 +31,9 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.MapFieldSelector;
-import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.misc.ChainedFilter;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
@@ -41,10 +41,13 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.DocIdSet;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.OpenBitSet;
 import org.apache.lucene.util.OpenBitSetDISI;
 import org.apache.lucene.util.Version;
@@ -781,7 +784,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	    for( int index = idsToCollectStartPosition; index < endPosition; index ++ )
 	    {
 	    	Document doc = searcher.doc(hits.scoreDocs[index].doc,fieldSelector);
-	    	ids.add(NumberTools.stringToLong(doc.get(DefaultInstitutionalItemIndexService.ID)));
+	    	ids.add(NumericUtils.prefixCodedToLong(doc.get(DefaultInstitutionalItemIndexService.ID)) );
 	    }
         FacetSearchHelper helper = new FacetSearchHelper(ids, hits.totalHits, facetResults, mainQueryString);
         return helper;
@@ -921,16 +924,13 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 		List<Filter> filters = new LinkedList<Filter>();
 		
         //isolate the collection root
-   	    QueryParser subQueryParser = new QueryParser(Version.LUCENE_29, "collection_root_id", analyzer);
-		subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
-		Query subQuery = subQueryParser.parse(NumberTools.longToString(collection.getTreeRoot().getId()));
+		Term t = new Term("collection_root_id", NumericUtils.longToPrefixCoded(collection.getTreeRoot().getId()));
+		Query subQuery = new TermQuery( t );
 		filters.add(new QueryWrapperFilter(subQuery));
 		
 		
 		//isolate the range of children
-		subQueryParser = new QueryParser(Version.LUCENE_29, "collection_left_value", analyzer);
-		subQueryParser.setDefaultOperator(QueryParser.AND_OPERATOR);
-		subQuery = subQueryParser.parse("[" + NumberTools.longToString(collection.getLeftValue()) + " TO " + NumberTools.longToString(collection.getRightValue()) + "]" );
+		subQuery = NumericRangeQuery.newLongRange("collection_left_value", collection.getLeftValue(), collection.getRightValue(), true, true);
 		filters.add(new QueryWrapperFilter(subQuery));
 	    return filters;
 	}

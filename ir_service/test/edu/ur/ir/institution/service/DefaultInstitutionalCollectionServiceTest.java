@@ -658,7 +658,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 		ts = tm.getTransaction(td);
 
 		   /** Institutional Item index processing record service  */
-		List<InstitutionalItemIndexProcessingRecord> processingRecords = recordProcessingService.getAllOrderByItemIdUpdatedDate();
+		List<InstitutionalItemIndexProcessingRecord> processingRecords = recordProcessingService.getAllOrderByItemIdUpdatedDate(0, 1000);
 		for(InstitutionalItemIndexProcessingRecord pr : processingRecords )
 		{
 			recordProcessingService.delete(pr);
@@ -783,7 +783,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 
 		
 		   /** Institutional Item index processing record service  */
-		List<InstitutionalItemIndexProcessingRecord> processingRecords = recordProcessingService.getAllOrderByItemIdUpdatedDate();
+		List<InstitutionalItemIndexProcessingRecord> processingRecords = recordProcessingService.getAllOrderByItemIdUpdatedDate(0, 1000);
 		for(InstitutionalItemIndexProcessingRecord pr : processingRecords )
 		{
 			recordProcessingService.delete(pr);

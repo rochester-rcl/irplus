@@ -114,7 +114,7 @@
         <!--  this is the body regin of the page -->
         <div id="bd">
                 
-            <h3> Workspace: ${user.firstName}&nbsp;${user.lastName}</h3>
+            <h3> Workspace: ${user.firstName}&nbsp;${user.lastName}&nbsp; (<a href="<c:url value="/user/viewResearcher.action"/>">Edit Researcher Page</a>)</h3>
 
 	        <!--  set up tabs for the workspace -->
 	        <div id="workspace-tabs" class="yui-navset">

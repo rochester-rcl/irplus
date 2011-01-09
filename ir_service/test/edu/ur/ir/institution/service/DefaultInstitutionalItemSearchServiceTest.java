@@ -291,7 +291,7 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()), false);
 
 		
 		// search the document and make sure we can find the stored data
@@ -545,8 +545,8 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
-        institutionalItemIndexService.addItem(institutionalItem2, new File(repo.getInstitutionalItemIndexFolder()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()), false);
+        institutionalItemIndexService.addItem(institutionalItem2, new File(repo.getInstitutionalItemIndexFolder()), false);
 
 		
 		// search the document and make sure we can find the stored data
@@ -867,9 +867,9 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
-        institutionalItemIndexService.addItem(institutionalItem2, new File(repo.getInstitutionalItemIndexFolder()));
-        institutionalItemIndexService.addItem(institutionalItem3, new File(repo.getInstitutionalItemIndexFolder()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()), false);
+        institutionalItemIndexService.addItem(institutionalItem2, new File(repo.getInstitutionalItemIndexFolder()), false);
+        institutionalItemIndexService.addItem(institutionalItem3, new File(repo.getInstitutionalItemIndexFolder()), false);
 
 		
 		// search the document and make sure we can find the stored data
