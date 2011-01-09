@@ -21,19 +21,19 @@
 -- ---------------------------------------------
 -- Drop Group spaces tables/schema
 -- ---------------------------------------------
-DROP TABLE ir_group_space.group_space_group_members;
-DROP TABLE ir_group_space.group_space_group;
-DROP TABLE ir_group_space.group_space_owner;
-DROP TABLE ir_group_space.group_file;
-DROP TABLE ir_group_space.group_folder;
-DROP TABLE ir_group_space.group_space;
+DROP TABLE ir_group_workspace.group_workspace_group_members;
+DROP TABLE ir_group_workspace.group_workspace_group;
+DROP TABLE ir_group_workspace.group_workspace_owner;
+DROP TABLE ir_group_workspace.group_workspace_file;
+DROP TABLE ir_group_workspace.group_workspace_folder;
+DROP TABLE ir_group_workspace.group_workspace;
 
-DROP SEQUENCE ir_group_space.group_space_group_seq;
-DROP SEQUENCE ir_group_space.group_file_seq;
-DROP SEQUENCE ir_group_space.group_space_seq;
-DROP SEQUENCE ir_group_space.group_folder_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_group_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_file_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_seq;
+DROP SEQUENCE ir_group_workspace.group_workspace_folder_seq;
 
-DROP SCHEMA ir_group_space;
+DROP SCHEMA ir_group_workspace;
 
 
 -- ---------------------------------------------

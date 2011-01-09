@@ -37,6 +37,9 @@ public interface IndexProcessingTypeService  extends Serializable {
 	/** default delete processing type */
 	public static final String DELETE = "DELETE";
 	
+	/** indicates the index needs to be deleted and re-built */
+	public static final String DELETE_INDEX = "DELETE_INDEX";
+	
     /**
      * Get a count of index processing types
      *  

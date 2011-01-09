@@ -217,6 +217,8 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws DuplicateContributorException 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IOException 
+	 * @throws ParseException 
 	 */
 	public void testIndexInstitutionalItem() throws NoIndexFoundException, 
 	IllegalFileSystemNameException, 
@@ -225,7 +227,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	UserDeletedPublicationException, 
 	DuplicateContributorException, 
 	LocationAlreadyExistsException,
-	CollectionDoesNotAcceptItemsException
+	CollectionDoesNotAcceptItemsException, IOException, ParseException
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -338,17 +340,11 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()), false);
 
-		Directory lucenDirectory;
-		try {
-			lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
-		} catch (IOException e1) {
-			throw new RuntimeException(e1);
-		}
+		Directory  lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
 		// search the document and make sure we can find the stored data
-		try {
-
+	
 			int hits = executeQuery(DefaultInstitutionalItemIndexService.ABSTRACT, 
 					"abstract", 
 					lucenDirectory);
@@ -430,21 +426,14 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			+ " for finding " + DefaultInstitutionalItemIndexService.SUB_TITLES + " " 
 			+ "sub title";
 			
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		
 		
 		institutionalItemIndexService.deleteItem(institutionalItem.getId(), new File(repo.getInstitutionalItemIndexFolder()));
 		
-		try {
-			lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
-		} catch (IOException e1) {
-			throw new RuntimeException(e1);
-		}
+		lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
 		// search the document and make sure we can NOT find the stored data
-		try {
 
-			int hits = executeQuery(DefaultInstitutionalItemIndexService.ABSTRACT, 
+		hits = executeQuery(DefaultInstitutionalItemIndexService.ABSTRACT, 
 					"abstract", 
 					lucenDirectory);
 
@@ -452,9 +441,6 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			+ " for finding " + DefaultInstitutionalItemIndexService.ABSTRACT + " " 
 			+ "abstract";
 			
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 		tm.commit(ts);
 		
 	    // Start new transaction - clean up the data
@@ -483,6 +469,8 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws DuplicateContributorException 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws IOException 
+	 * @throws ParseException 
 	 */
 	public void testDeleteSearchCollectionItemIndex() throws NoIndexFoundException, 
 	IllegalFileSystemNameException, 
@@ -491,7 +479,7 @@ public class DefaultInstitutionalItemIndexServiceTest {
 	UserDeletedPublicationException, 
 	DuplicateContributorException, 
 	LocationAlreadyExistsException,
-	CollectionDoesNotAcceptItemsException
+	CollectionDoesNotAcceptItemsException, IOException, ParseException
 	{
 		// Start the transaction - create the repository
 		TransactionStatus ts = tm.getTransaction(td);
@@ -608,16 +596,9 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
-        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()));
+        institutionalItemIndexService.addItem(institutionalItem, new File(repo.getInstitutionalItemIndexFolder()), false);
 
-		Directory lucenDirectory;
-		try {
-			lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
-		} catch (IOException e1) {
-			throw new RuntimeException(e1);
-		}
-		// search the document and make sure we can find the stored data
-		try {
+		Directory lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
 
 			int hits = executeQuery(DefaultInstitutionalItemIndexService.ABSTRACT, 
 					"abstract", 
@@ -700,16 +681,13 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			+ " for finding " + DefaultInstitutionalItemIndexService.SUB_TITLES + " " 
 			+ "sub title";
 			
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 		
 		institutionalItemIndexProcessingRecordService.processItemsInCollection(collection, deleteProcessingType);
 		tm.commit(ts);
 		
 		
 		ts = tm.getTransaction(td);
-		List <InstitutionalItemIndexProcessingRecord> records  = institutionalItemIndexProcessingRecordService.getAllOrderByItemIdUpdatedDate();		
+		List <InstitutionalItemIndexProcessingRecord> records  = institutionalItemIndexProcessingRecordService.getAllOrderByItemIdUpdatedDate(0, 1000);		
 		for( InstitutionalItemIndexProcessingRecord record : records )
 		{
 		    InstitutionalItem i = institutionalItemService.getInstitutionalItem(record.getInstitutionalItemId(), false);
@@ -720,16 +698,10 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		    }
 		}
 		
-		try {
 			repo = helper.getRepository();
 			lucenDirectory = FSDirectory.open(new File(repo.getInstitutionalItemIndexFolder()));
-		} catch (IOException e1) {
-			throw new RuntimeException(e1);
-		}
 		// search the document and make sure we can NOT find the stored data
-		try {
-
-			int hits = executeQuery(DefaultInstitutionalItemIndexService.ABSTRACT, 
+		hits = executeQuery(DefaultInstitutionalItemIndexService.ABSTRACT, 
 					"abstract", 
 					lucenDirectory);
 
@@ -737,9 +709,6 @@ public class DefaultInstitutionalItemIndexServiceTest {
 			+ " for finding " + DefaultInstitutionalItemIndexService.ABSTRACT + " " 
 			+ "abstract";
 			
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	
 		
 	    // Start new transaction - clean up the data

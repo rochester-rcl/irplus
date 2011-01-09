@@ -44,14 +44,25 @@ public class DefaultGroupSpaceService implements GroupWorkspaceService {
 	 * @param groupSpace - group space to add to the system.
 	 * @throws DuplicateNameException - if the group space already exists 
 	 */
-	public void save(GroupWorkspace groupSpace) throws DuplicateNameException
+	public void save(GroupWorkspace groupWorkspace) throws DuplicateNameException
 	{
-		GroupWorkspace other = groupWorkspaceDAO.findByUniqueName(groupSpace.getName());
-		if( other != null && !other.getId().equals(groupSpace.getId()))
+		GroupWorkspace other = groupWorkspaceDAO.findByUniqueName(groupWorkspace.getName());
+		if( other != null && !other.getId().equals(groupWorkspace.getId()))
 		{
-			throw new DuplicateNameException("Duplicate name error " + groupSpace.getName());
+			throw new DuplicateNameException("Duplicate name error " + groupWorkspace.getName());
 		}
-		groupWorkspaceDAO.makePersistent(groupSpace);
+		groupWorkspaceDAO.makePersistent(groupWorkspace);
+	}
+	
+	/**
+	 * Get a group workspace by it's name.
+	 * 
+	 * @param name - name of the group workspace
+	 * @return - the group workspace if found otherwise null
+	 */
+	public GroupWorkspace get(String name)
+	{
+		return groupWorkspaceDAO.findByUniqueName(name);
 	}
 	
 	
@@ -111,6 +122,4 @@ public class DefaultGroupSpaceService implements GroupWorkspaceService {
 	{
 		return groupWorkspaceDAO.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, orderType);
 	}
-
-
 }

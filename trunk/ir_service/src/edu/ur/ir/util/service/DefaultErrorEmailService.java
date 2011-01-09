@@ -65,7 +65,8 @@ public class DefaultErrorEmailService implements ErrorEmailService{
 		}
 		else
 		{
-			log.debug( "send emails disabled ");
+			log.info( "send emails disabled ");
+			log.error(error);
 		}
 	}
 

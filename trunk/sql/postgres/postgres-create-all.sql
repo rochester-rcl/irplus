@@ -3595,15 +3595,15 @@ ALTER TABLE ir_metadata_dublin_core.identifier_type_dc_mapping_seq OWNER TO ir_p
 
 
 
-CREATE SCHEMA ir_group_space AUTHORIZATION ir_plus;
+CREATE SCHEMA ir_group_workspace AUTHORIZATION ir_plus;
 
 
 -- ---------------------------------------------
 -- group space information
 -- ---------------------------------------------
-CREATE TABLE ir_group_space.group_space
+CREATE TABLE ir_group_workspace.group_workspace
 (
-  group_space_id BIGINT PRIMARY KEY,
+  group_workspace_id BIGINT PRIMARY KEY,
   name TEXT NOT NULL,
   lower_case_name TEXT NOT NULL,
   description TEXT,
@@ -3611,23 +3611,23 @@ CREATE TABLE ir_group_space.group_space
   version INTEGER,
   UNIQUE (lower_case_name)
 );
-ALTER TABLE ir_group_space.group_space OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace OWNER TO ir_plus;
 
 -- The group space sequence
-CREATE SEQUENCE ir_group_space.group_space_seq ;
-ALTER TABLE ir_group_space.group_space_seq OWNER TO ir_plus;
+CREATE SEQUENCE ir_group_workspace.group_workspace_seq ;
+ALTER TABLE ir_group_workspace.group_workspace_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
 -- group space folder information
 -- ---------------------------------------------
 
-CREATE TABLE ir_group_space.group_folder
+CREATE TABLE ir_group_workspace.group_workspace_folder
 (
-  group_folder_id BIGINT PRIMARY KEY,
-  root_group_folder_id BIGINT NOT NULL,
+  group_workspace_folder_id BIGINT PRIMARY KEY,
+  root_group_workspace_folder_id BIGINT NOT NULL,
   parent_id BIGINT,
-  group_space_id BIGINT NOT NULL,
+  group_workspace_id BIGINT NOT NULL,
   user_id BIGINT NOT NULL,
   left_value BIGINT NOT NULL,
   right_value BIGINT NOT NULL,
@@ -3635,81 +3635,81 @@ CREATE TABLE ir_group_space.group_folder
   path TEXT NOT NULL,
   description TEXT,
   version INTEGER,
-  FOREIGN KEY (parent_id) REFERENCES ir_group_space.group_folder (group_folder_id),
-  FOREIGN KEY (root_group_folder_id) REFERENCES ir_group_space.group_folder (group_folder_id),
+  FOREIGN KEY (parent_id) REFERENCES ir_group_workspace.group_workspace_folder (group_workspace_folder_id),
+  FOREIGN KEY (root_group_workspace_folder_id) REFERENCES ir_group_workspace.group_workspace_folder (group_workspace_folder_id),
   FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
   UNIQUE (parent_id, name),
-  UNIQUE (group_space_id, path, name)
+  UNIQUE (group_workspace_id, path, name)
 );
-ALTER TABLE ir_group_space.group_folder OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace_folder OWNER TO ir_plus;
 
 -- The group folder sequence
-CREATE SEQUENCE ir_group_space.group_folder_seq ;
-ALTER TABLE ir_group_space.group_folder_seq OWNER TO ir_plus;
+CREATE SEQUENCE ir_group_workspace.group_workspace_folder_seq ;
+ALTER TABLE ir_group_workspace.group_workspace_folder_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
 -- Group file Information
 -- ---------------------------------------------
-CREATE TABLE ir_group_space.group_file
+CREATE TABLE ir_group_workspace.group_workspace_file
 (
-    group_file_id BIGINT PRIMARY KEY,
-    group_folder_id BIGINT,
-    group_space_id BIGINT NOT NULL,
+    group_workspace_file_id BIGINT PRIMARY KEY,
+    group_workspace_folder_id BIGINT,
+    group_workspace_id BIGINT NOT NULL,
     versioned_file_id BIGINT NOT NULL,
     version INTEGER,
-    FOREIGN KEY (group_folder_id) REFERENCES ir_group_space.group_folder (group_folder_id),
+    FOREIGN KEY (group_workspace_folder_id) REFERENCES ir_group_workspace.group_workspace_folder (group_workspace_folder_id),
     FOREIGN KEY (versioned_file_id) REFERENCES ir_file.versioned_file (versioned_file_id),
-    FOREIGN KEY (group_space_id) REFERENCES ir_group_space.group_space (group_space_id),
-    UNIQUE(group_space_id, group_folder_id, versioned_file_id)
+    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
+    UNIQUE(group_workspace_id, group_workspace_folder_id, versioned_file_id)
 );
-ALTER TABLE ir_group_space.group_file OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace_file OWNER TO ir_plus;
 
 -- The group file sequence
-CREATE SEQUENCE ir_group_space.group_file_seq;
-ALTER TABLE ir_group_space.group_file_seq OWNER TO ir_plus;
+CREATE SEQUENCE ir_group_workspace.group_workspace_file_seq;
+ALTER TABLE ir_group_workspace.group_workspace_file_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Group space owner Information
 -- ---------------------------------------------
-CREATE TABLE ir_group_space.group_space_owner
+CREATE TABLE ir_group_workspace.group_workspace_owner
 (
-    group_space_id BIGINT NOT NULL,
+    group_workspace_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
-    FOREIGN KEY (group_space_id) REFERENCES ir_group_space.group_space (group_space_id),
+    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
     FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
-    UNIQUE(group_space_id, user_id)
+    UNIQUE(group_workspace_id, user_id)
 );
-ALTER TABLE ir_group_space.group_space_owner OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace_owner OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Group space group Information
 -- ---------------------------------------------
-CREATE TABLE ir_group_space.group_space_group
+CREATE TABLE ir_group_workspace.group_workspace_group
 (
-    group_space_group_id BIGINT PRIMARY KEY,
-    group_space_id BIGINT NOT NULL,
+    group_workspace_group_id BIGINT PRIMARY KEY,
+    group_workspace_id BIGINT NOT NULL,
     name TEXT NOT NULL,
     lower_case_name TEXT NOT NULL,
     description TEXT,
-    FOREIGN KEY (group_space_id) REFERENCES ir_group_space.group_space (group_space_id)
+    FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id)
 );
-ALTER TABLE ir_group_space.group_space_group OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace_group OWNER TO ir_plus;
 
 -- The group file sequence
-CREATE SEQUENCE ir_group_space.group_space_group_seq;
-ALTER TABLE ir_group_space.group_space_group_seq OWNER TO ir_plus;
+CREATE SEQUENCE ir_group_workspace.group_workspace_group_seq;
+ALTER TABLE ir_group_workspace.group_workspace_group_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
 -- Group space group membership Information
 -- ---------------------------------------------
-CREATE TABLE ir_group_space.group_space_group_members
+CREATE TABLE ir_group_workspace.group_workspace_group_members
 (
-    group_space_group_id BIGINT NOT NULL,
+    group_workspace_group_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
-    FOREIGN KEY (group_space_group_id) REFERENCES ir_group_space.group_space_group (group_space_group_id),
+    FOREIGN KEY (group_workspace_group_id) REFERENCES ir_group_workspace.group_workspace_group (group_workspace_group_id),
     FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
-    PRIMARY KEY(group_space_group_id, user_id)
+    PRIMARY KEY(group_workspace_group_id, user_id)
 );
-ALTER TABLE ir_group_space.group_space_group_members OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace_group_members OWNER TO ir_plus;

@@ -4984,6 +4984,11 @@ insert into
 ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
 values (nextval('ir_index.index_processing_type_seq'), 0, 'DELETE', 'A record is to be deleted from the index');
 
+insert into 
+ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
+values (nextval('ir_index.index_processing_type_seq'), 0, 'DELETE_INDEX', 'the index needs to be deleted and rebuilt');
+
+
 -- -----------------------------------
 --  Insert the dublin core 
 --  encoding schemes 

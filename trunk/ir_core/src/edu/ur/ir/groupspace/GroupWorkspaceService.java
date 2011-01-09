@@ -38,6 +38,14 @@ public interface GroupWorkspaceService extends Serializable{
 	 */
 	public void save(GroupWorkspace groupWorkspace) throws DuplicateNameException;
 	
+	/**
+	 * Get a group workspace by it's name.
+	 * 
+	 * @param name - name of the group workspace
+	 * @return - the group workspace if found otherwise null
+	 */
+	public GroupWorkspace get(String name);
+	
 	
     /**
      * Delete the group space from the system.

@@ -58,6 +58,7 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	/** Service for dealing with processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
+	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemIndexProcessingRecordService.class);
 
@@ -81,13 +82,31 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	}
 
 	/**
-	 * Get all processing records ordered by item id and updated date
+	 * Get all institutional item indexing processing record ordered by updated date descending.
 	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#getAllOrderByItemIdUpdatedDate()
+	 * @param rowStart - start position
+	 * @param maxResults - maximum number of results to get.
+	 *  
+	 * @return all institutional item index processing records or an empty list if none found
 	 */
-	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate() {
-		return processingRecordDAO.getAllOrderByItemIdUpdatedDate();
+	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate(int rowStart, int maxResults) {
+		return processingRecordDAO.getAllOrderByItemIdUpdatedDate(rowStart, maxResults);
 	}
+	
+	
+	/**
+	 * Get all institutional item index processing records for a given index processing type ordered
+	 * by updated date descending
+	 * 
+	 * @param processingTypeId - processing type id
+	 * 
+	 * @return list of records found
+	 */
+	public List<InstitutionalItemIndexProcessingRecord> getAllByProcessingTypeUpdatedDate(Long processingTypeId)
+	{
+		return processingRecordDAO.getAllByProcessingTypeUpdatedDate(processingTypeId);
+	}
+
 
 	/**
 	 * Get the count of the processing records.
@@ -146,9 +165,20 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#processItemsInCollection(edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.index.IndexProcessingType)
 	 */
-	public void processItemsInRepository( IndexProcessingType processingType)
+	public void processItemsInRepository( IndexProcessingType processingType, boolean create)
 	{
-		log.debug("seting collection items for re-indexing  repository processing type = " + processingType);
+		if( log.isDebugEnabled() )
+		{
+		    log.debug("seting collection items for re-indexing  repository processing type = " +
+		    		processingType + " create = " + create);
+		}
+		if( create )
+		{
+			IndexProcessingType deleteIndexType = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE_INDEX);
+			InstitutionalItemIndexProcessingRecord deleteIndex = new InstitutionalItemIndexProcessingRecord(-1l, deleteIndexType);
+			processingRecordDAO.makePersistent(deleteIndex);
+		}
+		
 	    processingRecordDAO.insertAllItemsForRepository(processingType);
 	}
 
