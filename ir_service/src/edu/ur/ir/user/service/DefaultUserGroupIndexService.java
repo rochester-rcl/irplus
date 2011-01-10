@@ -46,9 +46,8 @@ public class DefaultUserGroupIndexService implements UserGroupIndexService
 	/** eclipse generated id */
 	private static final long serialVersionUID = -1776477271740814948L;
 	
-
 	/** Analyzer for dealing with text indexing */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/** Service for sending email errors */
 	private ErrorEmailService errorEmailService;

@@ -71,7 +71,7 @@ public class DefaultInstitutionalCollectionIndexService implements Institutional
 	private InstitutionalCollectionService institutionalCollectionService;
 	
 	/** Analyzer for dealing with text indexing */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/** Service for sending email errors */
 	private ErrorEmailService errorEmailService;

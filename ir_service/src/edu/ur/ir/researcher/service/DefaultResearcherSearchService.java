@@ -30,7 +30,6 @@ import java.util.StringTokenizer;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.misc.ChainedFilter;
@@ -44,6 +43,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.OpenBitSet;
 import org.apache.lucene.util.OpenBitSetDISI;
 import org.apache.lucene.util.Version;
@@ -67,7 +67,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 	private static final long serialVersionUID = -4377980407262168156L;
 
 	/** Analyzer to use for parsing the queries */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/**  Logger for editing a file database. */
 	private static final Logger log = Logger.getLogger(DefaultResearcherSearchService.class);
@@ -564,7 +564,7 @@ public class DefaultResearcherSearchService implements ResearcherSearchService {
 	    for( int index = idsToCollectStartPosition; index < endPosition; index ++ )
 	    {
 	    	Document doc = searcher.doc(hits.scoreDocs[index].doc);
-	    	ids.add(NumberTools.stringToLong(doc.get(DefaultResearcherIndexService.ID)));
+	    	ids.add(NumericUtils.prefixCodedToLong(doc.get(DefaultResearcherIndexService.ID)));
 	    }
         FacetSearchHelper helper = new FacetSearchHelper(ids, hits.totalHits, facetResults, mainQueryString);
         return helper;

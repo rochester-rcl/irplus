@@ -44,7 +44,7 @@ public class DefaultLdapUserService implements LdapUserService  {
 	private static final long serialVersionUID = 1059520968635339038L;
 
 	/** user search  */
-	private FilterBasedLdapUserSearch userSearch;
+	private transient FilterBasedLdapUserSearch userSearch;
 	
 	/** loads user data from local db*/
 	private UserService userService;

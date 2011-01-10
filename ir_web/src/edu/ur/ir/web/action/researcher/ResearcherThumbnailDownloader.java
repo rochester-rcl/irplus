@@ -51,10 +51,10 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware{
 	private static final Logger log = Logger.getLogger(RepositoryThumbnailDownloader.class);
 
 	/**  Servlet response to write to */
-	private HttpServletResponse response ;
+	private transient HttpServletResponse response ;
 	
 	/**  Servlet response to write to */
-	private HttpServletRequest request;
+	private transient HttpServletRequest request;
 	
 	/** id of the picture */
 	private Long irFileId;
@@ -95,11 +95,11 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware{
     				    FileInfo info = transform.getTransformedFile();
     				    if( irFile.isPublicViewable() )
     	    		    {
-    	    		        webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
+    	    		        webIoUtils.streamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
     	    		    }
     	    		    else
     	    		    {
-    	    			    webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), false, false);
+    	    			    webIoUtils.streamFileInfo(info.getName(), info, response, request, (1024*4), false, false);
     	    		    }
     			    }
     		    }

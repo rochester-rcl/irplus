@@ -62,10 +62,10 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
     private ItemService itemService;
 	
 	/**  Servlet response to write to */
-	private HttpServletResponse response;
+	private transient HttpServletResponse response;
 	
 	/**  Servlet request made */
-	private HttpServletRequest request;
+	private transient HttpServletRequest request;
 	
 	/** Utility for streaming file */
 	private WebIoUtils webIoUtils;
@@ -202,7 +202,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
     private void downloadFile(ItemFile itemFile) throws Exception {
         String fileName = itemFile.getIrFile().getName();
         FileInfo fileInfo =  itemFile.getIrFile().getFileInfo();
-        webIoUtils.StreamFileInfo(fileName, fileInfo, response, request, (1024*4), false, true);
+        webIoUtils.streamFileInfo(fileName, fileInfo, response, request, (1024*4), false, true);
         
     }
     

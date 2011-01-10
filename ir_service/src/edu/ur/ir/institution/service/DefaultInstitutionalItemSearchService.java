@@ -72,7 +72,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	private static final long serialVersionUID = 4908678264742124106L;
 
 	/** Analyzer to use for parsing the queries */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/**  Logger for editing a file database. */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemSearchService.class);
@@ -81,7 +81,7 @@ public class DefaultInstitutionalItemSearchService implements InstitutionalItemS
 	private int maxNumberOfMainQueryHits = 10000;
 	
 	/** Key word analyzer */
-	private KeywordAnalyzer keywordAnalyzer = new KeywordAnalyzer();
+	private transient KeywordAnalyzer keywordAnalyzer = new KeywordAnalyzer();
 	
 	
 	/** fields to search in the index*/

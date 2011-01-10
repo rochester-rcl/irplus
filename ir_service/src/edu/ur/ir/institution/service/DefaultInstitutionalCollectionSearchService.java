@@ -57,10 +57,8 @@ public class DefaultInstitutionalCollectionSearchService implements Institutiona
 	/** Service to deal with institutional collection information. */
 	private InstitutionalCollectionService institutionalCollectionService;
 
-
-
 	/** Analyzer for dealing with analyzing the search */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalCollectionSearchService.class);

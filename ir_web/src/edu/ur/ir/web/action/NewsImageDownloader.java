@@ -53,10 +53,10 @@ implements ServletResponseAware, ServletRequestAware{
 	private Long newsItemId;
 	
 	/**  Servlet response to write to */
-	private HttpServletResponse response;
+	private transient HttpServletResponse response;
 	
 	/**  Servlet request made */
-	private HttpServletRequest request;
+	private transient HttpServletRequest request;
 	
 	/** id of the ir file to download */
 	private Long irFileId;
@@ -65,7 +65,6 @@ implements ServletResponseAware, ServletRequestAware{
 	
 	/** Utility for streaming files */
 	private WebIoUtils webIoUtils;
-	
 
 	/**
      * Allows a file to be downloaded
@@ -104,7 +103,7 @@ implements ServletResponseAware, ServletRequestAware{
             
             if( fileInfo != null )
             {
-                 webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
+                 webIoUtils.streamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
             }
 		}
         return SUCCESS;

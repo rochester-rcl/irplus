@@ -59,7 +59,7 @@ public class DefaultReviewableItemService implements ReviewableItemService {
 	private InstitutionalCollectionSecurityService institutionalCollectionSecurityService;
 	
 	/** Mail sender */
-	private MailSender mailSender;
+	private transient MailSender mailSender;
 	
 	/** Mail message for admin to verify the user affiliation */
 	private SimpleMailMessage itemRejectedMessage;

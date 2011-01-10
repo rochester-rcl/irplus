@@ -16,16 +16,11 @@
 
 package edu.ur.hibernate.file.db;
 
-import java.util.List;
 
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import edu.ur.file.db.UniqueFileSystemNameDAO;
-import edu.ur.hibernate.HbHelper;
 
 /**
  * Returns a sequence number that is always gauranteed to be unique
@@ -37,8 +32,11 @@ import edu.ur.hibernate.HbHelper;
  */
 public class HbUniqueFileSystemNameDAO implements UniqueFileSystemNameDAO {
 	
-    SessionFactory sessionFactory;
-    HibernateTemplate hibernateTemplate;
+    /** eclipse generated id */
+	private static final long serialVersionUID = 576526276230070841L;
+	
+	// session factory
+	private SessionFactory sessionFactory;
 	
 	/**
 	 * Set the session factory.  
@@ -48,27 +46,15 @@ public class HbUniqueFileSystemNameDAO implements UniqueFileSystemNameDAO {
 	public void setSessionFactory(SessionFactory sessionFactory)
     {
        this.sessionFactory = sessionFactory;
-       this.hibernateTemplate = new HibernateTemplate(sessionFactory);
     }
-	
-
     
     /**
      * Gets a long value from the named query
      * 
      * @see edu.ur.file.db.FileInfoDAO#getNextUniqueFileName()
      */
-    @SuppressWarnings("unchecked")
    public String getNextName() {
-		List value = (List)hibernateTemplate.executeFind(new HibernateCallback() {
-			public Object doInHibernate(Session session) {
-				Query query = session.getNamedQuery("getNextFileName");
-				return query.list();
-			}
-		});
-		
-		Object name = HbHelper.getUnique(value);
-		
-		return name.toString();
+    	Query query = sessionFactory.getCurrentSession().getNamedQuery("getNextFileName");
+    	return query.uniqueResult().toString();
 	}
 }

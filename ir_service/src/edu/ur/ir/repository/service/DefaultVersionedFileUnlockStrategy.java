@@ -32,16 +32,12 @@ import edu.ur.ir.user.IrUser;
  */
 public class DefaultVersionedFileUnlockStrategy implements VersionedFileUnLockStrategy{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = -7057217108521696958L;
+	
 	/** Service for dealing with access control lists*/
 	private SecurityService securityService;
 
-	public SecurityService getSecurityService() {
-		return securityService;
-	}
-
-	public void setSecurityService(SecurityService securityService) {
-		this.securityService = securityService;
-	}
 
 	/**
 	 * Returns true if the user can unlock the file.
@@ -78,5 +74,24 @@ public class DefaultVersionedFileUnlockStrategy implements VersionedFileUnLockSt
 		return false;
 		
 	}
+	
+	/**
+	 * Get the security service.
+	 * 
+	 * @return the security service
+	 */
+	public SecurityService getSecurityService() {
+		return securityService;
+	}
+
+	/**
+	 * Set the security service.
+	 * 
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
+
 
 }
