@@ -57,10 +57,10 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
 	private static final Logger log = Logger.getLogger(GenericItemTransformedFileDownloader.class);
 
 	/**  Servlet response to write to */
-	private HttpServletResponse response ;
+	private transient HttpServletResponse response ;
 	
 	/**  Servlet response to write to */
-	private HttpServletRequest request;
+	private transient HttpServletRequest request;
 	
 	/** System code for the transformed file  */
 	private String systemCode;
@@ -122,7 +122,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
         	if( tf != null )
         	{
         		FileInfo info = tf.getTransformedFile();
-        	    webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
+        	    webIoUtils.streamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
         	}
         }
         else if ( user != null)
@@ -134,7 +134,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware {
             	if( tf != null )
             	{
             		FileInfo info = tf.getTransformedFile();
-            	    webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
+            	    webIoUtils.streamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
             	}
         	}
         }

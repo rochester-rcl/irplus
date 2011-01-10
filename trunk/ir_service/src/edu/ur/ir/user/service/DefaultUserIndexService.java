@@ -64,7 +64,7 @@ public class DefaultUserIndexService implements UserIndexService{
 	public static final String SEPERATOR = "|";
 	
 	/** Analyzer for dealing with text indexing */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserIndexService.class);
@@ -111,7 +111,7 @@ public class DefaultUserIndexService implements UserIndexService{
 			throw new NoIndexFoundException("the folder " + userIndexFolder.getAbsolutePath() + " could not be found");
 		}
 		
-	    writeDocument(userIndexFolder.getAbsolutePath(), getDocument(user));
+	    writeDocument(userIndexFolder, getDocument(user));
 	}
 
 	
@@ -136,7 +136,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		Directory directory = null;
 		IndexWriter writer = null;
 		try {
-			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
+			directory = FSDirectory.open(userIndexFolder);
 			writer = getWriter(directory);
 			Term term = new Term(USER_ID, userId.toString());
 			writer.deleteDocuments(term);
@@ -200,13 +200,13 @@ public class DefaultUserIndexService implements UserIndexService{
 	 * @param directoryPath - location where the directory exists.
 	 * @param documents - documents to add to the directory.
 	 */
-	private void writeDocument(String directoryPath, Document document)
+	private void writeDocument(File directoryPath, Document document)
 	{
 		log.debug("write document to directory " + directoryPath );
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(directoryPath);
+			directory = FSDirectory.open(directoryPath);
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
@@ -265,7 +265,7 @@ public class DefaultUserIndexService implements UserIndexService{
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(userIndexFolder.getAbsolutePath());
+			directory = FSDirectory.open(userIndexFolder);
 			
 			if(overwriteExistingIndex)
 			{
@@ -358,17 +358,18 @@ public class DefaultUserIndexService implements UserIndexService{
 				Field.Index.ANALYZED));
 	    }
 	    
-	    String emails = "";
+	    StringBuffer emails = new StringBuffer("");
 	    for( UserEmail email : user.getUserEmails())
 	    {
 	    	if( email != null )
 	    	{
-	    		emails += email.getEmail() + " ";
+	    		emails.append(email.getEmail());
+	    		emails.append(" ");
 	    	}
 	    }
 	    
 	    doc.add(new Field(USER_EMAILS, 
-				emails, 
+				emails.toString(), 
 				Field.Store.YES, 
 				Field.Index.ANALYZED));
 	    

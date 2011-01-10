@@ -78,7 +78,7 @@ public class DefaultInviteUserService implements InviteUserService {
 	private static final Logger log = Logger.getLogger(DefaultInviteUserService.class);
 	
 	/* Mail sender */
-	private MailSender mailSender;
+	private transient MailSender mailSender;
 
 	/* Mail message for inviting user who exist in the system*/
 	private SimpleMailMessage userExistMailMessage;

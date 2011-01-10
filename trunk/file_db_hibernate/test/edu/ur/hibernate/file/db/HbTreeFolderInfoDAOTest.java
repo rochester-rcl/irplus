@@ -195,7 +195,7 @@ public class HbTreeFolderInfoDAOTest {
 	 * 
 	 */
 	@Test
-	public void TreeFolderInfoChildrenDAOTest() throws LocationAlreadyExistsException {
+	public void treeFolderInfoChildrenDAOTest() throws LocationAlreadyExistsException {
 		
 		
 		TransactionStatus ts = tm.getTransaction(td);
@@ -548,7 +548,7 @@ public class HbTreeFolderInfoDAOTest {
 	 * 
      */
 	@Test
-	public void TreeFolderInfoFileDAOTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException {
+	public void treeFolderInfoFileDAOTest() throws LocationAlreadyExistsException, IllegalFileSystemNameException {
 		TransactionStatus ts = tm.getTransaction(td);
 		// get a unique name for the folder
 		assert uniqueNameGenerator.getNextName() != null : "Next unique should not be null";
@@ -627,7 +627,7 @@ public class HbTreeFolderInfoDAOTest {
 	 * 
 	 */
 	@Test
-	public void TreeFolderChildrenPathDAOTest() throws LocationAlreadyExistsException {
+	public void treeFolderChildrenPathDAOTest() throws LocationAlreadyExistsException {
 		
 		TransactionStatus ts = tm.getTransaction(td);
 		

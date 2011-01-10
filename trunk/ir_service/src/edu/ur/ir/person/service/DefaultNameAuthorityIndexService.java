@@ -52,7 +52,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	private static final long serialVersionUID = -2917625239480866680L;
 
 	/** Analyzer for dealing with text indexing */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultNameAuthorityIndexService.class);
@@ -103,7 +103,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(nameAuthorityIndexFolder.getAbsolutePath());
+			directory = FSDirectory.open(nameAuthorityIndexFolder);
 			
 			if(overwriteExistingIndex)
 			{
@@ -164,12 +164,12 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 	 * @param directoryPath - location where the directory exists.
 	 * @param documents - documents to add to the directory.
 	 */
-	private void writeDocument(String directoryPath, Document document)
+	private void writeDocument(File directoryPath, Document document)
 	{
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(directoryPath);
+			directory = FSDirectory.open(directoryPath);
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
@@ -225,7 +225,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 			throw new NoIndexFoundException("Name index folder not found ");
 		} 
 
-		writeDocument(nameAuthorityFolder.getAbsolutePath(), getDocument(personNameAuthority));
+		writeDocument(nameAuthorityFolder, getDocument(personNameAuthority));
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		IndexWriter writer = null;
 		
 		try {
-			directory = FSDirectory.getDirectory(nameAuthorityIndexFolder);
+			directory = FSDirectory.open(nameAuthorityIndexFolder);
 			writer = getWriter(directory);
 			Term term = new Term(PERSON_NAME_AUTHORITY_ID, personNameAuthority.getId().toString());
 			writer.deleteDocuments(term);
@@ -341,7 +341,7 @@ public class DefaultNameAuthorityIndexService implements NameAuthorityIndexServi
 		Directory directory = null;
 		try 
 		{
-		    directory = FSDirectory.getDirectory(nameAuthorityIndex.getAbsolutePath());
+		    directory = FSDirectory.open(nameAuthorityIndex);
 			writer = getWriter(directory);
 			writer.optimize();
 		} 

@@ -82,7 +82,7 @@ public class DefaultInstitutionalItemIndexService implements InstitutionalItemIn
 	private int collectionBatchSize = 1;
 	
 	/** Analyzer for dealing with text indexing */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/** Service that maintains file text extractors */
 	private FileTextExtractorService fileTextExtractorService;

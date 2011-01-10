@@ -57,18 +57,17 @@ implements ServletResponseAware, ServletRequestAware
 	private RepositoryService repositoryService;
 	
 	/**  Servlet response to write to */
-	private HttpServletResponse response;
+	private transient HttpServletResponse response;
 	
 	/** id of the ir file to download */
 	private Long irFileId;
 	
 	/** request made to the server */
-	private HttpServletRequest request;
+	private transient HttpServletRequest request;
 	
 	/** Utility for web utils */
 	private WebIoUtils webIoUtils;
 	
-
 	/**
      * Allows a file to be downloaded
      *
@@ -96,7 +95,7 @@ implements ServletResponseAware, ServletRequestAware
             }
         
            
-             webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
+             webIoUtils.streamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
 		}
         	
       

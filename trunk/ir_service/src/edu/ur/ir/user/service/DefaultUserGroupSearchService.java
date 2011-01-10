@@ -71,7 +71,7 @@ public class DefaultUserGroupSearchService implements UserGroupSearchService {
 			DefaultUserGroupIndexService.DESCRIPTION};
 	
 	/** Analyzer for dealing with analyzing the search */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 
 
 	/**

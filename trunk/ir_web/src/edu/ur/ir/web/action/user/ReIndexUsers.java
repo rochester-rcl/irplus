@@ -21,7 +21,7 @@ public class ReIndexUsers extends ActionSupport{
 	private static final long serialVersionUID = -3469784982224968731L;
 
 	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
+	private transient Scheduler quartzScheduler;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(ReIndexUsers.class);

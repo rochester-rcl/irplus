@@ -49,7 +49,7 @@ implements ServletResponseAware, ServletRequestAware
 	private InstitutionalCollectionService institutionalCollectionService;
 
 	/**  Servlet response to write to */
-	private HttpServletResponse response;
+	private transient HttpServletResponse response;
 	
 	/** id of the ir file to download */
 	private Long irFileId;
@@ -58,7 +58,7 @@ implements ServletResponseAware, ServletRequestAware
 	private Long collectionId;
 	
 	/** request sent by the user */
-	private HttpServletRequest request;
+	private transient HttpServletRequest request;
 	
 	/** Utility to help stream files */
 	private WebIoUtils webIoUtils;
@@ -95,7 +95,7 @@ implements ServletResponseAware, ServletRequestAware
                 {
                     log.debug("sending file for download " + irFile);
                 }
-                webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
+                webIoUtils.streamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
 			}
 		}
         

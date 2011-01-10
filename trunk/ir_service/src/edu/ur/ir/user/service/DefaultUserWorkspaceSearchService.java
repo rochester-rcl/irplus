@@ -53,7 +53,7 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 	private static final long serialVersionUID = 8399684576467880725L;
 
 	/** Analyzer for dealing with analyzing the search */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserWorkspaceSearchService.class);

@@ -679,12 +679,11 @@ public class ResearcherFolderDAOTest {
 	
 	/**
 	 * Test moving researcher folders accross two different root folders.
+	 * @throws DuplicateNameException 
 	 */
 	@Test
-	public void moveFoldersTest()
+	public void moveFoldersTest() throws DuplicateNameException
 	{
-		try
-		{
 		TransactionStatus ts = tm.getTransaction(td);
 		UserEmail userEmail = new UserEmail("user@email");
 
@@ -736,13 +735,7 @@ public class ResearcherFolderDAOTest {
 		researcherDAO.makeTransient(researcherDAO.getById(researcher.getId(), false));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		tm.commit(ts);
-		}
-		catch(Exception e)
-		{
-			
-			log.debug("failure", e);
-			throw new RuntimeException(e);
-		}
+		
 	}
 	
 	

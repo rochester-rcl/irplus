@@ -64,7 +64,7 @@ public class DefaultUserSearchService implements UserSearchService{
 			DefaultUserIndexService.USER_NAMES};
 	
 	/** Analyzer for dealing with analyzing the search */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 
 
 	public SearchResults<IrUser> search(File userIndexFolder, String query,

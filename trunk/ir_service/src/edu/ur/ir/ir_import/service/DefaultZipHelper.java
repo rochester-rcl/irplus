@@ -77,6 +77,7 @@ public class DefaultZipHelper implements ZipHelper {
 		catch(Exception e)
 		{
 		    log.error(e);	
+		    errorEmailService.sendError(e);
 		}
 		finally 
 		{

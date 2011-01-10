@@ -64,10 +64,10 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	private UserFileSystemService userFileSystemService;
 	
 	/**  Servlet response to write to */
-	private HttpServletResponse response;
+	private transient HttpServletResponse response;
 	
 	/**  Servlet request made */
-	private HttpServletRequest request;
+	private transient HttpServletRequest request;
 	
 	/** Utility for streaming files */
 	private WebIoUtils webIoUtils;
@@ -120,7 +120,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         			" and file version number " + versionNumber + " could not be found");
         }
       
-        webIoUtils.StreamFileInfo(fileVersion.getVersionedFile().getName(), fileInfo, response, request, (1024*4), false, true);
+        webIoUtils.streamFileInfo(fileVersion.getVersionedFile().getName(), fileInfo, response, request, (1024*4), false, true);
         return SUCCESS;
     }
 	

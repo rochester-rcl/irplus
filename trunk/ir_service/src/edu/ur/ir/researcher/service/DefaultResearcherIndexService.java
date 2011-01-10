@@ -27,13 +27,13 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.NumberTools;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.util.NumericUtils;
 
 import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
@@ -89,7 +89,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	public static final String ESCAPED_SEPERATOR = "\\|";
 	
 	/** Analyzer for dealing with text indexing */
-	private Analyzer analyzer;
+	private transient Analyzer analyzer;
 	
 	/** Service for sending email errors */
 	private ErrorEmailService errorEmailService;
@@ -134,7 +134,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		{
 			throw new NoIndexFoundException("the folder " + researcherIndexFolder.getAbsolutePath() + " could not be found");
 		}
-	    writeDocument(researcherIndexFolder.getAbsolutePath(), getDocument(researcher));
+	    writeDocument(researcherIndexFolder, getDocument(researcher));
 	}
 
 	/**
@@ -190,9 +190,9 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		Directory directory = null;
 		IndexWriter writer = null;
 		try {
-			directory = FSDirectory.getDirectory(researcherIndexFolder.getAbsolutePath());
+			directory = FSDirectory.open(researcherIndexFolder);
 			writer = getWriter(directory);
-			Term term = new Term(ID, NumberTools.longToString(researcherId));
+			Term term = new Term(ID, NumericUtils.longToPrefixCoded(researcherId));
 			writer.deleteDocuments(term);
 			writer.commit();
 			
@@ -254,13 +254,13 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 	 * @param directoryPath - location where the directory exists.
 	 * @param documents - documents to add to the directory.
 	 */
-	private void writeDocument(String directoryPath, Document document)
+	private void writeDocument(File directoryPath, Document document)
 	{
 		log.debug("write document to directory " + directoryPath );
 		Directory directory = null;
 		IndexWriter writer = null;
 		try {
-			directory = FSDirectory.getDirectory(directoryPath);
+			directory = FSDirectory.open(directoryPath);
 			writer = getWriter(directory);
 			writer.addDocument(document);
 			writer.commit();
@@ -318,7 +318,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		IndexWriter writer = null;
 		Directory directory = null;
 		try {
-			directory = FSDirectory.getDirectory(researcherIndexFolder.getAbsolutePath());
+			directory = FSDirectory.open(researcherIndexFolder);
 			
 			if(overwriteExistingIndex)
 			{
@@ -384,7 +384,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		Document doc = new Document();
         
 	    doc.add(new Field(ID, 
-	    	NumberTools.longToString(researcher.getId()), 
+	    	NumericUtils.longToPrefixCoded(researcher.getId()),
 			Field.Store.YES, 
 			Field.Index.NOT_ANALYZED));
 	    
@@ -521,7 +521,7 @@ public class DefaultResearcherIndexService implements ResearcherIndexService{
 		Directory directory = null;
 		try 
 		{
-		    directory = FSDirectory.getDirectory(researcherIndex.getAbsolutePath());
+		    directory = FSDirectory.open(researcherIndex);
 			writer = getWriter(directory);
 			writer.optimize();
 		} 

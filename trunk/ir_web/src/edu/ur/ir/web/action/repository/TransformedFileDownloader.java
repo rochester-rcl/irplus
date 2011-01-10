@@ -55,10 +55,10 @@ implements ServletResponseAware, ServletRequestAware {
 	private MimeTypeService mimeTypeService;
 		
 	/**  Servlet response to write to */
-	private HttpServletResponse response ;
+	private transient HttpServletResponse response ;
 	
 	/**  Servlet response to write to */
-	private HttpServletRequest request;
+	private transient HttpServletRequest request;
 	
 	/** Ir File to get the transformed file for */
 	private Long irFileId;
@@ -87,11 +87,11 @@ implements ServletResponseAware, ServletRequestAware {
     	{
     		if( irFile.isPublicViewable() )
     		{
-    		    webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
+    		    webIoUtils.streamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
     		}
     		else
     		{
-    			webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), false, false);
+    			webIoUtils.streamFileInfo(info.getName(), info, response, request, (1024*4), false, false);
     		}
     	}
         

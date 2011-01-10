@@ -79,7 +79,7 @@ public class DefaultUserService implements UserService {
 	private static final long serialVersionUID = 8453376073372213621L;
 
 	/**  Encoder for passwords.  */
-	private MessageDigestPasswordEncoder passwordEncoder;
+	private transient MessageDigestPasswordEncoder passwordEncoder;
 	
 	/**  User data access  */
 	private IrUserDAO irUserDAO;
@@ -106,7 +106,7 @@ public class DefaultUserService implements UserService {
 	private ResearcherService researcherService;
 		
 	/** Mail sender */
-	private MailSender mailSender;
+	private transient MailSender mailSender;
 
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserService.class);

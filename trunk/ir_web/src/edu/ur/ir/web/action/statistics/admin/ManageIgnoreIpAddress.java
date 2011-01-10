@@ -88,7 +88,7 @@ public class ManageIgnoreIpAddress extends Pager implements  Preparable{
 	private int rowEnd;
 	
 	/** Quartz scheduler instance to schedule jobs  */
-	private Scheduler quartzScheduler;
+	private transient Scheduler quartzScheduler;
 	
 	private boolean storeCounts = false;
 	

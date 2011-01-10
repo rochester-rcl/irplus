@@ -24,7 +24,7 @@ public class DefaultErrorEmailService implements ErrorEmailService{
 	private static final long serialVersionUID = -3929770443839230101L;
 
 	/** Java mail sender to send emails */
-    private JavaMailSender mailSender;
+    private transient JavaMailSender mailSender;
     
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultErrorEmailService.class);

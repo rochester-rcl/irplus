@@ -87,7 +87,7 @@ public class DefaultInstitutionalCollectionService implements
 	private SimpleMailMessage itemReviewMessage;
 	
 	/** Service to send email */
-	private MailSender mailSender;
+	private transient MailSender mailSender;
 	
 	/** service for marking items that need to be indexed */
 	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;

@@ -41,7 +41,7 @@ public class RedirectOldHandleUrl extends ActionSupport implements ServletReques
 	private static final long serialVersionUID = -3542335646160702315L;
 	
 	/** request made */
-	private HttpServletRequest request;
+	private transient HttpServletRequest request;
 	
 	/** Service for dealing with handles */
 	private HandleService handleService;
