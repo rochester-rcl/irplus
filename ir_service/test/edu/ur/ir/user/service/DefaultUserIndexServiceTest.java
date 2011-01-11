@@ -103,7 +103,7 @@ public class DefaultUserIndexServiceTest {
 	private int executeQuery(String field, String queryString, Directory dir)
 			throws CorruptIndexException, IOException, ParseException {
 		IndexSearcher searcher = new IndexSearcher(dir, true);
-		QueryParser parser = new QueryParser(field, new StandardAnalyzer(Version.LUCENE_29));
+		QueryParser parser = new QueryParser(Version.LUCENE_29, field, new StandardAnalyzer(Version.LUCENE_29));
 		Query q1 = parser.parse(queryString);
 		TopDocs hits = searcher.search(q1, 1000);
 		int hitCount = hits.totalHits;

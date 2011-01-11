@@ -119,13 +119,13 @@
     <bean id="userGroupSearchService" 
        class="edu.ur.ir.user.service.DefaultUserGroupSearchService">
        <property name="userGroupService" ref="userGroupService"/>
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
  
  
     <bean id="userGroupIndexService" 
        class="edu.ur.ir.user.service.DefaultUserGroupIndexService">
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
        <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
    
@@ -253,13 +253,13 @@
     <bean id="institutionalCollectionSearchService" 
        class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSearchService">
        <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
  
  
     <bean id="institutionalCollectionIndexService" 
        class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionIndexService">
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
        <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
    
@@ -399,6 +399,11 @@
    <bean id="defaultTextAnalyzer" 
        class="edu.ur.lucene.analysis.StandardWithISOLatin1AccentFilter" 
        singleton="false" />
+       
+   <bean id="standardWithACIIFolding"
+         class="edu.ur.lucene.analysis.StandardWithACIIFoldingFilter"
+         singleton="false">
+   </bean>
    
    <bean id="userWorkspaceIndexService" 
        class="edu.ur.ir.user.service.DefaultUserWorkspaceIndexService">
@@ -413,7 +418,7 @@
    <bean id="nameAuthorityIndexService" 
        class="edu.ur.ir.person.service.DefaultNameAuthorityIndexService">
        <property name="errorEmailService" ref="errorEmailService"/>
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
    
    <bean id="reIndexPersonNameAuthoritiesService" 
@@ -431,7 +436,7 @@
    
    <bean id="userIndexService" 
        class="edu.ur.ir.user.service.DefaultUserIndexService">
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
        <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
    
@@ -446,7 +451,7 @@
        <property name="collectionBatchSize" value="10"/>
        <property name="fileTextExtractorService" ref="fileTextExtractorService"/>
        <property name="institutionalItemService" ref="institutionalItemService"/>
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
        <property name="errorEmailService" ref="errorEmailService"/>
        <property name="irFileIndexingFailureRecordDAO" ref="irFileIndexingFailureRecordDAO"/>
    </bean>
@@ -454,7 +459,7 @@
    <bean id="researcherIndexService" 
        class="edu.ur.ir.researcher.service.DefaultResearcherIndexService">
        <property name="errorEmailService" ref="errorEmailService"/>
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
    
    <bean id="reIndexResearchersService" 
@@ -476,23 +481,23 @@
    <bean id="nameAuthoritySearchService" 
        class="edu.ur.ir.person.service.DefaultNameAuthoritySearchService">
        <property name="personService" ref="personService"/>
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
 
    <bean id="userSearchService" 
        class="edu.ur.ir.user.service.DefaultUserSearchService">
        <property name="userService" ref="userService"/>
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
    
    <bean id="institutionalItemSearchService" 
        class="edu.ur.ir.institution.service.DefaultInstitutionalItemSearchService">
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
 
    <bean id="researcherSearchService" 
        class="edu.ur.ir.researcher.service.DefaultResearcherSearchService">
-       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="analyzer" ref="standardWithACIIFolding"/>
    </bean>
    
    <!-- ****************************************** --> 
