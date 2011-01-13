@@ -48,6 +48,7 @@
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
 					<urstb:td>First Name</urstb:td>
 					<urstb:td>Last Name</urstb:td>
+					<urstb:td>Preferred Email</urstb:td>
 					<urstb:td>Affiliation</urstb:td>
 	            </urstb:tr>
 	            </urstb:thead>
@@ -78,6 +79,9 @@
 	                        </urstb:td>
 	                         <urstb:td>
 			                   ${pendingUser.lastName} 
+	                        </urstb:td>
+	                         <urstb:td>
+			                   ${pendingUser.defaultEmail} 
 	                        </urstb:td>
 	                        <urstb:td>
 			                     <select id="affiliation_id" name="affiliationId" />
