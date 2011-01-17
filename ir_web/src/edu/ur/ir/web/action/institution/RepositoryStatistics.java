@@ -69,8 +69,6 @@ public class RepositoryStatistics extends ActionSupport{
 	/** count for the name of the sponsors */
 	private Long sponsorCount;
 	
-	/** repository for the system  */
-	private Repository repository;
 		
 	/** Used for sorting name based entities */
 	private AscendingNameComparator nameComparator = new AscendingNameComparator();
@@ -163,10 +161,7 @@ public class RepositoryStatistics extends ActionSupport{
 		this.sponsorService = sponsorService;
 	}
 
-	public Repository getRepository() {
-		return repository;
-	}
-	
+
 	public Long getNumberOfPublicResearchers() {
 		return numberOfPublicResearchers;
 	}

@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008-2010 University of Rochester
+   Copyright 2008 - 2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.web.action.institution;
+package edu.ur.ir.web.action.group;
 
 import java.io.File;
 import java.util.List;
@@ -22,34 +22,34 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import edu.ur.ir.SearchResults;
-import edu.ur.ir.institution.InstitutionalCollection;
-import edu.ur.ir.institution.InstitutionalCollectionSearchService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrUserGroup;
+import edu.ur.ir.user.UserGroupSearchService;
 import edu.ur.ir.web.table.Pager;
 
 /**
- * Action to allow for searching institutional collection information.
+ * User group search.
  * 
  * @author Nathan Sarr
  *
  */
-public class InstitutionalCollectionSearch extends Pager{
+public class UserGroupSearch extends Pager{
 	
 	/* eclipse generated id */
-	private static final long serialVersionUID = 9100655709322426569L;
+	private static final long serialVersionUID = -8043365727284355067L;
 
 	/* Search service for user information */
-	private InstitutionalCollectionSearchService institutionalCollectionSearchService;
-	
+	private UserGroupSearchService userGroupSearchService;
+
 	/* Query for institutional collection search */
 	private String query;
 
 	/*  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(InstitutionalCollectionSearch.class);
+	private static final Logger log = Logger.getLogger(UserGroupSearch.class);
 	
 	/*  User as result of search  */
-	private List<InstitutionalCollection> collections;
+	private List<IrUserGroup> userGroups;
 	
 	/* total number of hits */
 	private int totalHits;
@@ -69,15 +69,10 @@ public class InstitutionalCollectionSearch extends Pager{
 	/* indicates this the first time the user viewing the search */
 	private boolean searchInit = false;
 	
-	/* current parent collection id */
-	private Long parentCollectionId;
-
-
-
 	/**
 	 * Default constructor
 	 */
-	public InstitutionalCollectionSearch()
+	public UserGroupSearch()
 	{
 		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;	
@@ -97,16 +92,17 @@ public class InstitutionalCollectionSearch extends Pager{
 		{
 		    Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		
-		    File collectionFolder = new File(repo.getInstitutionalCollectionIndexFolder());
+		    File userGroupIndexFolder = new File(repo.getUserGroupIndexFolder());
 
 		    rowEnd = rowStart + numberOfResultsToShow;
 	    
-		    SearchResults<InstitutionalCollection> result = institutionalCollectionSearchService.search(collectionFolder, 
+		    log.debug("user group search service = " + userGroupSearchService);
+		    SearchResults<IrUserGroup> result = userGroupSearchService.search(userGroupIndexFolder, 
 				query, 
 				rowStart, 
 	    		numberOfResultsToShow);
 		
-		    collections = result.getObjects();
+		    userGroups = result.getObjects();
 
 		    totalHits = result.getTotalHits();
 		
@@ -166,15 +162,6 @@ public class InstitutionalCollectionSearch extends Pager{
 	}
 
 	/**
-	 * Get the collections.
-	 * 
-	 * @return
-	 */
-	public List<InstitutionalCollection> getCollections() {
-		return collections;
-	}
-
-	/**
 	 * Get the row end.
 	 * 
 	 * @return
@@ -183,15 +170,6 @@ public class InstitutionalCollectionSearch extends Pager{
 		return rowEnd;
 	}
 
-	/**
-	 * Set the institutional collection search service.
-	 * 
-	 * @param institutionalCollectionSearchService
-	 */
-	public void setInstitutionalCollectionSearchService(
-			InstitutionalCollectionSearchService institutionalCollectionSearchService) {
-		this.institutionalCollectionSearchService = institutionalCollectionSearchService;
-	}
 
 	/**
 	 * Set the repository service.
@@ -219,23 +197,26 @@ public class InstitutionalCollectionSearch extends Pager{
 	public String getViewType() {
 		return viewType;
 	}
-
+	
 	/**
-	 * Get the parent collection id.
+	 * Get the user groups
 	 * 
 	 * @return
 	 */
-	public Long getParentCollectionId() {
-		return parentCollectionId;
+	public List<IrUserGroup> getUserGroups() {
+		return userGroups;
+	}
+	
+	/**
+	 * Set the search service.
+	 * 
+	 * @param userGroupSearchService
+	 */
+	public void setUserGroupSearchService(
+			UserGroupSearchService userGroupSearchService) {
+		this.userGroupSearchService = userGroupSearchService;
 	}
 
-	/**
-	 * Set the parent collection id.
-	 * 
-	 * @param parentCollectionId
-	 */
-	public void setParentCollectionId(Long parentCollectionId) {
-		this.parentCollectionId = parentCollectionId;
-	}
+
 
 }

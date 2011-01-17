@@ -15,20 +15,78 @@
 */
 
 /**
- * This code is for dealing with adding and removing group spaces
+ * This code is for dealing with adding and removing folders 
+ * in the workspace.
  */
-YAHOO.namespace("ur.groupspace");
+YAHOO.namespace("ur.user.group_workspace");
+
 
 //actions for adding,updating and removing content types
-var updateGroupWorkspaceAction = basePath + 'admin/updateGroupWorkspace.action';
-var newGroupWorkspaceAction = basePath + 'admin/createGroupWorkspace.action';
-var deleteGroupWorkspaceAction = basePath + 'admin/deleteGroupWorkspace.action';
-var getGroupWorkspaceAction = basePath + 'admin/getGroupWorkspace.action';
+var updateGroupWorkspaceAction = basePath + 'user/updateGroupWorkspace.action';
+var newGroupWorkspaceAction = basePath + 'user/createGroupWorkspace.action';
+var deleteGroupWorkspaceAction = basePath + 'user/deleteGroupWorkspace.action';
+var getGroupWorkspaceAction = basePath + 'user/getGroupWorkspace.action';
 /**
  * content type namespace
  */
-YAHOO.ur.groupspace = {
+YAHOO.ur.user.group_workspace = {
 	
+	/**
+	 * Get all group workspaces for a user
+	 */
+    getGroupWorkspaces : function (userId)
+    {
+	    // handle a successful return
+        var handleSuccess = function(o) 
+        {
+    	    YAHOO.ur.util.wait.waitDialog.hide();
+		    // check for the timeout - forward user to login page if timeout
+            // occurred
+            if( !urUtil.checkTimeOut(o.responseText) )
+            {       	    
+                var response = o.responseText;
+                document.getElementById('group_workspaces').innerHTML = response;
+            
+                // this is for capturing history
+                // it may fail if this is not an A grade browser so we need to
+                // catch the error.
+                // this will store the folder Id in the URL
+                try 
+                {
+            	    // do not remove the string conversion on folder id otherwise an error occurs
+                    YAHOO.util.History.navigate( "groupWorkspaceModule", "0" );
+                } 
+                catch ( e ) 
+                {
+                    // history failed
+                }
+            
+                // update shared inbox count
+                YAHOO.ur.shared.file.inbox.getSharedFilesCount();
+                
+                // hide the wait dialog
+                YAHOO.ur.util.wait.waitDialog.hide();
+            }
+        };
+
+        // handle form submission failure
+        var handleFailure = function(o) 
+        {
+    	    YAHOO.ur.util.wait.waitDialog.hide();
+            alert('get workspaces by user id failure '  + o.status + ' status text ' + o.statusText);
+        };
+
+        //destroy the folder menus
+        //YAHOO.ur.folder.destroyFolderMenus();
+
+        // set the state for the folder id
+        //personalFolderState = folderId;
+
+    
+        YAHOO.util.Connect.asyncRequest('GET',updateGroupWorkspaceAction,
+        {success: handleSuccess, failure: handleFailure});       
+    },
+		
 	 /** 
 	  * clear out any form data messages or input
 	  * in the groupspace form
@@ -65,8 +123,8 @@ YAHOO.ur.groupspace = {
 		// handle a cancel of the adding content type dialog
 		var handleCancel = function() 
 		{
-		    YAHOO.ur.groupspace.newGroupWorkspaceDialog.hide();
-		    YAHOO.ur.groupspace.clearGroupWorkspaceForm();
+		    YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.hide();
+		    YAHOO.ur.user.group_workspace.clearGroupWorkspaceForm();
 		};
 		
 		var handleSuccess = function(o) 
@@ -90,7 +148,7 @@ YAHOO.ur.groupspace = {
 		        // received from the server
 		        if( success == "false" )
 		        {
-	                YAHOO.ur.groupspace.newGroupWorkspaceDialog.showDialog();
+	                YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.showDialog();
 		        }
 		        else
 		        {
@@ -111,7 +169,7 @@ YAHOO.ur.groupspace = {
 		// make it modal - 
 		// it should not start out as visible - it should not be shown until 
 		// new content type button is clicked.
-		YAHOO.ur.groupspace.newGroupWorkspaceDialog = new YAHOO.widget.Dialog('newGroupWorkspaceDialog', 
+		YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog = new YAHOO.widget.Dialog('newGroupWorkspaceDialog', 
 	        { width : "500px",
 			  visible : false, 
 			  modal : true,
@@ -120,10 +178,10 @@ YAHOO.ur.groupspace = {
 			} );
 			
 		//submit form
-		YAHOO.ur.groupspace.newGroupWorkspaceDialog.submit = function() 
+		YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.submit = function() 
 		{
 		    YAHOO.util.Connect.setForm('addGroupWorkspace');
-		    if( YAHOO.ur.groupspace.newGroupWorkspaceDialog.validate() )
+		    if( YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.validate() )
 		    {
 	            var cObj = YAHOO.util.Connect.asyncRequest('post',
 	            		newGroupWorkspaceAction, callback);
@@ -132,7 +190,7 @@ YAHOO.ur.groupspace = {
 
 	    
 	 	// Validate the entries in the form to require that both first and last name are entered
-		YAHOO.ur.groupspace.newGroupWorkspaceDialog.validate = function() 
+		YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.validate = function() 
 		{
 		    var name = document.getElementById('groupWorkspaceName').value;
 			if (name == "" || name == null) {
@@ -148,20 +206,20 @@ YAHOO.ur.groupspace = {
 				
 				
 		// Render the Dialog
-		YAHOO.ur.groupspace.newGroupWorkspaceDialog.render();			
+		YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.render();			
 			
 	    // show and center the dialog box
-	    YAHOO.ur.groupspace.newGroupWorkspaceDialog.showDialog = function()
+	    YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.showDialog = function()
 	    {
-	        YAHOO.ur.groupspace.newGroupWorkspaceDialog.center();
-	        YAHOO.ur.groupspace.newGroupWorkspaceDialog.show()
+	        YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.center();
+	        YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.show()
 	    }
 
 	
 	    // listener for showing the dialog when clicked.
-		YAHOO.util.Event.addListener("showGroupWorkspace", "click", 
-		    YAHOO.ur.groupspace.newGroupWorkspaceDialog.showDialog, 
-		    YAHOO.ur.groupspace.newGroupWorkspaceDialog, true);
+		YAHOO.util.Event.addListener("newGroupWorkspaceBtn", "click", 
+		    YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.showDialog, 
+		    YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog, true);
 		    
 	},
 	
@@ -187,7 +245,7 @@ YAHOO.ur.groupspace = {
 		// handle a cancel of deleting content type dialog
 		var handleCancel = function() 
 		{
-			YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.hide();
+			YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.hide();
 		};
 		
 		var handleSuccess = function(o) 
@@ -196,15 +254,15 @@ YAHOO.ur.groupspace = {
 	        // occurred
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
-		        var div = document.getElementById('groupWorkspaceTable');
+		        var div = document.getElementById('group_workspaces');
 		        div.innerHTML = o.responseText;
-		        YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.hide();
+		        YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.hide();
 		    }
 		};
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-			YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.hide();
+			YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.hide();
 		    alert('delete group workspace failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
@@ -212,7 +270,7 @@ YAHOO.ur.groupspace = {
 		// make it modal - 
 		// it should not start out as visible - it should not be shown until 
 		// new content type button is clicked.
-		YAHOO.ur.groupspace.deleteGroupWorkspaceDialog = new YAHOO.widget.Dialog('deleteGroupWorkspaceDialog', 
+		YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog = new YAHOO.widget.Dialog('deleteGroupWorkspaceDialog', 
 	        { width : "500px",
 			  visible : false, 
 			  modal : true,
@@ -221,17 +279,17 @@ YAHOO.ur.groupspace = {
 			} );
 			
 	    // show and center the delete dialog
-		YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.showDialog = function()
+		YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.showDialog = function()
 	    {
-			YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.center();
-			YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.show();
+			YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.center();
+			YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.show();
 	    }
 	    
 		// Wire up the success and failure handlers
 		var callback = { success: handleSuccess, failure: handleFailure };
 				
 		// Render the Dialog
-		YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.render();
+		YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.render();
 
 	},
 	
@@ -239,7 +297,7 @@ YAHOO.ur.groupspace = {
 	deleteGroupWorkspace : function(id)
 	{
 		document.getElementById('deleteId').value=id;
-		YAHOO.ur.groupspace.deleteGroupWorkspaceDialog.showDialog();
+		YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.showDialog();
 	},
 	
 	// initialize the page
@@ -247,12 +305,11 @@ YAHOO.ur.groupspace = {
 	// been created
 	init : function() 
 	{
-	    YAHOO.ur.groupspace.createCreateGroupWorkspaceDialog();
-	    YAHOO.ur.groupspace.createDeleteGroupWorkspaceDialog();
-	    var myTabs = new YAHOO.widget.TabView("group-workspace-tabs");
+	    YAHOO.ur.user.group_workspace.createCreateGroupWorkspaceDialog();
+	    YAHOO.ur.user.group_workspace.createDeleteGroupWorkspaceDialog();
   	}
 	
 }	
 
 // initialize the code once the dom is ready
-YAHOO.util.Event.onDOMReady(YAHOO.ur.groupspace.init);
+YAHOO.util.Event.onDOMReady(YAHOO.ur.user.group_workspace.init);

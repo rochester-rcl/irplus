@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */  
+
 package edu.ur.ir.web.action.groupspace;
 
 import java.util.List;
@@ -30,16 +31,16 @@ import edu.ur.ir.web.table.Pager;
 import edu.ur.order.OrderType;
 
 /**
- * Manage a group spaces.
+ * Allows a user to manage user group workspaces.
  * 
  * @author Nathan Sarr
  *
  */
-public class ManageGroupWorkspaces extends Pager implements UserIdAware {
-
-	/** eclipse generated id */
-	private static final long serialVersionUID = 5292140116837950036L;
+public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	
+	/** eclipse generated id */
+	private static final long serialVersionUID = 9102093257134215694L;
+
 	/* Name for the content type */
 	private String name;
 
@@ -76,7 +77,7 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 	/**
 	 * Default constructor
 	 */
-	public ManageGroupWorkspaces()
+	public ManageUserGroupWorkspaces()
 	{
 		numberOfResultsToShow = 25;
 		numberOfPagesToShow = 10;
@@ -149,6 +150,7 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 		try 
 		{
 			groupWorkspace = new GroupWorkspace(name, description);
+			groupWorkspace.addOwner(user);
 		    groupWorkspaceService.save(groupWorkspace);
 		} 
 		catch (DuplicateNameException e) 

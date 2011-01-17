@@ -289,6 +289,12 @@
             <result name="deleted">/pages/admin/user_group/user_group_deleted.jsp</result>
         </action>
         
+        <action name="userGroupSearch"
+            class="edu.ur.ir.web.action.group.UserGroupSearch">
+            <interceptor-ref name="editStack" />
+            <result name="success">/pages/admin/user_group/user_group_search_table.jsp</result>
+        </action>
+        
         <action name="userGroupUserSearch"
             class="edu.ur.ir.web.action.group.UserGroupUserSearch">
             <interceptor-ref name="editStack" />

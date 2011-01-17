@@ -309,11 +309,57 @@ YAHOO.ur.usergroup =
 	        YAHOO.ur.usergroup.deleteUserGroupDialog, true);
     },
     
+    /*
+     * Execute the user search and update div to show found users
+     */
+    userGroupSearch: function(rowStart, startPageNumber, currentPageNumber)
+    {
+        // action to perform for searching user groups
+        var userGroupSearchAction =  basePath + 'admin/userGroupSearch.action';
+        
+        /*  This call back updates the html when the names are retrieved   */
+        var callback = 
+        {
+            success: function(o) 
+            {  
+            	 // check for the timeout - forward user to login page if timout
+	             // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {
+                    var divToUpdate = document.getElementById('user_group_search_results_div');
+                    divToUpdate.innerHTML = o.responseText; 
+                }
+            },
+	
+	        failure: function(o) 
+	        {
+	            alert('User group search Failure ' + o.status + ' status text ' + o.statusText );
+	        }
+        }
+        
+        if( document.userGroupSearchForm.query.value != null && document.userGroupSearchForm.query.value != '')
+        {
+    
+	        var formObject = document.getElementById('user_group_search_form');
+	        YAHOO.util.Connect.setForm(formObject);
+	
+            var transaction = YAHOO.util.Connect.asyncRequest('POST', 
+                userGroupSearchAction + '?rowStart=' + rowStart +  '&startPageNumber=' + startPageNumber + '&currentPageNumber=' + currentPageNumber, 
+                callback);
+        }
+        else
+        {
+            var divToUpdate = document.getElementById('user_group_search_results_div');
+            divToUpdate.innerHTML = ""; 
+        }
+    },
+    
     init : function()
     {
         YAHOO.ur.usergroup.getUserGroups(0,1,1,'asc');
         YAHOO.ur.usergroup.createNewUserGroupDialog();
         YAHOO.ur.usergroup.createDeleteUserGroupDialog();
+        var myTabs = new YAHOO.widget.TabView("user-group-tabs");
     }
     
 };

@@ -49,6 +49,8 @@
     <ur:js src="page-resources/yui/button/button-min.js"/>
     <ur:js src="page-resources/yui/container/container-min.js"/>
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
+ 	<ur:js src="page-resources/yui/tabview/tabview-min.js"/>
+ 	
  	
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
@@ -68,16 +70,40 @@
         <h3>Group Workspaces</h3>
   
         <div id="bd">
+    
+            <!--  set up tabs for the workspace -->
+            <div id="group-workspace-tabs" class="yui-navset">
+	            <ul class="yui-nav">
+	                <li class="selected"><a href="#tab1"><em>Browse</em></a></li>
+		            <li><a href="#tab2"><em>Search</em></a></li>
+	            </ul>
+	                
+	                
+	            <div class="yui-content">
+	                <!--  first tab -->
+	                <div id="tab1">
+    
       
-		    <button id="showGroupWorkspace" 
-		            class="ur_button" 
- 		            onmouseover="this.className='ur_buttonover';"
- 		            onmouseout="this.className='ur_button';">New Group Workspace</button> 
-	        <br/>
-	        <br/>
-	        <div id="groupWorkspaceTable">
-	            <c:import url="group_workspace_table.jsp"/>
+		                <button id="showGroupWorkspace" 
+		                        class="ur_button" 
+ 		                        onmouseover="this.className='ur_buttonover';"
+ 		                        onmouseout="this.className='ur_button';">New Group Workspace</button> 
+	                    <br/>
+	                    <br/>
+	                    <div id="groupWorkspaceTable">
+	                        <c:import url="group_workspace_table.jsp"/>
+	                    </div>
+	                </div>
+	                <!-- end tab 1 -->
+	                <div id="tab2">
+	                 <p>tab 2 content</p>
+	                </div>
+	                <!--  end tab 2 -->
+	            </div>
+	            <!-- end content -->
+	            
 	        </div>
+	        <!-- end workspace  tabs-->
 	
       </div>
       <!--  end body div -->

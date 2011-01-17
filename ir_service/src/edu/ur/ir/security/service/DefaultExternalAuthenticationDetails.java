@@ -27,6 +27,9 @@ import edu.ur.ir.user.ExternalAccountType;
  */
 public class DefaultExternalAuthenticationDetails implements ExternalAuthenticationDetails{
 
+	/** eclipse id */
+	private static final long serialVersionUID = -6810034471027729681L;
+	
 	/**  The type of authentication that was successful */
 	private ExternalAccountType type;
 	

@@ -81,7 +81,7 @@ YAHOO.ur.collection.move =
 	        
 	                getCollectionsAction = getCollectionsAction +
 	                 '?parentCollectionId=' + destinationId +
-	                 '&showCollectionTab=true' + '&bustcache='+new Date().getTime();
+	                 '&tabName=COLLECTION' + '&bustcache='+new Date().getTime();
 	            
 	                window.location = getCollectionsAction;
 	            }

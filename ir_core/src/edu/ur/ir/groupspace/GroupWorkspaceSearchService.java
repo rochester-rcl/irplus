@@ -14,8 +14,7 @@
    limitations under the License.
 */  
 
-
-package edu.ur.ir.institution;
+package edu.ur.ir.groupspace;
 
 import java.io.File;
 import java.io.Serializable;
@@ -23,23 +22,24 @@ import java.io.Serializable;
 import edu.ur.ir.SearchResults;
 
 /**
- * Interface to perform searching over the institutional collection index. 
+ * Search the group workspace index
  * 
  * @author Nathan Sarr
  *
  */
-public interface InstitutionalCollectionSearchService extends Serializable {
+public interface GroupWorkspaceSearchService extends Serializable {
 	
 	/**
-	 * Returns search results for institutional collections.
+	 * Returns search results for group workspaces.
 	 * 
-	 * @param institutionalCollectionIndexFolder - folder for the institutional collections
+	 * @param indexFolder - folder for the group workspaces index
 	 * @param query - query to execute
 	 * @param offset - offset to start at
 	 * @param numResults - number of results.
 	 * 
-	 * @return - set of institutional collections found for the query.
+	 * @return - set of group workspaces found for the query.
 	 */
-	public SearchResults<InstitutionalCollection> search(File institutionalCollectionIndexFolder, String query, int offset, int numResults);
+	public SearchResults<GroupWorkspace> search(File indexFolder, String query, int offset, int numResults);
+
 
 }

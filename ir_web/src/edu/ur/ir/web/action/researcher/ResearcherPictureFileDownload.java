@@ -95,14 +95,19 @@ implements ServletResponseAware, ServletRequestAware
 		    		irFile = researcher.getPrimaryPicture();
 		    	}
 		    }
-            FileInfo fileInfo = irFile.getFileInfo();
+		    
+		    if( irFile != null )
+		    {
+                FileInfo fileInfo = irFile.getFileInfo();
 
-            if( log.isDebugEnabled() )
-            {
-                log.debug("Found ir File " + irFile);
-            }
+                if( log.isDebugEnabled() )
+                {
+                    log.debug("Found ir File " + irFile);
+                }
            
-            webIoUtils.streamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
+                webIoUtils.streamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
+		
+		    }
 		}
         
         return SUCCESS;

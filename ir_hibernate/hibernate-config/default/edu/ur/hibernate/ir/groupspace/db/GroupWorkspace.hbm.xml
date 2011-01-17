@@ -117,4 +117,13 @@
 	    select groupWorkspace from GroupWorkspace as groupWorkspace
 		order by groupWorkspace.lowerCaseName desc
 	</query>	
+	
+	<!--  get groupspaces for a given user by user id and name ascending  -->
+	<query name="groupSpaceByUserIdNameAsc">
+	    select groupWorkspace from GroupWorkspace as groupWorkspace
+	    join groupWorkspace.owners as owner
+	    where owner.id = :userId
+		order by groupWorkspace.lowerCaseName asc
+	</query>
+	
 </hibernate-mapping>

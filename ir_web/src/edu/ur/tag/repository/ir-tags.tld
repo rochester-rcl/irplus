@@ -711,6 +711,7 @@
 			boolean isContributor(edu.ur.ir.item.GenericItem, edu.ur.ir.person.PersonName)
 		</function-signature>
 	</function>
+	
 	<function>
 		<name>getItemDescription</name>
 		<function-class>
@@ -721,5 +722,15 @@
 		</function-signature>
 	</function>
 	
+	
+   <function>
+		<name>isGroupWorkspaceOwner</name>
+		<function-class>
+			edu.ur.tag.repository.GroupWorkspaceWebUtilFunctions
+		</function-class>
+		<function-signature>
+			boolean isGroupWorkspaceOwner(edu.ur.ir.groupspace.GroupWorkspace)
+		</function-signature>
+	</function>
   
 </taglib>

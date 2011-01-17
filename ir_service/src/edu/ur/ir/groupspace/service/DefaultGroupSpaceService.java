@@ -122,4 +122,16 @@ public class DefaultGroupSpaceService implements GroupWorkspaceService {
 	{
 		return groupWorkspaceDAO.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, orderType);
 	}
+	
+	/**
+	 * Get all group workspaces for a given user - this includes groups they own or belong to a group within the workspace.
+	 * 
+	 * @param userId - id of the user to get the group workspaces for
+	 * 
+	 * @return - list of all groups the user belongs to.
+	 */
+	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId)
+	{
+		return groupWorkspaceDAO.getGroupWorkspacesForUser(userId);
+	}
 }

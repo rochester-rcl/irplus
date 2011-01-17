@@ -88,6 +88,7 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
      * @param name - name of the group space
      * @param owner - owner of the group space
      * @param description - description of the group space
+     * 
      * @throws IllegalFileSystemNameException 
      */
     public GroupWorkspace(String name, String description) 

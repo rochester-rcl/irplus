@@ -29,7 +29,7 @@
 <html>
 
 <head>
-    <title>Group Workspace: ${groupWorkspace.name}</title>
+    <title>Group Workspace: ${groupSpace.name}</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -54,7 +54,7 @@
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
- 	<ur:js src="page-resources/js/admin/edit_group_workspace.js"/>
+ 	<ur:js src="page-resources/js/user/user_edit_group_workspace.js"/>
 </head>
 
 <body class="yui-skin-sam">
@@ -65,7 +65,10 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3><a href="<c:url value="/admin/viewGroupWorkspaces.action"/>">Group Workspaces</a> &gt; Editing: ${groupWorkspace.name}</h3>
+        <c:url var="workspace" value="/user/workspace.action">
+            <c:param name="tabName" value="GROUP_WORKSPACE"/>
+        </c:url>
+        <h3><a href="${workspace}">Group Workspaces</a> &gt; Editing: ${groupWorkspace.name}</h3>
   
         <div id="bd">
             <div id="groupWorkspacePropertiesTabs" class="yui-navset">
@@ -83,7 +86,7 @@
 		                 <p class="errorMessage"><ir:printError errors="${fieldErrors}" 
 		                                      key="groupWorkspaceAlreadyExists"/></p>
                          <form id="editGroupWorkspaceInformation" name="groupWorkspaceInformation" method="post" 
-                             action="<c:url value="/admin/updateGroupWorkspace.action"/>">
+                             action="<c:url value="/user/updateGroupWorkspace.action"/>">
                             <input type="hidden" id="groupWorkspaceId" 
                                   name="id" value="${groupWorkspace.id}" />
                             <table class="formTable">
@@ -119,8 +122,7 @@
                      
                      <!--  second tab -->
                      <div id="tab2">
-                         <h3>Owners</h3>
-                         <c:import url="group_workspace_owners_table.jsp"/>
+                         tab 2
                      </div>
                      <!--  end second tab -->
                      

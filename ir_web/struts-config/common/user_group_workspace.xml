@@ -1,4 +1,4 @@
-<!--  
+ <!--  
    Copyright 2008-2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 --> 
-
-
+ 
+ 
        <!--  ************************************ -->
        <!-- Group spaces actions                  -->
        <!--  ************************************ -->
        <action name="viewGroupWorkspaces" 
-            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaces">
+            class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="editStack"/>
             <result name="success">/pages/admin/groupspace/group_workspaces.jsp</result>
         </action>
@@ -27,10 +27,10 @@
         <!--  This handles update, save and delete -->
         <action name="*GroupWorkspace" 
             method="{1}"
-            class="edu.ur.ir.web.action.groupspace.ManageGroupWorkspaces">
+            class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="crudStack" />
-            <result name="input">/pages/admin/groupspace/group_workspace.jsp</result>
+            <result name="input">/pages/user/workspace/group_workspace.jsp</result>
             <result name="added">/pages/admin/groupspace/group_workspace_form.jsp</result>
-            <result name="deleted">/pages/admin/groupspace/group_workspace_table.jsp</result>
-            <result name="get">/pages/admin/groupspace/edit_group_workspace.jsp</result>
+            <result name="deleted">/pages/user/workspace/group_workspace_table.jsp</result>
+            <result name="get">/pages/user/workspace/edit_group_workspace.jsp</result>
         </action>

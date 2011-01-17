@@ -48,6 +48,8 @@
     <ur:js src="page-resources/yui/button/button-min.js"/>
     <ur:js src="page-resources/yui/container/container-min.js"/>
  	<ur:js src="page-resources/yui/menu/menu-min.js"/>
+ 	<ur:js src="page-resources/yui/tabview/tabview-min.js"/>
+ 	
  	
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
@@ -67,16 +69,50 @@
         <h3>User Groups</h3>
   
         <div id="bd">
+        
+            <!--  set up tabs for the workspace -->
+            <div id="user-group-tabs" class="yui-navset">
+	            <ul class="yui-nav">
+		            <li class="selected"><a href="#tab1"><em>Browse</em></a></li>
+		            <li><a href="#tab2"><em>Search</em></a></li>
+	            </ul>
+	                
+	                
+	            <div class="yui-content">
+	                <!--  first tab -->
+	                <div id="tab1">
       
-		    <button id="showUserGroup" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">New User Group</button> 
-	        <button id="showDeleteUserGroup" class="ur_button" 
- 		                               onmouseover="this.className='ur_buttonover';"
- 		                               onmouseout="this.className='ur_button';">Delete</button>
-	        <br/>
-	        <br/>
-	        <div id="newUserGroups"></div>
+		                <button id="showUserGroup" class="ur_button" 
+ 		                        onmouseover="this.className='ur_buttonover';"
+ 		                        onmouseout="this.className='ur_button';">New User Group</button> 
+	                    
+	                    <button id="showDeleteUserGroup" class="ur_button" 
+ 		                        onmouseover="this.className='ur_buttonover';"
+ 		                        onmouseout="this.className='ur_button';">Delete</button>
+	                    <br/>
+	                    <br/>
+	                    <div id="newUserGroups"></div>
+	               </div>
+	               
+	               <div id="tab2">
+	               
+	                    <form method="GET" 
+	                          id="user_group_search_form" 
+	                          name="userGroupSearchForm" 
+	                          action="javascript:YAHOO.ur.usergroup.userGroupSearch(0, 1, 1);">
+	                          
+	                          Search: <input type="text" size="50" id="user_group_query" name="query" value=""/>
+	                         
+	                         <input type="submit" value="search"/>
+	                    </form>
+	                   
+	                    <div  id="user_group_search_results_div"></div>
+	               </div>
+	           </div>
+	           <!-- end content div -->
+	           
+	       </div>
+	       <!--  end content div -->
       </div>
       <!--  end body div -->
       

@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008 - 2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,14 +16,19 @@
 
 package edu.ur.ir.web.action.group;
 
+import java.io.File;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.Preparable;
 
+import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserGroup;
+import edu.ur.ir.user.UserGroupIndexService;
 import edu.ur.ir.user.UserGroupService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -39,52 +44,61 @@ import edu.ur.ir.web.table.Pager;
  */
 public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 
-	/** generated serial id */
+	/* generated serial id */
 	private static final long serialVersionUID = 5414305662558717897L;
 
-	/** User group to manage. */
+	/* User group to manage. */
 	private IrUserGroup userGroup;
 	
-	/** Id for the user group */
+
+	/* Id for the user group */
 	private Long id;
 	
-	/** Service for dealing with user groups */
+	/* Service for dealing with user groups */
 	private UserGroupService userGroupService;
 	
-	/**  Logger for managing content types*/
+
+
+	/*  Logger for managing content types*/
 	private static final Logger log = Logger.getLogger(ManageUserGroups.class);
 	
-	/** indicates the user group was added */
+	/* indicates the user group was added */
 	private boolean added;
 	
-	/** indicates a user group delete action was successful */
+	/* indicates a user group delete action was successful */
 	private boolean deleted;
 	
-	/** message to be displayed to the user */
+	/* message to be displayed to the user */
 	private String message;
 	
-	/** Set of content type ids */
+	/* Set of content type ids */
 	private long[] userGroupIds;
 	
-	/** Set of user groups for viewing */
+	/* Set of user groups for viewing */
 	private Collection<IrUserGroup> userGroups;
 
-	/** User id  */
+	/* User id  */
 	private Long userId;
 	
-	/** User service */
+	/* User service */
 	private UserService userService;
 	
-	/** type of sort [ ascending | descending ] 
-	 *  this is for incoming requests */
+	/* type of sort [ ascending | descending ]   this is for incoming requests */
 	private String sortType = "asc";
 
-	/** Total number of user groups  */
+	/* Total number of user groups  */
 	private int totalHits;
 	
-	/** Row End */
+	/* Row End */
 	private int rowEnd;
 	
+	/* Service to index user groups */
+	private UserGroupIndexService userGroupIndexService;
+	
+	/* Service to deal with repository information */
+	private RepositoryService repositoryService;
+
+
 	/** Default constructor */
 	public  ManageUserGroups() 
 	{
@@ -92,7 +106,7 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 		numberOfPagesToShow = 10;
 	}
 	
-	public String create()
+	public String create() throws NoIndexFoundException
 	{
 		log.debug("creating a user group type = " + userGroup.getName());
 		added = false;
@@ -102,6 +116,9 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 			IrUser user = userService.getUser(userId, false);
 			userGroup.addAdministrator(user);
 			userGroupService.save(userGroup);
+			
+			Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+			userGroupIndexService.add(userGroup, new File(repo.getUserGroupIndexFolder()));
 		    added = true;
 		}
 		else
@@ -134,8 +151,9 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 	 * Method to update an existing user group
 	 * 
 	 * @return
+	 * @throws NoIndexFoundException 
 	 */
-	public String update()
+	public String update() throws NoIndexFoundException
 	{
 		log.debug("updateing user group id = " + userGroup.getId());
 		added = false;
@@ -145,6 +163,9 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 		if( other == null || other.getId().equals(userGroup.getId()))
 		{
 			userGroupService.save(userGroup);
+			Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+			userGroupIndexService.update(userGroup, new File(repo.getUserGroupIndexFolder()));
+
 			added = true;
 		}
 		else
@@ -172,6 +193,8 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 			    log.debug("Deleting content type with id " + userGroupIds[index]);
 			    IrUserGroup userGroup = userGroupService.get(userGroupIds[index], false);
 			    userGroupService.delete(userGroup);
+				Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+				userGroupIndexService.delete(userGroup.getId(), new File(repo.getUserGroupIndexFolder()));
 		    }
 		}
 		deleted = true;
@@ -199,21 +222,6 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 		return userGroup;
 	}
 
-
-	public void setUserGroup(IrUserGroup userGroup) {
-		this.userGroup = userGroup;
-	}
-
-
-	public UserGroupService getUserGroupService() {
-		return userGroupService;
-	}
-
-
-	public void setUserGroupService(UserGroupService userGroupService) {
-		this.userGroupService = userGroupService;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -226,9 +234,6 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 		return message;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
 
 	public boolean isDeleted() {
 		return deleted;
@@ -266,9 +271,6 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 		return userGroups;
 	}
 
-	public void setUserGroups(Collection<IrUserGroup> userGroups) {
-		this.userGroups = userGroups;
-	}
 
 	public long[] getUserGroupIds() {
 		return userGroupIds;
@@ -278,13 +280,9 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 		this.userGroupIds = userGroupIds;
 	}
 
-
-
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
-
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -302,10 +300,6 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 		return totalHits;
 	}
 
-	public void setTotalHits(int totalHits) {
-		this.totalHits = totalHits;
-	}
-
 	public int getRowEnd() {
 		return rowEnd;
 	}
@@ -314,5 +308,26 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 		this.rowEnd = rowEnd;
 	}
 
+	/**
+	 * Set the user group index service.
+	 * 
+	 * @param userGroupIndexService
+	 */
+	public void setUserGroupIndexService(UserGroupIndexService userGroupIndexService) {
+		this.userGroupIndexService = userGroupIndexService;
+	}
 
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+	
+	public void setUserGroupService(UserGroupService userGroupService) {
+		this.userGroupService = userGroupService;
+	}
+	
+	public void setUserGroup(IrUserGroup userGroup) {
+		this.userGroup = userGroup;
+	}
+
+	
 }

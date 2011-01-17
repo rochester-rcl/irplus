@@ -75,7 +75,7 @@
 		         <c:if test="${parentCollectionId != 0}">
                       <c:url var="viewRootCollectionsUrl" value="/user/workspace.action">
                           <c:param name="parentCollectionId" value="0"/>
-                          <c:param name="showCollectionTab" value="true"/>
+                          <c:param name="tabName" value="COLLECTION"/>
                       </c:url>
 		             <a href="${viewRootCollectionsUrl}">My Publications</a>&nbsp;/
 		         </c:if>
@@ -84,7 +84,7 @@
 		         </c:if>
 		         
 	             <c:url var="viewCollectionsUrl" value="/user/workspace.action">
-                      <c:param name="showCollectionTab" value="true"/>
+                      <c:param name="tabName" value="COLLECTION"/>
                   </c:url>
 		         
 		         

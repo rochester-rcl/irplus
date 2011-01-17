@@ -36,7 +36,7 @@ var updateLinkAction = basePath + 'user/updateItemLink.action';
 var newLinkAction = basePath + 'user/addItemLink.action';
 
 // Action to add files to item
-var publicationWorkspaceAction = basePath + 'user/workspace.action?showCollectionTab=true';
+var publicationWorkspaceAction = basePath + 'user/workspace.action?tabName=COLLECTION';
 var viewInstitutionalItemAction = basePath + 'institutionalPublicationPublicView.action';
 
 // Action to add files to item

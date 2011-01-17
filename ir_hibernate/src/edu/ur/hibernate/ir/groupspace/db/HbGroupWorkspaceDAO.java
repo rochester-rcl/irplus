@@ -137,6 +137,22 @@ public class HbGroupWorkspaceDAO implements GroupWorkspaceDAO
 		q.setFetchSize(numberOfResultsToShow);
 	    return q.list();
 	}
+	
+	/**
+	 * Get all group workspaces for a given user - this includes groups they own or belong to a group within the workspace.
+	 * 
+	 * @param userId - id of the user to get the group workspaces for
+	 * 
+	 * @return - list of all groups the user belongs to.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId)
+	{
+	    Session session = hbCrudDAO.getSessionFactory() .getCurrentSession();
+	    Query q = session.getNamedQuery("groupSpaceByUserIdNameAsc");
+	    q.setParameter("userId", userId);
+	    return q.list();
+	}
 
 
 }

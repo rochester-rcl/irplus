@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008-2010 University of Rochester
+   Copyright 2008-2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public interface InstitutionalCollectionIndexService extends Serializable{
 	 * 
 	 * @param collections - collections to re index
 	 * @param collectionIndexFolder - folder location of the index
-	 * @param overwriteExistingIndex - if set to true, will overwrite the exiting index.
+	 * @param overwriteExistingIndex - if set to true, will overwrite the existing index.
 	 */
 	public void add(List<InstitutionalCollection> collections, File collectionIndexFolder,
 			boolean overwriteExistingIndex);

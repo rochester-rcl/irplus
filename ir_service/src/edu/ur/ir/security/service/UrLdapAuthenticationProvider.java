@@ -19,6 +19,7 @@ package edu.ur.ir.security.service;
 
 
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -138,19 +139,24 @@ import edu.ur.ir.user.ExternalAccountTypeService;
  * @see DefaultLdapAuthoritiesPopulator
  */
 
-public class UrLdapAuthenticationProvider implements AuthenticationProvider {
-    //~ Static fields/initializers =====================================================================================
+public class UrLdapAuthenticationProvider implements AuthenticationProvider, Serializable {
+    
+	/** eclipse generated id  */
+	private static final long serialVersionUID = -8847083271809838452L;
+
+
+	//~ Static fields/initializers =====================================================================================
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultSecurityService.class);
 	
 	
     //~ Instance fields ================================================================================================
 
-    protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+    protected transient MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
-    private LdapAuthenticator authenticator;
-    private LdapAuthoritiesPopulator authoritiesPopulator;
-    private UserDetailsContextMapper userDetailsContextMapper = new LdapUserDetailsMapper();
+    private transient LdapAuthenticator authenticator;
+    private transient LdapAuthoritiesPopulator authoritiesPopulator;
+    private transient UserDetailsContextMapper userDetailsContextMapper = new LdapUserDetailsMapper();
     private boolean useAuthenticationRequestCredentials = true;
     
     /**  name of the of external authentication*/

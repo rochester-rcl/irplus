@@ -1,12 +1,14 @@
 package edu.ur.ir;
 
+import java.io.Serializable;
+
 /**
  * Service for dealing with users who need help
  * 
  * @author Nathan Sarr
  *
  */
-public interface PublicHelpService {
+public interface PublicHelpService extends Serializable {
 	
 
 	/**
