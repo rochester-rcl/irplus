@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 - 2011 University of Rochester
+   Copyright  - 2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -25,59 +25,49 @@ import org.quartz.TriggerUtils;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
- * This re-indexes all users in the system.
+ * Re - index all user groups 
  * 
  * @author Nathan Sarr
  *
  */
-public class ReIndexUsers extends ActionSupport{
+public class ReIndexUserGroups extends ActionSupport{
 	
+	/* eclipse generated id */
+	private static final long serialVersionUID = 6796256135001803887L;
 
-	/** eclipse generated id */
-	private static final long serialVersionUID = -3469784982224968731L;
-
-	/** Quartz scheduler instance to schedule jobs  */
+	/* Quartz scheduler instance to schedule jobs  */
 	private transient Scheduler quartzScheduler;
 	
 	/**  Get the logger for this class */
-	private static final Logger log = Logger.getLogger(ReIndexUsers.class);
+	private static final Logger log = Logger.getLogger(ReIndexUserGroups.class);
 	
-	/** Default Batch Size */
+	/* Default Batch Size */
 	private int batchSize = 25;
 	
 	public String execute() throws Exception
 	{
 		log.debug("re index users called");
 		//create the job detail
-		JobDetail jobDetail = new JobDetail("reIndexUsersJob", Scheduler.DEFAULT_GROUP, 
-				edu.ur.ir.user.service.DefaultReIndexUsersJob.class);
+		JobDetail jobDetail = new JobDetail("reIndexUserGroupsJob", Scheduler.DEFAULT_GROUP, 
+				edu.ur.ir.user.service.DefaultReIndexUserGroupsJob.class);
 		
 		jobDetail.getJobDataMap().put("batchSize", Integer.valueOf(batchSize));
 		
 		//create a trigger that fires once right away
 		Trigger trigger = TriggerUtils.makeImmediateTrigger(0,0);
-		trigger.setName("SingleReIndexUsersJobFireNow");
+		trigger.setName("SingleReIndexUserGroupsJobFireNow");
 		quartzScheduler.scheduleJob(jobDetail, trigger);
 		
 		return SUCCESS;
 	}
 	
-	public Scheduler getQuartzScheduler() {
-		return quartzScheduler;
-	}
-
 	public void setQuartzScheduler(Scheduler quartzScheduler) {
 		this.quartzScheduler = quartzScheduler;
-	}
-
-	public int getBatchSize() {
-		return batchSize;
 	}
 
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
 	}
-
 
 
 }

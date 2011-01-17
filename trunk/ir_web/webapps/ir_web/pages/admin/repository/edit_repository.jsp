@@ -271,6 +271,11 @@
                            <br/>
                            <br/>
                            
+                            <a href="<c:url value="/admin/reIndexUserGroups.action"/>">Re-Index User Groups</a>
+                           
+                           <br/>
+                           <br/>
+                           
                            <a href="<c:url value="/admin/reIndexResearchers.action"/>">Re-Index Researchers</a>
                            
                            <br/>

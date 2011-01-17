@@ -373,14 +373,13 @@ public class DefaultUserFileSystemServiceTest {
 			ts = tm.getTransaction(td);
 			
 			PersonalFolder myFolder = userFileSystemService.createNewFolder(user, "myFolder1");
-			PersonalFolder subFolder = myFolder.createChild("subFolder");
-			
-			userFileSystemService.makePersonalFolderPersistent(myFolder);
 			assert myFolder != null : "folder should be created";
-			
-			// create a sub folder
+
+			PersonalFolder subFolder = myFolder.createChild("subFolder");
 			assert subFolder != null : "folder should be created";
 			
+			userFileSystemService.makePersonalFolderPersistent(myFolder);
+						
 			PersonalFile pf = userFileSystemService.addFileToUser(repo, 
 					f, 
 					myFolder, 

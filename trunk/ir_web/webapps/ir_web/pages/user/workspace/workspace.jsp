@@ -73,6 +73,8 @@
     <ur:js src="page-resources/js/user/workspace_collection.js"/>
     <ur:js src="page-resources/js/user/workspace_folder.js"/>
     <ur:js src="page-resources/js/user/workspace_search.js"/>
+    <ur:js src="page-resources/js/user/user_group_workspace.js"/>
+
 </head>
 
 
@@ -104,6 +106,8 @@
     </script>
 
     
+    <input type="hidden" id="set_tab_name" name="set_tab_name"  value="${tabName}"/> 
+    
     <!--  yahoo doc 2 template creates a page 950 pixles wide -->
     <div id="doc2">  
  
@@ -120,9 +124,10 @@
 	        <div id="workspace-tabs" class="yui-navset">
 	                 <ul class="yui-nav">
                          <li class="selected"><a href="#tab1"><em><u>My Files</u></em></a></li>
-                         <li><a href="#tab2"><em><u>My Publications</u></em></a></li>
-                         <li><a href="#tab3"><em><u>Search My Workspace</u></em></a></li>
-                         <li><a href="#tab4"><em><u>Shared File Inbox <strong>(<span id="inbox_files_count">&nbsp;&nbsp;&nbsp;</span>)</strong></u></em></a></li>
+                         <li><a href="#tab2"><em><u>Group Workspaces</u></em></a></li>
+                         <li><a href="#tab3"><em><u>My Publications</u></em></a></li>
+                         <li><a href="#tab4"><em><u>Search My Workspace</u></em></a></li>
+                         <li><a href="#tab5"><em><u>Shared File Inbox <strong>(<span id="inbox_files_count">&nbsp;&nbsp;&nbsp;</span>)</strong></u></em></a></li>
                      </ul>
 
                     <!--  first tab -->
@@ -140,24 +145,29 @@
 	                  </div>
 	                  <!--  end first tab -->
 	                  
-	                  
-	                  <!--  start second tab -->
+	                  <!--  group workspaces -->
 	                  <div id="tab2">
+	                      <div id="group_workspaces">
+	                           <c:import url="group_workspace_table.jsp"/>
+	                      </div>
+	                  </div>
+	                  <!-- end group workspaces -->
+	                  
+	                  <!--  start third tab -->
+	                  <div id="tab3">
 	                      <div id="newPersonalCollections">
 	                      <form id="collections" name="myCollections">
 	                          <input type="hidden" id="myCollections_parentCollectionId" 
 	                               name="parentCollectionId" 
 	                               value="${parentCollectionId}"/>
-	                               <input type="hidden" id="myCollections_showCollection" 
-	                               name="showCollectionTab" 
-	                               value="${showCollectionTab}"/>
+	                               
 	                      </form>
 	                      </div>
 	                 </div>                
-	                 <!--  end second tab -->
+	                 <!--  end third tab -->
 	                 
-	                 <!--  Start third tab -->
-	                 <div id="tab3">
+	                 <!--  Start forth tab -->
+	                 <div id="tab4">
 	                     
 	                     <form id="userSearchForm" name="userSearchForm" 
 	                         action="javascript:YAHOO.ur.workspace.search.executeUserSearch();">
@@ -189,10 +199,10 @@
 	                     <div id="search_results">
 	                     </div>
 	                 </div>
-	                 <!--  End third tab -->
+	                 <!--  End fourth tab -->
 	                 
-	                 <!--  Start 4th -->
-	                 <div id="tab4">
+	                 <!--  Start 5th -->
+	                 <div id="tab5">
 	                      <br/>
 	                    
 	                            <button class="ur_button"
@@ -212,7 +222,7 @@
 	                     <div id="shared_folder_inbox">
 	                     </div>
 	                 </div>
-	                 <!--  End 4th tab tab -->
+	                 <!--  End 5th tab tab -->
 	                 
 	             </div>
 	             <!--  end content div -->
@@ -421,6 +431,35 @@
 		     Do you want to delete the selected publications and folders?
 		 </div>
 	 </div>
+	 
+	 <!-- Dialog box for uploading a file -->
+     <div id="newGroupWorkspaceDialog" class="hidden">
+       <div class="hd">Group Workspace Information</div>
+       <div class="bd">
+          <form id="addGroupWorkspace" 
+                            name="newGroupWorkspaceForm" 
+		                    method="post"
+		                    action="/user/createGroupWorkspace.action">
+	          <div id="groupWorkspaceDialogFields">
+	              <c:import url="/pages/admin/groupspace/group_workspace_form.jsp"/>
+	          </div>
+	      </form>
+       </div>
+     </div>
+	 <!--  end file upload dialog -->  
+	 
+	 <!-- Dialog box for deleting a group workspace -->
+	 <div id="deleteGroupWorkspaceDialog" class="hidden">
+      <div class="hd">Delete Group Workspace</div>
+		<div class="bd">
+		    <form id="deleteGroupWorkspaceForm" name="deleteGroupWorkspace" method="post" 
+		                action="/admin/deleteGroupWorkspace.action">
+			   <p>Are you sure you wish to delete the selected group workspace?</p>
+			   <input type="hidden" id="deleteId" name="id" value=""/>
+		    </form>
+		</div>
+     </div>
+	 <!-- Dialog box for deleting a group workspace -->
 
 </body>
 </html>

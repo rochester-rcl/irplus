@@ -142,9 +142,6 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	
 	/** indicates net id already exists and the net id validated against the password*/
 	private boolean externalAccountAlreadyExists = false;
-	
-
-
 
 	/** External authentication provider */
 	private ExternalAuthenticationProvider externalAuthenticationProvider;

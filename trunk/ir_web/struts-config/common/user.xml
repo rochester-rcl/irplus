@@ -20,6 +20,7 @@
     "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
     "http://struts.apache.org/dtds/struts-2.0.dtd" [
     <!ENTITY researcher SYSTEM "user_researcher.xml">
+    <!ENTITY group_workspace SYSTEM "user_group_workspace.xml">
     ]>
 <struts>
     
@@ -88,6 +89,11 @@
         <!--  Researcher actions                -->
         <!--  ************************************ -->
         &researcher;
+        
+        <!--  ************************************ -->
+        <!--  Group workspace actions              -->
+        <!--  ************************************ -->
+        &group_workspace;
                 
                 
         <!--  ************************************ -->

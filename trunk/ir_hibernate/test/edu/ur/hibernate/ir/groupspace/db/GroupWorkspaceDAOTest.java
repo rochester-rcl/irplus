@@ -17,6 +17,8 @@
 
 package edu.ur.hibernate.ir.groupspace.db;
 
+import java.util.List;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -111,6 +113,9 @@ public class GroupWorkspaceDAOTest {
  	    ts = tm.getTransaction(td);
  		GroupWorkspace other = groupWorkspaceDAO.getById(groupSpace.getId(), false);
  		assert other.getIsOwner(user) : "User " + user + " should be owner of project but is not";
+ 		List<GroupWorkspace> workspaces = groupWorkspaceDAO.getGroupWorkspacesForUser(user.getId());
+ 		assert workspaces.size() == 1 : "Should find one workspace but found " + workspaces.size();
+ 		assert workspaces.contains(other) : "List should contain " + other + " but does not";
         tm.commit(ts);        
 
  	    ts = tm.getTransaction(td);

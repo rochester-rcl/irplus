@@ -126,7 +126,7 @@
 					        </c:if>
                         </div>
                     </div>
-                    <!--  end tabs -->
+                    <!--  end content -->
                     
                 </div>  
                 <!--  tabs -->    

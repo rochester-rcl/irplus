@@ -57,8 +57,9 @@ public class UserGroup extends ActionSupport implements  Preparable {
 	
 	/**  Logger for file upload */
 	private static final Logger log = Logger.getLogger(UserGroup.class);
-
 	
+
+
 	/* (non-Javadoc)
 	 * @see com.opensymphony.xwork2.Preparable#prepare()
 	 */
@@ -191,4 +192,5 @@ public class UserGroup extends ActionSupport implements  Preparable {
 	public void setUserGroup(IrUserGroup userGroup) {
 		this.userGroup = userGroup;
 	}
+
 }

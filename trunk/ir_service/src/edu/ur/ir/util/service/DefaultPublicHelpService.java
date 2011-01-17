@@ -17,8 +17,11 @@ import edu.ur.ir.PublicHelpService;
  */
 public class DefaultPublicHelpService implements PublicHelpService{
 
-    /** Java mail sender to send emails */
-    private JavaMailSender mailSender;
+    /** eclipse generated id */
+	private static final long serialVersionUID = -6937481628862884612L;
+
+	/** Java mail sender to send emails */
+    private transient JavaMailSender mailSender;
     
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultPublicHelpService.class);

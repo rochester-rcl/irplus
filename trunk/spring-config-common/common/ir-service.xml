@@ -468,6 +468,12 @@
        <property name="researcherService" ref="researcherService"/>
    </bean>
    
+   <bean id="reIndexUserGroupsService" 
+       class="edu.ur.ir.user.service.DefaultReIndexUserGroupsService">
+       <property name="userGroupIndexService" ref="userGroupIndexService"/>
+       <property name="userGroupService" ref="userGroupService"/>
+   </bean>
+   
    <!-- ****************************************** --> 
    <!-- Searching related services                 -->
    <!-- ****************************************** -->
