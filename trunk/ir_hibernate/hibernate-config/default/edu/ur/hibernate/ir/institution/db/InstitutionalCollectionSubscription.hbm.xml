@@ -47,14 +47,21 @@
 	    <!--  The  institutional collection   -->
         <many-to-one name="institutionalCollection" class="InstitutionalCollection"
               optimistic-lock="false" 
-              unique="true" column="institutional_collection_id" cascade="save-update"
-              not-null="true" access="field"/>
+              unique="true" 
+              column="institutional_collection_id" 
+              cascade="save-update"
+              not-null="true" 
+              access="field"/>
 
         <!--  The subscriber -->
-        <many-to-one name="user" class="edu.ur.ir.user.IrUser" 
+        <many-to-one name="user"
+              class="edu.ur.ir.user.IrUser" 
               optimistic-lock="false"
-              unique="true" column="user_id" cascade="save-update"
-              not-null="true" access="field"/>
+              unique="true" 
+              column="user_id" 
+              cascade="save-update"
+              not-null="true" 
+              access="field"/>
 		
 	</class>
 

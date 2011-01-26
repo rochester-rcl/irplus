@@ -54,17 +54,15 @@
 
 		<property name="versionNumber" column="version_number" type="int" 
 		          access="field" 
-		          not-null="true"/>	
-		  
+		          not-null="true"/>		  
+			
         <!--  withdrawn token -->
 		<many-to-one class="WithdrawnToken" 
 			unique="true" 
 			name="withdrawnToken" 
 			column="withdrawn_token_id" 
-			cascade="save-update"
-			access="field" 
-			insert="true"
-			update="true"/>
+			access="field"
+			cascade="all"/>
 	
 	    <!--  institutional item repository license -->
 	    <one-to-one name="repositoryLicense" 
@@ -107,7 +105,7 @@
 		<set name="withdrawHistory" 
 		     optimistic-lock="false"
 		     inverse="true" 
-		     cascade="all-delete-orphan" 
+		     cascade="all, delete-orphan" 
 		     access="field"
 			 lazy="true"  
 			 fetch="subselect">
@@ -119,7 +117,7 @@
 		<set name="reinstateHistory" 
 		     optimistic-lock="false"
 		     inverse="true" 
-		     cascade="all-delete-orphan" 
+		     cascade="all, delete-orphan" 
 		     access="field"
 			 lazy="true"  
 			 fetch="subselect">

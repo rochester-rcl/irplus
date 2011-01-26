@@ -364,6 +364,11 @@ public class PersonalFolderDAOTest {
 				childFolder1.getTreeRoot().getId());
 		
 		assert nodes.size() == 5 : "Expected all 5 nodes but got " + nodes.size();
+		
+		
+		// make sure we can get all sub folders for a given folder
+		nodes = personalFolderDAO.getSubFoldersForFolder(user.getId(), personalFolder1.getId());
+		assert nodes.size() == 2 : "Should have two nodes but has " + nodes.size();
 
 		
 		// make sure tree without specified nodes can be retrieved

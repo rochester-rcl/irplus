@@ -16,6 +16,8 @@
 
 package edu.ur.ir.groupspace;
 
+import java.util.List;
+
 import edu.ur.dao.CrudDAO;
 
 /**
@@ -23,4 +25,24 @@ import edu.ur.dao.CrudDAO;
  * 
  * Represents a group file data access object
  */
-public interface GroupWorkspaceFileDAO extends CrudDAO<GroupWorkspaceFile>{}
+public interface GroupWorkspaceFileDAO extends CrudDAO<GroupWorkspaceFile>
+{
+	/**
+	 * Get personal files for a group workspace in the specified folder
+	 * 
+	 * @param workspaceId Id of the user having the files
+	 * @param parentFolderId Id of the folder contaiing the files
+	 * 
+	 * @return List of files in the folder
+	 */
+	 public List<GroupWorkspaceFile> getFiles(Long workspaceId, Long parentFolderId);
+	 
+	/**
+	  * Get the root files 
+	  * 
+	  * @param workspaceId - get the root files
+	  * 
+	  * @return the found files
+	  */
+	 public List<GroupWorkspaceFile> getRootFiles(Long workspaceId);
+}

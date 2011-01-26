@@ -90,6 +90,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 */
 	public String execute()
 	{
+		log.debug("view group wrorkspaces");
 		groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 		return SUCCESS;
 	}

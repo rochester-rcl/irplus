@@ -147,7 +147,7 @@
 	                  
 	                  <!--  group workspaces -->
 	                  <div id="tab2">
-	                      <div id="group_workspaces">
+	                      <div id="group_workspaces" class="hidden">
 	                           <c:import url="group_workspace_table.jsp"/>
 	                      </div>
 	                  </div>
@@ -155,55 +155,57 @@
 	                  
 	                  <!--  start third tab -->
 	                  <div id="tab3">
-	                      <div id="newPersonalCollections">
-	                      <form id="collections" name="myCollections">
-	                          <input type="hidden" id="myCollections_parentCollectionId" 
-	                               name="parentCollectionId" 
-	                               value="${parentCollectionId}"/>
+	                      <div id="newPersonalCollections" class="hidden">
+	                          <form id="collections" name="myCollections">
+	                              <input type="hidden" id="myCollections_parentCollectionId" 
+	                                   name="parentCollectionId" 
+	                                   value="${parentCollectionId}"/>
 	                               
-	                      </form>
+	                          </form>
 	                      </div>
 	                 </div>                
 	                 <!--  end third tab -->
 	                 
 	                 <!--  Start forth tab -->
 	                 <div id="tab4">
-	                     
-	                     <form id="userSearchForm" name="userSearchForm" 
-	                         action="javascript:YAHOO.ur.workspace.search.executeUserSearch();">
+	                     <div id="workspace_search" class="hidden">
+	                         <form id="userSearchForm" name="userSearchForm" 
+	                             action="javascript:YAHOO.ur.workspace.search.executeUserSearch();">
 	                         
-	                         <table class="formTable">
-	                             <tr>
-	                                 <td class="label">
-	                                     Search:
-	                                 </td>
-	                                 <td class="input">
-	                                     <input type="text" name="query" size="50"
-	                                         value="${query}"/>
-	                                 </td>
-	                                 <td>
-	                                     <button
-	                                      class="ur_button" 
-	                                      onmouseover="this.className='ur_buttonover';"
- 		                                  onmouseout="this.className='ur_button';"
- 		                                  onclick="javascript:YAHOO.ur.workspace.search.executeUserSearch();"
-	                                      id="userSearchButton"><span class="magnifierBtnImg">&nbsp;</span>Search</button>
-	                                 </td>
+	                             <table class="formTable">
+	                                 <tr>
+	                                     <td class="label">
+	                                         Search:
+	                                     </td>
+	                                     <td class="input">
+	                                         <input type="text" name="query" size="50"
+	                                             value="${query}"/>
+	                                     </td>
+	                                     <td>
+	                                         <button
+	                                          class="ur_button" 
+	                                          onmouseover="this.className='ur_buttonover';"
+ 		                                      onmouseout="this.className='ur_button';"
+ 		                                      onclick="javascript:YAHOO.ur.workspace.search.executeUserSearch();"
+	                                          id="userSearchButton"><span class="magnifierBtnImg">&nbsp;</span>Search</button>
+	                                      </td>
 	                                 
-	                             </tr>
-	                         </table>
-	                     </form>
+	                                 </tr>
+	                             </table>
+	                         </form>
 	                     
-	                     <br/>
-	                     <!--  location where search results will be placed -->
-	                     <div id="search_results">
+	                         <br/>
+	                         <!--  location where search results will be placed -->
+	                         <div id="search_results">
+	                         </div>
 	                     </div>
 	                 </div>
 	                 <!--  End fourth tab -->
 	                 
 	                 <!--  Start 5th -->
 	                 <div id="tab5">
-	                      <br/>
+	                     <div id="inbox_tab" class="hidden">
+	                         <br/>
 	                    
 	                            <button class="ur_button"
 	                                    onmouseover="this.className='ur_buttonover';"
@@ -215,11 +217,12 @@
  		                                onmouseout="this.className='ur_button';"
  		                                onclick="javascript:YAHOO.ur.shared.file.inbox.deleteInboxFileConfirmDialog.showDialog();"> <span class="deleteBtnImg">&nbsp;</span>Delete</button>
 	                     
-	                     <br/>
-	                     <br/>
+	                         <br/>
+	                         <br/>
 	         
-	                     <!--  location where shared inbox content will be placed -->
-	                     <div id="shared_folder_inbox">
+	                         <!--  location where shared inbox content will be placed -->
+	                         <div id="shared_folder_inbox">
+	                         </div>
 	                     </div>
 	                 </div>
 	                 <!--  End 5th tab tab -->

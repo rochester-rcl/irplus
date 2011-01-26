@@ -117,18 +117,19 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public void deleteInstitutionalItem(InstitutionalItem institutionalItem, IrUser deletingUser) {
 		
 		Set<GenericItem> genericItemsToDelete = new HashSet<GenericItem>();
-		Set<InstitutionalItemVersion> versions = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions();
 		
-		// get the generic item for each version
-		for(InstitutionalItemVersion version : versions)
-		{
-			GenericItem genericItem = version.getItem();
-			genericItemsToDelete.add(genericItem);
-		}
 		
 		// Delete ResearcherInstitutionalItem referring to this institutional item
 		researcherFileSystemService.deleteResearcherInstitutionalItem(institutionalItem);
 		deletedInstitutionalItemService.addDeleteHistory(institutionalItem, deletingUser);
+			
+		// get the generic item for each version
+		for(InstitutionalItemVersion version : institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions())
+		{
+			GenericItem genericItem = version.getItem();
+			genericItemsToDelete.add(genericItem);		
+		}
+		
 		institutionalItemDAO.makeTransient(institutionalItem);
 
 		// Check to see if generic item can be deleted

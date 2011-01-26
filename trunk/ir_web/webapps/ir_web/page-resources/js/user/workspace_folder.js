@@ -65,6 +65,7 @@ YAHOO.ur.folder =
      */
     personalFolderStateChangeHandler : function(folderId)
     {
+	    YAHOO.ur.user.workspace.setActiveIndex("FOLDER");
         var currentState = YAHOO.util.History.getCurrentState("personalFolderModule"); 
         var currentFolder = document.getElementById('myFolders_parentFolderId').value;
         // do not change state if we are on the current file / folder
@@ -1458,6 +1459,13 @@ YAHOO.ur.folder =
         
         // register the history system
         YAHOO.util.History.register("personalFolderModule", personalFolderState, YAHOO.ur.folder.personalFolderStateChangeHandler);
+        
+        //un-hide the content in the tabs
+        document.getElementById("group_workspaces").className='';
+        document.getElementById("newPersonalCollections").className='';
+        document.getElementById("workspace_search").className='';
+        document.getElementById("inbox_tab").className='';
+        
     }
 };
 

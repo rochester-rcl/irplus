@@ -331,15 +331,6 @@ public class InstitutionalItemVersion extends BasePersistent{
 	}
 
 	/**
-	 * Set the withdrawn token for this institutinal item.
-	 * 
-	 * @param withdrawnToken
-	 */
-	public void setWithdrawnToken(WithdrawnToken withdrawnToken) {
-		this.withdrawnToken = withdrawnToken;
-	}
-
-	/**
 	 * History for withdraw of this item version.
 	 * 
 	 * @return

@@ -856,4 +856,13 @@
    </bean>
    
    
+   <!-- ****************************************** --> 
+   <!-- Group workspace file system service                   -->
+   <!-- ****************************************** --> 
+   <bean id="groupWorkspaceFileSystemService" 
+       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceFileSystemService">
+       <property name="groupWorkspaceFileDAO" ref="groupWorkspaceFileDAO"/>
+       <property name="groupWorkspaceFolderDAO" ref="groupWorkspaceFolderDAO"/>
+   </bean>
+   
 </beans>

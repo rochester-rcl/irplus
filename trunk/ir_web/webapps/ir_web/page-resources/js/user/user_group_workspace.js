@@ -26,15 +26,51 @@ var updateGroupWorkspaceAction = basePath + 'user/updateGroupWorkspace.action';
 var newGroupWorkspaceAction = basePath + 'user/createGroupWorkspace.action';
 var deleteGroupWorkspaceAction = basePath + 'user/deleteGroupWorkspace.action';
 var getGroupWorkspaceAction = basePath + 'user/getGroupWorkspace.action';
+var viewGroupWorkspaceAction =  basePath + 'user/viewGroupWorkspaceFolders.action';
+var viewGroupWorkspacesAction = basePath + '/user/viewGroupWorkspaces.action';
+
+//If there is no bookmarked state, assign the default state:
+var groupWorkspaceFolderState = "0";
+
 /**
  * content type namespace
  */
 YAHOO.ur.user.group_workspace = {
 	
+		
+	/**
+	  * function to handle state changes
+	  */
+    groupWorkspaceStateChangeHandler : function(workspaceId)
+	{
+	    var currentState = YAHOO.util.History.getCurrentState("groupWorkspaceFolderModule"); 
+	    YAHOO.ur.user.workspace.setActiveIndex("GROUP_WORKSPACE");
+	    
+	    if( workspaceId == 0 )
+	    {
+	    	YAHOO.ur.user.group_workspace.getGroupWorkspaces();
+	    }
+	    else
+	    {
+	    	YAHOO.ur.user.group_workspace.getGroupWorkspaceById(workspaceId);
+	    }
+	    
+	    //var currentFolder = document.getElementById('myFolders_parentFolderId').value;
+	    
+	    // do not change state if we are on the current file / folder
+	    /*if( currentState != currentFolder )
+	    {
+	        document.getElementById('myFolders_parentFolderId').value = folderId;
+	        var folderId = document.getElementById("myFolders_parentFolderId").value;
+	        YAHOO.ur.folder.getFolderById(folderId, -1); 
+	        YAHOO.ur.folder.insertHiddenParentFolderId();
+	    }*/
+	},	
+		
 	/**
 	 * Get all group workspaces for a user
 	 */
-    getGroupWorkspaces : function (userId)
+    getGroupWorkspaces : function ()
     {
 	    // handle a successful return
         var handleSuccess = function(o) 
@@ -54,7 +90,7 @@ YAHOO.ur.user.group_workspace = {
                 try 
                 {
             	    // do not remove the string conversion on folder id otherwise an error occurs
-                    YAHOO.util.History.navigate( "groupWorkspaceModule", "0" );
+                    YAHOO.util.History.navigate( "groupWorkspaceFolderModule", "0" );
                 } 
                 catch ( e ) 
                 {
@@ -83,7 +119,8 @@ YAHOO.ur.user.group_workspace = {
         //personalFolderState = folderId;
 
     
-        YAHOO.util.Connect.asyncRequest('GET',updateGroupWorkspaceAction,
+        YAHOO.util.Connect.asyncRequest('GET', 
+        		viewGroupWorkspacesAction + '?bustcache=' + new Date().getTime(),
         {success: handleSuccess, failure: handleFailure});       
     },
 		
@@ -204,7 +241,6 @@ YAHOO.ur.user.group_workspace = {
 		// Wire up the success and failure handlers
 		var callback = { success: handleSuccess,   failure: handleFailure };
 				
-				
 		// Render the Dialog
 		YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.render();			
 			
@@ -212,14 +248,8 @@ YAHOO.ur.user.group_workspace = {
 	    YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.showDialog = function()
 	    {
 	        YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.center();
-	        YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.show()
+	        YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.show();
 	    }
-
-	
-	    // listener for showing the dialog when clicked.
-		YAHOO.util.Event.addListener("newGroupWorkspaceBtn", "click", 
-		    YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.showDialog, 
-		    YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog, true);
 		    
 	},
 	
@@ -300,6 +330,60 @@ YAHOO.ur.user.group_workspace = {
 		YAHOO.ur.user.group_workspace.deleteGroupWorkspaceDialog.showDialog();
 	},
 	
+    /**
+     *  Function that retrieves folder information
+     *  based on the given folder id.  If a file id is passed in
+     *  then the browser location will be pointed to for the file download.  
+     *  This is required to work for all browsers Safari/IE/Chrome/Fire Fox.
+     *
+     *  folderId - The folder id used to get the folder.
+     *  fileId - id of the file a -1 indicates no file id 
+     */
+    getGroupWorkspaceById : function(workspaceId)
+    {
+    	
+		// handle a successful return
+	    var handleSuccess = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            var response = o.responseText;
+	            document.getElementById('group_workspaces').innerHTML = response;	 
+	            YAHOO.util.History.navigate( "groupWorkspaceFolderModule", workspaceId + "" );
+	            YAHOO.ur.util.wait.waitDialog.hide();
+	            
+	            // this is for capturing history
+                // it may fail if this is not an A grade browser so we need to
+                // catch the error.
+                // this will store the folder Id in the URL
+                try 
+                {
+            	    // do not remove the string conversion on folder id otherwise an error occurs
+                    YAHOO.util.History.navigate( "groupWorkspaceModule", workspaceId );
+                } 
+                catch ( e ) 
+                {
+                    // history failed
+                }
+	        }
+	    };
+	
+	    // handle form submission failure
+	    var handleFailure = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+	        alert('get folder by id failure '  + o.status + ' status text ' + o.statusText);
+	    };
+
+    
+        YAHOO.util.Connect.asyncRequest('GET', viewGroupWorkspaceAction + 
+        		'?groupWorkspaceId=' + workspaceId +  '&bustcache=' + new Date().getTime(),
+          {success: handleSuccess, failure: handleFailure});
+    },
+	
 	// initialize the page
 	// this is called once the dom has
 	// been created
@@ -307,6 +391,12 @@ YAHOO.ur.user.group_workspace = {
 	{
 	    YAHOO.ur.user.group_workspace.createCreateGroupWorkspaceDialog();
 	    YAHOO.ur.user.group_workspace.createDeleteGroupWorkspaceDialog();
+	    
+        // register the history system
+        YAHOO.util.History.register("groupWorkspaceFolderModule", 
+        		groupWorkspaceFolderState, 
+        		YAHOO.ur.user.group_workspace.groupWorkspaceStateChangeHandler);
+
   	}
 	
 }	

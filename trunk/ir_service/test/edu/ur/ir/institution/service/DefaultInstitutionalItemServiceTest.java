@@ -370,5 +370,93 @@ public class DefaultInstitutionalItemServiceTest {
 		tm.commit(ts);	
 
 	}
+	
+	/**
+	 * Test creating and deleting a multiversion item
+	 */
+	public void deleteMultiVersionInstitutionalItemTest() throws DuplicateNameException, 
+	UserHasPublishedDeleteException, 
+	UserDeletedPublicationException, 
+	IllegalFileSystemNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException
+	{
+		// Start the transaction - create the repository
+		TransactionStatus ts = tm.getTransaction(td);
+		RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+
+		// save the repository
+		repo = repositoryService.getRepository(repo.getId(), false);
+		InstitutionalCollection collection = repo.createInstitutionalCollection("collection");
+		
+		UserEmail email = new UserEmail("email");
+		IrUser user = userService.createUser("password", "username", email);
+
+		
+		// create the first file to store in the temporary folder
+		String tempDirectory = properties.getProperty("ir_service_temp_directory");
+		File directory = new File(tempDirectory);
+		
+        // helper to create the file
+		FileUtil testUtil = new FileUtil();
+		testUtil.createDirectory(directory);
+
+		File f = testUtil.creatFile(directory, "testFile", 
+		"Hello  - irFile This is text in a file - VersionedFileDAO test");
+		
+		assert f != null : "File should not be null";
+		assert user.getId() != null : "User id should not be null";
+		assert repo.getFileDatabase().getId() != null : "File database id should not be null";
+		
+		IrFile irFile = repositoryService.createIrFile(repo, f, "fileName", "description");
+
+		
+		// create a personal item to publish into the repository
+		GenericItem genericItem = new GenericItem("item name");
+		genericItem.addFile(irFile);
+		InstitutionalItem institutionalItem = collection.createInstitutionalItem(genericItem);
+		
+		GenericItem genericItem2 = new GenericItem("item name2");
+		institutionalItem.addNewVersion(genericItem2);
+		
+		
+		institutionalCollectionService.saveCollection(collection);
+		tm.commit(ts);
+
+		ts = tm.getTransaction(td);
+		institutionalItem = institutionalItemService.getInstitutionalItem(institutionalItem.getId(),false);
+		institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(1).withdraw(user, "sucks", true);
+		institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(1).reInstate(user, "good");
+		institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersion(1).withdraw(user, "sucks", true);
+		institutionalItemService.saveInstitutionalItem(institutionalItem);
+        tm.commit(ts);
+        
+		// test searching for the data
+		ts = tm.getTransaction(td);
+        
+		String fullPath = irFile.getFileInfo().getFullPath();
+		File deletedFile = new File(fullPath);
+		assert deletedFile.exists() : "File for path " + fullPath + " should exist";
+		InstitutionalItem myItem = institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false);
+		institutionalItemService.deleteInstitutionalItem(myItem, user);
+		
+        assert !deletedFile.exists() : "File for path " + fullPath + " should not exist";
+		
+		tm.commit(ts);
+		
+	    // Start new transaction - clean up the data
+		ts = tm.getTransaction(td);
+		InstitutionalCollection updatedCollection = institutionalCollectionService.getCollection(collection.getId(),false);
+		assert updatedCollection.getItems().size() == 0 : "Collection should have zero items but has " + updatedCollection.getItems().size();
+	    InstitutionalItem deletedItem = institutionalItemService.getInstitutionalItem(institutionalItem.getId(), false);
+	    assert deletedItem == null : "deleted item should be null but is not " + deletedItem;
+		deletedInstitutionalItemService.deleteAllInstitutionalItemHistory();
+		IrUser deleteUser = userService.getUser(user.getId(), false);
+        userService.deleteUser(deleteUser, deleteUser);		
+        institutionalCollectionService.deleteCollection(updatedCollection, user);
+        helper.cleanUpRepository();
+		tm.commit(ts);	
+	}
 
 }

@@ -16,6 +16,8 @@
 
 package edu.ur.ir.groupspace;
 
+import java.util.List;
+
 import edu.ur.dao.CrudDAO;
 
 /**
@@ -24,4 +26,25 @@ import edu.ur.dao.CrudDAO;
  * @author Nathan Sarr
  *
  */
-public interface GroupWorkspaceFolderDAO extends CrudDAO<GroupWorkspaceFolder>{}
+public interface GroupWorkspaceFolderDAO extends CrudDAO<GroupWorkspaceFolder>
+{
+	/**
+	 * Get the path to the folder.
+	 * 
+	 * @param parentFolderId - id of the parent folder
+	 * 
+	 * @return - list of all folders in order - parent to child
+	 */
+	public List<GroupWorkspaceFolder> getFolderPath(GroupWorkspaceFolder folder);
+	
+	/**
+	 * Get sub folders within parent folder for a group workspace
+	 * 
+	 * @param workspaceId Id of the group workspace containing the folders
+	 * @param parentFolderId Id of the parent folder to start at - can be at any point
+	 * in the tree
+	 * 
+	 * @return List of sub folders within the parent folder
+	 */
+	public List<GroupWorkspaceFolder> getFolders(Long workspaceId, Long parentFolderId );
+}

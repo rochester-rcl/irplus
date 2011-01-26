@@ -539,6 +539,80 @@ public class InstitutionalItemDAOTest {
 		assert institutionalItemDAO.getById(institutionalItem.getId(), false) == null : 
 			"Should not be able to find the insitutional item" + institutionalItem;
 	}
+	
+	/**
+	 * Test creating an item with multiple versions
+	 */
+	public void multiVersionInstitutionalItemDAOTest()
+	throws DuplicateNameException, 
+	LocationAlreadyExistsException,
+	CollectionDoesNotAcceptItemsException{
+
+	    // start a new transaction
+		TransactionStatus ts = tm.getTransaction(td);
+		
+		RepositoryBasedTestHelper repoHelper = new RepositoryBasedTestHelper(ctx);
+		Repository repo = repoHelper.createRepository("localFileServer", 
+				"displayName",
+				"file_database", 
+				"my_repository", 
+				properties.getProperty("a_repo_path"),
+				"default_folder");
+
+		//commit the transaction 
+		// create a collection
+		InstitutionalCollection col = repo.createInstitutionalCollection("colName");
+		col.setDescription("colDescription");
+		
+		institutionalCollectionDAO.makePersistent(col);
+		tm.commit(ts);
+		
+		// start a new transaction
+		ts = tm.getTransaction(td);
+		
+		UserEmail userEmail = new UserEmail("email");
+				
+		IrUser user = new IrUser("user", "password");
+		user.setPasswordEncoding("encoding");
+		user.addUserEmail(userEmail, true);
+
+        userDAO.makePersistent(user);
+		col = institutionalCollectionDAO.getById(col.getId(), false);
+		GenericItem genericItem = new GenericItem("genericItem");
+		GenericItem genericItem2 = new GenericItem("genericItem2");
+		
+		InstitutionalItem institutionalItem = col.createInstitutionalItem(genericItem);
+		institutionalItem.addNewVersion(genericItem2);
+		institutionalItemDAO.makePersistent(institutionalItem);
+
+		tm.commit(ts);
+
+		ts = tm.getTransaction(td);
+		InstitutionalItem other = institutionalItemDAO.getById(institutionalItem.getId(), false);
+		assert other.equals(institutionalItem) :
+			"Should be able to find item " + institutionalItem;
+		int numVersions = other.getVersionedInstitutionalItem().getInstitutionalItemVersions().size();
+		assert numVersions == 2 : "Should have two versions but has " + numVersions;
+	
+		// check selects
+		
+		
+		tm.commit(ts);
+
+		//create a new transaction
+		ts = tm.getTransaction(td);
+		institutionalItemDAO.makeTransient(institutionalItemDAO.getById(institutionalItem.getId(), false));
+		institutionalCollectionDAO.makeTransient(institutionalCollectionDAO.getById(col.getId(), false));
+		
+		itemDAO.makeTransient(itemDAO.getById(genericItem.getId(), false));
+		userDAO.makeTransient(userDAO.getById(user.getId(), false));
+		repoHelper.cleanUpRepository();
+		
+		tm.commit(ts);	
+		
+		assert institutionalItemDAO.getById(institutionalItem.getId(), false) == null : 
+			"Should not be able to find the insitutional item" + institutionalItem;
+	}
 
 
 }

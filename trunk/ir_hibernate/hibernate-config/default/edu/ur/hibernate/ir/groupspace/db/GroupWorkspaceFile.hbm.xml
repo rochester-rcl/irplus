@@ -71,5 +71,15 @@
 	</class>
 	
 	
-    
+    	<!-- named query for getting files in a folder -->
+	<query name="getFilesInAFolderForGroupWorkspace">
+		from GroupWorkspaceFile as groupWorkspaceFile where
+		groupWorkspaceFile.groupWorkspace.id = :workspaceId and groupWorkspaceFile.groupWorkspaceFolder.id = :folderId
+	</query>
+	
+	<!-- named query for getting files at the root level of the workspace-->
+	<query name="getRootWorkspaceFiles">
+		from GroupWorkspaceFile as groupWorkspaceFile where
+		groupWorkspaceFile.groupWorkspace.id = :workspaceId and groupWorkspaceFile.groupWorkspaceFolder.id is NULL
+	</query>
 </hibernate-mapping>

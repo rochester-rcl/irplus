@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Validateable;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.index.IndexProcessingTypeService;
@@ -43,8 +42,7 @@ import edu.ur.ir.web.action.UserIdAware;
  * @author Nathan Sarr
  *
  */
-public class ViewPersonalFolders extends ActionSupport implements  
-  UserIdAware, Validateable {
+public class ViewPersonalFolders extends ActionSupport implements  UserIdAware {
 	
 	/**Eclipse gernerated id */
 	private static final long serialVersionUID = 6684102482237911784L;

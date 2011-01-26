@@ -17,6 +17,7 @@
 
 package edu.ur.hibernate.ir.groupspace.db;
 
+import java.util.List;
 import java.util.Properties;
 
 import org.springframework.context.ApplicationContext;
@@ -333,6 +334,10 @@ public class GroupWorkspaceFolderDAOTest {
 	    
         // Start the transaction this is for lazy loading
         ts = tm.getTransaction(td);
+        
+    	// make sure we can get all sub folders for a given folder
+		List<GroupWorkspaceFolder> nodes = groupWorkspaceFolderDAO.getFolders(groupSpace.getId(), groupFolder1.getId());
+		assert nodes.size() == 2 : "Should have two nodes but has " + nodes.size();
         
 		// make sure object has been persisted
 		GroupWorkspaceFolder other = groupWorkspaceFolderDAO.getById(groupFolder1.getId(), false);
