@@ -185,7 +185,7 @@ CREATE TABLE ir_group_workspace.group_workspace_owner
     user_id BIGINT NOT NULL,
     FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
     FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
-    UNIQUE(group_workspace_id, user_id)
+    PRIMARY KEY(group_workspace_id, user_id)
 );
 ALTER TABLE ir_group_workspace.group_workspace_owner OWNER TO ir_plus;
 
@@ -229,3 +229,15 @@ ALTER TABLE ir_group_workspace.group_workspace_group_members OWNER TO ir_plus;
 insert into 
 ir_index.index_processing_type ( index_processing_type_id, version, name, description) 
 values (nextval('ir_index.index_processing_type_seq'), 0, 'DELETE_INDEX', 'the index needs to be deleted and rebuilt');
+
+
+-- ---------------------------------------------
+-- Create unique constraints on the delete tables
+-- ---------------------------------------------
+ALTER TABLE ir_repository.deleted_institutional_item
+  ADD CONSTRAINT deleted_institutional_item_institutional_item_id_key UNIQUE(institutional_item_id);
+
+  
+ ALTER TABLE ir_repository.deleted_institutional_item_version
+  ADD CONSTRAINT deleted_institutional_item_ve_institutional_item_version_id_key UNIQUE(institutional_item_version_id);
+ 

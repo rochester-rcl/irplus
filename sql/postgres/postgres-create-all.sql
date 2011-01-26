@@ -2106,7 +2106,8 @@ CREATE TABLE ir_repository.deleted_institutional_item
     user_id BIGINT NOT NULL,
     deleted_date TIMESTAMP WITH TIME ZONE NOT NULL ,
     version INTEGER,
-    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
+    FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
+    UNIQUE(institutional_item_id)
 );
 ALTER TABLE ir_repository.deleted_institutional_item OWNER TO ir_plus;
 
@@ -2131,8 +2132,9 @@ CREATE TABLE ir_repository.deleted_institutional_item_version
     handle_info_id BIGINT,
     version_number INTEGER NOT NULL,
     version INTEGER,
-    FOREIGN KEY (deleted_institutional_item_id) REFERENCES ir_repository.deleted_institutional_item(deleted_institutional_item_id)
-);
+    FOREIGN KEY (deleted_institutional_item_id) REFERENCES ir_repository.deleted_institutional_item(deleted_institutional_item_id),
+    UNIQUE(institutional_item_version_id)
+ );
 ALTER TABLE ir_repository.deleted_institutional_item_version OWNER TO ir_plus;
 
 -- The deleted institutional item seq
@@ -3678,7 +3680,7 @@ CREATE TABLE ir_group_workspace.group_workspace_owner
     user_id BIGINT NOT NULL,
     FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id),
     FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
-    UNIQUE(group_workspace_id, user_id)
+    PRIMARY KEY(group_workspace_id, user_id)
 );
 ALTER TABLE ir_group_workspace.group_workspace_owner OWNER TO ir_plus;
 
