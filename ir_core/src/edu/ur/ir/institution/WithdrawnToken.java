@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import edu.ur.ir.user.IrUser;
@@ -33,7 +34,7 @@ public class WithdrawnToken extends BasePersistent{
 	private static final long serialVersionUID = -2832160995762046047L;
 
 	/** Date the item was withdrawn. */
-	private Date date;
+	private Timestamp date;
 	
 	/** Reason this item was withdrawn */
 	private String reason;
@@ -57,7 +58,7 @@ public class WithdrawnToken extends BasePersistent{
 	{
 		setUser(withdrawUser);
 		setReason(withdrawnReason);
-		setDate(new Date());
+		setDate(new Timestamp(new Date().getTime()));
 		setShowMetadata(showMetadata);
 		setInstitutionalItemVersion(institutionalItemVersion);
 	}
@@ -68,6 +69,7 @@ public class WithdrawnToken extends BasePersistent{
 		value += getUser() == null? 0 : getUser().hashCode();
 		value += getDate() == null ? 0 : getDate().hashCode();
 		value += getInstitutionalItemVersion() == null ? 0 : getInstitutionalItemVersion().hashCode();
+		value += id == null ? 0 : id.hashCode();
 		return value;
 	}
 	
@@ -87,29 +89,29 @@ public class WithdrawnToken extends BasePersistent{
 		if( ( getInstitutionalItemVersion() != null && !getInstitutionalItemVersion().equals(other.getInstitutionalItemVersion()) ) ||
 			( getInstitutionalItemVersion() == null && other.getInstitutionalItemVersion() != null ) ) return false;
 
+		if( ( id != null && !id.equals(other.getId()) ) ||
+			( id == null && other.getId() != null ) ) return false;
 		return true;
 	}
 	
 	
 	public String toString()
 	{
-		StringBuffer sb = new StringBuffer("[ withdraw user = ");
-		sb.append(user);
+		StringBuffer sb = new StringBuffer("[ id = ");
+		sb.append(id);
 		sb.append("withdrawn reason = " );
 		sb.append(reason);
 		sb.append(" show metadata = ");
 		sb.append(showMetadata);
-		sb.append(" institutional item version = ");
-		sb.append("institutionalItemVersion");
 		sb.append("]");
 		return sb.toString();
 	}
 
-	public Date getDate() {
+	public Timestamp getDate() {
 		return date;
 	}
 
-	void setDate(Date dateWithdrawn) {
+	void setDate(Timestamp dateWithdrawn) {
 		this.date = dateWithdrawn;
 	}
 

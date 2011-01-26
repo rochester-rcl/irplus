@@ -19,6 +19,7 @@ package edu.ur.hibernate.ir.user.db;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -45,7 +46,8 @@ public class HbPersonalFileDAO implements PersonalFileDAO{
 	/**
 	 * Default Constructor
 	 */
-	public HbPersonalFileDAO() {
+	public HbPersonalFileDAO() 
+	{
 		hbCrudDAO = new HbCrudDAO<PersonalFile>(PersonalFile.class);
 	}
 	
@@ -150,24 +152,26 @@ public class HbPersonalFileDAO implements PersonalFileDAO{
 	 * @return the found files
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PersonalFile> getFilesInFolderForUser(Long userId, Long folderId) {
-		Object[] values = {userId, folderId};
-		return (List<PersonalFile>) (hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFilesInAFolderForUser", values));
-		
+	public List<PersonalFile> getFilesInFolderForUser(Long userId, Long folderId) 
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getFilesInAFolderForUser");
+		q.setParameter("userId", userId);
+		q.setParameter("folderId", folderId );
+		return q.list();
 	}
 	
 	/**
-	 * Get the root files 
+	 * Get the root files - at the user level
 	 * 
-	 * @param userId
+	 * @param userId - id of the user to get the root files for
 	 * 
-	 * @return the found files
+	 * @return the found files at the root user level
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PersonalFile> getRootFiles(Long userId) {
-		
-		return (List<PersonalFile>) (hbCrudDAO.getHibernateTemplate().
-				findByNamedQuery("getRootFiles", userId));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRootFiles");
+		q.setParameter("userId", userId);
+		return q.list();
 	}
 
 	/**

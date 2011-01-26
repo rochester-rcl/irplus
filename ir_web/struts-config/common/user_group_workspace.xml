@@ -21,7 +21,7 @@
        <action name="viewGroupWorkspaces" 
             class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="editStack"/>
-            <result name="success">/pages/admin/groupspace/group_workspaces.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace_table.jsp</result>
         </action>
        
         <!--  This handles update, save and delete -->
@@ -33,4 +33,11 @@
             <result name="added">/pages/admin/groupspace/group_workspace_form.jsp</result>
             <result name="deleted">/pages/user/workspace/group_workspace_table.jsp</result>
             <result name="get">/pages/user/workspace/edit_group_workspace.jsp</result>
+        </action>
+        
+       <action name="viewGroupWorkspaceFolders"
+            method="getTable"
+            class="edu.ur.ir.web.action.groupspace.ViewGroupWorkspaceFolders">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/group_workspace_file_system_table.jsp</result>
         </action>

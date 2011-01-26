@@ -52,23 +52,19 @@
                    
         <!--  The versioned institutional item -->
 		<many-to-one class="InstitutionalItemVersion" 
-		    optimistic-lock="false"
 			unique="true" 
 			name="institutionalItemVersion" 
 			column="institutional_item_version_id" 
 			access="field" 
-			insert="true"
-			update="true"/>
+			not-null="true"/>
 		
 		<!--  The versioned institutional item -->
 		<many-to-one class="edu.ur.ir.user.IrUser" 
-		    optimistic-lock="false"
 			unique="true" 
 			name="user" 
 			column="user_id" 
 			access="field" 
-			insert="true"
-			update="true"/>
+			not-null="true"/>
  
 	</class>
 	

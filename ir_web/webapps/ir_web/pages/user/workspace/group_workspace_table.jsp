@@ -43,8 +43,7 @@
 	           <button class="ur_button" 
  		               onmouseover="this.className='ur_buttonover';"
  		               onmouseout="this.className='ur_button';"
- 		               onClick=""
- 		               id="newGroupWorkspaceBtn"><span class="addFolderBtnImg">&nbsp;</span>New Group Workspace</button> 
+ 		               onClick="javascript:YAHOO.ur.user.group_workspace.newGroupWorkspaceDialog.showDialog()"><span class="addFolderBtnImg">&nbsp;</span>New Group Workspace</button> 
       </c:if>
   </div>
   <br/>
@@ -58,6 +57,7 @@
         <urstb:table width="100%">
             <urstb:thead>
                 <urstb:tr>
+                    <urstb:td>Type</urstb:td>
                     <urstb:td>Name</urstb:td>
                     <urstb:td>Description</urstb:td>
                     <urstb:td>Action</urstb:td>
@@ -73,8 +73,19 @@
                         cssClass="${rowClass}"
                         onMouseOver="this.className='highlight'"
                         onMouseOut="this.className='${rowClass}'">
+                        <urstb:td width="60px">
+                            <!-- this deals with folder information
+	                        folders get an id of the folder_checkbox_{id} 
+	                        where id  is the id of the folder 
+	                        clicking on a link creates a popup menu-->
+	                        <div id="group_workspace_${groupWorkspace.id}">
+	                             <button type="button"  class="table_button" 
+	                                onmouseover="this.className='table_buttonover';"
+ 		                            onmouseout="this.className='table_button';"><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
+	                        </div>
+                        </urstb:td>
                         <urstb:td>
-                            ${groupWorkspace.name}
+                           <a href="javascript:YAHOO.ur.user.group_workspace.getGroupWorkspaceById(${groupWorkspace.id});">${groupWorkspace.name}</a>
                         </urstb:td>
                         <urstb:td>
                             ${groupWorkspace.description}

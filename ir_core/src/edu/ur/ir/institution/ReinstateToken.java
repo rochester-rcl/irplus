@@ -16,6 +16,7 @@
 
 package edu.ur.ir.institution;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import edu.ur.ir.user.IrUser;
@@ -34,7 +35,7 @@ public class ReinstateToken extends BasePersistent{
 	private static final long serialVersionUID = 2324220244089802342L;
 
 	/** Date the item was withdrawn. */
-	private Date date;
+	private Timestamp date;
 	
 	/** Reason this item was withdrawn */
 	private String reason;
@@ -54,7 +55,7 @@ public class ReinstateToken extends BasePersistent{
 	{
 		setUser(reInstateUser);
 		setReason(reInstateReason);
-		setDate(new Date());
+		setDate(new Timestamp(new Date().getTime()));
 		setInstitutionalItemVersion(institutionalItemVersion);
 	}
 	
@@ -65,6 +66,7 @@ public class ReinstateToken extends BasePersistent{
 		value += getUser() == null? 0 : getUser().hashCode();
 		value += getDate() == null ? 0 : getDate().hashCode();
 		value += getInstitutionalItemVersion() == null ? 0 : getInstitutionalItemVersion().hashCode();
+		value += id == null ? 0 : id.hashCode();
 		return value;
 	}
 	
@@ -83,6 +85,10 @@ public class ReinstateToken extends BasePersistent{
 		
 		if( ( getInstitutionalItemVersion() != null && !getInstitutionalItemVersion().equals(other.getInstitutionalItemVersion()) ) ||
 			( getInstitutionalItemVersion() == null && other.getInstitutionalItemVersion() != null ) ) return false;
+		
+		if( ( id != null && !id.equals(other.getId()) ) ||
+			( id == null && other.getId() != null ) ) return false;
+
 
 		return true;
 	}
@@ -90,21 +96,19 @@ public class ReinstateToken extends BasePersistent{
 	
 	public String toString()
 	{
-		StringBuffer sb = new StringBuffer("[ re instate  user = ");
-		sb.append(user);
-		sb.append("re instate reason = " );
+		StringBuffer sb = new StringBuffer("[ id = ");
+		sb.append(id);
+		sb.append(" re instate reason = " );
 		sb.append(reason);
-		sb.append(" institutional item version = ");
-		sb.append(institutionalItemVersion);
 		sb.append("]");
 		return sb.toString();
 	}
 
-	public Date getDate() {
+	public Timestamp getDate() {
 		return date;
 	}
 
-	void setDate(Date dateReInstated) {
+	void setDate(Timestamp dateReInstated) {
 		this.date = dateReInstated;
 	}
 

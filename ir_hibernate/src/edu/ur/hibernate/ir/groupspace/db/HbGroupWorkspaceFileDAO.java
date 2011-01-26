@@ -16,12 +16,21 @@
 
 package edu.ur.hibernate.ir.groupspace.db;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileDAO;
 
+/**
+ * Group workspace data access for file data.
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public class HbGroupWorkspaceFileDAO implements GroupWorkspaceFileDAO{
 
 	/** eclipse generated id */
@@ -55,6 +64,39 @@ public class HbGroupWorkspaceFileDAO implements GroupWorkspaceFileDAO{
 	public GroupWorkspaceFile getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
+	
+	/**
+	 * Get personal files for a group workspace in the specified folder
+	 * 
+	 * @param workspaceId Id of the user having the files
+	 * @param parentFolderId Id of the folder contaiing the files
+	 * 
+	 * @return List of files in the folder
+	 */
+	 @SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFile> getFiles(Long workspaceId, Long parentFolderId)
+	{
+		 Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getFilesInAFolderForGroupWorkspace");
+		 q.setParameter("workspaceId", workspaceId);
+		 q.setParameter("folderId", parentFolderId );
+		 return q.list();
+	}
+	 
+	/**
+	  * Get the root files at the top workspace level
+	  * 
+	  * @param workspaceId - workspace to get the root files from
+	  * 
+	  * @return the found files
+	  */
+	 @SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFile> getRootFiles(Long workspaceId)
+	 {
+		 Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRootWorkspaceFiles");
+		 q.setParameter("workspaceId", workspaceId);
+		 return q.list();
+		 
+	 }
 
 	/**
 	 * Make the group folder persistent.
@@ -73,5 +115,7 @@ public class HbGroupWorkspaceFileDAO implements GroupWorkspaceFileDAO{
 	public void makeTransient(GroupWorkspaceFile entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+	
+
 
 }

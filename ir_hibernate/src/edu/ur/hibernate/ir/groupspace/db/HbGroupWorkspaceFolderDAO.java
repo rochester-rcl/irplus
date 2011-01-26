@@ -16,6 +16,9 @@
 
 package edu.ur.hibernate.ir.groupspace.db;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -60,6 +63,41 @@ public class HbGroupWorkspaceFolderDAO implements GroupWorkspaceFolderDAO{
 	 */
 	public GroupWorkspaceFolder getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
+	}
+	
+	/**
+	 * Get the path to the folder.
+	 * 
+	 * @param parentFolderId - id of the parent folder
+	 * 
+	 * @return - list of all folders in order - parent to child
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFolder> getFolderPath(GroupWorkspaceFolder folder)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceFolderPath");
+		q.setParameter("leftValue", folder.getLeftValue());
+		q.setParameter("rootId",folder.getTreeRoot().getId());
+		q.setParameter("userId", folder.getOwner().getId());
+		return q.list();
+	}
+	
+	/**
+	 * Get sub folders within parent folder for a group workspace
+	 * 
+	 * @param workspaceId Id of the group workspace containing the folders
+	 * @param parentFolderId Id of the parent folder to start at - can be at any point
+	 * in the tree
+	 * 
+	 * @return List of sub folders within the parent folder
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFolder> getFolders(Long workspaceId, Long parentFolderId )
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getWorkspaceFolders");
+		q.setParameter("workspaceId", workspaceId);
+		q.setParameter("parentId", parentFolderId);
+		return q.list();
 	}
 
 	/**

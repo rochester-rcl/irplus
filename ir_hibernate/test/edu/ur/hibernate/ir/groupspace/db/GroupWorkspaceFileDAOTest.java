@@ -179,6 +179,8 @@ public class GroupWorkspaceFileDAOTest {
 		
 		assert files.size() == 1 : "Files size = " + files.size() + " but should equal 1";
 
+		assert groupWorkspaceFileDAO.getRootFiles(groupSpace.getId()).size() == 1 : "Should be equal to 1";
+
 		
 		assert groupWorkspaceFileDAO.getById(gf.getId(), false) != null: "Should be able to find personal file " + gf;
 
@@ -264,6 +266,9 @@ public class GroupWorkspaceFileDAOTest {
 		tm.commit(ts);
 		
 		ts = tm.getTransaction(td);
+		
+		assert groupWorkspaceFileDAO.getFiles(groupSpace.getId(), groupFolder.getId()).size() == 1 : "Should be equal to 1";
+
 		user = userDAO.getById(user.getId(), false);
 		Long irFileId = versionedFile.getCurrentVersion().getIrFile().getId();
 	    

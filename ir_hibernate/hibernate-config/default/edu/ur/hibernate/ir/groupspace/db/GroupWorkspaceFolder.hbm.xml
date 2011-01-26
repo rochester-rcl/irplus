@@ -20,7 +20,7 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for group space.
+	Mapping for group workspace.
 	
 	@author Nathan Sarr
 -->
@@ -111,9 +111,30 @@
 			<key column="group_workspace_folder_id" not-null="true"/>
 			<one-to-many class="GroupWorkspaceFile"/>
 		</set>
-		 
-
 	</class>
+	
+	<!-- Get root folders -->
+	<query name="getGroupWorkspaceRootFolders">
+	    from GroupWorkspaceFolder as folder	    
+	    where folder.groupWorkspace.id = :groupWorkspaceId
+	    and folder.id = folder.treeRoot.id
+	</query>
      
-     
+    <!-- Gets the path for a given folder-->
+	<query name="getGroupWorkspaceFolderPath">
+	    from GroupWorkspaceFolder as folder 	    
+	    where :leftValue between folder.leftValue and folder.rightValue
+	    and folder.treeRoot.id = :rootId
+	    and folder.owner.id = :userId
+	    order by folder.leftValue
+	</query>
+	
+	<!-- Gets all sub folders within the parent folder -->
+	<query name="getWorkspaceFolders">
+	    from GroupWorkspaceFolder as folder	    
+	    where folder.groupWorkspace.id = :workspaceId
+	    and folder.parent.id = :parentId
+	</query>
+	
+	
 </hibernate-mapping>

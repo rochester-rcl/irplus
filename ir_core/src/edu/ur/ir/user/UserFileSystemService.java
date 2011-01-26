@@ -37,7 +37,8 @@ import edu.ur.ir.repository.Repository;
  */
 public interface UserFileSystemService extends Serializable{
 	
-	/** Default id for the root folder for each users*/
+	/** Default id for the root folder for each user - this indicates get files or folders
+	 * from the user object */
 	public static final long ROOT_FOLDER_ID = 0L;
 
 	
@@ -72,13 +73,13 @@ public interface UserFileSystemService extends Serializable{
 	public List<PersonalFolder> getAllPersonalFoldersForUser(Long userId);
 	
 	/**
-	 * Gets the path to the collection starting from the top parent all the way
-	 * down to the specified child.  Only includes parents of the specified 
-	 * collection.  The list is ordered highest level parent to last child.  This
+	 * Gets the path to the folder starting from the top parent all the way
+	 * down to the specified child personal folder id.  Only includes parents of the specified 
+	 * child.  The list is ordered highest level parent to last child.  This
 	 * is useful for displaying the path to a given collection.
 	 * 
-	 * @param collection 
-	 * @return list of parent collections.
+	 * @param personal folder id 
+	 * @return list of parent folders.
 	 * 
 	 */
 	public List<PersonalFolder> getPersonalFolderPath(Long personalFolderId);
