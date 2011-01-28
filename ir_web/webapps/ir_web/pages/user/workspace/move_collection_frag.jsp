@@ -25,7 +25,7 @@
 
     <c:url var="cancelUrl" value="/user/workspace.action">
         <c:param name="parentCollectionId" value="${parentCollectionId}"/>
-        <c:param name="tabName" value="COLLECTION"/>
+        <c:param name="showCollectionTab" value="true"/>
     </c:url>
     
     <button class="ur_button"

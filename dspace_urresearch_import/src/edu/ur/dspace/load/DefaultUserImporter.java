@@ -64,7 +64,7 @@ import edu.ur.ir.user.UserService;
 public class DefaultUserImporter implements UserImporter{
 
 	/** Date format */
-	private DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+	public static final DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
 	
 	/**  Service for dealing with users */
 	private UserService userService;

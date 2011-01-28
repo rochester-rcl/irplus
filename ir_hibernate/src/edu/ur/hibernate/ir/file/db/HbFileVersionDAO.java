@@ -16,6 +16,8 @@
 
 package edu.ur.hibernate.ir.file.db;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -62,6 +64,13 @@ public class HbFileVersionDAO implements FileVersionDAO {
 	public Long getCount() {
 		return (Long)
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("versionCount"));
+	}
+
+	/**
+	 * Return all versions
+	 */
+	public List<FileVersion> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	/**

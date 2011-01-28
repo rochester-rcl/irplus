@@ -41,6 +41,14 @@ public class HbLicenseDAO implements LicenseDAO{
     }
 	
 	/** 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
+	/** 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */
 	public License getById(Long id, boolean lock) {

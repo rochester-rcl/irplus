@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008-2010 University of Rochester
+   Copyright 2008 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package edu.ur.ir.web.action.institution;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -29,11 +28,9 @@ import com.opensymphony.xwork2.ActionSupport;
 
 
 import edu.ur.exception.DuplicateNameException;
-import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
-import edu.ur.ir.institution.InstitutionalCollectionIndexService;
 import edu.ur.ir.institution.InstitutionalCollectionSecurityService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
@@ -117,9 +114,8 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 	
 	/** service for marking items that need to be indexed */
 	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
-	
-	/** institutional collection index service */
-	private InstitutionalCollectionIndexService institutionalCollectionIndexService;
+
+
 
 	/** index processing type service */
 	private IndexProcessingTypeService indexProcessingTypeService;
@@ -128,9 +124,8 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 	 * Create a new institutional collection 
 	 * 
 	 * @return {@link #SUCCESS}
-	 * @throws NoIndexFoundException 
 	 */
-	public String create() throws NoIndexFoundException {
+	public String create() {
 		log.debug("create called");
 		actionSuccess = false;
 		
@@ -139,10 +134,6 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 		
 		// assume that if the current collection id is null or equal to 0
 		// then we are adding a root collection to the user.
-		 Repository repository = 
-			 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
-					 false);
-
 		if(parentCollectionId == null || parentCollectionId == 0)
 		{
 			 // only admins can add root collections
@@ -150,10 +141,12 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 			 {
 				return "accessDenied";
 			 }
+			 Repository repository = 
+				 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
+						 false);
 			try {
 				collection = repository.createInstitutionalCollection(collectionName.trim());
 				repositoryService.saveRepository(repository);
-				institutionalCollectionIndexService.add(collection, new File(repository.getInstitutionalCollectionIndexFolder()));
 				actionSuccess = true;
 			   
 			} catch (DuplicateNameException e) {
@@ -174,11 +167,7 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 				{
 				    collection = parent.createChild(collectionName.trim());
 				    institutionalCollectionService.saveCollection(parent);
-					institutionalCollectionIndexService.add(collection, new File(repository.getInstitutionalCollectionIndexFolder()));
 				    institutionalCollectionSecurityService.giveAdminPermissionsToParentCollections(collection);
-		            //re-index the root as all root left and right values have been updated
-					IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
-				    institutionalItemIndexProcessingRecordService.processItemsInCollection( collection.getTreeRoot(), processingType);
 				    actionSuccess = true;
 				}
 			} catch (DuplicateNameException e) {
@@ -195,16 +184,12 @@ public class EditInstitutionalCollection extends ActionSupport implements UserId
 	/**
 	 * Update an existing institutional collection 
 	 * 
-s	 
-	 * @throws NoIndexFoundException */
-	public String update() throws NoIndexFoundException {
+s	 */
+	public String update() {
 		log.debug("update called collection name = " + collectionName + " collection description = " + collectionDescription);
 		collection = 
 			institutionalCollectionService.getCollection(collectionId, false);
-		 Repository repository = 
-			 repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, 
-					 false);
-
+        
 		actionSuccess = true;
 		//name change
 		if( !collection.getName().equals(collectionName.trim()))
@@ -214,8 +199,6 @@ s
 				log.debug("success saving insitutional collection " + collection);
 	            collection.setDescription(collectionDescription);	
 	            institutionalCollectionService.saveCollection(collection);
-				institutionalCollectionIndexService.update(collection, new File(repository.getInstitutionalCollectionIndexFolder()));
-
 	            //re-index the contents of the institutional collection
 				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE); 
 				institutionalItemIndexProcessingRecordService.processItemsInCollection( collection, processingType);
@@ -228,8 +211,6 @@ s
 			// description change
 			collection.setDescription(collectionDescription);
 			institutionalCollectionService.saveCollection(collection);
-			institutionalCollectionIndexService.update(collection, new File(repository.getInstitutionalCollectionIndexFolder()));
-
 		}
         return "update";
 	}
@@ -412,6 +393,27 @@ s
 		return collectionPath;
 	}
 
+
+	/**
+	 * Path to this collection.
+	 * 
+	 * @param collectionPath
+	 */
+	public void setCollectionPath(Collection<InstitutionalCollection> collectionPath) {
+		this.collectionPath = collectionPath;
+	}
+
+
+	/**
+	 * Service for setting up security.
+	 * 
+	 * @return
+	 */
+	public InstitutionalCollectionSecurityService getInstitutionalCollectionSecurityService() {
+		return institutionalCollectionSecurityService;
+	}
+
+
 	/**
 	 * Service for setting up security.
 	 * 
@@ -422,127 +424,83 @@ s
 		this.institutionalCollectionSecurityService = institutionalCollectionSecurityService;
 	}
 
-	/**
-	 * Set the institutional collection service.
-	 * 
-	 * @param institutionalCollectionService
-	 */
+
+	public InstitutionalCollectionService getInstitutionalCollectionService() {
+		return institutionalCollectionService;
+	}
+
+
 	public void setInstitutionalCollectionService(
 			InstitutionalCollectionService institutionalCollectionService) {
 		this.institutionalCollectionService = institutionalCollectionService;
 	}
 
-	/**
-	 * Get the collection description.
-	 * 
-	 * @return
-	 */
 	public String getCollectionDescription() {
 		return collectionDescription;
 	}
 
-	/**
-	 * Set the collection description.
-	 * 
-	 * @param collectionDescription
-	 */
 	public void setCollectionDescription(String collectionDescription) {
 		this.collectionDescription = collectionDescription;
 	}
 	
-	/**
-	 * Returns true for action success.
-	 * 
-	 * @return
-	 */
 	public boolean getActionSuccess()
 	{
 		return actionSuccess;
 	}
 
-	/**
-	 * Get the user group control access entries.
-	 * 
-	 * @return
-	 */
 	public Set<IrUserGroupAccessControlEntry> getEntries() {
 		return entries;
 	}
 
-	/**
-	 * Set the user group service.
-	 * 
-	 * @param userGroupService
-	 */
+	public void setEntries(Set<IrUserGroupAccessControlEntry> entries) {
+		this.entries = entries;
+	}
+
+
+	public UserGroupService getUserGroupService() {
+		return userGroupService;
+	}
+
 	public void setUserGroupService(UserGroupService userGroupService) {
 		this.userGroupService = userGroupService;
 	}
 
-	/**
-	 * Get the user groups.
-	 * 
-	 * @return
-	 */
 	public List<IrUserGroup> getUserGroups() {
 		return userGroups;
 	}
 
-	/**
-	 * Get the permissions.
-	 * 
-	 * @return
-	 */
+	public void setUserGroups(List<IrUserGroup> userGroups) {
+		this.userGroups = userGroups;
+	}
+
 	public List<IrClassTypePermission> getPermissions() {
 		return permissions;
 	}
 
-	/**
-	 * Set the user id.
-	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
-	 */
+	public void setPermissions(List<IrClassTypePermission> permissions) {
+		this.permissions = permissions;
+	}
+
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	
-	/**
-	 * Set the user service.
-	 * 
-	 * @param userService
-	 */
+	public UserService getUserService() {
+		return userService;
+	}
+
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 
-	/**
-	 * Set the institutional item index processing record service.
-	 * 
-	 * @param institutionalItemIndexProcessingRecordService
-	 */
 	public void setInstitutionalItemIndexProcessingRecordService(
 			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
 		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
 	}
 
-	/**
-	 * Set the index processing type service.
-	 * 
-	 * @param indexProcessingTypeService
-	 */
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
-	
-	/**
-	 * Set the institutional colleciton index service.
-	 * 
-	 * @param institutionalCollectionIndexService
-	 */
-	public void setInstitutionalCollectionIndexService(
-			InstitutionalCollectionIndexService institutionalCollectionIndexService) {
-		this.institutionalCollectionIndexService = institutionalCollectionIndexService;
-	}
-
 
 }

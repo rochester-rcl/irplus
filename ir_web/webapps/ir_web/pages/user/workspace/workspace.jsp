@@ -73,17 +73,12 @@
     <ur:js src="page-resources/js/user/workspace_collection.js"/>
     <ur:js src="page-resources/js/user/workspace_folder.js"/>
     <ur:js src="page-resources/js/user/workspace_search.js"/>
-    <ur:js src="page-resources/js/user/user_group_workspace.js"/>
-
 </head>
 
 
 <body id="body" class="yui-skin-sam">
-
-    
-    <iframe id="yui-history-iframe" src="page-resources/yui/assets/blank.html"></iframe>
+    <iframe id="yui-history-iframe" src="path-to-existing-asset"></iframe>
     <input id="yui-history-field" type="hidden">
-    
     <script type="text/javascript">
         try
         {
@@ -91,22 +86,10 @@
         }
         catch(e)
         {
-        	 // The only exception that gets thrown here is when the browser is
-            // not supported (Opera, or not A-grade) Degrade gracefully.
-            // Note that we have two options here to degrade gracefully:
-            //   1) Call initializeNavigationBar. The page will use Ajax/DHTML,
-            //      but the back/forward buttons will not work.
-            //   2) Initialize our module. The page will not use Ajax/DHTML,
-            //      but the back/forward buttons will work. This is what we
-            //      chose to do here:
-
-
-            // do nothing
+            // history only works with grade A browsers
         }
     </script>
 
-    
-    <input type="hidden" id="set_tab_name" name="set_tab_name"  value="${tabName}"/> 
     
     <!--  yahoo doc 2 template creates a page 950 pixles wide -->
     <div id="doc2">  
@@ -118,16 +101,15 @@
         <!--  this is the body regin of the page -->
         <div id="bd">
                 
-            <h3> Workspace: ${user.firstName}&nbsp;${user.lastName}&nbsp; (<a href="<c:url value="/user/viewResearcher.action"/>">Edit Researcher Page</a>)</h3>
+            <h3> Workspace for: ${user.firstName}&nbsp;${user.lastName}</h3>
 
 	        <!--  set up tabs for the workspace -->
 	        <div id="workspace-tabs" class="yui-navset">
 	                 <ul class="yui-nav">
                          <li class="selected"><a href="#tab1"><em><u>My Files</u></em></a></li>
-                         <li><a href="#tab2"><em><u>Group Workspaces</u></em></a></li>
-                         <li><a href="#tab3"><em><u>My Publications</u></em></a></li>
-                         <li><a href="#tab4"><em><u>Search My Workspace</u></em></a></li>
-                         <li><a href="#tab5"><em><u>Shared File Inbox <strong>(<span id="inbox_files_count">&nbsp;&nbsp;&nbsp;</span>)</strong></u></em></a></li>
+                         <li><a href="#tab2"><em><u>My Publications</u></em></a></li>
+                         <li><a href="#tab3"><em><u>Search My Workspace</u></em></a></li>
+                         <li><a href="#tab4"><em><u>Shared File Inbox <strong>(<span id="inbox_files_count">&nbsp;&nbsp;&nbsp;</span>)</strong></u></em></a></li>
                      </ul>
 
                     <!--  first tab -->
@@ -145,67 +127,60 @@
 	                  </div>
 	                  <!--  end first tab -->
 	                  
-	                  <!--  group workspaces -->
-	                  <div id="tab2">
-	                      <div id="group_workspaces" class="hidden">
-	                           <c:import url="group_workspace_table.jsp"/>
-	                      </div>
-	                  </div>
-	                  <!-- end group workspaces -->
 	                  
-	                  <!--  start third tab -->
-	                  <div id="tab3">
-	                      <div id="newPersonalCollections" class="hidden">
-	                          <form id="collections" name="myCollections">
-	                              <input type="hidden" id="myCollections_parentCollectionId" 
-	                                   name="parentCollectionId" 
-	                                   value="${parentCollectionId}"/>
-	                               
-	                          </form>
+	                  <!--  start second tab -->
+	                  <div id="tab2">
+	                      <div id="newPersonalCollections">
+	                      <form id="collections" name="myCollections">
+	                          <input type="hidden" id="myCollections_parentCollectionId" 
+	                               name="parentCollectionId" 
+	                               value="${parentCollectionId}"/>
+	                               <input type="hidden" id="myCollections_showCollection" 
+	                               name="showCollectionTab" 
+	                               value="${showCollectionTab}"/>
+	                      </form>
 	                      </div>
 	                 </div>                
-	                 <!--  end third tab -->
+	                 <!--  end second tab -->
 	                 
-	                 <!--  Start forth tab -->
-	                 <div id="tab4">
-	                     <div id="workspace_search" class="hidden">
-	                         <form id="userSearchForm" name="userSearchForm" 
-	                             action="javascript:YAHOO.ur.workspace.search.executeUserSearch();">
-	                         
-	                             <table class="formTable">
-	                                 <tr>
-	                                     <td class="label">
-	                                         Search:
-	                                     </td>
-	                                     <td class="input">
-	                                         <input type="text" name="query" size="50"
-	                                             value="${query}"/>
-	                                     </td>
-	                                     <td>
-	                                         <button
-	                                          class="ur_button" 
-	                                          onmouseover="this.className='ur_buttonover';"
- 		                                      onmouseout="this.className='ur_button';"
- 		                                      onclick="javascript:YAHOO.ur.workspace.search.executeUserSearch();"
-	                                          id="userSearchButton"><span class="magnifierBtnImg">&nbsp;</span>Search</button>
-	                                      </td>
-	                                 
-	                                 </tr>
-	                             </table>
-	                         </form>
+	                 <!--  Start third tab -->
+	                 <div id="tab3">
 	                     
-	                         <br/>
-	                         <!--  location where search results will be placed -->
-	                         <div id="search_results">
-	                         </div>
+	                     <form id="userSearchForm" name="userSearchForm" 
+	                         action="javascript:YAHOO.ur.workspace.search.executeUserSearch();">
+	                         
+	                         <table class="formTable">
+	                             <tr>
+	                                 <td class="label">
+	                                     Search:
+	                                 </td>
+	                                 <td class="input">
+	                                     <input type="text" name="query" size="50"
+	                                         value="${query}"/>
+	                                 </td>
+	                                 <td>
+	                                     <button
+	                                      class="ur_button" 
+	                                      onmouseover="this.className='ur_buttonover';"
+ 		                                  onmouseout="this.className='ur_button';"
+ 		                                  onclick="javascript:YAHOO.ur.workspace.search.executeUserSearch();"
+	                                      id="userSearchButton"><span class="magnifierBtnImg">&nbsp;</span>Search</button>
+	                                 </td>
+	                                 
+	                             </tr>
+	                         </table>
+	                     </form>
+	                     
+	                     <br/>
+	                     <!--  location where search results will be placed -->
+	                     <div id="search_results">
 	                     </div>
 	                 </div>
-	                 <!--  End fourth tab -->
+	                 <!--  End third tab -->
 	                 
-	                 <!--  Start 5th -->
-	                 <div id="tab5">
-	                     <div id="inbox_tab" class="hidden">
-	                         <br/>
+	                 <!--  Start 4th -->
+	                 <div id="tab4">
+	                      <br/>
 	                    
 	                            <button class="ur_button"
 	                                    onmouseover="this.className='ur_buttonover';"
@@ -217,15 +192,14 @@
  		                                onmouseout="this.className='ur_button';"
  		                                onclick="javascript:YAHOO.ur.shared.file.inbox.deleteInboxFileConfirmDialog.showDialog();"> <span class="deleteBtnImg">&nbsp;</span>Delete</button>
 	                     
-	                         <br/>
-	                         <br/>
+	                     <br/>
+	                     <br/>
 	         
-	                         <!--  location where shared inbox content will be placed -->
-	                         <div id="shared_folder_inbox">
-	                         </div>
+	                     <!--  location where shared inbox content will be placed -->
+	                     <div id="shared_folder_inbox">
 	                     </div>
 	                 </div>
-	                 <!--  End 5th tab tab -->
+	                 <!--  End 4th tab tab -->
 	                 
 	             </div>
 	             <!--  end content div -->
@@ -434,35 +408,6 @@
 		     Do you want to delete the selected publications and folders?
 		 </div>
 	 </div>
-	 
-	 <!-- Dialog box for uploading a file -->
-     <div id="newGroupWorkspaceDialog" class="hidden">
-       <div class="hd">Group Workspace Information</div>
-       <div class="bd">
-          <form id="addGroupWorkspace" 
-                            name="newGroupWorkspaceForm" 
-		                    method="post"
-		                    action="/user/createGroupWorkspace.action">
-	          <div id="groupWorkspaceDialogFields">
-	              <c:import url="/pages/admin/groupspace/group_workspace_form.jsp"/>
-	          </div>
-	      </form>
-       </div>
-     </div>
-	 <!--  end file upload dialog -->  
-	 
-	 <!-- Dialog box for deleting a group workspace -->
-	 <div id="deleteGroupWorkspaceDialog" class="hidden">
-      <div class="hd">Delete Group Workspace</div>
-		<div class="bd">
-		    <form id="deleteGroupWorkspaceForm" name="deleteGroupWorkspace" method="post" 
-		                action="/admin/deleteGroupWorkspace.action">
-			   <p>Are you sure you wish to delete the selected group workspace?</p>
-			   <input type="hidden" id="deleteId" name="id" value=""/>
-		    </form>
-		</div>
-     </div>
-	 <!-- Dialog box for deleting a group workspace -->
 
 </body>
 </html>

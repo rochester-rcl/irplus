@@ -17,7 +17,6 @@
 package edu.ur.hibernate.ir.user.db;
 
 import java.io.File;
-import java.util.List;
 import java.util.Properties;
 
 import org.springframework.context.ApplicationContext;
@@ -172,14 +171,6 @@ public class InviteInfoDAOTest {
 		assert inviteInfo.getUser().equals(user) : "User should be equal";
 		assert inviteInfo.getFiles().contains(vf) : "VersionedFile should be equal";
 		assert (inviteInfoDAO.findInviteInfoForToken("123")).equals(inviteInfo) : "The user inviteInfo should be equal";
-		List<InviteInfo> invites = inviteInfoDAO.getInviteInfoByEmail("TeSt@Mail.com");
-		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
-		assert invites.get(0).equals(inviteInfo) : "invite " + invites.get(0) + " should equal " + inviteInfo;
-		
-		
-		invites = inviteInfoDAO.getInviteInfoByEmail("test@mail.com");
-		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
-		assert invites.get(0).equals(inviteInfo) : "invite " + invites.get(0) + " should equal " + inviteInfo;
 		tm.commit(ts);
 		
 		

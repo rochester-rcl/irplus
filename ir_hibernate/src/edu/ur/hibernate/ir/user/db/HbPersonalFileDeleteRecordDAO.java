@@ -60,6 +60,10 @@ public class HbPersonalFileDeleteRecordDAO implements PersonalFileDeleteRecordDA
 		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personalFileDeleteRecordCount"));
 	}
 
+	public List<PersonalFileDeleteRecord> getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	public PersonalFileDeleteRecord getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

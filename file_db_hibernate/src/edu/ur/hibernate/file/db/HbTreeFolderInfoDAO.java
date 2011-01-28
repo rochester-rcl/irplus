@@ -32,11 +32,9 @@ import edu.ur.hibernate.HbHelper;
  * @author Nathan Sarr
  *
  */
-public class HbTreeFolderInfoDAO extends HbCrudDAO<TreeFolderInfo> implements TreeFolderInfoDAO {
+public class HbTreeFolderInfoDAO extends HbCrudDAO<TreeFolderInfo> 
+ implements TreeFolderInfoDAO {
 	
-	/** eclipse generated id */
-	private static final long serialVersionUID = -1056728438639125817L;
-
 	/**
 	 * Default Constructor
 	 */

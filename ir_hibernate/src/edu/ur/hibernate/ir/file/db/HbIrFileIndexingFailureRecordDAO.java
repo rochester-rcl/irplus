@@ -61,6 +61,15 @@ public class HbIrFileIndexingFailureRecordDAO implements IrFileIndexingFailureRe
 	}
 
 	/**
+	 * Get all records.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<IrFileIndexingFailureRecord> getAll() {
+		return hbCrudDAO.getAll();
+	}
+
+	/**
 	 * Get record by id.
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)

@@ -150,10 +150,7 @@
  		                 onmouseout="this.className='ur_button';">Change Owner</button>
               </c:if>
               
-              
-
-              <c:if test="${!ur:isEmpty(personalFile.versionedFile.collaborators)}">
-              <h3>Sharing - Confirmed</h3>
+              <h3>Sharing</h3>
               
               <div class="dataTable">
               <urstb:table width="100%">
@@ -190,36 +187,7 @@
                   </urstb:tbody>
               </urstb:table>
               </div>
-              </c:if>
-              
-              <c:if test="${!ur:isEmpty(personalFile.versionedFile.invitees)}">
-              <h3>Sharing - Awaiting account creation</h3>
-              <div class="dataTable">
-              <urstb:table width="100%">
-                  <urstb:thead>
-                      <urstb:tr>
-                          <urstb:td> Email </urstb:td>
-                      </urstb:tr>
-                  </urstb:thead>
-                  <urstb:tbody
-                      var="invite" 
-                      oddRowClass="odd"
-                      evenRowClass="even"
-                      currentRowClassVar="rowClass"
-                      collection="${personalFile.versionedFile.invitees}">
-                      <urstb:tr 
-                          cssClass="${rowClass}"
-                          onMouseOver="this.className='highlight'"
-                          onMouseOut="this.className='${rowClass}'">
-                          <urstb:td>
-                          ${invite.email} 
-                          </urstb:td>
-                      </urstb:tr>
-                  </urstb:tbody>
-              </urstb:table>
-              </div>
-              </c:if>
-              
+     
 	          <h3>All File Versions</h3>
 	     
 	          <div class="dataTable">

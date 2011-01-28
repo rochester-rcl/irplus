@@ -211,18 +211,20 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 * Get the user email based on email.
 	 * 
 	 * @param email
-	 * @return the user email otherwise null
+	 * @return
 	 */
 	public UserEmail getUserEmail(String email)
 	{
+		UserEmail myEmail = null;
 		for( UserEmail userEmail : emails)
 		{
-			if( userEmail.getEmail().equalsIgnoreCase(email))
+			if( userEmail.getEmail().equals(email))
 			{
-				return userEmail;
+				myEmail = userEmail;
+				break;
 			}
 		}
-		return null;
+		return myEmail;
 	}
 
 

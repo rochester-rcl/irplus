@@ -26,7 +26,6 @@
     <!ENTITY insitutional_collection SYSTEM "admin_collection.xml">
     <!ENTITY handle SYSTEM "admin_handle.xml">
     <!ENTITY file_storage SYSTEM "admin_file_storage.xml">
-    <!ENTITY group_spaces SYSTEM "admin_group_spaces.xml">
     ]>
     
 <struts>
@@ -120,11 +119,6 @@
         <!--  File Storage Actions                 -->
         <!--  ************************************ -->
         &file_storage;
-        
-        <!--  ************************************ -->
-        <!--  group spaces Actions                 -->
-        <!--  ************************************ -->
-        &group_spaces;
         
         <!--  ************************************ -->
         <!--  Administration Home Page             -->

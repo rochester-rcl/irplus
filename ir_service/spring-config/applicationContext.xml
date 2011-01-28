@@ -86,7 +86,6 @@
     <import resource="ir-news-hibernate.xml"/>
     <import resource="ir-researcher-hibernate.xml"/>
     <import resource="ir-statistics-hibernate.xml"/>
-    <import resource="ir-group-workspace-hibernate.xml"/>
     
     
    <!-- ****************************************** --> 
@@ -94,11 +93,6 @@
    <!-- ****************************************** --> 
    <import resource="ir-service.xml"/>
   
-   <!-- ****************************************** --> 
-   <!-- Export/Import services  -->
-   <!-- ****************************************** --> 
-   <import resource="ir-export-import-service.xml"/>
-
    <!-- ****************************************** --> 
    <!-- File Service  -->
    <!-- ****************************************** --> 

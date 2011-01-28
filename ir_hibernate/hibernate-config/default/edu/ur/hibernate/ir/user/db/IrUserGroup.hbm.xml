@@ -48,8 +48,7 @@
 		<!-- users that belong to this group -->
 		<set name="users" 
 		    optimistic-lock="false"
-		    schema="ir_user"
-		    table="user_group_users"  
+		    table="ir_user.user_group_users"  
 		    cascade="save-update" 
 		    access="field" 
 		    lazy="true"

@@ -145,7 +145,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	private String emailMessage;
 
 	/** Id of the affiliation selected */
-	private Long affiliationId = -1l;
+	private Long affiliationId;
 	
 	/** Affiliation service class */
 	private AffiliationService affiliationService;
@@ -208,9 +208,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	
 	/** the external account user name */
 	private String externalAccountUserName;
-	
-	private Long roleId = -1l;
-	
+
 
 	/** Default constructor */
 	public  ManageUsers() 
@@ -484,7 +482,13 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
  			    deleted = false;
 				log.error("user has published", e);
 			}
- 		}
+ 			
+ 			
+ 		
+			
+		}
+
+		
 		return "deleted";
 	}
  
@@ -532,89 +536,14 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public String viewUsers()
 	{
-		if(log.isDebugEnabled())
-		{
-		    log.debug("RowStart = " + rowStart
-	    		+ " numberOfResultsToShow=" + numberOfResultsToShow
-	    		+ " sortElement="  + sortElement + "   orderType =" + sortType
-	    		+ " affilationId = " + affiliationId
-	    		+ " roleId = " + roleId);
-		}
+		log.debug("RowStart = " + rowStart
+	    		+ "   numberOfResultsToShow=" + numberOfResultsToShow + "   sortElement="  + sortElement + "   orderType =" + sortType);
 		rowEnd = rowStart + numberOfResultsToShow;
 	    
 		OrderType orderType = OrderType.getOrderType(sortType);
-		
-		
-	    if( sortElement.equalsIgnoreCase("lastName"))
-	    {
-	    	if(affiliationId == -1l && roleId == -1l  )
-	    	{
-	            users = userService.getUsersByLastNameOrder(rowStart, numberOfResultsToShow, orderType);
-	            totalHits = userService.getUserCount().intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId == -1)
-	    	{
-	    		users = userService.getUsersByAffiliationFullNameOrder(affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByAffiliationCount(affiliationId).intValue();
-	    	}
-	    	else if(affiliationId == -1 && roleId > 0 )
-	    	{
-	    		users = userService.getUsersByRoleFullNameOrder(roleId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByRoleCount(roleId).intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId > 0 )
-	    	{
-	    		users = userService.getUsersByRoleAffiliationFullNameOrder(roleId, affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    	    totalHits = userService.getUserByRoleAffiliationCount(roleId, affiliationId).intValue();
-	    	}
-	    
-	    } 
-	    else if ( sortElement.equalsIgnoreCase("username") )
-	    {
-	    	if(affiliationId == -1l && roleId == -1l  )
-	    	{
-	    		users = userService.getUsersByUsernameOrder(rowStart, numberOfResultsToShow, orderType);
-		        totalHits = userService.getUserCount().intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId == -1)
-	    	{
-	    		users = userService.getUsersByAffiliationUsernameOrder(affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    	    totalHits = userService.getUserByAffiliationCount(affiliationId).intValue();
-	    	}
-	    	else if(affiliationId == -1 && roleId > 0 )
-	    	{
-	    		users = userService.getUsersByRoleUsernameOrder(roleId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByRoleCount(roleId).intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId > 0 )
-	    	{
-	    		users = userService.getUsersByRoleAffiliationUsernameOrder(roleId, affiliationId, totalHits, numberOfResultsToShow, orderType);
-	    	    totalHits = userService.getUserByRoleAffiliationCount(roleId, affiliationId).intValue();
-	    	}
-	    } 
-	    else if ( sortElement.equalsIgnoreCase("email") )
-	    {
-	    	if(affiliationId == -1l && roleId == -1l  )
-	    	{
-	    		users = userService.getUsersByEmailOrder(rowStart, numberOfResultsToShow, orderType);
-	            totalHits = userService.getUserCount().intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId == -1)
-	    	{
-	    		users = userService.getUsersByAffiliationEmailOrder(affiliationId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByAffiliationCount(affiliationId).intValue();
-	    	}
-	    	else if(affiliationId == -1 && roleId > 0 )
-	    	{
-	    		users = userService.getUsersByRoleEmailOrder(roleId, rowStart, numberOfResultsToShow, orderType);
-	    		totalHits = userService.getUserByRoleCount(roleId).intValue();
-	    	}
-	    	else if(affiliationId > 0 && roleId > 0)
-	    	{
-	    		users = userService.getUsersByRoleAffiliationEmailOrder(roleId, affiliationId, rowStart, numberOfResultsToShow, orderType);	    		
-	    		totalHits = userService.getUserByRoleAffiliationCount(roleId, affiliationId).intValue();
-	    	}
-	    }		
+	    users = userService.getUsers(rowStart, 
+	    		numberOfResultsToShow, sortElement, orderType);
+	    totalHits = userService.getUserCount().intValue();
 		
 		if(rowEnd > totalHits)
 		{
@@ -793,17 +722,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		List<Affiliation> affiliations = affiliationService.getAllAffiliations();
 		Collections.sort(affiliations, nameComparator);
 		return affiliations ;
-	}
-	
-	/**
-	 * Get all roles
-	 * 
-	 * @return
-	 */
-	public List<IrRole> getRoles() {
-		List<IrRole> roles = roleService.getAllRoles();
-		Collections.sort(roles, nameComparator);
-		return roles ;
 	}
 
 
@@ -1232,24 +1150,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 
 	public void setExternalAccountUserName(String externalAccountUserName) {
 		this.externalAccountUserName = externalAccountUserName;
-	}
-	
-	/**
-	 * Get the role id.
-	 * 
-	 * @return
-	 */
-	public Long getRoleId() {
-		return roleId;
-	}
-
-	/**
-	 * Set the role id
-	 * 
-	 * @param roleId
-	 */
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
 	}
 
 

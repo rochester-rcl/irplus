@@ -18,7 +18,6 @@ package edu.ur.metadata.dc;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.UniqueNameDAO;
 import edu.ur.metadata.dc.DublinCoreTerm;
 
@@ -29,4 +28,4 @@ import edu.ur.metadata.dc.DublinCoreTerm;
  *
  */
 public interface DublinCoreTermDAO extends CountableDAO, 
-CrudDAO<DublinCoreTerm>, UniqueNameDAO<DublinCoreTerm>, ListAllDAO{}
+CrudDAO<DublinCoreTerm>, UniqueNameDAO<DublinCoreTerm>{}

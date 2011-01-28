@@ -61,6 +61,10 @@ public class HbIrFileTransformationFailureRecordDAO implements IrFileTransformat
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irFileTransformationFailureRecordCount"));
 	}
 
+	public List<IrFileTransformationFailureRecord> getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	public IrFileTransformationFailureRecord getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}

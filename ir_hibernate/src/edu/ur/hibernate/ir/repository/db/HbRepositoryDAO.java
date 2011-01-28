@@ -91,6 +91,16 @@ public class HbRepositoryDAO implements RepositoryDAO {
 	}
 
 	/**
+	 * Get all repositories.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
+	/**
 	 * Get the repository by id.
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)

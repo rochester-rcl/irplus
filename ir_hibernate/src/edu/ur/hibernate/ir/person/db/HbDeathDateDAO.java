@@ -33,9 +33,6 @@ import edu.ur.ir.person.DeathDateDAO;
  */
 public class HbDeathDateDAO implements DeathDateDAO{
 	
-	/** eclipse generated id */
-	private static final long serialVersionUID = 1912799826810116895L;
-	
 	private final HbCrudDAO<DeathDate> hbCrudDAO;
 
 	/**
@@ -74,5 +71,10 @@ public class HbDeathDateDAO implements DeathDateDAO{
 
 	public void makeTransient(DeathDate entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 }

@@ -45,9 +45,6 @@
 
 		<property name="token" column="token" type="string"
 			not-null="true" access="field" />
-			
-		<property name="createdDate" column="created_date" type="timestamp"
-			not-null="true" access="field" />
 
 		<!--  user sending the invitation -->
 		<many-to-one class="IrUser" 
@@ -74,29 +71,9 @@
     </class>
 		
     <!-- named query for getting invite information for given token-->
-    <query name="findInviteInfoForToken">from InviteInfo inviteInfo where inviteInfo.token = :token </query> 
+    <query name="findInviteInfoForToken">from InviteInfo inviteInfo where inviteInfo.token like ? </query> 
  
     <!-- named query for getting invite information for given email -->
-    <query name="findInviteInfoForEmail">from InviteInfo inviteInfo where lower(inviteInfo.email) = :email </query> 
-    
-    <!-- named query for getting invite information made by a given user -->
-    <query name="getInviteInfoMadeByUser">from InviteInfo inviteInfo where user.id = :userId </query> 
-    
-    	<!--  Get a count of roles in the system -->
-	<query name="inviteInfoCount">
-	    select count(*) from InviteInfo
-	</query>
-	
-		<!-- sort by last name asc -->
-	<query name="getInviteInfosOrderByInvitorAsc">
-		select inviteInfo from InviteInfo as inviteInfo
-		order by inviteInfo.user.lowerCaseLastName asc, inviteInfo.user.lowerCaseFirstName asc, inviteInfo.user.lowerCaseMiddleName asc
-	</query>	
-
-	<!-- sort by last name desc -->
-	<query name="getInviteInfosOrderByInvitorDesc">
-		select inviteInfo from InviteInfo as inviteInfo
-		order by inviteInfo.user.lowerCaseLastName desc, inviteInfo.user.lowerCaseFirstName desc, inviteInfo.user.lowerCaseMiddleName desc
-	</query>	
+    <query name="findInviteInfoForEmail">from InviteInfo inviteInfo where inviteInfo.email like ? </query> 
 	
 </hibernate-mapping>

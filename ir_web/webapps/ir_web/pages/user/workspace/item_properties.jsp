@@ -56,6 +56,7 @@
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
+    <ur:js src="page-resources/js/user/file_properties.js"/>
 </head>
 
 <body id="body" class="yui-skin-sam">
@@ -74,7 +75,7 @@
 		         <c:if test="${parentCollectionId != 0}">
                       <c:url var="viewRootCollectionsUrl" value="/user/workspace.action">
                           <c:param name="parentCollectionId" value="0"/>
-                          <c:param name="tabName" value="COLLECTION"/>
+                          <c:param name="showCollectionTab" value="true"/>
                       </c:url>
 		             <a href="${viewRootCollectionsUrl}">My Publications</a>&nbsp;/
 		         </c:if>
@@ -83,7 +84,7 @@
 		         </c:if>
 		         
 	             <c:url var="viewCollectionsUrl" value="/user/workspace.action">
-                      <c:param name="tabName" value="COLLECTION"/>
+                      <c:param name="showCollectionTab" value="true"/>
                   </c:url>
 		         
 		         

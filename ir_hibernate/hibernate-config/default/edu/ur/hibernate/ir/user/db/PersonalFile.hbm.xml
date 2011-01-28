@@ -89,14 +89,14 @@
 	
 	<!-- named query for getting files in a folder -->
 	<query name="getFilesInAFolderForUser">
-		from PersonalFile as personalFile where
-		personalFile.owner.id = :userId and personalFile.personalFolder.id = :folderId
+		from PersonalFile as PersonalFile where
+		PersonalFile.owner.id = ? and PersonalFile.personalFolder.id = ?
 	</query>
 	
-	<!-- named query for getting files for root level - the user -->
+	<!-- named query for getting files in a folder -->
 	<query name="getRootFiles">
-		from PersonalFile as personalFile where
-		personalFile.owner.id = :userId and personalFile.personalFolder.id is NULL
+		from PersonalFile as PersonalFile where
+		PersonalFile.owner.id = ? and PersonalFile.personalFolder.id is NULL
 	</query>
 	
    <!-- named query for getting files  -->

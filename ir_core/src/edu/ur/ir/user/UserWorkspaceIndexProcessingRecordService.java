@@ -55,6 +55,13 @@ public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
     public void save(UserWorkspaceIndexProcessingRecord userWorkspaceIndexProcessingRecord);
  
 	/**
+	 * Get all workspace index processing records 
+	 * 
+	 * @return List of all index processing types
+	 */
+	public List<UserWorkspaceIndexProcessingRecord> getAll();
+	
+	/**
 	 * Get the processing record by the workspace item id, user id and file system type.
 	 * 
 	 * @param userId - id of the user who owns the item

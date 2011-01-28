@@ -16,6 +16,8 @@
 
 package edu.ur.hibernate.ir.item.db;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -104,6 +106,15 @@ public class HbItemExtentDAO implements ItemExtentDAO{
 	 */
 	public void makeTransient(ItemExtent entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	/**
+	 * Get all of the item extents
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<ItemExtent> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	/**

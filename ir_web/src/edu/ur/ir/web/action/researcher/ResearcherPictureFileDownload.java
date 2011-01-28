@@ -58,13 +58,13 @@ implements ServletResponseAware, ServletRequestAware
 	private ResearcherService researcherService;
 	
 	/**  Servlet response to write to */
-	private transient HttpServletResponse response;
+	private HttpServletResponse response;
 	
 	/** id of the ir file to download */
 	private Long irFileId;
 	
 	/** request made to the server */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** Utility for web utils */
 	private WebIoUtils webIoUtils;
@@ -95,19 +95,14 @@ implements ServletResponseAware, ServletRequestAware
 		    		irFile = researcher.getPrimaryPicture();
 		    	}
 		    }
-		    
-		    if( irFile != null )
-		    {
-                FileInfo fileInfo = irFile.getFileInfo();
+            FileInfo fileInfo = irFile.getFileInfo();
 
-                if( log.isDebugEnabled() )
-                {
-                    log.debug("Found ir File " + irFile);
-                }
+            if( log.isDebugEnabled() )
+            {
+                log.debug("Found ir File " + irFile);
+            }
            
-                webIoUtils.streamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
-		
-		    }
+            webIoUtils.StreamFileInfo(fileInfo.getName(), fileInfo, response, request, (1024*4), true, false);
 		}
         
         return SUCCESS;

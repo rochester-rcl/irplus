@@ -60,8 +60,9 @@
 			cascade="save-update"
 			name="institutionalItemVersion" 
 			column="institutional_item_version_id" 
-		    not-null="true"
-			access="field" />
+			access="field" 
+			insert="true"
+			update="true"/>
 		
 		<!--  The versioned institutional item -->
 		<many-to-one class="edu.ur.ir.user.IrUser" 
@@ -69,8 +70,9 @@
 			unique="true" 
 			name="user" 
 			column="user_id" 
-			not-null="true"
-			access="field" />
+			access="field" 
+			insert="true"
+			update="true"/>
  
 	</class>
 	

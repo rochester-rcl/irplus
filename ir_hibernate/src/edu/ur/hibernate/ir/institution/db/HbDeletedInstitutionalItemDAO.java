@@ -86,12 +86,17 @@ public class HbDeletedInstitutionalItemDAO implements DeletedInstitutionalItemDA
 		hbCrudDAO.makeTransient(entity);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+	
 	/**
 	 * Deletes the entire history
 	 */
 	public void deleteAll() {
 		
-		hbCrudDAO.getHibernateTemplate().deleteAll(hbCrudDAO.getAll());
+		hbCrudDAO.getHibernateTemplate().deleteAll(getAll());
 		
 	}
 

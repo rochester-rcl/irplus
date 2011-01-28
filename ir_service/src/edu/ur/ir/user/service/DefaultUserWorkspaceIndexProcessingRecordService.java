@@ -135,6 +135,11 @@ UserWorkspaceIndexProcessingRecordService
 		return userWorkspaceIndexProcessingRecordDAO.get(fileSystem, userId, processingType);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<UserWorkspaceIndexProcessingRecord> getAll() {
+		return userWorkspaceIndexProcessingRecordDAO.getAll();
+	}
+
 	public List<UserWorkspaceIndexProcessingRecord> getAllOrderByIdDate() {
 		return userWorkspaceIndexProcessingRecordDAO.getAllOrderByUserIdDate();
 	}

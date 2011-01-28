@@ -120,7 +120,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 	private Long licenseId;
 	
 	/** Authenticator for ldap username/password */
-	private transient LdapAuthenticator authenticator;
+	private LdapAuthenticator authenticator;
 	
 	/** Authentication provider for ldap */
 	private UrLdapAuthenticationProvider ldapAuthProvider;

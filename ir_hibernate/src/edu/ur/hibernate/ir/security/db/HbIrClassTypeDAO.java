@@ -97,6 +97,18 @@ public class HbIrClassTypeDAO implements IrClassTypeDAO {
 		return (IrClassType) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getIrClassTypeByName", name));
 	}
+
+	
+	/**
+	 * Get all class types.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	
 	/**
 	 * Get the class type by id.

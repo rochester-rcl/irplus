@@ -88,8 +88,6 @@
              <class name="edu.ur.hibernate.ir.user.db.PersonalItemDeleteRecordDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.PersonalFileDeleteRecordDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.ExternalAccountTypeDAOTest"/>
-             <class name="edu.ur.hibernate.ir.user.db.FolderInviteInfoDAOTest"/>
-             <class name="edu.ur.hibernate.ir.user.db.FolderAutoShareInfoDAOTest"/>
              
              <class name="edu.ur.hibernate.ir.file.db.IrFileDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.file.db.VersionedFileDAOTest"/> 
@@ -112,10 +110,6 @@
 		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.ContributorTypeDublinCoreMappingDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.IdentifierTypeDublinCoreMappingDAOTest"/>
 		     
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceFolderDAOTest"/>
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceDAOTest"/>
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceFileDAOTest"/>
-
 		</classes>
 	</test>
 	

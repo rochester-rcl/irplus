@@ -32,7 +32,7 @@
         <property name="mappingResources">
             <set>
                 <value>edu/ur/hibernate/ir/index/db/IndexProcessingType.hbm.xml</value>
-
+            
                 <value>edu/ur/hibernate/ir/repository/db/Repository.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/repository/db/License.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/repository/db/LicenseVersion.hbm.xml</value>
@@ -111,18 +111,11 @@
                 <value>edu/ur/hibernate/ir/user/db/Department.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/SharedInboxFile.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/UserRepositoryLicense.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/UserWorkspaceIndexProcessingRecord.hbm.xml</value>  
+                <value>edu/ur/hibernate/ir/user/db/UserWorkspaceIndexProcessingRecord.hbm.xml</value>   
                 <value>edu/ur/hibernate/ir/user/db/PersonalFileDeleteRecord.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/PersonalItemDeleteRecord.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/ExternalAccountType.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/ExternalUserAccount.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/FolderInviteInfo.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/FolderAutoShareInfo.hbm.xml</value>
-                              
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspace.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFolder.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFile.hbm.xml</value>
-
+                <value>edu/ur/hibernate/ir/user/db/ExternalAccountType.hbm.xml</value>   
+                <value>edu/ur/hibernate/ir/user/db/ExternalUserAccount.hbm.xml</value>          
                                 
                 <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrClassTypePermission.hbm.xml</value>
@@ -130,7 +123,7 @@
                 <value>edu/ur/hibernate/ir/security/db/IrUserAccessControlEntry.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrRoleAccessControlEntry.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrUserGroupAccessControlEntry.hbm.xml</value>
-               
+                
 
                 <value>edu/ur/hibernate/ir/file/db/IrFile.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/file/db/VersionedFile.hbm.xml</value>
@@ -166,9 +159,10 @@
                 
                 <value>edu/ur/hibernate/ir/item/metadata/dc/db/ContributorTypeDublinCoreMapping.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/metadata/dc/db/IdentifierTypeDublinCoreMapping.hbm.xml</value>
-                
+ 
                 <value>edu/ur/hibernate/metadata/dc/DublinCoreEncodingScheme.hbm.xml</value>
                 <value>edu/ur/hibernate/metadata/dc/DublinCoreTerm.hbm.xml</value>
+                
                 
             </set>
         </property>

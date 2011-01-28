@@ -117,12 +117,6 @@
                 <value>edu/ur/hibernate/ir/user/db/PersonalItemDeleteRecord.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/ExternalAccountType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/ExternalUserAccount.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/FolderInviteInfo.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/FolderAutoShareInfo.hbm.xml</value>
-                         
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspace.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFolder.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFile.hbm.xml</value>
                                 
                 <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrClassTypePermission.hbm.xml</value>

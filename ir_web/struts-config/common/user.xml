@@ -20,7 +20,6 @@
     "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
     "http://struts.apache.org/dtds/struts-2.0.dtd" [
     <!ENTITY researcher SYSTEM "user_researcher.xml">
-    <!ENTITY group_workspace SYSTEM "user_group_workspace.xml">
     ]>
 <struts>
     
@@ -89,11 +88,6 @@
         <!--  Researcher actions                -->
         <!--  ************************************ -->
         &researcher;
-        
-        <!--  ************************************ -->
-        <!--  Group workspace actions              -->
-        <!--  ************************************ -->
-        &group_workspace;
                 
                 
         <!--  ************************************ -->
@@ -953,7 +947,7 @@
         </action>
         
         <!--  ************************************ -->
-        <!--  Invite User actions (File)          -->
+        <!--  Invite User actions			       -->
         <!--  ************************************ -->
 
 		<action name="checkSharePermission" class="edu.ur.ir.web.action.user.InviteUser"
@@ -1016,38 +1010,7 @@
             <result name="added">/pages/user/workspace/add_invite_response.jsp</result>
         </action> 
 
-        <!--  ************************************ -->
-        <!--  Auto share folder actions (Folder)   -->
-        <!--  ************************************ -->
-        <action name="autoShareFolder" 
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        <action name="autoShareFolderWithUsers" 
-            method="autoShareFolder"
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        <action name="removeAutoShareFolder" 
-            method="deleteAutoShare"
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        <action name="removeAutoShareFolderInvite" 
-            method="deleteFolderInvite"
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        
-        
+ 
         <!--  ************************************ -->
         <!--  Change Password  actions			       -->
         <!--  ************************************ -->
@@ -1131,14 +1094,6 @@
             <result name="get">/pages/admin/item/metadata/persons/person_form_frag.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/persons/person_deleted.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
-        </action>
-        
-        <!--  special action for a user who is editing their own name in their account section -->
-        <action name="userInitialCreatePerson" 
-            method="create"
-            class="edu.ur.ir.web.action.person.ManagePersons">
-            <interceptor-ref name="crudStack" />
-            <result name="added">/pages/user/login/add_authoring_name_form_frag.jsp</result>
         </action>
         
         <!--  ************************************ -->

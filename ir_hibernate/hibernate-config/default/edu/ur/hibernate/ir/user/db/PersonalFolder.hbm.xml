@@ -104,47 +104,14 @@
 			<key column="personal_folder_id" not-null="true"/>
 			<one-to-many class="PersonalFile"/>
 		</set>
-		
-		<!--  Folder auto share information -->
-		<set name="autoShareInfos" 
-		    optimistic-lock="false"
-		    inverse="true" 
-		    cascade="all, delete-orphan" 
-		    access="field" 
-		    lazy="true"
-		    fetch="subselect">
-			<key column="personal_folder_id" not-null="true"/>
-			<one-to-many class="FolderAutoShareInfo"/>
-		</set>
-		
-		<!--  Folder auto share information emails - when users shared with have not
-		      yet created accounts -->
-		<set name="folderInviteInfos" 
-		    optimistic-lock="false"
-		    inverse="true" 
-		    cascade="all, delete-orphan" 
-		    access="field" 
-		    lazy="true"
-		    fetch="subselect">
-			<key column="personal_folder_id" not-null="true"/>
-			<one-to-many class="FolderInviteInfo"/>
-		</set>
 
 	</class>
 		
 	<!--  All files for the specified folder including files in sub folders -->
 	<query name="getAllPersonalFilesForFolder">
 	    from PersonalFile as personalFile
-	    where  personalFile.personalFolder.leftValue between :leftValue and :rightValue
-	    and personalFile.personalFolder.treeRoot.id = :rootId
-	</query>
-	
-    <!--  All children folders for the specified folder including sub folders -->
-	<query name="getAllChildrenFoldersForFolder">
-	    from PersonalFolder as personalFolder
-	    where personalFolder.leftValue &gt; :leftValue 
-	    and  personalFolder.rightValue &lt; :rightValue
-	    and personalFolder.treeRoot.id = :rootId
+	    where  personalFile.personalFolder.leftValue between ? and ?
+	    and personalFile.personalFolder.treeRoot.id = ?
 	</query>
 	
     <!--  All versioned files for the specified folder including 
@@ -224,26 +191,26 @@
 	    order by personalFolder.name
 	</query>
 	
-    <!-- Gets the path for a given folder-->
+    <!-- Gets the path for a given collection-->
 	<query name="getPersonalFolderPath">
 	    from PersonalFolder as personalFolder 	    
-	    where :leftValue between personalFolder.leftValue and personalFolder.rightValue
-	    and personalFolder.treeRoot.id = :rootId
-	    and personalFolder.owner.id = :userId
+	    where ? between personalFolder.leftValue and personalFolder.rightValue
+	    and personalFolder.treeRoot.id = ?
+	    and personalFolder.owner.id = ?
 	    order by personalFolder.leftValue
 	</query>
 	
 	<!-- Gets all sub folders within the parent folder -->
-	<query name="getPersonalFoldersForFolder">
+	<query name="getPersonalSubFoldersForFolder">
 	    from PersonalFolder as personalFolder	    
-	    where personalFolder.owner.id = :userId
-	    and personalFolder.parent.id = :parentId
+	    where personalFolder.owner.id = ?
+	    and personalFolder.parent.id = ?
 	</query>
 
 	<!-- Get root folders -->
 	<query name="getPersonalRootFolders">
 	    from PersonalFolder as personalFolder	    
-	    where personalFolder.owner.id = :userId
+	    where personalFolder.owner.id = ?
 	    and personalFolder.id = personalFolder.treeRoot.id
 	</query>
 	

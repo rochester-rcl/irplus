@@ -34,9 +34,6 @@ import edu.ur.order.OrderType;
  */
 public class HbPersonNameAuthorityDAO implements PersonNameAuthorityDAO{
 	
-	/** eclipse generated id */
-	private static final long serialVersionUID = -3472332062844173345L;
-	
 	/** Helper for persisting information using hibernate.*/
 	private final HbCrudDAO<PersonNameAuthority> hbCrudDAO;
 
@@ -95,6 +92,11 @@ public class HbPersonNameAuthorityDAO implements PersonNameAuthorityDAO{
 			return hbCrudDAO.getByQuery("getAllPersonNameAuthorityAsc", rowStart, maxResults);
 		}
 		
+	}
+	
+	
+	public List<PersonNameAuthority> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public PersonNameAuthority getById(Long id, boolean lock) {

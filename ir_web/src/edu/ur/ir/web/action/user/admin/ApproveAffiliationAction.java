@@ -17,11 +17,16 @@
 
 package edu.ur.ir.web.action.user.admin;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.researcher.Researcher;
+import edu.ur.ir.researcher.ResearcherIndexService;
 import edu.ur.ir.user.Affiliation;
 import edu.ur.ir.user.AffiliationService;
 import edu.ur.ir.user.IrRole;
@@ -62,6 +67,12 @@ public class ApproveAffiliationAction extends Pager implements UserIdAware {
 
 	/** Set of user ids */
 	private List<Long> userIds;
+	
+	/** Researcher Index Service */
+	private ResearcherIndexService researcherIndexService;
+
+	/** Researcher Service */
+	private RepositoryService repositoryService;
 
 	/** type of sort [ ascending | descending ] 
 	 *  this is for incoming requests */
@@ -97,6 +108,7 @@ public class ApproveAffiliationAction extends Pager implements UserIdAware {
 		
 		IrUser user = null;
 		Affiliation affiliation = null;
+		Researcher researcher = null;
 		
 		for(int i=0;i<userIds.size();i++) 
 		{
@@ -117,7 +129,7 @@ public class ApproveAffiliationAction extends Pager implements UserIdAware {
 				// Sometimes user might have researcher object if the user is an admin.
 				if (user.getResearcher() == null) 
 				{
-					user.createResearcher();
+					researcher = user.createResearcher();
 				}
 			}			
 
@@ -264,11 +276,6 @@ public class ApproveAffiliationAction extends Pager implements UserIdAware {
 	}
 
 
-	/**
-	 * Role service for dealing with role information.
-	 * 
-	 * @return role service
-	 */
 	public RoleService getRoleService() {
 		return roleService;
 	}
@@ -279,26 +286,27 @@ public class ApproveAffiliationAction extends Pager implements UserIdAware {
 	}
 
 
+	public void setResearcherIndexService(
+			ResearcherIndexService researcherIndexService) {
+		this.researcherIndexService = researcherIndexService;
+	}
+
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
+
 	public String getSortType() {
 		return sortType;
 	}
 
 
-	/**
-	 * Sort type for the affilations.
-	 * 
-	 * @param sortType
-	 */
 	public void setSortType(String sortType) {
 		this.sortType = sortType;
 	}
 
 
-	/**
-	 * Total number of affiliations.
-	 * 
-	 * @see edu.ur.ir.web.table.Pager#getTotalHits()
-	 */
 	public int getTotalHits() {
 		return totalHits;
 	}
@@ -328,11 +336,6 @@ public class ApproveAffiliationAction extends Pager implements UserIdAware {
 		this.userId = userId;
 	}
 
-	/**
-	 * Get the user id.
-	 * 
-	 * @return the user id
-	 */
 	public Long getUserId() {
 		return userId;
 	}

@@ -75,12 +75,11 @@ public class DeleteInstitutionalItem extends ActionSupport implements UserIdAwar
 		
 		if (institutionalItemId != null) {
 			InstitutionalItem institutionalItem = institutionalItemService.getInstitutionalItem(institutionalItemId, false);
-			if( institutionalItem != null )
-			{
-			    institutionalItemService.deleteInstitutionalItem(institutionalItem, user);
-			    IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE); 
-			    institutionalItemIndexProcessingRecordService.save(institutionalItemId, processingType);
-			}
+			
+			institutionalItemService.deleteInstitutionalItem(institutionalItem, user);
+			
+			IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE); 
+			institutionalItemIndexProcessingRecordService.save(institutionalItem.getId(), processingType);
 			
 		}		
 		return SUCCESS;		

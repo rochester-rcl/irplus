@@ -136,7 +136,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 			
 			if( researcherLink == null )
 		    {
-			    folder.createLink(linkName, linkUrl, linkDescription);
+			    researcherLink = folder.createLink(linkName, linkUrl, linkDescription);
 			    researcherFileSystemService.saveResearcherFolder(folder);
 			    added = true;
 
@@ -180,12 +180,11 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 		else
 		{
 			ResearcherFolder folder = researcherFileSystemService.getResearcherFolder(parentFolderId, false);
+			other = folder.getResearcherLink(linkName);
 			if( folder == null || !folder.getResearcher().getId().equals(researcher.getId()))
 			{
 				return "accessDenied";
 			}
-			other = folder.getResearcherLink(linkName);
-
 		}
 		
 		// name has been changed and does not conflict

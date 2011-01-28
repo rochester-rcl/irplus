@@ -63,7 +63,7 @@ public class DefaultReIndexUserService implements ReIndexUserService{
 			// notice the minus one because we are starting at 0
 			log.debug("processing " + rowStart + " to " + (rowStart + (batchSize - 1)) );
 			
-		    List<IrUser> users = userService.getUsersByUsernameOrder(rowStart, batchSize, OrderType.DESCENDING_ORDER);
+		    List<IrUser> users = userService.getUsers(rowStart, batchSize, "username", OrderType.DESCENDING_ORDER);
 		    numProcessed = numProcessed + users.size();
 		    userIndexService.addUsers(users, userIndexFolder, overwriteExistingIndex);
 		    overwriteExistingIndex = false;

@@ -16,6 +16,8 @@
 
 package edu.ur.hibernate.ir.item.db;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -75,4 +77,10 @@ public class HbItemSponsorDAO implements ItemSponsorDAO {
 	public void makeTransient(ItemSponsor entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 }

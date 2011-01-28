@@ -57,6 +57,15 @@ public class HbUserRepositoryLicenseDAO implements UserRepositoryLicenseDAO{
     }
 
 	/**
+	 * Get all user repository license information.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<UserRepositoryLicense> getAll() {
+		return hbCrudDAO.getAll();
+	}
+	
+	/**
 	 * Make the user repository license perisistent.
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)

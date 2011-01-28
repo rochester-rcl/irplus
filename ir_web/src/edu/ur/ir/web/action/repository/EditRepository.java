@@ -30,7 +30,6 @@ import com.opensymphony.xwork2.Validateable;
 
 import edu.ur.file.db.FileDatabase;
 import edu.ur.file.db.FileServerService;
-import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.handle.HandleService;
@@ -57,91 +56,83 @@ import org.apache.commons.io.IOUtils;
 public class EditRepository extends ActionSupport implements Preparable, 
 Validateable, UserIdAware{
 	
-	/*  Logger for editing a file database. */
+	/**  Logger for editing a file database. */
 	private static final Logger log = Logger.getLogger(EditRepository.class);
 	
-	/*  Name of the repository */
+	/**  Name of the repository */
 	private String repositoryName;
 	
-	/*  Name of the institution */
+	/**  Name of the institution */
 	private String institutionName;
 	
-	/*  Generated version id */
+	/**  Generated version id */
 	private static final long serialVersionUID = -6421997690248407461L;
 	
-	/*  The new repository */
+	/**  The new repository */
 	private Repository repository;
 
-	/* Service for dealing with repository */
+	/** Service for dealing with repository */
 	private RepositoryService repositoryService;
 	
-	/* Delete the picture from the repository */
+	/** Delete the picture from the repository */
 	private Long irFilePictureId;
 	
-	/* id of the name authority to set on the repository */
+	/** id of the name authority to set on the repository */
 	private Long handleNameAuthorityId;
 	
-	/* default id for file databases */
+	/** default id for file databases */
 	private Long defaultFileDatabaseId;
 	
-	/* location of the name index folder  */
+	/** location of the name index folder  */
 	private String nameIndexFolder;
 	
-	/* location of the institutional item index folder */
+	/** location of the institutional item index folder */
 	private String institutionalItemIndexFolder;
 	
-	/* location of the researcher index folder. */
+	/** location of the researcher index folder. */
 	private String researcherIndexFolder;
 	
-	/* user index folder */
+	/** user index folder */
 	private String userIndexFolder;
 	
-	/* location for user workspace folders  */
+	/** location for user workspace folders  */
 	private String userWorkspaceIndexFolder;
 	
-	/* location for user workspace folders  */
-	private String userGroupIndexFolder;
 
-	/* location for user workspace folders  */
-	private String institutionalCollectionIndexFolder;
 	
-	/* Service for dealing with handle information  */
+	/** Service for dealing with handle information  */
 	private HandleService handleService;
 	
-	/* Service for file server/database information */
+	/** Service for file server/database information */
 	private FileServerService fileServerService;
 	
-	/* Set of handle name authorities in the system  */
+	/** Set of handle name authorities in the system  */
 	private List<HandleNameAuthority> handleNameAuthorities;
 	
-	/* List of available file databases  */
+	/** List of available file databases  */
 	private List<FileDatabase> fileDatabases;
 	
-	/* Service for dealing with user information  */
+	/** Service for dealing with user information  */
 	private UserService userService;
 	
-	/* Service for dealing with user information  */
+	/** Service for dealing with user information  */
 	private UserIndexService userIndexService;
 	
-	/* batch size for re-indexing repository information - number of records to process*/
+	/** batch size for re-indexing repository information - number of records to process*/
 	private int batchSize = 10;
 	
-	/* id of the default versioned license for the repository */
+	/** id of the default versioned license for the repository */
 	private Long defaultLicenseVersionId;
 	
-	/* indicates that subscriptions should be suspended  */
+	/** indicates that subscriptions should be suspended  */
 	private boolean suspendSubscriptions = false;
 	
-	/* Service for dealing with license information  */
+	/** Service for dealing with license information  */
 	private LicenseService licenseService;
 	
-	/* Set of licenses */
+	/** Set of licenses */
 	private List<LicenseVersion> licenses;
 	
-	/* service to send error emails */
-	private ErrorEmailService errorEmailService;
-	
-	/* id of the user making the changes */
 	private Long userId;
 	
 	/**
@@ -204,18 +195,40 @@ Validateable, UserIdAware{
 		
 		try {
 			updateNameIndexFolder(repository, nameIndexFolder);
-			updateUserWorkspaceIndexFolder(repository, userWorkspaceIndexFolder);
-			updateInstitutionalItemIndexFolder(repository, institutionalItemIndexFolder);
-			updateResearcherIndexFolder(repository, researcherIndexFolder);
-			updateUserIndexFolder(repository, userIndexFolder);
-			updateUserGroupIndexFolder(repository, userGroupIndexFolder);
-			updateInstitutionalCollectionIndexFolder(repository, institutionalCollectionIndexFolder);
-
 		} catch (IOException e1) {
-			log.error(e1);
-			errorEmailService.sendError(e1);
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
+		try {
+			updateUserWorkspaceIndexFolder(repository, userWorkspaceIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateInstitutionalItemIndexFolder(repository, institutionalItemIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateResearcherIndexFolder(repository, researcherIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateUserIndexFolder(repository, userIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	
 		if(!repository.getInitalized())
 		{
 			repository.setInitalized(true);
@@ -303,22 +316,41 @@ Validateable, UserIdAware{
 		
 		try {
 			updateNameIndexFolder(repository, nameIndexFolder);
-			updateUserWorkspaceIndexFolder(repository, userWorkspaceIndexFolder);
-			updateInstitutionalItemIndexFolder(repository, institutionalItemIndexFolder);
-			updateResearcherIndexFolder(repository, researcherIndexFolder);
-			updateUserIndexFolder(repository, userIndexFolder);
-			updateUserGroupIndexFolder(repository, userGroupIndexFolder);
-			updateInstitutionalCollectionIndexFolder(repository, institutionalCollectionIndexFolder);
-
 		} catch (IOException e1) {
-			log.error(e1);
-			errorEmailService.sendError(e1);
-		}
-        catch (NoIndexFoundException e) {
-        	log.error(e);
-			errorEmailService.sendError(e);
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
+		try {
+			updateUserWorkspaceIndexFolder(repository, userWorkspaceIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateInstitutionalItemIndexFolder(repository, institutionalItemIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateResearcherIndexFolder(repository, researcherIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			updateUserIndexFolder(repository, userIndexFolder);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NoIndexFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		if( log.isDebugEnabled())
@@ -714,94 +746,6 @@ Validateable, UserIdAware{
 		}
 	}
 
-	private void updateInstitutionalCollectionIndexFolder(Repository r, String folder) throws IOException
-	{
-		
-		log.debug("update institutional collection index folder " + folder);
-		String oldFolder = r.getInstitutionalCollectionIndexFolder();
-		boolean change = true;
-		if( folder != null)
-		{
-			// add the end seperator
-		    if (folder.charAt(folder.length() - 1) != IOUtils.DIR_SEPARATOR) 
-		    {
-		    	folder = folder + IOUtils.DIR_SEPARATOR;
-		    }
-			File f = new File(folder);
-			if(oldFolder != null)
-			{
-				File oldFolderFile = new File(oldFolder);
-				
-				if( f.getAbsolutePath().equals(oldFolderFile.getAbsolutePath()))
-			    {
-				    change = false;
-			    }
-			}
-			
-			if(change)
-			{
-				FileUtils.forceMkdir(f);
-				log.debug("setting institutional collection index folder to " + folder);
-			    r.setInstitutionalCollectionIndexFolder(folder);
-			    if( oldFolder != null)
-				{
-				    FileUtils.deleteQuietly(new File(oldFolder));
-				}
-			}
-		}
-		else
-		{
-			if(oldFolder != null)
-			{
-				FileUtils.deleteQuietly(new File(oldFolder));
-			}
-		}
-	}
-	
-	private void updateUserGroupIndexFolder(Repository r, String folder) throws IOException
-	{
-		
-		log.debug("update user group index folder " + folder);
-		String oldFolder = r.getUserGroupIndexFolder();
-		boolean change = true;
-		if( folder != null)
-		{
-			// add the end seperator
-		    if (folder.charAt(folder.length() - 1) != IOUtils.DIR_SEPARATOR) 
-		    {
-		    	folder = folder + IOUtils.DIR_SEPARATOR;
-		    }
-			File f = new File(folder);
-			if(oldFolder != null)
-			{
-				File oldFolderFile = new File(oldFolder);
-				
-				if( f.getAbsolutePath().equals(oldFolderFile.getAbsolutePath()))
-			    {
-				    change = false;
-			    }
-			}
-			
-			if(change)
-			{
-				FileUtils.forceMkdir(f);
-				log.debug("setting user group index folder to " + folder);
-			    r.setUserGroupIndexFolder(folder);
-			    if( oldFolder != null)
-				{
-				    FileUtils.deleteQuietly(new File(oldFolder));
-				}
-			}
-		}
-		else
-		{
-			if(oldFolder != null)
-			{
-				FileUtils.deleteQuietly(new File(oldFolder));
-			}
-		}
-	}
-	
 	public String getRepositoryName() {
 		return repositoryName;
 	}
@@ -878,28 +822,6 @@ Validateable, UserIdAware{
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-	
-	/**
-	 * Set the user group index folder.
-	 * 
-	 * @param userGroupIndexFolder
-	 */
-	public void setUserGroupIndexFolder(String userGroupIndexFolder) {
-		this.userGroupIndexFolder = userGroupIndexFolder;
-	}
-
-	/**
-	 * Set the institutional collection index folder.
-	 * 
-	 * @param institutionalCollectionIndexFolder
-	 */
-	public void setInstitutionalCollectionIndexFolder(
-			String institutionalCollectionIndexFolder) {
-		this.institutionalCollectionIndexFolder = institutionalCollectionIndexFolder;
-	}
-
-
-
 
 
 }

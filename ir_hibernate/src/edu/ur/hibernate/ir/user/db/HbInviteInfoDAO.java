@@ -18,14 +18,12 @@ package edu.ur.hibernate.ir.user.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.InviteInfoDAO;
-import edu.ur.ir.user.IrUser;
-import edu.ur.order.OrderType;
 
 /**
  * Persistence for invite information
@@ -65,34 +63,22 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 */
 	public InviteInfo findInviteInfoForToken(String token)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findInviteInfoForToken");
-		q.setParameter("token", token);
-		return (InviteInfo) q.uniqueResult();
+		return (InviteInfo) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("findInviteInfoForToken", token));
 	}
 
-	/**
-	 * Get the invite info by id.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
-	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	public InviteInfo getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
-	/**
-	 * Make the invite info persistent.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
-	 */
 	public void makePersistent(InviteInfo entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
-	/**
-	 * Make the invite info transient.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
-	 */
 	public void makeTransient(InviteInfo entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
@@ -105,67 +91,7 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<InviteInfo> getInviteInfoByEmail(String email) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findInviteInfoForEmail");
-		q.setParameter("email", email.trim().toLowerCase());
-		return q.list();
-	}
-	
-	
-	/**
-	 * Get the list of invite infos ordered by inviteor
-	 * 
-	 * @param rowStart - start position in the list
-	 * @param maxResults - maximum number of results to retrieve
-	 * @param orderType - ascending/decending order
-	 * 
-	 * @return list of invitees found
-	 */
-	@SuppressWarnings("unchecked")
-	public List<InviteInfo> getInviteInfosOrderByInviteor(int rowStart,
-			int maxResults, OrderType orderType) {
-		
-		Query q = null;
-		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
-			q = hbCrudDAO
-					.getSessionFactory()
-					.getCurrentSession()
-					.getNamedQuery(
-							"getInviteInfosOrderByInvitorDesc");
-		} else {
-			q = hbCrudDAO
-					.getSessionFactory()
-					.getCurrentSession()
-					.getNamedQuery(
-							"getInviteInfosOrderByInvitorAsc");
-		}
-
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		q.setFetchSize(maxResults);
-		return (List<InviteInfo>) q.list();
-	}
-
-	/**
-	 * Get a count of invite infos in the system.
-	 * 
-	 * @see edu.ur.dao.CountableDAO#getCount()
-	 */
-	public Long getCount() {
-		return (Long)hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("inviteInfoCount").uniqueResult();
-	}
-	
-	/**
-	 * Get the invites made by a particular user.
-	 * 
-	 * @param user - invites made by a given user
-	 * @return - all invites made by the user or an empty list if no invites found
-	 */
-	@SuppressWarnings("unchecked")
-	public List<InviteInfo> getInvitesMadeByUser(IrUser user)
-	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInviteInfoMadeByUser");
-		q.setParameter("userId",user.getId());
-		return q.list();
+		return hbCrudDAO.getHibernateTemplate().findByNamedQuery("findInviteInfoForEmail", email);
 	}
 
 }
