@@ -1,0 +1,372 @@
+/*
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+/* 
+   Global css page for major layout of
+   main components on each of the pages
+*/
+
+/* set the default link colors */
+a:link 
+{ 
+	color: #00f;
+}
+
+a:visited 
+{ 
+	color: #00f;
+}
+
+a:hover 
+{ 
+	color: #00f;
+}
+
+a:active 
+{ 
+	color: #e00;
+}
+
+/* powered by logo */
+
+.powered_by
+{
+	padding-top:5px;
+}
+
+/* this makes the text black in IE otherwise the
+   a:visited tag overrides*/
+.menu_text
+{
+	color:#000;
+}
+
+#header
+{
+	width : 100%;
+	clear: both;
+}
+
+#header_logo
+{
+	width : 30%;
+	align: left;
+	float: left;
+	padding-top: .5em;
+	padding-bottom: .5em;
+}
+
+#header_links
+{
+	width : 70%;
+	align: right;
+	float: right;
+	text-align: right;
+	padding-top: 2.5em;
+	clear: right;
+}
+
+
+
+h1 
+{
+    font-weight: bold;
+    font-size: 2em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+h2
+{
+	font-size: 1.5em;
+	padding-top: .5em;
+    padding-bottom: .5em;
+}
+
+.collection_path
+{
+	font-size: 1em;
+	margin-bottom: -5px;
+	padding-top: 0em;
+    padding-bottom: 0em;
+}
+
+strong
+{
+	font-weight: bold;
+}
+
+.smallText
+{
+    font-size: .8em;
+}
+
+/* main class for error messages */
+.errorMessage
+{
+	font-weight: bold;
+	color: red;
+}
+
+/* main class for error messages */
+.greenMessage
+{
+	font-weight: bold;
+	color: green;
+}
+
+.center
+{
+	text-align: center;
+}
+
+/******************************
+Create the basic navigation
+this is for things like help
+and other related navigation that
+goes above the menu bar and in the 
+footer
+*********************************/
+ul.basicNav {
+	float: left;
+	margin: 0;
+	padding-bottom: 20px;
+	padding-left: 0px;
+}
+
+.basicNav li {
+	float: left;
+	list-style:none;
+}
+
+
+/* copy right statement */
+.copyright {
+	float:left;
+	clear: left;
+	width: 550px;
+	font-size: 1 em;
+}
+
+/*  customize the footer */
+#ft
+{
+    padding: 2em 0em 0em 0em;
+    margin: 5em 0em 0em 0em;
+    height: 10em;
+    border-top: 1px solid #b9c0c2;
+}
+
+
+
+
+/* styling for buttons that have
+   not yet been rolled over*/
+.ur_button
+{
+	margin-right: 2px;
+	margin-left: 2px;
+    border: 1px solid #B9C0C2;
+    background: url(../images/all-images/button_background.gif);
+    height: 28px;
+    font-size: .9em;
+    font-weight: bold;
+    font-family: Verdana;
+    color: #454545;
+    cursor:pointer;
+    cursor:hand;
+    
+}
+
+/* styling for buttons when they have been rolled over*/
+.ur_buttonover
+{
+	margin-right: 2px;
+	margin-left: 2px;
+    border: 1px solid #B9C0C2;
+    background: url(../images/all-images/button_highlight.gif);
+    height: 28px;
+    font-size: .9em;
+    font-weight: bold;
+    font-family: Verdana;
+    color: #454545;
+    cursor:pointer;
+    cursor:hand;
+}
+
+/* styling for buttons that have
+   not yet been rolled over*/
+.ur_button_disabled
+{
+	margin-right: 2px;
+    border: 1px solid #B9C0C2;
+    background: url(../images/all-images/button_background.gif);
+    height: 2em;
+    font-size: 1em;
+    font-weight: bold;
+    font-family: Verdana;
+    color: #CCCCCC;
+    cursor:pointer;
+    cursor:hand;
+}
+
+.yui-button{
+	margin-right: 2px;
+    border: 1px solid #B9C0C2;
+    background: url(../images/all-images/button_background.gif);
+    height: 2em;
+    font-size: 1em;
+    font-weight: bold;
+    font-family: Verdana;
+    color: #454545;
+    cursor:pointer;
+    cursor:hand;
+}
+
+/* styling for buttons when they have been rolled over*/
+.table_button
+{
+	margin: 0px;
+    border: 1px solid #B9C0C2;
+    background: url(../images/all-images/button_background.gif);
+    height: 28px;
+    font-family: Verdana;
+    color: #454545;
+    cursor:pointer;
+    cursor:hand;
+}
+
+/* styling for buttons when they have been rolled over*/
+.table_buttonover
+{
+    border: 1px solid #B9C0C2;
+    background: url(../images/all-images/button_highlight.gif);
+    height: 28px;
+    font-family: Verdana;
+    color: #454545;
+    cursor:pointer;
+    cursor:hand;
+}
+
+
+/* used for placing images on a button */
+.buttonImg {
+	border-style: none;
+	display: inline;
+	margin: 0em .3em 0 -.5em;
+}
+
+.tableImg {
+	border-style: none;
+	border: 0px;
+	display: inline;
+	margin: 0em .3em 0 .25em;
+}
+
+/* styling for buttons when they have been rolled over*/
+.tableLink
+{
+    cursor:pointer;
+    cursor:hand;
+}
+
+/* styling for pop-up boxes */
+label { display:block;float:left;width:45%;clear:left; }
+.clear { clear:both; }
+      
+/* hide the div's that should not be shown */
+.hidden{
+    position: absolute;
+    visibility: hidden;
+}
+
+/*******************************
+facet and searching
+*******************************/
+
+.facet_container {
+	float: left;
+	margin-right: 12px;
+	width: 24%;
+    border: 1px solid;
+}
+
+.facet_search_selection {
+	background-color: #e3e3e3;
+    width: 90%;
+    margin-top: 0px;
+    float: left;
+    padding: 10px;
+	border-bottom: 1px solid #808080;
+}
+
+/* hack for IE 6 fix*/
+* html .facet_search_selection 
+{
+	width: 100%;
+}
+
+.facets
+{
+	background-color: #FFFFCC;
+	clear: both;
+	float: left;
+    width: 90%;
+    padding: 10px;
+}
+
+/* hack for IE 6 fix*/
+* html .facets
+{
+	width: 100%;
+}
+
+.full_text_search_results
+{
+	float: left;
+	width: 100%;
+}
+
+.search_results_table {
+	float: left;
+	width: 74%;
+}
+
+.search_div_pager {
+	float: center;
+	background-color: #D4D4D4;
+    text-align: center;
+}
+
+
+/******************************
+override yui css files
+*********************************/
+.yui-skin-sam .yui-navset .yui-nav,.yui-skin-sam .yui-navset .yui-navset-top .yui-nav
+{
+	border-bottom: solid #029bec;
+}
+
+.yui-skin-sam .yui-navset .yui-content {
+	background: #ffffff;
+}
+
+.yui-skin-sam .yui-navset .yui-content,.yui-skin-sam .yui-navset .yui-navset-top .yui-content
+{
+	border: 0px;
+	border-top-color: #ffffff;
+	padding: 0.25em 0.5em;
+}

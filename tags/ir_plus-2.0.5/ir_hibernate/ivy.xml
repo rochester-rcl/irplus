@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!--
+    Document   : ivy.xml
+    Created on : November 22, 2008, 3:52 PM
+    Author     : Nathan Sarr
+    Description:
+        Purpose of the document follows.
+-->
+
+<ivy-module version="2.0">
+    <info organisation="ir_hibernate" module="ir_hibernate"/>
+    <dependencies>
+
+        <dependency org="ir_dao" name="ir_dao" rev="2.0" changing="true"/>
+        <dependency org="file_db_service" name="file_db_service" rev="2.0" changing="true"/>
+        <dependency org="metadata_service" name="metadata_service" rev="2.0" changing="true"/>
+        
+        <!-- commons dbcp files -->
+        <dependency org="commons-dbcp" name="commons-dbcp" rev="1.2.2" transitive="false">
+            <artifact name="commons-dbcp" type="jar"/>
+        </dependency>
+
+        <!-- commons dbcp files -->
+        <dependency org="commons-pool" name="commons-pool" rev="1.5.1" transitive="false">
+            <artifact name="commons-pool" type="jar"/>
+        </dependency>
+
+         <!-- postgresql jar files -->
+	    <dependency org="postgresql" name="postgresql" rev="8.3-604.jdbc3" transitive="false">
+	        <artifact name="postgresql" type="jar"/>
+ 	    </dependency>
+ 	    
+
+    </dependencies>
+</ivy-module>
