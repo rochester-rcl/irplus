@@ -124,67 +124,63 @@
 	                 
 	                 <!--  Start second tab -->
                      <div id="tab2">
-                         <table width="100%">
-							<c:if test='${ir:userHasRole("ROLE_ADMIN", "OR") || ir:isAdminOfGroup(user,userGroup)}'>
-	                             <tr>
-	                                 <td></td>
-	                                 <td>
-	                                     <form method="GET" id="user_search_form" name="userSearchForm" 
+                        
+						     <c:if test='${ir:userHasRole("ROLE_ADMIN", "OR") || ir:isAdminOfGroup(user,userGroup)}'>
+	                            <form method="GET" id="user_search_form" name="userSearchForm" 
 	                                         action="javascript:YAHOO.ur.usergroup.edit.userSearch(0, 1, 1);">
 	                                         Search: <input type="text" size="50" id="user_query" name="query" value=""/>
 	                                         <input type="hidden" name="id" value="${userGroup.id}"/>
 	                                         <input type="submit" value="search"/>
-	                                     </form>
-	                                 </td>
-	                             </tr>
-	                        
-                             <tr>
-                                 <td><br/><br/></td>
-                             </tr>
-                             <tr>
-                                 <td valign="top">
-                                    <div id="group_members_div">
-                                        <c:import url="user_group_users_frag.jsp"></c:import>
+	                           </form>
+	                           <br/>
+	                           <br/>
+	                           
+	                           <!--  create the grid -->
+                               <div class="yui-g">
+                                     <!--  create the first column -->
+                                    <div class="yui-u first">
+	                                    <div id="group_members_div">
+                                            <c:import url="user_group_users_frag.jsp"></c:import>
+                                        </div>
                                     </div>
-                                 </td>
-                                 <td valign="top">
-                                     <div id="users_search_results_div"></div>
-                                 </td>
-                             </tr>
+                                
+                                    <!--  Start the second column -->
+                                    <div class="yui-u">
+                                        <div id="users_search_results_div" ></div>
+                                    </div>
+                                </div>
+                                <!-- end the grid -->
+                                 
                              </c:if>
-                         </table>
 	                 </div>
 	                 <!--  End second tab -->
 	                 
 	                 <!--  Start third tab -->
                      <div id="tab3">
-                         <table width="100%">
                          	<c:if test='${ir:userHasRole("ROLE_ADMIN", "OR") || ir:isAdminOfGroup(user,userGroup)}'>
-	                             <tr>
-	                                 <td></td>
-	                                 <td>
-	                                     <form method="GET" id="admin_search_form" name="adminSearchForm" 
+	                            <form method="GET" id="admin_search_form" name="adminSearchForm" 
 	                                         action="javascript:YAHOO.ur.usergroup.edit.adminSearch(0, 1, 1);">
 	                                         Search: <input type="text" size="50" id="admin_query" name="query" value=""/>
 	                                         <input type="hidden" name="id" value="${userGroup.id}"/>
 	                                     </form>
-	                                 </td>
-	                             </tr>
                              </c:if>
-                             <tr>
-                                 <td><br/><br/></td>
-                             </tr>
-                             <tr>
-                                 <td valign="top">
+                             <br/>
+                             <br/>
+                             
+                             <!--  create the grid -->
+                             <div class="yui-g">
+                                 <!--  create the first column -->
+                                 <div class="yui-u first">
                                     <div id="group_admins_div">
                                         <c:import url="user_group_admins_frag.jsp"></c:import>
                                     </div>
-                                 </td>
-                                 <td valign="top">
+                                </div>
+                                
+                                <!--  Start the second column -->
+                                <div class="yui-u">
                                      <div id="admin_search_results_div"></div>
-                                 </td>
-                             </tr>
-                         </table>
+                                </div>
+                            </div>
 	                 </div>
 	                 <!--  End third tab -->
 	                 
