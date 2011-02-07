@@ -68,7 +68,10 @@
 		          not-null="true"/>				          
 
 	    <property name="lastLoginDate" column="last_login_date" type="timestamp" 
-		          access="field" />		
+		          access="field" />	
+		          
+		<property name="mostRecentLoginDate" column="most_recent_login_date" type="timestamp" 
+		          access="field" />			
 		
 		<property name="selfRegistered" column="self_registered" 
 		     type="boolean" not-null="true"

@@ -65,10 +65,10 @@ public class GroupWorkspaceDAOTest {
 	@Test
 	public void simpleGroupWorkspaceDAOTest() throws Exception{
 
-		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
          
         TransactionStatus ts = tm.getTransaction(td);
- 		groupWorkspaceDAO.makePersistent(groupSpace);
+		GroupWorkspace groupSpace = new GroupWorkspace("grouName", "groupDescription");
+        groupWorkspaceDAO.makePersistent(groupSpace);
  	    tm.commit(ts);
  	    
  	    ts = tm.getTransaction(td);

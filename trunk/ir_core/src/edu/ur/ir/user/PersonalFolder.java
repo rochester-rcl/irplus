@@ -86,9 +86,6 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 	/* Root of the entire folder tree. */
 	private PersonalFolder treeRoot;
 	
-	/*  The type of object this represents */
-	private FileSystemType fileSystemType = FileSystemType.PERSONAL_FOLDER;
-	
 	/* Auto share information for a folder  */
 	private Set<FolderAutoShareInfo> autoShareInfos = new HashSet<FolderAutoShareInfo>();
 
@@ -727,7 +724,7 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 	 * @see edu.ur.ir.FileSystem#getType()
 	 */
 	public FileSystemType getFileSystemType() {
-		return fileSystemType;
+		return FileSystemType.PERSONAL_FOLDER;
 	}
 
 	/**

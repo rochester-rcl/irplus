@@ -111,13 +111,6 @@ YAHOO.ur.user.group_workspace = {
     	    YAHOO.ur.util.wait.waitDialog.hide();
             alert('get workspaces by user id failure '  + o.status + ' status text ' + o.statusText);
         };
-
-        //destroy the folder menus
-        //YAHOO.ur.folder.destroyFolderMenus();
-
-        // set the state for the folder id
-        //personalFolderState = folderId;
-
     
         YAHOO.util.Connect.asyncRequest('GET', 
         		viewGroupWorkspacesAction + '?bustcache=' + new Date().getTime(),
@@ -341,11 +334,10 @@ YAHOO.ur.user.group_workspace = {
      */
     getGroupWorkspaceById : function(workspaceId)
     {
-    	
+		
 		// handle a successful return
 	    var handleSuccess = function(o) 
 	    {
-	    	YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timeout
 	        // occurred
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -353,7 +345,7 @@ YAHOO.ur.user.group_workspace = {
 	            var response = o.responseText;
 	            document.getElementById('group_workspaces').innerHTML = response;	 
 	            YAHOO.util.History.navigate( "groupWorkspaceFolderModule", workspaceId + "" );
-	            YAHOO.ur.util.wait.waitDialog.hide();
+	            YAHOO.ur.folder.insertHiddenGroupWorkspaceFolderInfo(); 
 	            
 	            // this is for capturing history
                 // it may fail if this is not an A grade browser so we need to
@@ -374,7 +366,6 @@ YAHOO.ur.user.group_workspace = {
 	    // handle form submission failure
 	    var handleFailure = function(o) 
 	    {
-	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        alert('get folder by id failure '  + o.status + ' status text ' + o.statusText);
 	    };
 

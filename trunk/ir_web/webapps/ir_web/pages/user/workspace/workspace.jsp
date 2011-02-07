@@ -117,9 +117,10 @@
   
         <!--  this is the body regin of the page -->
         <div id="bd">
-                
-            <h3> Workspace: ${user.firstName}&nbsp;${user.lastName}&nbsp; (<a href="<c:url value="/user/viewResearcher.action"/>">Edit Researcher Page</a>)</h3>
-
+            <div class="workspace_head">
+                <div class="workspace_head_float_left"><h3>Workspace: ${user.firstName}&nbsp;${user.lastName}&nbsp;(<a href="<c:url value="/user/viewResearcher.action"/>">Edit Researcher Page</a>) </h3></div>
+                <div class="workspace_head_float_right">Last Login:&nbsp;<fmt:formatDate type="both" dateStyle="full" timeStyle="full" value="${user.lastLoginDate}" /> </div>
+            </div>
 	        <!--  set up tabs for the workspace -->
 	        <div id="workspace-tabs" class="yui-navset">
 	                 <ul class="yui-nav">
@@ -435,7 +436,7 @@
 		 </div>
 	 </div>
 	 
-	 <!-- Dialog box for uploading a file -->
+	 <!-- Dialog box for creating a group workspace -->
      <div id="newGroupWorkspaceDialog" class="hidden">
        <div class="hd">Group Workspace Information</div>
        <div class="bd">
@@ -449,14 +450,14 @@
 	      </form>
        </div>
      </div>
-	 <!--  end file upload dialog -->  
+	 <!--  end file dialog for creating a group workspace -->  
 	 
 	 <!-- Dialog box for deleting a group workspace -->
 	 <div id="deleteGroupWorkspaceDialog" class="hidden">
       <div class="hd">Delete Group Workspace</div>
 		<div class="bd">
 		    <form id="deleteGroupWorkspaceForm" name="deleteGroupWorkspace" method="post" 
-		                action="/admin/deleteGroupWorkspace.action">
+		                action="/user/deleteGroupWorkspace.action">
 			   <p>Are you sure you wish to delete the selected group workspace?</p>
 			   <input type="hidden" id="deleteId" name="id" value=""/>
 		    </form>

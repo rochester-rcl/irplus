@@ -32,7 +32,6 @@ import edu.ur.ir.person.PersonService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
-import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.table.Pager;
@@ -71,10 +70,6 @@ public class ViewContributorPage extends Pager {
 	/**  Repository */
 	private Repository repository;
 	
-
-	/** Statistics service*/
-	private DownloadStatisticsService downloadStatisticsService;
-
 	/** Total downloads */
 	private Long totalDownloads = 0l;
 	
@@ -379,12 +374,7 @@ public class ViewContributorPage extends Pager {
 	}
 
 
-	public void setDownloadStatisticsService(
-			DownloadStatisticsService downloadStatisticsService) {
-		this.downloadStatisticsService = downloadStatisticsService;
-	}
-
-
+	
 	public long getPublicationsCount() {
 		return publicationsCount;
 	}

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import edu.ur.ir.FileSystem;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.index.IndexProcessingType;
 
 
@@ -93,6 +94,19 @@ public interface UserWorkspaceIndexProcessingRecordService extends Serializable{
 	 */
 	public List<UserWorkspaceIndexProcessingRecord> saveAll(PersonalFile personalFile, 
 			IndexProcessingType processingType);
+	
+	/**
+	 * Update all indexes for a group workspace file - since a workspace file can be shared across multiple users, we may
+	 * want to update all users.  This method provides this option.
+	 * 
+	 * @param workspaceFile - workspace file to update
+	 * @param processingType - type of processing
+	 * 
+	 * @return list of records updated.
+	 */
+	public List<UserWorkspaceIndexProcessingRecord> saveAll(GroupWorkspaceFile File, 
+			IndexProcessingType processingType);
+	
     /**
      * Add all items within the given user to be processed
      * 

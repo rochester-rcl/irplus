@@ -77,20 +77,18 @@
 	    select count(*) from IrUserGroup
 	</query>
 	
-	<!-- named query for getting all groups ordered by names -->
-    <query name="getAllGroupNameAsc">from IrUserGroup order by name </query>
     
     <!-- named query for getting a group -->
 	<query name="getGroupByName">
 		from IrUserGroup as IrUserGroup where
-		IrUserGroup.name = ?
+		IrUserGroup.name = :name
 	</query>
 	
 	<!--  Get a list of groups for a particular user -->
 	<query name="getGroupsForUser">
 	    select userGroup from IrUserGroup userGroup
 	    join userGroup.users as user
-	    where user.id = ?
+	    where user.id = :userId
 	</query>
 	
 	<!--  Get a particular user from a user group -->

@@ -157,7 +157,7 @@ public interface UserFileSystemService extends Serializable{
      * 
      * @param repositoryId - the repository to add the file to.
      * @param f - file to add
-     * @param userId - Unique user id 
+     * @param user - user to add the file to. 
      * @param fileName - The name to give the file.
      * @param description - description of the file.
      * 
@@ -186,7 +186,7 @@ public interface UserFileSystemService extends Serializable{
     		String description )throws DuplicateNameException, IllegalFileSystemNameException;
     
     /**
-     * Create a personal versioned file in the system with an empty file for the
+     * Create an empty personal versioned file in the system for the
      * given user. This is created at the root level (added to the user)
      * 
      * @param Repository - the repository to add the file to.

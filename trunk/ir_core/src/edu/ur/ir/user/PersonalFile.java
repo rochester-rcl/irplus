@@ -40,9 +40,6 @@ public class PersonalFile extends BasePersistent implements FileSystem{
 	/**  Parent Personal folder for this file information */
 	private PersonalFolder personalFolder;
 	
-	/** The file system type  */
-	private FileSystemType fileSystemType = FileSystemType.PERSONAL_FILE;
-	
 	/** User who owns the personal file */
 	private IrUser owner;
 	
@@ -208,7 +205,7 @@ public class PersonalFile extends BasePersistent implements FileSystem{
 	 * @see edu.ur.ir.FileSystem#getFileSystemType()
 	 */
 	public FileSystemType getFileSystemType() {
-		return fileSystemType;
+		return FileSystemType.PERSONAL_FILE;
 	}
 
 	/**

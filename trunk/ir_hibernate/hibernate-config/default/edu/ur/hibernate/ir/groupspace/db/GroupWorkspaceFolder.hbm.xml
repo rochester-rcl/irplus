@@ -136,5 +136,11 @@
 	    and folder.parent.id = :parentId
 	</query>
 	
+		<!-- Get root folders -->
+	<query name="getRootWorkspaceFolders">
+	    from GroupWorkspaceFolder as folder	    
+	    where folder.groupWorkspace.id = :workspaceId
+	    and folder.id = folder.treeRoot.id
+	</query>
 	
 </hibernate-mapping>

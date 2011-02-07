@@ -114,7 +114,7 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 		log.debug("deleting a group space with id = " +  id);
 		IrUser user = userService.getUser(userId, false);
 
-		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE) || user.hasRole(IrRole.GROUP_SPACE_ROLE) )
+		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE) )
 		{
 			return "accessDenied";
 		}
@@ -142,16 +142,17 @@ public class ManageGroupWorkspaces extends Pager implements UserIdAware {
 		log.debug("creating a group space with name = " + name);
 		IrUser user = userService.getUser(userId, false);
 		
-		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE) || user.hasRole(IrRole.GROUP_SPACE_ROLE) )
+		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE)  )
 		{
 			return "accessDenied";
 		}
-		try 
+		GroupWorkspace other = groupWorkspaceService.get(name);
+		if( other == null )
 		{
 			groupWorkspace = new GroupWorkspace(name, description);
 		    groupWorkspaceService.save(groupWorkspace);
 		} 
-		catch (DuplicateNameException e) 
+		else
 		{
 			success = false;
 			message = getText("groupWorkspaceNameError", 
