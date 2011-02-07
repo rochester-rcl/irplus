@@ -36,7 +36,7 @@ public interface GroupWorkspaceService extends Serializable{
 	 * @param groupWorkspace - group space to add to the system.
 	 * @throws DuplicateNameException - if the group space already exists 
 	 */
-	public void save(GroupWorkspace groupWorkspace) throws DuplicateNameException;
+	public void save(GroupWorkspace groupWorkspace);
 	
 	/**
 	 * Get a group workspace by it's name.

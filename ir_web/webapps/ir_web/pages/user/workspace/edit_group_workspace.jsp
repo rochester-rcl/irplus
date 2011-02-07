@@ -55,6 +55,7 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
  	<ur:js src="page-resources/js/user/user_edit_group_workspace.js"/>
+ 	<ur:js src="page-resources/js/user/workspace_group.js"/>
 </head>
 
 <body class="yui-skin-sam">
@@ -122,13 +123,48 @@
                      
                      <!--  second tab -->
                      <div id="tab2">
-                         tab 2
+                           <c:if test='${ir:userHasRole("ROLE_ADMIN", "OR") || ir:isAdminOfGroup(user,userGroup)}'>
+	                            <form method="GET" id="admin_search_form" name="adminSearchForm" 
+	                                         action="javascript:YAHOO.ur.usergroup.edit.adminSearch(0, 1, 1);">
+	                                         Search: <input type="text" size="50" id="admin_query" name="query" value=""/>
+	                                         <input type="hidden" name="id" value="${userGroup.id}"/>
+	                                     </form>
+                             </c:if>
+                             <br/>
+                             <br/>
+                             
+                             <!--  create the grid -->
+                             <div class="yui-g">
+                                 <!--  create the first column -->
+                                 <div class="yui-u first">
+                                     <div id="workspace_owners">
+                                         <c:import url="group_workspace_owners_table.jsp"/>
+                                     </div>
+                                 </div>
+                                 <div class="yui-u">
+                                     <div id="workspace_owners_invite">
+                                     </div>
+                                 </div>
+                             </div>
                      </div>
                      <!--  end second tab -->
                      
                      <!--  third tab -->
                      <div id="tab3">
-                         tab 3
+                         <div id="workspace_groups">
+                             <br/>
+                                 <div align="right">
+	                             <button class="ur_button" 
+ 		                             onmouseover="this.className='ur_buttonover';"
+ 		                             onmouseout="this.className='ur_button';"
+ 		                             onClick="javascript:YAHOO.ur.user.workspace_group.newWorkspaceGroupDialog.showDialog()"><span class="groupAddBtnImg">&nbsp;</span>New Group</button> 
+                                 </div>
+                            
+                             <br/>
+                             <div id="workspace_groups_table">
+                                 <c:import url="workspace_groups_table.jsp"/>
+                             </div>
+                         </div>
                      </div>
                      <!--  end third tab -->
                  </div>
@@ -145,7 +181,34 @@
   <!--  End doc div-->
   
   
+  <!-- Dialog box for deleting a workspace group-->
+  <div id="deleteWorkspaceGroupDialog" class="hidden">
+      <div class="hd">Delete Workspace Group</div>
+		<div class="bd">
+		    <form id="deleteWorkspaceGroupForm" name="deleteWorkspaceGroup" method="post" 
+		                action="/user/deleteWorkspaceGroup.action">
+			   <p>Are you sure you wish to delete the selected workspace group?</p>
+			   <input type="hidden" id="deleteId" name="id" value=""/>
+		    </form>
+		</div>
+  </div>
+  <!-- Dialog box for deleting a workspace group -->
  
+  <!-- Dialog box for creating a workspace group-->
+  <div id="newWorkspaceGroupDialog" class="hidden">
+       <div class="hd">Workspace Group Information</div>
+       <div class="bd">
+          <form id="addWorkspaceGroup" 
+                            name="newWorkspaceGroupForm" 
+		                    method="post"
+		                    action="/user/createWorkspaceGroup.action">
+	          <div id="workspaceGroupDialogFields">
+	              <c:import url="/pages/user/workspace/workspace_group_form.jsp"/>
+	          </div>
+	      </form>
+       </div>
+  </div>
+  <!--  end dialog for creating a workspace group--> 
 
 </body>
 </html>

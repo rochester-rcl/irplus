@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008-2010 University of Rochester
+   Copyright 2008-2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.CommonPersistent;
 
 /**
- * Represents a group of users within a group space.
+ * Represents a group of users within a group work space.
  * 
  * @author Nathan Sarr
  *
@@ -53,9 +53,9 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	 * 
 	 * @param name
 	 */
-	public GroupWorkspaceGroup(GroupWorkspace groupSpace, String name)
+	public GroupWorkspaceGroup(GroupWorkspace groupWorkspace, String name)
 	{
-		this.groupWorkspace = groupSpace;
+		this.groupWorkspace = groupWorkspace;
 		setName(name);
 	}
 	
@@ -128,6 +128,27 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 		this.lowerCaseName = name.toLowerCase();
 	}
 	
+	/**
+	 * Add a user to the group.
+	 * 
+	 * @param user - user to add to the group
+	 */
+	public void addUser(IrUser user)
+	{
+		users.add(user);
+	}
+	
+	/**
+	 * Remove a user from the group.
+	 * 
+	 * @param user - user to remove from the group
+	 * @return true if the user is removed from the gorup
+	 */
+	public boolean removeUser(IrUser user)
+	{
+		return users.remove(user);
+	}
+	
 	
 	/**
 	 * Hash code is based on the name of
@@ -155,8 +176,8 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 
 		final GroupWorkspaceGroup other = (GroupWorkspaceGroup) o;
 
-		if( ( lowerCaseName != null && !lowerCaseName.equalsIgnoreCase(other.getLowerCaseName()) ) ||
-			( lowerCaseName == null && other.getLowerCaseName() != null ) ) return false;
+		if( ( name != null && !name.equalsIgnoreCase(other.getName()) ) ||
+			( name == null && other.getName() != null ) ) return false;
 
 		if( ( groupWorkspace != null && !groupWorkspace.equals(other.getGroupWorkspace()) ) ||
 			( groupWorkspace == null && other.getGroupWorkspace() != null ) ) return false;

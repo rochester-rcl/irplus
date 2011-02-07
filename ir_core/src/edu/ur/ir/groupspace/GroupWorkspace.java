@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008-2010 University of Rochester
+   Copyright 2008-2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -530,6 +530,19 @@ public class GroupWorkspace extends BasePersistent implements NameAware, Descrip
 	}
 	
 	/**
+	 * Remove the group from the set of groups.
+	 * 
+	 * @param group - group to remove
+	 * @return - true if the group is removed
+	 */
+	public boolean remove(GroupWorkspaceGroup group)
+	{
+		return groups.remove(group);
+	}
+	
+	/**
+	 * Create a new group for the given group workspace.
+	 * 
 	 * @param name - name to create the group with
 	 * @param description - description of the group
 	 * @return - created group

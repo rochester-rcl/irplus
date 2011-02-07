@@ -90,7 +90,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 */
 	public String execute()
 	{
-		log.debug("view group wrorkspaces");
+		log.debug("view group workspaces");
 		groupWorkSpaces = groupWorkspaceService.getGroupWorkspacesNameOrder(rowStart, numberOfResultsToShow, OrderType.ASCENDING_ORDER);
 		return SUCCESS;
 	}
@@ -116,7 +116,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		log.debug("deleting a group space with id = " +  id);
 		IrUser user = userService.getUser(userId, false);
 
-		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE) || user.hasRole(IrRole.GROUP_SPACE_ROLE) )
+		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE)  )
 		{
 			return "accessDenied";
 		}
@@ -144,17 +144,18 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		log.debug("creating a group space with name = " + name);
 		IrUser user = userService.getUser(userId, false);
 		
-		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE) || user.hasRole(IrRole.GROUP_SPACE_ROLE) )
+		if( user == null || !user.hasRole(IrRole.ADMIN_ROLE) )
 		{
 			return "accessDenied";
 		}
-		try 
+		GroupWorkspace other = groupWorkspaceService.get(name);
+		if( other == null )
 		{
 			groupWorkspace = new GroupWorkspace(name, description);
 			groupWorkspace.addOwner(user);
 		    groupWorkspaceService.save(groupWorkspace);
 		} 
-		catch (DuplicateNameException e) 
+		else
 		{
 			success = false;
 			message = getText("groupWorkspaceNameError", 
@@ -170,7 +171,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 	 * @return success if the update is successful
 	 * @throws DuplicateNameException - if a duplicate name error occurs
 	 */
-	public String update() throws DuplicateNameException
+	public String update() 
 	{
 		log.debug("updating group space  = " + name + " id = " + id);
 		groupWorkspace = groupWorkspaceService.get(id, false);
@@ -183,7 +184,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		}
 		else
 		{
-			message = getText("groupSpaceNameError", 
+			message = getText("groupWorkspaceNameError", 
 					new String[]{groupWorkspace.getName()});
 			    addFieldError("groupWorkspaceAlreadyExists", message);
 			success = false;

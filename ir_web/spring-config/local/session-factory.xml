@@ -122,6 +122,7 @@
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspace.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFolder.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFile.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceGroup.hbm.xml</value>
 
                                 
                 <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>

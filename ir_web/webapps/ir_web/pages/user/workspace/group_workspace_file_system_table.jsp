@@ -99,5 +99,124 @@
  
                
 <div class="dataTable">
-
+	
+	
+    <c:url var="myGroupWorkspaceFoldersUrl" value="/user/workspace.action"/>
+	<form method="post" id="groupFolders" name="groupFolders" action="${myFoldersUrl}">
+	       
+        <input type="hidden" id="groupFoldersParentFolderId" name="parentFolderId" value="${parentFolderId}"/>
+        <input type="hidden" id="groupFoldersGroupWorkspaceId" name="groupWorkspaceId" value="${groupWorkspace.id}"/>
+        <c:url var="downArrow" value="/page-resources/images/all-images/bullet_arrow_down.gif" />
+        <urstb:table width="100%">
+            <urstb:thead>
+                <urstb:tr>
+                    <urstb:td><input type="checkbox" name="checkAllSetting" 
+	                    value="off" 
+	                    onClick="alert('clicked')"/>
+	                </urstb:td>
+                    <urstb:td>Type</urstb:td>
+                    <urstb:td>Name</urstb:td>
+                    <urstb:td>Version</urstb:td>
+                    <urstb:td>File Size</urstb:td>
+                    <urstb:td>Properties</urstb:td>
+                    <urstb:td>Owner</urstb:td>
+                </urstb:tr>
+            </urstb:thead>
+            <urstb:tbody
+                var="fileSystemObject" 
+                oddRowClass="odd"
+                evenRowClass="even"
+                currentRowClassVar="rowClass"
+                collection="${fileSystem}">
+                    <urstb:tr 
+                        cssClass="${rowClass}"
+                        onMouseOver="this.className='highlight'"
+                        onMouseOut="this.className='${rowClass}'">
+                        <urstb:td>
+                            <!-- this deals with folder information
+	                          folders get an id of the folder_checkbox_{id} 
+	                          where id  is the id of the folder -->
+	                          <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+	                              <input type="checkbox" name="groupFolderIds" id="folder_checkbox_${fileSystemObject.id}" 
+	                                     value="${fileSystemObject.id}"/>
+	                         </c:if>
+	                     
+	                         <!-- this deals with file information
+	                              folders get an id of the folder_checkbox_{id} 
+	                              where id  is the id of the folder -->
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                             <input type="checkbox" name="groupFileIds" id="file_checkbox_${fileSystemObject.id}" 
+	                                 value="${fileSystemObject.id}"/>
+	                         </c:if>
+                        </urstb:td>
+                        
+                        <urstb:td>
+                               <!-- this deals with folder information
+	                          folders get an id of the folder_checkbox_{id} 
+	                          where id  is the id of the folder -->
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+	                            <button type="button"  class="table_button" 
+	                                onmouseover="this.className='table_buttonover';"
+ 		                            onmouseout="this.className='table_button';"
+	                                onclick="javascript:YAHOO.ur.folder.buildFolderMenu(${fileSystemObject.id}, 
+	                                this,'folder_'+ ${fileSystemObject.id}, 
+	                                'folder_menu_' + ${fileSystemObject.id});"><span class="folderBtnImg"></span><img src="${downArrow}"/></button>
+	                         </c:if>
+	                     
+	                         <!-- this deals with file information
+	                              folders get an id of the folder_checkbox_{id} 
+	                              where id  is the id of the folder -->
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                             <input type="checkbox" name="groupFileIds" id="file_checkbox_${fileSystemObject.id}" 
+	                                 value="${fileSystemObject.id}"/>
+	                         </c:if>
+                        </urstb:td>
+                        
+                        <urstb:td>
+                            ${fileSystemObject.name}  
+                        </urstb:td>
+                        
+                        <urstb:td>
+ 	                         <!-- this deals with file information
+	                              folders get an id of the folder_checkbox_{id} 
+	                              where id  is the id of the folder -->
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                             
+	                         </c:if>
+                        </urstb:td>
+                        
+                        <urstb:td>
+ 	                         <!-- this deals with file information
+	                              folders get an id of the folder_checkbox_{id} 
+	                              where id  is the id of the folder -->
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                             
+	                         </c:if>
+                        </urstb:td>
+                            
+                        <urstb:td>
+                            <a href="">Properties</a>
+                        </urstb:td>
+                            
+                        <urstb:td>
+                            <!-- this deals with folder information
+	                          folders get an id of the folder_checkbox_{id} 
+	                          where id  is the id of the folder -->
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFolder'}">
+	                              ${fileSystemObject.owner.firstName}&nbsp;${fileSystemObject.owner.lastName}
+	                         </c:if>
+	                     
+	                         <!-- this deals with file information
+	                              folders get an id of the folder_checkbox_{id} 
+	                              where id  is the id of the folder -->
+	                         <c:if test="${fileSystemObject.fileSystemType.type == 'groupFile'}">
+	                             
+	                         </c:if>
+                        </urstb:td>
+                            
+                        </urstb:tr>
+            </urstb:tbody>
+        </urstb:table>
+	    <input type="hidden" id="move_files_folders_destination_id" name="destinationFolderId" value=""/>
+    </form>
 </div>

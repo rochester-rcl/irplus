@@ -79,8 +79,6 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	
 	/* id of the group workspace */
 	private Long groupWorkspaceId;
-	
-
 
 	/* Service to deal with group workspace information */
 	private GroupWorkspaceService groupWorkspaceService;
@@ -134,6 +132,7 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 			parentFolder = groupWorkspaceFileSystemService.getFolder(parentFolderId, false);
 		    folderPath = groupWorkspaceFileSystemService.getFolderPath(parentFolder);
 		}
+		
 		Collection<GroupWorkspaceFolder> folders = groupWorkspaceFileSystemService.getFolders(groupWorkspaceId, parentFolderId);
 		Collection<GroupWorkspaceFile>files = groupWorkspaceFileSystemService.getFiles(groupWorkspaceId, parentFolderId);
 		
@@ -177,6 +176,12 @@ public class ViewGroupWorkspaceFolders extends ActionSupport implements UserIdAw
 	    	{
 	    		folderNameSort = "none";
 	    	}
+	    }
+	    
+	    if( log.isDebugEnabled())
+	    {
+	    	log.debug("done create file system");
+	        log.debug("File system size = " + fileSystem.size());
 	    }
 	    
 	}

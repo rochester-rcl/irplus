@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.file.FileCollaborator;
+import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.IrUser;
@@ -299,6 +300,29 @@ UserWorkspaceIndexProcessingRecordService
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	
+	/**
+	 * Update all indexes for a group workspace file - since a workspace file can be shared across multiple users, we may
+	 * want to update all users.  This method provides this option.
+	 * 
+	 * @param workspaceFile - workspace file to update
+	 * @param processingType - type of processing
+	 * 
+	 * @return list of records updated.
+	 */
+	public List<UserWorkspaceIndexProcessingRecord> saveAll(
+			GroupWorkspaceFile workspaceFile, IndexProcessingType processingType) {
+		LinkedList<UserWorkspaceIndexProcessingRecord> records = new LinkedList<UserWorkspaceIndexProcessingRecord>();
+		records.add(save(workspaceFile.getVersionedFile().getOwner().getId(), workspaceFile, processingType));
+    	
+    	//add the new version to all users
+    	Set<FileCollaborator> collaborators = workspaceFile.getVersionedFile().getCollaborators();
+    	for(FileCollaborator collaborator : collaborators)
+    	{
+    	    records.add(save(collaborator.getCollaborator().getId(), workspaceFile, processingType));
+ 		}
+    	return records;
 	}
 
 }

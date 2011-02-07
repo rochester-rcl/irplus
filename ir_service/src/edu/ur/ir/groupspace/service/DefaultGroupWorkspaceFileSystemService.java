@@ -16,13 +16,22 @@
 
 package edu.ur.ir.groupspace.service;
 
+import java.io.File;
 import java.util.List;
 
+import edu.ur.exception.DuplicateNameException;
+import edu.ur.file.IllegalFileSystemNameException;
+import edu.ur.ir.file.VersionedFile;
+import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceFile;
 import edu.ur.ir.groupspace.GroupWorkspaceFileDAO;
 import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
 import edu.ur.ir.groupspace.GroupWorkspaceFolder;
 import edu.ur.ir.groupspace.GroupWorkspaceFolderDAO;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.security.SecurityService;
+import edu.ur.ir.user.IrUser;
 
 /**
  * Group workspace file system service to allow for the management and
@@ -41,7 +50,15 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 
 	/* Group workspace file data access object */
 	private GroupWorkspaceFileDAO groupWorkspaceFileDAO;
+	
+	// Service class for dealing with the repository  
+	private RepositoryService repositoryService;
 		
+	// Service class for dealing with the (A)cess (C)ontrol (L)ists 
+	private SecurityService securityService;
+
+
+
 	/**
 	 * Get the group workspace folder.
 	 * 
@@ -78,7 +95,14 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	 */
 	public List<GroupWorkspaceFolder> getFolders(Long workspaceId, Long parentFolderId )
 	{
-		return groupWorkspaceFolderDAO.getFolders(workspaceId, parentFolderId);
+		if(  parentFolderId == null || parentFolderId == ROOT_FOLDER_ID )
+		{
+		    return groupWorkspaceFolderDAO.getRootFolders(workspaceId);
+		}
+		else
+		{
+		    return groupWorkspaceFolderDAO.getFolders(workspaceId, parentFolderId);
+		}
 	}
 
 	/**
@@ -103,6 +127,16 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 	}
 	
 	/**
+	 * Save the group workspace folder into persistent storage.
+	 * 
+	 * @param groupWorkspaceFolder
+	 */
+	public void save(GroupWorkspaceFolder groupWorkspaceFolder)
+	{
+		groupWorkspaceFolderDAO.makePersistent(groupWorkspaceFolder);
+	}
+	
+	/**
 	 * Set the group workspace folder data access object.
 	 * 
 	 * @param groupWorkspaceFolderDAO
@@ -121,4 +155,232 @@ public class DefaultGroupWorkspaceFileSystemService implements GroupWorkspaceFil
 		this.groupWorkspaceFileDAO = groupWorkspaceFileDAO;
 	}
 
+   /**
+     * Create a group workspace versioned file in the system with the specified file for the
+     * given workspace. This is created at the root level (added to the group workspace)
+     * 
+     * @param repositoryId - the repository to add the file to.
+     * @param group workspace - workspace to add the file to
+     * @param f - file to add
+     * @param name - name to give the file
+     * @param description - description of the file.
+     * 
+     * @return the created group workspace file
+     * @throws DuplicateNameException 
+     * @throws IllegalFileSystemNameException 
+     */
+	public GroupWorkspaceFile addFile(Repository repository,
+			GroupWorkspace workspace, 
+			IrUser user,
+			File f, 
+			String name, 
+			String description) throws DuplicateNameException, IllegalFileSystemNameException {
+		if( name == null || name.trim().equals("") )
+		{
+			throw new IllegalStateException("File name is null");
+		}
+		
+		GroupWorkspaceFile workspaceFile = workspace.getRootFile(name);
+		
+		if(  workspaceFile != null )
+		{
+			throw new DuplicateNameException("File with the name " + 
+					name + " already exists ", name);
+		}
+		
+		VersionedFile versionedFile = 
+	    	repositoryService.createVersionedFile(user, repository, 
+	    			f, name, description);
+		
+		try
+		{
+		   
+	       workspaceFile = workspace.createRootFile(versionedFile);
+		}
+		catch(DuplicateNameException dne)
+		{
+			repositoryService.deleteVersionedFile(versionedFile);
+			throw dne;
+		}
+	    groupWorkspaceFileDAO.makePersistent(workspaceFile);
+	    
+	    securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
+        		user);
+	    
+	    return workspaceFile;
+	}
+
+	/**
+	 * Set the repository service.
+	 * 
+	 * @param repositoryService
+	 */
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
+   /**
+     * Create a group workspace versioned file in the system with an empty file for the
+     * given workspace. This is created at the root level (added to the group workspace)
+     * 
+     * @param Repository - the repository to add the file to.
+     * @param workspace - group workspace to add the empty file to
+     * @param user - User creating the file
+     * @param fileName - The name to give the file.
+     * @param description - description of the file.
+     * 
+     * @return the created workspace file
+     */
+    public GroupWorkspaceFile addFile(Repository repository, 
+            GroupWorkspace workspace, 
+    		IrUser user, 
+    		String fileName, 
+    		String description )throws DuplicateNameException, IllegalFileSystemNameException
+    {
+		if( fileName == null || fileName.trim().equals("") )
+		{
+			throw new IllegalStateException("File name is null");
+		}
+		
+		GroupWorkspaceFile workspaceFile = workspace.getRootFile(fileName);
+		
+		if(  workspaceFile != null )
+		{
+			throw new DuplicateNameException("File with the name " + 
+					fileName + " already exists ", fileName);
+		}
+		VersionedFile versionedFile = 
+	    	repositoryService.createVersionedFile(user, repository, 
+	    			fileName, description);
+		try
+		{
+	        workspaceFile = workspace.createRootFile(versionedFile);
+		}
+		catch(DuplicateNameException dne)
+		{
+				repositoryService.deleteVersionedFile(versionedFile);
+				throw dne;
+		}
+	    groupWorkspaceFileDAO.makePersistent(workspaceFile);
+	    securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), user);
+		
+	    return workspaceFile;	
+    }
+    
+    /**
+     * Create a group workspace versioned file in the system with the specified file for the
+     * given user. 
+     * 
+     * @param repositoryId - the repository to add the file to.
+     * @param folder - group workspace folder to add the file to.  
+     * @param user - user creating the file 
+     * @param f - file to add
+     * @param fileName - The name to give the file.
+     * @param description - description of the file.
+     * 
+     * @return the created personal file
+     */
+    public GroupWorkspaceFile addFile(Repository repository, 
+    		GroupWorkspaceFolder folder, 	
+            IrUser user,
+    		File f, 
+    		String fileName, 
+    		String description ) throws DuplicateNameException, IllegalFileSystemNameException
+    {
+		if( fileName == null || fileName.trim().equals("") )
+		{
+			throw new IllegalStateException("file name is null");
+		}
+		
+		GroupWorkspaceFile workspaceFile = folder.getFile(fileName);
+		if(  workspaceFile != null )
+		{
+			throw new DuplicateNameException("File with the name " + 
+					fileName + " already exists ", fileName);
+		}
+		
+        VersionedFile versionedFile = 
+           repositoryService.createVersionedFile(user, 
+        		        repository, 
+            			f, 
+            			fileName, 
+            			description);
+       
+        try {
+			workspaceFile = folder.addVersionedFile(versionedFile);
+		} catch (DuplicateNameException e) {
+			repositoryService.deleteVersionedFile(versionedFile);
+			throw e;
+		}
+        
+		save(folder);
+       
+        //securityService.assignOwnerPermissions(personalFile.getVersionedFile(), 
+        //		personalFolder.getOwner());
+        
+		return workspaceFile;
+    }
+    
+    
+    /**
+     * Create a group workspace versioned file in the system with an empty file for the
+     * given user. 
+     * 
+     * @param repository - the repository to add the file to.
+     * @param folder - workspace folder to add the file to. 
+     * @param user - user adding the file
+     * @param fileName - The name to give the file.
+     * @param description - description of the file.
+     * 
+     * @return the created group workspace file
+     */
+    public GroupWorkspaceFile addFile(Repository repository, 
+    		GroupWorkspaceFolder folder, 
+    		IrUser user,
+    		String fileName, 
+    		String description )throws DuplicateNameException, IllegalFileSystemNameException
+    {
+		if( fileName == null ||fileName.trim().equals("") )
+		{
+			throw new IllegalStateException("file name is null");
+		}
+		
+		GroupWorkspaceFile workspaceFile = folder.getFile(fileName);
+		
+		if(  workspaceFile != null )
+		{
+			throw new DuplicateNameException("File with the name " + 
+					fileName + " already exists ", fileName);
+		}
+		
+        VersionedFile versionedFile = 
+            	repositoryService.createVersionedFile(user, 
+            			repository, 
+            			fileName, 
+            			description);
+        
+        // this is still needed 
+        try {
+				workspaceFile = folder.addVersionedFile(versionedFile);
+		} catch (DuplicateNameException e) {
+				repositoryService.deleteVersionedFile(versionedFile);
+				throw e;
+		}
+        save(folder);
+     
+        securityService.assignOwnerPermissions(workspaceFile.getVersionedFile(), 
+        		user);
+        
+        return workspaceFile;	
+    }
+	
+    
+	/**
+	 * Set the security service.
+	 * 
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
 }

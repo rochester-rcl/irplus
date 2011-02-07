@@ -93,7 +93,7 @@ public class HbGroupWorkspaceDAO implements GroupWorkspaceDAO
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupSpaceCount");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceCount");
 		return (Long)q.uniqueResult();
 	}
 
@@ -103,7 +103,7 @@ public class HbGroupWorkspaceDAO implements GroupWorkspaceDAO
 	 * @see edu.ur.dao.UniqueNameDAO#findByUniqueName(java.lang.String)
 	 */
 	public GroupWorkspace findByUniqueName(String name) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupSpaceByName");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getGroupWorkspaceByName");
 		q.setParameter("lowerCaseName", name.toLowerCase());
 		return (GroupWorkspace)q.uniqueResult();
 	}
@@ -122,14 +122,14 @@ public class HbGroupWorkspaceDAO implements GroupWorkspaceDAO
 	public List<GroupWorkspace> getGroupWorkspacesNameOrder(int rowStart, int numberOfResultsToShow, OrderType orderType)
 	{	
 	    Query q = null;
-	    Session session = hbCrudDAO.getSessionFactory() .getCurrentSession();
+	    Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
 	    if(orderType.equals(OrderType.ASCENDING_ORDER))
 	    {
-	        q = session.getNamedQuery("groupSpaceByNameAsc");
+	        q = session.getNamedQuery("groupWorkspaceByNameAsc");
 	    } 
 	    else
 	    {
-	        q = session.getNamedQuery("groupSpaceByNameDesc");
+	        q = session.getNamedQuery("groupWorkspaceByNameDesc");
 	    } 
 			    
 	    q.setFirstResult(rowStart);
@@ -149,7 +149,7 @@ public class HbGroupWorkspaceDAO implements GroupWorkspaceDAO
 	public List<GroupWorkspace> getGroupWorkspacesForUser(Long userId)
 	{
 	    Session session = hbCrudDAO.getSessionFactory() .getCurrentSession();
-	    Query q = session.getNamedQuery("groupSpaceByUserIdNameAsc");
+	    Query q = session.getNamedQuery("groupWorkspaceByUserIdNameAsc");
 	    q.setParameter("userId", userId);
 	    return q.list();
 	}

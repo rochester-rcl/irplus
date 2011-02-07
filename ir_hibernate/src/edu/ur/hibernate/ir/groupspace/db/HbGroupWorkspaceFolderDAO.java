@@ -99,6 +99,20 @@ public class HbGroupWorkspaceFolderDAO implements GroupWorkspaceFolderDAO{
 		q.setParameter("parentId", parentFolderId);
 		return q.list();
 	}
+	
+	/**
+	 * Get the root folders for a given workspace.
+	 * 
+	 * @param workspaceId - id of the workspace
+	 * @return list of folders at the root of the given workspace.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GroupWorkspaceFolder> getRootFolders(Long workspaceId)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRootWorkspaceFolders");
+		q.setParameter("workspaceId", workspaceId);
+		return q.list();
+	}
 
 	/**
 	 * Make the group folder persistent.

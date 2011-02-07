@@ -44,13 +44,8 @@ public class DefaultGroupSpaceService implements GroupWorkspaceService {
 	 * @param groupSpace - group space to add to the system.
 	 * @throws DuplicateNameException - if the group space already exists 
 	 */
-	public void save(GroupWorkspace groupWorkspace) throws DuplicateNameException
+	public void save(GroupWorkspace groupWorkspace) 
 	{
-		GroupWorkspace other = groupWorkspaceDAO.findByUniqueName(groupWorkspace.getName());
-		if( other != null && !other.getId().equals(groupWorkspace.getId()))
-		{
-			throw new DuplicateNameException("Duplicate name error " + groupWorkspace.getName());
-		}
 		groupWorkspaceDAO.makePersistent(groupWorkspace);
 	}
 	

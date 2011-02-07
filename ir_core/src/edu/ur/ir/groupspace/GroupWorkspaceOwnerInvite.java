@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008-2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,73 +12,67 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/  
+*/
 
-package edu.ur.ir.user;
+package edu.ur.ir.groupspace;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import edu.ur.ir.file.VersionedFile;
-import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
 
 /**
- * Invite information
+ * Represents an invitation to join a group workspace.  This can
+ * be either someone who does not yet exist in the system or
+ * already exists as part of the IR+ system.
  * 
- * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
-public class InviteInfo extends BasePersistent {
+public class GroupWorkspaceOwnerInvite extends BasePersistent{
 
-	/* Eclipse generated Id	 */
-	private static final long serialVersionUID = 6007214729437637359L;
-
-	/* Email id - to send the invitation to */
+	/* eclipse generated id  */
+	private static final long serialVersionUID = 7228329226519598249L;
+	
+	/* Email id - to send the invitation to if needed */
 	private String email;
 	
-	/* Token sent to the user */
+	/* Token sent to the user if needed*/
 	private String token;
+	
+	/* user invited  */
+	private IrUser invitedUser;
 
 	/* Invite message */
 	private String inviteMessage;
 
 	/* User sending the invitation */
-	private IrUser user;
-	
-	/* Versioned Files that has to be shared */
-	private Set<VersionedFile> files = new HashSet<VersionedFile>();
-	
-	/* Permissions given to the user */
-	private Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+	private IrUser invitingUser;
 	
 	/* date the invite info was created */
 	private Timestamp createdDate;
 
-
-
+	/* Group workspace user is being invited to */
+	private GroupWorkspace groupWorkspace;
+	
 	/**
-	 * Default Constructor
+	 * Package protected constructor
 	 */
-	InviteInfo() {}
+	GroupWorkspaceOwnerInvite() {}
 	
 	/**
 	 *  Constructor 
 	 */
-	public InviteInfo(IrUser user, Set<VersionedFile> versionedFile) {
-		setUser(user);
-		setFiles(versionedFile);
+	public GroupWorkspaceOwnerInvite(GroupWorkspace workspace, IrUser invitingUser, String email) {
+		
 		this.createdDate = new Timestamp(new Date().getTime());
 	}
 
 	/**
 	 *  Constructor 
 	 */
-	public InviteInfo(IrUser user, VersionedFile versionedFile) {
-		setUser(user);
-		addFile(versionedFile);
+	public GroupWorkspaceOwnerInvite(GroupWorkspace workspace, IrUser invitingUser, IrUser invitedUser) {
 		this.createdDate = new Timestamp(new Date().getTime());
 	}
 	/**
@@ -97,42 +91,6 @@ public class InviteInfo extends BasePersistent {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	/**
-	 * Get the user information
-	 * 
-	 * @return User object
-	 */	
-	public IrUser getUser() {
-		return user;
-	}
-
-	/**
-	 * Set the user
-	 * 
-	 * @param user user sending the email
-	 */
-	public void setUser(IrUser user) {
-		this.user = user;
-	}
-
-	/**
-	 * Get files that has to shared
-	 * 
-	 * @return Set of VersionedFiles
-	 */
-	public Set<VersionedFile> getFiles() {
-		return files;
-	}
-	
-	/**
-	 * Set file information
-	 * 
-	 * @param files versioned file information
-	 */
-	public void setFiles(Set<VersionedFile> files) {
-		this.files = files;
 	}
 	
 	/**
@@ -178,15 +136,21 @@ public class InviteInfo extends BasePersistent {
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof InviteInfo)) return false;
+		if (!(o instanceof GroupWorkspaceOwnerInvite)) return false;
 
-		final InviteInfo other = (InviteInfo) o;
+		final GroupWorkspaceOwnerInvite other = (GroupWorkspaceOwnerInvite) o;
 
 		if( ( token != null && !token.equals(other.getToken()) ) ||
 			( token == null && other.getToken() != null ) ) return false;
 
 		if( ( email != null && !email.equals(other.getEmail()) ) ||
 			( email == null && other.getEmail() != null ) ) return false;
+		
+		if( ( groupWorkspace != null && !groupWorkspace.equals(other.getGroupWorkspace()) ) ||
+			( groupWorkspace == null && other.getGroupWorkspace() != null ) ) return false;
+
+		if( ( invitingUser != null && !invitingUser.equals(other.getInvitingUser()) ) ||
+			( invitingUser == null && other.getInvitingUser() != null ) ) return false;
 
 		return true;
 	}
@@ -201,27 +165,11 @@ public class InviteInfo extends BasePersistent {
 		int value = 0;
 		value += token == null ? 0 : token.hashCode();
 		value += email == null ? 0 : email.hashCode();
+		value += inviteMessage == null ? 0 : inviteMessage.hashCode();
 		return value;
 	}
 
-	/**
-	 * Get permissions on the shared file for the user
-	 * 
-	 * @return
-	 */
-	public Set<IrClassTypePermission> getPermissions() {
-		return permissions;
-	}
 
-	/**
-	 * Set permissions on the shared file for the user
-	 * 
-	 * @param permissions permission code separated by commas
-	 */
-	public void setPermissions(Set<IrClassTypePermission> permissions) {
-		this.permissions = permissions;
-	}
-	
 	/**
 	 * Get invitation message
 	 *  
@@ -239,38 +187,62 @@ public class InviteInfo extends BasePersistent {
 	public void setInviteMessage(String inviteMessage) {
 		this.inviteMessage = inviteMessage;
 	}
-
-	/**
-	 * Add a permission to the invite information
-	 * 
-	 * @param permission
-	 */
-	public void addPermission(IrClassTypePermission permission)
-	{
-		permissions.add(permission);
-	}
-
-	/**
-	 * Add a file to the invite information
-	 * 
-	 * @param file
-	 */
-	public void addFile(VersionedFile file)
-	{
-		files.add(file);
-	}
-
-	/**
-	 * Remove a file from the invitation.
-	 * 
-	 * @param file
-	 * @return true if the file is removed.
-	 */
-	public boolean removeFile(VersionedFile file)
-	{
-		return files.remove(file);
-	}
 	
+	/**
+	 * Get the user invited to be an owner.
+	 * 
+	 * @return
+	 */
+	public IrUser getInvitedUser() {
+		return invitedUser;
+	}
+
+	/**
+	 * Set the invitied user.
+	 * 
+	 * @param invitedUser
+	 */
+	public void setInvitedUser(IrUser invitedUser) {
+		this.invitedUser = invitedUser;
+	}
+
+	/**
+	 * Get the inviting user.
+	 * 
+	 * @return
+	 */
+	public IrUser getInvitingUser() {
+		return invitingUser;
+	}
+
+	/**
+	 * Set the inviting user.
+	 * 
+	 * @param invitingUser
+	 */
+	public void setInvitingUser(IrUser invitingUser) {
+		this.invitingUser = invitingUser;
+	}
+
+	/**
+	 * Get the group workspace.
+	 * 
+	 * @return
+	 */
+	public GroupWorkspace getGroupWorkspace() {
+		return groupWorkspace;
+	}
+
+	/**
+	 * Set the group workspace.
+	 * 
+	 * @param groupWorkspace
+	 */
+	public void setGroupWorkspace(GroupWorkspace groupWorkspace) {
+		this.groupWorkspace = groupWorkspace;
+	}
+
+
 	/**
 	 * To string of the invite info.
 	 * 
@@ -290,6 +262,4 @@ public class InviteInfo extends BasePersistent {
 		return sb.toString();
 	}
 
-
-	
 }

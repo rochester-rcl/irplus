@@ -15,8 +15,7 @@
 */  
 
 
-package edu.ur.ir.web.action.user;
-
+package edu.ur.ir.web.action.groupspace;
 
 import org.apache.log4j.Logger;
 
@@ -25,70 +24,78 @@ import com.opensymphony.xwork2.ActionSupport;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.groupspace.GroupWorkspace;
+import edu.ur.ir.groupspace.GroupWorkspaceFileSystemService;
+import edu.ur.ir.groupspace.GroupWorkspaceFolder;
+import edu.ur.ir.groupspace.GroupWorkspaceService;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.user.IrUser;
-import edu.ur.ir.user.PersonalFolder;
-import edu.ur.ir.user.UserFileSystemService;
-import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
+
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 
 /**
- * Action to add a folder to the users set of folders.
+ * Manages add/updating a group folder.
  * 
  * @author Nathan Sarr
  *
  */
-public class AddPersonalFolder extends ActionSupport implements UserIdAware{
+public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAware{
 	
-	/**  Collection data access  */
+	// eclipse generated id
+	private static final long serialVersionUID = -3802168590556334259L;
+
+	//  user service 
 	private UserService userService;
 	
-	/** User file system service. */
-	private UserFileSystemService userFileSystemService;
+	//group workspace service
+	private GroupWorkspaceFileSystemService groupWorkspaceFileSystemService;
+	
+	//service to deal with group workspace information
+	private GroupWorkspaceService groupWorkspaceService;
 
-	/** the name of the folder to add */
+	// the name of the folder to add 
 	private String folderName;
 	
-	/** Description of the folder */
+	// Description of the folder 
 	private String folderDescription;
 	
-	/** Current folder the user is looking at  */
+	// Current folder the user is looking at 
 	private Long parentFolderId;
 	
-	/** Id of the folder to update for updating  */
+	// Id of the folder to update for updating 
 	private Long updateFolderId;
 	
-	/**  Eclipse generated id */
-	private static final long serialVersionUID = -927739179789125748L;
+	//  Logger for add personal folder action 
+	private static final Logger log = Logger.getLogger(AddGroupWorkspaceFolder.class);
 	
-	/**  Logger for add personal folder action */
-	private static final Logger log = Logger.getLogger(AddPersonalFolder.class);
-	
-	/**  User object */
+	//  User id
 	private Long userId;
+	
+	// id of the workspace to add the folder
+	private Long groupWorkspaceId;
 
-	/**  Indicates the folder has been added*/
+	//  Indicates the folder has been added
 	private boolean folderAdded = false;
 	
-	/** Message that can be displayed to the user. */
+	// Message that can be displayed to the user.
 	private String folderMessage;
 	
-	/** process for setting up personal workspace information to be indexed */
+	// process for setting up personal workspace information to be indexed 
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 	
-	/** service for accessing index processing types */
+	// service for accessing index processing types 
 	private IndexProcessingTypeService indexProcessingTypeService;
-
 	
 	/**
 	 * Create the new folder
 	 */
 	public String add() throws Exception
 	{
-		log.debug("creating a personal folder parent folderId = " + parentFolderId);
+		log.debug("creating a group folder parent folderId = " + parentFolderId);
 		IrUser thisUser = userService.getUser(userId, true);
-
+		GroupWorkspace groupWorkspace = groupWorkspaceService.get(groupWorkspaceId, false);
 		
 		folderAdded = false;
 		// assume that if the current folder id is null or equal to 0
@@ -96,15 +103,19 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		if(parentFolderId == null || parentFolderId == 0)
 		{
 			 // add root folder
-			 if( thisUser.getRootFolder(folderName) == null )
+			 if( groupWorkspace.getRootFolder(folderName) == null )
 		     {
-				 PersonalFolder personalFolder = null;
+				 GroupWorkspaceFolder folder = null;
 				 try {
-					personalFolder = thisUser.createRootFolder(folderName);
-					personalFolder.setDescription(folderDescription);
-					userFileSystemService.makePersonalFolderPersistent(personalFolder);
+					 
 					
-					userWorkspaceIndexProcessingRecordService.save(personalFolder.getOwner().getId(), personalFolder, 
+					folder = groupWorkspace.createRootFolder(thisUser, folderName);
+					folder.setDescription(folderDescription);
+					log.debug("adding root workspace folder " + folder);
+					groupWorkspaceFileSystemService.save(folder);
+					
+					
+					userWorkspaceIndexProcessingRecordService.save(folder.getOwner().getId(), folder, 
 			    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
 					
 			        folderAdded = true;
@@ -125,7 +136,7 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		else
 		{
 		    // add sub folder	
-			PersonalFolder folder = userFileSystemService.getPersonalFolder(parentFolderId, true);
+			GroupWorkspaceFolder folder = groupWorkspaceFileSystemService.getFolder(parentFolderId, true);
 			
 			// user must be owner of folder
 			if( !folder.getOwner().getId().equals(thisUser.getId()))
@@ -135,9 +146,9 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 			
 			try
 			{
-			    PersonalFolder personalFolder = folder.createChild(folderName);
+			    GroupWorkspaceFolder personalFolder = folder.createChild(folderName, thisUser);
 			    personalFolder.setDescription(folderDescription);
-			    userFileSystemService.makePersonalFolderPersistent(folder);
+			    groupWorkspaceFileSystemService.save(folder);
 			    
 			    userWorkspaceIndexProcessingRecordService.save(personalFolder.getOwner().getId(), personalFolder, 
 		    			indexProcessingTypeService.get(IndexProcessingTypeService.INSERT));
@@ -168,71 +179,7 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 */
 	public String update() throws NoIndexFoundException
 	{
-		
-	
-		log.debug("updating a personal folder parent folderId = " + parentFolderId);
-		folderAdded = false;
-
-		PersonalFolder other = null;
-		
-		// check the name.  This makes sure that 
-		// if the name has been changed, it does not conflict
-		// with a folder already in the folder system.
-		if( parentFolderId == null || parentFolderId == 0)
-		{
-			other = userFileSystemService.getRootPersonalFolder(folderName, userId);
-		}
-		else
-		{
-			other = userFileSystemService.getPersonalFolder(folderName, parentFolderId);
-		}
-		
-		// name has been changed and does not conflict
-		if( other == null)
-		{
-			PersonalFolder existingFolder = userFileSystemService.getPersonalFolder(updateFolderId, true);
-			
-			// do not allow user if they do not own the folder
-            if( !existingFolder.getOwner().getId().equals(userId))
-            {
-            	return "accessDenied";
-            }
-			
-			try {
-				existingFolder.reName(folderName);
-				userFileSystemService.makePersonalFolderPersistent(existingFolder);
-				
-				userWorkspaceIndexProcessingRecordService.save(existingFolder.getOwner().getId(), existingFolder, 
-		    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
-				
-				folderAdded = true;
-			} catch (DuplicateNameException e) {
-				folderAdded = false;
-				folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
-				addFieldError("personalFolderAlreadyExists", folderMessage);
-			} catch (IllegalFileSystemNameException ifsne) {
-				folderAdded = false;
-				folderMessage = getText("illegalPersonalFolderName", new String[]{folderName, String.valueOf(ifsne.getIllegalCharacters())});
-				addFieldError("illegalPersonalFolderName", folderMessage);
-			}
-			
-		}
-		// name has not been changed
-		else if(other.getId().equals(updateFolderId))
-		{
-			other.setDescription(folderDescription);
-			userFileSystemService.makePersonalFolderPersistent(other);
-			userWorkspaceIndexProcessingRecordService.save(other.getOwner().getId(), other, 
-	    			indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
-			
-			folderAdded = true;
-		} else {
-			folderMessage = getText("personalFolderAlreadyExists", new String[]{folderName});
-			addFieldError("personalFolderAlreadyExists", folderMessage);
-		}
-			
 	    return "added";
-		
 	}
 
 	/**
@@ -242,19 +189,6 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 */
 	public String get()
 	{
-		log.debug("get called");
-		
-		PersonalFolder folder = userFileSystemService.getPersonalFolder(updateFolderId, true);
-		
-		if( !folder.getOwner().getId().equals(userId))
-		{
-			return "accessDenied";
-		}
-		
-		
-		folderName = folder.getName();
-		folderDescription = folder.getDescription();
-		
 	    return "get";
 	}
 	
@@ -264,7 +198,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @param userService
 	 */
-	public void setUserService(UserService userService) {
+	public void setUserService(UserService userService)
+	{
 		this.userService = userService;
 	}
 
@@ -273,7 +208,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @return
 	 */
-	public Long getUserId() {
+	public Long getUserId() 
+	{
 		return userId;
 	}
 
@@ -282,7 +218,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @see edu.ur.ir.web.action.UserAware#setOwner(edu.ur.ir.user.IrUser)
 	 */
-	public void setUserId(Long userId) {
+	public void setUserId(Long userId) 
+	{
 		this.userId = userId;
 	}
 
@@ -291,7 +228,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @return
 	 */
-	public String getFolderName() {
+	public String getFolderName() 
+	{
 		return folderName;
 	}
 
@@ -300,7 +238,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @param folderName
 	 */
-	public void setFolderName(String folderName) {
+	public void setFolderName(String folderName) 
+	{
 		this.folderName = folderName;
 	}
 
@@ -309,7 +248,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @return
 	 */
-	public Long getParentFolderId() {
+	public Long getParentFolderId() 
+	{
 		return parentFolderId;
 	}
 
@@ -318,7 +258,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @param currentFolderId
 	 */
-	public void setParentFolderId(Long currentFolderId) {
+	public void setParentFolderId(Long currentFolderId) 
+	{
 		this.parentFolderId = currentFolderId;
 	}
 
@@ -327,7 +268,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @return
 	 */
-	public boolean isFolderAdded() {
+	public boolean isFolderAdded() 
+	{
 		return folderAdded;
 	}
 
@@ -336,7 +278,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @return
 	 */
-	public String getFolderMessage() {
+	public String getFolderMessage() 
+	{
 		return folderMessage;
 	}
 
@@ -345,7 +288,8 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @return
 	 */
-	public String getFolderDescription() {
+	public String getFolderDescription() 
+	{
 		return folderDescription;
 	}
 
@@ -354,29 +298,84 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @param folderDescription
 	 */
-	public void setFolderDescription(String folderDescription) {
+	public void setFolderDescription(String folderDescription) 
+	{
 		this.folderDescription = folderDescription;
 	}
 
+	/**
+	 * Get the update folder id.
+	 * 
+	 * @return update folder id
+	 */
 	public Long getUpdateFolderId() {
 		return updateFolderId;
 	}
 
+	/**
+	 * Set the update folder id
+	 * 
+	 * @param updateFolderId
+	 */
 	public void setUpdateFolderId(Long updateFolderId) {
 		this.updateFolderId = updateFolderId;
 	}
 
-	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
-		this.userFileSystemService = userFileSystemService;
-	}
-
+	/**
+	 * Set the user index processing record service.
+	 * 
+	 * @param userWorkspaceIndexProcessingRecordService
+	 */
 	public void setUserWorkspaceIndexProcessingRecordService(
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
+	/**
+	 * Set the index processing record type service.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
+	
+	/**
+	 * Get the workspace id.
+	 * 
+	 * @return
+	 */
+	public Long getGroupWorkspaceId() {
+		return groupWorkspaceId;
+	}
+
+	/**
+	 * Set the workspace id.
+	 * 
+	 * @param workspaceId
+	 */
+	public void setGroupWorkspaceId(Long workspaceId) {
+		this.groupWorkspaceId = workspaceId;
+	}
+
+	/**
+	 * Set the group workspace file system service.
+	 * 
+	 * @param groupWorkspaceFileSystemService
+	 */
+	public void setGroupWorkspaceFileSystemService(
+			GroupWorkspaceFileSystemService groupWorkspaceFileSystemService) {
+		this.groupWorkspaceFileSystemService = groupWorkspaceFileSystemService;
+	}
+
+	/**
+	 * Set the group workspace service.
+	 * 
+	 * @param groupWorkspaceService
+	 */
+	public void setGroupWorkspaceService(GroupWorkspaceService groupWorkspaceService) {
+		this.groupWorkspaceService = groupWorkspaceService;
+	}
+
 }

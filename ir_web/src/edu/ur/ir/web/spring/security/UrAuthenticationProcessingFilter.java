@@ -160,7 +160,7 @@ public class UrAuthenticationProcessingFilter extends AbstractAuthenticationProc
                     // process the group membership information
                     if( user != null )
                     {
-                    	user.setLastLoginDate(new Timestamp(new Date().getTime()));
+                    	user.setMostRecentLoginDate(new Timestamp(new Date().getTime()));
                     	userService.makeUserPersistent(user);
                     	for(UserGroupMemberFilter filter : this.groupMemberFilters)
                     	{
