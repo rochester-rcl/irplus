@@ -30,6 +30,7 @@ import edu.ur.file.db.FileInfo;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.researcher.Researcher;
 import edu.ur.ir.researcher.ResearcherService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.util.WebIoUtils;
 
 /**
@@ -39,7 +40,7 @@ import edu.ur.ir.web.util.WebIoUtils;
  *
  */
 public class ResearcherPictureFileDownload extends ActionSupport 
-implements ServletResponseAware, ServletRequestAware
+implements ServletResponseAware, ServletRequestAware, UserIdAware
 {
 	
 	/** Eclipse generated id*/
@@ -69,6 +70,7 @@ implements ServletResponseAware, ServletRequestAware
 	/** Utility for web utils */
 	private WebIoUtils webIoUtils;
 	
+	private Long userId;
 
 	/**
      * Allows a file to be downloaded
@@ -85,15 +87,16 @@ implements ServletResponseAware, ServletRequestAware
 	    // make sure this is a picture in the researcher - otherwise anyone could get
 	    // to the files.
 		researcher = researcherService.getResearcher(researcherId, false);
-		if( researcher != null )
+		if( researcher != null && 
+				(researcher.isPublic() || researcher.getUser().getId().equals(userId)) )
 		{
 			// causes a load form the database;
 		    IrFile irFile = researcher.getPicture(irFileId);
 		    
 		    if (irFile == null) {
-		    	if (researcher.getPrimaryPicture().getId().equals(irFileId)) {
-		    		irFile = researcher.getPrimaryPicture();
-		    	}
+		        if (researcher.getPrimaryPicture().getId().equals(irFileId)) {
+		    	    irFile = researcher.getPrimaryPicture();
+		        }
 		    }
             FileInfo fileInfo = irFile.getFileInfo();
 
@@ -167,6 +170,10 @@ implements ServletResponseAware, ServletRequestAware
 
 	public void setResearcherId(Long researcherId) {
 		this.researcherId = researcherId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

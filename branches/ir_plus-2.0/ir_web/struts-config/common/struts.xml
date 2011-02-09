@@ -275,12 +275,6 @@
             <result name="success" type="no-op"/>
         </action> 
         
-        <!--  Action for downloading transformed files -->
-        <action name="transformedFileDownload" 
-            class="edu.ur.ir.web.action.repository.TransformedFileDownloader">
-            <result name="success" type="no-op"/>
-        </action> 
-        
         <!--  Action for item file transformed MOSTLY Thumbnail viewing -->
         <action name="genericItemTransformedFileDownload" 
             class="edu.ur.ir.web.action.item.GenericItemTransformedFileDownloader">
@@ -358,6 +352,7 @@
         <!-- Download Researcher picture  -->
         <action name="downloadResearcherPicture"
             class="edu.ur.ir.web.action.researcher.ResearcherPictureFileDownload">
+            <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="no-op"/>
         </action>
