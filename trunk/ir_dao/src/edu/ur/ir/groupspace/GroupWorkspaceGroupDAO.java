@@ -42,7 +42,7 @@ public interface GroupWorkspaceGroupDAO extends CrudDAO<GroupWorkspaceGroup> {
 	 * 
 	 * @return list of user groups.
 	 */
-	public List<GroupWorkspaceGroup> getGroups(Long groupSpaceId, int rowStart, 
+	public List<GroupWorkspaceGroup> getGroupsByName(Long groupSpaceId, int rowStart, 
     		int numberOfResultsToShow, OrderType orderType);
 	
 	/**
