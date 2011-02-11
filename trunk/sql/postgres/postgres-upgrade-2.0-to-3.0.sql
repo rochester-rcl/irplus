@@ -199,6 +199,7 @@ CREATE TABLE ir_group_workspace.group_workspace_group
     name TEXT NOT NULL,
     lower_case_name TEXT NOT NULL,
     description TEXT,
+    version INTEGER,
     FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id)
 );
 ALTER TABLE ir_group_workspace.group_workspace_group OWNER TO ir_plus;
@@ -211,7 +212,7 @@ ALTER TABLE ir_group_workspace.group_workspace_group_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 -- Group space group membership Information
 -- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_group_members
+CREATE TABLE ir_group_workspace.group_workspace_group_users
 (
     group_workspace_group_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
@@ -219,7 +220,7 @@ CREATE TABLE ir_group_workspace.group_workspace_group_members
     FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
     PRIMARY KEY(group_workspace_group_id, user_id)
 );
-ALTER TABLE ir_group_workspace.group_workspace_group_members OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace_group_users OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
@@ -240,4 +241,78 @@ ALTER TABLE ir_repository.deleted_institutional_item
   
  ALTER TABLE ir_repository.deleted_institutional_item_version
   ADD CONSTRAINT deleted_institutional_item_ve_institutional_item_version_id_key UNIQUE(institutional_item_version_id);
+  
+  
+-- ---------------------------------------------
+-- Security class types for permissions
+-- ---------------------------------------------
+  
+insert into ir_security.class_type(class_type_id, name , description , version) 
+values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.groupspace.GroupWorkspaceFolder', 
+'Group Workspace Folder',1);
+
+insert into ir_security.class_type(class_type_id, name , description , version) 
+values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.groupspace.GroupWorkspace', 
+'Group Workspace',1);
+
+
  
+-- ---------------------------------------------
+-- New permission types for workspace folders
+-- ---------------------------------------------
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'FOLDER_EDIT','The user can add and delete any files and folders from the 
+specified folder including child files and folders',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspaceFolder';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'FOLDER_ADD_FILE','The user can add files to the specified folder 
+and only delete files they own',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspaceFolder';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'FOLDER_READ','The user can view the folder and the names of 
+all files and folders within the folder',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspaceFolder';
+
+-- ---------------------------------------------
+-- New permission types for workspace
+-- ---------------------------------------------
+
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'FOLDER_EDIT','The user can add and delete any files and folders from the 
+specified folder including child files and folders',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspace';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'FOLDER_ADD_FILE','The user can add files to the specified folder 
+and only delete files they own',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspace';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'FOLDER_READ','The user can view the folder and the names of 
+all files and folders within the folder',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspace';
+
+-- ---------------------------------------------
+-- Add a new column most recent login date
+-- last login date will hold the last time the 
+-- user logged in
+-- ---------------------------------------------
+ALTER TABLE ir_user.ir_user ADD COLUMN most_recent_login_date TIMESTAMP WITH TIME ZONE;
+
+UPDATE ir_user.ir_user set most_recent_login_date = last_login_date;

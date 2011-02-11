@@ -798,6 +798,7 @@ CREATE TABLE ir_user.ir_user
   lower_case_middle_name TEXT,
   created_date TIMESTAMP WITH TIME ZONE,
   last_login_date TIMESTAMP WITH TIME ZONE,
+  most_recent_login_date TIMESTAMP WITH TIME ZONE,
   self_registered BOOLEAN,
   phone_number TEXT,
   account_expired BOOLEAN NOT NULL,
@@ -2774,6 +2775,16 @@ insert into ir_security.class_type(class_type_id, name , description , version)
 values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.item.ItemFile', 
 'Item File',1);
 
+insert into ir_security.class_type(class_type_id, name , description , version) 
+values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.groupspace.GroupWorkspaceFolder', 
+'Group Workspace Folder',1);
+
+insert into ir_security.class_type(class_type_id, name , description , version) 
+values (nextval('ir_security.class_type_seq'), 'edu.ur.ir.groupspace.GroupWorkspace', 
+'Group Workspace',1);
+
+
+
 -- ---------------------------------------------
 -- Class type permission
 -- ---------------------------------------------
@@ -2878,6 +2889,36 @@ nextval('ir_security.class_type_permission_seq'),
 versions as well as share/unshare the file with other users and give those users permissions',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.file.VersionedFile';
+
+  
+
+
+ 
+-- ---------------------------------------------
+--  permission types for group workspace
+-- ---------------------------------------------
+
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'FOLDER_EDIT','The user can add and delete any files and folders from the 
+specified folder including child files and folders',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspace';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'FOLDER_ADD_FILE','The user can add files to the specified folder 
+and only delete files they own',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspace';
+
+insert into ir_security.class_type_permission select 
+nextval('ir_security.class_type_permission_seq'),
+  ir_security.class_type.class_type_id, 'FOLDER_READ','The user can view the folder and the names of 
+all files and folders within the folder',0
+  from ir_security.class_type where ir_security.class_type.name = 
+'edu.ur.ir.groupspace.GroupWorkspace';
 
 -- ------------------------------------
 -- institutional colleciton permissions
@@ -3694,6 +3735,7 @@ CREATE TABLE ir_group_workspace.group_workspace_group
     name TEXT NOT NULL,
     lower_case_name TEXT NOT NULL,
     description TEXT,
+    version INTEGER,
     FOREIGN KEY (group_workspace_id) REFERENCES ir_group_workspace.group_workspace (group_workspace_id)
 );
 ALTER TABLE ir_group_workspace.group_workspace_group OWNER TO ir_plus;
@@ -3706,7 +3748,7 @@ ALTER TABLE ir_group_workspace.group_workspace_group_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 -- Group space group membership Information
 -- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_group_members
+CREATE TABLE ir_group_workspace.group_workspace_group_users
 (
     group_workspace_group_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
@@ -3714,4 +3756,4 @@ CREATE TABLE ir_group_workspace.group_workspace_group_members
     FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id),
     PRIMARY KEY(group_workspace_group_id, user_id)
 );
-ALTER TABLE ir_group_workspace.group_workspace_group_members OWNER TO ir_plus;
+ALTER TABLE ir_group_workspace.group_workspace_group_users OWNER TO ir_plus;
