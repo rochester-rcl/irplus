@@ -185,16 +185,11 @@
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>
-						                                <c:if test="${researcher.public}">
-						                        	        <c:url value="viewResearcherPage.action" var="viewResearcherPage">
-						                        	            <c:param name="researcherId" value="${researcher.id}"/>
-						                        	        </c:url>
-														    <a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
-														    <c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
-														</c:if>
-														<c:if test="${!researcher.public}">
-														${researcher.user.lastName},&nbsp;${researcher.user.firstName} (Private)
-													    </c:if>
+						                            <c:url value="viewResearcherPage.action" var="viewResearcherPage">
+						                        	    <c:param name="researcherId" value="${researcher.id}"/>
+						                        	 </c:url>
+													<a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
+													<c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
 						                        </urstb:td>
 						                    </urstb:tr>
 						            </urstb:tbody>
