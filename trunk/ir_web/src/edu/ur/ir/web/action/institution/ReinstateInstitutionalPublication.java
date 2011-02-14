@@ -130,7 +130,7 @@ public class ReinstateInstitutionalPublication extends ActionSupport implements 
 		this.reinstateAllVersions = reinstateAllVersions;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 		
 	}

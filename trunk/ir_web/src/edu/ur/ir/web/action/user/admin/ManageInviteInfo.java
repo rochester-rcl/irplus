@@ -126,9 +126,9 @@ public class ManageInviteInfo extends Pager implements UserIdAware{
 	/**
 	 * Set the user id accessing the information.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
 	 */
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 	

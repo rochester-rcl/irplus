@@ -331,7 +331,7 @@ public class ManageExtentTypes extends Pager implements Preparable, UserIdAware{
 		this.userService = userService;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 	

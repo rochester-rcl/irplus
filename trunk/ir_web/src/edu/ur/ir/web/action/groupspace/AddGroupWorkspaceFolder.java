@@ -218,7 +218,7 @@ public class AddGroupWorkspaceFolder extends ActionSupport implements UserIdAwar
 	 * 
 	 * @see edu.ur.ir.web.action.UserAware#setOwner(edu.ur.ir.user.IrUser)
 	 */
-	public void setUserId(Long userId) 
+	public void injectUserId(Long userId) 
 	{
 		this.userId = userId;
 	}

@@ -20,6 +20,19 @@
     
 <beans>
 
+   <!-- ****************************************** --> 
+   <!-- Contributor related data service -->
+   <!-- ****************************************** --> 
+    <bean id="systemPropertyInitializingService" 
+          class="edu.ur.ir.util.service.SystemPropertyInitializingService">
+        <property name="systemProperties">
+            <map>
+                 <!-- Set headless mode to true -->
+                 <entry key="java.awt.headless" value="true"/>
+            </map>
+         </property>
+   </bean>
+
    <!-- Sha Password encoder to use SHA-1 password encoding -->
    <bean id="passwordEncoder" class="org.springframework.security.providers.encoding.ShaPasswordEncoder"/>
     
@@ -863,6 +876,14 @@
        class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceFileSystemService">
        <property name="groupWorkspaceFileDAO" ref="groupWorkspaceFileDAO"/>
        <property name="groupWorkspaceFolderDAO" ref="groupWorkspaceFolderDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Group workspace group service        -->
+   <!-- ****************************************** --> 
+   <bean id="groupWorkspaceGroupService" 
+       class="edu.ur.ir.groupspace.service.DefaultGroupWorkspaceGroupService">
+       <property name="groupWorkspaceGroupDAO" ref="groupWorkspaceGroupDAO"/>
    </bean>
    
 </beans>

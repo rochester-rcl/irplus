@@ -551,7 +551,7 @@ public class AddResearcherPublication extends ActionSupport implements UserIdAwa
 	/**
 	 * id of the user making the change
 	 */
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 	

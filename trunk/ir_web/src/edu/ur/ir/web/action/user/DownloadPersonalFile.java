@@ -200,7 +200,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	}
 
 	/** id of the user */
-	public void setUserId(Long userId)
+	public void injectUserId(Long userId)
 	{
 		this.userId = userId;
 	}

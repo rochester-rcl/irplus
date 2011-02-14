@@ -1434,7 +1434,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		this.userService = userService;
 	}
 	
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

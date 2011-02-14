@@ -322,7 +322,7 @@ public class ManageDepartments extends Pager implements Preparable, UserIdAware{
 		this.rowEnd = rowEnd;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 	

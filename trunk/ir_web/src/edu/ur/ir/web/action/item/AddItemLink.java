@@ -250,7 +250,7 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	}
 
 	
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

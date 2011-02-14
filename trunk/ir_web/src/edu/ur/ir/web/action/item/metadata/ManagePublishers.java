@@ -338,7 +338,7 @@ public class ManagePublishers extends Pager implements Preparable, UserIdAware{
 	}
 
 	
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 	

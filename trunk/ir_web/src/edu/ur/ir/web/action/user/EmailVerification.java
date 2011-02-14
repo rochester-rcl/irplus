@@ -110,7 +110,7 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 		this.token = token;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 
