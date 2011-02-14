@@ -456,7 +456,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		this.researcherService = researcherService;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

@@ -168,7 +168,7 @@ UserIdAware {
 		this.institutionalItemService = institutionalItemService;
 	}
 	
-	public void setUserId(Long userId)
+	public void injectUserId(Long userId)
 	{
 		this.userId = userId;
 	}

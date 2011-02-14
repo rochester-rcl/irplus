@@ -173,7 +173,7 @@ UserIdAware {
 	/* (non-Javadoc)
 	 * @see edu.ur.ir.web.action.UserAware#setUser(edu.ur.ir.user.IrUser)
 	 */
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

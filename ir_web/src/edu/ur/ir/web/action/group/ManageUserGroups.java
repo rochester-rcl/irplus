@@ -280,7 +280,7 @@ public class ManageUserGroups extends Pager implements Preparable, UserIdAware {
 		this.userGroupIds = userGroupIds;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

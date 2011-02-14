@@ -282,7 +282,7 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @see edu.ur.ir.web.action.UserAware#setOwner(edu.ur.ir.user.IrUser)
 	 */
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

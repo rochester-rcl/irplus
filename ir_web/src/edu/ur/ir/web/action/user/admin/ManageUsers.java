@@ -1205,7 +1205,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	}
 
 	
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		adminUserId = userId;
 	}
 

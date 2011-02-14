@@ -228,7 +228,7 @@ public class ChangePassword extends ActionSupport implements UserIdAware {
 		this.password = password;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

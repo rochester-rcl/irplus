@@ -87,4 +87,26 @@
        </property>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Group workspace Group information  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="groupWorkspaceGroupDAOTarget" 
+       class="edu.ur.hibernate.ir.groupspace.db.HbGroupWorkspaceGroupDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+     
+   <bean id="groupWorkspaceGroupDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="groupWorkspaceGroupDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
 </beans>

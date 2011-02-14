@@ -35,6 +35,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.WebBrowserFileViewerHelper;
 import edu.ur.ir.web.util.WebIoUtils;
 
 /**
@@ -77,13 +78,15 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	private Long userId;
 	
 	/** User service */
-	private UserService userService; 
-	
+	private UserService userService; 	
 	
 	/** Item file security service */
 	private ItemFileSecurityService itemFileSecurityService; 
 	
-    /**
+	/** file types that can be opened by the browser */
+	private WebBrowserFileViewerHelper webBrowserFileViewerHelper;
+	
+	/**
      * Checks for user permission and then downloads the file 
      * 
      * @return
@@ -202,7 +205,14 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
     private void downloadFile(ItemFile itemFile) throws Exception {
         String fileName = itemFile.getIrFile().getName();
         FileInfo fileInfo =  itemFile.getIrFile().getFileInfo();
-        webIoUtils.streamFileInfo(fileName, fileInfo, response, request, (1024*4), false, true);
+        boolean forceDownload = true;
+        
+        if( webBrowserFileViewerHelper.canShowFileTypeInBrowser(fileInfo.getExtension()) )
+        {
+            forceDownload = false;	
+        }
+        
+        webIoUtils.streamFileInfo(fileName, fileInfo, response, request, (1024*4), false, forceDownload);
         
     }
     
@@ -266,7 +276,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	}
 
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -280,5 +290,8 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 		this.itemFileSecurityService = itemFileSecurityService;
 	}
 
-
+	public void setWebBrowserFileViewerHelper(
+				WebBrowserFileViewerHelper webBrowserFileViewerHelper) {
+		this.webBrowserFileViewerHelper = webBrowserFileViewerHelper;
+	}
 }

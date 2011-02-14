@@ -158,7 +158,7 @@ public class ChangeOwnerForPersonalFile extends ActionSupport implements UserIdA
 	}
 
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 	

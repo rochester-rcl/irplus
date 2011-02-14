@@ -98,7 +98,7 @@ public class AutoShareFolder extends ActionSupport implements Preparable, UserId
 	/* (non-Javadoc)
 	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;	
 	}
 	

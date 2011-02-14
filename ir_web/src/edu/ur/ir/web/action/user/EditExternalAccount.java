@@ -177,7 +177,7 @@ public class EditExternalAccount extends ActionSupport implements UserIdAware {
 		this.userService = userService;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

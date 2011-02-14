@@ -174,7 +174,7 @@ public class ViewResearcherPublication extends ActionSupport implements UserIdAw
 		this.researcherId = researcherId;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 	

@@ -383,7 +383,7 @@ public class ViewInstitutionalPublication extends ActionSupport implements UserI
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

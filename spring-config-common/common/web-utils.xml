@@ -36,7 +36,20 @@
    </bean>
    
 
-
+  <bean id="webBrowserFileViewerHelper" class="edu.ur.ir.web.util.WebBrowserFileViewerHelper">
+      <property name="browserFileTypes">
+           <list>
+                <value>jpg</value>
+                <value>tiff</value>
+                <value>jpeg</value>
+                <value>png</value>
+                <value>gif</value>
+                <value>bmp</value>
+           </list>
+      </property>
+      
+  </bean>
+  
    <!-- File group entries for the web application -->
    <bean id="fileGroupEntriesTag" class="edu.ur.tag.repository.FileGroupEntriesTag">
        <property name="securityService" ref="securityService"/>

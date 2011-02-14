@@ -206,7 +206,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	 * 
 	 * @param userId
 	 */
-	public void setUserId(Long userId)
+	public void injectUserId(Long userId)
 	{
 		this.userId = userId;
 	}

@@ -376,7 +376,7 @@ public class UpdateUserAccount extends ActionSupport implements UserIdAware, Pre
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

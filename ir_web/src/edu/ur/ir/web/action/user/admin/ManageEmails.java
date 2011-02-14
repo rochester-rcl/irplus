@@ -512,7 +512,7 @@ public class ManageEmails extends ActionSupport implements  Preparable, UserIdAw
 		return emailVerificationMessage;
 	}
 	
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 	

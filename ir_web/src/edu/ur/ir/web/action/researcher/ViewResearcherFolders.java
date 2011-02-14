@@ -436,7 +436,7 @@ public class ViewResearcherFolders extends ActionSupport implements UserIdAware 
 		this.itemIds = institutionalItemIds;
 	}
 
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

@@ -275,12 +275,6 @@
             <result name="success" type="no-op"/>
         </action> 
         
-        <!--  Action for downloading transformed files -->
-        <action name="transformedFileDownload" 
-            class="edu.ur.ir.web.action.repository.TransformedFileDownloader">
-            <result name="success" type="no-op"/>
-        </action> 
-        
         <!--  Action for item file transformed MOSTLY Thumbnail viewing -->
         <action name="genericItemTransformedFileDownload" 
             class="edu.ur.ir.web.action.item.GenericItemTransformedFileDownloader">

@@ -204,7 +204,7 @@ public class LockVersionedFile extends ActionSupport implements UserIdAware {
 	}
 
 	
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

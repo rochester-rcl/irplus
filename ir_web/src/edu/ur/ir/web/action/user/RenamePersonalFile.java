@@ -263,7 +263,7 @@ public class RenamePersonalFile extends ActionSupport implements UserIdAware{
 	}
 
 	
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

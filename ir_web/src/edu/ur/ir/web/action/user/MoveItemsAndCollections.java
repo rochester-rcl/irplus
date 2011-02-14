@@ -277,9 +277,9 @@ public class MoveItemsAndCollections extends ActionSupport implements UserIdAwar
 	/**
 	 * Allow a user id to be passed in.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
 	 */
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 

@@ -316,7 +316,7 @@ public class AddResearcherLink extends ActionSupport implements UserIdAware{
 		this.linkDescription = linkDescription;
 	}
 	
-	public void setUserId(Long userId) {
+	public void injectUserId(Long userId) {
 		this.userId = userId;
 	}
 
