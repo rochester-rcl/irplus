@@ -89,7 +89,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	    // to the files.
 		researcher = researcherService.getResearcher(researcherId, false);
 		if( researcher != null && 
-				(researcher.isPublic() && researcher.getUser().getId().equals(userId)))
+				(researcher.isPublic() || researcher.getUser().getId().equals(userId)))
 		{
 			// causes a load form the database;
 		    IrFile irFile = researcher.getPicture(irFileId);
