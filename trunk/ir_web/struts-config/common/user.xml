@@ -219,6 +219,12 @@
             <result name="success" type="no-op"/>
         </action> 
         
+        <action name="viewFilesSharedWithUser"
+            class="edu.ur.ir.web.action.user.ViewAllFilesSharedWithUser">
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/user/workspace/view_all_files_shared_with_user.jsp</result>
+        </action>
+        
         <!--  lock a file so that no other user can upload changes -->
         <action name="lockVersionedFile" class="edu.ur.ir.web.action.user.LockVersionedFile" >
             <interceptor-ref name="editStack"/>
