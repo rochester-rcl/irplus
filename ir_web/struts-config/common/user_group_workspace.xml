@@ -21,7 +21,7 @@
        <action name="viewGroupWorkspaces" 
             class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/workspace/group_workspace_table.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/group_workspace_table.jsp</result>
         </action>
        
         <!--  This handles update, save and delete -->
@@ -29,10 +29,10 @@
             method="{1}"
             class="edu.ur.ir.web.action.groupspace.ManageUserGroupWorkspaces">
             <interceptor-ref name="crudStack" />
-            <result name="input">/pages/user/workspace/group_workspace.jsp</result>
+            <result name="input">/pages/user/workspace/group_workspace/group_workspace.jsp</result>
             <result name="added">/pages/admin/groupspace/group_workspace_form.jsp</result>
-            <result name="deleted">/pages/user/workspace/group_workspace_table.jsp</result>
-            <result name="get">/pages/user/workspace/edit_group_workspace.jsp</result>
+            <result name="deleted">/pages/user/workspace/group_workspace/group_workspace_table.jsp</result>
+            <result name="get">/pages/user/workspace/group_workspace/edit_group_workspace.jsp</result>
         </action>
         
         <!--  This handles update, save and delete for creating workspace groups -->
@@ -40,10 +40,10 @@
             method="{1}"
             class="edu.ur.ir.web.action.groupspace.ManageWorkspaceGroups">
             <interceptor-ref name="crudStack" />
-            <result name="input">/pages/user/workspace/workspace_group.jsp</result>
-            <result name="added">/pages/user/workspace/workspace_group_form.jsp</result>
-            <result name="deleted">/pages/user/workspace/workspace_groups_table.jsp</result>
-            <result name="get">/pages/user/workspace/edit_workspace_group.jsp</result>
+            <result name="input">/pages/user/workspace/group_workspace/workspace_group.jsp</result>
+            <result name="added">/pages/user/workspace/group_workspace/workspace_group_form.jsp</result>
+            <result name="deleted">/pages/user/workspace/group_workspace/workspace_groups_table.jsp</result>
+            <result name="get">/pages/user/workspace/group_workspace/edit_workspace_group.jsp</result>
         </action>
         
          <!--  view all groups for a group workspace -->
@@ -51,16 +51,17 @@
             method="viewGroups"
             class="edu.ur.ir.web.action.groupspace.ManageWorkspaceGroups">
             <interceptor-ref name="crudStack" />
-            <result name="success">/pages/user/workspace/workspace_groups_table.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/workspace_groups_table.jsp</result>
         </action>
         
         <action name="viewGroupWorkspaceFolders"
             method="getTable"
             class="edu.ur.ir.web.action.groupspace.ViewGroupWorkspaceFolders">
             <interceptor-ref name="editStack"/>
-            <result name="success">/pages/user/workspace/group_workspace_file_system_table.jsp</result>
+            <result name="success">/pages/user/workspace/group_workspace/group_workspace_file_system_table.jsp</result>
         </action>
         
+        <!--  NOTE this action uses the personal folder form -->
         <action name="*GroupFolder"
             method ="{1}"
             class="edu.ur.ir.web.action.user.AddGroupFolder">
