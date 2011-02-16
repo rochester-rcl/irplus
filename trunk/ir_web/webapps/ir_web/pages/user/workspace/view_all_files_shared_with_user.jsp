@@ -66,7 +66,10 @@
         <div id="bd">
             <h3>All files shared with:&nbsp;${sharedWithUser.firstName}&nbsp;${sharedWithUser.lastName}</h3>
             
+            <c:import url="view_all_files_shared_with_user_pager.jsp"/>
+            <br/>
             <c:import url="view_all_files_shared_with_user_table.jsp"/>
+            <c:import url="view_all_files_shared_with_user_pager.jsp"/>
         </div>
         <!--  end body div -->
       

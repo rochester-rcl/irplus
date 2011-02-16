@@ -170,7 +170,6 @@ YAHOO.ur.user.group_workspace = {
 		        // the form, if there was an issue, update the form with
 		        // the error messages.
 		        groupspaceForm.innerHTML = o.responseText;
-		    
 		        // determine if the add/edit was a success
 		        var success = document.getElementById("success").value;
 		  
@@ -182,8 +181,8 @@ YAHOO.ur.user.group_workspace = {
 		        }
 		        else
 		        {
-		        	var id = document.getElementById('groupWorkspaceId').value;
-		        	window.location = getGroupWorkspaceAction+ '?id=' + id;
+		        	var id = document.newGroupWorkspaceForm.id.value;
+		        	window.location = getGroupWorkspaceAction+ '?id=' + id + '&bustcache=' + new Date().getTime();
 		        }
 		    }
 	        

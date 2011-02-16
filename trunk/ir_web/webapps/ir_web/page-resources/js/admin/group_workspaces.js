@@ -95,6 +95,7 @@ YAHOO.ur.groupspace = {
 		        else
 		        {
 		        	var id = document.getElementById('groupWorkspaceId').value;
+		        	alert('groupWorkspaceId = ' + groupWorkspaceId);
 		        	window.location = getGroupWorkspaceAction+ '?id=' + id;
 		        }
 		    }

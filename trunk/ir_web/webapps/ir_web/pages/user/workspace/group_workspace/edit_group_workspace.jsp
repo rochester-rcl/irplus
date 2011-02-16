@@ -202,8 +202,11 @@
                             name="newWorkspaceGroupForm" 
 		                    method="post"
 		                    action="/user/createWorkspaceGroup.action">
+		     <!--  if editing an id must be passed -->     
+	    <input type="hidden" id="groupWorkspaceId"
+		        name="groupWorkspaceId" value="${groupWorkspace.id}"/>
 	          <div id="workspaceGroupDialogFields">
-	              <c:import url="/pages/user/workspace/workspace_group_form.jsp"/>
+	              <c:import url="workspace_group_form.jsp"/>
 	          </div>
 	      </form>
        </div>

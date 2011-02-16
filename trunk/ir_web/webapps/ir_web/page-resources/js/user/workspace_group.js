@@ -81,7 +81,6 @@ YAHOO.ur.user.workspace_group = {
 		        {
 		        	YAHOO.ur.user.workspace_group.clearForm();
 		        	var workspaceId = document.getElementById("groupWorkspaceId").value;
-			        
 		        	YAHOO.ur.user.workspace_group.getGroups(workspaceId);
 		        	YAHOO.ur.user.workspace_group.newWorkspaceGroupDialog.hide();
 		        }
@@ -91,7 +90,6 @@ YAHOO.ur.user.workspace_group = {
 		
 		// handle form sbumission failure
 		var handleFailure = function(o) {
-			YAHOO.ur.util.wait.waitDialog.hide();
 		    alert('group workspace submission failed ' + o.status + ' status text ' + o.statusText );
 		};
 	
@@ -159,7 +157,7 @@ YAHOO.ur.user.workspace_group = {
 	    
 	    document.getElementById('groupName').value = "";
 		document.getElementById('groupDescription').value = "";
-		document.getElementById('id').value = "";
+		document.getElementById('workspace_group_id').value = "";
 		
 		document.getElementById('newWorkspaceGroup').value = "true";
 		
