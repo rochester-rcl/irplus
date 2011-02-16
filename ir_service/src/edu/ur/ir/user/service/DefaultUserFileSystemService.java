@@ -1110,4 +1110,33 @@ public class DefaultUserFileSystemService implements UserFileSystemService{
 		this.personalFileDeleteRecordDAO = personalFileDeleteRecordDAO;
 	}
 
+	/**
+	 * Get a list of personal files shared witht he given user.
+	 * 
+	 * @param rowStart - start position in the list
+	 * @param maxResults - maximum number of results
+	 * @param ownerId - owner of the personal files.
+	 * @param sharedWithUserId - id of the user who files are shared with
+	 * 
+	 * @return list of files shared with the user.
+	 */
+	public List<PersonalFile> getFilesSharedWithUser(int rowStart,
+			int maxResults, Long ownerId, Long sharedWithUserId)
+	{
+		return personalFileDAO.getFilesSharedWithUser(rowStart, maxResults, ownerId, sharedWithUserId);
+	}
+	
+	/**
+	 * Get the count of files shared with a given user.
+	 * 
+	 * @param ownerId - owner of the personal file sto check
+	 * @param sharedWithUserId - id of the shared with user id.
+	 * 
+	 * @return count of files shared with the given shared with user id
+	 */
+	public Long getFilesSharedWithUserCount(Long ownerId, Long sharedWithUserId)
+	{
+		return personalFileDAO.getFilesSharedWithUserCount(ownerId, sharedWithUserId);
+	}
+
 }

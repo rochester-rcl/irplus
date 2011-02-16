@@ -22,10 +22,7 @@
 
 
 
-<table class="pager">
-<tr> <td>
-
-
+<div class="pager">
 	<ur:pager currentPageNumber="${currentPageNumber}" 
 	     startPageNumber="${startPageNumber}"  
 		 totalHits="${totalHits}"
@@ -67,9 +64,6 @@
 		</ur:lastPage>	
 				    
 	</ur:pager>	
-
-</td> </tr>    
-</table>   
-
+</div>
 				         
 				         

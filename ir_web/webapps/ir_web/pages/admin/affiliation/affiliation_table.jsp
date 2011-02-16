@@ -24,6 +24,7 @@
 <c:if test="${totalHits > 0}">
 	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 	<c:import url="browse_all_affiliation_pager.jsp"/>
+	<br/>
 </c:if>
 
 <div class="dataTable">
@@ -91,6 +92,7 @@
 </div>	
 
 <c:if test="${totalHits > 0}">
+    <br/>
 	<c:import url="browse_all_affiliation_pager.jsp"/>
 </c:if>
 

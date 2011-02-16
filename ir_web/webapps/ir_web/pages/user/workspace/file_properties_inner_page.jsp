@@ -179,13 +179,16 @@
                           </urstb:td>
                         
                           <urstb:td>
-                          ${collaborator.collaborator.username}
+                           <c:url var="showAllSharedFiles" value="/user/viewFilesSharedWithUser.action">
+                              <c:param name="sharedWithUserId" value="${collaborator.collaborator.id}"/>
+                          </c:url>
+                          <a href="${showAllSharedFiles}">${collaborator.collaborator.username}</a>
                           </urstb:td>
 
                           <urstb:td>
                           ${collaborator.collaborator.defaultEmail.email}
                           </urstb:td>                        
-
+                            
                       </urstb:tr>
                   </urstb:tbody>
               </urstb:table>

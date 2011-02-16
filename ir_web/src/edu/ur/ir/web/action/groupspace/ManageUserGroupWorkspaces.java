@@ -159,7 +159,7 @@ public class ManageUserGroupWorkspaces extends Pager implements UserIdAware{
 		{
 			success = false;
 			message = getText("groupWorkspaceNameError", 
-					new String[]{groupWorkspace.getName()});
+					new String[]{name});
 			addFieldError("groupWorkspaceAlreadyExists", message);
 		}
         return "added";
