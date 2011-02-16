@@ -67,6 +67,7 @@
             
             <c:if test="${totalHits > 0}">
                 <c:import url="ip_download_counts_pager.jsp"/>
+                <br/>
             </c:if>
             
  			<div class="dataTable">

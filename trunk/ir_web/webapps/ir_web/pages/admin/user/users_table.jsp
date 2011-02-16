@@ -29,6 +29,7 @@
 </c:if>
 
 <c:import url="browse_all_users_pager.jsp"/>
+<br/>
 
 
 <div class="dataTable">

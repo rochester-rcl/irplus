@@ -29,6 +29,7 @@
 </c:if>
   
 <c:import url="search_all_users_pager.jsp"/>
+<br/>
 
 <div class="dataTable">
 	<form method="post" id="user_search_results" name="userSearchResults" >

@@ -119,7 +119,7 @@
 		                  <div class="clear">&nbsp;</div>
 
                           <c:import url="browse_researcher_pager.jsp"></c:import>
-						
+						  <br/>
 						<div class="dataTable">
 							                 
 					        <urstb:table width="100%">

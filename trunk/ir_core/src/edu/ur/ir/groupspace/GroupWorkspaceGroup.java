@@ -37,6 +37,9 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	/* list of users in the group */
 	private Set<IrUser> users = new HashSet<IrUser>();
 	
+	/* users invited to join the group workspace group */
+	private Set<InvitedGroupWorkspaceGroupUser> invitedUsers = new HashSet<InvitedGroupWorkspaceGroupUser>();
+	
 	/* Owning group Space  */
 	private GroupWorkspace groupWorkspace;
 	
@@ -149,6 +152,84 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 		return users.remove(user);
 	}
 	
+	/**
+	 * Get the invited user by email - ignores case.  Retun the invite if found
+	 * otherwise return null.
+	 * 
+	 * @param email
+	 * @return invite fi found otherwise null.
+	 */
+	public InvitedGroupWorkspaceGroupUser getInvite(String email)
+	{
+		for(InvitedGroupWorkspaceGroupUser invite : invitedUsers)
+		{
+			if( invite.getEmail().equalsIgnoreCase(email))
+			{
+				return invite;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Create an invote for the specified user.
+	 * 
+	 * @param email - email 
+	 * @param inviteingUser
+	 * @param token
+	 * @return
+	 */
+	public InvitedGroupWorkspaceGroupUser inviteUser(String email,
+			IrUser inviteingUser, 
+			String token )
+	{
+		InvitedGroupWorkspaceGroupUser invite = getInvite(email);
+		if(  invite == null )
+		{
+			invite = new InvitedGroupWorkspaceGroupUser(email, 
+			    this, 
+			    inviteingUser, 
+			    token);
+		    invitedUsers.add(invite);
+		}
+		return invite;
+	}
+	
+	/**
+	 * Delete the invite if found.  If the invite is not found
+	 * this returns true as it is not part of the set.
+	 * 
+	 * @param email - remove the invite based on email - ignores case
+	 * @return true if the invite is deleted.
+	 */
+	public boolean deleteInvite(String email)
+	{
+		InvitedGroupWorkspaceGroupUser invite = getInvite(email);
+		if( invite != null )
+		{
+			return invitedUsers.remove(invite);
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * Set of users invited to join the group.
+	 * 
+	 * @return unmodifiable set of invited users
+	 */
+	public Set<InvitedGroupWorkspaceGroupUser> getInvitedUsers() {
+		return Collections.unmodifiableSet(invitedUsers);
+	}
+
+	/**
+	 * Set of users invited to join the group.
+	 * 
+	 * @param invitedUsers
+	 */
+	void setInvitedUsers(Set<InvitedGroupWorkspaceGroupUser> invitedUsers) {
+		this.invitedUsers = invitedUsers;
+	}
 	
 	/**
 	 * Hash code is based on the name of

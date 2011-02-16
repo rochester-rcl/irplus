@@ -93,5 +93,34 @@ CrudDAO<PersonalFile>
 	 */
 	public Long getFileWithSpecifiedIrFile(Long irFileId);
 	
+	/**
+	 * Delete the personal file record from persistent storage.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
+	 */
 	public void makeTransient(PersonalFile pf);
+	
+	
+	/**
+	 * Get a list of personal files shared witht he given user.
+	 * 
+	 * @param rowStart - start position in the list
+	 * @param maxResults - maximum number of results
+	 * @param ownerId - owner of the personal files.
+	 * @param sharedWithUserId - id of the user who files are shared with
+	 * 
+	 * @return list of files shared with the user.
+	 */
+	public List<PersonalFile> getFilesSharedWithUser(int rowStart,
+			int maxResults, Long ownerId, Long sharedWithUserId);
+	
+	/**
+	 * Get the count of files shared with a given user.
+	 * 
+	 * @param ownerId - owner of the personal file sto check
+	 * @param sharedWithUserId - id of the shared with user id.
+	 * 
+	 * @return count of files shared with the given shared with user id
+	 */
+	public Long getFilesSharedWithUserCount(Long ownerId, Long sharedWithUserId);
 }

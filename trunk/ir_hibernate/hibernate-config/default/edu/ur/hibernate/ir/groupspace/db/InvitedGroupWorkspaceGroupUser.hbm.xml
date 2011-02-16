@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!--  
    Copyright 2008 - 2011 University of Rochester
 
@@ -15,25 +14,23 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->   
-
-
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for invite information
+	Mapping for invite information to a group workspace group
 	
-	@author Sharmila Ranganathan
+	@author Nathan Sarr
 -->
-<hibernate-mapping package="edu.ur.ir.user">
-	<class name="InviteInfo" schema="ir_user"
-	    table="invite_info"
+<hibernate-mapping package="edu.ur.ir.groupspace">
+	<class name="InvitedGroupWorkspaceGroupUser" schema="ir_group_workspace"
+	    table="group_workspace_group_invite"
 		lazy="true">
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="invite_info_id"
+		<id name="id" type="long" column="group_workspace_group_invite_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_user.invite_info_seq</param>
+				<param name="sequence">ir_group_workspace.group_workspace_group_invite_seq</param>
 			</generator>
 		</id>
 
@@ -51,26 +48,22 @@
 			not-null="true" access="field" />
 
 		<!--  user sending the invitation -->
-		<many-to-one class="IrUser" 
-			name="user" column="user_id" insert="true"
-			update="false" unique="true" access="field"/>
+		<many-to-one class="edu.ur.ir.user.IrUser" 
+			name="invitingUser" 
+			column="user_id" 
+			insert="true"
+			update="false" 
+			unique="true" 
+			access="field"/>
 			
-		<!-- files to share -->
-		<set name="files" 
-		     table="ir_user.invite_files" 
-		     access="field" >
-			<key column="invite_info_id" />
-			<many-to-many column="versioned_file_id" class="edu.ur.ir.file.VersionedFile"/>
-		</set>
-
-		<!-- permissions on files -->
-		<set name="permissions" 
-		     table="ir_user.invite_permissions" 
-		     access="field" >
-			<key column="invite_info_id" />
-			<many-to-many column="class_type_permission_id" class="edu.ur.ir.security.IrClassTypePermission"/>
-		</set>
-			
+	  <!-- group workspace group the user was added to -->
+	  <many-to-one class="GroupWorkspaceGroup" 
+			name="group" 
+			column="group_workspace_group_id" 
+			insert="true"
+			update="false" 
+			unique="true" 
+			access="field"/>
 
     </class>
 		

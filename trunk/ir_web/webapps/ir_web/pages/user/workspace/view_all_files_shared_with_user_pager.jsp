@@ -22,6 +22,7 @@
 
 
 <div class="pager">
+
 	<ur:pager currentPageNumber="${currentPageNumber}" 
 	     startPageNumber="${startPageNumber}"  
 		 totalHits="${totalHits}"
@@ -29,38 +30,32 @@
 		 numberOfResultsToShow="${numberOfResultsToShow}" >	
 
 		<ur:firstPage>
-	          <c:url var="browseUrl" value="/browsePersonNames.action">
+	          <c:url var="browseUrl" value="/user/viewFilesSharedWithUser.action">
 		           <c:param name="rowStart" value="0"/>
 			       <c:param name="startPageNumber" value="1"/>
 			       <c:param name="currentPageNumber" value="1"/>
-			       <c:param name="sortElement" value="${sortElement}"/>		
-			       <c:param name="sortType" value="${sortType}"/>
-			       <c:param name="selectedAlpha" value="${selectedAlpha}"/>																					
+			       <c:param name="sharedWithUserId" value="${sharedWithUserid}"/>																		
 		      </c:url>										
 		 
 		      <a href="${browseUrl}">First</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</ur:firstPage>
 				
 		<ur:previousPage>
-		    <c:url var="browseUrl" value="/browsePersonNames.action">
+		    <c:url var="browseUrl" value="/viewSponsorPage.action">
 	                <c:param name="rowStart" value="${rowStart}"/>
 					<c:param name="startPageNumber" value="${prevousPageStartPageNumber}"/>
 					<c:param name="currentPageNumber" value="${currentPageNumber - 1}"/>
-					<c:param name="sortElement" value="${sortElement}"/>		
-					<c:param name="sortType" value="${sortType}"/>	
-					<c:param name="selectedAlpha" value="${selectedAlpha}"/>																				
+					<c:param name="sharedWithUserId" value="${sharedWithUserid}"/>																		
 			</c:url>	
 									
 			<&nbsp;<a href="${browseUrl}">Previous</a> &nbsp;&nbsp;
 
 			<ur:morePrevious>
-		          <c:url var="browseUrl" value="/browsePersonNames.action">
+		          <c:url var="browseUrl" value="/viewSponsorPage.action">
 			           <c:param name="rowStart" value="${rowStart}"/>
 				       <c:param name="startPageNumber" value="${startPageNumberForPreviousSet}"/>
 				       <c:param name="currentPageNumber" value="${startPageNumberForPreviousSet}"/>
-				       <c:param name="sortElement" value="${sortElement}"/>		
-				       <c:param name="sortType" value="${sortType}"/>
-				       <c:param name="selectedAlpha" value="${selectedAlpha}"/>																			
+				       <c:param name="sharedWithUserId" value="${sharedWithUserid}"/>																
 			      </c:url>										
 			 
 			      &nbsp;<a href="${browseUrl}">....</a> &nbsp;&nbsp;
@@ -69,13 +64,11 @@
 								
 		<ur:forEachPage var="pageNumber">
 		    <c:if test="${pageNumber != currentPageNumber}">
-			     <c:url var="browseUrl" value="/browsePersonNames.action">
+			     <c:url var="browseUrl" value="/viewSponsorPage.action">
 				     <c:param name="rowStart" value="${rowStart}"/>
 					 <c:param name="startPageNumber" value="${startPageNumber}"/>
 					 <c:param name="currentPageNumber" value="${pageNumber}"/>
-					 <c:param name="sortElement" value="${sortElement}"/>		
-					 <c:param name="sortType" value="${sortType}"/>		
-					 <c:param name="selectedAlpha" value="${selectedAlpha}"/>												
+					 <c:param name="sharedWithUserId" value="${sharedWithUserid}"/>												
 				 </c:url>		
 																			
 				 <a href="${browseUrl}">${pageNumber}</a>&nbsp;&nbsp;
@@ -88,43 +81,36 @@
 															
 		<ur:nextPage>
 	       <ur:moreNext>
-		        <c:url var="browseUrl" value="/browsePersonNames.action">
+		        <c:url var="browseUrl" value="/viewSponsorPage.action">
 				    <c:param name="rowStart" value="${nextSetRowStart}"/>
 					<c:param name="startPageNumber" value="${startPageNumberForNextSet}"/>
 					<c:param name="currentPageNumber" value="${startPageNumberForNextSet}"/>	
-					<c:param name="sortElement" value="${sortElement}"/>		
-					<c:param name="sortType" value="${sortType}"/>		
-					<c:param name="selectedAlpha" value="${selectedAlpha}"/>															
+					<c:param name="sharedWithUserId" value="${sharedWithUserid}"/>															
 			    </c:url>										
 				<a href="${browseUrl}">....</a>&nbsp;&nbsp;&nbsp;
 	        </ur:moreNext>
 		
-		    <c:url var="browseUrl" value="/browsePersonNames.action">
+		    <c:url var="browseUrl" value="/viewSponsorPage.action">
 			    <c:param name="rowStart" value="${rowStart}"/>
 				<c:param name="startPageNumber" value="${nextPageStartPageNumber}"/>
 				<c:param name="currentPageNumber" value="${currentPageNumber + 1}"/>	
-				<c:param name="sortElement" value="${sortElement}"/>		
-				<c:param name="sortType" value="${sortType}"/>	
-				<c:param name="selectedAlpha" value="${selectedAlpha}"/>																		
+				<c:param name="sharedWithUserId" value="${sharedWithUserid}"/>																	
 			</c:url>	
 
 		     <a href="${browseUrl}">Next</a>&nbsp;> &nbsp;&nbsp;
 	    </ur:nextPage>
 
 	       <ur:lastPage>
-		        <c:url var="browseUrl" value="/browsePersonNames.action">
+		        <c:url var="browseUrl" value="/viewSponsorPage.action">
 				    <c:param name="rowStart" value="${rowstartForLastPage}"/>
 					<c:param name="startPageNumber" value="${startPageNumber}"/>
 					<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
-					<c:param name="sortElement" value="${sortElement}"/>		
-					<c:param name="sortType" value="${sortType}"/>	
-					<c:param name="selectedAlpha" value="${selectedAlpha}"/>																		
+					<c:param name="sharedWithUserId" value="${sharedWithUserid}"/>																		
 			    </c:url>										
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="${browseUrl}">Last</a> 
 			</ur:lastPage>	
 				    
 	</ur:pager>	
 </div>
-
 				         
 				         
