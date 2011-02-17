@@ -787,10 +787,7 @@ DescriptionAware, NameAware, Comparable<PersonalFolder>, FileSystem{
 	public FolderInviteInfo createInviteInfo(Set<IrClassTypePermission> permissions, String email)
 	    throws FileSharingException
 	{
-		if(owner.getUserEmail(email) != null )
-		{
-			throw new FileSharingException("Cann't set auto share with yourself");
-		}
+		
 		FolderInviteInfo inviteInfo = getFolderInviteInfo(email);
 		if( inviteInfo != null )
 		{

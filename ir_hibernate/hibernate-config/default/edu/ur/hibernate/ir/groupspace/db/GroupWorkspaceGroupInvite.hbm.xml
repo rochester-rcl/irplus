@@ -22,7 +22,7 @@
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.groupspace">
-	<class name="InvitedGroupWorkspaceGroupUser" schema="ir_group_workspace"
+	<class name="GroupWorkspaceGroupInvite" schema="ir_group_workspace"
 	    table="group_workspace_group_invite"
 		lazy="true">
 
@@ -50,7 +50,16 @@
 		<!--  user sending the invitation -->
 		<many-to-one class="edu.ur.ir.user.IrUser" 
 			name="invitingUser" 
-			column="user_id" 
+			column="inviting_user_id" 
+			insert="true"
+			update="false" 
+			unique="true" 
+			access="field"/>
+	
+		<!--  user being invited -->
+		<many-to-one class="edu.ur.ir.user.IrUser" 
+			name="invitedUser" 
+			column="invited_user_id" 
 			insert="true"
 			update="false" 
 			unique="true" 
@@ -68,29 +77,29 @@
     </class>
 		
     <!-- named query for getting invite information for given token-->
-    <query name="findInviteInfoForToken">from InviteInfo inviteInfo where inviteInfo.token = :token </query> 
+    <query name="findGroupWorkspaceGroupInviteForToken">from GroupWorkspaceGroupInvite inviteInfo where inviteInfo.token = :token </query> 
  
     <!-- named query for getting invite information for given email -->
-    <query name="findInviteInfoForEmail">from InviteInfo inviteInfo where lower(inviteInfo.email) = :email </query> 
+    <query name="findGroupWorkspaceGroupInviteForEmail">from GroupWorkspaceGroupInvite inviteInfo where lower(inviteInfo.email) = :email </query> 
     
     <!-- named query for getting invite information made by a given user -->
-    <query name="getInviteInfoMadeByUser">from InviteInfo inviteInfo where user.id = :userId </query> 
+    <query name="getGroupWorkspaceGroupInviteMadeByUser">from GroupWorkspaceGroupInvite inviteInfo where invitingUser.id = :userId </query> 
     
     	<!--  Get a count of roles in the system -->
-	<query name="inviteInfoCount">
-	    select count(*) from InviteInfo
+	<query name="groupWorkspaceGroupInviteCount">
+	    select count(*) from GroupWorkspaceGroupInvite
 	</query>
 	
 		<!-- sort by last name asc -->
-	<query name="getInviteInfosOrderByInvitorAsc">
-		select inviteInfo from InviteInfo as inviteInfo
-		order by inviteInfo.user.lowerCaseLastName asc, inviteInfo.user.lowerCaseFirstName asc, inviteInfo.user.lowerCaseMiddleName asc
+	<query name="getGroupWorkspaceGroupInviteOrderByInvitorAsc">
+		select inviteInfo from GroupWorkspaceGroupInvite as inviteInfo
+		order by inviteInfo.group.groupWorkspace.name asc, inviteInfo.invitingUser.lowerCaseLastName asc, inviteInfo.invitingUser.lowerCaseFirstName asc, inviteInfo.invitingUser.lowerCaseMiddleName asc
 	</query>	
 
 	<!-- sort by last name desc -->
-	<query name="getInviteInfosOrderByInvitorDesc">
-		select inviteInfo from InviteInfo as inviteInfo
-		order by inviteInfo.user.lowerCaseLastName desc, inviteInfo.user.lowerCaseFirstName desc, inviteInfo.user.lowerCaseMiddleName desc
+	<query name="getGroupWorkspaceGroupInviteOrderByInvitorDesc">
+		select inviteInfo from GroupWorkspaceGroupInvite as inviteInfo
+		order by inviteInfo.group.groupWorkspace.name desc, inviteInfo.invitingUser.lowerCaseLastName desc, inviteInfo.invitingUser.lowerCaseFirstName desc, inviteInfo.invitingUser.lowerCaseMiddleName desc
 	</query>	
 	
 </hibernate-mapping>

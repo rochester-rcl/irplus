@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008-2011 University of Rochester
+   Copyright 2008 - 2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,12 +17,27 @@
 package edu.ur.ir.groupspace;
 
 /**
- * Service to deal with users who are invited to join a group
- * of a group workspace.
+ * 
+ * Represents an exception when trying to invite a user to join
+ * a group.
  * 
  * @author Nathan Sarr
  *
  */
-public interface InvitedGroupWorkspaceGroupService {
+public class GroupWorkspaceInviteException extends Exception{
+	
+	/* eclipse generated id */
+	private static final long serialVersionUID = 735851509309873009L;
+
+	/**
+	 * Creates a group workspace invite exception if one occurs.
+	 * 
+	 * @param message - message for the exception
+	 */
+	public GroupWorkspaceInviteException(String message)
+	{
+		super(message);
+	}
+
 
 }

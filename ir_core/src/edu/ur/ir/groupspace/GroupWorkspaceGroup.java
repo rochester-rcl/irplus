@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserEmail;
 import edu.ur.persistent.CommonPersistent;
 
 /**
@@ -38,7 +39,7 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	private Set<IrUser> users = new HashSet<IrUser>();
 	
 	/* users invited to join the group workspace group */
-	private Set<InvitedGroupWorkspaceGroupUser> invitedUsers = new HashSet<InvitedGroupWorkspaceGroupUser>();
+	private Set<GroupWorkspaceGroupInvite> invitedUsers = new HashSet<GroupWorkspaceGroupInvite>();
 	
 	/* Owning group Space  */
 	private GroupWorkspace groupWorkspace;
@@ -159,9 +160,9 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	 * @param email
 	 * @return invite fi found otherwise null.
 	 */
-	public InvitedGroupWorkspaceGroupUser getInvite(String email)
+	public GroupWorkspaceGroupInvite getInvite(String email)
 	{
-		for(InvitedGroupWorkspaceGroupUser invite : invitedUsers)
+		for(GroupWorkspaceGroupInvite invite : invitedUsers)
 		{
 			if( invite.getEmail().equalsIgnoreCase(email))
 			{
@@ -172,21 +173,100 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	}
 	
 	/**
-	 * Create an invote for the specified user.
+	 * Get the invite for a user who has created an account.
+	 * 
+	 * @param user - user who exists in the system
+	 * @return the workspace group invite if one exists otherwise null
+	 */
+	public GroupWorkspaceGroupInvite getInvite(IrUser user)
+	{
+		if( user != null )
+		{
+		    for(GroupWorkspaceGroupInvite invite : invitedUsers)
+		    {
+			    for( UserEmail email : user.getUserEmails())
+			    {
+				    if(email.getEmail().equalsIgnoreCase(invite.getEmail()))
+				    {
+					    return invite;
+				    }
+			    } 
+		    }
+		}
+		return null;
+	 }
+	
+	/**
+	 * Returns the user if they are a member of the users othwerwise returns null.
+	 * 
+	 * @param email - email of the user to look for
+	 * @return user if found otherwise null
+	 */
+	public IrUser getUser(String email)
+	{
+		for(IrUser user : users)
+		{
+			if( user.getUserEmail(email) != null)
+			{
+				return user;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Create an invite for a user who does not yet exist in the system
 	 * 
 	 * @param email - email 
-	 * @param inviteingUser
-	 * @param token
-	 * @return
+	 * @param inviteingUser - user doing the invite
+	 * @param token - token for the invite
+	 * 
+	 * @return - the created invite
+	 * @throws GroupWorkspaceInviteException 
 	 */
-	public InvitedGroupWorkspaceGroupUser inviteUser(String email,
+	public GroupWorkspaceGroupInvite inviteUser(String email,
 			IrUser inviteingUser, 
-			String token )
+			String token ) throws GroupWorkspaceInviteException
 	{
-		InvitedGroupWorkspaceGroupUser invite = getInvite(email);
+		IrUser user = getUser(email);
+		if( user != null )
+		{
+			throw new GroupWorkspaceInviteException("user already exists");
+		}
+		GroupWorkspaceGroupInvite invite = getInvite(email);
+		
 		if(  invite == null )
 		{
-			invite = new InvitedGroupWorkspaceGroupUser(email, 
+			invite = new GroupWorkspaceGroupInvite(email, 
+			    this, 
+			    inviteingUser, 
+			    token);
+		    invitedUsers.add(invite);
+		}
+		return invite;
+	}
+	
+	/**
+	 * Create an invite for a user who exists in the system.
+	 * 
+	 * @param invitedUser
+	 * @param inviteingUser
+	 * 
+	 * @return
+	 * @throws GroupWorkspaceInviteException 
+	 */
+	public GroupWorkspaceGroupInvite inviteUser(IrUser invitedUser,
+			IrUser inviteingUser, String token) throws GroupWorkspaceInviteException
+	{
+		if( users.contains(invitedUser) )
+		{
+			throw new GroupWorkspaceInviteException("user already exists");
+		}
+		
+		GroupWorkspaceGroupInvite invite = getInvite(invitedUser);
+		if(  invite == null )
+		{
+			invite = new GroupWorkspaceGroupInvite(invitedUser, 
 			    this, 
 			    inviteingUser, 
 			    token);
@@ -204,7 +284,7 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	 */
 	public boolean deleteInvite(String email)
 	{
-		InvitedGroupWorkspaceGroupUser invite = getInvite(email);
+		GroupWorkspaceGroupInvite invite = getInvite(email);
 		if( invite != null )
 		{
 			return invitedUsers.remove(invite);
@@ -218,7 +298,7 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	 * 
 	 * @return unmodifiable set of invited users
 	 */
-	public Set<InvitedGroupWorkspaceGroupUser> getInvitedUsers() {
+	public Set<GroupWorkspaceGroupInvite> getInvitedUsers() {
 		return Collections.unmodifiableSet(invitedUsers);
 	}
 
@@ -227,7 +307,7 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	 * 
 	 * @param invitedUsers
 	 */
-	void setInvitedUsers(Set<InvitedGroupWorkspaceGroupUser> invitedUsers) {
+	void setInvitedUsers(Set<GroupWorkspaceGroupInvite> invitedUsers) {
 		this.invitedUsers = invitedUsers;
 	}
 	

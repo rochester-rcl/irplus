@@ -55,9 +55,16 @@ public class FolderInviteInfo extends BasePersistent
 	 * 
 	 * @param personalFolder - personal folder 
 	 * @param email - email for the folder invite info
+	 *
+	 * @throws FileSharingException - if a user tries to share a file with themselves.
 	 */
-	public FolderInviteInfo(PersonalFolder personalFolder, String email, Set<IrClassTypePermission> permissions)
+	public FolderInviteInfo(PersonalFolder personalFolder, String email, Set<IrClassTypePermission> permissions) 
+	throws FileSharingException
 	{
+		if( personalFolder.getOwner().getUserEmail(email) != null )
+		{
+			throw new FileSharingException("Cannot share a folder with yourself");
+		}
 		this.personalFolder = personalFolder;
 		this.email = email.trim();
 		this.createdDate = new Timestamp(new Date().getTime());
