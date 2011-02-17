@@ -316,3 +316,13 @@ all files and folders within the folder',0
 ALTER TABLE ir_user.ir_user ADD COLUMN most_recent_login_date TIMESTAMP WITH TIME ZONE;
 
 UPDATE ir_user.ir_user set most_recent_login_date = last_login_date;
+
+
+-- ---------------------------------------------
+-- Add a constraint on the invite info table
+-- ---------------------------------------------
+ ALTER TABLE ir_user.invite_info
+  ADD CONSTRAINT invite_info_token_key UNIQUE (token);
+
+  
+  

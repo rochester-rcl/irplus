@@ -98,10 +98,10 @@ public class InviteInfoDAOTest {
 	.getBean("irFileDAO");
      
 	/**
-	 * Test PersonName persistance
+	 * Test Invite user persistence
 	 */
 	@Test
-	public void baseInviteUserTokenDAOTest()throws Exception{
+	public void baseInviteInfoDAOTest()throws Exception{
 
 		TransactionStatus ts = tm.getTransaction(td);
 

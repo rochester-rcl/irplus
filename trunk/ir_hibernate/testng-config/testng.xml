@@ -116,6 +116,7 @@
 		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceFileDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceGroupDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceGroupInviteDAOTest"/>
 
 		</classes>
 	</test>

@@ -2653,7 +2653,8 @@ CREATE TABLE ir_user.invite_info
   email TEXT NOT NULL,
   user_id BIGINT NOT NULL,
   created_date TIMESTAMP WITH TIME ZONE NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id) 
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id), 
+  UNIQUE(token)
 );
 ALTER TABLE ir_user.invite_info OWNER TO ir_plus;
 
@@ -3746,7 +3747,7 @@ ALTER TABLE ir_group_workspace.group_workspace_group_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
--- Group space group membership Information
+-- Group workspace group membership Information
 -- ---------------------------------------------
 CREATE TABLE ir_group_workspace.group_workspace_group_users
 (
@@ -3757,3 +3758,27 @@ CREATE TABLE ir_group_workspace.group_workspace_group_users
     PRIMARY KEY(group_workspace_group_id, user_id)
 );
 ALTER TABLE ir_group_workspace.group_workspace_group_users OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Group workspace group invite Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_workspace.group_workspace_group_invite
+(
+    group_workspace_group_invite_id BIGINT NOT NULL,
+    version INTEGER,
+    token TEXT NOT NULL,
+    email TEXT NOT NULL,
+    inviting_user_id BIGINT NOT NULL,
+    invited_user_id BIGINT,
+    created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    group_workspace_group_id BIGINT NOT NULL,
+    FOREIGN KEY (group_workspace_group_id) REFERENCES ir_group_workspace.group_workspace_group (group_workspace_group_id),
+    FOREIGN KEY (inviting_user_id) REFERENCES ir_user.ir_user (user_id),
+    FOREIGN KEY (invited_user_id) REFERENCES ir_user.ir_user (user_id),
+    UNIQUE(token)
+);
+ALTER TABLE ir_group_workspace.group_workspace_group_invite OWNER TO ir_plus;
+
+-- The group workspace group sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_group_invite_seq;
+ALTER TABLE ir_group_workspace.group_workspace_group_invite_seq OWNER TO ir_plus;
