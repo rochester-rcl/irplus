@@ -131,7 +131,7 @@
                           <br/>
                           <br/>
                           <label class="label" for="j_name">User Name:</label>
-                          <input tabindex="1" type='text' size="30" name='j_username' value='<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION.message}"><c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></c:if>'/>
+                          <input tabindex="1" type='text' size="30" name='j_username' value='<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION.message}">${SPRING_SECURITY_LAST_USERNAME}</c:if>'/>
                            
                           <br/>
                           <br/>
