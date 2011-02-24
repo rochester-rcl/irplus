@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 University of Rochester
+   Copyright 2008 - 2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,8 +17,10 @@
 package edu.ur.hibernate.ir.user.db;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -36,6 +38,7 @@ import edu.ur.hibernate.ir.test.helper.RepositoryBasedTestHelper;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
+import edu.ur.ir.invite.InviteToken;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.security.IrClassTypeDAO;
 import edu.ur.ir.security.IrClassTypePermission;
@@ -151,11 +154,18 @@ public class InviteInfoDAOTest {
 		IrClassTypePermission permission 
 			= irClassTypePermissionDAO.getClassTypePermissionByNameAndClassType("edu.ur.ir.file.VersionedFile", "VIEW");
 
-		InviteInfo inviteInfo = new InviteInfo(user, vf);
-		inviteInfo.setEmail("test@mail.com");
-		inviteInfo.setToken("123");
-		inviteInfo.addPermission(permission);
-		inviteInfo.setInviteMessage("invite message");
+		InviteToken token = new InviteToken("test@mail.com", "123", user);
+		token.setInviteMessage("invite message");
+		
+		Set<VersionedFile> files = new HashSet<VersionedFile>();
+		files.add(vf);
+		
+		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
+		permissions.add(permission);
+		
+		InviteInfo inviteInfo = new InviteInfo(files, permissions, token );
+		
+		
 
 		inviteInfoDAO.makePersistent(inviteInfo);
 		
@@ -165,11 +175,11 @@ public class InviteInfoDAOTest {
 		ts = tm.getTransaction(td);
 		InviteInfo other = inviteInfoDAO.getById(inviteInfo.getId(), false);
 		assert other.equals(inviteInfo) : "The user inviteInfo information should be equal";
-		assert inviteInfo.getEmail() == "test@mail.com" : "Email should be equal";
-		assert inviteInfo.getInviteMessage() == "invite message" : "Message should be equal";
-		assert inviteInfo.getToken() == "123" : "inviteInfo should be equal";
+		assert inviteInfo.getInviteToken().getEmail() == "test@mail.com" : "Email should be equal";
+		assert inviteInfo.getInviteToken().getInviteMessage() == "invite message" : "Message should be equal";
+		assert inviteInfo.getInviteToken().getToken() == "123" : "inviteInfo should be equal";
 		assert inviteInfo.getPermissions().contains(permission) : "Permissions should exit";
-		assert inviteInfo.getUser().equals(user) : "User should be equal";
+		assert inviteInfo.getInviteToken().getInvitingUser().equals(user) : "User should be equal";
 		assert inviteInfo.getFiles().contains(vf) : "VersionedFile should be equal";
 		assert (inviteInfoDAO.findInviteInfoForToken("123")).equals(inviteInfo) : "The user inviteInfo should be equal";
 		List<InviteInfo> invites = inviteInfoDAO.getInviteInfoByEmail("TeSt@Mail.com");

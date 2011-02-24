@@ -187,7 +187,7 @@ public class DefaultUserImporter implements UserImporter{
 	{		
 		UserEmail defaultEmail = new UserEmail(u.email); 
 					
-		defaultEmail.setVerified(true);
+		defaultEmail.setVerifiedTrue();
 		IrUser irUser = userService.createUser(u.password, u.email, defaultEmail);
 
 		irUser.setAccountExpired(false);

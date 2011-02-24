@@ -52,7 +52,7 @@
 			
 			<c:forEach var="invite" items="${personalFile.versionedFile.invitees}" >	  
 				<tr>
-					<td>      ${invite.email} - [to be shared]    </td>
+					<td>      ${invite.inviteToken.email} - [to be shared]    </td>
 					<td>		<a href="javascript:YAHOO.ur.invite.unsharePendingInvitee('${invite.id}',
 			                           '${personalFile.id}', '${shareFileIds}');">UnShare</a>
 			        </td>

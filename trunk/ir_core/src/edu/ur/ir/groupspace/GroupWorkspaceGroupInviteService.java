@@ -58,6 +58,44 @@ public interface GroupWorkspaceGroupInviteService
 			int maxResults, OrderType orderType);
 	
 	
+	/**
+	 * Get the invited group workspace group user by id.
+	 * 
+	 * @param id - id of the invite id
+	 * @param lock - upgrade the lock.
+	 * 
+	 * @return the invite if found.
+	 */
+	public GroupWorkspaceGroupInvite getById(Long id, boolean lock);
+
+	
+	/**
+	 * Make the invite record persistent.
+	 * 
+	 * @param entity
+	 */
+	public void save(GroupWorkspaceGroupInvite entity);
+
+	/**
+	 * Delete the invite 
+	 * 
+	 * @param entity
+	 */
+	public void delete(GroupWorkspaceGroupInvite entity);
+
+	/**
+	 * Get a count of the number of invite records.
+	 * 
+	 */
+	public Long getCount();
+	
+	/**
+	 * Sends an email notifying the specified user that  they have been invited
+	 * to join a group workspace.
+	 * 
+	 * @param invite
+	 */
+	public void sendEmailInvite(GroupWorkspaceGroupInvite invite);
 	
 	
 }

@@ -46,9 +46,11 @@ import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.IrUserGroup;
 import edu.ur.ir.user.RoleService;
 import edu.ur.ir.user.UserDeletedPublicationException;
 import edu.ur.ir.user.UserEmail;
+import edu.ur.ir.user.UserGroupService;
 import edu.ur.ir.user.UserHasPublishedDeleteException;
 import edu.ur.ir.user.UserIndexService;
 import edu.ur.ir.user.UserService;
@@ -211,6 +213,21 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	
 	private Long roleId = -1l;
 	
+	/** service to view user group information */
+	private UserGroupService userGroupService;
+	
+	/** list of groups the user belongs to */
+	private List<IrUserGroup> userGroups;
+	
+
+	/**
+	 * Set the user group service.
+	 * 
+	 * @param userGroupService
+	 */
+	public void setUserGroupService(UserGroupService userGroupService) {
+		this.userGroupService = userGroupService;
+	}
 
 	/** Default constructor */
 	public  ManageUsers() 
@@ -273,7 +290,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		String firstName = irUser.getFirstName();
 		String lastName = irUser.getLastName();
 					
-		defaultEmail.setVerified(true);
+		defaultEmail.setVerifiedTrue();
 		irUser = userService.createUser(irUser.getPassword(), irUser.getUsername(), defaultEmail);
 
 		irUser.setAccountExpired(accountExpired);
@@ -432,6 +449,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 			irUser = userService.getUser(id, false);
 			defaultEmail = irUser.getDefaultEmail();
 			fileSystemSize = repositoryService.getFileSystemSizeForUser(irUser);
+			userGroups = userGroupService.getUserGroupsForUser(id);
 		}
 		
 		return SUCCESS;
@@ -494,6 +512,13 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public String changePassword() {
 		
+		IrUser admin = userService.getUser(adminUserId, false);
+        
+        if( !admin.hasRole(IrRole.ADMIN_ROLE))
+        {
+        	return "accessDenied";
+        }
+		
 		irUser = userService.getUser(id, false);
 		
 		userService.updatePassword(password, irUser);
@@ -515,6 +540,12 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public String loginAsUser() 
 	{
+		IrUser admin = userService.getUser(adminUserId, false);
+        
+        if( !admin.hasRole(IrRole.ADMIN_ROLE))
+        {
+        	return "accessDenied";
+        }
 		log.debug("user id = " + id);
 		irUser = userService.getUser(id, false);
 		log.debug("User = " + irUser);
@@ -539,7 +570,16 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	    		+ " sortElement="  + sortElement + "   orderType =" + sortType
 	    		+ " affilationId = " + affiliationId
 	    		+ " roleId = " + roleId);
+		   
+		    log.debug("admin user id = " + adminUserId);
 		}
+		
+		IrUser admin = userService.getUser(adminUserId, false);
+        
+        if( !admin.hasRole(IrRole.ADMIN_ROLE))
+        {
+        	return "accessDenied";
+        }
 		rowEnd = rowStart + numberOfResultsToShow;
 	    
 		OrderType orderType = OrderType.getOrderType(sortType);
@@ -633,6 +673,12 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public String reIndexUserWorkspace() throws IOException
 	{
+		IrUser admin = userService.getUser(adminUserId, false);
+        
+        if( !admin.hasRole(IrRole.ADMIN_ROLE))
+        {
+        	return "accessDenied";
+        }
 		log.debug("user id = " + id);
 		viewEditUser();
 		irUser.setReBuildUserWorkspaceIndex(true);
@@ -642,14 +688,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return SUCCESS;
 	}
 
-	/**
-	 * Get the user type service.
-	 * 
-	 * @return
-	 */
-	public UserService getUserService() {
-		return userService;
-	}
+
 
 	/**
 	 * Set the user type service.
@@ -716,10 +755,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return irUser;
 	}
 
-	public void setIrUser(IrUser irUser) {
-		this.irUser = irUser;
-	}
-
 	public boolean isAccountLocked() {
 		return accountLocked;
 	}
@@ -732,10 +767,7 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return defaultEmail;
 	}
 
-	public void setDefaultEmail(UserEmail defaultEmail) {
-		this.defaultEmail = defaultEmail;
-	}
-
+	
 	public boolean isAccountExpired() {
 		return accountExpired;
 	}
@@ -780,10 +812,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return roleService;
 	}
 
-	public void setRoleService(RoleService roleService) {
-		this.roleService = roleService;
-	}
-
 	/**
 	 * Get all affiliations
 	 * 
@@ -806,15 +834,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		return roles ;
 	}
 
-
-	/**
-	 * Get service class for affiliation
-	 * 
-	 * @return
-	 */
-	public AffiliationService getAffiliationService() {
-		return affiliationService;
-	}
 
 	/**
 	 * Set service class for affiliation
@@ -849,10 +868,6 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 
 	public void setEmailMessage(String emailMessage) {
 		this.emailMessage = emailMessage;
-	}
-
-	public DepartmentService getDepartmentService() {
-		return departmentService;
 	}
 
 	public void setDepartmentService(DepartmentService departmentService) {
@@ -897,16 +912,8 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		this.userRole = userRole;
 	}
 
-	public RepositoryService getRepositoryService() {
-		return repositoryService;
-	}
-
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
-	}
-
-	public UserIndexService getUserIndexService() {
-		return userIndexService;
 	}
 
 	public void setUserIndexService(UserIndexService userIndexService) {
@@ -1177,17 +1184,9 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		this.message = message;
 	}
 
-	public AuthenticateUserOverrideService getAuthenticateUserOverrideService() {
-		return authenticateUserOverrideService;
-	}
-
 	public void setAuthenticateUserOverrideService(
 			AuthenticateUserOverrideService authenticateUserOverrideService) {
 		this.authenticateUserOverrideService = authenticateUserOverrideService;
-	}
-
-	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
-		return userWorkspaceIndexProcessingRecordService;
 	}
 
 	public void setUserWorkspaceIndexProcessingRecordService(
@@ -1195,22 +1194,13 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
-	public IndexProcessingTypeService getIndexProcessingTypeService() {
-		return indexProcessingTypeService;
-	}
-
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
 
-	
 	public void injectUserId(Long userId) {
 		adminUserId = userId;
-	}
-
-	public ExternalAccountTypeService getExternalAccountTypeService() {
-		return externalAccountTypeService;
 	}
 
 	public void setExternalAccountTypeService(
@@ -1250,6 +1240,15 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	 */
 	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
+	}
+	
+	/**
+	 * Get the list of user groups the user belongs to.
+	 * 
+	 * @return
+	 */
+	public List<IrUserGroup> getUserGroups() {
+		return userGroups;
 	}
 
 

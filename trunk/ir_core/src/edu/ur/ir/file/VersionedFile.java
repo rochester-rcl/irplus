@@ -430,7 +430,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 		List<String> inviteeEmails = new ArrayList<String>();
 		
 		for (InviteInfo inviteInfo:invitees) {
-			inviteeEmails.add(inviteInfo.getEmail());
+			inviteeEmails.add(inviteInfo.getInviteToken().getEmail());
 		}
 		
 		return inviteeEmails;

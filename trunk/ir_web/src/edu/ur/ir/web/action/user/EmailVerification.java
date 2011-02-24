@@ -73,8 +73,7 @@ public class EmailVerification extends ActionSupport implements UserIdAware {
 			UserEmail email = userService.getUserEmailByToken(token);
 			
 			if ((email != null) && (email.getIrUser().equals(user))) {
-				email.setVerified(true);
-				email.setToken(null);
+				email.setVerifiedTrue();
 				userService.makeUserPersistent(user);
 				
 				try {

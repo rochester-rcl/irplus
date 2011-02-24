@@ -95,10 +95,12 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 			
 			if( user != null )
 			{
+				log.debug("injecting user id");
 	            ((UserIdAware) action).injectUserId(user.getId());
 			}
 			else
 			{
+				log.debug("setting user id to null");
 				// make sure user id is cleared out
 				((UserIdAware) action).injectUserId(null);
 			}

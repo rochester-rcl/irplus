@@ -215,7 +215,7 @@
                           onMouseOver="this.className='highlight'"
                           onMouseOut="this.className='${rowClass}'">
                           <urstb:td>
-                          ${invite.email} 
+                          ${invite.inviteToken.email} 
                           </urstb:td>
                       </urstb:tr>
                   </urstb:tbody>
