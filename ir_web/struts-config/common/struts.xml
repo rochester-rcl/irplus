@@ -70,8 +70,9 @@
              
         </interceptors>
         
+       <default-interceptor-ref name="default"/>
        
-        <default-action-ref name="unknownAction" />
+       <default-action-ref name="unknownAction" />
 
         <global-results>
         	 <result type="redirect" name="change-password">/pages/user/login/force_change_password.jsp</result>
