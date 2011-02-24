@@ -21,6 +21,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 
 <!--  document type -->
 <c:import url="/inc/doctype-frag.jsp"/>
@@ -93,6 +94,7 @@
             <ul class="yui-nav">
                 <li class="selected"><a href="#tab1"><em>User Information</em></a></li>
                 <li><a href="#tab2"><em>Emails</em></a></li>
+                <li><a href="#tab2"><em>Groups</em></a></li>
                 <li><a href="#tab3"><em>Authoritative name</em></a></li>
                 <li><a href="#tab4"><em>Accepted Repository Licenses</em></a></li>
             </ul>
@@ -162,8 +164,48 @@
 				 </div>
 	             <!--  end tab 2 -->
 	             
-                 <!--  Start third tab -->
-                 <div id="tab3">
+	              <!--  tab3 -->
+               	 <div id="tab3">
+         		     
+         		     <h3>Groups this user belongs to</h3>
+         		     <div class="dataTable">
+         		     <urstb:table width="100%">
+	                     <urstb:thead>
+	                         <urstb:tr>
+	                             <urstb:td>Id</urstb:td>
+					             <urstb:td>Description</urstb:td>
+	                         </urstb:tr>
+	                     </urstb:thead>
+	                     <urstb:tbody
+	                         var="userGroup" 
+	                         oddRowClass="odd"
+	                         evenRowClass="even"
+	                         currentRowClassVar="rowClass"
+	                         collection="${userGroups}">
+	                         
+	                         <urstb:tr 
+	                             cssClass="${rowClass}"
+	                             onMouseOver="this.className='highlight'"
+	                             onMouseOut="this.className='${rowClass}'">
+	                        
+	                            <urstb:td>
+			                        <c:url var="editUserGroupUrl" value="/admin/viewUserGroup.action">
+			                            <c:param name="id" value="${userGroup.id}"/>
+			                        </c:url>
+			                        <a href="${editUserGroupUrl}">${userGroup.name}</a>
+	                            </urstb:td>
+	                            <urstb:td>
+	                                ${userGroup.description}
+	                            </urstb:td>
+	                        </urstb:tr>
+	                    </urstb:tbody>
+	                </urstb:table>
+	                </div>
+				 </div>
+	             <!--  end tab 3 -->
+	             
+                 <!--  Start 4th tab -->
+                 <div id="tab4">
                      <table width="100%">
                          <tr>
                              <td width= "50%"></td>
@@ -198,10 +240,10 @@
                          </tr>
                      </table>
                  </div>
-                 <!--  End third tab -->
+                 <!--  End 4th tab -->
                  
-                 <!--  start 4th tab -->
-               	 <div id="tab4">
+                 <!--  start 5th tab -->
+               	 <div id="tab5">
          		     <h3>Accepted Repository Submission Licenses</h3>
 			         <c:import url="repository_accepted_licenses_table.jsp"/>
          		     
