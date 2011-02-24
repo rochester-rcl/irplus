@@ -146,12 +146,35 @@ public class UserEmail extends BasePersistent {
 	}
 
 	/**
-	 * Sets the email as verified.
+	 * Sets the email as verified. If the verified is set to true,
+	 * the token will be set to null.
 	 * 
 	 * @param isVerified
 	 */
-	public void setVerified(boolean isVerified) {
+	void setVerified(boolean isVerified) {
 		this.isVerified = isVerified;
+	}
+	
+	/**
+	 * Set the is verified state to true and
+	 * set the token value to null
+	 */
+	public void setVerifiedTrue()
+	{
+		this.isVerified = true;
+		this.token = null;
+	}
+	
+	/**
+	 * Set the is verified state to false and set the token
+	 * to the token value.
+	 * 
+	 * @param token
+	 */
+	public void setVerifiedFalse(String token)
+	{
+		this.isVerified = false;
+		this.token = token;
 	}
 
 	/**
@@ -168,7 +191,7 @@ public class UserEmail extends BasePersistent {
 	 * 
 	 * @param token
 	 */
-	public void setToken(String token) {
+	void setToken(String token) {
 		this.token = token;
 	}
 	

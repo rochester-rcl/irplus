@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 - 2011 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for invite token
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.invite">
+	<class name="InviteToken" schema="ir_invite"
+	    table="invite_token"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="invite_token_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_invite.invite_token_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+		
+	    <property name="email" column="email" type="string"
+			not-null="true" access="field" />
+
+		<property name="token" column="token" type="string"
+			not-null="true" access="field" />
+			
+		<property name="createdDate" column="created_date" type="timestamp"
+			not-null="true" access="field" />
+			
+	    <property name="expirationDate" column="expiration_date" type="timestamp"
+			 access="field" />
+
+		<!--  user sending the invitation -->
+		<many-to-one class="edu.ur.ir.user.IrUser" 
+			name="invitingUser" 
+			column="inviting_user_id" 
+			insert="true"
+			update="false" 
+			unique="true" 
+			access="field"/>
+
+    </class>
+		
+    <!-- named query for getting invite information for given token-->
+    <query name="findInviteTokenByToken">from InviteToken inviteToken where inviteToken.token = :token </query> 
+ 
+    <!-- named query for getting invite information for given email -->
+    <query name="findInviteTokenByEmail">from InviteToken inviteToken where lower(inviteToken.email) = :email </query> 
+    
+    <!-- named query for getting invite information made by a given user -->
+    <query name="getInviteTokenMadeByUser">from InviteToken inviteToken where invitingUser.id = :userId </query> 
+    
+    	<!--  Get a count of roles in the system -->
+	<query name="inviteTokenCount">
+	    select count(*) from InviteToken
+	</query>
+	
+		<!-- sort by last name asc -->
+	<query name="getInviteTokensOrderByInvitorAsc">
+		select inviteToken from InviteToken as inviteToken
+		order by inviteToken.invitingUser.lowerCaseLastName asc, inviteToken.invitingUser.lowerCaseFirstName asc, inviteToken.invitingUser.lowerCaseMiddleName asc
+	</query>	
+
+	<!-- sort by last name desc -->
+	<query name="getInviteTokensOrderByInvitorDesc">
+		select inviteToken from InviteToken as inviteToken
+		order by inviteToken.invitingUser.lowerCaseLastName desc, inviteToken.invitingUser.lowerCaseFirstName desc, inviteToken.invitingUser.lowerCaseMiddleName desc
+	</query>	
+	
+</hibernate-mapping>

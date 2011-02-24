@@ -156,7 +156,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 
 		if ((token != null) && (token.length() > 0)) {
 			inviteInfo = inviteUserService.findInviteInfoByToken(token);
-			defaultEmail = new UserEmail(inviteInfo.getEmail());
+			defaultEmail = new UserEmail(inviteInfo.getInviteToken().getEmail());
 		}
 		return SUCCESS;
 	}
@@ -582,8 +582,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		String phoneNumber = irUser.getPhoneNumber().trim();
 		ExternalUserAccount externalAccount = irUser.getExternalAccount();
 				
-		defaultEmail.setVerified(false);
-		defaultEmail.setToken(TokenGenerator.getToken());
+		defaultEmail.setVerifiedFalse(TokenGenerator.getToken());
 				
 		irUser = userService.createUser(irUser.getPassword().trim(), irUser.getUsername().trim(), 
 			    		defaultEmail);
@@ -642,29 +641,28 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 		if ((token != null) && (token.length() > 0)) {
 			log.debug("found token ");
 			inviteInfo = inviteUserService.findInviteInfoByToken(token);
-            log.debug(" checking emails inviteInfo email = " + inviteInfo.getEmail() + " default email = " + defaultEmail.getEmail());
+            log.debug(" checking emails inviteInfo email = " + inviteInfo.getInviteToken().getEmail() + " default email = " + defaultEmail.getEmail());
 			
             
-            if (!inviteInfo.getEmail().equals(defaultEmail.getEmail())) {
+            if (!inviteInfo.getInviteToken().getEmail().equals(defaultEmail.getEmail())) {
 				log.debug("NOT EQUAL adding default email " + defaultEmail );
-				String emailToken = TokenGenerator.getToken();
 
-				UserEmail anotherEmail = new UserEmail(inviteInfo.getEmail());
-				anotherEmail.setVerified(true);
+				UserEmail anotherEmail = new UserEmail(inviteInfo.getInviteToken().getEmail());
+				anotherEmail.setVerifiedTrue();
 				irUser.addUserEmail(anotherEmail, true);
 
-				irUser.getUserEmail(defaultEmail.getEmail()).setToken(emailToken);
+				irUser.getUserEmail(defaultEmail.getEmail()).setVerifiedFalse(TokenGenerator.getToken());
 				
 				// send email With URL to verify email
-				userService.sendEmailForEmailVerification(emailToken, defaultEmail.getEmail(), irUser.getUsername());
+				userService.sendEmailForEmailVerification(defaultEmail.getToken(), defaultEmail.getEmail(), irUser.getUsername());
 			} else {
 				log.debug("setting default email verified ");
-				irUser.getDefaultEmail().setVerified(true);
+				irUser.getDefaultEmail().setVerifiedTrue();
 				userService.makeUserPersistent(irUser);
 			}
 			
 			inviteUserService.shareFileForUserWithToken(irUser.getId(), token);
-			inviteUserService.sharePendingFilesForEmail(irUser.getId(), inviteInfo.getEmail());
+			inviteUserService.sharePendingFilesForEmail(irUser.getId(), inviteInfo.getInviteToken().getEmail());
 			
 			returnVal = "successInvite";
 		} 

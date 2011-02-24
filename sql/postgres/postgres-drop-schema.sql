@@ -209,8 +209,14 @@ DROP SEQUENCE ir_user.folder_invite_info_seq;
 DROP SEQUENCE ir_user.shared_inbox_file_seq;
 
 
+-- ---------------------------------------------
+-- Drop ir_invite information
+-- ---------------------------------------------
+DROP TABLE ir_invite.invite_token;
+DROP SEQUENCE ir_invite.invite_token_seq;
 
 
+DROP SCHEMA ir_invite;
 
 -- ---------------------------------------------
 -- Drop ir_item information
@@ -378,24 +384,6 @@ DROP SEQUENCE mime.sub_type_extension_seq;
 
 DROP SCHEMA mime;
 
--- ---------------------------------------------
--- DROP the fedora information
--- ---------------------------------------------
-
-DROP TABLE fedora_file_system.file;
-DROP TABLE fedora_file_system.alternate_id;
-DROP TABLE fedora_file_system.datastream_info;
-DROP TABLE fedora_file_system.file_database;
-DROP TABLE fedora_file_system.file_server;
-
-DROP SEQUENCE fedora_file_system.file_seq;
-DROP SEQUENCE fedora_file_system.alternate_id_seq;
-DROP SEQUENCE fedora_file_system.datastream_info_seq;
-DROP SEQUENCE fedora_file_system.file_database_seq;
-DROP SEQUENCE fedora_file_system.file_server_seq;
-DROP SEQUENCE fedora_file_system.file_system_name_seq;
-
-DROP SCHEMA fedora_file_system;
 
 
 -- ---------------------------------------------

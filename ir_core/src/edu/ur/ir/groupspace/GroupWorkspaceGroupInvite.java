@@ -86,12 +86,13 @@ public class GroupWorkspaceGroupInvite extends BasePersistent{
 	
 	/**
 	 * Create an invite for a user who exists in the system.
+	 * @param email - which email was selected as the email to send to.
 	 * @param invitedUser
 	 * @param group
 	 * @param inviteingUser
 	 * @param token - unique token for the invite
 	 */
-	public GroupWorkspaceGroupInvite(IrUser invitedUser, GroupWorkspaceGroup group, 
+	public GroupWorkspaceGroupInvite(String email, IrUser invitedUser, GroupWorkspaceGroup group, 
 			IrUser inviteingUser, String token)
 	{
 		this.invitedUser = invitedUser;
@@ -111,7 +112,7 @@ public class GroupWorkspaceGroupInvite extends BasePersistent{
 	}
 
 	/**
-	 * Email of the user being invited.
+	 * Email of the user being invited.  
 	 * 
 	 * @return - email of the user being invited.
 	 */

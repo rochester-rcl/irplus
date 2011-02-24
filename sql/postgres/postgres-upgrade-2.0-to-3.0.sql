@@ -1,3 +1,22 @@
+-- ---------------------------------------------
+-- DROP the fedora information
+-- ---------------------------------------------
+
+DROP TABLE fedora_file_system.file;
+DROP TABLE fedora_file_system.alternate_id;
+DROP TABLE fedora_file_system.datastream_info;
+DROP TABLE fedora_file_system.file_database;
+DROP TABLE fedora_file_system.file_server;
+
+DROP SEQUENCE fedora_file_system.file_seq;
+DROP SEQUENCE fedora_file_system.alternate_id_seq;
+DROP SEQUENCE fedora_file_system.datastream_info_seq;
+DROP SEQUENCE fedora_file_system.file_database_seq;
+DROP SEQUENCE fedora_file_system.file_server_seq;
+DROP SEQUENCE fedora_file_system.file_system_name_seq;
+
+DROP SCHEMA fedora_file_system;
+
 -- create the institutional collection index folder
 ALTER TABLE ir_repository.repository ADD COLUMN institutional_collection_index_folder TEXT;
 
@@ -222,6 +241,29 @@ CREATE TABLE ir_group_workspace.group_workspace_group_users
 );
 ALTER TABLE ir_group_workspace.group_workspace_group_users OWNER TO ir_plus;
 
+-- ---------------------------------------------
+-- Group workspace group invite Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_workspace.group_workspace_group_invite
+(
+    group_workspace_group_invite_id BIGINT NOT NULL,
+    version INTEGER,
+    token TEXT NOT NULL,
+    email TEXT NOT NULL,
+    inviting_user_id BIGINT NOT NULL,
+    invited_user_id BIGINT,
+    created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    group_workspace_group_id BIGINT NOT NULL,
+    FOREIGN KEY (group_workspace_group_id) REFERENCES ir_group_workspace.group_workspace_group (group_workspace_group_id),
+    FOREIGN KEY (inviting_user_id) REFERENCES ir_user.ir_user (user_id),
+    FOREIGN KEY (invited_user_id) REFERENCES ir_user.ir_user (user_id),
+    UNIQUE(token)
+);
+ALTER TABLE ir_group_workspace.group_workspace_group_invite OWNER TO ir_plus;
+
+-- The group workspace group sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_group_invite_seq;
+ALTER TABLE ir_group_workspace.group_workspace_group_invite_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Create a re-index service
@@ -324,5 +366,81 @@ UPDATE ir_user.ir_user set most_recent_login_date = last_login_date;
  ALTER TABLE ir_user.invite_info
   ADD CONSTRAINT invite_info_token_key UNIQUE (token);
 
-  
-  
+
+-- ---------------------------------------------
+-- Create a schema to hold all file system
+-- information.
+-- ---------------------------------------------
+
+CREATE SCHEMA ir_invite AUTHORIZATION ir_plus;
+
+CREATE TABLE ir_invite.invite_token
+(
+  invite_token_id BIGINT PRIMARY KEY,
+  version INTEGER,
+  token TEXT NOT NULL,
+  email TEXT NOT NULL,
+  inviting_user_id BIGINT NOT NULL,
+  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  expiration_date TIMESTAMP WITH TIME ZONE,
+  FOREIGN KEY (inviting_user_id) REFERENCES ir_user.ir_user (user_id), 
+  UNIQUE(token)
+);
+ALTER TABLE ir_invite.invite_token OWNER TO ir_plus;
+
+-- The  invite token sequence
+CREATE SEQUENCE ir_invite.invite_token_seq;
+ALTER TABLE ir_invite.invite_token_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Move invite info over
+-- ---------------------------------------------
+--CREATE TABLE ir_user.invite_info
+--(
+--  invite_info_id BIGINT PRIMARY KEY,
+-- version INTEGER,
+--  token TEXT NOT NULL,
+--  email TEXT NOT NULL,
+--  user_id BIGINT NOT NULL,
+--  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+--  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id), 
+--  UNIQUE(token)
+--);
+-- ALTER TABLE ir_user.invite_info OWNER TO ir_plus;
+
+
+INSERT INTO ir_invite.invite_token SELECT
+nextval('ir_invite.invite_token_seq'),0, token, email, user_id, created_date, null
+FROM ir_user.invite_info;
+
+-- Add new column
+ALTER TABLE ir_user.invite_info ADD COLUMN invite_token_id BIGINT;
+
+-- create reference
+UPDATE ir_user.invite_info SET invite_token_id = ()SELECT invite_token_id
+FROM ir_invite.invite_token WHERE invite_info.token = invite_token.token);
+
+-- set not null
+ALTER TABLE ir_user.invite_info ALTER COLUMN invite_token_id SET NOT NULL;
+
+-- create foreign key link
+ALTER TABLE ir_user.invite_info
+  ADD CONSTRAINT invite_info_invite_token_id_fkey FOREIGN KEY (invite_token_id) REFERENCES ir_invite.invite_token (invite_token_id);
+
+-- drop moved columns
+ALTER TABLE ir_user.invite_info DROP COLUMN token;
+ALTER TABLE ir_user.invite_info DROP COLUMN email;
+ALTER TABLE ir_user.invite_info DROP COLUMN user_id;
+ALTER TABLE ir_user.invite_info DROP COLUMN created_date;
+-- ---------------------------------------------
+-- Update all users who have a verified email
+-- where the token is not null
+-- ---------------------------------------------
+UPDATE ir_user.user_email set token = null
+where ir_user.user_email.isverified = true
+and token is not null;
+
+
+-- create an index on the handle info local name
+CREATE INDEX handle_info_local_name_idx ON handle.handle_info(local_name);

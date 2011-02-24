@@ -255,7 +255,7 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	 * @return
 	 * @throws GroupWorkspaceInviteException 
 	 */
-	public GroupWorkspaceGroupInvite inviteUser(IrUser invitedUser,
+	public GroupWorkspaceGroupInvite inviteUser(String email, IrUser invitedUser,
 			IrUser inviteingUser, String token) throws GroupWorkspaceInviteException
 	{
 		if( users.contains(invitedUser) )
@@ -266,10 +266,12 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 		GroupWorkspaceGroupInvite invite = getInvite(invitedUser);
 		if(  invite == null )
 		{
-			invite = new GroupWorkspaceGroupInvite(invitedUser, 
+			invite = new GroupWorkspaceGroupInvite(email, 
+					invitedUser, 
 			    this, 
 			    inviteingUser, 
 			    token);
+		
 		    invitedUsers.add(invite);
 		}
 		return invite;

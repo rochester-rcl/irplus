@@ -159,6 +159,5 @@ public class HbGroupWorkspaceGroupInviteDAO implements GroupWorkspaceGroupInvite
 	public Long getCount() {
 		return (Long)hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceGroupInviteCount").uniqueResult();
 	}
-	
 
 }

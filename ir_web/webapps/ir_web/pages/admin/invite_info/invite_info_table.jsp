@@ -51,16 +51,16 @@
 	                        onMouseOver="this.className='highlight'"
 	                        onMouseOut="this.className='${rowClass}'">
 	                        <urstb:td>
-		                        ${inviteInfo.user.lastName}, ${inviteInfo.user.firstName}
+		                        ${inviteInfo.inviteToken.invitingUser.lastName}, ${inviteInfo.inviteToken.invitingUser.firstName}
 	                        </urstb:td>
 	                        <urstb:td>
-	                             ${inviteInfo.email}
+	                             ${inviteInfo.inviteToken.email}
 	                        </urstb:td>
 	                        <urstb:td>
-	                             ${inviteInfo.createdDate}
+	                             ${inviteInfo.inviteToken.createdDate}
 	                        </urstb:td>
 	                        <urstb:td>
-	                             ${inviteInfo.token}
+	                             ${inviteInfo.inviteToken.token}
 	                        </urstb:td>
 	                        <urstb:td>
 	                           <c:forEach items="${inviteInfo.files}"  var="file">

@@ -41,6 +41,7 @@ import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.invite.InviteToken;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
@@ -139,6 +140,16 @@ public class DefaultInviteUserServiceTest {
 	UserWorkspaceIndexProcessingRecordService recordProcessingService = 
     	(UserWorkspaceIndexProcessingRecordService) ctx.getBean("userWorkspaceIndexProcessingRecordService");
 
+	/**
+	 * Test sharing files.
+	 * 
+	 * @throws FileSharingException
+	 * @throws DuplicateNameException
+	 * @throws IllegalFileSystemNameException
+	 * @throws UserHasPublishedDeleteException
+	 * @throws UserDeletedPublicationException
+	 * @throws LocationAlreadyExistsException
+	 */
 	public void inviteShareFileTest() throws FileSharingException, DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException {
 		// determine if we should be sending emails 
 		boolean sendEmail = Boolean.valueOf(properties.getProperty("send_emails")).booleanValue();
@@ -242,10 +253,14 @@ public class DefaultInviteUserServiceTest {
 		ts = tm.getTransaction(td);
 		user = userService.getUser(user.getUsername());
 		vf = versionedFileDAO.getById(vf.getId(), false);
-		InviteInfo t = new InviteInfo(user, vf);
-		t.setEmail(strEmail);
-		t.setToken("token");
-		t.setInviteMessage("inviteMessage");
+		
+		InviteToken inviteToken = new InviteToken(strEmail, "token", user);
+		inviteToken.setInviteMessage("invite Message to share file");
+		
+		Set<VersionedFile> files = new HashSet<VersionedFile>();
+		files.add(vf);
+		InviteInfo t = new InviteInfo(files, null, inviteToken);
+		
 		inviteUserService.makeInviteInfoPersistent(t);
 		
 		tm.commit(ts);
@@ -253,12 +268,12 @@ public class DefaultInviteUserServiceTest {
 		// Start a transaction 
 		ts = tm.getTransaction(td);
 
-		InviteInfo otherToken = inviteInfoDAO.getById(t.getId(), false);
+		InviteInfo otherInfo = inviteInfoDAO.getById(t.getId(), false);
 		
-		assert otherToken.getEmail().equals(strEmail) : "Email should be equal strEmail = " + strEmail + " other email = " + otherToken.getEmail();
-		assert otherToken.getToken().equals("token"): "Token should be equal";
-		assert otherToken.getUser().equals(user) : "User should be equal";
-		assert otherToken.getFiles().contains(vf) :"Versioned file should be equal";
+		assert otherInfo.getInviteToken().getEmail().equals(strEmail) : "Email should be equal strEmail = " + strEmail + " other email = " + otherInfo.getInviteToken().getEmail();
+		assert otherInfo.getInviteToken().getToken().equals("token"): "Token should be equal other token = " + otherInfo.getInviteToken().getToken();
+		assert otherInfo.getInviteToken().getInvitingUser().equals(user) : "User should be equal";
+		assert otherInfo.getFiles().contains(vf) :"Versioned file should be equal";
 
 		tm.commit(ts);
 
@@ -278,7 +293,7 @@ public class DefaultInviteUserServiceTest {
 		
 		// Start a transaction 
 		ts = tm.getTransaction(td);
-		inviteInfoDAO.makeTransient(otherToken);
+		inviteInfoDAO.makeTransient(inviteInfoDAO.getById(otherInfo.getId(), false));
 
 		tm.commit(ts);
 
@@ -361,14 +376,11 @@ public class DefaultInviteUserServiceTest {
 		
 		
 		String userEmail3 = properties.getProperty("user_3_email");
-		InviteInfo inviteInfo
-			= new InviteInfo(user, versionedFiles);
-	
-		inviteInfo.setEmail(userEmail3);
-		inviteInfo.setInviteMessage("inviteMessage");
+		InviteToken inviteToken = new InviteToken(userEmail3, TokenGenerator.getToken(), user);
 		
-		inviteInfo.setToken(TokenGenerator.getToken());
-		inviteInfo.setPermissions(permissions);
+		InviteInfo inviteInfo
+			= new InviteInfo(versionedFiles, permissions, inviteToken);
+		
 		inviteUserService.makeInviteInfoPersistent(inviteInfo);
 		
 		IrRole role = new IrRole();
@@ -381,14 +393,17 @@ public class DefaultInviteUserServiceTest {
 		//Start a transaction - make sure the file exists
 		ts = tm.getTransaction(td);
 
-		// User1 adds new email address "new_email@yahoo.com"
+		// User1 adds new email address "new_email@yahoo.com" with
+		// email set to verified.
 		UserEmail userEmail = new UserEmail(userEmail3);
+		userEmail.setVerifiedTrue();
 		user1.addUserEmail(userEmail, false);
+		
 		
 		userService.makeUserPersistent(user1);
 		
 		// Share files pending for this email address
-		inviteUserService.sharePendingFilesForEmail(user1.getId(), inviteInfo.getEmail());
+		inviteUserService.sharePendingFilesForEmail(user1.getId(), inviteInfo.getInviteToken().getEmail());
 		
 		tm.commit(ts);
 		
@@ -461,7 +476,7 @@ public class DefaultInviteUserServiceTest {
 		// create the existing user
 		String userEmail3 = properties.getProperty("user_3_email");
 		UserEmail email3 = new UserEmail(userEmail3);
-		email3.setVerified(true);
+		email3.setVerifiedTrue();
 		IrUser user3 = userService.createUser("password3", "username3", email3);
 		
 		// create the first file to store in the temporary folder
@@ -607,7 +622,7 @@ public class DefaultInviteUserServiceTest {
 		// create the existing user
 		String userEmail3 = properties.getProperty("user_3_email");
 		UserEmail email3 = new UserEmail(userEmail3);
-		email3.setVerified(true);
+		email3.setVerifiedTrue();
 		IrUser user3 = userService.createUser("password3", "username3", email3);
 		
 		// create the first file to store in the temporary folder

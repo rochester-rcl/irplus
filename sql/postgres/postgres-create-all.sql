@@ -159,7 +159,7 @@ CREATE TABLE handle.handle_info
     handle_id BIGINT NOT NULL PRIMARY KEY,
     handle_name_authority_id BIGINT NOT NULL,
     handle_idx BIGINT NOT NULL,
-    local_name text NOT NULL, 
+    local_name TEXT NOT NULL, 
     data_type TEXT,
     data TEXT,
     time_to_live_type INT,
@@ -179,8 +179,8 @@ ALTER TABLE handle.handle_info OWNER TO ir_plus;
 CREATE SEQUENCE handle.handle_info_seq;
 ALTER TABLE handle.handle_info_seq OWNER TO ir_plus;
 
-
-
+-- create an index on the handle info local name
+CREATE INDEX handle_info_local_name_idx ON handle.handle_info(local_name);
 
 
 -- ----------------------------------------------
@@ -2285,173 +2285,35 @@ ALTER TABLE ir_repository.reviewable_item_seq OWNER TO ir_plus;
 -- ----------------------------------------------
 -- **********************************************
        
--- FEDORA SCHEMA     
+-- Invite SCHEMA     
 
 -- **********************************************
 -- ----------------------------------------------
 
-
-
-
-
-
 -- ---------------------------------------------
--- Create a schema to hold all fedora file system
+-- Create a schema to hold all file system
 -- information.
 -- ---------------------------------------------
 
-CREATE SCHEMA fedora_file_system AUTHORIZATION ir_plus;
+CREATE SCHEMA ir_invite AUTHORIZATION ir_plus;
 
--- ---------------------------------------------
--- Sequence for naming files and folders on the file
--- system
--- ---------------------------------------------
-
-CREATE SEQUENCE fedora_file_system.file_system_name_seq; 
-ALTER TABLE fedora_file_system.file_system_name_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- File Server information
--- ---------------------------------------------
-
--- Create a new table to hold folder information in the system
-CREATE TABLE fedora_file_system.file_server
+CREATE TABLE ir_invite.invite_token
 (
-  file_server_id BIGINT PRIMARY KEY,
-  name TEXT UNIQUE NOT NULL,
-  description TEXT,
-  version INTEGER
-);
-ALTER TABLE fedora_file_system.file_server OWNER TO ir_plus;
-
--- The folder name sequence
-CREATE SEQUENCE fedora_file_system.file_server_seq;
-ALTER TABLE fedora_file_system.file_server_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Fedora File Database Information
--- ---------------------------------------------
-
--- Create a new table to hold database information in the system
-CREATE TABLE fedora_file_system.file_database
-(
-  file_database_id BIGINT PRIMARY KEY,
-  file_server_id BIGINT NOT NULL,
-  name TEXT NOT NULL,
-  display_name TEXT,
-  description TEXT,
-  base_url TEXT,
-  upload_url TEXT, 		
-  admin_user_name TEXT,			
-  admin_password TEXT,
-  uri_prefix TEXT,
-  default_log_message TEXT,
+  invite_token_id BIGINT PRIMARY KEY,
   version INTEGER,
-  FOREIGN KEY(file_server_id) REFERENCES fedora_file_system.file_server 
-
-(file_server_id),
-  UNIQUE (name, file_server_id)
+  token TEXT NOT NULL,
+  email TEXT NOT NULL,
+  inviting_user_id BIGINT NOT NULL,
+  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  expiration_date TIMESTAMP WITH TIME ZONE,
+  FOREIGN KEY (inviting_user_id) REFERENCES ir_user.ir_user (user_id), 
+  UNIQUE(token)
 );
-ALTER TABLE fedora_file_system.file_database OWNER TO ir_plus;
+ALTER TABLE ir_invite.invite_token OWNER TO ir_plus;
 
--- The folder name sequence
-CREATE SEQUENCE fedora_file_system.file_database_seq;
-ALTER TABLE fedora_file_system.file_database_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Datastream Information
--- ---------------------------------------------
-
--- Create a new table to hold datastream information in the system
-CREATE TABLE fedora_file_system.datastream_info
-(
-  datastream_info_id BIGINT NOT NULL PRIMARY KEY,
-  fedora_state TEXT,
-  pid TEXT NOT NULL,
-  external_datastream_id TEXT,
-  datastream_label TEXT,
-  upload_url TEXT,
-  versionable BOOLEAN,
-  mime_type TEXT,
-  format_uri TEXT,
-  datastream_location TEXT,
-  fedora_control_group TEXT,
-  checksum_type TEXT,
-  checksum TEXT,
-  log_message TEXT,
-  version INTEGER,
-  UNIQUE (pid)
-);
-ALTER TABLE fedora_file_system.datastream_info OWNER TO ir_plus;
-
--- The file sequence
-CREATE SEQUENCE fedora_file_system.datastream_info_seq;
-ALTER TABLE fedora_file_system.datastream_info_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- Alternate Id 
--- ---------------------------------------------
-
--- Create a new table to hold alternate ids for fedora datastreams
-CREATE TABLE fedora_file_system.alternate_id
-(
-  alternate_id BIGINT NOT NULL PRIMARY KEY,
-  datastream_info_id BIGINT NOT NULL,
-  id_value TEXT NOT NULL,
-  version INTEGER,
-  FOREIGN KEY (datastream_info_id) REFERENCES fedora_file_system.datastream_info 
-
-(datastream_info_id)
-);
-ALTER TABLE fedora_file_system.alternate_id OWNER TO ir_plus;
-
--- The file sequence
-CREATE SEQUENCE fedora_file_system.alternate_id_seq;
-ALTER TABLE fedora_file_system.alternate_id_seq OWNER TO ir_plus;
-
--- ---------------------------------------------
--- File Information
--- ---------------------------------------------
-
--- Create a new table to hold file information in the system
-CREATE TABLE fedora_file_system.file
-(
-  file_id BIGINT NOT NULL PRIMARY KEY,
-  datastream_info_id BIGINT,
-  file_database_id BIGINT NOT NULL,
-  file_name TEXT NOT NULL,
-  path TEXT not NULL,
-  size BIGINT,
-  created_date TIMESTAMP WITH TIME ZONE,
-  extension VARCHAR(10),
-  modified_date TIMESTAMP WITH TIME ZONE,
-  display_name TEXT,
-  description TEXT,
-  version INTEGER,
-  FOREIGN KEY (file_database_id) REFERENCES fedora_file_system.file_database 
-
-(file_database_id),
-  FOREIGN KEY (datastream_info_id) REFERENCES fedora_file_system.datastream_info 
-
-(datastream_info_id),
-  UNIQUE (file_name)
-);
-ALTER TABLE fedora_file_system.file OWNER TO ir_plus;
-
--- Index on the file Name
-CREATE INDEX fedora_file_display_name_idx ON fedora_file_system.file USING btree 
-
-(display_name);
-
--- The file sequence
-CREATE SEQUENCE fedora_file_system.file_seq;
-ALTER TABLE fedora_file_system.file_seq OWNER TO ir_plus;
-
-
-
-
-
-
+-- The  invite token sequence
+CREATE SEQUENCE ir_invite.invite_token_seq;
+ALTER TABLE ir_invite.invite_token_seq OWNER TO ir_plus;
 
 
 
@@ -2638,23 +2500,32 @@ update ir_user.ir_user set default_email_id = currval('ir_user.user_email_seq') 
 user_id = currval('ir_user.ir_user_seq');
 
 
-
 -- ---------------------------------------------
 -- Invite Information
 -- ---------------------------------------------
 
 
+--CREATE TABLE ir_user.invite_info
+--(
+--  invite_info_id BIGINT PRIMARY KEY,
+-- version INTEGER,
+--  token TEXT NOT NULL,
+--  email TEXT NOT NULL,
+--  user_id BIGINT NOT NULL,
+--  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
+--  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id), 
+--  UNIQUE(token)
+--);
+-- ALTER TABLE ir_user.invite_info OWNER TO ir_plus;
+
 
 CREATE TABLE ir_user.invite_info
 (
   invite_info_id BIGINT PRIMARY KEY,
+  invite_token_id BIGINT NOT NULL,
   version INTEGER,
-  token TEXT NOT NULL,
-  email TEXT NOT NULL,
-  user_id BIGINT NOT NULL,
-  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id), 
-  UNIQUE(token)
+  FOREIGN KEY (invite_token_id) REFERENCES ir_invite.invite_token(invite_token_id),
+  UNIQUE(invite_token_id)
 );
 ALTER TABLE ir_user.invite_info OWNER TO ir_plus;
 

@@ -35,6 +35,7 @@ import edu.ur.ir.file.FileCollaboratorDAO;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.file.VersionedFileDAO;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.invite.InviteToken;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.PermissionNotGrantedException;
@@ -71,10 +72,10 @@ import edu.ur.util.TokenGenerator;
  */
 public class DefaultInviteUserService implements InviteUserService {
 
-	/** eclipse generated id */
+	/* eclipse generated id */
 	private static final long serialVersionUID = -6844595955214510755L;
 
-	/**  Get the logger for this class */
+	/*  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInviteUserService.class);
 	
 	/* Mail sender */
@@ -152,11 +153,11 @@ public class DefaultInviteUserService implements InviteUserService {
 	public void sendEmailToExistingUser(InviteInfo inviteInfo) {
 		
 		SimpleMailMessage message = new SimpleMailMessage(userExistMailMessage);
-		message.setTo(inviteInfo.getEmail());
+		message.setTo(inviteInfo.getInviteToken().getEmail());
 		
 		String subject = message.getSubject();
-		subject = StringUtils.replace(subject, "%FIRST_NAME%", inviteInfo.getUser().getFirstName());
-		subject = StringUtils.replace(subject, "%LAST_NAME%", inviteInfo.getUser().getLastName());
+		subject = StringUtils.replace(subject, "%FIRST_NAME%", inviteInfo.getInviteToken().getInvitingUser().getFirstName());
+		subject = StringUtils.replace(subject, "%LAST_NAME%", inviteInfo.getInviteToken().getInvitingUser().getLastName());
 		message.setSubject(subject);
 		
 		String text = message.getText();
@@ -173,9 +174,9 @@ public class DefaultInviteUserService implements InviteUserService {
 		
 		text = StringUtils.replace(text, "%NAME%", names.toString());
 		text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
-		if( inviteInfo.getInviteMessage() != null )
+		if( inviteInfo.getInviteToken().getInviteMessage() != null )
 		{
-		    text = text.concat(inviteInfo.getInviteMessage());
+		    text = text.concat(inviteInfo.getInviteToken().getInviteMessage());
 		}
 		message.setText(text);
 		sendEmail(message);
@@ -188,11 +189,11 @@ public class DefaultInviteUserService implements InviteUserService {
 	 */
 	public void sendEmailToNotExistingUser(InviteInfo inviteInfo) {
 		SimpleMailMessage message = new SimpleMailMessage(userNotExistMailMessage);
-		message.setTo(inviteInfo.getEmail());
+		message.setTo(inviteInfo.getInviteToken().getEmail());
 	
 		String subject = message.getSubject();
-		subject = StringUtils.replace(subject, "%FIRST_NAME%", inviteInfo.getUser().getFirstName());
-		subject = StringUtils.replace(subject, "%LAST_NAME%", inviteInfo.getUser().getLastName());
+		subject = StringUtils.replace(subject, "%FIRST_NAME%", inviteInfo.getInviteToken().getInvitingUser().getFirstName());
+		subject = StringUtils.replace(subject, "%LAST_NAME%", inviteInfo.getInviteToken().getInvitingUser().getLastName());
 		message.setSubject(subject);
 
 		String text = message.getText();
@@ -208,11 +209,11 @@ public class DefaultInviteUserService implements InviteUserService {
 		}
 		
 		text = StringUtils.replace(text, "%NAME%", names.toString());
-		text = StringUtils.replace(text, "%TOKEN%", inviteInfo.getToken());
+		text = StringUtils.replace(text, "%TOKEN%", inviteInfo.getInviteToken().getToken());
 		text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
-		if( inviteInfo.getInviteMessage() != null )
+		if( inviteInfo.getInviteToken().getInviteMessage() != null )
 		{
-		    text = text.concat(inviteInfo.getInviteMessage());
+		    text = text.concat(inviteInfo.getInviteToken().getInviteMessage());
 		}
 		message.setText(text);
 		sendEmail(message);
@@ -303,15 +304,15 @@ public class DefaultInviteUserService implements InviteUserService {
 					versionedFiles.add(versionedFile);
 				}
 			}
-		
-			InviteInfo inviteInfo = new InviteInfo(invitingUser, versionedFiles);
-			inviteInfo.setEmail(email);
-			inviteInfo.setInviteMessage(inviteMessage);
 			
 			log.debug("invitied user = " + invitedUser);
 			/* If user exist in the system then share the file and send email*/
 			if (invitedUser != null) 
 			{
+				InviteToken inviteToken = new InviteToken(email, null, invitingUser);
+				inviteToken.setInviteMessage(inviteMessage);
+				InviteInfo inviteInfo = new InviteInfo(versionedFiles, null, inviteToken );
+				
 				
 				// If the shared user has no Author or collaborator or researcher or admin role, then assign collaborator role
 				if (!invitedUser.hasRole(IrRole.AUTHOR_ROLE) && !invitedUser.hasRole(IrRole.COLLABORATOR_ROLE) 
@@ -350,9 +351,10 @@ public class DefaultInviteUserService implements InviteUserService {
 			else 
 			{
 				/* If user does not exist in the system then get a token and send email with the token */
-				inviteInfo.setToken(TokenGenerator.getToken());
-				inviteInfo.setPermissions(permissions);
-
+				InviteToken inviteToken = new InviteToken(email, TokenGenerator.getToken(), invitingUser);
+				inviteToken.setInviteMessage(inviteMessage);
+				InviteInfo inviteInfo = new InviteInfo(versionedFiles, permissions, inviteToken );
+	
 				try 
 				{
 					sendEmailToNotExistingUser(inviteInfo);
@@ -520,8 +522,9 @@ public class DefaultInviteUserService implements InviteUserService {
 			}
 			
 			// Add the email to the invited user
-			UserEmail userEmail = new UserEmail(inviteInfo.getEmail());
-			userEmail.setVerified(true);
+			UserEmail userEmail = new UserEmail(inviteInfo.getInviteToken().getEmail());
+			userEmail.setVerifiedTrue();
+			
 			invitedUser.addUserEmail(userEmail, false);
 			userService.makeUserPersistent(invitedUser);
 			
@@ -531,7 +534,7 @@ public class DefaultInviteUserService implements InviteUserService {
 				if (file.getCollaborator(invitedUser) == null) {
 	
 					// Share the file with invited user
-					SharedInboxFile inboxFile = shareFile(inviteInfo.getUser(), invitedUser, file);
+					SharedInboxFile inboxFile = shareFile(inviteInfo.getInviteToken().getInvitingUser(), invitedUser, file);
 					inboxFiles.add(inboxFile);
 					// create permissions for the shared file
 					securityService.createPermissions(file, invitedUser, inviteInfo.getPermissions());
@@ -555,11 +558,21 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * 
 	 * @param UserId Id of the invited user
 	 * @param email Email used to invite the user
-	 * @throws FileSharingException - if the user tries to share a file with themselves
+	 * 
+	 * @throws FileSharingException - if the user tries to share a file with themselves or the email has 
+	 * not yet been verified.
 	 */
 	public Set<SharedInboxFile> sharePendingFilesForEmail(Long userId, String email) throws FileSharingException {
 		
 		IrUser invitedUser = userService.getUser(userId, true);
+		
+		UserEmail userEmail = invitedUser.getUserEmail(email);
+		if( userEmail == null || !userEmail.isVerified())
+		{
+			FileSharingException e = new FileSharingException("user email has not yet been verified");
+			errorEmailService.sendError(e);
+			throw e;
+		}
 		
 		List<InviteInfo> invites = inviteInfoDAO.getInviteInfoByEmail(email);
 		
@@ -578,11 +591,6 @@ public class DefaultInviteUserService implements InviteUserService {
 		for (InviteInfo inviteInfo: invites) {
 			
 			if (inviteInfo != null) {
-				
-				// Add the email to the invited user
-				UserEmail userEmail = new UserEmail(inviteInfo.getEmail());
-				invitedUser.addUserEmail(userEmail, false);
-				
 				Set<VersionedFile> files = inviteInfo.getFiles();
 				
 				
@@ -590,7 +598,7 @@ public class DefaultInviteUserService implements InviteUserService {
 					if (file.getCollaborator(invitedUser) == null) {
 		
 						// Share the file with invited user
-						SharedInboxFile inboxFile = shareFile(inviteInfo.getUser(), invitedUser, file);
+						SharedInboxFile inboxFile = shareFile(inviteInfo.getInviteToken().getInvitingUser(), invitedUser, file);
 						inboxFiles.add(inboxFile);
 						// create permissions for the shared file
 						securityService.createPermissions(file, invitedUser, inviteInfo.getPermissions());
@@ -829,12 +837,13 @@ public class DefaultInviteUserService implements InviteUserService {
 		        	 }
 		    	     if( user == null )
 		    	     {
-		    	    	
-		    	    	 FolderInviteInfo inviteInfo = personalFolder.createInviteInfo(permissions, email);
+		    	    	 log.debug("Creating invite for email " + email);
+		    	    	 FolderInviteInfo inviteInfo = f.createInviteInfo(permissions, email);
 		 		         save(inviteInfo);
 		    	     }
 		    	     else
 		    	     {
+		    	    	 log.debug("Creating share for user " + user);
 		    		     FolderAutoShareInfo shareInfo  = f.createAutoShareInfo(permissions, user);
 					     save(shareInfo);
 		    	     }
