@@ -23,7 +23,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div class="dataTable">
-    <urstb:table width="95%">
+    <urstb:table width="45%">
         <urstb:caption>Current Group Members</urstb:caption>
             <urstb:thead>
                 <urstb:tr>

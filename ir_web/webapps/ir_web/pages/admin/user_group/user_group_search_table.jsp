@@ -47,7 +47,13 @@
                     cssClass="${rowClass}"
                     onMouseOver="this.className='highlight'"
                     onMouseOut="this.className='${rowClass}'">
-                        <urstb:td>${userGroup.name}</urstb:td>
+                       
+                        <urstb:td>
+                             <c:url var="editUserGroupUrl" value="/admin/viewUserGroup.action">
+			                        <c:param name="id" value="${userGroup.id}"/>
+			                 </c:url>
+                            <a href="${editUserGroupUrl}">${userGroup.name}</a>
+                        </urstb:td>
                         <urstb:td>${userGroup.description}</urstb:td>
                 </urstb:tr>
             </urstb:tbody>

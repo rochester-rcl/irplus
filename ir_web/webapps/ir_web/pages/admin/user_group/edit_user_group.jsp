@@ -134,23 +134,18 @@
 	                           </form>
 	                           <br/>
 	                           <br/>
-	                           
-	                           <!--  create the grid -->
-                               <div class="yui-g">
-                                     <!--  create the first column -->
-                                    <div class="yui-u first">
-	                                    <div id="group_members_div">
-                                            <c:import url="user_group_users_frag.jsp"></c:import>
-                                        </div>
-                                    </div>
-                                
-                                    <!--  Start the second column -->
-                                    <div class="yui-u">
-                                        <div id="users_search_results_div" ></div>
-                                    </div>
-                                </div>
-                                <!-- end the grid -->
-                                 
+	                               <table>
+	                                   <tr>
+	                                       <td valign="top">
+	                                            <div id="group_members_div">
+                                                    <c:import url="user_group_users_frag.jsp"/>
+                                                </div>
+                                           </td>
+                                           <td valign="top">
+                                               <div id="users_search_results_div" ></div>
+                                           </td>
+                                        </tr>
+                                  </table>
                              </c:if>
 	                 </div>
 	                 <!--  End second tab -->
@@ -163,24 +158,23 @@
 	                                         Search: <input type="text" size="50" id="admin_query" name="query" value=""/>
 	                                         <input type="hidden" name="id" value="${userGroup.id}"/>
 	                                     </form>
-                             </c:if>
-                             <br/>
-                             <br/>
                              
-                             <!--  create the grid -->
-                             <div class="yui-g">
-                                 <!--  create the first column -->
-                                 <div class="yui-u first">
-                                    <div id="group_admins_div">
-                                        <c:import url="user_group_admins_frag.jsp"></c:import>
-                                    </div>
-                                </div>
+                             <br/>
+                             <br/>
+                                 <table>
+                                     <tr>
+                                        <td valign="top">
+                                            <div id="group_admins_div">
+                                                <c:import url="user_group_admins_frag.jsp"/>
+                                            </div>
+                                        </td>
+                                        <td valign="top">
+                                            <div id="admin_search_results_div"></div>
+                                        </td>
                                 
-                                <!--  Start the second column -->
-                                <div class="yui-u">
-                                     <div id="admin_search_results_div"></div>
-                                </div>
-                            </div>
+                                   </tr>
+                                </table>
+                           </c:if>
 	                 </div>
 	                 <!--  End third tab -->
 	                 
