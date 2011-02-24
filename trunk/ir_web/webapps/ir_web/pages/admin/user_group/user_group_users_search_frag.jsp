@@ -29,7 +29,7 @@
 <c:import url="user_group_user_search_pager.jsp"/>
 
 <div class="dataTable">
-    <urstb:table width="95%">
+    <urstb:table>
         <urstb:caption>Found Users</urstb:caption>
             <urstb:thead>
                 <urstb:tr>
