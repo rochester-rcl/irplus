@@ -357,7 +357,7 @@
    <!-- ****************************************** --> 
    <bean id="inviteUserService" 
        class="edu.ur.ir.user.service.DefaultInviteUserService">
-	   <property name="inviteInfoDAO" ref="inviteInfoDAO"/>
+	   <property name="fileInviteInfoDAO" ref="fileInviteInfoDAO"/>
        <property name="personalFileDAO" ref="personalFileDAO"/>
        <property name="userService" ref="userService"/>
        <property name="fileCollaboratorDAO" ref="fileCollaboratorDAO"/>

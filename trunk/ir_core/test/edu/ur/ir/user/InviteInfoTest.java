@@ -54,7 +54,7 @@ public class InviteInfoTest {
 		
 		InviteToken inviteToken = new InviteToken("test@ufr.com", "qwerty12345", user );
 		inviteToken.setInviteMessage("invite message!");
-		InviteInfo info = new InviteInfo ();
+		FileInviteInfo info = new FileInviteInfo ();
 		info.setInviteToken(inviteToken);
 		info.addPermission(permission);
 		
@@ -89,15 +89,15 @@ public class InviteInfoTest {
 		permission1.setName("write");
 
 		InviteToken inviteToken = new InviteToken("test@ufr.com", "qwerty12345", user );
-		InviteInfo inviteInfo1 = new InviteInfo();
+		FileInviteInfo inviteInfo1 = new FileInviteInfo();
 		inviteInfo1.setInviteToken(inviteToken);
 
 		InviteToken inviteToken2 = new InviteToken("test2@ufr.com", "2qwerty12345", user );
-		InviteInfo inviteInfo2 = new InviteInfo();
+		FileInviteInfo inviteInfo2 = new FileInviteInfo();
 		inviteInfo2.setInviteToken(inviteToken2);
 
 		InviteToken inviteToken3 = new InviteToken("test@ufr.com", "qwerty12345", user );
-		InviteInfo inviteInfo3 = new InviteInfo();
+		FileInviteInfo inviteInfo3 = new FileInviteInfo();
 		inviteInfo3.setInviteToken(inviteToken3);
 	
 		

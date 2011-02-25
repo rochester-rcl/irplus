@@ -199,15 +199,15 @@
    <!-- Invite Info								   -->
    <!-- ****************************************** --> 
 
-   <bean id="inviteInfoDAOTarget" 
-       class="edu.ur.hibernate.ir.user.db.HbInviteInfoDAO">
+   <bean id="fileInviteInfoDAOTarget" 
+       class="edu.ur.hibernate.ir.user.db.HbFileInviteInfoDAO">
        <property name="sessionFactory" ref="sessionFactory"/>
    </bean>
    
-   <bean id="inviteInfoDAO" 
+   <bean id="fileInviteInfoDAO" 
        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
        <property name="transactionManager" ref="transactionManager"/>
-       <property name="target" ref="inviteInfoDAOTarget"/>
+       <property name="target" ref="fileInviteInfoDAOTarget"/>
        <property name="transactionAttributes">
            <props>
                <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>

@@ -44,7 +44,7 @@ public interface InviteUserService extends Serializable{
 	 * 
 	 * @param entity invite information
 	 */
-	public void makeInviteInfoPersistent(InviteInfo entity) ;
+	public void makeInviteInfoPersistent(FileInviteInfo entity) ;
 	
 	/**
 	 * Save the folder invite info.
@@ -77,16 +77,16 @@ public interface InviteUserService extends Serializable{
 	/**
 	 * Sends email to user existing in the system for collaborating on a document/file
 	 * 
-	 * @param InviteInfo invite information containing information to send email
+	 * @param FileInviteInfo invite information containing information to send email
 	 */
-	public void sendEmailToExistingUser(InviteInfo inviteInfo);
+	public void sendEmailToExistingUser(FileInviteInfo inviteInfo);
 	
 	/**
 	 * Sends email to user not in the system for collaborating on a document/file
 	 * 
 	 * @param inviteUser Invite information containing information to send email
 	 */
-	public void sendEmailToNotExistingUser(InviteInfo inviteInfo);
+	public void sendEmailToNotExistingUser(FileInviteInfo inviteInfo);
 
 	/**
 	 * Shares the file with the other user
@@ -132,7 +132,7 @@ public interface InviteUserService extends Serializable{
 	 *  @param token Token given for invited user
 	 *  @return Inviting user and file details
 	 */
-	public InviteInfo findInviteInfoByToken(String token);
+	public FileInviteInfo findInviteInfoByToken(String token);
 	
 	/**
 	 * Share files for user with the specified token 
@@ -154,14 +154,14 @@ public interface InviteUserService extends Serializable{
 	 * 
 	 * @throws FileSharingException if the user tries to share a file with themselves
 	 */
-	public List<InviteInfo> findInviteInfoByEmail(String email);
+	public List<FileInviteInfo> findInviteInfoByEmail(String email);
 	
 	/**
 	 * Delete the specified invite information.
 	 * 
 	 * @param inviteInfo - invite info to delete
 	 */
-	public void delete(InviteInfo inviteInfo);
+	public void delete(FileInviteInfo inviteInfo);
 	
 	/**
 	 * Save versioned file 
@@ -178,7 +178,7 @@ public interface InviteUserService extends Serializable{
 	 *  
 	 * @return Invite information for the sepcified id
 	 */
-	public InviteInfo getInviteInfoById(Long id, boolean lock);
+	public FileInviteInfo getInviteInfoById(Long id, boolean lock);
 	
 	/**
 	 * Get the folder invite info by id.
@@ -227,7 +227,7 @@ public interface InviteUserService extends Serializable{
 	 * 
 	 * @return list of invite infos found
 	 */
-	public List<InviteInfo> getInviteInfosOrderByInviteor(int rowStart,
+	public List<FileInviteInfo> getInviteInfosOrderByInviteor(int rowStart,
 			int maxResults, OrderType orderType);
 	
 	/**
@@ -280,7 +280,7 @@ public interface InviteUserService extends Serializable{
 	 * @param email - email to get the invite information for
 	 * @return the invite information
 	 */
-	public List<InviteInfo> getInviteInfo(String email);
+	public List<FileInviteInfo> getInviteInfo(String email);
 	
 	/**
 	 * Get the invites made by a particular user.
@@ -288,6 +288,6 @@ public interface InviteUserService extends Serializable{
 	 * @param user - invites made by a given user
 	 * @return - all invites made by the user or an empty list if no invites found
 	 */
-	public List<InviteInfo> getInvitesMadeByUser(IrUser user);
+	public List<FileInviteInfo> getInvitesMadeByUser(IrUser user);
 	
 }

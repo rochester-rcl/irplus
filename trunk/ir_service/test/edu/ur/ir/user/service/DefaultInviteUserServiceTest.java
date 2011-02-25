@@ -52,8 +52,8 @@ import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.FileSharingException;
 import edu.ur.ir.user.FolderAutoShareInfo;
 import edu.ur.ir.user.FolderInviteInfo;
-import edu.ur.ir.user.InviteInfo;
-import edu.ur.ir.user.InviteInfoDAO;
+import edu.ur.ir.user.FileInviteInfo;
+import edu.ur.ir.user.FileInviteInfoDAO;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -123,8 +123,8 @@ public class DefaultInviteUserServiceTest {
     PersonalFileDAO personalFileDAO= (PersonalFileDAO) ctx
  	.getBean("personalFileDAO");
 
-    InviteInfoDAO inviteInfoDAO= (InviteInfoDAO) ctx
- 	.getBean("inviteInfoDAO");
+    FileInviteInfoDAO inviteInfoDAO= (FileInviteInfoDAO) ctx
+ 	.getBean("fileInviteInfoDAO");
 
     VersionedFileDAO versionedFileDAO= (VersionedFileDAO) ctx
 		.getBean("versionedFileDAO");
@@ -259,7 +259,7 @@ public class DefaultInviteUserServiceTest {
 		
 		Set<VersionedFile> files = new HashSet<VersionedFile>();
 		files.add(vf);
-		InviteInfo t = new InviteInfo(files, null, inviteToken);
+		FileInviteInfo t = new FileInviteInfo(files, null, inviteToken);
 		
 		inviteUserService.makeInviteInfoPersistent(t);
 		
@@ -268,7 +268,7 @@ public class DefaultInviteUserServiceTest {
 		// Start a transaction 
 		ts = tm.getTransaction(td);
 
-		InviteInfo otherInfo = inviteInfoDAO.getById(t.getId(), false);
+		FileInviteInfo otherInfo = inviteInfoDAO.getById(t.getId(), false);
 		
 		assert otherInfo.getInviteToken().getEmail().equals(strEmail) : "Email should be equal strEmail = " + strEmail + " other email = " + otherInfo.getInviteToken().getEmail();
 		assert otherInfo.getInviteToken().getToken().equals("token"): "Token should be equal other token = " + otherInfo.getInviteToken().getToken();
@@ -378,8 +378,8 @@ public class DefaultInviteUserServiceTest {
 		String userEmail3 = properties.getProperty("user_3_email");
 		InviteToken inviteToken = new InviteToken(userEmail3, TokenGenerator.getToken(), user);
 		
-		InviteInfo inviteInfo
-			= new InviteInfo(versionedFiles, permissions, inviteToken);
+		FileInviteInfo inviteInfo
+			= new FileInviteInfo(versionedFiles, permissions, inviteToken);
 		
 		inviteUserService.makeInviteInfoPersistent(inviteInfo);
 		
@@ -545,9 +545,9 @@ public class DefaultInviteUserServiceTest {
 		tm.commit(ts);
 
 		ts = tm.getTransaction(td);
-		List<InviteInfo> infos = inviteUserService.getInviteInfo(userEmail2);
+		List<FileInviteInfo> infos = inviteUserService.getInviteInfo(userEmail2);
 		assert infos.size() == 1 : "Should have one invite info";
-		InviteInfo info = infos.get(0);
+		FileInviteInfo info = infos.get(0);
 		assert info.getPermissions().contains(view);
 		
 		user3 = userService.getUser(user3.getId(), false);
@@ -696,9 +696,9 @@ public class DefaultInviteUserServiceTest {
 		tm.commit(ts);
 
 		ts = tm.getTransaction(td);
-		List<InviteInfo> infos = inviteUserService.getInviteInfo(userEmail2);
+		List<FileInviteInfo> infos = inviteUserService.getInviteInfo(userEmail2);
 		assert infos.size() == 1 : "Should have one invite info";
-		InviteInfo info = infos.get(0);
+		FileInviteInfo info = infos.get(0);
 		assert info.getPermissions().contains(view);
 		
 		user3 = userService.getUser(user3.getId(), false);

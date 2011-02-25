@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
-import edu.ur.ir.user.InviteInfo;
+import edu.ur.ir.user.FileInviteInfo;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -41,7 +41,7 @@ public class ManageInviteInfo extends Pager implements UserIdAware{
 	private int rowEnd;
 	
 	/** Set of departments for viewing the departments */
-	private Collection<InviteInfo> inviteInfos;
+	private Collection<FileInviteInfo> inviteInfos;
 
     /** id of the user tyring to access the information */
     private long userId;
@@ -95,7 +95,7 @@ public class ManageInviteInfo extends Pager implements UserIdAware{
 	 */
 	public String delete()
 	{
-		InviteInfo info = inviteUserService.getInviteInfoById(inviteInfoId, false);
+		FileInviteInfo info = inviteUserService.getInviteInfoById(inviteInfoId, false);
 		if( info != null )
 		{
 		    inviteUserService.delete(info);
@@ -146,7 +146,7 @@ public class ManageInviteInfo extends Pager implements UserIdAware{
 	 * 
 	 * @return - invite info information.
 	 */
-	public Collection<InviteInfo> getInviteInfos() {
+	public Collection<FileInviteInfo> getInviteInfos() {
 		return inviteInfos;
 	}
 

@@ -27,7 +27,7 @@
             <class name="edu.ur.hibernate.ir.user.db.PersonalFileDAOTest"/>
             <class name="edu.ur.hibernate.ir.user.db.PersonalCollectionDAOTest"/>
             <class name="edu.ur.hibernate.ir.user.db.UserEmailDAOTest"/>
-            <class name="edu.ur.hibernate.ir.user.db.InviteInfoDAOTest"/>
+            <class name="edu.ur.hibernate.ir.user.db.FileInviteInfoDAOTest"/>
 	    </classes>
 	</test>
 	

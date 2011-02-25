@@ -38,7 +38,7 @@ import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.PermissionNotGrantedException;
 import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.FileSharingException;
-import edu.ur.ir.user.InviteInfo;
+import edu.ur.ir.user.FileInviteInfo;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
@@ -441,7 +441,7 @@ public class InviteUser extends ActionSupport implements UserIdAware {
 			return("accessDenied");
 		}
 
-		InviteInfo inviteInfo = inviteUserService.getInviteInfoById(inviteInfoId, false);
+		FileInviteInfo inviteInfo = inviteUserService.getInviteInfoById(inviteInfoId, false);
 		PersonalFile personalFile = userFileSystemService.getPersonalFile(personalFileId, false);
 		inviteInfo.removeFile(personalFile.getVersionedFile());
 		

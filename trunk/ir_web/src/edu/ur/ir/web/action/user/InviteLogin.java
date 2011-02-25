@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.ir.user.InviteInfo;
+import edu.ur.ir.user.FileInviteInfo;
 import edu.ur.ir.user.InviteUserService;
 
 /**
@@ -43,7 +43,7 @@ public class InviteLogin extends ActionSupport implements Preparable {
 	private String token;
 
 	/** Invite information */
-	private InviteInfo inviteInfo;
+	private FileInviteInfo inviteInfo;
 
 	/** Invite service */
 	private InviteUserService inviteUserService;
@@ -82,11 +82,11 @@ public class InviteLogin extends ActionSupport implements Preparable {
 		this.token = token;
 	}
 
-	public InviteInfo getInviteInfo() {
+	public FileInviteInfo getInviteInfo() {
 		return inviteInfo;
 	}
 
-	public void setInviteInfo(InviteInfo inviteInfo) {
+	public void setInviteInfo(FileInviteInfo inviteInfo) {
 		this.inviteInfo = inviteInfo;
 	}
 

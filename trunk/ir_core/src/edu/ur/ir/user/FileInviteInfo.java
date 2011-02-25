@@ -31,7 +31,7 @@ import edu.ur.persistent.BasePersistent;
  * @author Sharmila Ranganathan
  *
  */
-public class InviteInfo extends BasePersistent {
+public class FileInviteInfo extends BasePersistent {
 
 	/* Eclipse generated Id	 */
 	private static final long serialVersionUID = 6007214729437637359L;
@@ -48,12 +48,12 @@ public class InviteInfo extends BasePersistent {
  	/**
 	 * Default Constructor
 	 */
-	InviteInfo() {}
+	FileInviteInfo() {}
 	
 	/**
 	 *  Constructor 
 	 */
-	public InviteInfo(Set<VersionedFile> versionedFile, Set<IrClassTypePermission> permissions, InviteToken inviteToken) {
+	public FileInviteInfo(Set<VersionedFile> versionedFile, Set<IrClassTypePermission> permissions, InviteToken inviteToken) {
 		setFiles(versionedFile);
 		setPermissions(permissions);
 		this.setInviteToken(inviteToken);
@@ -84,9 +84,9 @@ public class InviteInfo extends BasePersistent {
 	public boolean equals(Object o)
 	{
 		if (this == o) return true;
-		if (!(o instanceof InviteInfo)) return false;
+		if (!(o instanceof FileInviteInfo)) return false;
 
-		final InviteInfo other = (InviteInfo) o;
+		final FileInviteInfo other = (FileInviteInfo) o;
 
 		if( ( inviteToken != null && !inviteToken.equals(other.getInviteToken()) ) ||
 			( inviteToken == null && other.getInviteToken() != null ) ) return false;

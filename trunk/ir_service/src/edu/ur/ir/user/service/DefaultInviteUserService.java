@@ -45,8 +45,8 @@ import edu.ur.ir.user.FolderAutoShareInfo;
 import edu.ur.ir.user.FolderAutoShareInfoDAO;
 import edu.ur.ir.user.FolderInviteInfo;
 import edu.ur.ir.user.FolderInviteInfoDAO;
-import edu.ur.ir.user.InviteInfo;
-import edu.ur.ir.user.InviteInfoDAO;
+import edu.ur.ir.user.FileInviteInfo;
+import edu.ur.ir.user.FileInviteInfoDAO;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -94,7 +94,7 @@ public class DefaultInviteUserService implements InviteUserService {
 	private UserService userService;
 	
 	/* Data access for invite information  */
-	private InviteInfoDAO inviteInfoDAO;
+	private FileInviteInfoDAO fileInviteInfoDAO;
 	
 	/* Data access for personal file */
 	private PersonalFileDAO personalFileDAO;
@@ -139,18 +139,18 @@ public class DefaultInviteUserService implements InviteUserService {
 	/**
 	 * Persistent method for invite info
 	 * 
-	 * @see edu.ur.ir.user.InviteUserService#makeInviteInfoPersistent(InviteInfo entity)
+	 * @see edu.ur.ir.user.InviteUserService#makeInviteInfoPersistent(FileInviteInfo entity)
 	 */
-	public void makeInviteInfoPersistent(InviteInfo entity) {
-		inviteInfoDAO.makePersistent(entity);
+	public void makeInviteInfoPersistent(FileInviteInfo entity) {
+		fileInviteInfoDAO.makePersistent(entity);
 	}
 
 	/**
 	 * Sends email invitation for collaborating on a file
 	 * 
-	 *  @see edu.ur.ir.user.InviteUserService#sendEmailToExistingUser(InviteInfo)
+	 *  @see edu.ur.ir.user.InviteUserService#sendEmailToExistingUser(FileInviteInfo)
 	 */
-	public void sendEmailToExistingUser(InviteInfo inviteInfo) {
+	public void sendEmailToExistingUser(FileInviteInfo inviteInfo) {
 		
 		SimpleMailMessage message = new SimpleMailMessage(userExistMailMessage);
 		message.setTo(inviteInfo.getInviteToken().getEmail());
@@ -185,9 +185,9 @@ public class DefaultInviteUserService implements InviteUserService {
 	/**
 	 * Sends email invitation for collaborating on a file
 	 * 
-	 *  @see edu.ur.ir.user.InviteUserService#sendEmailToNotExistingUser(InviteInfo)
+	 *  @see edu.ur.ir.user.InviteUserService#sendEmailToNotExistingUser(FileInviteInfo)
 	 */
-	public void sendEmailToNotExistingUser(InviteInfo inviteInfo) {
+	public void sendEmailToNotExistingUser(FileInviteInfo inviteInfo) {
 		SimpleMailMessage message = new SimpleMailMessage(userNotExistMailMessage);
 		message.setTo(inviteInfo.getInviteToken().getEmail());
 	
@@ -311,7 +311,7 @@ public class DefaultInviteUserService implements InviteUserService {
 			{
 				InviteToken inviteToken = new InviteToken(email, null, invitingUser);
 				inviteToken.setInviteMessage(inviteMessage);
-				InviteInfo inviteInfo = new InviteInfo(versionedFiles, null, inviteToken );
+				FileInviteInfo inviteInfo = new FileInviteInfo(versionedFiles, null, inviteToken );
 				
 				
 				// If the shared user has no Author or collaborator or researcher or admin role, then assign collaborator role
@@ -353,7 +353,7 @@ public class DefaultInviteUserService implements InviteUserService {
 				/* If user does not exist in the system then get a token and send email with the token */
 				InviteToken inviteToken = new InviteToken(email, TokenGenerator.getToken(), invitingUser);
 				inviteToken.setInviteMessage(inviteMessage);
-				InviteInfo inviteInfo = new InviteInfo(versionedFiles, permissions, inviteToken );
+				FileInviteInfo inviteInfo = new FileInviteInfo(versionedFiles, permissions, inviteToken );
 	
 				try 
 				{
@@ -508,7 +508,7 @@ public class DefaultInviteUserService implements InviteUserService {
 		
 		IrUser invitedUser = userService.getUser(userId, true);
 		
-		InviteInfo inviteInfo = findInviteInfoByToken(token);
+		FileInviteInfo inviteInfo = findInviteInfoByToken(token);
 		Set<SharedInboxFile> inboxFiles = new HashSet<SharedInboxFile>();
 		
 		if (inviteInfo != null) {
@@ -544,7 +544,7 @@ public class DefaultInviteUserService implements InviteUserService {
 							+ " is already shared with this user:" + invitedUser.getUsername());
 				}
 			}
-			inviteInfoDAO.makeTransient(inviteInfo);
+			fileInviteInfoDAO.makeTransient(inviteInfo);
 		}
 		
 		return inboxFiles;
@@ -574,7 +574,7 @@ public class DefaultInviteUserService implements InviteUserService {
 			throw e;
 		}
 		
-		List<InviteInfo> invites = inviteInfoDAO.getInviteInfoByEmail(email);
+		List<FileInviteInfo> invites = fileInviteInfoDAO.getInviteInfoByEmail(email);
 		
 		if ( invites.size() > 0) {
 			// If the shared user has no Author or collaborator or researcher or admin role, then assign collaborator role
@@ -588,7 +588,7 @@ public class DefaultInviteUserService implements InviteUserService {
 		
 		Set<SharedInboxFile> inboxFiles = new HashSet<SharedInboxFile>();
 		
-		for (InviteInfo inviteInfo: invites) {
+		for (FileInviteInfo inviteInfo: invites) {
 			
 			if (inviteInfo != null) {
 				Set<VersionedFile> files = inviteInfo.getFiles();
@@ -608,7 +608,7 @@ public class DefaultInviteUserService implements InviteUserService {
 								+ " is already shared with this user:" + invitedUser.getUsername());
 					}
 				}
-				inviteInfoDAO.makeTransient(inviteInfo);
+				fileInviteInfoDAO.makeTransient(inviteInfo);
 			}
 		}
 		
@@ -620,8 +620,8 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * 
 	 *  @see edu.ur.ir.user.InviteUserService#findInviteInfoByToken(String)
 	 */
-	public InviteInfo findInviteInfoByToken(String token){
-		InviteInfo inviteUser = inviteInfoDAO.findInviteInfoForToken(token);
+	public FileInviteInfo findInviteInfoByToken(String token){
+		FileInviteInfo inviteUser = fileInviteInfoDAO.findInviteInfoForToken(token);
 		return inviteUser;
 	}
 	
@@ -631,17 +631,17 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * @param email - email to find invite info information for.
 	 * @return - all invite infos found
 	 */
-	public List<InviteInfo> findInviteInfoByEmail(String email)
+	public List<FileInviteInfo> findInviteInfoByEmail(String email)
 	{
-		return inviteInfoDAO.getInviteInfoByEmail(email);
+		return fileInviteInfoDAO.getInviteInfoByEmail(email);
 	}
 	
 	public void setMailSender(MailSender mailSender) {
 		this.mailSender = mailSender;
 	}
 
-	public void setInviteInfoDAO(InviteInfoDAO inviteInfoDAO) {
-		this.inviteInfoDAO = inviteInfoDAO;
+	public void setFileInviteInfoDAO(FileInviteInfoDAO inviteInfoDAO) {
+		this.fileInviteInfoDAO = inviteInfoDAO;
 	}
 
 	public void setPersonalFileDAO(PersonalFileDAO personalFileDAO) {
@@ -701,8 +701,8 @@ public class DefaultInviteUserService implements InviteUserService {
 	 *  
 	 * @return Invite information for the sepcified id
 	 */
-	public InviteInfo getInviteInfoById(Long id, boolean lock) {
-		return inviteInfoDAO.getById(id, lock);
+	public FileInviteInfo getInviteInfoById(Long id, boolean lock) {
+		return fileInviteInfoDAO.getById(id, lock);
 	}
 
 	public String getBaseWebAppPath() {
@@ -748,10 +748,10 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * 
 	 * @return list of invite infos found
 	 */
-	public List<InviteInfo> getInviteInfosOrderByInviteor(int rowStart,
+	public List<FileInviteInfo> getInviteInfosOrderByInviteor(int rowStart,
 			int maxResults, OrderType orderType)
 	{
-		return inviteInfoDAO.getInviteInfosOrderByInviteor(rowStart, maxResults, orderType);
+		return fileInviteInfoDAO.getInviteInfosOrderByInviteor(rowStart, maxResults, orderType);
 	}
 	
 	/**
@@ -761,16 +761,16 @@ public class DefaultInviteUserService implements InviteUserService {
 	 */
 	public Long getInviteInfoCount()
 	{
-		return inviteInfoDAO.getCount();
+		return fileInviteInfoDAO.getCount();
 	}
 
 	/**
 	 * Delete the invite info object.
 	 * 
-	 * @see edu.ur.ir.user.InviteUserService#delete(edu.ur.ir.user.InviteInfo)
+	 * @see edu.ur.ir.user.InviteUserService#delete(edu.ur.ir.user.FileInviteInfo)
 	 */
-	public void delete(InviteInfo inviteInfo) {
-		inviteInfoDAO.makeTransient(inviteInfo);
+	public void delete(FileInviteInfo inviteInfo) {
+		fileInviteInfoDAO.makeTransient(inviteInfo);
 	}
 	
 	/**
@@ -890,9 +890,9 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * @param user - invites made by a given user
 	 * @return - all invites made by the user or an empty list if no invites found
 	 */
-	public List<InviteInfo> getInvitesMadeByUser(IrUser user)
+	public List<FileInviteInfo> getInvitesMadeByUser(IrUser user)
 	{
-		return inviteInfoDAO.getInvitesMadeByUser(user);
+		return fileInviteInfoDAO.getInvitesMadeByUser(user);
 	}
 
 	/**
@@ -967,9 +967,9 @@ public class DefaultInviteUserService implements InviteUserService {
 	 * @param email - email to get the invite information for
 	 * @return the invite information
 	 */
-	public List<InviteInfo> getInviteInfo(String email)
+	public List<FileInviteInfo> getInviteInfo(String email)
 	{
-		return inviteInfoDAO.getInviteInfoByEmail(email);
+		return fileInviteInfoDAO.getInviteInfoByEmail(email);
 	}
 	
 	/**
