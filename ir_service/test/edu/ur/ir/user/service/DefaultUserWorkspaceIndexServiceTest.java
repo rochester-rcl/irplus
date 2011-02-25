@@ -62,7 +62,7 @@ import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.service.test.helper.ContextHolder;
 import edu.ur.ir.repository.service.test.helper.PropertiesLoader;
 import edu.ur.ir.repository.service.test.helper.RepositoryBasedTestHelper;
-import edu.ur.ir.user.InviteInfoDAO;
+import edu.ur.ir.user.FileInviteInfoDAO;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFile;
@@ -124,8 +124,8 @@ public class DefaultUserWorkspaceIndexServiceTest {
 	.getBean("versionedFileDAO");
     
     /** invite information data access object */
-    InviteInfoDAO inviteInfoDAO= (InviteInfoDAO) ctx
- 	.getBean("inviteInfoDAO");
+    FileInviteInfoDAO inviteInfoDAO= (FileInviteInfoDAO) ctx
+ 	.getBean("fileInviteInfoDAO");
     
 	/** Item services */
 	ContentTypeService contentTypeService = (ContentTypeService) ctx.getBean("contentTypeService");

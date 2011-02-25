@@ -43,8 +43,8 @@ import edu.ur.ir.repository.Repository;
 import edu.ur.ir.security.IrClassTypeDAO;
 import edu.ur.ir.security.IrClassTypePermission;
 import edu.ur.ir.security.IrClassTypePermissionDAO;
-import edu.ur.ir.user.InviteInfo;
-import edu.ur.ir.user.InviteInfoDAO;
+import edu.ur.ir.user.FileInviteInfo;
+import edu.ur.ir.user.FileInviteInfoDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.IrUserDAO;
 import edu.ur.ir.user.UserManager;
@@ -58,7 +58,7 @@ import edu.ur.util.FileUtil;
  */
 
 @Test(groups = { "baseTests" }, enabled = true)
-public class InviteInfoDAOTest {
+public class FileInviteInfoDAOTest {
 	
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
@@ -73,8 +73,8 @@ public class InviteInfoDAOTest {
      IrUserDAO userDAO= (IrUserDAO) ctx
      	.getBean("irUserDAO");
 
-     InviteInfoDAO inviteInfoDAO= (InviteInfoDAO) ctx
- 		.getBean("inviteInfoDAO");
+     FileInviteInfoDAO inviteInfoDAO= (FileInviteInfoDAO) ctx
+ 		.getBean("fileInviteInfoDAO");
      
      VersionedFileDAO versionedFileDAO= (VersionedFileDAO) ctx
 		.getBean("versionedFileDAO");
@@ -163,7 +163,7 @@ public class InviteInfoDAOTest {
 		Set<IrClassTypePermission> permissions = new HashSet<IrClassTypePermission>();
 		permissions.add(permission);
 		
-		InviteInfo inviteInfo = new InviteInfo(files, permissions, token );
+		FileInviteInfo inviteInfo = new FileInviteInfo(files, permissions, token );
 		
 		
 
@@ -173,7 +173,7 @@ public class InviteInfoDAOTest {
 		tm.commit(ts);
         
 		ts = tm.getTransaction(td);
-		InviteInfo other = inviteInfoDAO.getById(inviteInfo.getId(), false);
+		FileInviteInfo other = inviteInfoDAO.getById(inviteInfo.getId(), false);
 		assert other.equals(inviteInfo) : "The user inviteInfo information should be equal";
 		assert inviteInfo.getInviteToken().getEmail() == "test@mail.com" : "Email should be equal";
 		assert inviteInfo.getInviteToken().getInviteMessage() == "invite message" : "Message should be equal";
@@ -182,7 +182,7 @@ public class InviteInfoDAOTest {
 		assert inviteInfo.getInviteToken().getInvitingUser().equals(user) : "User should be equal";
 		assert inviteInfo.getFiles().contains(vf) : "VersionedFile should be equal";
 		assert (inviteInfoDAO.findInviteInfoForToken("123")).equals(inviteInfo) : "The user inviteInfo should be equal";
-		List<InviteInfo> invites = inviteInfoDAO.getInviteInfoByEmail("TeSt@Mail.com");
+		List<FileInviteInfo> invites = inviteInfoDAO.getInviteInfoByEmail("TeSt@Mail.com");
 		assert invites.size() == 1 : "Should find one invite but found " + invites.size();
 		assert invites.get(0).equals(inviteInfo) : "invite " + invites.get(0) + " should equal " + inviteInfo;
 		

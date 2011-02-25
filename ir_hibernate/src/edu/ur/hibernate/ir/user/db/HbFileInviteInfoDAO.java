@@ -22,8 +22,8 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.user.InviteInfo;
-import edu.ur.ir.user.InviteInfoDAO;
+import edu.ur.ir.user.FileInviteInfo;
+import edu.ur.ir.user.FileInviteInfoDAO;
 import edu.ur.ir.user.IrUser;
 import edu.ur.order.OrderType;
 
@@ -33,19 +33,19 @@ import edu.ur.order.OrderType;
  * @author Sharmila Ranganathan 
  *
  */
-public class HbInviteInfoDAO implements InviteInfoDAO {
+public class HbFileInviteInfoDAO implements FileInviteInfoDAO {
 
 	/** eclipse generated id */
 	private static final long serialVersionUID = 5758222725214280712L;
 	
 	/**  Helper for persisting information using hibernate.  */	
-	private final HbCrudDAO<InviteInfo> hbCrudDAO;
+	private final HbCrudDAO<FileInviteInfo> hbCrudDAO;
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbInviteInfoDAO() {
-		hbCrudDAO = new HbCrudDAO<InviteInfo>(InviteInfo.class);
+	public HbFileInviteInfoDAO() {
+		hbCrudDAO = new HbCrudDAO<FileInviteInfo>(FileInviteInfo.class);
 	}
 
 	/**
@@ -63,11 +63,11 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 * 
 	 * @param token
 	 */
-	public InviteInfo findInviteInfoForToken(String token)
+	public FileInviteInfo findInviteInfoForToken(String token)
 	{
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findInviteInfoForToken");
 		q.setParameter("token", token);
-		return (InviteInfo) q.uniqueResult();
+		return (FileInviteInfo) q.uniqueResult();
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */
-	public InviteInfo getById(Long id, boolean lock) {
+	public FileInviteInfo getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
@@ -84,7 +84,7 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
 	 */
-	public void makePersistent(InviteInfo entity) {
+	public void makePersistent(FileInviteInfo entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
@@ -93,7 +93,7 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
-	public void makeTransient(InviteInfo entity) {
+	public void makeTransient(FileInviteInfo entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 
@@ -104,7 +104,7 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 * @return List of invite information
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InviteInfo> getInviteInfoByEmail(String email) {
+	public List<FileInviteInfo> getInviteInfoByEmail(String email) {
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("findInviteInfoForEmail");
 		q.setParameter("email", email.trim().toLowerCase());
 		return q.list();
@@ -121,7 +121,7 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 * @return list of invitees found
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InviteInfo> getInviteInfosOrderByInviteor(int rowStart,
+	public List<FileInviteInfo> getInviteInfosOrderByInviteor(int rowStart,
 			int maxResults, OrderType orderType) {
 		
 		Query q = null;
@@ -142,7 +142,7 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 		q.setFirstResult(rowStart);
 		q.setMaxResults(maxResults);
 		q.setFetchSize(maxResults);
-		return (List<InviteInfo>) q.list();
+		return (List<FileInviteInfo>) q.list();
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class HbInviteInfoDAO implements InviteInfoDAO {
 	 * @return - all invites made by the user or an empty list if no invites found
 	 */
 	@SuppressWarnings("unchecked")
-	public List<InviteInfo> getInvitesMadeByUser(IrUser user)
+	public List<FileInviteInfo> getInvitesMadeByUser(IrUser user)
 	{
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getInviteInfoMadeByUser");
 		q.setParameter("userId",user.getId());

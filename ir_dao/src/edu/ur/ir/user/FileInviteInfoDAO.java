@@ -29,7 +29,7 @@ import edu.ur.order.OrderType;
  * @author Sharmila Ranganathan
  *
  */
-public interface InviteInfoDAO extends CrudDAO<InviteInfo>, CountableDAO {
+public interface FileInviteInfoDAO extends CrudDAO<FileInviteInfo>, CountableDAO {
 	
 	/**
 	 * Find the Invite information for a specified token
@@ -37,7 +37,7 @@ public interface InviteInfoDAO extends CrudDAO<InviteInfo>, CountableDAO {
 	 * @param token user token
 	 * @return User token information
 	 */
-	public InviteInfo findInviteInfoForToken(String token);
+	public FileInviteInfo findInviteInfoForToken(String token);
 	
 	/**
 	 * Find the Invite information for a specified email
@@ -45,7 +45,7 @@ public interface InviteInfoDAO extends CrudDAO<InviteInfo>, CountableDAO {
 	 * @param email email address shared with
 	 * @return List of invite information
 	 */
-	public List<InviteInfo> getInviteInfoByEmail(String email);
+	public List<FileInviteInfo> getInviteInfoByEmail(String email);
 		
 	/**
 	 * Get the list of invite infos ordered by inviteor
@@ -56,7 +56,7 @@ public interface InviteInfoDAO extends CrudDAO<InviteInfo>, CountableDAO {
 	 * 
 	 * @return list of invite infos found
 	 */
-	public List<InviteInfo> getInviteInfosOrderByInviteor(int rowStart,
+	public List<FileInviteInfo> getInviteInfosOrderByInviteor(int rowStart,
 			int maxResults, OrderType orderType);
 	
 	/**
@@ -65,5 +65,5 @@ public interface InviteInfoDAO extends CrudDAO<InviteInfo>, CountableDAO {
 	 * @param user - invites made by a given user
 	 * @return - all invites made by the user or an empty list if no invites found
 	 */
-	public List<InviteInfo> getInvitesMadeByUser(IrUser user);
+	public List<FileInviteInfo> getInvitesMadeByUser(IrUser user);
 }

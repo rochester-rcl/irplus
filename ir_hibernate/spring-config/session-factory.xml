@@ -107,7 +107,7 @@
                 <value>edu/ur/hibernate/ir/user/db/PersonalCollection.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/PersonalItem.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/UserEmail.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/InviteInfo.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/FileInviteInfo.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/Affiliation.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/Department.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/SharedInboxFile.hbm.xml</value>

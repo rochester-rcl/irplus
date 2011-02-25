@@ -41,7 +41,7 @@ import edu.ur.ir.user.Department;
 import edu.ur.ir.user.DepartmentService;
 import edu.ur.ir.user.ExternalUserAccount;
 import edu.ur.ir.user.FileSharingException;
-import edu.ur.ir.user.InviteInfo;
+import edu.ur.ir.user.FileInviteInfo;
 import edu.ur.ir.user.InviteUserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
@@ -99,7 +99,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	private RoleService roleService;
 
 	/** Invite information */
-	private InviteInfo inviteInfo;
+	private FileInviteInfo inviteInfo;
 	
 	/** Message that can be displayed to the user. */
 	private String message;
@@ -407,7 +407,7 @@ public class RegisterUser extends ActionSupport implements UserIdAware, Preparab
 	 * 
 	 * @return
 	 */
-	public InviteInfo getInviteInfo() {
+	public FileInviteInfo getInviteInfo() {
 		return inviteInfo;
 	}
 
