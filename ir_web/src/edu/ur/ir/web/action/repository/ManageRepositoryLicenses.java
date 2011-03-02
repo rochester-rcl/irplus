@@ -225,7 +225,7 @@ public class ManageRepositoryLicenses extends ActionSupport implements UserIdAwa
 	}
 
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

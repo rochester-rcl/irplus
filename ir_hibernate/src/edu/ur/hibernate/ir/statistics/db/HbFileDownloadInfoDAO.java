@@ -75,6 +75,10 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("fileDownloadInfoCount"));
 	}
 	
+	public List<FileDownloadInfo> getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	public FileDownloadInfo getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
@@ -138,8 +142,9 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 	@SuppressWarnings("unchecked")
 	public List<FileDownloadInfo> getDownloadInfoIgnored(final int rowStart,
 			final int maxResults) {
+		List<FileDownloadInfo> foundItems = new LinkedList<FileDownloadInfo>();
 		
-		 List<FileDownloadInfo> foundItems = (List<FileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		foundItems = (List<FileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {

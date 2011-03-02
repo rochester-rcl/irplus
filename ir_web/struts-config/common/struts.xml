@@ -70,9 +70,8 @@
              
         </interceptors>
         
-       <default-interceptor-ref name="default"/>
        
-       <default-action-ref name="unknownAction" />
+        <default-action-ref name="unknownAction" />
 
         <global-results>
         	 <result type="redirect" name="change-password">/pages/user/login/force_change_password.jsp</result>
@@ -353,6 +352,7 @@
         <!-- Download Researcher picture  -->
         <action name="downloadResearcherPicture"
             class="edu.ur.ir.web.action.researcher.ResearcherPictureFileDownload">
+            <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="no-op"/>
         </action>

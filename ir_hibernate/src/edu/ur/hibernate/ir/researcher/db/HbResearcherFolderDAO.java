@@ -193,6 +193,18 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 		hbCrudDAO.getHibernateTemplate().findByNamedQuery("getResearcherFolderPath", values);
 	}
 	
+    
+
+	/**
+	 * Get all researcher folders in the system.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	/**
 	 * Get all researcher folders by id.
 	 * 

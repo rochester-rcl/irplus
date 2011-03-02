@@ -57,6 +57,18 @@ public class HbReviewableItemDAO implements ReviewableItemDAO {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
 
+	
+	/**
+	 * Return all reviewable items.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
+	
 	/**
 	 * Get an reviewable item by it's id.
 	 * 
@@ -92,7 +104,9 @@ public class HbReviewableItemDAO implements ReviewableItemDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ReviewableItem> getAllPendingItems() {
-		List<ReviewableItem> items = (List<ReviewableItem>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllPendingItems", ReviewableItem.PENDING_REVIEW);
+		List<ReviewableItem> items = new LinkedList<ReviewableItem>();
+		items = (List<ReviewableItem>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getAllPendingItems", ReviewableItem.PENDING_REVIEW);
+
 		return items;
 	}
 	
@@ -103,7 +117,9 @@ public class HbReviewableItemDAO implements ReviewableItemDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ReviewableItem> getReviewHistoryByItem(Long itemId) {
-		List<ReviewableItem> items = (List<ReviewableItem>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("geReviewItemByGenericItemId", itemId);
+		List<ReviewableItem> items = new LinkedList<ReviewableItem>();
+		items = (List<ReviewableItem>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("geReviewItemByGenericItemId", itemId);
+
 		return items;
 	}
 }

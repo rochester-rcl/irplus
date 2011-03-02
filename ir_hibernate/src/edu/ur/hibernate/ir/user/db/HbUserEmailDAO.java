@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -116,42 +115,21 @@ public class HbUserEmailDAO implements UserEmailDAO {
 		return (UserEmail)	HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getUserEmailByToken", token));
 	}	
 
-	/**
-	 * Get the email by id.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
-	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	public UserEmail getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
-	/**
-	 * Add the user email to database.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
-	 */
 	public void makePersistent(UserEmail entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
-	/**
-	 * Remove the email from from the database.
-	 * 
-	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
-	 */
 	public void makeTransient(UserEmail entity) {
 		hbCrudDAO.makeTransient(entity);
-	}
-
-	/**
-	 * Find a user email by the stored lower case email value.
-	 * 
-	 * @see edu.ur.ir.user.UserEmailDAO#getUserByLowerCaseEmail(java.lang.String)
-	 */
-	public UserEmail getUserByLowerCaseEmail(String email) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getUserByLowerCaseEmail");
-		q.setParameter("email", email.trim().toLowerCase());
-		return (UserEmail) q.uniqueResult();
 	}
 
 

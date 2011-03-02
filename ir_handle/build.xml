@@ -74,15 +74,9 @@
 	        <fileset dir="${properties.config.production}"/>
 		</copy>
 	</target>
-	
-	<!-- copy the custom code in-->
-	<target name="do-custom-build" depends="copy-resources" if="build.custom" >
-		<copy todir="${build.dir}/classes" overwrite="true" 
-		    file="${custom.build.dir}/properties/production/ir_plus.properties"/>
-	</target>
 
 	<!-- compile the java source files -->
-    <target name="build" depends="retrieve, do-custom-build " xmlns:ext="http://edu.ur/d1/ext">
+    <target name="build" depends="retrieve, copy-resources" xmlns:ext="http://edu.ur/d1/ext">
         <mkdir dir="${build.dir}/classes"/>
         <ext:javac srcdir="${src.dir}"
 			 destdir="${build.dir}/classes"
@@ -147,8 +141,6 @@
 			basedir="${build.dir}/classes"
 			excludes="**/*Test.class"/>
     </target>
-	
-
 	
 	<!-- publish the distribution jar file to the local repository -->
 	<target name="publish-local" depends="dist" description="-->publishes the jar file to the local ivy repository">

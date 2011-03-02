@@ -24,7 +24,7 @@ import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.user.PersonalFolder;
 
 /**
- * Interface for persisting/retrieving folder information
+ * Interface for persisting folders
  * 
  * @author Nathan Sarr
  */
@@ -100,19 +100,10 @@ CrudDAO<PersonalFolder>
 	 * This returns all personal files for the specified parent folder.  This
 	 * includes files in sub folders.
 	 * 
-	 * @param personalFolder parent folder to get all files from
-	 * @return list of personal files
+	 * @param personalFolder
+	 * @return
 	 */
 	public List<PersonalFile> getAllFilesForFolder(PersonalFolder personalFolder);
-	
-	/**
-	 * This returns all folders for the specified parent folder.  This
-	 * includes all children including those within sub folders.
-	 * 
-	 * @param personalFolder - to get all children folders from
-	 * @return list of all children folders
-	 */
-	public List<PersonalFolder> getAllChildrenForFolder(PersonalFolder personalFolder);
 	
 	/**
 	 * This returns all versioned files for the specified parent folder.  This
@@ -159,7 +150,7 @@ CrudDAO<PersonalFolder>
 	public List<PersonalFolder> getFolders(Long userId, List<Long> folderIds);
 	
 	/**
-	 * Get sub folders for the parent folder.  This only returns the first level of children.
+	 * Get sub folders for the parent folder
 	 * 
 	 * @param userId Id of the user having the folder 
 	 * @param parentFolderId Id of the parent folder

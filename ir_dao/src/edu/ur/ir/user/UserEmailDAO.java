@@ -30,20 +30,11 @@ import edu.ur.dao.CrudDAO;
 public interface UserEmailDAO extends CrudDAO<UserEmail>, CountableDAO {
 
 	/**
-	 * Get the user for the specified email - the case must match 
-	 * exactly
+	 * Get the user for the specified email
 	 * 
 	 * @param email Email id to find the user
 	 */
 	public UserEmail getUserByEmail(String email);
-	
-	/**
-	 * Get the user for the specified email - this lower cases
-	 * the email 
-	 * 
-	 * @param email Email id to find the user
-	 */
-	public UserEmail getUserByLowerCaseEmail(String email);
 	
  	/**
 	 * Get emails in the given list with the specified ids.  If the list

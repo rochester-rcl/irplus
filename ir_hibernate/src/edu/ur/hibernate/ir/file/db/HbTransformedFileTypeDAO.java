@@ -136,4 +136,9 @@ public class HbTransformedFileTypeDAO implements TransformedFileTypeDAO {
 		hbCrudDAO.makeTransient(entity);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 }

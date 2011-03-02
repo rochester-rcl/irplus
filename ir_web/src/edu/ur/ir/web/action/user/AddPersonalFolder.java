@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 - 2011 University of Rochester
+   Copyright 2008 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -26,10 +26,12 @@ import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.index.IndexProcessingTypeService;
+import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalFolder;
 import edu.ur.ir.user.UserFileSystemService;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
+import edu.ur.ir.user.UserWorkspaceIndexService;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
 
@@ -73,6 +75,12 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	
 	/** Message that can be displayed to the user. */
 	private String folderMessage;
+	
+	/** User index service for indexing files */
+	private UserWorkspaceIndexService userWorkspaceIndexService;
+	
+	/** Repository service for placing information in the repository */
+	private RepositoryService repositoryService;
 	
 	/** process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
@@ -258,6 +266,14 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	    return "get";
 	}
 	
+	/**
+	 * The user service for dealing with actions.
+	 * 
+	 * @return
+	 */
+	public UserService getUserService() {
+		return userService;
+	}
 
 	/**
 	 * The user service for dealing with actions.
@@ -282,7 +298,7 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 	 * 
 	 * @see edu.ur.ir.web.action.UserAware#setOwner(edu.ur.ir.user.IrUser)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -366,13 +382,41 @@ public class AddPersonalFolder extends ActionSupport implements UserIdAware{
 		this.updateFolderId = updateFolderId;
 	}
 
+	public UserFileSystemService getUserFileSystemService() {
+		return userFileSystemService;
+	}
+
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
 		this.userFileSystemService = userFileSystemService;
+	}
+
+	public UserWorkspaceIndexService getUserWorkspaceIndexService() {
+		return userWorkspaceIndexService;
+	}
+
+	public void setUserWorkspaceIndexService(UserWorkspaceIndexService userIndexService) {
+		this.userWorkspaceIndexService = userIndexService;
+	}
+
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
 	}
 
 	public void setUserWorkspaceIndexProcessingRecordService(
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
+	}
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
 	}
 
 	public void setIndexProcessingTypeService(

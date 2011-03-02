@@ -56,6 +56,9 @@ public class HbUserWorkspaceIndexProcessingRecordDAO implements UserWorkspaceInd
 		return (List<UserWorkspaceIndexProcessingRecord>) hbCrudDAO.getHibernateTemplate().findByNamedQuery("getUserWorkspaceIndexProcessingRecordsByUserIdDateItemId");
 	}
 
+	public List<UserWorkspaceIndexProcessingRecord> getAll() {
+		return hbCrudDAO.getAll();
+	}
 
 	public UserWorkspaceIndexProcessingRecord getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);

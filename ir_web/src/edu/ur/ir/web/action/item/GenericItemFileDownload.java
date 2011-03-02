@@ -35,7 +35,6 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
-import edu.ur.ir.web.util.WebBrowserFileViewerHelper;
 import edu.ur.ir.web.util.WebIoUtils;
 
 /**
@@ -63,10 +62,10 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
     private ItemService itemService;
 	
 	/**  Servlet response to write to */
-	private transient HttpServletResponse response;
+	private HttpServletResponse response;
 	
 	/**  Servlet request made */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** Utility for streaming file */
 	private WebIoUtils webIoUtils;
@@ -78,15 +77,13 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	private Long userId;
 	
 	/** User service */
-	private UserService userService; 	
+	private UserService userService; 
+	
 	
 	/** Item file security service */
 	private ItemFileSecurityService itemFileSecurityService; 
 	
-	/** file types that can be opened by the browser */
-	private WebBrowserFileViewerHelper webBrowserFileViewerHelper;
-	
-	/**
+    /**
      * Checks for user permission and then downloads the file 
      * 
      * @return
@@ -205,14 +202,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
     private void downloadFile(ItemFile itemFile) throws Exception {
         String fileName = itemFile.getIrFile().getName();
         FileInfo fileInfo =  itemFile.getIrFile().getFileInfo();
-        boolean forceDownload = true;
-        
-        if( webBrowserFileViewerHelper.canShowFileTypeInBrowser(fileInfo.getExtension()) )
-        {
-            forceDownload = false;	
-        }
-        
-        webIoUtils.streamFileInfo(fileName, fileInfo, response, request, (1024*4), false, forceDownload);
+        webIoUtils.StreamFileInfo(fileName, fileInfo, response, request, (1024*4), false, true);
         
     }
     
@@ -276,7 +266,7 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	}
 
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -290,8 +280,5 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 		this.itemFileSecurityService = itemFileSecurityService;
 	}
 
-	public void setWebBrowserFileViewerHelper(
-				WebBrowserFileViewerHelper webBrowserFileViewerHelper) {
-		this.webBrowserFileViewerHelper = webBrowserFileViewerHelper;
-	}
+
 }

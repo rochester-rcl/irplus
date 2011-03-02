@@ -31,7 +31,7 @@ public class FileSystemType implements Serializable, Orderable{
 	/** eclipse genreated id */
 	private static final long serialVersionUID = -7485498621126903978L;
 
-	/** Represents a file and folder types */
+	/** Represents a file type */
 	public static final FileSystemType FILE = new FileSystemType("file", 1);
 	public static final FileSystemType FOLDER = new FileSystemType("folder", 10);
 	public static final FileSystemType PERSONAL_FILE = new FileSystemType("personalFile", 1);
@@ -48,8 +48,6 @@ public class FileSystemType implements Serializable, Orderable{
 	public static final FileSystemType RESEARCHER_PUBLICATION = new FileSystemType("researcherPublication", 1);
 	public static final FileSystemType RESEARCHER_LINK = new FileSystemType("researcherLink", 1);
 	public static final FileSystemType RESEARCHER_INSTITUTIONAL_ITEM = new FileSystemType("researcherInstitutionalItem", 1);
-	public static final FileSystemType GROUP_FILE = new FileSystemType("groupFile", 1);
-	public static final FileSystemType GROUP_FOLDER = new FileSystemType("groupFolder", 10);
 
 	
 	/**

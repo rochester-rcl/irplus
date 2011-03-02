@@ -219,7 +219,7 @@
 				    <h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 				</c:if> 
             	<c:import url="contributor_page_view_pager.jsp"/>
-            	<br/>
+            	
             	<div class="dataTable">
 				    <urstb:table width="100%">
 					    <urstb:thead>

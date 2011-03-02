@@ -29,7 +29,6 @@
 </c:if>
 
 <c:import url="browse_all_users_pager.jsp"/>
-<br/>
 
 
 <div class="dataTable">
@@ -40,117 +39,46 @@
 	            <urstb:tr>
 	                <urstb:td>Id</urstb:td>
              
-	                
-	                <c:url var="usernameSortAsc" value="/admin/viewUsers.action">
-					    <c:param name="rowStart" value="${rowStart}"/>
-						<c:param name="startPageNumber" value="${startPageNumber}"/>
-						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
-						<c:param name="sortElement" value="username"/>		
-						<c:param name="sortType" value="asc"/>
-						<c:param name="roleId" value="${roleId}"/>
-						<c:param name="affiliationId" value="${affiliationId}"/>
-				    </c:url>
-				    
-				    <c:url var="usernameSortDesc" value="/admin/viewUsers.action">
-					    <c:param name="rowStart" value="${rowStart}"/>
-						<c:param name="startPageNumber" value="${startPageNumber}"/>
-						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
-						<c:param name="sortElement" value="username"/>		
-						<c:param name="sortType" value="desc"/>
-						<c:param name="roleId" value="${roleId}"/>
-						<c:param name="affiliationId" value="${affiliationId}"/>
-				    </c:url>
-	                
 	                <c:set var="userNameSort" value="none"/>
 	                <c:if test='${sortElement == "username"}'>
 	                    <c:set var="userNameSort" value="${sortType}"/>
 	                </c:if>
 	                
-	                
 	                <urstb:tdHeadSort  height="33"
-	                    useHref="true"
-					    hrefVar="href"
 	                    currentSortAction="${userNameSort}"
-	                    ascendingSortAction="${usernameSortAsc}"
-	                    descendingSortAction="${usernameSortDesc}">
-	                    <a href="${href}">User Name</a>                                              
+	                    ascendingSortAction="javascript:YAHOO.ur.user.getUsers(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'username', 'asc');"
+	                    descendingSortAction="javascript:YAHOO.ur.user.getUsers(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'username', 'desc');">
+	                    <u>User Name</u>                                              
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
 	
-	                
-	                
-	                <c:url var="lastNameSortAsc" value="/admin/viewUsers.action">
-					    <c:param name="rowStart" value="${rowStart}"/>
-						<c:param name="startPageNumber" value="${startPageNumber}"/>
-						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
-						<c:param name="sortElement" value="lastName"/>		
-						<c:param name="sortType" value="asc"/>
-						<c:param name="roleId" value="${roleId}"/>
-						<c:param name="affiliationId" value="${affiliationId}"/>
-				    </c:url>
-				    
-				    <c:url var="lastNameSortDesc" value="/admin/viewUsers.action">
-					    <c:param name="rowStart" value="${rowStart}"/>
-						<c:param name="startPageNumber" value="${startPageNumber}"/>
-						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
-						<c:param name="sortElement" value="lastName"/>		
-						<c:param name="sortType" value="desc"/>
-						<c:param name="roleId" value="${roleId}"/>
-						<c:param name="affiliationId" value="${affiliationId}"/>
-				    </c:url>
-	                
 	                <c:set var="lastNameSort" value="none"/>
 	                <c:if test='${sortElement == "lastName"}'>
 	                    <c:set var="lastNameSort" value="${sortType}"/>
 	                </c:if>
 	                
-	                
 	                <urstb:tdHeadSort  height="33"
-	                    useHref="true"
-					    hrefVar="href"
 	                    currentSortAction="${lastNameSort}"
-	                    ascendingSortAction="${lastNameSortAsc}"
-	                    descendingSortAction="${lastNameSortDesc}">
-	                    <a href="${href}">Last Name</a>                                              
+	                    ascendingSortAction="javascript:YAHOO.ur.user.getUsers(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'lastName', 'asc');"
+	                    descendingSortAction="javascript:YAHOO.ur.user.getUsers(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'lastName', 'desc');">
+	                    <u>Last Name</u>                                              
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
 	
 	                <urstb:td>First Name</urstb:td>
               
-                    <c:url var="emailSortAsc" value="/admin/viewUsers.action">
-					    <c:param name="rowStart" value="${rowStart}"/>
-						<c:param name="startPageNumber" value="${startPageNumber}"/>
-						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
-						<c:param name="sortElement" value="email"/>		
-						<c:param name="sortType" value="asc"/>
-						<c:param name="roleId" value="${roleId}"/>
-						<c:param name="affiliationId" value="${affiliationId}"/>
-				    </c:url>
-				    
-				    <c:url var="emailSortDesc" value="/admin/viewUsers.action">
-					    <c:param name="rowStart" value="${rowStart}"/>
-						<c:param name="startPageNumber" value="${startPageNumber}"/>
-						<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
-						<c:param name="sortElement" value="email"/>		
-						<c:param name="sortType" value="desc"/>
-						<c:param name="roleId" value="${roleId}"/>
-						<c:param name="affiliationId" value="${affiliationId}"/>
-				    </c:url>
-                    
 	                <c:set var="emailSort" value="none"/>
 	                <c:if test='${sortElement == "email"}'>
 	                    <c:set var="emailSort" value="${sortType}"/>
 	                </c:if>
 	                
 	                <urstb:tdHeadSort  height="33"
-	                    useHref="true"
-					    hrefVar="href"
 	                    currentSortAction="${emailSort}"
-	                    ascendingSortAction="${emailSortAsc}"
-	                    descendingSortAction="${emailSortDesc}">
-	                    <a href="${href}">Email</a>                                              
+	                    ascendingSortAction="javascript:YAHOO.ur.user.getUsers(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'email', 'asc');"
+	                    descendingSortAction="javascript:YAHOO.ur.user.getUsers(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'email', 'desc');">
+	                    <u>Email</u>                                              
 	                    <urstb:thImgSort
 	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
 	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>

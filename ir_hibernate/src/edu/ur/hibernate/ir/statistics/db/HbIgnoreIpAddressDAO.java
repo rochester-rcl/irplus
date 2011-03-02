@@ -72,6 +72,15 @@ public class HbIgnoreIpAddressDAO implements IgnoreIpAddressDAO {
     }	
 
 	/**
+	 * Get all ip addresses.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<IgnoreIpAddress> getAll() {
+		return hbCrudDAO.getAll();
+	}
+
+	/**
 	 * GEt the ignore ip address by id.
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)

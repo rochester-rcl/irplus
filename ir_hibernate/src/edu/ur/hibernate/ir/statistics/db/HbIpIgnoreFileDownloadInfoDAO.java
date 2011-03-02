@@ -85,6 +85,10 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("ipIgnoreFileDownloadInfoCount"));
 	}
 
+	public List<IpIgnoreFileDownloadInfo> getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	public IpIgnoreFileDownloadInfo getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
@@ -100,8 +104,9 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 	@SuppressWarnings("unchecked")
 	public List<IpIgnoreFileDownloadInfo> getIgnoreInfoNowAcceptable(final int rowStart,
 			final int maxResults) {
+        List<IpIgnoreFileDownloadInfo> foundItems = new LinkedList<IpIgnoreFileDownloadInfo>();
 		
-         List<IpIgnoreFileDownloadInfo> foundItems = (List<IpIgnoreFileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
+		foundItems = (List<IpIgnoreFileDownloadInfo>) hbCrudDAO.getHibernateTemplate().execute(new HibernateCallback() 
 		{
 		    public Object doInHibernate(Session session) throws HibernateException, SQLException 
 		    {

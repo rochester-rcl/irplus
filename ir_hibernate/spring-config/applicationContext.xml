@@ -76,9 +76,7 @@
     <import resource="ir-user-hibernate.xml"/>
     <import resource="ir-news-hibernate.xml"/>
     <import resource="ir-researcher-hibernate.xml"/>
-    <import resource="ir-statistics-hibernate.xml"/>   
-    <import resource="ir-group-workspace-hibernate.xml"/>
-    <import resource="ir-invite-hibernate.xml"/>
+    <import resource="ir-statistics-hibernate.xml"/>
     
     <!-- ****************************************** --> 
     <!-- File database service -->

@@ -351,12 +351,6 @@ facet and searching
     text-align: center;
 }
 
-.hanging_indent {
-    text-indent: -25px;
-    padding-left: 25px;
-    padding-bottom: 6px;
-}
-
 
 /******************************
 override yui css files
@@ -375,26 +369,4 @@ override yui css files
 	border: 0px;
 	border-top-color: #ffffff;
 	padding: 0.25em 0.5em;
-}
-
-/******************************
-workspace header
-*********************************/
-.workspace_head
-{
-	clear: both;
-	width: 100%;
-	height: 50px;
-}
-
-.workspace_head_float_left
-{
-	 float: left;
-}
-
-.workspace_head_float_right
-{
-	float: right;
-	padding-top: 15px;
-	text-align: bottom;
 }

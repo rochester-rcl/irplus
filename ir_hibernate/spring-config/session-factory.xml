@@ -107,7 +107,7 @@
                 <value>edu/ur/hibernate/ir/user/db/PersonalCollection.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/PersonalItem.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/UserEmail.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/FileInviteInfo.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/user/db/InviteInfo.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/Affiliation.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/Department.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/SharedInboxFile.hbm.xml</value>
@@ -117,16 +117,6 @@
                 <value>edu/ur/hibernate/ir/user/db/PersonalItemDeleteRecord.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/ExternalAccountType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/user/db/ExternalUserAccount.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/FolderInviteInfo.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/user/db/FolderAutoShareInfo.hbm.xml</value>
-                
-                <value>edu/ur/hibernate/ir/invite/db/InviteToken.hbm.xml</value>
-                         
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspace.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFolder.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceFile.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceGroup.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/groupspace/db/GroupWorkspaceGroupInvite.hbm.xml</value>
                                 
                 <value>edu/ur/hibernate/ir/security/db/IrClassType.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/security/db/IrClassTypePermission.hbm.xml</value>

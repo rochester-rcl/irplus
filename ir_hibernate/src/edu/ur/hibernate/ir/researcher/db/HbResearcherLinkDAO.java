@@ -61,6 +61,13 @@ public class HbResearcherLinkDAO implements ResearcherLinkDAO{
     {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
+	
+	/**
+	 * Return all ResearcherLinks in the system
+	 */
+	public List<ResearcherLink> getAll() {
+		return hbCrudDAO.getAll();
+	}
 
 	/**
 	 * Return ResearcherLink by id

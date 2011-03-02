@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -100,6 +101,8 @@ public class PersonalFolderDAOTest {
 	UniqueNameGenerator uniqueNameGenerator = (UniqueNameGenerator) 
 	ctx.getBean("uniqueNameGenerator");
 	
+	/** Logger */
+	private static final Logger log = Logger.getLogger(PersonalFolderDAOTest.class);
 	
 	/**
 	 * Setup for testing
@@ -121,7 +124,6 @@ public class PersonalFolderDAOTest {
 
 	/**
 	 * Test personal folder persistence
-	 * 
 	 * @throws DuplicateNameException 
 	 * 
 	*/
@@ -364,11 +366,6 @@ public class PersonalFolderDAOTest {
 				childFolder1.getTreeRoot().getId());
 		
 		assert nodes.size() == 5 : "Expected all 5 nodes but got " + nodes.size();
-		
-		
-		// make sure we can get all sub folders for a given folder
-		nodes = personalFolderDAO.getSubFoldersForFolder(user.getId(), personalFolder1.getId());
-		assert nodes.size() == 2 : "Should have two nodes but has " + nodes.size();
 
 		
 		// make sure tree without specified nodes can be retrieved
@@ -661,13 +658,12 @@ public class PersonalFolderDAOTest {
 	
 	/**
 	 * Test moving personal folders accross two different root folders.
-	 * 
-	 * @throws DuplicateNameException 
-	 * @throws IllegalFileSystemNameException 
 	 */
 	@Test
-	public void movePersonalFoldersTest() throws DuplicateNameException, IllegalFileSystemNameException
+	public void moveFoldersTest()
 	{
+		try
+		{
 		TransactionStatus ts = tm.getTransaction(td);
 		UserEmail userEmail = new UserEmail("user@email");
 
@@ -709,6 +705,13 @@ public class PersonalFolderDAOTest {
 		personalFolderDAO.makeTransient(personalFolderDAO.getById(folderC.getId(), true));
 		userDAO.makeTransient(userDAO.getById(user.getId(), false));
 		tm.commit(ts);
+		}
+		catch(Exception e)
+		{
+			
+			log.debug("failure", e);
+			throw new RuntimeException(e);
+		}
 	}
 	
 	

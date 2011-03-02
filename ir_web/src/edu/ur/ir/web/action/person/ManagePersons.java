@@ -693,7 +693,7 @@ public class ManagePersons extends Pager implements  Preparable, UserIdAware {
 		return totalHits;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	
