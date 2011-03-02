@@ -1,0 +1,358 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a institutional item
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.institution">
+
+	<class name="InstitutionalItem" schema="ir_repository" table="institutional_item"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="institutional_item_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_repository.institutional_item_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+		          
+        <!--  The versioned institutional item this institutional item wraps -->
+        <many-to-one name="versionedInstitutionalItem" 
+              optimistic-lock="false"
+              lazy="false"
+              fetch="join"
+              class="VersionedInstitutionalItem" 
+              unique="true" 
+              column="versioned_institutional_item_id" 
+              cascade="all"
+              not-null="true"
+              access="field"/>
+        
+        <!--  The institutional collection that holds the item -->
+        <many-to-one name="institutionalCollection"
+              optimistic-lock="false" 
+              class="InstitutionalCollection" 
+              unique="true" 
+              column="institutional_collection_id" 
+              cascade="save-update"
+              access="field"/>
+               
+		<!-- User this item belongs to -->
+		<many-to-one class="edu.ur.ir.user.IrUser" 
+			name="owner" 
+			column="user_id" 
+			access="field" 
+			unique="true"/>               
+               
+	</class>
+
+
+   <!-- Check if the publication version is published to the given collection -->
+   	<query name="isItemPublishedToThisCollection">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.institutionalItemVersions as version
+	    join version.item as item
+	    where institutionalItem.institutionalCollection.id = :collectionId 
+	    and item.id = :itemId 
+
+	</query>
+	
+	<!-- count of all institutional items in the system for a repository-->
+	<query name="institutionalItemCount">
+	    select count(*) from InstitutionalItem
+	</query>
+	
+	<!-- count of all institutional items in the system -->
+	<query name="institutionalItemCountForRepository">
+	    select count(*) from InstitutionalItem as institutionalItem
+	    where institutionalItem.institutionalCollection.repository.id = ?
+	</query>
+
+	<!-- count of all institutional items for statistics -->
+	<query name="distinctInstitutionalItemCount">
+	    select count(distinct item.id) from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.institutionalItemVersions as version
+	    join version.item as item
+	</query>
+	
+	<!-- Count of institutional item contributed by given person name -->
+	<query name="getPublicationCountByPersonNameId">
+	    select count(distinct institutionalItem) from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as  versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.contributors as itemContributor
+	    join itemContributor.contributor as contributor
+	    where contributor.personName.id in (:personNameIds) 
+	</query>	
+		
+	<!-- Get institutional item by given verison id -->
+	<query name="getInstitutionalItemByVersionId">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as  versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    where institutionalItemVersion.id = ? 
+	</query>	
+    
+	
+	<!-- ********************************************************* -->
+	<!-- count of all institutional items in the system for a repository -->
+	<!-- By Name  -->
+	<!-- ********************************************************* -->
+	<query name="getRepositoryItemsByNameOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    where institutionalItem.institutionalCollection.repository.id = ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
+	</query>
+	
+    <query name="getRepositoryItemsByNameOrderDesc">
+	   select institutionalItem from InstitutionalItem as institutionalItem 	   
+	    where institutionalItem.institutionalCollection.repository.id = ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
+	</query>
+	
+	
+	
+	<!-- ********************************************************* -->
+	<!-- count of all institutional items in the system for a repository -->
+	<!-- By character  -->
+	<!-- ********************************************************* -->
+	<query name="institutionalItemCountForRepositoryByChar">
+	    select count(*) from InstitutionalItem as institutionalItem
+	    where institutionalItem.institutionalCollection.repository.id = ?
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	</query>
+	
+	<query name="getRepositoryItemsByCharOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	  
+	    where institutionalItem.institutionalCollection.repository.id = ?
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
+	</query>
+	
+    <query name="getRepositoryItemsByCharOrderDesc">
+	   select institutionalItem from InstitutionalItem as institutionalItem 	   
+	    where institutionalItem.institutionalCollection.repository.id = ?
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
+	</query>
+	
+	<!-- ********************************************************* -->
+	<!-- count of all institutional items in the system for a repository -->
+	<!-- By character RANGE  -->
+	<!-- ********************************************************* -->
+	<query name="institutionalItemCountForRepositoryByCharRange">
+	    select count(*) from InstitutionalItem as institutionalItem
+	    where institutionalItem.institutionalCollection.repository.id = ?
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	</query>
+	
+	<query name="getRepositoryItemsByCharRangeOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	  
+	    where institutionalItem.institutionalCollection.repository.id = ?
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
+	</query>
+	
+    <query name="getRepositoryItemsByCharRangeOrderDesc">
+	   select institutionalItem from InstitutionalItem as institutionalItem 	   
+	    where institutionalItem.institutionalCollection.repository.id = ?
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
+	</query>
+	
+	
+	<!-- ********************************************************* -->
+	<!--get institutional collection items by name ordered -->
+	<!-- ********************************************************* -->
+
+	<query name="getInstitutionalCollectionItemsByNameOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
+	</query>
+		
+    <query name="getInstitutionalCollectionItemsByNameOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
+	</query>
+	
+   <!-- ********************************************************* -->
+	<!-- institutional item ids  -->
+	<!-- ********************************************************* -->
+
+	<query name="getInstitutionalCollectionItemIdsOrderAsc">
+	    select institutionalItem.id from InstitutionalItem as institutionalItem    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    order by institutionalItem.id asc
+	</query>
+		
+    <query name="getInstitutionalCollectionItemIdsOrderDesc">
+	    select institutionalItem.id from InstitutionalItem as institutionalItem    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    order by institutionalItem.id desc
+	</query>
+	
+    <!-- ********************************************************* -->
+	<!-- count of all institutional items in the system for a collection by letter-->
+	<!-- ********************************************************* -->
+	<query name="institutionalItemCountForCollectionByChar">
+	    select  count(*) from InstitutionalItem as institutionalItem 	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	</query>
+	
+	<query name="getInstitutionalCollectionItemsByCharOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	     and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
+	</query>
+	
+    <query name="getInstitutionalCollectionItemsByCharOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	     and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
+	</query>
+	
+   <!-- ********************************************************* -->
+	<!-- count of all institutional items in the system for a collection tree -->
+	<!-- By character RANGE  -->
+	<!-- ********************************************************* -->
+	<query name="institutionalItemCountForCollectionByCharRange">
+	    select  count(*) from InstitutionalItem as institutionalItem 	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	</query>
+	
+	<query name="getCollectionItemsByCharRangeOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
+	</query>
+	
+    <query name="getCollectionItemsByCharRangeOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
+	</query>
+	
+	
+	 <!-- ********************************************************* -->
+	<!-- General item counts -->
+	<!-- ********************************************************* -->
+	
+	<!-- Gets the publications for a collection and its children
+	. This only works across the specified root collection -->
+	<query name="institutionalItemCountForCollectionAndchildren">
+	    select count(*) from InstitutionalItem as institutionalItem 	    
+	    where institutionalItem.institutionalCollection.leftValue  &gt;= ? 
+	    and institutionalItem.institutionalCollection.leftValue &lt;= ? 
+	    and institutionalItem.institutionalCollection.treeRoot.id = ?   
+	</query>
+	
+	<!-- count of all institutional items that use the generic item with the specified id-->
+	<query name="institutionalItemCountForGenericItem">
+	    select count(*) from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.institutionalItemVersions as version
+	    where version.item.id = ?
+	</query>
+	
+	<query name="institutionalItemCountForCollection">
+	    select count(*) from InstitutionalItem as institutionalItem
+	    where institutionalItem.institutionalCollection.id = ?
+	</query>
+
+	<!--  get Collections the generic Item was submitted to -->
+	<query name="getCollectionsForGenericItem">
+	    select institutionalItem.institutionalCollection from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.institutionalItemVersions as version
+	    where version.item.id = ?
+	</query>
+
+	<!--  get institutional items where the generic Item is the latest version -->
+	<query name="getInstitutionalItemsForGenericItemId">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as version
+	    where version.item.id = ?
+	</query>
+	
+	<!--  get institutional items between the given date range where the items
+	     have been accepted into the institutional collection this only looks
+	     at the current version -->
+	<query name="getInstitutionalCollectionItemsByAcceptedDateRange">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as version
+	    where institutionalItem.institutionalCollection.id = ? 
+	    and version.dateOfDeposit &gt;= ? 
+	    and version.dateOfDeposit &lt;= ?
+	    order by version.dateOfDeposit desc
+	</query>
+	
+		<!--  get institutional items between the given date range where the items
+	     have been accepted into the institutional collection this only looks
+	     at the current version -->
+	<query name="getInstitutionalCollectionItemsByAcceptedDateAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as version
+	    where institutionalItem.institutionalCollection.id = ? 
+	    order by version.dateOfDeposit asc
+	</query>
+	
+			<!--  get institutional items between the given date range where the items
+	     have been accepted into the institutional collection this only looks
+	     at the current version -->
+	<query name="getInstitutionalCollectionItemsByAcceptedDateDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem 	    
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as version
+	    where institutionalItem.institutionalCollection.id = ? 
+	    order by version.dateOfDeposit desc
+	</query>
+</hibernate-mapping>

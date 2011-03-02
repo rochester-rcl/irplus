@@ -1,0 +1,422 @@
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+       <!--  ************************************ -->
+       <!--  Researcher actions     -->
+       <!--  ************************************ -->
+       <action name="viewResearcher" 
+       		method="view"
+            class="edu.ur.ir.web.action.researcher.EditResearcher">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="view">/pages/user/researcher/edit_researcher.jsp</result>
+        </action>
+        
+        <action name="uploadResearcherPicture"
+            class="edu.ur.ir.web.action.researcher.UploadResearcherImage"
+            method="addNewPicture">
+            <interceptor-ref name="urUploadStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_upload_form_frag.jsp</result>
+        </action>
+        
+        <action name="getResearcherPictures"
+            class="edu.ur.ir.web.action.researcher.EditResearcher"
+            method="getPictures">
+            <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_pictures_frag.jsp</result>
+        </action>
+        
+        <action name="deleteResearcherPicture" method="delete"
+            class="edu.ur.ir.web.action.researcher.ManageResearcherPicture">
+            <interceptor-ref name="crudStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_pictures_frag.jsp</result>
+        </action>    
+        
+        <action name="setDefaultPicture" method="setDefaultPicture"
+            class="edu.ur.ir.web.action.researcher.ManageResearcherPicture">
+            <interceptor-ref name="crudStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_pictures_frag.jsp</result>
+        </action>
+        
+        <action name="updatePersonalInformation" method="updatePersonalInformation"
+            class="edu.ur.ir.web.action.researcher.EditResearcher">
+            <interceptor-ref name="crudStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="no-op"/>
+        </action>  
+
+        <!--  Get department information -->
+        <action name="getDepartmentsInformation"
+                method="getDepartmentsInformation"
+                class="edu.ur.ir.web.action.researcher.EditResearcher">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/department_list.jsp</result>
+        </action>
+        
+        <!--  save the researcher and update the departments -->
+        <action name="saveResearcherAndGetDepartments"
+                method="updatePersonalInformation"
+                class="edu.ur.ir.web.action.researcher.EditResearcher">
+                <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/department_list.jsp</result>
+        </action>                          
+                
+        <action name="setResearcherPagePermission" class="edu.ur.ir.web.action.researcher.EditResearcher"
+        	method="setResearcherPagePermission">
+        	<interceptor-ref name="editStack"/>
+        	<result name="accessDenied">/accessDenied.jsp</result>
+           <result name="success">/pages/user/researcher/researcher_page_status.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Field Actions            	   -->
+        <!--  ************************************ -->
+                          
+        <!--  Get Fields  -->
+        <action name="getFieldsInformation"
+                method="getFieldsInformation"
+                class="edu.ur.ir.web.action.researcher.EditResearcher">
+                <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/field_list.jsp</result>
+        </action>
+        
+        <!--  save the researcher and update the fields  -->
+        <action name="saveResearcherAndGetFields"
+                method="updatePersonalInformation"
+                class="edu.ur.ir.web.action.researcher.EditResearcher">
+                <interceptor-ref name="crudStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getFieldsInformation.action</result>
+        </action>                          
+        
+        <!--  ************************************ -->
+        <!--  Researcher Folder Actions            -->
+        <!--  ************************************ -->
+        
+        <action name="viewResearcherFolders"
+            method="getTable"
+            class="edu.ur.ir.web.action.researcher.ViewResearcherFolders">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/folder_table.jsp</result>
+        </action>
+        
+        <action name="addResearcherFolder"
+            method ="save"
+            class="edu.ur.ir.web.action.researcher.AddResearcherFolder">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/add_response.jsp</result>
+        </action>
+        
+        <action name="updateResearcherFolder"
+            method ="updateFolder"
+            class="edu.ur.ir.web.action.researcher.AddResearcherFolder">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/add_response.jsp</result>
+        </action>
+        
+        <!--  Allows a user to delete files and folders -->
+        <action name="deleteResearcherFileSystemObjects"
+            method ="deleteFileSystemObjects"
+            class="edu.ur.ir.web.action.researcher.ViewResearcherFolders">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/folder_table.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Researcher File Actions            -->
+        <!--  ************************************ -->
+        
+        <!--  Allows to view the page to add, remove files to researcher page -->
+        <action name="viewAddFiles"
+            class="edu.ur.ir.web.action.researcher.AddResearcherFile">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/add_files_to_researcher.jsp</result>
+        </action>        
+        
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="getPersonalFilesFolders"
+                method="getPersonalFolders"
+                class="edu.ur.ir.web.action.researcher.AddResearcherFile">
+                <interceptor-ref name="editStack"/>
+                <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/personal_folder_table.jsp</result>
+        </action>
+        
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="getResearcherFileSystem"
+                method="getResearcherFolders"
+                class="edu.ur.ir.web.action.researcher.AddResearcherFile">
+                <interceptor-ref name="editStack"/>
+                <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_file_add_table.jsp</result>
+        </action>
+
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="addResearcherFile"
+                method="addResearcherFile"
+                class="edu.ur.ir.web.action.researcher.AddResearcherFile">
+                <interceptor-ref name="editStack"/>
+                <result name="accessDenied">/accessDenied.jsp</result>
+                <result name="success" type="no-op"/>
+        </action>        
+        
+        <action name="researcherFileDownload" class="edu.ur.ir.web.action.researcher.DownloadResearcherFile">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="no-op"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="notFound">/pages/researcher_page/researcher_file_not_found.jsp</result>
+        </action> 
+        
+        <!--  Change file version -->
+        <action name="changeResearcherFileVersion"
+                method="changeFileVersion"
+                class="edu.ur.ir.web.action.researcher.AddResearcherFile">
+                <interceptor-ref name="editStack"/>
+             <result name="accessDenied">/accessDenied.jsp</result>
+             <result name="success" type="no-op"/>
+        </action>        
+        
+        <!--  ************************************ -->
+        <!--  Researcher Publication Actions            -->
+        <!--  ************************************ -->
+        
+        <!--  Allows to view the page to add, remove publications to researcher page -->
+        <action name="viewAddPublications"
+            class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/add_publications_to_researcher.jsp</result>
+        </action>        
+        
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="getPersonalCollectionsAndItems"
+                method="getPersonalCollections"
+                class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/personal_collection_table.jsp</result>
+        </action>
+        
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="getResearcherFolders"
+                method="getResearcherFolders"
+                class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_publication_add_table.jsp</result>
+        </action>
+
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="addResearcherPublication"
+                method="addResearcherPublication"
+                class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="no-op"/>
+        </action>  
+        
+        <!--  Change file version -->
+        <action name="changeResearcherPublicationVersion"
+                method="changePublicationVersion"
+                class="edu.ur.ir.web.action.researcher.AddResearcherPublication">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="no-op"/>
+        </action>              
+        
+        <!--  ************************************ -->
+        <!--  Researcher Link Actions            -->
+        <!--  ************************************ -->
+        
+        
+        <action name="addResearcherLink"
+            method ="save"
+            class="edu.ur.ir.web.action.researcher.AddResearcherLink">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/add_response.jsp</result>
+        </action>
+        
+        <action name="getResearcherLink"
+            method ="get"
+            class="edu.ur.ir.web.action.researcher.AddResearcherLink">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_link_form_frag.jsp</result>
+        </action>
+        
+        <action name="updateResearcherLink"
+            method ="updateLink"
+            class="edu.ur.ir.web.action.researcher.AddResearcherLink">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/add_response.jsp</result>
+        </action>
+        
+       <!--  ************************************ 			   -->
+       <!--  Researcher Personal links -  actions         -->
+       <!--  ************************************              -->   
+       
+        <!-- create a new link -->
+        <action name="addResearcherPersonalLink"
+            method="create"
+            class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/add_researcher_personal_link_form.jsp</result>
+        </action>
+        
+         <!-- update collection link -->
+        <action name="updateResearcherPersonalLink"
+            method="update"
+            class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/add_researcher_personal_link_form.jsp</result>
+        </action>
+        
+        <!-- remove a link -->
+        <action name="deleteResearcherPersonalLink"
+            method="delete"
+            class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
+            <interceptor-ref name="crudStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_personal_links_table_frag.jsp</result>
+        </action> 
+        
+        <!--  view links -->
+        <action name="viewResearcherPersonalLinks"
+            method="view"
+            class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
+            <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_personal_links_table_frag.jsp</result>
+        </action>
+        
+         <!--  view links -->
+        <action name="editResearcherPersonalLinkView"
+            method="viewLink"
+            class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
+            <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/add_researcher_personal_link_form.jsp</result>
+        </action>
+        
+        <!--  move link up -->
+        <action name="moveResearcherPersonalLinkUp"
+            method="moveLinkUp"
+            class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
+            <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_personal_links_table_frag.jsp</result>
+        </action> 
+        
+        <!--  move link down -->
+        <action name="moveResearcherPersonalLinkDown"
+            method="moveLinkDown"
+            class="edu.ur.ir.web.action.researcher.ManagePersonalLinks">
+            <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_personal_links_table_frag.jsp</result>
+        </action>   
+        
+       <!--  ************************************ 			   -->
+       <!--  Researcher Institutional item  -  actions         -->
+       <!--  ************************************              -->   
+       
+        <!--  load the institutional item  -->
+        <action name="viewResearcherInstitutionalItem"
+            class="edu.ur.ir.web.action.researcher.AddResearcherInstitutionalItem">
+            <interceptor-ref name="editStack" />
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/add_institutional_item_to_researcher.jsp</result>
+        </action>   
+
+        <!-- Action to get the personal folders and files for display in the table  -->
+        <action name="getResearcherFileSystemTable"
+                method="getResearcherFolders"
+                class="edu.ur.ir.web.action.researcher.AddResearcherInstitutionalItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/researcher_file_system_form.jsp</result>
+        </action>        
+
+        <!-- Action to add researcher institutional item -->
+        <action name="addResearcherInstitutionalItem"
+                method="addResearcherInstitutionalItem"
+                class="edu.ur.ir.web.action.researcher.AddResearcherInstitutionalItem">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirectAction"> 
+                <param name="actionName">viewResearcher</param> 
+                <param name="showFoldersTab">true</param> 
+                <param name="parentFolderId">${parentFolderId}</param> 
+            </result> 
+        </action>         
+        
+        <!--  move the selected researcher objects -->
+        <action name="moveResearcherFileSystemObjects" class="edu.ur.ir.web.action.researcher.MoveResearcherFileSystemObjects">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/move_folders_response.jsp</result>
+        </action>
+        
+        <action name="viewMoveResearcherFolderLocations"
+            class="edu.ur.ir.web.action.researcher.MoveResearcherFileSystemObjects"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/researcher/move.jsp</result>
+        </action>
+        
+        
+       <!--  ************************************ 			   -->
+       <!--  Researcher move actions                           -->
+       <!--  ************************************              -->   
+        <action name="viewMoveResearcherLocations"
+            class="edu.ur.ir.web.action.researcher.MoveResearcherInformation"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/move.jsp</result>
+        </action>
+        
+         <action name="getMoveResearcherFolderDestinations"
+            class="edu.ur.ir.web.action.researcher.MoveResearcherInformation"
+            method="viewLocations">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/move_researcher_info_frag.jsp</result>
+        </action>
+        
+        <action name="moveResearcherInformation"
+            class="edu.ur.ir.web.action.researcher.MoveResearcherInformation"
+            method="move">
+            <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success">/pages/user/researcher/move_researcher_info_frag.jsp</result>
+        </action>

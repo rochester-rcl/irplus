@@ -1,0 +1,313 @@
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+        <!--  ************************************ -->
+        <!--  Content type Actions            -->
+        <!--  ************************************ -->
+        <action name="viewContentTypes">
+            <result name="success">/pages/admin/item/metadata/content_types/content_type.jsp</result>
+        </action>
+        
+        <action name="getContentTypes" 
+            class="edu.ur.ir.web.action.item.metadata.ManageContentTypes"
+            method="viewContentTypes">
+            <result name="success">/pages/admin/item/metadata/content_types/content_type_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*ContentType" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.ManageContentTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/content_types/content_type.jsp</result>
+            <result name="added">/pages/admin/item/metadata/content_types/content_type_form.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/content_types/content_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/content_types/content_type_form.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Copyright Statement Actions          -->
+        <!--  ************************************ -->
+        <action name="viewCopyrightStatements">
+            <result name="success">/pages/admin/item/metadata/copyright_statements/copyright_statement.jsp</result>
+        </action>
+        
+        <action name="getCopyrightStatements" 
+            class="edu.ur.ir.web.action.item.metadata.ManageCopyrightStatements"
+            method="viewCopyrightStatements">
+            <result name="success">/pages/admin/item/metadata/copyright_statements/copyright_statement_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*CopyrightStatement" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.ManageCopyrightStatements">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/copyright_statements/copyright_statement.jsp</result>
+            <result name="added">/pages/admin/item/metadata/copyright_statements/copyright_statement_form.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/copyright_statements/copyright_statement_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/copyright_statements/copyright_statement_form.jsp</result>
+        </action>
+        
+                
+        <!--  ************************************ -->
+        <!--  Language type Actions                -->
+        <!--  ************************************ -->
+        <action name="viewLanguageTypes">
+            <result name="success">/pages/admin/item/metadata/language_types/language_type.jsp</result>
+        </action>
+        
+        <action name="getLanguageTypes" 
+            class="edu.ur.ir.web.action.item.metadata.ManageLanguageTypes"
+            method="viewLanguageTypes">
+            <result name="success">/pages/admin/item/metadata/language_types/language_type_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*LanguageType" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.ManageLanguageTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/language_types/language_type.jsp</result>
+            <result name="added">/pages/admin/item/metadata/language_types/language_type_added.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/language_types/language_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/language_types/language_type_form.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Identifier type Actions                -->
+        <!--  ************************************ -->
+        <action name="viewIdentifierTypes">
+            <result name="success">/pages/admin/item/metadata/identifier_types/identifier_type.jsp</result>
+        </action>
+        
+        <action name="getIdentifierTypes" 
+            class="edu.ur.ir.web.action.item.metadata.ManageIdentifierTypes"
+            method="viewIdentifierTypes">
+            <result name="success">/pages/admin/item/metadata/identifier_types/identifier_type_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*IdentifierType" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.ManageIdentifierTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/identifier_types/identifier_type.jsp</result>
+            <result name="added">/pages/admin/item/metadata/identifier_types/identifier_type_added.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/identifier_types/identifier_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/identifier_types/identifier_type_form.jsp</result>
+        </action>
+
+        <!--  ************************************ -->
+        <!--  Extent type Actions                -->
+        <!--  ************************************ -->
+        <action name="viewExtentTypes">
+            <result name="success">/pages/admin/item/metadata/extent_types/extent_type.jsp</result>
+        </action>
+        
+        <action name="getExtentTypes" 
+            class="edu.ur.ir.web.action.item.metadata.ManageExtentTypes"
+            method="viewExtentTypes">
+            <result name="success">/pages/admin/item/metadata/extent_types/extent_type_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*ExtentType" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.ManageExtentTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/extent_types/extent_type.jsp</result>
+            <result name="added">/pages/admin/item/metadata/extent_types/extent_type_added.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/extent_types/extent_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/extent_types/extent_type_form.jsp</result>
+ 
+        </action>
+                
+        <!--  ************************************ -->
+        <!--  Contributor type Actions             -->
+        <!--  ************************************ -->
+        <action name="viewContributorTypes">
+            <result name="success">/pages/admin/item/metadata/contributor_types/contributor_type.jsp</result>
+        </action>
+        
+        <action name="getContributorTypes" 
+            class="edu.ur.ir.web.action.person.ManageContributorTypes"
+            method="viewContributorTypes">
+            <result name="success">/pages/admin/item/metadata/contributor_types/contributor_type_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*ContributorType" 
+            method="{1}"
+            class="edu.ur.ir.web.action.person.ManageContributorTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/contributor_types/contributor_type.jsp</result>
+            <result name="added">/pages/admin/item/metadata/contributor_types/contributor_type_added.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/contributor_types/contributor_type_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/contributor_types/contributor_type_form.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Person Actions                       -->
+        <!--  ************************************ -->
+        <action name="viewPersons">
+            <result name="success">/pages/admin/item/metadata/persons/persons.jsp</result>
+        </action>
+        
+        <action name="getPersons" 
+            class="edu.ur.ir.web.action.person.ManagePersons"
+            method="viewPersons">
+            <result name="success">/pages/admin/item/metadata/persons/persons_table.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Person Edit/Name Actions             -->
+        <!--  ************************************ -->
+        <action name="personEdit" 
+            class="edu.ur.ir.web.action.person.ManagePersonNames"
+            method="editPerson">
+            <result name="input">/pages/admin/item/metadata/persons/persons.jsp</result>
+            <result name="veiwForEdit">/pages/admin/item/metadata/persons/edit_person.jsp</result>
+        </action>
+        
+        <action name="searchPerson" 
+            class="edu.ur.ir.web.action.person.PersonNameSearch">
+            <result name="success">/pages/admin/item/metadata/persons/person_search_results.jsp</result>
+        </action>        
+        
+        <!--  ************************************ -->
+        <!--  Sponsor Actions            -->
+        <!--  ************************************ -->
+        <action name="viewSponsors">
+            <result name="success">/pages/admin/item/metadata/sponsors/sponsor.jsp</result>
+        </action>
+        
+        <action name="getSponsors" 
+            class="edu.ur.ir.web.action.item.metadata.ManageSponsors"
+            method="viewSponsors">
+            <result name="success">/pages/admin/item/metadata/sponsors/sponsor_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*Sponsor" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.ManageSponsors">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/sponsors/sponsor.jsp</result>
+            <result name="added">/pages/admin/item/metadata/sponsors/sponsor_form.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/sponsors/sponsor_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/sponsors/sponsor_form.jsp</result>
+        </action>
+        
+        
+        <!--  ************************************ -->
+        <!--  Publisher  Actions     		       -->
+        <!--  ************************************ -->
+        <action name="viewPublishers">
+            <result name="success">/pages/admin/item/metadata/publishers/publisher.jsp</result>
+        </action>
+        
+        <action name="getPublishers" 
+            class="edu.ur.ir.web.action.item.metadata.ManagePublishers"
+            method="viewPublishers">
+            <result name="success">/pages/admin/item/metadata/publishers/publisher_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*Publisher" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.ManagePublishers">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/publishers/publisher.jsp</result>
+            <result name="added">/pages/admin/item/metadata/publishers/publisher_form.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/publishers/publisher_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/publishers/publisher_form.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Series  Actions     		       -->
+        <!--  ************************************ -->
+        <action name="viewSeries">
+            <result name="success">/pages/admin/item/metadata/series/series.jsp</result>
+        </action>
+        
+        <action name="getAllSeries" 
+            class="edu.ur.ir.web.action.item.metadata.ManageSeries"
+            method="viewSeries">
+            <result name="success">/pages/admin/item/metadata/series/series_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*Series" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.ManageSeries">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/series/series.jsp</result>
+            <result name="added">/pages/admin/item/metadata/series/series_form.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/series/series_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/series/series_form.jsp</result>
+        </action>        
+        
+        <!--  ******************************************************** -->
+        <!--  Contributor type Dublin Core Mapping Actions             -->
+        <!--  ******************************************************** -->
+        <action name="viewContributorTypeDublinCoreMappings"
+         class="edu.ur.ir.web.action.item.metadata.dc.ManageContributorTypeDublinCoreMapping">
+            <result name="success">/pages/admin/item/metadata/dc/contributor_types/contributor_type_dc_mapping.jsp</result>
+        </action>
+        
+        <action name="getContributorTypeDublinCoreMappings" 
+            class="edu.ur.ir.web.action.item.metadata.dc.ManageContributorTypeDublinCoreMapping"
+            method="">
+            <result name="success">/pages/admin/item/metadata/dc/contributor_types/contributor_type_dc_mapping_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*ContributorTypeDublinCoreMapping" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.dc.ManageContributorTypeDublinCoreMapping">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/dc/contributor_types/contributor_type.jsp</result>
+            <result name="added">/pages/admin/item/metadata/dc/contributor_types/contributor_type_dc_mapping_form.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/dc/contributor_types/contributor_type_dc_mapping_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/dc/contributor_types/contributor_type_dc_mapping_form.jsp</result>
+        </action>
+ 
+        <!--  ******************************************************** -->
+        <!--  Identifier type Dublin Core Mapping Actions             -->
+        <!--  ******************************************************** -->
+        <action name="viewIdentifierTypeDublinCoreMappings"
+         class="edu.ur.ir.web.action.item.metadata.dc.ManageIdentifierTypeDublinCoreMapping">
+            <result name="success">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping.jsp</result>
+        </action>
+        
+        <action name="getIdentifierTypeDublinCoreMappings" 
+            class="edu.ur.ir.web.action.item.metadata.dc.ManageIdentifierTypeDublinCoreMapping"
+            method="">
+            <result name="success">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping_table.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*IdentifierTypeDublinCoreMapping" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.dc.ManageIdentifierTypeDublinCoreMapping">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/item/metadata/dc/identifier_types/identifier_type.jsp</result>
+            <result name="added">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping_form.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping_deleted.jsp</result>
+            <result name="get">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping_form.jsp</result>
+        </action>
+        
