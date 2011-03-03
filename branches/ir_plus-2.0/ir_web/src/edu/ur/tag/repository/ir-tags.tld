@@ -721,5 +721,15 @@
 		</function-signature>
 	</function>
 	
+   <function>
+		<name>getSlashedDate</name>
+		<function-class>
+			edu.ur.tag.repository.DateUtilFunctions
+		</function-class>
+		<function-signature>
+			String getSlashedDate(edu.ur.ir.Date)
+		</function-signature>
+	</function>
+	
   
 </taglib>

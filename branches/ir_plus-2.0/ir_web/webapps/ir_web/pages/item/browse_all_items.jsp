@@ -215,10 +215,35 @@
 											<c:param name="selectedAlpha" value="${selectedAlpha}"/>	
 											<c:param name="contentTypeId" value="${contentTypeId}"/>	
 										</c:url>
+										
+										<c:url var="sortAscendingPublicationDateUrl" value="/browseRepositoryItems.action">
+										     <c:param name="rowStart" value="${rowStart}"/>
+											 <c:param name="startPageNumber" value="${startPageNumber}"/>
+											 <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											 <c:param name="sortElement" value="publicationDate"/>		
+											 <c:param name="sortType" value="asc"/>
+											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+											 <c:param name="contentTypeId" value="${contentTypeId}"/>	
+										</c:url>
+					                     
+					                    <c:url var="sortDescendingPublicationDateUrl" value="/browseRepositoryItems.action">
+										    <c:param name="rowStart" value="${rowStart}"/>
+											<c:param name="startPageNumber" value="${startPageNumber}"/>
+											<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											<c:param name="sortElement" value="publicationDate"/>		
+											<c:param name="sortType" value="desc"/>
+											<c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+											<c:param name="contentTypeId" value="${contentTypeId}"/>	
+										</c:url>
 					                    
 					                    <c:set var="nameSort" value="none"/>
 					                    <c:if test='${sortElement == "name"}'>
 					                        <c:set var="nameSort" value="${sortType}"/>
+					                    </c:if>
+					                    
+					                    <c:set var="publicationDateSort" value="none"/>
+					                    <c:if test='${sortElement == "publicationDate"}'>
+					                        <c:set var="publicationDateSort" value="${sortType}"/>
 					                    </c:if>
 					                    
 					                    <urstb:tdHeadSort  height="33"
@@ -228,6 +253,17 @@
                                             ascendingSortAction="${sortAscendingNameUrl}"
                                             descendingSortAction="${sortDescendingNameUrl}">
                                             <a href="${href}">Name</a>                                              
+                                            <urstb:thImgSort
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+					                    
+					                     <urstb:tdHeadSort  height="33"
+					                        useHref="true"
+					                        hrefVar="href"
+                                            currentSortAction="${publicationDateSort}"
+                                            ascendingSortAction="${sortAscendingPublicationDateUrl}"
+                                            descendingSortAction="${sortDescendingPublicationDateUrl}">
+                                            <a href="${href}">Publication Date</a>                                              
                                             <urstb:thImgSort
                                                          sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
                                                          sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
@@ -263,6 +299,10 @@
 						                        	
 						                        	<c:set var="description" value="${ir:getItemDescription(institutionalItem.versionedInstitutionalItem.currentVersion.item)}"/>
 						                        	<c:if test="${!ir:isStringEmpty(description)}"><div class="smallText"><ur:maxText numChars="150" text="${description}"/></div></c:if>
+						                        </urstb:td>
+						                        
+						                        <urstb:td>
+						                            ${ir:getSlashedDate(institutionalItem.versionedInstitutionalItem.currentVersion.item.externalPublishedItem.publishedDate)}
 						                        </urstb:td>
 						                        
 						                        <urstb:td>

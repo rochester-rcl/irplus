@@ -122,19 +122,44 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 			log.debug("Viewing all items with no content types");
 		    if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
 		    {
-		        institutionalItems = institutionalItemService.getRepositoryItemsOrderByName(rowStart, 
-		    		numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, OrderType.getOrderType(sortType));
+		    	if( sortElement.equalsIgnoreCase("name"))
+		    	{
+		            institutionalItems = institutionalItemService.getRepositoryItemsOrderByName(rowStart, 
+		    		    numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, OrderType.getOrderType(sortType));
+		    	}
+		    	else if( sortElement.equalsIgnoreCase("publicationDate"))
+		    	{
+		    		institutionalItems = institutionalItemService.getRepositoryItemsByPublicationDateOrder(rowStart, 
+		    				numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, OrderType.getOrderType(sortType) );
+		    	}
 		        totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID).intValue();
 		    }
 		    else if (selectedAlpha.equals("0-9"))
 		    {
-			    institutionalItems = institutionalItemService.getRepositoryItemsBetweenChar(rowStart, numberOfResultsToShow, 
-					Repository.DEFAULT_REPOSITORY_ID, '0', '9', OrderType.getOrderType(sortType));
+		    	if( sortElement.equalsIgnoreCase("name"))
+		    	{
+			        institutionalItems = institutionalItemService.getRepositoryItemsBetweenChar(rowStart, numberOfResultsToShow, 
+					    Repository.DEFAULT_REPOSITORY_ID, '0', '9', OrderType.getOrderType(sortType));
+		    	}
+		    	else if( sortElement.equalsIgnoreCase("publicationDate"))
+		    	{
+		    		institutionalItems = institutionalItemService.getRepositoryItemsBetweenCharByPublicationDateOrder(rowStart, numberOfResultsToShow, 
+					    Repository.DEFAULT_REPOSITORY_ID, '0', '9', OrderType.getOrderType(sortType));
+		    	}
 			    totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, '0', '9').intValue();
 		    }
 		    else
 		    {
-			    institutionalItems = institutionalItemService.getRepositoryItemsByChar(rowStart, numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+		    	if( sortElement.equalsIgnoreCase("name"))
+		    	{
+			        institutionalItems = institutionalItemService.getRepositoryItemsByChar(rowStart, numberOfResultsToShow, 
+			        		Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+		    	}
+		    	else if( sortElement.equalsIgnoreCase("publicationDate"))
+		        {
+		    		institutionalItems = institutionalItemService.getRepositoryItemsByCharPublicationDateOrder(rowStart, numberOfResultsToShow,
+		    				Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+		        }
 			    totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0)).intValue();
 		    }
 		}
@@ -143,19 +168,45 @@ public class RepositoryInstitutionalItemBrowse extends Pager {
 			log.debug("Viewing all items with content type id " + contentTypeId);
 			if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
 		    {
-		        institutionalItems = institutionalItemService.getRepositoryItemsOrderByName(rowStart, 
-		    		numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, contentTypeId, OrderType.getOrderType(sortType));
+				if( sortElement.equalsIgnoreCase("name"))
+		    	{
+		            institutionalItems = institutionalItemService.getRepositoryItemsOrderByName(rowStart, 
+		    		    numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, contentTypeId, OrderType.getOrderType(sortType));
+		    	}
+		    	else if( sortElement.equalsIgnoreCase("publicationDate"))
+		        {
+		    		institutionalItems = institutionalItemService.getRepositoryItemsByPublicationDateOrder(rowStart, 
+		    		    numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, contentTypeId, OrderType.getOrderType(sortType));
+		        }
 		        totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, contentTypeId).intValue();
 		    }
 		    else if (selectedAlpha.equals("0-9"))
 		    {
-			    institutionalItems = institutionalItemService.getRepositoryItemsBetweenChar(rowStart, numberOfResultsToShow, 
-					Repository.DEFAULT_REPOSITORY_ID, '0', '9', contentTypeId, OrderType.getOrderType(sortType));
+		    	if( sortElement.equalsIgnoreCase("name"))
+		    	{
+			        institutionalItems = institutionalItemService.getRepositoryItemsBetweenChar(rowStart, numberOfResultsToShow, 
+					    Repository.DEFAULT_REPOSITORY_ID, '0', '9', contentTypeId, OrderType.getOrderType(sortType));
+		    	}
+		    	else if( sortElement.equalsIgnoreCase("publicationDate"))
+		        {
+		    		institutionalItems = institutionalItemService.getRepositoryItemsBetweenCharByPublicationDateOrder(rowStart, numberOfResultsToShow, 
+					    Repository.DEFAULT_REPOSITORY_ID, '0', '9', contentTypeId, OrderType.getOrderType(sortType));
+		        }
 			    totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, '0', '9', contentTypeId).intValue();
 		    }
 		    else
 		    {
-			    institutionalItems = institutionalItemService.getRepositoryItemsByChar(rowStart, numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, contentTypeId, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+		    	if( sortElement.equalsIgnoreCase("name"))
+		    	{
+			        institutionalItems = institutionalItemService.getRepositoryItemsByChar(rowStart, numberOfResultsToShow, 
+			        		Repository.DEFAULT_REPOSITORY_ID, contentTypeId, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+		    	}
+		    	else if( sortElement.equalsIgnoreCase("publicationDate"))
+		        {
+		    		institutionalItems = institutionalItemService.getRepositoryItemsByCharPublicationDateOrder(rowStart, 
+		    				numberOfResultsToShow, Repository.DEFAULT_REPOSITORY_ID, contentTypeId, selectedAlpha.charAt(0), 
+		    				OrderType.getOrderType(sortType));
+		        }
 			    totalHits = institutionalItemService.getCount(Repository.DEFAULT_REPOSITORY_ID, selectedAlpha.charAt(0), contentTypeId).intValue();
 		    }
 		}
