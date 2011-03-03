@@ -98,6 +98,34 @@
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
+	<!-- order by publication date -->
+	<query name="getRepositoryItemsContentTypeByPublicationDateOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	</query>
+	
+	<query name="getRepositoryItemsContentTypeByPublicationDateOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
+	</query>
 	
 	<!-- ********************************************************* -->
 	<!-- count of all institutional items in the system for a repository -->
@@ -141,6 +169,37 @@
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
+	<!-- order by publication date -->
+	<query name="getRepositoryItemsContentTypeByCharPublicationDateOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and  item.nameFirstChar = :char
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	</query>
+	
+	<query name="getRepositoryItemsContentTypeByCharPublicationDateOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and  item.nameFirstChar = :char
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
+	</query>
+	
 	<!-- ********************************************************* -->
 	<!-- count of all institutional items in the system for a repository -->
 	<!-- By character RANGE  -->
@@ -181,6 +240,37 @@
 	    and item.nameFirstChar between :firstChar and :lastChar
 	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
+	</query>
+	
+		<!-- order by publication date -->
+	<query name="getRepositoryItemsContentTypeByCharRangePublicationDateOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	</query>
+	
+	<query name="getRepositoryItemsContentTypeByCharRangePublicationDateOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
 	</query>
 	
 	
@@ -227,7 +317,36 @@
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
+	<!-- order by publication date -->
+	<query name="getInstitutionalCollectionItemsContentTypeByPublicationDateOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	</query>
 	
+	<query name="getInstitutionalCollectionItemsContentTypeByPublicationDateOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
+	</query>
 	<!-- ********************************************************* -->
 	<!-- count of all institutional items in the system for a collection by letter-->
 	<!-- ********************************************************* -->
@@ -270,6 +389,39 @@
 	    and item.nameFirstChar = :firstChar
 	    and itemContentType.contentType.id = :contentTypeId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
+	</query>
+	
+	<!-- order by publication date -->
+	<query name="getInstitutionalCollectionItemsContentTypeByCharPublicationDateOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and item.nameFirstChar = :firstChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	</query>
+	
+	<query name="getInstitutionalCollectionItemsContentTypeByCharPublicationDateOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and item.nameFirstChar = :firstChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
 	</query>
 	
    <!-- ********************************************************* -->
@@ -317,7 +469,38 @@
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 
+		<!-- order by publication date -->
+	<query name="getCollectionItemsContentTypeByCharRangePublicationDateOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	</query>
 	
+	<query name="getCollectionItemsContentTypeByCharRangePublicationDateOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.externalPublishedItem as publishedItem
+	         left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
+	</query>
 
 	
 </hibernate-mapping>

@@ -30,7 +30,7 @@ public class SimpleDateFormatter {
 	 * @param date
 	 * @return
 	 */
-	public String getDate(Date date)
+	public static String getDate(Date date)
 	{
 		String value = "";
 		
@@ -48,6 +48,39 @@ public class SimpleDateFormatter {
 		}
 		return value;
 		
+	}
+
+	/**
+	 * Get the date in MM/dd/yyyy format
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static String getSlashedDate(Date date) {
+		if (date == null) {
+			return "";
+		}
+		StringBuffer sb = new StringBuffer();
+
+		if (date.getMonth() > 0) {
+			sb.append(date.getMonth());
+			sb.append("/");
+		}
+
+		if (date.getDay() > 0) {
+			if( date.getMonth() <= 0 )
+			{
+				sb.append("??/");
+			}
+			sb.append(date.getDay());
+			sb.append("/");
+		}
+
+		if (date.getYear() > 0) {
+			sb.append(date.getYear());
+		}
+
+		return sb.toString();
 	}
 
 }
