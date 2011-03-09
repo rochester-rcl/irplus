@@ -234,6 +234,26 @@ public interface InstitutionalItemService extends Serializable{
 	
 	/**
 	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsBetweenCharByFirstAvailableOrder(final int rowStart,
+			int maxResults, 
+			Long repositoryId,
+			char firstChar,
+			char lastChar,
+			OrderType orderType);
+	
+	/**
+	 * Get a list of items for a specified repository by between the that have titles
 	 * that start between the specified characters with the given content type id
 	 * 
 	 * @param rowStart - Start row to fetch the data from
@@ -276,6 +296,28 @@ public interface InstitutionalItemService extends Serializable{
 			Long contentTypeId,
 			OrderType orderType);
 	
+	/**
+	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters with the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsBetweenCharByFirstAvailableOrder(final int rowStart,
+			int maxResults, 
+			Long repositoryId,
+			char firstChar,
+			char lastChar,
+			Long contentTypeId,
+			OrderType orderType);
+	
 	
 	/**
 	 * Get a list of items for a specified repository.
@@ -303,7 +345,9 @@ public interface InstitutionalItemService extends Serializable{
 	 * 
 	 * @return List of institutional items
 	 */
-	public List<InstitutionalItem> getRepositoryItemsOrderByName(int rowStart, int maxResults, Long repositoryId, 
+	public List<InstitutionalItem> getRepositoryItemsOrderByName(int rowStart, 
+			int maxResults, 
+			Long repositoryId, 
 			Long contentTypeId, 
 			OrderType orderType) ;	
     
@@ -318,7 +362,41 @@ public interface InstitutionalItemService extends Serializable{
 	 * 
 	 * @return List of institutional items
 	 */
-	public List<InstitutionalItem> getRepositoryItemsByPublicationDateOrder(int rowStart, int maxResults, Long repositoryId, 
+	public List<InstitutionalItem> getRepositoryItemsByPublicationDateOrder(int rowStart, 
+			int maxResults, 
+			Long repositoryId, 
+			OrderType orderType);
+	
+	/**
+	 * Get a list of items for a specified repository with the given content type id.
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsByFirstAvailableOrder(int rowStart, 
+			int maxResults, 
+			Long repositoryId, 
+			OrderType orderType);
+	
+	/**
+	 * Get a list of items for a specified repository with the given content type id.
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsByPublicationDateOrder(int rowStart, 
+			int maxResults, 
+			Long repositoryId, 
+			Long contentTypeId, 
 			OrderType orderType) ;
 	
 	/**
@@ -332,7 +410,9 @@ public interface InstitutionalItemService extends Serializable{
 	 * 
 	 * @return List of institutional items
 	 */
-	public List<InstitutionalItem> getRepositoryItemsByPublicationDateOrder(int rowStart, int maxResults, Long repositoryId, 
+	public List<InstitutionalItem> getRepositoryItemsByFirstAvailableOrder(int rowStart, 
+			int maxResults, 
+			Long repositoryId, 
 			Long contentTypeId, 
 			OrderType orderType) ;
 	
@@ -414,6 +494,24 @@ public interface InstitutionalItemService extends Serializable{
 			Long repositoryId,
 			char firstChar,
 			OrderType orderType);
+	
+	/**
+	 * Get a list of items for a specified repository by first character of the name
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsByCharFirstAvailableOrder(int rowStart,
+			int maxResults, 
+			Long repositoryId,
+			char firstChar,
+			OrderType orderType);
+	
 	/**
 	 * Get a list of items for a specified repository by first character of the name and
 	 * the given content type id
@@ -455,6 +553,26 @@ public interface InstitutionalItemService extends Serializable{
 			OrderType orderType);
 	
 	/**
+	 * Get a list of items for a specified repository by first character of the name and
+	 * the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getRepositoryItemsByCharFirstAvailableOrder(int rowStart,
+			int maxResults, 
+			Long repositoryId,
+			Long contentTypeId,
+			char firstChar,
+			OrderType orderType);
+	
+	/**
 	 * Get the list of items for the specified collection.  This includes items in sub collections
 	 * 
 	 * @param rowStart - Start row to fetch the data from
@@ -482,9 +600,24 @@ public interface InstitutionalItemService extends Serializable{
 	public List<InstitutionalItem> getCollectionItemsPublicationDateOrder(int rowStart, 
 			int maxResults, 
 			InstitutionalCollection collection, 
-			OrderType orderType) ;
+			OrderType orderType);
 
 
+	/**
+	 * Get the list of items for the specified collection.  This includes items in sub collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults -  maximum number of results to return
+	 * @param collectionId - id of the collection to get items 
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getCollectionItemsFirstAvailableOrder(int rowStart, 
+			int maxResults, 
+			InstitutionalCollection collection, 
+			OrderType orderType);
+	
 	/**
 	 * Get the list of items for the specified collection with the given 
 	 * content type id.  This includes items in child collections
@@ -516,6 +649,24 @@ public interface InstitutionalItemService extends Serializable{
 	 * @return List of institutional items
 	 */
 	public List<InstitutionalItem> getCollectionItemsPublicationDateOrder(int rowStart, 
+			int maxResults, 
+			InstitutionalCollection collection, 
+			Long contentTypeId,
+			OrderType orderType) ;
+	
+	/**
+	 * Get the list of items for the specified collection with the given 
+	 * content type id.  This includes items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults -  maximum number of results to return
+	 * @param collection - the collection to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getCollectionItemsFirstAvailableOrder(int rowStart, 
 			int maxResults, 
 			InstitutionalCollection collection, 
 			Long contentTypeId,
@@ -572,6 +723,24 @@ public interface InstitutionalItemService extends Serializable{
 			char firstChar,
 			OrderType orderType);
 	
+	/**
+	 * Get a list of items for a specified collection by first character of the name.  
+	 * This INCLUDES items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param Institutionalcollection - parent collection
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getCollectionItemsByCharFirstAvailableOrder(final int rowStart,
+			int maxResults, 
+			InstitutionalCollection institutionalCollection,
+			char firstChar,
+			OrderType orderType);
+	
 	
 	/**
 	 * Get a list of items for a specified collection by first character of the name 
@@ -609,6 +778,28 @@ public interface InstitutionalItemService extends Serializable{
 	 * @return List of institutional items
 	 */
 	public List<InstitutionalItem> getCollectionItemsByCharPublicationDateOrder(final int rowStart,
+			int maxResults, 
+			InstitutionalCollection collection,
+			Long contentTypeId,
+			char firstChar,
+			OrderType orderType);
+	
+	
+	/**
+	 * Get a list of items for a specified collection by first character of the name 
+	 * and the specified content type.  
+	 * This INCLUDES items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param Institutionalcollection - parent collection
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getCollectionItemsByCharFirstAvailableOrder(final int rowStart,
 			int maxResults, 
 			InstitutionalCollection collection,
 			Long contentTypeId,
@@ -657,7 +848,26 @@ public interface InstitutionalItemService extends Serializable{
 			char lastChar,
 			OrderType orderType);
 	
-	
+	/**
+	 * Get a list of items for a specified collection by titles
+	 * that start between the specified first character in the name.  This 
+	 * INCLUDES items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param Institutional Collection - parent collection 
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getCollectionItemsBetweenCharFirstAvailableOrder(int rowStart,
+			int maxResults, 
+			InstitutionalCollection institutionalCollection,
+			char firstChar,
+			char lastChar,
+			OrderType orderType);
 	
 	/**
 	 * Get a list of items for a specified collection by titles
@@ -705,6 +915,31 @@ public interface InstitutionalItemService extends Serializable{
 			char firstChar,
 			char lastChar,
 			OrderType orderType);
+	
+	/**
+	 * Get a list of items for a specified collection by titles
+	 * that start between the specified first character in the name and the given content
+	 * type.  This INCLUDES items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param Institutional Collection - parent collection 
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	public List<InstitutionalItem> getCollectionItemsBetweenCharFirstAvailableOrder(int rowStart,
+			int maxResults, 
+			InstitutionalCollection collection,
+			Long contentTypeId,
+			char firstChar,
+			char lastChar,
+			OrderType orderType);
+	
+	
 	/**
 	 * Get a count of institutional items in a collection and its children.
 	 * 

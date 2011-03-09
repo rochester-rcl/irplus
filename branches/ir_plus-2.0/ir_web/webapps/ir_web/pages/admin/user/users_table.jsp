@@ -50,8 +50,8 @@
 	                    descendingSortAction="javascript:YAHOO.ur.user.getUsers(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'username', 'desc');">
 	                    <u>User Name</u>                                              
 	                    <urstb:thImgSort
-	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 	
 	                <c:set var="lastNameSort" value="none"/>
 	                <c:if test='${sortElement == "lastName"}'>
@@ -64,8 +64,8 @@
 	                    descendingSortAction="javascript:YAHOO.ur.user.getUsers(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'lastName', 'desc');">
 	                    <u>Last Name</u>                                              
 	                    <urstb:thImgSort
-	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 	
 	                <urstb:td>First Name</urstb:td>
               
@@ -80,8 +80,8 @@
 	                    descendingSortAction="javascript:YAHOO.ur.user.getUsers(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'email', 'desc');">
 	                    <u>Email</u>                                              
 	                    <urstb:thImgSort
-	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 	                <urstb:td>Login Date</urstb:td>
 	                <urstb:td>Change password</urstb:td>
 	                <urstb:td>Login as user</urstb:td>

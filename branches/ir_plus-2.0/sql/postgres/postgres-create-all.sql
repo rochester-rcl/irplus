@@ -1307,113 +1307,8 @@ ALTER TABLE ir_item.sponsor_seq OWNER TO ir_plus;
 CREATE INDEX sponsor_name_first_char_idx ON ir_item.sponsor(sponsor_name_first_char);
 
 
--- ---------------------------------------------
--- Item's published Date 
--- ---------------------------------------------
-
-CREATE TABLE ir_item.published_date (
-  published_date_id BIGINT NOT NULL,
-  version INTEGER,
-  day INTEGER,
-  month INTEGER,
-  year INTEGER,
-  hours INTEGER,
-  minutes INTEGER,
-  seconds INTEGER,
-  fraction_seconds INTEGER,
-  external_published_item_id BIGINT,
-  PRIMARY KEY (published_date_id)
-  
-) ;
-ALTER TABLE ir_item.published_date OWNER TO ir_plus;
-
--- The published date sequence
-CREATE SEQUENCE ir_item.published_date_seq ;
-ALTER TABLE ir_item.published_date_seq OWNER TO ir_plus;
 
 
--- ---------------------------------------------
--- External published item
--- ---------------------------------------------
-
-CREATE TABLE ir_item.external_published_item(
-  external_published_item_id bigint NOT NULL,
-  version INTEGER,
-  publisher_id BIGINT,
-  published_date_id BIGINT,
-  citation TEXT,
-  PRIMARY KEY (external_published_item_id),
-  FOREIGN KEY (publisher_id)
-      REFERENCES ir_item.publisher (publisher_id) ,
-  FOREIGN KEY (published_date_id) REFERENCES ir_item.published_date 
-	(published_date_id)   
-  
-) ;
-ALTER TABLE ir_item.external_published_item OWNER TO ir_plus;
-
--- The external published item sequence
-CREATE SEQUENCE ir_item.external_published_item_seq ;
-ALTER TABLE ir_item.external_published_item_seq OWNER TO ir_plus;
-
-      
--- ---------------------------------------------
--- Constraint for published date 
--- ---------------------------------------------
-ALTER TABLE ir_item.published_date ADD CONSTRAINT external_published_item_published_date_id_fkey FOREIGN 
-
-KEY (external_published_item_id)
-      REFERENCES ir_item.external_published_item(external_published_item_id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION;
-
--- ---------------------------------------------
--- Item's  First available Date 
--- ---------------------------------------------
-
-CREATE TABLE ir_item.first_available_date (
-  first_available_date_id bigint NOT NULL,
-  version integer,
-  day integer,
-  month integer,
-  year integer,
-  hours integer,
-  minutes integer,
-  seconds integer,
-  fraction_seconds integer,
-  item_id BIGINT,
-  PRIMARY KEY (first_available_date_id)
-  
-) ;
-ALTER TABLE ir_item.first_available_date OWNER TO ir_plus;
-
--- The published date sequence
-CREATE SEQUENCE ir_item.first_available_date_seq ;
-ALTER TABLE ir_item.first_available_date_seq OWNER TO ir_plus;
-
-
--- ---------------------------------------------
--- Item's release Date 
--- ---------------------------------------------
-
-CREATE TABLE ir_item.original_item_creation_date (
-  original_item_creation_date_id bigint NOT NULL,
-  version integer,
-  day integer,
-  month integer,
-  year integer,
-  hours integer,
-  minutes integer,
-  seconds integer,
-  fraction_seconds integer,
-  item_id BIGINT,
-  PRIMARY KEY (original_item_creation_date_id)
-  
-  
-) ;
-ALTER TABLE ir_item.original_item_creation_date OWNER TO ir_plus;
-
--- The published date sequence
-CREATE SEQUENCE ir_item.original_item_creation_date_seq ;
-ALTER TABLE ir_item.original_item_creation_date_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Item Information
@@ -1424,13 +1319,10 @@ CREATE TABLE ir_item.item
   item_id BIGINT PRIMARY KEY,
   language_type_id BIGINT,
   content_type_id BIGINT,
-  external_published_item_id BIGINT,
-  original_item_creation_date_id BIGINT,
   copyright_statement_id BIGINT,
   user_id BIGINT,
   withdrawn BOOLEAN,
   release_date DATE,
-  first_available_date_id BIGINT,
   name TEXT NOT NULL,
   name_first_char CHAR NOT NULL,
   lower_case_name TEXT NOT NULL,
@@ -1447,13 +1339,8 @@ CREATE TABLE ir_item.item
 	(language_type_id),
   FOREIGN KEY (copyright_statement_id) REFERENCES ir_item.copyright_statement
 	(copyright_statement_id),
-  FOREIGN KEY (original_item_creation_date_id) REFERENCES ir_item.original_item_creation_date 
-	(original_item_creation_date_id),
-  FOREIGN KEY (first_available_date_id) REFERENCES ir_item.first_available_date 
-	(first_available_date_id),	
   FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type (content_type_id),
-  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id),
-  FOREIGN KEY (external_published_item_id) REFERENCES ir_item.external_published_item (external_published_item_id)
+  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user(user_id)
 ) ;
 ALTER TABLE ir_item.item OWNER TO ir_plus;
 
@@ -1470,16 +1357,97 @@ CREATE SEQUENCE ir_item.item_seq;
 ALTER TABLE ir_item.item_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
--- Constraint for first available date 
+-- External published item
 -- ---------------------------------------------
-ALTER TABLE ir_item.first_available_date ADD CONSTRAINT item_first_available_date_id_fkey FOREIGN 
-KEY (item_id)  REFERENCES ir_item.item(item_id) ;
-      
+
+CREATE TABLE ir_item.external_published_item(
+  external_published_item_id BIGINT NOT NULL PRIMARY KEY,
+  version INTEGER,
+  publisher_id BIGINT,
+  citation TEXT,
+  item_id BIGINT NOT NULL,
+  FOREIGN KEY (publisher_id)
+      REFERENCES ir_item.publisher (publisher_id),
+  FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id) 
+) ;
+ALTER TABLE ir_item.external_published_item OWNER TO ir_plus;
+
+-- The external published item sequence
+CREATE SEQUENCE ir_item.external_published_item_seq ;
+ALTER TABLE ir_item.external_published_item_seq OWNER TO ir_plus;
+
 -- ---------------------------------------------
--- Constraint for release date 
+-- Item's published Date 
 -- ---------------------------------------------
-ALTER TABLE ir_item.original_item_creation_date ADD CONSTRAINT item_original_item_creation_date_id_fkey FOREIGN 
-KEY (item_id) REFERENCES ir_item.item(item_id);
+
+CREATE TABLE ir_item.published_date (
+  published_date_id BIGINT NOT NULL PRIMARY KEY,
+  external_published_item_id BIGINT NOT NULL,
+  version INTEGER,
+  day INTEGER,
+  month INTEGER,
+  year INTEGER,
+  hours INTEGER,
+  minutes INTEGER,
+  seconds INTEGER,
+  fraction_seconds INTEGER,
+  FOREIGN KEY (external_published_item_id)
+      REFERENCES ir_item.external_published_item (external_published_item_id)
+) ;
+ALTER TABLE ir_item.published_date OWNER TO ir_plus;
+
+-- The published date sequence
+CREATE SEQUENCE ir_item.published_date_seq ;
+ALTER TABLE ir_item.published_date_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Item's  First available Date 
+-- ---------------------------------------------
+
+CREATE TABLE ir_item.first_available_date (
+  first_available_date_id BIGINT NOT NULL PRIMARY KEY,
+  version INTEGER,
+  day INTEGER,
+  month INTEGER,
+  year INTEGER,
+  hours INTEGER,
+  minutes INTEGER,
+  seconds INTEGER,
+  fraction_seconds INTEGER,
+  item_id BIGINT NOT NULL,
+  CONSTRAINT item_first_available_date_id_fkey FOREIGN KEY (item_id)  REFERENCES ir_item.item(item_id)
+) ;
+ALTER TABLE ir_item.first_available_date OWNER TO ir_plus;
+
+-- The available date sequence
+CREATE SEQUENCE ir_item.first_available_date_seq ;
+ALTER TABLE ir_item.first_available_date_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Item's original creation Date 
+-- ---------------------------------------------
+
+CREATE TABLE ir_item.original_item_creation_date (
+  original_item_creation_date_id bigint NOT NULL PRIMARY KEY,
+  version INTEGER,
+  day INTEGER,
+  month INTEGER,
+  year INTEGER,
+  hours INTEGER,
+  minutes INTEGER,
+  seconds INTEGER,
+  fraction_seconds INTEGER,
+  item_id BIGINT NOT NULL,
+  CONSTRAINT item_original_item_creation_date_id_fkey FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id)
+) ;
+ALTER TABLE ir_item.original_item_creation_date OWNER TO ir_plus;
+
+-- The published date sequence
+CREATE SEQUENCE ir_item.original_item_creation_date_seq ;
+ALTER TABLE ir_item.original_item_creation_date_seq OWNER TO ir_plus;      
+
 
 -- ---------------------------------------------
 -- Item type table

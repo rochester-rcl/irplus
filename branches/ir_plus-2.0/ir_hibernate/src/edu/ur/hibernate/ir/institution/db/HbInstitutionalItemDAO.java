@@ -1445,11 +1445,11 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 		Query q = null;
 		if( orderType.equals(OrderType.DESCENDING_ORDER))
 	    {
-	        q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRepositoryItemsByPublicationDateOrderAsc");
+	        q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRepositoryItemsByPublicationDateOrderDesc");
 	    }
  	    else
 	    {
-	        q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRepositoryItemsByPublicationDateOrderDesc");
+	        q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRepositoryItemsByPublicationDateOrderAsc");
 	    }
 	    q.setLong("repositoryId", repositoryId);
 	    q.setFirstResult(rowStart);
@@ -1466,6 +1466,7 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	 * @param rowStart - Start row to fetch the data from
 	 * @param maxResulsts - maximum number of results to fetch
 	 * @param repositoryId - id of the collection to get items 
+	 * @param contentTypeId - id of the content type
 	 * @param orderType - The order to sort by (ascending/descending)
 	 * 
 	 * @return List of institutional items
@@ -1486,6 +1487,460 @@ public class HbInstitutionalItemDAO implements InstitutionalItemDAO {
 	    }
 	    
 	    q.setParameter("repositoryId", repositoryId);
+		q.setParameter("contentTypeId", contentTypeId);
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(maxResults);
+	    q.setFetchSize(maxResults);
+        return q.list();
+	}
+
+	/**
+	 * Get the list of items for the specified collection with the given 
+	 * content type id.  This includes items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults -  maximum number of results to return
+	 * @param collection - the collection to get items 
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getCollectionItemsFirstAvailableOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = session
+					.getNamedQuery("getInstitutionalCollectionItemsFirstAvailableOrderDesc");
+		} else {
+			q = session
+					.getNamedQuery("getInstitutionalCollectionItemsFirstAvailableOrderAsc");
+		}
+
+		q.setLong("leftVal", collection.getLeftValue());
+		q.setLong("rightVal", collection.getRightValue());
+		q.setLong("rootId", collection.getTreeRoot().getId());
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return q.list();
+	}
+
+	
+	/**
+	 * Get the list of items for the specified collection with the given 
+	 * content type id.  This includes items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults -  maximum number of results to return
+	 * @param collection - the collection to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getCollectionItemsFirstAvailableOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+		if (orderType.equals(OrderType.DESCENDING_ORDER)) {
+			q = session
+					.getNamedQuery("getInstitutionalCollectionItemsContentTypeByFirstAvailableOrderDesc");
+		} else {
+			q = session
+					.getNamedQuery("getInstitutionalCollectionItemsContentTypeByFirstAvailableOrderAsc");
+		}
+
+		q.setLong("leftVal", collection.getLeftValue());
+		q.setLong("rightVal", collection.getRightValue());
+		q.setLong("rootId", collection.getTreeRoot().getId());
+		q.setLong("contentTypeId", contentTypeId);
+		q.setFirstResult(rowStart);
+		q.setMaxResults(maxResults);
+		q.setFetchSize(maxResults);
+		return q.list();
+	}
+
+	/**
+	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters
+	 * 
+	 * NOTE: This search includes all items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param collection - the institutional collection 
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return list of items matching the specified criteria
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getCollectionItemsBetweenChar(int, int, edu.ur.ir.institution.InstitutionalCollection, java.lang.Long, char, char, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getCollectionItemsBetweenCharFirstAvailableOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			char firstChar, char lastChar, OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharRangeFirstAvailableOrderDesc");
+	    }
+ 	    else
+	    {
+	        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharRangeFirstAvailableOrderAsc");
+	    }
+	    
+		q.setParameter("leftVal", collection.getLeftValue());
+		q.setParameter("rightVal", collection.getRightValue());
+		q.setParameter("rootId", collection.getTreeRoot().getId());
+		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(maxResults);
+	    q.setFetchSize(maxResults);
+        return q.list();
+	}
+
+	/**
+	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters
+	 * 
+	 * NOTE: This search includes all items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param collection - the institutional collection 
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return list of items matching the specified criteria
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getCollectionItemsBetweenChar(int, int, edu.ur.ir.institution.InstitutionalCollection, java.lang.Long, char, char, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getCollectionItemsBetweenCharFirstAvailableOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, char firstChar, char lastChar,
+			OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharRangeFirstAvailableOrderDesc");
+	    }
+ 	    else
+	    {
+	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharRangeFirstAvailableOrderAsc");
+	    }
+	    
+		q.setParameter("leftVal", collection.getLeftValue());
+		q.setParameter("rightVal", collection.getRightValue());
+		q.setParameter("rootId", collection.getTreeRoot().getId());
+		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
+		q.setParameter("contentTypeId", contentTypeId);
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(maxResults);
+	    q.setFetchSize(maxResults);
+        return q.list();
+	}
+
+	/**
+	 * Get a list of items for a specified collection by first character of the name
+	 * 
+	 * NOTE: This search includes all items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param institutional collection - the institutional collection 
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getCollectionItemsByCharFirstAvailableOrder(
+			int rowStart, int maxResults,
+			InstitutionalCollection collection, char firstChar,
+			OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharFirstAvailableOrderDesc");
+	    }
+ 	    else
+	    {
+	        q = session.getNamedQuery("getInstitutionalCollectionItemsByCharFirstAvailableOrderAsc");
+	    }
+	    
+		q.setParameter("leftVal", collection.getLeftValue());
+		q.setParameter("rightVal", collection.getRightValue());
+		q.setParameter("rootId", collection.getTreeRoot().getId());
+		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(maxResults);
+	    q.setFetchSize(maxResults);
+        return q.list();
+	}
+
+	/**
+	 * Get a list of items for a specified collection by first character of the name
+	 * 
+	 * NOTE: This search includes all items in child collections
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param institutional collection - the institutional collection 
+	 * @param contentTypeId - id of the content type 
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getCollectionItemsByCharFirstAvailableOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, char firstChar, OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharFirstAvailableOrderDesc");
+	    }
+ 	    else
+	    {
+	        q = session.getNamedQuery("getInstitutionalCollectionItemsContentTypeByCharFirstAvailableOrderAsc");
+	    }
+	    
+		q.setParameter("leftVal", collection.getLeftValue());
+		q.setParameter("rightVal", collection.getRightValue());
+		q.setParameter("rootId", collection.getTreeRoot().getId());
+		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+		q.setParameter("contentTypeId", contentTypeId);
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(maxResults);
+	    q.setFetchSize(maxResults);
+        return q.list();
+	}
+
+	/**
+	 * Get a list of items for a specified repository by publication date.
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the collection to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getRepositoryItemsFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId,
+			Long contentTypeId, OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsContentTypeByFirstAvailableOrderDesc");
+	    }
+ 	    else
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsContentTypeByFirstAvailableOrderAsc");
+	    }
+	    
+	    q.setParameter("repositoryId", repositoryId);
+		q.setParameter("contentTypeId", contentTypeId);
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(maxResults);
+	    q.setFetchSize(maxResults);
+        return q.list();
+	}
+
+	/**
+	 * Get a list of items for a specified repository by publication date.
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the collection to get items 
+	 * @param orderType - The order to sort by (ascending/descending)
+	 * 
+	 * @return List of institutional items
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getRepositoryItemsFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId, OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsByFirstAvailableOrderDesc");
+	    }
+ 	    else
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsByFirstAvailableOrderAsc");
+	    }
+	    
+	    q.setParameter("repositoryId", repositoryId);
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(maxResults);
+	    q.setFetchSize(maxResults);
+        return q.list();
+	}
+
+	/**
+	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters with the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getRepositoryItemsBetweenChar(int, int, java.lang.Long, char, char, java.lang.Long, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getRepositoryItemsBetweenCharFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId, char firstChar,
+			char lastChar, OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsByCharRangeFirstAvailableOrderDesc");
+	    }
+ 	    else
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsByCharRangeFirstAvailableOrderAsc");
+	    }
+	    
+	    q.setParameter("repositoryId", repositoryId);
+		q.setParameter("firstChar",Character.valueOf(Character.toLowerCase(firstChar)));
+		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(maxResults);
+	    q.setFetchSize(maxResults);
+        return q.list();
+	}
+
+	/**
+	 * Get a list of items for a specified repository by between the that have titles
+	 * that start between the specified characters with the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResulsts - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param firstChar - first character in range that the first letter of the name can have
+	 * @param lastChar - last character in range that the first letter of the name can have
+	 * @param contentTypeId - id of the content type
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 * @see edu.ur.ir.institution.InstitutionalItemDAO#getRepositoryItemsBetweenChar(int, int, java.lang.Long, char, char, java.lang.Long, edu.ur.order.OrderType)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getRepositoryItemsBetweenCharFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId, char firstChar,
+			char lastChar, Long contentTypeId, OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsContentTypeByCharRangeFirstAvailableOrderDesc");
+	    }
+ 	    else
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsContentTypeByCharRangeFirstAvailableOrderAsc");
+	    }
+	    
+	    q.setParameter("repositoryId", repositoryId);
+		q.setParameter("firstChar",Character.valueOf(Character.toLowerCase(firstChar)));
+		q.setParameter("lastChar", Character.valueOf(Character.toLowerCase(lastChar)));
+		q.setParameter("contentTypeId", contentTypeId);
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(maxResults);
+	    q.setFetchSize(maxResults);
+        return q.list();
+	}
+
+	/**
+	 * Get a list of items for a specified repository by first character of the name and
+	 * the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getRepositoryItemsByCharFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId, char firstChar,
+			OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsByCharFirstAvailableOrderDesc");
+	    }
+ 	    else
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsByCharFirstAvailableOrderAsc");
+	    }
+	    
+	    q.setParameter("repositoryId", repositoryId);
+		q.setParameter("firstChar", Character.valueOf(Character.toLowerCase(firstChar)));
+		q.setFirstResult(rowStart);
+	    q.setMaxResults(maxResults);
+	    q.setFetchSize(maxResults);
+        return q.list();
+	}
+
+	/**
+	 * Get a list of items for a specified repository by first character of the name and
+	 * the given content type id
+	 * 
+	 * @param rowStart - Start row to fetch the data from
+	 * @param maxResults - maximum number of results to fetch
+	 * @param repositoryId - id of the repository to get items 
+	 * @param contentTypeId - id of the content type
+	 * @param firstChar - first character that the name should have
+	 * @param orderType - The order to sort by (asc/desc)
+	 * 
+	 * @return List of institutional items
+	 */
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItem> getRepositoryItemsByCharFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId,
+			Long contentTypeId, char firstChar, OrderType orderType) {
+		Session session = hbCrudDAO.getSessionFactory().getCurrentSession();
+		Query q = null;
+	    if( orderType.equals(OrderType.DESCENDING_ORDER))
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsContentTypeByCharFirstAvailableOrderDesc");
+	    }
+ 	    else
+	    {
+	        q = session.getNamedQuery("getRepositoryItemsContentTypeByCharFirstAvailableOrderAsc");
+	    }
+	    
+	    q.setParameter("repositoryId", repositoryId);
+		q.setParameter("char", Character.valueOf(Character.toLowerCase(firstChar)));
 		q.setParameter("contentTypeId", contentTypeId);
 		q.setFirstResult(rowStart);
 	    q.setMaxResults(maxResults);

@@ -472,12 +472,10 @@ public class DefaultUserWorkspaceIndexServiceTest {
 		
 		item1.setLanguageType(languageType);
 		
-		ExternalPublishedItem externalPublishedItem = new ExternalPublishedItem();
+		ExternalPublishedItem externalPublishedItem = item1.createExternalPublishedItem();
 		externalPublishedItem.setPublisher(publisher);
-		externalPublishedItem.addPublishedDate(05,13,2008);
+		externalPublishedItem.updatePublishedDate(05,13,2008);
 		externalPublishedItem.setCitation("citation");
-		
-		item1.setExternalPublishedItem(externalPublishedItem);
 		
 		userPublishingFileSystemService.makePersonalItemPersistent(personalItem);
 	

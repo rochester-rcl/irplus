@@ -47,8 +47,8 @@
 	                    descendingSortAction="javascript:YAHOO.ur.person.getPersons(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'surname', 'desc');">
 	                    <u>Last Name</u>                                              
 	                    <urstb:thImgSort
-	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 	
 	                <c:set var="forenameSort" value="none"/>
 	                <c:if test='${sortElement == "forename"}'>
@@ -61,8 +61,8 @@
 	                    descendingSortAction="javascript:YAHOO.ur.person.getPersons(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'forename', 'desc');">
 	                    <u>First Name</u>                                              
 	                    <urstb:thImgSort
-	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 	
 	                <urstb:td>Middle Name</urstb:td>
 	                <urstb:td>Family Name</urstb:td>

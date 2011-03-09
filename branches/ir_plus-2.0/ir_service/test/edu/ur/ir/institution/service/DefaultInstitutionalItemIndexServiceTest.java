@@ -305,10 +305,10 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		GenericItem genericItem = item.getVersionedItem().getCurrentVersion().getItem();
 		genericItem.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem.addContributor(c);
-		genericItem.addFirstAvailableDate(9, 8, 1977);
+		genericItem.updateFirstAvailableDate(9, 8, 1977);
         genericItem.addItemIdentifier("identifier value", identType);
         genericItem.createLink("msnbc", "http://www.msnbc.com");
-        genericItem.addOriginalItemCreationDate(9, 8, 2001);
+        genericItem.updateOriginalItemCreationDate(9, 8, 2001);
         genericItem.addReport(series, "report 3456");
         genericItem.addSubTitle("the sub title", "The articles");
         genericItem.setItemAbstract("abstract");
@@ -318,13 +318,13 @@ public class DefaultInstitutionalItemIndexServiceTest {
         genericItem.setPrimaryContentType(contentType);
         genericItem.setLanguageType(languageType);
         genericItem.setName("name");
-        ExternalPublishedItem externalPublishedItem = new ExternalPublishedItem();
+        ExternalPublishedItem externalPublishedItem = genericItem.createExternalPublishedItem();
         
         externalPublishedItem.setCitation("citation");
         externalPublishedItem.setPublisher(publisher);
-        externalPublishedItem.addPublishedDate(10, 1, 2005);
+        externalPublishedItem.updatePublishedDate(10, 1, 2005);
         
-        genericItem.setExternalPublishedItem(externalPublishedItem);
+        
         userPublishingFileSystemService.makePersonalItemPersistent(item);
         
         // add the item to the collection
@@ -576,10 +576,10 @@ public class DefaultInstitutionalItemIndexServiceTest {
 		GenericItem genericItem = item.getVersionedItem().getCurrentVersion().getItem();
 		genericItem.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem.addContributor(c);
-		genericItem.addFirstAvailableDate(9, 8, 1977);
+		genericItem.updateFirstAvailableDate(9, 8, 1977);
         genericItem.addItemIdentifier("identifier value", identType);	
         genericItem.createLink("msnbc", "http://www.msnbc.com");
-        genericItem.addOriginalItemCreationDate(9, 8, 2001);
+        genericItem.updateOriginalItemCreationDate(9, 8, 2001);
         genericItem.addReport(series, "report 3456");
         genericItem.addSubTitle("the sub title", "The Articles");
         genericItem.setItemAbstract("abstract");
@@ -588,13 +588,12 @@ public class DefaultInstitutionalItemIndexServiceTest {
         genericItem.setPrimaryContentType(contentType);
         genericItem.setLanguageType(languageType);
         genericItem.setName("name");
-        ExternalPublishedItem externalPublishedItem = new ExternalPublishedItem();
+        ExternalPublishedItem externalPublishedItem = genericItem.createExternalPublishedItem();
         
         externalPublishedItem.setCitation("citation");
         externalPublishedItem.setPublisher(publisher);
-        externalPublishedItem.addPublishedDate(10, 1, 2005);
+        externalPublishedItem.updatePublishedDate(10, 1, 2005);
         
-        genericItem.setExternalPublishedItem(externalPublishedItem);
         userPublishingFileSystemService.makePersonalItemPersistent(item);
         
         // add the item to the collection

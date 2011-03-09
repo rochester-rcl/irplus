@@ -41,7 +41,7 @@
 	    group by contentType.id
 	</query>
 	
-	    <!-- ********************************************************* -->
+	<!-- ********************************************************* -->
     <!-- Get a count of all collections institutional items within the repository that have a count greater than 0  -->
     <!-- ********************************************************* -->
     <query name="getCollectionItemsSumByContentType">
@@ -110,7 +110,7 @@
 	         left outer join publishedItem.publishedDate as publishedDate
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
 	</query>
 	
 	<query name="getRepositoryItemsContentTypeByPublicationDateOrderDesc">
@@ -124,7 +124,34 @@
 	         left outer join publishedItem.publishedDate as publishedDate
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
+	</query>
+	
+	<!-- order by first available date -->
+	<query name="getRepositoryItemsContentTypeByFirstAvailableOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	<query name="getRepositoryItemsContentTypeByFirstAvailableOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
 	</query>
 	
 	<!-- ********************************************************* -->
@@ -182,7 +209,7 @@
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
 	    and  item.nameFirstChar = :char
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
 	</query>
 	
 	<query name="getRepositoryItemsContentTypeByCharPublicationDateOrderDesc">
@@ -197,7 +224,36 @@
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
 	    and  item.nameFirstChar = :char
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
+	</query>
+	
+	<!-- order by first available date -->
+	<query name="getRepositoryItemsContentTypeByCharFirstAvailableOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and  item.nameFirstChar = :char
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	<query name="getRepositoryItemsContentTypeByCharFirstAvailableOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and  item.nameFirstChar = :char
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
 	</query>
 	
 	<!-- ********************************************************* -->
@@ -255,7 +311,7 @@
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
 	    and item.nameFirstChar between :firstChar and :lastChar
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
 	</query>
 	
 	<query name="getRepositoryItemsContentTypeByCharRangePublicationDateOrderDesc">
@@ -270,9 +326,37 @@
 	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
 	    and item.nameFirstChar between :firstChar and :lastChar
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
 	</query>
 	
+	<!-- order by first available date -->
+	<query name="getRepositoryItemsContentTypeByCharRangeFirstAvailableOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	<query name="getRepositoryItemsContentTypeByCharRangeFirstAvailableOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
+	</query>
 	
 	<!-- ********************************************************* -->
 	<!-- get institutional collection items by name ordered -->
@@ -330,7 +414,7 @@
 	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
 	</query>
 	
 	<query name="getInstitutionalCollectionItemsContentTypeByPublicationDateOrderDesc">
@@ -345,8 +429,40 @@
 	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
 	</query>
+	
+	<!-- order by first available date date -->
+	<query name="getInstitutionalCollectionItemsContentTypeByFirstAvailableOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	<query name="getInstitutionalCollectionItemsContentTypeByFirstAvailableOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
+	</query>
+	
+	
+	
 	<!-- ********************************************************* -->
 	<!-- count of all institutional items in the system for a collection by letter-->
 	<!-- ********************************************************* -->
@@ -405,7 +521,7 @@
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
 	    and item.nameFirstChar = :firstChar
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
 	</query>
 	
 	<query name="getInstitutionalCollectionItemsContentTypeByCharPublicationDateOrderDesc">
@@ -421,7 +537,38 @@
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
 	    and item.nameFirstChar = :firstChar
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
+	</query>
+	
+	<!-- order by first available date date -->
+	<query name="getInstitutionalCollectionItemsContentTypeByCharFirstAvailableOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and item.nameFirstChar = :firstChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	<query name="getInstitutionalCollectionItemsContentTypeByCharFirstAvailableOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and item.nameFirstChar = :firstChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
 	</query>
 	
    <!-- ********************************************************* -->
@@ -483,7 +630,7 @@
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
 	    and item.nameFirstChar between :firstChar and :lastChar
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year asc, publishedDate.month asc, publishedDate.day asc
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
 	</query>
 	
 	<query name="getCollectionItemsContentTypeByCharRangePublicationDateOrderDesc">
@@ -499,8 +646,40 @@
 	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
 	    and item.nameFirstChar between :firstChar and :lastChar
 	    and itemContentType.contentType.id = :contentTypeId
-	    order by publishedDate.year desc, publishedDate.month desc, publishedDate.day desc
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
 	</query>
+	
+		<!-- order by first available date date -->
+	<query name="getInstitutionalCollectionItemsContentTypeByCharRangeFirstAvailableOrderAsc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	<query name="getInstitutionalCollectionItemsContentTypeByCharRangeFirstAvailableOrderDesc">
+	    select institutionalItem 
+	    from InstitutionalItem as institutionalItem
+		     join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	         join versionedInstitutionalItem.currentVersion as currentVersion
+	         join currentVersion.item as item
+	         join item.itemContentTypes as itemContentType
+	         left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId
+	    and item.nameFirstChar between :firstChar and :lastChar
+	    and itemContentType.contentType.id = :contentTypeId
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
+	</query>
+	
 
 	
 </hibernate-mapping>

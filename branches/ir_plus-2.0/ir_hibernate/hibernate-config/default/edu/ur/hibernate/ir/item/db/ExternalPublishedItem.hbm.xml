@@ -51,14 +51,18 @@
 			access="field" 
 			not-found="ignore"/>
 			
-		<!-- Published date information  -->	
-		<many-to-one 
-		    class="edu.ur.ir.item.PublishedDate" 
-			name="publishedDate" 
-			column="published_date_id" 
+		<one-to-one name="publishedDate"
+		            access="field"
+		            cascade="all-delete-orphan"
+                    property-ref="externalPublishedItem"/>	
+        
+        <!--  Parent Item  -->
+		<many-to-one class="GenericItem"
+			name="item" 
+			column="item_id" 
 			insert="true"
+			unique="true"
 			update="true" 
-			unique="true"  
-			cascade="all"/>					
+			access="field"/>  	
 	 </class>
 </hibernate-mapping>

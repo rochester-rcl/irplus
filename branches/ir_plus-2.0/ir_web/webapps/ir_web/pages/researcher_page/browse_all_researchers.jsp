@@ -153,8 +153,8 @@
                                             descendingSortAction="${sortDescLastNameUrl}">
                                             <a href="${href}">Name</a>                                              
                                             <urstb:thImgSort
-                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 										
 										
 										

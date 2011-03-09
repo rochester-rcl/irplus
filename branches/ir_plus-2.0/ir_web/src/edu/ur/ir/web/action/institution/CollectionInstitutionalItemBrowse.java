@@ -129,7 +129,7 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		rowEnd = rowStart + numberOfResultsToShow;
 		log.debug("looking at collection " + institutionalCollection);
 		
-		
+
 		if( contentTypeId == -1l )
 		{
 			if( selectedAlpha == null || selectedAlpha.equals("All") || selectedAlpha.trim().equals(""))
@@ -142,6 +142,11 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		    	else if( sortElement.equalsIgnoreCase("publicationDate"))
 		        {
 		    		institutionalItems = institutionalItemService.getCollectionItemsPublicationDateOrder(rowStart, 
+		    		    numberOfResultsToShow, institutionalCollection, OrderType.getOrderType(sortType));
+		        }
+		    	else if( sortElement.equalsIgnoreCase("firstAvailableDate"))
+		        {
+		    		institutionalItems = institutionalItemService.getCollectionItemsFirstAvailableOrder(rowStart, 
 		    		    numberOfResultsToShow, institutionalCollection, OrderType.getOrderType(sortType));
 		        }
 		        totalHits = institutionalItemService.getCountForCollectionAndChildren(institutionalCollection).intValue();
@@ -158,6 +163,11 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		    		institutionalItems = institutionalItemService.getCollectionItemsBetweenCharPublicationDateOrder(rowStart, numberOfResultsToShow, 
 					    institutionalCollection, '0', '9', OrderType.getOrderType(sortType));
 		        }
+		    	else if( sortElement.equalsIgnoreCase("firstAvailableDate"))
+		        {
+		    		institutionalItems = institutionalItemService.getCollectionItemsBetweenCharFirstAvailableOrder(rowStart, numberOfResultsToShow, 
+					    institutionalCollection, '0', '9', OrderType.getOrderType(sortType));
+		        }
 			    totalHits = institutionalItemService.getCount(institutionalCollection, '0', '9').intValue();
 		    }
 		    else
@@ -170,6 +180,11 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		    	else if( sortElement.equalsIgnoreCase("publicationDate"))
 		        {
 		    		institutionalItems = institutionalItemService.getCollectionItemsByCharPublicationDateOrder(rowStart, numberOfResultsToShow, 
+			        		institutionalCollection, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+		        }
+		    	else if( sortElement.equalsIgnoreCase("firstAvailableDate"))
+		        {
+		    		institutionalItems = institutionalItemService.getCollectionItemsByCharFirstAvailableOrder(rowStart, numberOfResultsToShow, 
 			        		institutionalCollection, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
 		        }
 			    
@@ -191,6 +206,11 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		    		institutionalItems = institutionalItemService.getCollectionItemsPublicationDateOrder(rowStart, 
 		    		numberOfResultsToShow, institutionalCollection, contentTypeId, OrderType.getOrderType(sortType));
 		        }
+		    	else if( sortElement.equalsIgnoreCase("firstAvailableDate"))
+		        {
+		    		institutionalItems = institutionalItemService.getCollectionItemsFirstAvailableOrder(rowStart, 
+		    		numberOfResultsToShow, institutionalCollection, contentTypeId, OrderType.getOrderType(sortType));
+		        }
 		        totalHits = institutionalItemService.getCount(institutionalCollection, contentTypeId).intValue();
 		    }
 		    else if (selectedAlpha.equals("0-9"))
@@ -205,6 +225,11 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		    		institutionalItems = institutionalItemService.getCollectionItemsBetweenCharPublicationDateOrder(rowStart, numberOfResultsToShow, 
 					institutionalCollection, contentTypeId, '0', '9', OrderType.getOrderType(sortType));
 		        }
+		    	else if( sortElement.equalsIgnoreCase("firstAvailableDate"))
+		        {
+		    		institutionalItems = institutionalItemService.getCollectionItemsBetweenCharFirstAvailableOrder(rowStart, numberOfResultsToShow, 
+					institutionalCollection, contentTypeId, '0', '9', OrderType.getOrderType(sortType));
+		        }
 			    totalHits = institutionalItemService.getCount(institutionalCollection, '0', '9', contentTypeId).intValue();
 		    }
 		    else
@@ -217,6 +242,11 @@ public class CollectionInstitutionalItemBrowse extends Pager {
 		    	else if( sortElement.equalsIgnoreCase("publicationDate"))
 		        {
 		    		 institutionalItems = institutionalItemService.getCollectionItemsByCharPublicationDateOrder(rowStart, numberOfResultsToShow, 
+			    		institutionalCollection, contentTypeId, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
+		        }
+		    	else if( sortElement.equalsIgnoreCase("firstAvailableDate"))
+		        {
+		    		institutionalItems = institutionalItemService.getCollectionItemsByCharFirstAvailableOrder(rowStart, numberOfResultsToShow, 
 			    		institutionalCollection, contentTypeId, selectedAlpha.charAt(0), OrderType.getOrderType(sortType));
 		        }
 			    log.debug("test hits = " + institutionalItemService.getCount(institutionalCollection, selectedAlpha.charAt(0), contentTypeId).intValue());

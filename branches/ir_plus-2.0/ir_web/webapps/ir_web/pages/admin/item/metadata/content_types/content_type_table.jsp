@@ -45,8 +45,8 @@
 	                    descendingSortAction="javascript:YAHOO.ur.content.type.getContentTypes(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'desc');">
 	                    <u>Name</u>                                              
 	                    <urstb:thImgSort
-	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 	                <urstb:td>System Code</urstb:td>
 					<urstb:td>Description</urstb:td>
 	            </urstb:tr>

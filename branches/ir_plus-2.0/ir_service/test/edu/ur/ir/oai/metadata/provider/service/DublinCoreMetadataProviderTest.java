@@ -36,12 +36,9 @@ import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.DuplicateContributorException;
 import edu.ur.ir.item.ExternalPublishedItem;
-import edu.ur.ir.item.FirstAvailableDate;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
-import edu.ur.ir.item.OriginalItemCreationDate;
-import edu.ur.ir.item.PublishedDate;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -153,9 +150,9 @@ public class DublinCoreMetadataProviderTest {
 		contributor.setContributorType(contributorType);
 		contributor.setPersonName(personName);
 		
-		ExternalPublishedItem externalPublishedItem = new ExternalPublishedItem();
+		ExternalPublishedItem externalPublishedItem = item.createExternalPublishedItem();
 		Publisher publisher = new Publisher("publisher");
-		externalPublishedItem.setPublishedDate(new PublishedDate(12,10,2008));
+		externalPublishedItem.updatePublishedDate(12,10,2008);
 		externalPublishedItem.setPublisher(publisher);
 		
 		
@@ -170,8 +167,7 @@ public class DublinCoreMetadataProviderTest {
 		item.setPrimaryContentType(contentType);
 		item.addContentType(secondContentType);
 		item.addContributor(contributor);
-		item.setExternalPublishedItem(externalPublishedItem);
-		item.setFirstAvailableDate(new FirstAvailableDate(1, 30, 2008));
+		item.updateFirstAvailableDate(1, 30, 2008);
 		item.setId(10l);
 		item.setItemAbstract("itemAbstract");
 		item.setCopyrightStatement(copyrightStatement);
@@ -185,7 +181,7 @@ public class DublinCoreMetadataProviderTest {
 		item.setName("Itemname");
 		item.setOwner(owner);
 		item.setPublishedToSystem(true);
-		item.setOriginalItemCreationDate(new OriginalItemCreationDate(10,25,2008));
+		item.updateOriginalItemCreationDate(10,25,2008);
 		item.setReleaseDate(new Date());
 		item.addItemSponsor(sponsor);
 		item.addSubTitle("Title 2", "The articles");
