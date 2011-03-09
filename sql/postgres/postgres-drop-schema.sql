@@ -187,9 +187,6 @@ DROP SEQUENCE ir_user.shared_inbox_file_seq;
 -- Drop ir_item information
 -- ---------------------------------------------
 ALTER TABLE ir_item.item DROP CONSTRAINT item_primay_image_item_file_id_fkey;
-ALTER TABLE ir_item.first_available_date DROP CONSTRAINT item_first_available_date_id_fkey;
-ALTER TABLE ir_item.original_item_creation_date DROP CONSTRAINT item_original_item_creation_date_id_fkey;
-ALTER TABLE ir_item.published_date DROP CONSTRAINT external_published_item_published_date_id_fkey;
 DROP TABLE ir_item.item_content_type;
 DROP TABLE ir_item.item_contributor;
 DROP TABLE ir_item.item_series_report_number;
@@ -202,8 +199,11 @@ DROP TABLE ir_item.versioned_item;
 DROP TABLE ir_item.item_file;
 DROP TABLE ir_item.item_identifier;
 DROP TABLE ir_item.item_extent;
-DROP TABLE ir_item.item;
+DROP TABLE ir_item.original_item_creation_date;
+DROP TABLE ir_item.first_available_date;
+DROP TABLE ir_item.published_date;
 DROP TABLE ir_item.external_published_item;
+DROP TABLE ir_item.item;
 DROP TABLE ir_item.publisher;
 DROP TABLE ir_item.sponsor;
 DROP TABLE ir_item.identifier_type;
@@ -212,9 +212,6 @@ DROP TABLE ir_item.language_type;
 DROP TABLE ir_item.content_type;
 DROP TABLE ir_item.copyright_statement;
 
-DROP TABLE ir_item.published_date;
-DROP TABLE ir_item.original_item_creation_date;
-DROP TABLE ir_item.first_available_date;
 
 DROP SEQUENCE ir_item.copyright_statement_seq;
 DROP SEQUENCE ir_item.item_sponsor_seq;

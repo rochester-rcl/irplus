@@ -263,6 +263,29 @@
 											<c:param name="contentTypeId" value="${contentTypeId}"/>		
 										</c:url>
 										
+										
+										<c:url var="sortAscendingFirstAvailableDateUrl" value="/browseCollectionItems.action">
+										     <c:param name="rowStart" value="${rowStart}"/>
+											 <c:param name="startPageNumber" value="${startPageNumber}"/>
+											 <c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											 <c:param name="sortElement" value="firstAvailableDate"/>		
+											 <c:param name="sortType" value="asc"/>
+											 <c:param name="selectedAlpha" value="${selectedAlpha}"/>	
+											 <c:param name="collectionId" value="${institutionalCollection.id}"/>
+											 <c:param name="contentTypeId" value="${contentTypeId}"/>	
+										</c:url>
+					                     
+					                    <c:url var="sortDescendingFirstAvailableDateUrl" value="/browseCollectionItems.action">
+										    <c:param name="rowStart" value="${rowStart}"/>
+											<c:param name="startPageNumber" value="${startPageNumber}"/>
+											<c:param name="currentPageNumber" value="${currentPageNumber}"/>	
+											<c:param name="sortElement" value="firstAvailableDate"/>		
+											<c:param name="sortType" value="desc"/>
+											<c:param name="selectedAlpha" value="${selectedAlpha}"/>
+											<c:param name="collectionId" value="${institutionalCollection.id}"/>
+											<c:param name="contentTypeId" value="${contentTypeId}"/>		
+										</c:url>
+										
 					                    
 					                    <c:set var="nameSort" value="none"/>
 					                    <c:if test='${sortElement == "name"}'>
@@ -274,30 +297,51 @@
 					                        <c:set var="publicationDateSort" value="${sortType}"/>
 					                    </c:if>
 					                    
+					                    <c:set var="firstAvailableDateSort" value="none"/>
+					                    <c:if test='${sortElement == "firstAvailableDate"}'>
+					                        <c:set var="firstAvailableDateSort" value="${sortType}"/>
+					                    </c:if>
+					                    
 					                    <urstb:tdHeadSort  height="33"
 					                        useHref="true"
 					                        hrefVar="href"
                                             currentSortAction="${nameSort}"
                                             ascendingSortAction="${sortAscendingNameUrl}"
-                                            descendingSortAction="${sortDescendingNameUrl}">
+                                            descendingSortAction="${sortDescendingNameUrl}"
+                                            defaultSort="asc">
                                             <a href="${href}">Name</a>                                              
                                             <urstb:thImgSort
-                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
                                         <urstb:tdHeadSort  height="33"
+                                            width="125"
 					                        useHref="true"
 					                        hrefVar="href"
                                             currentSortAction="${publicationDateSort}"
                                             ascendingSortAction="${sortAscendingPublicationDateUrl}"
-                                            descendingSortAction="${sortDescendingPublicationDateUrl}">
+                                            descendingSortAction="${sortDescendingPublicationDateUrl}"
+                                            defaultSort="desc">
                                             <a href="${href}">Publication Date</a>                                              
                                             <urstb:thImgSort
-                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
+					                    <urstb:tdHeadSort  height="33" 
+					                        width="125"
+					                        useHref="true"
+					                        hrefVar="href"
+                                            currentSortAction="${firstAvailableDateSort}"
+                                            ascendingSortAction="${sortAscendingFirstAvailableDateUrl}"
+                                            descendingSortAction="${sortDescendingFirstAvailableDateUrl}"
+                                            defaultSort="desc">
+                                            <a href="${href}">First Public Date</a>                                              
+                                            <urstb:thImgSort
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					                    <urstb:td>Contributors</urstb:td>
 						                </urstb:tr>
 						            </urstb:thead>
 						            <urstb:tbody
+						                
 						                var="institutionalItem" 
 						                oddRowClass="odd"
 						                evenRowClass="even"
@@ -312,7 +356,7 @@
 						                             <c:if test="${ir:hasThumbnail(institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile.irFile)}">
 						                                 <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${institutionalItem.versionedInstitutionalItem.currentVersion.item.primaryImageFile}" var="url"/>
                                                          <c:if test="${url != null}">
-                                                             <img height="66px" width="100px" src="${url}"/></a>
+                                                             <img height="66px" width="100px" src="${url}"/>
                                                          </c:if>
 				                                     </c:if>	
 						                        </urstb:td>
@@ -326,6 +370,9 @@
 						                        </urstb:td>
 						                        <urstb:td>
 						                            ${ir:getSlashedDate(institutionalItem.versionedInstitutionalItem.currentVersion.item.externalPublishedItem.publishedDate)}
+						                        </urstb:td>
+						                        <urstb:td>
+						                            ${ir:getSlashedDate(institutionalItem.versionedInstitutionalItem.currentVersion.item.firstAvailableDate)}
 						                        </urstb:td>
 						                        <urstb:td>
 						                             <c:forEach var="itemContributor" items="${institutionalItem.versionedInstitutionalItem.currentVersion.item.contributors}">
@@ -620,8 +667,8 @@
                                             descendingSortAction="${sortLastNameDescendingUrl}">
                                             <a href="${href}">Name</a>                                              
                                             <urstb:thImgSort
-                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					                     
 						                </urstb:tr>
 						            </urstb:thead>
@@ -712,8 +759,8 @@
                                             descendingSortAction="${sortSponsorNameDescendingUrl}">
                                             <a href="${href}">Name</a>                                              
                                             <urstb:thImgSort
-                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					                     
 						                <urstb:td>Description</urstb:td>
 						                </urstb:tr>

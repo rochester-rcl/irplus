@@ -261,10 +261,10 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		GenericItem genericItem = item.getVersionedItem().getCurrentVersion().getItem();
 		genericItem.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem.addContributor(c);
-		genericItem.addFirstAvailableDate(9, 8, 1977);
+		genericItem.updateFirstAvailableDate(9, 8, 1977);
         genericItem.addItemIdentifier("identifier value", identType);	
         genericItem.createLink("msnbc", "http://www.msnbc.com");
-        genericItem.addOriginalItemCreationDate(9, 8, 2001);
+        genericItem.updateOriginalItemCreationDate(9, 8, 2001);
         genericItem.addReport(series, "report 3456");
         genericItem.addSubTitle("the sub title", "The articles");
         genericItem.setItemAbstract("abstract");
@@ -273,13 +273,13 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem.setPrimaryContentType(contentType);
         genericItem.setLanguageType(languageType);
         genericItem.setName("name");
-        ExternalPublishedItem externalPublishedItem = new ExternalPublishedItem();
+        ExternalPublishedItem externalPublishedItem = genericItem.createExternalPublishedItem();
         
         externalPublishedItem.setCitation("citation");
         externalPublishedItem.setPublisher(publisher);
-        externalPublishedItem.addPublishedDate(10, 1, 2005);
+        externalPublishedItem.updatePublishedDate(10, 1, 2005);
         
-        genericItem.setExternalPublishedItem(externalPublishedItem);
+        
         userPublishingFileSystemService.makePersonalItemPersistent(item);
         
         // add the item to the collection
@@ -426,10 +426,10 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		GenericItem genericItem = item.getVersionedItem().getCurrentVersion().getItem();
 		genericItem.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem.addContributor(c);
-		genericItem.addFirstAvailableDate(9, 8, 1977);
+		genericItem.updateFirstAvailableDate(9, 8, 1977);
         genericItem.addItemIdentifier("identifier value", identType);	
         genericItem.createLink("msnbc", "http://www.msnbc.com");
-        genericItem.addOriginalItemCreationDate(9, 8, 2001);
+        genericItem.updateOriginalItemCreationDate(9, 8, 2001);
         genericItem.addReport(series, "report 3456");
         genericItem.addSubTitle("the sub title", null);
         genericItem.setItemAbstract("abstract");
@@ -438,13 +438,12 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem.setPrimaryContentType(contentType);
         genericItem.setLanguageType(languageType);
         genericItem.setName("name");
-        ExternalPublishedItem externalPublishedItem = new ExternalPublishedItem();
+        ExternalPublishedItem externalPublishedItem =genericItem.createExternalPublishedItem();
         
         externalPublishedItem.setCitation("citation");
         externalPublishedItem.setPublisher(publisher);
-        externalPublishedItem.addPublishedDate(10, 1, 2005);
+        externalPublishedItem.updatePublishedDate(10, 1, 2005);
         
-        genericItem.setExternalPublishedItem(externalPublishedItem);
         userPublishingFileSystemService.makePersonalItemPersistent(item);
         
         // add the item to the collection
@@ -510,10 +509,10 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		GenericItem genericItem2 = item2.getVersionedItem().getCurrentVersion().getItem();
 		genericItem2.addFile(pf2.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem2.addContributor(c2);
-		genericItem2.addFirstAvailableDate(9, 8, 1977);
+		genericItem2.updateFirstAvailableDate(9, 8, 1977);
         genericItem2.addItemIdentifier("173943037", identType2);	
         genericItem2.createLink("hotmail", "http://www.hotmail.com");
-        genericItem2.addOriginalItemCreationDate(9, 8, 2001);
+        genericItem2.updateOriginalItemCreationDate(9, 8, 2001);
         genericItem2.addReport(series2, "report 3456");
         genericItem2.addSubTitle("generic 2", "The articles");
         genericItem2.setItemAbstract("words go here");
@@ -525,13 +524,12 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem2.setPrimaryContentType(contentType2);
         genericItem2.setLanguageType(languageType2);
         genericItem2.setName("name");
-        ExternalPublishedItem externalPublishedItem2 = new ExternalPublishedItem();
+        ExternalPublishedItem externalPublishedItem2 = genericItem2.createExternalPublishedItem();
         
         externalPublishedItem2.setCitation("work blah");
         externalPublishedItem2.setPublisher(publisher2);
-        externalPublishedItem2.addPublishedDate(10, 1, 2005);
+        externalPublishedItem2.updatePublishedDate(10, 1, 2005);
         
-        genericItem2.setExternalPublishedItem(externalPublishedItem2);
         userPublishingFileSystemService.makePersonalItemPersistent(item2);
         
         // add the item to the collection
@@ -703,10 +701,10 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		GenericItem genericItem = item.getVersionedItem().getCurrentVersion().getItem();
 		genericItem.addFile(pf.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem.addContributor(c);
-		genericItem.addFirstAvailableDate(9, 8, 1977);
+		genericItem.updateFirstAvailableDate(9, 8, 1977);
         genericItem.addItemIdentifier("identifier value", identType);	
         genericItem.createLink("msnbc", "http://www.msnbc.com");
-        genericItem.addOriginalItemCreationDate(9, 8, 2001);
+        genericItem.updateOriginalItemCreationDate(9, 8, 2001);
         genericItem.addReport(series, "report 3456");
         genericItem.addSubTitle("the sub title", null);
         genericItem.setItemAbstract("abstract");
@@ -715,13 +713,12 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem.setPrimaryContentType(contentType);
         genericItem.setLanguageType(languageType);
         genericItem.setName("name");
-        ExternalPublishedItem externalPublishedItem = new ExternalPublishedItem();
+        ExternalPublishedItem externalPublishedItem = genericItem.createExternalPublishedItem();
         
         externalPublishedItem.setCitation("citation");
         externalPublishedItem.setPublisher(publisher);
-        externalPublishedItem.addPublishedDate(10, 1, 2005);
+        externalPublishedItem.updatePublishedDate(10, 1, 2005);
         
-        genericItem.setExternalPublishedItem(externalPublishedItem);
         userPublishingFileSystemService.makePersonalItemPersistent(item);
         
         // add the item to the collection
@@ -787,10 +784,10 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		GenericItem genericItem2 = item2.getVersionedItem().getCurrentVersion().getItem();
 		genericItem2.addFile(pf2.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem2.addContributor(c2);
-		genericItem2.addFirstAvailableDate(9, 8, 1977);
+		genericItem2.updateFirstAvailableDate(9, 8, 1977);
         genericItem2.addItemIdentifier("173943037", identType2);	
         genericItem2.createLink("hotmail", "http://www.hotmail.com");
-        genericItem2.addOriginalItemCreationDate(9, 8, 2001);
+        genericItem2.updateOriginalItemCreationDate(9, 8, 2001);
         genericItem2.addReport(series2, "report 3456");
         genericItem2.addSubTitle("generic 2", "The articles");
         genericItem2.setItemAbstract("words go here");
@@ -799,13 +796,12 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem2.setPrimaryContentType(contentType2);
         genericItem2.setLanguageType(languageType2);
         genericItem2.setName("name");
-        ExternalPublishedItem externalPublishedItem2 = new ExternalPublishedItem();
+        ExternalPublishedItem externalPublishedItem2 = genericItem2.createExternalPublishedItem();
         
         externalPublishedItem2.setCitation("work blah");
         externalPublishedItem2.setPublisher(publisher2);
-        externalPublishedItem2.addPublishedDate(10, 1, 2005);
+        externalPublishedItem2.updatePublishedDate(10, 1, 2005);
         
-        genericItem2.setExternalPublishedItem(externalPublishedItem2);
         userPublishingFileSystemService.makePersonalItemPersistent(item2);
         
         // add the item to the collection
@@ -834,10 +830,10 @@ public class DefaultInstitutionalItemSearchServiceTest {
 		GenericItem genericItem3 = item3.getVersionedItem().getCurrentVersion().getItem();
 		genericItem3.addFile(pf3.getVersionedFile().getCurrentVersion().getIrFile());
 		genericItem3.addContributor(c2);
-		genericItem3.addFirstAvailableDate(9, 8, 1977);
+		genericItem3.updateFirstAvailableDate(9, 8, 1977);
         genericItem3.addItemIdentifier("173943037", identType2);	
         genericItem3.createLink("hotmail", "http://www.hotmail.com");
-        genericItem3.addOriginalItemCreationDate(9, 8, 2001);
+        genericItem3.updateOriginalItemCreationDate(9, 8, 2001);
         genericItem3.addReport(series2, "report 3456");
         genericItem3.addSubTitle("generic 2", "The articles");
         genericItem3.setItemAbstract("words go here");
@@ -846,13 +842,12 @@ public class DefaultInstitutionalItemSearchServiceTest {
         genericItem3.setPrimaryContentType(contentType2);
         genericItem3.setLanguageType(languageType2);
         genericItem3.setName("name");
-        ExternalPublishedItem externalPublishedItem3 = new ExternalPublishedItem();
+        ExternalPublishedItem externalPublishedItem3 = genericItem3.createExternalPublishedItem();
         
         externalPublishedItem3.setCitation("work blah");
         externalPublishedItem3.setPublisher(publisher2);
-        externalPublishedItem3.addPublishedDate(10, 1, 2005);
+        externalPublishedItem3.updatePublishedDate(10, 1, 2005);
         
-        genericItem3.setExternalPublishedItem(externalPublishedItem3);
         userPublishingFileSystemService.makePersonalItemPersistent(item3);
         
         // add the item to the collection

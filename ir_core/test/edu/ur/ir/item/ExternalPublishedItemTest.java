@@ -36,7 +36,7 @@ public class ExternalPublishedItemTest {
 	{
 		ExternalPublishedItem e = new ExternalPublishedItem();
 		e.setCitation("citation");
-		PublishedDate publishedDate = e.addPublishedDate(12, 30, 1990);
+		PublishedDate publishedDate = e.updatePublishedDate(12, 30, 1990);
 		e.setId(55l);
 		e.setVersion(33);
 		
@@ -61,7 +61,7 @@ public class ExternalPublishedItemTest {
 	
 		ExternalPublishedItem e1 = new ExternalPublishedItem();
 		e1.setCitation("citation1");
-		e1.addPublishedDate(12, 30, 1990);
+		e1.updatePublishedDate(12, 30, 1990);
 		e1.setId(55l);
 		e1.setVersion(33);
 		
@@ -72,7 +72,7 @@ public class ExternalPublishedItemTest {
 		
 		ExternalPublishedItem e2 = new ExternalPublishedItem();
 		e2.setCitation("citation2");
-		e2.addPublishedDate(12, 30, 1995);
+		e2.updatePublishedDate(12, 30, 1995);
 		e2.setId(56l);
 		e2.setVersion(34);
 		
@@ -83,7 +83,7 @@ public class ExternalPublishedItemTest {
 		
 		ExternalPublishedItem e3 = new ExternalPublishedItem();
 		e3.setCitation("citation1");
-		e3.addPublishedDate(12, 30, 1990);
+		e3.updatePublishedDate(12, 30, 1990);
 		e3.setId(57l);
 		e3.setVersion(35);
 		

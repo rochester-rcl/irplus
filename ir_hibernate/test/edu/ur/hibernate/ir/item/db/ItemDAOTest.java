@@ -42,6 +42,8 @@ import edu.ur.ir.file.IrFile;
 import edu.ur.ir.file.IrFileDAO;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeDAO;
+import edu.ur.ir.item.ExternalPublishedItem;
+import edu.ur.ir.item.FirstAvailableDate;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.GenericItemDAO;
 import edu.ur.ir.item.IdentifierType;
@@ -54,6 +56,7 @@ import edu.ur.ir.item.ItemIdentifierDAO;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.LanguageType;
 import edu.ur.ir.item.LanguageTypeDAO;
+import edu.ur.ir.item.OriginalItemCreationDate;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorDAO;
 import edu.ur.ir.person.ContributorType;
@@ -176,9 +179,7 @@ public class ItemDAOTest {
 		
 		tm.commit(ts);
 		
-		// Check the repositories
-		tm = (PlatformTransactionManager)ctx.getBean("transactionManager");
-
+	
         // Start the transaction this is for lazy loading
 		ts = tm.getTransaction(td);
 		
@@ -209,6 +210,145 @@ public class ItemDAOTest {
 		contentTypeDAO.makeTransient(contentTypeDAO.getById(ct.getId(), false));
 		assert contentTypeDAO.getById(ct.getId(), false) == null : "Should not find content type";
 		tm.commit(ts);	
+	}
+	
+	
+	
+	/**
+	 * Test deleting the first available date
+	 */
+	@Test
+	public void itemDAODeleteFirstAvailableDateTest() {
+		
+		TransactionStatus ts = tm.getTransaction(td);
+		GenericItem item = new GenericItem("the", "item1");
+		item.updateFirstAvailableDate(5,13, 2008);
+		itemDAO.makePersistent(item);
+		
+		tm.commit(ts);
+
+        // Start the transaction this is for lazy loading
+		ts = tm.getTransaction(td);
+		
+		GenericItem other = itemDAO.getById(item.getId(), false);
+		assert other != null : "Should be able to find " +
+		"the item by id";
+		
+		FirstAvailableDate d = other.getFirstAvailableDate();
+ 		assert d.getMonth() == 5 : "Month equals " + d.getMonth();
+ 		assert d.getDay() == 13 : "Day equals " + d.getDay();
+ 		assert d.getYear() == 2008 : "Day equals " + d.getYear();
+ 		
+ 		other.updateFirstAvailableDate(0,0,0);
+ 		itemDAO.makePersistent(other);
+ 		tm.commit(ts);
+ 		
+ 		ts = tm.getTransaction(td);
+ 		other = itemDAO.getById(item.getId(), false);
+ 		assert other.getFirstAvailableDate() == null : "fist available date should be null";
+		// delete the ir collection
+		itemDAO.makeTransient(other);
+		tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+		assert itemDAO.getById(other.getId(), false ) == null : "Should not be able to find " +
+			"other";
+		
+		// commit the transaction - this block is only needed when lazy loading
+		// must occur in testing
+		tm.commit(ts);
+		
+	}
+	
+	/**
+	 * Test deleting the original creation date
+	 */
+	@Test
+	public void itemDAODeleteOriginalItemCreationDateTest() {
+		
+		TransactionStatus ts = tm.getTransaction(td);
+		GenericItem item = new GenericItem("the", "item1");
+		item.updateOriginalItemCreationDate(5,13, 2008);
+		itemDAO.makePersistent(item);
+		
+		tm.commit(ts);
+		
+
+        // Start the transaction this is for lazy loading
+		ts = tm.getTransaction(td);
+		
+		GenericItem other = itemDAO.getById(item.getId(), false);
+		assert other != null : "Should be able to find " +
+		"the item by id";
+		
+		OriginalItemCreationDate d = other.getOriginalItemCreationDate();
+ 		assert d.getMonth() == 5 : "Month equals " + d.getMonth();
+ 		assert d.getDay() == 13 : "Day equals " + d.getDay();
+ 		assert d.getYear() == 2008 : "Day equals " + d.getYear();
+ 		
+ 		other.updateOriginalItemCreationDate(0,0,0);
+ 		itemDAO.makePersistent(other);
+ 		tm.commit(ts);
+ 		
+ 		
+ 		
+ 		
+ 		ts = tm.getTransaction(td);
+ 		other = itemDAO.getById(item.getId(), false);
+ 		assert other.getOriginalItemCreationDate() == null : "original item creation date should be null";
+		// delete the ir collection
+		itemDAO.makeTransient(other);
+		tm.commit(ts);
+		
+		
+		ts = tm.getTransaction(td);
+		assert itemDAO.getById(other.getId(), false ) == null : "Should not be able to find " +
+			"other";
+		
+		// commit the transaction - this block is only needed when lazy loading
+		// must occur in testing
+		tm.commit(ts);
+		
+	}
+	
+	/**
+	 * Test deleting the first available date
+	 */
+	@Test
+	public void itemDAODeleteExternalPublishedItemTest() {
+		
+		TransactionStatus ts = tm.getTransaction(td);
+		GenericItem item = new GenericItem("the", "item1");
+		ExternalPublishedItem externalPublishedItem = item.createExternalPublishedItem();
+		externalPublishedItem.updatePublishedDate(1, 1, 2010);
+		itemDAO.makePersistent(item);
+		
+		tm.commit(ts);
+
+        // Start the transaction this is for lazy loading
+		ts = tm.getTransaction(td);
+		
+		GenericItem other = itemDAO.getById(item.getId(), false);
+		assert other != null : "Should be able to find " +
+		"the item by id";
+		externalPublishedItem = other.getExternalPublishedItem();
+		assert externalPublishedItem != null : "Should find extrnally publised item";
+		assert externalPublishedItem.getPublishedDate().getMonth() == 1 : " Equals " +  externalPublishedItem.getPublishedDate().getMonth();
+		assert externalPublishedItem.getPublishedDate().getDay() == 1 : " Equals " +  externalPublishedItem.getPublishedDate().getDay();
+		assert externalPublishedItem.getPublishedDate().getYear() == 2010 : " Equals " +  externalPublishedItem.getPublishedDate().getYear(); ;
+		other.deleteExternalPublishedItem();
+		assert other.getExternalPublishedItem() == null : "external published item should be null";
+ 		itemDAO.makePersistent(other);
+ 		tm.commit(ts);
+ 		
+ 		ts = tm.getTransaction(td);
+ 		other = itemDAO.getById(item.getId(), false);
+ 		assert other.getExternalPublishedItem() == null : "published item should be null";
+		// delete the item
+		itemDAO.makeTransient(other);
+		tm.commit(ts);
+		
 	}
 	
 	/**

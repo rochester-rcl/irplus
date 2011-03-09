@@ -199,8 +199,8 @@
                                     descendingSortAction="${sortDescendingTitleUrl}">
                                     <a href="${href}">Title</a>                                              
                                     <urstb:thImgSort
-                                        sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                        sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/>
+                                        sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                        sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/>
                                 </urstb:tdHeadSort>
                                 
                                 <urstb:tdHeadSort  height="33"
@@ -211,8 +211,8 @@
                                     descendingSortAction="${sortDescendingSubmissionUrl}">
                                     <a href="${href}">Submission Date</a>                                              
                                     <urstb:thImgSort
-                                        sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                        sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/>
+                                        sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                        sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/>
                                 </urstb:tdHeadSort>
 					        
 					            
@@ -225,8 +225,8 @@
                                     descendingSortAction="${sortDescendingDownloadUrl}">
                                     <a href="${href}">Total Downloads</a>                                              
                                     <urstb:thImgSort
-                                        sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                        sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/>
+                                        sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                        sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/>
                                 </urstb:tdHeadSort>
 					            
 
