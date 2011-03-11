@@ -1368,7 +1368,8 @@ CREATE TABLE ir_item.external_published_item(
   item_id BIGINT NOT NULL,
   FOREIGN KEY (publisher_id)
       REFERENCES ir_item.publisher (publisher_id),
-  FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id) 
+  FOREIGN KEY (item_id) REFERENCES ir_item.item (item_id),
+  UNIQUE(item_id)
 ) ;
 ALTER TABLE ir_item.external_published_item OWNER TO ir_plus;
 
@@ -1392,7 +1393,8 @@ CREATE TABLE ir_item.published_date (
   seconds INTEGER,
   fraction_seconds INTEGER,
   FOREIGN KEY (external_published_item_id)
-      REFERENCES ir_item.external_published_item (external_published_item_id)
+      REFERENCES ir_item.external_published_item (external_published_item_id),
+  UNIQUE(external_published_item_id)
 ) ;
 ALTER TABLE ir_item.published_date OWNER TO ir_plus;
 
@@ -1416,7 +1418,8 @@ CREATE TABLE ir_item.first_available_date (
   seconds INTEGER,
   fraction_seconds INTEGER,
   item_id BIGINT NOT NULL,
-  CONSTRAINT item_first_available_date_id_fkey FOREIGN KEY (item_id)  REFERENCES ir_item.item(item_id)
+  CONSTRAINT item_first_available_date_id_fkey FOREIGN KEY (item_id)  REFERENCES ir_item.item(item_id),
+  UNIQUE(item_id)
 ) ;
 ALTER TABLE ir_item.first_available_date OWNER TO ir_plus;
 
@@ -1440,7 +1443,8 @@ CREATE TABLE ir_item.original_item_creation_date (
   seconds INTEGER,
   fraction_seconds INTEGER,
   item_id BIGINT NOT NULL,
-  CONSTRAINT item_original_item_creation_date_id_fkey FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id)
+  CONSTRAINT item_original_item_creation_date_id_fkey FOREIGN KEY (item_id) REFERENCES ir_item.item(item_id),
+  UNIQUE(item_id)
 ) ;
 ALTER TABLE ir_item.original_item_creation_date OWNER TO ir_plus;
 

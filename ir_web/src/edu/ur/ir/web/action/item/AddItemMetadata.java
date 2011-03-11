@@ -491,6 +491,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		
 		item.updateOriginalItemCreationDate(createdMonth, createdDay, createdYear);
 		item.updateFirstAvailableDate(firstAvailableMonth, firstAvailableDay, firstAvailableYear);
+		
 		item.setPrimaryContentType(contentTypeService.getContentType(contentTypeId, false));
 		item.setLanguageType(languageTypeService.get(languageTypeId, false));
 		item.setCopyrightStatement(copyrightStatementService.get(copyrightStatementId, false));
@@ -513,9 +514,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			item.removePrimaryImageFile();
 		}
 			
-		
-		itemService.makePersistent(item);
-
 		// Adds the selected report numbers
 		if (seriesIds != null) {
 			for (int i =0; i < seriesIds.length; i++ ) {
@@ -605,7 +603,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		// Save the item
 		itemService.makePersistent(item);
 		
-	
 		
 		// Update personal item index
 		PersonalItem personalItem = userPublishingFileSystemService.getPersonalItem(item);
@@ -619,7 +616,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		
 		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "Item Metadata Modified");
-
 		return SUCCESS;
 	}
 

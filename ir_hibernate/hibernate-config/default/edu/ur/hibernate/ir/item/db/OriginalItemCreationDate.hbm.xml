@@ -61,15 +61,15 @@
 		<property name="fractionOfSecond" column="fraction_seconds" type="int"
 			access="field" />
 			
+		
 		<!--  Parent Item   -->
-		<many-to-one class="GenericItem"
-			name="item" 
+		<many-to-one class="edu.ur.ir.item.GenericItem"
+			name="genericItem" 
 			column="item_id" 
-			insert="true"
-			update="true" 
 			unique="true"
-			access="field"/> 
-
+			access="field"
+			not-null="true"/> 
+        
 	</class>
 		
 	<!--  Get a count of release dates in the system -->

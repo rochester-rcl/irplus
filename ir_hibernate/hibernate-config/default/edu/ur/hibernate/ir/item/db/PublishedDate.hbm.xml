@@ -66,9 +66,8 @@
 			name="externalPublishedItem" 
 			column="external_published_item_id" 
 			unique="true"
-			insert="true"
-			update="true" 
-			access="field"/>   
+			access="field"
+			not-null="true"/>   
 		
 		
 

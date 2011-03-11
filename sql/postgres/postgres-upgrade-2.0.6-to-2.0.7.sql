@@ -14,6 +14,7 @@ WHERE published_date.external_published_item_id IS NULL
 
 -- Set the column to not null
 ALTER TABLE ir_item.published_date ALTER COLUMN external_published_item_id SET NOT NULL;
+ALTER TABLE ir_item.published_date ADD CONSTRAINT published_date_external_published_item_id_key UNIQUE (external_published_item_id);
 
 -- drop the bad column
 ALTER TABLE ir_item.external_published_item DROP COLUMN published_date_id;
@@ -38,6 +39,7 @@ WHERE first_available_date.item_id IS NULL;
 
 -- Set the column to not null
 ALTER TABLE ir_item.first_available_date ALTER COLUMN item_id SET NOT NULL;
+ALTER TABLE ir_item.first_available_date ADD CONSTRAINT first_available_date_item_id_key UNIQUE (item_id);
 
 -- drop the bad column
 ALTER TABLE ir_item.item DROP COLUMN first_available_date_id;
@@ -62,6 +64,8 @@ WHERE original_item_creation_date.item_id IS NULL;
 
 -- Set the column to not null
 ALTER TABLE ir_item.original_item_creation_date ALTER COLUMN item_id SET NOT NULL;
+
+ALTER TABLE ir_item.original_item_creation_date ADD CONSTRAINT original_item_creation_date_item_id_key UNIQUE (item_id);
 
 -- drop the bad column
 ALTER TABLE ir_item.item DROP COLUMN original_item_creation_date_id;
@@ -91,6 +95,10 @@ WHERE item.external_published_item_id = external_published_item.external_publish
 
 -- set the new column to not null
 ALTER TABLE ir_item.external_published_item ALTER COLUMN item_id SET NOT NULL;
+ALTER TABLE ir_item.external_published_item  ADD CONSTRAINT external_published_item_item_id_key UNIQUE (item_id);
+-- Add the constraint
+ALTER TABLE ir_item.external_published_item ADD CONSTRAINT external_published_item_item_id_fkey FOREIGN KEY (item_id)
+REFERENCES ir_item.item (item_id);
 
 -- drop the bad column
 ALTER TABLE ir_item.item DROP COLUMN external_published_item_id;

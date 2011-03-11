@@ -57,6 +57,8 @@ import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.LanguageType;
 import edu.ur.ir.item.LanguageTypeDAO;
 import edu.ur.ir.item.OriginalItemCreationDate;
+import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.PublisherDAO;
 import edu.ur.ir.person.Contributor;
 import edu.ur.ir.person.ContributorDAO;
 import edu.ur.ir.person.ContributorType;
@@ -125,8 +127,13 @@ public class ItemDAOTest {
     IrUserDAO userDAO= (IrUserDAO) ctx
 	.getBean("irUserDAO");
     
+    /** file data access */
     IrFileDAO irFileDAO = 
     	(IrFileDAO) ctx.getBean("irFileDAO");
+    
+    /** publisher data access */
+    PublisherDAO publisherDAO = (PublisherDAO) ctx
+	.getBean("publisherDAO");
     
  	
 	/**
@@ -241,6 +248,7 @@ public class ItemDAOTest {
  		
  		other.updateFirstAvailableDate(0,0,0);
  		itemDAO.makePersistent(other);
+ 		
  		tm.commit(ts);
  		
  		ts = tm.getTransaction(td);
@@ -320,8 +328,14 @@ public class ItemDAOTest {
 		
 		TransactionStatus ts = tm.getTransaction(td);
 		GenericItem item = new GenericItem("the", "item1");
+		
+		Publisher publisher = new Publisher("publisherName");
+ 		publisher.setDescription("publisherDescription");
+ 		publisherDAO.makePersistent(publisher);
+		
 		ExternalPublishedItem externalPublishedItem = item.createExternalPublishedItem();
 		externalPublishedItem.updatePublishedDate(1, 1, 2010);
+		externalPublishedItem.setPublisher(publisher);
 		itemDAO.makePersistent(item);
 		
 		tm.commit(ts);
@@ -337,6 +351,7 @@ public class ItemDAOTest {
 		assert externalPublishedItem.getPublishedDate().getMonth() == 1 : " Equals " +  externalPublishedItem.getPublishedDate().getMonth();
 		assert externalPublishedItem.getPublishedDate().getDay() == 1 : " Equals " +  externalPublishedItem.getPublishedDate().getDay();
 		assert externalPublishedItem.getPublishedDate().getYear() == 2010 : " Equals " +  externalPublishedItem.getPublishedDate().getYear(); ;
+		assert externalPublishedItem.getPublisher().equals(publisher) : "Should find publisher";
 		other.deleteExternalPublishedItem();
 		assert other.getExternalPublishedItem() == null : "external published item should be null";
  		itemDAO.makePersistent(other);
@@ -345,6 +360,7 @@ public class ItemDAOTest {
  		ts = tm.getTransaction(td);
  		other = itemDAO.getById(item.getId(), false);
  		assert other.getExternalPublishedItem() == null : "published item should be null";
+ 		publisherDAO.makeTransient(publisherDAO.getById(publisher.getId(), false));
 		// delete the item
 		itemDAO.makeTransient(other);
 		tm.commit(ts);
