@@ -43,6 +43,11 @@
 		<property name="citation" column="citation" type="string"
 			not-null="false" access="field"  />
 			
+		<one-to-one name="publishedDate"
+		            access="field"
+		            cascade="all, delete-orphan"
+                    property-ref="externalPublishedItem"/>	
+                    
 	    <many-to-one class="edu.ur.ir.item.Publisher" 
 			name="publisher" 
 			column="publisher_id" 
@@ -50,19 +55,15 @@
 			update="true" 
 			access="field" 
 			not-found="ignore"/>
-			
-		<one-to-one name="publishedDate"
-		            access="field"
-		            cascade="all-delete-orphan"
-                    property-ref="externalPublishedItem"/>	
         
         <!--  Parent Item  -->
-		<many-to-one class="GenericItem"
+		<many-to-one class="edu.ur.ir.item.GenericItem"
 			name="item" 
 			column="item_id" 
 			insert="true"
 			unique="true"
 			update="true" 
+			not-null="true"
 			access="field"/>  	
 	 </class>
 </hibernate-mapping>

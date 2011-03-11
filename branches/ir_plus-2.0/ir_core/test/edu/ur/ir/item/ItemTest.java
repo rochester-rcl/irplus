@@ -344,7 +344,7 @@ public class ItemTest {
 		item.setPrimaryContentType(contentType);
 		item.addContributor(contributor);
 		item.setExternalPublishedItem(externalPublishedItem);
-		item.setFirstAvailableDate(new FirstAvailableDate(1, 30, 2008));
+		item.updateFirstAvailableDate(1, 30, 2008);
 		item.setId(10l);
 		item.setItemAbstract("itemAbstract");
 		item.addFile(irFile);
@@ -358,7 +358,7 @@ public class ItemTest {
 		item.setName("Itemname");
 		item.setOwner(owner);
 		item.setPublishedToSystem(true);
-		item.setOriginalItemCreationDate(new OriginalItemCreationDate(10,25,2008));
+		item.updateOriginalItemCreationDate(10,25,2008);
 		item.setReleaseDate(new Date());
 		item.addItemSponsor(sponsor);
 		item.addSubTitle("Title 2", "The articles");
