@@ -72,7 +72,8 @@ public class HbNewsDAO implements NewsDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("newsCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("newsCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

@@ -18,6 +18,52 @@
 -- **********************************************
 -- ----------------------------------------------
 
+
+
+-- ---------------------------------------------
+-- Drop Institutional Repository Metadata tables/schema
+-- ---------------------------------------------
+
+DROP TABLE ir_metadata_dublin_core.contributor_type_dc_mapping;
+DROP SEQUENCE ir_metadata_dublin_core.contributor_type_dc_mapping_seq;
+
+DROP TABLE ir_metadata_dublin_core.identifier_type_dc_mapping;
+DROP SEQUENCE ir_metadata_dublin_core.identifier_type_dc_mapping_seq;
+
+DROP SCHEMA ir_metadata_dublin_core;
+
+
+-- ---------------------------------------------
+-- Drop security tables
+-- ---------------------------------------------
+ 
+
+DROP TABLE ir_security.group_workspace_group_control_entry_permission;
+DROP TABLE ir_security.group_workspace_group_control_entry;
+DROP TABLE ir_security.role_control_entry_permission;
+DROP TABLE ir_security.role_control_entry;
+DROP TABLE ir_security.user_control_entry_permission;
+DROP TABLE ir_security.user_control_entry;
+DROP TABLE ir_security.user_group_control_entry_permission;
+DROP TABLE ir_security.user_group_control_entry;
+DROP TABLE ir_security.acl;
+ALTER TABLE ir_user.invite_permissions DROP CONSTRAINT invite_permissions_class_type_permission_id_fkey;
+ALTER TABLE ir_user.folder_invite_permissions DROP CONSTRAINT folder_invite_permissions_class_type_permission_id_fkey;
+ALTER TABLE ir_user.folder_auto_share_permissions DROP CONSTRAINT folder_auto_share_permissions_class_type_permission_id_fkey;
+
+DROP TABLE ir_security.class_type_permission;
+DROP TABLE ir_security.class_type;
+
+DROP SEQUENCE ir_security.group_workspace_group_control_entry_seq;
+DROP SEQUENCE ir_security.role_control_entry_seq;
+DROP SEQUENCE ir_security.class_type_permission_seq;
+DROP SEQUENCE ir_security.user_control_entry_seq;
+DROP SEQUENCE ir_security.user_group_control_entry_seq;
+DROP SEQUENCE ir_security.acl_seq;
+DROP SEQUENCE ir_security.class_type_seq;
+
+DROP SCHEMA ir_security;
+
 -- ---------------------------------------------
 -- Drop Group spaces tables/schema
 -- ---------------------------------------------
@@ -38,45 +84,8 @@ DROP SEQUENCE ir_group_workspace.group_workspace_folder_seq;
 DROP SCHEMA ir_group_workspace;
 
 
--- ---------------------------------------------
--- Drop Institutional Repository Metadata tables/schema
--- ---------------------------------------------
-
-DROP TABLE ir_metadata_dublin_core.contributor_type_dc_mapping;
-DROP SEQUENCE ir_metadata_dublin_core.contributor_type_dc_mapping_seq;
-
-DROP TABLE ir_metadata_dublin_core.identifier_type_dc_mapping;
-DROP SEQUENCE ir_metadata_dublin_core.identifier_type_dc_mapping_seq;
-
-DROP SCHEMA ir_metadata_dublin_core;
 
 
--- ---------------------------------------------
--- Drop security tables
--- ---------------------------------------------
-  
-DROP TABLE ir_security.role_control_entry_permission;
-DROP TABLE ir_security.role_control_entry;
-DROP TABLE ir_security.user_control_entry_permission;
-DROP TABLE ir_security.user_control_entry;
-DROP TABLE ir_security.user_group_control_entry_permission;
-DROP TABLE ir_security.user_group_control_entry;
-DROP TABLE ir_security.acl;
-ALTER TABLE ir_user.invite_permissions DROP CONSTRAINT invite_permissions_class_type_permission_id_fkey;
-ALTER TABLE ir_user.folder_invite_permissions DROP CONSTRAINT folder_invite_permissions_class_type_permission_id_fkey;
-ALTER TABLE ir_user.folder_auto_share_permissions DROP CONSTRAINT folder_auto_share_permissions_class_type_permission_id_fkey;
-
-DROP TABLE ir_security.class_type_permission;
-DROP TABLE ir_security.class_type;
-
-DROP SEQUENCE ir_security.role_control_entry_seq;
-DROP SEQUENCE ir_security.class_type_permission_seq;
-DROP SEQUENCE ir_security.user_control_entry_seq;
-DROP SEQUENCE ir_security.user_group_control_entry_seq;
-DROP SEQUENCE ir_security.acl_seq;
-DROP SEQUENCE ir_security.class_type_seq;
-
-DROP SCHEMA ir_security;
 
 -- ---------------------------------------------
 -- Drop ir_repository information

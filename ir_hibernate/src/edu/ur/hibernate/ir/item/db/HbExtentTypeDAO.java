@@ -60,7 +60,8 @@ public class HbExtentTypeDAO implements ExtentTypeDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("extentTypeCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("extentTypeCount");
+		return (Long)q.uniqueResult();
 	}
 	
 	/**

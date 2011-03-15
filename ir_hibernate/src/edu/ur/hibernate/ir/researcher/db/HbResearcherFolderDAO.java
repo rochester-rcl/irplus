@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -72,8 +73,8 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("researcherFolderCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("researcherFolderCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

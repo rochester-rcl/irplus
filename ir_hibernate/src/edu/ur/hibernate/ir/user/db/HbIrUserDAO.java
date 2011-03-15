@@ -74,7 +74,8 @@ public class HbIrUserDAO implements IrUserDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("userCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("userCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

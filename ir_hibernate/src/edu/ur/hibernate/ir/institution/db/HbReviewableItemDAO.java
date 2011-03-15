@@ -16,7 +16,6 @@
 
 package edu.ur.hibernate.ir.institution.db;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.SessionFactory;

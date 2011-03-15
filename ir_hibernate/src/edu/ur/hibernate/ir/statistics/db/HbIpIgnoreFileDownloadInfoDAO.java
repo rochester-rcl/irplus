@@ -18,7 +18,6 @@ package edu.ur.hibernate.ir.statistics.db;
 
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -81,8 +80,8 @@ public class HbIpIgnoreFileDownloadInfoDAO implements IpIgnoreFileDownloadInfoDA
 	}
 
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("ipIgnoreFileDownloadInfoCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("ipIgnoreFileDownloadInfoCount");
+		return (Long)q.uniqueResult();
 	}
 
 	public IpIgnoreFileDownloadInfo getById(Long id, boolean lock) {

@@ -217,8 +217,8 @@ public class HbPersonNameDAO  implements PersonNameDAO {
 	 * 
 	 */
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personNameCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("personNameCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

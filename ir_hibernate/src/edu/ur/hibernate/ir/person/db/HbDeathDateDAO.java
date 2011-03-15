@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.person.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -61,7 +62,8 @@ public class HbDeathDateDAO implements DeathDateDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("deathDateCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deathDateCount");
+		return (Long)q.uniqueResult();
 	}
 
 	public DeathDate getById(Long id, boolean lock) {

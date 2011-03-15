@@ -186,20 +186,20 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	private void sendExistingUserEmail(GroupWorkspaceGroupInvite invite)
 	{
 		SimpleMailMessage message = new SimpleMailMessage(userWorkspaceGroupInviteUserExists);
-		message.setTo(invite.getEmail());
+		message.setTo(invite.getInviteToken().getEmail());
 		
 		String subject = message.getSubject();
-		subject = StringUtils.replace(subject, "%FIRST_NAME%", invite.getInvitingUser().getFirstName());
-		subject = StringUtils.replace(subject, "%LAST_NAME%",  invite.getInvitingUser().getLastName());
+		subject = StringUtils.replace(subject, "%FIRST_NAME%", invite.getInviteToken().getInvitingUser().getFirstName());
+		subject = StringUtils.replace(subject, "%LAST_NAME%",  invite.getInviteToken().getInvitingUser().getLastName());
 		message.setSubject(subject);
 		
 		String text = message.getText();
 		
 		text = StringUtils.replace(text, "%NAME%", invite.getGroup().getName());
 		text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
-		if( invite.getInviteMessage() != null )
+		if( invite.getInviteToken().getInviteMessage() != null )
 		{
-		    text = text.concat(invite.getInviteMessage());
+		    text = text.concat(invite.getInviteToken().getInviteMessage());
 		}
 		message.setText(text);
 		sendEmail(message);
@@ -213,7 +213,7 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 	private void sendEmailToNotExistingUser(GroupWorkspaceGroupInvite invite)
 	{
 		SimpleMailMessage message = new SimpleMailMessage(userWorkspaceGroupInviteUserNotExistsMessage);
-		message.setTo(invite.getEmail());
+		message.setTo(invite.getInviteToken().getEmail());
 	
 		String subject = message.getSubject();
 		subject = StringUtils.replace(subject, "%FIRST_NAME%", invite.getInvitedUser().getFirstName());
@@ -225,11 +225,11 @@ public class DeafaultGroupWorkspaceGroupInviteService implements GroupWorkspaceG
 		
 		
 		text = StringUtils.replace(text, "%NAME%", invite.getGroup().getName());
-		text = StringUtils.replace(text, "%TOKEN%", invite.getToken());
+		text = StringUtils.replace(text, "%TOKEN%", invite.getInviteToken().getToken());
 		text = StringUtils.replace(text, "%BASE_WEB_APP_PATH%", baseWebAppPath);
-		if( invite.getInviteMessage() != null )
+		if( invite.getInviteToken().getInviteMessage() != null )
 		{
-		    text = text.concat(invite.getInviteMessage());
+		    text = text.concat(invite.getInviteToken().getInviteMessage());
 		}
 		message.setText(text);
 		sendEmail(message);

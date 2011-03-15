@@ -18,7 +18,6 @@ package edu.ur.hibernate.ir.statistics.db;
 
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -71,8 +70,8 @@ public class HbFileDownloadInfoDAO implements FileDownloadInfoDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("fileDownloadInfoCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("fileDownloadInfoCount");
+		return (Long)q.uniqueResult();
 	}
 	
 	public FileDownloadInfo getById(Long id, boolean lock) {

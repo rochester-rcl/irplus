@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.repository.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -65,7 +66,8 @@ public class HbRepositoryDAO implements RepositoryDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("repositoryCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("repositoryCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

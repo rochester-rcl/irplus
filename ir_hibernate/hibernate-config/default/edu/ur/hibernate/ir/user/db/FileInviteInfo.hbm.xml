@@ -41,7 +41,7 @@
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
 
-		<!--  user sending the invitation -->
+		<!--  invite token -->
 		<many-to-one class="edu.ur.ir.invite.InviteToken"
 			name="inviteToken" 
 			column="invite_token_id" 

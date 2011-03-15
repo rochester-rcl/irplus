@@ -241,29 +241,7 @@ CREATE TABLE ir_group_workspace.group_workspace_group_users
 );
 ALTER TABLE ir_group_workspace.group_workspace_group_users OWNER TO ir_plus;
 
--- ---------------------------------------------
--- Group workspace group invite Information
--- ---------------------------------------------
-CREATE TABLE ir_group_workspace.group_workspace_group_invite
-(
-    group_workspace_group_invite_id BIGINT NOT NULL,
-    version INTEGER,
-    token TEXT NOT NULL,
-    email TEXT NOT NULL,
-    inviting_user_id BIGINT NOT NULL,
-    invited_user_id BIGINT,
-    created_date TIMESTAMP WITH TIME ZONE NOT NULL,
-    group_workspace_group_id BIGINT NOT NULL,
-    FOREIGN KEY (group_workspace_group_id) REFERENCES ir_group_workspace.group_workspace_group (group_workspace_group_id),
-    FOREIGN KEY (inviting_user_id) REFERENCES ir_user.ir_user (user_id),
-    FOREIGN KEY (invited_user_id) REFERENCES ir_user.ir_user (user_id),
-    UNIQUE(token)
-);
-ALTER TABLE ir_group_workspace.group_workspace_group_invite OWNER TO ir_plus;
 
--- The group workspace group sequence
-CREATE SEQUENCE ir_group_workspace.group_workspace_group_invite_seq;
-ALTER TABLE ir_group_workspace.group_workspace_group_invite_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
 -- Create a re-index service
@@ -331,22 +309,21 @@ all files and folders within the folder',0
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'FOLDER_EDIT','The user can add and delete any files and folders from the 
-specified folder including child files and folders',0
+  ir_security.class_type.class_type_id, 'GROUP_EDIT','The user(s) can read, add and delete any files and folders from the 
+specified group',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspace';
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'FOLDER_ADD_FILE','The user can add files to the specified folder 
+  ir_security.class_type.class_type_id, 'GROUP_ADD_FILE','The user(s) can read all files and add files to group folders  
 and only delete files they own',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspace';
 
 insert into ir_security.class_type_permission select 
 nextval('ir_security.class_type_permission_seq'),
-  ir_security.class_type.class_type_id, 'FOLDER_READ','The user can view the folder and the names of 
-all files and folders within the folder',0
+  ir_security.class_type.class_type_id, 'GROUP_READ','The user(s) can view all files and folders within the group',0
   from ir_security.class_type where ir_security.class_type.name = 
 'edu.ur.ir.groupspace.GroupWorkspace';
 
@@ -396,18 +373,7 @@ ALTER TABLE ir_invite.invite_token_seq OWNER TO ir_plus;
 -- ---------------------------------------------
 -- Move invite info over
 -- ---------------------------------------------
---CREATE TABLE ir_user.invite_info
---(
---  invite_info_id BIGINT PRIMARY KEY,
--- version INTEGER,
---  token TEXT NOT NULL,
---  email TEXT NOT NULL,
---  user_id BIGINT NOT NULL,
---  created_date TIMESTAMP WITH TIME ZONE NOT NULL,
---  FOREIGN KEY (user_id) REFERENCES ir_user.ir_user (user_id), 
---  UNIQUE(token)
---);
--- ALTER TABLE ir_user.invite_info OWNER TO ir_plus;
+
 
 
 INSERT INTO ir_invite.invite_token SELECT
@@ -418,7 +384,7 @@ FROM ir_user.invite_info;
 ALTER TABLE ir_user.invite_info ADD COLUMN invite_token_id BIGINT;
 
 -- create reference
-UPDATE ir_user.invite_info SET invite_token_id = ()SELECT invite_token_id
+UPDATE ir_user.invite_info SET invite_token_id = (SELECT invite_token_id
 FROM ir_invite.invite_token WHERE invite_info.token = invite_token.token);
 
 -- set not null
@@ -444,3 +410,25 @@ and token is not null;
 
 -- create an index on the handle info local name
 CREATE INDEX handle_info_local_name_idx ON handle.handle_info(local_name);
+
+
+-- ---------------------------------------------
+-- Group workspace group invite Information
+-- ---------------------------------------------
+CREATE TABLE ir_group_workspace.group_workspace_group_invite
+(
+    group_workspace_group_invite_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    invite_token_id BIGINT NOT NULL,
+    invited_user_id BIGINT,
+    group_workspace_group_id BIGINT NOT NULL,
+    FOREIGN KEY (group_workspace_group_id) REFERENCES ir_group_workspace.group_workspace_group (group_workspace_group_id),
+    FOREIGN KEY (invite_token_id) REFERENCES ir_invite.invite_token(invite_token_id),
+    FOREIGN KEY (invited_user_id) REFERENCES ir_user.ir_user (user_id),
+    UNIQUE(invite_token_id)
+);
+ALTER TABLE ir_group_workspace.group_workspace_group_invite OWNER TO ir_plus;
+
+-- The group workspace group sequence
+CREATE SEQUENCE ir_group_workspace.group_workspace_group_invite_seq;
+ALTER TABLE ir_group_workspace.group_workspace_group_invite_seq OWNER TO ir_plus;

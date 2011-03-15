@@ -16,6 +16,7 @@
 
 package edu.ur.hibernate.ir.item.db;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -73,7 +74,8 @@ public class HbItemIdentifierDAO implements ItemIdentifierDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemIdentifierCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemIdentifierCount");
+		return (Long)q.uniqueResult();
 	}
 
 	public ItemIdentifier getById(Long id, boolean lock) {

@@ -16,12 +16,11 @@
 
 package edu.ur.hibernate.ir.file.db;
 
-import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.file.IrFileIndexingFailureRecord;
 import edu.ur.ir.file.IrFileIndexingFailureRecordDAO;
 
@@ -56,8 +55,8 @@ public class HbIrFileIndexingFailureRecordDAO implements IrFileIndexingFailureRe
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irFileIndexingFailureRecordCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irFileIndexingFailureRecordCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

@@ -246,9 +246,8 @@ public class HbPersonalCollectionDAO implements PersonalCollectionDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personalCollectionCount"));
-
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("personalCollectionCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

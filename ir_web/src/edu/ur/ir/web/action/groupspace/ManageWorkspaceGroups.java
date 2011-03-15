@@ -17,6 +17,10 @@
 package edu.ur.ir.web.action.groupspace;
 
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import edu.ur.exception.DuplicateNameException;
@@ -24,6 +28,8 @@ import edu.ur.ir.groupspace.GroupWorkspace;
 import edu.ur.ir.groupspace.GroupWorkspaceGroup;
 import edu.ur.ir.groupspace.GroupWorkspaceGroupService;
 import edu.ur.ir.groupspace.GroupWorkspaceService;
+import edu.ur.ir.security.IrClassTypePermission;
+import edu.ur.ir.security.SecurityService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
@@ -60,17 +66,17 @@ public class ManageWorkspaceGroups extends Pager implements UserIdAware {
 
 	/* Group space object */
 	private GroupWorkspaceGroup workspaceGroup;
+	
+	/* Permission types for the file */
+	private List<IrClassTypePermission> classTypePermissions;
+
+	/* Permissions to be assigned while sharing the file */
+	private List<Long> selectedPermissions = new ArrayList<Long>();	
+	
+	/* ACL service */
+	private  SecurityService securityService;
 
 
-	public String getMessage() {
-		return message;
-	}
-
-
-	public void setGroupWorkspaceGroupService(
-			GroupWorkspaceGroupService groupWorkspaceGroupService) {
-		this.groupWorkspaceGroupService = groupWorkspaceGroupService;
-	}
 
 	/* indicates successful action */
 	private boolean success = true;
@@ -129,6 +135,7 @@ public class ManageWorkspaceGroups extends Pager implements UserIdAware {
 		workspaceGroup = groupWorkspaceGroupService.get(id, false);
 		groupWorkspace = workspaceGroup.getGroupWorkspace();
 		IrUser user = userService.getUser(userId, false);
+		classTypePermissions = this.orderPermissionsList(securityService.getClassTypePermissions(GroupWorkspace.class.getName()));
 		if( workspaceGroup.getGroupWorkspace().getIsOwner(user))
 		{
 			return "get";
@@ -361,6 +368,111 @@ public class ManageWorkspaceGroups extends Pager implements UserIdAware {
 	 */
 	public void setGroupWorkspaceId(Long groupWorkspaceId) {
 		this.groupWorkspaceId = groupWorkspaceId;
+	}
+
+	/**
+	 * Set the security service.
+	 * 
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
+	}
+
+
+	/**
+	 * Get the selected permissions.
+	 * 
+	 * @return selected permissions by the user.
+	 */
+	public List<Long> getSelectedPermissions() {
+		return selectedPermissions;
+	}
+
+
+	/**
+	 * Set the selected permissions.
+	 * 
+	 * @param selectedPermissions
+	 */
+	public void setSelectedPermissions(List<Long> selectedPermissions) {
+		this.selectedPermissions = selectedPermissions;
+	}
+
+
+	/**
+	 * Get the class type permissions.
+	 * 
+	 * @return class type permissions
+	 */
+	public List<IrClassTypePermission> getClassTypePermissions() {
+		return classTypePermissions;
+	}
+
+
+	/**
+	 * Get the message for the user
+	 * 
+	 * @return
+	 */
+	public String getMessage() {
+		return message;
+	}
+	
+
+	/**
+	 * Set the group workspace group service.
+	 * 
+	 * @param groupWorkspaceGroupService
+	 */
+	public void setGroupWorkspaceGroupService(
+			GroupWorkspaceGroupService groupWorkspaceGroupService) {
+		this.groupWorkspaceGroupService = groupWorkspaceGroupService;
+	}
+	
+	/**
+	 * Order the permissions in a predictable manner.
+	 * 
+	 * @param permissionsToOrder
+	 * @return
+	 */
+	private List<IrClassTypePermission> orderPermissionsList(List<IrClassTypePermission> permissionsToOrder)
+	{
+		List<IrClassTypePermission> orderedPermissions = new LinkedList<IrClassTypePermission>();
+		IrClassTypePermission view = null;
+		IrClassTypePermission edit = null;
+		IrClassTypePermission addOnly = null;
+		
+		for(IrClassTypePermission permission : permissionsToOrder)
+		{
+			if( permission.getName().equals("FOLDER_EDIT"))
+			{
+				edit = permission;
+			}
+			else if( permission.getName().equals("FOLDER_ADD_FILE"))
+			{
+				addOnly = permission;
+			}
+			else if( permission.getName().equals("FOLDER_READ"))
+			{
+				 view = permission;
+			}
+		}
+		
+		if( view != null )
+		{
+			orderedPermissions.add(view);
+		}
+		if( addOnly != null )
+		{
+			orderedPermissions.add(addOnly);
+		}
+		if( edit != null )
+		{
+			orderedPermissions.add(edit);
+		}
+		
+		return orderedPermissions;
 	}
 
 }

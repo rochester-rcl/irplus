@@ -16,8 +16,7 @@
 
 package edu.ur.hibernate.ir.institution.db;
 
-import java.util.List;
-
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -58,8 +57,8 @@ public class HbDeletedInstitutionalItemDAO implements DeletedInstitutionalItemDA
 
 
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("deletedInstitutionalItemCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("deletedInstitutionalItemCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

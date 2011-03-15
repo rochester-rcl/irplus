@@ -69,7 +69,8 @@ public class HbPublisherDAO implements PublisherDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("publisherCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("publisherCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

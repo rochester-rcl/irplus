@@ -70,7 +70,8 @@ public class HbUserEmailDAO implements UserEmailDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("userEmailCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("userEmailCount");
+		return (Long)q.uniqueResult();
 	}
 
 

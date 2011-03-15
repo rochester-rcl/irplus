@@ -70,8 +70,8 @@ public class HbGenericItemDAO implements GenericItemDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.ur.ir.invite.InviteToken;
+import edu.ur.ir.security.Sid;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserEmail;
 import edu.ur.persistent.CommonPersistent;
@@ -30,7 +32,10 @@ import edu.ur.persistent.CommonPersistent;
  * @author Nathan Sarr
  *
  */
-public class GroupWorkspaceGroup extends CommonPersistent{
+public class GroupWorkspaceGroup extends CommonPersistent implements Sid{
+	
+	/** type for this secure id */
+	public static final String WORKSPACE_GROUP_SID_TYPE = "WORKSPACE_GROUP_SID_TYPE";
 	
 	/* eclipse generated id */
 	private static final long serialVersionUID = 186970723642439395L;
@@ -164,7 +169,7 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	{
 		for(GroupWorkspaceGroupInvite invite : invitedUsers)
 		{
-			if( invite.getEmail().equalsIgnoreCase(email))
+			if( invite.getInviteToken().getEmail().equalsIgnoreCase(email))
 			{
 				return invite;
 			}
@@ -180,18 +185,15 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	 */
 	public GroupWorkspaceGroupInvite getInvite(IrUser user)
 	{
-		if( user != null )
+        for(GroupWorkspaceGroupInvite invite : invitedUsers)
 		{
-		    for(GroupWorkspaceGroupInvite invite : invitedUsers)
-		    {
-			    for( UserEmail email : user.getUserEmails())
+		    for( UserEmail email : user.getUserEmails())
+			{
+			    if(email.getEmail().equalsIgnoreCase(invite.getInviteToken().getEmail()))
 			    {
-				    if(email.getEmail().equalsIgnoreCase(invite.getEmail()))
-				    {
-					    return invite;
-				    }
-			    } 
-		    }
+				    return invite;
+			    }
+			} 
 		}
 		return null;
 	 }
@@ -225,7 +227,7 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 	 * @throws GroupWorkspaceInviteException 
 	 */
 	public GroupWorkspaceGroupInvite inviteUser(String email,
-			IrUser inviteingUser, 
+			IrUser invitingUser, 
 			String token ) throws GroupWorkspaceInviteException
 	{
 		IrUser user = getUser(email);
@@ -237,41 +239,39 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 		
 		if(  invite == null )
 		{
-			invite = new GroupWorkspaceGroupInvite(email, 
-			    this, 
-			    inviteingUser, 
-			    token);
+			InviteToken inviteToken = new InviteToken(email, token, invitingUser);
+			invite = new GroupWorkspaceGroupInvite(this, inviteToken); 
 		    invitedUsers.add(invite);
 		}
 		return invite;
 	}
-	
+
 	/**
 	 * Create an invite for a user who exists in the system.
 	 * 
-	 * @param invitedUser
-	 * @param inviteingUser
+	 * @param email - email the inviting user choose 
+	 * @param invitedUser - the user who was invited
+	 * @param invitingUser - user doing the inviting
+	 * @param token - token generated
 	 * 
-	 * @return
-	 * @throws GroupWorkspaceInviteException 
+	 * @return the created group workspace group invite or the existing one 
+	 * 
+	 * @throws GroupWorkspaceInviteException
 	 */
 	public GroupWorkspaceGroupInvite inviteUser(String email, IrUser invitedUser,
-			IrUser inviteingUser, String token) throws GroupWorkspaceInviteException
+			IrUser invitingUser, String token) throws GroupWorkspaceInviteException
 	{
 		if( users.contains(invitedUser) )
 		{
-			throw new GroupWorkspaceInviteException("user already exists");
+			throw new GroupWorkspaceInviteException("user already exists in group");
 		}
 		
 		GroupWorkspaceGroupInvite invite = getInvite(invitedUser);
 		if(  invite == null )
 		{
-			invite = new GroupWorkspaceGroupInvite(email, 
-					invitedUser, 
-			    this, 
-			    inviteingUser, 
-			    token);
-		
+			InviteToken inviteToken = new InviteToken(email, token, invitingUser);
+			invite = new GroupWorkspaceGroupInvite(this, inviteToken); 
+			invite.setInvitedUser(invitedUser);
 		    invitedUsers.add(invite);
 		}
 		return invite;
@@ -362,6 +362,16 @@ public class GroupWorkspaceGroup extends CommonPersistent{
 		sb.append(description);
 		sb.append("]");
 		return sb.toString();
+	}
+
+	
+	/**
+	 * GEt the sid type for this workspace group.
+	 * 
+	 * @see edu.ur.ir.security.Sid#getSidType()
+	 */
+	public String getSidType() {
+		return WORKSPACE_GROUP_SID_TYPE;
 	}
 
 

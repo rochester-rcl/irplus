@@ -16,12 +16,10 @@
 
 package edu.ur.hibernate.ir.item.db;
 
-import java.util.List;
-
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.item.FirstAvailableDate;
 import edu.ur.ir.item.FirstAvailableDateDAO;
 
@@ -62,7 +60,8 @@ public class HbFirstAvailableDateDAO implements FirstAvailableDateDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("firstAvailableDateCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("firstAvailableDateCount");
+		return (Long)q.uniqueResult();
 	}
 
 	public FirstAvailableDate getById(Long id, boolean lock) {

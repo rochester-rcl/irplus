@@ -67,8 +67,8 @@ public class HbPersonalFolderDAO implements PersonalFolderDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personalFolderCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("personalFolderCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**
