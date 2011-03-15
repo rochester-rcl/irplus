@@ -1321,10 +1321,6 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * @param externalPublishedItem
 	 */
 	void setExternalPublishedItem(ExternalPublishedItem externalPublishedItem) {
-		if( externalPublishedItem != null )
-		{
-		    externalPublishedItem.setItem(this);
-		}
 		this.externalPublishedItem = externalPublishedItem;
 	}
 	
@@ -1338,7 +1334,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	{
 		if( externalPublishedItem == null )
 		{
-		    externalPublishedItem = new ExternalPublishedItem(this);
+		    externalPublishedItem = new ExternalPublishedItem();
 		}
 		return externalPublishedItem;
 	}
@@ -1451,7 +1447,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 		// Copy item's externally published data
 		ExternalPublishedItem oldExternalPublishedItem = this.getExternalPublishedItem();
 		if (oldExternalPublishedItem != null) {
-			ExternalPublishedItem newExternalPublishedItem  = new ExternalPublishedItem (newItem);
+			ExternalPublishedItem newExternalPublishedItem  = new ExternalPublishedItem ();
 			newExternalPublishedItem.setCitation(oldExternalPublishedItem.getCitation());
 			newExternalPublishedItem.setPublishedDate(oldExternalPublishedItem.getPublishedDate());
 			newExternalPublishedItem.setPublisher(oldExternalPublishedItem.getPublisher());

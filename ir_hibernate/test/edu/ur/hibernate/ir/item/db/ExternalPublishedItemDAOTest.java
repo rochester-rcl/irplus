@@ -26,8 +26,6 @@ import org.testng.annotations.Test;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.ExternalPublishedItemDAO;
-import edu.ur.ir.item.GenericItem;
-import edu.ur.ir.item.GenericItemDAO;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.PublisherDAO;
 
@@ -49,9 +47,6 @@ public class ExternalPublishedItemDAOTest {
 	PublisherDAO publisherDAO = (PublisherDAO) ctx
 	.getBean("publisherDAO");
 	
-	/** Item relational data access */
-	GenericItemDAO itemDAO = (GenericItemDAO) ctx .getBean("itemDAO");
-
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
 	.getBean("transactionManager");
 	
@@ -70,11 +65,9 @@ public class ExternalPublishedItemDAOTest {
         Publisher p = new Publisher("publisher");
 		publisherDAO.makePersistent(p);
 		
-		GenericItem item = new GenericItem("the", "item1");
-		item.updateOriginalItemCreationDate(5,13, 2008);
-		itemDAO.makePersistent(item);
 		
-		ExternalPublishedItem e = item.createExternalPublishedItem();
+		
+		ExternalPublishedItem e =  new ExternalPublishedItem();
  		e.setCitation("citation");
         e.setPublisher(p);
         e.updatePublishedDate(5,13, 2008);
@@ -100,7 +93,6 @@ public class ExternalPublishedItemDAOTest {
         Publisher publisherOther = publisherDAO.getById(p.getId(), false);
         publisherDAO.makeTransient(publisherOther);
         assert  publisherDAO.getById(publisherOther.getId(), false) == null : "Should no longer be able to find publisher";
-        itemDAO.makeTransient(itemDAO.getById(item.getId(), false));
         tm.commit(ts);
 	}
 	
@@ -115,10 +107,7 @@ public class ExternalPublishedItemDAOTest {
 		Publisher p = new Publisher("publisher");
 		publisherDAO.makePersistent(p);
 
-		GenericItem item = new GenericItem("the", "item1");
-		itemDAO.makePersistent(item);
- 
-		ExternalPublishedItem e = item.createExternalPublishedItem();
+		ExternalPublishedItem e = new ExternalPublishedItem();
  		e.setCitation("citation");
         e.setPublisher(p);
         e.updatePublishedDate(5,13, 2008);
@@ -152,7 +141,6 @@ public class ExternalPublishedItemDAOTest {
         Publisher publisherOther = publisherDAO.getById(p.getId(), false);
         publisherDAO.makeTransient(publisherOther);
         assert  publisherDAO.getById(publisherOther.getId(), false) == null : "Should no longer be able to find publisher";
-        itemDAO.makeTransient(itemDAO.getById(item.getId(), false));
         tm.commit(ts);
 	}
 }

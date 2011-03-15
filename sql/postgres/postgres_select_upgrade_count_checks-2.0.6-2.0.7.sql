@@ -23,12 +23,3 @@ SELECT count(*)
 FROM ir_item.original_item_creation_date
 WHERE original_item_creation_date.item_id IS NULL;
 
--- --------------------------------------
--- Number of rows that will be updated 
--- for external_published_item
--- --------------------------------------
-SELECT count(*) from ir_item.external_published_item;
-
--- number of rows that are in the item table
-SELECT count(*) for ir_item.item 
-WHERE external_published_item_id IS NOT NULL;

@@ -178,14 +178,8 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		processAuthors(repository, dspaceItem, genericItem, DspaceMetadataLabel.AUTHORS);
 		processAuthors(repository, dspaceItem, genericItem, DspaceMetadataLabel.CONTRIBUTORS);
 		genericItem.setItemAbstract(dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.ABSTRACT));
-		
-		
-		genericItem.updateFirstAvailableDate(getFirstAvailableDate(dspaceItem).getMonth(), 
-				getFirstAvailableDate(dspaceItem).getDay(), 
-				getFirstAvailableDate(dspaceItem).getYear());
-		genericItem.updateOriginalItemCreationDate(getOriginalCreationDate(dspaceItem).getMonth(), 
-				getOriginalCreationDate(dspaceItem).getDay(),
-				getOriginalCreationDate(dspaceItem).getYear()); 
+		genericItem.updateFirstAvailableDate(getFirstAvailableDate(dspaceItem).getMonth(), getFirstAvailableDate(dspaceItem).getDay(), getFirstAvailableDate(dspaceItem).getYear());
+		genericItem.updateOriginalItemCreationDate(getOriginalCreationDate(dspaceItem).getMonth(), getOriginalCreationDate(dspaceItem).getDay(), getOriginalCreationDate(dspaceItem).getYear()); 
 	    String description = dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.DESCRIPTION);
 	    genericItem.setDescription(description);
 	    processIdentifiers(dspaceItem, genericItem, "GOVT_DOC", DspaceMetadataLabel.GOVERNMENT_DOC_NO);
@@ -348,7 +342,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			
 			if( publishedDate != null)
 			{
-				externalPublishedItem.updatePublishedDate(publishedDate.getMinutes(), publishedDate.getDay(), publishedDate.getYear());
+				externalPublishedItem.updatePublishedDate(publishedDate.getMonth(), publishedDate.getDay(), publishedDate.getYear());
 			}
 			
 			if( citation != null && !citation.trim().equals(""))

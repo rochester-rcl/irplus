@@ -74,7 +74,6 @@
 		<property name="releaseDate" column="release_date" type="date" 
 		          access="field" />	
 		
-
 		
 		<!-- Copyright Statement information  -->
 		<many-to-one class="CopyrightStatement"
@@ -91,6 +90,26 @@
 			column="primary_image_item_file_id" 
 			unique="true" 
 			cascade="delete"/>
+			
+		<!--  Date the item was originally created - for example a photo created in 1880  -->
+		<many-to-one class="OriginalItemCreationDate" 
+			name="originalItemCreationDate" 
+			access="field"
+			column="original_item_creation_date_id" 
+			insert="true"
+			update="true" 
+			unique="true"  
+			cascade="all, delete-orphan"/>
+
+		<!-- Date the Item will be first made available to public -->
+		<many-to-one class="FirstAvailableDate" 
+			name="firstAvailableDate" 
+			column="first_available_date_id" 
+			access="field"
+			insert="true"
+			update="true" 
+			unique="true"  
+			cascade="all, delete-orphan"/>			
 					          
 		<!-- User this item belongs to -->
 		<many-to-one class="edu.ur.ir.user.IrUser" 
@@ -107,21 +126,15 @@
 			access="field"
 			unique="true"/>
 			
-		<!--  Date the item was originally created - for example a photo created in 1880  -->
-		<one-to-one class="OriginalItemCreationDate"
-		            name="originalItemCreationDate"
-		            cascade="all, delete-orphan"
-                    property-ref="genericItem"/>
-                    
-        <one-to-one name="externalPublishedItem"
-		            cascade="all, delete-orphan"
-                    property-ref="item"/>	
-		
-		<!-- Date the Item will be first made available to public -->
-		<one-to-one class="FirstAvailableDate"
-		            name="firstAvailableDate"
-		            cascade="all, delete-orphan"
-                    property-ref="genericItem"/>	
+		<!-- Externally published information  -->
+		<many-to-one class="ExternalPublishedItem" 
+			name="externalPublishedItem" 
+			column="external_published_item_id" 
+			insert="true"
+			update="true" 
+			unique="true"  
+			access="field"
+			cascade="all, delete-orphan"/>
 
 		<!--  Sponsors for this Item -->	
 		<set name="itemSponsors" 

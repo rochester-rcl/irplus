@@ -60,15 +60,15 @@
 
 		<property name="fractionOfSecond" column="fraction_seconds" type="int"
 			access="field" />
-		
-		<!--  Parent Item  -->
-		<many-to-one class="edu.ur.ir.item.GenericItem"
-			name="genericItem" 
-			column="item_id" 
-			unique="true"
-			access="field"
-			not-null="true"/>  
 			
+		<!--  Parent Item  -->
+		<many-to-one class="GenericItem"
+			name="item" 
+			column="item_id" 
+			insert="true"
+			unique="true"
+			update="true" 
+			access="field"/>  
 
 	</class>
 		

@@ -65,11 +65,9 @@
 		<many-to-one class="ExternalPublishedItem"
 			name="externalPublishedItem" 
 			column="external_published_item_id" 
-			unique="true"
-			access="field"
-			not-null="true"/>   
-		
-		
+			insert="true"
+			update="true" 
+			access="field"/>   
 
 	</class>
 		
