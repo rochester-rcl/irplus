@@ -17,19 +17,32 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
   
-  
-  <appender name="A1" class="org.apache.log4j.RollingFileAppender"> 
-    <param name="file" value="C:/ir_plus_log/ir_handle.log"/>
-    <param name="MaxFileSize" value="1024KB"/>
-    <!-- Keep up to 20 files around -->
-    <param name="MaxBackupIndex" value="20"/>
-    <layout class="org.apache.log4j.PatternLayout"> 
-      <param name="ConversionPattern" value="%d %-5p %c @ %m%n"/> 
-    </layout> 
-  </appender> 
-  
-  
-  
+
+   <appender name="appenderFile" class="org.apache.log4j.RollingFileAppender">
+     <param name="File" value="C:/ir_plus_log/ir_handle.log"/>
+     <param name="Append" value="true"/>
+     <param name="MaxFileSize" value="500KB"/>
+     <param name="MaxBackupIndex" value="100"/>
+     <layout class="org.apache.log4j.PatternLayout">
+       <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+     </layout>
+   </appender>
+   
+   <appender name="appenderFileDBCon" class="org.apache.log4j.RollingFileAppender">
+     <param name="File" value="C:/ir_plus_log/ir_handle.db.log"/>
+     <param name="Append" value="true"/>
+     <param name="MaxFileSize" value="500KB"/>
+     <param name="MaxBackupIndex" value="100"/>
+     <layout class="org.apache.log4j.PatternLayout">
+       <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+     </layout>
+   </appender>
+   
+   <logger name="org.apache.commons.io">
+    <!-- Print only messages of level error or above in the package org.apache.commons.io -->
+    <level value="error"/> 
+   </logger>
+   
    <logger name="org.apache.catalina.core">
     <level value="error"/> 
    </logger>
@@ -73,9 +86,20 @@
    <logger name="org.hibernate">
     <level value="error"/> 
    </logger>
-  
-  <root> 
-    <priority value ="debug" /> 
-    <appender-ref ref="A1" /> 
-  </root>
+   
+   
+    <logger name="org.hibernate.SQL" additivity="false">
+      <level value="debug" />
+      <appender-ref ref="appenderFileDBCon" />
+    </logger>
+    
+    <logger name="edu.ur" additivity="false">
+      <level value="debug" />
+      <appender-ref ref="appenderFile" />
+    </logger>
+   
+   <root>
+       <level value="debug"/>
+       <appender-ref ref="appenderFile" />
+   </root>
 </log4j:configuration>

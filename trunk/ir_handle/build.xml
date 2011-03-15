@@ -68,7 +68,7 @@
     <!-- Copy non java resources -->
 	<target name="copy-resources" description="-->Copy the non java resources into the build directory">
 		<copy todir="${build.dir}/classes">
-		    <fileset dir="${log4j.production.appender}"/>
+		    <fileset dir="${log4j.debug.file.appender}"/>
 	        <fileset dir="${spring.config.common.config}"/>
 	        <fileset dir="${spring.project.config}"/>
 	        <fileset dir="${properties.config.production}"/>
@@ -82,7 +82,7 @@
 	</target>
 
 	<!-- compile the java source files -->
-    <target name="build" depends="retrieve, do-custom-build " xmlns:ext="http://edu.ur/d1/ext">
+    <target name="build" depends="clean, retrieve, do-custom-build " xmlns:ext="http://edu.ur/d1/ext">
         <mkdir dir="${build.dir}/classes"/>
         <ext:javac srcdir="${src.dir}"
 			 destdir="${build.dir}/classes"
