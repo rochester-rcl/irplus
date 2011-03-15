@@ -2,7 +2,7 @@ IR+ changes 2.0 to 2.x
 ==============================
 - Updated Approve affiliations - removed unneeded variables and imports
 - added last login date to user search results table 
-- updated to allow filtering by role and affiliation 
+- updated to allow filtering by role and affiliation in user administration
 - Updated to allow administrators to view invite table
    - allows administrators to delete an invite
    - allows administrators to see list of named files shared
@@ -30,7 +30,14 @@ IR+ changes 2.0 to 2.x
 - Updated collection page to show description of sub collections
 - Updated collections indexing to occur on new collection creation or updating of collection
 - Added Group workspaces admin option in administration drop down
-
+- Added setting to make system property headless = true for graphics processing
+- Added ability to have images open in browser based on setting
+- Added ability to see all files being shared with a given user
+- Added ability to see last login date 
+- Now removes the invite token if the user removes all files associated with invite
+- Updated to now properly use the default interceptor stack
+- Updated to correctly forward to action not found if user tries to enter an action that does not exist
+- Updated user admin to view all groups a user belongs to
 
 [ur_persistence_util]
 =============================
