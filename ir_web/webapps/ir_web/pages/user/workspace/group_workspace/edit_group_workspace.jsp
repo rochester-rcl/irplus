@@ -2,7 +2,7 @@
 
 
 <!--  
-   Copyright 2008 University of Rochester
+   Copyright 2008-2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@
 	             <ul class="yui-nav">
                      <li class="selected"><a href="#tab1"><em>Group Workspace Information</em></a></li>
                      <li><a href="#tab2"><em>Owner(s)</em></a></li>
-                     <li ><a href="#tab3"><em>Group(s)</em></a></li>
+                     <li><a href="#tab3"><em>Group(s)</em></a></li>
                  </ul>
 
                  <div class="yui-content">

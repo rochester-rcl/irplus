@@ -62,9 +62,9 @@
         </action>
         
         <!--  NOTE this action uses the personal folder form -->
-        <action name="*GroupFolder"
+        <action name="*GroupWorkspaceFolder"
             method ="{1}"
-            class="edu.ur.ir.web.action.user.AddGroupFolder">
+            class="edu.ur.ir.web.action.groupspace.AddGroupWorkspaceFolder">
             <interceptor-ref name="crudStack" />
             <result name="added">/pages/user/workspace/personal_folder_form.jsp</result>
             <result name="get">/pages/user/workspace/personal_folder_form.jsp</result>

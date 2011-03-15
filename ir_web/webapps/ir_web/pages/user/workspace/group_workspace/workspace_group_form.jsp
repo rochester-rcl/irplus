@@ -1,7 +1,7 @@
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
 
 <!--  
-   Copyright 2008-2010 University of Rochester
+   Copyright 2008-2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
       is an issue.
  -->
 <%@ taglib prefix="ir" uri="ir-tags"%>
-		       
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>	       
 		
 		               
 	<!--  if editing an id must be passed -->     
@@ -53,4 +53,6 @@
 	                id="groupDescription" cols="42" rows="4">${description}</textarea>
 	            </td>
 			</tr>
+			
+			
 	    </table>

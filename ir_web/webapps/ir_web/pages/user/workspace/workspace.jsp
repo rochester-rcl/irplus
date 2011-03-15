@@ -73,7 +73,7 @@
     <ur:js src="page-resources/js/user/workspace_collection.js"/>
     <ur:js src="page-resources/js/user/workspace_folder.js"/>
     <ur:js src="page-resources/js/user/workspace_search.js"/>
-    <ur:js src="page-resources/js/user/user_group_workspace.js"/>
+    <ur:js src="page-resources/js/user/group_workspace.js"/>
 
 </head>
 
