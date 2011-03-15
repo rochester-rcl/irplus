@@ -32,10 +32,10 @@ var deleteFolderAction = basePath + 'user/deletePersonalFileSystemObjects.action
 var getFolderAction = basePath + 'user/getPersonalFolder.action';
 
 //actions for adding and removing folders - group workspace
-var updateGroupWorkspaceFolderAction = basePath + 'user/updateGroupFolder.action';
-var newGroupWorkspaceFolderAction = basePath + 'user/addGroupFolder.action';
-var deleteGroupWorkspaceFolderAction = basePath + 'user/deleteGroupFileSystemObjects.action';
-var getGroupWorkspaceFolderAction = basePath + 'user/getGroupFolder.action';
+var updateGroupWorkspaceFolderAction = basePath + 'user/updateGroupWorkspaceFolder.action';
+var newGroupWorkspaceFolderAction = basePath + 'user/addGroupWorkspaceFolder.action';
+var deleteGroupWorkspaceFolderAction = basePath + 'user/deleteGroupWorkspaceFileSystemObjects.action';
+var getGroupWorkspaceFolderAction = basePath + 'user/getGroupWorkspaceFolder.action';
 
 
 // Action to rename file
