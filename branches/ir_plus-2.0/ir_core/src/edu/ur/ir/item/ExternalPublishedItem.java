@@ -38,24 +38,6 @@ public class ExternalPublishedItem extends BasePersistent {
 	
 	/** Publisher for the item  */
 	private Publisher publisher;
-	
-	/** Generic item this external published item belongs to */
-	private GenericItem item;
-	
-	/**
-	 * Package protected constructor.
-	 */
-	ExternalPublishedItem(){}
-	
-    /**
-     * Set the generic item for this publication information
-     * 
-     * @param item
-     */
-    public ExternalPublishedItem(GenericItem item)
-    {
-    	setItem(item);
-    }
 
 	/**
 	 * Get the date item was published
@@ -67,22 +49,22 @@ public class ExternalPublishedItem extends BasePersistent {
 	}
 
 	/**
-	 * Set the date item was published.  
+	 * Set the date item was published
 	 * 
 	 * @param datePublished date item was published
 	 */
 	void setPublishedDate(PublishedDate publishedDate) {
 		this.publishedDate = publishedDate;
+		
 	}
 	
 	/**
-	 * Update the published date with the given values.  If month, day and year are 
-	 * all 0 published date is set to null.  If published date does not yet exist,
-	 * a new one is created.
+	 * Add the publish date
 	 * 
 	 * @param month
 	 * @param day
 	 * @param year
+	 * @return publlished date
 	 */
 	public PublishedDate updatePublishedDate(int month, int day, int year)
 	{
@@ -196,21 +178,4 @@ public class ExternalPublishedItem extends BasePersistent {
 		return true;
 	}
 	
-	/**
-	 * Get the item.
-	 * 
-	 * @return
-	 */
-	public GenericItem getItem() {
-		return item;
-	}
-
-	/**
-	 * Set the item
-	 * 
-	 * @param item
-	 */
-	void setItem(GenericItem item) {
-		this.item = item;
-	}
 }
