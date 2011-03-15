@@ -67,7 +67,8 @@ public class HbContentTypeDAO implements ContentTypeDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("contentTypeCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("contentTypeCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

@@ -18,12 +18,12 @@ package edu.ur.hibernate.ir.item.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.item.ItemLink;
 import edu.ur.ir.item.ItemLinkDAO;
 
@@ -64,7 +64,8 @@ public class HbItemLinkDAO implements ItemLinkDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemLinkCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemLinkCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

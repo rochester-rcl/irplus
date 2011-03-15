@@ -72,7 +72,8 @@ public class HbIrRoleDAO implements IrRoleDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irRoleCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irRoleCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

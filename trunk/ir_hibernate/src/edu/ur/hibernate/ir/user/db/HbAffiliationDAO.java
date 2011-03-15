@@ -68,7 +68,8 @@ public class HbAffiliationDAO implements AffiliationDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("affiliationCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("affiliationCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

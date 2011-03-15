@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -70,7 +71,8 @@ public class HbSharedInboxFileDAO implements SharedInboxFileDAO{
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("sharedInboxFileCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("sharedInboxFileCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

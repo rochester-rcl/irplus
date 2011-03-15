@@ -25,7 +25,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Query;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.groupspace.GroupWorkspaceGroup;
 import edu.ur.ir.security.IrAcl;
 import edu.ur.ir.security.IrAclDAO;
 import edu.ur.ir.security.Sid;
@@ -74,7 +74,8 @@ public class HbIrAclDAO implements IrAclDAO {
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irAclCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclCount");
+		return (Long) q.uniqueResult();
 	}
 
 	/**
@@ -84,9 +85,10 @@ public class HbIrAclDAO implements IrAclDAO {
 	 */
 	public IrAcl getAcl(Long objectId, String className) {
 		IrAcl acl = null;
-		Object[] ids = new Object[] {objectId, className};
-		acl = (IrAcl) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irAclByObjectIdentity", ids));
-
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByObjectIdentity");
+		q.setParameter("objectId", objectId);
+		q.setParameter("name", className);
+		acl = (IrAcl) q.uniqueResult();
 		return acl;
 	}
 
@@ -107,8 +109,11 @@ public class HbIrAclDAO implements IrAclDAO {
 			    log.debug("User id = " + user.getId() + " identity id = "
 					+ objectId + " class type = "+ className);
 			}
-			Object[] ids = new Object[] {user.getId(), objectId, className};
-			acl = (IrAcl) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irAclByUserAndObjectIdentity", ids));
+			Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByUserAndObjectIdentity");
+			q.setParameter("userId", user.getId());
+			q.setParameter("objectId", objectId);
+			q.setParameter("name", className);
+			acl = (IrAcl) q.uniqueResult();
 		}
 		else if( sid instanceof IrUserGroup)
 		{
@@ -118,8 +123,11 @@ public class HbIrAclDAO implements IrAclDAO {
 			    log.debug("User Group id = " + userGroup.getId() + " identity id = "
 					+ objectId + " class type = "+ className);
 			}
-			Object[] ids = new Object[] {userGroup.getId(), objectId, className};
-			acl = (IrAcl) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irAclByUserGroupAndObjectIdentity", ids));
+			Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByUserGroupAndObjectIdentity");
+			q.setParameter("groupId", userGroup.getId());
+			q.setParameter("objectId", objectId);
+			q.setParameter("name", className);
+			acl = (IrAcl) q.uniqueResult();
 		}
 		else if( sid instanceof IrRole)
 		{
@@ -129,8 +137,25 @@ public class HbIrAclDAO implements IrAclDAO {
 			    log.debug("Role id = " + role.getId() + " identity id = "
 					+ objectId + " class type = "+ className);
 			}
-			Object[] ids = new Object[] {role.getId(), objectId, className};
-			acl = (IrAcl) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irAclByRoleAndObjectIdentity", ids));
+			Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByRoleAndObjectIdentity");
+			q.setParameter("roleId", role.getId());
+			q.setParameter("objectId", objectId);
+			q.setParameter("name", className);
+			acl = (IrAcl) q.uniqueResult();
+		}
+		else if( sid instanceof GroupWorkspaceGroup)
+		{
+			GroupWorkspaceGroup group = (GroupWorkspaceGroup)sid;
+			if( log.isDebugEnabled())
+			{
+			    log.debug("GroupWorkspaceGroup id = " + group.getId() + " identity id = "
+					+ objectId + " class type = "+ className);
+			}
+			Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByGroupWorkspaceGroupAndObjectIdentity");
+			q.setParameter("groupId", group.getId());
+			q.setParameter("objectId", objectId);
+			q.setParameter("name", className);
+			acl = (IrAcl) q.uniqueResult();
 		}
 		else
 		{
@@ -186,8 +211,9 @@ public class HbIrAclDAO implements IrAclDAO {
 			{
 			    log.debug("User id = " + user.getId());
 			}
-			
-			acls = (List<IrAcl>) (hbCrudDAO.getHibernateTemplate().findByNamedQuery("irAclByUser", user.getId()));
+			Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByUser");
+			q.setParameter("userId", user.getId());
+			acls = (List<IrAcl>) q.list();
 		}
 		else if( sid instanceof IrUserGroup)
 		{
@@ -196,7 +222,9 @@ public class HbIrAclDAO implements IrAclDAO {
 			{
 			    log.debug("User Group id = " + userGroup.getId());
 			}
-			acls = (List<IrAcl>) (hbCrudDAO.getHibernateTemplate().findByNamedQuery("irAclByUserGroup", userGroup.getId()));
+			Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByUserGroup");
+			q.setParameter("groupId", userGroup.getId());
+			acls = (List<IrAcl>) q.list();
 		}
 		else if( sid instanceof IrRole)
 		{
@@ -205,7 +233,20 @@ public class HbIrAclDAO implements IrAclDAO {
 			{
 			    log.debug("Role id = " + role.getId());
 			}
-			acls = (List<IrAcl>) (hbCrudDAO.getHibernateTemplate().findByNamedQuery("irAclByRole", role.getId()));
+			Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByRole");
+			q.setParameter("roleId", role.getId());
+			acls = (List<IrAcl>) q.list();
+		}
+		else if( sid instanceof GroupWorkspaceGroup)
+		{
+			GroupWorkspaceGroup group = (GroupWorkspaceGroup)sid;
+			if( log.isDebugEnabled())
+			{
+			    log.debug("Group workspace Group id = " + group.getId());
+			}
+			Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irAclByGroupWorkspaceGroup");
+			q.setParameter("groupId", group.getId());
+			acls = (List<IrAcl>) q.list();
 		}
 		else
 		{
@@ -230,9 +271,26 @@ public class HbIrAclDAO implements IrAclDAO {
 			    log.debug("User id = " + user.getId() + " identity id = "
 					+ objectId + " class type = "+ className);
 			}
-			Object[] ids = new Object[] {user.getId(), objectId, className, permission};
-			count += (Long) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("userHasPermissionDirectCount", ids));
-            count += (Long) HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("userHasPermissionByGroupCount", ids));
+			Query q1 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("userHasPermissionDirectCount");
+			q1.setParameter("userId", user.getId());
+			q1.setParameter("objectId", objectId );
+			q1.setParameter("className", className);
+			q1.setParameter("permissionName", permission);
+			count += (Long)q1.uniqueResult();
+			
+			Query q2 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("userHasPermissionByGroupCount");
+			q2.setParameter("userId", user.getId());
+			q2.setParameter("objectId", objectId );
+			q2.setParameter("className", className);
+			q2.setParameter("permissionName", permission);
+			count += (Long)q2.uniqueResult();
+			
+			Query q3 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("userHasPermissionByGroupWorkspaceGroupCount");
+			q3.setParameter("userId", user.getId());
+			q3.setParameter("objectId", objectId );
+			q3.setParameter("className", className);
+			q3.setParameter("permissionName", permission);
+			count += (Long)q3.uniqueResult();
 		}
 		else
 		{
@@ -251,11 +309,28 @@ public class HbIrAclDAO implements IrAclDAO {
 	public Set<Sid> getSidsWithPermissionForObject(Long objectId, String className,
 			String permission) {
 		HashSet<Sid> sids = new HashSet<Sid>();
-		Object[] ids = new Object[] { objectId, className, permission};
-		List<Sid> userSids = (List<Sid>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("usersWithSpecifiedPermission", ids);
-		List<Sid> groupSids = (List<Sid>)hbCrudDAO.getHibernateTemplate().findByNamedQuery("groupsWithSpecifiedPermission", ids);
+		
+		Query q1 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("usersWithSpecifiedPermission");
+		q1.setParameter("objectId", objectId);
+		q1.setParameter("className", className);
+		q1.setParameter("permissionName", permission);
+		List<Sid> userSids = (List<Sid>) q1.list();
+		
+		Query q2 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupsWithSpecifiedPermission");
+		q2.setParameter("objectId", objectId);
+		q2.setParameter("className", className);
+		q2.setParameter("permissionName", permission);
+		List<Sid> groupSids = (List<Sid>) q2.list();
+		
+		Query q3 = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupsWorksapceGroupsWithSpecifiedPermission");
+		q3.setParameter("objectId", objectId);
+		q3.setParameter("className", className);
+		q3.setParameter("permissionName", permission);
+		List<Sid> workspaceGroupSids = (List<Sid>) q3.list();
+		
 		sids.addAll(userSids);
 		sids.addAll(groupSids);
+		sids.addAll(workspaceGroupSids);
 		return sids;
 	}
 	
@@ -270,6 +345,7 @@ public class HbIrAclDAO implements IrAclDAO {
 		HashSet<Sid> sids = new HashSet<Sid>();
 		Set<Long> userIds = new HashSet<Long>();
 		Set<Long> groupIds = new HashSet<Long>();
+		Set<Long> groupWorkspaceGroupIds = new HashSet<Long>();
 		
 		for(Sid sid : specificSids)
 		{
@@ -281,6 +357,10 @@ public class HbIrAclDAO implements IrAclDAO {
 			{
 				groupIds.add( ((IrUserGroup)sid).getId() );
 			}
+			else if( sid.getSidType().equals(GroupWorkspaceGroup.WORKSPACE_GROUP_SID_TYPE))
+			{
+				groupWorkspaceGroupIds.add( ((GroupWorkspaceGroup)sid).getId() );
+			}
 			else
 			{
 				throw new IllegalStateException("Unknown sid type " + sid.getSidType());
@@ -290,11 +370,11 @@ public class HbIrAclDAO implements IrAclDAO {
 		
 		if( userIds.size() > 0 )
 		{
-		    Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("specifiedUsersWithPermission");
+		    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("specifiedUsersWithPermission");
 	
-		    q.setLong(0, objectId);
-		    q.setString(1, className);
-		    q.setString(2, permission);
+		    q.setParameter("objectId", objectId);
+		    q.setParameter("className", className);
+		    q.setParameter("permissionName", permission);
 		    q.setParameterList("userIds", userIds);
 		
 		    List<Sid> userSids = (List<Sid>)q.list();
@@ -303,11 +383,24 @@ public class HbIrAclDAO implements IrAclDAO {
 
 		if( groupIds.size() > 0 )
 		{
-		    Query q = hbCrudDAO.getHibernateTemplate().getSessionFactory().getCurrentSession().getNamedQuery("specifiedGroupsWithPermission");
+		    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("specifiedGroupsWithPermission");
 		
-		    q.setLong(0, objectId);
-		    q.setString(1, className);
-		    q.setString(2, permission);
+		    q.setParameter("objectId", objectId);
+		    q.setParameter("className", className);
+		    q.setParameter("permissionName", permission);
+		    q.setParameterList("groupIds", groupIds);
+		
+		    List<Sid> groupSids = (List<Sid>)q.list();
+		    sids.addAll(groupSids);
+		}
+		
+		if( groupWorkspaceGroupIds.size() > 0 )
+		{
+		    Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("specifiedGroupWorkspaceGroupsWithPermission");
+		
+		    q.setParameter("objectId", objectId);
+		    q.setParameter("className", className);
+		    q.setParameter("permissionName", permission);
 		    q.setParameterList("groupIds", groupIds);
 		
 		    List<Sid> groupSids = (List<Sid>)q.list();

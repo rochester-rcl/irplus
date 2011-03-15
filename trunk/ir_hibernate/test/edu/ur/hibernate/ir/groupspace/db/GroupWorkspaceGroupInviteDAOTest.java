@@ -116,7 +116,7 @@ public class GroupWorkspaceGroupInviteDAOTest
 		
 	    group = groupWorkspaceGroupDAO.getById(group.getId(), false);
         GroupWorkspaceGroupInvite invite = group.inviteUser("test@mail.com", user, "123");
-        invite.setInviteMessage("invite message");
+        invite.getInviteToken().setInviteMessage("invite message");
 		inviteDAO.makePersistent(invite);
 		
 		//complete the transaction
@@ -125,10 +125,10 @@ public class GroupWorkspaceGroupInviteDAOTest
 		ts = tm.getTransaction(td);
 		GroupWorkspaceGroupInvite other = inviteDAO.getById(invite.getId(), false);
 		assert other.equals(invite) : "The user invite information should be equal invite = " + invite + " other = " + other;
-		assert invite.getEmail() == "test@mail.com" : "Email should be equal but email = " + invite.getEmail();
-		assert invite.getInviteMessage() == "invite message" : "Message should be equal";
-		assert invite.getToken() == "123" : "inviteInfo should be equal";
-		assert invite.getInvitingUser().equals(user) : "User should be equal user = " + user + " invitingUser = " + invite.getInvitingUser();
+		assert invite.getInviteToken().getEmail() == "test@mail.com" : "Email should be equal but email = " + invite.getInviteToken().getEmail();
+		assert invite.getInviteToken().getInviteMessage() == "invite message" : "Message should be equal";
+		assert invite.getInviteToken().getToken() == "123" : "inviteInfo should be equal";
+		assert invite.getInviteToken().getInvitingUser().equals(user) : "User should be equal user = " + user + " invitingUser = " + invite.getInviteToken().getInvitingUser();
 		assert (inviteDAO.findInviteInfoForToken("123")).equals(other) : "The user inviteInfo should be equal";
 		List<GroupWorkspaceGroupInvite> invites = inviteDAO.getInviteInfoByEmail("TeSt@Mail.com");
 		assert invites.size() == 1 : "Should find one invite but found " + invites.size();

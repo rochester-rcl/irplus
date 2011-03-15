@@ -78,7 +78,8 @@ public class HbResearcherDAO implements ResearcherDAO {
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("researcherCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("researcherCount");
+		return (Long)q.uniqueResult();
 	}
 	
 	public Researcher getById(Long id, boolean lock) {

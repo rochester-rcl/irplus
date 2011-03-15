@@ -68,7 +68,8 @@ public class HbFieldDAO implements FieldDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("fieldCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("fieldCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

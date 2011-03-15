@@ -70,7 +70,8 @@ public class HbSeriesDAO implements SeriesDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("seriesCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("seriesCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

@@ -2,6 +2,7 @@ package edu.ur.hibernate.ir.user.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -70,7 +71,8 @@ public class HbUserWorkspaceIndexProcessingRecordDAO implements UserWorkspaceInd
 	}
 
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("userWorkspaceIndexProcessingRecordCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("userWorkspaceIndexProcessingRecordCount");
+		return (Long)q.uniqueResult();
 	}
 
 }

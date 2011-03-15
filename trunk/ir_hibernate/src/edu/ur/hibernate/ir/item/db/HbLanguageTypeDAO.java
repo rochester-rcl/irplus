@@ -70,7 +70,8 @@ public class HbLanguageTypeDAO implements LanguageTypeDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("languageTypeCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("languageTypeCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

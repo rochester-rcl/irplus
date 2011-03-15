@@ -37,25 +37,15 @@
 		<!-- A versioned entity. -->
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
-		
-	    <property name="email" column="email" type="string"
-			not-null="true" access="field" />
 
-		<property name="token" column="token" type="string"
-			not-null="true" access="field" />
-			
-		<property name="createdDate" column="created_date" type="timestamp"
-			not-null="true" access="field" />
-
-		<!--  user sending the invitation -->
-		<many-to-one class="edu.ur.ir.user.IrUser" 
-			name="invitingUser" 
-			column="inviting_user_id" 
-			insert="true"
-			update="false" 
+		<!--  invite token -->
+		<many-to-one class="edu.ur.ir.invite.InviteToken"
+			name="inviteToken" 
+			column="invite_token_id" 
+			cascade="all"
 			unique="true" 
 			access="field"/>
-	
+			
 		<!--  user being invited -->
 		<many-to-one class="edu.ur.ir.user.IrUser" 
 			name="invitedUser" 
@@ -77,13 +67,13 @@
     </class>
 		
     <!-- named query for getting invite information for given token-->
-    <query name="findGroupWorkspaceGroupInviteForToken">from GroupWorkspaceGroupInvite inviteInfo where inviteInfo.token = :token </query> 
+    <query name="findGroupWorkspaceGroupInviteForToken">from GroupWorkspaceGroupInvite inviteInfo where inviteInfo.inviteToken.token = :token </query> 
  
     <!-- named query for getting invite information for given email -->
-    <query name="findGroupWorkspaceGroupInviteForEmail">from GroupWorkspaceGroupInvite inviteInfo where lower(inviteInfo.email) = :email </query> 
+    <query name="findGroupWorkspaceGroupInviteForEmail">from GroupWorkspaceGroupInvite inviteInfo where lower(inviteInfo.inviteToken.email) = :email </query> 
     
     <!-- named query for getting invite information made by a given user -->
-    <query name="getGroupWorkspaceGroupInviteMadeByUser">from GroupWorkspaceGroupInvite inviteInfo where invitingUser.id = :userId </query> 
+    <query name="getGroupWorkspaceGroupInviteMadeByUser">from GroupWorkspaceGroupInvite inviteInfo where inviteInfo.inviteToken.invitingUser.id = :userId </query> 
     
     	<!--  Get a count of roles in the system -->
 	<query name="groupWorkspaceGroupInviteCount">
@@ -93,13 +83,13 @@
 		<!-- sort by last name asc -->
 	<query name="getGroupWorkspaceGroupInviteOrderByInvitorAsc">
 		select inviteInfo from GroupWorkspaceGroupInvite as inviteInfo
-		order by inviteInfo.group.groupWorkspace.name asc, inviteInfo.invitingUser.lowerCaseLastName asc, inviteInfo.invitingUser.lowerCaseFirstName asc, inviteInfo.invitingUser.lowerCaseMiddleName asc
+		order by inviteInfo.group.groupWorkspace.name asc, inviteInfo.inviteToken.invitingUser.lowerCaseLastName asc, inviteInfo.inviteToken.invitingUser.lowerCaseFirstName asc, inviteInfo.inviteToken.invitingUser.lowerCaseMiddleName asc
 	</query>	
 
 	<!-- sort by last name desc -->
 	<query name="getGroupWorkspaceGroupInviteOrderByInvitorDesc">
 		select inviteInfo from GroupWorkspaceGroupInvite as inviteInfo
-		order by inviteInfo.group.groupWorkspace.name desc, inviteInfo.invitingUser.lowerCaseLastName desc, inviteInfo.invitingUser.lowerCaseFirstName desc, inviteInfo.invitingUser.lowerCaseMiddleName desc
+		order by inviteInfo.group.groupWorkspace.name desc, inviteInfo.inviteToken.invitingUser.lowerCaseLastName desc, inviteInfo.inviteToken.invitingUser.lowerCaseFirstName desc, inviteInfo.inviteToken.invitingUser.lowerCaseMiddleName desc
 	</query>	
 	
 </hibernate-mapping>

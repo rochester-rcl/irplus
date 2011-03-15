@@ -18,10 +18,10 @@ package edu.ur.hibernate.ir.person.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonNameAuthorityDAO;
 import edu.ur.order.OrderType;
@@ -64,7 +64,8 @@ public class HbPersonNameAuthorityDAO implements PersonNameAuthorityDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("personCount");
+		return (Long)q.uniqueResult();
 	}
 	
 	/**

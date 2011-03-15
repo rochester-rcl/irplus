@@ -16,10 +16,10 @@
 
 package edu.ur.hibernate.ir.item.db;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.item.ItemTitle;
 import edu.ur.ir.item.ItemTitleDAO;
 
@@ -60,7 +60,8 @@ public class HbItemTitleDAO implements ItemTitleDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemTitleCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemTitleCount");
+		return (Long)q.uniqueResult();
 	}
 
 	public ItemTitle getById(Long id, boolean lock) {

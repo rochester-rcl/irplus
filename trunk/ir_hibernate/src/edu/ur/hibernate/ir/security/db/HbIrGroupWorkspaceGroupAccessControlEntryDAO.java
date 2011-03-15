@@ -14,40 +14,41 @@
    limitations under the License.
 */  
 
-package edu.ur.hibernate.ir.security.db;
 
+package edu.ur.hibernate.ir.security.db;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
+import edu.ur.ir.groupspace.GroupWorkspaceGroup;
 import edu.ur.ir.security.IrClassType;
 import edu.ur.ir.security.IrClassTypePermission;
-import edu.ur.ir.security.IrUserGroupAccessControlEntry;
-import edu.ur.ir.security.IrUserGroupAccessControlEntryDAO;
-import edu.ur.ir.user.IrUserGroup;
+import edu.ur.ir.security.IrGroupWorkspaceGroupAccessControlEntry;
+import edu.ur.ir.security.IrGroupWorkspaceGroupAccessControlEntryDAO;
 
 /**
- * DAO Implementation for user group access control entry
+ * Implementation for group workspace group access control entries.
  * 
  * @author Nathan Sarr
  *
  */
-public class HbIrUserGroupAccessControlEntryDAO implements 
-IrUserGroupAccessControlEntryDAO 
+public class HbIrGroupWorkspaceGroupAccessControlEntryDAO implements 
+IrGroupWorkspaceGroupAccessControlEntryDAO
 {
-	/** eclipse generated id */
-	private static final long serialVersionUID = -6233995403157802235L;
 	
-	/** helper for persistence operations */
-	private final HbCrudDAO<IrUserGroupAccessControlEntry> hbCrudDAO;
+	
+	/* eclipse generated id */
+	private static final long serialVersionUID = -1949888515822971852L;
+	
+	/* helper for persistence operations */
+	private final HbCrudDAO<IrGroupWorkspaceGroupAccessControlEntry> hbCrudDAO;
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbIrUserGroupAccessControlEntryDAO() {
-		hbCrudDAO = new HbCrudDAO<IrUserGroupAccessControlEntry>(IrUserGroupAccessControlEntry.class);
+	public HbIrGroupWorkspaceGroupAccessControlEntryDAO() {
+		hbCrudDAO = new HbCrudDAO<IrGroupWorkspaceGroupAccessControlEntry>(IrGroupWorkspaceGroupAccessControlEntry.class);
 	}
 	
 	/**
@@ -66,7 +67,7 @@ IrUserGroupAccessControlEntryDAO
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irUserGroupAccessEntryCount");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceGroupAccessEntryCount");
 		return (Long)q.uniqueResult();
 	}
 
@@ -75,7 +76,7 @@ IrUserGroupAccessControlEntryDAO
 	 * 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */
-	public IrUserGroupAccessControlEntry getById(Long id, boolean lock) {
+	public IrGroupWorkspaceGroupAccessControlEntry getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
@@ -84,7 +85,7 @@ IrUserGroupAccessControlEntryDAO
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
 	 */
-	public void makePersistent(IrUserGroupAccessControlEntry entity) {
+	public void makePersistent(IrGroupWorkspaceGroupAccessControlEntry entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
@@ -93,7 +94,7 @@ IrUserGroupAccessControlEntryDAO
 	 * 
 	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
 	 */
-	public void makeTransient(IrUserGroupAccessControlEntry entity) {
+	public void makeTransient(IrGroupWorkspaceGroupAccessControlEntry entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 
@@ -102,14 +103,15 @@ IrUserGroupAccessControlEntryDAO
 	 * 
 	 * @see edu.ur.ir.security.IrUserGroupAccessControlEntryDAO#getUserGroupPermissionCountForClassType(edu.ur.ir.user.IrUserGroup, edu.ur.ir.security.IrClassTypePermission, edu.ur.ir.security.IrClassType)
 	 */
-	public Long getUserGroupPermissionCountForClassType(IrUserGroup userGroup,
+	public Long getPermissionCountForClassType(GroupWorkspaceGroup group,
 			IrClassTypePermission classTypePermission, IrClassType classType) {
-		Long[] ids = new Long[] {classType.getId(),
-				classTypePermission.getId(), 
-				userGroup.getId() };
-		Long count =  (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("permissionCountForClassType", 
-					ids));
-		return count;
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceGroupPermissionCountForClassType");
+		q.setParameter("classTypeId", classType.getId());
+		q.setParameter("permissionId", classTypePermission.getId() );
+		q.setParameter("workspaceGroupId", group.getId());
+		return (Long)q.uniqueResult();
+		
 	}
 
 	/**
@@ -118,16 +120,15 @@ IrUserGroupAccessControlEntryDAO
 	 * 
 	 * @see edu.ur.ir.security.IrUserGroupAccessControlEntryDAO#getUserGroupPermissionCountForClassTypeObject(edu.ur.ir.user.IrUserGroup, edu.ur.ir.security.IrClassTypePermission, edu.ur.ir.security.IrClassType, java.lang.Long)
 	 */
-	public Long getUserGroupPermissionCountForClassTypeObject(
-			IrUserGroup userGroup, IrClassTypePermission classTypePermission,
+	public Long getPermissionCountForClassTypeObject(
+			GroupWorkspaceGroup group, IrClassTypePermission classTypePermission,
 			IrClassType classType, Long objectId) {
-		Long[] ids = new Long[] {classType.getId(),
-				classTypePermission.getId(), 
-				userGroup.getId(),
-				objectId};
-		Long count =  (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("permissionCountForClassTypeObject", 
-					ids));
-		return count;
+		
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("groupWorkspaceGroupPermissionCountForClassTypeObject");
+		q.setParameter("classTypeId", classType.getId());
+		q.setParameter("permissionId", classTypePermission.getId() );
+		q.setParameter("workspaceGroupId", group.getId());
+		q.setParameter("objectId", objectId);
+		return (Long)q.uniqueResult();
 	}
-
 }

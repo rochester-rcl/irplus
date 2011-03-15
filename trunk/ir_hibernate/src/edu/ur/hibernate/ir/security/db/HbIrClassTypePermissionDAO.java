@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.security.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -65,7 +66,8 @@ public class HbIrClassTypePermissionDAO implements IrClassTypePermissionDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irClassTypePermissionCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irClassTypePermissionCount");
+		return (Long)q.uniqueResult();
 	}
 
 	/**

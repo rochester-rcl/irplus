@@ -16,12 +16,10 @@
 
 package edu.ur.hibernate.ir.user.db;
 
-import java.util.List;
-
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.user.PersonalItemDeleteRecord;
 import edu.ur.ir.user.PersonalItemDeleteRecordDAO;
 
@@ -57,7 +55,8 @@ public class HbPersonalItemDeleteRecordDAO implements PersonalItemDeleteRecordDA
     }
 
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personalItemDeleteRecordCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("personalItemDeleteRecordCount");
+		return (Long)q.uniqueResult();
 	}
 
 	public PersonalItemDeleteRecord getById(Long id, boolean lock) {

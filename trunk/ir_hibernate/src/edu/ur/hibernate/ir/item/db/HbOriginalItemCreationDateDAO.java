@@ -16,10 +16,10 @@
 
 package edu.ur.hibernate.ir.item.db;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.item.OriginalItemCreationDate;
 import edu.ur.ir.item.OriginalItemCreationDateDAO;
 
@@ -60,7 +60,8 @@ public class HbOriginalItemCreationDateDAO implements OriginalItemCreationDateDA
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("originalItemCreationDateCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("originalItemCreationDateCount");
+		return (Long)q.uniqueResult();
 	}
 
 	public OriginalItemCreationDate getById(Long id, boolean lock) {

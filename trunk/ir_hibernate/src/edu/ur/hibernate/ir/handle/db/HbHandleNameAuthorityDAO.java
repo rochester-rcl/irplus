@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.handle.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -59,8 +60,8 @@ public class HbHandleNameAuthorityDAO implements HandleNameAuthorityDAO{
 	
 	
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("handleNameAuthorityCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("handleNameAuthorityCount");
+		return (Long)q.uniqueResult();
 	}
 
 	

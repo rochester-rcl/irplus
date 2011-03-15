@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.handle.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -58,8 +59,8 @@ public class HbHandleInfoDAO implements HandleInfoDAO{
     }
 	
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("handleInfoCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("handleInfoCount");
+		return (Long)q.uniqueResult();
 	}
 	
 	/**

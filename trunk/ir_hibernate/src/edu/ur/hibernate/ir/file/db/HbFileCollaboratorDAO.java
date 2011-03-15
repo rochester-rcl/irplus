@@ -18,6 +18,7 @@ package edu.ur.hibernate.ir.file.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -64,8 +65,8 @@ public class HbFileCollaboratorDAO implements FileCollaboratorDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("fileCollaboratorCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("fileCollaboratorCount");
+		return (Long)q.uniqueResult();
 	}
 	
 	/**

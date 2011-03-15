@@ -19,6 +19,7 @@ package edu.ur.hibernate.ir.item.db;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -58,8 +59,8 @@ public class HbItemVersionDAO implements ItemVersionDAO{
     }
 
 	public Long getCount() {
-		return (Long)
-		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemVersionCount"));
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemVersionCount");
+		return (Long)q.uniqueResult();
 	}
 
 	public ItemVersion getById(Long id, boolean lock) {
