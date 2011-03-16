@@ -514,6 +514,12 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			item.removePrimaryImageFile();
 		}
 			
+		// this properly removes all data from the database
+		// other wise a possible exception is thrown for duplicate
+		// unique key constraint because the old data was not removed
+		// on the next save.
+		itemService.makePersistent(item);
+
 		// Adds the selected report numbers
 		if (seriesIds != null) {
 			for (int i =0; i < seriesIds.length; i++ ) {
