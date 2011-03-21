@@ -123,17 +123,13 @@
             <!--  this is the body regin of the page -->
             <div id="bd">
             	
-            	 <h3> Browsing/Searching: <a href="browseRepositoryItems.action">${repository.name}</a> >
+            	 <h3> Browsing/Searching: <a href="home.action">${repository.name}</a> >
             	     <c:forEach var="collection" items="${collectionPath}">
-            	         <c:if test="${collection.id != institutionalCollection.id}">
-                         <c:url var="pathCollectionUrl" value="/browseCollectionItems.action">
+            	        
+                         <c:url var="pathCollectionUrl" value="/viewInstitutionalCollection.action">
                               <c:param name="collectionId" value="${collection.id}"/>
                          </c:url>
-                         <a href="${pathCollectionUrl}">${collection.name}</a> >
-                         </c:if>
-                         <c:if test="${collection.id == institutionalCollection.id}">
-                         ${collection.name}
-                         </c:if>
+                         <a href="${pathCollectionUrl}">${collection.name}</a> <c:if test="${collection.id != institutionalCollection.id}">&nbsp;>&nbsp;</c:if>
                      </c:forEach>
             	 </h3>
 		        

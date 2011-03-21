@@ -113,7 +113,7 @@
             <!--  this is the body regin of the page -->
             <div id="bd">
             	
-            	 <h3> Browse/Search: ${repository.name}</h3>
+            	 <h3> Browse/Search: <a href="home.action">${repository.name}</a></h3>
 		        
 		        
 		        <!--  set up tabs for editing news -->
