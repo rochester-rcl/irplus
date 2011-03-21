@@ -47,7 +47,7 @@
                     onMouseOver="this.className='highlight'"
                     onMouseOut="this.className='${rowClass}'">
                       	<c:if test='${ir:userHasRole("ROLE_ADMIN", "OR") || ir:isAdminOfGroup(user,userGroup)}'>
-	                        <urstb:td><a href="javascript:YAHOO.ur.usergroup.edit.removeMember(${user.id}, ${userGroup.id}, 0, 1, 1);">Remove User</a></urstb:td>
+	                        <urstb:td><a href="javascript:YAHOO.ur.usergroup.edit.removeMember(${member.id}, ${userGroup.id}, 0, 1, 1);">Remove User</a></urstb:td>
 	                    </c:if>
                         <urstb:td>${member.username}</urstb:td>
                         <urstb:td>${member.firstName}</urstb:td>
