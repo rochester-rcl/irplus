@@ -408,7 +408,7 @@
 	      	      
 	      <tr>
 	        <td class="rowBorder" colspan="2">
-	          <label  for="itemForm_externallyPublished">Will this item be considered published once submitted or been publicly distributed before?</label>
+	          <label  for="itemForm_externallyPublished">Will this be considered published once submitted, or has it been publicly distributed before?</label>
 	        </td>
 	       </tr>
 	        
