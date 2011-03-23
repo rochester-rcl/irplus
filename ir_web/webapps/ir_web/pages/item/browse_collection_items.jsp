@@ -362,7 +362,7 @@
 						                            </c:url>
 						                        <a href="${itemView}">${institutionalItem.name}</a><br>
                                                 <c:set var="description" value="${ir:getItemDescription(institutionalItem.versionedInstitutionalItem.currentVersion.item)}"/>
-						                        <c:if test="${!ir:isStringEmpty(description)}"><div class="smallText"><ur:maxText numChars="150" text="${description}"/></div></c:if>
+						                        <c:if test="${!ir:isStringEmpty(description)}"><div class="smallText"><ur:maxText numChars="350" text="${description}"/></div></c:if>
 						                        </urstb:td>
 						                        <urstb:td>
 						                            ${ir:getSlashedDate(institutionalItem.versionedInstitutionalItem.currentVersion.item.externalPublishedItem.publishedDate)}
