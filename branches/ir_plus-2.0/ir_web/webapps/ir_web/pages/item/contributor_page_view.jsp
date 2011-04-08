@@ -80,11 +80,11 @@
                                         <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                         <c:param name="researcherId" value="${researcher.id}"/>
                                    </c:url>
-                                   <img align="middle" height="66px" width="100px" src="${url}"/>
+                                   <img class="centered_thumbnail" src="${url}"/>
                                </c:if>	    
 								
 						        <c:if test="${researcher.primaryPicture == null }">
-				                     <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
+				                     <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
 						        </c:if>
 						     </td>
 						     <td width="22%">
@@ -104,7 +104,7 @@
 						</c:if>
 						<c:if test="${researcher == null || !researcher.public}">
 							<td width="12%">
-			                     <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
+			                     <img src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
 						     </td>						
 							<td width="22%">
 								<h3><a href="${contributorRss}"><ir:authorName personName="${personName}" displayDates="true"/></a>&nbsp;<img src="<c:url value='/page-resources/images/all-images/feed.jpg'/>" alt="RSS Feed"/></h3>
