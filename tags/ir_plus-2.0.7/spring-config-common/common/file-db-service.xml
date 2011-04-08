@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+   <!-- ****************************************** --> 
+   <!-- Checksum Related services                  -->
+   <!-- ****************************************** -->
+   
+   <bean id="md5ChecksumCalculator" class="edu.ur.file.checksum.Md5ChecksumCalculator"/>
+   
+   <bean id="checksumService" 
+       class="edu.ur.file.db.service.DefaultChecksumService">
+       <property name="checksumCalculators">
+           <list>
+               <ref bean="md5ChecksumCalculator"/>
+           </list>
+       </property>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- File storage strategies                    -->
+   <!-- ****************************************** -->
+   <bean id="simpleFileStoreStrategy" 
+       class="edu.ur.file.db.service.SimpleFileStoreStrategy"/>
+   
+   <!--  stores all files in a single folder  -->
+   <bean id="maxFilesStoreStrategy" 
+       class="edu.ur.file.db.service.MaxFilesStoreStrategy">
+       <property name="treeFolderInfoDAO" ref="treeFolderInfoDAO"/>
+       <property name="uniqueNameGenerator" ref="uniqueNameGenerator"/>
+       <property name="fileDatabaseDAO" ref="fileDatabaseDAO"/>
+       <property name="maxNumberOfFilesPerFolder" value="1000"/>
+   </bean> 
+   
+   
+   <!-- ****************************************** --> 
+   <!-- File Server Service Class  -->
+   <!-- ****************************************** --> 
+   <bean id="fileServerService" 
+       class="edu.ur.file.db.service.DefaultFileServerService">
+       <property name="fileServerDAO" ref="fileServerDAO"/>
+       <property name="fileDatabaseDAO" ref="fileDatabaseDAO"/>
+       <property name="treeFolderInfoDAO" ref="treeFolderInfoDAO"/>
+       <property name="fileInfoDAO" ref="fileInfoDAO"/>
+       <property name="checksumService" ref="checksumService"/>
+       <property name="defaultDatabaseFileStoreStrategy" ref="maxFilesStoreStrategy"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Sub type service Class  -->
+   <!-- ****************************************** --> 
+   <bean id="mimeTypeService" 
+       class="edu.ur.file.db.service.DefaultMimeTypeService">
+       <property name="topMediaTypeDAO" ref="topMediaTypeDAO"/>
+       <property name="subTypeDAO" ref="subTypeDAO"/>
+       <property name="subTypeExtensionDAO" ref="subTypeExtensionDAO"/>
+   </bean>
+   
+   
+
+ </beans>
