@@ -4,6 +4,7 @@ The following should be checked prior to release:
   - turn off test running
   - Set web.xml file to be non-ssl file
   - Set yui to download and unzip
+  - Set zip version number
   
 2.  Copy in help files
 
