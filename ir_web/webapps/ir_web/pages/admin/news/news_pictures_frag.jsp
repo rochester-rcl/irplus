@@ -42,7 +42,7 @@
                          <c:param name="newsItemId" value="${newsItem.id}"/>
                         <c:param name="irFileId" value="${newsItem.primaryPicture.id}"/>
                      </c:url>
-                     <img height="66px" width="100px" src="${url}"/>
+                     <img class="basic_thumbnail"  src="${url}"/>
                  </c:if>
 				   
 				</td>
@@ -92,7 +92,7 @@
                                   <c:param name="newsItemId" value="${newsItem.id}"/>
                                   <c:param name="irFileId" value="${irFile.id}"/>
                               </c:url>
-                              <img height="66px" width="100px" src="${url}"/>
+                              <img class="basic_thumbnail"  src="${url}"/>
                           </c:if>
                           </urstb:td>
                         

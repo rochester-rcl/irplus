@@ -307,7 +307,7 @@
                                  <c:if test="${ir:hasThumbnail(version.item.primaryImageFile.irFile)}">
                                      <ir:itemTransformUrl systemCode="PRIMARY_THUMBNAIL" download="true" itemFile="${version.item.primaryImageFile}" var="url"/>
                                         <c:if test="${url != null}">
-                                            <img height="66px" width="100px" src="${url}"/></a>
+                                            <img class="basic_thumbnail" src="${url}"/>
                                         </c:if>
                                  </c:if>
                               </c:if>

@@ -19,6 +19,33 @@
    main components on each of the pages
 */
 
+/* set the thumbnail and general picture sizes */
+
+.basic_thumbnail
+{
+	height: 66px;
+	width: 100px;
+}
+
+.centered_thumbnail
+{
+	height: 66px;
+	width: 100px;
+	align: middle;
+}
+
+.picture_module_size
+{
+	width:466px;
+	height:309px;
+}
+
+.noimage_size
+{
+	height:100px;
+	width:100px;
+}
+
 /* set the default link colors */
 a:link 
 { 
