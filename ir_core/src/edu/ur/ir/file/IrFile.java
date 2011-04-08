@@ -63,7 +63,7 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 	private boolean publicViewable = false;
 	
 	/** roll up download count for the ir file */
-	private Long downloadCount = Long.valueOf(0l);
+	private Long downloadCount = new Long(0l);
 	
 
 	/**
@@ -323,7 +323,7 @@ public class IrFile extends BasePersistent implements NameAware, DescriptionAwar
 		}
 		else
 		{
-			this.downloadCount = Long.valueOf(0l);
+			this.downloadCount = new Long(0l);
 		}
 	}
 

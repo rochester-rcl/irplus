@@ -244,7 +244,7 @@ public class NameSearch extends Pager implements  UserIdAware, Preparable  {
 		return userId;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

@@ -16,11 +16,12 @@
 
 package edu.ur.hibernate.ir.item.db;
 
+import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.ExternalPublishedItemDAO;
 
@@ -62,8 +63,7 @@ public class HbExternalPublishedItemDAO implements ExternalPublishedItemDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("sponsorCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("sponsorCount"));
 	}
 
 	public ExternalPublishedItem getById(Long id, boolean lock) {
@@ -77,4 +77,10 @@ public class HbExternalPublishedItemDAO implements ExternalPublishedItemDAO {
 	public void makeTransient(ExternalPublishedItem entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 }

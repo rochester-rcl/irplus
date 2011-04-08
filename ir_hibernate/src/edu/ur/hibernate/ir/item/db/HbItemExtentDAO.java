@@ -16,7 +16,8 @@
 
 package edu.ur.hibernate.ir.item.db;
 
-import org.hibernate.Query;
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -77,8 +78,7 @@ public class HbItemExtentDAO implements ItemExtentDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemExtentCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemExtentCount"));
 	}
 
 	/**
@@ -106,6 +106,15 @@ public class HbItemExtentDAO implements ItemExtentDAO{
 	 */
 	public void makeTransient(ItemExtent entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	/**
+	 * Get all of the item extents
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<ItemExtent> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	/**

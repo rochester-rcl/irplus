@@ -80,7 +80,11 @@ public class ItemTest {
 	
 		ItemIdentifier itemIdentifier = item.addItemIdentifier("4444-55-6644", identifierType);
 
-		FirstAvailableDate dateFirstAvailable = item.addFirstAvailableDate(12, 1, 1990);
+		FirstAvailableDate dateFirstAvailable = item.updateFirstAvailableDate(12, 1, 1990);
+		
+		assert dateFirstAvailable.getMonth() == 12 : "Moth equals " + dateFirstAvailable.getMonth();
+		assert dateFirstAvailable.getDay() == 1 : "Day equals " + dateFirstAvailable.getDay();
+		assert dateFirstAvailable.getYear() == 1990 : "Year equals " + dateFirstAvailable.getYear();
 		 
 		assert item.getDescription().equals("myDescription") : "Descriptions should be equal";
 		assert item.getName().equals("myName") : "Names should be equal";
@@ -340,7 +344,7 @@ public class ItemTest {
 		item.setPrimaryContentType(contentType);
 		item.addContributor(contributor);
 		item.setExternalPublishedItem(externalPublishedItem);
-		item.setFirstAvailableDate(new FirstAvailableDate(1, 30, 2008));
+		item.updateFirstAvailableDate(1, 30, 2008);
 		item.setId(10l);
 		item.setItemAbstract("itemAbstract");
 		item.addFile(irFile);
@@ -354,7 +358,7 @@ public class ItemTest {
 		item.setName("Itemname");
 		item.setOwner(owner);
 		item.setPublishedToSystem(true);
-		item.setOriginalItemCreationDate(new OriginalItemCreationDate(10,25,2008));
+		item.updateOriginalItemCreationDate(10,25,2008);
 		item.setReleaseDate(new Date());
 		item.addItemSponsor(sponsor);
 		item.addSubTitle("Title 2", "The articles");

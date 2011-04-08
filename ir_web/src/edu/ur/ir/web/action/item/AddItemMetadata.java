@@ -39,7 +39,6 @@ import edu.ur.ir.item.CopyrightStatementService;
 import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.ExtentTypeService;
 import edu.ur.ir.item.ExternalPublishedItem;
-import edu.ur.ir.item.FirstAvailableDate;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.IdentifierTypeService;
@@ -48,8 +47,6 @@ import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.item.LanguageType;
 import edu.ur.ir.item.LanguageTypeService;
-import edu.ur.ir.item.OriginalItemCreationDate;
-import edu.ur.ir.item.PublishedDate;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.PublisherService;
 import edu.ur.ir.item.Series;
@@ -492,23 +489,8 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			item.setReleaseDate(null);
 		}
 		
-		OriginalItemCreationDate cd = item.getOriginalItemCreationDate();
-		if (cd == null) {
-			item.addOriginalItemCreationDate(createdMonth, createdDay, createdYear);
-		} else {
-			cd.setDay(createdDay);
-			cd.setMonth(createdMonth);
-			cd.setYear(createdYear);
-		}
-		
-		FirstAvailableDate fd = item.getFirstAvailableDate();
-		if (fd == null) {
-			item.addFirstAvailableDate(firstAvailableMonth, firstAvailableDay, firstAvailableYear);
-		} else {
-			fd.setDay(firstAvailableDay);
-			fd.setMonth(firstAvailableMonth);
-			fd.setYear(firstAvailableYear);
-		}
+		item.updateOriginalItemCreationDate(createdMonth, createdDay, createdYear);
+		item.updateFirstAvailableDate(firstAvailableMonth, firstAvailableDay, firstAvailableYear);
 		
 		item.setPrimaryContentType(contentTypeService.getContentType(contentTypeId, false));
 		item.setLanguageType(languageTypeService.get(languageTypeId, false));
@@ -522,12 +504,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		item.removeAllItemSponsors();
 		item.removeAllNonPrimaryContentTypes();
 
-		ExternalPublishedItem oldPublishedData = null;
-		
-		if (!isExternallyPublished) {
-			oldPublishedData = item.getExternalPublishedItem();
-			item.setExternalPublishedItem(null);
-		}
+	
 		
 		if (primaryFileId != null && !primaryFileId.equals(0l)) {
 			item.addPrimaryImageFile(item.getItemFile(primaryFileId));
@@ -537,7 +514,10 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			item.removePrimaryImageFile();
 		}
 			
-		
+		// this properly removes all data from the database
+		// other wise a possible exception is thrown for duplicate
+		// unique key constraint because the old data was not removed
+		// on the next save.
 		itemService.makePersistent(item);
 
 		// Adds the selected report numbers
@@ -603,44 +583,32 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		if (isExternallyPublished) {
 			
 			ExternalPublishedItem ex = item.getExternalPublishedItem();
-
-			/* Create new externally published data */
-			if (ex == null) {
-				ExternalPublishedItem newExternalPublishedItem = new ExternalPublishedItem();
-				newExternalPublishedItem.setCitation(citation);
-				newExternalPublishedItem.setPublisher(publisherService.getPublisher(publisherId, false));
-				newExternalPublishedItem.addPublishedDate(publishedMonth, publishedDay, publishedYear);
-
-				item.setExternalPublishedItem(newExternalPublishedItem);
-			} else {
-				if (publisherId.equals(0l)) {
-					ex.setPublisher(null);
-				} else {
-					ex.setPublisher(publisherService.getPublisher(publisherId, false));
-				}
-				
-				PublishedDate pd = ex.getPublishedDate();
-				
-				if (pd == null) {
-					ex.addPublishedDate(publishedMonth, publishedDay, publishedYear);
-				} else {
-					pd.setDay(publishedDay);
-					pd.setMonth(publishedMonth);
-					pd.setYear(publishedYear);
-				}
-				
-				ex.setCitation(citation);
-				
+			
+			if( ex == null )
+			{
+				ex = item.createExternalPublishedItem();
 			}
+			
+			// add the publisher
+			if (publisherId.equals(0l)) {
+				ex.setPublisher(null);
+			} else {
+				ex.setPublisher(publisherService.getPublisher(publisherId, false));
+			}
+			
+			log.debug("before updating published date " + ex.getPublishedDate());
+			ex.updatePublishedDate(publishedMonth, publishedDay, publishedYear);
+			log.debug("published date is " + ex.getPublishedDate());
+			ex.setCitation(citation);
 		} 
+		else
+		{
+			item.deleteExternalPublishedItem();
+		}
 
 		// Save the item
 		itemService.makePersistent(item);
 		
-		// Delete old externally published data
-		if (oldPublishedData != null) {
-			itemService.deleteExternalPublishedItem(oldPublishedData);
-		}
 		
 		// Update personal item index
 		PersonalItem personalItem = userPublishingFileSystemService.getPersonalItem(item);
@@ -654,7 +622,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		
 		institutionalItemService.markAllInstitutionalItemsForIndexing(genericItemId, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 		institutionalItemVersionService.setAllVersionsAsUpdated(user, genericItemId, "Item Metadata Modified");
-
 		return SUCCESS;
 	}
 
@@ -1434,7 +1401,7 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		this.userService = userService;
 	}
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

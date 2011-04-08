@@ -653,7 +653,7 @@ public class ManagePersonNames extends ActionSupport implements   Preparable, Us
 	}
 
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

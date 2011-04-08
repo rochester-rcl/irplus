@@ -38,7 +38,7 @@ public class ExternalPublishedItem extends BasePersistent {
 	
 	/** Publisher for the item  */
 	private Publisher publisher;
-	
+
 	/**
 	 * Get the date item was published
 	 * 
@@ -53,7 +53,7 @@ public class ExternalPublishedItem extends BasePersistent {
 	 * 
 	 * @param datePublished date item was published
 	 */
-	public void setPublishedDate(PublishedDate publishedDate) {
+	void setPublishedDate(PublishedDate publishedDate) {
 		this.publishedDate = publishedDate;
 		
 	}
@@ -66,10 +66,29 @@ public class ExternalPublishedItem extends BasePersistent {
 	 * @param year
 	 * @return publlished date
 	 */
-	public PublishedDate addPublishedDate(int month, int day, int year) {
-		PublishedDate publishedDate = new PublishedDate(month, day, year);
-		publishedDate.setExternalPublishedItem(this);
-		this.publishedDate = publishedDate;
+	public PublishedDate updatePublishedDate(int month, int day, int year)
+	{
+		if(month > 0 || day > 0 || year > 0)
+		{
+			if( publishedDate != null )
+			{
+				publishedDate.setMonth(month);
+				publishedDate.setYear(year);
+				publishedDate.setDay(day);
+			}
+			else
+			{
+				this.publishedDate = new PublishedDate(month, day, year);
+				publishedDate.setExternalPublishedItem(this);
+			}
+		}
+		else
+		{
+			if( publishedDate != null )
+			{
+				publishedDate = null;
+			}
+		}
 		
 		return publishedDate;
 	}
@@ -158,4 +177,5 @@ public class ExternalPublishedItem extends BasePersistent {
 
 		return true;
 	}
+	
 }

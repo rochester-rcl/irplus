@@ -65,7 +65,7 @@
             <div id="bd">
                <h3>Version</h3>
                
-               <p>IR+ version 2.0</p>
+               <p>IR+ version 2.0.7</p>
                 
                <h3>About</h3> 
                

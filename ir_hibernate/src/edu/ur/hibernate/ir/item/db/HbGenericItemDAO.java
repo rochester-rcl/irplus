@@ -70,8 +70,8 @@ public class HbGenericItemDAO implements GenericItemDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("itemCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("itemCount"));
 	}
 
 	/**
@@ -178,6 +178,11 @@ public class HbGenericItemDAO implements GenericItemDAO{
 
 	public void makeTransient(GenericItem entity) {
 		hbCrudDAO.makeTransient(entity);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public Long getContributionCountByPersonName(PersonName personName) {

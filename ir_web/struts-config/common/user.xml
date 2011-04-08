@@ -20,12 +20,11 @@
     "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
     "http://struts.apache.org/dtds/struts-2.0.dtd" [
     <!ENTITY researcher SYSTEM "user_researcher.xml">
-    <!ENTITY group_workspace SYSTEM "user_group_workspace.xml">
     ]>
 <struts>
     
     <include file="struts-default.xml"/>
-    
+
     <package name="user" namespace="/user" extends="struts-default">
            <result-types>
                <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>
@@ -77,9 +76,6 @@
              </interceptor-stack>
              
         </interceptors>
-        <default-interceptor-ref name="default"/>
-        
-        <default-action-ref name="unknownAction" />
         
  
   		<global-results>
@@ -92,11 +88,6 @@
         <!--  Researcher actions                -->
         <!--  ************************************ -->
         &researcher;
-        
-        <!--  ************************************ -->
-        <!--  Group workspace actions              -->
-        <!--  ************************************ -->
-        &group_workspace;
                 
                 
         <!--  ************************************ -->
@@ -221,12 +212,6 @@
             <result name="notFound">/fileNotFound.jsp</result>
             <result name="success" type="no-op"/>
         </action> 
-        
-        <action name="viewFilesSharedWithUser"
-            class="edu.ur.ir.web.action.user.ViewAllFilesSharedWithUser">
-            <interceptor-ref name="crudStack"/>
-            <result name="success">/pages/user/workspace/view_all_files_shared_with_user.jsp</result>
-        </action>
         
         <!--  lock a file so that no other user can upload changes -->
         <action name="lockVersionedFile" class="edu.ur.ir.web.action.user.LockVersionedFile" >
@@ -962,7 +947,7 @@
         </action>
         
         <!--  ************************************ -->
-        <!--  Invite User actions (File)          -->
+        <!--  Invite User actions			       -->
         <!--  ************************************ -->
 
 		<action name="checkSharePermission" class="edu.ur.ir.web.action.user.InviteUser"
@@ -1025,38 +1010,7 @@
             <result name="added">/pages/user/workspace/add_invite_response.jsp</result>
         </action> 
 
-        <!--  ************************************ -->
-        <!--  Auto share folder actions (Folder)   -->
-        <!--  ************************************ -->
-        <action name="autoShareFolder" 
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        <action name="autoShareFolderWithUsers" 
-            method="autoShareFolder"
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        <action name="removeAutoShareFolder" 
-            method="deleteAutoShare"
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        <action name="removeAutoShareFolderInvite" 
-            method="deleteFolderInvite"
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        
-        
+ 
         <!--  ************************************ -->
         <!--  Change Password  actions			       -->
         <!--  ************************************ -->
@@ -1140,14 +1094,6 @@
             <result name="get">/pages/admin/item/metadata/persons/person_form_frag.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/persons/person_deleted.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
-        </action>
-        
-        <!--  special action for a user who is editing their own name in their account section -->
-        <action name="userInitialCreatePerson" 
-            method="create"
-            class="edu.ur.ir.web.action.person.ManagePersons">
-            <interceptor-ref name="crudStack" />
-            <result name="added">/pages/user/login/add_authoring_name_form_frag.jsp</result>
         </action>
         
         <!--  ************************************ -->

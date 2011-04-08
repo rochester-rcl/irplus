@@ -20,7 +20,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -73,8 +72,8 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("researcherFolderCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("researcherFolderCount"));
 	}
 
 	/**
@@ -194,6 +193,18 @@ public class HbResearcherFolderDAO implements ResearcherFolderDAO{
 		hbCrudDAO.getHibernateTemplate().findByNamedQuery("getResearcherFolderPath", values);
 	}
 	
+    
+
+	/**
+	 * Get all researcher folders in the system.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	/**
 	 * Get all researcher folders by id.
 	 * 

@@ -1,49 +1,6 @@
-IR+ changes 2.0 to 2.x
-==============================
-- Updated Approve affiliations - removed unneeded variables and imports
-- added last login date to user search results table 
-- updated to allow filtering by role and affiliation in user administration
-- Updated to allow administrators to view invite table
-   - allows administrators to delete an invite
-   - allows administrators to see list of named files shared
-- Updated to Lucene version 2.9.4
-- Updated to load user id when going to approve user affiliations - fixes menu bar
-- Updated to YUI 2.8.2 r1
-- Updated to PDF box 1.4.0
-- Updated to POI 3.7 
-- Updated to ivy 2.2.0
-- Updated to hibernate 3.6.0 Final
-- Added updated date to invite info
-- Added indexing capabilities for collections
-- Added indexing capabilities for user groups
-- Changed upload files to return access denied rather than files not uploaded for non-authoring users.
-- Updated to Spring 3.0.5
-- Updated to re-index all items within a collection tree if a new collection is added
-- Updated email to have a new column - lower case email to allow comparison by the lower case email
-  address
-- Updated file properties page to show emails that are shared with but users have not yet created an account
-- fixed to make back button work in personal files/folders workspace
-- Updated home page to set focus on search box
-- Updated Search / Browse page to set focus on search box
-- Added search interface to institutional collection admin section
-- Added job to allow administrators option to re-index all institutional collections
-- Updated collection page to show description of sub collections
-- Updated collections indexing to occur on new collection creation or updating of collection
-- Added Group workspaces admin option in administration drop down
-- Added setting to make system property headless = true for graphics processing
-- Added ability to have images open in browser based on setting
-- Added ability to see all files being shared with a given user
-- Added ability to see last login date 
-- Now removes the invite token if the user removes all files associated with invite
-- Updated to now properly use the default interceptor stack
-- Updated to correctly forward to action not found if user tries to enter an action that does not exist
-- Updated user admin to view all groups a user belongs to
-
-[ur_persistence_util]
-=============================
-- Removed getAll from HbCrudDAO and moved it into its own interface.  Removed method from all
-DAO classes that did not have a client using the method.
-
+IR+ 2.0.5 to 2.06.
+============================
+Fixed security vulnerabilities
 
 IR+ 2.0.4 to 2.0.5
 ============================
@@ -51,8 +8,8 @@ IR+ 2.0.4 to 2.0.5
 [Thanks to Paul Hoffman and Fenway Libraries Online] 
 
 IR+ 2.0.3 to 2.0.4
-===========================
-Updated to Struts 2.2.1 for security issue
+=============================
+- Updated to deal with Struts 2 security issue
 
 IR+ 2.0.2 to 2.0.3
 =============================
@@ -62,14 +19,8 @@ IR+ 2.0.1 to 2.0.2
 =============================
 - Fixed security issue for YUI library
 
+irplus changes 1.0 to 2.0
 
-IR+ Changes 2.0 to 2.0.1
-==============================
-Fixed issue with incorrect indexing of institutional items on submission
-
-
-IR+ changes 1.0 to 2.0
-===============================
 
 [Global]
 =============================

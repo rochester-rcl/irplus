@@ -27,7 +27,7 @@ import java.util.StringTokenizer;
  */
 public class SearchHelper {
 	
-	public static int MIN_STRING_WILD_CARD_ADD = 3;
+	public static int MIN_STRING_WILD_CARD_ADD = 4;
 	
 	/**
 	 * Prepares a string for searching - this removes problamatic characters.
@@ -42,7 +42,21 @@ public class SearchHelper {
 		// unbalanced quotes or no quotes
 		if( count == 0 || ((count % 2) != 0) )
 		{
-			return fixMainSearchStringSegment(value, wildCardTerms);
+			String newVal =  fixMainSearchStringSegment(value, wildCardTerms);
+			//make sure search has more than Min String wild card if user using star
+			if( stringHasEndingStar(newVal)  && newVal.length() < MIN_STRING_WILD_CARD_ADD )
+			{
+				if( newVal.length() > 1 )
+				{
+					newVal = newVal.substring(0, newVal.length() -1 );
+				}
+				else
+				{
+					newVal = "";
+				}
+			}
+			return newVal;
+			
 		}
 		else
 		{
@@ -137,6 +151,7 @@ public class SearchHelper {
 			}
 		}
 		
+
 		
 		return newValue;
 	}
@@ -369,7 +384,7 @@ public class SearchHelper {
 	
 	public static void main(String[] args)
 	{
-		String value = "\"this is a test\" hello nate \"more stuff \"";
+		String value = "\"P-Selectivity\" Immunity, and";
 		System.out.println(SearchHelper.prepareMainSearchString(value, true));
 	}
 

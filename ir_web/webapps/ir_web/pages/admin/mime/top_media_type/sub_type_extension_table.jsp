@@ -26,7 +26,6 @@
 <c:if test="${totalHits > 0}">
 	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 	<c:import url="browse_all_sub_type_extension_pager.jsp"/>
-	<br/>
 </c:if>
 
 
@@ -47,8 +46,8 @@
 	                    descendingSortAction="javascript:YAHOO.ur.subTypeExtension.getSubTypeExtensions(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'desc');">
 	                    <u>Name</u>                                              
 	                    <urstb:thImgSort
-	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					<urstb:td>Description</urstb:td>
 	                <urstb:td>Edit</urstb:td>
 	            </urstb:tr>

@@ -128,17 +128,59 @@
 	<!-- ********************************************************* -->
 	<query name="getRepositoryItemsByNameOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem
-	    where institutionalItem.institutionalCollection.repository.id = ?
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getRepositoryItemsByNameOrderDesc">
 	   select institutionalItem from InstitutionalItem as institutionalItem 	   
-	    where institutionalItem.institutionalCollection.repository.id = ?
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
+	<!--  by publication date order -->
+	<query name="getRepositoryItemsByPublicationDateOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
+	</query>
 	
+	<query name="getRepositoryItemsByPublicationDateOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
+	</query>
+	
+	<!--  by First made available to the public -->
+	<query name="getRepositoryItemsByFirstAvailableOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	<query name="getRepositoryItemsByFirstAvailableOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
+	</query>
 	
 	<!-- ********************************************************* -->
 	<!-- count of all institutional items in the system for a repository -->
@@ -152,17 +194,67 @@
 	
 	<query name="getRepositoryItemsByCharOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	  
-	    where institutionalItem.institutionalCollection.repository.id = ?
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getRepositoryItemsByCharOrderDesc">
 	   select institutionalItem from InstitutionalItem as institutionalItem 	   
-	    where institutionalItem.institutionalCollection.repository.id = ?
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
+	
+	<!--  by publication date order -->
+	<query name="getRepositoryItemsByCharPublicationDateOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
+	</query>
+	
+	
+	<query name="getRepositoryItemsByCharPublicationDateOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
+	</query>
+	
+	<!--  by First made available to the public -->
+	<query name="getRepositoryItemsByCharFirstAvailableOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	<query name="getRepositoryItemsByCharFirstAvailableOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
+	</query>
+	
 	
 	<!-- ********************************************************* -->
 	<!-- count of all institutional items in the system for a repository -->
@@ -176,18 +268,65 @@
 	
 	<query name="getRepositoryItemsByCharRangeOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	  
-	    where institutionalItem.institutionalCollection.repository.id = ?
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getRepositoryItemsByCharRangeOrderDesc">
 	   select institutionalItem from InstitutionalItem as institutionalItem 	   
-	    where institutionalItem.institutionalCollection.repository.id = ?
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
+		<!--  by publication date order -->
+	<query name="getRepositoryItemsByCharRangePublicationDateOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
+	</query>
+	
+	<query name="getRepositoryItemsByCharRangePublicationDateOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
+	</query>
+	
+		<!--  by First made available to the public -->
+	<query name="getRepositoryItemsByCharRangeFirstAvailableOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	<query name="getRepositoryItemsByCharRangeFirstAvailableOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.repository.id = :repositoryId
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
+	</query>
 	
 	<!-- ********************************************************* -->
 	<!--get institutional collection items by name ordered -->
@@ -195,17 +334,68 @@
 
 	<query name="getInstitutionalCollectionItemsByNameOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
-	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
-	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 		
     <query name="getInstitutionalCollectionItemsByNameOrderDesc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
-	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
-	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
+	
+	<!--  by publication date order -->
+	<query name="getInstitutionalCollectionItemsPublicationDateOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
+	</query>
+	
+	
+	<query name="getInstitutionalCollectionItemsPublicationDateOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
+	</query>
+	
+	<!--  by first available date order -->
+	<query name="getInstitutionalCollectionItemsFirstAvailableOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	
+	<query name="getInstitutionalCollectionItemsFirstAvailableOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc item.lowerCaseName desc
+	</query>
+	
 	
    <!-- ********************************************************* -->
 	<!-- institutional item ids  -->
@@ -237,18 +427,72 @@
 	
 	<query name="getInstitutionalCollectionItemsByCharOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
-	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
-	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	     and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getInstitutionalCollectionItemsByCharOrderDesc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
-	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
-	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	     and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = ?
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
+	</query>
+	
+	<!--  by publication date order -->
+	<query name="getInstitutionalCollectionItemsByCharPublicationDateOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
+	</query>
+	
+	
+	<query name="getInstitutionalCollectionItemsByCharPublicationDateOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
+	</query>
+	
+	<!--  by first available date order -->
+	<query name="getInstitutionalCollectionItemsByCharFirstAvailableOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	
+	
+	<query name="getInstitutionalCollectionItemsByCharFirstAvailableOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar = :firstChar
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
 	</query>
 	
    <!-- ********************************************************* -->
@@ -264,20 +508,73 @@
 	
 	<query name="getCollectionItemsByCharRangeOrderAsc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
-	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
-	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName asc
 	</query>
 	
     <query name="getCollectionItemsByCharRangeOrderDesc">
 	    select institutionalItem from InstitutionalItem as institutionalItem 	    
-	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
-	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
-	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between ? and ?
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
 	    order by institutionalItem.versionedInstitutionalItem.currentVersion.item.lowerCaseName desc
 	</query>
 	
+	<!--  by publication date order -->
+	<query name="getInstitutionalCollectionItemsByCharRangePublicationDateOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
+	    order by coalesce(publishedDate.year, -1) asc, coalesce(publishedDate.month,-1) asc, coalesce(publishedDate.day,-1) asc, item.lowerCaseName asc
+	</query>
+	
+	
+	<query name="getInstitutionalCollectionItemsByCharRangePublicationDateOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.externalPublishedItem as publishedItem
+	    left outer join publishedItem.publishedDate as publishedDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
+	    order by coalesce(publishedDate.year, -1) desc, coalesce(publishedDate.month,-1) desc, coalesce(publishedDate.day,-1) desc, item.lowerCaseName desc
+	</query>
+	
+	
+	<!--  by first available date order -->
+	<query name="getInstitutionalCollectionItemsByCharRangeFirstAvailableOrderAsc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
+	    order by coalesce(availableDate.year,-1) asc, coalesce(availableDate.month, -1) asc, coalesce(availableDate.day, -1) asc, item.lowerCaseName asc
+	</query>
+	             
+	<query name="getInstitutionalCollectionItemsByCharRangeFirstAvailableOrderDesc">
+	    select institutionalItem from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedItem
+	    join versionedItem.currentVersion as currentVersion
+	    join currentVersion.item as item
+	    left outer join item.firstAvailableDate as availableDate
+	    where institutionalItem.institutionalCollection.leftValue  between :leftVal and :rightVal
+	    and institutionalItem.institutionalCollection.treeRoot.id = :rootId 
+	    and institutionalItem.versionedInstitutionalItem.currentVersion.item.nameFirstChar between :firstChar and :lastChar
+	    order by coalesce(availableDate.year, -1) desc, coalesce(availableDate.month, -1) desc, coalesce(availableDate.day, -1) desc, item.lowerCaseName desc
+	</query>
 	
 	 <!-- ********************************************************* -->
 	<!-- General item counts -->

@@ -30,7 +30,7 @@
     <dependencies>
 
         <!-- spring files -->
-        <dependency org="org.springframework" name="spring-core" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-core" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-core" type="jar"/>
         </dependency>
 

@@ -40,6 +40,9 @@ public class PersonalFile extends BasePersistent implements FileSystem{
 	/**  Parent Personal folder for this file information */
 	private PersonalFolder personalFolder;
 	
+	/** The file system type  */
+	private FileSystemType fileSystemType = FileSystemType.PERSONAL_FILE;
+	
 	/** User who owns the personal file */
 	private IrUser owner;
 	
@@ -118,8 +121,9 @@ public class PersonalFile extends BasePersistent implements FileSystem{
 	public int hashCode()
 	{
 		int hashCode = 0;
+		hashCode += getName() == null ? 0 : getName().hashCode();
 		hashCode += owner == null ? 0 : owner.hashCode();
-		hashCode += getFullPath() == null ? 0 : getFullPath().hashCode();
+		hashCode += personalFolder == null ? 0 : personalFolder.hashCode();
 		return hashCode;
 	}
 	
@@ -205,7 +209,7 @@ public class PersonalFile extends BasePersistent implements FileSystem{
 	 * @see edu.ur.ir.FileSystem#getFileSystemType()
 	 */
 	public FileSystemType getFileSystemType() {
-		return FileSystemType.PERSONAL_FILE;
+		return fileSystemType;
 	}
 
 	/**

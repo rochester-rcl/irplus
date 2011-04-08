@@ -46,7 +46,7 @@ public class ExternalPublishedItemDAOTest {
 	
 	PublisherDAO publisherDAO = (PublisherDAO) ctx
 	.getBean("publisherDAO");
-
+	
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
 	.getBean("transactionManager");
 	
@@ -59,15 +59,18 @@ public class ExternalPublishedItemDAOTest {
 	@Test
 	public void baseExternalPublishedItemDAOTest() throws Exception{
 
- 		Publisher p = new Publisher("publisher");
-		publisherDAO.makePersistent(p);
+ 		
 
         TransactionStatus ts = tm.getTransaction(td);
- 
-		ExternalPublishedItem e = new ExternalPublishedItem();
+        Publisher p = new Publisher("publisher");
+		publisherDAO.makePersistent(p);
+		
+		
+		
+		ExternalPublishedItem e =  new ExternalPublishedItem();
  		e.setCitation("citation");
         e.setPublisher(p);
-        e.addPublishedDate(5,13, 2008);
+        e.updatePublishedDate(5,13, 2008);
         
  		externalPublishedItemDAO.makePersistent(e);
  	    tm.commit(ts);
@@ -75,6 +78,10 @@ public class ExternalPublishedItemDAOTest {
  	    ts = tm.getTransaction(td);
 
  		ExternalPublishedItem other = externalPublishedItemDAO.getById(e.getId(), false);
+ 		assert other.getPublishedDate().getMonth() == 5 : "Month equals " + other.getPublishedDate().getMonth();
+ 		assert other.getPublishedDate().getDay() == 13 : "Day equals " + other.getPublishedDate().getDay();
+ 		assert other.getPublishedDate().getYear() == 2008 : "Day equals " + other.getPublishedDate().getYear();
+ 		
         assert other.equals(e) : "External published item data should be equal";
         
         externalPublishedItemDAO.makeTransient(other);
@@ -86,7 +93,54 @@ public class ExternalPublishedItemDAOTest {
         Publisher publisherOther = publisherDAO.getById(p.getId(), false);
         publisherDAO.makeTransient(publisherOther);
         assert  publisherDAO.getById(publisherOther.getId(), false) == null : "Should no longer be able to find publisher";
+        tm.commit(ts);
+	}
+	
+	/**
+	 * Test external published item data persistance
+	 */
+	@Test
+	public void externalPublishedItemUpdatePublishedDateDAOTest() throws Exception{
+
+		TransactionStatus ts = tm.getTransaction(td);
+ 		
+		Publisher p = new Publisher("publisher");
+		publisherDAO.makePersistent(p);
+
+		ExternalPublishedItem e = new ExternalPublishedItem();
+ 		e.setCitation("citation");
+        e.setPublisher(p);
+        e.updatePublishedDate(5,13, 2008);
         
+ 		externalPublishedItemDAO.makePersistent(e);
+ 	    tm.commit(ts);
+ 	    
+ 	    ts = tm.getTransaction(td);
+
+ 		ExternalPublishedItem other = externalPublishedItemDAO.getById(e.getId(), false);
+ 		assert other.getPublishedDate().getMonth() == 5 : "Month equals " + other.getPublishedDate().getMonth();
+ 		assert other.getPublishedDate().getDay() == 13 : "Day equals " + other.getPublishedDate().getDay();
+ 		assert other.getPublishedDate().getYear() == 2008 : "Day equals " + other.getPublishedDate().getYear();
+ 		
+        assert other.equals(e) : "External published item data should be equal";
+        other.updatePublishedDate(0, 0, 0);
+        assert other.getPublishedDate() == null : "Publshed date should be null";
+        externalPublishedItemDAO.makePersistent(other);
+        tm.commit(ts);
+        
+        
+        ts = tm.getTransaction(td);
+        other = externalPublishedItemDAO.getById(e.getId(), false);
+        assert other.getPublishedDate() == null : "Publshed date should be null";
+        externalPublishedItemDAO.makeTransient(other);
+        assert  externalPublishedItemDAO.getById(other.getId(), false) == null : "Should no longer be able to find external published item data";
+        tm.commit(ts);
+        
+        ts = tm.getTransaction(td);
+
+        Publisher publisherOther = publisherDAO.getById(p.getId(), false);
+        publisherDAO.makeTransient(publisherOther);
+        assert  publisherDAO.getById(publisherOther.getId(), false) == null : "Should no longer be able to find publisher";
         tm.commit(ts);
 	}
 }

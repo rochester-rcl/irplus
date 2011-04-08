@@ -32,7 +32,7 @@ public class ReIndexInstitutionalItem extends ActionSupport{
 	{
 		log.debug("re index institutional items called");
 		IndexProcessingType updateType = indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE);
-		institutionalItemIndexProcessingRecordService.processItemsInRepository(updateType, true);
+		institutionalItemIndexProcessingRecordService.processItemsInRepository(updateType);
 		return SUCCESS;
 	}
 

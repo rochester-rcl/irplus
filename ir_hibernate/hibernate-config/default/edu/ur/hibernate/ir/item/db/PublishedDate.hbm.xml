@@ -63,8 +63,11 @@
 			
 		<!--  Parent Item -->
 		<many-to-one class="ExternalPublishedItem"
-			name="externalPublishedItem" column="external_published_item_id" insert="true"
-			update="true" access="field"/>   
+			name="externalPublishedItem" 
+			column="external_published_item_id" 
+			insert="true"
+			update="true" 
+			access="field"/>   
 
 	</class>
 		
