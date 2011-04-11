@@ -1,16 +1,20 @@
 The following should be checked prior to release:
 
-1.  Check build file 
-  - turn off test running
-  - Set web.xml file to be non-ssl file
-  - Set yui to download and unzip
-  - Set zip version number
+1.  Check build file(s) 
+  - turn off test running (base.xml)
+  - Set web.xml file to be non-ssl file (ir_web/build.xml)
+  - Set yui to download and unzip (ir_web/build.xml)
+  - Set zip version number (build.xml)
   
 2.  Copy in help files
+   - root of zip file
+   - into web app pages/help
+      (admin-help.pdf)
+      (user-help.pdf)
 
 3.  Copy ir_plus.properties file from test into production folder
 
-4.  Ensure version is set in about page
+4.  Ensure version is set in about page and build.xml
 
 5.  Zip file
 
