@@ -1,0 +1,262 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for Sponsor.
+	
+	@author Sharmila Ranganathan
+-->
+<hibernate-mapping package="edu.ur.ir.item">
+	<class name="Sponsor" schema="ir_item" table="sponsor"
+		lazy="true">
+
+        <cache usage="nonstrict-read-write" />
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="sponsor_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_item.sponsor_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+			
+	     <property name="sponsorFirstChar" column="sponsor_name_first_char" type="char"
+			not-null="true" access="field" />	
+			
+					
+	 </class>
+
+	<!--  Get a count of sponsors in the system -->
+	<query name="sponsorCount">
+	    select count(*) from Sponsor
+	</query>
+	
+	<!-- named query for getting all sponsors ordered by name -->
+    <query name="getAllSponsorNameAsc">from Sponsor order by name </query>
+    
+    <!-- named query for getting a Sponsor by name -->
+	<query name="getSponsorByName">
+		from Sponsor as Sponsor where
+		Sponsor.name = ?
+	</query>	
+	
+	<!-- named query for getting a Sponsor order by name asc -->
+	<query name="getSponsorsOrderByNameAsc">
+		from Sponsor order by name asc
+	</query>
+	
+	<!-- named query for getting a Sponsor order by name desc -->
+	<query name="getSponsorsOrderByNameDesc">
+		from Sponsor order by name desc
+	</query>	
+	
+	<!-- ********************************************************* -->
+	<!-- count of all sponsors in the repository -->
+	<!-- By character  -->
+	<!-- ********************************************************* -->
+
+	<!-- named query for getting a cont of Sponsors order by name first char -->
+	<query name="getSponsorsNameFirstCharCount">
+		select count(*) 
+		from Sponsor where sponsorFirstChar = ?
+	</query>
+
+	<!-- named query for getting a Sponsor order by name first char desc -->
+	<query name="getSponsorsOrderByNameFirstCharDesc">
+		from Sponsor where sponsorFirstChar = :sponsorFirstChar
+		order by name desc
+	</query>
+	
+	<!-- named query for getting a Sponsor order by name first char asc -->
+	<query name="getSponsorsOrderByNameFirstCharAsc">
+		from Sponsor where sponsorFirstChar = :sponsorFirstChar
+		order by name asc
+	</query>	
+	
+	<!-- ********************************************************* -->
+	<!-- count of all sponsors in the repository -->
+	<!-- by character range -->
+	<!-- ********************************************************* -->
+	
+	<!-- named query for getting a cont of Sponsors order by name first char -->
+	<query name="getSponsorsOrderByNameFirstCharRangeCount">
+		select count(*) 
+		from Sponsor where sponsorFirstChar between ? and ?
+	</query>
+
+	<!-- named query for getting a cont of Sponsors order by name first char -->
+	<query name="getSponsorsOrderByNameFirstCharRangeAsc">
+		from Sponsor where sponsorFirstChar between :firstChar and :secondChar
+		order by name asc
+	</query>
+
+	<!-- named query for getting a cont of Sponsors order by name first char -->
+	<query name="getSponsorsOrderByNameFirstCharRangeDesc">
+		from Sponsor where sponsorFirstChar between :firstChar and :secondChar
+		order by name desc
+	</query>
+	
+	
+	<!-- ********************************************************* -->
+	<!-- get all sponsors in the system for a collection -->
+	<!-- ********************************************************* -->
+
+	<query name="getCollectionSponsorNameByNameOrderAsc">
+	    select distinct(sponsor) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor 
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    order by sponsor.name asc
+	</query>
+		
+    <query name="getCollectionSponsorNameByNameOrderDesc">
+	    select distinct(sponsor) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor 
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    order by sponsor.name desc
+	</query>
+	
+	<!-- ********************************************************* -->
+	<!-- count of all institutional item sponsors in the system for a collection -->
+	<!-- ********************************************************* -->
+	<query name="sponsorCollectionNameCount">
+	    select count(distinct sponsor.id ) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor 
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	</query>
+	
+    <!-- ********************************************************* -->
+	<!-- count of all institutional item sponsors in the system for a collection by letter-->
+	<!-- ********************************************************* -->
+	<query name="collectionSponsorNameCountByChar">
+	    select count(distinct sponsor.id ) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor 
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and sponsor.sponsorFirstChar = ?
+	</query>
+	
+	<query name="getCollectionSponsorNameByCharOrderAsc">
+	    select distinct(sponsor) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor 
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and sponsor.sponsorFirstChar = ?
+	    order by sponsor.name asc
+	</query>
+	
+    <query name="getCollectionSponsorNameByCharOrderDesc">
+        select distinct(sponsor) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor 
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and sponsor.sponsorFirstChar = ?
+	    order by sponsor.name desc
+	</query>
+	
+   <!-- ********************************************************* -->
+	<!-- count of all institutional items sponsors in the system for a collection tree -->
+	<!-- By character RANGE  -->
+	<!-- ********************************************************* -->
+	<query name="sponsorCollectionNameCountByCharRange">
+	    select count(distinct sponsor.id) 
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor 
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and sponsor.sponsorFirstChar between ? and ?
+	</query>
+	
+	<query name="getCollectionSponsorNameByCharRangeOrderAsc">
+	    select distinct(sponsor)
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor 
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and sponsor.sponsorFirstChar between ? and ?
+	    order by sponsor.name asc
+	</query>
+	
+    <query name="getCollectionSponsorNameByCharRangeOrderDesc">
+	    select distinct(sponsor)
+	    from InstitutionalItem as institutionalItem
+	    join institutionalItem.versionedInstitutionalItem as versionedInstitutionalItem
+	    join versionedInstitutionalItem.institutionalItemVersions as institutionalItemVersion
+	    join institutionalItemVersion.item as item
+	    join item.itemSponsors as itemSponsor
+	    join itemSponsor.sponsor as sponsor 
+	    where institutionalItem.institutionalCollection.leftValue  between ? and ?
+	    and institutionalItem.institutionalCollection.treeRoot.id = ? 
+	    and sponsor.sponsorFirstChar between ? and ?
+	    order by sponsor.name desc
+	</query>
+		
+</hibernate-mapping>

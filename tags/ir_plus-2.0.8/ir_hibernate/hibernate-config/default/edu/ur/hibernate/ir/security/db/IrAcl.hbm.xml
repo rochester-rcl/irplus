@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for an IrObjectIdentity.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.ir.security">
+	<class name="IrAcl" table="ir_security.acl"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="acl_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_security.acl_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="entriesInheriting" column="entries_inheriting" type="boolean"
+			not-null="true" access="field" />
+
+		<property name="objectId" column="object_id" type="long"
+			not-null="true" access="field" />
+
+		<!-- Class Type-->
+		<many-to-one class="IrClassType" not-null="true" access="field"
+			name="classType" column="class_type_id" insert="true"/>
+			
+		<!--  Parent ACL -->
+		<many-to-one class="IrAcl"
+			name="irParentAcl" column="parent_id" insert="true"
+			update="true" access="field"/>
+		
+		<!-- User Access control entries for this acl -->
+		<set name="userEntries" 
+		    optimistic-lock="false"
+		    access="field" 
+		    inverse="true" 
+		    cascade="all-delete-orphan" 
+		    lazy="true"
+		    fetch="subselect">
+		    <key column="acl_id" not-null="true"/>
+		    <one-to-many class="edu.ur.ir.security.IrUserAccessControlEntry"/>
+		</set>
+		
+		<!-- Role Access control entries for this acl -->
+		<set name="roleEntries"
+		    optimistic-lock="false" 
+		    access="field" 
+		    inverse="true" 
+		    cascade="all-delete-orphan" 
+		    lazy="true"
+		    fetch="subselect">
+		    <key column="acl_id" not-null="true"/>
+		    <one-to-many class="IrRoleAccessControlEntry"/>
+		</set>
+		
+		<!-- Group Access control entries for this acl -->
+		<set name="groupEntries" 
+		     optimistic-lock="false" 
+		     access="field" 
+		     inverse="true" 
+		     cascade="all-delete-orphan" 
+		     lazy="true"
+		     fetch="subselect">
+		    <key column="acl_id" not-null="true"/>
+		    <one-to-many class="IrUserGroupAccessControlEntry"/>
+		</set>
+			
+	 </class>
+		
+	<!--  Get a count of the acl objects in the system -->
+	<query name="irAclCount">
+	    select count(*) from IrAcl
+	</query>
+	
+	<!--  get the Acl entries for a user and object identity -->
+	<query name="irAclByUserAndObjectIdentity" >
+	    select irAcl from IrAcl irAcl
+	    join irAcl.userEntries as entry 
+        where entry.irUser.id = ? 
+        and irAcl.objectId = ?
+        and irAcl.classType.name = ?
+	</query>
+	
+	<!--  get the Acl entries for a group and object identity -->
+	<query name="irAclByUserGroupAndObjectIdentity" >
+	    select irAcl from IrAcl irAcl
+	    join irAcl.groupEntries as entry 
+        where entry.userGroup.id = ? 
+        and irAcl.objectId = ?
+        and irAcl.classType.name = ?
+	</query>
+	
+	<!--  get the Acl entries for a role and object identity -->
+	<query name="irAclByRoleAndObjectIdentity" >
+	    select irAcl from IrAcl irAcl
+	    join irAcl.roleEntries as entry 
+        where entry.irRole.id = ? 
+        and irAcl.objectId = ?
+        and irAcl.classType.name = ?
+	</query>
+	
+	<!--  get the Acl entries for a user -->
+	<query name="irAclByObjectIdentity" >
+	    select irAcl from IrAcl irAcl
+        where irAcl.objectId = ?
+        and irAcl.classType.name = ?
+	</query>
+
+	<!--  get the Acl entries for a user -->
+	<query name="irAclByUser" >
+	    select irAcl from IrAcl irAcl
+	    join irAcl.userEntries as entry 
+        where entry.irUser.id = ? 
+	</query>
+	
+	<!--  get the Acl entries for a user group-->
+	<query name="irAclByUserGroup" >
+	    select irAcl from IrAcl irAcl
+	    join irAcl.groupEntries as entry 
+        where entry.userGroup.id = ? 
+	</query>
+
+	<!--  get the Acl entries for a role-->
+	<query name="irAclByRole" >
+	    select irAcl from IrAcl irAcl
+	    join irAcl.roleEntries as entry 
+        where entry.irRole.id = ? 
+	</query>
+	
+	<!--  get the Acl entries for a user and object identity -->
+	<query name="userHasPermissionDirectCount" >
+	    select count(*) from IrAcl irAcl
+	      join irAcl.userEntries as entry 
+	      join entry.irClassTypePermissions as classPermission
+        where entry.irUser.id = ? 
+        and irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
+	</query>
+	
+	<!--  get the Acl entries for a user and object identity with 
+	      the specified permission-->
+	<query name="userHasPermissionByGroupCount" >
+	    select count(*) from IrAcl irAcl
+	      join irAcl.groupEntries as groupEntries 
+	      join groupEntries.userGroup.users as user
+	      join groupEntries.irClassTypePermissions as classPermission
+        where user.id = ? 
+        and irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
+	</query>
+	
+	<!--  get the Acl entries for a group that has the specified permission for the 
+	      given object -->
+	<query name="groupsWithSpecifiedPermission" >
+	    select userGroup from IrAcl irAcl
+	      join irAcl.groupEntries as groupEntries 
+	      join groupEntries.userGroup as userGroup
+	      join groupEntries.irClassTypePermissions as classPermission
+        where  irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
+	</query>
+		
+    <!--  get the Acl entries for a user and object identity with the specified permissions -->
+	<query name="usersWithSpecifiedPermission" >
+	    select user from IrAcl irAcl
+	      join irAcl.userEntries as userEntries 
+	      join userEntries.irUser as user
+	      join userEntries.irClassTypePermissions as classPermission
+        where  irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
+	</query>
+	
+	<!--  get the Acl entries for a group that has the specified permission for the 
+	      given object -->
+	<query name="specifiedGroupsWithPermission" >
+	    select userGroup from IrAcl irAcl
+	      join irAcl.groupEntries as groupEntries 
+	      join groupEntries.userGroup as userGroup
+	      join groupEntries.irClassTypePermissions as classPermission
+        where  irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
+        and userGroup.id in (:groupIds)
+	</query>
+	
+    <!--  get the Acl entries for a group and object identity -->
+	<query name="specifiedUsersWithPermission" >
+	    select user from IrAcl irAcl
+	      join irAcl.userEntries as userEntries 
+	      join userEntries.irUser as user
+	      join userEntries.irClassTypePermissions as classPermission
+        where  irAcl.objectId = ?
+        and irAcl.classType.name = ?
+        and classPermission.name = ?
+        and user.id in (:userIds)
+	</query>
+
+   
+</hibernate-mapping>
