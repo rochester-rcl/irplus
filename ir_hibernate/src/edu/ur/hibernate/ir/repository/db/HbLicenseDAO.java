@@ -1,10 +1,11 @@
 package edu.ur.hibernate.ir.repository.db;
 
+import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.repository.License;
 import edu.ur.ir.repository.LicenseDAO;
 
@@ -40,6 +41,14 @@ public class HbLicenseDAO implements LicenseDAO{
     }
 	
 	/** 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
+	/** 
 	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
 	 */
 	public License getById(Long id, boolean lock) {
@@ -65,8 +74,7 @@ public class HbLicenseDAO implements LicenseDAO{
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("licenseCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("licenseCount"));
 	}
 
 }

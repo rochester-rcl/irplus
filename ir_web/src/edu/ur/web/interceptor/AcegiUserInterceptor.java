@@ -95,14 +95,11 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 			
 			if( user != null )
 			{
-				log.debug("injecting user id");
-	            ((UserIdAware) action).injectUserId(user.getId());
+	            ((UserIdAware) action).setUserId(user.getId());
 			}
 			else
 			{
-				log.debug("setting user id to null");
-				// make sure user id is cleared out
-				((UserIdAware) action).injectUserId(null);
+				((UserIdAware) action).setUserId(null);
 			}
 	    }
 		
@@ -118,21 +115,11 @@ public class AcegiUserInterceptor extends AbstractInterceptor implements StrutsS
 	}
 
 
-	/**
-	 * Get the user service to access information.
-	 * 
-	 * @return
-	 */
 	public UserService getUserService() {
 		return userService;
 	}
 
 
-	/**
-	 * Set the user service to access information.
-	 * 
-	 * @param userService
-	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}

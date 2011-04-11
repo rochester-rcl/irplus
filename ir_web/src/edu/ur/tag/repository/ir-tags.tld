@@ -711,7 +711,6 @@
 			boolean isContributor(edu.ur.ir.item.GenericItem, edu.ur.ir.person.PersonName)
 		</function-signature>
 	</function>
-	
 	<function>
 		<name>getItemDescription</name>
 		<function-class>
@@ -722,15 +721,15 @@
 		</function-signature>
 	</function>
 	
-	
    <function>
-		<name>isGroupWorkspaceOwner</name>
+		<name>getSlashedDate</name>
 		<function-class>
-			edu.ur.tag.repository.GroupWorkspaceWebUtilFunctions
+			edu.ur.tag.repository.DateUtilFunctions
 		</function-class>
 		<function-signature>
-			boolean isGroupWorkspaceOwner(edu.ur.ir.groupspace.GroupWorkspace)
+			String getSlashedDate(edu.ur.ir.Date)
 		</function-signature>
 	</function>
+	
   
 </taglib>

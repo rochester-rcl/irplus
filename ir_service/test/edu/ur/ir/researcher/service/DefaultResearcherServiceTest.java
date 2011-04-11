@@ -248,7 +248,8 @@ public class DefaultResearcherServiceTest {
 
 			// new transaction
 			ts = tm.getTransaction(td);
-			
+			researcher = researcherService.getResearcher(researcher.getId(), false);
+			item = itemService.getGenericItem(item.getId(), false);
 			ResearcherPublication p = researcherFileSystemService.createRootPublication(researcher, item, 1);
 			
 			tm.commit(ts);

@@ -26,7 +26,6 @@
     <!ENTITY insitutional_collection SYSTEM "admin_collection.xml">
     <!ENTITY handle SYSTEM "admin_handle.xml">
     <!ENTITY file_storage SYSTEM "admin_file_storage.xml">
-    <!ENTITY group_spaces SYSTEM "admin_group_spaces.xml">
     ]>
     
 <struts>
@@ -42,7 +41,6 @@
         <interceptors>
              <interceptor name="user" class="edu.ur.web.interceptor.AcegiUserInterceptor"/>
              <interceptor name="emailError" class="edu.ur.web.interceptor.EmailErrorInterceptor"/>
-             
              <interceptor-stack name="default">
                 <interceptor-ref name="emailError"/>
                 <interceptor-ref name="defaultStack"/>
@@ -83,11 +81,6 @@
             </interceptor-stack>
         </interceptors>
         
-        <!--  set the default action for this package -->
-        <default-interceptor-ref name="default"/>
-        
-         <default-action-ref name="unknownAction" />
-         
          <global-results>
         	 <result name="change-password">/pages/home.jsp</result>
         </global-results>
@@ -126,11 +119,6 @@
         <!--  File Storage Actions                 -->
         <!--  ************************************ -->
         &file_storage;
-        
-        <!--  ************************************ -->
-        <!--  group spaces Actions                 -->
-        <!--  ************************************ -->
-        &group_spaces;
         
         <!--  ************************************ -->
         <!--  Administration Home Page             -->

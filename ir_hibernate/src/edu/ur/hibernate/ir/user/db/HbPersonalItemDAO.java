@@ -63,6 +63,13 @@ public class HbPersonalItemDAO implements PersonalItemDAO {
     }
 	
 	/**
+	 * Return all PersonalItems in the system
+	 */
+	public List<PersonalItem> getAll() {
+		return hbCrudDAO.getAll();
+	}
+
+	/**
 	 * Return PersonalItem by id
 	 */
 	public PersonalItem getById(Long id, boolean lock) {

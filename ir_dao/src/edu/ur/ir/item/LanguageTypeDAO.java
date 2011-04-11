@@ -20,7 +20,6 @@ import java.util.List;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.UniqueNameDAO;
 import edu.ur.dao.UniqueSystemCodeDAO;
@@ -32,7 +31,7 @@ import edu.ur.dao.UniqueSystemCodeDAO;
  *
  */
 public interface LanguageTypeDAO extends CountableDAO, 
-CrudDAO<LanguageType>, NameListDAO, UniqueNameDAO<LanguageType>,UniqueSystemCodeDAO<LanguageType>, ListAllDAO
+CrudDAO<LanguageType>, NameListDAO, UniqueNameDAO<LanguageType>,UniqueSystemCodeDAO<LanguageType>
 {
 	/**
 	 * Get the list of language types order by name

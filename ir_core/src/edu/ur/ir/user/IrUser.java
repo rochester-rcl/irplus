@@ -162,12 +162,9 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	/** represents an external account that a user can be authenticated against */
 	private ExternalUserAccount externalAccount;
 	
-	/** last date the user logged in - takes on most recent login date*/
+	/** last date the user logged in */
 	private Timestamp lastLoginDate;
 	
-	/** most recent login date - this will be stored every time user logs in*/
-	private Timestamp mostRecentLoginDate;
-
 
 
 	/**
@@ -214,18 +211,20 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 * Get the user email based on email.
 	 * 
 	 * @param email
-	 * @return the user email otherwise null
+	 * @return
 	 */
 	public UserEmail getUserEmail(String email)
 	{
+		UserEmail myEmail = null;
 		for( UserEmail userEmail : emails)
 		{
-			if( userEmail.getEmail().equalsIgnoreCase(email))
+			if( userEmail.getEmail().equals(email))
 			{
-				return userEmail;
+				myEmail = userEmail;
+				break;
 			}
 		}
-		return null;
+		return myEmail;
 	}
 
 
@@ -1791,7 +1790,7 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	
 	
 	/**
-	 * Date last time user logged into the system in relation to the most recent login date.
+	 * Date last time user logged into the system.
 	 * 
 	 * @return - last time the user logged into the system
 	 */
@@ -1804,34 +1803,8 @@ public class IrUser extends BasePersistent implements PersistentUser, UserDetail
 	 * 
 	 * @param lastLoginDate - last time the user logged into the system
 	 */
-	private void setLastLoginDate(Timestamp lastLoginDate) {
+	public void setLastLoginDate(Timestamp lastLoginDate) {
 		this.lastLoginDate = lastLoginDate;
-	}
-	
-	/**
-	 * Get the most recent login date.
-	 * 
-	 * @return most recent login date
-	 */
-	public Timestamp getMostRecentLoginDate() {
-		return mostRecentLoginDate;
-	}
-
-	/**
-	 * Sets the most recent login date and moves the old most
-	 * recent login date to the 
-	 * @param mostRecentLoginDate
-	 */
-	public void setMostRecentLoginDate(Timestamp mostRecentLoginDate) {
-		if( this.mostRecentLoginDate != null )
-		{
-		    setLastLoginDate(this.mostRecentLoginDate);
-		}
-		else if( lastLoginDate == null && mostRecentLoginDate != null )
-		{		
-			setLastLoginDate(mostRecentLoginDate);
-		}
-		this.mostRecentLoginDate = mostRecentLoginDate;
 	}
 	
 }

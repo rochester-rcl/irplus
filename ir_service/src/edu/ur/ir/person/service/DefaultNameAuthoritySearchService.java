@@ -30,8 +30,6 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.SearchHelper;
@@ -52,7 +50,7 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 	private static final long serialVersionUID = -2397275247687886048L;
 
 	/** Analyzer for dealing with analyzing the search */
-	private transient Analyzer analyzer;
+	private Analyzer analyzer;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultNameAuthoritySearchService.class);
@@ -113,9 +111,8 @@ public class DefaultNameAuthoritySearchService implements NameAuthoritySearchSer
 		
 		IndexSearcher searcher = null;
 		try {
-			FSDirectory directory = FSDirectory.open(new File(indexFolder));
-			searcher = new IndexSearcher(directory, true);
-			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, fields, analyzer);
+			searcher = new IndexSearcher(indexFolder);
+			QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			
 			Query luceneQuery = parser.parse(query);

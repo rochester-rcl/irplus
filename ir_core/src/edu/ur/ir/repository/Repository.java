@@ -90,12 +90,6 @@ public class Repository extends CommonPersistent {
 	/** Folder containing all user workspace indexes*/ 
 	private String userWorkspaceIndexFolder;
 	
-	/** Folder to hold collection index information */
-	private String institutionalCollectionIndexFolder;
-
-	/** group index folder */
-	private String userGroupIndexFolder;
-	
 	/** default license for the repository */
 	private LicenseVersion defaultLicense;
 	
@@ -488,42 +482,6 @@ public class Repository extends CommonPersistent {
 	 */
 	public void setResearcherIndexFolder(String researcherIndexFolder) {
 		this.researcherIndexFolder = researcherIndexFolder;
-	}
-	
-	/**
-	 * Folder that holds all of the collection information.
-	 * 
-	 * @return collection index folder location
-	 */
-	public String getInstitutionalCollectionIndexFolder() {
-		return institutionalCollectionIndexFolder;
-	}
-
-	/**
-	 * Set the collection index folder.
-	 * 
-	 * @param collectionIndexFolder
-	 */
-	public void setInstitutionalCollectionIndexFolder(String institutionalCollectionIndexFolder) {
-		this.institutionalCollectionIndexFolder = institutionalCollectionIndexFolder;
-	}
-
-	/**
-	 * Set the group index folder.
-	 * 
-	 * @return group index folder
-	 */
-	public String getUserGroupIndexFolder() {
-		return userGroupIndexFolder;
-	}
-
-	/**
-	 * Set the group index folder.
-	 * 
-	 * @param groupsIndexFolder
-	 */
-	public void setUserGroupIndexFolder(String userGroupIndexFolder) {
-		this.userGroupIndexFolder = userGroupIndexFolder;
 	}
 
 	/**

@@ -68,10 +68,10 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	private UserFileSystemService userFileSystemService;
 	
 	/**  Servlet response to write to */
-	private transient HttpServletResponse response;
+	private HttpServletResponse response;
 	
 	/**  Servlet request made */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** Utility for streaming files */
 	private WebIoUtils webIoUtils;
@@ -118,7 +118,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         			" and file version number " + versionNumber + " could not be found");
         }
       
-        webIoUtils.streamFileInfo(fileVersion.getVersionedFile().getName(), fileInfo, response, request, (1024*4), false, true);
+        webIoUtils.StreamFileInfo(fileVersion.getVersionedFile().getName(), fileInfo, response, request, (1024*4), false, true);
         return SUCCESS;
     }
 	
@@ -200,7 +200,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	}
 
 	/** id of the user */
-	public void injectUserId(Long userId)
+	public void setUserId(Long userId)
 	{
 		this.userId = userId;
 	}

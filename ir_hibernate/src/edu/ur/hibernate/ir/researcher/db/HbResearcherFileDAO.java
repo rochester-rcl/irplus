@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -72,8 +71,15 @@ public class HbResearcherFileDAO implements ResearcherFileDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irFileCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irFileCount"));
+	}
+	
+	/**
+	 * Return all ResearcherFile
+	 */
+	public List<ResearcherFile> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	/**

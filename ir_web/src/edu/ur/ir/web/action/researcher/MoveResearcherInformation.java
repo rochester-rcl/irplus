@@ -129,13 +129,13 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 	
 		IrUser user = userService.getUser(userId, false);
 		researcher = user.getResearcher();
+	    researcherId = researcher.getId();
 		
 		if( researcher == null || !researcher.getUser().getId().equals(userId) || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE) )
 		{
 			// user cannot move file if they are not a researcher or messing with someone else's researcher page
 	    	return "accessDenied";
 		}
-	    researcherId = researcher.getId();
 
 		// folders to move
 		List<Long> listFolderIds = new LinkedList<Long>();
@@ -244,6 +244,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		log.debug("move files and folders called");
 		IrUser user = userService.getUser(userId, false);
 		researcher = user.getResearcher();
+		researcherId = researcher.getId();
 		
 		
 		if( researcher == null || !researcher.getUser().getId().equals(userId) || !researcher.getUser().hasRole(IrRole.RESEARCHER_ROLE) )
@@ -251,7 +252,6 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 			// user cannot move file if they are not a researcher or messing with someone elses researcher page
 	    	return "accessDenied";
 		}
-		researcherId = researcher.getId();
 
 
 		List<FileSystem> notMoved = new LinkedList<FileSystem>();
@@ -456,7 +456,7 @@ public class MoveResearcherInformation extends ActionSupport implements UserIdAw
 		this.researcherService = researcherService;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

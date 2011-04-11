@@ -68,8 +68,7 @@ public class HbFieldDAO implements FieldDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("fieldCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("fieldCount"));
 	}
 
 	/**
@@ -101,6 +100,11 @@ public class HbFieldDAO implements FieldDAO {
 	public Field findByUniqueName(String name) {
 		return (Field) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFieldByName", name));
+	}
+
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public Field getById(Long id, boolean lock) {

@@ -16,13 +16,15 @@
 
 package edu.ur.ir;
 
+import java.io.Serializable;
+
 /**
  * Interface to represent Date
  * 
  * @author Sharmila Ranganathan
  *
  */
-public interface Date {
+public interface Date extends Serializable{
 	
 	/**
 	 * Get day

@@ -109,8 +109,8 @@
                        ascendingSortAction="javascript:YAHOO.ur.personal.collection.updateSort('asc', 'type');"
                        descendingSortAction="javascript:YAHOO.ur.personal.collection.updateSort('desc', 'type');">
                        <u>Type</u><urstb:thImgSort
-                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
                     
                     <urstb:tdHeadSort
                        height="33"
@@ -118,8 +118,8 @@
                        ascendingSortAction="javascript:YAHOO.ur.personal.collection.updateSort('asc', 'name');"
                        descendingSortAction="javascript:YAHOO.ur.personal.collection.updateSort('desc', 'name');">
                        <u>Name</u><urstb:thImgSort
-                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
                     <urstb:td> Version </urstb:td>
                     <urstb:td> Properties </urstb:td>
                     <urstb:td> Submit </urstb:td>

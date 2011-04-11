@@ -24,7 +24,7 @@
         <c:param name="irFileId" value="${repositoryImageFile.id}"/>
     </c:url>
     
-   <img class="repository_image" width="466px" height="278px" src="${pictureUrl}"/>
+   <img class="repository_image, picture_module_size" src="${pictureUrl}"/>
    
    <c:if test="${numRepositoryPictures > 1}"> 
    <table class="buttonTable">

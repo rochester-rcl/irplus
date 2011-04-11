@@ -355,7 +355,7 @@ public class DefaultCommunityExporter implements CommunityExporter{
 
 	    public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
 	    	Community community = new Community();
-	    	community.id = Long.valueOf(rs.getInt("community_id"));
+	    	community.id = new Long(rs.getInt("community_id"));
 	        community.copyright = rs.getString("copyright_text");
 	        community.shortDescription = rs.getString("short_description");
 	        community.name = rs.getString("name");

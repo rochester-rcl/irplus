@@ -17,8 +17,6 @@
 
 package edu.ur.ir.security;
 
-import java.io.Serializable;
-
 import edu.ur.ir.user.ExternalAccountType;
 
 /**
@@ -27,7 +25,7 @@ import edu.ur.ir.user.ExternalAccountType;
  * @author Nathan Sarr
  *
  */
-public interface ExternalAuthenticationDetails extends Serializable {
+public interface ExternalAuthenticationDetails {
 	
 	/**
 	 * Returns the external account type.

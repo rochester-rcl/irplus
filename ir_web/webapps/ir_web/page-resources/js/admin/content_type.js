@@ -1,5 +1,5 @@
 /*
-   Copyright 2008-2010 University of Rochester
+   Copyright 2008 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -286,8 +286,8 @@ YAHOO.ur.content.type = {
 	},
 	
 	/**
-	 * Creates a YUI new content type modal dialog for when a user wants to delete 
-	 * a content type
+	 * Creates a YUI new content type modal dialog for when a user wants to create 
+	 * a new content type
 	 *
 	 */
 	createDeleteContentTypeDialog :function()
@@ -312,8 +312,8 @@ YAHOO.ur.content.type = {
 		
 		var handleSuccess = function(o) 
 		{
-			// check for the timeout - forward user to login page if timeout
-	        // occurred
+			// check for the timeout - forward user to login page if timout
+	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
 	        {
 		        //get the response from adding a content type
@@ -341,7 +341,7 @@ YAHOO.ur.content.type = {
 		
 		// handle form submission failure
 		var handleFailure = function(o) {
-		    alert('delete content type submission failed ' + o.status + ' status text ' + o.statusText);
+		    alert('content type submission failed ' + o.status + ' status text ' + o.statusText);
 		};
 	
 		// Instantiate the Dialog

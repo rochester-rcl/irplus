@@ -42,7 +42,9 @@
 
 		<property name="citation" column="citation" type="string"
 			not-null="false" access="field"  />
-			
+		
+		
+		
 	    <many-to-one class="edu.ur.ir.item.Publisher" 
 			name="publisher" 
 			column="publisher_id" 
@@ -56,9 +58,9 @@
 		    class="edu.ur.ir.item.PublishedDate" 
 			name="publishedDate" 
 			column="published_date_id" 
-			insert="true"
-			update="true" 
 			unique="true"  
-			cascade="all"/>					
+			cascade="all, delete-orphan"
+			access="field"/>	
+			
 	 </class>
 </hibernate-mapping>

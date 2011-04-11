@@ -29,6 +29,7 @@ import edu.ur.ir.researcher.ResearcherDAO;
 import edu.ur.ir.researcher.ResearcherFile;
 import edu.ur.ir.researcher.ResearcherFileSystemService;
 import edu.ur.ir.researcher.ResearcherFolder;
+import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherService;
 import edu.ur.ir.user.IrUser;
@@ -157,7 +158,17 @@ public class DefaultResearcherService implements ResearcherService{
 		this.researcherDAO = researcherDAO;
 	}
 	
- 	/**
+    /**
+     * Get all the researchers.
+     * 
+     * @see edu.ur.ir.researcher.ResearcherService#getAllResearchers()
+     */
+    @SuppressWarnings("unchecked")
+	public List<Researcher> getAllResearchers() {
+    	return researcherDAO.getAll();
+    }
+
+	/**
 	 * Get all researchers having researcher page public
 	 *  
      * @see edu.ur.ir.researcher.ResearcherService#getAllPublicResearchers()

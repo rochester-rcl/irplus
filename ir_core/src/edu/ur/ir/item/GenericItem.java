@@ -1306,12 +1306,49 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	}
 	
 
+	/**
+	 * Get the external published item for this generic item.
+	 * 
+	 * @return the external published item. 
+	 */
 	public ExternalPublishedItem getExternalPublishedItem() {
 		return externalPublishedItem;
 	}
 
-	public void setExternalPublishedItem(ExternalPublishedItem externalPublishedItem) {
+	/**
+	 * Set the external published item.  Sets the generic item as the owner.
+	 * 
+	 * @param externalPublishedItem
+	 */
+	void setExternalPublishedItem(ExternalPublishedItem externalPublishedItem) {
 		this.externalPublishedItem = externalPublishedItem;
+	}
+	
+	/**
+	 * If this item does not have an external published item a new one is
+	 * created otherwise the exiting one is returned.  
+	 * 
+	 * @return A new external published item or the one that already exists.
+	 */
+	public ExternalPublishedItem createExternalPublishedItem()
+	{
+		if( externalPublishedItem == null )
+		{
+		    externalPublishedItem = new ExternalPublishedItem();
+		}
+		return externalPublishedItem;
+	}
+	
+	/**
+	 * Sets the external published item to null.
+	 */
+	public void deleteExternalPublishedItem()
+	{
+		if( externalPublishedItem != null )
+		{
+			externalPublishedItem = null;
+		}
+		    
 	}
 
 	/**
@@ -1453,42 +1490,46 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * 
 	 * @param dateFirstAvailable
 	 */
-	public void setFirstAvailableDate(FirstAvailableDate firstAvailableDate) {
+	void setFirstAvailableDate(FirstAvailableDate firstAvailableDate) {
 		this.firstAvailableDate = firstAvailableDate;
 	}
 	
 	/**
-	 * Add the first item's first available date
+	 * Update the published date with the given values.  If month, day and year are 
+	 * all 0 published date is set to null.  If published date does not yet exist,
+	 * a new one is created.
 	 * 
 	 * @param month
 	 * @param day
 	 * @param year
-	 * @return first available date
 	 */
-	public FirstAvailableDate addFirstAvailableDate(int month, int day, int year) {
-
-		FirstAvailableDate firstAvailableDate = new FirstAvailableDate(month, day, year);
-		firstAvailableDate.setItem(this);
-		this.firstAvailableDate = firstAvailableDate;
+	public FirstAvailableDate updateFirstAvailableDate(int month, int day, int year)
+	{
+		if(month > 0 || day > 0 || year > 0)
+		{
+			if( firstAvailableDate != null )
+			{
+				firstAvailableDate.setMonth(month);
+				firstAvailableDate.setYear(year);
+				firstAvailableDate.setDay(day);
+			}
+			else
+			{
+				this.firstAvailableDate = new FirstAvailableDate(month, day, year);
+				firstAvailableDate.setItem(this);
+			}
+		}
+		else
+		{
+			if( firstAvailableDate != null )
+			{
+				firstAvailableDate = null;
+			}
+		}
 		
 		return firstAvailableDate;
 	}
 	
-	/**
-	 * Add the release date for the item
-	 * 
-	 * @param month
-	 * @param day
-	 * @param year
-	 * @return release date
-	 */
-	public OriginalItemCreationDate addOriginalItemCreationDate(int month, int day, int year) {
-		OriginalItemCreationDate originalItemCreationDate = new OriginalItemCreationDate(month, day, year);
-		originalItemCreationDate.setItem(this);
-		this.originalItemCreationDate = originalItemCreationDate;
-		return originalItemCreationDate;
-	}
-
 	/**
 	 * Get the date the item can be made available to public
 	 * 
@@ -1504,8 +1545,44 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * 
 	 * @param releaseDate
 	 */
-	public void setOriginalItemCreationDate(OriginalItemCreationDate originalItemCreationDate) {
+	void setOriginalItemCreationDate(OriginalItemCreationDate originalItemCreationDate) {
 		this.originalItemCreationDate = originalItemCreationDate;
+	}
+	
+	/**
+	 * Update the original item creating date with the given values.  If month, day and year are 
+	 * all 0 creation date is set to null.  If creation date does not yet exist,
+	 * a new one is created.
+	 * 
+	 * @param month
+	 * @param day
+	 * @param year
+	 */
+	public OriginalItemCreationDate updateOriginalItemCreationDate(int month, int day, int year)
+	{
+		if(month > 0 || day > 0 || year > 0)
+		{
+			if( originalItemCreationDate != null )
+			{
+				originalItemCreationDate.setMonth(month);
+				originalItemCreationDate.setYear(year);
+				originalItemCreationDate.setDay(day);
+			}
+			else
+			{
+				this.originalItemCreationDate = new OriginalItemCreationDate(month, day, year);
+				originalItemCreationDate.setItem(this);
+			}
+		}
+		else
+		{
+			if( originalItemCreationDate != null )
+			{
+				originalItemCreationDate = null;
+			}
+		}
+		
+		return originalItemCreationDate;
 	}
 	
 	/**

@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.FileInfo;
-import edu.ur.ir.user.FileInviteInfo;
+import edu.ur.ir.user.InviteInfo;
 import edu.ur.ir.user.IrUser;
 import edu.ur.persistent.BasePersistent;
 import edu.ur.simple.type.DescriptionAware;
@@ -84,7 +84,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	private Set<FileCollaborator> collaborators = new HashSet<FileCollaborator>();
 
 	/** Invitees who are not part of the system and yet to create an account */
-	private Set<FileInviteInfo> invitees = new HashSet<FileInviteInfo>();
+	private Set<InviteInfo> invitees = new HashSet<InviteInfo>();
 	
 	/** the file size of the current version */
 	private Long currentFileSizeBytes = 0L;
@@ -416,7 +416,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	 * 
 	 * @param inviteInfo invite information
 	 */
-	public void addInvitee(FileInviteInfo inviteInfo) {
+	public void addInvitee(InviteInfo inviteInfo) {
 		
 		invitees.add(inviteInfo);
 	}
@@ -429,8 +429,8 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	public List<String> getInviteeEmails() {
 		List<String> inviteeEmails = new ArrayList<String>();
 		
-		for (FileInviteInfo inviteInfo:invitees) {
-			inviteeEmails.add(inviteInfo.getInviteToken().getEmail());
+		for (InviteInfo inviteInfo:invitees) {
+			inviteeEmails.add(inviteInfo.getEmail());
 		}
 		
 		return inviteeEmails;
@@ -458,7 +458,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	 * @param inviteInfo invitee that has to be removed
 	 * @return true if removed else return false
 	 */
-	public boolean removeInvitee(FileInviteInfo inviteInfo) {
+	public boolean removeInvitee(InviteInfo inviteInfo) {
 		return invitees.remove(inviteInfo);
 	}
 
@@ -587,7 +587,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	 *
 	 * @return Set of invite information
 	 */
-	public Set<FileInviteInfo> getInvitees() {
+	public Set<InviteInfo> getInvitees() {
 		return invitees;
 	}
 
@@ -596,7 +596,7 @@ public class VersionedFile extends BasePersistent implements NameAware, Descript
 	 *
 	 * @param Set of invite information
 	 */
-	public void setInvitees(Set<FileInviteInfo> invitees) {
+	public void setInvitees(Set<InviteInfo> invitees) {
 		this.invitees = invitees;
 	}
 

@@ -117,19 +117,18 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public void deleteInstitutionalItem(InstitutionalItem institutionalItem, IrUser deletingUser) {
 		
 		Set<GenericItem> genericItemsToDelete = new HashSet<GenericItem>();
+		Set<InstitutionalItemVersion> versions = institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions();
 		
+		// get the generic item for each version
+		for(InstitutionalItemVersion version : versions)
+		{
+			GenericItem genericItem = version.getItem();
+			genericItemsToDelete.add(genericItem);
+		}
 		
 		// Delete ResearcherInstitutionalItem referring to this institutional item
 		researcherFileSystemService.deleteResearcherInstitutionalItem(institutionalItem);
 		deletedInstitutionalItemService.addDeleteHistory(institutionalItem, deletingUser);
-			
-		// get the generic item for each version
-		for(InstitutionalItemVersion version : institutionalItem.getVersionedInstitutionalItem().getInstitutionalItemVersions())
-		{
-			GenericItem genericItem = version.getItem();
-			genericItemsToDelete.add(genericItem);		
-		}
-		
 		institutionalItemDAO.makeTransient(institutionalItem);
 
 		// Check to see if generic item can be deleted
@@ -922,8 +921,6 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 				repositoryId, contentTypeId, orderType);
 	}
 
-
-
 	/**
 	 * Get a list of of repository content types with counts for the number
 	 * of items within the repository.  
@@ -1005,5 +1002,180 @@ public class DefaultInstitutionalItemService implements InstitutionalItemService
 	public void setInstitutionalItemVersionUrlGenerator(
 			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
 		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
+	}
+
+	
+	public List<InstitutionalItem> getCollectionItemsBetweenCharPublicationDateOrder(
+			int rowStart, 
+			int maxResults,
+			InstitutionalCollection collection, 
+			char firstChar,
+			char lastChar, 
+			OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsBetweenCharPublicationDateOrder(rowStart, 
+			  	maxResults, collection, firstChar, lastChar, orderType);
+	}
+
+	
+	public List<InstitutionalItem> getCollectionItemsBetweenCharPublicationDateOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, char firstChar, char lastChar,
+			OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsBetweenCharPublicationDateOrder(rowStart, maxResults, collection, 
+				contentTypeId, firstChar, lastChar, orderType);
+	}
+
+	
+	public List<InstitutionalItem> getCollectionItemsByCharPublicationDateOrder(
+			int rowStart, int maxResults,
+			InstitutionalCollection collection, char firstChar,
+			OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsByCharPublicationDateOrder(rowStart, maxResults, collection, 
+				firstChar, orderType);
+	}
+
+	
+	public List<InstitutionalItem> getCollectionItemsByCharPublicationDateOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, char firstChar, OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsByCharPublicationDateOrder(rowStart, maxResults, collection, 
+				contentTypeId, firstChar, orderType);
+	}
+
+	public List<InstitutionalItem> getCollectionItemsPublicationDateOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsPublicationDateOrder(rowStart, maxResults, 
+				collection, contentTypeId, orderType);
+	}
+
+	public List<InstitutionalItem> getCollectionItemsPublicationDateOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsPublicationDateOrder(rowStart, maxResults, collection, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsBetweenCharByPublicationDateOrder(
+			int rowStart, int maxResults, Long repositoryId, char firstChar,
+			char lastChar, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsBetweenCharPublicationDateOrder(rowStart, maxResults, 
+				repositoryId, firstChar, lastChar, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsBetweenCharByPublicationDateOrder(
+			int rowStart, int maxResults, Long repositoryId, char firstChar,
+			char lastChar, Long contentTypeId, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsBetweenCharPublicationDateOrder(rowStart, maxResults, 
+				repositoryId, firstChar, lastChar, contentTypeId, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsByCharPublicationDateOrder(
+			int rowStart, int maxResults, Long repositoryId, char firstChar,
+			OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsByCharPublicationDateOrder(rowStart, maxResults, 
+				repositoryId, firstChar, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsByCharPublicationDateOrder(
+			int rowStart, int maxResults, Long repositoryId,
+			Long contentTypeId, char firstChar, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsByCharPublicationDateOrder(rowStart, maxResults, 
+				repositoryId, contentTypeId, firstChar, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsByPublicationDateOrder(
+			int rowStart, int maxResults, Long repositoryId,
+			Long contentTypeId, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsPublicationDateOrder(rowStart, maxResults, 
+				repositoryId, contentTypeId, orderType);
+	}
+
+	
+	public List<InstitutionalItem> getRepositoryItemsByPublicationDateOrder(
+			int rowStart, int maxResults, Long repositoryId, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsPublicationDateOrder(rowStart, maxResults, repositoryId, orderType);
+	}
+
+	public List<InstitutionalItem> getCollectionItemsBetweenCharFirstAvailableOrder(
+			int rowStart, int maxResults,
+			InstitutionalCollection collection, char firstChar,
+			char lastChar, OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsBetweenCharFirstAvailableOrder(rowStart, maxResults, collection, 
+				firstChar, lastChar, orderType);
+	}
+
+	public List<InstitutionalItem> getCollectionItemsBetweenCharFirstAvailableOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, char firstChar, char lastChar,
+			OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsBetweenCharFirstAvailableOrder(rowStart, maxResults, 
+				collection, contentTypeId, firstChar, lastChar, orderType);
+	}
+
+	public List<InstitutionalItem> getCollectionItemsByCharFirstAvailableOrder(
+			int rowStart, int maxResults,
+			InstitutionalCollection collection, char firstChar,
+			OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsByCharFirstAvailableOrder(rowStart, maxResults, 
+				collection, firstChar, orderType);
+	}
+
+	public List<InstitutionalItem> getCollectionItemsByCharFirstAvailableOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, char firstChar, OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsByCharFirstAvailableOrder(rowStart, maxResults, 
+				collection, contentTypeId, firstChar, orderType);
+	}
+
+	public List<InstitutionalItem> getCollectionItemsFirstAvailableOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsFirstAvailableOrder(rowStart, maxResults, collection, orderType);
+	}
+
+	public List<InstitutionalItem> getCollectionItemsFirstAvailableOrder(
+			int rowStart, int maxResults, InstitutionalCollection collection,
+			Long contentTypeId, OrderType orderType) {
+		return institutionalItemDAO.getCollectionItemsFirstAvailableOrder(rowStart, maxResults, 
+				collection, contentTypeId, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsBetweenCharByFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId, char firstChar,
+			char lastChar, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsBetweenCharFirstAvailableOrder(rowStart, maxResults, 
+				repositoryId, firstChar, lastChar, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsBetweenCharByFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId, char firstChar,
+			char lastChar, Long contentTypeId, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsBetweenCharFirstAvailableOrder(rowStart, maxResults, 
+				repositoryId, firstChar, lastChar,  contentTypeId, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsByCharFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId, char firstChar,
+			OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsByCharFirstAvailableOrder(rowStart, maxResults, 
+				repositoryId, firstChar, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsByCharFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId,
+			Long contentTypeId, char firstChar, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsByCharFirstAvailableOrder(rowStart, maxResults, 
+				repositoryId, contentTypeId, firstChar, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsByFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsFirstAvailableOrder(rowStart, maxResults, repositoryId, orderType);
+	}
+
+	public List<InstitutionalItem> getRepositoryItemsByFirstAvailableOrder(
+			int rowStart, int maxResults, Long repositoryId,
+			Long contentTypeId, OrderType orderType) {
+		return institutionalItemDAO.getRepositoryItemsFirstAvailableOrder(rowStart, maxResults, repositoryId,  contentTypeId, orderType);
 	}
 }

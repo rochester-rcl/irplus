@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 import edu.ur.exception.DuplicateNameException;
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.file.db.LocationAlreadyExistsException;
+import edu.ur.ir.FileSystem;
 import edu.ur.ir.file.IrFile;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeService;
@@ -281,12 +282,10 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		
 		item1.setLanguageType(languageType);
 		
-		ExternalPublishedItem externalPublishedItem = new ExternalPublishedItem();
+		ExternalPublishedItem externalPublishedItem = item1.createExternalPublishedItem();
 		externalPublishedItem.setPublisher(publisher);
-		externalPublishedItem.addPublishedDate(05,13,2008);
+		externalPublishedItem.updatePublishedDate(05,13,2008);
 		externalPublishedItem.setCitation("citation");
-		
-		item1.setExternalPublishedItem(externalPublishedItem);
 		
 		userPublishingFileSystemService.makePersonalItemPersistent(personalItem);
 		tm.commit(ts);
@@ -333,8 +332,9 @@ public class DefaultUserPublishingFileSystemServiceTest {
 	 * Test moving publications and collections to an existing collection
 	 * @throws UserHasPublishedDeleteException 
 	 * @throws LocationAlreadyExistsException 
+	 * @throws DuplicateNameException 
 	 */
-	public void moveItemCollectionTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
+	public void moveItemCollectionTest() throws UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException, DuplicateNameException
 	{
 		
 		// Start the transaction 
@@ -373,40 +373,25 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		PersonalCollection myCollection = null;
 		PersonalCollection destination = null;
 		
-		try
-		{
-		    myCollection = userPublishingFileSystemService.createRootPersonalCollection(user, "myCollection1" , "desc1");
-		    assert myCollection != null : "collection should be created";
+        myCollection = userPublishingFileSystemService.createRootPersonalCollection(user, "myCollection1" , "desc1");
+		assert myCollection != null : "collection should be created";
 		    
-		    destination = userPublishingFileSystemService.createRootPersonalCollection(user, "myCollection2", "desc2");
+		destination = userPublishingFileSystemService.createRootPersonalCollection(user, "myCollection2", "desc2");
 	
-	        assert destination != null : "collection should be created";
-		}
-		catch(Exception e)
-		{
-		    
-		}
-		
+	    assert destination != null : "collection should be created";
 		
 		assert destination != null : "collection should be created";
 		assert user.getRootPersonalCollection(destination.getName()) != null : 
 			"Should be able to find collection " + destination;
 		
-		PersonalItem it = null;
-		
-		try
-		{
-		    it = userPublishingFileSystemService.createPersonalItem(myCollection, user, "articles", "item1");
-		}
-		catch(Exception e)
-		{
-			throw new IllegalStateException(e);
-		}
+		PersonalItem it  = userPublishingFileSystemService.createPersonalItem(myCollection, user, "articles", "item1");
+	
 		
 		tm.commit(ts);
         
 		// start new transaction
         ts = tm.getTransaction(td);
+        assert it.getId() != null : "Personal publication should not have a null id " + it;
         // make sure you can get the list of personal items for a user
         List<Long> itemIds = new LinkedList<Long>();
         itemIds.add(it.getId());
@@ -417,21 +402,16 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		// start new transaction
         ts = tm.getTransaction(td);
         
-        assert it.getId() != null : "Personal publication should not have a null id " + it;
+        myCollection = userPublishingFileSystemService.getPersonalCollection(myCollection.getId(), false);
+        destination = userPublishingFileSystemService.getPersonalCollection(destination.getId(), false);
+        
         List<PersonalCollection> collectionsToMove = new LinkedList<PersonalCollection>();
         collectionsToMove.add(myCollection);
         
-        try
-        {
-        	userPublishingFileSystemService.moveCollectionSystemInformation(destination, 
+        List<FileSystem> notMoved = userPublishingFileSystemService.moveCollectionSystemInformation(destination, 
         		collectionsToMove, null);
-        }
-        catch(Exception e)
-        {
-        	throw new IllegalStateException(e);
-        }
         
-        
+        assert notMoved.size() == 0 : "Not moved size = " + notMoved.size();
         
         tm.commit(ts);
      
@@ -439,13 +419,18 @@ public class DefaultUserPublishingFileSystemServiceTest {
         // make sure the collection was moved.
 		ts = tm.getTransaction(td);
 		IrUser otherUser2 = userService.getUser(user.getUsername());
-		PersonalCollection theDestination = user.getRootPersonalCollection(destination.getName());
+		PersonalCollection theDestination = otherUser2.getRootPersonalCollection(destination.getName());
+		
+		assert theDestination != null : "Should be able to find the destination";
+		
 		PersonalCollection newChild = theDestination.getChild(myCollection.getName());
 		
 		assert  newChild != null : "Was not able to find " + myCollection
 		+ " in children of " +
 		theDestination ;
 		
+		
+		it  = userPublishingFileSystemService.getPersonalItem(it.getId(), false);
 		assert newChild.getPersonalItem(it.getName()) != null : "Item: " + it.getName() 
 		+ "was not found ";
 		
@@ -453,16 +438,9 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		List<PersonalItem> itemsToMove = new LinkedList<PersonalItem>();
         itemsToMove.add(it);
         
-        try
-        {
-        	userPublishingFileSystemService.moveCollectionSystemInformation(destination, 
+        userPublishingFileSystemService.moveCollectionSystemInformation(theDestination, 
 				null, itemsToMove);
-        }
-        catch(Exception e)
-        {
-        	throw new IllegalStateException(e);
-        }
-		tm.commit(ts);
+ 		tm.commit(ts);
 		
 		
 		ts = tm.getTransaction(td);
@@ -521,19 +499,34 @@ public class DefaultUserPublishingFileSystemServiceTest {
 		// new transaction - create two new collections
 		ts = tm.getTransaction(td);
 		
-	
-		PersonalCollection  myCollection = userPublishingFileSystemService.createRootPersonalCollection(user, "myCollection1", "desc1");
-		assert myCollection != null : "collection should be created ";
-
-		PersonalCollection subCollection = myCollection.createChild("subCollection");
-		// create a sub collection
-		assert subCollection != null : "collection should be created ";
+		PersonalCollection myCollection = null;
+		PersonalCollection subCollection = null;
+		try
+		{
+		    myCollection = userPublishingFileSystemService.createRootPersonalCollection(user, "myCollection1", "desc1");
+		    subCollection = myCollection.createChild("subCollection");
+		}
+		catch(Exception e)
+		{
+			throw new IllegalStateException(e);
+		}
 		
 		userPublishingFileSystemService.makePersonalCollectionPersistent(myCollection);
 		
+		assert myCollection != null : "collection should be created";
 		
-	
-		PersonalItem it = userPublishingFileSystemService.createPersonalItem(myCollection, user, "articles", "item1");
+		// create a sub collection
+		assert subCollection != null : "collection should be created";
+		
+		PersonalItem it = null;
+		try
+		{
+		    it = userPublishingFileSystemService.createPersonalItem(myCollection, user, "articles", "item1");
+		}
+		catch(Exception e)
+		{
+			throw new IllegalStateException(e);
+		}
 		tm.commit(ts);
          
 		// start new transaction
