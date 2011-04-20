@@ -737,6 +737,13 @@
        <property name="listSetsService" ref="listSetsService"/>
    </bean>
    
+   <bean id="marc21OaiMetadataProvider" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultMarcOaiMetadataProvider">
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="listSetsService" ref="listSetsService"/>
+       <property name="marcExportService" ref="marcExportService"/>
+   </bean>
+   
    <!-- ****************************************** --> 
    <!-- OAI harvesting Service for the system -->
    <!-- ****************************************** --> 
@@ -746,6 +753,7 @@
            <list>
                <ref bean="dublinCoreOaiMetadataProvider"/>
                <ref bean="qualifiedDublinCoreOaiMetadataProvider"/>
+               <ref bean="marc21OaiMetadataProvider"/>
            </list>
        </property>
    </bean>
@@ -795,5 +803,37 @@
        <property name="listSetsService" ref="listSetsService"/>
        <property name="listMetadataFormatsService" ref="listMetadataFormatsService"/>
    </bean>
+   
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="marcContentTypeFieldMapperService" 
+       class="edu.ur.ir.marc.service.DefaultMarcContentTypeFieldMapperService">
+       <property name="marcContentTypeFieldMapperDAO" ref="marcContentTypeFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Contributor type -->
+   <!-- relator code mapping                         -->
+   <!-- ****************************************** --> 
+   <bean id="marcContributorTypeRelatorCodeService" 
+       class="edu.ur.ir.marc.service.DefaultMarcContributorTypeRelatorCodeService">
+       <property name="marcContributorTypeRelatorCodeDAO" ref="marcContributorTypeRelatorCodeDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="marcExportService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultMarcExportService">
+       <property name="contentTypeService" ref="contentTypeService"/>
+       <property name="marcContentTypeFieldMapperService" ref="marcContentTypeFieldMapperService"/>
+       <property name="marcContributorTypeRelatorCodeService" ref="marcContributorTypeRelatorCodeService"/>
+   </bean>
+   
+   
    
 </beans>

@@ -18,6 +18,14 @@
 -- **********************************************
 -- ----------------------------------------------
 
+
+DROP TABLE ir_metadata_marc.content_type_field_mapping;
+DROP SEQUENCE ir_metadata_marc.content_type_field_mapping_seq;
+
+DROP TABLE ir_metadata_marc.contributor_type_relator_code;
+DROP SEQUENCE ir_metadata_marc.contributor_type_relator_code_seq;
+
+DROP SCHEMA ir_metadata_marc;
 -- ---------------------------------------------
 -- Drop Institutional Repository Metadata tables/schema
 -- ---------------------------------------------
@@ -415,11 +423,17 @@ DROP SCHEMA ir_index;
 DROP TABLE metadata.metadata_type;
 DROP TABLE metadata.dublin_core_term;
 DROP TABLE metadata.dublin_core_encoding_scheme;
+DROP TABLE metadata.marc_data_field;
+DROP TABLE metadata.marc_sub_field;
+DROP TABLE metadata.marc_relator_code;
 
 
 DROP SEQUENCE metadata.metadata_type_seq;
 DROP SEQUENCE metadata.dublin_core_term_seq;
 DROP SEQUENCE metadata.dublin_core_encoding_scheme_seq;
+DROP SEQUENCE metadata.marc_data_field_seq;
+DROP SEQUENCE metadata.marc_sub_field_seq;
+DROP SEQUENCE metadata.marc_relator_code_seq;
 
 
 DROP SCHEMA metadata;

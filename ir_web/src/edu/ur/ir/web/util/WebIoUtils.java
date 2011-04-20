@@ -164,6 +164,112 @@ public class WebIoUtils {
         writeStream(f, response, bufferSize);
 	}
 	
+	
+	/**
+	 * @param fileName - name to give the file when down loading - should not
+	 * include the extension.
+	 * 
+	 * @param fileInfo - file information
+	 * @param response - response to write to
+	 * @param request - request
+	 * @param bufferSize - size to make the buffer
+	 * 
+	 * @throws Exception
+	 */
+	public void streamFile(String fileName, File f, String extension, 
+			HttpServletResponse response, HttpServletRequest request, 
+			int bufferSize, boolean isPublic, boolean forceDownload) throws Exception
+	{
+        if (request.getScheme().equals("https"))
+        {
+        	response.setHeader("Pragma", "public");
+        	response.setHeader("Cache-Control", "public");
+        	
+        	if( isPublic == false)
+        	{
+        	    response.setHeader("Cache-Control", "must-revalidate");
+        	}
+        	
+        	if( isPublic )
+        	{
+        		// have the system cache the file if it is public
+        		GregorianCalendar calendar = new GregorianCalendar();
+        		
+        		calendar.add(Calendar.HOUR, 72);
+        	    SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+        	    
+        	    String date = sdf.format(calendar.getTime());
+        	    date = date + " GMT";
+        		response.setHeader("Expires", date);
+        	}
+        }
+		String fileExtension = "";
+        if( extension != null)
+        {
+            fileExtension = "." + extension;	
+        }
+        
+        //default top media type and subtype
+        String topMediaName = "application";
+        String subTypeName = "octet-stream";
+        
+        String fullFileName = fileName + fileExtension;
+        
+        //determine browser type
+        
+        String browserType = request.getHeader("user-agent");
+        
+        log.debug("user-agent = " + browserType);
+        
+        if(browserType != null && browserType.indexOf("MSIE") > -1)
+        {
+        	//use uri to encode the file name to prevent IE from
+        	//putting underscores in file name
+        	try
+        	{
+                URI uri = new URI(null, fileName + fileExtension, null);
+                fullFileName = uri.toASCIIString();
+        	}
+        	catch (URISyntaxException e) {
+        		log.error("could not create uri", e );
+        		// rest the file name
+        		fullFileName = fileName + fileExtension;
+			}
+            
+        }
+        
+        if( forceDownload )
+        {
+            //tell it to download only
+            response.addHeader("Content-Disposition", "attachment; filename=\"" + 
+        		 fullFileName + "\"");
+        }
+        
+        String contentType = null;
+        if( extension != null)
+        {
+            contentType = mimeTypeService.findMimeType(extension);
+        }
+        
+        if(contentType == null)
+        {
+        	contentType = topMediaName + "/" + subTypeName;
+        }
+        
+        
+        log.debug("Setting the content type to " + contentType);
+        
+        
+        // Set the response MIME type
+        response.setContentType(contentType);
+        
+        // Response length
+        response.setHeader("Content-Length", String.valueOf(f.length()));
+        
+
+        writeStream(f, response, bufferSize);
+	}
+	
 	/**
 	 * Write the stream to the response.
 	 * 

@@ -110,6 +110,8 @@
 		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.ContributorTypeDublinCoreMappingDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.IdentifierTypeDublinCoreMappingDAOTest"/>
 		     
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.MarcContentTypeFieldMapperDAOTest"/>
+		     
 		</classes>
 	</test>
 	
