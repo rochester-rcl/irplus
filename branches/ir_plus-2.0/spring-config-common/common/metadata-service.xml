@@ -34,4 +34,25 @@
        <property name="dublinCoreEncodingSchemeDAO" ref="dublinCoreEncodingSchemeDAO"/>
    </bean> 
    
+   <!-- ****************************************** --> 
+   <!-- Metadata Marc Data Field service -->
+   <!-- ****************************************** --> 
+   <bean id="marcDataFieldService" class="edu.ur.metadata.marc.service.DefaultMarcDataFieldService">
+       <property name="marcDataFieldDAO" ref="marcDataFieldDAO"/>
+   </bean> 
+   
+   <!-- ****************************************** --> 
+   <!-- Metadata Marc Sub Field service -->
+   <!-- ****************************************** --> 
+   <bean id="marcSubFieldService" class="edu.ur.metadata.marc.service.DefaultMarcSubFieldService">
+       <property name="marcSubFieldDAO" ref="marcSubFieldDAO"/>
+   </bean> 
+   
+   <!-- ****************************************** --> 
+   <!-- Metadata Marc Sub Field service -->
+   <!-- ****************************************** --> 
+   <bean id="marcRelatorCodeService" class="edu.ur.metadata.marc.service.DefaultMarcRelatorCodeService">
+       <property name="marcRelatorCodeDAO" ref="marcRelatorCodeDAO"/>
+   </bean> 
+   
 </beans>

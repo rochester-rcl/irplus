@@ -1,68 +1,873 @@
 -- ---------------------------------------------
--- Insert the 15 elements into the dublin core
--- table
+-- Marc data field table
+-- ---------------------------------------------
+CREATE TABLE metadata.marc_data_field
+(
+    marc_data_field_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    code VARCHAR(3) NOT NULL,
+    repeatable BOOLEAN NOT NULL,
+    description TEXT,
+    UNIQUE(code)
+);
+ALTER TABLE metadata.marc_data_field OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.marc_data_field_seq;
+ALTER TABLE metadata.marc_data_field_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Marc sub field table
+-- ---------------------------------------------
+CREATE TABLE metadata.marc_sub_field
+(
+    marc_sub_field_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE metadata.marc_sub_field OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.marc_sub_field_seq;
+ALTER TABLE metadata.marc_sub_field_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- Marc sub field table
+-- ---------------------------------------------
+CREATE TABLE metadata.marc_relator_code
+(
+    marc_relator_code_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    relator_code TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name),
+    UNIQUE(relator_code)
+    
+);
+ALTER TABLE metadata.marc_relator_code OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.marc_relator_code_seq;
+ALTER TABLE metadata.marc_relator_code_seq OWNER TO ir_plus;
+
+
+
+-- ----------------------------------------------
+-- **********************************************
+       
+-- IR Marc metadata schema  
+
+-- **********************************************
+-- ----------------------------------------------
+CREATE SCHEMA ir_metadata_marc AUTHORIZATION ir_plus;
+
+
+-- ---------------------------------------------
+-- mapping between content types and fields
+-- ---------------------------------------------
+CREATE TABLE ir_metadata_marc.content_type_field_mapping
+(
+    content_type_field_mapping_id BIGINT PRIMARY KEY NOT NULL,
+    content_type_id BIGINT NOT NULL,
+    control_field_006 CHARACTER(18),
+    control_field_007 CHARACTER(23),
+    control_field_008 CHARACTER(40),
+    encoding_level CHAR,
+    record_status CHAR,
+    type_of_record CHAR,
+    bibliographic_level CHAR,
+    type_of_control CHAR,
+    descriptive_cataloging_form CHAR,
+    version INTEGER,
+    UNIQUE(content_type_id),
+    FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type(content_type_id)
+);
+
+ALTER TABLE ir_metadata_marc.content_type_field_mapping OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_metadata_marc.content_type_field_mapping_seq;
+ALTER TABLE ir_metadata_marc.content_type_field_mapping_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- mapping between contributor types and relator codes
+-- ---------------------------------------------
+CREATE TABLE ir_metadata_marc.contributor_type_relator_code
+(
+    contributor_type_relator_code_id BIGINT PRIMARY KEY NOT NULL,
+    contributor_type_id BIGINT NOT NULL,
+    marc_relator_code_id BIGINT NOT NULL,
+    version INTEGER,
+    UNIQUE(contributor_type_id),
+    FOREIGN KEY (contributor_type_id) REFERENCES person.contributor_type(contributor_type_id),
+    FOREIGN KEY (marc_relator_code_id) REFERENCES  metadata.marc_relator_code(marc_relator_code_id)
+);
+
+ALTER TABLE ir_metadata_marc.contributor_type_relator_code OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_metadata_marc.contributor_type_relator_code_seq;
+ALTER TABLE ir_metadata_marc.contributor_type_relator_code_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Inserts the marc sub fields
 -- ---------------------------------------------
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'contributor', 'An entity responsible for making contributions to the resource');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'a', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'coverage', 'The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'b', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'creator', 'An entity primarily responsible for making the resource.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'c', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'date', 'A point or period of time associated with an event in the lifecycle of the resource.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'd', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'description', 'An account of the resource');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'e', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'format', 'The file format, physical medium, or dimensions of the resource.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'f', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'identifier', 'An unambiguous reference to the resource within a given context.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'g', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'language', 'A language of the resource.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'h', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'publisher', 'An entity responsible for making the resource available.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'i', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'relation', 'A related resource.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'j', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'rights', 'Information about rights held in and over the resource.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'k', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'source', 'A related resource from which the described resource is derived.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'l', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'subject', 'The topic of the resource.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'm', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'title', 'A name given to the resource.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'n', '');
 
-insert into                                                         
-metadata.dublin_core_element ( dublin_core_element_id, version, name, description) 
-values (nextval('metadata.dublin_core_element_seq'), 0, 'type', 'The nature or genre of the resource.');
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'o', '');
 
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'p', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'q', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'r', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 's', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 't', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'u', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'v', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'w', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'x', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'y', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, 'z', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, '1', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, '2', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, '3', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, '4', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, '5', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, '6', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, '7', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, '8', '');
+
+insert into metadata.marc_sub_field(marc_sub_field_id, version, name, description)
+values(nextval('metadata.marc_sub_field_seq'), 0, '9', '');
+
+-- ---------------------------------------------
+-- Inserts the marc data fields
+-- ---------------------------------------------
+
+ 
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '010', 'Library of Congress Control Number', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '013', 'Patent Control Information', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '015', 'National Bibliography Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '016', 'National Bibliographic Agency Control Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '017', 'Copyright or Legal Deposit Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '018', 'Copyright Article-Fee Code', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '020', 'International Standard Book Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '022', 'International Standard Serial Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '024', 'Other Standard Identifier', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '025', 'Overseas Acquisition Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '026', 'Fingerprint Identifier', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '027', 'Standard Technical Report Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '028', 'Publisher Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '030', 'CODEN Designation', true, '');
+
+
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '031', 'Musical Incipits Information', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '032', 'Postal Registration Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '033', 'Date/Time and Place of an Event', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '034', 'Coded Cartographic Mathematical Data', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '035', 'System Control Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '036', 'Original Study Number for Computer Data Files', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '037', 'Source of Acquisition', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '038', 'Record Content Licensor', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '040', 'Cataloging Source', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '041', 'Language Code', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '042', 'Authentication Code', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '043', 'Geographic Area Code', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '044', 'Country of Publishing/Producing Entity Code', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '045', 'Time Period of Content', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '046', 'Special Coded Dates', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '047', 'Form of Musical Composition Code', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '048', 'Number of Musical Instruments or Voices Codes', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '050', 'Library of Congress Call Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '051', 'Library of Congress Copy, Issue, Offprint Statement', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '052', 'Geographic Classification', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '055', 'Classification Numbers Assigned in Canada', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '060', 'National Library of Medicine Call Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '061', 'National Library of Medicine Copy Statement', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '066', 'Character Sets Present', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '070', 'National Agricultural Library Call Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '071', 'National Agricultural Library Copy Statement', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '072', 'Subject Category Code', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '074', 'GPO Item Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '080', 'Universal Decimal Classification Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '082', 'Dewey Decimal Classification Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '083', 'Additional Dewey Decimal Classification Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '084', 'Other Classification Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '085', 'Synthesized Classification Number Components', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '086', 'Government Document Classification Number', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '088', 'Report Number', true, '');
+
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '100', 'Main Entry - Personal Name', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '110', 'Main Entry - Corporate Name', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '111', 'Main Entry - Meeting Name', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '130', 'Main Entry - Uniform Title', false, '');
+
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '210', 'Abbreviated Title', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '222', 'Key Title', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '240', 'Uniform Title', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '242', 'Translation of Title by Cataloging Agency', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '243', 'Collective Uniform Title', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '245', 'Title Statement', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '246', 'Varying Form of Title', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '247', 'Former Title', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '250', 'Edition Statement', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '254', 'Musical Presentation Statement', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '255', 'Cartographic Mathematical Data', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '256', 'Computer File Characteristics', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '257', 'Country of Producing Entity', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '258', 'Philatelic Issue Data', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '260', 'Publication, Distribution, etc. (Imprint)', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '263', 'Projected Publication Date', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '270', 'Address', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '300', 'Physical Description', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '306', 'Playing Time', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '307', 'Hours, etc.', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '310', 'Current Publication Frequency', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '321', 'Former Publication Frequency', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '336', 'Content Type', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '337', 'Media Type', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '338', 'Carrier Type', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '340', 'Physical Medium', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '342', 'Geospatial Reference Data', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '343', 'Planar Coordinate Data', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '351', 'Organization and Arrangement of Materials', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '352', 'Digital Graphic Representation', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '355', 'Security Classification Control', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '357', 'Originator Dissemination Control', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '362', 'Dates of Publication and/or Sequential Designation', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '363', 'Normalized Date and Sequential Designation', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '365', 'Trade Price', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '366', 'Trade Availability Information', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '380', 'Form of Work', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '381', 'Other Distinguishing Characteristics of Work or Expression', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '382', 'Medium of Performance', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '383', 'Numeric Designation of Musical Work', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '384', 'Key', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '490', 'Series Statement', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '500', 'General Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '501', 'With Note ', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '502', 'Dissertation Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '504', 'Bibliography, etc. Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '505', 'Formatted Contents Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '506', 'Restrictions on Access Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '507', 'Scale Note for Graphic Material', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '508', 'Creation/Production Credits Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '510', 'Citation/References Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '511', 'Participant or Performer Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '513', 'Type of Report and Period Covered Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '514', 'Data Quality Note', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '515', 'Numbering Peculiarities Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '516', 'Type of Computer File or Data Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '518', 'Date/Time and Place of an Event Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '520', 'Summary, etc.', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '521', 'Target Audience Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '522', 'Geographic Coverage Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '524', 'Preferred Citation of Described Materials Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '525', 'Supplement Note ', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '526', 'Study Program Information Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '530', 'Additional Physical Form available Note ', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '533', 'Reproduction Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '534', 'Original Version Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '535', 'Location of Originals/Duplicates Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '536', 'Funding Information Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '538', 'System Details Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '540', 'Terms Governing Use and Reproduction Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '541', 'Immediate Source of Acquisition Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '542', 'Information Relating to Copyright Status', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '544', 'Location of Other Archival Materials Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '545', 'Biographical or Historical Data', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '546', 'Language Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '547', 'Former Title Complexity Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '550', 'Issuing Body Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '552', 'Entity and Attribute Information Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '555', 'Cumulative Index/Finding Aids Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '556', 'Information About Documentation Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '561', 'Ownership and Custodial History', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '562', 'Copy and Version Identification Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '563', 'Binding Information', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '565', 'Case File Characteristics Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '567', 'Methodology Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '580', 'Linking Entry Complexity Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '581', 'Publications About Described Materials Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '583', 'Action Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '584', 'Accumulation and Frequency of Use Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '585', 'Exhibitions Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '586', 'Awards Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '588', 'Source of Description Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '600', 'Subject Added Entry - Personal Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '610', 'Subject Added Entry - Corporate Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '611', 'Subject Added Entry - Meeting Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '630', 'Subject Added Entry - Uniform Title', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '648', 'Subject Added Entry - Chronological Term', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '650', 'Subject Added Entry - Topical Term', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '653', 'Index Term - Uncontrolled', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '654', 'Subject Added Entry - Faceted Topical Terms', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '655', 'Index Term - Genre/Form', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '656', 'Index Term - Occupation', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '657', 'Index Term - Function', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '658', 'Index Term - Curriculum Objective', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '662', 'Subject Added Entry - Hierarchical Place Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '700', 'Added Entry - Personal Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '710', 'Added Entry - Corporate Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '711', 'Added Entry - Meeting Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '720', 'Added Entry - Uncontrolled Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '730', 'Added Entry - Uniform Title', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '740', 'Added Entry - Uncontrolled Related/Analytical Title', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '751', 'Added Entry - Geographic Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '752', 'Added Entry - Hierarchical Place Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '753', 'System Details Access to Computer Files', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '754', 'Added Entry - Taxonomic Identification', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '760', 'Main Series Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '762', 'Subseries Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '765', 'Original Language Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '767', 'Translation Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '770', 'Supplement/Special Issue Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '772', 'Supplement Parent Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '773', 'Host Item Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '774', 'Constituent Unit Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '775', 'Other Edition Entry ', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '776', 'Additional Physical Form Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '777', 'Issued With Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '780', 'Preceding Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '785', 'Succeeding Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '786', 'Data Source Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '787', 'Other Relationship Entry', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '800', 'Series Added Entry - Personal Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '810', 'Series Added Entry - Corporate Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '811', 'Series Added Entry - Meeting Name', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '830', 'Series Added Entry - Uniform Title', true, '');
+
+
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '841', 'Holdings Coded Data Values', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '842', 'Textual Physical Form Designator', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '843', 'Reproduction Note', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '844', 'Name of Unit', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '845', 'Terms Governing Use and Reproduction', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '850', 'Holding Institution', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '852', 'Location', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '853', 'Captions and Pattern - Basic Bibliographic Unit', true, '');
+
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '854', 'Captions and Pattern - Supplementary Material', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '855', 'Captions and Pattern - Indexes', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '856', 'Electronic Location and Access', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '863', 'Enumeration and Chronology - Basic Bibliographic Unit', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '864', 'Enumeration and Chronology - Supplementary Material', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '865', 'Enumeration and Chronology - Indexes', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '866', 'Textual Holdings - Basic Bibliographic Unit', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '867', 'Textual Holdings - Supplementary Material', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '868', 'Textual Holdings - Indexes', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '876', 'Item Information - Basic Bibliographic Unit', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '877', 'Item Information - Supplementary Material', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '878', 'Item Information - Indexes', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '880', 'Alternate Graphic Representation', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '882', 'Replacement Record Information', false, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '886', 'Foreign MARC Information Field', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '887', 'Non-MARC Information Field ', true, '');
 
 
 -- ---------------------------------------------
@@ -945,9 +1750,6 @@ values (nextval('metadata.marc_relator_code_seq'), 0, 'Woodcutter', 'wdc','Use f
 insert into                                                         
 metadata.marc_relator_code (marc_relator_code_id, version, name, relator_code, description) 
 values (nextval('metadata.marc_relator_code_seq'), 0, 'Writer of accompanying material', 'wam','Use for a person or organization who writes significant material which accompanies a sound recording or other audiovisual material.');
-
-
-
 
 
 

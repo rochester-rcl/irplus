@@ -88,6 +88,68 @@ ALTER TABLE metadata.dublin_core_encoding_scheme OWNER TO ir_plus;
 CREATE SEQUENCE metadata.dublin_core_encoding_scheme_seq;
 ALTER TABLE metadata.dublin_core_encoding_scheme_seq OWNER TO ir_plus;
 
+
+
+
+-- ---------------------------------------------
+-- Marc data field table
+-- ---------------------------------------------
+CREATE TABLE metadata.marc_data_field
+(
+    marc_data_field_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    code VARCHAR(3)NOT NULL,
+    repeatable BOOLEAN NOT NULL,
+    description TEXT,
+    UNIQUE(code)
+);
+ALTER TABLE metadata.marc_data_field OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.marc_data_field_seq;
+ALTER TABLE metadata.marc_data_field_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Marc sub field table
+-- ---------------------------------------------
+CREATE TABLE metadata.marc_sub_field
+(
+    marc_sub_field_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE metadata.marc_sub_field OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.marc_sub_field_seq;
+ALTER TABLE metadata.marc_sub_field_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Marc sub field table
+-- ---------------------------------------------
+CREATE TABLE metadata.marc_relator_code
+(
+    marc_relator_code_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    relator_code TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name),
+    UNIQUE(relator_code)
+    
+);
+ALTER TABLE metadata.marc_relator_code OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.marc_relator_code_seq;
+ALTER TABLE metadata.marc_relator_code_seq OWNER TO ir_plus;
+
+
 -- **********************************************
        
 -- Index SCHEMA     
@@ -3471,7 +3533,7 @@ CREATE INDEX ip_ignore_ip_address_idx
 -- ----------------------------------------------
 -- **********************************************
        
--- IR metadata schema  
+-- IR Dublin core metadata schema  
 
 -- **********************************************
 -- ----------------------------------------------
@@ -3515,6 +3577,61 @@ ALTER TABLE ir_metadata_dublin_core.identifier_type_dc_mapping OWNER TO ir_plus;
 CREATE SEQUENCE ir_metadata_dublin_core.identifier_type_dc_mapping_seq ;
 ALTER TABLE ir_metadata_dublin_core.identifier_type_dc_mapping_seq OWNER TO ir_plus;
 
+-- ----------------------------------------------
+-- **********************************************
+       
+-- IR Marc metadata schema  
 
+-- **********************************************
+-- ----------------------------------------------
+CREATE SCHEMA ir_metadata_marc AUTHORIZATION ir_plus;
+
+
+-- ---------------------------------------------
+-- mapping between content types and fields
+-- ---------------------------------------------
+CREATE TABLE ir_metadata_marc.content_type_field_mapping
+(
+    content_type_field_mapping_id BIGINT PRIMARY KEY NOT NULL,
+    content_type_id BIGINT NOT NULL,
+    control_field_006 CHARACTER(18),
+    control_field_007 CHARACTER(23),
+    control_field_008 CHARACTER(40),
+    encoding_level CHAR,
+    record_status CHAR,
+    type_of_record CHAR,
+    bibliographic_level CHAR,
+    type_of_control CHAR,
+    descriptive_cataloging_form CHAR,
+    version INTEGER,
+    UNIQUE(content_type_id),
+    FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type(content_type_id)
+);
+
+ALTER TABLE ir_metadata_marc.content_type_field_mapping OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_metadata_marc.content_type_field_mapping_seq;
+ALTER TABLE ir_metadata_marc.content_type_field_mapping_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- mapping between contributor types and relator codes
+-- ---------------------------------------------
+CREATE TABLE ir_metadata_marc.contributor_type_relator_code
+(
+    contributor_type_relator_code_id BIGINT PRIMARY KEY NOT NULL,
+    contributor_type_id BIGINT NOT NULL,
+    marc_relator_code_id BIGINT NOT NULL,
+    version INTEGER,
+    UNIQUE(contributor_type_id),
+    FOREIGN KEY (contributor_type_id) REFERENCES person.contributor_type(contributor_type_id),
+    FOREIGN KEY (marc_relator_code_id) REFERENCES  metadata.marc_relator_code(marc_relator_code_id)
+);
+
+ALTER TABLE ir_metadata_marc.contributor_type_relator_code OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_metadata_marc.contributor_type_relator_code_seq;
+ALTER TABLE ir_metadata_marc.contributor_type_relator_code_seq OWNER TO ir_plus;
 
       
