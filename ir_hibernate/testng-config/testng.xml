@@ -111,6 +111,9 @@
 		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.IdentifierTypeDublinCoreMappingDAOTest"/>
 		     
 		     <class name="edu.ur.hibernate.ir.metadata.marc.db.MarcContentTypeFieldMapperDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.MarcContributorTypeRelatorCodeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.MarcDataFieldMapperDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.IdentifierTypeSubFieldMapperDAOTest"/>
 		     
 		</classes>
 	</test>

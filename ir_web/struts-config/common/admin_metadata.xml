@@ -311,3 +311,81 @@
             <result name="get">/pages/admin/item/metadata/dc/identifier_types/identifier_type_dc_mapping_form.jsp</result>
         </action>
         
+        
+        <!--  ******************************************************** -->
+        <!--  Content type MARC Mapping Actions                        -->
+        <!--  ******************************************************** -->
+        <action name="viewContentTypeMarcMappings"
+         class="edu.ur.ir.web.action.item.metadata.marc.ManageMarcContentTypeField">
+            <result name="success">/pages/admin/item/metadata/marc/content_type_marc_mapping/content_type_marc_mapping.jsp</result>
+        </action>
+        
+         <!--  This handles update, save and delete -->
+        <action name="*ContentTypeMarcMapping" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.marc.ManageMarcContentTypeField">
+            <interceptor-ref name="crudStack" />
+            <result name="edit">/pages/admin/item/metadata/marc/content_type_marc_mapping/edit_content_type_marc_mapping.jsp</result>
+            <result name="added">/pages/admin/item/metadata/marc/content_type_marc_mapping/content_type_marc_mapping.jsp</result>
+            <result name="addError">/pages/admin/item/metadata/marc/content_type_marc_mapping/edit_content_type_marc_mapping.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/marc/content_type_marc_mapping/content_type_marc_mapping.jsp</result>
+        </action>
+        
+        
+        <!--  ******************************************************** -->
+        <!--  Contributor type MARC relator codes mapping              -->
+        <!--  ******************************************************** -->
+        <action name="viewContributorTypeRelatorCodes"
+           class="edu.ur.ir.web.action.item.metadata.marc.ManageMarcContributorTypeRelatorCode">
+            <result name="success">/pages/admin/item/metadata/marc/contributor_type_relator_code/contributor_type_relator_code.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*MarcContributorTypeRelatorCode" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.marc.ManageMarcContributorTypeRelatorCode">
+            <interceptor-ref name="crudStack" />
+            <result name="edit">/pages/admin/item/metadata/marc/contributor_type_relator_code/edit_contributor_type_relator_code.jsp</result>
+            <result name="added">/pages/admin/item/metadata/marc/contributor_type_relator_code/contributor_type_relator_code.jsp</result>
+            <result name="addError">/pages/admin/item/metadata/marc/contributor_type_relator_code/edit_contributor_type_relator_code.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/marc/contributor_type_relator_code/contributor_type_relator_code.jsp</result>
+        </action>
+        
+        <!--  ******************************************************** -->
+        <!--   MARC data field mapping              -->
+        <!--  ******************************************************** -->
+        <action name="viewMarcDataFieldMappers"
+           class="edu.ur.ir.web.action.item.metadata.marc.ManageMarcDataFieldMapper">
+            <result name="success">/pages/admin/item/metadata/marc/marc_data_field_mapper/marc_data_field_mapper.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*MarcDataFieldMapper" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.marc.ManageMarcDataFieldMapper">
+            <interceptor-ref name="crudStack" />
+            <result name="edit">/pages/admin/item/metadata/marc/marc_data_field_mapper/edit_marc_data_field_mapper.jsp</result>
+            <result name="added">/pages/admin/item/metadata/marc/marc_data_field_mapper/marc_data_field_mapper.jsp</result>
+            <result name="addError">/pages/admin/item/metadata/marc/marc_data_field_mapper/edit_marc_data_field_mapper.jsp</result>
+            <result name="deleted">/pages/admin/item/metadata/marc/marc_data_field_mapper/marc_data_field_mapper.jsp</result>
+        </action>
+        
+        <!--  ******************************************************** -->
+        <!--   MARC identifier type sub field mapping              -->
+        <!--  ******************************************************** -->
+        <!--  This handles update, save and delete -->
+        <action name="*MarcIdentifierTypeSubFieldMapper" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.marc.ManageIdentifierTypeSubFieldMapper">
+            <interceptor-ref name="crudStack" />
+            <result name="edit">/pages/admin/item/metadata/marc/marc_data_field_mapper/edit_identifier_type_sub_field_mapper.jsp</result>
+            <result name="added" type="redirectAction"> 
+                <param name="actionName">editMarcDataFieldMapper</param> 
+                <param name="id">${marcDataFieldMapper.id}</param> 
+            </result> 
+            <result name="addError">/pages/admin/item/metadata/marc/marc_data_field_mapper/edit_identifier_type_sub_field_mapper.jsp</result>
+            <result name="deleted" type="redirectAction"> 
+                <param name="actionName">editMarcDataFieldMapper</param> 
+                <param name="id">${marcDataFieldMapper.id}</param> 
+            </result> 
+        </action>

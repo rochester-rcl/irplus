@@ -117,7 +117,7 @@ public class ManageMarcContentTypeField extends ActionSupport
 	}
 
 	/**
-	 * Method to create a new copyright statement.
+	 * Method to create a new content type mapping
 	 * 
 	 * Create a new copyright statement
 	 */

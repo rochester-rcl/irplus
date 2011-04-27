@@ -11,6 +11,12 @@ import edu.ur.hibernate.metadata.helper.test.ContextHolder;
 import edu.ur.metadata.marc.MarcDataField;
 import edu.ur.metadata.marc.MarcDataFieldDAO;
 
+/**
+ * Test Marc data field persistence
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public class MarcDataFieldDAOTest {
 	
     /** spring application context manager  */
@@ -26,16 +32,14 @@ public class MarcDataFieldDAOTest {
     TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
     
 	/**
-	 * Test dublin core term persistence
+	 * Test marc data field persistence
 	 */
 	@Test
 	public void baseMarcDataFieldDAOTest() throws Exception{
 
+		TransactionStatus ts = tm.getTransaction(td);
 		MarcDataField element = new MarcDataField("field", true, "100");
  		element.setDescription("mdDescription");
- 		
-         
-        TransactionStatus ts = tm.getTransaction(td);
  		marcDataFieldDAO.makePersistent(element);
  	    tm.commit(ts);
  	    

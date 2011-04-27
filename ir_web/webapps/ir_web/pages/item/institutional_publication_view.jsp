@@ -275,6 +275,10 @@
 			    </c:url>
 			    <h3><a href="${oaiDcUrl}">Get OAI Record - Metadata Prefix: ${prefix}</a></h3>
 			</c:forEach>
+			<c:url var="marcExport" value="/exportToMarcMrcFile.action">
+			        <c:param name="institutionalItemVersionId" value="${institutionalItemVersion.id}"/>
+			</c:url>
+			<h3><a href="${marcExport}">Get .mrc file</a></h3>
 			</c:if>
 			
 			  <!-- *************************  All versions Start *************************  -->

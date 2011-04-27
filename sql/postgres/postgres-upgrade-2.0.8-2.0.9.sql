@@ -115,6 +115,51 @@ CREATE SEQUENCE ir_metadata_marc.contributor_type_relator_code_seq;
 ALTER TABLE ir_metadata_marc.contributor_type_relator_code_seq OWNER TO ir_plus;
 
 
+
+-- ---------------------------------------------
+-- mapping between data field and types within the 
+-- system
+-- ---------------------------------------------
+CREATE TABLE ir_metadata_marc.data_field_mapper
+(
+    data_field_mapper_id BIGINT PRIMARY KEY NOT NULL,
+    marc_data_field_id BIGINT NOT NULL,
+    indicator_1 CHARACTER(1),
+    indicator_2 CHARACTER(1),
+    version INTEGER,
+    UNIQUE(marc_data_field_id),
+    FOREIGN KEY (marc_data_field_id) REFERENCES metadata.marc_data_field(marc_data_field_id)
+);
+
+ALTER TABLE ir_metadata_marc.data_field_mapper OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_metadata_marc.data_field_mapper_seq;
+ALTER TABLE ir_metadata_marc.data_field_mapper_seq OWNER TO ir_plus;
+
+-- ---------------------------------------------
+-- mapping between sub field / data field / identifier types
+-- ---------------------------------------------
+CREATE TABLE ir_metadata_marc.identifier_type_sub_field_mapper
+(
+    identifier_type_sub_field_mapper_id BIGINT PRIMARY KEY NOT NULL,
+    data_field_mapper_id BIGINT NOT NULL,
+    marc_sub_field_id BIGINT NOT NULL,
+    identifier_type_id BIGINT NOT NULL,
+    pre_string TEXT,
+    post_string TEXT,
+    version INTEGER,
+    FOREIGN KEY (data_field_mapper_id) REFERENCES ir_metadata_marc.data_field_mapper(data_field_mapper_id),
+    FOREIGN KEY (marc_sub_field_id) REFERENCES  metadata.marc_sub_field(marc_sub_field_id),
+    FOREIGN KEY (identifier_type_id) REFERENCES ir_item.identifier_type(identifier_type_id)
+);
+
+ALTER TABLE ir_metadata_marc.identifier_type_sub_field_mapper OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_metadata_marc.identifier_type_sub_field_mapper_seq;
+ALTER TABLE ir_metadata_marc.identifier_type_sub_field_mapper_seq OWNER TO ir_plus;
+
 -- ---------------------------------------------
 -- Inserts the marc sub fields
 -- ---------------------------------------------

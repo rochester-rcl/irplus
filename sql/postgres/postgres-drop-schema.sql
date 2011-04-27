@@ -18,12 +18,17 @@
 -- **********************************************
 -- ----------------------------------------------
 
+DROP TABLE ir_metadata_marc.identifier_type_sub_field_mapper;
+DROP SEQUENCE ir_metadata_marc.identifier_type_sub_field_mapper_seq;
 
 DROP TABLE ir_metadata_marc.content_type_field_mapping;
 DROP SEQUENCE ir_metadata_marc.content_type_field_mapping_seq;
 
 DROP TABLE ir_metadata_marc.contributor_type_relator_code;
 DROP SEQUENCE ir_metadata_marc.contributor_type_relator_code_seq;
+
+DROP TABLE ir_metadata_marc.data_field_mapper;
+DROP SEQUENCE ir_metadata_marc.data_field_mapper_seq;
 
 DROP SCHEMA ir_metadata_marc;
 -- ---------------------------------------------

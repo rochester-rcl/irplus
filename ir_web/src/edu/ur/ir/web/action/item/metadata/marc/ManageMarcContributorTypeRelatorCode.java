@@ -83,8 +83,19 @@ public class ManageMarcContributorTypeRelatorCode extends ActionSupport
 	 */
 	public String save()
 	{
-		ContributorType contributorType = contributorTypeService.get(contributorTypeId, false);
-		MarcRelatorCode marcRelatorCode = marcRelatorCodeService.getById(relatorCodeId, false);
+		log.debug("Save called");
+		ContributorType contributorType = null;
+		MarcRelatorCode marcRelatorCode = null;
+		
+		if( contributorTypeId != null )
+		{
+		    contributorType = contributorTypeService.get(contributorTypeId, false);
+		}
+		
+		if( relatorCodeId != null )
+		{
+		    marcRelatorCode = marcRelatorCodeService.getById(relatorCodeId, false);
+		}
 		
 		if( contributorType == null || marcRelatorCode == null )
 		{

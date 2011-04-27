@@ -1,5 +1,5 @@
-<!--  
-   Copyright 2008 University of Rochester
+/**  
+   Copyright 2008-2011 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -12,14 +12,24 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
--->   
+*/  
 
-<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
 
-<suite name="ir hibernate test single">
-	<test name="Test Single">
-		<classes>
-		     <class name="edu.ur.hibernate.ir.metadata.marc.db.IdentifierTypeSubFieldMapperDAOTest"/>
-		</classes>
-	</test>
-</suite>
+package edu.ur.ir.marc;
+
+import java.util.Comparator;
+
+/**
+ * Implments the comparison between  tow marc data field mappers by data field code.
+ * 
+ * @author Nathan Sarr
+ *
+ */
+public class MarcDataFieldMapperComparator implements Comparator<MarcDataFieldMapper>{
+
+	
+	public int compare(MarcDataFieldMapper o1, MarcDataFieldMapper o2) {
+		return o1.getMarcDataField().getCode().compareToIgnoreCase(o2.getMarcDataField().getCode());
+	}
+
+}
