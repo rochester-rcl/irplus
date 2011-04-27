@@ -22,28 +22,28 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.marc.MarcContentTypeFieldMapper;
-import edu.ur.ir.marc.MarcContentTypeFieldMapperDAO;
+import edu.ur.ir.marc.IdentifierTypeSubFieldMapper;
+import edu.ur.ir.marc.IdentifierTypeSubFieldMapperDAO;
 
 /**
- * Implementation of the Marc Content type field mapper data access object.
+ * Data access for the identifer type sub field mapper.
  * 
  * @author Nathan Sarr
  *
  */
-public class HbMarcContentTypeFieldMapperDAO implements MarcContentTypeFieldMapperDAO{
+public class HbIdentifierTypeSubFieldMapperDAO implements IdentifierTypeSubFieldMapperDAO{
 
-	/** eclipse generated id */
-	private static final long serialVersionUID = -5853383312640313089L;
+	// Eclipse generated id.
+	private static final long serialVersionUID = -3009362822867315140L;
 	
 	/**  Helper for persisting information using hibernate.  */
-	private final HbCrudDAO<MarcContentTypeFieldMapper> hbCrudDAO;
+	private final HbCrudDAO<IdentifierTypeSubFieldMapper> hbCrudDAO;
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbMarcContentTypeFieldMapperDAO() {
-		hbCrudDAO = new HbCrudDAO<MarcContentTypeFieldMapper>(MarcContentTypeFieldMapper.class);
+	public  HbIdentifierTypeSubFieldMapperDAO() {
+		hbCrudDAO = new HbCrudDAO<IdentifierTypeSubFieldMapper>(IdentifierTypeSubFieldMapper.class);
 	}
 	
 	/**
@@ -58,30 +58,41 @@ public class HbMarcContentTypeFieldMapperDAO implements MarcContentTypeFieldMapp
 
 
 	
-	public MarcContentTypeFieldMapper getByContentTypeId(Long contentTypeId) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcContentTypeFieldMapperByContentTypeId");
-		q.setParameter("contentTypeId", contentTypeId);
-        return (MarcContentTypeFieldMapper)q.uniqueResult();
-	}
-
-	
-	public List<MarcContentTypeFieldMapper> getAll() {
+	/**
+	 * Get all identifier type sub field mappers.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	public List<IdentifierTypeSubFieldMapper> getAll() {
 		return hbCrudDAO.getAll();
 	}
 
-	
-	public MarcContentTypeFieldMapper getById(Long id, boolean lock) {
+	/**
+	 * Get identifier type sub field mapper by id.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
+	 */
+	public IdentifierTypeSubFieldMapper getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
-	
-	public void makePersistent(MarcContentTypeFieldMapper entity) {
+	/**
+	 * Save the identifier type sub field mapper.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
+	 */
+	public void makePersistent(IdentifierTypeSubFieldMapper entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
-	
-	public void makeTransient(MarcContentTypeFieldMapper entity) {
+	/**
+	 * Remove the identifier type sub field mapper from persistence.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
+	 */
+	public void makeTransient(IdentifierTypeSubFieldMapper entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+	
 
 }

@@ -834,6 +834,22 @@
        <property name="marcContributorTypeRelatorCodeService" ref="marcContributorTypeRelatorCodeService"/>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="marcDataFieldMapperService" 
+       class="edu.ur.ir.marc.service.DefaultMarcDataFieldMapperService">
+       <property name="marcDataFieldMapperDAO" ref="marcDataFieldMapperDAO"/>
+   </bean>
    
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="identifierTypeSubFieldMapperService" 
+       class="edu.ur.ir.marc.service.DefaultIdentifierTypeSubFieldMapperService">
+       <property name="identifierTypeSubFieldMapperDAO" ref="identifierTypeSubFieldMapperDAO"/>
+   </bean>
    
 </beans>

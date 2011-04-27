@@ -24,26 +24,25 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
-import edu.ur.ir.item.ContentType;
-import edu.ur.ir.item.ContentTypeDAO;
-
-import edu.ur.ir.marc.MarcContentTypeFieldMapper;
-import edu.ur.ir.marc.MarcContentTypeFieldMapperDAO;
+import edu.ur.ir.marc.MarcDataFieldMapper;
+import edu.ur.ir.marc.MarcDataFieldMapperDAO;
+import edu.ur.metadata.marc.MarcDataField;
+import edu.ur.metadata.marc.MarcDataFieldService;
 
 /**
- * Test for the MarcContentTypeFieldMapperDAO
+ * Test data access for the marc data field mapper.
  * 
  * @author Nathan Sarr
  *
  */
-public class MarcContentTypeFieldMapperDAOTest  {
+public class MarcDataFieldMapperDAOTest {
 	
 	/** get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 	
 	/** dublin core mapping data access object */
-	MarcContentTypeFieldMapperDAO marcContentTypeFieldMapperDAO = (MarcContentTypeFieldMapperDAO) ctx
-	.getBean("marcContentTypeFieldMapperDAO");
+	MarcDataFieldMapperDAO marcDataFieldMapperDAO = (MarcDataFieldMapperDAO) ctx
+	.getBean("marcDataFieldMapperDAO");
 
   
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
@@ -52,44 +51,40 @@ public class MarcContentTypeFieldMapperDAOTest  {
     TransactionDefinition td = new DefaultTransactionDefinition(
 	TransactionDefinition.PROPAGATION_REQUIRED);
     
-    /** content type data access object */
-    ContentTypeDAO contentTypeDAO = (ContentTypeDAO) ctx
-	.getBean("contentTypeDAO");
+    MarcDataFieldService marcDataFieldService = (MarcDataFieldService) ctx
+	.getBean("marcDataFieldService");
     
 	/**
 	 * Test mapping persistence
 	 */
 	@Test
-	public void baseMarcContentTypeFiledMapperDAOTest() throws Exception{
+	public void baseMarcDataFieldMapperDAOTest() throws Exception{
 
 	    TransactionStatus ts = tm.getTransaction(td);
  		
-        // create a identifier type
- 		ContentType ct = new ContentType("ctName", "ctDescription");
- 		contentTypeDAO.makePersistent(ct);	
- 	   
- 	    
- 	    // create the mapping
- 		MarcContentTypeFieldMapper mapper = new MarcContentTypeFieldMapper(ct);
- 		marcContentTypeFieldMapperDAO.makePersistent(mapper);
- 	    
+	    MarcDataField element = new MarcDataField("field", true, "100");
+	    marcDataFieldService.save(element);
+	    
+ 		MarcDataFieldMapper mapper = new MarcDataFieldMapper(element);
+ 		mapper.setIndicator1("1");
+ 		mapper.setIndicator1("2");
+ 		marcDataFieldMapperDAO.makePersistent(mapper);	    
  	    tm.commit(ts);
  	   
  	    ts = tm.getTransaction(td);
  	    
- 	    MarcContentTypeFieldMapper other = marcContentTypeFieldMapperDAO.getById(mapper.getId(), false);
+ 	    MarcDataFieldMapper other = marcDataFieldMapperDAO.getById(mapper.getId(), false);
  	    assert other.equals(mapper) : " Other " + other + "\n should be equal to " + mapper;
  	    
- 	    other =  marcContentTypeFieldMapperDAO.getByContentTypeId(ct.getId());
+ 	    other =  marcDataFieldMapperDAO.getByMarcDataFieldId(element.getId());
  	    assert other.equals(mapper) : " Other " + other + "\n should be equal to " + mapper;
  	    tm.commit(ts);
  	    
  	    
 	    ts = tm.getTransaction(td);
         // delete data
-	    marcContentTypeFieldMapperDAO.makeTransient(marcContentTypeFieldMapperDAO.getById(mapper.getId(), false));
-	    contentTypeDAO.makeTransient(contentTypeDAO.getById(ct.getId(), false));
+	    marcDataFieldMapperDAO.makeTransient(marcDataFieldMapperDAO.getById(mapper.getId(), false));
+	    marcDataFieldService.delete(marcDataFieldService.getById(element.getId(), false));
 	    tm.commit(ts);
 	}
-
 }
