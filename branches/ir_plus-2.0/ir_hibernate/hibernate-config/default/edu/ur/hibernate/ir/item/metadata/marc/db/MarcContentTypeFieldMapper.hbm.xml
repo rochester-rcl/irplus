@@ -51,6 +51,10 @@
 		<!-- template control fields - 006: 18 characters -->	
 		<property name="controlField006" column="control_field_006" type="string"
 			access="field" />
+			
+				<!-- template control fields - 006: 18 characters -->	
+		<property name="thesis" column="is_thesis" type="boolean"
+			access="field" not-null="true"/>
 	    
 	    <!-- template control fields - 007: 23 characters -->	
         <property name="controlField007" column="control_field_007" type="string"

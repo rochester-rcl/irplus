@@ -275,10 +275,14 @@
 			    </c:url>
 			    <h3><a href="${oaiDcUrl}">Get OAI Record - Metadata Prefix: ${prefix}</a></h3>
 			</c:forEach>
-			<c:url var="marcExport" value="/exportToMarcMrcFile.action">
+			<c:url var="marcMrcExport" value="/exportToMarcMrcFile.action">
 			        <c:param name="institutionalItemVersionId" value="${institutionalItemVersion.id}"/>
 			</c:url>
-			<h3><a href="${marcExport}">Get .mrc file</a></h3>
+			<h3><a href="${marcMrcExport}">Get MARC as .mrc file</a></h3>
+			<c:url var="marcXmlExport" value="/exportToMarcXmlFile.action">
+			        <c:param name="institutionalItemVersionId" value="${institutionalItemVersion.id}"/>
+			</c:url>
+			<h3><a href="${marcXmlExport}">Get MARC as .xml file</a></h3>
 			</c:if>
 			
 			  <!-- *************************  All versions Start *************************  -->

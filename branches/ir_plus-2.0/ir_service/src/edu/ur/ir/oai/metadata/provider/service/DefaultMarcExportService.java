@@ -149,10 +149,9 @@ public class DefaultMarcExportService implements MarcExportService{
 		{
 		    handlePublisher(record, year);
 		    handleExtents(item, record);
-		    handleDateSubmitted(record, version.getDateOfDeposit());
 		    if( item.getDescription() != null && !item.getDescription().trim().equals(""))
 		    {
-		        handleDescription(record, item.getDescription());
+		        handleDescription(record, item.getDescription(), mapper);
 		    }
 		    if( item.isEmbargoed() )
 		    {
@@ -233,12 +232,6 @@ public class DefaultMarcExportService implements MarcExportService{
 				}
 			}
 		}
-		
-		
-		
-		
-		
-		
 		
 	}
 	
@@ -401,29 +394,22 @@ public class DefaultMarcExportService implements MarcExportService{
 	
 
 	
-	private void handleDateSubmitted(Record record, Date dateSubmitted)
-	{
-		DateFormat fullDateFormater = new SimpleDateFormat("MM/dd/yyyy");
-		
-		String date = "";
-		
-		if( dateSubmitted != null )
-		{
-			date = fullDateFormater.format(dateSubmitted);
-		}
-		
-		DataField df = factory.newDataField("500", ' ', ' ');
-		String value = "Title from PDF of title page (University of Rochester, viewed on " + date + ")";
-		df.addSubfield(factory.newSubfield('a', value));
-		record.addVariableField(df);
-	}
+
 	
-	private void handleDescription(Record record, String description)
+	private void handleDescription(Record record, String description, MarcContentTypeFieldMapper mapper)
 	{
-		
-		DataField df = factory.newDataField("502", ' ', ' ');
-		df.addSubfield(factory.newSubfield('a', description));
-		record.addVariableField(df);
+		if( mapper != null && mapper.isThesis() )
+		{
+		    DataField df = factory.newDataField("502", ' ', ' ');
+		    df.addSubfield(factory.newSubfield('a', description));
+		    record.addVariableField(df);
+		}
+		else
+		{
+			DataField df = factory.newDataField("500", ' ', ' ');
+		    df.addSubfield(factory.newSubfield('a', description));
+		    record.addVariableField(df);
+		}
 	}
 	
 	private void handleEmbargo(Record record, Date embargoDate)
@@ -439,7 +425,7 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 		
 		DataField df = factory.newDataField("506", ' ', ' ');
-		String value = "Access restricted to current members of the University of Rochester until  " + date + ". Registration with NetID required.";
+		String value = "Access restricted  until  " + date + ".";
 		df.addSubfield(factory.newSubfield('a', value));
 		record.addVariableField(df);
 	}
@@ -531,7 +517,8 @@ public class DefaultMarcExportService implements MarcExportService{
 	{
 		for(ItemContentType itemContentType : item.getItemContentTypes() )
 		{
-			if( itemContentType.getContentType().equals("Thesis"))
+			MarcContentTypeFieldMapper mapper = marcContentTypeFieldMapperService.getByContentTypeId(itemContentType.getContentType().getId());
+			if( mapper != null && mapper.isThesis() )
 			{
 				DataField df = factory.newDataField("655", ' ', ' ');
 				df.setIndicator2('7');
@@ -539,6 +526,8 @@ public class DefaultMarcExportService implements MarcExportService{
 				df.addSubfield(factory.newSubfield('a', "Electronic dissertations."));
 				df.addSubfield(factory.newSubfield('2', "lcgft"));
 				record.addVariableField(df);
+				// exit out once set
+				return;
 			}
 		}
 	}

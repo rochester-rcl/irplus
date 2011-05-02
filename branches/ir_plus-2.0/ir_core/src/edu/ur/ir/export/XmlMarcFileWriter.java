@@ -5,18 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-
-import org.marc4j.MarcStreamWriter;
 import org.marc4j.MarcWriter;
+import org.marc4j.MarcXmlWriter;
 import org.marc4j.marc.Record;
 
-/**
- * Creates an mrc file
- * 
- * @author Nathan Sarr
- *
- */
-public class MrcMarcFileWriter implements MarcRecordFileWriter {
+public class XmlMarcFileWriter implements MarcRecordFileWriter {
 
 	
 	public void writeFile(Record marcRecord, File f) throws FileNotFoundException {
@@ -25,7 +18,7 @@ public class MrcMarcFileWriter implements MarcRecordFileWriter {
 		MarcWriter writer = null;
 		try {
 			outputStream = new FileOutputStream(f);
-			writer = new MarcStreamWriter(outputStream);
+			writer = new  MarcXmlWriter(outputStream);
 			writer.write(marcRecord);
 			writer.close();
 		}
@@ -54,7 +47,6 @@ public class MrcMarcFileWriter implements MarcRecordFileWriter {
 
 		
 	}
-
 
 
 }

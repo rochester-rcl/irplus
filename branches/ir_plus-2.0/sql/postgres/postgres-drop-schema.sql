@@ -18,6 +18,9 @@
 -- **********************************************
 -- ----------------------------------------------
 
+DROP TABLE ir_metadata_marc.extent_type_sub_field_mapper;
+DROP SEQUENCE ir_metadata_marc.extent_type_sub_field_mapper_seq;
+
 DROP TABLE ir_metadata_marc.identifier_type_sub_field_mapper;
 DROP SEQUENCE ir_metadata_marc.identifier_type_sub_field_mapper_seq;
 
