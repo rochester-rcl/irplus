@@ -597,12 +597,10 @@ public class DefaultMarcRecordCreator implements MarcRecordCreator
 		
 		Sponsor sponsor = new Sponsor("sponserer");
 		
-		ExtentType numPages = new ExtentType();
-		numPages.setName("Number of Pages");	
+		ExtentType numPages = new ExtentType("Number of Pages");
 		item.addItemExtent(numPages, "12");
 		
-		ExtentType illustrations = new ExtentType();
-		illustrations.setName("Illustrations");	
+		ExtentType illustrations = new ExtentType("Illustrations");
 		item.addItemExtent(illustrations, "12");
 
 		

@@ -94,9 +94,23 @@ public class HbMarcDataFieldMapperDAO implements MarcDataFieldMapperDAO{
 	}
 
 	
-	public MarcDataFieldMapper getByMarcDataFieldId(Long marcDataFieldId) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcDataFieldMapperByDataFieldId");
+	public MarcDataFieldMapper getByMarcDataFieldIndicatorsId(Long marcDataFieldId, String indicator1, String indicator2) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcDataFieldMapperByDataFieldIndicatorsId");
 		q.setParameter("marcDataFieldId", marcDataFieldId);
+		
+		String ind1 = indicator1;
+		if( ind1 == null || ind1.trim() == "")
+		{
+		    ind1 = " ";	
+		}
+		q.setParameter("indicator1", ind1);
+		
+		String ind2 = indicator2;
+		if( ind2 == null || ind2.trim() == "")
+		{
+		    ind2 = " ";	
+		}
+		q.setParameter("indicator2", ind2);
 		return (MarcDataFieldMapper)q.uniqueResult();
 	}
 

@@ -56,9 +56,7 @@ public class ExtentTypeDAOTest {
 	@Test
 	public void baseExtentTypeDAOTest() throws Exception{
 		
-		ExtentType extentType = new ExtentType();
-		extentType.setName("extentTypeName");
- 		extentType.setDescription("extentTypeDescription");
+		ExtentType extentType = new ExtentType("extentTypeName","extentTypeDescription" );
 
         // Start the transaction 
 		TransactionStatus ts = tm.getTransaction(td);

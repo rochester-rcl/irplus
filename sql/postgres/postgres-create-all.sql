@@ -3595,7 +3595,7 @@ CREATE TABLE ir_metadata_marc.content_type_field_mapping
     content_type_field_mapping_id BIGINT PRIMARY KEY NOT NULL,
     content_type_id BIGINT NOT NULL,
     control_field_006 CHARACTER(18),
-    control_field_007 CHARACTER(23),
+    control_field_007 CHARACTER(14),
     control_field_008 CHARACTER(40),
     encoding_level CHAR,
     record_status CHAR,
@@ -3641,10 +3641,10 @@ CREATE TABLE ir_metadata_marc.data_field_mapper
 (
     data_field_mapper_id BIGINT PRIMARY KEY NOT NULL,
     marc_data_field_id BIGINT NOT NULL,
-    indicator_1 CHARACTER(1),
-    indicator_2 CHARACTER(1),
+    indicator_1 CHARACTER(1) NOT NULL,
+    indicator_2 CHARACTER(1) NOT NULL,
     version INTEGER,
-    UNIQUE(marc_data_field_id),
+    UNIQUE(marc_data_field_id, indicator_1, indicator_2),
     FOREIGN KEY (marc_data_field_id) REFERENCES metadata.marc_data_field(marc_data_field_id)
 );
 
@@ -3676,5 +3676,31 @@ ALTER TABLE ir_metadata_marc.identifier_type_sub_field_mapper OWNER TO ir_plus;
 -- The external account type sequence
 CREATE SEQUENCE ir_metadata_marc.identifier_type_sub_field_mapper_seq;
 ALTER TABLE ir_metadata_marc.identifier_type_sub_field_mapper_seq OWNER TO ir_plus;
+
+
+
+-- ---------------------------------------------
+-- mapping between sub field / data field / extent types
+-- ---------------------------------------------
+CREATE TABLE ir_metadata_marc.extent_type_sub_field_mapper
+(
+    extent_type_sub_field_mapper_id BIGINT PRIMARY KEY NOT NULL,
+    data_field_mapper_id BIGINT NOT NULL,
+    marc_sub_field_id BIGINT NOT NULL,
+    extent_type_id BIGINT NOT NULL,
+    pre_string TEXT,
+    post_string TEXT,
+    version INTEGER,
+    FOREIGN KEY (data_field_mapper_id) REFERENCES ir_metadata_marc.data_field_mapper(data_field_mapper_id),
+    FOREIGN KEY (marc_sub_field_id) REFERENCES  metadata.marc_sub_field(marc_sub_field_id),
+    FOREIGN KEY (extent_type_id) REFERENCES ir_item.extent_type(extent_type_id)
+);
+
+ALTER TABLE ir_metadata_marc.extent_type_sub_field_mapper OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_metadata_marc.extent_type_sub_field_mapper_seq;
+ALTER TABLE ir_metadata_marc.extent_type_sub_field_mapper_seq OWNER TO ir_plus;
+
 
       

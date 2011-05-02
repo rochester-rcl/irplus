@@ -78,6 +78,11 @@ public class DefaultIdentifierTypeSubFieldMapperService implements IdentifierTyp
 			IdentifierTypeSubFieldMapperDAO identifierTypeSubFieldMapperDAO) {
 		this.identifierTypeSubFieldMapperDAO = identifierTypeSubFieldMapperDAO;
 	}
+
+	@Override
+	public List<IdentifierTypeSubFieldMapper> getByIdentifierTypeId(Long id) {
+		return identifierTypeSubFieldMapperDAO.getByIdentifierTypeId(id);
+	}
 	
 
 }

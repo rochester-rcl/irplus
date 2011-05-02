@@ -42,11 +42,11 @@
 		
 		<!-- first indicator -->	
 		<property name="indicator1" column="indicator_1" type="string"
-			access="field" />
+			access="field" not-null="true"/>
 	    
 	    <!-- second indicator -->	
         <property name="indicator2" column="indicator_2" type="string"
-			access="field" />
+			access="field" not-null="true"/>
 	
 	
 		<!--  marc data field -->
@@ -66,14 +66,26 @@
 			<key column="data_field_mapper_id" not-null="true"/>
 			<one-to-many class="IdentifierTypeSubFieldMapper"/>
 		</set>
+		
+		<!--  set of extent type sub field mappers -->	
+		<set name="extentTypeSubFieldMappings" 
+		    inverse="true" 
+		    cascade="all-delete-orphan" 
+		    access="field" 
+		    lazy="true">
+			<key column="data_field_mapper_id" not-null="true"/>
+			<one-to-many class="ExtentTypeSubFieldMapper"/>
+		</set>
 	   
 	 </class>
 		
 
     <!-- Gets mapping by marc data field id  -->
-	<query name="getMarcDataFieldMapperByDataFieldId">
+	<query name="getMarcDataFieldMapperByDataFieldIndicatorsId">
 	    from MarcDataFieldMapper as mapping 	    
 	    where mapping.marcDataField.id = :marcDataFieldId
+	    and mapping.indicator1 = :indicator1
+	    and mapping.indicator2 = :indicator2
 	</query>
 
 	

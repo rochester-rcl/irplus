@@ -39,5 +39,13 @@ public interface IdentifierTypeSubFieldMapperService {
 	 */
 	public void delete(IdentifierTypeSubFieldMapper entity);
 	
+	/**
+	 * Get by the identifier type id.
+	 * 
+	 * @param id - identifier type id.
+	 * @return the mapper if found otherwise null
+	 */
+	public List<IdentifierTypeSubFieldMapper> getByIdentifierTypeId(Long id);
+	
 
 }
