@@ -24,67 +24,95 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
+import edu.ur.ir.item.ExtentType;
+import edu.ur.ir.item.ExtentTypeDAO;
+import edu.ur.ir.marc.ExtentTypeSubFieldMapperDAO;
+import edu.ur.ir.marc.ExtentTypeSubFieldMapper;
 import edu.ur.ir.marc.MarcDataFieldMapper;
 import edu.ur.ir.marc.MarcDataFieldMapperDAO;
 import edu.ur.metadata.marc.MarcDataField;
 import edu.ur.metadata.marc.MarcDataFieldService;
+import edu.ur.metadata.marc.MarcSubField;
+import edu.ur.metadata.marc.MarcSubFieldService;
 
 /**
- * Test data access for the marc data field mapper.
+ * Test Extent type mapping.
  * 
  * @author Nathan Sarr
  *
  */
-public class MarcDataFieldMapperDAOTest {
-	
-	/** get the application context */
+public class ExtentTypeSubFieldMapperDAOTest {
+
+	// get the application context */
 	ApplicationContext ctx = ContextHolder.getApplicationContext();
 	
-	/** dublin core mapping data access object */
+	// marc data field data mapper data access object */
 	MarcDataFieldMapperDAO marcDataFieldMapperDAO = (MarcDataFieldMapperDAO) ctx
 	.getBean("marcDataFieldMapperDAO");
+	
+	ExtentTypeSubFieldMapperDAO extentTypeSubFieldMapperDAO = (ExtentTypeSubFieldMapperDAO) ctx
+	.getBean("extentTypeSubFieldMapperDAO");
 
-  
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
 	.getBean("transactionManager");
 	
     TransactionDefinition td = new DefaultTransactionDefinition(
 	TransactionDefinition.PROPAGATION_REQUIRED);
     
+    // marc data field service
     MarcDataFieldService marcDataFieldService = (MarcDataFieldService) ctx
 	.getBean("marcDataFieldService");
+    
+    // identifier type data access
+    ExtentTypeDAO extentTypeDAO = (ExtentTypeDAO) ctx
+	.getBean("extentTypeDAO");
+    
+    // marc sub field service
+    MarcSubFieldService marcSubFieldService = (MarcSubFieldService) ctx.getBean("marcSubFieldService");
     
 	/**
 	 * Test mapping persistence
 	 */
 	@Test
-	public void baseMarcDataFieldMapperDAOTest() throws Exception{
+	public void baseExtentTypeSubfieldMapperDAOTest() throws Exception{
 
 	    TransactionStatus ts = tm.getTransaction(td);
  		
+	    // create new data field
 	    MarcDataField element = new MarcDataField("field", true, "100");
 	    marcDataFieldService.save(element);
 	    
+	    // create the sub field
+	    MarcSubField marcSubField = new MarcSubField("j");
+	    marcSubFieldService.save(marcSubField);
+	    
+	    // create the extent type
+	    ExtentType extentType = new ExtentType("extentTypeName");
+	    extentTypeDAO.makePersistent(extentType);
+	    
+	    // create the parent mapper
  		MarcDataFieldMapper mapper = new MarcDataFieldMapper(element);
- 		mapper.setIndicator1("1");
- 		mapper.setIndicator1("2");
- 		marcDataFieldMapperDAO.makePersistent(mapper);	    
+ 		marcDataFieldMapperDAO.makePersistent(mapper);	  
+ 		
+ 		ExtentTypeSubFieldMapper subFieldMapper = mapper.add(extentType, marcSubField);
+ 		
+ 		extentTypeSubFieldMapperDAO.makePersistent(subFieldMapper);
  	    tm.commit(ts);
  	   
  	    ts = tm.getTransaction(td);
  	    
- 	    MarcDataFieldMapper other = marcDataFieldMapperDAO.getById(mapper.getId(), false);
- 	    assert other.equals(mapper) : " Other " + other + "\n should be equal to " + mapper;
- 	    
- 	    other =  marcDataFieldMapperDAO.getByMarcDataFieldIndicatorsId(element.getId(), mapper.getIndicator1(), mapper.getIndicator2());
- 	    assert other.equals(mapper) : " Other " + other + "\n should be equal to " + mapper;
+ 	    ExtentTypeSubFieldMapper other = extentTypeSubFieldMapperDAO.getById(subFieldMapper.getId(), false);
+ 	    assert other.equals(subFieldMapper) : " Other " + other + "\n should be equal to " + mapper;
+
  	    tm.commit(ts);
  	    
  	    
 	    ts = tm.getTransaction(td);
         // delete data
 	    marcDataFieldMapperDAO.makeTransient(marcDataFieldMapperDAO.getById(mapper.getId(), false));
+	    marcSubFieldService.delete(marcSubFieldService.getById(marcSubField.getId(), false));
 	    marcDataFieldService.delete(marcDataFieldService.getById(element.getId(), false));
+	    extentTypeDAO.makeTransient(extentTypeDAO.getById(extentType.getId(), false));
 	    tm.commit(ts);
 	}
 }

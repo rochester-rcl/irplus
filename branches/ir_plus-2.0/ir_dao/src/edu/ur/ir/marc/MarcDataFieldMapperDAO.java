@@ -30,7 +30,10 @@ public interface MarcDataFieldMapperDAO extends CrudDAO<MarcDataFieldMapper>
 	 * Get the mapper by marc data field id.
 	 * 
 	 * @param marcDataFieldId - id of the marc data field
+	 * @param indicator1 - indicator1 value
+	 * @param indicator2 - indicator2 value
+	 * 
 	 * @return the MarcDataFieldMapper
 	 */
-	public MarcDataFieldMapper getByMarcDataFieldId(Long marcDataFieldId);
+	public MarcDataFieldMapper getByMarcDataFieldIndicatorsId(Long marcDataFieldId, String indicator1, String indicator2);
 }

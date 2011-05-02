@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.metadata.marc.MarcDataField;
 import edu.ur.metadata.marc.MarcSubField;
@@ -40,13 +41,16 @@ public class MarcDataFieldMapper extends BasePersistent{
 	private MarcDataField marcDataField;
 	
 	// first indicator
-	private String indicator1;
+	private String indicator1 = " ";
 	
 	//second indicatior
-	private String indicator2;
+	private String indicator2 = " ";
 	
 	// list of identifier type mappings
 	private Set<IdentifierTypeSubFieldMapper> identifierTypeSubFieldMappings = new HashSet<IdentifierTypeSubFieldMapper>();
+
+	// list of extent type mappings
+	private Set<ExtentTypeSubFieldMapper> extentTypeSubFieldMappings = new HashSet<ExtentTypeSubFieldMapper>();
 
 
 	/**
@@ -113,6 +117,83 @@ public class MarcDataFieldMapper extends BasePersistent{
 		return identifierTypeSubFieldMappings.remove(mapper);
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Get the extent type sub field mapper by 
+	 * @param extentType
+	 * @param MarcSubField marcSubField
+	 * 
+	 * @return the found extent sub type field mapper otherwise null 
+	 */
+	public ExtentTypeSubFieldMapper get(ExtentType extentType,MarcSubField marcSubField)
+	{
+		for(ExtentTypeSubFieldMapper etsfm : extentTypeSubFieldMappings)
+		{
+			if(etsfm.getExtentType().getId().equals(extentType.getId()) && 
+			   etsfm.getMarcSubField().equals(marcSubField))
+			{
+				return etsfm;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Create a new identifier type subfield mapper.
+	 * 
+	 * @param identifierType
+	 * @param marcSubField
+	 * @return
+	 */
+	public ExtentTypeSubFieldMapper add(ExtentType extentType, MarcSubField marcSubField)
+	{
+		ExtentTypeSubFieldMapper subFieldMapper = get(extentType, marcSubField);
+		if( subFieldMapper == null )
+		{
+			subFieldMapper = new ExtentTypeSubFieldMapper(extentType, this, marcSubField);
+			extentTypeSubFieldMappings.add(subFieldMapper);
+		}
+		return subFieldMapper;
+	}
+	
+	/**
+	 * Remove the identifier type sub field mapper from the list of mappers.
+	 * 
+	 * @param mapper identifier type sub field mapper to remove
+	 * @return true if the mapper is removed otherwise false
+	 */
+	public boolean remove(ExtentTypeSubFieldMapper mapper)
+	{
+		return extentTypeSubFieldMappings.remove(mapper);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * Get the marc data field.
 	 * 
@@ -149,7 +230,14 @@ public class MarcDataFieldMapper extends BasePersistent{
 	 * @param indicator1
 	 */
 	public void setIndicator1(String indicator1) {
-		this.indicator1 = indicator1;
+		if( indicator1 != null && !indicator1.trim().equals(""))
+		{
+		    this.indicator1 = indicator1;
+		}
+		else
+		{
+			this.indicator1 = " ";
+		}
 	}
 
 
@@ -169,7 +257,14 @@ public class MarcDataFieldMapper extends BasePersistent{
 	 * @param indicator2
 	 */
 	public void setIndicator2(String indicator2) {
-		this.indicator2 = indicator2;
+		if( indicator2 != null && !indicator2.trim().equals(""))
+		{
+		    this.indicator2 = indicator2;
+		}
+		else
+		{
+			this.indicator2 = " ";
+		}
 	}
 	
 	/**
@@ -218,6 +313,26 @@ public class MarcDataFieldMapper extends BasePersistent{
 			Set<IdentifierTypeSubFieldMapper> identifierTypeSubFieldMappings) {
 		this.identifierTypeSubFieldMappings = identifierTypeSubFieldMappings;
 	}
+	
+	/**
+	 * Get the extent type sub field mappings.
+	 * 
+	 * @return the subfield mappings
+	 */
+	public Set<ExtentTypeSubFieldMapper> getExtentTypeSubFieldMappings() {
+		return Collections.unmodifiableSet(extentTypeSubFieldMappings);
+	}
+
+	
+	/**
+	 * Package protected setter.
+	 * 
+	 * @param identifierTypeSubFieldMappings
+	 */
+	void setExtentTypeSubFieldMappings(
+			Set<ExtentTypeSubFieldMapper> extentTypeSubFieldMappings) {
+		this.extentTypeSubFieldMappings = extentTypeSubFieldMappings;
+	}
     
     /**
      * Equals.
@@ -233,7 +348,37 @@ public class MarcDataFieldMapper extends BasePersistent{
 
 		if( ( marcDataField != null && !marcDataField.equals(other.getMarcDataField()) ) ||
 			( marcDataField == null && other.getMarcDataField() != null ) ) return false;
+		
+		if( ( indicator1 != null && !indicator1.equals(other.getIndicator1()) ) ||
+			( indicator1 == null && other.getIndicator1() != null ) ) return false;
+		
+		if( ( indicator2 != null && !indicator2.equals(other.getIndicator2()) ) ||
+			( indicator2 == null && other.getIndicator2() != null ) ) return false;
 		return true;
+    }
+    
+    public char getIndicator1AsChar()
+    {
+    	if( indicator1 == null || indicator1.length() == 0 || indicator1.trim().equals(""))
+    	{
+    		return ' ';
+    	}
+    	else
+    	{
+    		return indicator1.charAt(0);
+    	}
+    }
+    
+    public char getIndicator2AsChar()
+    {
+    	if( indicator2 == null || indicator2.length() == 0 || indicator2.trim().equals(""))
+    	{
+    		return ' ';
+    	}
+    	else
+    	{
+    		return indicator2.charAt(0);
+    	}
     }
 
 }

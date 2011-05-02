@@ -93,6 +93,20 @@ public class HbIdentifierTypeSubFieldMapperDAO implements IdentifierTypeSubField
 	public void makeTransient(IdentifierTypeSubFieldMapper entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+
+	/**
+	 * Get by the identifier type id.
+	 * 
+	 * @param id - identifier type id.
+	 * @return the list of mappers
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IdentifierTypeSubFieldMapper> getByIdentifierTypeId(Long id)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getIdentifierTypeMapperByIdentifierTypeId");
+		q.setParameter("identifierTypeId", id);
+		return q.list();
+	}
 	
 
 }

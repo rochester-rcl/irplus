@@ -16,6 +16,8 @@
 
 package edu.ur.ir.marc;
 
+import java.util.List;
+
 import edu.ur.dao.CrudDAO;
 
 /**
@@ -25,5 +27,13 @@ import edu.ur.dao.CrudDAO;
  *
  */
 public interface IdentifierTypeSubFieldMapperDAO extends CrudDAO<IdentifierTypeSubFieldMapper>{
+	
+	/**
+	 * Get by the identifier type id.
+	 * 
+	 * @param id - identifier type id.
+	 * @return the list of mappers
+	 */
+	public List<IdentifierTypeSubFieldMapper> getByIdentifierTypeId(Long id);
 }
 

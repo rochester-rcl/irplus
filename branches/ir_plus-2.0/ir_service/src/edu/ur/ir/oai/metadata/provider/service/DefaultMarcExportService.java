@@ -20,6 +20,7 @@ package edu.ur.ir.oai.metadata.provider.service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ import org.marc4j.marc.Record;
 
 import edu.ur.ir.export.MarcExportService;
 import edu.ur.ir.institution.InstitutionalItemVersion;
+import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.item.GenericItem;
@@ -40,13 +42,19 @@ import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.item.ItemExtent;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemIdentifier;
+import edu.ur.ir.item.ItemTitle;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.marc.ExtentTypeSubFieldMapper;
+import edu.ur.ir.marc.ExtentTypeSubFieldMapperService;
+import edu.ur.ir.marc.IdentifierTypeSubFieldMapper;
+import edu.ur.ir.marc.IdentifierTypeSubFieldMapperService;
 import edu.ur.ir.marc.MarcContentTypeFieldMapper;
 import edu.ur.ir.marc.MarcContentTypeFieldMapperService;
 import edu.ur.ir.marc.MarcContributorTypeRelatorCode;
 import edu.ur.ir.marc.MarcContributorTypeRelatorCodeService;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.PersonName;
+import edu.ur.metadata.marc.MarcDataField;
 
 /**
  * Export service for marc.
@@ -73,8 +81,15 @@ public class DefaultMarcExportService implements MarcExportService{
 
 	// service to help with relator codes
 	private MarcContributorTypeRelatorCodeService marcContributorTypeRelatorCodeService;
-
-
+	
+	// service for dealing with identifier type sub fields
+	private IdentifierTypeSubFieldMapperService identifierTypeSubFieldMapperService;
+	
+	/**  Used to get the url for a given item */
+	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
+	
+	// service for dealing with identifier type sub fields
+	private ExtentTypeSubFieldMapperService extentTypeSubFieldMapperService;
 
 
 
@@ -154,12 +169,20 @@ public class DefaultMarcExportService implements MarcExportService{
 		        handleKeywords(record, item.getItemKeywords());
 		    }
 		    handleContentTypes(record, item);
+		    String url = null;
 		    if( version.getHandleInfo() != null )
 		    {
-			    if( version.getHandleInfo().getData() != null && !version.getHandleInfo().getData().trim().equals(""))
-			    {
-				    handleHandleUrl(record, version.getHandleInfo().getData());
-			    }
+				url = version.getHandleInfo().getNameAuthority().getAuthorityBaseUrl() + 
+						version.getHandleInfo().getNameAuthority().getNamingAuthority() + "/" + 
+						version.getHandleInfo().getLocalName();
+		    }
+		    else
+		    {
+		        url = institutionalItemVersionUrlGenerator.createUrl(version.getVersionedInstitutionalItem().getInstitutionalItem(), version.getVersionNumber());
+		    }
+		    if( url != null )
+		    {
+		        handleUrl(record,url);
 		    }
 		}
 		return record;
@@ -169,32 +192,54 @@ public class DefaultMarcExportService implements MarcExportService{
 	// work properly
 	private void handleExtents(GenericItem item, Record record)
 	{
-		String numPages = "";
-		String illustrations = "";
-		
-		Set<ItemExtent> extents = item.getItemExtents();
+        Set<ItemExtent> extents = item.getItemExtents();
 		
 		for(ItemExtent extent : extents)
 		{
-			if(extent.getExtentType().getName().equalsIgnoreCase("Number of Pages"))
+			List<ExtentTypeSubFieldMapper> mappers = extentTypeSubFieldMapperService.getByExtentTypeId(extent.getExtentType().getId());
+			
+			if( mappers.size() > 0 )
 			{
-				numPages = extent.getValue().trim();
-			}
-			if( extent.getExtentType().getName().equalsIgnoreCase("Illustrations"))
-			{
-				illustrations = extent.getValue().trim();
+				for(ExtentTypeSubFieldMapper mapper : mappers)
+				{
+					//get the datafield 
+					MarcDataField marcDataField = mapper.getMarcDataFieldMapper().getMarcDataField();
+					
+					DataField df = (DataField)record.getVariableField(marcDataField.getCode());
+					
+					String value = extent.getValue();
+					if( mapper.getPreString() != null )
+					{
+						value = mapper.getPreString() + value;
+					}
+					if( mapper.getPostString() != null )
+					{
+						value = value + mapper.getPostString();
+					}
+					
+					if( df == null)
+					{
+						df = factory.newDataField(marcDataField.getCode(), 
+								mapper.getMarcDataFieldMapper().getIndicator1AsChar(),
+								mapper.getMarcDataFieldMapper().getIndicator2AsChar());
+						
+						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), value));
+						record.addVariableField(df);
+					}
+					else
+					{
+						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), value));
+					}
+				}
 			}
 		}
 		
-		DataField df = factory.newDataField("300", ' ', ' ');
-		df.addSubfield(factory.newSubfield('a', "1 online resource " + numPages));
 		
 		
-		if(illustrations != null && !illustrations.equals(""))
-		{
-			df.addSubfield(factory.newSubfield('b', illustrations));
-		}
-		record.addVariableField(df);
+		
+		
+		
+		
 	}
 	
 	private ItemContributor getMainAuthor(GenericItem item)
@@ -231,7 +276,19 @@ public class DefaultMarcExportService implements MarcExportService{
 		
 		DataField df = factory.newDataField("245", '1', ind2);
 		df.addSubfield(factory.newSubfield('a', leadingArticles + item.getName()));
-		df.addSubfield(factory.newSubfield('h', "[electronic resource]:"));
+		
+		
+		if( item.getSubTitles().size() > 0 )
+		{
+			Iterator<ItemTitle> subTitleIter = item.getSubTitles().iterator();
+			ItemTitle subTitle = subTitleIter.next();
+			df.addSubfield(factory.newSubfield('h', "[electronic resource]:"));
+			df.addSubfield(factory.newSubfield('b', subTitle.getFullTitle() + "/"));	
+		}
+		else
+		{
+			df.addSubfield(factory.newSubfield('h', "[electronic resource]/"));
+		}
 		
 		if( ic != null )
 		{
@@ -419,12 +476,41 @@ public class DefaultMarcExportService implements MarcExportService{
 	{
 		for(ItemIdentifier identifier : identifiers)
 		{
-			if( identifier.getIdentifierType().getName().equals("LCSH"))
+			List<IdentifierTypeSubFieldMapper> mappers = identifierTypeSubFieldMapperService.getByIdentifierTypeId(identifier.getIdentifierType().getId());
+			
+			if( mappers.size() > 0 )
 			{
-				DataField df = factory.newDataField("650", ' ', ' ');
-				df.setIndicator2('0');
-				df.addSubfield(factory.newSubfield('a', identifier.getValue()));
-				record.addVariableField(df);
+				for(IdentifierTypeSubFieldMapper mapper : mappers)
+				{
+					//get the datafield 
+					MarcDataField marcDataField = mapper.getMarcDataFieldMapper().getMarcDataField();
+					
+					DataField df = (DataField)record.getVariableField(marcDataField.getCode());
+					
+					String value = identifier.getValue();
+					if( mapper.getPreString() != null )
+					{
+						value = mapper.getPreString() + value;
+					}
+					if( mapper.getPostString() != null )
+					{
+						value = value + mapper.getPostString();
+					}
+					
+					if( marcDataField.isRepeatable() || df == null)
+					{
+						df = factory.newDataField(marcDataField.getCode(), 
+								mapper.getMarcDataFieldMapper().getIndicator1AsChar(),
+								mapper.getMarcDataFieldMapper().getIndicator2AsChar());
+						
+						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), value));
+						record.addVariableField(df);
+					}
+					else
+					{
+						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), value));
+					}
+				}
 			}
 		}
 	}
@@ -457,7 +543,7 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 	}
 	
-	private void handleHandleUrl(Record record, String url)
+	private void handleUrl(Record record, String url)
 	{
 		DataField df = factory.newDataField("856", '4', '0');
 		df.addSubfield(factory.newSubfield('u', url));
@@ -546,6 +632,35 @@ public class DefaultMarcExportService implements MarcExportService{
 			MarcContributorTypeRelatorCodeService marcContributorTypeRelatorCodeService) {
 		this.marcContributorTypeRelatorCodeService = marcContributorTypeRelatorCodeService;
 	}
+	
+	/**
+	 * Set the identifier type sub field mapper service.
+	 * 
+	 * @param identifierTypeSubFieldMapperService
+	 */
+	public void setIdentifierTypeSubFieldMapperService(
+			IdentifierTypeSubFieldMapperService identifierTypeSubFieldMapperService) {
+		this.identifierTypeSubFieldMapperService = identifierTypeSubFieldMapperService;
+	}
 
 
+	/**
+	 * Set the institutional item version url generator.
+	 * 
+	 * @param institutionalItemVersionUrlGenerator
+	 */
+	public void setInstitutionalItemVersionUrlGenerator(
+			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
+	}
+
+	/**
+	 * Set the extent type field mapper service.
+	 * 
+	 * @param extentTypeSubFieldMapperService
+	 */
+	public void setExtentTypeSubFieldMapperService(
+			ExtentTypeSubFieldMapperService extentTypeSubFieldMapperService) {
+		this.extentTypeSubFieldMapperService = extentTypeSubFieldMapperService;
+	}
 }

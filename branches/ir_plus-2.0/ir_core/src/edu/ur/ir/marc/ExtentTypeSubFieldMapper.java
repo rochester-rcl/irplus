@@ -16,61 +16,59 @@
 
 package edu.ur.ir.marc;
 
-import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.ExtentType;
 import edu.ur.metadata.marc.MarcSubField;
 
-
 /**
- * Mapps a sub filed to a subfield.
- * 
+ * Maps an extent type to a sub field.
  * 
  * @author Nathan Sarr
  *
  */
-public class IdentifierTypeSubFieldMapper extends MarcSubFieldMapper{
+public class ExtentTypeSubFieldMapper extends MarcSubFieldMapper{
 	
 	//eclipse generated id.
-	private static final long serialVersionUID = -2540077455609267252L;
+	private static final long serialVersionUID = -7715705997475412147L;
 	
-	// identifier type to map this to
-	private IdentifierType identifierType;
+	// extent type to map this to
+	private ExtentType extentType;
 
 	/**
 	 * Package protected constructor
 	 */
-	IdentifierTypeSubFieldMapper(){}
+	ExtentTypeSubFieldMapper(){}
 	
 	/**
-	 * Create an identifier type sub field mapper.
+	 * Create an extent type sub field mapper.
 	 * 
-	 * @param identifierType - identifier to map
+	 * @param extentType - extent to map
 	 * @param marcDataField - parent marc data field
-	 * @param marcSubField - marc sub field to map the identifier type to
+	 * @param marcSubField - marc sub field to map the extent type to
 	 */
-	public IdentifierTypeSubFieldMapper(IdentifierType identifierType, 
+	public ExtentTypeSubFieldMapper(ExtentType extentType, 
 			MarcDataFieldMapper marcDataFieldMapper, MarcSubField marcSubField)
 	{
-		setIdentifierType(identifierType);
+		setExtentType(extentType);
 		setMarcDataFieldMapper(marcDataFieldMapper);
 		setMarcSubField(marcSubField);
 	}
 	
 	/**
-	 * Get the identifier type.
+	 * Get the extent type.
 	 * 
 	 * @return
 	 */
-	public IdentifierType getIdentifierType() {
-		return identifierType;
+	public ExtentType getExtentType() {
+		return extentType;
 	}
 
 	/**
-	 * Set the identifier type.
+	 * Set the extent type.
 	 * 
-	 * @param identifierType
+	 * @param extentType
 	 */
-	public void setIdentifierType(IdentifierType identifierType) {
-		this.identifierType = identifierType;
+	public void setExtentType(ExtentType extentType) {
+		this.extentType = extentType;
 	}
 	
 	/**
@@ -81,7 +79,7 @@ public class IdentifierTypeSubFieldMapper extends MarcSubFieldMapper{
     public int hashCode()
     {
     	int hash = 0;
-    	hash += identifierType == null ? 0 : identifierType.hashCode();
+    	hash += extentType == null ? 0 : extentType.hashCode();
     	hash += marcDataFieldMapper == null ? 0 : marcDataFieldMapper.hashCode();
     	hash += marcSubField == null ? 0 : marcSubField.hashCode();
     	return hash;
@@ -89,7 +87,7 @@ public class IdentifierTypeSubFieldMapper extends MarcSubFieldMapper{
     
     public String toString()
     {
-    	StringBuffer sb = new StringBuffer("[Marc identifier type sub field mapper id = ");
+    	StringBuffer sb = new StringBuffer("[Marc extent type sub field mapper id = ");
 		sb.append(id);
 		sb.append("]");
 		return sb.toString();
@@ -103,12 +101,12 @@ public class IdentifierTypeSubFieldMapper extends MarcSubFieldMapper{
     public boolean equals(Object o)
     {
     	if (this == o) return true;
-		if (!(o instanceof IdentifierTypeSubFieldMapper)) return false;
+		if (!(o instanceof ExtentTypeSubFieldMapper)) return false;
 
-		final IdentifierTypeSubFieldMapper other = (IdentifierTypeSubFieldMapper) o;
+		final ExtentTypeSubFieldMapper other = (ExtentTypeSubFieldMapper) o;
 
-		if( ( identifierType != null && !identifierType.equals(other.getIdentifierType()) ) ||
-			( identifierType == null && other.getIdentifierType() != null ) ) return false;
+		if( ( extentType != null && !extentType.equals(other.getExtentType()) ) ||
+			( extentType == null && other.getExtentType() != null ) ) return false;
 		
 		if( ( marcDataFieldMapper != null && !marcDataFieldMapper.equals(other.getMarcDataFieldMapper()) ) ||
 			( marcDataFieldMapper == null && other.getMarcDataFieldMapper() != null ) ) return false;
@@ -120,4 +118,5 @@ public class IdentifierTypeSubFieldMapper extends MarcSubFieldMapper{
 		return true;
     }
 	
+
 }

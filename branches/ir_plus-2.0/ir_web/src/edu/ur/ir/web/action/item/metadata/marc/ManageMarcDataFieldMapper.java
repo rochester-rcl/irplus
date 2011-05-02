@@ -82,7 +82,7 @@ public class ManageMarcDataFieldMapper extends ActionSupport
 			 return "addError";
 		}
 		
-		MarcDataFieldMapper other = marcDataFieldMapperService.getByDataFieldId(dataFieldId);
+		MarcDataFieldMapper other = marcDataFieldMapperService.getByDataFieldIndicatorsId(dataFieldId, indicator1, indicator2);
 		if( marcDataFieldMapper != null )
 		{
 			if(other == null ||  marcDataFieldMapper.getId().equals(other.getId()))

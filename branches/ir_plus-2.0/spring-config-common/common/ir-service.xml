@@ -832,6 +832,10 @@
        <property name="contentTypeService" ref="contentTypeService"/>
        <property name="marcContentTypeFieldMapperService" ref="marcContentTypeFieldMapperService"/>
        <property name="marcContributorTypeRelatorCodeService" ref="marcContributorTypeRelatorCodeService"/>
+       <property name="identifierTypeSubFieldMapperService" ref="identifierTypeSubFieldMapperService"/>
+       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+       <property name="extentTypeSubFieldMapperService" ref="extentTypeSubFieldMapperService"/>
+   
    </bean>
    
    <!-- ****************************************** --> 
@@ -850,6 +854,15 @@
    <bean id="identifierTypeSubFieldMapperService" 
        class="edu.ur.ir.marc.service.DefaultIdentifierTypeSubFieldMapperService">
        <property name="identifierTypeSubFieldMapperDAO" ref="identifierTypeSubFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!--  Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="extentTypeSubFieldMapperService" 
+       class="edu.ur.ir.marc.service.DefaultExtentTypeSubFieldMapperService">
+       <property name="extentTypeSubFieldMapperDAO" ref="extentTypeSubFieldMapperDAO"/>
    </bean>
    
 </beans>

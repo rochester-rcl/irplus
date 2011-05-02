@@ -32,9 +32,12 @@ public interface MarcDataFieldMapperService extends Serializable{
 	 * Get the mapper by data field id.
 	 * 
 	 * @param dataFieldId - id of the data field.
+	 * @param indicator1 - value of the first indicator
+	 * @param indicator2 - value of the second indicator
+	 * 
 	 * @return the mapper if found otherwise null.
 	 */
-	public MarcDataFieldMapper getByDataFieldId(Long dataFieldId);
+	public MarcDataFieldMapper getByDataFieldIndicatorsId(Long dataFieldId, String indicator1, String indicator2);
 	
 	
 	/**

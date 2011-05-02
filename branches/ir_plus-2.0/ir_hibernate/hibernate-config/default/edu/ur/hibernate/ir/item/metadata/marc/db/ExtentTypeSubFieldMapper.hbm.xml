@@ -25,14 +25,14 @@
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.marc">
-	<class name="IdentifierTypeSubFieldMapper" schema="ir_metadata_marc" table="identifier_type_sub_field_mapper"
+	<class name="ExtentTypeSubFieldMapper" schema="ir_metadata_marc" table="extent_type_sub_field_mapper"
 		lazy="true">
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="identifier_type_sub_field_mapper_id"
+		<id name="id" type="long" column="extent_type_sub_field_mapper_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_metadata_marc.identifier_type_sub_field_mapper_seq</param>
+				<param name="sequence">ir_metadata_marc.extent_type_sub_field_mapper_seq</param>
 			</generator>
 		</id>
 
@@ -66,18 +66,18 @@
 			not-null="true"/>
 		
 		<!--  identifier type -->
-		<many-to-one class="edu.ur.ir.item.IdentifierType"
-			name="identifierType" 
-			column="identifier_type_id" 
+		<many-to-one class="edu.ur.ir.item.ExtentType"
+			name="extentType" 
+			column="extent_type_id" 
 			access="field" 
 			unique="true"
 			not-null="true"/>
 	 </class>
 	 
 	 <!-- Gets mapping by  contributor type id  -->
-	 <query name="getIdentifierTypeMapperByIdentifierTypeId">
-	    from IdentifierTypeSubFieldMapper as mapping 	    
-	    where mapping.identifierType.id = :identifierTypeId
+	 <query name="getExtentTypeMapperByExtentTypeId">
+	    from ExtentTypeSubFieldMapper as mapping 	    
+	    where mapping.extentType.id = :extentTypeId
 	 </query>
 	 
 	

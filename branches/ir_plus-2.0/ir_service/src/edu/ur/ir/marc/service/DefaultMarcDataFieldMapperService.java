@@ -39,8 +39,8 @@ public class DefaultMarcDataFieldMapperService implements MarcDataFieldMapperSer
 	 * 
 	 * @see edu.ur.ir.marc.MarcDataFieldMapperService#getByDataFieldId(java.lang.Long)
 	 */
-	public MarcDataFieldMapper getByDataFieldId(Long dataFieldId) {
-		return marcDataFieldMapperDAO.getByMarcDataFieldId(dataFieldId);
+	public MarcDataFieldMapper getByDataFieldIndicatorsId(Long dataFieldId, String indicator1, String indicator2) {
+		return marcDataFieldMapperDAO.getByMarcDataFieldIndicatorsId(dataFieldId, indicator1, indicator2);
 	}
 
 	/**
