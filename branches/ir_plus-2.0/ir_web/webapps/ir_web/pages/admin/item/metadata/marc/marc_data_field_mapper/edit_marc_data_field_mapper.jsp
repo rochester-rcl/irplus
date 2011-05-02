@@ -113,7 +113,7 @@
 	        <c:url value="/admin/editMarcIdentifierTypeSubFieldMapper.action" var="newIdentifierTypeMapperUrl">
 	            <c:param name="marcDataFieldMapperId" value="${marcDataFieldMapper.id}"/>
 	        </c:url>
-	        <a href="${newIdentifierTypeMapperUrl}">New Identifier type Mapping</a>
+	        <a href="${newIdentifierTypeMapperUrl}">New Identifier Type Mapping</a>
 	        <br/>
 	        <br/>
 	        <div class="dataTable">
@@ -154,6 +154,61 @@
 	                           
 	                           <c:url value="/admin/editMarcIdentifierTypeSubFieldMapper.action" var="editUrl">
 	                               <c:param name="id" value="${ident.id}"/>
+	                           </c:url>
+	                           <a href="${deleteUrl}">Delete</a> / <a href="${editUrl}">Edit</a>
+	                        </urstb:td>
+	                       
+	                    </urstb:tr>
+	            </urstb:tbody>
+	        </urstb:table>
+  
+            </div>	
+
+	        <h3>Extent Type Mappings</h3>
+	        <c:url value="/admin/editMarcExtentTypeSubFieldMapper.action" var="newExtentTypeMapperUrl">
+	            <c:param name="marcDataFieldMapperId" value="${marcDataFieldMapper.id}"/>
+	        </c:url>
+	        <a href="${newExtentTypeMapperUrl}">New Extent Type Mapping</a>
+	        <br/>
+	        <br/>
+	        <div class="dataTable">
+
+	        <urstb:table width="100%">
+	        <urstb:thead>
+	            <urstb:tr>
+	                <urstb:td>Id</urstb:td>
+					<urstb:td>Extent Type</urstb:td>
+					<urstb:td>Sub Field</urstb:td>
+					<urstb:td>Action</urstb:td>
+	            </urstb:tr>
+	            </urstb:thead>
+	            <urstb:tbody
+	                var="extent" 
+	                oddRowClass="odd"
+	                evenRowClass="even"
+	                currentRowClassVar="rowClass"
+	                collection="${marcDataFieldMapper.extentTypeSubFieldMappings}">
+	                    <urstb:tr 
+	                        cssClass="${rowClass}"
+	                        onMouseOver="this.className='highlight'"
+	                        onMouseOut="this.className='${rowClass}'">
+	                        <urstb:td>
+		                       ${extent.id}
+	                        </urstb:td>
+	                        <urstb:td>
+			                   ${extent.extentType.name}
+	                        </urstb:td>
+	                        <urstb:td>
+			                   ${extent.marcSubField.name} 
+	                        </urstb:td>
+	                       
+	                        <urstb:td>
+	                           <c:url value="/admin/deleteMarcExtentTypeSubFieldMapper.action" var="deleteUrl">
+	                               <c:param name="id" value="${extent.id}"/>
+	                           </c:url>
+	                           
+	                           <c:url value="/admin/editMarcExtentTypeSubFieldMapper.action" var="editUrl">
+	                               <c:param name="id" value="${extent.id}"/>
 	                           </c:url>
 	                           <a href="${deleteUrl}">Delete</a> / <a href="${editUrl}">Edit</a>
 	                        </urstb:td>

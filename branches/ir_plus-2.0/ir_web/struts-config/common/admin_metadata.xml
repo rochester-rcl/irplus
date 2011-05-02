@@ -365,7 +365,7 @@
             class="edu.ur.ir.web.action.item.metadata.marc.ManageMarcDataFieldMapper">
             <interceptor-ref name="crudStack" />
             <result name="edit">/pages/admin/item/metadata/marc/marc_data_field_mapper/edit_marc_data_field_mapper.jsp</result>
-            <result name="added">/pages/admin/item/metadata/marc/marc_data_field_mapper/marc_data_field_mapper.jsp</result>
+            <result name="added">/pages/admin/item/metadata/marc/marc_data_field_mapper/edit_marc_data_field_mapper.jsp</result>
             <result name="addError">/pages/admin/item/metadata/marc/marc_data_field_mapper/edit_marc_data_field_mapper.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/marc/marc_data_field_mapper/marc_data_field_mapper.jsp</result>
         </action>
@@ -384,6 +384,27 @@
                 <param name="id">${marcDataFieldMapper.id}</param> 
             </result> 
             <result name="addError">/pages/admin/item/metadata/marc/marc_data_field_mapper/edit_identifier_type_sub_field_mapper.jsp</result>
+            <result name="deleted" type="redirectAction"> 
+                <param name="actionName">editMarcDataFieldMapper</param> 
+                <param name="id">${marcDataFieldMapper.id}</param> 
+            </result> 
+        </action>
+        
+        
+        <!--  ******************************************************** -->
+        <!--   MARC Extent type sub field mapping              -->
+        <!--  ******************************************************** -->
+        <!--  This handles update, save and delete -->
+        <action name="*MarcExtentTypeSubFieldMapper" 
+            method="{1}"
+            class="edu.ur.ir.web.action.item.metadata.marc.ManageExtentTypeSubFieldMapper">
+            <interceptor-ref name="crudStack" />
+            <result name="edit">/pages/admin/item/metadata/marc/marc_data_field_mapper/edit_extent_type_sub_field_mapper.jsp</result>
+            <result name="added" type="redirectAction"> 
+                <param name="actionName">editMarcDataFieldMapper</param> 
+                <param name="id">${marcDataFieldMapper.id}</param> 
+            </result> 
+            <result name="addError">/pages/admin/item/metadata/marc/marc_data_field_mapper/edit_extent_type_sub_field_mapper.jsp</result>
             <result name="deleted" type="redirectAction"> 
                 <param name="actionName">editMarcDataFieldMapper</param> 
                 <param name="id">${marcDataFieldMapper.id}</param> 

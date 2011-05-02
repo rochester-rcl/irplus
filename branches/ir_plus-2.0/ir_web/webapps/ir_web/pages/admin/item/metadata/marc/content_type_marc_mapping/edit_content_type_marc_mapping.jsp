@@ -65,8 +65,10 @@
         <c:import url="/inc/header.jsp"/>
       
        
-        <h3><a href="<c:url value="/admin/viewContentTypeMarcMappings.action"/>">MARC21 content type mappings</a> &gt; Content Type MARC Mapping</h3>
+        <h3><a href="<c:url value="/admin/viewContentTypeMarcMappings.action"/>">MARC21 Leader/content type mappings</a> &gt; Edit MARC21 Leader/Content Type MARC Mapping</h3>
   
+        <p>Note: This is only a template - you only need to fill in the fields common to all items with the given content type.  
+           Some fields like language and dates will be filled in automatically.</p>
         <div id="bd">
 		
 	  <form action="<c:url value="/admin/saveContentTypeMarcMapping.action"/>"  method="post">
@@ -90,37 +92,37 @@
 		      </td>
 	       </tr>
 	       <tr>       
-	           <td align="left" class="label">Record Status</td>
+	           <td align="left" class="label">Record Status(Leader/05)</td>
 		       <td align="left" class="input">
 		           <input type="text"  size="1" maxlength="1" name="recordStatus" value="<c:if test="${recordStatus != ' '}">${recordStatus}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       
-	           <td align="left" class="label">Type of Record</td>
+	           <td align="left" class="label">Type of Record(Leader/06)</td>
 		       <td align="left" class="input">
 		           <input type="text"  size="1" maxlength="1" name="typeOfRecord" value="<c:if test="${typeOfRecord != ' '}">${typeOfRecord}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       
-	           <td align="left" class="label">Bibliographic Level</td>
+	           <td align="left" class="label">Bibliographic Level(Leader/07)</td>
 		       <td align="left" class="input">
 		           <input type="text"  size="1" maxlength="1" name="bibliographicLevel" value="<c:if test="${bibliographicLevel != ' '}">${bibliographicLevel}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       
-	           <td align="left" class="label">Type Of Control</td>
+	           <td align="left" class="label">Type Of Control(Leader/08)</td>
 		       <td align="left" class="input">
 		           <input type="text"  size="1" maxlength="1" name="typeOfControl" value="<c:if test="${typeOfControl != ' '}">${typeOfControl}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       
-	           <td align="left" class="label">Encoding Level</td>
+	           <td align="left" class="label">Encoding Level(Leader/17)</td>
 		       <td align="left" class="input">
 		           <input type="text"  size="1" maxlength="1" name="encodingLevel" value="<c:if test="${encodingLevel != ' '}">${encodingLevel}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       
-	           <td align="left" class="label">Descriptive Cataloging Form</td>
+	           <td align="left" class="label">Descriptive Cataloging Form(Leader/18)</td>
 		       <td align="left" class="input">
 		           <input type="text"  size="1" maxlength="1" name="descriptiveCatalogingForm" value="<c:if test="${descriptiveCatalogingForm != ' '}">${descriptiveCatalogingForm}</c:if>"/>
 		       </td>
