@@ -470,9 +470,17 @@
          	<result name="success">/pages/collection/collection_statistics.jsp</result>
         </action> 
         
-         <!-- marc file export action -->
+        <!-- marc MRC file export action -->
         <action name="exportToMarcMrcFile"
-            class="edu.ur.ir.web.action.export.MarcFileExport">
+            class="edu.ur.ir.web.action.export.MarcFileExport"
+            method="mrc">
+            <result name="success" type="no-op"/>
+        </action>
+        
+         <!-- marc XML file export action -->
+        <action name="exportToMarcXmlFile"
+            class="edu.ur.ir.web.action.export.MarcFileExport"
+            method="xml">
             <result name="success" type="no-op"/>
         </action>
          

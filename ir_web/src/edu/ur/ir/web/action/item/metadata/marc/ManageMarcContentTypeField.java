@@ -108,7 +108,9 @@ public class ManageMarcContentTypeField extends ActionSupport
 	
 	// descriptive cataloging form
 	private char descriptiveCatalogingForm = ' ';
-
+	
+	// set thesis equal to false
+	private boolean thesis = false;
 
 
 	public String execute()
@@ -136,7 +138,7 @@ public class ManageMarcContentTypeField extends ActionSupport
 		    log.debug("recording status = " + recordStatus);
 		    log.debug("type of control = " + typeOfControl);
 		    log.debug("type of record = " + typeOfRecord);
-		   
+		    log.debug("thesis = " + thesis);
 		}
 		
 
@@ -170,6 +172,7 @@ public class ManageMarcContentTypeField extends ActionSupport
 				marcContentTypeFieldMapper.setRecordStatus(recordStatus);
 				marcContentTypeFieldMapper.setTypeOfControl(typeOfControl);
 				marcContentTypeFieldMapper.setTypeOfRecord(typeOfRecord);
+				marcContentTypeFieldMapper.setThesis(thesis);
 				
 				log.debug("marcContentTypeFieldMapper = " + marcContentTypeFieldMapper);
 				marcContentTypeFieldMapperService.save(marcContentTypeFieldMapper);
@@ -435,6 +438,7 @@ public class ManageMarcContentTypeField extends ActionSupport
 		
 		id = marcContentTypeFieldMapper.getId();
 		contentTypeId = marcContentTypeFieldMapper.getContentType().getId();
+		thesis = marcContentTypeFieldMapper.isThesis();
 	}
 	
 	
@@ -537,6 +541,25 @@ public class ManageMarcContentTypeField extends ActionSupport
 	 */
 	public Long getId() {
 		return id;
+	}
+	
+
+	/**
+	 * Returns true if thesis is checked.
+	 * 
+	 * @return
+	 */
+	public boolean getThesis() {
+		return thesis;
+	}
+
+	/**
+	 * Set to true if thesis is checked.
+	 * 
+	 * @param thesis
+	 */
+	public void setThesis(boolean thesis) {
+		this.thesis = thesis;
 	}
 
 }

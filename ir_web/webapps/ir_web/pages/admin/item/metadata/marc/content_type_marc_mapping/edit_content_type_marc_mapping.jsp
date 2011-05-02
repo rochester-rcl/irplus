@@ -92,6 +92,12 @@
 		      </td>
 	       </tr>
 	       <tr>       
+	           <td align="left" class="label">Thesis Content Type</td>
+		       <td align="left" class="input">
+		           <input type="checkbox"  name="thesis" <c:if test="${thesis}">checked="true"</c:if> value="true"/>
+		       </td>
+	       </tr>
+	       <tr>       
 	           <td align="left" class="label">Record Status(Leader/05)</td>
 		       <td align="left" class="input">
 		           <input type="text"  size="1" maxlength="1" name="recordStatus" value="<c:if test="${recordStatus != ' '}">${recordStatus}</c:if>"/>

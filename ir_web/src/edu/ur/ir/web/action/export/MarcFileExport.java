@@ -30,6 +30,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.export.MarcExportService;
 import edu.ur.ir.export.MrcMarcFileWriter;
+import edu.ur.ir.export.XmlMarcFileWriter;
 import edu.ur.ir.file.TemporaryFileCreator;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
@@ -77,11 +78,11 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
      *
      * @return {@link #SUCCESS}
      */
-    public String execute() throws Exception {
+    public String mrc() throws Exception {
     	
     	if( log.isDebugEnabled())
     	{
-    		log.debug("get institutional item version  " + institutionalItemVersionId);
+    		log.debug("get mrc institutional item version  " + institutionalItemVersionId);
     	}
     	
     	MrcMarcFileWriter writer = new MrcMarcFileWriter();
@@ -91,6 +92,29 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
     	Record marcRecord = marcExportService.export(version);
     	writer.writeFile(marcRecord, f);        	
     	webIoUtils.streamFile(fileName, f, "mrc", response, request, (1024*4), true, true);
+    	f.delete();
+        return SUCCESS;
+    }
+    
+	/**
+     * Gets the next ir file to be downloaded
+     *
+     * @return {@link #SUCCESS}
+     */
+    public String xml() throws Exception {
+    	
+    	if( log.isDebugEnabled())
+    	{
+    		log.debug("get xml institutional item version  " + institutionalItemVersionId);
+    	}
+    	
+    	XmlMarcFileWriter writer = new XmlMarcFileWriter();
+    	InstitutionalItemVersion version = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
+    	File f = temporaryFileCreator.createTemporaryFile("xml");
+    	String fileName = "institutional_item_version_" + version.getId();   	
+    	Record marcRecord = marcExportService.export(version);
+    	writer.writeFile(marcRecord, f);        	
+    	webIoUtils.streamFile(fileName, f, "xml", response, request, (1024*4), true, true);
     	f.delete();
         return SUCCESS;
     }

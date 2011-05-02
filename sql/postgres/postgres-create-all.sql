@@ -3597,6 +3597,7 @@ CREATE TABLE ir_metadata_marc.content_type_field_mapping
     control_field_006 CHARACTER(18),
     control_field_007 CHARACTER(14),
     control_field_008 CHARACTER(40),
+    is_thesis BOOLEAN NOT NULL,
     encoding_level CHAR,
     record_status CHAR,
     type_of_record CHAR,

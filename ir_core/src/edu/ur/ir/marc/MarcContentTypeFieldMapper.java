@@ -65,6 +65,12 @@ public class MarcContentTypeFieldMapper extends BasePersistent{
 	// descriptive cataloging form
 	private char descriptiveCatalogingForm = ' ';
 	
+	// indicates this is a thesis
+	private boolean thesis = false;
+	
+	
+
+
 	/**
 	 * Content type field mapper
 	 */
@@ -360,6 +366,32 @@ public class MarcContentTypeFieldMapper extends BasePersistent{
 			( contentType == null && other.getContentType() != null ) ) return false;
 		
 		return true;
+	}
+	
+	/**
+	 * Returns true if this is a thesis.
+	 * 
+	 * @return
+	 */
+	public boolean getThesis()
+	{
+		return isThesis();
+	}
+	
+	/**
+	 * Returns true if this is a thesis
+	 * @return
+	 */
+	public boolean isThesis() {
+		return thesis;
+	}
+
+	/**
+	 * Returns true if this is a thesis.
+	 * @param thesis
+	 */
+	public void setThesis(boolean thesis) {
+		this.thesis = thesis;
 	}
 
 
