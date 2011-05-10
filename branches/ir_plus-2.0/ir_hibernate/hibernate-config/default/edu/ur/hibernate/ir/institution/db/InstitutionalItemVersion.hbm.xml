@@ -704,6 +704,19 @@
 	      )
 	</query>
 	
+		<!--place of publication changes -->
+    <query name="updateItemVersionForPlaceOfPublicationChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       where item.externalPublishedItem.placeOfPublication.id = :placeOfPublicationId 
+	      )
+	</query>
+	
 	
     <!--series changes -->
     <query name="updateItemVersionForSeriesChange">

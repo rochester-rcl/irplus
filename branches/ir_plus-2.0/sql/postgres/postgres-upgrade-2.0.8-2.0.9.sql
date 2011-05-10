@@ -1,4 +1,34 @@
 -- ---------------------------------------------
+-- Place of publication
+-- ---------------------------------------------
+CREATE TABLE ir_item.place_of_publication
+(
+    place_of_publication_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT,
+    letter_code VARCHAR(3),
+    description TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE ir_item.place_of_publication OWNER TO ir_plus;
+
+-- The language type sequence
+CREATE SEQUENCE ir_item.place_of_publication_seq ;
+ALTER TABLE ir_item.place_of_publication_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Alter external published item and add place of
+-- publication
+-- ---------------------------------------------
+ALTER TABLE ir_item.external_published_item ADD COLUMN place_of_publication_id BIGINT;
+ 
+
+ALTER TABLE ir_item.external_published_item
+  ADD CONSTRAINT external_published_item_place_of_publication_id_fkey FOREIGN KEY (place_of_publication_id)
+      REFERENCES ir_item.place_of_publication (place_of_publication_id);
+
+-- ---------------------------------------------
 -- Marc data field table
 -- ---------------------------------------------
 CREATE TABLE metadata.marc_data_field
@@ -94,6 +124,68 @@ ALTER TABLE ir_metadata_marc.content_type_field_mapping OWNER TO ir_plus;
 -- The external account type sequence
 CREATE SEQUENCE ir_metadata_marc.content_type_field_mapping_seq;
 ALTER TABLE ir_metadata_marc.content_type_field_mapping_seq OWNER TO ir_plus;
+
+
+INSERT INTO ir_metadata_marc.content_type_field_mapping (
+    content_type_field_mapping_id, 
+    content_type_id, 
+    control_field_006, 
+    control_field_007, 
+    control_field_008, 
+    is_thesis, 
+    encoding_level, 
+    record_status, 
+    type_of_record, 
+    bibliographic_level, 
+    type_of_control, 
+    descriptive_cataloging_form, 
+    version) 
+    VALUES(
+            nextval('ir_metadata_marc.content_type_field_mapping_seq'), 
+            (select content_type.content_type_id from ir_item.content_type 
+            where content_type.unique_system_code = 'BOOK'), 
+            'm        d        ', 
+            'cr||||||||||||', 
+            '                       s                ',  
+            false, 
+            'K', 
+            ' ', 
+            'c', 
+            'm', 
+            ' ', 
+            'a', 
+            0) ;
+
+INSERT INTO ir_metadata_marc.content_type_field_mapping (content_type_field_mapping_id,
+content_type_id, 
+control_field_006, 
+control_field_007,
+control_field_008, 
+is_thesis, 
+encoding_level, 
+record_status, 
+type_of_record, 
+bibliographic_level, 
+type_of_control, 
+descriptive_cataloging_form, 
+version) 
+VALUES (nextval('ir_metadata_marc.content_type_field_mapping_seq'), 
+         (select content_type.content_type_id from ir_item.content_type 
+            where content_type.unique_system_code = 'THESIS'), 
+        'm        d        ',
+        'cr||||||||||||', 
+        '      s                s                ',  
+        true, 
+        'K', 
+        ' ', 
+        'c', 
+        'm', 
+        ' ', 
+        'a', 
+        0);
+
+
+
 
 -- ---------------------------------------------
 -- mapping between contributor types and relator codes

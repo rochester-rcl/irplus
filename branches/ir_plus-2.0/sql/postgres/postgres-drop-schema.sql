@@ -220,6 +220,7 @@ DROP TABLE ir_item.item_identifier;
 DROP TABLE ir_item.item_extent;
 DROP TABLE ir_item.item;
 DROP TABLE ir_item.external_published_item;
+DROP TABLE ir_item.place_of_publication;
 DROP TABLE ir_item.publisher;
 DROP TABLE ir_item.sponsor;
 DROP TABLE ir_item.identifier_type;
@@ -232,6 +233,7 @@ DROP TABLE ir_item.published_date;
 DROP TABLE ir_item.original_item_creation_date;
 DROP TABLE ir_item.first_available_date;
 
+DROP SEQUENCE ir_item.place_of_publication_seq;
 DROP SEQUENCE ir_item.copyright_statement_seq;
 DROP SEQUENCE ir_item.item_sponsor_seq;
 DROP SEQUENCE ir_item.item_contributor_seq;

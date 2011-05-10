@@ -53,7 +53,14 @@ public class DefaultMarcOaiMetadataProvider implements OaiMetadataProvider{
 		 Document doc = record.getOwnerDocument();
 		 // create the header
          createHeader(doc, record, institutionalItemVersion);
-         Record marcRecord = marcExportService.export(institutionalItemVersion);
+         
+         boolean showAllFields = false;
+         if( institutionalItemVersion.getItem().isPubliclyViewable() && !institutionalItemVersion.getItem().isEmbargoed() && !institutionalItemVersion.isWithdrawn() )
+         {
+        	 showAllFields = true;
+         }
+         
+         Record marcRecord = marcExportService.export(institutionalItemVersion, showAllFields);
          marcXmlAppender.addToDocument(marcRecord, doc, record);
 	}
 

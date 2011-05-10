@@ -29,6 +29,7 @@ import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -296,6 +297,16 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	public Long insertAllItemsForLangaugeType(LanguageType languageType,
 			IndexProcessingType processingType) {
 		return processingRecordDAO.insertAllItemsForLanguageType(languageType, processingType);
+	}
+	
+	/**
+	 * Insert all items for place of publication
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForPlaceOfPublication(edu.ur.ir.item.PlaceOfPublication, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForPlaceOfPublication(PlaceOfPublication placeOfPublication,
+			IndexProcessingType processingType) {
+		return processingRecordDAO.insertAllItemsForPlaceOfPublication(placeOfPublication, processingType);
 	}
 
 	/**

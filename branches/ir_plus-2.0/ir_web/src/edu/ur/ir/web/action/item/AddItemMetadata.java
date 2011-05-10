@@ -47,6 +47,8 @@ import edu.ur.ir.item.ItemObject;
 import edu.ur.ir.item.ItemService;
 import edu.ur.ir.item.LanguageType;
 import edu.ur.ir.item.LanguageTypeService;
+import edu.ur.ir.item.PlaceOfPublication;
+import edu.ur.ir.item.PlaceOfPublicationService;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.PublisherService;
 import edu.ur.ir.item.Series;
@@ -101,6 +103,10 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 
 	/** Service for loading publisher data.  */
 	private PublisherService publisherService;
+	
+	// service to deal with places of publication
+	private PlaceOfPublicationService placeOfPublicationService;
+
 
 	/** Service for loading sponsor data.  */
 	private SponsorService sponsorService;
@@ -243,6 +249,11 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	
 	/** Publisher Id for the external published item */
 	private Long publisherId;
+	
+	/** Publisher Id for the external published item */
+	private Long placeOfPublicationId;
+
+
 
 	/** Primary file id  */
 	private Long primaryFileId;
@@ -279,8 +290,6 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	
 	/** service for dealing with institutional item version information */
 	private InstitutionalItemVersionService institutionalItemVersionService;
-
-	
 
 
 	/**
@@ -596,10 +605,20 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 				ex.setPublisher(publisherService.getPublisher(publisherId, false));
 			}
 			
+			if( placeOfPublicationId.equals(0l))
+			{
+				ex.setPlaceOfPublication(null);
+			}
+			else
+			{
+				ex.setPlaceOfPublication(placeOfPublicationService.get(placeOfPublicationId, false));
+			}
+			
 			log.debug("before updating published date " + ex.getPublishedDate());
 			ex.updatePublishedDate(publishedMonth, publishedDay, publishedYear);
 			log.debug("published date is " + ex.getPublishedDate());
 			ex.setCitation(citation);
+			
 		} 
 		else
 		{
@@ -869,6 +888,17 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 		 List<Publisher> publishers = publisherService.getAllPublisher();
 		Collections.sort(publishers, nameComparator);
 		return publishers;
+	}
+	
+	/**
+	 * Get places of publication
+	 * 
+	 * @return
+	 */
+	public List<PlaceOfPublication> getPlacesOfPublication() {
+		 List<PlaceOfPublication> placesOfPublication = placeOfPublicationService.getAll();
+		Collections.sort(placesOfPublication, nameComparator);
+		return placesOfPublication;
 	}
 
 	/**
@@ -1460,6 +1490,26 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 			InstitutionalItemVersionService institutionalItemVersionService) {
 		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
+	
+
+	public Long getPlaceOfPublicationId() {
+		return placeOfPublicationId;
+	}
+
+	public void setPlaceOfPublicationId(Long placeOfPublicationId) {
+		this.placeOfPublicationId = placeOfPublicationId;
+	}
+	
+	/**
+	 * Set the place of publication.
+	 * 
+	 * @param placeOfPublicationService
+	 */
+	public void setPlaceOfPublicationService(
+			PlaceOfPublicationService placeOfPublicationService) {
+		this.placeOfPublicationService = placeOfPublicationService;
+	}
+
 	
 
 }

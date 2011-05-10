@@ -205,9 +205,19 @@
 				</tr>
 						
 				<tr>
-				    <td>${item.externalPublishedItem.publisher.name} </td>
+				    <td>${item.externalPublishedItem.publisher.name}</td>
 				</tr>	
 				</c:if>	
+				<c:if test="${item.externalPublishedItem.placeOfPublication != null}">
+				<tr>
+				    <td class="previewLabel">Place Of Publication:</td>
+				</tr>
+						
+				<tr>
+				    <td>${item.externalPublishedItem.placeOfPublication.name}</td>
+				</tr>	
+				</c:if>
+				
 				 <c:if test="${item.externalPublishedItem.citation != null}">
                  <tr>
 				    <td class="previewLabel">Citation:</td>

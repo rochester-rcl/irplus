@@ -34,6 +34,10 @@ import edu.ur.ir.export.XmlMarcFileWriter;
 import edu.ur.ir.file.TemporaryFileCreator;
 import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
+import edu.ur.ir.user.IrRole;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.UserService;
+import edu.ur.ir.web.action.UserIdAware;
 import edu.ur.ir.web.util.WebIoUtils;
 
 
@@ -44,7 +48,7 @@ import edu.ur.ir.web.util.WebIoUtils;
  * @author Nathan Sarr
  *
  */
-public class MarcFileExport extends ActionSupport implements ServletResponseAware, ServletRequestAware {
+public class MarcFileExport extends ActionSupport implements ServletResponseAware, ServletRequestAware, UserIdAware {
 	
 	/** Eclipse generated Id */
 	private static final long serialVersionUID = -3752593484718291238L;
@@ -69,8 +73,14 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
 	
 	// the marc export service
 	private MarcExportService marcExportService;
+	
+	// id of the user.
+	private Long userId;
+	
+	// user service 
+	private UserService userService;
 
-
+	// utilities for 
 	WebIoUtils webIoUtils;
 
 	/**
@@ -85,13 +95,37 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
     		log.debug("get mrc institutional item version  " + institutionalItemVersionId);
     	}
     	
+    	IrUser user = null;
+    	log.debug("user id = " + userId);
+    	if( userId != null )
+    	{
+    	    user = userService.getUser(userId, false);
+    	    log.debug("user = " + user);
+    	}
+    	
+    
+    	
     	MrcMarcFileWriter writer = new MrcMarcFileWriter();
     	InstitutionalItemVersion version = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
+    	
+    	
+	    boolean showAllFields = false;
+    	
+    	if( user != null && user.hasRole(IrRole.ADMIN_ROLE))
+    	{
+    		showAllFields = true;	
+    	}
+    	else if( version.getItem().isPubliclyViewable() && !version.getItem().isEmbargoed() && !version.isWithdrawn() )
+        {
+    		showAllFields = true;
+        }
+        	
+    	log.debug("show all fields = " + showAllFields);
     	File f = temporaryFileCreator.createTemporaryFile("mrc");
     	String fileName = "institutional_item_version_" + version.getId();   	
-    	Record marcRecord = marcExportService.export(version);
+    	Record marcRecord = marcExportService.export(version, showAllFields);
     	writer.writeFile(marcRecord, f);        	
-    	webIoUtils.streamFile(fileName, f, "mrc", response, request, (1024*4), true, true);
+    	webIoUtils.streamFile(fileName, f, "mrc", response, request, (1024*4), false, true);
     	f.delete();
         return SUCCESS;
     }
@@ -111,10 +145,32 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
     	XmlMarcFileWriter writer = new XmlMarcFileWriter();
     	InstitutionalItemVersion version = institutionalItemVersionService.getInstitutionalItemVersion(institutionalItemVersionId, false);
     	File f = temporaryFileCreator.createTemporaryFile("xml");
-    	String fileName = "institutional_item_version_" + version.getId();   	
-    	Record marcRecord = marcExportService.export(version);
+    	String fileName = "institutional_item_version_" + version.getId(); 
+    	
+    	IrUser user = null;
+    	log.debug("user id = " + userId);
+    	if( userId != null )
+    	{
+    	    user = userService.getUser(userId, false);
+    	    log.debug("user = " + user);
+    	}
+    	
+    	boolean showAllFields = false;
+     	
+     	if( user!= null && user.hasRole(IrRole.ADMIN_ROLE))
+     	{
+     		log.debug("user is admin");
+     		showAllFields = true;	
+     	}
+     	else if( version.getItem().isPubliclyViewable() && !version.getItem().isEmbargoed() && !version.isWithdrawn() )
+        {
+     		showAllFields = true;
+        }
+    	
+    	log.debug("show all fields = " + showAllFields);
+    	Record marcRecord = marcExportService.export(version, showAllFields);
     	writer.writeFile(marcRecord, f);        	
-    	webIoUtils.streamFile(fileName, f, "xml", response, request, (1024*4), true, true);
+    	webIoUtils.streamFile(fileName, f, "xml", response, request, (1024*4), false, true);
     	f.delete();
         return SUCCESS;
     }
@@ -162,5 +218,15 @@ public class MarcFileExport extends ActionSupport implements ServletResponseAwar
 	public void setMarcExportService(MarcExportService marcExportService) {
 		this.marcExportService = marcExportService;
 	}
+
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
 
 }

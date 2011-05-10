@@ -36,14 +36,19 @@ import edu.ur.ir.institution.InstitutionalItemVersion;
 import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeService;
+import edu.ur.ir.item.CopyrightStatement;
+import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.ItemContentType;
 import edu.ur.ir.item.ItemContributor;
 import edu.ur.ir.item.ItemExtent;
 import edu.ur.ir.item.ItemFile;
 import edu.ur.ir.item.ItemIdentifier;
+import edu.ur.ir.item.ItemReport;
 import edu.ur.ir.item.ItemTitle;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
+import edu.ur.ir.item.PublishedDate;
 import edu.ur.ir.marc.ExtentTypeSubFieldMapper;
 import edu.ur.ir.marc.ExtentTypeSubFieldMapperService;
 import edu.ur.ir.marc.IdentifierTypeSubFieldMapper;
@@ -90,17 +95,41 @@ public class DefaultMarcExportService implements MarcExportService{
 	
 	// service for dealing with identifier type sub fields
 	private ExtentTypeSubFieldMapperService extentTypeSubFieldMapperService;
-
-
+	
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public Record export(InstitutionalItemVersion version) {
+	public Record export(InstitutionalItemVersion version, boolean showAllFields) {
         Record record = factory.newRecord();
         GenericItem item = version.getItem();
+        ExternalPublishedItem externalPublishedItem = item.getExternalPublishedItem();
+        PublishedDate publishedDate = null;
+        PlaceOfPublication placeOfPublication = null;
+        
+        if( externalPublishedItem != null )
+        {
+             if( externalPublishedItem.getPublishedDate() != null )
+             {
+        	    publishedDate = externalPublishedItem.getPublishedDate();
+             }
+             
+             if(externalPublishedItem.getPlaceOfPublication() != null )
+             {
+            	 placeOfPublication = externalPublishedItem.getPlaceOfPublication();
+             }
+             
+             if( externalPublishedItem.getCitation() != null )
+             {
+            	 handleCitation(record, externalPublishedItem.getCitation());
+             }
+        }
+        
         String year = "";
         
-        if( version.getDateOfDeposit() != null)
+        if( publishedDate != null && publishedDate.getYear() > 0)
+        {
+        	year = publishedDate.getYear() + "";
+        }
+        else if( version.getDateOfDeposit() != null)
 		{
 			year = dateFormat.format(version.getDateOfDeposit());
 		}
@@ -136,7 +165,7 @@ public class DefaultMarcExportService implements MarcExportService{
     		ControlField control_007 = factory.newControlField("007", new String(mapper.getControlField007()));
     		record.getControlFields().add(control_007);
     		
-    		handle008Field(record, mapper, year, item.getLanguageType());
+    		handle008Field(record, mapper, year, item.getLanguageType(), placeOfPublication);
         }
 		
 
@@ -145,9 +174,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		ItemContributor ic = this.getMainAuthor(item);
 		handleTitle(item, ic, record);
 		
-		if( item.isPubliclyViewable() && !item.isEmbargoed() && !version.isWithdrawn())
+		if( showAllFields )
 		{
-		    handlePublisher(record, year);
+			if( externalPublishedItem != null )
+			{
+		        handlePublisher(record, externalPublishedItem, year);
+			}
 		    handleExtents(item, record);
 		    if( item.getDescription() != null && !item.getDescription().trim().equals(""))
 		    {
@@ -167,7 +199,7 @@ public class DefaultMarcExportService implements MarcExportService{
 		    {
 		        handleKeywords(record, item.getItemKeywords());
 		    }
-		    handleContentTypes(record, item);
+		    handleThesisType(record, item);
 		    String url = null;
 		    if( version.getHandleInfo() != null )
 		    {
@@ -183,6 +215,9 @@ public class DefaultMarcExportService implements MarcExportService{
 		    {
 		        handleUrl(record,url);
 		    }
+		    
+		    handleSeries(record, item.getItemReports());
+		    handleCopyright(record, item.getCopyrightStatement());
 		}
 		return record;
 	}
@@ -246,13 +281,22 @@ public class DefaultMarcExportService implements MarcExportService{
 	}
 	
 	// we should use publisher information as stored in publisher name.
-	private void handlePublisher(Record record, String year)
+	private void handlePublisher(Record record,ExternalPublishedItem externalPublishedItem, String year)
 	{
-		DataField df = factory.newDataField("260", ' ', ' ');
-		df.addSubfield(factory.newSubfield('a', "Rochester, N.Y.:"));
-		df.addSubfield(factory.newSubfield('b', "University of Rochester"));
-		df.addSubfield(factory.newSubfield('c',  year));
-		record.addVariableField(df);
+         DataField df = factory.newDataField("260", ' ', ' ');
+         if( externalPublishedItem.getPlaceOfPublication() != null )
+         {
+		     df.addSubfield(factory.newSubfield('a', externalPublishedItem.getPlaceOfPublication().getName()));
+         }
+         if( externalPublishedItem.getPublisher() != null )
+         {
+		     df.addSubfield(factory.newSubfield('b',externalPublishedItem.getPublisher().getName()));
+         }
+         if( year != null )
+         {
+		     df.addSubfield(factory.newSubfield('c',  year));
+         }
+		 record.addVariableField(df);
 	}
 	
 	private void handleTitle(GenericItem item, ItemContributor ic, Record record)
@@ -512,8 +556,46 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 	}
 	
+	private void handleCopyright(Record record, CopyrightStatement copyrightStatement)
+	{
+		if( copyrightStatement != null)
+		{
+			DataField df = factory.newDataField("540", ' ', ' ');
+			df.addSubfield(factory.newSubfield('a', copyrightStatement.getText()));
+			record.addVariableField(df);
+		}
+	}
 	
-	private void handleContentTypes(Record record, GenericItem item)
+	private void handleSeries(Record record, Set<ItemReport> reports)
+	{
+		for(ItemReport report : reports)
+		{
+			DataField df490 = factory.newDataField("490", '1', ' ');
+			DataField df830 = factory.newDataField("830", ' ', '0');
+			df490.addSubfield(factory.newSubfield('a', report.getSeries().getName()));
+			df830.addSubfield(factory.newSubfield('a', report.getSeries().getName()));
+			if( report.getReportNumber() != null && !report.getReportNumber().trim().equals(""))
+			{
+				df490.addSubfield(factory.newSubfield('v', report.getReportNumber()));
+				df830.addSubfield(factory.newSubfield('v', report.getReportNumber()));
+			}
+			record.addVariableField(df490);
+			record.addVariableField(df830);
+		}
+	}
+	
+	private void handleCitation(Record record, String citation)
+	{
+		if( citation != null && !citation.trim().equals(""))
+		{
+			DataField df = factory.newDataField("524", ' ', ' ');
+			df.addSubfield(factory.newSubfield('a', citation));
+			record.addVariableField(df);
+		}
+	}
+	
+	
+	private void handleThesisType(Record record, GenericItem item)
 	{
 		for(ItemContentType itemContentType : item.getItemContentTypes() )
 		{
@@ -551,7 +633,9 @@ public class DefaultMarcExportService implements MarcExportService{
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void handle008Field(Record record, MarcContentTypeFieldMapper mapper, String year, LanguageType languageType)
+	private void handle008Field(Record record, MarcContentTypeFieldMapper mapper, String year, 
+			LanguageType languageType,
+			PlaceOfPublication placeOfPublication)
 	{
 		// add 008 fields
 		char[] _008 = mapper.getControlField008().toCharArray();
@@ -576,7 +660,7 @@ public class DefaultMarcExportService implements MarcExportService{
 		        String language = languageType.getIso639_2();
 		        if( language.length() > 3 )
 		        {
-		    	    language = language.substring(0, 2);
+		    	    language = language.substring(0, 3);
 		        }
 		        
 		        for( int index = 0; index < language.length(); index++ )
@@ -587,11 +671,31 @@ public class DefaultMarcExportService implements MarcExportService{
 			}
 		}
 		
+		if( placeOfPublication != null )
+		{
+			if( placeOfPublication.getLetterCode() != null )
+			{
+				String letterCode = placeOfPublication.getLetterCode();
+				if( letterCode.length() > 3 )
+				{
+					letterCode = letterCode.substring(0, 3);
+				}
+				
+				for( int index = 0; index < letterCode.length(); index++ )
+		        {
+		        	_008[15 + index] = letterCode.charAt(index);
+		        }
+				
+			}
+		}
+		
 		// this is hard coded for new york right now.  will need to be fixed to work with
 		// any state / country
 		ControlField control_008 = factory.newControlField("008", new String(_008));
 		record.getControlFields().add(control_008);
 	}
+	
+
 	
 	/**
 	 * Set the content type filed mapping service.
@@ -652,4 +756,6 @@ public class DefaultMarcExportService implements MarcExportService{
 			ExtentTypeSubFieldMapperService extentTypeSubFieldMapperService) {
 		this.extentTypeSubFieldMapperService = extentTypeSubFieldMapperService;
 	}
+	
+
 }

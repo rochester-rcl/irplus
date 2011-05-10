@@ -37,6 +37,7 @@ import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -545,14 +546,29 @@ public class DefaultInstitutionalItemVersionService implements InstitutionalItem
 	}
 	
 	/**
-	 * Set all versions as updated for the identifier type.
+	 * Set all versions as updated for the language type.
 	 * 
-	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForIdentifierType(edu.ur.ir.item.IdentifierType, edu.ur.ir.user.IrUser, java.lang.String)
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForLanguageType(edu.ur.ir.item.LanguageType, edu.ur.ir.user.IrUser, java.lang.String)
 	 */
 	public Long setAllVersionsAsUpdatedForLanguageType(
 			LanguageType languageType, IrUser user, String message) {
 	    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForLangaugeType(languageType, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 	    Long updatedCount =  institutionalItemVersionDAO.setAsModifiedByLanguageTypeChange(languageType, user, message);
+	    log.debug("Total number of language type records set as updated = " + updatedCount);
+		log.debug("Total number of language type records set as index = " + indexCount);
+		return updatedCount;
+	}
+	
+	
+	/**
+	 * Set all versions as updated for the place publication.
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionService#setAllVersionsAsUpdatedForIdentifierType(edu.ur.ir.item.IdentifierType, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAllVersionsAsUpdatedForPlaceOfPublication(
+			PlaceOfPublication placeOfPublication, IrUser user, String message) {
+	    Long indexCount = institutionalItemIndexProcessingRecordService.insertAllItemsForPlaceOfPublication(placeOfPublication, indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+	    Long updatedCount =  institutionalItemVersionDAO.setAsModifiedByPlaceOfPublicationChange(placeOfPublication, user, message);
 	    log.debug("Total number of language type records set as updated = " + updatedCount);
 		log.debug("Total number of language type records set as index = " + indexCount);
 		return updatedCount;

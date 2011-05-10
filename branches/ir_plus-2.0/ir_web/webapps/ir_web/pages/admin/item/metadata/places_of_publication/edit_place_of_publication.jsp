@@ -1,6 +1,5 @@
 <jsp:directive.page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" />
 
-
 <!--  
    Copyright 2008 University of Rochester
 
@@ -28,7 +27,7 @@
 <html>
 
 <head>
-    <title>Language Types</title>
+    <title>Create/Edit Place of Publication</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -37,10 +36,11 @@
     <ur:styleSheet href="page-resources/yui/reset-fonts-grids/reset-fonts-grids.css"/>
     <ur:styleSheet href="page-resources/yui/assets/skins/sam/skin.css"/>
     <ur:styleSheet href="page-resources/css/base-ur.css"/>
-
+        
     <ur:styleSheet href="page-resources/css/main_menu.css"/>
     <ur:styleSheet href="page-resources/css/global.css"/>
     <ur:styleSheet href="page-resources/css/tables.css"/>
+    
     
     <!--  Style for dialog boxes -->
     <ur:js src="page-resources/yui/utilities/utilities.js"/>
@@ -50,76 +50,60 @@
  	
  	<ur:js src="pages/js/base_path.js"/>
  	<ur:js src="page-resources/js/util/ur_util.js"/>
- 	<ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
-	<ur:js src="pages/js/ur_table.js"/>
-    <ur:js src="page-resources/js/admin/language_type.js"/>
+    <ur:js src="pages/js/ur_table.js"/>
+    
      
 </head>
 
 <body class=" yui-skin-sam">
-
+    
     <!--  yahoo doc 2 template creates a page 950 pixles wide -->
     <div id="doc2">
     
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>Edit Languages</h3>
-  
+       
+        <h3><a href="<c:url value="/admin/viewPlacesOfPublication.action"/>">Places of Publication</a> &gt; Create/Edit Place of Publication</h3>
         <div id="bd">
-		    <button id="showLanguageType" class="ur_button" 
- 		        onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';">New Language type</button> 
-
-	        <button id="showDeleteLanguageType" class="ur_button" 
- 		        onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';">Delete</button>
+		
+	  <form action="<c:url value="/admin/savePlaceOfPublication.action"/>"  method="post">
+	      <input type="hidden" name="id" value="${placeOfPublication.id}"/>
+	      <div id="error" class="errorMessage">${message}</div>
+	      <table class="formTable"> 
 	      
-	        <br/>
-	        <br/>
-	        <div id="newLanguageTypes"></div>
-       </div>
-       <!--  end body div -->
-
+	       <tr>       
+	           <td align="left" class="label">Name*</td>
+		       <td align="left" class="input">
+		           <input type="text"  size="50"  name="placeOfPublication.name" value="${placeOfPublication.name}"/>
+		       </td>
+	       </tr>
+	       <tr>       
+	           <td align="left" class="label">2/3 Letter Code</td>
+		       <td align="left" class="input">
+		           <input type="text"  size="3" maxlength="3" name="placeOfPublication.letterCode" value="${placeOfPublication.letterCode}"/>
+		       </td>
+	       </tr>
+	       <tr>
+	           <td align="left" class="label">Description:</td>
+		       <td colspan="2" align="left" class="input"><textarea  
+		           name="placeOfPublication.description" cols="42" rows="4">${placeOfPublication.description}</textarea></td>
+	      </tr>
+	       
+	    </table>
+	    <input type="submit" value="Save"/>
+	    </form>
+        </div>
+        <!--  end body div -->
+  
       <!--  this is the footer of the page -->
       <c:import url="/inc/footer.jsp"/>
-      
-  </div>
-  <!--  End doc div-->
   
- 	         <div id="newLanguageTypeDialog" class="hidden">
-	             <div class="hd">Language Type Information</div>
-		         <div class="bd">
-		         
-		         <form id="addLanguageType" name="newLanguageType" method="POST" 
-		              action="/user/addLanguageType.action">
-		              <div id="languageTypeForm">
-		                  <c:import url="language_type_form.jsp"/>
-		              </div>
-		          </form>
-		          </div>
-	         </div>
-	      
-	         <div id="deleteLanguageTypeDialog" class="hidden">
-	            <div class="hd">Delete Language Types</div>
-		        <div class="bd">
-		           <form id="deleteLanguageType" name="deleteLanguageType" method="post" 
-		              action="/user/deleteLanguageType.action">
-		              <div id="deleteLanguageTypeError" class="errorMessage"></div>
-			          <p>Are you sure you wish to delete the selected language types?</p>
-		           </form>
-		        </div>
-	         </div>	     	      
+  </div>
+  <!--  End  doc div-->
+  
 
-    <!--  wait div -->
-	<div id="wait_dialog_box" class="hidden">
-	    <div class="hd">Processing...</div>
-		<div class="bd">
-		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
-		    <p><img src="${wait}"></img></p>
-		</div>
-	</div>       
 
 </body>
 </html>

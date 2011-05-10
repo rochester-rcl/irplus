@@ -27,17 +27,21 @@ import edu.ur.persistent.BasePersistent;
  */
 public class ExternalPublishedItem extends BasePersistent {
 
-	/**  Eclipse generated id */
+	//  Eclipse generated id */
 	private static final long serialVersionUID = -1703893157173707520L;
 	
-	/** Date the item was published */
+	// Date the item was published */
 	private PublishedDate publishedDate;
 	
-	/** Citation */
+	// Citation */
 	private String citation;
 	
-	/** Publisher for the item  */
+	// Publisher for the item  */
 	private Publisher publisher;
+	
+	// location of the publisher
+	private PlaceOfPublication placeOfPublication;
+
 
 	/**
 	 * Get the date item was published
@@ -130,6 +134,25 @@ public class ExternalPublishedItem extends BasePersistent {
 	}
 	
 	/**
+	 * Get the place of publication.
+	 * 
+	 * @return
+	 */
+	public PlaceOfPublication getPlaceOfPublication() {
+		return placeOfPublication;
+	}
+
+	/**
+	 * Set the place of publication.
+	 * 
+	 * @param placeOfPublication
+	 */
+	public void setPlaceOfPublication(PlaceOfPublication placeOfPublication) {
+		this.placeOfPublication = placeOfPublication;
+	}
+
+	
+	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode()
@@ -174,8 +197,14 @@ public class ExternalPublishedItem extends BasePersistent {
 		
 		if( ( publisher != null && !publisher.equals(other.getPublisher()) ) ||
 				( publisher == null && other.getPublisher() != null ) ) return false;
+		
+		if( ( placeOfPublication != null && !placeOfPublication.equals(other.getPlaceOfPublication()) ) ||
+				( placeOfPublication == null && other.getPlaceOfPublication() != null ) ) return false;
 
 		return true;
 	}
+	
+
+
 	
 }

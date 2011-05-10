@@ -448,6 +448,24 @@
 			              </td>
 			          </tr>
 			          <tr>
+				          <td>
+	          			      <input type="button" class="ur_button" id="show_place_of_publication" value="Add New Place Of Publication"/>
+	        		      </td> 	
+			      	  </tr>
+			          <tr>
+			              <td>
+			                  <label  for="itemForm_place_of_publication">Place Of Publication</label>
+			              </td>
+			          </tr>
+			          <tr>
+			              <td>
+			              	<div id="place_of_publication_form">
+			              	    <c:import url="/pages/user/workspace/item/place_of_publication_list.jsp"/>
+		      	 		    </div>
+			              </td>
+			          </tr>
+			          
+			          <tr>
 			              <td width="230">
 			         		 <label  for="itemForm_datePublished">Date Published (MM/DD/YYYY)</label>
 			              </td>

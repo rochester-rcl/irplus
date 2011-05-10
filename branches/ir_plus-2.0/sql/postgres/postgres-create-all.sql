@@ -1328,6 +1328,25 @@ ALTER TABLE ir_item.language_type OWNER TO ir_plus;
 CREATE SEQUENCE ir_item.language_type_seq ;
 ALTER TABLE ir_item.language_type_seq OWNER TO ir_plus;
 
+
+-- ---------------------------------------------
+-- Place of publication
+-- ---------------------------------------------
+CREATE TABLE ir_item.place_of_publication
+(
+    place_of_publication_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT,
+    letter_code VARCHAR(3),
+    description TEXT,
+    UNIQUE(name)
+);
+ALTER TABLE ir_item.place_of_publication OWNER TO ir_plus;
+
+-- The language type sequence
+CREATE SEQUENCE ir_item.place_of_publication_seq ;
+ALTER TABLE ir_item.place_of_publication_seq OWNER TO ir_plus;
+
 -- ---------------------------------------------
 -- Identifier type table
 -- ---------------------------------------------
@@ -1403,10 +1422,13 @@ CREATE TABLE ir_item.external_published_item(
   version INTEGER,
   publisher_id BIGINT,
   published_date_id BIGINT,
+  place_of_publication_id BIGINT,
   citation TEXT,
   PRIMARY KEY (external_published_item_id),
   FOREIGN KEY (publisher_id)
       REFERENCES ir_item.publisher (publisher_id) ,
+  FOREIGN KEY (place_of_publication_id)
+      REFERENCES ir_item.place_of_publication (place_of_publication_id) ,
   FOREIGN KEY (published_date_id) REFERENCES ir_item.published_date 
 	(published_date_id)   
   

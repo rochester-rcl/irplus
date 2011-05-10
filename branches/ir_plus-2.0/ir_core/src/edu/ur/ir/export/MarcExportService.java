@@ -33,8 +33,11 @@ public interface MarcExportService extends Serializable{
 	 * Export the record and return a marc4j Record.
 	 * 
 	 * @param version - institutional item version to convert.
+	 * @param showAllFields - will show all fields.  If set to false only header
+	 * title and main author will be shown.
+	 * 
 	 * @return marc4j record
 	 */
-	public Record export(InstitutionalItemVersion version);
+	public Record export(InstitutionalItemVersion version, boolean showAllFields);
 
 }
