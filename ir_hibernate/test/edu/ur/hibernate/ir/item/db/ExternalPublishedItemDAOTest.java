@@ -26,6 +26,8 @@ import org.testng.annotations.Test;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.ExternalPublishedItemDAO;
+import edu.ur.ir.item.PlaceOfPublication;
+import edu.ur.ir.item.PlaceOfPublicationDAO;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.PublisherDAO;
 
@@ -50,6 +52,10 @@ public class ExternalPublishedItemDAOTest {
 	PlatformTransactionManager tm = (PlatformTransactionManager) ctx
 	.getBean("transactionManager");
 	
+	   /** Language type data access */
+    PlaceOfPublicationDAO placeOfPublicationDAO = (PlaceOfPublicationDAO) ctx
+	.getBean("placeOfPublicationDAO");
+	
     TransactionDefinition td = new DefaultTransactionDefinition(
 	TransactionDefinition.PROPAGATION_REQUIRED);
 	
@@ -65,12 +71,14 @@ public class ExternalPublishedItemDAOTest {
         Publisher p = new Publisher("publisher");
 		publisherDAO.makePersistent(p);
 		
-		
+		PlaceOfPublication placeOfPub = new PlaceOfPublication("Rochester");
+		placeOfPublicationDAO.makePersistent(placeOfPub);
 		
 		ExternalPublishedItem e =  new ExternalPublishedItem();
  		e.setCitation("citation");
         e.setPublisher(p);
         e.updatePublishedDate(5,13, 2008);
+        e.setPlaceOfPublication(placeOfPub);
         
  		externalPublishedItemDAO.makePersistent(e);
  	    tm.commit(ts);
@@ -81,6 +89,9 @@ public class ExternalPublishedItemDAOTest {
  		assert other.getPublishedDate().getMonth() == 5 : "Month equals " + other.getPublishedDate().getMonth();
  		assert other.getPublishedDate().getDay() == 13 : "Day equals " + other.getPublishedDate().getDay();
  		assert other.getPublishedDate().getYear() == 2008 : "Day equals " + other.getPublishedDate().getYear();
+ 		assert other.getPublisher().equals(p) : "Other publisher " + other.getPublishedDate() + " should equal " + p;
+ 		assert other.getPlaceOfPublication().equals(placeOfPub) : " Place of publication " + other.getPlaceOfPublication() +
+ 		" should equal " + placeOfPub;
  		
         assert other.equals(e) : "External published item data should be equal";
         
@@ -92,6 +103,7 @@ public class ExternalPublishedItemDAOTest {
 
         Publisher publisherOther = publisherDAO.getById(p.getId(), false);
         publisherDAO.makeTransient(publisherOther);
+        placeOfPublicationDAO.makeTransient(placeOfPublicationDAO.getById(placeOfPub.getId(), false));
         assert  publisherDAO.getById(publisherOther.getId(), false) == null : "Should no longer be able to find publisher";
         tm.commit(ts);
 	}

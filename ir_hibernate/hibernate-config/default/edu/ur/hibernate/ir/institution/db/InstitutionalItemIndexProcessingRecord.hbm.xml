@@ -170,6 +170,7 @@
 	        from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
 	</query>
 	
+	
 	<query name="insertAllItemsForContributorPersonName">
 		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
 	    select institutionalItem.id, indexProcessingType, current_timestamp() 
@@ -196,6 +197,17 @@
 	    from InstitutionalItem institutionalItem,
 	         IndexProcessingType indexProcessingType
 	    where institutionalItem.versionedInstitutionalItem.currentVersion.item.externalPublishedItem.publisher.id = :publisherId
+	    and indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	    from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
+	</query>
+	
+	<query name="insertAllItemsForPlaceOfPublication">
+		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where institutionalItem.versionedInstitutionalItem.currentVersion.item.externalPublishedItem.placeOfPublication.id = :placeOfPublicationId
 	    and indexProcessingType.id = :processingTypeId
 	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
 	    from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)

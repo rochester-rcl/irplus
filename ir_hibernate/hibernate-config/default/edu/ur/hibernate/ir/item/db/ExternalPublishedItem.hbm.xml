@@ -43,15 +43,21 @@
 		<property name="citation" column="citation" type="string"
 			not-null="false" access="field"  />
 		
-		
-		
 	    <many-to-one class="edu.ur.ir.item.Publisher" 
 			name="publisher" 
 			column="publisher_id" 
 			insert="true"
 			update="true" 
-			access="field" 
-			not-found="ignore"/>
+			access="field"
+			unique="true"/>
+			
+		<many-to-one class="edu.ur.ir.item.PlaceOfPublication" 
+			name="placeOfPublication" 
+			column="place_of_publication_id" 
+			insert="true"
+			update="true" 
+			access="field"
+			unique="true" />
 			
 		<!-- Published date information  -->	
 		<many-to-one 
@@ -63,4 +69,15 @@
 			access="field"/>	
 			
 	 </class>
+	 
+	 <!--  Get a count of item sponsors in the system -->
+	<query name="externalPublishedItemCount">
+	    select count(*) from ExternalPublishedItem
+	</query>
+	
+	 <!--  Get a count of item sponsors in the system -->
+	<query name="externalPublishedItemCountByPublisher">
+	    select count(*) from ExternalPublishedItem as item 
+	    where item.publisher.id = :publisherId
+	</query>
 </hibernate-mapping>

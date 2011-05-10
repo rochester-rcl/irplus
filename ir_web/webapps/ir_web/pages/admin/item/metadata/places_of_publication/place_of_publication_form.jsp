@@ -21,33 +21,41 @@
 <%@ taglib prefix="ir" uri="ir-tags"%>
 
 		<!--  represents a successful submission -->
-		<input type="hidden" id="newPublisherForm_success" 
+		<input type="hidden" id="newPlaceOfPublicationForm_success" 
 		       value="${added}"/>
 		       
 		<!--  if editing an id must be passed -->     
-	    <input type="hidden" id="newPublisherForm_id"
+	    <input type="hidden" id="newPlaceOfPublicationForm_id"
 		        name="id" value=""/>
 
-		<div id="publisherError">             
+		<div id="placeOfPublicationError">             
 		    <!--  get the error messages from fieldErrors -->
 			<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-			key="publisher.name"/></p>
+			key="placeOfPublication.name"/></p>
 			<p class="errorMessage"><ir:printError errors="${fieldErrors}" 
-			key="publisherAlreadyExists"/></p> 
+			key="placeOfPublicationAlreadyExists"/></p> 
 		</div>
 				
 		<table class="formTable">    
 		    <tr>
 			    <td align="left" class="label">Name:*</td>
 	            <td align="left" class="input"><input type="text" 
-			        id="newPublisherForm_name" 
-			    	name="publisher.name"
+			        id="newPlaceOfPublicationForm_name" 
+			    	name="placeOfPublication.name"
 			        size="45"/> </td>
+	         </tr>
+	         <tr>       
+	           <td align="left" class="label">2/3 Letter Code</td>
+		       <td align="left" class="input">
+		           <input type="text"  size="3" maxlength="3" 
+		           id="newPlaceOfPublicationForm_letter_code"
+		           name="placeOfPublication.letterCode" value="${placeOfPublication.letterCode}"/>
+		       </td>
 	         </tr>
 	         <tr>
 	             <td align="left" class="label">Description:</td>
-	             <td colspan="2" align="left" class="input"><textarea name="publisher.description" 
-	    			id="newPublisherForm_description" cols="42" rows="4"></textarea></td>
+	             <td colspan="2" align="left" class="input"><textarea name="placeOfPublication.description" 
+	    			id="newPlaceOfPublicationForm_description" cols="42" rows="4"></textarea></td>
 	         </tr>
 		</table>
 		

@@ -257,6 +257,14 @@
    </bean>
    
    <!-- ****************************************** --> 
+   <!-- Service to manage place of publcation data -->
+   <!-- ****************************************** --> 
+   <bean id="placeOfPublicationService" 
+       class="edu.ur.ir.item.service.DefaultPlaceOfPublicationService">
+       <property name="placeOfPublicationDAO" ref="placeOfPublicationDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
    <!-- Service to manage identifier type data -->
    <!-- ****************************************** --> 
    <bean id="identifierTypeService" 
@@ -864,5 +872,6 @@
        class="edu.ur.ir.marc.service.DefaultExtentTypeSubFieldMapperService">
        <property name="extentTypeSubFieldMapperDAO" ref="extentTypeSubFieldMapperDAO"/>
    </bean>
+   
    
 </beans>

@@ -81,6 +81,9 @@
             </interceptor-stack>
         </interceptors>
         
+        <!--  set the default stack for this package -->
+        <default-interceptor-ref name="default"/>
+        
          <global-results>
         	 <result name="change-password">/pages/home.jsp</result>
         </global-results>

@@ -32,6 +32,7 @@ import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -743,6 +744,21 @@ public class HbInstitutionalItemVersionDAO implements InstitutionalItemVersionDA
         q.setParameter("note", message);
         q.setParameter("user", user);
         q.setParameter("languageTypeId", languageType.getId());
+        numUpdated = numUpdated + q.executeUpdate();
+        return numUpdated;	
+	}
+	
+	/**
+	 * Set all versioned items associated with the place of publication  as modified.
+	 * @see edu.ur.ir.institution.InstitutionalItemVersionDAO#setAsModifiedByLagnuageTypeChange(edu.ur.ir.item.LanguageType, edu.ur.ir.user.IrUser, java.lang.String)
+	 */
+	public Long setAsModifiedByPlaceOfPublicationChange(PlaceOfPublication placeOfPublication,
+			IrUser user, String message) {
+		Long numUpdated = 0l;
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("updateItemVersionForPlaceOfPublicationChange");
+        q.setParameter("note", message);
+        q.setParameter("user", user);
+        q.setParameter("placeOfPublicationId", placeOfPublication.getId());
         numUpdated = numUpdated + q.executeUpdate();
         return numUpdated;	
 	}

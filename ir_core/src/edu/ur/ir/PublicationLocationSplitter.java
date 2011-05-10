@@ -14,26 +14,28 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.item;
 
-
-import edu.ur.dao.CountableDAO;
-import edu.ur.dao.CrudDAO;
+package edu.ur.ir;
 
 /**
- * Externally published item  data access.
+ * Publication location splitter.
  * 
- * @author Sharmila Ranganathan
+ * @author Nathan Sarr
  *
  */
-public interface ExternalPublishedItemDAO extends CountableDAO, 
-CrudDAO<ExternalPublishedItem>
-{
+public interface PublicationLocationSplitter {
+
 	/**
-	 * Get a count of external published items with the given publisher id.
-	 * 
-	 * @param publisherId - if of the publisher
-	 * @return - count of external published items with the given sponsor.
+	 * Will split a Location / publisher combination into two
+	 * parts Location and Publisher.  The array will always
+	 * be of size 2.  An empty string will be returned if
+	 * no location or publisher is returned.
+	 *  
+	 *  Location will always be in location 0 and Publisher
+	 *  will always be in location 1.
+	 *  
+	 * @param publisher - Location/Publisher
+	 * @return
 	 */
-	public Long getCountForPublisher(Long publisherId);
+	public String[] split(String publisher);
 }

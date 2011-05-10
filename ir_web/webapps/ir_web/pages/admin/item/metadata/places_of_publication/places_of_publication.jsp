@@ -28,7 +28,7 @@
 <html>
 
 <head>
-    <title>Language Types</title>
+    <title>Places of Publication</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -52,8 +52,6 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
-	<ur:js src="pages/js/ur_table.js"/>
-    <ur:js src="page-resources/js/admin/language_type.js"/>
      
 </head>
 
@@ -65,20 +63,14 @@
         <!--  this is the header of the page -->
         <c:import url="/inc/header.jsp"/>
       
-        <h3>Edit Languages</h3>
-  
+        <h3>Edit Places Of Publication</h3>
+         <a href="<c:url value="/admin/editPlaceOfPublication"/>">New Place Of Publication</a>
         <div id="bd">
-		    <button id="showLanguageType" class="ur_button" 
- 		        onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';">New Language type</button> 
-
-	        <button id="showDeleteLanguageType" class="ur_button" 
- 		        onmouseover="this.className='ur_buttonover';"
- 		        onmouseout="this.className='ur_button';">Delete</button>
-	      
 	        <br/>
 	        <br/>
-	        <div id="newLanguageTypes"></div>
+	        <div id="placesOfPublication">
+	            <c:import url="place_of_publication_table.jsp"/>
+	        </div>
        </div>
        <!--  end body div -->
 
@@ -86,40 +78,7 @@
       <c:import url="/inc/footer.jsp"/>
       
   </div>
-  <!--  End doc div-->
-  
- 	         <div id="newLanguageTypeDialog" class="hidden">
-	             <div class="hd">Language Type Information</div>
-		         <div class="bd">
-		         
-		         <form id="addLanguageType" name="newLanguageType" method="POST" 
-		              action="/user/addLanguageType.action">
-		              <div id="languageTypeForm">
-		                  <c:import url="language_type_form.jsp"/>
-		              </div>
-		          </form>
-		          </div>
-	         </div>
-	      
-	         <div id="deleteLanguageTypeDialog" class="hidden">
-	            <div class="hd">Delete Language Types</div>
-		        <div class="bd">
-		           <form id="deleteLanguageType" name="deleteLanguageType" method="post" 
-		              action="/user/deleteLanguageType.action">
-		              <div id="deleteLanguageTypeError" class="errorMessage"></div>
-			          <p>Are you sure you wish to delete the selected language types?</p>
-		           </form>
-		        </div>
-	         </div>	     	      
-
-    <!--  wait div -->
-	<div id="wait_dialog_box" class="hidden">
-	    <div class="hd">Processing...</div>
-		<div class="bd">
-		    <c:url var="wait" value="/page-resources/images/all-images/ajax-loader.gif"/>
-		    <p><img src="${wait}"></img></p>
-		</div>
-	</div>       
+ 
 
 </body>
 </html>
