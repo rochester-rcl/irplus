@@ -291,7 +291,27 @@
             <result name="added">/pages/admin/external_account_type/external_account_type_form.jsp</result>
             <result name="deleted">/pages/admin/external_account_type/external_account_type_deleted.jsp</result>
             <result name="get">/pages/admin/external_account_type/external_account_type_form.jsp</result>
-        </action>       
+        </action> 
+        
+        
+        <!--  ************************************ -->
+        <!--  Import MARC records    -->
+        <!--  ************************************ -->
+        <action name="viewMarcFileUploadPage"
+            class="edu.ur.ir.web.action.user.ImportMarcRecords"
+            method="viewMarcFileUploadPage">
+            <result name="success">/pages/user/workspace/upload_marc_file.jsp</result>
+        </action>
+        
+        <action name="uploadMarcFile"
+            class="edu.ur.ir.web.action.user.ImportMarcRecords"
+            method="uploadMarcFile">
+            <interceptor-ref name="urUploadStack"/>
+             <result name="success"  type="redirectAction"> 
+                <param name="actionName">/user/workspace.action</param> 
+            </result> 
+        </action>
+              
     </package>
     
 </struts>

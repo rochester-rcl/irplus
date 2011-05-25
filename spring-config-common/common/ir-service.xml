@@ -873,5 +873,22 @@
        <property name="extentTypeSubFieldMapperDAO" ref="extentTypeSubFieldMapperDAO"/>
    </bean>
    
-   
+   <!-- ****************************************** --> 
+   <!--  Service that deals with importing marc    -->
+   <!--     files                                  -->
+   <!-- ****************************************** --> 
+   <bean id="marcFileToVersionedItemImporter" 
+       class="edu.ur.ir.importer.service.DefaultMarcFileToVersionedItemImporter">
+       
+ 	    <property name="marcContributorTypeRelatorCodeService" ref="marcContributorTypeRelatorCodeService"/>
+	    <property name="identifierTypeSubFieldMapperService" ref="identifierTypeSubFieldMapperService"/>
+	    <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+	    <property name="extentTypeSubFieldMapperService" ref="extentTypeSubFieldMapperService"/>
+	    <property name="nameAuthorityIndexService" ref="nameAuthorityIndexService"/>
+	    <property name="nameAuthoritySearchService" ref="nameAuthoritySearchService"/>
+	    <property name="repositoryService" ref="repositoryService"/>
+	    <property name="contributorTypeService" ref="contributorTypeService"/>
+	    <property name="contributorService" ref="contributorService"/>
+	    <property name="personService" ref="personService"/>
+   </bean>
 </beans>

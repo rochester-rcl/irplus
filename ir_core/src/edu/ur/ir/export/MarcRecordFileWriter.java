@@ -5,6 +5,10 @@ import java.io.FileNotFoundException;
 
 import org.marc4j.marc.Record;
 
+/**
+ * @author Nathan Sarr
+ *
+ */
 public interface MarcRecordFileWriter {
 
 

@@ -72,10 +72,16 @@
 	                onmouseover="this.className='ur_buttonover';"
  		            onmouseout="this.className='ur_button';"
 	                id="addItemButton"><span class="deleteBtnImg">&nbsp;</span>Delete</button>
-
+              
 	        </td>
         </tr>
     </table>
+    <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
+        <c:url value="/admin/viewMarcFileUploadPage.action" var="importMarcUrl">
+            <c:param name="parentCollectionId" value="${parentCollectionId}"/>
+        </c:url>
+        <a href="${importMarcUrl}">Import MARC records</a>
+    </c:if>
 
 <div class="dataTable">
    

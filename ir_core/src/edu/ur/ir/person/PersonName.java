@@ -343,22 +343,22 @@ public class PersonName extends BasePersistent{
 
 		final PersonName other = (PersonName) o;
 
-		if( ( familyName != null && !familyName.equals(other.getFamilyName()) ) ||
+		if( ( familyName != null && !familyName.equalsIgnoreCase(other.getFamilyName()) ) ||
 			( familyName == null && other.getFamilyName() != null ) ) return false;
 		
-		if( ( forename != null && !forename.equals(other.getForename()) ) ||
+		if( ( forename != null && !forename.equalsIgnoreCase(other.getForename()) ) ||
 		    ( forename == null && other.getForename() != null ) ) return false;
 		
-		if( ( initials != null && !initials.equals(other.getInitials()) ) ||
+		if( ( initials != null && !initials.equalsIgnoreCase(other.getInitials()) ) ||
 			( initials == null && other.getInitials() != null ) ) return false;
 
-		if( ( middleName != null && !middleName.equals(other.getMiddleName()) ) ||
+		if( ( middleName != null && !middleName.equalsIgnoreCase(other.getMiddleName()) ) ||
 			( middleName == null && other.getMiddleName() != null ) ) return false;
 		
-		if( ( numeration != null && !numeration.equals(other.getNumeration()) ) ||
+		if( ( numeration != null && !numeration.equalsIgnoreCase(other.getNumeration()) ) ||
 			( numeration == null && other.getNumeration() != null ) ) return false;
 
-		if( ( surname != null && !surname.equals(other.getSurname()) ) ||
+		if( ( surname != null && !surname.equalsIgnoreCase(other.getSurname()) ) ||
 			( surname == null && other.getSurname() != null ) ) return false;
 
 		return true;
