@@ -748,7 +748,6 @@ YAHOO.ur.personal.collection =
     executeDeleteAction : function()
     {
     	 YAHOO.ur.personal.collection.deleteCollection.showDialog();
-         resetSelected.selected = true;
          YAHOO.ur.shared.file.inbox.getSharedFilesCount();
     },
     
@@ -758,7 +757,6 @@ YAHOO.ur.personal.collection =
     executeMoveAction : function()
     {
     	 YAHOO.ur.personal.collection.moveCollectionData();
-         resetSelected.selected = true;
          YAHOO.ur.shared.file.inbox.getSharedFilesCount();
     },
 

@@ -20,7 +20,6 @@ package edu.ur.ir.oai.metadata.provider.service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -218,6 +217,7 @@ public class DefaultMarcExportService implements MarcExportService{
 		    
 		    handleSeries(record, item.getItemReports());
 		    handleCopyright(record, item.getCopyrightStatement());
+		    handleOtherTitles(record, item);
 		}
 		return record;
 	}
@@ -227,6 +227,29 @@ public class DefaultMarcExportService implements MarcExportService{
 	private void handleExtents(GenericItem item, Record record)
 	{
         Set<ItemExtent> extents = item.getItemExtents();
+        
+        boolean hasB = false;
+        boolean hasC = false;
+        
+        for(ItemExtent extent : extents)
+		{
+			List<ExtentTypeSubFieldMapper> mappers = extentTypeSubFieldMapperService.getByExtentTypeId(extent.getExtentType().getId());
+			
+			if( mappers.size() > 0 )
+			{
+				for(ExtentTypeSubFieldMapper mapper : mappers)
+				{
+					if( mapper.getMarcSubField().getName().equalsIgnoreCase("b") )
+					{
+						hasB = true;
+					}
+					else if( mapper.getMarcSubField().getName().equalsIgnoreCase("c") )
+					{
+						hasC = true;
+					}
+				}
+			}
+		}
 		
 		for(ItemExtent extent : extents)
 		{
@@ -242,14 +265,27 @@ public class DefaultMarcExportService implements MarcExportService{
 					DataField df = (DataField)record.getVariableField(marcDataField.getCode());
 					
 					String value = extent.getValue();
+					
 					if( mapper.getPreString() != null )
 					{
 						value = mapper.getPreString() + value;
+						
 					}
 					if( mapper.getPostString() != null )
 					{
 						value = value + mapper.getPostString();
 					}
+					
+					if(mapper.getMarcSubField().getName().equalsIgnoreCase("a") && hasB)
+					{
+						value = value + " : ";
+					}
+					
+					if(mapper.getMarcSubField().getName().equalsIgnoreCase("a") && !hasB && hasC)
+					{
+						value = value + " ; ";
+					}
+					
 					
 					if( df == null)
 					{
@@ -257,12 +293,14 @@ public class DefaultMarcExportService implements MarcExportService{
 								mapper.getMarcDataFieldMapper().getIndicator1AsChar(),
 								mapper.getMarcDataFieldMapper().getIndicator2AsChar());
 						
-						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), value));
+						
+						
+						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), removeInvalidXmlChars(value)));
 						record.addVariableField(df);
 					}
 					else
 					{
-						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), value));
+						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), removeInvalidXmlChars(value)));
 					}
 				}
 			}
@@ -286,17 +324,37 @@ public class DefaultMarcExportService implements MarcExportService{
          DataField df = factory.newDataField("260", ' ', ' ');
          if( externalPublishedItem.getPlaceOfPublication() != null )
          {
-		     df.addSubfield(factory.newSubfield('a', externalPublishedItem.getPlaceOfPublication().getName()));
+        	 String value = externalPublishedItem.getPlaceOfPublication().getName();
+        	 if(externalPublishedItem.getPublisher() != null)
+        	 {
+        		 value = value + " :";
+        	 }
+		     df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(value)));
          }
          if( externalPublishedItem.getPublisher() != null )
          {
-		     df.addSubfield(factory.newSubfield('b',externalPublishedItem.getPublisher().getName()));
+        	 String name = externalPublishedItem.getPublisher().getName();
+        	 if( year != null )
+        	 {
+        		 name = name + ", ";
+        	 }
+		     df.addSubfield(factory.newSubfield('b', removeInvalidXmlChars(name)));
          }
          if( year != null )
          {
-		     df.addSubfield(factory.newSubfield('c',  year));
+		     df.addSubfield(factory.newSubfield('c',  year + "."));
          }
 		 record.addVariableField(df);
+	}
+	
+	private void handleOtherTitles(Record record, GenericItem genericItem)
+	{
+		for(ItemTitle title : genericItem.getSubTitles())
+		{
+			DataField df = factory.newDataField("246", '3', ' ');
+			df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(title.getFullTitle())));
+			record.addVariableField(df);
+		}
 	}
 	
 	private void handleTitle(GenericItem item, ItemContributor ic, Record record)
@@ -312,19 +370,15 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 		
 		DataField df = factory.newDataField("245", '1', ind2);
-		df.addSubfield(factory.newSubfield('a', leadingArticles + item.getName()));
+		df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(leadingArticles + item.getName())));
 		
-		
-		if( item.getSubTitles().size() > 0 )
+		if( ic != null )
 		{
-			Iterator<ItemTitle> subTitleIter = item.getSubTitles().iterator();
-			ItemTitle subTitle = subTitleIter.next();
-			df.addSubfield(factory.newSubfield('h', "[electronic resource]:"));
-			df.addSubfield(factory.newSubfield('b', subTitle.getFullTitle() + "/"));	
+		    df.addSubfield(factory.newSubfield('h', "[electronic resource] /"));
 		}
 		else
 		{
-			df.addSubfield(factory.newSubfield('h', "[electronic resource]/"));
+			df.addSubfield(factory.newSubfield('h', "[electronic resource]"));
 		}
 		
 		if( ic != null )
@@ -343,7 +397,7 @@ public class DefaultMarcExportService implements MarcExportService{
 		    {
 			     authorName += " " + pn.getSurname();
 		    }
-		    df.addSubfield(factory.newSubfield('c', authorName + ".") );
+		    df.addSubfield(factory.newSubfield('c', removeInvalidXmlChars(authorName) + ".") );
 			record.addVariableField(df);
 		}
 	
@@ -391,17 +445,40 @@ public class DefaultMarcExportService implements MarcExportService{
 			{
 				deathYear += pn.getPersonNameAuthority().getDeathDate().getYear();
 			}
+			
+			if( hasBirthYear || hasDeathYear )
+			{
+				authorName = authorName.trim() + ",";
+			}
+			else if( relatorCode != null )
+			{
+				authorName = authorName.trim() + ".";
+			}
+			
+			String lifeDate = "";
+			if( hasBirthYear || hasDeathYear )
+			{
+				
+				lifeDate = birthYear + "-" + deathYear;
+				if( hasDeathYear )
+				{
+					lifeDate = lifeDate + ".";
+				}
+			}
+			
+			
 			// primary contributor
 			if( index == 0 )
 			{
 				DataField df = factory.newDataField("100", '1', ' ');
-				df.addSubfield(factory.newSubfield('a', authorName));
 				
+				df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(authorName)));
 				
 				if( hasBirthYear || hasDeathYear )
 				{
-					df.addSubfield(factory.newSubfield('d', birthYear + "-" + deathYear));
+				    df.addSubfield(factory.newSubfield('d',lifeDate));
 				}
+				
 				
 				if( relatorCode != null )
 				{
@@ -414,20 +491,20 @@ public class DefaultMarcExportService implements MarcExportService{
 			else
 			{
 				DataField df = factory.newDataField("700", '1', ' ');
-				df.addSubfield(factory.newSubfield('a', authorName));
+				df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(authorName)));
 				if( hasBirthYear || hasDeathYear )
 				{
-					df.addSubfield(factory.newSubfield('d', birthYear + "-" + deathYear));
+					df.addSubfield(factory.newSubfield('d', lifeDate));
 				}
 				if( relatorCode != null )
 				{
 					df.addSubfield(factory.newSubfield('4', relatorCode.getMarcRelatorCode().getRelatorCode()));
 					
-					// this is specific to U of R
+					// add note
 					if( relatorCode.equals("ths"))
 					{
 						DataField df2 = factory.newDataField("500", ' ', ' ');
-						df2.addSubfield(factory.newSubfield('a', "Advisor:" + pn.getForename() + " " + pn.getMiddleName() + " " + pn.getSurname()));
+						df2.addSubfield(factory.newSubfield('a', "Advisor:" + removeInvalidXmlChars(pn.getForename() + " " + pn.getMiddleName() + " " + pn.getSurname())));
 					}
 				}
 				record.addVariableField(df);
@@ -445,13 +522,13 @@ public class DefaultMarcExportService implements MarcExportService{
 		if( mapper != null && mapper.isThesis() )
 		{
 		    DataField df = factory.newDataField("502", ' ', ' ');
-		    df.addSubfield(factory.newSubfield('a', description));
+		    df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(description)));
 		    record.addVariableField(df);
 		}
 		else
 		{
 			DataField df = factory.newDataField("500", ' ', ' ');
-		    df.addSubfield(factory.newSubfield('a', description));
+		    df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(description)));
 		    record.addVariableField(df);
 		}
 	}
@@ -476,8 +553,8 @@ public class DefaultMarcExportService implements MarcExportService{
 	
 	private void handleAbstract(Record record, String itemAbstract)
 	{
-		DataField df = factory.newDataField("520", ' ', ' ');
-		df.addSubfield(factory.newSubfield('3', itemAbstract));
+		DataField df = factory.newDataField("520", '3', ' ');
+		df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(itemAbstract)));
 		record.addVariableField(df);
 	}
 	
@@ -533,12 +610,12 @@ public class DefaultMarcExportService implements MarcExportService{
 								mapper.getMarcDataFieldMapper().getIndicator1AsChar(),
 								mapper.getMarcDataFieldMapper().getIndicator2AsChar());
 						
-						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), value));
+						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), removeInvalidXmlChars(value)));
 						record.addVariableField(df);
 					}
 					else
 					{
-						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), value));
+						df.addSubfield(factory.newSubfield(mapper.getMarcSubField().getName().charAt(0), removeInvalidXmlChars(value)));
 					}
 				}
 			}
@@ -551,7 +628,7 @@ public class DefaultMarcExportService implements MarcExportService{
 		for( String word : words)
 		{
 			DataField df = factory.newDataField("653", ' ', ' ');
-			df.addSubfield(factory.newSubfield('a', word));
+			df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(word) + "."));
 			record.addVariableField(df);
 		}
 	}
@@ -561,7 +638,7 @@ public class DefaultMarcExportService implements MarcExportService{
 		if( copyrightStatement != null)
 		{
 			DataField df = factory.newDataField("540", ' ', ' ');
-			df.addSubfield(factory.newSubfield('a', copyrightStatement.getText()));
+			df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(copyrightStatement.getText())));
 			record.addVariableField(df);
 		}
 	}
@@ -572,12 +649,18 @@ public class DefaultMarcExportService implements MarcExportService{
 		{
 			DataField df490 = factory.newDataField("490", '1', ' ');
 			DataField df830 = factory.newDataField("830", ' ', '0');
-			df490.addSubfield(factory.newSubfield('a', report.getSeries().getName()));
-			df830.addSubfield(factory.newSubfield('a', report.getSeries().getName()));
+			String series = report.getSeries().getName();
 			if( report.getReportNumber() != null && !report.getReportNumber().trim().equals(""))
 			{
-				df490.addSubfield(factory.newSubfield('v', report.getReportNumber()));
-				df830.addSubfield(factory.newSubfield('v', report.getReportNumber()));
+			    series = series + ";";   
+			}
+			
+			df490.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(series)));
+			df830.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(series)));
+			if( report.getReportNumber() != null && !report.getReportNumber().trim().equals(""))
+			{
+				df490.addSubfield(factory.newSubfield('v', removeInvalidXmlChars(report.getReportNumber())));
+				df830.addSubfield(factory.newSubfield('v', removeInvalidXmlChars(report.getReportNumber())));
 			}
 			record.addVariableField(df490);
 			record.addVariableField(df830);
@@ -589,7 +672,7 @@ public class DefaultMarcExportService implements MarcExportService{
 		if( citation != null && !citation.trim().equals(""))
 		{
 			DataField df = factory.newDataField("524", ' ', ' ');
-			df.addSubfield(factory.newSubfield('a', citation));
+			df.addSubfield(factory.newSubfield('a', removeInvalidXmlChars(citation)));
 			record.addVariableField(df);
 		}
 	}
@@ -630,6 +713,7 @@ public class DefaultMarcExportService implements MarcExportService{
 		leader.setTypeOfRecord(mapper.getTypeOfRecord());
 		leader.setImplDefined1(new char[]{mapper.getBibliographicLevel(), mapper.getTypeOfControl()});
 		leader.setImplDefined2(new char[]{mapper.getEncodingLevel(), mapper.getDescriptiveCatalogingForm(), ' '});
+	    leader.setCharCodingScheme('a');
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -755,6 +839,20 @@ public class DefaultMarcExportService implements MarcExportService{
 	public void setExtentTypeSubFieldMapperService(
 			ExtentTypeSubFieldMapperService extentTypeSubFieldMapperService) {
 		this.extentTypeSubFieldMapperService = extentTypeSubFieldMapperService;
+	}
+	
+	/**
+	 * Removes invalid xml charachters from the specified string.
+	 * 
+	 * @param value - string to replace the characters with
+	 * @return cleaned up string.
+	 */
+	private String removeInvalidXmlChars(String value)
+	{
+		String fixed = value.replaceAll("\u201C", "\"");
+		fixed = fixed.replaceAll("\u201D", "\"");
+		fixed = fixed.replaceAll("\u2019", "'");
+	    return fixed;
 	}
 	
 

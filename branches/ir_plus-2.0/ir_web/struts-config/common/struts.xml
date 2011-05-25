@@ -412,23 +412,23 @@
                 method="getRss">
                 <interceptor-ref name="editStack" />
                 <result name="success">/pages/item/contributor_page_rss_feed.jsp</result>
+                <result name="not_found">/pages/item/contributor_page_not_found_rss_feed.jsp</result>
+                <result name="input">/pages/item/contributor_page_not_found_rss_feed.jsp</result>
         </action>
         
          <action name="viewContributorPage" 
                 class="edu.ur.ir.web.action.item.ViewContributorPage">
          	<result name="success">/pages/item/contributor_page_view.jsp</result>
+         	<result name="not_found">/pages/item/contributor_page_not_found.jsp</result>
+            <result name="input">/pages/item/contributor_page_not_found.jsp</result>
          </action> 
          
          <action name="viewContributorXmlPage" 
                 class="edu.ur.ir.web.action.item.ViewContributorPage">
          	<result name="success">/pages/item/contributor_page_view_xml.jsp</result>
+         	<result name="not_found">/pages/item/institutional_publication_not_found.jsp</result>
+            <result name="input">/pages/item/institutional_publication_not_found.jsp</result>
          </action>
-         
-          <action name="viewByPersonNameContributorPage" 
-                class="edu.ur.ir.web.action.item.ViewByPersonContributorPage">
-         	<result name="success">/pages/item/contributor_page_view.jsp</result>
-         </action>       
-                 
                  
         <!--  ************************************ -->
         <!--    Sponsor actions                 -->

@@ -94,5 +94,16 @@ public class DefaultMarcContributorTypeRelatorCodeService implements MarcContrib
 		this.marcContributorTypeRelatorCodeDAO = marcContributorTypeRelatorCodeDAO;
 	}
 
+	/**
+	 * Returns the list of contributor types that have the specified relator code.
+	 * 
+	 * @param relatorCode - relator code 
+	 * @return the list of records found with the contributor type relator codes.
+	 */
+	public List<MarcContributorTypeRelatorCode> getByRelatorCode(
+			String relatorCode) {
+		return marcContributorTypeRelatorCodeDAO.getByRelatorCode(relatorCode);
+	}
+
 
 }

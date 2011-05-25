@@ -540,6 +540,40 @@ insert into metadata.marc_data_field(marc_data_field_id, version, code, name, re
 values(nextval('metadata.marc_data_field_seq'), 0, '088', 'Report Number', true, '');
 
 
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '090', 'Local Call Number - 090', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '091', 'Local Call Number - 091', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '092', 'Local Call Number - 092', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '093', 'Local Call Number - 093', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '094', 'Local Call Number - 094', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '095', 'Local Call Number - 095', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '096', 'Local Call Number - 096', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '097', 'Local Call Number - 097', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '098', 'Local Call Number - 098', true, '');
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '099', 'Local Call Number - 099', true, '');
+
+
+
+
 insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
 values(nextval('metadata.marc_data_field_seq'), 0, '100', 'Main Entry - Personal Name', false, '');
 

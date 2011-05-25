@@ -73,7 +73,7 @@
 						      <td>
 						      	   <input type="text" id="itemForm_titleArticles" name="subTitleArticles" value="<c:out value='${title.leadingArticles}'/>" size="15"/>&nbsp;<input type="text" id="itemForm_title" name="subTitles" value="<c:out value='${title.title}'/>" size="90"/>
 						      </td>
-						      <td>   
+						      <td>
 						      	  &nbsp;&nbsp;&nbsp; <input type="button" class="ur_button" id="itemForm_remove" value="Remove Other Title" onclick="javascript:YAHOO.ur.item.metadata.removeSubTitle('title_table_${rowCounter.count}');"/>
 						      </td>
 						    </tr>

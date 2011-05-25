@@ -32,7 +32,6 @@ import edu.ur.ir.person.PersonService;
 import edu.ur.ir.repository.Repository;
 import edu.ur.ir.repository.RepositoryService;
 import edu.ur.ir.researcher.Researcher;
-import edu.ur.ir.statistics.DownloadStatisticsService;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.table.Pager;
@@ -71,10 +70,6 @@ public class ViewContributorPage extends Pager {
 	/**  Repository */
 	private Repository repository;
 	
-
-	/** Statistics service*/
-	private DownloadStatisticsService downloadStatisticsService;
-
 	/** Total downloads */
 	private Long totalDownloads = 0l;
 	
@@ -135,9 +130,20 @@ public class ViewContributorPage extends Pager {
 	 */
 	public String getRss()
 	{
+		if(personNameId == null )
+		{
+			return "not_found";
+		}
 		repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 		rowEnd = rowStart + numberOfResultsToShow;
+		
 		personName = personService.getName(personNameId, false);
+		
+		if( personName == null )
+		{
+		    return "not_found";	
+		}
+		
 		PersonNameAuthority authority = personName.getPersonNameAuthority();
 		Set<PersonName> names = authority.getNames();
 		totalDownloads = institutionalItemVersionService.getNumberOfDownlodsForPersonNames(names);
@@ -153,9 +159,17 @@ public class ViewContributorPage extends Pager {
 	 */
 	public String execute()
 	{
-		
+		if( personNameId == null )
+		{
+		    return "not_found";	
+		}
 		rowEnd = rowStart + numberOfResultsToShow;
 		personName = personService.getName(personNameId, false);
+		
+		if( personName == null )
+		{
+		    return "not_found";	
+		}
 		PersonNameAuthority authority = personName.getPersonNameAuthority();
 		Set<PersonName> names = authority.getNames();
 
@@ -378,11 +392,6 @@ public class ViewContributorPage extends Pager {
 		return contributorPublications;
 	}
 
-
-	public void setDownloadStatisticsService(
-			DownloadStatisticsService downloadStatisticsService) {
-		this.downloadStatisticsService = downloadStatisticsService;
-	}
 
 
 	public long getPublicationsCount() {

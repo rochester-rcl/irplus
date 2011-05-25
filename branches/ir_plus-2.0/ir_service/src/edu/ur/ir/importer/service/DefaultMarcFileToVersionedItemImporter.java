@@ -1,0 +1,665 @@
+/**  
+   Copyright 2008 - 2011 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/  
+
+package edu.ur.ir.importer.service;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+import org.marc4j.MarcReader;
+import org.marc4j.MarcStreamReader;
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
+
+import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.SearchResults;
+import edu.ur.ir.importer.MarcFileToVersionedItemImporter;
+import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
+import edu.ur.ir.item.DuplicateContributorException;
+import edu.ur.ir.item.ExternalPublishedItem;
+import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.VersionedItem;
+import edu.ur.ir.marc.ExtentTypeSubFieldMapperService;
+import edu.ur.ir.marc.IdentifierTypeSubFieldMapperService;
+import edu.ur.ir.marc.MarcContributorTypeRelatorCode;
+import edu.ur.ir.marc.MarcContributorTypeRelatorCodeService;
+import edu.ur.ir.person.BirthDate;
+import edu.ur.ir.person.Contributor;
+import edu.ur.ir.person.ContributorService;
+import edu.ur.ir.person.ContributorType;
+import edu.ur.ir.person.ContributorTypeService;
+import edu.ur.ir.person.DeathDate;
+import edu.ur.ir.person.NameAuthorityIndexService;
+import edu.ur.ir.person.NameAuthoritySearchService;
+import edu.ur.ir.person.PersonName;
+import edu.ur.ir.person.PersonNameAuthority;
+import edu.ur.ir.person.PersonService;
+import edu.ur.ir.repository.Repository;
+import edu.ur.ir.repository.RepositoryService;
+import edu.ur.ir.user.IrUser;
+
+/**
+ * Deals with importing marc files.
+ * 
+ * @author Nathan Sarr
+ *
+ */
+public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersionedItemImporter{
+	
+	//  Logger for add personal folder action */
+	private static final Logger log = Logger.getLogger(DefaultMarcFileToVersionedItemImporter.class);
+	
+	// service to help with relator codes
+	private MarcContributorTypeRelatorCodeService marcContributorTypeRelatorCodeService;
+
+	// service for dealing with identifier type sub fields
+	private IdentifierTypeSubFieldMapperService identifierTypeSubFieldMapperService;
+	
+	/**  Used to get the url for a given item */
+	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
+	
+	// service for dealing with identifier type sub fields
+	private ExtentTypeSubFieldMapperService extentTypeSubFieldMapperService;
+	
+	// Service for indexing names */
+	private NameAuthorityIndexService nameAuthorityIndexService;
+	
+	// service for finding names
+	private NameAuthoritySearchService nameAuthoritySearchService;
+	
+
+	// service to deal with repository information
+	private RepositoryService repositoryService;
+	
+	/** Service for dealing with contributor types */
+	private ContributorTypeService contributorTypeService;
+	
+	// service to deal with contributor information
+	private ContributorService contributorService;
+	
+	private PersonService personService;
+
+
+	@SuppressWarnings("unchecked")
+	public VersionedItem createVersionedItem(Record record, IrUser owner) throws NoIndexFoundException
+	{
+	
+		GenericItem item = new GenericItem("unknown");
+	    VersionedItem versionedItem = new VersionedItem(owner, item);
+		
+        // returns fields for tags 010 through 999
+		List<DataField> fields = (List<DataField>)record.getDataFields();
+		for(DataField field : fields)
+		{
+			String tag = field.getTag();
+		    char ind1 = field.getIndicator1();
+		    char ind2 = field.getIndicator2();
+
+		    log.debug("Tag: " + tag + " Indicator 1: " + ind1 + " Indicator 2: " + ind2);
+		    
+		    List subfields = field.getSubfields();
+	        Iterator i = subfields.iterator();
+
+	        while (i.hasNext()) {
+	            Subfield subfield = (Subfield) i.next();
+		        char code = subfield.getCode();
+		        String data = subfield.getData();
+		        log.debug("Subfield code: " + code + " Data element: " + data);
+	        }
+		    
+		    if( tag.equals("245"))
+		    {
+		    	handle245(field, item);
+		    }
+		    if( tag.equals("100") || tag.equals("700"))
+		    {
+		    	handle100(field, item);
+		    }
+		    if( tag.equals("300"))
+		    {
+		    	handle300(field);
+		    }
+		    if( tag.equals("260"))
+		    {
+		        handle260(field, item);	
+		    }
+		}
+		return versionedItem;
+	}
+
+	/**
+	 * Import the marc file into the personal collection
+	 * @throws FileNotFoundException 
+	 * @throws NoIndexFoundException 
+	 * 
+	 * @see edu.ur.ir.importer.MarcFileToVersionedItemImporter#importMarc(java.io.File, edu.ur.ir.user.PersonalCollection)
+	 */
+	
+	public List<VersionedItem> importMarc(File f, IrUser owner) throws FileNotFoundException, NoIndexFoundException {
+		
+		List<VersionedItem> versionedItems = new LinkedList<VersionedItem>();
+		FileInputStream fis = new FileInputStream(f);
+		MarcReader reader = new MarcStreamReader(fis);
+		while (reader.hasNext()) {
+	        Record record = reader.next();
+	        versionedItems.add(createVersionedItem(record, owner));
+	    }
+		return versionedItems;
+	}
+	
+	/**
+	 * Handle the 100 level record.
+	 * 
+	 * @param field
+	 * @throws NoIndexFoundException 
+	 */
+	private void handle100(DataField field, GenericItem item) throws NoIndexFoundException
+	{
+		log.debug("Dealing with " + field.getTag() );
+		if( field.getSubfield('a') != null )
+		{
+			ContributorType contributorType = contributorTypeService.getByUniqueSystemCode("AUTHOR");
+		    
+			
+			PersonNameAuthority authority = splitName(field.getSubfield('a').getData().trim());
+						
+		    if( field.getSubfield('d') != null)
+			{
+				splitBirthDeathYears(field.getSubfield('d').getData(), authority);
+				log.debug("Person name authority = " + authority);
+			}
+		    
+		    
+		    if( field.getSubfield('4') != null )
+		    {
+		    	List<MarcContributorTypeRelatorCode> marcContributorTypes = marcContributorTypeRelatorCodeService.getByRelatorCode(field.getSubfield('4').getData());
+		        if( marcContributorTypes.size() > 0 )
+		        {
+		        	MarcContributorTypeRelatorCode contributorTypeByRelatorCode = marcContributorTypes.get(0);
+		        	if ( contributorTypeByRelatorCode != null )
+		        	{
+		        		contributorType= contributorTypeByRelatorCode.getContributorType();
+		        	}
+		        }
+		    }
+		    
+		    
+		    Repository repository = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
+		    PersonName pn = this.getExistingAuthor(repository, authority);
+		    Contributor contributor = contributorService.get( pn, contributorType);
+			log.debug("Contributor found = " + contributor);
+			if( contributor == null )
+			{
+				log.debug("creating new contributor");
+				contributor = new Contributor();
+			    contributor.setContributorType(contributorType);
+			    contributor.setPersonName(pn);
+			}
+			try {
+				log.debug("existing contributor used");
+				item.addContributor(contributor);
+			} catch (DuplicateContributorException e) {
+				log.debug("did not add contributor " + contributor + " because of error ", e);
+			}
+		    
+		}
+	}
+	
+	
+	/**
+	 * Deal with the 245.
+	 * 
+	 * @param marc 245 field
+	 */
+	private void handle245(DataField field, GenericItem item)
+	{
+		log.debug("Dealing with 245");
+		
+		Subfield subfield = field.getSubfield('a');
+		String title = "Unknown";
+		String articles = "";
+		
+		if( subfield != null )
+		{
+		    char ind2 = field.getIndicator2(); 
+		    int articlesEndPosition = 0;
+		    
+		    if( ind2 != ' ')
+		    {
+			    Integer value  = Integer.valueOf( ind2 + "");
+			    if( value != null )
+			    {
+				    articlesEndPosition = value.intValue();
+			    }
+		    }
+		    title = subfield.getData().substring(articlesEndPosition).trim();
+		    title = endPunctuationStripper(title);
+		    articles = subfield.getData().substring(0, articlesEndPosition).trim();
+		    item.setName(title);
+		    item.setLeadingNameArticles(articles);
+		   
+		}
+		
+		log.debug("Title = |" + title + "|");
+		log.debug("Articles = " + articles);
+		
+	}
+	
+	private void handle260(DataField field, GenericItem item)
+	{
+		log.debug("handle publisher");
+		ExternalPublishedItem externalPublishedItem = item.getExternalPublishedItem();
+		Subfield subfield = field.getSubfield('a');
+		if( subfield != null )
+		{
+			log.debug("placeOfPublication = " + this.endPunctuationStripper(subfield.getData()));
+			
+		}
+		subfield = field.getSubfield('b');
+		if( subfield != null )
+		{
+			log.debug("publisher = " + this.endPunctuationStripper(subfield.getData()));
+		}
+		
+		subfield = field.getSubfield('c');
+		if( subfield != null )
+		{
+			log.debug("Date of publication = " + this.endPunctuationStripper(subfield.getData()));
+		}
+	}
+	
+	private void handle300(DataField field) 
+	{
+		log.debug("handle extents");
+		Subfield subfield = field.getSubfield('a');
+		if( subfield != null )
+		{
+			log.debug("number of pages = " + this.endPunctuationStripper(subfield.getData()));
+			
+		}
+		subfield = field.getSubfield('b');
+		if( subfield != null )
+		{
+			log.debug("illustrations = " + this.endPunctuationStripper(subfield.getData()));
+		}
+		
+		subfield = field.getSubfield('c');
+		if( subfield != null )
+		{
+			log.debug("size = " + this.endPunctuationStripper(subfield.getData()));
+		}
+	}
+	
+	/**
+	 * Strip off ending punctuation
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private String endPunctuationStripper(String value)
+	{
+		if( value == null )
+		{
+			return value;
+		}
+		if(value.lastIndexOf('/') == (value.length() - 1))
+		{
+			return value.substring(0, value.length()-1).trim();
+		}
+		else if(value.lastIndexOf(':') == (value.length() - 1))
+		{
+			return value.substring(0, value.length()-1).trim();
+		}
+		else if(value.lastIndexOf(',') == (value.length() - 1))
+		{
+			return value.substring(0, value.length()-1).trim();
+		}
+		else if(value.lastIndexOf(';') == (value.length() - 1))
+		{
+			return value.substring(0, value.length()-1).trim();
+		}
+		else if(value.lastIndexOf('.') == (value.length() - 1))
+		{
+			return value.substring(0, value.length()-1).trim();
+		}
+		else
+		{
+			return value;
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see edu.ur.dspace.load.AuthorNameSplitter#splitName(java.lang.String)
+	 */
+	private PersonNameAuthority splitName(String authorName) {
+		PersonName personName = new PersonName();
+		PersonNameAuthority nameAuthority = new PersonNameAuthority(personName);
+
+		// split on the name
+		String[] fullNameParts = authorName.split(",");
+
+		int size = fullNameParts.length;
+		log.debug("size = 2");
+		if( size == 2)
+		{
+			// assume last name in first part
+			
+			personName.setSurname(fullNameParts[0].trim());
+			
+			// check the last part for multiple parts
+			String[] foreNameParts = fullNameParts[1].trim().split(" ");
+			if( foreNameParts.length > 1)
+			{
+				personName.setForename(foreNameParts[0].trim());
+				String middleName = "";
+				for( int index = 1; index < foreNameParts.length; index++)
+				{
+					middleName = middleName + foreNameParts[index] + " ";
+				}
+				middleName = middleName.trim();
+				personName.setMiddleName(middleName);
+			}
+			else
+			{
+				personName.setForename(fullNameParts[1]);
+			}
+		}
+		else 
+		{
+			log.debug("Adding all to last name " + fullNameParts[0]);
+			personName.setSurname(authorName);
+		}
+
+		log.debug("PersonName = " + personName);
+		return nameAuthority;	
+	}
+	
+	
+	private void splitBirthDeathYears(String years, PersonNameAuthority authority)
+	{
+		log.debug("handle birth death year splitting " + years);
+		if( years != null )
+		{
+			
+		    String[] dateParts = endPunctuationStripper(years).split("-");
+		    if( dateParts.length ==  2)
+		    {
+		    	
+		    	try
+		    	{
+		    		Integer birthInt = Integer.valueOf(dateParts[0]);
+		    		BirthDate birthDate = new BirthDate(birthInt);
+		    		authority.setBirthDate(birthDate);
+		    	}
+		    	catch(Exception e)
+		    	{
+		    		// do nothing
+		    	}
+		    	
+		    	try
+		    	{
+		    		 Integer deathInt = Integer.valueOf(dateParts[1]);
+		    		 DeathDate deathDate = new DeathDate(deathInt);
+		    		 authority.setDeathDate(deathDate);
+		    	}
+		    	catch(Exception e)
+		    	{
+		    		// do nothing
+		    	}
+		    	
+		    }
+		    else if ( dateParts.length == 1)
+		    {
+		    	try
+		    	{
+		    		Integer birthInt = Integer.valueOf(dateParts[0]);
+		    		BirthDate birthDate = new BirthDate(birthInt);
+		    		authority.setBirthDate(birthDate);
+		    	}
+		    	catch(Exception e)
+		    	{
+		    		// do nothing
+		    	}
+		    }
+		    
+		    
+		}
+		
+		
+	}
+	
+	
+	public void setMarcContributorTypeRelatorCodeService(
+			MarcContributorTypeRelatorCodeService marcContributorTypeRelatorCodeService) {
+		this.marcContributorTypeRelatorCodeService = marcContributorTypeRelatorCodeService;
+	}
+
+	public void setIdentifierTypeSubFieldMapperService(
+			IdentifierTypeSubFieldMapperService identifierTypeSubFieldMapperService) {
+		this.identifierTypeSubFieldMapperService = identifierTypeSubFieldMapperService;
+	}
+
+	public void setInstitutionalItemVersionUrlGenerator(
+			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
+		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
+	}
+
+	public void setExtentTypeSubFieldMapperService(
+			ExtentTypeSubFieldMapperService extentTypeSubFieldMapperService) {
+		this.extentTypeSubFieldMapperService = extentTypeSubFieldMapperService;
+	}
+	
+	
+	/**
+	 * Testing 
+	 * @param args
+	 * @throws FileNotFoundException
+	 * @throws NoIndexFoundException 
+	 */
+	public static void main(String[] args) throws FileNotFoundException, NoIndexFoundException
+	{
+		String file = "C:\\sib_marc_files\\CPEBachSongs.do";
+		DefaultMarcFileToVersionedItemImporter dmfis = new DefaultMarcFileToVersionedItemImporter();
+		dmfis.importMarc(new File(file), null);
+		log.debug("===========================");
+		file = "C:\\sib_marc_files\\JuonSilhouettenMarc.do";
+		dmfis.importMarc(new File(file), null);
+	}
+	
+	/**
+	 * Get the final list of authors. This searches the existing list of authors.  If one
+	 * is found it is used instead of the created name authority.
+	 * 
+	 * @param createdNameAuthorities
+	 * @return
+	 * @throws NoIndexFoundException 
+	 */
+	private PersonName getExistingAuthor(Repository repository, PersonNameAuthority createdAuthority) throws NoIndexFoundException
+	{
+		log.debug("check for existing author");
+		String query  = buildAuthorityNameQuery(createdAuthority);
+		log.debug("query = " + query);
+		SearchResults<PersonNameAuthority> results = nameAuthoritySearchService.search(new File(repository.getNameIndexFolder()), query, 0, 5);
+	    log.debug("search results size = " + results.getNumberObjects());
+		
+		PersonName createdName = createdAuthority.getAuthoritativeName();
+		PersonName finalName =  createdName;
+		boolean found = false;
+		if( results.getNumberObjects() > 0  )
+	    {
+	        List<PersonNameAuthority> foundNames = results.getObjects();
+	        Iterator<PersonNameAuthority> iterator = foundNames.iterator();
+	        while(!found && iterator.hasNext())
+	        {
+	        	PersonNameAuthority foundAuthorityName = iterator.next();
+	        	
+	        	if( foundAuthorityName != null )
+	        	{
+	        	    BirthDate birthDate = foundAuthorityName.getBirthDate();
+	        	    DeathDate deathDate = foundAuthorityName.getDeathDate();
+	        	    boolean datesOk = true;
+	        	
+	        	    if( birthDate != null && createdAuthority.getBirthDate() != null)
+	        	    {
+	        		   if( birthDate.getYear() != createdAuthority.getBirthDate().getYear() )
+	        		   {
+	        			   datesOk = false;
+	        		   }
+	        	    }
+	        	    
+	        	    if( deathDate != null && createdAuthority.getDeathDate() != null)
+	        	    {
+	        		   if( deathDate.getYear() != createdAuthority.getDeathDate().getYear() )
+	        		   {
+	        			   datesOk = false;
+	        		   }
+	        	    }
+	        	
+	        	
+	        	    log.debug("dates ok = " + datesOk );
+	        	    
+	        	    if( datesOk )
+	        	    {
+	        		    // set of names for the authoritative name
+	        		    Set<PersonName> names = foundAuthorityName.getNames();
+	        		    Iterator<PersonName> nameIter = names.iterator();
+	        		
+	        		    while(!found && nameIter.hasNext())
+	        		    {
+	        			    PersonName foundName = nameIter.next();
+	        			    log.debug( "comparing found name " + foundName + " to name " +  createdName);
+	        			    if( foundName.equals(createdName))
+	        			    {
+	        		            log.debug("Name found!");
+	        		            found = true;
+	        		            finalName = foundName;
+	        			    }
+	        		    }
+	        	    }
+	            }
+	        }
+		}
+		if( !found )
+	    {
+	        personService.save(createdAuthority);
+	        nameAuthorityIndexService.addToIndex(createdAuthority, new File(repository.getNameIndexFolder()));
+	    }
+		log.debug("adding final name " + finalName);
+		return finalName;
+	}
+	
+	/**
+	 * Build a search query for the person name.
+	 * 
+	 * @param authority
+	 * @return
+	 */
+	private String buildAuthorityNameQuery(PersonNameAuthority authority)
+	{
+	   StringBuffer queryString = new StringBuffer("");
+	   PersonName personName = authority.getAuthoritativeName();
+	   if( personName.getForename() != null )
+		{
+			queryString.append(personName.getForename());
+			queryString.append(" ");
+		}
+
+		if( personName.getMiddleName()!= null )
+		{
+			queryString.append(personName.getMiddleName());
+			queryString.append(" ");
+		}
+
+		if( personName.getFamilyName() != null )
+		{
+			queryString.append(personName.getFamilyName());
+			queryString.append(" ");
+		}
+
+		if( personName.getSurname() != null )
+		{
+			queryString.append(personName.getSurname());
+			queryString.append(" ");
+		}
+
+	   
+	   return queryString.toString();
+	}
+
+	/**
+	 * Set the repository service
+	 * @param repositoryService
+	 */
+	public void setRepositoryService(RepositoryService repositoryService) {
+		this.repositoryService = repositoryService;
+	}
+	
+	/**
+	 * Set the contributor type service.
+	 * 
+	 * @param contributorTypeService
+	 */
+	public void setContributorTypeService(
+			ContributorTypeService contributorTypeService) {
+		this.contributorTypeService = contributorTypeService;
+	}
+	
+	/**
+	 * Set the contributor service.
+	 * 
+	 * @param contributorService
+	 */
+	public void setContributorService(ContributorService contributorService) {
+		this.contributorService = contributorService;
+	}
+	
+	/**
+	 * Set the name authority index service.
+	 * 
+	 * @param nameAuthorityIndexService
+	 */
+	public void setNameAuthorityIndexService(
+			NameAuthorityIndexService nameAuthorityIndexService) {
+		this.nameAuthorityIndexService = nameAuthorityIndexService;
+	}
+
+	/**
+	 * Set the name authority search service.
+	 * 
+	 * @param nameAuthoritySearchService
+	 */
+	public void setNameAuthoritySearchService(
+			NameAuthoritySearchService nameAuthoritySearchService) {
+		this.nameAuthoritySearchService = nameAuthoritySearchService;
+	}
+
+	/**
+	 * Set the person service.
+	 * 
+	 * @param personService
+	 */
+	public void setPersonService(PersonService personService) {
+		this.personService = personService;
+	}
+
+}

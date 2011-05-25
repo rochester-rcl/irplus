@@ -72,6 +72,20 @@ public class HbMarcContributorTypeRelatorCodeDAO implements MarcContributorTypeR
 		q.setParameter("relatorCodeId", relatorCodeId);
 		return (MarcContributorTypeRelatorCode)q.uniqueResult();
 	}
+	
+	/**
+	 * Returns the list of contributor types that have the specified relator code.
+	 * 
+	 * @param relatorCode - relator code 
+	 * @return the list of records found with the contributor type relator codes.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<MarcContributorTypeRelatorCode> getByRelatorCode(String relatorCode)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcContributorTypeRelatorCodeByRelatorCodeName");
+		q.setParameter("relatorCode",  relatorCode);
+		return q.list();
+	}
 
 	public List<MarcContributorTypeRelatorCode> getAll() {
 		return hbCrudDAO.getAll();

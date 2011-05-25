@@ -16,6 +16,8 @@
 
 package edu.ur.ir.marc;
 
+import java.util.List;
+
 import edu.ur.dao.CrudDAO;
 
 /**
@@ -41,5 +43,13 @@ public interface MarcContributorTypeRelatorCodeDAO extends CrudDAO<MarcContribut
 	 * @return the mapping otherwise null.
 	 */
 	public MarcContributorTypeRelatorCode getByRelatorCode( Long relatorCodeId);
+	
+	/**
+	 * Returns the list of contributor types that have the specified relator code.
+	 * 
+	 * @param relatorCode - relator code 
+	 * @return the list of records found with the contributor type relator codes.
+	 */
+	public List<MarcContributorTypeRelatorCode> getByRelatorCode(String relatorCode);
 	
 }

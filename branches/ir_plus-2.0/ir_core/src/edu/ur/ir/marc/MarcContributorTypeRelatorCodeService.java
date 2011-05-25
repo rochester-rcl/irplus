@@ -36,6 +36,14 @@ public interface MarcContributorTypeRelatorCodeService extends Serializable{
 	 */
 	public MarcContributorTypeRelatorCode getByContributorTypeId(Long contributorTypeId);
 	
+	/**
+	 * Returns the list of contributor types that have the specified relator code.
+	 * 
+	 * @param relatorCode - relator code 
+	 * @return the list of records found with the contributor type relator codes.
+	 */
+	public List<MarcContributorTypeRelatorCode> getByRelatorCode(String relatorCode);
+	
 	
 	/**
 	 * Get all of the contributor type relator codes
