@@ -31,6 +31,7 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 
+
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.importer.MarcFileToVersionedItemImporter;
@@ -38,6 +39,11 @@ import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
 import edu.ur.ir.item.DuplicateContributorException;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.PlaceOfPublication;
+import edu.ur.ir.item.PlaceOfPublicationService;
+import edu.ur.ir.item.PublishedDate;
+import edu.ur.ir.item.Publisher;
+import edu.ur.ir.item.PublisherService;
 import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.marc.ExtentTypeSubFieldMapperService;
 import edu.ur.ir.marc.IdentifierTypeSubFieldMapperService;
@@ -86,7 +92,6 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	
 	// service for finding names
 	private NameAuthoritySearchService nameAuthoritySearchService;
-	
 
 	// service to deal with repository information
 	private RepositoryService repositoryService;
@@ -97,7 +102,14 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	// service to deal with contributor information
 	private ContributorService contributorService;
 	
+	// service to deal with person information
 	private PersonService personService;
+	
+	// service to deal with place of publication information
+	private PlaceOfPublicationService placeOfPublicationService;
+	
+	// service to deal with publisher information
+	private PublisherService publisherService;
 
 
 	@SuppressWarnings("unchecked")
@@ -106,7 +118,9 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	
 		GenericItem item = new GenericItem("unknown");
 	    VersionedItem versionedItem = new VersionedItem(owner, item);
-		
+		String keywords = "";
+	    
+	    
         // returns fields for tags 010 through 999
 		List<DataField> fields = (List<DataField>)record.getDataFields();
 		for(DataField field : fields)
@@ -131,19 +145,45 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    {
 		    	handle245(field, item);
 		    }
-		    if( tag.equals("100") || tag.equals("700"))
+		    else if( tag.equals("100") || tag.equals("700"))
 		    {
 		    	handle100(field, item);
 		    }
-		    if( tag.equals("300"))
+		    else if( tag.equals("300"))
 		    {
-		    	handle300(field);
+		    	handle300(field, item);
 		    }
-		    if( tag.equals("260"))
+		    else if( tag.equals("260"))
 		    {
 		        handle260(field, item);	
 		    }
+		    else if( tag.equals("653") || tag.equals("650") )
+		    {
+		    	//keywords
+		    	String value = handle653(field, item);
+		    	if( value != null && !value.trim().equals("") )
+		    	{
+		    		if( keywords.equals("") )
+		    		{
+		    	        keywords = value;
+		    		}
+		    		else
+		    		{
+		    			keywords = keywords + ";" + value;
+		    		}
+		        }
+		    }
+		    else
+		    {
+		    	handleOtherTags(field, item);
+		    }
 		}
+		
+		if( keywords != null && !keywords.trim().equals(""))
+		{
+			item.setItemKeywords(keywords);
+		}
+		
 		return versionedItem;
 	}
 
@@ -165,6 +205,46 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	        versionedItems.add(createVersionedItem(record, owner));
 	    }
 		return versionedItems;
+	}
+	
+	/**
+	 * Get the key word
+	 * 
+	 * @param field
+	 * @param item
+	 * 
+	 * @return the found keyword or null not found
+	 */
+	private String handle653(DataField field, GenericItem item)
+	{
+		String data = null;
+		if( field.getSubfield('a') != null )
+		{
+			data = endPunctuationStripper(field.getSubfield('a').getData().trim());
+		}
+		return data;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void handleOtherTags(DataField field, GenericItem item)
+	{
+		String tag = field.getTag();
+	    char ind1 = field.getIndicator1();
+	    char ind2 = field.getIndicator2();
+
+	    log.debug("Tag: " + tag + " Indicator 1: " + ind1 + " Indicator 2: " + ind2);
+	    
+	    List subfields = field.getSubfields();
+        Iterator i = subfields.iterator();
+
+        while (i.hasNext()) {
+            Subfield subfield = (Subfield) i.next();
+	        char code = subfield.getCode();
+	        String data = subfield.getData();
+	        log.debug("Subfield code: " + code + " Data element: " + data);
+        }
+		log.debug("handeling other tags ");
+		 
 	}
 	
 	/**
@@ -265,30 +345,75 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		
 	}
 	
+	/**
+	 * Get the publisher information. 
+	 * 
+	 * @param field
+	 * @param item
+	 */
 	private void handle260(DataField field, GenericItem item)
 	{
 		log.debug("handle publisher");
-		ExternalPublishedItem externalPublishedItem = item.getExternalPublishedItem();
+		ExternalPublishedItem externalPublishedItem = new ExternalPublishedItem();
 		Subfield subfield = field.getSubfield('a');
+		boolean add = false;
 		if( subfield != null )
 		{
-			log.debug("placeOfPublication = " + this.endPunctuationStripper(subfield.getData()));
+			String place = endPunctuationStripper(subfield.getData());
+			log.debug("placeOfPublication = " + place);
+			PlaceOfPublication placeOfPub = placeOfPublicationService.get(place);
+			if( placeOfPub == null )
+			{
+				placeOfPub = new PlaceOfPublication(place);
+				placeOfPublicationService.save(placeOfPub);
+			}
 			
+			externalPublishedItem.setPlaceOfPublication(placeOfPub);
+			add = true;
 		}
 		subfield = field.getSubfield('b');
 		if( subfield != null )
 		{
-			log.debug("publisher = " + this.endPunctuationStripper(subfield.getData()));
+			String pub = endPunctuationStripper(subfield.getData());
+			log.debug("publisher = " + pub );
+			Publisher publisher = publisherService.getPublisher(pub);
+			if( publisher == null )
+			{
+				publisher = new Publisher(pub);
+				publisherService.savePublisher(publisher);
+			}
+			
+			externalPublishedItem.setPublisher(publisher);
+			
+			add = true;
 		}
 		
 		subfield = field.getSubfield('c');
 		if( subfield != null )
 		{
-			log.debug("Date of publication = " + this.endPunctuationStripper(subfield.getData()));
+			String pubDate = this.endPunctuationStripper(subfield.getData());
+			log.debug("Date of publication = " + pubDate);
+			PublishedDate publicationDate = this.getPublishedDate(pubDate);
+			if( publicationDate != null )
+			{
+				externalPublishedItem.updatePublishedDate(publicationDate.getMonth(), publicationDate.getDay(), publicationDate.getYear());
+			}
+			add = true;
+		}
+		
+		if( add )
+		{
+			item.setExternalPublishedItem(externalPublishedItem);
 		}
 	}
 	
-	private void handle300(DataField field) 
+	
+	/**
+	 * Handle extent information.
+	 * 
+	 * @param field
+	 */
+	private void handle300(DataField field,  GenericItem item) 
 	{
 		log.debug("handle extents");
 		Subfield subfield = field.getSubfield('a');
@@ -441,8 +566,6 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    		// do nothing
 		    	}
 		    }
-		    
-		    
 		}
 		
 		
@@ -471,22 +594,6 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	
 	
 	/**
-	 * Testing 
-	 * @param args
-	 * @throws FileNotFoundException
-	 * @throws NoIndexFoundException 
-	 */
-	public static void main(String[] args) throws FileNotFoundException, NoIndexFoundException
-	{
-		String file = "C:\\sib_marc_files\\CPEBachSongs.do";
-		DefaultMarcFileToVersionedItemImporter dmfis = new DefaultMarcFileToVersionedItemImporter();
-		dmfis.importMarc(new File(file), null);
-		log.debug("===========================");
-		file = "C:\\sib_marc_files\\JuonSilhouettenMarc.do";
-		dmfis.importMarc(new File(file), null);
-	}
-	
-	/**
 	 * Get the final list of authors. This searches the existing list of authors.  If one
 	 * is found it is used instead of the created name authority.
 	 * 
@@ -499,7 +606,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		log.debug("check for existing author");
 		String query  = buildAuthorityNameQuery(createdAuthority);
 		log.debug("query = " + query);
-		SearchResults<PersonNameAuthority> results = nameAuthoritySearchService.search(new File(repository.getNameIndexFolder()), query, 0, 5);
+		SearchResults<PersonNameAuthority> results = nameAuthoritySearchService.search(new File(repository.getNameIndexFolder()), query, 0, 10);
 	    log.debug("search results size = " + results.getNumberObjects());
 		
 		PersonName createdName = createdAuthority.getAuthoritativeName();
@@ -548,11 +655,15 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	        		    {
 	        			    PersonName foundName = nameIter.next();
 	        			    log.debug( "comparing found name " + foundName + " to name " +  createdName);
-	        			    if( foundName.equals(createdName))
+	        			    if( foundName.softEquals(createdName))
 	        			    {
 	        		            log.debug("Name found!");
 	        		            found = true;
 	        		            finalName = foundName;
+	        			    }
+	        			    else
+	        			    {
+	        			    	log.debug("Names NOT equal!");
 	        			    }
 	        		    }
 	        	    }
@@ -605,6 +716,93 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	   
 	   return queryString.toString();
 	}
+	
+	/**
+	 * Get the published date for the dspace item.
+	 * 
+	 * @param dspaceItem
+	 * @return
+	 */
+	private PublishedDate getPublishedDate(String date)
+	{
+		log.debug("Processing publish date");
+		PublishedDate publishedDate = null;
+		
+		log.debug("Publish date = " + date);
+		
+		if(date != null && !date.trim().equals(""))
+		{
+			date = date.trim();
+
+		    	// assume year only ex. 1999
+		    	if( date.length() == 4 )
+		    	{
+		    		 publishedDate = new PublishedDate();
+		    		 try
+		    		 {
+		    		     publishedDate.setYear(new Integer(date));
+		    		 }
+		    		 catch(NumberFormatException nfe)
+		    		 {
+		    			 publishedDate = null;
+		    			 log.error("could not create year for date " + date, nfe);
+		    		 }
+		    	}
+		    	// assume year and month ex. 1985-03
+		    	else if( date.length() == 7 )
+		    	{
+		    		String[] dateParts = date.split("-");
+		    		if(dateParts.length == 2)
+		    		{
+		    			publishedDate = new PublishedDate();
+			    		 try
+			    		 {
+			    		     publishedDate.setYear(new Integer(dateParts[0]));
+			    		     publishedDate.setMonth(new Integer(dateParts[1]));
+			    		 }
+			    		 catch(NumberFormatException nfe)
+			    		 {
+			    			 publishedDate = null;
+			    			 log.error("could not create year for date " + date, nfe);
+			    		 }
+		    		}
+		    		else
+		    		{
+		    			 publishedDate = null;
+		    			log.error(" could not do 7 digit split on - for dspace date " + date);
+		    		}
+		    	}
+		    	
+		    	// assume year month day ex. 1985-03-01
+		    	else if( date.length() == 10 )
+		    	{
+		    		String[] dateParts = date.split("-");
+		    		if(dateParts.length == 3)
+		    		{
+		    			publishedDate = new PublishedDate();
+			    		 try
+			    		 {
+			    		     publishedDate.setYear(new Integer(dateParts[0]));
+			    		     publishedDate.setMonth(new Integer(dateParts[1]));
+			    		     publishedDate.setMonth(new Integer(dateParts[2]));
+			    		 }
+			    		 catch(NumberFormatException nfe)
+			    		 {
+			    			 publishedDate = null;
+			    			 log.error("could not create year for date " + date, nfe);
+			    		 }
+		    		}
+		    		else
+		    		{
+		    			 publishedDate = null;
+		    			log.error(" could not do 10 digit split on - for dspace date " + date);
+		    		}
+		    	}
+		    
+		}
+		return publishedDate;
+	}
+	
 
 	/**
 	 * Set the repository service
@@ -660,6 +858,25 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 */
 	public void setPersonService(PersonService personService) {
 		this.personService = personService;
+	}
+	
+	/**
+	 * Set the place of publication service.
+	 * 
+	 * @param placeOfPublicationService
+	 */
+	public void setPlaceOfPublicationService(
+			PlaceOfPublicationService placeOfPublicationService) {
+		this.placeOfPublicationService = placeOfPublicationService;
+	}
+
+	/**
+	 * Set the publisher service.
+	 * 
+	 * @param publisherService
+	 */
+	public void setPublisherService(PublisherService publisherService) {
+		this.publisherService = publisherService;
 	}
 
 }

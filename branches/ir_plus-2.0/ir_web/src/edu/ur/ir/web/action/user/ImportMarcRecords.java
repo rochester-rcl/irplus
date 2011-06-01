@@ -66,9 +66,10 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
     // service to deal with user information
     private UserService userService;
 
-
 	//  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(ImportMarcRecords.class);
+	
+	private List<VersionedItem> items;
 	
 	/**
 	 * Uploads a new image to the system.
@@ -85,7 +86,7 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 		IrUser user = userService.getUser(userId, false);
 		if( file != null && file.exists() )
 		{
-			List<VersionedItem> items = marcFileToVersionedItemImporter.importMarc(file, user);
+			items = marcFileToVersionedItemImporter.importMarc(file, user);
 	        log.debug("importing " + items.size() + " items ");
 			PersonalCollection personalCollection = userPublishingFileSystemService.getPersonalCollection(parentCollectionId, false);
 
@@ -122,6 +123,16 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 		}
 	    
 	    return SUCCESS;
+	}
+	
+	/**
+	 * Get the list of versioned items produced.
+	 * 
+	 * @return
+	 */
+	public List<VersionedItem> getItems()
+	{
+		return items;
 	}
 	
 	/**

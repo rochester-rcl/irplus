@@ -307,9 +307,7 @@
             class="edu.ur.ir.web.action.user.ImportMarcRecords"
             method="uploadMarcFile">
             <interceptor-ref name="urUploadStack"/>
-             <result name="success"  type="redirectAction"> 
-                <param name="actionName">/user/workspace.action</param> 
-            </result> 
+            <result name="success">/pages/user/workspace/upload_marc_complete.jsp</result>
         </action>
               
     </package>

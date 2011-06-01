@@ -25,6 +25,8 @@ import edu.ur.ir.researcher.ResearcherLink;
 import edu.ur.ir.researcher.ResearcherLinkDAO;
 import edu.ur.ir.researcher.ResearcherPublication;
 import edu.ur.ir.researcher.ResearcherPublicationDAO;
+import edu.ur.ir.user.IrUser;
+import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.UserFileSystemService;
 
 /**
@@ -210,6 +212,13 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 	public void deleteFile(ResearcherFile rf)
 	{
 		IrFile irFile = rf.getIrFile();
+		
+		// remove the file from the parent folder
+		if( rf.getParentFolder() != null )
+		{
+		   rf.getParentFolder().removeResearcherFile(rf);
+		}
+		
 		researcherFileDAO.makeTransient(rf);
 
 		// Check if irFile is used by PersonalFile or Item or researcher 
@@ -289,7 +298,16 @@ public class DefaultResearcherFileSystemService implements ResearcherFileSystemS
 		}
 		
 		log.debug("Deleted all contents");
-		
+		if( researcherFolder.isRoot() )
+		{
+			Researcher researcher = researcherFolder.getResearcher();
+			researcher.removeRootFolder(researcherFolder);
+		}
+		else
+		{
+			ResearcherFolder parent = researcherFolder.getParent();
+			parent.removeChild(researcherFolder);
+		}
 		researcherFolderDAO.makeTransient(researcherFolder);
 
 	}

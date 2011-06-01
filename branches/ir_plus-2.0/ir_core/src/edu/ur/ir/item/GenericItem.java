@@ -1320,7 +1320,7 @@ public class GenericItem extends CommonPersistent implements Cloneable {
 	 * 
 	 * @param externalPublishedItem
 	 */
-	void setExternalPublishedItem(ExternalPublishedItem externalPublishedItem) {
+	public void setExternalPublishedItem(ExternalPublishedItem externalPublishedItem) {
 		this.externalPublishedItem = externalPublishedItem;
 	}
 	

@@ -20,6 +20,7 @@
 <%@ taglib prefix="ur" uri="ur-tags"%>
 <%@ taglib prefix="ir" uri="ir-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="urstb" uri="simple-ur-table-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!--  document type -->
@@ -29,7 +30,7 @@
 <html>
 
 <head>
-    <title>Upload Marc File</title>
+    <title>Upload Complete</title>
     
     <!-- Medatadata fragment for page cache -->
     <c:import url="/inc/meta-frag.jsp"/>
@@ -61,21 +62,56 @@
     <!--  this is the body regin of the page -->
     <div id="bd">
     
-            <h3> Import marc file to: <c:if test="${parentCollectionId > 0}">/My Publications${parentCollection.fullPath}</c:if><c:if test="${parentCollectionId <=0 }">My Publications</c:if></h3>
-
-	        <form id="marcImport" name="macImport" method="post" enctype="multipart/form-data" 
-	            action="<c:url value="/admin/uploadMarcFile.action"/>">
-	            <input type="hidden" name="parentCollectionId" value="${parentCollectionId}"/>
-                <table class="formTable">
-                    <tr>
-                        <td class="label">File:</td>
-                        <td class="input"><input type="file" name="file" size="100"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="buttons"><input type="submit" value="Upload"/></td>
-                    </tr>
-	            </table>
-	        </form>
+        <h3>Upload Complete - The following publications were created:</h3>
+        
+        
+ 	    <c:forEach items="${items}" var="item">
+ 	        <table border="1px">
+ 	            <tr>
+ 	                <td>Leading Articles</td>
+ 	                <td>${item.currentVersion.item.leadingNameArticles}</td>
+ 	            </tr>
+ 	            <tr>
+ 	                <td>Title</td>
+ 	                <td>${item.currentVersion.item.name}</td>
+ 	            </tr>
+ 	            <tr>
+ 	                <td>Contributors</td>
+ 	                <td>
+ 	                <c:forEach items="${item.currentVersion.item.contributors}" var="contrib">
+ 	                     ${contrib.contributor.contributorType.name}: ${contrib.contributor.personName} <br/><br/> 
+ 	                </c:forEach>
+ 	                </td>
+ 	            </tr>
+ 	            <tr>
+ 	                <td>Publisher</td>
+ 	                <td>
+ 	                     ${item.currentVersion.item.externalPublishedItem.publisher}
+ 	                </td>
+ 	            </tr>
+ 	            <tr>
+ 	                <td>Publisher Location</td>
+ 	                <td>
+ 	                     ${item.currentVersion.item.externalPublishedItem.placeOfPublication}
+ 	                </td>
+ 	            </tr>            
+ 	             <tr>
+ 	                <td>Publication Date</td>
+ 	                <td>
+ 	                     ${item.currentVersion.item.externalPublishedItem.publishedDate}
+ 	                </td>
+ 	            </tr>
+ 	            <tr>
+ 	                <td>Keywords</td>
+ 	                <td>
+ 	                     ${item.currentVersion.item.itemKeywords}
+ 	                </td>
+ 	            </tr>
+ 	        </table>  
+ 	        <br/>
+ 	        <br/>  
+ 	    </c:forEach>
+ 	  
       </div>
       <!--  end the body tag --> 
 
