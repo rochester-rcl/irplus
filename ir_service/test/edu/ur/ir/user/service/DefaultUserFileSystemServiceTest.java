@@ -104,6 +104,7 @@ public class DefaultUserFileSystemServiceTest {
 		
 		/**
 		 * Test creating a file
+		 * 
 		 * @throws UserHasPublishedDeleteException 
 		 * @throws LocationAlreadyExistsException 
 		 */
@@ -584,6 +585,95 @@ public class DefaultUserFileSystemServiceTest {
 			assert userService.getUser(user.getId(), false) == null : "User should be null";
 			helper.cleanUpRepository();
 			tm.commit(ts);	 
+		}
+		
+		/**
+		 * Test deleting files and folders within a subfolder.
+		 * 
+		 * @throws DuplicateNameException 
+		 * @throws UserHasPublishedDeleteException 
+		 * @throws LocationAlreadyExistsException 
+		 */
+		public void deleteFileFolderTest() throws DuplicateNameException, IllegalFileSystemNameException, UserHasPublishedDeleteException, UserDeletedPublicationException, LocationAlreadyExistsException
+		{
+			
+			// Start the transaction 
+			TransactionStatus ts = tm.getTransaction(td);
+			UserEmail email = new UserEmail("email");
+
+			IrUser user = userService.createUser("password", "username", email);
+			RepositoryBasedTestHelper helper = new RepositoryBasedTestHelper(ctx);
+			Repository repo = helper.createTestRepositoryDefaultFileServer(properties);
+			// save the repository
+			tm.commit(ts);
+			
+	        // Start the transaction 
+			ts = tm.getTransaction(td);
+
+			// create the first file to store in the temporary folder
+			String tempDirectory = properties.getProperty("ir_service_temp_directory");
+			File directory = new File(tempDirectory);
+			
+	        // helper to create the file
+			FileUtil testUtil = new FileUtil();
+			testUtil.createDirectory(directory);
+
+			File f = testUtil.creatFile(directory, "testFile", 
+			"Hello  - irFile This is text in a file - VersionedFileDAO test");
+			
+			assert f != null : "File should not be null";
+			assert user.getId() != null : "User id should not be null";
+			assert repo.getFileDatabase().getId() != null : "File database id should not be null";
+			
+			tm.commit(ts);
+			
+			// new transaction - create two new folders and a personal file
+			ts = tm.getTransaction(td);
+			
+			PersonalFolder myFolder = userFileSystemService.createNewFolder(user, "myFolder1");
+			    assert myFolder != null : "folder should be created";
+			 
+			// add sub Folder
+			PersonalFolder subFolder = myFolder.createChild("subFolder");   
+			userFileSystemService.makePersonalFolderPersistent(myFolder);
+			
+			// add file to root folder
+			PersonalFile pf = userFileSystemService.addFileToUser(repo, 
+					f, 
+					myFolder, 
+					"test file", 
+					"description");
+			
+			// add file to sub folder
+			PersonalFile pf2 = userFileSystemService.addFileToUser(repo, 
+					f, 
+					subFolder, 
+					"test file", 
+					"description");
+			
+			tm.commit(ts);
+	        
+			
+			// start new transaction
+	        ts = tm.getTransaction(td);
+	        subFolder = userFileSystemService.getPersonalFolder(subFolder.getId(), false);
+	        pf2 = userFileSystemService.getPersonalFile(pf2.getId(), false);
+	        assert subFolder.getFiles().contains(pf2) : "Sub folder 2 should contain " + pf2;
+	        userFileSystemService.deletePersonalFolder(subFolder, user, "test");
+	        pf = userFileSystemService.getPersonalFile(pf.getId(), false);
+	        userFileSystemService.delete(pf, user, "test");
+	        
+	        tm.commit(ts);
+	     
+	      
+			
+			// make sure move occured
+			ts = tm.getTransaction(td);
+			IrUser deleteUser = userService.getUser(user.getId(), false);
+			userService.deleteUser(deleteUser, deleteUser);
+			helper.cleanUpRepository();
+			tm.commit(ts);	
+			
 		}
 		
 

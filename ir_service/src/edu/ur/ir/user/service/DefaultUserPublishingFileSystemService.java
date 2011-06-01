@@ -338,6 +338,12 @@ public class DefaultUserPublishingFileSystemService implements UserPublishingFil
 		personalItemDeleteRecord.setDeleteReason(deleteReason);
 		personalItemDeleteRecordDAO.makePersistent(personalItemDeleteRecord);
 		
+		// remove the file from the parent folder
+		if( personalItem.getPersonalCollection() != null )
+		{
+		   personalItem.getPersonalCollection().removePersonalItem(personalItem);
+		}
+		
 		// delete the item
 		personalItemDAO.makeTransient(personalItem);
 		itemService.deleteVersionedItem(personalItem.getVersionedItem());

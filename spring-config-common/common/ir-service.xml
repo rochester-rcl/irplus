@@ -890,5 +890,7 @@
 	    <property name="contributorTypeService" ref="contributorTypeService"/>
 	    <property name="contributorService" ref="contributorService"/>
 	    <property name="personService" ref="personService"/>
+	    <property name="publisherService" ref="publisherService"/>
+	    <property name="placeOfPublicationService" ref="placeOfPublicationService"/>
    </bean>
 </beans>
