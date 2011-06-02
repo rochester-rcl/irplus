@@ -14,26 +14,23 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.marc;
+package edu.ur.ir.item.metadata.marc;
 
 import edu.ur.dao.CrudDAO;
 
 /**
- * Interface for dealing with marc data field data.
+ * Data access object for marc to content types field mapping
  * 
  * @author Nathan Sarr
  *
  */
-public interface MarcDataFieldMapperDAO extends CrudDAO<MarcDataFieldMapper>
+public interface MarcContentTypeFieldMapperDAO extends CrudDAO<MarcContentTypeFieldMapper>
 {
 	/**
-	 * Get the mapper by marc data field id.
+	 * Get the mapper by content type.
 	 * 
-	 * @param marcDataFieldId - id of the marc data field
-	 * @param indicator1 - indicator1 value
-	 * @param indicator2 - indicator2 value
-	 * 
-	 * @return the MarcDataFieldMapper
+	 * @param contentTypeId
+	 * @return
 	 */
-	public MarcDataFieldMapper getByMarcDataFieldIndicatorsId(Long marcDataFieldId, String indicator1, String indicator2);
+	public MarcContentTypeFieldMapper getByContentTypeId(Long contentTypeId);
 }
