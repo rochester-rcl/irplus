@@ -35,10 +35,10 @@ import org.marc4j.marc.Subfield;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.importer.MarcFileToVersionedItemImporter;
-import edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator;
 import edu.ur.ir.item.DuplicateContributorException;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
+import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.PlaceOfPublicationService;
 import edu.ur.ir.item.PublishedDate;
@@ -46,6 +46,7 @@ import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.PublisherService;
 import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.marc.ExtentTypeSubFieldMapperService;
+import edu.ur.ir.marc.IdentifierTypeSubFieldMapper;
 import edu.ur.ir.marc.IdentifierTypeSubFieldMapperService;
 import edu.ur.ir.marc.MarcContributorTypeRelatorCode;
 import edu.ur.ir.marc.MarcContributorTypeRelatorCodeService;
@@ -80,9 +81,6 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 
 	// service for dealing with identifier type sub fields
 	private IdentifierTypeSubFieldMapperService identifierTypeSubFieldMapperService;
-	
-	/**  Used to get the url for a given item */
-	private InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator;
 	
 	// service for dealing with identifier type sub fields
 	private ExtentTypeSubFieldMapperService extentTypeSubFieldMapperService;
@@ -160,7 +158,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    else if( tag.equals("653") || tag.equals("650") )
 		    {
 		    	//keywords
-		    	String value = handle653(field, item);
+		    	String value = handleSubjects(field, item);
 		    	if( value != null && !value.trim().equals("") )
 		    	{
 		    		if( keywords.equals("") )
@@ -215,7 +213,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 * 
 	 * @return the found keyword or null not found
 	 */
-	private String handle653(DataField field, GenericItem item)
+	private String handleSubjects(DataField field, GenericItem item)
 	{
 		String data = null;
 		if( field.getSubfield('a') != null )
@@ -228,6 +226,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	@SuppressWarnings("unchecked")
 	private void handleOtherTags(DataField field, GenericItem item)
 	{
+		log.debug("handeling other tags ");
 		String tag = field.getTag();
 	    char ind1 = field.getIndicator1();
 	    char ind2 = field.getIndicator2();
@@ -242,8 +241,19 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	        char code = subfield.getCode();
 	        String data = subfield.getData();
 	        log.debug("Subfield code: " + code + " Data element: " + data);
+	        
+	        if( data != null && !data.trim().equals(""))
+	        {
+	            List<IdentifierTypeSubFieldMapper> identMappers = identifierTypeSubFieldMapperService.getByDataField(tag, ind1 + "", ind2 + "", code +"");
+	            log.debug("Found " + identMappers .size() + " identifer type mappers");
+	            for(IdentifierTypeSubFieldMapper mapper : identMappers )
+	            {
+	        	    IdentifierType identType = mapper.getIdentifierType();
+	        	    item.addItemIdentifier(data, identType);
+	            }
+	        }
         }
-		log.debug("handeling other tags ");
+		
 		 
 	}
 	
@@ -580,11 +590,6 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	public void setIdentifierTypeSubFieldMapperService(
 			IdentifierTypeSubFieldMapperService identifierTypeSubFieldMapperService) {
 		this.identifierTypeSubFieldMapperService = identifierTypeSubFieldMapperService;
-	}
-
-	public void setInstitutionalItemVersionUrlGenerator(
-			InstitutionalItemVersionUrlGenerator institutionalItemVersionUrlGenerator) {
-		this.institutionalItemVersionUrlGenerator = institutionalItemVersionUrlGenerator;
 	}
 
 	public void setExtentTypeSubFieldMapperService(
