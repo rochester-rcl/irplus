@@ -22,8 +22,8 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.marc.MarcDataFieldMapper;
-import edu.ur.ir.marc.MarcDataFieldMapperDAO;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapperDAO;
 
 /**
  * Default hibernate implementation of the marc data field mapper.

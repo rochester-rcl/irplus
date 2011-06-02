@@ -22,8 +22,8 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.marc.MarcContributorTypeRelatorCode;
-import edu.ur.ir.marc.MarcContributorTypeRelatorCodeDAO;
+import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCode;
+import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCodeDAO;
 
 
 /**

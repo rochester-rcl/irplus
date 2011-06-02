@@ -24,7 +24,7 @@
 	
 	@author Nathan Sarr
 -->
-<hibernate-mapping package="edu.ur.ir.marc">
+<hibernate-mapping package="edu.ur.ir.item.metadata.marc">
 	<class name="ExtentTypeSubFieldMapper" schema="ir_metadata_marc" table="extent_type_sub_field_mapper"
 		lazy="true">
 
@@ -50,7 +50,7 @@
 	
 	
 	    <!--  parent mapper -->
-		<many-to-one class="edu.ur.ir.marc.MarcDataFieldMapper"
+		<many-to-one class="MarcDataFieldMapper"
 			name="marcDataFieldMapper" 
 			column="data_field_mapper_id" 
 			unique="true"

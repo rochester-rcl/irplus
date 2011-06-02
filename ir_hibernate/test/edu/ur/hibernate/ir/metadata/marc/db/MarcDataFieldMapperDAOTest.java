@@ -24,8 +24,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
-import edu.ur.ir.marc.MarcDataFieldMapper;
-import edu.ur.ir.marc.MarcDataFieldMapperDAO;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapperDAO;
 import edu.ur.metadata.marc.MarcDataField;
 import edu.ur.metadata.marc.MarcDataFieldService;
 

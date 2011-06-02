@@ -22,8 +22,8 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.marc.MarcContentTypeFieldMapper;
-import edu.ur.ir.marc.MarcContentTypeFieldMapperDAO;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapperDAO;
 
 /**
  * Implementation of the Marc Content type field mapper data access object.

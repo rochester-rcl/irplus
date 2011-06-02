@@ -26,9 +26,9 @@ import org.testng.annotations.Test;
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeDAO;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapperDAO;
 
-import edu.ur.ir.marc.MarcContentTypeFieldMapper;
-import edu.ur.ir.marc.MarcContentTypeFieldMapperDAO;
 
 /**
  * Test for the MarcContentTypeFieldMapperDAO

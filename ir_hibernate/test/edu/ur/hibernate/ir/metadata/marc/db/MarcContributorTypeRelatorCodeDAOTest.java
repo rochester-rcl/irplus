@@ -24,8 +24,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.ir.test.helper.ContextHolder;
-import edu.ur.ir.marc.MarcContributorTypeRelatorCode;
-import edu.ur.ir.marc.MarcContributorTypeRelatorCodeDAO;
+import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCode;
+import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCodeDAO;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.ContributorTypeDAO;
 import edu.ur.metadata.marc.MarcRelatorCode;

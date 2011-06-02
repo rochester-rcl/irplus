@@ -24,7 +24,7 @@
 	
 	@author Nathan Sarr
 -->
-<hibernate-mapping package="edu.ur.ir.marc">
+<hibernate-mapping package="edu.ur.ir.item.metadata.marc">
 	<class name="MarcContentTypeFieldMapper" schema="ir_metadata_marc" table="content_type_field_mapping"
 		lazy="true">
 
