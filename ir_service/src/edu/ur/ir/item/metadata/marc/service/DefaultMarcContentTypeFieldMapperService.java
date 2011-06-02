@@ -14,13 +14,13 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.marc.service;
+package edu.ur.ir.item.metadata.marc.service;
 
 import java.util.List;
 
-import edu.ur.ir.marc.MarcContentTypeFieldMapper;
-import edu.ur.ir.marc.MarcContentTypeFieldMapperDAO;
-import edu.ur.ir.marc.MarcContentTypeFieldMapperService;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapperDAO;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapperService;
 
 /**
  * Default service implementation for the marc content type field mapper.

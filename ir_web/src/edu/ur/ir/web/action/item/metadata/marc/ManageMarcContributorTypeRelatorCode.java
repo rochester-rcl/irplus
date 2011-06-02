@@ -24,8 +24,8 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.ur.ir.marc.MarcContributorTypeRelatorCode;
-import edu.ur.ir.marc.MarcContributorTypeRelatorCodeService;
+import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCode;
+import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCodeService;
 import edu.ur.ir.person.ContributorType;
 import edu.ur.ir.person.ContributorTypeService;
 import edu.ur.metadata.marc.MarcRelatorCode;

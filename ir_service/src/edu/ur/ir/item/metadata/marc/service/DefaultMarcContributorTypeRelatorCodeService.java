@@ -14,13 +14,13 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.marc.service;
+package edu.ur.ir.item.metadata.marc.service;
 
 import java.util.List;
 
-import edu.ur.ir.marc.MarcContributorTypeRelatorCode;
-import edu.ur.ir.marc.MarcContributorTypeRelatorCodeDAO;
-import edu.ur.ir.marc.MarcContributorTypeRelatorCodeService;
+import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCode;
+import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCodeDAO;
+import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCodeService;
 
 /**
  * Default implementation of the marc contributor type relator code service.

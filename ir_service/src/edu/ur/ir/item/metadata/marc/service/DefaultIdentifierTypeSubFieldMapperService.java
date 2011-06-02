@@ -14,13 +14,13 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.marc.service;
+package edu.ur.ir.item.metadata.marc.service;
 
 import java.util.List;
 
-import edu.ur.ir.marc.IdentifierTypeSubFieldMapper;
-import edu.ur.ir.marc.IdentifierTypeSubFieldMapperDAO;
-import edu.ur.ir.marc.IdentifierTypeSubFieldMapperService;
+import edu.ur.ir.item.metadata.marc.IdentifierTypeSubFieldMapper;
+import edu.ur.ir.item.metadata.marc.IdentifierTypeSubFieldMapperDAO;
+import edu.ur.ir.item.metadata.marc.IdentifierTypeSubFieldMapperService;
 
 /**
  * Service to deal with identifier type sub field mappings.

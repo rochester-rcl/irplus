@@ -10,10 +10,10 @@ import com.opensymphony.xwork2.Preparable;
 
 import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.ExtentTypeService;
-import edu.ur.ir.marc.ExtentTypeSubFieldMapper;
-import edu.ur.ir.marc.ExtentTypeSubFieldMapperService;
-import edu.ur.ir.marc.MarcDataFieldMapper;
-import edu.ur.ir.marc.MarcDataFieldMapperService;
+import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapper;
+import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapperService;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapperService;
 import edu.ur.metadata.marc.MarcSubField;
 import edu.ur.metadata.marc.MarcSubFieldService;
 import edu.ur.simple.type.AscendingNameComparator;
