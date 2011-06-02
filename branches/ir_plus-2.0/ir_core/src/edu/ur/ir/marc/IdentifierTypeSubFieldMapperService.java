@@ -47,5 +47,20 @@ public interface IdentifierTypeSubFieldMapperService {
 	 */
 	public List<IdentifierTypeSubFieldMapper> getByIdentifierTypeId(Long id);
 	
+	/**
+	 * Get the list of all identifiers with the specified data field name and indicator settings.
+	 * 
+	 * @param code - name of the data field (100, 200, etc)
+	 * @param indicator1 - first indicator value
+	 * @param indicator2 - second indicator value
+	 * @param subField - subfield value
+	 * 
+	 * @return list of identifier sub filed mappings.
+	 */
+	public List<IdentifierTypeSubFieldMapper> getByDataField(String code, 
+			String indicator1, 
+			String indicator2, 
+			String subField);
+	
 
 }
