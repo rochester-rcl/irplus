@@ -818,7 +818,7 @@
    <!--  mapping                                   -->
    <!-- ****************************************** --> 
    <bean id="marcContentTypeFieldMapperService" 
-       class="edu.ur.ir.marc.service.DefaultMarcContentTypeFieldMapperService">
+       class="edu.ur.ir.item.metadata.marc.service.DefaultMarcContentTypeFieldMapperService">
        <property name="marcContentTypeFieldMapperDAO" ref="marcContentTypeFieldMapperDAO"/>
    </bean>
    
@@ -827,7 +827,7 @@
    <!-- relator code mapping                         -->
    <!-- ****************************************** --> 
    <bean id="marcContributorTypeRelatorCodeService" 
-       class="edu.ur.ir.marc.service.DefaultMarcContributorTypeRelatorCodeService">
+       class="edu.ur.ir.item.metadata.marc.service.DefaultMarcContributorTypeRelatorCodeService">
        <property name="marcContributorTypeRelatorCodeDAO" ref="marcContributorTypeRelatorCodeDAO"/>
    </bean>
    
@@ -851,7 +851,7 @@
    <!--  mapping                                   -->
    <!-- ****************************************** --> 
    <bean id="marcDataFieldMapperService" 
-       class="edu.ur.ir.marc.service.DefaultMarcDataFieldMapperService">
+       class="edu.ur.ir.item.metadata.marc.service.DefaultMarcDataFieldMapperService">
        <property name="marcDataFieldMapperDAO" ref="marcDataFieldMapperDAO"/>
    </bean>
    
@@ -860,7 +860,7 @@
    <!--  mapping                                   -->
    <!-- ****************************************** --> 
    <bean id="identifierTypeSubFieldMapperService" 
-       class="edu.ur.ir.marc.service.DefaultIdentifierTypeSubFieldMapperService">
+       class="edu.ur.ir.item.metadata.marc.service.DefaultIdentifierTypeSubFieldMapperService">
        <property name="identifierTypeSubFieldMapperDAO" ref="identifierTypeSubFieldMapperDAO"/>
    </bean>
    
@@ -869,7 +869,7 @@
    <!--  mapping                                   -->
    <!-- ****************************************** --> 
    <bean id="extentTypeSubFieldMapperService" 
-       class="edu.ur.ir.marc.service.DefaultExtentTypeSubFieldMapperService">
+       class="edu.ur.ir.item.metadata.marc.service.DefaultExtentTypeSubFieldMapperService">
        <property name="extentTypeSubFieldMapperDAO" ref="extentTypeSubFieldMapperDAO"/>
    </bean>
    
