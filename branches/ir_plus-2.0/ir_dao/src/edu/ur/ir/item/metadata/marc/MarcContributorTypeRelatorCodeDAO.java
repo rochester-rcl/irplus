@@ -14,7 +14,7 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.marc;
+package edu.ur.ir.item.metadata.marc;
 
 import java.util.List;
 
