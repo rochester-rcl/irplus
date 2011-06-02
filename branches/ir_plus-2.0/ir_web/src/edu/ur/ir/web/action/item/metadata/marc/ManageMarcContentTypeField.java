@@ -30,8 +30,8 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeService;
-import edu.ur.ir.marc.MarcContentTypeFieldMapper;
-import edu.ur.ir.marc.MarcContentTypeFieldMapperService;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapperService;
 import edu.ur.simple.type.AscendingNameComparator;
 
 /**

@@ -14,13 +14,13 @@
    limitations under the License.
 */  
 
-package edu.ur.ir.marc.service;
+package edu.ur.ir.item.metadata.marc.service;
 
 import java.util.List;
 
-import edu.ur.ir.marc.ExtentTypeSubFieldMapperService;
-import edu.ur.ir.marc.ExtentTypeSubFieldMapper;
-import edu.ur.ir.marc.ExtentTypeSubFieldMapperDAO;
+import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapperService;
+import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapper;
+import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapperDAO;
 
 /**
  * Service implementation for the extent type sub field mapper service.

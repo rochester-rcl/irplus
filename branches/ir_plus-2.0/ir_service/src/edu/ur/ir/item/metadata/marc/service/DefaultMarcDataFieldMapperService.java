@@ -1,10 +1,10 @@
-package edu.ur.ir.marc.service;
+package edu.ur.ir.item.metadata.marc.service;
 
 import java.util.List;
 
-import edu.ur.ir.marc.MarcDataFieldMapper;
-import edu.ur.ir.marc.MarcDataFieldMapperDAO;
-import edu.ur.ir.marc.MarcDataFieldMapperService;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapperDAO;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapperService;
 
 /**
  * Default implementation of the data field mapper service.

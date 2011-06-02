@@ -25,15 +25,15 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.ir.marc.IdentifierTypeSubFieldMapper;
-import edu.ur.ir.marc.IdentifierTypeSubFieldMapperService;
-import edu.ur.ir.marc.MarcDataFieldMapper;
-import edu.ur.ir.marc.MarcDataFieldMapperService;
 import edu.ur.metadata.marc.MarcSubField;
 import edu.ur.metadata.marc.MarcSubFieldService;
 import edu.ur.simple.type.AscendingNameComparator;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.IdentifierTypeService;
+import edu.ur.ir.item.metadata.marc.IdentifierTypeSubFieldMapper;
+import edu.ur.ir.item.metadata.marc.IdentifierTypeSubFieldMapperService;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapperService;
 
 /**
  * Allow a user to manage the identifier type sub filed mappings.

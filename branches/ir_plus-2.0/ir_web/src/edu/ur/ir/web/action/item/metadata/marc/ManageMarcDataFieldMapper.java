@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
-import edu.ur.ir.marc.MarcDataFieldMapper;
-import edu.ur.ir.marc.MarcDataFieldMapperComparator;
-import edu.ur.ir.marc.MarcDataFieldMapperService;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapperComparator;
+import edu.ur.ir.item.metadata.marc.MarcDataFieldMapperService;
 import edu.ur.metadata.marc.MarcDataFieldService;
 import edu.ur.metadata.marc.MarcDataField;
 
