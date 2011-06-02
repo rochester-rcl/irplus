@@ -107,6 +107,14 @@
  	                     ${item.currentVersion.item.itemKeywords}
  	                </td>
  	            </tr>
+ 	            <tr>
+ 	                <td>Identifier</td>
+ 	                <td>
+ 	                <c:forEach items="${item.currentVersion.item.itemIdentifiers}" var="ident">
+ 	                     ${ident.identifierType}: ${ident.value} <br/><br/> 
+ 	                </c:forEach>
+ 	                </td>
+ 	            </tr>
  	        </table>  
  	        <br/>
  	        <br/>  

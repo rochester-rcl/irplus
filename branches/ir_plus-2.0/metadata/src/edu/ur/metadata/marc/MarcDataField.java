@@ -79,6 +79,8 @@ public class MarcDataField extends CommonPersistent{
 		sb.append(id);
 		sb.append(" name = ");
 		sb.append(name);
+		sb.append(" code = ");
+		sb.append(code);
 		sb.append(" description = ");
 		sb.append( description );
 		sb.append("]");

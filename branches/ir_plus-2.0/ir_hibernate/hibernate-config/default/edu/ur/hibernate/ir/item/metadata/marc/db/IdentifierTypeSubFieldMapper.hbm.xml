@@ -74,10 +74,19 @@
 			not-null="true"/>
 	 </class>
 	 
-	 <!-- Gets mapping by  contributor type id  -->
+	 <!-- Gets mapping by  identifier type id  -->
 	 <query name="getIdentifierTypeMapperByIdentifierTypeId">
 	    from IdentifierTypeSubFieldMapper as mapping 	    
 	    where mapping.identifierType.id = :identifierTypeId
+	 </query>
+	 
+	 	 <!-- Gets mapping by  identifier type id  -->
+	 <query name="getIdentifierTypeMapperByDataField">
+	    from IdentifierTypeSubFieldMapper as mapping 	    
+	    where mapping.marcDataFieldMapper.marcDataField.code = :code
+	    and mapping.marcDataFieldMapper.indicator1 = :indicator1
+	    and mapping.marcDataFieldMapper.indicator2 = :indicator2
+	    and mapping.marcSubField.name = :subField
 	 </query>
 	 
 	

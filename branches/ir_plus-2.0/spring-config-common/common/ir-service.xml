@@ -882,7 +882,6 @@
        
  	    <property name="marcContributorTypeRelatorCodeService" ref="marcContributorTypeRelatorCodeService"/>
 	    <property name="identifierTypeSubFieldMapperService" ref="identifierTypeSubFieldMapperService"/>
-	    <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
 	    <property name="extentTypeSubFieldMapperService" ref="extentTypeSubFieldMapperService"/>
 	    <property name="nameAuthorityIndexService" ref="nameAuthorityIndexService"/>
 	    <property name="nameAuthoritySearchService" ref="nameAuthoritySearchService"/>

@@ -79,10 +79,31 @@ public class DefaultIdentifierTypeSubFieldMapperService implements IdentifierTyp
 		this.identifierTypeSubFieldMapperDAO = identifierTypeSubFieldMapperDAO;
 	}
 
+	/**
+	 * Get the list of identifier type sub fields by identifier type id.
+	 * 
+	 * @see edu.ur.ir.marc.IdentifierTypeSubFieldMapperService#getByIdentifierTypeId(java.lang.Long)
+	 */
 	@Override
 	public List<IdentifierTypeSubFieldMapper> getByIdentifierTypeId(Long id) {
 		return identifierTypeSubFieldMapperDAO.getByIdentifierTypeId(id);
 	}
 	
+	/**
+	 * Get the list of all identifiers with the specified data field name and indicator settings.
+	 * 
+	 * @param code - name of the data field (100, 200, etc)
+	 * @param indicator1 - first indicator value
+	 * @param indicator2 - second indicator value
+	 * @param subField - sub field value
+	 * 
+	 * @return list of identifier sub filed mappings.
+	 */
+	public List<IdentifierTypeSubFieldMapper> getByDataField(String code, 
+			String indicator1, String indicator2, String subField)
+	{
+	    return identifierTypeSubFieldMapperDAO.getByDataField(code, indicator1, indicator2, 
+	    		subField);
+    }
 
 }

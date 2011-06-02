@@ -55,8 +55,6 @@ public class HbIdentifierTypeSubFieldMapperDAO implements IdentifierTypeSubField
     {
         hbCrudDAO.setSessionFactory(sessionFactory);
     }
-
-
 	
 	/**
 	 * Get all identifier type sub field mappers.
@@ -105,6 +103,27 @@ public class HbIdentifierTypeSubFieldMapperDAO implements IdentifierTypeSubField
 	{
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getIdentifierTypeMapperByIdentifierTypeId");
 		q.setParameter("identifierTypeId", id);
+		return q.list();
+	}
+
+	/**
+	 * Get the list of all identifiers with the specified data field name and indicator settings.
+	 * 
+	 * @param name - name of the data field (100, 200, etc)
+	 * @param indicator1 - first indicator value
+	 * @param indicator2 - second indicator value
+	 * @param subField - sub field value
+	 * 
+	 * @return list of identifier sub filed mappings.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<IdentifierTypeSubFieldMapper> getByDataField(String code,
+			String indicator1, String indicator2, String subField) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getIdentifierTypeMapperByDataField");
+		q.setParameter("code", code);
+		q.setParameter("indicator1", indicator1);
+		q.setParameter("indicator2", indicator2);
+		q.setParameter("subField", subField);
 		return q.list();
 	}
 	
