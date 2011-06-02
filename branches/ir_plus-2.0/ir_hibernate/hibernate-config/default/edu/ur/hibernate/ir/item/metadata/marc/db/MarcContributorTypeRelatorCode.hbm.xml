@@ -24,7 +24,7 @@
 	
 	@author Nathan Sarr
 -->
-<hibernate-mapping package="edu.ur.ir.marc">
+<hibernate-mapping package="edu.ur.ir.item.metadata.marc">
 	<class name="MarcContributorTypeRelatorCode" schema="ir_metadata_marc" table="contributor_type_relator_code"
 		lazy="true">
 

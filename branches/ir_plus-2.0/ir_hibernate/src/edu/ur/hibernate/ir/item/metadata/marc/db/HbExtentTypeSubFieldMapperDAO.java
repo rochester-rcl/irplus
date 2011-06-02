@@ -6,8 +6,8 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.ir.marc.ExtentTypeSubFieldMapper;
-import edu.ur.ir.marc.ExtentTypeSubFieldMapperDAO;
+import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapper;
+import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapperDAO;
 
 /**
  * Hibernate implementation of the extent type sub field mapper.
