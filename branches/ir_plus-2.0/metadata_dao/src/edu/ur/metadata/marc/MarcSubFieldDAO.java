@@ -20,6 +20,12 @@ import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 import edu.ur.dao.UniqueNameDAO;
 
+/**
+ * Deals with marc subfield data access.
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public interface MarcSubFieldDAO  extends CountableDAO, 
 CrudDAO<MarcSubField>, UniqueNameDAO<MarcSubField>{
 

@@ -26,6 +26,12 @@ import edu.ur.hibernate.HbCrudDAO;
 import edu.ur.metadata.marc.MarcSubField;
 import edu.ur.metadata.marc.MarcSubFieldDAO;
 
+/**
+ * Data access for the marc sub field.
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public class HbMarcSubFieldDAO implements MarcSubFieldDAO{
 
     // eclipse generated id

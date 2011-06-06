@@ -20,5 +20,11 @@ import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
 import edu.ur.dao.UniqueNameDAO;
 
+/**
+ * Deal with the MARC data field data access.
+ * 
+ * @author Nathan Sarr
+ *
+ */
 public interface MarcDataFieldDAO extends CountableDAO, 
 CrudDAO<MarcDataField>, UniqueNameDAO<MarcDataField>{}

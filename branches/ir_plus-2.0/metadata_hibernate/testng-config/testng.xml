@@ -23,6 +23,9 @@
 		     <class name="edu.ur.hibernate.metadata.MetadataTypeDAOTest"/>
 		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreTermDAOTest"/>
 		     <class name="edu.ur.hibernate.metadata.dc.DublinCoreEncodingSchemeDAOTest"/>
+		     <class name="edu.ur.hibernate.metadata.marc.MarcSubFieldDAOTest"/>
+		     <class name="edu.ur.hibernate.metadata.marc.MarcDataFieldDAOTest"/>
+		     <class name="edu.ur.hibernate.metadata.marc.MarcRelatorCodeDAOTest"/>
 		</classes>
 	</test>
 	

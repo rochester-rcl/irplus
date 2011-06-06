@@ -130,7 +130,7 @@ ALTER TABLE metadata.marc_sub_field_seq OWNER TO ir_plus;
 
 
 -- ---------------------------------------------
--- Marc sub field table
+-- Marc relator code table
 -- ---------------------------------------------
 CREATE TABLE metadata.marc_relator_code
 (
@@ -148,6 +148,28 @@ ALTER TABLE metadata.marc_relator_code OWNER TO ir_plus;
 -- The external account type sequence
 CREATE SEQUENCE metadata.marc_relator_code_seq;
 ALTER TABLE metadata.marc_relator_code_seq OWNER TO ir_plus;
+
+
+-- ---------------------------------------------
+-- Marc type of record
+-- ---------------------------------------------
+CREATE TABLE metadata.marc_type_of_record
+(
+    marc_type_of_record_id BIGINT PRIMARY KEY,
+    version INTEGER,
+    name TEXT NOT NULL,
+    record_type TEXT NOT NULL,
+    description TEXT,
+    UNIQUE(name),
+    UNIQUE(record_type)
+    
+);
+ALTER TABLE metadata.marc_type_of_record OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE metadata.marc_type_of_record_seq;
+ALTER TABLE metadata.marc_type_of_record_seq OWNER TO ir_plus;
+
 
 
 -- **********************************************

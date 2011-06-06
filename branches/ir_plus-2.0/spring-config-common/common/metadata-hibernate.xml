@@ -153,5 +153,28 @@
        </property>
    </bean>
    
+   <!-- ****************************************** --> 
+   <!-- MARC type of record  -->
+   <!-- ****************************************** --> 
+   
+   <bean id="marcTypeOfRecordDAOTarget" 
+       class="edu.ur.hibernate.metadata.marc.HbMarcTypeOfRecordDAO">
+       <property name="sessionFactory" ref="sessionFactory"/>
+   </bean>
+   
+   <bean id="marcTypeOfRecordDAO" 
+       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager" ref="transactionManager"/>
+       <property name="target" ref="marcTypeOfRecordDAOTarget"/>
+       <property name="transactionAttributes">
+           <props>
+               <prop key="find*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="get*">PROPAGATION_SUPPORTS, readOnly</prop>
+               <prop key="make*">PROPAGATION_REQUIRED</prop>
+           </props>
+       </property>
+   </bean>
+   
+   
    
   </beans>
