@@ -83,5 +83,29 @@ public class HbMarcContentTypeFieldMapperDAO implements MarcContentTypeFieldMapp
 	public void makeTransient(MarcContentTypeFieldMapper entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+	
+	/**
+	 * Get the list of all content types with the specified data field name and indicator settings.
+	 * 
+	 * @param code - code of the data field (100, 200, etc)
+	 * @param indicator1 - first indicator value
+	 * @param indicator2 - second indicator value
+	 * @param subField - subfield value.
+	 * 
+	 * @return list of content type sub filed mappings.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<MarcContentTypeFieldMapper> getByDataField(String code, 
+			String indicator1, 
+			String indicator2,
+			String subField)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getContentTypeMapperByDataField");
+		q.setParameter("code", code);
+		q.setParameter("indicator1", indicator1);
+		q.setParameter("indicator2", indicator2);
+		q.setParameter("subField", subField);
+		return q.list();
+	}
 
 }

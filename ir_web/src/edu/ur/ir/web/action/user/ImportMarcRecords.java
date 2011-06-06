@@ -26,6 +26,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
+import edu.ur.ir.importer.BadMarcFileException;
 import edu.ur.ir.importer.MarcFileToVersionedItemImporter;
 import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.user.IrUser;
@@ -78,37 +79,48 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 	 * @throws IllegalFileSystemNameException 
 	 * @throws NoIndexFoundException 
 	 * @throws IOException 
+	 * @throws BadMarcFileException 
 	 */
-	public String uploadMarcFile() throws IllegalFileSystemNameException, NoIndexFoundException, IOException
+	public String uploadMarcFile() throws IllegalFileSystemNameException, NoIndexFoundException, IOException, BadMarcFileException
 	{
 		log.debug("upload marc file");
 				
 		IrUser user = userService.getUser(userId, false);
 		if( file != null && file.exists() )
 		{
-			items = marcFileToVersionedItemImporter.importMarc(file, user);
-	        log.debug("importing " + items.size() + " items ");
-			PersonalCollection personalCollection = userPublishingFileSystemService.getPersonalCollection(parentCollectionId, false);
+			try
+			{
+			    items = marcFileToVersionedItemImporter.importMarc(file, user);
+			    log.debug("importing " + items.size() + " items ");
+				PersonalCollection personalCollection = userPublishingFileSystemService.getPersonalCollection(parentCollectionId, false);
 
-	        if( personalCollection == null )
-		    {
-		        for(VersionedItem item : items)
-		        {
-		        	user.createRootPersonalItem(item);
-		        }
-		    }
-		    else if(personalCollection.getOwner().getId().equals(userId))
-		    {
-		    	for(VersionedItem item : items)
-		        {
-		    	     personalCollection.addVersionedItem(item);
-		        }
-		    }
-		    else
-		    {
-			    return "accessDenied";
-		    }
-		    file.delete();
+		        if( personalCollection == null )
+			    {
+			        for(VersionedItem item : items)
+			        {
+			        	user.createRootPersonalItem(item);
+			        }
+			    }
+			    else if(personalCollection.getOwner().getId().equals(userId))
+			    {
+			    	for(VersionedItem item : items)
+			        {
+			    	     personalCollection.addVersionedItem(item);
+			        }
+			    }
+			    else
+			    {
+				    return "accessDenied";
+			    }
+			}
+			catch(BadMarcFileException bmfe)
+			{
+			    return "importFailed";	
+			}
+	        finally
+	        {
+		        file.delete();
+	        }
 		}
 		else
 		{

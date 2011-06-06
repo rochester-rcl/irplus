@@ -76,6 +76,20 @@
  	                <td>${item.currentVersion.item.name}</td>
  	            </tr>
  	            <tr>
+ 	                <td>Other Titles</td>
+ 	                <c:forEach items="${item.currentVersion.item.subTitles}" var="other">
+ 	                     ${other.fullTitle}<br/><br/> 
+ 	                </c:forEach>
+ 	            </tr>
+ 	            <tr>
+ 	                <td>Description</td>
+ 	                <td>${item.currentVersion.item.description}</td>
+ 	            </tr>
+ 	            <tr>
+ 	                <td>Abstract</td>
+ 	                <td>${item.currentVersion.item.itemAbstract}</td>
+ 	            </tr>
+ 	            <tr>
  	                <td>Contributors</td>
  	                <td>
  	                <c:forEach items="${item.currentVersion.item.contributors}" var="contrib">
@@ -108,10 +122,18 @@
  	                </td>
  	            </tr>
  	            <tr>
- 	                <td>Identifier</td>
+ 	                <td>Identifiers</td>
  	                <td>
  	                <c:forEach items="${item.currentVersion.item.itemIdentifiers}" var="ident">
  	                     ${ident.identifierType}: ${ident.value} <br/><br/> 
+ 	                </c:forEach>
+ 	                </td>
+ 	            </tr>
+ 	            <tr>
+ 	                <td>Extents</td>
+ 	                <td>
+ 	                <c:forEach items="${item.currentVersion.item.itemExtents}" var="extent">
+ 	                     ${extent.extentType}: ${extent.value} <br/><br/> 
  	                </c:forEach>
  	                </td>
  	            </tr>

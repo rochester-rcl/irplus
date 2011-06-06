@@ -16,6 +16,8 @@
 
 package edu.ur.ir.item.metadata.marc;
 
+import java.util.List;
+
 import edu.ur.dao.CrudDAO;
 
 /**
@@ -33,4 +35,19 @@ public interface MarcContentTypeFieldMapperDAO extends CrudDAO<MarcContentTypeFi
 	 * @return
 	 */
 	public MarcContentTypeFieldMapper getByContentTypeId(Long contentTypeId);
+	
+	/**
+	 * Get the list of all content types with the specified data field name and indicator settings.
+	 * 
+	 * @param code - code of the data field (100, 200, etc)
+	 * @param indicator1 - first indicator value
+	 * @param indicator2 - second indicator value
+	 * @param subField - subfield value.
+	 * 
+	 * @return list of content type sub filed mappings.
+	 */
+	public List<MarcContentTypeFieldMapper> getByDataField(String code, 
+			String indicator1, 
+			String indicator2,
+			String subField);
 }
