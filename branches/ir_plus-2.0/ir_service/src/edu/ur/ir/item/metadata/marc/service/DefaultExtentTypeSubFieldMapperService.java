@@ -80,9 +80,26 @@ public class DefaultExtentTypeSubFieldMapperService implements ExtentTypeSubFiel
 		this.extentTypeSubFieldMapperDAO = extentTypeSubFieldMapperDAO;
 	}
 
-	@Override
 	public List<ExtentTypeSubFieldMapper> getByExtentTypeId(Long id) {
 		return extentTypeSubFieldMapperDAO.getByExtentTypeId(id);
+	}
+	
+	/**
+	 * Get the list of all extent types with the specified data field name and indicator settings.
+	 * 
+	 * @param code - name of the data field (100, 200, etc)
+	 * @param indicator1 - first indicator value
+	 * @param indicator2 - second indicator value
+	 * @param subField - subfield value
+	 * 
+	 * @return list of extent type sub filed mappings.
+	 */
+	public List<ExtentTypeSubFieldMapper> getByDataField(String code, 
+			String indicator1, 
+			String indicator2, 
+			String subField)
+	{
+		return extentTypeSubFieldMapperDAO.getByDataField(code, indicator1, indicator2, subField);
 	}
 	
 }

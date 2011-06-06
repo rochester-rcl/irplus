@@ -513,10 +513,6 @@ public class DefaultMarcExportService implements MarcExportService{
 		
 	}
 	
-
-	
-
-	
 	private void handleDescription(Record record, String description, MarcContentTypeFieldMapper mapper)
 	{
 		if( mapper != null && mapper.isThesis() )

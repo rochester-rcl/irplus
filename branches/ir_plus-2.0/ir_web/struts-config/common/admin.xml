@@ -31,6 +31,7 @@
 <struts>
     
     <include file="struts-default.xml"/>
+  
     
     <package name="admin" namespace="/admin" extends="struts-default">
     
@@ -86,6 +87,8 @@
         
          <global-results>
         	 <result name="change-password">/pages/home.jsp</result>
+        	 <result type="redirect" name="handleError">/pages/error.jsp</result>
+        	 <result type="redirect" name="accessDenied">/accessDenied.jsp</result>
         </global-results>
         
         <!--  ************************************ -->
@@ -308,6 +311,7 @@
             method="uploadMarcFile">
             <interceptor-ref name="urUploadStack"/>
             <result name="success">/pages/user/workspace/upload_marc_complete.jsp</result>
+            <result name="importFailed">/pages/user/workspace/upload_marc_file_failed.jsp</result>
         </action>
               
     </package>

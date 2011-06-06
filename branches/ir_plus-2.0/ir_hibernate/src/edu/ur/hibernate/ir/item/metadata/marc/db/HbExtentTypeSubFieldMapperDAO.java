@@ -62,5 +62,26 @@ public class HbExtentTypeSubFieldMapperDAO implements ExtentTypeSubFieldMapperDA
 	public void makeTransient(ExtentTypeSubFieldMapper entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+	
+	/**
+	 * Get the list of all extent types with the specified data field name and indicator settings.
+	 * 
+	 * @param name - name of the data field (100, 200, etc)
+	 * @param indicator1 - first indicator value
+	 * @param indicator2 - second indicator value
+	 * @param subField - sub field value
+	 * 
+	 * @return list of extent type sub filed mappings.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ExtentTypeSubFieldMapper> getByDataField(String code,
+			String indicator1, String indicator2, String subField) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getExtentTypeMapperByDataField");
+		q.setParameter("code", code);
+		q.setParameter("indicator1", indicator1);
+		q.setParameter("indicator2", indicator2);
+		q.setParameter("subField", subField);
+		return q.list();
+	}
 
 }

@@ -74,10 +74,19 @@
 			not-null="true"/>
 	 </class>
 	 
-	 <!-- Gets mapping by  contributor type id  -->
+	 <!-- Gets mapping by contributor type id  -->
 	 <query name="getExtentTypeMapperByExtentTypeId">
 	    from ExtentTypeSubFieldMapper as mapping 	    
 	    where mapping.extentType.id = :extentTypeId
+	 </query>
+	 
+	 <!-- Gets mapping by marc data field  -->
+	 <query name="getExtentTypeMapperByDataField">
+	    from ExtentTypeSubFieldMapper as mapping 	    
+	    where mapping.marcDataFieldMapper.marcDataField.code = :code
+	    and mapping.marcDataFieldMapper.indicator1 = :indicator1
+	    and mapping.marcDataFieldMapper.indicator2 = :indicator2
+	    and mapping.marcSubField.name = :subField
 	 </query>
 	 
 	

@@ -19,12 +19,14 @@ package edu.ur.ir.importer.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.marc4j.MarcException;
 import org.marc4j.MarcReader;
 import org.marc4j.MarcStreamReader;
 import org.marc4j.marc.DataField;
@@ -34,8 +36,10 @@ import org.marc4j.marc.Subfield;
 
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.SearchResults;
+import edu.ur.ir.importer.BadMarcFileException;
 import edu.ur.ir.importer.MarcFileToVersionedItemImporter;
 import edu.ur.ir.item.DuplicateContributorException;
+import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.IdentifierType;
@@ -45,6 +49,7 @@ import edu.ur.ir.item.PublishedDate;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.PublisherService;
 import edu.ur.ir.item.VersionedItem;
+import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapper;
 import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapperService;
 import edu.ur.ir.item.metadata.marc.IdentifierTypeSubFieldMapper;
 import edu.ur.ir.item.metadata.marc.IdentifierTypeSubFieldMapperService;
@@ -94,7 +99,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	// service to deal with repository information
 	private RepositoryService repositoryService;
 	
-	/** Service for dealing with contributor types */
+	// Service for dealing with contributor types */
 	private ContributorTypeService contributorTypeService;
 	
 	// service to deal with contributor information
@@ -117,8 +122,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		GenericItem item = new GenericItem("unknown");
 	    VersionedItem versionedItem = new VersionedItem(owner, item);
 		String keywords = "";
-	    
-	    
+
+		
         // returns fields for tags 010 through 999
 		List<DataField> fields = (List<DataField>)record.getDataFields();
 		for(DataField field : fields)
@@ -143,13 +148,17 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    {
 		    	handle245(field, item);
 		    }
+		    else if( tag.equals("246") && ind1 == '3')
+		    {
+		    	addSubTitle(field, item);
+		    }
+		    else if( tag.equals("520") && ind1 == '3')
+		    {
+		    	addAbstract(field, item);
+		    }
 		    else if( tag.equals("100") || tag.equals("700"))
 		    {
 		    	handle100(field, item);
-		    }
-		    else if( tag.equals("300"))
-		    {
-		    	handle300(field, item);
 		    }
 		    else if( tag.equals("260"))
 		    {
@@ -171,6 +180,10 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    		}
 		        }
 		    }
+		    else if( tag.equals("500")  || tag.equals("502") )
+		    {
+		    	addDescription(field, item);
+		    }
 		    else
 		    {
 		    	handleOtherTags(field, item);
@@ -189,20 +202,101 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 * Import the marc file into the personal collection
 	 * @throws FileNotFoundException 
 	 * @throws NoIndexFoundException 
+	 * @throws NoIndexFoundException 
+	 * @throws BadMarcFileException 
 	 * 
 	 * @see edu.ur.ir.importer.MarcFileToVersionedItemImporter#importMarc(java.io.File, edu.ur.ir.user.PersonalCollection)
 	 */
 	
-	public List<VersionedItem> importMarc(File f, IrUser owner) throws FileNotFoundException, NoIndexFoundException {
+	public List<VersionedItem> importMarc(File f, IrUser owner) throws FileNotFoundException, NoIndexFoundException, BadMarcFileException {
 		
 		List<VersionedItem> versionedItems = new LinkedList<VersionedItem>();
-		FileInputStream fis = new FileInputStream(f);
-		MarcReader reader = new MarcStreamReader(fis);
-		while (reader.hasNext()) {
-	        Record record = reader.next();
-	        versionedItems.add(createVersionedItem(record, owner));
-	    }
+		FileInputStream fis = null;
+		try
+		{
+		    fis = new FileInputStream(f);
+		    MarcReader reader = new MarcStreamReader(fis);
+		    while (reader.hasNext()) {
+	            Record record = reader.next();
+	            versionedItems.add(createVersionedItem(record, owner));
+	        }
+		}
+		catch(MarcException e)
+		{
+			throw new BadMarcFileException("The file could not be parsed " + e.getMessage());
+		}
+		finally
+		{
+		    if( fis != null )
+		    {
+		    	try {
+					fis.close();
+				} catch (IOException e) {
+					fis = null;
+				}
+		    }
+		}
 		return versionedItems;
+	}
+	
+	/**
+	 * Add the sub title to the item.
+	 * 
+	 * @param field
+	 * @param item
+	 */
+	private void addSubTitle(DataField field, GenericItem item)
+	{
+		String data = null;
+		
+		if( field.getSubfield('a') != null ) 
+		{
+			data = field.getSubfield('a').getData();
+			if(  data != null && !data.trim().equals(""))
+			{
+				item.addSubTitle(data, null);
+			}
+		}
+	}
+	
+	/**
+	 * Add the abstract to the item.
+	 * 
+	 * @param field
+	 * @param item
+	 */
+	private void addAbstract(DataField field, GenericItem item)
+	{
+		String data = null;
+		
+		if( field.getSubfield('a') != null ) 
+		{
+			data = field.getSubfield('a').getData();
+			if(  data != null && !data.trim().equals(""))
+			{
+				item.setItemAbstract(data);
+			}
+		}
+	}
+	
+	/**
+	 * Add the abstract to the item.
+	 * 
+	 * @param field
+	 * @param item
+	 */
+	private void addDescription(DataField field, GenericItem item)
+	{
+		String data = null;
+		
+		if( field.getSubfield('a') != null ) 
+		{
+			data = field.getSubfield('a').getData();
+			if(  data != null && !data.trim().equals(""))
+			{
+				item.setDescription(data);
+			}
+		}
 	}
 	
 	/**
@@ -236,6 +330,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	    List subfields = field.getSubfields();
         Iterator i = subfields.iterator();
 
+        // iterate through sub fields
         while (i.hasNext()) {
             Subfield subfield = (Subfield) i.next();
 	        char code = subfield.getCode();
@@ -244,12 +339,25 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	        
 	        if( data != null && !data.trim().equals(""))
 	        {
-	            List<IdentifierTypeSubFieldMapper> identMappers = identifierTypeSubFieldMapperService.getByDataField(tag, ind1 + "", ind2 + "", code +"");
-	            log.debug("Found " + identMappers .size() + " identifer type mappers");
+	        	//handle identifier type mappings
+	            List<IdentifierTypeSubFieldMapper> identMappers = 
+	            	identifierTypeSubFieldMapperService.getByDataField(tag, 
+	            		ind1 + "", ind2 + "", code +"");
+	            log.debug("Found " + identMappers.size() + " identifer type mappers");
 	            for(IdentifierTypeSubFieldMapper mapper : identMappers )
 	            {
 	        	    IdentifierType identType = mapper.getIdentifierType();
 	        	    item.addItemIdentifier(data, identType);
+	            }
+	            
+	            // handle extent type mappings
+	            List<ExtentTypeSubFieldMapper> extentMappers = 
+	            	extentTypeSubFieldMapperService.getByDataField(tag, ind1 + "",  ind2 + "", code +"");
+	            log.debug("Found " + extentMappers.size() + " extent type mappers ");
+	            for(ExtentTypeSubFieldMapper mapper : extentMappers)
+	            {
+	                ExtentType extentType = mapper.getExtentType();
+	                item.addItemExtent(extentType, fixExtentTypeData(data));
 	            }
 	        }
         }
@@ -418,31 +526,22 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	}
 	
 	
-	/**
-	 * Handle extent information.
-	 * 
-	 * @param field
-	 */
-	private void handle300(DataField field,  GenericItem item) 
+	
+	public String fixExtentTypeData(String data)
 	{
-		log.debug("handle extents");
-		Subfield subfield = field.getSubfield('a');
-		if( subfield != null )
+		String value = data;
+		// deals with format: text ( content ) text
+		int index = value.indexOf(')');
+		if( index != -1)
 		{
-			log.debug("number of pages = " + this.endPunctuationStripper(subfield.getData()));
-			
+		   if( value.indexOf('(') < index  && value.indexOf('(') != -1)
+		   {
+			   int beginIndex =  value.indexOf('(') + 1;
+			   value = value.substring(beginIndex, index).trim();
+		   }
 		}
-		subfield = field.getSubfield('b');
-		if( subfield != null )
-		{
-			log.debug("illustrations = " + this.endPunctuationStripper(subfield.getData()));
-		}
+		return value;
 		
-		subfield = field.getSubfield('c');
-		if( subfield != null )
-		{
-			log.debug("size = " + this.endPunctuationStripper(subfield.getData()));
-		}
 	}
 	
 	/**
@@ -882,6 +981,12 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 */
 	public void setPublisherService(PublisherService publisherService) {
 		this.publisherService = publisherService;
+	}
+	
+	public static void main(String[] args)
+	{
+		DefaultMarcFileToVersionedItemImporter importer = new DefaultMarcFileToVersionedItemImporter();
+		System.out.println( importer.fixExtentTypeData("1 online resource (1 digital photograph)") );
 	}
 
 }

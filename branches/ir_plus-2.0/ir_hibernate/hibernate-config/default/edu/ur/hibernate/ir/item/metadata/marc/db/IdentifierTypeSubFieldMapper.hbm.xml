@@ -80,7 +80,7 @@
 	    where mapping.identifierType.id = :identifierTypeId
 	 </query>
 	 
-	 	 <!-- Gets mapping by  identifier type id  -->
+	 <!-- Gets mapping by data field  -->
 	 <query name="getIdentifierTypeMapperByDataField">
 	    from IdentifierTypeSubFieldMapper as mapping 	    
 	    where mapping.marcDataFieldMapper.marcDataField.code = :code
