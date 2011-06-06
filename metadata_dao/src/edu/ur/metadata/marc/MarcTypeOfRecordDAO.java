@@ -21,19 +21,21 @@ import edu.ur.dao.CrudDAO;
 import edu.ur.dao.UniqueNameDAO;
 
 /**
- * Deals with marc relator code data access.
+ * Deals with persistance for the marc type of record.
  * 
  * @author Nathan Sarr
  *
  */
-public interface MarcRelatorCodeDAO extends CountableDAO, 
-CrudDAO<MarcRelatorCode>, UniqueNameDAO<MarcRelatorCode> {
+public interface MarcTypeOfRecordDAO extends CountableDAO, 
+CrudDAO<MarcTypeOfRecord>, UniqueNameDAO<MarcTypeOfRecord> {
 
 	/**
-	 * Get the marc relator code by relator code value.
+	 * Get the marc type of record code by record type value.
 	 * 
-	 * @param relatorCode - value of the relator code
-	 * @return - the the marc relator code if found otherwise null
+	 * @param recordType - value of the type of record
+	 * @return - the the marc type of record if found otherwise null
 	 */
-	public MarcRelatorCode getByRelatorCode(String relatorCode);
+	public MarcTypeOfRecord getByRecordType(String recordType);
+
+
 }

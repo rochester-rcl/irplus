@@ -14,7 +14,6 @@
    limitations under the License.
 */  
 
-
 package edu.ur.hibernate.metadata.marc;
 
 import java.util.List;
@@ -23,28 +22,29 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
-import edu.ur.metadata.marc.MarcDataField;
-import edu.ur.metadata.marc.MarcDataFieldDAO;
+import edu.ur.metadata.marc.MarcTypeOfRecord;
+import edu.ur.metadata.marc.MarcTypeOfRecordDAO;
 
 /**
- * Data access for the marc data field.
+ * Default implementation of marc type of record.
  * 
  * @author Nathan Sarr
  *
  */
-public class HbMarcDataFieldDAO implements MarcDataFieldDAO{
-
-	/** eclipse generated id */
-	private static final long serialVersionUID = 4069588211804487008L;
+public class HbMarcTypeOfRecordDAO implements MarcTypeOfRecordDAO {
+	
+	//eclipse generated id.
+	private static final long serialVersionUID = 2941313248903731861L;
+	
 	
 	/**  Helper for persisting information using hibernate.  */
-	private final HbCrudDAO<MarcDataField> hbCrudDAO;
+	private final HbCrudDAO<MarcTypeOfRecord> hbCrudDAO;
 	
 	/**
 	 * Default Constructor
 	 */
-	public HbMarcDataFieldDAO() {
-		hbCrudDAO = new HbCrudDAO<MarcDataField>(MarcDataField.class);
+	public HbMarcTypeOfRecordDAO() {
+		hbCrudDAO = new HbCrudDAO<MarcTypeOfRecord>(MarcTypeOfRecord.class);
 	}
 	
 	/**
@@ -58,36 +58,39 @@ public class HbMarcDataFieldDAO implements MarcDataFieldDAO{
     }
 
 	public Long getCount() {
-		return (Long) hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("marcDataFieldCount").uniqueResult();
+		return (Long) hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("marcTypeOfRecordCount").uniqueResult();
 
 	}
 
-	public List<MarcDataField> getAll() {
+	public List<MarcTypeOfRecord> getAll() {
 		return hbCrudDAO.getAll();
 	}
 
-	public MarcDataField getById(Long id, boolean lock) {
+	public MarcTypeOfRecord getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
-	public void makePersistent(MarcDataField entity) {
+	public void makePersistent(MarcTypeOfRecord entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
-	public void makeTransient(MarcDataField entity) {
+	public void makeTransient(MarcTypeOfRecord entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
 
-	/**
-	 * This will look at the code field and NOT the name field.
-	 * 
-	 * @see edu.ur.dao.UniqueNameDAO#findByUniqueName(java.lang.String)
-	 */
-	public MarcDataField findByUniqueName(String name) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcDataFieldByCode");
-		q.setParameter("code", name);
-		return (MarcDataField)q.uniqueResult();
+	public MarcTypeOfRecord findByUniqueName(String name) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcTypeOfRecordByName");
+		q.setParameter("name", name);
+		return (MarcTypeOfRecord)q.uniqueResult();
 	
 	}
+
+	@Override
+	public MarcTypeOfRecord getByRecordType(String recordType) {
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcTypeOfRecordByRecordType");
+		q.setParameter("recordType", recordType);
+		return (MarcTypeOfRecord)q.uniqueResult();
+	}
+
 
 }

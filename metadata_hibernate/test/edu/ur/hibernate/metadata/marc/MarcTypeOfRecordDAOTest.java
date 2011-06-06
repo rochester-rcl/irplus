@@ -25,22 +25,22 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.testng.annotations.Test;
 
 import edu.ur.hibernate.metadata.helper.test.ContextHolder;
-import edu.ur.metadata.marc.MarcDataField;
-import edu.ur.metadata.marc.MarcDataFieldDAO;
+import edu.ur.metadata.marc.MarcTypeOfRecord;
+import edu.ur.metadata.marc.MarcTypeOfRecordDAO;
 
 /**
- * Test Marc data field persistence
+ * Test marc type of record persistence.
  * 
  * @author Nathan Sarr
  *
  */
-public class MarcDataFieldDAOTest {
-	
+public class MarcTypeOfRecordDAOTest {
+
     /** spring application context manager  */
     ApplicationContext ctx = ContextHolder.getApplicationContext();
     
     /** dublin core element data access object */
-    MarcDataFieldDAO marcDataFieldDAO = (MarcDataFieldDAO)ctx.getBean("marcDataFieldDAO");
+    MarcTypeOfRecordDAO marcTypeOfRecordDAO = (MarcTypeOfRecordDAO)ctx.getBean("marcTypeOfRecordDAO");
     
     /** platform transaction manager  */
     PlatformTransactionManager tm = (PlatformTransactionManager)ctx.getBean("transactionManager");
@@ -49,27 +49,30 @@ public class MarcDataFieldDAOTest {
     TransactionDefinition td = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
     
 	/**
-	 * Test marc data field persistence
+	 * Test dublin core term persistence
 	 */
 	@Test
-	public void baseMarcDataFieldDAOTest() throws Exception{
+	public void baseMarcTypeOfRecordDAOTest() throws Exception{
 
-		TransactionStatus ts = tm.getTransaction(td);
-		MarcDataField element = new MarcDataField("field", true, "100");
- 		element.setDescription("mdDescription");
- 		marcDataFieldDAO.makePersistent(element);
+		MarcTypeOfRecord element = new MarcTypeOfRecord("name", "a" );
+ 		element.setDescription("dsescription");
+         
+        TransactionStatus ts = tm.getTransaction(td);
+ 		marcTypeOfRecordDAO.makePersistent(element);
  	    tm.commit(ts);
  	    
  	    ts = tm.getTransaction(td);
- 		MarcDataField other = marcDataFieldDAO.getById(element.getId(), false);
-        assert other.equals(element) : "Marc data fields should be equal mt = " + element + " other = " + other;
+ 		MarcTypeOfRecord other = marcTypeOfRecordDAO.getById(element.getId(), false);
+        assert other.equals(element) : "Marc record type should be equal mt = " + element + " other = " + other;
          
-        MarcDataField dublinCoreElementByName =  marcDataFieldDAO.findByUniqueName(element.getCode());
-        assert dublinCoreElementByName.equals(element) : "Marc data field should be found " + element; 
+        MarcTypeOfRecord typeOfRecordByName =  marcTypeOfRecordDAO.findByUniqueName(element.getName());
+        assert typeOfRecordByName.equals(element) : "Marc record type should be found " + element; 
+        
+        MarcTypeOfRecord typeOfRecordByRecordType =  marcTypeOfRecordDAO.getByRecordType(element.getRecordType());
+        assert typeOfRecordByRecordType.equals(element) : "Marc record type should be found " + element; 
          
-        marcDataFieldDAO.makeTransient(other);
-        assert  marcDataFieldDAO.getById(other.getId(), false) == null : "Should no longer be able to find marc data field";
+        marcTypeOfRecordDAO.makeTransient(other);
+        assert  marcTypeOfRecordDAO.getById(other.getId(), false) == null : "Should no longer be able to find marc record type";
 	    tm.commit(ts);
 	}
-
 }
