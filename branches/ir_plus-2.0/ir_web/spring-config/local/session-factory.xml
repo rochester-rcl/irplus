@@ -166,12 +166,14 @@
                 <value>edu/ur/hibernate/metadata/marc/MarcDataField.hbm.xml</value>
                 <value>edu/ur/hibernate/metadata/marc/MarcSubField.hbm.xml</value>
                 <value>edu/ur/hibernate/metadata/marc/MarcRelatorCode.hbm.xml</value>
+                <value>edu/ur/hibernate/metadata/marc/MarcTypeOfRecord.hbm.xml</value>
                 
                 <value>edu/ur/hibernate/ir/item/metadata/marc/db/MarcContentTypeFieldMapper.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/metadata/marc/db/MarcContributorTypeRelatorCode.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/metadata/marc/db/MarcDataFieldMapper.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/metadata/marc/db/IdentifierTypeSubFieldMapper.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/metadata/marc/db/ExtentTypeSubFieldMapper.hbm.xml</value>
+                <value>edu/ur/hibernate/ir/item/metadata/marc/db/ContentTypeRecordTypeMapper.hbm.xml</value>
             </set>
         </property>
         <property name="hibernateProperties">
