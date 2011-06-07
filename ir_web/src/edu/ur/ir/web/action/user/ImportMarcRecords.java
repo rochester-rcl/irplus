@@ -100,6 +100,7 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 			        {
 			        	user.createRootPersonalItem(item);
 			        }
+			        userService.makeUserPersistent(user);
 			    }
 			    else if(personalCollection.getOwner().getId().equals(userId))
 			    {
@@ -107,6 +108,7 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 			        {
 			    	     personalCollection.addVersionedItem(item);
 			        }
+			    	userPublishingFileSystemService.makePersonalCollectionPersistent(personalCollection);
 			    }
 			    else
 			    {
