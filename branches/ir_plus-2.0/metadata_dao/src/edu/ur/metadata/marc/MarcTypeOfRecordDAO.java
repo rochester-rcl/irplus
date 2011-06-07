@@ -35,7 +35,7 @@ CrudDAO<MarcTypeOfRecord>, UniqueNameDAO<MarcTypeOfRecord> {
 	 * @param recordType - value of the type of record
 	 * @return - the the marc type of record if found otherwise null
 	 */
-	public MarcTypeOfRecord getByRecordType(String recordType);
+	public MarcTypeOfRecord getByRecordType(char recordType);
 
 
 }

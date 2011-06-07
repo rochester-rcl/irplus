@@ -48,6 +48,14 @@
 			access="field" 
 			not-null="true"/>
 		
+		
+		<!-- marc type of record  -->
+		<many-to-one class="edu.ur.metadata.marc.MarcTypeOfRecord"
+			name="marcTypeOfRecord" 
+			column="marc_type_of_record_id" 
+			unique="true"
+			access="field" />
+			
 		<!-- template control fields - 006: 18 characters -->	
 		<property name="controlField006" column="control_field_006" type="string"
 			access="field" />
@@ -68,10 +76,6 @@
 	    <property name="recordStatus" column="record_status" type="char"
 			access="field" />
 			
-		<!-- leader record type -->
-	    <property name="typeOfRecord" column="type_of_record" type="char"
-			access="field" />
-	
         <!-- leader bib level -->
 	    <property name="bibliographicLevel" column="bibliographic_level" type="char"
 			access="field" />
@@ -98,5 +102,10 @@
 	    where mapping.contentType.id = :contentTypeId
 	</query>
 
+	<!-- Gets identifier types by identifier type id and dublin core element id  -->
+	<query name="getMarcContentTypeFieldMapperByTypeOfRecord">
+	    from MarcContentTypeFieldMapper as mapping 	    
+	    where mapping.marcTypeOfRecord.recordType = :recordType
+	</query>
 	
 </hibernate-mapping>

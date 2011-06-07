@@ -706,7 +706,16 @@ public class DefaultMarcExportService implements MarcExportService{
 		Leader leader = record.getLeader();
 		
 		leader.setRecordStatus(mapper.getRecordStatus());
-		leader.setTypeOfRecord(mapper.getTypeOfRecord());
+		
+		
+		if( mapper.getMarcTypeOfRecord() != null )
+		{
+		    leader.setTypeOfRecord(mapper.getMarcTypeOfRecord().getRecordType());
+		}
+		else
+		{
+			leader.setTypeOfRecord(' ');
+		}
 		leader.setImplDefined1(new char[]{mapper.getBibliographicLevel(), mapper.getTypeOfControl()});
 		leader.setImplDefined2(new char[]{mapper.getEncodingLevel(), mapper.getDescriptiveCatalogingForm(), ' '});
 	    leader.setCharCodingScheme('a');

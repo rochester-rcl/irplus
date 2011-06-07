@@ -45,7 +45,7 @@
 		<property name="name" column="name" type="string"
 			not-null="true" access="field" />
 		
-		<property name="recordType" column="record_type" type="string"
+		<property name="recordType" column="record_type" type="char"
 			not-null="true" access="field" />
 
 		<property name="description" column="description" type="string"

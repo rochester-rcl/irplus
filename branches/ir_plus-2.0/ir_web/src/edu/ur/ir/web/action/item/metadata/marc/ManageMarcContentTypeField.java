@@ -32,6 +32,8 @@ import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.ContentTypeService;
 import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapper;
 import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapperService;
+import edu.ur.metadata.marc.MarcTypeOfRecord;
+import edu.ur.metadata.marc.MarcTypeOfRecordService;
 import edu.ur.simple.type.AscendingNameComparator;
 
 /**
@@ -60,7 +62,13 @@ public class ManageMarcContentTypeField extends ActionSupport
 
 	// Service for dealing with content types */
 	private ContentTypeService contentTypeService;
- 
+	
+	// id of the marc type of record
+	private Long marcTypeOfRecordId;
+	
+	// service for dealing with type of record
+	private MarcTypeOfRecordService marcTypeOfRecordService;
+
 	// Content type marc mapping */
     private MarcContentTypeFieldMapper marcContentTypeFieldMapper;
 
@@ -94,9 +102,6 @@ public class ManageMarcContentTypeField extends ActionSupport
 	// leader record status
 	private char recordStatus = ' ';
 
-	// leader record type
-	private char typeOfRecord = ' ';
-	
 	// leader bib level
 	private char bibliographicLevel = ' ';
 	
@@ -137,7 +142,7 @@ public class ManageMarcContentTypeField extends ActionSupport
 		    log.debug("encoding level = " + encodingLevel);
 		    log.debug("recording status = " + recordStatus);
 		    log.debug("type of control = " + typeOfControl);
-		    log.debug("type of record = " + typeOfRecord);
+		    log.debug("type of record = " + marcTypeOfRecordId);
 		    log.debug("thesis = " + thesis);
 		}
 		
@@ -162,6 +167,15 @@ public class ManageMarcContentTypeField extends ActionSupport
 				{
 				    marcContentTypeFieldMapper = new MarcContentTypeFieldMapper(contentType);
 				}
+				
+				MarcTypeOfRecord marcTypeOfRecord = null;
+				if( marcTypeOfRecordId != null )
+			
+				{
+					marcTypeOfRecord = marcTypeOfRecordService.getById(marcTypeOfRecordId, false);
+				}
+				
+				marcContentTypeFieldMapper.setMarcTypeOfRecord(marcTypeOfRecord);
 				marcContentTypeFieldMapper.setControlField006(charField006);
 				marcContentTypeFieldMapper.setControlField007(charField007);
 				marcContentTypeFieldMapper.setControlField008(charField008);
@@ -171,7 +185,9 @@ public class ManageMarcContentTypeField extends ActionSupport
 				marcContentTypeFieldMapper.setEncodingLevel(encodingLevel);
 				marcContentTypeFieldMapper.setRecordStatus(recordStatus);
 				marcContentTypeFieldMapper.setTypeOfControl(typeOfControl);
-				marcContentTypeFieldMapper.setTypeOfRecord(typeOfRecord);
+				
+				
+				
 				marcContentTypeFieldMapper.setThesis(thesis);
 				
 				log.debug("marcContentTypeFieldMapper = " + marcContentTypeFieldMapper);
@@ -277,6 +293,18 @@ public class ManageMarcContentTypeField extends ActionSupport
 		return contentTypes;
 	}
 	
+	/**
+	 * Get marc type of records.
+	 * 
+	 * @return
+	 */
+	public List<MarcTypeOfRecord> getMarcTypeOfRecords()
+	{
+		List<MarcTypeOfRecord> records = marcTypeOfRecordService.getAll();
+		Collections.sort(records, nameComparator);
+		return records;
+	}
+	
 
 	public MarcContentTypeFieldMapper getMarcContentTypeFieldMapper() {
 		return marcContentTypeFieldMapper;
@@ -367,13 +395,6 @@ public class ManageMarcContentTypeField extends ActionSupport
 			recordStatus = recordStatusStr.charAt(0);
 		}
 	
-		
-		String typeOfRecordStr = request.getParameter("typeOfRecord");
-		if(typeOfRecordStr != null && typeOfRecordStr.length() > 0 )
-		{
-			typeOfRecord = typeOfRecordStr.charAt(0);
-		}
-		
 		String bibliographicLevelStr = request.getParameter("bibliographicLevel");
 		if(bibliographicLevelStr != null && bibliographicLevelStr.length() > 0 )
 		{
@@ -430,7 +451,8 @@ public class ManageMarcContentTypeField extends ActionSupport
 
 		
 		recordStatus = marcContentTypeFieldMapper.getRecordStatus();
-		typeOfRecord = marcContentTypeFieldMapper.getTypeOfRecord();
+		
+
 		bibliographicLevel = marcContentTypeFieldMapper.getBibliographicLevel();
 		typeOfControl = marcContentTypeFieldMapper.getTypeOfControl();
 		encodingLevel = marcContentTypeFieldMapper.getEncodingLevel();
@@ -438,6 +460,11 @@ public class ManageMarcContentTypeField extends ActionSupport
 		
 		id = marcContentTypeFieldMapper.getId();
 		contentTypeId = marcContentTypeFieldMapper.getContentType().getId();
+		if( marcContentTypeFieldMapper.getMarcTypeOfRecord() != null  )
+		{
+			marcTypeOfRecordId = marcContentTypeFieldMapper.getMarcTypeOfRecord().getId();
+		}
+		
 		thesis = marcContentTypeFieldMapper.isThesis();
 	}
 	
@@ -458,15 +485,6 @@ public class ManageMarcContentTypeField extends ActionSupport
 	 */
 	public char getRecordStatus() {
 		return recordStatus;
-	}
-
-	/**
-	 * Type of record.
-	 * 
-	 * @return
-	 */
-	public char getTypeOfRecord() {
-		return typeOfRecord;
 	}
 
 	/**
@@ -560,6 +578,35 @@ public class ManageMarcContentTypeField extends ActionSupport
 	 */
 	public void setThesis(boolean thesis) {
 		this.thesis = thesis;
+	}
+
+	
+	/**
+	 * Set the marc type of record service.
+	 * 
+	 * @param marcTypeOfRecordService
+	 */
+	public void setMarcTypeOfRecordService(
+			MarcTypeOfRecordService marcTypeOfRecordService) {
+		this.marcTypeOfRecordService = marcTypeOfRecordService;
+	}
+	
+	/**
+	 * Get the marc type of record id.
+	 * 
+	 * @return
+	 */
+	public Long getMarcTypeOfRecordId() {
+		return marcTypeOfRecordId;
+	}
+
+	/**
+	 * Set the marc type of record id.
+	 * 
+	 * @param marcTypeOfRecordId
+	 */
+	public void setMarcTypeOfRecordId(Long marcTypeOfRecordId) {
+		this.marcTypeOfRecordId = marcTypeOfRecordId;
 	}
 
 }

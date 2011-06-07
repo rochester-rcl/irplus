@@ -18,6 +18,7 @@
 package edu.ur.ir.item.metadata.marc;
 
 import edu.ur.ir.item.ContentType;
+import edu.ur.metadata.marc.MarcTypeOfRecord;
 import edu.ur.persistent.BasePersistent;
 
 /**
@@ -51,7 +52,7 @@ public class MarcContentTypeFieldMapper extends BasePersistent{
 	private char recordStatus = ' ';
 
 	// leader record type
-	private char typeOfRecord = ' ';
+	private MarcTypeOfRecord marcTypeOfRecord;
 	
 	// leader bib level
 	private char bibliographicLevel = ' ';
@@ -133,8 +134,8 @@ public class MarcContentTypeFieldMapper extends BasePersistent{
 	 * 
 	 * @return
 	 */
-	public char getTypeOfRecord() {
-		return typeOfRecord;
+	public MarcTypeOfRecord getMarcTypeOfRecord() {
+		return marcTypeOfRecord;
 	}
 
 	/**
@@ -142,8 +143,8 @@ public class MarcContentTypeFieldMapper extends BasePersistent{
 	 * 
 	 * @param typeOfRecord
 	 */
-	public void setTypeOfRecord(char typeOfRecord) {
-		this.typeOfRecord = typeOfRecord;
+	public void setMarcTypeOfRecord(MarcTypeOfRecord marcTypeOfRecord) {
+		this.marcTypeOfRecord = marcTypeOfRecord;
 	}
 
 	/**
@@ -339,7 +340,7 @@ public class MarcContentTypeFieldMapper extends BasePersistent{
 		sb.append(" recordStatus = " );
 		sb.append(recordStatus);
 		sb.append(" typeOfRecord = " );
-		sb.append(typeOfRecord);
+		sb.append(marcTypeOfRecord);
 		sb.append(" bibliographicLevel = " );
 		sb.append(bibliographicLevel);
 		sb.append(" typeOfControl = " );

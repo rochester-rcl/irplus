@@ -30,7 +30,7 @@ public class MarcTypeOfRecord extends CommonPersistent{
 	private static final long serialVersionUID = -2110267536536562352L;
 	
 	// character record type
-	private String recordType;
+	private char recordType;
 
 	/**
 	 * Package protected constructor 
@@ -43,7 +43,7 @@ public class MarcTypeOfRecord extends CommonPersistent{
 	 * @param name
 	 * @param recordType
 	 */
-	public MarcTypeOfRecord(String name, String recordType)
+	public MarcTypeOfRecord(String name, char recordType)
 	{
 		setRecordType(recordType);
 		setName(name);
@@ -54,7 +54,7 @@ public class MarcTypeOfRecord extends CommonPersistent{
 	 * 
 	 * @return
 	 */
-	public String getRecordType() {
+	public char getRecordType() {
 		return recordType;
 	}
 
@@ -63,7 +63,7 @@ public class MarcTypeOfRecord extends CommonPersistent{
 	 * 
 	 * @param recordType
 	 */
-	void setRecordType(String recordType) {
+	void setRecordType(char recordType) {
 		this.recordType = recordType;
 	}
 	
@@ -76,7 +76,7 @@ public class MarcTypeOfRecord extends CommonPersistent{
 	{
 		int value = 0;
 		value += name == null ? 0 : name.hashCode();
-		value += recordType == null ? 0 : recordType.hashCode();
+		value += Character.valueOf(recordType).hashCode();
 		return value;
 	}
 	
@@ -95,8 +95,7 @@ public class MarcTypeOfRecord extends CommonPersistent{
 		if( ( name != null && !name.equals(other.getName()) ) ||
 			( name == null && other.getName() != null ) ) return false;
 		
-		if( ( recordType != null && !recordType.equals(other.getRecordType()) ) ||
-			( recordType == null && other.getRecordType() != null ) ) return false;
+		if(  recordType != other.getRecordType() ) return false;
 		
 		return true;
 	}

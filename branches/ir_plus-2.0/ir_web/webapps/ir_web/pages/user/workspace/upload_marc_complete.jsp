@@ -76,6 +76,10 @@
  	                <td>${item.currentVersion.item.name}</td>
  	            </tr>
  	            <tr>
+ 	                <td>Content Type</td>
+ 	                <td>${item.currentVersion.item.primaryItemContentType.contentType.name}</td>
+ 	            </tr>
+ 	            <tr>
  	                <td>Other Titles</td>
  	                <c:forEach items="${item.currentVersion.item.subTitles}" var="other">
  	                     ${other.fullTitle}<br/><br/> 

@@ -70,7 +70,7 @@ public class ContentTypeRecordTypeMapperDAOTest {
  		ContentType ct = new ContentType("ctName", "description");
  		contentTypeDAO.makePersistent(ct);	
  	   
- 	    MarcTypeOfRecord mtr = new MarcTypeOfRecord("a", "aut");
+ 	    MarcTypeOfRecord mtr = new MarcTypeOfRecord("a", 'a');
  	    marcTypeOfRecordService.save(mtr);
  	    
  	    // create the mapping

@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import org.marc4j.MarcException;
 import org.marc4j.MarcReader;
 import org.marc4j.MarcStreamReader;
+import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
@@ -53,6 +54,8 @@ import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapper;
 import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapperService;
 import edu.ur.ir.item.metadata.marc.IdentifierTypeSubFieldMapper;
 import edu.ur.ir.item.metadata.marc.IdentifierTypeSubFieldMapperService;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapper;
+import edu.ur.ir.item.metadata.marc.MarcContentTypeFieldMapperService;
 import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCode;
 import edu.ur.ir.item.metadata.marc.MarcContributorTypeRelatorCodeService;
 import edu.ur.ir.person.BirthDate;
@@ -113,6 +116,9 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	
 	// service to deal with publisher information
 	private PublisherService publisherService;
+	
+	//  Service for dealing with mapping between content type and marc fields */
+	private MarcContentTypeFieldMapperService marcContentTypeFieldMapperService;
 
 
 	@SuppressWarnings("unchecked")
@@ -123,6 +129,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	    VersionedItem versionedItem = new VersionedItem(owner, item);
 		String keywords = "";
 
+		
+		this.setContentType(record, item);
 		
         // returns fields for tags 010 through 999
 		List<DataField> fields = (List<DataField>)record.getDataFields();
@@ -196,6 +204,55 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		}
 		
 		return versionedItem;
+	}
+	
+	/**
+	 * Set the primary content type.
+	 * 
+	 * @param typeOfRecord - type of record to set the content type.
+	 * @param item - item to set the content type for.
+	 */
+	private void setContentType(Record record, GenericItem item)
+	{
+		char typeOfRecord = record.getLeader().getTypeOfRecord();
+		
+		ControlField cf = (ControlField)record.getVariableField("008");
+		boolean thesisMarkerSet = false;
+		if( cf != null )
+		{
+		    String data = cf.getData();
+		    if( data.length() > 25 )
+		    {
+		    	char marker = data.charAt(24);
+		    	log.debug("thesis marker = " + marker);
+		    	if( marker == 'm' )
+		    	{
+		    		thesisMarkerSet = true;
+		    	}
+		    	
+		    }
+		}
+		
+		
+		List<MarcContentTypeFieldMapper> mappers = marcContentTypeFieldMapperService.getByRecordType(typeOfRecord);
+	    
+		Iterator<MarcContentTypeFieldMapper> iter = mappers.iterator();
+		boolean done = false;
+		while(iter.hasNext() && !done)
+		{
+			MarcContentTypeFieldMapper mapper = iter.next();
+			if( mapper.getThesis()  && thesisMarkerSet )
+			{
+				item.setPrimaryContentType(mapper.getContentType());
+				done = true;
+			}
+			else
+			{
+				item.setPrimaryContentType(mapper.getContentType());
+			}
+		}
+		
+		
 	}
 
 	/**
@@ -983,10 +1040,16 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		this.publisherService = publisherService;
 	}
 	
-	public static void main(String[] args)
-	{
-		DefaultMarcFileToVersionedItemImporter importer = new DefaultMarcFileToVersionedItemImporter();
-		System.out.println( importer.fixExtentTypeData("1 online resource (1 digital photograph)") );
+	/**
+	 * Set the marc content type field mapper service.
+	 * 
+	 * @param marcContentTypeFieldMapperService
+	 */
+	public void setMarcContentTypeFieldMapperService(
+			MarcContentTypeFieldMapperService marcContentTypeFieldMapperService) {
+		this.marcContentTypeFieldMapperService = marcContentTypeFieldMapperService;
 	}
+	
+	
 
 }

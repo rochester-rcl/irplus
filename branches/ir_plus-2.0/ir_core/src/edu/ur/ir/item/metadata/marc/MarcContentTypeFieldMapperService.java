@@ -66,5 +66,13 @@ public interface  MarcContentTypeFieldMapperService {
 	 * @param entity
 	 */
 	public void delete(MarcContentTypeFieldMapper entity);
+	
+	/**
+	 * Get the mapper by record type
+	 * 
+	 * @param record type - leader 06 record type
+	 * @return list of record types attached to marc content type fields
+	 */
+	public List<MarcContentTypeFieldMapper> getByRecordType(char recordType);
 
 }

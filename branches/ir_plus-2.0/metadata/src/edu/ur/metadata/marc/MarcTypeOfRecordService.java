@@ -80,6 +80,6 @@ public interface MarcTypeOfRecordService extends Serializable{
 	 * @param recordType - type of recrod
 	 * @return the found type of record or null if it doesn't exist.
 	 */
-	public MarcTypeOfRecord getByRecordType(String recordType);
+	public MarcTypeOfRecord getByRecordType(char recordType);
 
 }

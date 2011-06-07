@@ -86,7 +86,7 @@ public class HbMarcTypeOfRecordDAO implements MarcTypeOfRecordDAO {
 	}
 
 	@Override
-	public MarcTypeOfRecord getByRecordType(String recordType) {
+	public MarcTypeOfRecord getByRecordType(char recordType) {
 		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcTypeOfRecordByRecordType");
 		q.setParameter("recordType", recordType);
 		return (MarcTypeOfRecord)q.uniqueResult();

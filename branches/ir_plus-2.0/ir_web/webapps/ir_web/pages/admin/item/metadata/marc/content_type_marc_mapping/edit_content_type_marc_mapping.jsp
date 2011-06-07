@@ -92,6 +92,21 @@
 		      </td>
 	       </tr>
 	       <tr>       
+	           <td align="left" class="label">Type of Record(Leader/06):</td>
+		       <td align="left" class="input">
+		          <select name="marcTypeOfRecordId">
+		          <c:forEach items="${marcTypeOfRecords}" var="marcTypeOfRecord">
+		               <option  
+		                <c:if test="${marcTypeOfRecordId == marcTypeOfRecord.id}">
+		                  selected="true"
+		                </c:if>
+		               
+		               value="${marcTypeOfRecord.id}">${marcTypeOfRecord.name} - ${marcTypeOfRecord.recordType}</option>
+		         </c:forEach>
+		         </select> 
+		      </td>
+	       </tr>
+	       <tr>       
 	           <td align="left" class="label">Thesis Content Type</td>
 		       <td align="left" class="input">
 		           <input type="checkbox"  name="thesis" <c:if test="${thesis}">checked="true"</c:if> value="true"/>
@@ -101,12 +116,6 @@
 	           <td align="left" class="label">Record Status(Leader/05)</td>
 		       <td align="left" class="input">
 		           <input type="text"  size="1" maxlength="1" name="recordStatus" value="<c:if test="${recordStatus != ' '}">${recordStatus}</c:if>"/>
-		       </td>
-	       </tr>
-	       <tr>       
-	           <td align="left" class="label">Type of Record(Leader/06)</td>
-		       <td align="left" class="input">
-		           <input type="text"  size="1" maxlength="1" name="typeOfRecord" value="<c:if test="${typeOfRecord != ' '}">${typeOfRecord}</c:if>"/>
 		       </td>
 	       </tr>
 	       <tr>       

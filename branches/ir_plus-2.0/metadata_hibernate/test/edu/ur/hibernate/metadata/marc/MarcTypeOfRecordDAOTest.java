@@ -54,7 +54,7 @@ public class MarcTypeOfRecordDAOTest {
 	@Test
 	public void baseMarcTypeOfRecordDAOTest() throws Exception{
 
-		MarcTypeOfRecord element = new MarcTypeOfRecord("name", "a" );
+		MarcTypeOfRecord element = new MarcTypeOfRecord("name", 'a' );
  		element.setDescription("dsescription");
          
         TransactionStatus ts = tm.getTransaction(td);
