@@ -49,10 +49,17 @@
    </bean> 
    
    <!-- ****************************************** --> 
-   <!-- Metadata Marc Sub Field service -->
+   <!-- Metadata Marc Relator code service -->
    <!-- ****************************************** --> 
    <bean id="marcRelatorCodeService" class="edu.ur.metadata.marc.service.DefaultMarcRelatorCodeService">
        <property name="marcRelatorCodeDAO" ref="marcRelatorCodeDAO"/>
+   </bean> 
+   
+      <!-- ****************************************** --> 
+   <!-- Metadata Marc type of record service -->
+   <!-- ****************************************** --> 
+   <bean id="marcTypeOfRecordService" class="edu.ur.metadata.marc.service.DefaultMarcTypeOfRecordService">
+       <property name="marcTypeOfRecordDAO" ref="marcTypeOfRecordDAO"/>
    </bean> 
    
 </beans>

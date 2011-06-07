@@ -33,6 +33,9 @@ DROP SEQUENCE ir_metadata_marc.contributor_type_relator_code_seq;
 DROP TABLE ir_metadata_marc.data_field_mapper;
 DROP SEQUENCE ir_metadata_marc.data_field_mapper_seq;
 
+DROP TABLE ir_metadata_marc.content_type_record_type_mapper;
+DROP SEQUENCE ir_metadata_marc.content_type_record_type_mapper_seq;
+
 DROP SCHEMA ir_metadata_marc;
 -- ---------------------------------------------
 -- Drop Institutional Repository Metadata tables/schema
@@ -436,6 +439,7 @@ DROP TABLE metadata.dublin_core_encoding_scheme;
 DROP TABLE metadata.marc_data_field;
 DROP TABLE metadata.marc_sub_field;
 DROP TABLE metadata.marc_relator_code;
+DROP TABLE metadata.marc_type_of_record;
 
 
 DROP SEQUENCE metadata.metadata_type_seq;
@@ -444,6 +448,7 @@ DROP SEQUENCE metadata.dublin_core_encoding_scheme_seq;
 DROP SEQUENCE metadata.marc_data_field_seq;
 DROP SEQUENCE metadata.marc_sub_field_seq;
 DROP SEQUENCE metadata.marc_relator_code_seq;
+DROP SEQUENCE metadata.marc_type_of_record_seq;
 
 
 DROP SCHEMA metadata;
