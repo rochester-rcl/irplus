@@ -115,6 +115,7 @@
 		     <class name="edu.ur.hibernate.ir.metadata.marc.db.MarcDataFieldMapperDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.metadata.marc.db.IdentifierTypeSubFieldMapperDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.metadata.marc.db.ExtentTypeSubFieldMapperDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.ContentTypeRecordTypeMapperDAOTest"/>
 		     
 		</classes>
 	</test>

@@ -19,7 +19,7 @@
 <suite name="ir hibernate test single">
 	<test name="Test Single">
 		<classes>
-		     <class name="edu.ur.hibernate.ir.item.db.ExternalPublishedItemDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.ContentTypeRecordTypeMapperDAOTest"/>
 		</classes>
 	</test>
 </suite>

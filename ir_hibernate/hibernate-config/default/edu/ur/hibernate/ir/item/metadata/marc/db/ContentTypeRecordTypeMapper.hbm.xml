@@ -20,19 +20,19 @@
 <!DOCTYPE hibernate-mapping SYSTEM
 			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!--
-	Mapping for contributor type relator code mapper.
+	Mapping for content type 
 	
 	@author Nathan Sarr
 -->
 <hibernate-mapping package="edu.ur.ir.item.metadata.marc">
-	<class name="MarcContributorTypeRelatorCode" schema="ir_metadata_marc" table="contributor_type_relator_code"
+	<class name="ContentTypeRecordTypeMapper" schema="ir_metadata_marc" table="content_type_record_type_mapper"
 		lazy="true">
 
 		<!-- Common id property. -->
-		<id name="id" type="long" column="contributor_type_relator_code_id"
+		<id name="id" type="long" column="content_type_record_type_mapper_id"
 			unsaved-value="0" access="field">
 			<generator class="sequence">
-				<param name="sequence">ir_metadata_marc.contributor_type_relator_code_seq</param>
+				<param name="sequence">ir_metadata_marc.content_type_record_type_mapper_seq</param>
 			</generator>
 		</id>
 
@@ -41,39 +41,39 @@
 			access="org.hibernate.property.DirectPropertyAccessor" />
 
 		<!-- contributor type -->
-		<many-to-one class="edu.ur.ir.person.ContributorType"
-			name="contributorType" 
-			column="contributor_type_id" 
+		<many-to-one class="edu.ur.ir.item.ContentType"
+			name="contentType" 
+			column="content_type_id" 
 			unique="true"
 			access="field" 
 			not-null="true"/>
 		
 	    <!-- contributor type -->
-		<many-to-one class="edu.ur.metadata.marc.MarcRelatorCode"
-			name="marcRelatorCode" 
-			column="marc_relator_code_id" 
+		<many-to-one class="edu.ur.metadata.marc.MarcTypeOfRecord"
+			name="marcTypeOfRecord" 
+			column="marc_type_of_record_id" 
 			unique="true"
 			access="field" 
 			not-null="true"/>
 	
 	 </class>
 
-	<!-- Gets mapping by  contributor type id  -->
-	<query name="getMarcContributorTypeRelatorCodeByContributorTypeId">
-	    from MarcContributorTypeRelatorCode as mapping 	    
-	    where mapping.contributorType.id = :contributorId
+	<!-- Gets mapping by content type id  -->
+	<query name="getContentTypeRecordTypeByContentTypeId">
+	    from ContentTypeRecordTypeMapper as mapping 	    
+	    where mapping.contentType.id = :contentTypeId
 	</query>
 
-    <!-- Gets mapping by relator code id  -->
-	<query name="getMarcContributorTypeRelatorCodeByRelatorCodeId">
-	    from MarcContributorTypeRelatorCode as mapping 	    
-	    where mapping.marcRelatorCode.id = :relatorCodeId
+    <!-- Gets mapping by record type id  -->
+	<query name="getContentTypeRecordTypeByRecordTypeId">
+	    from ContentTypeRecordTypeMapper as mapping 	    
+	    where mapping.marcTypeOfRecord.id = :recordTypeId
 	</query>
 	
-	  <!-- Gets mapping by relator code id  -->
-	<query name="getMarcContributorTypeRelatorCodeByRelatorCodeName">
-	    from MarcContributorTypeRelatorCode as mapping 	    
-	    where mapping.marcRelatorCode.name = :relatorCode
+	  <!-- Gets mapping by record type  -->
+	<query name="getContentTypeRecordTypeByRecordType">
+	    from ContentTypeRecordTypeMapper as mapping 	    
+	    where mapping.marcTypeOfRecord.recordType = :recordType
 	</query>
 	
 </hibernate-mapping>

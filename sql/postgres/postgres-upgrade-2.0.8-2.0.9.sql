@@ -277,6 +277,27 @@ CREATE SEQUENCE ir_metadata_marc.extent_type_sub_field_mapper_seq;
 ALTER TABLE ir_metadata_marc.extent_type_sub_field_mapper_seq OWNER TO ir_plus;
 
 -- ---------------------------------------------
+-- mapping between content type and type of record
+-- ---------------------------------------------
+CREATE TABLE ir_metadata_marc.content_type_record_type_mapper
+(
+    content_type_record_type_mapper_id BIGINT PRIMARY KEY NOT NULL,
+    content_type_id BIGINT NOT NULL,
+    marc_type_of_record_id BIGINT NOT NULL,
+    version INTEGER,
+    UNIQUE(content_type_id),
+    FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type(content_type_id),
+    FOREIGN KEY (marc_type_of_record_id) REFERENCES  metadata.marc_type_of_record(marc_type_of_record_id)
+);
+
+ALTER TABLE ir_metadata_marc.content_type_record_type_mapper OWNER TO ir_plus;
+
+-- The external account type sequence
+CREATE SEQUENCE ir_metadata_marc.content_type_record_type_mapper_seq;
+ALTER TABLE ir_metadata_marc.content_type_record_type_mapper_seq OWNER TO ir_plus;
+      
+
+-- ---------------------------------------------
 -- Inserts the marc sub fields
 -- ---------------------------------------------
 
@@ -1947,5 +1968,62 @@ metadata.marc_relator_code (marc_relator_code_id, version, name, relator_code, d
 values (nextval('metadata.marc_relator_code_seq'), 0, 'Writer of accompanying material', 'wam','Use for a person or organization who writes significant material which accompanies a sound recording or other audiovisual material.');
 
 
+-- ---------------------------------------------
+-- Inserts into the marc type of record table
+-- ---------------------------------------------
 
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Language material', 'a','');
 
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Manuscript language material', 't','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Projected medium', 'g','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Two-dimensional nonprojectable graphic', 'k','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Three-dimensional artifact or naturally occurring object.', 'r','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Kit', 'o','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Mixed materials', 'p','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Cartographic material', 'e','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Manuscript cartographic material', 'f','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Notated music', 'c','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Manuscript notated music', 'd','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Nonmusical sound recording', 'i','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Musical sound recording', 'j','');
+
+insert into                                                         
+metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
+values (nextval('metadata.marc_type_of_record_seq'), 0, 'Computer file', 'm','');
