@@ -33,9 +33,6 @@ DROP SEQUENCE ir_metadata_marc.contributor_type_relator_code_seq;
 DROP TABLE ir_metadata_marc.data_field_mapper;
 DROP SEQUENCE ir_metadata_marc.data_field_mapper_seq;
 
-DROP TABLE ir_metadata_marc.content_type_record_type_mapper;
-DROP SEQUENCE ir_metadata_marc.content_type_record_type_mapper_seq;
-
 DROP SCHEMA ir_metadata_marc;
 -- ---------------------------------------------
 -- Drop Institutional Repository Metadata tables/schema

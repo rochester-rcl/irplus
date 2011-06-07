@@ -386,26 +386,7 @@ ALTER TABLE ir_metadata_marc.extent_type_sub_field_mapper OWNER TO ir_plus;
 CREATE SEQUENCE ir_metadata_marc.extent_type_sub_field_mapper_seq;
 ALTER TABLE ir_metadata_marc.extent_type_sub_field_mapper_seq OWNER TO ir_plus;
 
--- ---------------------------------------------
--- mapping between content type and type of record
--- ---------------------------------------------
-CREATE TABLE ir_metadata_marc.content_type_record_type_mapper
-(
-    content_type_record_type_mapper_id BIGINT PRIMARY KEY NOT NULL,
-    content_type_id BIGINT NOT NULL,
-    marc_type_of_record_id BIGINT NOT NULL,
-    version INTEGER,
-    UNIQUE(content_type_id),
-    FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type(content_type_id),
-    FOREIGN KEY (marc_type_of_record_id) REFERENCES  metadata.marc_type_of_record(marc_type_of_record_id)
-);
 
-ALTER TABLE ir_metadata_marc.content_type_record_type_mapper OWNER TO ir_plus;
-
--- The external account type sequence
-CREATE SEQUENCE ir_metadata_marc.content_type_record_type_mapper_seq;
-ALTER TABLE ir_metadata_marc.content_type_record_type_mapper_seq OWNER TO ir_plus;
-      
 
 -- ---------------------------------------------
 -- Inserts the marc sub fields

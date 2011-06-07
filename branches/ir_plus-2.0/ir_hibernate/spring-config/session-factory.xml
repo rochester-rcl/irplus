@@ -169,7 +169,6 @@
                 <value>edu/ur/hibernate/ir/item/metadata/marc/db/MarcDataFieldMapper.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/metadata/marc/db/IdentifierTypeSubFieldMapper.hbm.xml</value>
                 <value>edu/ur/hibernate/ir/item/metadata/marc/db/ExtentTypeSubFieldMapper.hbm.xml</value>
-                <value>edu/ur/hibernate/ir/item/metadata/marc/db/ContentTypeRecordTypeMapper.hbm.xml</value>
                 
             </set>
         </property>
