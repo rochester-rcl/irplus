@@ -158,7 +158,7 @@ CREATE TABLE metadata.marc_type_of_record
     marc_type_of_record_id BIGINT PRIMARY KEY,
     version INTEGER,
     name TEXT NOT NULL,
-    record_type TEXT NOT NULL,
+    record_type CHAR NOT NULL,
     description TEXT,
     UNIQUE(name),
     UNIQUE(record_type)
@@ -3638,19 +3638,20 @@ CREATE TABLE ir_metadata_marc.content_type_field_mapping
 (
     content_type_field_mapping_id BIGINT PRIMARY KEY NOT NULL,
     content_type_id BIGINT NOT NULL,
+    marc_type_of_record_id BIGINT,
     control_field_006 CHARACTER(18),
     control_field_007 CHARACTER(14),
     control_field_008 CHARACTER(40),
     is_thesis BOOLEAN NOT NULL,
     encoding_level CHAR,
-    record_status CHAR,
-    type_of_record CHAR,
+    record_status CHAR, 
     bibliographic_level CHAR,
     type_of_control CHAR,
     descriptive_cataloging_form CHAR,
     version INTEGER,
     UNIQUE(content_type_id),
-    FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type(content_type_id)
+    FOREIGN KEY (content_type_id) REFERENCES ir_item.content_type(content_type_id),
+    FOREIGN KEY (marc_type_of_record_id) REFERENCES  metadata.marc_type_of_record(marc_type_of_record_id)
 );
 
 ALTER TABLE ir_metadata_marc.content_type_field_mapping OWNER TO ir_plus;

@@ -50,4 +50,12 @@ public interface MarcContentTypeFieldMapperDAO extends CrudDAO<MarcContentTypeFi
 			String indicator1, 
 			String indicator2,
 			String subField);
+	
+	/**
+	 * Get the mapper by record type
+	 * 
+	 * @param record type - leader 06 record type
+	 * @return list of record types attached to marc content type fields
+	 */
+	public List<MarcContentTypeFieldMapper> getByRecordType(char recordType);
 }

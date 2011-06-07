@@ -107,5 +107,19 @@ public class HbMarcContentTypeFieldMapperDAO implements MarcContentTypeFieldMapp
 		q.setParameter("subField", subField);
 		return q.list();
 	}
+	
+	/**
+	 * Get the mapper by record type
+	 * 
+	 * @param record type - leader 06 record type
+	 * @return list of record types attached to marc content type fields
+	 */
+	@SuppressWarnings("unchecked")
+	public List<MarcContentTypeFieldMapper> getByRecordType(char recordType)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcContentTypeFieldMapperByTypeOfRecord");
+		q.setParameter("recordType", recordType);
+        return q.list();
+	}
 
 }
