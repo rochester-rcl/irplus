@@ -26,7 +26,7 @@
     <info organisation="metadata_service" module="metadata_service"/>
     <dependencies>
 
-        <dependency org="metadata_hibernate" name="metadata_hibernate" rev="2.0" />
+        <dependency org="metadata_hibernate" name="metadata_hibernate" rev="2.0" changing="true"/>
         
     </dependencies>
 </ivy-module>
