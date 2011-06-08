@@ -62,8 +62,12 @@
     <!--  this is the body regin of the page -->
     <div id="bd">
     
-        <h3>Upload Failed - The MARC file could not be imported</h3>
-        
+        <c:url var="workspaceUrl" value="/user/workspace.action">
+            <c:param name="showCollectionTab" value="true"/>
+            <c:param name="parentCollectionId" value="${parentCollectionId}"/>
+        </c:url>
+        <h3>Upload Failed - The MARC file could not be imported </h3>
+        <h3><a href="${workspaceUrl}">Back to workspace</a></h3>
         <p>The MARC could not be imported - this could be due to an an incorrectly formatted file - if you think this is an error please <a href="<c:url value="/contactUs.action" />">contact us</a> </p>
  	     
       </div>

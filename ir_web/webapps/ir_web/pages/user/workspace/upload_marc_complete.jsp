@@ -63,8 +63,11 @@
     <div id="bd">
     
         <h3>Upload Complete - The following publications were created:</h3>
-        
-        
+        <c:url var="workspaceUrl" value="/user/workspace.action">
+            <c:param name="showCollectionTab" value="true"/>
+            <c:param name="parentCollectionId" value="${parentCollectionId}"/>
+        </c:url>
+        <h3><a href="${workspaceUrl}">Back to workspace</a></h3>
  	    <c:forEach items="${items}" var="item">
  	        <table border="1px">
  	            <tr>
