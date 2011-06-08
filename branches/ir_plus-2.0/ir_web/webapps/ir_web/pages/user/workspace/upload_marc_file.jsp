@@ -61,8 +61,12 @@
     <!--  this is the body regin of the page -->
     <div id="bd">
     
-            <h3> Import marc file to: <c:if test="${parentCollectionId > 0}">/My Publications${parentCollection.fullPath}</c:if><c:if test="${parentCollectionId <=0 }">My Publications</c:if></h3>
-
+        <h3> Import marc file to: <c:if test="${parentCollectionId > 0}">/My Publications${parentCollection.fullPath}</c:if><c:if test="${parentCollectionId <=0 }">My Publications</c:if></h3>
+        <c:url var="workspaceUrl" value="/user/workspace.action">
+            <c:param name="showCollectionTab" value="true"/>
+            <c:param name="parentCollectionId" value="${parentCollectionId}"/>
+        </c:url>
+        <h3><a href="${workspaceUrl}">Back to workspace</a></h3>
 	        <form id="marcImport" name="macImport" method="post" enctype="multipart/form-data" 
 	            action="<c:url value="/admin/uploadMarcFile.action"/>">
 	            <input type="hidden" name="parentCollectionId" value="${parentCollectionId}"/>
