@@ -44,6 +44,7 @@ import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.LanguageType;
 import edu.ur.ir.item.LanguageTypeService;
 import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.PlaceOfPublicationService;
@@ -122,7 +123,9 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	private MarcContentTypeFieldMapperService marcContentTypeFieldMapperService;
 	
 	// deal with language information
-	private LanguageTypeService languageTypeSerivce;
+	private LanguageTypeService languageTypeService;
+
+
 
 
 	@SuppressWarnings("unchecked")
@@ -136,6 +139,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 
 		
 		this.setContentType(record, item);
+		this.setLanguage(record, item);
 		
         // returns fields for tags 010 through 999
 		List<DataField> fields = (List<DataField>)record.getDataFields();
@@ -254,7 +258,6 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    	{
 		    		thesisMarkerSet = true;
 		    	}
-		    	
 		    }
 		}
 		
@@ -276,8 +279,29 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 				item.setPrimaryContentType(mapper.getContentType());
 			}
 		}
-		
-		
+	}
+	
+	private void setLanguage(Record record, GenericItem item)
+	{
+		ControlField cf = (ControlField)record.getVariableField("008");
+		String code = "";
+		if( cf != null )
+		{
+		    String data = cf.getData();
+		    if( data != null && data.length() > 38 )
+		    {
+		    	code = code + data.charAt(35);
+		    	code = code + data.charAt(36);
+		    	code = code + data.charAt(37);
+		    	code = code.trim();
+		    	LanguageType lt = this.languageTypeService.getByIso639_2(code);
+		    	log.debug("Language type = " + lt + " for code " + code);
+		    	if( lt != null )
+		    	{
+		    	    item.setLanguageType(lt);
+		    	}
+		    }
+		}
 	}
 
 	/**
@@ -485,16 +509,21 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 				log.debug("Person name authority = " + authority);
 			}
 		    
-		    
+		   
+		    log.debug("checking sub field 4 data ");
 		    if( field.getSubfield('4') != null && field.getSubfield('4').getData() != null )
 		    {
+		    	log.debug("sub field 4 data = " + field.getSubfield('4').getData());
 		    	List<MarcContributorTypeRelatorCode> marcContributorTypes = marcContributorTypeRelatorCodeService.getByRelatorCode(field.getSubfield('4').getData());
-		        if( marcContributorTypes.size() > 0 )
+		        log.debug("Found " + marcContributorTypes.size() + " marc contributor types ");
+		    	if( marcContributorTypes.size() > 0 )
 		        {
 		        	MarcContributorTypeRelatorCode contributorTypeByRelatorCode = marcContributorTypes.get(0);
+		        	log.debug("found contributor type " + contributorTypeByRelatorCode);
 		        	if ( contributorTypeByRelatorCode != null )
 		        	{
 		        		contributorType= contributorTypeByRelatorCode.getContributorType();
+		        		log.debug("setting contributor type " + contributorType);
 		        	}
 		        }
 		    }
@@ -1092,6 +1121,14 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		this.marcContentTypeFieldMapperService = marcContentTypeFieldMapperService;
 	}
 	
+	/**
+	 * Set the language type serivce.
+	 * 
+	 * @param languageTypeService
+	 */
+	public void setLanguageTypeService(LanguageTypeService languageTypeService) {
+		this.languageTypeService = languageTypeService;
+	}
 	
 
 }

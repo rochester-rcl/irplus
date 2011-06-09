@@ -107,21 +107,8 @@
 						    Date Withdrawn: ${institutionalItemVersion.withdrawnToken.date}
 						</p>
 					</c:if>
-								
-					<c:if test="${!institutionalItemVersion.withdrawn  || ir:userHasRole('ROLE_ADMIN', '') || institutionalItem.owner == user}">
-					    <c:import url="item_files_frag.jsp">
-					      <c:param name="isPreview" value="false"/>
-					    </c:import>
-					</c:if>
-				
-					<c:if test="${!institutionalItemVersion.withdrawn || institutionalItemVersion.withdrawnToken.showMetadata  
-								              || ir:userHasRole('ROLE_ADMIN', '') || institutionalItem.owner == user}">
-	                     <c:import url="item_metadata_frag.jsp"/>
-				    </c:if>
-					<!-- End - Display the Item preview -->
-				
-	
-                    <!-- if statements for the buttons the forms are below this in a separate statements 
+					
+					  <!-- if statements for the buttons the forms are below this in a separate statements 
                          this is due to formatting in IE 6 -->
                      
 					<c:if test="${user != null && institutionalItem.owner == user || ir:userHasRole('ROLE_ADMIN', '')}">
@@ -250,7 +237,22 @@
 										
 					</c:if>
 					
-			</c:if>
+					
+								
+					<c:if test="${!institutionalItemVersion.withdrawn  || ir:userHasRole('ROLE_ADMIN', '') || institutionalItem.owner == user}">
+					    <c:import url="item_files_frag.jsp">
+					      <c:param name="isPreview" value="false"/>
+					    </c:import>
+					</c:if>
+				
+					<c:if test="${!institutionalItemVersion.withdrawn || institutionalItemVersion.withdrawnToken.showMetadata  
+								              || ir:userHasRole('ROLE_ADMIN', '') || institutionalItem.owner == user}">
+	                     <c:import url="item_metadata_frag.jsp"/>
+				    </c:if>
+					<!-- End - Display the Item preview -->
+				
+	
+                  			</c:if>
 			<!--  end if for show publication -->
 				
 			<c:if test="${!showPublication && !ir:userHasRole('ROLE_ADMIN', '') && institutionalItem.owner != user}">
@@ -278,11 +280,11 @@
 			<c:url var="marcMrcExport" value="/exportToMarcMrcFile.action">
 			        <c:param name="institutionalItemVersionId" value="${institutionalItemVersion.id}"/>
 			</c:url>
-			<h3><a href="${marcMrcExport}">Get MARC as .mrc file</a></h3>
+			<h3><a href="${marcMrcExport}">Download MARC as .mrc file</a></h3>
 			<c:url var="marcXmlExport" value="/exportToMarcXmlFile.action">
 			        <c:param name="institutionalItemVersionId" value="${institutionalItemVersion.id}"/>
 			</c:url>
-			<h3><a href="${marcXmlExport}">Get MARC as .xml file</a></h3>
+			<h3><a href="${marcXmlExport}">Download MARC as .xml file</a></h3>
 			</c:if>
 			
 			  <!-- *************************  All versions Start *************************  -->

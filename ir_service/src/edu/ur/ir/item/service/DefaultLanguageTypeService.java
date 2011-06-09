@@ -86,4 +86,15 @@ public class DefaultLanguageTypeService implements LanguageTypeService{
 	public LanguageType getByUniqueSystemCode(String uniqueSystemCode) {
 		return languageTypeDAO.getByUniqueSystemCode(uniqueSystemCode);
 	}
+	
+	/**
+	 * Get the language type by it's three letter code.  
+	 * 
+	 * @param value 3 letter code
+	 * @return the found language type otherwise null.
+	 */
+	public LanguageType getByIso639_2(String value)
+	{
+		return languageTypeDAO.getByIso639_2(value);
+	}
 }
