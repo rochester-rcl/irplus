@@ -333,7 +333,7 @@ public class PersonName extends BasePersistent{
 	
 	/**
 	 * This checks to see if the person name is equal without looking
-	 * at the id.
+	 * at the id.  Null is considered the same as ""
 	 * 
 	 */
 	public boolean softEquals(Object o)
@@ -342,24 +342,60 @@ public class PersonName extends BasePersistent{
 		if (!(o instanceof PersonName)) return false;
 
 		final PersonName other = (PersonName) o;
-
-		if( ( familyName != null && !familyName.equalsIgnoreCase(other.getFamilyName()) ) ||
-			( familyName == null && other.getFamilyName() != null ) ) return false;
+        
+		boolean familyNameEmpty = (familyName == null || familyName.trim().equals(""));
+		boolean otherFamilyNameEmpty = (other.getFamilyName() == null || other.getFamilyName().trim().equals(""));
 		
-		if( ( forename != null && !forename.equalsIgnoreCase(other.getForename()) ) ||
-		    ( forename == null && other.getForename() != null ) ) return false;
+		if( !familyNameEmpty || !otherFamilyNameEmpty)
+		{
+		    if( ( !familyNameEmpty && !forename.equalsIgnoreCase(other.getForename()) ) ||
+			    ( familyNameEmpty  != otherFamilyNameEmpty ) ) return false;
+		}
 		
-		if( ( initials != null && !initials.equalsIgnoreCase(other.getInitials()) ) ||
-			( initials == null && other.getInitials() != null ) ) return false;
-
-		if( ( middleName != null && !middleName.equalsIgnoreCase(other.getMiddleName()) ) ||
-			( middleName == null && other.getMiddleName() != null ) ) return false;
+		boolean forenameEmpty = (forename == null || forename.trim().equals(""));
+		boolean otherForenameEmpty = (other.getForename() == null || other.getForename().trim().equals(""));
 		
-		if( ( numeration != null && !numeration.equalsIgnoreCase(other.getNumeration()) ) ||
-			( numeration == null && other.getNumeration() != null ) ) return false;
+		if( !forenameEmpty || !otherForenameEmpty)
+		{
+		    if( ( forename != null && !forename.equalsIgnoreCase(other.getForename()) ) ||
+		        ( forename == null && other.getForename() != null ) ) return false;
+		}
+		
+		boolean initialsEmpty = (initials == null || initials.trim().equals(""));
+		boolean otherInitialsEmpty = (other.getInitials() == null || other.getInitials().trim().equals(""));
+		
+		if( !initialsEmpty || !otherInitialsEmpty)
+		{
+		    if( ( initials != null && !initials.equalsIgnoreCase(other.getInitials()) ) ||
+			    ( initials == null && other.getInitials() != null ) ) return false;
+		}
 
-		if( ( surname != null && !surname.equalsIgnoreCase(other.getSurname()) ) ||
-			( surname == null && other.getSurname() != null ) ) return false;
+		boolean middleNameEmpty = (middleName == null || middleName.trim().equals(""));
+		boolean otherMiddleNameEmpty = (other.getMiddleName() == null || other.getMiddleName().trim().equals(""));
+		
+		if( !middleNameEmpty || !otherMiddleNameEmpty )
+		{
+		    if( ( middleName != null && !middleName.equalsIgnoreCase(other.getMiddleName()) ) ||
+			    ( middleName == null && other.getMiddleName() != null ) ) return false;
+		}
+		
+		boolean numerationEmpty = (numeration == null || numeration.trim().equals(""));
+		boolean otherNumerationEmpty = (other.getNumeration() == null || other.getNumeration().trim().equals(""));
+		
+		if( !numerationEmpty || !otherNumerationEmpty)
+		{
+		    if( ( numeration != null && !numeration.equalsIgnoreCase(other.getNumeration()) ) ||
+			    ( numeration == null && other.getNumeration() != null ) ) return false;
+		}
+
+		boolean surnameEmpty = (surname == null || surname.trim().equals(""));
+		boolean otherSurnameEmpty = (other.getSurname() == null || other.getSurname().trim().equals(""));
+		
+		if( !surnameEmpty || !otherSurnameEmpty)
+		{
+		    if( ( surname != null && !surname.equalsIgnoreCase(other.getSurname()) ) ||
+			    ( surname == null && other.getSurname() != null ) ) return false;
+		}
 
 		return true;
 	}
