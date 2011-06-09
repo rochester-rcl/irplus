@@ -84,9 +84,11 @@
  	            </tr>
  	            <tr>
  	                <td>Other Titles</td>
+ 	                <td>
  	                <c:forEach items="${item.currentVersion.item.subTitles}" var="other">
- 	                     ${other.fullTitle}<br/><br/> 
+ 	                     ${other}<br/><br/> 
  	                </c:forEach>
+ 	                </td>
  	            </tr>
  	            <tr>
  	                <td>Description</td>
