@@ -25,7 +25,7 @@
         <c:param name="collectionId" value="${collectionId}"/>
     </c:url>
     
-    <img class="repository_image, picture_module_size"  src="${pictureUrl}"/>
+    <img class="repository_image picture_module_size"  src="${pictureUrl}"/>
 
     <c:if test="${numCollectionPictures > 1}">
     <table class="buttonTable">

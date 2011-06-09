@@ -50,6 +50,6 @@
 
 <c:if test="${irFile == null }">
     
-     <img class="repository_image, picture_module_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg"/>
+     <img class="repository_image picture_module_size" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg"/>
 </c:if>
 
