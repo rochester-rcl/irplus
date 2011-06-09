@@ -82,7 +82,7 @@ public class HbMarcContributorTypeRelatorCodeDAO implements MarcContributorTypeR
 	@SuppressWarnings("unchecked")
 	public List<MarcContributorTypeRelatorCode> getByRelatorCode(String relatorCode)
 	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcContributorTypeRelatorCodeByRelatorCodeName");
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getMarcContributorTypeRelatorCodeByRelatorCode");
 		q.setParameter("relatorCode",  relatorCode);
 		return q.list();
 	}

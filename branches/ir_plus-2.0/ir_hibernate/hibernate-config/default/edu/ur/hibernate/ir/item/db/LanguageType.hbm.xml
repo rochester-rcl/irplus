@@ -87,4 +87,10 @@
 	<query name="getLanguageTypesOrderByNameDesc">
 		from LanguageType order by name desc
 	</query>	
+	
+   <!-- named query for getting a language type by iso639_2-->
+	<query name="getLanguageTypeByIso639_2">
+		from LanguageType as LanguageType where
+		LanguageType.iso639_2 = :value
+	</query>
 </hibernate-mapping>

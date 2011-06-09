@@ -160,4 +160,17 @@ public class HbLanguageTypeDAO implements LanguageTypeDAO {
 		return (LanguageType) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getLanguageTypeByUniqueSystemCode", uniqueSystemCode));
 	}
+	
+	/**
+	 * Get the language type by it's three letter code.  
+	 * 
+	 * @param value 3 letter code
+	 * @return the found language type otherwise null.
+	 */
+	public LanguageType getByIso639_2(String value)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getLanguageTypeByIso639_2");
+		q.setParameter("value", value);
+		return (LanguageType)q.uniqueResult();
+	}
 }

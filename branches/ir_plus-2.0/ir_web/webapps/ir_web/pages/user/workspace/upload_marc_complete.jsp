@@ -146,6 +146,10 @@
  	                </c:forEach>
  	                </td>
  	            </tr>
+ 	             <tr>
+ 	                <td>Language</td>
+ 	                <td>${item.currentVersion.item.languageType}</td>
+ 	            </tr>
  	        </table>  
  	        <br/>
  	        <br/>  

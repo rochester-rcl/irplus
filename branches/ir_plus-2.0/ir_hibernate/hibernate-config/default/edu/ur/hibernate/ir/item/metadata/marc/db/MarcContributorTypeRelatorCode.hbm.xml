@@ -71,9 +71,9 @@
 	</query>
 	
 	  <!-- Gets mapping by relator code id  -->
-	<query name="getMarcContributorTypeRelatorCodeByRelatorCodeName">
+	<query name="getMarcContributorTypeRelatorCodeByRelatorCode">
 	    from MarcContributorTypeRelatorCode as mapping 	    
-	    where mapping.marcRelatorCode.name = :relatorCode
+	    where mapping.marcRelatorCode.relatorCode = :relatorCode
 	</query>
 	
 </hibernate-mapping>

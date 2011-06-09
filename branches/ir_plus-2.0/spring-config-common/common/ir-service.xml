@@ -892,5 +892,6 @@
 	    <property name="publisherService" ref="publisherService"/>
 	    <property name="placeOfPublicationService" ref="placeOfPublicationService"/>
 	    <property name="marcContentTypeFieldMapperService" ref="marcContentTypeFieldMapperService"/>
+	    <property name="languageTypeService" ref="languageTypeService"/>
    </bean>
 </beans>
