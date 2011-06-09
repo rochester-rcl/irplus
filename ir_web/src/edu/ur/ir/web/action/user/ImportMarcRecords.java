@@ -18,6 +18,7 @@ package edu.ur.ir.web.action.user;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -28,11 +29,14 @@ import edu.ur.file.IllegalFileSystemNameException;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.importer.BadMarcFileException;
 import edu.ur.ir.importer.MarcFileToVersionedItemImporter;
+import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
+import edu.ur.ir.user.PersonalItem;
 import edu.ur.ir.user.UserPublishingFileSystemService;
 import edu.ur.ir.user.UserService;
+import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
 
 /**
@@ -70,7 +74,16 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 	//  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(ImportMarcRecords.class);
 	
+	// list of versioned items crated
 	private List<VersionedItem> items;
+	
+	// index processing type service */
+	private IndexProcessingTypeService indexProcessingTypeService;
+	
+	
+
+	// process for setting up personal workspace information to be indexed */
+	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
 	
 	/**
 	 * Uploads a new image to the system.
@@ -84,7 +97,7 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 	public String uploadMarcFile() throws IllegalFileSystemNameException, NoIndexFoundException, IOException, BadMarcFileException
 	{
 		log.debug("upload marc file");
-				
+			
 		IrUser user = userService.getUser(userId, false);
 		if( file != null && file.exists() )
 		{
@@ -96,24 +109,41 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 
 		        if( personalCollection == null )
 			    {
+		        	List<PersonalItem> createdItems = new LinkedList<PersonalItem>();	
 			        for(VersionedItem item : items)
 			        {
-			        	user.createRootPersonalItem(item);
+			        	createdItems.add( user.createRootPersonalItem(item) );
+			        	
 			        }
 			        userService.makeUserPersistent(user);
+			        for(PersonalItem newItem : createdItems)
+				    {
+				        userWorkspaceIndexProcessingRecordService.save(newItem.getOwner().getId(),newItem, 
+				 		indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+				    }
+			       
 			    }
 			    else if(personalCollection.getOwner().getId().equals(userId))
 			    {
+			    	List<PersonalItem> createdItems = new LinkedList<PersonalItem>();	
 			    	for(VersionedItem item : items)
 			        {
-			    	     personalCollection.addVersionedItem(item);
+			    		createdItems.add(personalCollection.addVersionedItem(item));
 			        }
 			    	userPublishingFileSystemService.makePersonalCollectionPersistent(personalCollection);
+			    	for(PersonalItem newItem : createdItems)
+				    {
+				        userWorkspaceIndexProcessingRecordService.save(newItem.getOwner().getId(),newItem, 
+				 		indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
+				    }
 			    }
 			    else
 			    {
 				    return "accessDenied";
 			    }
+		        
+		        
+		        
 			}
 			catch(BadMarcFileException bmfe)
 			{
@@ -252,6 +282,26 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 	 */
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	
+	/**
+	 * Set the index processing type service.
+	 * 
+	 * @param indexProcessingTypeService
+	 */
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
+
+	/**
+	 * Set the user workspace index processing record service.
+	 * 
+	 * @param userWorkspaceIndexProcessingRecordService
+	 */
+	public void setUserWorkspaceIndexProcessingRecordService(
+			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
+		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
 }

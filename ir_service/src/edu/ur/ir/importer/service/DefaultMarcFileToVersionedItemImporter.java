@@ -44,6 +44,7 @@ import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.GenericItem;
 import edu.ur.ir.item.IdentifierType;
+import edu.ur.ir.item.LanguageTypeService;
 import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.PlaceOfPublicationService;
 import edu.ur.ir.item.PublishedDate;
@@ -119,12 +120,16 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	
 	//  Service for dealing with mapping between content type and marc fields */
 	private MarcContentTypeFieldMapperService marcContentTypeFieldMapperService;
+	
+	// deal with language information
+	private LanguageTypeService languageTypeSerivce;
 
 
 	@SuppressWarnings("unchecked")
 	public VersionedItem createVersionedItem(Record record, IrUser owner) throws NoIndexFoundException
 	{
 	
+		
 		GenericItem item = new GenericItem("unknown");
 	    VersionedItem versionedItem = new VersionedItem(owner, item);
 		String keywords = "";
@@ -160,6 +165,14 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    {
 		    	addSubTitle(field, item);
 		    }
+		    else if( tag.equals("240") )
+		    {
+		    	addSubTitle(field, item);
+		    }
+		    else if( tag.equals("740") )
+		    {
+		    	addSubTitle(field, item);
+		    }
 		    else if( tag.equals("520") && ind1 == '3')
 		    {
 		    	addAbstract(field, item);
@@ -167,6 +180,18 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    else if( tag.equals("100") || tag.equals("700"))
 		    {
 		    	handle100(field, item);
+		    	
+		    	if( tag.equals("700"))
+		    	{
+		    		if( field.getSubfield('t') != null )
+		    		{
+		    			String data = field.getSubfield('t').getData();
+		    			if( data != null && !data.trim().equals(""))
+		    			{
+		    				item.addSubTitle(this.endPunctuationStripper(data.trim()), null);
+		    			}
+		    		}
+		    	}
 		    }
 		    else if( tag.equals("260"))
 		    {
@@ -188,7 +213,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    		}
 		        }
 		    }
-		    else if( tag.equals("500")  || tag.equals("502") )
+		    else if( tag.equals("500") || tag.equals("502") || tag.equals("505") )
 		    {
 		    	addDescription(field, item);
 		    }
@@ -221,7 +246,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		if( cf != null )
 		{
 		    String data = cf.getData();
-		    if( data.length() > 25 )
+		    if( data != null && data.length() > 25 )
 		    {
 		    	char marker = data.charAt(24);
 		    	log.debug("thesis marker = " + marker);
@@ -304,14 +329,16 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 */
 	private void addSubTitle(DataField field, GenericItem item)
 	{
+		log.debug("add subtitle ");
 		String data = null;
 		
 		if( field.getSubfield('a') != null ) 
 		{
 			data = field.getSubfield('a').getData();
+			log.debug("adding sub title " + data);
 			if(  data != null && !data.trim().equals(""))
 			{
-				item.addSubTitle(data, null);
+				item.addSubTitle(this.endPunctuationStripper(data), null);
 			}
 		}
 	}
@@ -351,7 +378,14 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 			data = field.getSubfield('a').getData();
 			if(  data != null && !data.trim().equals(""))
 			{
-				item.setDescription(data);
+				if( item.getDescription() == null )
+				{
+				    item.setDescription(data);
+				}
+				else
+				{
+					item.setDescription(item.getDescription() + " " + data);
+				}
 			}
 		}
 	}
@@ -369,7 +403,11 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		String data = null;
 		if( field.getSubfield('a') != null )
 		{
-			data = endPunctuationStripper(field.getSubfield('a').getData().trim());
+			data = field.getSubfield('a').getData();
+			if( data != null && !data.trim().equals(""))
+			{
+			    data = endPunctuationStripper(data.trim());
+			}
 		}
 		return data;
 	}
@@ -414,7 +452,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	            for(ExtentTypeSubFieldMapper mapper : extentMappers)
 	            {
 	                ExtentType extentType = mapper.getExtentType();
-	                item.addItemExtent(extentType, fixExtentTypeData(data));
+	                item.addItemExtent(extentType, endPunctuationStripper(data) );
 	            }
 	        }
         }
@@ -440,12 +478,15 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 						
 		    if( field.getSubfield('d') != null)
 			{
-				splitBirthDeathYears(field.getSubfield('d').getData(), authority);
+		    	if( field.getSubfield('d').getData() != null )
+		    	{
+				    splitBirthDeathYears(field.getSubfield('d').getData(), authority);
+		    	}
 				log.debug("Person name authority = " + authority);
 			}
 		    
 		    
-		    if( field.getSubfield('4') != null )
+		    if( field.getSubfield('4') != null && field.getSubfield('4').getData() != null )
 		    {
 		    	List<MarcContributorTypeRelatorCode> marcContributorTypes = marcContributorTypeRelatorCodeService.getByRelatorCode(field.getSubfield('4').getData());
 		        if( marcContributorTypes.size() > 0 )
@@ -532,7 +573,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		ExternalPublishedItem externalPublishedItem = new ExternalPublishedItem();
 		Subfield subfield = field.getSubfield('a');
 		boolean add = false;
-		if( subfield != null )
+		if( subfield != null && subfield.getData() != null )
 		{
 			String place = endPunctuationStripper(subfield.getData());
 			log.debug("placeOfPublication = " + place);
@@ -547,7 +588,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 			add = true;
 		}
 		subfield = field.getSubfield('b');
-		if( subfield != null )
+		if( subfield != null && subfield.getData() != null)
 		{
 			String pub = endPunctuationStripper(subfield.getData());
 			log.debug("publisher = " + pub );
@@ -564,7 +605,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		}
 		
 		subfield = field.getSubfield('c');
-		if( subfield != null )
+		if( subfield != null && subfield.getData() != null)
 		{
 			String pubDate = this.endPunctuationStripper(subfield.getData());
 			log.debug("Date of publication = " + pubDate);
@@ -582,24 +623,6 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		}
 	}
 	
-	
-	
-	public String fixExtentTypeData(String data)
-	{
-		String value = data;
-		// deals with format: text ( content ) text
-		int index = value.indexOf(')');
-		if( index != -1)
-		{
-		   if( value.indexOf('(') < index  && value.indexOf('(') != -1)
-		   {
-			   int beginIndex =  value.indexOf('(') + 1;
-			   value = value.substring(beginIndex, index).trim();
-		   }
-		}
-		return value;
-		
-	}
 	
 	/**
 	 * Strip off ending punctuation
@@ -672,7 +695,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 			}
 			else
 			{
-				personName.setForename(fullNameParts[1]);
+				personName.setForename(fullNameParts[1].trim());
 			}
 		}
 		else 
@@ -893,11 +916,30 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		
 		if(date != null && !date.trim().equals(""))
 		{
-			date = date.trim();
+			    date = this.endPunctuationStripper(date.trim());
 
+			    log.debug("date lenght = " + date.length());
 		    	// assume year only ex. 1999
+			    // or 199-
 		    	if( date.length() == 4 )
 		    	{
+		    		 date.replaceAll("-", "0");
+		    		 publishedDate = new PublishedDate();
+		    		 try
+		    		 {
+		    		     publishedDate.setYear(new Integer(date));
+		    		 }
+		    		 catch(NumberFormatException nfe)
+		    		 {
+		    			 publishedDate = null;
+		    			 log.error("could not create year for date " + date, nfe);
+		    		 }
+		    	}
+		    	// assume year with circa ex. c1999
+		    	else if( date.length() == 5 )
+		    	{
+		    		 date = date.replace('c', ' ').trim();
+		    		 log.debug("date updated to " + date);
 		    		 publishedDate = new PublishedDate();
 		    		 try
 		    		 {
