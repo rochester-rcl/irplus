@@ -48,7 +48,10 @@
 		                        ${subscription.id}
 	                        </urstb:td>
 	                        <urstb:td>
-		                         ${subscription.institutionalCollection.name}
+	                             <c:url var="collectionUrl" value="viewInstitutionalCollection.action">
+	                                 <c:param name="collectionId" value="${subscription.institutionalCollection.id}"/>
+	                             </c:url> 
+		                         <a href="${collectionUrl}">${subscription.institutionalCollection.name}</a>
 	                        </urstb:td>
 					        <urstb:td>
 					            <a href="javascript:YAHOO.ur.email.unsubscribe('${subscription.user.id}', '${subscription.institutionalCollection.id}')">Unsubscribe</a>
