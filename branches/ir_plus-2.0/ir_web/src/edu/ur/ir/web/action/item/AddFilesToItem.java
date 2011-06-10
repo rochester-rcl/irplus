@@ -33,7 +33,6 @@ import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.index.IndexProcessingTypeService;
-import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.GenericItem;
