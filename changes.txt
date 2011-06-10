@@ -1,3 +1,23 @@
+IR+ 2.0.8 to 2.1
+==========================
+- Added MARC import/export
+- Fixed IE issue when editing a publication 
+  - Add/Create/Remove Series Button
+  - Add/Create/Remove sub title Button
+
+- Fixed issue with CSS on images with multiple classes (removed comma)
+- Fixed issue where moving files and folders on institutional publication then
+  selecting finish later took user to workspace rather than publication
+  
+- Moved editing buttons on institutional publication to top of page - were hidden before
+- Fixed deleting multiple files and folders within a sub folder - would fail before on personal workspace
+- Fixed deleting multiple files and folders within a sub folder - would fail before on researcher workspace
+
+- Separated place of publication from publisher
+- Added rss feed not found when no contributor id is passed in
+- Added contributor not found when no contributor id is padded in
+
+
 IR+ 2.0.7 to 2.0.8
 ==========================
 - Updated almost all images to use css rather than hard coded sizes
