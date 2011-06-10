@@ -501,7 +501,11 @@
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
                 <interceptor-ref name="editStack"/>
              <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+            <result name="success"  type="redirectAction"> 
+                <param name="actionName">getSelectedFiles</param> 
+                <param name="genericItemId">${genericItemId}</param>
+                <param name="institutionalItemId">${institutionalItemId}</param>
+            </result>
         </action>
         
         <!--  Action to move the file up-->
@@ -510,7 +514,11 @@
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+            <result name="success"  type="redirectAction"> 
+                <param name="actionName">getSelectedFiles</param> 
+                <param name="genericItemId">${genericItemId}</param>
+                <param name="institutionalItemId">${institutionalItemId}</param>
+            </result>
         </action>
         
         <!--  Edit item -->
@@ -963,7 +971,12 @@
             class="edu.ur.ir.web.action.item.AddItemLink">
             <interceptor-ref name="crudStack" />
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+            <result name="success"  type="redirectAction"> 
+                <param name="actionName">getSelectedFiles</param> 
+                <param name="genericItemId">${genericItemId}</param>
+                <param name="institutionalItemId">${institutionalItemId}</param>
+            </result>
+           
         </action>
         
         <action name="updateItemLink"
@@ -971,7 +984,11 @@
             class="edu.ur.ir.web.action.item.AddItemLink">
             <interceptor-ref name="crudStack" />
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+            <result name="success"  type="redirectAction"> 
+                <param name="actionName">getSelectedFiles</param> 
+                <param name="genericItemId">${genericItemId}</param>
+                <param name="institutionalItemId">${institutionalItemId}</param>
+            </result>
         </action>
         
         <!--  ************************************ -->
