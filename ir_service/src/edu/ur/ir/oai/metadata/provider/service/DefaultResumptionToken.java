@@ -76,6 +76,11 @@ public class DefaultResumptionToken implements ResumptionToken
 	
 	/** size of the list */
 	private Integer completeListSize = null;
+	
+	// indicates this is the inital request
+	private boolean initialRequest = true;
+
+
 
 
 
@@ -336,6 +341,24 @@ public class DefaultResumptionToken implements ResumptionToken
 			}
 		}
 	
+	}
+	
+	/**
+	 * Determine if this is the initial request.
+	 * 
+	 * @return true if it is the initial request.
+	 */
+	public boolean isInitialRequest() {
+		return initialRequest;
+	}
+
+	/**
+	 * Set the initial request.
+	 * 
+	 * @param initialRequest
+	 */
+	public void setInitialRequest(boolean initialRequest) {
+		this.initialRequest = initialRequest;
 	}
 	
 	public void checkFromUntilDates() throws BadArgumentException

@@ -133,7 +133,11 @@ public class DefaultMarcExportService implements MarcExportService{
 			year = dateFormat.format(version.getDateOfDeposit());
 		}
         
-        ContentType contentType = item.getPrimaryItemContentType().getContentType();
+        ContentType contentType = null;
+        if( item.getPrimaryItemContentType() != null  )
+        {
+            contentType = item.getPrimaryItemContentType().getContentType();
+        }
         MarcContentTypeFieldMapper mapper = null;
         if( contentType != null )
         {
