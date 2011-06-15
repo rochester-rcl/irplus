@@ -53,10 +53,12 @@
            <list>
                 <value>jpg</value>
                 <value>tiff</value>
+                <value>tif</value>
                 <value>jpeg</value>
                 <value>png</value>
                 <value>gif</value>
                 <value>bmp</value>
+                <value>pdf</value>
            </list>
       </property>
    </bean>
