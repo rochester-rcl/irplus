@@ -63,6 +63,17 @@
 		</attribute>
 
 	</tag>
+	
+	<tag>
+		<name>fileDownloadTag</name>
+		<tag-class>edu.ur.tag.repository.FileDownloadTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>extension</name>
+			<rtexprvalue>true</rtexprvalue>
+			<required>true</required>
+		</attribute>
+	</tag>
 
 	<tag>
 		<name>authorName</name>
