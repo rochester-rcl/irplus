@@ -46,4 +46,18 @@
    <bean id="securityUtilFunctions" class="edu.ur.tag.repository.SecurityUtilFunctions">
        <property name="securityService" ref="securityService"/>
    </bean>   
+   
+   <!-- helps determine which files can be downloaded through the browser -->
+   <bean id="webBrowserFileViewerHelper" class="edu.ur.ir.web.util.WebBrowserFileViewerHelper">
+      <property name="browserFileTypes">
+           <list>
+                <value>jpg</value>
+                <value>tiff</value>
+                <value>jpeg</value>
+                <value>png</value>
+                <value>gif</value>
+                <value>bmp</value>
+           </list>
+      </property>
+   </bean>
 </beans>

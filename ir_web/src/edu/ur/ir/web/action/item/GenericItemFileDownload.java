@@ -35,6 +35,7 @@ import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.UserService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.util.WebBrowserFileViewerHelper;
 import edu.ur.ir.web.util.WebIoUtils;
 
 /**
@@ -79,7 +80,20 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
 	/** User service */
 	private UserService userService; 
 	
+	/** file types that can be opened by the browser */
+	private WebBrowserFileViewerHelper webBrowserFileViewerHelper;
 	
+	
+	/**
+	 * Set the web frowser file viewer helper.
+	 * 
+	 * @param webBrowserFileViewerHelper
+	 */
+	public void setWebBrowserFileViewerHelper(
+			WebBrowserFileViewerHelper webBrowserFileViewerHelper) {
+		this.webBrowserFileViewerHelper = webBrowserFileViewerHelper;
+	}
+
 	/** Item file security service */
 	private ItemFileSecurityService itemFileSecurityService; 
 	
@@ -202,7 +216,14 @@ public class GenericItemFileDownload extends ActionSupport implements ServletRes
     private void downloadFile(ItemFile itemFile) throws Exception {
         String fileName = itemFile.getIrFile().getName();
         FileInfo fileInfo =  itemFile.getIrFile().getFileInfo();
-        webIoUtils.StreamFileInfo(fileName, fileInfo, response, request, (1024*4), false, true);
+        
+        boolean forceDownload = true;
+        
+        if( webBrowserFileViewerHelper.canShowFileTypeInBrowser(fileInfo.getExtension()) )
+        {
+            forceDownload = false;	
+        }
+        webIoUtils.StreamFileInfo(fileName, fileInfo, response, request, (1024*4), false, forceDownload);
         
     }
     

@@ -331,17 +331,11 @@ public class WebIoUtils {
        
 	}
 
-	public MimeTypeService getMimeTypeService() {
-		return mimeTypeService;
-	}
 
 	public void setMimeTypeService(MimeTypeService mimeTypeService) {
 		this.mimeTypeService = mimeTypeService;
 	}
 
-	public ResponseBufferedOutputWriter getResponseOutputWriter() {
-		return responseOutputWriter;
-	}
 
 	public void setResponseOutputWriter(
 			ResponseBufferedOutputWriter responseOutputWriter) {
