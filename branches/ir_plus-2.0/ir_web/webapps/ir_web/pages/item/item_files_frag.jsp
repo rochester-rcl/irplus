@@ -65,7 +65,7 @@
 				    <c:param name="itemId" value="${item.id}"/>
 					<c:param name="itemFileId" value="${object.id}"/>
 				 </c:url>
-		         <a href="${previewItemFileDownloadUrl}" <ir:fileDownloadTag extension="${object.irFile.extension}"/> >${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/>
+		         <a href="${previewItemFileDownloadUrl}" <ir:fileDownloadTag extension="${object.irFile.fileInfo.extension}"/> >${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/>
 		    </c:if>
 		    <c:if test='${param.isResearcherView}'>
 					<c:url var="itemFileDownload" value="/downloadResearcherPublicationFile.action">
