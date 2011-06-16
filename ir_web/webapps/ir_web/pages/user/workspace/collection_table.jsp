@@ -129,7 +129,7 @@
                     <urstb:td> Version </urstb:td>
                     <urstb:td> Properties </urstb:td>
                     <urstb:td> Submit </urstb:td>
-                    <urstb:td> Current Version Published </urstb:td>
+                    <urstb:td> Version Published </urstb:td>
                 </urstb:tr>
             </urstb:thead>
             <urstb:tbody
@@ -175,11 +175,11 @@
                         <urstb:td>
                             <c:if test="${fileSystemObject.fileSystemType.type == 'personalCollection'}">
 	                            <a href="javascript:YAHOO.ur.personal.collection.getCollectionById('${fileSystemObject.id}')">${fileSystemObject.name}</a>
-	                            <c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.description}"/></div></c:if>
+	                            <c:if test="${fileSystemObject.description != '' && fileSystemObject.description != null}"><div class="smallText">Description: <ur:maxText numChars="80" text="${fileSystemObject.description}"/></div></c:if>
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalItem'}">
 	                        	<c:if test="${fileSystemObject.versionedItem.currentVersion.item.locked == 'false'}">
-	                            	<a href="JAVASCRIPT:YAHOO.ur.personal.collection.editPublication('${fileSystemObject.id}', '${fileSystemObject.versionedItem.currentVersion.item.id}', '${fileSystemObject.personalCollection.id}', '${fileSystemObject.versionedItem.currentVersion.item.publishedToSystem}');">${fileSystemObject.name}</a>
+	                            	<a href="JAVASCRIPT:YAHOO.ur.personal.collection.editPublication('${fileSystemObject.id}', '${fileSystemObject.versionedItem.currentVersion.item.id}', '${fileSystemObject.personalCollection.id}', '${fileSystemObject.versionedItem.currentVersion.item.publishedToSystem}');"><ur:maxText numChars="80" text="${fileSystemObject.name}"/></a>
 	                                <c:if test="${fileSystemObject.versionedItem.currentVersion.item.description != '' && fileSystemObject.versionedItem.currentVersion.item.description != null}"><div class="smallText">Description: <ur:maxText numChars="50" text="${fileSystemObject.versionedItem.currentVersion.item.description}"/></div></c:if>
 	                            </c:if>
 	                        	<c:if test="${fileSystemObject.versionedItem.currentVersion.item.locked == 'true'}">
