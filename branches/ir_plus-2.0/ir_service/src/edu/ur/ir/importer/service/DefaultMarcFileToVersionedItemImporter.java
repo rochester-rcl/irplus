@@ -51,6 +51,8 @@ import edu.ur.ir.item.PlaceOfPublicationService;
 import edu.ur.ir.item.PublishedDate;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.PublisherService;
+import edu.ur.ir.item.Series;
+import edu.ur.ir.item.SeriesService;
 import edu.ur.ir.item.VersionedItem;
 import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapper;
 import edu.ur.ir.item.metadata.marc.ExtentTypeSubFieldMapperService;
@@ -124,8 +126,9 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	
 	// deal with language information
 	private LanguageTypeService languageTypeService;
-
-
+	
+	// service to deal with series information
+	private SeriesService seriesService;
 
 
 	@SuppressWarnings("unchecked")
@@ -221,6 +224,10 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    {
 		    	addDescription(field, item);
 		    }
+		    else if( (tag.equals("490") && ind1 != '1') || tag.equals("830")  )
+		    {
+		    	addSeries(field, item);
+		    }
 		    else
 		    {
 		    	handleOtherTags(field, item);
@@ -233,6 +240,47 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		}
 		
 		return versionedItem;
+	}
+	
+	/**
+	 * Deal with the series information.
+	 * 
+	 * @param field
+	 * @param item
+	 */
+	private void addSeries(DataField field, GenericItem item)
+	{
+		log.debug("add series");
+		if( field.getSubfield('a') != null ) 
+		{
+			String data = field.getSubfield('a').getData();
+			data = this.endPunctuationStripper(data);
+			if( data != null && !data.trim().equals(""))
+			{
+				Series series = seriesService.getSeries(data);
+				log.debug("Found series " + series);
+				// create new series if not found
+				if( series == null )
+				{
+					log.debug("adding new series " + data);
+					series = new Series(data);
+					seriesService.saveSeries(series);
+				}
+				
+				// get the report number
+				String reportNumber = null;
+			    if( field.getSubfield('v') != null )
+			    {
+			    	 data = field.getSubfield('v').getData();
+			    	 if( data != null && !data.trim().equals(""))
+			    	 {
+			    		 reportNumber = data.trim();
+			    	 }
+			    }
+			    log.debug("report number = " + reportNumber);
+			    item.addReport(series, reportNumber);
+			}
+		}
 	}
 	
 	/**
@@ -281,6 +329,12 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		}
 	}
 	
+	/**
+	 * Sets the language based on the 3 digits in the 008 header.
+	 * 
+	 * @param record
+	 * @param item
+	 */
 	private void setLanguage(Record record, GenericItem item)
 	{
 		ControlField cf = (ControlField)record.getVariableField("008");
@@ -306,10 +360,10 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 
 	/**
 	 * Import the marc file into the personal collection
-	 * @throws FileNotFoundException 
-	 * @throws NoIndexFoundException 
-	 * @throws NoIndexFoundException 
-	 * @throws BadMarcFileException 
+	 * 
+	 * @throws FileNotFoundException - if file does not exist
+	 * @throws NoIndexFoundException  - if the index cannot be found
+	 * @throws BadMarcFileException - if the marc file cannot be parsed
 	 * 
 	 * @see edu.ur.ir.importer.MarcFileToVersionedItemImporter#importMarc(java.io.File, edu.ur.ir.user.PersonalCollection)
 	 */
@@ -327,6 +381,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	            versionedItems.add(createVersionedItem(record, owner));
 	        }
 		}
+		// deal with file format we cannot handle
 		catch(MarcException e)
 		{
 			throw new BadMarcFileException("The file could not be parsed " + e.getMessage());
@@ -456,8 +511,27 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	        String data = subfield.getData();
 	        log.debug("Subfield code: " + code + " Data element: " + data);
 	        
+	        
+	        
 	        if( data != null && !data.trim().equals(""))
 	        {
+	        	// handle 090 - 099 and 050 tags a little differently
+		        // if they are using the 'a' tag then append the subfield
+		        // b
+		        if(tag.matches("09[0-9]") || tag.equals("050"))
+		        {
+		        	if( code == 'a')
+		        	{
+		        		if(field.getSubfield('b') != null )
+		        		{
+		        			String cutter = field.getSubfield('b').getData();
+		        			if( cutter != null && !cutter.trim().equals(""))
+		        			{
+		        				data = data + cutter.trim();
+		        			}
+		        		}
+		        	}
+		        }
 	        	//handle identifier type mappings
 	            List<IdentifierTypeSubFieldMapper> identMappers = 
 	            	identifierTypeSubFieldMapperService.getByDataField(tag, 
@@ -465,6 +539,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	            log.debug("Found " + identMappers.size() + " identifer type mappers");
 	            for(IdentifierTypeSubFieldMapper mapper : identMappers )
 	            {
+	                        
 	        	    IdentifierType identType = mapper.getIdentifierType();
 	        	    item.addItemIdentifier(data, identType);
 	            }
@@ -552,7 +627,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	
 	
 	/**
-	 * Deal with the 245.
+	 * Deal with the 245. This is the title
 	 * 
 	 * @param marc 245 field
 	 */
@@ -577,8 +652,30 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 				    articlesEndPosition = value.intValue();
 			    }
 		    }
-		    title = subfield.getData().substring(articlesEndPosition).trim();
+		    
+		    if( subfield.getData() != null && !subfield.getData().trim().equals(""))
+		    {
+		        title = subfield.getData();
+		        if(title.length() > articlesEndPosition)
+		        {
+		        	title = title.substring(articlesEndPosition).trim();
+		        }
+		    }
+		    
+		    // append remainder of title
+		    Subfield subfieldRemainder = field.getSubfield('b');
+		    if( subfieldRemainder != null )
+		    {
+		    	String titleRemainder = subfieldRemainder.getData();
+		    	if( titleRemainder != null )
+		    	{
+		    		title = title + " " + titleRemainder.trim();
+		    	}
+		    }
+		    
+		    log.debug("Title before " + title);
 		    title = endPunctuationStripper(title);
+		    log.debug("title after " + title);
 		    articles = subfield.getData().substring(0, articlesEndPosition).trim();
 		    item.setName(title);
 		    item.setLeadingNameArticles(articles);
@@ -691,8 +788,12 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see edu.ur.dspace.load.AuthorNameSplitter#splitName(java.lang.String)
+	
+	/**
+	 * splits out the name as best it can to create a person name authority.
+	 * 
+	 * @param authorName
+	 * @return the person name authority created.
 	 */
 	private PersonNameAuthority splitName(String authorName) {
 		PersonName personName = new PersonName();
@@ -738,6 +839,12 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	}
 	
 	
+	/**
+	 * Split out the birth and death years if possible.
+	 * 
+	 * @param years
+	 * @param authority
+	 */
 	private void splitBirthDeathYears(String years, PersonNameAuthority authority)
 	{
 		log.debug("handle birth death year splitting " + years);
@@ -931,7 +1038,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	}
 	
 	/**
-	 * Get the published date for the dspace item.
+	 * Get the published date for the marc record
 	 * 
 	 * @param dspaceItem
 	 * @return
@@ -949,10 +1056,11 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 
 			    log.debug("date lenght = " + date.length());
 		    	// assume year only ex. 1999
-			    // or 199-
+			    // or 199- or 199?
 		    	if( date.length() == 4 )
 		    	{
-		    		 date.replaceAll("-", "0");
+		    		 date = date.replace('-', '0');
+		    		 date = date.replace('?', '0');
 		    		 publishedDate = new PublishedDate();
 		    		 try
 		    		 {
@@ -968,6 +1076,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    	else if( date.length() == 5 )
 		    	{
 		    		 date = date.replace('c', ' ').trim();
+		    		 date = date.replace('-', '0');
+		    		 date = date.replace('?', '0');
 		    		 log.debug("date updated to " + date);
 		    		 publishedDate = new PublishedDate();
 		    		 try
@@ -980,29 +1090,74 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    			 log.error("could not create year for date " + date, nfe);
 		    		 }
 		    	}
-		    	// assume year and month ex. 1985-03
+		    	// assume [1978] or [197-] or [197?]
+		    	else if (date.length() == 6)
+		    	{
+		    		date = date.replace('[', ' ');
+		    		date = date.replace(']', ' ');
+		    		date = date.replace('-', '0');
+		    		date = date.replace('?', '0');
+		    		date = date.trim();
+		    		try
+	    		    {
+	    		    	publishedDate = new PublishedDate();
+	    		        publishedDate.setYear(new Integer(date));
+	    		    }
+	    		    catch(NumberFormatException nfe)
+	    		    {
+	    			    publishedDate = null;
+	    			    log.error("could not create year for date " + date, nfe);
+	    		    }
+		    	}
+		    	
+		    	// assume year and month ex. 1985-03 or [188-?]
 		    	else if( date.length() == 7 )
 		    	{
-		    		String[] dateParts = date.split("-");
-		    		if(dateParts.length == 2)
+		    		// assume [188-?]
+		    		if(date.startsWith("["))
 		    		{
-		    			publishedDate = new PublishedDate();
-			    		 try
-			    		 {
-			    		     publishedDate.setYear(new Integer(dateParts[0]));
-			    		     publishedDate.setMonth(new Integer(dateParts[1]));
-			    		 }
-			    		 catch(NumberFormatException nfe)
-			    		 {
-			    			 publishedDate = null;
-			    			 log.error("could not create year for date " + date, nfe);
-			    		 }
+		    			date = date.replace('-', '0');
+		    			date = date.replace('[', ' ');
+		    			date = date.replace(']', ' ');
+		    			date = date.replace('?', ' ');
+		    			date = date.trim();
+		    			
+		    		    try
+		    		    {
+		    		    	publishedDate = new PublishedDate();
+		    		        publishedDate.setYear(new Integer(date));
+		    		    }
+		    		    catch(NumberFormatException nfe)
+		    		    {
+		    			    publishedDate = null;
+		    			    log.error("could not create year for date " + date, nfe);
+		    		    }
+		    			
 		    		}
 		    		else
 		    		{
-		    			 publishedDate = null;
-		    			log.error(" could not do 7 digit split on - for dspace date " + date);
-		    		}
+		    		    String[] dateParts = date.split("-");
+		    		    if(dateParts.length == 2)
+		    		    {
+			    		    try
+			    		    {
+			    		    	publishedDate = new PublishedDate();
+			    		        publishedDate.setYear(new Integer(dateParts[0]));
+			    		        publishedDate.setMonth(new Integer(dateParts[1]));
+			    		    }
+			    		    catch(NumberFormatException nfe)
+			    		    {
+			    			    publishedDate = null;
+			    			    log.error("could not create year for date " + date, nfe);
+			    		    }
+		    		    }
+		    		    else
+		    		    {
+		    			
+		    			     publishedDate = null;
+		    			     log.error(" could not do 7 digit split on - for dspace date " + date);
+		    		    }
+		    	    }
 		    	}
 		    	
 		    	// assume year month day ex. 1985-03-01
@@ -1128,6 +1283,15 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 */
 	public void setLanguageTypeService(LanguageTypeService languageTypeService) {
 		this.languageTypeService = languageTypeService;
+	}
+	
+	/**
+	 * Set the series.
+	 * 
+	 * @param seriesService
+	 */
+	public void setSeriesService(SeriesService seriesService) {
+		this.seriesService = seriesService;
 	}
 	
 

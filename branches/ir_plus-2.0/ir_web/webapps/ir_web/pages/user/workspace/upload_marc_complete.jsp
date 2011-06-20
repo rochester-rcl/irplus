@@ -139,6 +139,14 @@
  	                </td>
  	            </tr>
  	            <tr>
+ 	                <td>Series</td>
+ 	                <td>
+ 	                <c:forEach items="${item.currentVersion.item.itemReports}" var="report">
+ 	                     ${report.series.name}: ${report.reportNumber} <br/><br/> 
+ 	                </c:forEach>
+ 	                </td>
+ 	            </tr>
+ 	            <tr>
  	                <td>Extents</td>
  	                <td>
  	                <c:forEach items="${item.currentVersion.item.itemExtents}" var="extent">
