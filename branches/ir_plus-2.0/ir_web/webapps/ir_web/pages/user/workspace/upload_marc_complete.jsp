@@ -102,7 +102,7 @@
  	                <td>Contributors</td>
  	                <td>
  	                <c:forEach items="${item.currentVersion.item.contributors}" var="contrib">
- 	                     ${contrib.contributor.contributorType.name}: ${contrib.contributor.personName} <br/><br/> 
+ 	                     ${contrib.contributor.contributorType.name}: ${contrib.contributor.personName} Dates(${contrib.contributor.personName.personNameAuthority.birthDate.year} - ${contrib.contributor.personName.personNameAuthority.deathDate.year})<br/><br/> 
  	                </c:forEach>
  	                </td>
  	            </tr>
