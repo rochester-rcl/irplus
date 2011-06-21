@@ -16,11 +16,13 @@
 
 package edu.ur.hibernate.ir.item.db;
 
+import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.item.ExternalPublishedItem;
 import edu.ur.ir.item.ExternalPublishedItemDAO;
 
@@ -62,19 +64,56 @@ public class HbExternalPublishedItemDAO implements ExternalPublishedItemDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("sponsorCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("externalPublishedItemCount"));
 	}
 
+	/**
+	 * Get the extneral published item by id.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getById(java.lang.Long, boolean)
+	 */
 	public ExternalPublishedItem getById(Long id, boolean lock) {
 		return hbCrudDAO.getById(id, lock);
 	}
 
+	/**
+	 * Add the external published item to persistent storage.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makePersistent(java.lang.Object)
+	 */
 	public void makePersistent(ExternalPublishedItem entity) {
 		hbCrudDAO.makePersistent(entity);
 	}
 
+	/**
+	 * Remove the external published item from persistent storage.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#makeTransient(java.lang.Object)
+	 */
 	public void makeTransient(ExternalPublishedItem entity) {
 		hbCrudDAO.makeTransient(entity);
 	}
+	
+	/**
+	 * Get the count fo the publisher.
+	 * 
+	 * @see edu.ur.ir.item.ExternalPublishedItemDAO#getCountForPublisher(java.lang.Long)
+	 */
+	public Long getCountForPublisher(Long publisherId)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("externalPublishedItemCountByPublisher");
+		q.setParameter("publisherId", publisherId);
+		return (Long)q.uniqueResult();
+	}
+
+	/**
+	 * Get all publishers.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 }

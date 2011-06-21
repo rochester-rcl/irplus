@@ -885,6 +885,12 @@
 		    <required>false</required>
 		</attribute>
 		
+		<attribute>
+			<name>defaultSort</name>
+			<rtexprvalue>true</rtexprvalue>
+		    <required>false</required>
+		</attribute>
+		
 		<!--  Table specific attributes -->
 		<attribute>
 			<name>abbr</name>

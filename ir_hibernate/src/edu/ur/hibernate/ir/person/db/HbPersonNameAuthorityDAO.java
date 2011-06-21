@@ -18,10 +18,10 @@ package edu.ur.hibernate.ir.person.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.person.PersonNameAuthority;
 import edu.ur.ir.person.PersonNameAuthorityDAO;
 import edu.ur.order.OrderType;
@@ -33,9 +33,6 @@ import edu.ur.order.OrderType;
  *
  */
 public class HbPersonNameAuthorityDAO implements PersonNameAuthorityDAO{
-	
-	/** eclipse generated id */
-	private static final long serialVersionUID = -3472332062844173345L;
 	
 	/** Helper for persisting information using hibernate.*/
 	private final HbCrudDAO<PersonNameAuthority> hbCrudDAO;
@@ -64,8 +61,7 @@ public class HbPersonNameAuthorityDAO implements PersonNameAuthorityDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("personCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("personCount"));
 	}
 	
 	/**
@@ -96,6 +92,11 @@ public class HbPersonNameAuthorityDAO implements PersonNameAuthorityDAO{
 			return hbCrudDAO.getByQuery("getAllPersonNameAuthorityAsc", rowStart, maxResults);
 		}
 		
+	}
+	
+	
+	public List<PersonNameAuthority> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	public PersonNameAuthority getById(Long id, boolean lock) {

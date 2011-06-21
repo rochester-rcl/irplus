@@ -70,8 +70,7 @@ public class HbLanguageTypeDAO implements LanguageTypeDAO {
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("languageTypeCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("languageTypeCount"));
 	}
 
 	/**
@@ -160,5 +159,18 @@ public class HbLanguageTypeDAO implements LanguageTypeDAO {
 	public LanguageType getByUniqueSystemCode(String uniqueSystemCode) {
 		return (LanguageType) 
 	    HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("getLanguageTypeByUniqueSystemCode", uniqueSystemCode));
+	}
+	
+	/**
+	 * Get the language type by it's three letter code.  
+	 * 
+	 * @param value 3 letter code
+	 * @return the found language type otherwise null.
+	 */
+	public LanguageType getByIso639_2(String value)
+	{
+		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getLanguageTypeByIso639_2");
+		q.setParameter("value", value);
+		return (LanguageType)q.uniqueResult();
 	}
 }

@@ -119,7 +119,7 @@
 		                  <div class="clear">&nbsp;</div>
 
                           <c:import url="browse_researcher_pager.jsp"></c:import>
-						  <br/>
+						
 						<div class="dataTable">
 							                 
 					        <urstb:table width="100%">
@@ -153,8 +153,8 @@
                                             descendingSortAction="${sortDescLastNameUrl}">
                                             <a href="${href}">Name</a>                                              
                                             <urstb:thImgSort
-                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 										
 										
 										
@@ -177,19 +177,24 @@
                                                                 <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                                                 <c:param name="researcherId" value="${researcher.id}"/>
                                                             </c:url>
-                                                           <img height="66px" width="100px" src="${url}"/>
+                                                           <img class="basic_thumbnail" src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
 			                                         <c:if test="${!ir:hasThumbnail(researcher.primaryPicture) || !researcher.public}">
-	                                                      <img height="66px" width="100px" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
+	                                                      <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>
-						                            <c:url value="viewResearcherPage.action" var="viewResearcherPage">
-						                        	    <c:param name="researcherId" value="${researcher.id}"/>
-						                        	 </c:url>
-													<a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
-													<c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
+						                                <c:if test="${researcher.public}">
+						                        	        <c:url value="viewResearcherPage.action" var="viewResearcherPage">
+						                        	            <c:param name="researcherId" value="${researcher.id}"/>
+						                        	        </c:url>
+														    <a href="${viewResearcherPage}">${researcher.user.lastName},&nbsp;${researcher.user.firstName}</a><br>
+														    <c:if test="${researcher.researchInterest != '' && researcher.researchInterest != null}"><div class="smallText"><ur:maxText numChars="250" text="${researcher.researchInterest}"/></div></c:if>
+														</c:if>
+														<c:if test="${!researcher.public}">
+														${researcher.user.lastName},&nbsp;${researcher.user.firstName} (Private)
+													    </c:if>
 						                        </urstb:td>
 						                    </urstb:tr>
 						            </urstb:tbody>
@@ -251,7 +256,7 @@
 							                          <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 							                          <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 							                      </c:url>
-							                      <div class="hanging_indent"><a href="${departmentFilter}">${department.facetName}&nbsp;(${department.hits})</a></div>
+							                      <a href="${departmentFilter}">${department.facetName} (${department.hits}) </a><br/>
 							                   </c:if>
 							              </c:forEach>
 							          </ir:facet>
@@ -272,7 +277,7 @@
 							                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 							                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 							                     </c:url>
-							                    <div class="hanging_indent"><a href="${fieldFilter}">${field.facetName} (${field.hits})</a></div>
+							                     <a href="${fieldFilter}">${field.facetName} (${field.hits})</a> <br/>
 							               	 </c:if>
 							             </c:forEach>
 							        </ir:facet>	
@@ -293,7 +298,7 @@
 							                         <c:param name="facetDisplayNames" value="${facetDisplayNames}"/>	
 							                         <c:param name="query" value="${searchDataHelper.userQuery}"/> 					  
 							                     </c:url>
-							                     <div class="hanging_indent"><a href="${keywordFilter}">${keyword.facetName} (${keyword.hits})</a></div>
+							                     <a href="${keywordFilter}">${keyword.facetName} (${keyword.hits})</a> <br/>
 							               	 </c:if>
 							             </c:forEach>
 							        </ir:facet>								        						          
@@ -333,11 +338,11 @@
                                                                 <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                                                                  <c:param name="researcherId" value="${researcher.id}"/>
                                                             </c:url>
-                                                            <img height="66px" width="100px" src="${url}"/>
+                                                            <img class="basic_thumbnail" src="${url}"/>
                                                          </c:if>
 			                                         </c:if>    
 			                                         <c:if test="${researcher.primaryPicture == null || !researcher.public}">
-	                                                      <img height="66px" width="100px" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
+	                                                      <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
 			                                         </c:if>	
 						                        </urstb:td>
 						                        <urstb:td>

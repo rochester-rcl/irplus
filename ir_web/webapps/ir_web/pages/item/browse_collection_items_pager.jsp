@@ -21,7 +21,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 
-<div class="pager">
+<table class="pager">
+<tr> <td>
+
+
 	<ur:pager currentPageNumber="${currentPageNumber}" 
 	     startPageNumber="${startPageNumber}"  
 		 totalHits="${totalHits}"
@@ -135,6 +138,9 @@
 			</ur:lastPage>	
 				    
 	</ur:pager>	
-</div>
+
+</td> </tr>    
+</table>   
+
 				         
 				         

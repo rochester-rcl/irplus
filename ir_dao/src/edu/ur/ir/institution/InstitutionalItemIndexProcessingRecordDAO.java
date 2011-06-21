@@ -24,6 +24,7 @@ import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -40,26 +41,11 @@ public interface InstitutionalItemIndexProcessingRecordDAO
     extends CrudDAO<InstitutionalItemIndexProcessingRecord>, CountableDAO{
 	
 	/**
-	 * Get all institutional item indexing processing record ordered by updated date descending.
+	 * Get all institutional item indexing processing record ordered by item id and updated date.
 	 * 
-	 * @param rowStart - start position
-	 * @param maxResults - maximum number of results to get.
-	 *  
 	 * @return all institutional item index processing records or an empty list if none found
 	 */
-	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate(int rowStart,
-			int maxResults);
-	
-	/**
-	 * Get all institutional item index processing records for a given index processing type ordered
-	 * by updated date descending
-	 * 
-	 * @param processingTypeId - id of the processing type
-	 * 
-	 * @return list of records found
-	 */
-	public List<InstitutionalItemIndexProcessingRecord> getAllByProcessingTypeUpdatedDate(Long processingTypeId);
-
+	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate();
 	
 	/**
 	 * Get the processing record by item id and processing type.
@@ -133,6 +119,18 @@ public interface InstitutionalItemIndexProcessingRecordDAO
 	 * @return - number of items set for re-indexing
 	 */
 	public Long insertAllItemsForLanguageType(LanguageType languageType, IndexProcessingType processingType);
+	
+	/**
+	 * Sets all institutional items with a current item that has the specified place of publicaiton associated with it 
+	 * to be re-indexed based on the place of publication.
+	 * 
+	 * @param place of publication - the place of publication to be updated
+	 * @param processingType - type of indexing to be performed
+	 * 
+	 * @return - number of items set for re-indexing
+	 */
+	public Long insertAllItemsForPlaceOfPublication(PlaceOfPublication placeOfPublicaiton, IndexProcessingType processingType);
+	
 	
 	/**
 	 * Sets all institutional items with a current item that has the specified person name associated with it 

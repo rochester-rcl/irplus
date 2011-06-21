@@ -23,6 +23,7 @@ import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -41,22 +42,9 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
 	/**
 	 * Get all institutional item index processing records ordered by item id then processing date.
 	 * 
-	 * @param rowStart - start position
-	 * @param maxResults - maximum number of results
-	 * 
-	 * @return all index processing records ordered by updated date
+	 * @return
 	 */
-	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate(int rowStart, int maxResults);
-
-	/**
-	 * Get all institutional item index processing records for a given index processing type.
-	 * 
-	 * @param processingTypeId - id of the processing type
-	 * 
-	 * @return list of records found
-	 */
-	public List<InstitutionalItemIndexProcessingRecord> getAllByProcessingTypeUpdatedDate(Long processingTypeId);
-
+	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate();
 	
 	/**
      * Get a count of institutional item index processing records
@@ -88,6 +76,13 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
      */
     public void save(InstitutionalItemIndexProcessingRecord institutionalItemIndexProcessingRecord);
  
+	/**
+	 * Get all institutional item index processing records
+	 * 
+	 * @return List of all index processing types
+	 */
+	public List<InstitutionalItemIndexProcessingRecord> getAll();
+	
 	/**
 	 * Get the processing record by item id and processing type.
 	 * 
@@ -123,9 +118,8 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
      * Add all items within the repository to be processed.
      * 
      * @param processingType
-     * @param create - if true will insert a delete index processing record to re-create the index
      */
-    public void processItemsInRepository(IndexProcessingType processingType, boolean create);
+    public void processItemsInRepository(IndexProcessingType processingType);
     
 	/**
 	 * Insert all items for a content type to be re-indexed.
@@ -167,6 +161,16 @@ public interface InstitutionalItemIndexProcessingRecordService extends Serializa
 	 * @return number of institutional item versions to be re-indexed.
 	 */
 	public Long insertAllItemsForLangaugeType(LanguageType languageType, IndexProcessingType processingType);
+	
+	/**
+	 * Insert all items for a place of publication to be re-indexed.
+	 * 
+	 * @param placeOfPublication - the place of publication.
+	 * @param processingType - processing type 
+	 * 
+	 * @return number of institutional item versions to be re-indexed.
+	 */
+	public Long insertAllItemsForPlaceOfPublication(PlaceOfPublication placeOfPublcation, IndexProcessingType processingType);
 	
 	/**
 	 * Insert all items for a person name to be re-indexed.

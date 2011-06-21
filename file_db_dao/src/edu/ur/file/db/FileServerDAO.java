@@ -19,7 +19,6 @@ package edu.ur.file.db;
 
 import edu.ur.dao.CountableDAO;
 import edu.ur.dao.CrudDAO;
-import edu.ur.dao.ListAllDAO;
 import edu.ur.dao.NameListDAO;
 import edu.ur.dao.UniqueNameDAO;
 
@@ -31,6 +30,6 @@ import edu.ur.dao.UniqueNameDAO;
  *
  */
 public interface FileServerDAO extends CountableDAO, 
-CrudDAO<FileServer>, NameListDAO, UniqueNameDAO<FileServer>, ListAllDAO{
+CrudDAO<FileServer>, NameListDAO, UniqueNameDAO<FileServer>{
 
 }

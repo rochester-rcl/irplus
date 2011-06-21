@@ -51,7 +51,6 @@ import edu.ur.ir.oai.metadata.provider.ListRecordsService;
 import edu.ur.ir.oai.metadata.provider.ListSetsService;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataProvider;
 import edu.ur.ir.oai.metadata.provider.OaiMetadataServiceProvider;
-import edu.ur.ir.oai.metadata.provider.ResumptionToken;
 
 /**
  * Default implementation of the list identifiers service.
@@ -88,8 +87,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	/** service to deal with listing set information */
 	private ListSetsService listSetsService;
 
-	/** resumption token */
-	private DefaultResumptionToken resumptionToken;
+
 	
 	/**
 	 * List the identifiers for the system.
@@ -101,7 +99,9 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			throws BadResumptionTokenException,
 			CannotDisseminateFormatException, NoRecordsMatchException, BadArgumentException{
 		
-        boolean initialRequest = this.initilizeResumptionToken(metadataPrefix, set, from, until, strResumptionToken);
+		/** resumption token */
+		DefaultResumptionToken resumptionToken = this.initilizeResumptionToken(metadataPrefix, set, from, until, 
+        		strResumptionToken);
  		
         log.debug("resumption token = " + resumptionToken);
         if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
@@ -109,8 +109,8 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
 		}
 
-		int completeListSize = getCompleteListSize();
-		if( initialRequest && completeListSize <= 0)
+		int completeListSize = getCompleteListSize(resumptionToken);
+		if( resumptionToken.isInitialRequest() && completeListSize <= 0)
 		{
 			throw new NoRecordsMatchException("No records found for request");
 		}
@@ -137,20 +137,18 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 
 		if(!resumptionToken.getDeleted())
 		{
-			List<InstitutionalItemVersion> versions = getVersions();
-		    addIdentifiers(versions, doc);
+			List<InstitutionalItemVersion> versions = getVersions(resumptionToken);
+		    addIdentifiers(versions, doc, resumptionToken);
 		    resumptionToken.setCompleteListSize(completeListSize);
 		}
-		
-		
-		if( resumptionToken.getDeleted() )
+		else if( resumptionToken.getDeleted() )
 		{
-			List<DeletedInstitutionalItemVersion> deletedVersions = getDeletedVersions();
-		    addDeletedIdentifiers(deletedVersions, doc);
+			List<DeletedInstitutionalItemVersion> deletedVersions = getDeletedVersions(resumptionToken);
+		    addDeletedIdentifiers(deletedVersions, doc, resumptionToken);
 		    resumptionToken.setCompleteListSize(completeListSize);
 		}
 		 
-		 addResumptionToken(doc);
+		 addResumptionToken(doc, resumptionToken);
 		 
 		 // do not output the headers
 		 Element root = doc.getDocumentElement();
@@ -165,14 +163,11 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	 * @param metadataPrefix
 	 * @return
 	 */
-	private void addIdentifiers(List<InstitutionalItemVersion> versions, Document doc )
+	private void addIdentifiers(List<InstitutionalItemVersion> versions, Document doc, DefaultResumptionToken resumptionToken )
 	{
-		 Long lastId = -1l;
 		 Element root = doc.getDocumentElement();		 
 		 for(InstitutionalItemVersion version : versions)
 		 {
-			 lastId = version.getId();
-			 
 			 // create the header element of the record 
 			 Element header = doc.createElement("header");
 			 root.appendChild(header);
@@ -202,7 +197,6 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			 setSpec.appendChild(data);
 			 header.appendChild(setSpec);
 		 }
-		 resumptionToken.setLastId(lastId);
 	}
 	
 	/**
@@ -211,14 +205,11 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	 * @param metadataPrefix
 	 * @return
 	 */
-	private void addDeletedIdentifiers(List<DeletedInstitutionalItemVersion> deletedVersions, Document doc )
+	private void addDeletedIdentifiers(List<DeletedInstitutionalItemVersion> deletedVersions, Document doc, DefaultResumptionToken resumptionToken )
 	{
-		 Long lastId = -1l;
 		 Element root = doc.getDocumentElement();		 
 		 for(DeletedInstitutionalItemVersion version : deletedVersions)
 		 {
-			 lastId = version.getId();
-			 
 			 // create the header element of the record 
 			 Element header = doc.createElement("header");
 			 header.setAttribute("status", "deleted");
@@ -252,7 +243,6 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			     }
 			 }
 		 }
-		 resumptionToken.setLastId(lastId);
 	}
 	
 	/**
@@ -260,7 +250,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	 * 
 	 * @param doc
 	 */
-	private void addResumptionToken(Document doc )
+	private void addResumptionToken(Document doc, DefaultResumptionToken resumptionToken )
 	{
 		 Element root = doc.getDocumentElement();	
 		// create the header element of the record 
@@ -327,9 +317,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		this.institutionalCollectionService = institutionalCollectionService;
 	}
 	
-	public ResumptionToken getResumptionToken() {
-		return resumptionToken;
-	}
+
 	
 	public ListSetsService getListSetsService() {
 		return listSetsService;
@@ -345,7 +333,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	 * 
 	 * @return
 	 */
-	private int getCompleteListSize()
+	private int getCompleteListSize(DefaultResumptionToken resumptionToken)
 	{
 		int completeListSize = 0;
 		if( resumptionToken.getSet() == null)
@@ -418,7 +406,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	 * 
 	 * @return - list of institutional item versions
 	 */
-	private List<InstitutionalItemVersion> getVersions()
+	private List<InstitutionalItemVersion> getVersions(DefaultResumptionToken resumptionToken)
 	{
 		List<InstitutionalItemVersion> versions = new LinkedList<InstitutionalItemVersion>();
 	    // do batch size plus one - if we retrieve all records then another request must be issued
@@ -472,7 +460,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		}
 		
 	    int size = versions.size();
-		   
+		 
 	    // we will need to send resumption token
 	    if( size == (batchSize + 1))
 	    {
@@ -482,10 +470,12 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 		    versions.remove(size - 1);
 		    resumptionToken.setDeleted(Boolean.FALSE);
 		    resumptionToken.setInsertToken(Boolean.TRUE);
+		    resumptionToken.setLastId(versions.get(versions.size()-1).getId());
 	    }
 	    else 
 	    {
 	    	resumptionToken.setDeleted(Boolean.TRUE);
+	    	resumptionToken.setInsertToken(Boolean.TRUE);
 	    	resumptionToken.setLastId(0l);
 	    }
 	    return versions;
@@ -496,7 +486,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	 * 
 	 * @return list of deleted versions
 	 */
-	private List<DeletedInstitutionalItemVersion> getDeletedVersions()
+	private List<DeletedInstitutionalItemVersion> getDeletedVersions(DefaultResumptionToken resumptionToken)
 	{
 		List<DeletedInstitutionalItemVersion> deletedVersions = new LinkedList<DeletedInstitutionalItemVersion>();
 	    // do batch size plus one - if we retrieve all records then another request must be issued
@@ -561,6 +551,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	    	deletedVersions.remove(size - 1);
 		    resumptionToken.setDeleted(Boolean.TRUE);
 		    resumptionToken.setInsertToken(Boolean.TRUE);
+		    resumptionToken.setLastId(deletedVersions.get(deletedVersions.size()-1).getId());
 	    }
 	    else
 	    {
@@ -581,16 +572,16 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			String until, String strResumptionToken) throws BadArgumentException,
 			BadResumptionTokenException, CannotDisseminateFormatException,
 			NoRecordsMatchException, NoSetHierarchyException {
-		
-	       boolean initialRequest = this.initilizeResumptionToken(metadataPrefix, set, from, until, strResumptionToken);
+		   DefaultResumptionToken resumptionToken  = this.initilizeResumptionToken(metadataPrefix, set, from, 
+				   until, strResumptionToken);
 	       log.debug("resumption token = " + resumptionToken);
 	       if( !oaiMetadataServiceProvider.supports(resumptionToken.getMetadataPrefix()) )
 			{
 				throw new CannotDisseminateFormatException("Format: " + resumptionToken.getMetadataPrefix() + " is not supported");
 			}
 
-			int completeListSize = getCompleteListSize();
-			if( initialRequest && completeListSize <= 0)
+			int completeListSize = getCompleteListSize(resumptionToken);
+			if( resumptionToken.isInitialRequest() && completeListSize <= 0)
 			{
 				throw new NoRecordsMatchException("No records found for request");
 			}
@@ -615,19 +606,18 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 
 		if(!resumptionToken.getDeleted())
 		{
-			List<InstitutionalItemVersion> versions = getVersions();
-		    addRecords(versions, doc, oaiMetadataServiceProvider.getProvider(resumptionToken.getMetadataPrefix()));
+			List<InstitutionalItemVersion> versions = getVersions(resumptionToken);
+		    addRecords(versions, doc, oaiMetadataServiceProvider.getProvider(resumptionToken.getMetadataPrefix()), resumptionToken);
 		    resumptionToken.setCompleteListSize(completeListSize);
 		}
-		
-		if( resumptionToken.getDeleted() )
+		else if( resumptionToken.getDeleted() )
 		{
-			List<DeletedInstitutionalItemVersion> versions = getDeletedVersions();
-		    addDeletedRecords(versions, doc, oaiMetadataServiceProvider.getProvider(resumptionToken.getMetadataPrefix()));
+			List<DeletedInstitutionalItemVersion> versions = getDeletedVersions(resumptionToken);
+		    addDeletedRecords(versions, doc, oaiMetadataServiceProvider.getProvider(resumptionToken.getMetadataPrefix()), resumptionToken);
 		    resumptionToken.setCompleteListSize(completeListSize);
 		}
 		 
-		 addResumptionToken(doc);
+		 addResumptionToken(doc, resumptionToken);
 		 
 		 // do not output the headers
 		 Element root = doc.getDocumentElement();
@@ -643,18 +633,18 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	 * @param metadataPrefix
 	 * @return the last id processed
 	 */
-	private void addRecords(List<InstitutionalItemVersion> versions, Document doc, OaiMetadataProvider metadataProvider )
+	private void addRecords(List<InstitutionalItemVersion> versions, Document doc, 
+			OaiMetadataProvider metadataProvider, 
+			DefaultResumptionToken resumptionToken )
 	{
-		 Long lastId = -1l;
 		 Element root = doc.getDocumentElement();	
 		 for(InstitutionalItemVersion version : versions)
 		 {
 			 Element record = doc.createElement("record");
 			 root.appendChild(record);
-			 lastId = version.getId();
 			 metadataProvider.addXml(record, version);
 		 }
-		 resumptionToken.setLastId(lastId);
+		 
 	}
 	
 	/**
@@ -665,18 +655,16 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	 * @param metadataProvider
 	 * @return
 	 */
-	private void addDeletedRecords(List<DeletedInstitutionalItemVersion> versions, Document doc, OaiMetadataProvider metadataProvider)
+	private void addDeletedRecords(List<DeletedInstitutionalItemVersion> versions, Document doc, 
+			OaiMetadataProvider metadataProvider, DefaultResumptionToken resumptionToken)
 	{
-		 Long lastId = -1l;
 		 Element root = doc.getDocumentElement();	
 		 for(DeletedInstitutionalItemVersion version : versions)
 		 {
 			 Element record = doc.createElement("record");
 			 root.appendChild(record);
-			 lastId = version.getId();
 			 metadataProvider.addXml(record, version);
 		 }
-		 resumptionToken.setLastId(lastId);
 	}
 
 	public DeletedInstitutionalItemVersionService getDeletedInstitutionalItemVersionService() {
@@ -702,19 +690,20 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 	 * @throws BadArgumentException
 	 * @throws BadResumptionTokenException
 	 */
-	private boolean initilizeResumptionToken(String metadataPrefix, String set,
+	private DefaultResumptionToken initilizeResumptionToken(String metadataPrefix, String set,
 			String from, String until, String strResumptionToken) throws BadArgumentException, BadResumptionTokenException
 	{
 		boolean initialRequest = false;
-		
+		DefaultResumptionToken resumptionToken = null;
 		// parse the token if it exists
 		if(strResumptionToken != null && !strResumptionToken.equals(""))
 		{
 			resumptionToken = new DefaultResumptionToken(strResumptionToken);
+			resumptionToken.setInitialRequest(initialRequest);
 		}
 		else
 		{
-			initialRequest = true;
+			
 			resumptionToken = new DefaultResumptionToken();
 			
 			resumptionToken.setBatchSize(batchSize);
@@ -749,7 +738,7 @@ public class DefaultListIdentifiersService implements ListIdentifiersService, Li
 			throw new BadArgumentException("missing metadata prefix");
 		}
 		
-		return initialRequest;
+		return resumptionToken;
 	}
 
   

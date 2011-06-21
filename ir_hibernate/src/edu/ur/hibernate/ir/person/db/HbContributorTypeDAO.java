@@ -40,9 +40,6 @@ import edu.ur.ir.person.ContributorTypeDAO;
  */
 public class HbContributorTypeDAO implements ContributorTypeDAO {
 	
-	/* eclipse generated id */
-	private static final long serialVersionUID = 8813243420440799249L;
-
 	/**
 	 * Helper for persisting information using hibernate. 
 	 */

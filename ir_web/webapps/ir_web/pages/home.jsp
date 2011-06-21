@@ -96,7 +96,7 @@
                        <div class="contentBoxContent">
                            <c:url var="searchRepositoryItems" value="/searchRepositoryItems.action"/>
                            <form method="get" action="${searchRepositoryItems}">
-                                <p>Search: <input type="text" name="query" id="search" size="50" />
+                                <p>Search: <input type="text" name="query" size="50"/>
                                  <br/>
                                  <br/>
                                     <button type="submit" class="ur_button" 
@@ -135,7 +135,7 @@
                                                     <c:param name="collectionId" value="${institutionalCollection.id}"/>
                                                     <c:param name="irFileId" value="${institutionalCollection.primaryPicture.id}"/>
                                                 </c:url>
-                                                <img height="66px" width="100px" src="${url}"/>
+                                                <img class="basic_thumbnail" src="${url}"/>
                                             </c:if>
                                         </td>
                                         <td>
@@ -168,7 +168,7 @@
                         </div>
                      </c:if>
                     
-                     <c:if test="${numRepositoryPictures > 1}">
+                     <c:if test="${numRepositoryPictures >= 1}">
                      <div class="contentContainer">
                         <div class="contentBoxTitle">
                             <p>Images</p>

@@ -33,7 +33,6 @@ import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.file.FileVersion;
 import edu.ur.ir.file.VersionedFile;
 import edu.ur.ir.index.IndexProcessingTypeService;
-import edu.ur.ir.institution.InstitutionalItem;
 import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.institution.InstitutionalItemVersionService;
 import edu.ur.ir.item.GenericItem;
@@ -52,6 +51,7 @@ import edu.ur.ir.user.UserService;
 import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.UserWorkspaceIndexProcessingRecordService;
 import edu.ur.ir.web.action.UserIdAware;
+import edu.ur.ir.web.action.user.FileSystemSortHelper;
 import edu.ur.order.AscendingOrderComparator;
 
 /**
@@ -106,7 +106,7 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	
 	/** A collection of folders and files for a user in a given location of
     their personal directory.*/
-	private Collection<FileSystem> fileSystem;
+	private List<FileSystem> fileSystem;
 	
 	/** set of folders that are the path for the current folder */
 	private Collection <PersonalFolder> folderPath;
@@ -194,6 +194,8 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	    	fileSystem.add(o);
 	    }
 	    
+	    FileSystemSortHelper sortHelper = new FileSystemSortHelper();
+	    sortHelper.sort(fileSystem, FileSystemSortHelper.TYPE_DESC);
 	    return SUCCESS;
 	    
 	}
@@ -549,9 +551,9 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	/**
 	 * Set the user id.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -589,15 +591,6 @@ public class AddFilesToItem extends ActionSupport implements UserIdAware , Prepa
 	 */
 	public Collection<FileSystem> getFileSystem() {
 		return fileSystem;
-	}
-
-	/**
-	 * Set the files and folders
-	 * 
-	 * @param fileSystem Collection of files and folders
-	 */
-	public void setFileSystem(Collection<FileSystem> fileSystem) {
-		this.fileSystem = fileSystem;
 	}
 
 	/**

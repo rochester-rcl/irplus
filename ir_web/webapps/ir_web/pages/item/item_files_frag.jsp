@@ -39,8 +39,8 @@
 				        <c:param value="${institutionalItemVersion.item.id}" name="itemId"/>
 					    <c:param value="${object.id}" name="itemFileId"/>
 				    </c:url>
-				    <a href="${itemFileDownload}">
-	                 ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
+				    <a href="${itemFileDownload}" <ir:fileDownloadTag extension="${object.irFile.fileInfo.extension}"/> >
+	                  ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
 		            <br/>
 		            <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
 		                Download Status:
@@ -65,21 +65,21 @@
 				    <c:param name="itemId" value="${item.id}"/>
 					<c:param name="itemFileId" value="${object.id}"/>
 				 </c:url>
-		         <a href="${previewItemFileDownloadUrl}">${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/>
+		         <a href="${previewItemFileDownloadUrl}" <ir:fileDownloadTag extension="${object.irFile.fileInfo.extension}"/> >${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/>
 		    </c:if>
 		    <c:if test='${param.isResearcherView}'>
 					<c:url var="itemFileDownload" value="/downloadResearcherPublicationFile.action">
 					    <c:param value="${researcherPublicationId}" name="publicationId"/>
 						<c:param value="${object.id}" name="itemFileId"/>
 					</c:url>
-					<a href="${itemFileDownload}"> ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
+					<a href="${itemFileDownload}" <ir:fileDownloadTag extension="${object.irFile.fileInfo.extension}"/>> ${object.irFile.nameWithExtension}</a> &nbsp; <ir:fileSizeDisplay sizeInBytes="${object.irFile.fileInfo.size}"/> (No. of downloads : ${object.irFile.downloadCount})
 		    </c:if>
 												   
 	    </c:if>
 											    
 		<c:if test="${object.type == 'URL'}">
 		    <img  alt="" class="tableImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>
-	    	<a target="_blank" href="${object.url}">${object.name}</a>
+	    	<a href="${object.url}">${object.name}</a>
 		</c:if>
 											
 		</td>

@@ -332,7 +332,7 @@ public class ManageIdentifierTypes extends Pager implements  Preparable, UserIdA
 	}
 
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	

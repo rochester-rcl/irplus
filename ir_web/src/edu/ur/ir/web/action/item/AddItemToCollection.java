@@ -245,7 +245,7 @@ public class AddItemToCollection extends ActionSupport implements UserIdAware{
 	 * 
 	 * @param userId user logged in
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

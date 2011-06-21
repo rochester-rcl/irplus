@@ -44,16 +44,16 @@
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
         
-        <!--  re-index all the users in the repository -->
-        <action name="reIndexUsers" 
-            class="edu.ur.ir.web.action.user.ReIndexUsers">
+         <!--  re-index all the items in the repository -->
+        <action name="fixPublisherInformation" 
+            class="edu.ur.ir.web.action.repository.FixPublisherInformation">
             <interceptor-ref name="editStack"/>
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
         
-        <!--  re-index all the user groups in the repository -->
-        <action name="reIndexUserGroups" 
-            class="edu.ur.ir.web.action.user.ReIndexUserGroups">
+        <!--  re-index all the users in the repository -->
+        <action name="reIndexUsers" 
+            class="edu.ur.ir.web.action.user.ReIndexUsers">
             <interceptor-ref name="editStack"/>
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
@@ -65,14 +65,6 @@
             <result name="success" type="redirectAction">viewRepository</result>
         </action>
         
-        <!--  re-index all the collections in the repository -->
-        <action name="reIndexInstitutionalCollections" 
-            class="edu.ur.ir.web.action.institution.ReIndexInstitutionalCollections">
-            <interceptor-ref name="editStack"/>
-            <result name="success" type="redirectAction">viewRepository</result>
-        </action>
-
-
         <!--  re-index all the person name Authorities in the repository -->
         <action name="reIndexPersonNameAuthorities" 
             class="edu.ur.ir.web.action.person.ReIndexPersonNameAuthorities">

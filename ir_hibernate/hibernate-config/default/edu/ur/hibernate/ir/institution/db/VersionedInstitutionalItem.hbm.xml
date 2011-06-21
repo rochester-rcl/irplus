@@ -61,7 +61,7 @@
         <!--  published versions -->
 		<set name="institutionalItemVersions" 
 		     inverse="true" 
-		     cascade="all, delete-orphan" 
+		     cascade="all-delete-orphan" 
 		     access="field"
 			 lazy="true"  
 			 order-by="version_number desc" 

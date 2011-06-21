@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 - 2011 University of Rochester
+   Copyright 2008 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -106,9 +106,9 @@ public class UserWorkspaceSearch extends ActionSupport implements UserIdAware {
 	/**
 	 * Set the user id.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

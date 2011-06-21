@@ -30,8 +30,6 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.FileSystemType;
@@ -53,7 +51,7 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 	private static final long serialVersionUID = 8399684576467880725L;
 
 	/** Analyzer for dealing with analyzing the search */
-	private transient Analyzer analyzer;
+	private Analyzer analyzer;
 	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultUserWorkspaceSearchService.class);
@@ -139,9 +137,8 @@ public class DefaultUserWorkspaceSearchService implements UserWorkspaceSearchSer
 		String indexFolder = personalIndexFolder.getAbsolutePath();
 		IndexSearcher searcher = null;
 		try {
-			FSDirectory directory = FSDirectory.open(new File(indexFolder));
-			searcher = new IndexSearcher(directory, true);
-			QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, fields, analyzer);
+			searcher = new IndexSearcher(indexFolder);
+			QueryParser parser = new MultiFieldQueryParser(fields, analyzer);
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
 			
 			Query luceneQuery = parser.parse(query);

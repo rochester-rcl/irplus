@@ -748,7 +748,6 @@ YAHOO.ur.personal.collection =
     executeDeleteAction : function()
     {
     	 YAHOO.ur.personal.collection.deleteCollection.showDialog();
-         resetSelected.selected = true;
          YAHOO.ur.shared.file.inbox.getSharedFilesCount();
     },
     
@@ -758,7 +757,6 @@ YAHOO.ur.personal.collection =
     executeMoveAction : function()
     {
     	 YAHOO.ur.personal.collection.moveCollectionData();
-         resetSelected.selected = true;
          YAHOO.ur.shared.file.inbox.getSharedFilesCount();
     },
 
@@ -770,6 +768,10 @@ YAHOO.ur.personal.collection =
      */
     init: function() 
     {
+	    if (document.getElementById('myCollections_showCollection').value == 'true')
+	    {
+		    YAHOO.ur.user.workspace.setActiveIndex("COLLECTION");
+	    }
         var parentCollectionId = document.getElementById('myCollections_parentCollectionId').value;
         YAHOO.ur.personal.collection.getCollectionByIdWithoutLoadingSharedInboxFiles(parentCollectionId);
         YAHOO.ur.personal.collection.createNewCollectionDialog();

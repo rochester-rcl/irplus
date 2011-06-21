@@ -1,5 +1,5 @@
 /**  
-   Copyright 2008 - 2010 University of Rochester
+   Copyright 2008 University of Rochester
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ public class DefaultInstitutionalCollectionService implements
 	private SimpleMailMessage itemReviewMessage;
 	
 	/** Service to send email */
-	private transient MailSender mailSender;
+	private MailSender mailSender;
 	
 	/** service for marking items that need to be indexed */
 	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;

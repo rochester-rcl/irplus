@@ -29,5 +29,11 @@ import edu.ur.dao.CrudDAO;
 public interface ExternalPublishedItemDAO extends CountableDAO, 
 CrudDAO<ExternalPublishedItem>
 {
-	
+	/**
+	 * Get a count of external published items with the given publisher id.
+	 * 
+	 * @param publisherId - if of the publisher
+	 * @return - count of external published items with the given sponsor.
+	 */
+	public Long getCountForPublisher(Long publisherId);
 }

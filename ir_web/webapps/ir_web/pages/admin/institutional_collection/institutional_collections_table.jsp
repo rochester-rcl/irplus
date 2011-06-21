@@ -72,7 +72,6 @@
 <c:if test="${totalHits > 0}">
 	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 	<c:import url="browse_all_collections_pager.jsp"/>
-	<br/>
 </c:if>
 
 <div class="dataTable">
@@ -131,8 +130,8 @@
 	                    descendingSortAction="${browseDescUrl}">
 	                    <a href="${href}"><u>Name</u></a>                                              
 	                    <urstb:thImgSort
-	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 	                <urstb:td>Virtual Path</urstb:td>
 					<urstb:td>Properties</urstb:td>
 	            </urstb:tr>

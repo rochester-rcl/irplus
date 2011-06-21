@@ -16,7 +16,6 @@
 
 package edu.ur.ir.web.action.institution;
 
-import java.io.File;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -24,7 +23,6 @@ import org.apache.log4j.Logger;
 import edu.ur.ir.index.IndexProcessingType;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.institution.InstitutionalCollection;
-import edu.ur.ir.institution.InstitutionalCollectionIndexService;
 import edu.ur.ir.institution.InstitutionalCollectionService;
 import edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService;
 import edu.ur.ir.repository.Repository;
@@ -38,10 +36,6 @@ import edu.ur.ir.web.table.Pager;
  * Action to view institutional collections.
  * 
  * @author Nathan Sarr
- *
- */
-/**
- * @author ideazoft
  *
  */
 public class ManageInstitutionalCollections extends Pager implements UserIdAware {
@@ -66,7 +60,7 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
     private Collection <InstitutionalCollection> collectionPath;
 	
 	/** The collection that owns the listed items and personal collections */
-	private Long parentCollectionId = Long.valueOf(0);
+	private Long parentCollectionId = new Long(0);
 	
 	/** current parent collection null if at the root */
 	private InstitutionalCollection parent = null;
@@ -83,8 +77,6 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 	/** Institutional Collection service */
 	private InstitutionalCollectionService institutionalCollectionService;
 	
-
-
 	/** service for marking items that need to be indexed */
 	private InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService;
 
@@ -105,17 +97,6 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 	/** Row End */
 	private int rowEnd;
 	
-	/** indicates this the first time the user viewing the search */
-	private boolean searchInit = true;
-	
-	/** Indicates this is a browse view */
-	private String viewType = "browse";
-	
-	/** institutional collection index service */
-	private InstitutionalCollectionIndexService institutionalCollectionIndexService;
-	
-
-
 	/** Default constructor */
 	public  ManageInstitutionalCollections()
 	{
@@ -127,9 +108,9 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 	/**
 	 * Set the user id.
 	 * 
-	 * @see edu.ur.ir.web.action.UserIdAware#injectUserId(java.lang.Long)
+	 * @see edu.ur.ir.web.action.UserIdAware#setUserId(java.lang.Long)
 	 */
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 	
@@ -155,8 +136,7 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 		log.debug("Delete collection system objects called");
 		
 		IrUser user = userService.getUser(userId, false);
-		Repository repo = repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
-        File collectionFileIndex = new File(repo.getInstitutionalCollectionIndexFolder());		
+		
 		if( collectionIds != null )
 		{
 		    for(int index = 0; index < collectionIds.length; index++)
@@ -168,7 +148,6 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 				// only index if the item was added directly to the collection
 				IndexProcessingType processingType = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE); 
 				institutionalItemIndexProcessingRecordService.processItemsInCollection(collection, processingType);
-				institutionalCollectionIndexService.delete(collection.getId(), collectionFileIndex);
 			    institutionalCollectionService.deleteCollection(collection, user);
 		    }
 		}
@@ -260,13 +239,12 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 		this.collectionsDeleted = collectionsDeleted;
 	}
 
-	/**
-	 * Get the collection deleted message.
-	 * 
-	 * @return
-	 */
 	public String getcollectionsDeletedMessage() {
 		return collectionsDeletedMessage;
+	}
+
+	public void setcollectionsDeletedMessage(String collectionsDeletedMessage) {
+		this.collectionsDeletedMessage = collectionsDeletedMessage;
 	}
 	
 	/**
@@ -287,171 +265,108 @@ public class ManageInstitutionalCollections extends Pager implements UserIdAware
 		return userService.getUser(userId,false);
 	}
 
-	/**
-	 * Set the repository service.
-	 * 
-	 * @param repositoryService
-	 */
+	public RepositoryService getRepositoryService() {
+		return repositoryService;
+	}
+
 	public void setRepositoryService(RepositoryService repositoryService) {
 		this.repositoryService = repositoryService;
 	}
 
-	/**
-	 * Set the user service.
-	 * 
-	 * @param userService
-	 */
+	public UserService getUserService() {
+		return userService;
+	}
+
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 
-	/**
-	 * Get the deleted collection deleted message.
-	 * 
-	 * @return
-	 */
 	public String getCollectionsDeletedMessage() {
 		return collectionsDeletedMessage;
 	}
 
-	/**
-	 * Get the user id.
-	 * 
-	 * @return
-	 */
+	public void setCollectionsDeletedMessage(String collectionsDeletedMessage) {
+		this.collectionsDeletedMessage = collectionsDeletedMessage;
+	}
+
 	public Long getUserId() {
 		return userId;
 	}
 
-	/**
-	 * Get the repository.
-	 * 
-	 * @return
-	 */
+	public void setCollectionPath(Collection<InstitutionalCollection> collectionPath) {
+		this.collectionPath = collectionPath;
+	}
+
 	public Repository getRepository() {
 		return repositoryService.getRepository(Repository.DEFAULT_REPOSITORY_ID, false);
 	}
-	
-	/**
-	 * Get the parent.
-	 * 
-	 * @return
-	 */
-	public InstitutionalCollection getParent() {
-		return parent;
+
+	public InstitutionalCollectionService getInstitutionalCollectionService() {
+		return institutionalCollectionService;
 	}
 
-	/**
-	 * Get the institutional collections
-	 * 
-	 * @return
-	 */
-	public Collection<InstitutionalCollection> getInstitutionalCollections() {
-		return institutionalCollections;
-	}
-
-	/**
-	 * Get the sort type.
-	 * 
-	 * @return
-	 */
-	public String getSortType() {
-		return sortType;
-	}
-	
-	/**
-	 * Set the sort type.
-	 * 
-	 * @param sortType
-	 */
-	public void setSortType(String sortType) {
-		this.sortType = sortType;
-	}
-	
-	/**
-	 * Get the total hits found.
-	 * 
-	 * @see edu.ur.ir.web.table.Pager#getTotalHits()
-	 */
-	public int getTotalHits() {
-		return totalHits;
-	}
-	
-	/**
-	 * Get the row end.
-	 * 
-	 * @return
-	 */
-	public int getRowEnd() {
-		return rowEnd;
-	}
-	
-	/**
-	 * Set the row end.
-	 * 
-	 * @param rowEnd
-	 */
-	public void setRowEnd(int rowEnd) {
-		this.rowEnd = rowEnd;
-	}
-
-	/**
-	 * Set the institutional item index processing record service.
-	 * 
-	 * @param institutionalItemIndexProcessingRecordService
-	 */
-	public void setInstitutionalItemIndexProcessingRecordService(
-			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
-		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
-	}
-
-	/**
-	 * Set the index processing type service.
-	 *  
-	 * @param indexProcessingTypeService
-	 */
-	public void setIndexProcessingTypeService(
-			IndexProcessingTypeService indexProcessingTypeService) {
-		this.indexProcessingTypeService = indexProcessingTypeService;
-	}
-	
-	/**
-	 * Get the search init setting.
-	 * 
-	 * @return
-	 */
-	public boolean getSearchInit() {
-		return searchInit;
-	}
-
-	/**
-	 * Get the view type.
-	 * 
-	 * @return
-	 */
-	public String getViewType() {
-		return viewType;
-	}
-	
-	/**
-	 * Set the institutional collection index service.
-	 * 
-	 * @param institutionalCollectionIndexService
-	 */
-	public void setInstitutionalCollectionIndexService(
-			InstitutionalCollectionIndexService institutionalCollectionIndexService) {
-		this.institutionalCollectionIndexService = institutionalCollectionIndexService;
-	}
-
-	/**
-	 * Set the institutional collection service.
-	 * 
-	 * @param institutionalCollectionService
-	 */
 	public void setInstitutionalCollectionService(
 			InstitutionalCollectionService institutionalCollectionService) {
 		this.institutionalCollectionService = institutionalCollectionService;
 	}
 
+	public InstitutionalCollection getParent() {
+		return parent;
+	}
+
+	public void setParent(InstitutionalCollection parent) {
+		this.parent = parent;
+	}
+
+	public Collection<InstitutionalCollection> getInstitutionalCollections() {
+		return institutionalCollections;
+	}
+
+	public void setInstitutionalCollections(
+			Collection<InstitutionalCollection> institutionalCollections) {
+		this.institutionalCollections = institutionalCollections;
+	}
+
+
+	public String getSortType() {
+		return sortType;
+	}
+	public void setSortType(String sortType) {
+		this.sortType = sortType;
+	}
+	public int getTotalHits() {
+		return totalHits;
+	}
+	public void setTotalHits(int totalHits) {
+		this.totalHits = totalHits;
+	}
+	public int getRowEnd() {
+		return rowEnd;
+	}
+	public void setRowEnd(int rowEnd) {
+		this.rowEnd = rowEnd;
+	}
+
+
+	public InstitutionalItemIndexProcessingRecordService getInstitutionalItemIndexProcessingRecordService() {
+		return institutionalItemIndexProcessingRecordService;
+	}
+
+
+	public void setInstitutionalItemIndexProcessingRecordService(
+			InstitutionalItemIndexProcessingRecordService institutionalItemIndexProcessingRecordService) {
+		this.institutionalItemIndexProcessingRecordService = institutionalItemIndexProcessingRecordService;
+	}
+
+
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
+
+
+	public void setIndexProcessingTypeService(
+			IndexProcessingTypeService indexProcessingTypeService) {
+		this.indexProcessingTypeService = indexProcessingTypeService;
+	}
 
 }

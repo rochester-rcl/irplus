@@ -24,7 +24,6 @@
 <c:if test="${totalHits > 0}">
 	<h3>Viewing: ${rowStart + 1} - ${rowEnd} of ${totalHits}</h3>
 	<c:import url="browse_all_affiliation_pager.jsp"/>
-	<br/>
 </c:if>
 
 <div class="dataTable">
@@ -43,8 +42,8 @@
 	                    descendingSortAction="javascript:YAHOO.ur.affiliation.getAffiliations(${rowStart}, ${startPageNumber}, ${currentPageNumber}, 'desc');">
 	                    <u>Name</u>                                              
 	                    <urstb:thImgSort
-	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+	                                 sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+	                                 sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					<urstb:td>Author Permission</urstb:td>
 					<urstb:td>Researcher Permission</urstb:td>
 					<urstb:td>Approval Required</urstb:td>
@@ -92,7 +91,6 @@
 </div>	
 
 <c:if test="${totalHits > 0}">
-    <br/>
 	<c:import url="browse_all_affiliation_pager.jsp"/>
 </c:if>
 

@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.Validateable;
 
 import edu.ur.ir.FileSystem;
 import edu.ur.ir.index.IndexProcessingTypeService;
@@ -42,7 +43,8 @@ import edu.ur.ir.web.action.UserIdAware;
  * @author Nathan Sarr
  *
  */
-public class ViewPersonalFolders extends ActionSupport implements  UserIdAware {
+public class ViewPersonalFolders extends ActionSupport implements  
+  UserIdAware, Validateable {
 	
 	/**Eclipse gernerated id */
 	private static final long serialVersionUID = 6684102482237911784L;
@@ -107,9 +109,6 @@ public class ViewPersonalFolders extends ActionSupport implements  UserIdAware {
 	/**  Logger for vierw workspace action */
 	private static final Logger log = Logger.getLogger(ViewPersonalFolders.class);
 	
-	/** Parent personal folder */
-	private PersonalFolder parentFolder;
-
 
 	/**
 	 * Get folder table
@@ -213,7 +212,6 @@ public class ViewPersonalFolders extends ActionSupport implements  UserIdAware {
 		user = userService.getUser(userId, false);
 		if(parentFolderId != null && parentFolderId > 0)
 		{
-			parentFolder = userFileSystemService.getPersonalFolder(parentFolderId, false);
 		    folderPath = userFileSystemService.getPersonalFolderPath(parentFolderId);
 		}
 		Collection<PersonalFolder> myPersonalFolders = userFileSystemService.getPersonalFoldersForUser(userId, parentFolderId);
@@ -308,7 +306,8 @@ public class ViewPersonalFolders extends ActionSupport implements  UserIdAware {
 	}
 	
 	
-	public Collection<FileSystem> getFileSystem() {
+	@SuppressWarnings("unchecked")
+	public Collection getFileSystem() {
 		return fileSystem;
 	}
 
@@ -332,6 +331,10 @@ public class ViewPersonalFolders extends ActionSupport implements  UserIdAware {
 
 	public IrUser getUser() {
 		return user;
+	}
+
+	public UserFileSystemService getUserFileSystemService() {
+		return userFileSystemService;
 	}
 
 	public void setUserFileSystemService(UserFileSystemService userFileSystemService) {
@@ -375,26 +378,27 @@ public class ViewPersonalFolders extends ActionSupport implements  UserIdAware {
 		return fileSystemSize;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
+	public UserWorkspaceIndexProcessingRecordService getUserWorkspaceIndexProcessingRecordService() {
+		return userWorkspaceIndexProcessingRecordService;
+	}
 
 	public void setUserWorkspaceIndexProcessingRecordService(
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
 
+	public IndexProcessingTypeService getIndexProcessingTypeService() {
+		return indexProcessingTypeService;
+	}
 
 	public void setIndexProcessingTypeService(
 			IndexProcessingTypeService indexProcessingTypeService) {
 		this.indexProcessingTypeService = indexProcessingTypeService;
 	}
-	
-	public PersonalFolder getParentFolder() {
-		return parentFolder;
-	}
-
 	
 
 }

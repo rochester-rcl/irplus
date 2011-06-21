@@ -60,7 +60,7 @@ public class RepositoryBasedTestHelper {
 	
 	public RepositoryBasedTestHelper(ApplicationContext ctx)
 	{
-		 this.ctx = ctx;
+		this.ctx = ctx;
 		 repositoryService = (RepositoryService)ctx.getBean("repositoryService");
 		 fileServerService = (DefaultFileServerService)ctx.getBean("fileServerService");
 		 personalFileDeleteRecordDAO = (PersonalFileDeleteRecordDAO)ctx.getBean("personalFileDeleteRecordDAO");
@@ -97,13 +97,6 @@ public class RepositoryBasedTestHelper {
 		// location to store user personal workspace index folders
 		String userWorkspaceIndexFolder = properties.getProperty("user_workspace_index_folder");
 		
-		// location to store institutional collection index folders
-		String institutionalCollectionIndexFolder = properties.getProperty("institutional_collection_index_folder");
-	
-		// location to store institutional collection index folders
-		String userGroupIndexFolder = properties.getProperty("user_group_index_folder");
-
-		// create each of the folders
 		File f = new File(nameIndexFolder);
 		if( !f.exists() )
 		{
@@ -144,26 +137,6 @@ public class RepositoryBasedTestHelper {
 			}
 		}
 		
-		f = new File(institutionalCollectionIndexFolder);
-		if( !f.exists() )
-		{
-			try {
-				FileUtils.forceMkdir(f);
-			} catch (IOException e) {
-				throw new IllegalStateException(e);
-			}
-		}
-		
-		f = new File(userGroupIndexFolder);
-		if( !f.exists() )
-		{
-			try {
-				FileUtils.forceMkdir(f);
-			} catch (IOException e) {
-				throw new IllegalStateException(e);
-			}
-		}
-		
 		String defaultFolderDispalyName = "default_folder";
 
 		// create the file server
@@ -191,12 +164,6 @@ public class RepositoryBasedTestHelper {
 		
 		//set the user workspace index folders location
 		repository.setUserWorkspaceIndexFolder(userWorkspaceIndexFolder);
-
-		//set the collection index folders location
-		repository.setInstitutionalCollectionIndexFolder(institutionalCollectionIndexFolder);
-
-		//set the user group index folders location
-		repository.setUserGroupIndexFolder(userGroupIndexFolder);
 		
 		repositoryService.saveRepository(repository);
 		

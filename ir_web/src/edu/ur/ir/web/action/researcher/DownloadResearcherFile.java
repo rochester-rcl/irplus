@@ -57,10 +57,10 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 
 
 	/**  Servlet response to write to */
-	private transient HttpServletResponse response;
+	private HttpServletResponse response;
 	
 	/**  Servlet request made */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** id of the user downloading the file**/
 	private Long userId;
@@ -92,7 +92,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
         if( researcher.isPublic()  || researcher.getUser().getId().equals(userId))
         {	
             FileInfo fileInfo =  researcherFile.getIrFile().getFileInfo();
-            webIoUtils.streamFileInfo(researcherFile.getName(), fileInfo, response, request, (1024*4), false, true);
+            webIoUtils.StreamFileInfo(researcherFile.getName(), fileInfo, response, request, (1024*4), false, true);
             return SUCCESS;
         }
         else
@@ -132,7 +132,7 @@ implements ServletResponseAware, ServletRequestAware, UserIdAware
 	 * 
 	 * @param userId
 	 */
-	public void injectUserId(Long userId)
+	public void setUserId(Long userId)
 	{
 		this.userId = userId;
 	}

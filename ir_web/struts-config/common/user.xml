@@ -20,12 +20,11 @@
     "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
     "http://struts.apache.org/dtds/struts-2.0.dtd" [
     <!ENTITY researcher SYSTEM "user_researcher.xml">
-    <!ENTITY group_workspace SYSTEM "user_group_workspace.xml">
     ]>
 <struts>
     
     <include file="struts-default.xml"/>
-    
+
     <package name="user" namespace="/user" extends="struts-default">
            <result-types>
                <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>
@@ -77,10 +76,9 @@
              </interceptor-stack>
              
         </interceptors>
+        
+        <!--  set the default stack for this package -->
         <default-interceptor-ref name="default"/>
-        
-        <default-action-ref name="unknownAction" />
-        
  
   		<global-results>
         	 <result name="change-password">/pages/user/login/force_change_password.jsp</result>
@@ -92,11 +90,6 @@
         <!--  Researcher actions                -->
         <!--  ************************************ -->
         &researcher;
-        
-        <!--  ************************************ -->
-        <!--  Group workspace actions              -->
-        <!--  ************************************ -->
-        &group_workspace;
                 
                 
         <!--  ************************************ -->
@@ -221,12 +214,6 @@
             <result name="notFound">/fileNotFound.jsp</result>
             <result name="success" type="no-op"/>
         </action> 
-        
-        <action name="viewFilesSharedWithUser"
-            class="edu.ur.ir.web.action.user.ViewAllFilesSharedWithUser">
-            <interceptor-ref name="crudStack"/>
-            <result name="success">/pages/user/workspace/view_all_files_shared_with_user.jsp</result>
-        </action>
         
         <!--  lock a file so that no other user can upload changes -->
         <action name="lockVersionedFile" class="edu.ur.ir.web.action.user.LockVersionedFile" >
@@ -514,7 +501,11 @@
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
                 <interceptor-ref name="editStack"/>
              <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+            <result name="success"  type="redirectAction"> 
+                <param name="actionName">getSelectedFiles</param> 
+                <param name="genericItemId">${genericItemId}</param>
+                <param name="institutionalItemId">${institutionalItemId}</param>
+            </result>
         </action>
         
         <!--  Action to move the file up-->
@@ -523,7 +514,11 @@
                 class="edu.ur.ir.web.action.item.AddFilesToItem">
             <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+            <result name="success"  type="redirectAction"> 
+                <param name="actionName">getSelectedFiles</param> 
+                <param name="genericItemId">${genericItemId}</param>
+                <param name="institutionalItemId">${institutionalItemId}</param>
+            </result>
         </action>
         
         <!--  Edit item -->
@@ -585,6 +580,14 @@
                 class="edu.ur.ir.web.action.item.AddItemMetadata">
                 <interceptor-ref name="editStack"/>
             <result name="success">/pages/user/workspace/item/publisher_list.jsp</result>
+        </action>         
+        
+        <!--  Update the place of publication form  -->
+        <action name="getPlaceOfPublicationInformation"
+                method="getPlaceOfPublicationInformation"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="success">/pages/user/workspace/item/place_of_publication_list.jsp</result>
         </action>         
         
         <!--  save the item and goto Publication table -->
@@ -657,7 +660,17 @@
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="redirect">getPublisherInformation.action?genericItemId=${item.id}</result>
             <result name="workspace" type="redirect">home.action</result>
-        </action>        
+        </action>     
+        
+        <!--  save the item and update the place of publication -->
+        <action name="saveItemMetadataAndGetPlaceOfPublication"
+                method="saveItemMetadata"
+                class="edu.ur.ir.web.action.item.AddItemMetadata">
+                <interceptor-ref name="editStack"/>
+            <result name="accessDenied">/accessDenied.jsp</result>
+            <result name="success" type="redirect">getPlaceOfPublicationInformation.action?genericItemId=${item.id}</result>
+            <result name="workspace" type="redirect">home.action</result>
+        </action>           
        
        <!--  save the item and goto show add files -->
         <action name="saveMetadataAndShowAddFiles"
@@ -854,13 +867,21 @@
             <result name="added">/pages/admin/item/metadata/extent_types/extent_type_added.jsp</result>
         </action>    
         
-         <!--  This handles creating new extent type -->
+         <!--  This handles creating new publisher -->
         <action name="createPublisher" 
             method="create"
             class="edu.ur.ir.web.action.item.metadata.ManagePublishers">
             <interceptor-ref name="crudStack" />
             <result name="added">/pages/admin/item/metadata/publishers/publisher_form.jsp</result>
-        </action>                          
+        </action>  
+        
+         <!--  This handles creating new place of publication -->
+        <action name="createPlaceOfPublication" 
+            method="create"
+            class="edu.ur.ir.web.action.item.metadata.ManagePlacesOfPublication">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/item/metadata/places_of_publication/place_of_publication_form.jsp</result>
+        </action>                                 
 
         <!--  ************************************ -->
         <!--  Submission into institutional collections     -->
@@ -950,7 +971,12 @@
             class="edu.ur.ir.web.action.item.AddItemLink">
             <interceptor-ref name="crudStack" />
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+            <result name="success"  type="redirectAction"> 
+                <param name="actionName">getSelectedFiles</param> 
+                <param name="genericItemId">${genericItemId}</param>
+                <param name="institutionalItemId">${institutionalItemId}</param>
+            </result>
+           
         </action>
         
         <action name="updateItemLink"
@@ -958,11 +984,15 @@
             class="edu.ur.ir.web.action.item.AddItemLink">
             <interceptor-ref name="crudStack" />
             <result name="accessDenied">/accessDenied.jsp</result>
-            <result name="success" type="redirect">getSelectedFiles.action?genericItemId=${genericItemId}</result>
+            <result name="success"  type="redirectAction"> 
+                <param name="actionName">getSelectedFiles</param> 
+                <param name="genericItemId">${genericItemId}</param>
+                <param name="institutionalItemId">${institutionalItemId}</param>
+            </result>
         </action>
         
         <!--  ************************************ -->
-        <!--  Invite User actions (File)          -->
+        <!--  Invite User actions			       -->
         <!--  ************************************ -->
 
 		<action name="checkSharePermission" class="edu.ur.ir.web.action.user.InviteUser"
@@ -1025,38 +1055,7 @@
             <result name="added">/pages/user/workspace/add_invite_response.jsp</result>
         </action> 
 
-        <!--  ************************************ -->
-        <!--  Auto share folder actions (Folder)   -->
-        <!--  ************************************ -->
-        <action name="autoShareFolder" 
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        <action name="autoShareFolderWithUsers" 
-            method="autoShareFolder"
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        <action name="removeAutoShareFolder" 
-            method="deleteAutoShare"
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        <action name="removeAutoShareFolderInvite" 
-            method="deleteFolderInvite"
-            class="edu.ur.ir.web.action.user.AutoShareFolder">
-            <interceptor-ref name="editStack"/>           
-            <result name="success">/pages/user/workspace/auto_share_folder.jsp</result>
-        </action>
-        
-        
-        
+ 
         <!--  ************************************ -->
         <!--  Change Password  actions			       -->
         <!--  ************************************ -->
@@ -1140,14 +1139,6 @@
             <result name="get">/pages/admin/item/metadata/persons/person_form_frag.jsp</result>
             <result name="deleted">/pages/admin/item/metadata/persons/person_deleted.jsp</result>
             <result name="accessDenied">/accessDenied.jsp</result>
-        </action>
-        
-        <!--  special action for a user who is editing their own name in their account section -->
-        <action name="userInitialCreatePerson" 
-            method="create"
-            class="edu.ur.ir.web.action.person.ManagePersons">
-            <interceptor-ref name="crudStack" />
-            <result name="added">/pages/user/login/add_authoring_name_form_frag.jsp</result>
         </action>
         
         <!--  ************************************ -->

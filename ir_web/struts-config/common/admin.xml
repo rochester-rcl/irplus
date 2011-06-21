@@ -26,12 +26,12 @@
     <!ENTITY insitutional_collection SYSTEM "admin_collection.xml">
     <!ENTITY handle SYSTEM "admin_handle.xml">
     <!ENTITY file_storage SYSTEM "admin_file_storage.xml">
-    <!ENTITY group_spaces SYSTEM "admin_group_spaces.xml">
     ]>
     
 <struts>
     
     <include file="struts-default.xml"/>
+  
     
     <package name="admin" namespace="/admin" extends="struts-default">
     
@@ -42,7 +42,6 @@
         <interceptors>
              <interceptor name="user" class="edu.ur.web.interceptor.AcegiUserInterceptor"/>
              <interceptor name="emailError" class="edu.ur.web.interceptor.EmailErrorInterceptor"/>
-             
              <interceptor-stack name="default">
                 <interceptor-ref name="emailError"/>
                 <interceptor-ref name="defaultStack"/>
@@ -83,13 +82,13 @@
             </interceptor-stack>
         </interceptors>
         
-        <!--  set the default action for this package -->
+        <!--  set the default stack for this package -->
         <default-interceptor-ref name="default"/>
         
-         <default-action-ref name="unknownAction" />
-         
          <global-results>
         	 <result name="change-password">/pages/home.jsp</result>
+        	 <result type="redirect" name="handleError">/pages/error.jsp</result>
+        	 <result type="redirect" name="accessDenied">/accessDenied.jsp</result>
         </global-results>
         
         <!--  ************************************ -->
@@ -126,11 +125,6 @@
         <!--  File Storage Actions                 -->
         <!--  ************************************ -->
         &file_storage;
-        
-        <!--  ************************************ -->
-        <!--  group spaces Actions                 -->
-        <!--  ************************************ -->
-        &group_spaces;
         
         <!--  ************************************ -->
         <!--  Administration Home Page             -->
@@ -300,7 +294,26 @@
             <result name="added">/pages/admin/external_account_type/external_account_type_form.jsp</result>
             <result name="deleted">/pages/admin/external_account_type/external_account_type_deleted.jsp</result>
             <result name="get">/pages/admin/external_account_type/external_account_type_form.jsp</result>
-        </action>       
+        </action> 
+        
+        
+        <!--  ************************************ -->
+        <!--  Import MARC records    -->
+        <!--  ************************************ -->
+        <action name="viewMarcFileUploadPage"
+            class="edu.ur.ir.web.action.user.ImportMarcRecords"
+            method="viewMarcFileUploadPage">
+            <result name="success">/pages/user/workspace/upload_marc_file.jsp</result>
+        </action>
+        
+        <action name="uploadMarcFile"
+            class="edu.ur.ir.web.action.user.ImportMarcRecords"
+            method="uploadMarcFile">
+            <interceptor-ref name="urUploadStack"/>
+            <result name="success">/pages/user/workspace/upload_marc_complete.jsp</result>
+            <result name="importFailed">/pages/user/workspace/upload_marc_file_failed.jsp</result>
+        </action>
+              
     </package>
     
 </struts>

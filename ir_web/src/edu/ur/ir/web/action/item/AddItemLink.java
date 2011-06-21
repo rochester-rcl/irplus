@@ -93,6 +93,9 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	/** Service to deal with user information */
 	private UserService userService;
 
+	/** Id of institutional item being edited */
+	private Long institutionalItemId;
+
 
 
 
@@ -250,7 +253,7 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 	}
 
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -279,5 +282,23 @@ public class AddItemLink extends ActionSupport implements Preparable, UserIdAwar
 
 	public void setUserService(UserService userService) {
 		this.userService = userService;
+	}
+	
+	/**
+	 * Get institutional item id.
+	 * 
+	 * @return - the institutional item id.
+	 */
+	public Long getInstitutionalItemId() {
+		return institutionalItemId;
+	}
+
+	/**
+	 * Set the institutional item id.
+	 * 
+	 * @param institutionalItemId
+	 */
+	public void setInstitutionalItemId(Long institutionalItemId) {
+		this.institutionalItemId = institutionalItemId;
 	}
 }
