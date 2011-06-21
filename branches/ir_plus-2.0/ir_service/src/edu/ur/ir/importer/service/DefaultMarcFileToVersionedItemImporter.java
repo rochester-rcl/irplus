@@ -847,6 +847,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 */
 	private void splitBirthDeathYears(String years, PersonNameAuthority authority)
 	{
+		years = endPunctuationStripper(years);
 		log.debug("handle birth death year splitting " + years);
 		if( years != null )
 		{
@@ -857,23 +858,33 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    	
 		    	try
 		    	{
-		    		Integer birthInt = Integer.valueOf(dateParts[0]);
-		    		BirthDate birthDate = new BirthDate(birthInt);
-		    		authority.setBirthDate(birthDate);
+		    		int birthYear = this.getYear(dateParts[0]);
+		    		if( birthYear != -1 )
+		    		{
+		    			BirthDate birthDate = new BirthDate(birthYear);
+		    			authority.setBirthDate(birthDate);
+		    		}
+		    		
+		    		
 		    	}
 		    	catch(Exception e)
 		    	{
+		    		log.debug("Could not parse birth date " + dateParts[0]);
 		    		// do nothing
 		    	}
 		    	
 		    	try
 		    	{
-		    		 Integer deathInt = Integer.valueOf(dateParts[1]);
-		    		 DeathDate deathDate = new DeathDate(deathInt);
-		    		 authority.setDeathDate(deathDate);
+		    		int deathYear = this.getYear(dateParts[1]);
+		    		if( deathYear != -1)
+		    		{
+		    		    DeathDate deathDate = new DeathDate(deathYear);
+		    		    authority.setDeathDate(deathDate);
+		    		}
 		    	}
 		    	catch(Exception e)
 		    	{
+		    		log.debug("Could not parse death date " + dateParts[1]);
 		    		// do nothing
 		    	}
 		    	
@@ -882,12 +893,16 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    {
 		    	try
 		    	{
-		    		Integer birthInt = Integer.valueOf(dateParts[0]);
-		    		BirthDate birthDate = new BirthDate(birthInt);
-		    		authority.setBirthDate(birthDate);
+		    		int birthYear = this.getYear(dateParts[0]);
+		    		if( birthYear != -1 )
+		    		{
+		    			BirthDate birthDate = new BirthDate(birthYear);
+		    			authority.setBirthDate(birthDate);
+		    		}
 		    	}
 		    	catch(Exception e)
 		    	{
+		    		log.debug("Could not parse birth date 2 " + dateParts[0]);
 		    		// do nothing
 		    	}
 		    }
@@ -1054,60 +1069,17 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		{
 			    date = this.endPunctuationStripper(date.trim());
 
-			    log.debug("date lenght = " + date.length());
+			    log.debug("date length = " + date.length());
 		    	// assume year only ex. 1999
 			    // or 199- or 199?
-		    	if( date.length() == 4 )
+		    	if( date.length() == 4 || date.length() == 5 || date.length() == 6)
 		    	{
-		    		 date = date.replace('-', '0');
-		    		 date = date.replace('?', '0');
-		    		 publishedDate = new PublishedDate();
-		    		 try
+		    		 int year = this.getYear(date);
+		    		 if( year != -1)
 		    		 {
-		    		     publishedDate.setYear(new Integer(date));
+		    			 publishedDate = new PublishedDate();
+		    		     publishedDate.setYear(year);
 		    		 }
-		    		 catch(NumberFormatException nfe)
-		    		 {
-		    			 publishedDate = null;
-		    			 log.error("could not create year for date " + date, nfe);
-		    		 }
-		    	}
-		    	// assume year with circa ex. c1999
-		    	else if( date.length() == 5 )
-		    	{
-		    		 date = date.replace('c', ' ').trim();
-		    		 date = date.replace('-', '0');
-		    		 date = date.replace('?', '0');
-		    		 log.debug("date updated to " + date);
-		    		 publishedDate = new PublishedDate();
-		    		 try
-		    		 {
-		    		     publishedDate.setYear(new Integer(date));
-		    		 }
-		    		 catch(NumberFormatException nfe)
-		    		 {
-		    			 publishedDate = null;
-		    			 log.error("could not create year for date " + date, nfe);
-		    		 }
-		    	}
-		    	// assume [1978] or [197-] or [197?]
-		    	else if (date.length() == 6)
-		    	{
-		    		date = date.replace('[', ' ');
-		    		date = date.replace(']', ' ');
-		    		date = date.replace('-', '0');
-		    		date = date.replace('?', '0');
-		    		date = date.trim();
-		    		try
-	    		    {
-	    		    	publishedDate = new PublishedDate();
-	    		        publishedDate.setYear(new Integer(date));
-	    		    }
-	    		    catch(NumberFormatException nfe)
-	    		    {
-	    			    publishedDate = null;
-	    			    log.error("could not create year for date " + date, nfe);
-	    		    }
 		    	}
 		    	
 		    	// assume year and month ex. 1985-03 or [188-?]
@@ -1116,22 +1088,12 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    		// assume [188-?]
 		    		if(date.startsWith("["))
 		    		{
-		    			date = date.replace('-', '0');
-		    			date = date.replace('[', ' ');
-		    			date = date.replace(']', ' ');
-		    			date = date.replace('?', ' ');
-		    			date = date.trim();
-		    			
-		    		    try
-		    		    {
-		    		    	publishedDate = new PublishedDate();
-		    		        publishedDate.setYear(new Integer(date));
-		    		    }
-		    		    catch(NumberFormatException nfe)
-		    		    {
-		    			    publishedDate = null;
-		    			    log.error("could not create year for date " + date, nfe);
-		    		    }
+		    			 int year = this.getYear(date);
+			    		 if( year != -1)
+			    		 {
+			    			 publishedDate = new PublishedDate();
+			    		     publishedDate.setYear(year);
+			    		 }
 		    			
 		    		}
 		    		else
@@ -1188,6 +1150,112 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    
 		}
 		return publishedDate;
+	}
+	
+	/**
+	 * Get the year based on the string input.
+	 * 
+	 * @param year
+	 * @return the found year or -1 if could not be parsed.
+	 */
+	private int getYear(String date)
+	{
+		int value = -1;
+		date = this.endPunctuationStripper(date);
+		if( date == null )
+		{
+			return value;
+		}
+    	// assume year only ex. 1999
+	    // or 199- or 199?
+    	if( date.length() == 4 )
+    	{
+    		 date = date.replace('-', '0');
+    		 date = date.replace('?', '0');
+    		 try
+    		 {
+    			 value = Integer.valueOf(date).intValue();
+    		 }
+    		 catch(NumberFormatException nfe)
+    		 {
+    			 log.error("could not create year for date " + date, nfe);
+    		 }
+    	}
+    	// assume year with circa ex. c1999
+    	else if( date.length() == 5 )
+    	{
+    		 date = date.replace('c', ' ').trim();
+    		 date = date.replace('-', '0');
+    		 date = date.replace('?', '0');
+    		 log.debug("date updated to " + date);
+    		 try
+    		 {
+    			 value = Integer.valueOf(date).intValue();
+    		 }
+    		 catch(NumberFormatException nfe)
+    		 {
+    			 log.error("could not create year for date " + date, nfe);
+    		 }
+    	}
+    	// assume [1978] or [197-] or [197?]
+    	else if (date.length() == 6)
+    	{
+    		date = date.replace('[', ' ');
+    		date = date.replace(']', ' ');
+    		date = date.replace('-', '0');
+    		date = date.replace('?', '0');
+    		date = date.trim();
+    		try
+		    {
+    			value = Integer.valueOf(date).intValue();
+		    }
+		    catch(NumberFormatException nfe)
+		    {
+			    log.error("could not create year for date " + date, nfe);
+		    }
+    	}
+    	
+    	// assume [188-?] or [c1996]
+    	else if( date.length() == 7 )
+    	{
+    		// assume [c1996]
+    		if( date.indexOf('c') != -1)
+    		{
+    			date = date.replace('c', ' ');
+    			date = date.replace('-', '0');
+    			date = date.replace('[', ' ');
+    			date = date.replace(']', ' ');
+    			date = date.replace('?', ' ');
+    			date = date.trim();
+    			try
+      		    {
+      		    	value = Integer.valueOf(date).intValue();
+      		    }
+      		    catch(NumberFormatException nfe)
+      		    {
+      			    log.error("could not create year for date " + date, nfe);
+      		    }
+    		}
+    		// assume [188-?]
+    		else if(date.startsWith("["))
+    		{
+    			date = date.replace('-', '0');
+    			date = date.replace('[', ' ');
+    			date = date.replace(']', ' ');
+    			date = date.replace('?', ' ');
+    			date = date.trim();
+    			
+    		    try
+    		    {
+    		    	value = Integer.valueOf(date).intValue();
+    		    }
+    		    catch(NumberFormatException nfe)
+    		    {
+    			    log.error("could not create year for date " + date, nfe);
+    		    }
+    		}
+     	}
+		return value;
 	}
 	
 
