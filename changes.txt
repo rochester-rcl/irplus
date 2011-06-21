@@ -15,8 +15,16 @@ IR+ 2.0.8 to 2.1
 
 - Separated place of publication from publisher
 - Added rss feed not found when no contributor id is passed in
-- Added contributor not found when no contributor id is padded in
+- Added contributor not found when no contributor id is passed in
 
+- Added filter to open  files with the following extensions jpg, tiff, tif, jpeg, png, gif, bmp, pdf
+(Note: this is configurable)
+
+- Fixed view file system in create publication step one to order files and folders ascending by type.
+(Folders first alpha then files alpha)
+
+- Fixed final step of submission screen to show full publication name - previously did not show 
+articles (A, the, ...)  
 
 IR+ 2.0.7 to 2.0.8
 ==========================
