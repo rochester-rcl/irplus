@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd" [
+    <!ENTITY metadata SYSTEM "admin_metadata.xml">
+    <!ENTITY user SYSTEM "admin_user.xml">
+    <!ENTITY mime SYSTEM "admin_mime.xml">
+    <!ENTITY repository SYSTEM "admin_repository.xml">
+    <!ENTITY insitutional_collection SYSTEM "admin_collection.xml">
+    <!ENTITY handle SYSTEM "admin_handle.xml">
+    <!ENTITY file_storage SYSTEM "admin_file_storage.xml">
+    ]>
+    
+<struts>
+    
+    <include file="struts-default.xml"/>
+  
+    
+    <package name="admin" namespace="/admin" extends="struts-default">
+    
+        <result-types>
+            <result-type name="no-op" class="edu.ur.ir.web.action.result.NoOp"/>
+        </result-types>
+    
+        <interceptors>
+             <interceptor name="user" class="edu.ur.web.interceptor.AcegiUserInterceptor"/>
+             <interceptor name="emailError" class="edu.ur.web.interceptor.EmailErrorInterceptor"/>
+             <interceptor-stack name="default">
+                <interceptor-ref name="emailError"/>
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="user"/>
+             </interceptor-stack>
+        
+             <interceptor-stack name="editStack">
+                 <interceptor-ref name="emailError"/>
+                 <interceptor-ref name="servletConfig"/>
+                 <interceptor-ref name="staticParams"/>
+                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="prepare"/>
+                 <interceptor-ref name="modelDriven"/>
+                 <interceptor-ref name="conversionError"/>
+                 <interceptor-ref name="user"/>
+             </interceptor-stack>
+             
+             <interceptor-stack name="crudStack">
+                 <interceptor-ref name="emailError"/>
+                 <interceptor-ref name="servletConfig"/>
+                 <interceptor-ref name="staticParams"/>
+                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="prepare"/>
+                 <interceptor-ref name="modelDriven"/>
+                 <interceptor-ref name="params"/>
+                 <interceptor-ref name="conversionError"/>
+                 <interceptor-ref name="validation"/>
+                 <interceptor-ref name="workflow"/>
+                 <interceptor-ref name="user"/>
+             </interceptor-stack>
+             
+            <!-- U of R file upload stack -->
+            <interceptor-stack name="urUploadStack">
+                <interceptor-ref name="emailError"/>
+                <interceptor-ref name="fileUploadStack"/>
+                <interceptor-ref name="basicStack"/>
+                <interceptor-ref name="user"/>
+            </interceptor-stack>
+        </interceptors>
+        
+        <!--  set the default stack for this package -->
+        <default-interceptor-ref name="default"/>
+        
+         <global-results>
+        	 <result name="change-password">/pages/home.jsp</result>
+        	 <result type="redirect" name="handleError">/pages/error.jsp</result>
+        	 <result type="redirect" name="accessDenied">/accessDenied.jsp</result>
+        </global-results>
+        
+        <!--  ************************************ -->
+        <!--  Item metadata actions                -->
+        <!--  ************************************ -->
+        &metadata;
+        
+        <!--  ************************************ -->
+        <!--  User Actions                         -->
+        <!--  ************************************ -->
+        &user;
+        
+        <!--  ************************************ -->
+        <!--  Mime Actions                         -->
+        <!--  ************************************ -->
+        &mime;
+        
+        <!--  ************************************ -->
+        <!--  Repository Actions                   -->
+        <!--  ************************************ -->
+        &repository;
+        
+        <!--  ************************************ -->
+        <!--  Insitutional Collection Actions      -->
+        <!--  ************************************ -->
+        &insitutional_collection;
+        
+        <!--  ************************************ -->
+        <!--  Handle Actions                       -->
+        <!--  ************************************ -->
+        &handle;
+        
+        <!--  ************************************ -->
+        <!--  File Storage Actions                 -->
+        <!--  ************************************ -->
+        &file_storage;
+        
+        <!--  ************************************ -->
+        <!--  Administration Home Page             -->
+        <!--  ************************************ -->
+        <action name="adminHome" class="edu.ur.ir.web.action.Home">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/admin/admin-home.jsp</result>
+        </action>
+        
+        <action name="goAdminHome">
+            <result name="success" type="redirect">adminHome.action</result>
+        </action>
+
+         
+        <!--  ************************************ -->
+        <!--  News Actions                         -->
+        <!--  ************************************ -->
+       <action name="viewNewsItems">
+            <result name="success">/pages/admin/news/news.jsp</result>
+        </action>
+        
+        <action name="getNewsItems" 
+            class="edu.ur.ir.web.action.news.ManageNews"
+            method="viewNewsItems">
+            <result name="success">/pages/admin/news/news_table.jsp</result>
+        </action>
+        
+        <action name="uploadNewsPicture"
+            class="edu.ur.ir.web.action.news.UploadNewsImage"
+            method="addNewPicture">
+            <interceptor-ref name="urUploadStack"/>
+            <result name="success">/pages/admin/news/news_upload_form_frag.jsp</result>
+        </action>
+        
+        <action name="deleteNewsPicture"
+            class="edu.ur.ir.web.action.news.DeleteNewsPicture">
+            <interceptor-ref name="crudStack"/>
+            <result name="success">/pages/admin/news/news_pictures_frag.jsp</result>
+        </action>
+        
+        <action name="getNewsPictures"
+            class="edu.ur.ir.web.action.news.ManageNews"
+            method="edit">
+            <interceptor-ref name="crudStack"/>
+            <result name="edit">/pages/admin/news/news_pictures_frag.jsp</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*NewsItem" 
+            method="{1}"
+            class="edu.ur.ir.web.action.news.ManageNews">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/news/news.jsp</result>
+            <result name="added">/pages/admin/news/news_added.jsp</result>
+            <result name="deleted">/pages/admin/news/news_deleted.jsp</result>
+            <result name="edit">/pages/admin/news/edit_news.jsp</result>
+            <result name="success">/pages/admin/news/news.jsp</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  Ignore ip address Actions            -->
+        <!--  ************************************ -->
+        <action name="viewIgnoreIpAddresses">
+            <result name="success">/pages/admin/statistics/ignore_ipaddress.jsp</result>
+        </action>
+        
+        <action name="getIgnoreIpAddresses" 
+            class="edu.ur.ir.web.action.statistics.admin.ManageIgnoreIpAddress"
+            method="viewIgnoreIpAddresses">
+            <result name="success">/pages/admin/statistics/ignore_ipaddress_table.jsp</result>
+        </action>
+        
+         <action name="runFileDownloadUpdateProcessing" 
+            class="edu.ur.ir.web.action.statistics.admin.ManageIgnoreIpAddress"
+            method="runFileDownloadUpdateProcessing">
+            <result type="redirectAction" name="success">viewIgnoreIpAddresses</result>
+        </action>
+        
+        <!--  This handles update, save and delete -->
+        <action name="*IgnoreIpAddress" 
+            method="{1}"
+            class="edu.ur.ir.web.action.statistics.admin.ManageIgnoreIpAddress">
+            <interceptor-ref name="crudStack" />
+            <result name="input">/pages/admin/statistics/ignore_ipaddress.jsp</result>
+            <result name="added">/pages/admin/statistics/ignore_ipaddress_form.jsp</result>
+            <result name="deleted">/pages/admin/statistics/ignore_ipaddress_deleted.jsp</result>
+            <result name="get">/pages/admin/statistics/ignore_ipaddress_form.jsp</result>
+        </action>   
+        
+        <action name="viewDownloadCountsByIp"
+                class="edu.ur.ir.web.action.statistics.admin.ViewDownloadCountsByIp">
+                <result name="success">/pages/admin/statistics/ip_download_counts/ip_download_counts.jsp</result>
+        </action>
+        
+         <action name="viewIgnoreDownloadCountsByIp"
+                class="edu.ur.ir.web.action.statistics.admin.ViewIgnoreDownloadCountsByIp">
+                <result name="success">/pages/admin/statistics/ip_download_counts/ip_ignore_download_counts.jsp</result>
+        </action>
+        
+        
+        <!--  ************************************ -->
+        <!--  Repository License Actions           -->
+        <!--  ************************************ -->
+        <action name="viewRepositoryLicenses"
+               method="viewLicenses"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <result name="success">/pages/admin/license/licenses.jsp</result>
+        </action>    
+        
+        <action name="viewVersionedLicense"
+               method="viewVersionedLicense"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <result name="success">/pages/admin/license/view_versioned_license.jsp</result>
+        </action>   
+        
+        <action name="viewLicenseVersion"
+               method="viewLicenseVersion"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <result name="success">/pages/admin/license/view_license_version.jsp</result>
+        </action>   
+        
+        <action name="addNewLicenseVersion"
+               method="addNewLicenseVersion"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+              <result name="success">/pages/admin/license/add_new_license_version.jsp</result>
+        </action>     
+        
+         <action name="saveNewLicenseVersion"
+               method="saveNewVersion"
+               class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <interceptor-ref name="crudStack" />
+            <result name="success">/pages/admin/license/view_versioned_license.jsp</result>
+            <result name="newVersionInput">/pages/admin/license/add_new_license_version.jsp</result>
+        </action>     
+        
+        <!--  This handles update, save and delete -->
+        <action name="*RepositoryLicense" 
+            method="{1}"
+            class="edu.ur.ir.web.action.repository.ManageRepositoryLicenses">
+            <interceptor-ref name="crudStack" />
+            <result name="addNew">/pages/admin/license/add_new_license.jsp</result>
+            <result name="saveNewInput">/pages/admin/license/add_new_license.jsp</result>
+            <result name="cancel" type="redirect">viewRepositoryLicenses.action</result>
+            <result name="success" type="redirect">viewRepositoryLicenses.action</result>
+        </action>
+        
+        <!--  ************************************ -->
+        <!--  External account types management    -->
+        <!--  ************************************ -->
+        <action name="viewExternalAccountTypes"
+               method="viewExternalAccountTypes"
+               class="edu.ur.ir.web.action.user.admin.ManageExternalAccountTypes">
+            <result name="success">/pages/admin/external_account_type/external_account_types.jsp</result>
+        </action> 
+        
+        <action name="getExternalAccountTypesTable"
+               method="getExternalAccountTypesTable"
+               class="edu.ur.ir.web.action.user.admin.ManageExternalAccountTypes">
+            <result name="success">/pages/admin/external_account_type/external_account_type_table.jsp</result>
+        </action> 
+        
+        <!--  This handles update, save and delete -->
+        <action name="*ExternalAccountType" 
+            method="{1}"
+            class="edu.ur.ir.web.action.user.admin.ManageExternalAccountTypes">
+            <interceptor-ref name="crudStack" />
+            <result name="added">/pages/admin/external_account_type/external_account_type_form.jsp</result>
+            <result name="deleted">/pages/admin/external_account_type/external_account_type_deleted.jsp</result>
+            <result name="get">/pages/admin/external_account_type/external_account_type_form.jsp</result>
+        </action> 
+        
+        
+        <!--  ************************************ -->
+        <!--  Import MARC records    -->
+        <!--  ************************************ -->
+        <action name="viewMarcFileUploadPage"
+            class="edu.ur.ir.web.action.user.ImportMarcRecords"
+            method="viewMarcFileUploadPage">
+            <result name="success">/pages/user/workspace/upload_marc_file.jsp</result>
+        </action>
+        
+        <action name="uploadMarcFile"
+            class="edu.ur.ir.web.action.user.ImportMarcRecords"
+            method="uploadMarcFile">
+            <interceptor-ref name="urUploadStack"/>
+            <result name="success">/pages/user/workspace/upload_marc_complete.jsp</result>
+            <result name="importFailed">/pages/user/workspace/upload_marc_file_failed.jsp</result>
+        </action>
+              
+    </package>
+    
+</struts>
+    

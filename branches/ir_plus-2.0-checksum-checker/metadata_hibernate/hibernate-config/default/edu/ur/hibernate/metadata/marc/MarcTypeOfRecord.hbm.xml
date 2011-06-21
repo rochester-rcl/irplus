@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008-2010 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a marc type of record.
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.metadata.marc">
+	<class name="MarcTypeOfRecord" schema="metadata" table="marc_type_of_record"
+		lazy="true">
+
+        <cache usage="nonstrict-read-write" />
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="marc_type_of_record_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">metadata.marc_type_of_record_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+		
+		<property name="recordType" column="record_type" type="char"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+		
+	 </class>
+		
+	<!--  Get a count of records types -->
+	<query name="marcTypeOfRecordCount">
+	    select count(*) from MarcTypeOfRecord
+	</query>
+	
+    <!-- named query for type of record by name-->
+	<query name="getMarcTypeOfRecordByName">
+		from MarcTypeOfRecord as MarcTypeOfRecord where
+		MarcTypeOfRecord.name = :name
+	</query>
+	
+	 <!-- named query for getting type of record by name-->
+	<query name="getMarcTypeOfRecordByRecordType">
+		from MarcTypeOfRecord as MarcTypeOfRecord where
+		MarcTypeOfRecord.recordType = :recordType
+	</query>
+	
+	
+</hibernate-mapping>
