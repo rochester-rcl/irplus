@@ -25,10 +25,24 @@
     <!-- Email Sender 								-->
     <!-- ****************************************** --> 
 
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-         <property name="host" value="${mail.sender.host}"/>
-         <property name="port" value="${mail.sender.port}"/>
+   
+     <bean id="mailSession" class="javax.mail.Session" factory-method="getInstance"> 
+	    <constructor-arg> 
+		    <props> 
+			    <prop key="mail.smtp.socketFactory.class"> javax.net.ssl.SSLSocketFactory </prop> 
+			    <prop key="mail.smtp.socketFactory.fallback"> false </prop> 
+            </props> 
+            </constructor-arg> 
+     </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
+	   <property name="host" value="${mail.sender.host}" /> 
+	   <property name="port" value="${mail.sender.port}"/>
+	   <!--  uncomment for ssl
+	       <property name="session" ref="mailSession" /> 
+	    -->
     </bean>
+    
     
 
     <bean id = "userExistMailMessage" class="org.springframework.mail.SimpleMailMessage">
