@@ -131,6 +131,15 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	private SeriesService seriesService;
 
 
+	/**
+	 * Create a versioned item.
+	 * 
+	 * @param record - MARC record
+	 * @param owner - user who will own the generic item
+	 * @return - created versioned item.
+	 * 
+	 * @throws NoIndexFoundException
+	 */
 	@SuppressWarnings("unchecked")
 	public VersionedItem createVersionedItem(Record record, IrUser owner) throws NoIndexFoundException
 	{
@@ -245,8 +254,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	/**
 	 * Deal with the series information.
 	 * 
-	 * @param field
-	 * @param item
+	 * @param field to get series from
+	 * @param item to add series to
 	 */
 	private void addSeries(DataField field, GenericItem item)
 	{
@@ -332,8 +341,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	/**
 	 * Sets the language based on the 3 digits in the 008 header.
 	 * 
-	 * @param record
-	 * @param item
+	 * @param record to get language from 
+	 * @param item - to add lanaguage to.
 	 */
 	private void setLanguage(Record record, GenericItem item)
 	{
@@ -403,8 +412,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	/**
 	 * Add the sub title to the item.
 	 * 
-	 * @param field
-	 * @param item
+	 * @param field - to get sub title from
+	 * @param item - to add sub title to
 	 */
 	private void addSubTitle(DataField field, GenericItem item)
 	{
@@ -425,8 +434,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	/**
 	 * Add the abstract to the item.
 	 * 
-	 * @param field
-	 * @param item
+	 * @param field - to get data from
+	 * @param item - to add abstract to
 	 */
 	private void addAbstract(DataField field, GenericItem item)
 	{
@@ -443,10 +452,10 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	}
 	
 	/**
-	 * Add the abstract to the item.
+	 * Add the description to the item.
 	 * 
-	 * @param field
-	 * @param item
+	 * @param field - to get data from
+	 * @param item - to add data to
 	 */
 	private void addDescription(DataField field, GenericItem item)
 	{
@@ -472,8 +481,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	/**
 	 * Get the key word
 	 * 
-	 * @param field
-	 * @param item
+	 * @param field - field to get data from
+	 * @param item - to add data to
 	 * 
 	 * @return the found keyword or null not found
 	 */
@@ -491,6 +500,12 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		return data;
 	}
 	
+	/**
+	 * Deal with tags set up by the user - mapped to identifiers and extents.
+	 * 
+	 * @param field - field to get data from
+	 * @param item - item to add the data to
+	 */
 	@SuppressWarnings("unchecked")
 	private void handleOtherTags(DataField field, GenericItem item)
 	{
@@ -562,7 +577,9 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	/**
 	 * Handle the 100 level record.
 	 * 
-	 * @param field
+	 * @param field to get primary contributor from
+	 * @param item to add primary contributor to
+	 * 
 	 * @throws NoIndexFoundException 
 	 */
 	private void handle100(DataField field, GenericItem item) throws NoIndexFoundException
@@ -629,7 +646,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	/**
 	 * Deal with the 245. This is the title
 	 * 
-	 * @param marc 245 field
+	 * @param field - get title from
+	 * @param item - add title to.
 	 */
 	private void handle245(DataField field, GenericItem item)
 	{
@@ -690,8 +708,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	/**
 	 * Get the publisher information. 
 	 * 
-	 * @param field
-	 * @param item
+	 * @param field to get publisher from
+	 * @param item - to add publisher to
 	 */
 	private void handle260(DataField field, GenericItem item)
 	{
@@ -751,10 +769,15 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	
 	
 	/**
-	 * Strip off ending punctuation
+	 * Strip off ending punctuation this includes
+	 *  /
+	 *  :
+	 *  ,
+	 *  ;
+	 *  .
 	 * 
-	 * @param value
-	 * @return
+	 * @param value 
+	 * @return string with ending punctuation removed
 	 */
 	private String endPunctuationStripper(String value)
 	{
