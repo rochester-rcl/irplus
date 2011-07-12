@@ -80,7 +80,6 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 	// index processing type service */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
-	
 
 	// process for setting up personal workspace information to be indexed */
 	private UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService;
@@ -128,11 +127,13 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 			    	List<PersonalItem> createdItems = new LinkedList<PersonalItem>();	
 			    	for(VersionedItem item : items)
 			        {
-			    		createdItems.add(personalCollection.addVersionedItem(item));
+			    		PersonalItem i = personalCollection.addVersionedItem(item);
+			    		userPublishingFileSystemService.makePersonalItemPersistent(i);
+			    		createdItems.add(i);
 			        }
-			    	userPublishingFileSystemService.makePersonalCollectionPersistent(personalCollection);
 			    	for(PersonalItem newItem : createdItems)
 				    {
+			    		log.debug("owner = " + newItem.getOwner().getId() + " item = " + newItem + " processing type = " + indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 				        userWorkspaceIndexProcessingRecordService.save(newItem.getOwner().getId(),newItem, 
 				 		indexProcessingTypeService.get(IndexProcessingTypeService.UPDATE));
 				    }
@@ -303,5 +304,6 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 			UserWorkspaceIndexProcessingRecordService userWorkspaceIndexProcessingRecordService) {
 		this.userWorkspaceIndexProcessingRecordService = userWorkspaceIndexProcessingRecordService;
 	}
+	
 
 }

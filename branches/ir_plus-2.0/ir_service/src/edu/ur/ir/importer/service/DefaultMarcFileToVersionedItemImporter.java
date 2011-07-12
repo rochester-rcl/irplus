@@ -35,6 +35,7 @@ import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 
 
+import edu.ur.ir.ErrorEmailService;
 import edu.ur.ir.NoIndexFoundException;
 import edu.ur.ir.SearchResults;
 import edu.ur.ir.importer.BadMarcFileException;
@@ -129,6 +130,10 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	
 	// service to deal with series information
 	private SeriesService seriesService;
+
+	// service to deal with errors
+	ErrorEmailService errorEmailService;
+
 
 
 	/**
@@ -393,6 +398,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		// deal with file format we cannot handle
 		catch(MarcException e)
 		{
+			errorEmailService.sendError(e);
 			throw new BadMarcFileException("The file could not be parsed " + e.getMessage());
 		}
 		finally
@@ -1385,5 +1391,14 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		this.seriesService = seriesService;
 	}
 	
+	/**
+	 * Set the error email service.
+	 * 
+	 * @param errorEmailService
+	 */
+	public void setErrorEmailService(ErrorEmailService errorEmailService) {
+		this.errorEmailService = errorEmailService;
+	}
+
 
 }
