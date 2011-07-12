@@ -894,5 +894,6 @@
 	    <property name="marcContentTypeFieldMapperService" ref="marcContentTypeFieldMapperService"/>
 	    <property name="languageTypeService" ref="languageTypeService"/>
 	    <property name="seriesService" ref="seriesService"/>
+	    <property name="errorEmailService" ref="errorEmailService"/>
    </bean>
 </beans>
