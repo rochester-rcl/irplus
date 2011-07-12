@@ -26,7 +26,7 @@
     <info organisation="metadata_dao" module="metadata_dao"/>
     <dependencies>
 
-        <dependency org="metadata" name="metadata" rev="2.0" changing="true"/>
+        <dependency org="metadata" name="metadata" rev="2.1" changing="true"/>
         
     </dependencies>
 </ivy-module>
