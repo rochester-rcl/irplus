@@ -25,9 +25,9 @@
 
 	          it does not matter what the value is so long as the 
 		     line is uncommented.
-     -->
+    
  	<property name="yui.unzip" value="true"/>
- 	
+ 	 -->
 
 
 	<!-- always disable emma -->
