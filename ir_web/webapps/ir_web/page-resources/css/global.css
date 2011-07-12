@@ -89,7 +89,7 @@ a:active
 
 #header_logo
 {
-	width : 30%;
+	width : 50%;
 	align: left;
 	float: left;
 	padding-top: .5em;
@@ -98,7 +98,7 @@ a:active
 
 #header_links
 {
-	width : 70%;
+	width : 50%;
 	align: right;
 	float: right;
 	text-align: right;
