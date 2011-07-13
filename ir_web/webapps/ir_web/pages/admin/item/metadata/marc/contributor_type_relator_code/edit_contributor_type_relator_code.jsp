@@ -107,6 +107,8 @@
 	       
 	    </table>
 	    <input type="submit" value="Save"/>
+	    <input type="button" value="Cancel" onclick='javascript: window.location =  "<c:url value="/admin/viewContributorTypeRelatorCodes.action"/>"'/>
+	    
 	    </form>
         </div>
         <!--  end body div -->

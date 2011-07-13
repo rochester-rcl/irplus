@@ -178,6 +178,7 @@
 	       </tr>
 	    </table>
 	    <input type="submit" value="Save"/>
+	    <input type="button" value="Cancel" onclick='javascript: window.location =  "<c:url value="/admin/viewContentTypeMarcMappings.action"/>"'/>
 	    </form>
         </div>
         <!--  end body div -->

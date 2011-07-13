@@ -123,6 +123,7 @@
 	       
 	    </table>
 	    <input type="submit" value="Save"/>
+	    <input type="button" value="Cancel" onclick='javascript: window.location =  "${editMapperUrl}"'/>
 	    </form>
 	    
 	    
