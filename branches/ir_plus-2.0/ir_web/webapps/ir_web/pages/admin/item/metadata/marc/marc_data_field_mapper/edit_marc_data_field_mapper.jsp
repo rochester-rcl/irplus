@@ -105,6 +105,7 @@
 	       
 	    </table>
 	    <input type="submit" value="Save"/>
+	    <input type="button" value="Cancel" onclick='javascript: window.location =  "<c:url value="/admin/viewMarcDataFieldMappers.action"/>"'/>
 	    </form>
 	    
 	    
