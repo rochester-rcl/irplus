@@ -80,19 +80,7 @@
                                     </div>                    
                                 </li>
                                 
-                                <li class="yuimenuitem">
-                                    <a class="yuimenuitemlabel">MARC21 Mappings</a>
-
-                                    <div id="marcmapping" class="yuimenu">
-                                        <div class="bd">                    
-                                            <ul>
-                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContentTypeMarcMappings.action" />"><span class="menu_text">MARC21 Leader/Control Field Mappings</span></a></li>
-                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContributorTypeRelatorCodes.action" />"><span class="menu_text">Contributor Type Relator Code</span></a></li>
-                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewMarcDataFieldMappers.action" />"><span class="menu_text">MARC21 Data Field Mappings</span></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>                    
-                                </li>
+                                
                                 
 				                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewExtentTypes.action"/>"><span class="menu_text"><fmt:message key="menu.viewExtentTypes" /></span></a></li>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
@@ -123,6 +111,19 @@
                                 
                                 
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewLanguageTypes.action"/>" ><span class="menu_text"><fmt:message key="menu.viewLanguageTypes"/></span></a></li>
+                                <li class="yuimenuitem">
+                                    <a class="yuimenuitemlabel">MARC21 Mappings</a>
+
+                                    <div id="marcmapping" class="yuimenu">
+                                        <div class="bd">                    
+                                            <ul>
+                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContentTypeMarcMappings.action" />"><span class="menu_text">MARC21 Leader/Control Field Mappings</span></a></li>
+                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewContributorTypeRelatorCodes.action" />"><span class="menu_text">Contributor Type Relator Code</span></a></li>
+                                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewMarcDataFieldMappers.action" />"><span class="menu_text">MARC21 Data Field Mappings</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>                    
+                                </li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewTopMediaTypes.action" />"><span class="menu_text"><fmt:message key="menu.viewTopMediaTypes"/></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewNewsItems.action"/>"><span class="menu_text"><fmt:message key="menu.viewNewsItem"/></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPlacesOfPublication.action" />"><span class="menu_text">Places Of Publication</span></a></li>
