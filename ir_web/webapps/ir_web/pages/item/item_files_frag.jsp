@@ -79,7 +79,7 @@
 											    
 		<c:if test="${object.type == 'URL'}">
 		    <img  alt="" class="tableImg" src="${pageContext.request.contextPath}/page-resources/images/all-images/link.gif"/>
-	    	<a href="${object.url}">${object.name}</a>
+	    	<a href="${object.urlValue}">${object.name}</a>
 		</c:if>
 											
 		</td>
