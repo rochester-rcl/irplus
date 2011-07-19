@@ -51,14 +51,11 @@
 			                   ${contributorRelatorCode.marcRelatorCode.name} [${contributorRelatorCode.marcRelatorCode.relatorCode}]
 	                        </urstb:td>
 	                        <urstb:td>
-	                           <c:url value="/admin/deleteMarcContributorTypeRelatorCode.action" var="deleteUrl">
-	                               <c:param name="id" value="${contributorRelatorCode.id}"/>
-	                           </c:url>
-	                           
+	                          
 	                           <c:url value="/admin/editMarcContributorTypeRelatorCode.action" var="editUrl">
 	                               <c:param name="id" value="${contributorRelatorCode.id}"/>
 	                           </c:url>
-	                           <a href="${deleteUrl}">Delete</a> / <a href="${editUrl}">Edit</a>
+	                           <a href="${editUrl}">Edit</a> / <a href="javascript:YAHOO.ur.marc.contributorTypeMapping.deleteMapping(${contributorRelatorCode.id});">Delete</a> 
 	                        </urstb:td>
 	                       
 	                    </urstb:tr>

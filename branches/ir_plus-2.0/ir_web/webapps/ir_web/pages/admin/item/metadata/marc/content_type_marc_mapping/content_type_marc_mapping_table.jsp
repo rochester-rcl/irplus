@@ -47,14 +47,11 @@
 			                   ${mapping.contentType.name}
 	                        </urstb:td>
 	                        <urstb:td>
-	                           <c:url value="/admin/deleteContentTypeMarcMapping.action" var="deleteUrl">
-	                               <c:param name="id" value="${mapping.id}"/>
-	                           </c:url>
 	                           
 	                           <c:url value="/admin/editContentTypeMarcMapping.action" var="editUrl">
 	                               <c:param name="id" value="${mapping.id}"/>
 	                           </c:url>
-	                           <a href="${deleteUrl}">Delete</a> / <a href="${editUrl}">Edit</a>
+	                           <a href="${editUrl}">Edit</a>/<a href="javascript:YAHOO.ur.marc.contentTypeMapping.deleteMapping(${mapping.id});">Delete</a> 
 	                        </urstb:td>
 	                       
 	                    </urstb:tr>

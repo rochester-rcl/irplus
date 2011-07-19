@@ -62,7 +62,7 @@
 	                           <c:url value="/admin/editMarcDataFieldMapper.action" var="editUrl">
 	                               <c:param name="id" value="${marcDataFieldMapping.id}"/>
 	                           </c:url>
-	                           <a href="${deleteUrl}">Delete</a> / <a href="${editUrl}">Edit</a>
+	                           <a href="${editUrl}">Edit</a> / <a href="javascript:YAHOO.ur.marc.marcDataFieldMapping.deleteMapping(${marcDataFieldMapping.id});">Delete</a>
 	                        </urstb:td>
 	                       
 	                    </urstb:tr>

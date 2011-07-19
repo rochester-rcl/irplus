@@ -52,7 +52,7 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="pages/js/ur_table.js"/>
-    
+    <ur:js src="page-resources/js/admin/contributor_type_marc_mapping.js"/>
      
 </head>
 
@@ -84,7 +84,12 @@
   </div>
   <!--  End  doc div-->
   
-
+  <div id="deleteDialog" class="hidden">
+	<div class="hd">Delete MARC Contributor Type Mapping</div>
+	<div class="bd">
+		    <p>Are you sure you wish to delete the mapping?</p>
+	</div>
+  </div>
 
 </body>
 </html>
