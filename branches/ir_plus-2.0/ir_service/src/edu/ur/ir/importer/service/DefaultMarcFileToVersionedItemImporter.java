@@ -637,6 +637,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 				contributor = new Contributor();
 			    contributor.setContributorType(contributorType);
 			    contributor.setPersonName(pn);
+			    contributorService.save(contributor);
 			}
 			try {
 				log.debug("existing contributor used");
