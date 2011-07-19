@@ -29,6 +29,10 @@ articles (A, the, ...)
 - Fixed IE issue when users change logo - larger logos cause the header to go beyond set width.  
   Allowed logo 50% and links 50%
 
+- Fixed issue when url is not correct - causes exception on item_files_frag.jsp.  Updated
+to use ItemLink.urlValue rather than ItemLink.url
+
+
 IR+ 2.0.7 to 2.0.8
 ==========================
 - Updated almost all images to use css rather than hard coded sizes
