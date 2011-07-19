@@ -52,6 +52,7 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="pages/js/ur_table.js"/>
+    <ur:js src="page-resources/js/admin/marc_data_field_mapping.js"/>
     
      
 </head>
@@ -84,6 +85,12 @@
   </div>
   <!--  End  doc div-->
   
+  <div id="deleteDialog" class="hidden">
+	<div class="hd">Delete MARC Data Field Mapping</div>
+	<div class="bd">
+		    <p>Are you sure you wish to delete the data field mapping?</p>
+	</div>
+  </div>
 
 
 </body>
