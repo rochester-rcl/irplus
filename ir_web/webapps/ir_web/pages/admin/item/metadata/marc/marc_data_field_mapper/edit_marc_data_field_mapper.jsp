@@ -53,6 +53,8 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
     <ur:js src="pages/js/ur_table.js"/>
+    <ur:js src="page-resources/js/admin/marc_identifier_type_mapping.js"/>
+    <ur:js src="page-resources/js/admin/marc_extent_type_mapping.js"/>
     
      
 </head>
@@ -149,14 +151,10 @@
 	                        </urstb:td>
 	                       
 	                        <urstb:td>
-	                           <c:url value="/admin/deleteMarcIdentifierTypeSubFieldMapper.action" var="deleteUrl">
-	                               <c:param name="id" value="${ident.id}"/>
-	                           </c:url>
-	                           
 	                           <c:url value="/admin/editMarcIdentifierTypeSubFieldMapper.action" var="editUrl">
 	                               <c:param name="id" value="${ident.id}"/>
 	                           </c:url>
-	                           <a href="${deleteUrl}">Delete</a> / <a href="${editUrl}">Edit</a>
+	                           <a href="${editUrl}">Edit</a> /<a href="javascript:YAHOO.ur.marc.marcIdentifierTypeMapping.deleteMapping(${ident.id});">Delete</a>
 	                        </urstb:td>
 	                       
 	                    </urstb:tr>
@@ -204,14 +202,10 @@
 	                        </urstb:td>
 	                       
 	                        <urstb:td>
-	                           <c:url value="/admin/deleteMarcExtentTypeSubFieldMapper.action" var="deleteUrl">
-	                               <c:param name="id" value="${extent.id}"/>
-	                           </c:url>
-	                           
 	                           <c:url value="/admin/editMarcExtentTypeSubFieldMapper.action" var="editUrl">
 	                               <c:param name="id" value="${extent.id}"/>
 	                           </c:url>
-	                           <a href="${deleteUrl}">Delete</a> / <a href="${editUrl}">Edit</a>
+	                           <a href="${editUrl}">Edit</a> /  <a href="javascript:YAHOO.ur.marc.marcExtentTypeMapping.deleteMapping(${extent.id});">Delete</a>
 	                        </urstb:td>
 	                       
 	                    </urstb:tr>
@@ -229,6 +223,22 @@
       <!--  this is the footer of the page -->
       <c:import url="/inc/footer.jsp"/>
   
+    <div id="deleteExtentDialog" class="hidden">
+	    <div class="hd">Delete MARC Extent Type Field Mapping</div>
+	    <div class="bd">
+		    <p>Are you sure you wish to delete the selected Extent Type Mapping?</p>
+	    </div>
+    </div>
+    <!--  end dialog -->
+    
+    <div id="deleteIdentDialog" class="hidden">
+	    <div class="hd">Delete MARC Identifier Type Field Mapping</div>
+	    <div class="bd">
+		    <p>Are you sure you wish to delete the selected Identifier Type Mapping?</p>
+	    </div>
+    </div>
+    <!--  end dialog -->
+    
   </div>
   <!--  End  doc div-->
   
