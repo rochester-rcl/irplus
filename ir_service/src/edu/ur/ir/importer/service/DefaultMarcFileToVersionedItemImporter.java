@@ -336,7 +336,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 				item.setPrimaryContentType(mapper.getContentType());
 				done = true;
 			}
-			else
+			else if( !mapper.getThesis())
 			{
 				item.setPrimaryContentType(mapper.getContentType());
 			}
