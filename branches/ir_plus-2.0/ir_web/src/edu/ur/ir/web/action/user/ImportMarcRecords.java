@@ -111,7 +111,9 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 		        	List<PersonalItem> createdItems = new LinkedList<PersonalItem>();	
 			        for(VersionedItem item : items)
 			        {
-			        	createdItems.add( user.createRootPersonalItem(item) );
+			        	PersonalItem i = user.createRootPersonalItem(item);
+			    		userPublishingFileSystemService.makePersonalItemPersistent(i);
+			        	createdItems.add(i);
 			        	
 			        }
 			        userService.makeUserPersistent(user);
