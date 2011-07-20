@@ -108,19 +108,6 @@
 		         </td>
 	       </tr>
 	       
-	       <tr>       
-	           <td align="left" class="label">Pre-String</td>
-		       <td align="left" class="input">
-		          <input type="text" size="50"  name="preString" value="${identifierTypeSubFieldMapper.preString}"/>
-		      </td>
-	       </tr>
-	       <tr>       
-	           <td align="left" class="label">Post String</td>
-		       <td align="left" class="input">
-		          <input type="text" size="50" name="postString" value="${identifierTypeSubFieldMapper.postString}"/>
-		      </td>
-	       </tr>
-	       
 	    </table>
 	    <input type="submit" value="Save"/>
 	    <input type="button" value="Cancel" onclick='javascript: window.location =  "${editMapperUrl}"'/>

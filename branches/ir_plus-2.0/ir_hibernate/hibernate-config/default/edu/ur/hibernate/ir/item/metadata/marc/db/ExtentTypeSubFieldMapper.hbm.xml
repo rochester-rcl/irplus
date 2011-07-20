@@ -40,15 +40,6 @@
 		<version name="version" column="version"
 			access="org.hibernate.property.DirectPropertyAccessor" />
 		
-		<!-- first indicator -->	
-		<property name="preString" column="pre_string" type="string"
-			access="field" />
-	    
-	    <!-- second indicator -->	
-        <property name="postString" column="post_string" type="string"
-			access="field" />
-	
-	
 	    <!--  parent mapper -->
 		<many-to-one class="MarcDataFieldMapper"
 			name="marcDataFieldMapper" 

@@ -36,12 +36,6 @@ public abstract class MarcSubFieldMapper extends BasePersistent{
 	// subfield to map this too
 	protected MarcSubField marcSubField;
 	
-	// string to append before the value 
-	protected String preString;
-	
-	// String to append after the value
-	protected String postString;
-	
 	/**
 	 * Get the parent marc data field mapper.
 	 * 
@@ -78,41 +72,7 @@ public abstract class MarcSubFieldMapper extends BasePersistent{
 		this.marcSubField = marcSubField;
 	}
 	
-	/**
-	 * String data to be appeneded prior to the value.
-	 * 
-	 * @return
-	 */
-	public String getPreString() {
-		return preString;
-	}
 
-	/**
-	 * String to be appended prior to the value.
-	 * 
-	 * @param preString
-	 */
-	public void setPreString(String preString) {
-		this.preString = preString;
-	}
-
-	/**
-	 * String to be appended after the value.
-	 * 
-	 * @return
-	 */
-	public String getPostString() {
-		return postString;
-	}
-
-	/**
-	 * String to be appended afte rthe value.
-	 * 
-	 * @param postString
-	 */
-	public void setPostString(String postString) {
-		this.postString = postString;
-	}
 
 
 }
