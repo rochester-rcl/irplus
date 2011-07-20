@@ -126,16 +126,12 @@ implements Preparable{
 			
 			    identifierTypeSubFieldMapper.setIdentifierType(identifierType);
 			    identifierTypeSubFieldMapper.setMarcSubField(marcSubField);
-			    identifierTypeSubFieldMapper.setPostString(postString);
-			    identifierTypeSubFieldMapper.setPreString(preString);
 			    identifierTypeSubFieldMapperService.save(identifierTypeSubFieldMapper);
 		 }
 		 else
 		 {
 			    // new mapper
 			    identifierTypeSubFieldMapper = marcDataFieldMapper.add(identifierType, marcSubField);
-			    identifierTypeSubFieldMapper.setPostString(postString);
-			    identifierTypeSubFieldMapper.setPreString(preString);
 			    identifierTypeSubFieldMapperService.save(identifierTypeSubFieldMapper);
 		 }
 		

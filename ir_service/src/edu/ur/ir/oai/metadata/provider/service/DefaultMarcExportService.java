@@ -232,7 +232,10 @@ public class DefaultMarcExportService implements MarcExportService{
 	{
         Set<ItemExtent> extents = item.getItemExtents();
         
+        // has b subfield
         boolean hasB = false;
+        
+        // has c subfield
         boolean hasC = false;
         
         for(ItemExtent extent : extents)
@@ -270,15 +273,7 @@ public class DefaultMarcExportService implements MarcExportService{
 					
 					String value = extent.getValue();
 					
-					if( mapper.getPreString() != null )
-					{
-						value = mapper.getPreString() + value;
-						
-					}
-					if( mapper.getPostString() != null )
-					{
-						value = value + mapper.getPostString();
-					}
+					
 					
 					if(mapper.getMarcSubField().getName().equalsIgnoreCase("a") && hasB)
 					{
@@ -595,14 +590,6 @@ public class DefaultMarcExportService implements MarcExportService{
 					DataField df = (DataField)record.getVariableField(marcDataField.getCode());
 					
 					String value = identifier.getValue();
-					if( mapper.getPreString() != null )
-					{
-						value = mapper.getPreString() + value;
-					}
-					if( mapper.getPostString() != null )
-					{
-						value = value + mapper.getPostString();
-					}
 					
 					if( marcDataField.isRepeatable() || df == null)
 					{

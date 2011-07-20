@@ -110,16 +110,12 @@ implements Preparable{
 			
 			    extentTypeSubFieldMapper.setExtentType(extentType);
 			    extentTypeSubFieldMapper.setMarcSubField(marcSubField);
-			    extentTypeSubFieldMapper.setPostString(postString);
-			    extentTypeSubFieldMapper.setPreString(preString);
 			    extentTypeSubFieldMapperService.save(extentTypeSubFieldMapper);
 		 }
 		 else
 		 {
 			    // new mapper
 			    extentTypeSubFieldMapper = marcDataFieldMapper.add(extentType, marcSubField);
-			    extentTypeSubFieldMapper.setPostString(postString);
-			    extentTypeSubFieldMapper.setPreString(preString);
 			    extentTypeSubFieldMapperService.save(extentTypeSubFieldMapper);
 		 }
 		
