@@ -126,8 +126,8 @@
                                 </li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewTopMediaTypes.action" />"><span class="menu_text"><fmt:message key="menu.viewTopMediaTypes"/></span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewNewsItems.action"/>"><span class="menu_text"><fmt:message key="menu.viewNewsItem"/></span></a></li>
-                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPlacesOfPublication.action" />"><span class="menu_text">Places Of Publication</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPersons.action" />"><span class="menu_text">Person Name Authority</span></a></li>
+                                <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPlacesOfPublication.action" />"><span class="menu_text">Places Of Publication</span></a></li>
                                 <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewPublishers.action"/>"><span class="menu_text"><fmt:message key="menu.viewPublishers"/></span></a></li>
                                 <c:if test='${ir:userHasRole("ROLE_ADMIN","OR")}'>
                                     <li class="yuimenuitem"><a class="yuimenuitemlabel" href="<c:url value="/admin/viewRepository.action"/>"><span class="menu_text">Repository</span></a></li>
