@@ -194,7 +194,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    {
 		    	addSubTitle(field, item);
 		    }
-		    else if( tag.equals("520") && ind1 == '3')
+		    else if( tag.equals("520") )
 		    {
 		    	addAbstract(field, item);
 		    }
