@@ -93,14 +93,11 @@
 	                              ${placeOfPublication.description}
 	                        </urstb:td>	 
 	                        <urstb:td>
-	                             <c:url value="/admin/deletePlaceOfPublication.action" var="deleteUrl">
-	                               <c:param name="id" value="${placeOfPublication.id}"/>
-	                            </c:url>
 	                           
 	                            <c:url value="/admin/editPlaceOfPublication.action" var="editUrl">
 	                               <c:param name="id" value="${placeOfPublication.id}"/>
 	                             </c:url>
-	                             <a href="${editUrl}">Edit</a>/<a href="${deleteUrl}">Delete</a>
+	                             <a href="${editUrl}">Edit</a>/<a href="javascript:YAHOO.ur.placeOfPublication.deleteMapping(${placeOfPublication.id});">Delete</a>
 	                        </urstb:td>	                           
 	                        
 	                    </urstb:tr>

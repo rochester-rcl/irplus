@@ -76,23 +76,24 @@
 	       <tr>       
 	           <td align="left" class="label">Name*</td>
 		       <td align="left" class="input">
-		           <input type="text"  size="50"  name="placeOfPublication.name" value="${placeOfPublication.name}"/>
+		           <input type="text"  size="50"  name="placeOfPublication.name" value="<c:out value="${placeOfPublication.name}"/>"/>
 		       </td>
 	       </tr>
 	       <tr>       
 	           <td align="left" class="label">2/3 Letter Code</td>
 		       <td align="left" class="input">
-		           <input type="text"  size="3" maxlength="3" name="placeOfPublication.letterCode" value="${placeOfPublication.letterCode}"/>
+		           <input type="text"  size="3" maxlength="3" name="placeOfPublication.letterCode" value="<c:out value="${placeOfPublication.letterCode}"/>"/>
 		       </td>
 	       </tr>
 	       <tr>
 	           <td align="left" class="label">Description:</td>
 		       <td colspan="2" align="left" class="input"><textarea  
-		           name="placeOfPublication.description" cols="42" rows="4">${placeOfPublication.description}</textarea></td>
+		           name="placeOfPublication.description" cols="42" rows="4"><c:out value="${placeOfPublication.description}"/></textarea></td>
 	      </tr>
 	       
 	    </table>
 	    <input type="submit" value="Save"/>
+	     <input type="button" value="Cancel" onclick='javascript: window.location =  "<c:url value="/admin/viewPlacesOfPublication.action"/>"'/>
 	    </form>
         </div>
         <!--  end body div -->

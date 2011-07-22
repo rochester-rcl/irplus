@@ -52,6 +52,7 @@
  	<ur:js src="page-resources/js/util/ur_util.js"/>
  	<ur:js src="page-resources/js/util/wait_dialog.js" />
  	<ur:js src="page-resources/js/menu/main_menu.js"/>
+ 	 <ur:js src="page-resources/js/admin/place_of_publication.js"/>
      
 </head>
 
@@ -79,6 +80,12 @@
       
   </div>
  
+   <div id="deleteDialog" class="hidden">
+	<div class="hd">Delete Place of Publication</div>
+	<div class="bd">
+		    <p>Are you sure you wish to delete the place of publication?</p>
+	</div>
+  </div>
 
 </body>
 </html>
