@@ -14,19 +14,20 @@
    limitations under the License.
 */
 
-YAHOO.namespace("ur.marc.contributorTypeMapping");
+YAHOO.namespace("ur.placeOfPublication");
 
 // global delete id
 var deleteId;
-var deleteAction = basePath + 'admin/deleteMarcContributorTypeRelatorCode.action';
+var deleteAction = basePath + 'admin/deletePlaceOfPublication.action';
 
 /**
- * Contributor type name space
+ * place of publication name space
  */
-YAHOO.ur.marc.contributorTypeMapping = {
+YAHOO.ur.placeOfPublication = {
 		
 		/**
-		 * Creates a delete dialog
+		 * Creates a mac content type
+		 *
 		 */
 		createDeleteDialog : function()
 		{
@@ -39,7 +40,7 @@ YAHOO.ur.marc.contributorTypeMapping = {
 				
 			// handle a cancel of deleting copyrigght statement dialog
 			var handleCancel = function() {
-				YAHOO.ur.marc.contributorTypeMapping.deleteDialog.hide();
+				YAHOO.ur.placeOfPublication.deleteDialog.hide();
 			};
 			
 			
@@ -47,7 +48,7 @@ YAHOO.ur.marc.contributorTypeMapping = {
 			// make it modal - 
 			// it should not start out as visible - it should not be shown until 
 			// new copyrigght statement button is clicked.
-			YAHOO.ur.marc.contributorTypeMapping.deleteDialog = new YAHOO.widget.Dialog('deleteDialog', 
+			YAHOO.ur.placeOfPublication.deleteDialog = new YAHOO.widget.Dialog('deleteDialog', 
 		        { width : "500px",
 				  visible : false, 
 				  modal : true,
@@ -56,15 +57,15 @@ YAHOO.ur.marc.contributorTypeMapping = {
 				} );
 		     
 		    //center and show the delete dialog
-			YAHOO.ur.marc.contributorTypeMapping.deleteDialog.showDialog = function()
+			YAHOO.ur.placeOfPublication.deleteDialog.showDialog = function()
 		    {
-				YAHOO.ur.marc.contributorTypeMapping.deleteDialog.center();
-				YAHOO.ur.marc.contributorTypeMapping.deleteDialog.show();
+				YAHOO.ur.placeOfPublication.deleteDialog.center();
+				YAHOO.ur.placeOfPublication.deleteDialog.show();
 		    }
 		   
 					
 			// Render the Dialog
-			YAHOO.ur.marc.contributorTypeMapping.deleteDialog.render();
+			YAHOO.ur.placeOfPublication.deleteDialog.render();
 		
 		},
 		
@@ -74,7 +75,7 @@ YAHOO.ur.marc.contributorTypeMapping = {
 		deleteMapping : function(id)
 		{
 		    deleteId = id;	
-		    YAHOO.ur.marc.contributorTypeMapping.deleteDialog.showDialog();
+		    YAHOO.ur.placeOfPublication.deleteDialog.showDialog();
 		},
 		
 		// initialize the page
@@ -82,8 +83,8 @@ YAHOO.ur.marc.contributorTypeMapping = {
 		// been created
 		init : function() 
 		{
-	        YAHOO.ur.marc.contributorTypeMapping.createDeleteDialog();
+	        YAHOO.ur.placeOfPublication.createDeleteDialog();
 		}	
 }
 //initialize the code once the dom is ready
-YAHOO.util.Event.onDOMReady(YAHOO.ur.marc.contributorTypeMapping.init);
+YAHOO.util.Event.onDOMReady(YAHOO.ur.placeOfPublication.init);
