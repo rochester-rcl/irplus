@@ -7031,4 +7031,96 @@ insert into
 metadata.marc_type_of_record (marc_type_of_record_id, version, name, record_type, description) 
 values (nextval('metadata.marc_type_of_record_seq'), 0, 'Computer file', 'm','');
 
+-- -----------------------------------------------
+-- Insert mappings
+--
+-- ----------------------------------------------
+INSERT INTO ir_metadata_marc.content_type_field_mapping (
+    content_type_field_mapping_id, 
+    content_type_id, 
+    control_field_006, 
+    control_field_007, 
+    control_field_008, 
+    is_thesis, 
+    encoding_level, 
+    record_status,
+    marc_type_of_record_id,
+    bibliographic_level, 
+    type_of_control, 
+    descriptive_cataloging_form, 
+    version) 
+    VALUES(
+            nextval('ir_metadata_marc.content_type_field_mapping_seq'), 
+            (select content_type.content_type_id from ir_item.content_type 
+            where content_type.unique_system_code = 'BOOK'), 
+            'm        d        ', 
+            'cr||||||||||||', 
+            '                       s                ',  
+            false, 
+            'K', 
+            ' ', 
+            (select marc_type_of_record_id from metadata.marc_type_of_record 
+             where marc_type_of_record.record_type = 'a'), 
+            'm', 
+            ' ', 
+            'a', 
+            0) ;
 
+INSERT INTO ir_metadata_marc.content_type_field_mapping (content_type_field_mapping_id,
+content_type_id, 
+control_field_006, 
+control_field_007,
+control_field_008, 
+is_thesis, 
+encoding_level, 
+record_status, 
+marc_type_of_record_id,
+bibliographic_level, 
+type_of_control, 
+descriptive_cataloging_form, 
+version) 
+VALUES (nextval('ir_metadata_marc.content_type_field_mapping_seq'), 
+         (select content_type.content_type_id from ir_item.content_type 
+            where content_type.unique_system_code = 'THESIS'), 
+        'm        d        ',
+        'cr||||||||||||', 
+        '      s                s                ',  
+        true, 
+        'K', 
+        ' ', 
+        (select marc_type_of_record_id from metadata.marc_type_of_record 
+             where marc_type_of_record.record_type = 'a'), 
+        'm', 
+        ' ', 
+        'a', 
+        0);
+
+
+INSERT INTO ir_metadata_marc.content_type_field_mapping (content_type_field_mapping_id,
+content_type_id, 
+control_field_006, 
+control_field_007,
+control_field_008, 
+is_thesis, 
+encoding_level, 
+record_status, 
+marc_type_of_record_id,
+bibliographic_level, 
+type_of_control, 
+descriptive_cataloging_form, 
+version) 
+VALUES (nextval('ir_metadata_marc.content_type_field_mapping_seq'), 
+         (select content_type.content_type_id from ir_item.content_type 
+            where content_type.unique_system_code = 'MUSICAL_SCORE'), 
+        'm        d        ',
+        'cr||||||||||||', 
+        '      s                s                ',  
+        true, 
+        'K', 
+        ' ', 
+        (select marc_type_of_record_id from metadata.marc_type_of_record 
+             where marc_type_of_record.record_type = 'c'), 
+        'm', 
+        ' ', 
+        'a', 
+        0);
