@@ -174,9 +174,13 @@
 					                       onmouseover="this.className='ur_buttonover';"
 				 		                   onmouseout="this.className='ur_button';"
 				 		                   onclick="javascript:document.addToResearcherPageForm.submit();"
-					                       id="add_researcher_page">Add to My Researcher page</button>    
+					                       id="add_researcher_page">Add to Researcher page</button>    
 				</c:if>
 				
+				<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN,ROLE_RESEARCHER', 'OR')}">
+				    <br/>
+				    <br/>
+				</c:if>
 					
 				<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
 					    
