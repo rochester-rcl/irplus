@@ -49,7 +49,7 @@ UserIdAware{
 		// make sure the user has accepted the license
 		if( !acceptLicense )
 		{
-			addFieldError("licenseError", "You must accept the license to submit to the repository");
+			addFieldError("licenseError", "You must accept the license to use to the workspace");
 			return INPUT;
 		}
 		
@@ -67,15 +67,21 @@ UserIdAware{
 		
 		user.addAcceptedLicense(license);
 		userService.makeUserPersistent(user);
-		return SUCCESS;
+		
+		// if user is working on submitting an item send them to the
+		// submission page otherwise go to workspace
+		if( genericItemId != null )
+		{
+		    return SUCCESS;
+		}
+		else
+		{
+			return "workspace";
+		}
 	}
 	
 	public void setUserId(Long userId) {
 		this.userId = userId;	
-	}
-
-	public RepositoryService getRepositoryService() {
-		return repositoryService;
 	}
 
 	public void setRepositoryService(RepositoryService repostioryService) {
@@ -108,10 +114,6 @@ UserIdAware{
 
 	public void setAcceptLicense(boolean acceptLicense) {
 		this.acceptLicense = acceptLicense;
-	}
-
-	public UserService getUserService() {
-		return userService;
 	}
 
 	public void setUserService(UserService userService) {
