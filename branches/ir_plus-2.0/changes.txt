@@ -32,6 +32,15 @@ articles (A, the, ...)
 - Fixed issue when url is not correct - causes exception on item_files_frag.jsp.  Updated
 to use ItemLink.urlValue rather than ItemLink.url
 
+- Added processing window when deleting personal publications.  This prevents users from trying to perform
+actions while the delete is occurring.
+
+- Change in default license for the repository now requires the license to be accepted when the user visits 
+their workspace
+
+- Fixed large buttons issue in IE
+
+- Updated Administration documentation
 
 IR+ 2.0.7 to 2.0.8
 ==========================
