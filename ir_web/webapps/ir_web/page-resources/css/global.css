@@ -197,13 +197,11 @@ ul.basicNav {
     border-top: 1px solid #b9c0c2;
 }
 
-
-
-
 /* styling for buttons that have
    not yet been rolled over*/
 .ur_button
 {
+    overflow: visible;
 	margin-right: 2px;
 	margin-left: 2px;
     border: 1px solid #B9C0C2;
@@ -215,12 +213,12 @@ ul.basicNav {
     color: #454545;
     cursor:pointer;
     cursor:hand;
-    
 }
 
 /* styling for buttons when they have been rolled over*/
 .ur_buttonover
 {
+    overflow: visible;
 	margin-right: 2px;
 	margin-left: 2px;
     border: 1px solid #B9C0C2;
@@ -238,6 +236,7 @@ ul.basicNav {
    not yet been rolled over*/
 .ur_button_disabled
 {
+    overflow: visible;
 	margin-right: 2px;
     border: 1px solid #B9C0C2;
     background: url(../images/all-images/button_background.gif);
