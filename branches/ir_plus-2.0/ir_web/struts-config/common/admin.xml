@@ -89,6 +89,10 @@
         	 <result name="change-password">/pages/home.jsp</result>
         	 <result type="redirect" name="handleError">/pages/error.jsp</result>
         	 <result type="redirect" name="accessDenied">/accessDenied.jsp</result>
+        	 <result type="redirectAction" name="acceptLicense">
+        	      <param name="actionName">acceptRepositoryLicense.action</param>
+        	      <param name="namespace">/user</param>
+        	 </result>
         </global-results>
         
         <!--  ************************************ -->

@@ -84,6 +84,10 @@
         	 <result name="change-password">/pages/user/login/force_change_password.jsp</result>
         	 <result name="registration-error">/pages/user/login/invalid_token.jsp</result>
         	 <result name="accessDenied">/accessDenied.jsp</result>
+        	 <result type="redirectAction" name="acceptLicense">
+        	      <param name="actionName">acceptRepositoryLicense.action</param>
+        	      <param name="namespace">/user</param>
+        	 </result>
         </global-results>
 
         <!--  ************************************ -->
@@ -892,7 +896,16 @@
             class="edu.ur.ir.web.action.user.AcceptRepositoryLicense">
             <interceptor-ref name="editStack" />
             <result name="input">/pages/user/workspace/item/accept_license.jsp</result>
-            <result name="success" type="redirectAction">viewAddItemToCollections?genericItemId=${genericItemId}</result>
+            
+            <result name="success" type="redirectAction">
+                <param name="genericItemId">${genericItemId}</param>
+                 <param name="actionName">viewAddItemToCollections.action</param> 
+            </result>
+            
+            <!--  user was performing some action go back to workspace -->
+            <result name="workspace"  type="redirectAction"> 
+                <param name="actionName">workspace.action</param> 
+            </result> 
         </action> 
 
 		<!--  This allows a user to view the institutional collections an item can 

@@ -274,7 +274,7 @@
 	</query>
 	
 	<query name="getPublicationsForSponsorCount">
-	    select count(institutionalItemVersion) from InstitutionalItemVersion as institutionalItemVersion
+	    select count(distinct institutionalItemVersion) from InstitutionalItemVersion as institutionalItemVersion
 	    join institutionalItemVersion.item as item
 	    join item.itemSponsors as itemSponsor
 	    join itemSponsor.sponsor as sponsor
