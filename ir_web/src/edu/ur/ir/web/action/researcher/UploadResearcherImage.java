@@ -107,9 +107,11 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 		picture = repositoryService.createIrFile(repository, file, fileFileName, "picture for researcher id = " 
 				+ researcher.getId());
 		
+		IrFile primaryPicture = researcher.getPrimaryPicture();
 		if( primaryResearcherPicture )
 		{
-			IrFile primaryPicture = researcher.getPrimaryPicture();
+			// move old primary picture to 
+			// set of pictures
 			if( primaryPicture != null)
 			{
 				researcher.addPicture(primaryPicture);
@@ -120,7 +122,16 @@ public class UploadResearcherImage extends ActionSupport implements UserIdAware{
 		}
 		else
 		{
-			researcher.addPicture(picture);
+			// if there are no primary pictures
+			// make this one the primary picture
+			if( primaryPicture == null  )
+			{
+				researcher.setPrimaryPicture(picture);
+			}
+			else
+			{
+			    researcher.addPicture(picture);
+			}
 			added = true;
 		}
 		

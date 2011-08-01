@@ -17,6 +17,8 @@
 
 package edu.ur.ir.web.action.researcher;
 
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -97,7 +99,20 @@ public class ManageResearcherPicture extends ActionSupport implements Preparable
 			   log.debug("delete primary picture");
 			}
 			IrFile primaryPicture = researcher.getPrimaryPicture();
-			researcher.setPrimaryPicture(null);
+			
+		    IrFile newPrimaryPicture = null;
+			Iterator<IrFile> iter = researcher.getPictures().iterator();
+			if( iter.hasNext() )
+			{
+			    newPrimaryPicture = iter.next();
+				researcher.setPrimaryPicture(newPrimaryPicture);
+				researcher.removePicture(newPrimaryPicture);
+			}
+			else
+			{
+				researcher.setPrimaryPicture(null);
+			}
+			
 			repositoryService.deleteIrFile(primaryPicture);
 		}
 		else
