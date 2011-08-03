@@ -42,6 +42,12 @@ their workspace
 
 - Updated Administration documentation
 
+- Researcher pages picture upload - if no primary picture exists, the
+  up loaded picture becomes the primary picture.  If the primary picture
+  is deleted and other pictures exist the next picture in the set 
+  becomes the primary picture.
+
+
 IR+ 2.0.7 to 2.0.8
 ==========================
 - Updated almost all images to use css rather than hard coded sizes
