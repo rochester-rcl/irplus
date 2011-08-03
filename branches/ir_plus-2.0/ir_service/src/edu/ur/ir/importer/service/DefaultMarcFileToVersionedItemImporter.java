@@ -182,7 +182,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    {
 		    	handle245(field, item);
 		    }
-		    else if( tag.equals("246") && ind1 == '3')
+		    else if( tag.equals("246") && (ind1 == '3' || ind1 == '1') )
 		    {
 		    	addSubTitle(field, item);
 		    }
@@ -242,10 +242,9 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    {
 		    	addSeries(field, item);
 		    }
-		    else
-		    {
-		    	handleOtherTags(field, item);
-		    }
+		   
+		    handleOtherTags(field, item);
+		    
 		}
 		
 		if( keywords != null && !keywords.trim().equals(""))
@@ -312,11 +311,17 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		if( cf != null )
 		{
 		    String data = cf.getData();
-		    if( data != null && data.length() > 25 )
+		    if( data != null && data.length() >= 27 )
 		    {
-		    	char marker = data.charAt(24);
-		    	log.debug("thesis marker = " + marker);
-		    	if( marker == 'm' )
+		    	char marker24 = data.charAt(24);
+		    	char marker25 = data.charAt(25);
+		    	char marker26 = data.charAt(26);
+		    	char marker27 = data.charAt(27);
+		    	log.debug("thesis markers: 24 = " 
+		    			+ marker24 + " 25 =  " + 
+		    			marker25 + " 26 = " + 
+		    			marker26 + " 27 = " + marker27);
+		    	if( marker24 == 'm' || marker25 == 'm' || marker26 == 'm' || marker27 == 'm' )
 		    	{
 		    		thesisMarkerSet = true;
 		    	}
@@ -837,30 +842,37 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		if( size == 2)
 		{
 			// assume last name in first part
-			
-			personName.setSurname(fullNameParts[0].trim());
+			String surname = fullNameParts[0].trim();
+			surname = endPunctuationStripper(surname);
+			personName.setSurname(surname);
 			
 			// check the last part for multiple parts
 			String[] foreNameParts = fullNameParts[1].trim().split(" ");
 			if( foreNameParts.length > 1)
 			{
-				personName.setForename(foreNameParts[0].trim());
+				String forename = foreNameParts[0].trim();
+				forename = this.endPunctuationStripper(forename);
+				personName.setForename(forename);
 				String middleName = "";
 				for( int index = 1; index < foreNameParts.length; index++)
 				{
 					middleName = middleName + foreNameParts[index] + " ";
 				}
 				middleName = middleName.trim();
+				middleName = this.endPunctuationStripper(middleName);
 				personName.setMiddleName(middleName);
 			}
 			else
 			{
-				personName.setForename(fullNameParts[1].trim());
+				String forename = fullNameParts[1].trim();
+				forename = this.endPunctuationStripper(forename);
+				personName.setForename(forename);
 			}
 		}
 		else 
 		{
 			log.debug("Adding all to last name " + fullNameParts[0]);
+			authorName = this.endPunctuationStripper(authorName);
 			personName.setSurname(authorName);
 		}
 
