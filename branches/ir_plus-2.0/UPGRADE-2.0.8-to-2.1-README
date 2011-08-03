@@ -19,7 +19,7 @@ To upgrade from IR+ 2.0.8 to 2.1:
    This can be done using the command line interface or pgadmin.
    NOTE:  This script DOES alter the table structure.  
 
-6. Delete the old ir_plus war file from the tomcat director
+6. Delete the old ir_plus war file from the tomcat directory
 
 7. Delete the old ir_plus directory
     
