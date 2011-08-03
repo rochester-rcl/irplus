@@ -5905,6 +5905,10 @@ insert into metadata.marc_data_field(marc_data_field_id, version, code, name, re
 values(nextval('metadata.marc_data_field_seq'), 0, '650', 'Subject Added Entry - Topical Term', true, '');
 
 insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
+values(nextval('metadata.marc_data_field_seq'), 0, '651', 'Subject Added Entry - Geographic Name ', true, '');
+
+
+insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
 values(nextval('metadata.marc_data_field_seq'), 0, '653', 'Index Term - Uncontrolled', true, '');
 
 insert into metadata.marc_data_field(marc_data_field_id, version, code, name, repeatable, description)
