@@ -131,6 +131,9 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	
 	/** Indicates if the user is an author */
 	private boolean collaboratorRole = false;
+	
+	/** Indicates if the user can import data */
+	private boolean importerRole = false;
 
     /** Phone number of the user */
 	private String phoneNumber;
@@ -842,6 +845,10 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 	public void setCollaboratorRole(boolean collaboratorRole) {
 		this.collaboratorRole = collaboratorRole;
 	}
+	
+	public void setImporterRole(boolean importerRole) {
+		this.importerRole = importerRole;
+	}
 
 	public boolean isAuthorRole() {
 		return authorRole;
@@ -965,6 +972,15 @@ public class ManageUsers extends Pager implements Preparable, UserIdAware {
 		else
 		{
 			irUser.removeRole(roleService.getRole(IrRole.COLLABORATOR_ROLE));
+		}
+		
+		if( importerRole )
+		{
+			irUser.addRole(roleService.getRole(IrRole.IMPORTER_ROLE));
+		}
+		else
+		{
+			irUser.removeRole(roleService.getRole(IrRole.IMPORTER_ROLE));
 		}
 
 	}
