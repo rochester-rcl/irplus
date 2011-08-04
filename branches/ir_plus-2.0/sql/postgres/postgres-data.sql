@@ -4650,6 +4650,10 @@ select nextval('ir_user.role_seq'), 0, 'ROLE_AUTHOR', 'Indicates the user is a
 Author';
 
 insert into ir_user.role (role_id, version, name, description)
+select nextval('ir_user.role_seq'), 0, 'ROLE_IMPORTER', 
+'Indicates the user can import files';
+
+insert into ir_user.role (role_id, version, name, description)
 select nextval('ir_user.role_seq'), 0, 'ROLE_COLLECTION_ADMIN', 'Indicates the user is a 
 Collection Administrator';
 
@@ -4687,6 +4691,12 @@ ir_user.ir_user, ir_user.role
 where ir_user.ir_user.username = 'admin'
 and ir_user.role.name ='COLLECTION_AUTHOR';
 
+
+insert into ir_user.user_role(user_id, role_id)
+select ir_user.ir_user.user_id, ir_user.role.role_id from
+ir_user.ir_user, ir_user.role
+where ir_user.ir_user.username = 'admin'
+and ir_user.role.name ='ROLE_IMPORTER';
 
 -- ---------------------------------------------
 -- Insert the user role into the database

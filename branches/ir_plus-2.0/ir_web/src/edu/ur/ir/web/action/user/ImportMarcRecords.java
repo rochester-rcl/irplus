@@ -31,6 +31,7 @@ import edu.ur.ir.importer.BadMarcFileException;
 import edu.ur.ir.importer.MarcFileToVersionedItemImporter;
 import edu.ur.ir.index.IndexProcessingTypeService;
 import edu.ur.ir.item.VersionedItem;
+import edu.ur.ir.user.IrRole;
 import edu.ur.ir.user.IrUser;
 import edu.ur.ir.user.PersonalCollection;
 import edu.ur.ir.user.PersonalItem;
@@ -96,8 +97,15 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 	public String uploadMarcFile() throws IllegalFileSystemNameException, NoIndexFoundException, IOException, BadMarcFileException
 	{
 		log.debug("upload marc file");
-			
+		
+		
 		IrUser user = userService.getUser(userId, false);
+		log.debug(" user has importer role" + user.hasRole(IrRole.IMPORTER_ROLE));
+		if( !user.hasRole(IrRole.IMPORTER_ROLE))
+		{
+			return "accessDenied";
+		}
+		
 		if( file != null && file.exists() )
 		{
 			try
@@ -189,6 +197,13 @@ public class ImportMarcRecords extends ActionSupport implements UserIdAware{
 	 */
 	public String viewMarcFileUploadPage()
 	{
+
+		IrUser user = userService.getUser(userId, false);
+		log.debug(" user has importer role" + user.hasRole(IrRole.IMPORTER_ROLE));
+		if( !user.hasRole(IrRole.IMPORTER_ROLE))
+		{
+			return "accessDenied";
+		}
 		if( parentCollectionId != null && parentCollectionId > 0 )
 		{
 			parentCollection = userPublishingFileSystemService.getPersonalCollection(parentCollectionId, false);

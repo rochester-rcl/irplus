@@ -61,6 +61,7 @@ YAHOO.ur.email = {
         var authorRole = document.getElementById("editUserForm_isAuthor");
         var researcherRole = document.getElementById("editUserForm_isResearcher");
         var collectionAdminRole = document.getElementById("editUserForm_isCollectionAdmin");
+        var importerRole = document.getElementById("editUserForm_isImporter");
         
 	    if (permission.id == 'editUserForm_isAdmin') 
 	    {
@@ -68,7 +69,7 @@ YAHOO.ur.email = {
 		    {
 		        userRole.checked = true;
 		        authorRole.checked = true;
-		        researcherRole.checked = true;
+		        importer.checked = true;
 		    }
 	    }
 	
@@ -79,10 +80,7 @@ YAHOO.ur.email = {
 		        userRole.checked = true;
 		        authorRole.checked = true;
 		    } 
-		    else 
-		    {
-		        adminRole.checked = false;
-		    }
+		    
 	    }
 
 	    if (permission.id == 'editUserForm_isAuthor') 
@@ -95,6 +93,7 @@ YAHOO.ur.email = {
 		    {
 		        adminRole.checked = false;
 		        researcherRole.checked = false;
+		        importerRole.checked = false;
 		    }
 	    }
 	    
@@ -115,8 +114,19 @@ YAHOO.ur.email = {
 		        authorRole.checked = false;
 		        researcherRole.checked = false;
 		        collectionAdminRole.checked = false;
+		        importerRole.checked = false;
 		    }
 	    }
+	    
+	    if (permission.id == 'editUserForm_isImporter') 
+	    {
+		    if (permission.checked) 
+		    {
+		        authorRole.checked = true;
+		        userRole.checked = true;
+		    }
+	    }
+	    
 	    return true;
     },
 

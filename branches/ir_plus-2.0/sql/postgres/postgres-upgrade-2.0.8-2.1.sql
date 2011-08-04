@@ -1,4 +1,25 @@
 -- ---------------------------------------------
+-- insert a role for import abilities
+-- give all admins the importer role
+-- ---------------------------------------------
+insert into ir_user.role (role_id, version, name, description)
+select nextval('ir_user.role_seq'), 0, 'ROLE_IMPORTER', 
+'Indicates the user can import files';
+
+
+insert into ir_user.user_role(user_id, role_id)
+select ir_user.ir_user.user_id, ir_user.role.role_id from
+ir_user.ir_user, ir_user.role
+where ir_user.user_id in ( select ir_user.user_id from ir_user.ir_user, ir_user.user_role, ir_user.role
+where ir_user.user_id = user_role.user_id
+and user_role.role_id = role.role_id
+and role.name = 'ROLE_ADMIN') 
+and ir_user.role.name ='ROLE_IMPORTER';
+
+
+
+
+-- ---------------------------------------------
 -- Place of publication
 -- ---------------------------------------------
 CREATE TABLE ir_item.place_of_publication

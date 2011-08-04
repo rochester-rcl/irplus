@@ -75,9 +75,9 @@
               
 	        </td>
         </tr>
-    </table>
-    <c:if test="${user != null && (ir:userHasRole('ROLE_ADMIN', '')) }">
-        <c:url value="/admin/viewMarcFileUploadPage.action" var="importMarcUrl">
+    </table>                                       
+    <c:if test="${user != null && (ir:userHasRole('ROLE_IMPORTER', '')) }">
+        <c:url value="/user/viewMarcFileUploadPage.action" var="importMarcUrl">
             <c:param name="parentCollectionId" value="${parentCollectionId}"/>
         </c:url>
         <a href="${importMarcUrl}">Import MARC records</a>
