@@ -19,7 +19,10 @@ package edu.ur.ir.oai.metadata.provider.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -66,7 +69,7 @@ import edu.ur.metadata.marc.MarcDataField;
  * @author Nathan Sarr
  *
  */
-public class DefaultMarcExportService implements MarcExportService{
+public class DefaultMarcExportService implements MarcExportService, Comparator<ExtentTypeSubFieldMapper>{
 
 	/** eclipse generated export */
 	private static final long serialVersionUID = 1486364189520804900L;
@@ -96,6 +99,12 @@ public class DefaultMarcExportService implements MarcExportService{
 	private ExtentTypeSubFieldMapperService extentTypeSubFieldMapperService;
 	
 
+	/**
+	 * Export the institutional item version.
+	 * 
+	 * (non-Javadoc)
+	 * @see edu.ur.ir.export.MarcExportService#export(edu.ur.ir.institution.InstitutionalItemVersion, boolean)
+	 */
 	@SuppressWarnings("unchecked")
 	public Record export(InstitutionalItemVersion version, boolean showAllFields) {
         Record record = factory.newRecord();
@@ -238,42 +247,47 @@ public class DefaultMarcExportService implements MarcExportService{
         // has c subfield
         boolean hasC = false;
         
+        List<ExtentTypeSubFieldMapper> mappers = new LinkedList<ExtentTypeSubFieldMapper>();
+        
+        // get all mappers
         for(ItemExtent extent : extents)
+        {
+        	mappers.addAll(extentTypeSubFieldMapperService.getByExtentTypeId(extent.getExtentType().getId()));
+        }
+        
+        // sort the list according to marc sub field name
+        // this is to make sure exported fields are in order - $a, $b, $c
+        Collections.sort(mappers, this);
+        
+        // determine if we have a $b and or $c subfield
+        // this will affect punctuation
+ 	    for(ExtentTypeSubFieldMapper mapper : mappers)
 		{
-			List<ExtentTypeSubFieldMapper> mappers = extentTypeSubFieldMapperService.getByExtentTypeId(extent.getExtentType().getId());
-			
-			if( mappers.size() > 0 )
+		    if( mapper.getMarcSubField().getName().equalsIgnoreCase("b") )
 			{
-				for(ExtentTypeSubFieldMapper mapper : mappers)
-				{
-					if( mapper.getMarcSubField().getName().equalsIgnoreCase("b") )
-					{
-						hasB = true;
-					}
-					else if( mapper.getMarcSubField().getName().equalsIgnoreCase("c") )
-					{
-						hasC = true;
-					}
-				}
+			    hasB = true;
+			}
+			else if( mapper.getMarcSubField().getName().equalsIgnoreCase("c") )
+			{
+				hasC = true;
 			}
 		}
 		
-		for(ItemExtent extent : extents)
+ 	    
+		// match the extent type mappers up with the extents they belong to
+		for(ExtentTypeSubFieldMapper mapper : mappers)
 		{
-			List<ExtentTypeSubFieldMapper> mappers = extentTypeSubFieldMapperService.getByExtentTypeId(extent.getExtentType().getId());
-			
-			if( mappers.size() > 0 )
+			// take all the item extents 
+			for(ItemExtent extent : extents)
 			{
-				for(ExtentTypeSubFieldMapper mapper : mappers)
+				if( mapper.getExtentType().getId() == extent.getExtentType().getId())
 				{
-					//get the datafield 
-					MarcDataField marcDataField = mapper.getMarcDataFieldMapper().getMarcDataField();
+			        //get the datafield 
+				    MarcDataField marcDataField = mapper.getMarcDataFieldMapper().getMarcDataField();
 					
 					DataField df = (DataField)record.getVariableField(marcDataField.getCode());
 					
 					String value = extent.getValue();
-					
-					
 					
 					if(mapper.getMarcSubField().getName().equalsIgnoreCase("a") && hasB)
 					{
@@ -283,6 +297,11 @@ public class DefaultMarcExportService implements MarcExportService{
 					if(mapper.getMarcSubField().getName().equalsIgnoreCase("a") && !hasB && hasC)
 					{
 						value = value + " ; ";
+					}
+					
+					if(mapper.getMarcSubField().getName().equalsIgnoreCase("a") && !(hasB || hasC) )
+					{
+						value = value + ".";
 					}
 					
 					
@@ -307,6 +326,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		
 	}
 	
+	/**
+	 * Gets the main author of the item.
+	 * 
+	 * @param item
+	 * @return
+	 */
 	private ItemContributor getMainAuthor(GenericItem item)
 	{
 		ItemContributor ic = null;
@@ -346,6 +371,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		 record.addVariableField(df);
 	}
 	
+	/**
+	 * Sets other titles to the 246 field.
+	 * 
+	 * @param record
+	 * @param genericItem
+	 */
 	private void handleOtherTitles(Record record, GenericItem genericItem)
 	{
 		for(ItemTitle title : genericItem.getSubTitles())
@@ -356,6 +387,14 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 	}
 	
+	/**
+	 * Handles the main title.
+	 * 
+	 * @param item - item to get th the title from
+	 * @param ic - the main contributor
+	 * @param record - record to add the data to.
+	 * 
+	 */
 	private void handleTitle(GenericItem item, ItemContributor ic, Record record)
 	{
 		char ind2 = '0';
@@ -403,6 +442,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		
 	}
 
+	/**
+	 * Handle the contributors.
+	 * 
+	 * @param item - items to extract the contributors from
+	 * @param record - record to add the data to
+	 */
 	private void handleContributors(GenericItem item, Record record)
 	{
 		List<ItemContributor> contributors = item.getContributors();
@@ -512,6 +557,13 @@ public class DefaultMarcExportService implements MarcExportService{
 		
 	}
 	
+	/**
+	 * Handle the description.
+	 * 
+	 * @param record - record to add the description to
+	 * @param description - description
+	 * @param mapper - mapper
+	 */
 	private void handleDescription(Record record, String description, MarcContentTypeFieldMapper mapper)
 	{
 		if( mapper != null && mapper.isThesis() )
@@ -528,6 +580,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 	}
 	
+	/**
+	 * Deal with the embargo.
+	 * 
+	 * @param record - record to deal with the embargo 
+	 * @param embargoDate - date of the embargo
+	 */
 	private void handleEmbargo(Record record, Date embargoDate)
 	{
 		
@@ -546,6 +604,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		record.addVariableField(df);
 	}
 	
+	/**
+	 * Handle the abstract information.
+	 * 
+	 * @param record
+	 * @param itemAbstract
+	 */
 	private void handleAbstract(Record record, String itemAbstract)
 	{
 		DataField df = factory.newDataField("520", '3', ' ');
@@ -553,6 +617,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		record.addVariableField(df);
 	}
 	
+	/**
+	 * Deal with pdf information.
+	 * 
+	 * @param record
+	 * @param item
+	 */
 	private void handleFileType(Record record, GenericItem item)
 	{
 		boolean hasPdf = false;
@@ -609,6 +679,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 	}
 	
+	/**
+	 * Add the keywords to the 653 field
+	 * 
+	 * @param record
+	 * @param keyWords
+	 */
 	private void handleKeywords(Record record, String keyWords)
 	{
 		String[] words = keyWords.split(";");
@@ -620,6 +696,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 	}
 	
+	/**
+	 * Handle the copyright statement.
+	 * 
+	 * @param record
+	 * @param copyrightStatement
+	 */
 	private void handleCopyright(Record record, CopyrightStatement copyrightStatement)
 	{
 		if( copyrightStatement != null)
@@ -630,6 +712,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 	}
 	
+	/**
+	 * Handle the series information - placed in the 490 and 830 fields.
+	 * 
+	 * @param record
+	 * @param reports
+	 */
 	private void handleSeries(Record record, Set<ItemReport> reports)
 	{
 		for(ItemReport report : reports)
@@ -654,6 +742,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 	}
 	
+	/**
+	 * Handle the citation information. placed in the 524 field
+	 * 
+	 * @param record
+	 * @param citation
+	 */
 	private void handleCitation(Record record, String citation)
 	{
 		if( citation != null && !citation.trim().equals(""))
@@ -665,6 +759,12 @@ public class DefaultMarcExportService implements MarcExportService{
 	}
 	
 	
+	/**
+	 * If this is a thesis record then add thesis metadata.
+	 * 
+	 * @param record
+	 * @param item
+	 */
 	private void handleThesisType(Record record, GenericItem item)
 	{
 		for(ItemContentType itemContentType : item.getItemContentTypes() )
@@ -684,6 +784,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		}
 	}
 	
+	/**
+	 * Handle the url for the record.
+	 * 
+	 * @param record
+	 * @param url
+	 */
 	private void handleUrl(Record record, String url)
 	{
 		DataField df = factory.newDataField("856", '4', '0');
@@ -691,6 +797,12 @@ public class DefaultMarcExportService implements MarcExportService{
 		record.addVariableField(df);
 	}
 	
+	/**
+	 * Handle the leader of the record.
+	 * 
+	 * @param record
+	 * @param mapper
+	 */
 	private void handleLeader(Record record, MarcContentTypeFieldMapper mapper)
 	{
 		// these are specific to thesis
@@ -712,6 +824,16 @@ public class DefaultMarcExportService implements MarcExportService{
 	    leader.setCharCodingScheme('a');
 	}
 	
+	/**
+	 * Create the 008 field.
+	 * 
+	 * @param record - record to 
+	 * @param mapper - mapper for ctent types
+	 * @param year - year of publication
+	 * @param languageType - langauge type
+	 * @param placeOfPublication - location where published.
+	 * 
+	 */
 	@SuppressWarnings("unchecked")
 	private void handle008Field(Record record, MarcContentTypeFieldMapper mapper, String year, 
 			LanguageType languageType,
@@ -850,6 +972,20 @@ public class DefaultMarcExportService implements MarcExportService{
 		fixed = fixed.replaceAll("\u2019", "'");
 	    return fixed;
 	}
+
+	
+	/**
+	 * Compare the extent type sub field mapper based on name.
+	 * 
+	 * @param o1
+	 * @param o2
+	 * 
+	 * @return sub field mapper based on name.
+	 */
+	public int compare(ExtentTypeSubFieldMapper o1, ExtentTypeSubFieldMapper o2) {
+		return o1.getMarcSubField().getName().compareTo(o2.getMarcSubField().getName());
+	}
+
 	
 
 }
