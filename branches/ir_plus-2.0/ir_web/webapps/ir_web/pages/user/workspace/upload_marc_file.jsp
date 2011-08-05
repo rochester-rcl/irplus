@@ -68,7 +68,7 @@
         </c:url>
         <h3><a href="${workspaceUrl}">Back to workspace</a></h3>
 	        <form id="marcImport" name="macImport" method="post" enctype="multipart/form-data" 
-	            action="<c:url value="/admin/uploadMarcFile.action"/>">
+	            action="<c:url value="/user/uploadMarcFile.action"/>">
 	            <input type="hidden" name="parentCollectionId" value="${parentCollectionId}"/>
                 <table class="formTable">
                     <tr>
