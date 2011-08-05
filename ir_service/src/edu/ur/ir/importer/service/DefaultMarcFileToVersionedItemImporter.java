@@ -507,6 +507,74 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 			{
 			    data = endPunctuationStripper(data.trim());
 			}
+		
+			if( field.getSubfield('b') != null )
+		    {
+			    String subfieldB =  field.getSubfield('b').getData();
+			    if(  subfieldB != null && ! subfieldB.trim().equals(""))
+			    {
+				     subfieldB = endPunctuationStripper( subfieldB.trim());
+				     data = data + " " + subfieldB;
+			    }
+		    }
+			
+			if( field.getSubfield('c') != null )
+		    {
+			    String subfieldC =  field.getSubfield('c').getData();
+			    if(  subfieldC != null && ! subfieldC.trim().equals(""))
+			    {
+				     subfieldC = endPunctuationStripper( subfieldC.trim());
+				     data = data + " " + subfieldC;
+			    }
+		    }
+			
+			if( field.getSubfield('d') != null )
+		    {
+			    String subfieldD =  field.getSubfield('d').getData();
+			    if(  subfieldD != null && ! subfieldD.trim().equals(""))
+			    {
+				     subfieldD = endPunctuationStripper( subfieldD.trim());
+				     data = data + " " + subfieldD;
+			    }
+		    }
+			
+		    if( field.getSubfield('v') != null )
+		    {
+			    String subfieldV =  field.getSubfield('v').getData();
+			    if(  subfieldV != null && ! subfieldV.trim().equals(""))
+			    {
+				     subfieldV = endPunctuationStripper( subfieldV.trim());
+				     data = data + " " + subfieldV;
+			    }
+		    }
+		
+		    if( field.getSubfield('x') != null )
+		    {
+			    String subfieldX =  field.getSubfield('x').getData();
+			    if(  subfieldX != null && ! subfieldX.trim().equals(""))
+			    {
+				     subfieldX = endPunctuationStripper( subfieldX.trim());
+				     data = data + " " + subfieldX;
+			    }
+		    }
+		    if( field.getSubfield('y') != null )
+		    {
+			    String subfieldY =  field.getSubfield('y').getData();
+			    if(  subfieldY != null && ! subfieldY.trim().equals(""))
+			    {
+				     subfieldY = endPunctuationStripper( subfieldY.trim());
+				     data = data + " " +subfieldY;
+			    }
+		    }
+		    if( field.getSubfield('z') != null )
+		    {
+			    String subfieldZ =  field.getSubfield('z').getData();
+			    if(  subfieldZ != null && ! subfieldZ.trim().equals(""))
+			    {
+				    subfieldZ = endPunctuationStripper( subfieldZ.trim());
+				    data = data + " " +subfieldZ;
+			    }
+		    }
 		}
 		return data;
 	}
