@@ -68,7 +68,7 @@
             
             <!--  this is the body region of the page -->
             <div id="bd">
-				<h3><a href="home.action">${repository.name}</a> &gt;
+				<h3><a tabindex="1" href="home.action">${repository.name}</a> &gt;
                   <c:forEach var="collection" items="${path}">
                                     <c:url var="pathCollectionUrl" value="/viewInstitutionalCollection.action">
                                          <c:param name="collectionId" value="${collection.id}"/>
@@ -155,7 +155,7 @@
 				   </c:if>
 				   <c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN', '')}">
 						
-						<button class="ur_button" type="submit" 
+						<button class="ur_button" 
 					                       onmouseover="this.className='ur_buttonover';"
 				 		                   onmouseout="this.className='ur_button';"
 				 		                   onclick="javascript:document.newVersionForm.submit();"
@@ -170,7 +170,7 @@
 			    </c:if>   
 				
 				<c:if test="${user != null && (institutionalItem.owner == user) || ir:userHasRole('ROLE_ADMIN,ROLE_RESEARCHER', 'OR')}">
-						  <button class="ur_button" type="submit" 
+						  <button class="ur_button" 
 					                       onmouseover="this.className='ur_buttonover';"
 				 		                   onmouseout="this.className='ur_button';"
 				 		                   onclick="javascript:document.addToResearcherPageForm.submit();"
