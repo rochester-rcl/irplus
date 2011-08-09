@@ -1457,8 +1457,6 @@ YAHOO.ur.item.metadata = {
 	        button.className = 'ur_button';
 	        button.id = 'remove_other_title_' + tableId;
 	        
-	        alert('table id = ' + tableId);
-
 	        // listener for showing the dialog when clicked.
 	        YAHOO.util.Event.addListener(button.id, "click", 
 	        		YAHOO.ur.item.metadata.removeSubTitle, tableId);
@@ -1484,7 +1482,7 @@ YAHOO.ur.item.metadata = {
 	 */
 	removeSubTitle : function(event, tableId)
 	{
-        alert('table id = ' + tableId);
+      
 	    var table_div = document.getElementById("title_forms");
 	
 	    var child = document.getElementById(tableId);
