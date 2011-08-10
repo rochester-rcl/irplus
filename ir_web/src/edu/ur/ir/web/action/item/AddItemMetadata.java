@@ -428,6 +428,28 @@ public class AddItemMetadata extends ActionSupport implements Preparable, UserId
 	 */
 	public String getPublisherInformation() 
 	{
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			return "accessDenied";
+		}
+
+		return SUCCESS;
+	}
+	
+	/**
+	 * Action to update the publisher
+	 * 
+	 * @return
+	 */
+	public String getPlaceOfPublicationInformation() 
+	{
+		IrUser user = userService.getUser(userId, false);
+		if( !item.getOwner().getId().equals(userId) && !user.hasRole(IrRole.ADMIN_ROLE))
+		{
+			return "accessDenied";
+		}
+
 		return SUCCESS;
 	}
 	
