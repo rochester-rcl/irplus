@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,7 +86,8 @@ import edu.ur.ir.user.IrUser;
  * @author Nathan Sarr
  *
  */
-public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersionedItemImporter{
+public class DefaultMarcFileToVersionedItemImporter 
+    implements MarcFileToVersionedItemImporter, Comparator<Subfield> {
 	
 	//  Logger for add personal folder action */
 	private static final Logger log = Logger.getLogger(DefaultMarcFileToVersionedItemImporter.class);
@@ -178,6 +181,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		        log.debug("Subfield code: " + code + " Data element: " + data);
 	        }
 		    
+	        handleOtherTags(field, item);
+	        
 		    if( tag.equals("245"))
 		    {
 		    	handle245(field, item);
@@ -186,14 +191,16 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    {
 		    	addSubTitle(field, item);
 		    }
-		    else if( tag.equals("240") )
+		    else if( tag.equals("240") || 
+		    		 tag.equals("740") || 
+		    		 tag.equals("130") ||
+		    		 tag.equals("246") ||
+		    		 tag.equals("730") ||
+		    		 tag.equals("740") )
 		    {
 		    	addSubTitle(field, item);
 		    }
-		    else if( tag.equals("740") )
-		    {
-		    	addSubTitle(field, item);
-		    }
+		    
 		    else if( tag.equals("520") )
 		    {
 		    	addAbstract(field, item);
@@ -220,8 +227,8 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    }
 		    else if( tag.equals("653") || tag.equals("650") )
 		    {
-		    	//keywords
-		    	String value = handleSubjects(field, item);
+		    	 //keywords
+		    	String value = handleSubjects(field);
 		    	if( value != null && !value.trim().equals("") )
 		    	{
 		    		if( keywords.equals("") )
@@ -230,9 +237,10 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    		}
 		    		else
 		    		{
-		    			keywords = keywords + ";" + value;
-		    		}
+		    		    keywords = keywords + ";" + value;
+		    	    }
 		        }
+		    	
 		    }
 		    else if( tag.equals("500") || tag.equals("502") || tag.equals("505") )
 		    {
@@ -243,7 +251,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		    	addSeries(field, item);
 		    }
 		   
-		    handleOtherTags(field, item);
+		    
 		    
 		}
 		
@@ -261,38 +269,52 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 * @param field to get series from
 	 * @param item to add series to
 	 */
+	@SuppressWarnings("unchecked")
 	private void addSeries(DataField field, GenericItem item)
 	{
 		log.debug("add series");
-		if( field.getSubfield('a') != null ) 
+		List<Subfield> fields = field.getSubfields();
+		Collections.sort(fields, this);
+		String series = "";
+		String reportNumber = "";
+		for(Subfield f : fields)
 		{
-			String data = field.getSubfield('a').getData();
-			data = this.endPunctuationStripper(data);
-			if( data != null && !data.trim().equals(""))
+			if( f.getCode() != 'v' &&
+				f.getCode() != '0' &&
+				f.getCode() != '3' &&
+				f.getCode() != '5' &&
+				f.getCode() != '6' &&
+				f.getCode() != '8')
 			{
-				Series series = seriesService.getSeries(data);
-				log.debug("Found series " + series);
-				// create new series if not found
-				if( series == null )
-				{
-					log.debug("adding new series " + data);
-					series = new Series(data);
-					seriesService.saveSeries(series);
-				}
-				
-				// get the report number
-				String reportNumber = null;
-			    if( field.getSubfield('v') != null )
+			    if( f.getData() != null )
 			    {
-			    	 data = field.getSubfield('v').getData();
-			    	 if( data != null && !data.trim().equals(""))
-			    	 {
-			    		 reportNumber = data.trim();
-			    	 }
+				    series += endPunctuationStripper(f.getData()) + " ";
 			    }
-			    log.debug("report number = " + reportNumber);
-			    item.addReport(series, reportNumber);
 			}
+			
+			if( f.getCode() == 'v' )
+			{
+				if( f.getData() != null && !f.getData().trim().equals(""))
+		    	 {
+		    		 reportNumber = f.getData().trim();
+		    	 }
+			}
+		}
+		
+		if( series != null && !series.trim().equals(""))
+		{
+			Series theSeries = seriesService.getSeries(series);
+			log.debug("Found series " + series);
+			// create new series if not found
+			if( theSeries == null )
+			{
+				log.debug("adding new series " + series);
+				theSeries = new Series(series);
+				seriesService.saveSeries(theSeries);
+			}
+			
+			log.debug("report number = " + reportNumber);
+		    item.addReport(theSeries, reportNumber);
 		}
 	}
 	
@@ -426,19 +448,33 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 * @param field - to get sub title from
 	 * @param item - to add sub title to
 	 */
+	@SuppressWarnings("unchecked")
 	private void addSubTitle(DataField field, GenericItem item)
 	{
 		log.debug("add subtitle ");
-		String data = null;
+		String data = "";
 		
-		if( field.getSubfield('a') != null ) 
+		List<Subfield> fields = field.getSubfields();
+		Collections.sort(fields, this);
+		
+		for(Subfield f : fields)
 		{
-			data = field.getSubfield('a').getData();
-			log.debug("adding sub title " + data);
-			if(  data != null && !data.trim().equals(""))
+			if( f.getCode() != '0' &&
+				f.getCode() != '3' &&
+				f.getCode() != '5' &&
+				f.getCode() != '6' &&
+				f.getCode() != '8')
 			{
-				item.addSubTitle(this.endPunctuationStripper(data), null);
+			    if( f.getData() != null )
+			    {
+				    data += f.getData() + " ";
+			    }
 			}
+		}
+		
+		if(  data != null && !data.trim().equals(""))
+		{
+			item.addSubTitle(this.endPunctuationStripper(data), null);
 		}
 	}
 	
@@ -483,7 +519,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 				}
 				else
 				{
-					item.setDescription(item.getDescription() + " " + data);
+					item.setDescription(item.getDescription() + " --- " + data);
 				}
 			}
 		}
@@ -497,82 +533,39 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 * 
 	 * @return the found keyword or null not found
 	 */
-	private String handleSubjects(DataField field, GenericItem item)
+	@SuppressWarnings("unchecked")
+	private String handleSubjects(DataField field)
 	{
-		String data = null;
-		if( field.getSubfield('a') != null )
+		String data = "";
+		
+		List<Subfield> fields = field.getSubfields();
+		Collections.sort(fields, this);
+		boolean first = true;
+		
+		for(Subfield f : fields)
 		{
-			data = field.getSubfield('a').getData();
-			if( data != null && !data.trim().equals(""))
+			if( f.getCode() != 'e' &&
+				f.getCode() != '4' &&
+				f.getCode() != '0' &&
+				f.getCode() != '2' &&
+				f.getCode() != '3' &&
+				f.getCode() != '6' &&
+				f.getCode() != '8')
 			{
-			    data = endPunctuationStripper(data.trim());
-			}
-		
-			if( field.getSubfield('b') != null )
-		    {
-			    String subfieldB =  field.getSubfield('b').getData();
-			    if(  subfieldB != null && ! subfieldB.trim().equals(""))
+			    if( f.getData() != null && !f.getData().trim().equals(""))
 			    {
-				     subfieldB = endPunctuationStripper( subfieldB.trim());
-				     data = data + " " + subfieldB;
-			    }
-		    }
-			
-			if( field.getSubfield('c') != null )
-		    {
-			    String subfieldC =  field.getSubfield('c').getData();
-			    if(  subfieldC != null && ! subfieldC.trim().equals(""))
-			    {
-				     subfieldC = endPunctuationStripper( subfieldC.trim());
-				     data = data + " " + subfieldC;
-			    }
-		    }
-			
-			if( field.getSubfield('d') != null )
-		    {
-			    String subfieldD =  field.getSubfield('d').getData();
-			    if(  subfieldD != null && ! subfieldD.trim().equals(""))
-			    {
-				     subfieldD = endPunctuationStripper( subfieldD.trim());
-				     data = data + " " + subfieldD;
-			    }
-		    }
-			
-		    if( field.getSubfield('v') != null )
-		    {
-			    String subfieldV =  field.getSubfield('v').getData();
-			    if(  subfieldV != null && ! subfieldV.trim().equals(""))
-			    {
-				     subfieldV = endPunctuationStripper( subfieldV.trim());
-				     data = data + " " + subfieldV;
-			    }
-		    }
-		
-		    if( field.getSubfield('x') != null )
-		    {
-			    String subfieldX =  field.getSubfield('x').getData();
-			    if(  subfieldX != null && ! subfieldX.trim().equals(""))
-			    {
-				     subfieldX = endPunctuationStripper( subfieldX.trim());
-				     data = data + " " + subfieldX;
-			    }
-		    }
-		    if( field.getSubfield('y') != null )
-		    {
-			    String subfieldY =  field.getSubfield('y').getData();
-			    if(  subfieldY != null && ! subfieldY.trim().equals(""))
-			    {
-				     subfieldY = endPunctuationStripper( subfieldY.trim());
-				     data = data + " " +subfieldY;
-			    }
-		    }
-		    if( field.getSubfield('z') != null )
-		    {
-			    String subfieldZ =  field.getSubfield('z').getData();
-			    if(  subfieldZ != null && ! subfieldZ.trim().equals(""))
-			    {
-				    subfieldZ = endPunctuationStripper( subfieldZ.trim());
-				    data = data + " " +subfieldZ;
+				    if( !first )
+				    {
+					    data += " - ";
+				    }
+				    else
+				    {
+					    // first one
+					    first = false;
+				    }
+				
+			 	    data += f.getData();
+				
 			    }
 		    }
 		}
@@ -586,8 +579,9 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 * @param item - item to add the data to
 	 */
 	@SuppressWarnings("unchecked")
-	private void handleOtherTags(DataField field, GenericItem item)
+	private boolean handleOtherTags(DataField field, GenericItem item)
 	{
+		boolean handled = false;
 		log.debug("handeling other tags ");
 		String tag = field.getTag();
 	    char ind1 = field.getIndicator1();
@@ -621,11 +615,54 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 		        			String cutter = field.getSubfield('b').getData();
 		        			if( cutter != null && !cutter.trim().equals(""))
 		        			{
-		        				data = data + cutter.trim();
+		        				data = data + " " + cutter.trim();
 		        			}
 		        		}
 		        	}
 		        }
+		        
+		        // handle publisher number a little differently
+		        if( tag.matches("028") )
+		        {
+		        	if( code == 'a' )
+		        	{
+		        		if( field.getSubfield('b') != null)
+		        		{
+		        			String source = field.getSubfield('b').getData();
+		        			if( source != null && !source.trim().equals(""))
+		        			{
+		        				data = data + " " + source.trim();
+		        			}
+		        		}
+		        	}
+		        }
+		        
+		        
+		        // 250 should combine both a and b
+		        if( tag.matches("250"))
+		        {
+		        	if( code == 'a' )
+		        	{
+		        		if( field.getSubfield('b') != null)
+		        		{
+		        			String source = field.getSubfield('b').getData();
+		        			if( source != null && !source.trim().equals(""))
+		        			{
+		        				data = data + " " + source.trim();
+		        			}
+		        		}
+		        	}
+		        }
+		        
+		        // if 650 a is mapped get all data and append.
+		        if (tag.matches("650") )
+		        {
+		        	if ( code == 'a' )
+		        	{
+		        	    data = handleSubjects(field);
+		        	}
+		        }
+		        
 	        	//handle identifier type mappings
 	            List<IdentifierTypeSubFieldMapper> identMappers = 
 	            	identifierTypeSubFieldMapperService.getByDataField(tag, 
@@ -633,7 +670,7 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	            log.debug("Found " + identMappers.size() + " identifer type mappers");
 	            for(IdentifierTypeSubFieldMapper mapper : identMappers )
 	            {
-	                        
+	                handled = true;        
 	        	    IdentifierType identType = mapper.getIdentifierType();
 	        	    item.addItemIdentifier(data, identType);
 	            }
@@ -644,11 +681,14 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	            log.debug("Found " + extentMappers.size() + " extent type mappers ");
 	            for(ExtentTypeSubFieldMapper mapper : extentMappers)
 	            {
+	            	handled = true;
 	                ExtentType extentType = mapper.getExtentType();
 	                item.addItemExtent(extentType, endPunctuationStripper(data) );
 	            }
 	        }
         }
+        
+        return handled;
 		
 		 
 	}
@@ -1479,6 +1519,11 @@ public class DefaultMarcFileToVersionedItemImporter implements MarcFileToVersion
 	 */
 	public void setErrorEmailService(ErrorEmailService errorEmailService) {
 		this.errorEmailService = errorEmailService;
+	}
+
+	
+	public int compare(Subfield o1, Subfield o2) {
+		return Character.valueOf(o1.getCode()).compareTo(Character.valueOf(o2.getCode()));
 	}
 
 
