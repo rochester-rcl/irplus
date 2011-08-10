@@ -168,7 +168,7 @@
     			Your affiliation with the system has been confirmed as: "%AFFILIATION%" 
     			
     			You can login into the system using the link below:
-    			%BASE_WEB_APP_PATH%home.action
+    			%BASE_WEB_APP_PATH%
     			
     			]]>
     		</value>
