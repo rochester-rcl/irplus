@@ -1415,7 +1415,8 @@ YAHOO.ur.item.metadata = {
 	
 			// Create table row for Title
 	 		var mytable     = document.createElement("table");
-	 		mytable.setAttribute("id", "title_table_" + document.getElementById("title_table_id").value);
+	 		var myId = "title_table_" + document.getElementById("title_table_id").value;
+	 		mytable.setAttribute("id", myId);
 	 		mytable.setAttribute("class", "noPaddingTable");
 	        mytablebody = document.createElement("tbody");
 	        
@@ -1456,10 +1457,7 @@ YAHOO.ur.item.metadata = {
 	        button.setAttribute("value", "Remove Other Title");
 	        button.className = 'ur_button';
 	        button.id = 'remove_other_title_' + tableId;
-	        
-	        // listener for showing the dialog when clicked.
-	        YAHOO.util.Event.addListener(button.id, "click", 
-	        		YAHOO.ur.item.metadata.removeSubTitle, tableId);
+	        button.onclick = function (){javascript:YAHOO.ur.item.metadata.removeSubTitle(myId);};
 	        
 	        
 	        // appends the Text Node we created into the cell <td>
@@ -1480,9 +1478,8 @@ YAHOO.ur.item.metadata = {
 	/*
 	 * Removes the title
 	 */
-	removeSubTitle : function(event, tableId)
+	removeSubTitle : function(tableId)
 	{
-      
 	    var table_div = document.getElementById("title_forms");
 	
 	    var child = document.getElementById(tableId);
