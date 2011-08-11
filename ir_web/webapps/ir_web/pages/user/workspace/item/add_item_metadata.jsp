@@ -279,7 +279,9 @@
       
 	        <div id="newPublisherDialog" class="hidden">
                 <div class="hd">Publisher Information</div>
+                
                 <div class="bd">
+                    <div id="publisherError" class="publisherError">${message}</div>
                     <form id="addPublisher" name="newPublisherForm" 
 		                    method="post" 
 		                    action="<c:url value="/user/addPublisher.action"/>">
@@ -293,7 +295,9 @@
             
             <div id="newPlaceOfPublicationDialog" class="hidden">
                 <div class="hd">Place Of Publication Information</div>
+                
                 <div class="bd">
+                
                     <form id="addPlaceOfPublication" name="newPlaceOfPublicationForm" 
 		                    method="post" 
 		                    action="<c:url value="/user/addPlaceOfPublication.action"/>">
