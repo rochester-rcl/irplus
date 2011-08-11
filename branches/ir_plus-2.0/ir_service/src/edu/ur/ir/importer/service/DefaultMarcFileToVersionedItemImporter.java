@@ -194,7 +194,6 @@ public class DefaultMarcFileToVersionedItemImporter
 		    else if( tag.equals("240") || 
 		    		 tag.equals("740") || 
 		    		 tag.equals("130") ||
-		    		 tag.equals("246") ||
 		    		 tag.equals("730") ||
 		    		 tag.equals("740") )
 		    {
