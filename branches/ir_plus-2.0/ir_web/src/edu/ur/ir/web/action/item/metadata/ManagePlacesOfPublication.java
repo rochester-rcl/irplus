@@ -108,6 +108,7 @@ public class ManagePlacesOfPublication  extends Pager implements Preparable, Use
 		{
 			message = getText("placeOfPublicationAlreadyExists", 
 					new String[]{placeOfPublication.getName()});
+			addFieldError("placeOfPublicationAlreadyExists", message);
 		}
         return "added";
 	}
@@ -156,6 +157,7 @@ public class ManagePlacesOfPublication  extends Pager implements Preparable, Use
 		{
 			message = getText("placeOfPublicationAlreadyExists",
 					new String[]{placeOfPublication.getName()});
+			addFieldError("placeOfPublicationAlreadyExists", message);
 			return INPUT;
 		}
         return "added";
