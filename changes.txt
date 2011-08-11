@@ -1,6 +1,9 @@
 IR+ 2.0.8 to 2.1
 ==========================
 - Added MARC import/export
+    - Importer role added for importing MARC files - users must be given this 
+      privilege before they can import data
+    
 - Fixed IE issue when editing a publication 
   - Add/Create/Remove Series Button
   - Add/Create/Remove sub title Button
@@ -42,11 +45,19 @@ their workspace
 
 - Updated Administration documentation
 
+- Updated user documentation
+
 - Researcher pages picture upload - if no primary picture exists, the
   up loaded picture becomes the primary picture.  If the primary picture
   is deleted and other pictures exist the next picture in the set 
   becomes the primary picture.
 
+- No longer require researcher page abilities for administrator privileges.  Administrators 
+  may not need this privilege and can add it at a later time if needed to their own accounts.
+
+- Removed type="submit" on institutional item page so buttons are not selected by IE.
+
+- Fixed issues with IE and FF related to add/remove of other title.
 
 IR+ 2.0.7 to 2.0.8
 ==========================
