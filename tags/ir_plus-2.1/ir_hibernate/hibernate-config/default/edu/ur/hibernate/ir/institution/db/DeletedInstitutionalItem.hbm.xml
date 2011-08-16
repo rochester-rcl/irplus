@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a deleted institutional item.
+	
+	@author Sharmila Ranganathan
+-->
+<hibernate-mapping package="edu.ur.ir.institution">
+	<class name="DeletedInstitutionalItem" schema="ir_repository" table="deleted_institutional_item"
+		lazy="true">
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="deleted_institutional_item_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">ir_repository.deleted_institutional_item_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+		
+		<property name="institutionalItemName" column="institutional_item_name" type="string"
+			not-null="true" access="field" />
+		
+		<property name="institutionalCollectionName" column="institutional_collection_name" type="string"
+			not-null="true" access="field" />
+		
+		<property name="institutionalItemId" column="institutional_item_id" type="long"
+			not-null="true" access="field" />
+			
+		<property name="institutionalCollectionId" column="institutional_collection_id" type="long"
+			 access="field" />
+
+		<property name="deletedDate" column="deleted_date" type="timestamp" 
+		          access="field" 
+		          not-null="true"/>	
+
+		<!--  The user deleting the institutional item -->
+		<many-to-one class="edu.ur.ir.user.IrUser" 
+			unique="true" 
+			name="deletedBy" 
+			column="user_id" 
+			access="field" 
+			insert="true"
+			not-null="true"/>
+			
+		<!-- Items In this collection -->
+		<set name="deletedInstitutionalItemVersions" 
+		     optimistic-lock="false"
+		     cascade="all-delete-orphan" 
+		     access="field" 
+		     inverse="true" 
+		     fetch="subselect"
+		     lazy="true">
+			<key column="deleted_institutional_item_id"/>
+			<one-to-many class="DeletedInstitutionalItemVersion"/>
+		</set>			
+	
+	</class>
+		
+	<query name="deletedInstitutionalItemCount">
+	    select count(*) from DeletedInstitutionalItem
+	</query>
+
+
+	<query name="deleteInstitutionalItemInfo">
+	    from DeletedInstitutionalItem d
+	    where d.institutionalItemId = ?
+	</query>
+	
+	<query name="getDeletedInstitutionalItemCountForUser">
+	    select count(*) from DeletedInstitutionalItem d
+	    where d.deletedBy.id = ?
+	</query>
+</hibernate-mapping>

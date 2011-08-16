@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<!--  
+   Copyright 2008-2010 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+
+<!DOCTYPE hibernate-mapping SYSTEM
+			"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+	Mapping for a metadata type
+	
+	@author Nathan Sarr
+-->
+<hibernate-mapping package="edu.ur.metadata">
+	<class name="MetadataType" schema="metadata" table="metadata_type"
+		lazy="true">
+
+        <cache usage="nonstrict-read-write" />
+
+		<!-- Common id property. -->
+		<id name="id" type="long" column="metadata_type_id"
+			unsaved-value="0" access="field">
+			<generator class="sequence">
+				<param name="sequence">metadata.metadata_type_seq</param>
+			</generator>
+		</id>
+
+		<!-- A versioned entity. -->
+		<version name="version" column="version"
+			access="org.hibernate.property.DirectPropertyAccessor" />
+
+		<property name="name" column="name" type="string"
+			not-null="true" access="field" />
+
+		<property name="description" column="description" type="string"
+			not-null="false" />
+		
+	 </class>
+		
+	<!--  Get a count of metadata types in the system -->
+	<query name="metadataTypeCount">
+	    select count(*) from MetadataType
+	</query>
+	
+    <!-- named query for getting a content type-->
+	<query name="getMetadataTypeByName">
+		from MetadataType as MetadataType where
+		MetadataType.name = ?
+	</query>
+	
+	
+</hibernate-mapping>

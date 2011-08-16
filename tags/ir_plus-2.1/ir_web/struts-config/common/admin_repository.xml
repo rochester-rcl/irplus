@@ -1,0 +1,106 @@
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+       <!--  ************************************ -->
+        <!--  Repository actions                   -->
+        <!--  ************************************ -->
+        <action name="viewRepository" class="edu.ur.ir.web.action.repository.EditRepository">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/admin/repository/edit_repository.jsp</result>
+        </action>
+ 
+ 
+        <action name="createRepository" 
+            method="create"
+            class="edu.ur.ir.web.action.repository.EditRepository">
+            <interceptor-ref name="crudStack"/>
+            <result type="redirectAction" name="success">viewRepository</result>
+        </action>
+        
+        <action name="updateRepository" 
+            method="update"
+            class="edu.ur.ir.web.action.repository.EditRepository">
+            <interceptor-ref name="crudStack"/>
+            <result type="redirectAction" name="success">viewRepository</result>
+        </action>
+        
+        <!--  re-index all the items in the repository -->
+        <action name="reIndexInstitutionalItems" 
+            class="edu.ur.ir.web.action.repository.ReIndexInstitutionalItem">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
+         <!--  re-index all the items in the repository -->
+        <action name="fixPublisherInformation" 
+            class="edu.ur.ir.web.action.repository.FixPublisherInformation">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
+        <!--  re-index all the users in the repository -->
+        <action name="reIndexUsers" 
+            class="edu.ur.ir.web.action.user.ReIndexUsers">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
+        <!--  re-index all the researchers in the repository -->
+        <action name="reIndexResearchers" 
+            class="edu.ur.ir.web.action.researcher.ReIndexResearchers">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
+        <!--  re-index all the person name Authorities in the repository -->
+        <action name="reIndexPersonNameAuthorities" 
+            class="edu.ur.ir.web.action.person.ReIndexPersonNameAuthorities">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
+        <!--  reset all handles in the  repository -->
+        <action name="resetAllHandles" 
+            class="edu.ur.ir.web.action.repository.ResetAllHandles">
+            <interceptor-ref name="editStack"/>
+            <result name="success" type="redirectAction">viewRepository</result>
+        </action>
+        
+        <action name="cancelRepository" 
+            class="edu.ur.ir.web.action.repository.EditRepository">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/admin/repository/edit_repository.jsp</result>
+        </action>
+        
+        <action name="addRepositoryPicture"
+            class="edu.ur.ir.web.action.repository.AddRepositoryPicture">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/admin/repository/upload_picture.jsp</result>
+        </action>
+        
+        <action name="uploadRepositoryPicture"
+            class="edu.ur.ir.web.action.repository.AddRepositoryPicture"
+            method="addNewPicture">
+            <interceptor-ref name="urUploadStack"/>
+            <result name="success" type="redirect">viewRepository.action</result>
+        </action>
+        
+        <action name="deleteRepositoryPicture"
+            class="edu.ur.ir.web.action.repository.EditRepository"
+            method="deletePicture">
+            <interceptor-ref name="editStack"/>
+            <result name="success">/pages/admin/repository/repository_pictures_frag.jsp</result>
+        </action>

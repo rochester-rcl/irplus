@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  
+   Copyright 2008 University of Rochester
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->   
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+    
+<beans>
+
+   <!-- Sha Password encoder to use SHA-1 password encoding -->
+   <bean id="passwordEncoder" class="org.springframework.security.providers.encoding.ShaPasswordEncoder"/>
+    
+   <!-- ****************************************** --> 
+   <!-- Contributor related data service -->
+   <!-- ****************************************** --> 
+   <bean id="contributorService" class="edu.ur.ir.person.service.DefaultContributorService">
+       <property name="contributorDAO" ref="contributorDAO"/>
+   </bean> 
+    
+   <!-- ****************************************** --> 
+   <!-- User related data service -->
+   <!-- ****************************************** --> 
+   <bean id="userService" 
+       class="edu.ur.ir.user.service.DefaultUserService">
+       <property name="irUserDAO" ref="irUserDAO"/>
+       <property name="passwordEncoder" ref="passwordEncoder"/>
+       <property name="repositoryService" ref="repositoryService"/>
+       <property name="userFileSystemService" ref="userFileSystemService"/>
+       <property name="userPublishingFileSystemService" ref="userPublishingFileSystemService"/>       
+	   <property name="securityService" ref="securityService"/>
+       <property name="inviteUserService" ref="inviteUserService"/>
+       <property name="userEmailDAO" ref="userEmailDAO"/>
+       <property name="mailSender" ref="mailSender"/>
+       <property name="passwordTokenMessage" ref="passwordTokenMessage"/>
+       <property name="accountCreationMessage" ref="accountCreationMessage"/>
+       <property name="resetPasswordMessage" ref="resetPasswordMessage"/>
+       <property name="itemService" ref="itemService"/>
+       <property name="userAffiliationMessage" ref="userAffiliationMessage"/>
+       <property name="affiliationVerificationMessage" ref="affiliationVerificationMessage"/>
+       <property name="userPendingAffiliationMessage" ref="userPendingAffiliationMessage"/>
+       <property name="accountVerificationMessage" ref="accountVerificationMessage"/>
+       <property name="emailVerificationMessage" ref="emailVerificationMessage"/>
+       <property name="researcherService" ref="researcherService"/>
+       <property name="baseWebAppPath" value="${base.web.path}"/>
+       <property name="deletedInstitutionalItemService" ref="deletedInstitutionalItemService"/>
+       <property name="institutionalCollectionSubscriptionService" ref="institutionalCollectionSubscriptionService"/>
+       <property name="userGroupService" ref="userGroupService"/>
+       <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
+       <property name="personalItemDeleteRecordDAO" ref="personalItemDeleteRecordDAO"/>
+       <property name="externalUserAccountDAO" ref="externalUserAccountDAO"/>
+   </bean>
+   
+
+   <!-- ****************************************** --> 
+   <!-- User file system service                   -->
+   <!-- ****************************************** --> 
+   <bean id="userFileSystemService" 
+       class="edu.ur.ir.user.service.DefaultUserFileSystemService">
+       <property name="sharedInboxFileDAO" ref="sharedInboxFileDAO"/>
+       <property name="personalFileDAO" ref="personalFileDAO"/>
+       <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
+       <property name="personalFolderDAO" ref="personalFolderDAO"/>
+       <property name="repositoryService" ref="repositoryService"/>
+       <property name="irUserDAO" ref="irUserDAO"/>
+	   <property name="securityService" ref="securityService"/>
+	   <property name="inviteUserService" ref="inviteUserService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- User file system service                   -->
+   <!-- ****************************************** --> 
+   <bean id="userPublishingFileSystemService" 
+       class="edu.ur.ir.user.service.DefaultUserPublishingFileSystemService">
+       <property name="personalItemDAO" ref="personalItemDAO"/>
+       <property name="personalItemDeleteRecordDAO" ref="personalItemDeleteRecordDAO"/>
+       <property name="personalCollectionDAO" ref="personalCollectionDAO"/>
+       <property name="irUserDAO" ref="irUserDAO"/>
+       <property name="itemService" ref="itemService"/>  
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Role related services -->
+   <!-- ****************************************** --> 
+   <bean id="roleService" 
+       class="edu.ur.ir.user.service.DefaultRoleService">
+       <property name="irRoleDAO" ref="irRoleDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Affiliation related services -->
+   <!-- ****************************************** --> 
+   <bean id="affiliationService" 
+       class="edu.ur.ir.user.service.DefaultAffiliationService">
+       <property name="affiliationDAO" ref="affiliationDAO"/>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- User Group related services -->
+   <!-- ****************************************** --> 
+   <bean id="userGroupService" 
+       class="edu.ur.ir.user.service.DefaultUserGroupService">
+       <property name="irUserGroupDAO" ref="irUserGroupDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Item related services -->
+   <!-- ****************************************** --> 
+   <bean id="itemService" 
+       class="edu.ur.ir.item.service.DefaultItemService">
+       <property name="versionedItemDAO" ref="versionedItemDAO"/>
+       <property name="itemFileDAO" ref="itemFileDAO"/>
+       <property name="contributorDAO" ref="contributorDAO"/>
+       <property name="itemVersionDAO" ref="itemVersionDAO"/>
+       <property name="userFileSystemService" ref="userFileSystemService"/>
+       <property name="repositoryService" ref="repositoryService"/>
+       <property name="itemDAO" ref="itemDAO"/>
+       <property name="externalPublishedItemDAO" ref="externalPublishedItemDAO"/>
+       <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
+       <property name="securityService" ref="securityService"/>
+       <property name="reviewableItemService" ref="reviewableItemService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Repository related data service -->
+   <!-- ****************************************** --> 
+   
+   <!--  Versioned file locking strategy -->
+   <bean id="versionedFileUnLockStrategy" 
+       class="edu.ur.ir.repository.service.DefaultVersionedFileUnlockStrategy">
+        <property name="securityService" ref="securityService"/>
+   </bean>
+       
+   <!--  Versioned file unlocking strategy --> 
+   <bean id="versionedFileLockStrategy" 
+       class="edu.ur.ir.repository.service.DefaultVersionedFileLockStrategy">
+       <property name="securityService" ref="securityService"/>
+   </bean>
+   
+   <!--  Service for helping with repository --> 
+   <bean id="repositoryService" 
+       class="edu.ur.ir.repository.service.DefaultRepositoryService">
+       <property name="repositoryDAO" ref="repositoryDAO"/>
+       <property name="fileServerService" ref="fileServerService"/>
+       <property name="uniqueNameGenerator" ref="uniqueNameGenerator"/>
+       <property name="irFileDAO" ref="irFileDAO"/>
+       <property name="transformedFileDAO" ref="transformedFileDAO"/>
+       <property name="transformedFileTypeDAO" ref="transformedFileTypeDAO"/>
+       <property name="versionedFileDAO" ref="versionedFileDAO"/>
+       <property name="versionedFileLockStrategy" ref="versionedFileLockStrategy"/>
+       <property name="versionedFileUnLockStrategy" ref="versionedFileUnLockStrategy"/>
+       <property name="itemService" ref="itemService"/>
+       <property name="fileVersionDAO" ref="fileVersionDAO"/>
+       <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
+       <property name="externalAuthenticationEnabled" value="${external.authentication.enabled}"/>
+   </bean>
+
+    <!--  Service for helping with item file security --> 
+   <bean id="itemFileSecurityService" 
+       class="edu.ur.ir.item.service.DefaultItemFileSecurityService">
+       <property name="securityService" ref="securityService"/>
+   </bean>  
+ 
+    <!--  Service for helping with items security --> 
+   <bean id="itemSecurityService" 
+       class="edu.ur.ir.item.service.DefaultItemSecurityService">
+       <property name="securityService" ref="securityService"/>
+       <property name="itemFileSecurityService" ref="itemFileSecurityService"/>
+   </bean>  
+     
+     
+   <!--  Service for helping with institutional versions --> 
+   <bean id="institutionalItemVersionService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalItemVersionService">
+       <property name="institutionalItemVersionDAO" ref="institutionalItemVersionDAO"/>
+       <property name="handleInfoDAO" ref="handleInfoDAO"/>
+       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+       <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
+   </bean>
+   
+   <!--  Service for helping with institutional items --> 
+   <bean id="institutionalItemService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalItemService">
+       <property name="institutionalItemDAO" ref="institutionalItemDAO"/>
+       <property name="institutionalItemVersionService" ref="institutionalItemVersionService"/>
+       <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
+       <property name="itemService" ref="itemService"/>
+       <property name="deletedInstitutionalItemService" ref="deletedInstitutionalItemService"/>
+       <property name="itemSecurityService" ref="itemSecurityService"/>
+       <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
+       <property name="reviewableItemService" ref="reviewableItemService"/>
+       <property name="uniqueHandleNameGenerator" ref="uniqueHandleNameGenerator"/>
+       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+   </bean>
+   
+   <!--  Service for helping with deleted institutional items --> 
+   <bean id="deletedInstitutionalItemService" 
+       class="edu.ur.ir.institution.service.DefaultDeletedInstitutionalItemService">
+       <property name="deletedInstitutionalItemDAO" ref="deletedInstitutionalItemDAO"/>
+   </bean>
+   
+   <!--  Service for helping with deleted institutional item versions --> 
+   <bean id="deletedInstitutionalItemVersionService" 
+       class="edu.ur.ir.institution.service.DefaultDeletedInstitutionalItemVersionService">
+       <property name="deletedInstitutionalItemVersionDAO" ref="deletedInstitutionalItemVersionDAO"/>
+       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
+   </bean>
+   
+   <bean id="institutionalCollectionService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionService">
+       <property name="repositoryService" ref="repositoryService"/>
+       <property name="institutionalCollectionSecurityService" ref="institutionalCollectionSecurityService"/>
+       <property name="institutionalItemService" ref="institutionalItemService"/>
+       <property name="institutionalCollectionDAO" ref="institutionalCollectionDAO"/>
+       <property name="institutionalItemDAO" ref="institutionalItemDAO"/>
+       <property name="mailSender" ref="mailSender"/>
+       <property name="itemReviewMessage" ref="itemReviewMessage"/>
+       <property name="baseWebAppPath" value="${base.web.path}"/>
+       <property name="institutionalItemIndexProcessingRecordService" ref="institutionalItemIndexProcessingRecordService"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+   </bean>
+   
+   <bean id="institutionalCollectionSecurityService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSecurityService">
+       <property name="securityService" ref="securityService"/>
+       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service to manage content type data -->
+   <!-- ****************************************** --> 
+   <bean id="contentTypeService" 
+       class="edu.ur.ir.item.service.DefaultContentTypeService">
+       <property name="contentTypeDAO" ref="contentTypeDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service to manage language type data -->
+   <!-- ****************************************** --> 
+   <bean id="languageTypeService" 
+       class="edu.ur.ir.item.service.DefaultLanguageTypeService">
+       <property name="languageTypeDAO" ref="languageTypeDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service to manage place of publcation data -->
+   <!-- ****************************************** --> 
+   <bean id="placeOfPublicationService" 
+       class="edu.ur.ir.item.service.DefaultPlaceOfPublicationService">
+       <property name="placeOfPublicationDAO" ref="placeOfPublicationDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service to manage identifier type data -->
+   <!-- ****************************************** --> 
+   <bean id="identifierTypeService" 
+       class="edu.ur.ir.item.service.DefaultIdentifierTypeService">
+       <property name="identifierTypeDAO" ref="identifierTypeDAO"/>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Service to manage extent type data -->
+   <!-- ****************************************** --> 
+   <bean id="extentTypeService" 
+       class="edu.ur.ir.item.service.DefaultExtentTypeService">
+       <property name="extentTypeDAO" ref="extentTypeDAO"/>
+   </bean>
+      
+   <!-- ****************************************** --> 
+   <!-- Service to manage contributor type data -->
+   <!-- ****************************************** --> 
+   <bean id="contributorTypeService" 
+       class="edu.ur.ir.person.service.DefaultContributorTypeService">
+       <property name="contributorTypeDAO" ref="contributorTypeDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service to manage person data -->
+   <!-- ****************************************** --> 
+   <bean id="personService" 
+       class="edu.ur.ir.person.service.DefaultPersonService">
+       <property name="personNameAuthorityDAO" ref="personNameAuthorityDAO"/>
+       <property name="personNameDAO" ref="personNameDAO"/>
+   </bean>
+   
+      
+   <!-- ****************************************** --> 
+   <!-- Service to manage copyright statement data -->
+   <!-- ****************************************** --> 
+   <bean id="copyrightStatementService" 
+       class="edu.ur.ir.item.service.DefaultCopyrightStatementService">
+       <property name="copyrightStatementDAO" ref="copyrightStatementDAO"/>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Service to manage ACL						-->
+   <!-- ****************************************** --> 
+   <bean id="securityService" 
+       class="edu.ur.ir.security.service.DefaultSecurityService">
+	   <property name="irClassTypeDAO" ref="irClassTypeDAO"/>
+       <property name="irAclDAO" ref="irAclDAO"/>
+       <property name="irClassTypePermissionDAO" ref="irClassTypePermissionDAO"/>
+       <property name="irUserAccessControlEntryDAO" ref="irUserAccessControlEntryDAO"/>
+       <property name="irUserGroupAccessControlEntryDAO" ref="irUserGroupAccessControlEntryDAO"/>
+    </bean>
+    
+   <!-- ****************************************** --> 
+   <!-- Service to invite user					   -->
+   <!-- ****************************************** --> 
+   <bean id="inviteUserService" 
+       class="edu.ur.ir.user.service.DefaultInviteUserService">
+	   <property name="inviteInfoDAO" ref="inviteInfoDAO"/>
+       <property name="irUserDAO" ref="irUserDAO"/>
+       <property name="personalFileDAO" ref="personalFileDAO"/>
+       <property name="userService" ref="userService"/>
+       <property name="fileCollaboratorDAO" ref="fileCollaboratorDAO"/>
+       <property name="versionedFileDAO" ref="versionedFileDAO"/>
+       <property name="mailSender" ref="mailSender"/>
+       <property name="userExistMailMessage" ref="userExistMailMessage"/>
+       <property name="userNotExistMailMessage" ref="userNotExistMailMessage"/>
+       <property name="unShareMailMessage" ref="unShareMailMessage"/>
+       <property name="securityService" ref="securityService"/>
+       <property name="userFileSystemService" ref="userFileSystemService"/>
+       <property name="baseWebAppPath" value="${base.web.path}"/>
+       <property name="roleService" ref="roleService"/>
+       <property name="personalFileDeleteRecordDAO" ref="personalFileDeleteRecordDAO"/>
+   </bean>
+     
+   <!-- ****************************************** --> 
+   <!-- Indexing related services                  -->
+   <!-- ****************************************** -->
+   
+   <bean id="pdfTextExtractor" class="edu.ur.ir.index.DefaultPdfTextExtractor"/>
+   <bean id="plainTextExtractor" class="edu.ur.ir.index.DefaultPlainTextExtractor"/>
+   <bean id="rtfTextExtractor" class="edu.ur.ir.index.DefaultRtfTextExtractor"/>
+   <bean id="wordTextExtractor" class="edu.ur.ir.index.DefaultWordTextExtractor"/>
+   <bean id="wordXmlTextExtractor" class="edu.ur.ir.index.DefaultWordXmlTextExtractor"/>
+   <bean id="powerPointTextExtractor" class="edu.ur.ir.index.DefaultPowerPointTextExtractor"/>
+   <bean id="powerPointXmlTextExtractor" class="edu.ur.ir.index.DefaultPowerPointXmlTextExtractor"/>
+   <bean id="excelTextExtractor" class="edu.ur.ir.index.DefaultExcelTextExtractor"/>
+   <bean id="excelXmlTextExtractor" class="edu.ur.ir.index.DefaultExcelXmlTextExtractor"/>
+    
+   <bean id="fileTextExtractorService" 
+       class="edu.ur.ir.index.service.DefaultFileTextExtractorService">
+       <property name="fileTextExtractors">
+           <list>
+               <ref bean="pdfTextExtractor"/>
+               <ref bean="plainTextExtractor"/>
+               <ref bean="rtfTextExtractor"/>
+               <ref bean="wordTextExtractor"/>
+               <ref bean="wordXmlTextExtractor"/>
+               <ref bean="excelTextExtractor"/>
+               <ref bean="excelXmlTextExtractor"/>
+               <ref bean="powerPointTextExtractor"/>
+               <ref bean="powerPointXmlTextExtractor"/>
+           </list>
+       </property>
+   </bean>
+   
+   <bean id="defaultTextAnalyzer" 
+       class="edu.ur.lucene.analysis.StandardWithISOLatin1AccentFilter" 
+       singleton="false" />
+   
+   <bean id="userWorkspaceIndexService" 
+       class="edu.ur.ir.user.service.DefaultUserWorkspaceIndexService">
+       <property name="fileTextExtractorService" ref="fileTextExtractorService"/>
+       <property name="userFileSystemService" ref="userFileSystemService"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="uniqueNameGenerator" ref="uniqueNameGenerator"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
+       <property name="irFileIndexingFailureRecordDAO" ref="irFileIndexingFailureRecordDAO"/>
+   </bean>
+   
+   <bean id="nameAuthorityIndexService" 
+       class="edu.ur.ir.person.service.DefaultNameAuthorityIndexService">
+       <property name="errorEmailService" ref="errorEmailService"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+   </bean>
+   
+   <bean id="reIndexPersonNameAuthoritiesService" 
+       class="edu.ur.ir.person.service.DefaultReIndexPersonNameAuthoritiesService">
+       <property name="personService" ref="personService"/>
+       <property name="nameAuthorityIndexService" ref="nameAuthorityIndexService"/>
+   </bean>
+   
+   <bean id="userIndexService" 
+       class="edu.ur.ir.user.service.DefaultUserIndexService">
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
+   </bean>
+   
+    <bean id="reIndexUserService" 
+       class="edu.ur.ir.user.service.DefaultReIndexUserService">
+       <property name="userIndexService" ref="userIndexService"/>
+       <property name="userService" ref="userService"/>
+   </bean>
+   
+   <bean id="institutionalItemIndexService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalItemIndexService">
+       <property name="collectionBatchSize" value="10"/>
+       <property name="fileTextExtractorService" ref="fileTextExtractorService"/>
+       <property name="institutionalItemService" ref="institutionalItemService"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
+       <property name="irFileIndexingFailureRecordDAO" ref="irFileIndexingFailureRecordDAO"/>
+   </bean>
+   
+   <bean id="researcherIndexService" 
+       class="edu.ur.ir.researcher.service.DefaultResearcherIndexService">
+       <property name="errorEmailService" ref="errorEmailService"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+   </bean>
+   
+   <bean id="reIndexResearchersService" 
+       class="edu.ur.ir.researcher.service.DefaultReIndexResearcherService">
+       <property name="researcherIndexService" ref="researcherIndexService"/>
+       <property name="researcherService" ref="researcherService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Searching related services                 -->
+   <!-- ****************************************** -->
+   <bean id="userWorkspaceSearchService" 
+       class="edu.ur.ir.user.service.DefaultUserWorkspaceSearchService">
+       <property name="userFileSystemService" ref="userFileSystemService"/>
+       <property name="userPublishingFileSystemService" ref="userPublishingFileSystemService"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+   </bean>
+
+   <bean id="nameAuthoritySearchService" 
+       class="edu.ur.ir.person.service.DefaultNameAuthoritySearchService">
+       <property name="personService" ref="personService"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+   </bean>
+
+   <bean id="userSearchService" 
+       class="edu.ur.ir.user.service.DefaultUserSearchService">
+       <property name="userService" ref="userService"/>
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+   </bean>
+   
+   <bean id="institutionalItemSearchService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalItemSearchService">
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+   </bean>
+
+   <bean id="researcherSearchService" 
+       class="edu.ur.ir.researcher.service.DefaultResearcherSearchService">
+       <property name="analyzer" ref="defaultTextAnalyzer"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Sponsor services                 -->
+   <!-- ****************************************** -->
+      <bean id="sponsorService" 
+       class="edu.ur.ir.item.service.DefaultSponsorService">
+       <property name="sponsorDAO" ref="sponsorDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Series services                 -->
+   <!-- ****************************************** -->
+      <bean id="seriesService" 
+       		class="edu.ur.ir.item.service.DefaultSeriesService">
+       <property name="seriesDAO" ref="seriesDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Publisher services                 -->
+   <!-- ****************************************** -->
+      <bean id="publisherService" 
+       class="edu.ur.ir.item.service.DefaultPublisherService">
+       <property name="publisherDAO" ref="publisherDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Department related services -->
+   <!-- ****************************************** --> 
+   <bean id="departmentService" 
+       class="edu.ur.ir.user.service.DefaultDepartmentService">
+       <property name="departmentDAO" ref="departmentDAO"/>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Researcher service -->
+   <!-- ****************************************** --> 
+   <bean id="researcherService" 
+       class="edu.ur.ir.researcher.service.DefaultResearcherService">
+       <property name="researcherDAO" ref="researcherDAO"/>
+       <property name="researcherFileSystemService" ref="researcherFileSystemService"/>
+       <property name="repositoryService" ref="repositoryService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Researcher File System service -->
+   <!-- ****************************************** --> 
+   <bean id="researcherFileSystemService" 
+       class="edu.ur.ir.researcher.service.DefaultResearcherFileSystemService">
+       <property name="researcherDAO" ref="researcherDAO"/>
+       <property name="researcherFolderDAO" ref="researcherFolderDAO"/>
+       <property name="researcherFileDAO" ref="researcherFileDAO"/>
+       <property name="researcherPublicationDAO" ref="researcherPublicationDAO"/>
+       <property name="researcherLinkDAO" ref="researcherLinkDAO"/>
+       <property name="repositoryService" ref="repositoryService"/>
+       <property name="itemService" ref="itemService"/>
+       <property name="userFileSystemService" ref="userFileSystemService"/>
+       <property name="researcherInstitutionalItemDAO" ref="researcherInstitutionalItemDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Researcher Field service -->
+   <!-- ****************************************** --> 
+   <bean id="fieldService" 
+       class="edu.ur.ir.researcher.service.DefaultFieldService">
+       <property name="fieldDAO" ref="fieldDAO"/>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Ignore ip address service -->
+   <!-- ****************************************** --> 
+   <bean id="ignoreIpAddressService" 
+       class="edu.ur.ir.statistics.service.DefaultIgnoreIpAddressService">
+       <property name="ignoreIpAddressDAO" ref="ignoreIpAddressDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Statistics service -->
+   <!-- ****************************************** --> 
+   <bean id="downloadStatisticsService" 
+       class="edu.ur.ir.statistics.service.DefaultDownloadStatisticsService">
+       <property name="fileDownloadInfoDAO" ref="fileDownloadInfoDAO"/>
+       <property name="irFileDAO" ref="irFileDAO"/>
+       <property name="institutionalCollectionDAO" ref="institutionalCollectionDAO"/>
+       <property name="genericItemDAO" ref="itemDAO"/>
+       <property name="repositoryDAO" ref="repositoryDAO"/>
+       <property name="institutionalItemVersionDAO" ref="institutionalItemVersionDAO"/>
+       <property name="fileDownloadRollUpProcessingRecordDAO" ref="fileDownloadRollUpProcessingRecordDAO"/>
+       <property name="ipIgnoreFileDownloadInfoDAO" ref="ipIgnoreFileDownloadInfoDAO"/>
+       <property name="ignoreIpAddressDAO" ref="ignoreIpAddressDAO"/>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Reviewable item service                   -->
+   <!-- ****************************************** --> 
+   <bean id="reviewableItemService" 
+       class="edu.ur.ir.institution.service.DefaultReviewableItemService">
+       <property name="reviewableItemDAO" ref="reviewableItemDAO"/>
+	   <property name="institutionalCollectionSecurityService" ref="institutionalCollectionSecurityService"/>
+	   <property name="mailSender" ref="mailSender"/>
+	   <property name="itemRejectedMessage" ref="itemRejectedMessage"/>
+	   <property name="itemAcceptedMessage" ref="itemAcceptedMessage"/>
+	   <property name="institutionalItemService" ref="institutionalItemService"/>
+	   <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Person Name service                             -->
+   <!-- ****************************************** --> 
+   <bean id="personNameService" 
+       class="edu.ur.ir.person.service.DefaultPersonNameService">
+	   <property name="personNameDAO" ref="personNameDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Item url service                             -->
+   <!-- ****************************************** --> 
+   <bean id="institutionalItemVersionUrlGenerator" class="edu.ur.ir.institution.service.InstitutionalItemVersionUrlGenerator">
+       <property name="baseWebPath" value="${base.web.path}"/>
+       <property name="action" value="institutionalPublicationPublicView.action"/>
+       <property name="itemIdIdentifier" value="institutionalItemId"/>
+       <property name="versionNumberIdentifier" value="versionNumber"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Institutional collection subscription service -->
+   <!-- ****************************************** --> 
+   <bean id="institutionalCollectionSubscriptionService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalCollectionSubscriptionService">
+       <property name="institutionalCollectionSubscriptionDAO" ref="institutionalCollectionSubscriptionDAO"/>
+       <property name="institutionalItemService" ref="institutionalItemService"/>
+       <property name="repositoryService" ref="repositoryService"/>
+       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+       <property name="mailSender" ref="mailSender"/>
+       <property name="dateFormat" value="MM/dd/yyyy"/>
+       <property name="helpEmail" value="${email.public.help.address}"/>
+       <property name="fromAddress" value="${mail.sender.from}"/>
+   </bean>
+ 
+   <!-- ****************************************** --> 
+   <!-- Error email service -->
+   <!-- ****************************************** --> 
+   <bean id="errorEmailService" 
+       class="edu.ur.ir.util.service.DefaultErrorEmailService">
+       <property name="mailSender" ref="mailSender"/>
+       <property name="subject" value="An Repository Error Has Occured"/>
+       <property name="toAddress" value="${email.error.address}"/>
+       <property name="sendEmails" value="${send.error.emails}"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Help email service -->
+   <!-- ****************************************** --> 
+   <bean id="publicHelpService" 
+       class="edu.ur.ir.util.service.DefaultPublicHelpService">
+       <property name="mailSender" ref="mailSender"/>
+       <property name="toAddress" value="${email.public.help.address}"/>
+   </bean>
+   
+   
+   <!-- ****************************************** --> 
+   <!-- Repository License Service  -->
+   <!-- ****************************************** --> 
+    <bean id="licenseService" 
+       class="edu.ur.ir.repository.service.DefaultLicenseService">
+       <property name="versionedLicenseDAO" ref="versionedLicenseDAO"/>
+       <property name="licenseVersionDAO" ref="licenseVersionDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Authentication override service  -->
+   <!-- ****************************************** --> 
+      <bean id="authenticateUserOverrideService" 
+       class="edu.ur.ir.security.service.DefaultAuthenticateUserOverrideService"/>
+   
+      
+   <!-- ****************************************** --> 
+   <!-- Institutional item index processing records service -->
+   <!-- ****************************************** --> 
+   <bean id="institutionalItemIndexProcessingRecordService" 
+       class="edu.ur.ir.institution.service.DefaultInstitutionalItemIndexProcessingRecordService">
+       <property name="processingRecordDAO" ref="institutionalItemIndexProcessingRecordDAO"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+       <property name="institutionalItemService" ref="institutionalItemService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- User workspace processing records service -->
+   <!-- ****************************************** --> 
+   <bean id="userWorkspaceIndexProcessingRecordService" 
+       class="edu.ur.ir.user.service.DefaultUserWorkspaceIndexProcessingRecordService">
+       <property name="userWorkspaceIndexProcessingRecordDAO" ref="userWorkspaceIndexProcessingRecordDAO"/>
+       <property name="userFileSystemService" ref="userFileSystemService"/>
+       <property name="userPublishingFileSystemService" ref="userPublishingFileSystemService"/>
+       <property name="indexProcessingTypeService" ref="indexProcessingTypeService"/>
+       <property name="userService" ref="userService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- index processing type service -->
+   <!-- ****************************************** --> 
+   <bean id="indexProcessingTypeService" 
+       class="edu.ur.ir.index.service.DefaultIndexProcessingTypeService">
+       <property name="indexProcessingTypeDAO" ref="indexProcessingTypeDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Thumbnail transformer service -->
+   <!-- ****************************************** --> 
+   <bean id="thumbnailTransformerService" 
+       class="edu.ur.ir.file.transformer.service.DefaultThumbnailTransformerService">
+       <property name="basicThumbnailTransformer" ref="defaultThumbnailTransformer"/>
+       <property name="errorEmailService" ref="errorEmailService"/>
+       <property name="irFileTransformationFailureRecordDAO" ref="irFileTransformationFailureRecordDAO"/>
+       <property name="temporaryFileCreator" ref="temporaryFileCreator"/>
+       <property name="repositoryService" ref="repositoryService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- External Account type service -->
+   <!-- ****************************************** --> 
+   <bean id="externalAccountTypeService" 
+       class="edu.ur.ir.user.service.DefaultExternalAccountTypeService">
+       <property name="externalAccountTypeDAO" ref="externalAccountTypeDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Contributor type dublin core mapping service -->
+   <!-- ****************************************** --> 
+   <bean id="contributorTypeDublinCoreMappingService" 
+       class="edu.ur.ir.item.metadata.dc.service.DefaultContributorTypeDublinCoreMappingService">
+       <property name="contributorTypeDublinCoreMappingDAO" ref="contributorTypeDublinCoreMappingDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Identifier type dublin core mapping service -->
+   <!-- ****************************************** --> 
+   <bean id="identifierTypeDublinCoreMappingService" 
+       class="edu.ur.ir.item.metadata.dc.service.DefaultIdentifierTypeDublinCoreMappingService">
+       <property name="identifierTypeDublinCoreMappingDAO" ref="identifierTypeDublinCoreMappingDAO"/>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Mappings for name formatters -->
+   <!-- ****************************************** --> 
+   <bean id="firstNamePersonNameFormatter" class="edu.ur.ir.person.FirstNamePersonNameFormatter"/>
+   <bean id="lastNamePersonNameFormatter" class="edu.ur.ir.person.LastNamePersonNameFormatter"/>
+
+   <!-- ****************************************** --> 
+   <!-- Service that provides list sets functionality -->
+   <!-- ****************************************** --> 
+   <bean id="listSetsService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultListSetsService">
+       <property name="institutionalCollectionService" ref="institutionalCollectionService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that provides list formats functionality -->
+   <!-- ****************************************** --> 
+   <bean id="listMetadataFormatsService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultListMetadataFormatsService">
+       <property name="oaiMetadataServiceProvider" ref="oaiMetadataServiceProvider"/>
+       <property name="institutionalItemVersionService" ref="institutionalItemVersionService"/>
+   </bean>
+
+   <!-- ****************************************** --> 
+   <!-- Service that provides dublin core metadata -->
+   <!-- ****************************************** --> 
+   <bean id="dublinCoreOaiMetadataProvider" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultDublinCoreOaiMetadataProvider">
+       <property name="nameFormatter" ref="lastNamePersonNameFormatter" />
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="listSetsService" ref="listSetsService"/>
+   </bean>
+   
+    <bean id="qualifiedDublinCoreOaiMetadataProvider" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultQualifiedDublinCoreMetadataProvider">
+       <property name="contributorTypeDublinCoreMappingService" ref="contributorTypeDublinCoreMappingService"/>
+       <property name="identifierTypeDublinCoreMappingService" ref="identifierTypeDublinCoreMappingService"/>
+       <property name="nameFormatter" ref="lastNamePersonNameFormatter" />
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="listSetsService" ref="listSetsService"/>
+   </bean>
+   
+   <bean id="marc21OaiMetadataProvider" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultMarcOaiMetadataProvider">
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="listSetsService" ref="listSetsService"/>
+       <property name="marcExportService" ref="marcExportService"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- OAI harvesting Service for the system -->
+   <!-- ****************************************** --> 
+   <bean id="oaiMetadataServiceProvider" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultOaiMetadataServiceProvider">
+       <property name="providers">
+           <list>
+               <ref bean="dublinCoreOaiMetadataProvider"/>
+               <ref bean="qualifiedDublinCoreOaiMetadataProvider"/>
+               <ref bean="marc21OaiMetadataProvider"/>
+           </list>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- OAI harvesting Service for the system -->
+   <!-- ****************************************** --> 
+   <bean id="identifyService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultIdentifyService">
+       <property name="repositoryService" ref="repositoryService" />
+       <property name="institutionalItemVersionDAO" ref="institutionalItemVersionDAO" />
+       <property name="baseOaiUrl" value="${base.oai.url}" />
+       <property name="adminEmails">
+           <list>
+               <value>${oai.admin.email}</value>
+           </list>
+       </property>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- OAI list identifier service -->
+   <!-- ****************************************** --> 
+   <bean id="listIdentifiersService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultListIdentifiersService">
+       <property name="oaiMetadataServiceProvider" ref="oaiMetadataServiceProvider" />
+       <property name="institutionalItemVersionService" ref="institutionalItemVersionService" />
+       <property name="deletedInstitutionalItemVersionService" ref="deletedInstitutionalItemVersionService" />
+       <property name="institutionalCollectionService" ref="institutionalCollectionService" />
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="listSetsService" ref="listSetsService"/>
+   </bean>
+   
+   
+   <!-- ****************************************** --> 
+   <!-- OAI harvesting Output Service for the system -->
+   <!-- ****************************************** --> 
+   <bean id="oaiService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultOaiService">
+       <property name="identifyService" ref="identifyService"/>
+       <property name="oaiMetadataServiceProvider" ref="oaiMetadataServiceProvider"/>
+       <property name="institutionalItemService" ref="institutionalItemService" />
+       <property name="institutionalItemVersionService" ref="institutionalItemVersionService" />
+       <property name="deletedInstitutionalItemVersionService" ref="deletedInstitutionalItemVersionService" />
+       <property name="namespaceIdentifier" value="${oai.namespace.identifier}"/>
+       <property name="listIdentifiersService" ref="listIdentifiersService"/>
+       <property name="listRecordsService" ref="listIdentifiersService"/>
+       <property name="listSetsService" ref="listSetsService"/>
+       <property name="listMetadataFormatsService" ref="listMetadataFormatsService"/>
+   </bean>
+   
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="marcContentTypeFieldMapperService" 
+       class="edu.ur.ir.item.metadata.marc.service.DefaultMarcContentTypeFieldMapperService">
+       <property name="marcContentTypeFieldMapperDAO" ref="marcContentTypeFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Contributor type -->
+   <!-- relator code mapping                         -->
+   <!-- ****************************************** --> 
+   <bean id="marcContributorTypeRelatorCodeService" 
+       class="edu.ur.ir.item.metadata.marc.service.DefaultMarcContributorTypeRelatorCodeService">
+       <property name="marcContributorTypeRelatorCodeDAO" ref="marcContributorTypeRelatorCodeDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="marcExportService" 
+       class="edu.ur.ir.oai.metadata.provider.service.DefaultMarcExportService">
+       <property name="contentTypeService" ref="contentTypeService"/>
+       <property name="marcContentTypeFieldMapperService" ref="marcContentTypeFieldMapperService"/>
+       <property name="marcContributorTypeRelatorCodeService" ref="marcContributorTypeRelatorCodeService"/>
+       <property name="identifierTypeSubFieldMapperService" ref="identifierTypeSubFieldMapperService"/>
+       <property name="institutionalItemVersionUrlGenerator" ref="institutionalItemVersionUrlGenerator"/>
+       <property name="extentTypeSubFieldMapperService" ref="extentTypeSubFieldMapperService"/>
+   
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="marcDataFieldMapperService" 
+       class="edu.ur.ir.item.metadata.marc.service.DefaultMarcDataFieldMapperService">
+       <property name="marcDataFieldMapperDAO" ref="marcDataFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!-- Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="identifierTypeSubFieldMapperService" 
+       class="edu.ur.ir.item.metadata.marc.service.DefaultIdentifierTypeSubFieldMapperService">
+       <property name="identifierTypeSubFieldMapperDAO" ref="identifierTypeSubFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!--  Service that deals with Marc Conntent type -->
+   <!--  mapping                                   -->
+   <!-- ****************************************** --> 
+   <bean id="extentTypeSubFieldMapperService" 
+       class="edu.ur.ir.item.metadata.marc.service.DefaultExtentTypeSubFieldMapperService">
+       <property name="extentTypeSubFieldMapperDAO" ref="extentTypeSubFieldMapperDAO"/>
+   </bean>
+   
+   <!-- ****************************************** --> 
+   <!--  Service that deals with importing marc    -->
+   <!--     files                                  -->
+   <!-- ****************************************** --> 
+   <bean id="marcFileToVersionedItemImporter" 
+       class="edu.ur.ir.importer.service.DefaultMarcFileToVersionedItemImporter">
+       
+ 	    <property name="marcContributorTypeRelatorCodeService" ref="marcContributorTypeRelatorCodeService"/>
+	    <property name="identifierTypeSubFieldMapperService" ref="identifierTypeSubFieldMapperService"/>
+	    <property name="extentTypeSubFieldMapperService" ref="extentTypeSubFieldMapperService"/>
+	    <property name="nameAuthorityIndexService" ref="nameAuthorityIndexService"/>
+	    <property name="nameAuthoritySearchService" ref="nameAuthoritySearchService"/>
+	    <property name="repositoryService" ref="repositoryService"/>
+	    <property name="contributorTypeService" ref="contributorTypeService"/>
+	    <property name="contributorService" ref="contributorService"/>
+	    <property name="personService" ref="personService"/>
+	    <property name="publisherService" ref="publisherService"/>
+	    <property name="placeOfPublicationService" ref="placeOfPublicationService"/>
+	    <property name="marcContentTypeFieldMapperService" ref="marcContentTypeFieldMapperService"/>
+	    <property name="languageTypeService" ref="languageTypeService"/>
+	    <property name="seriesService" ref="seriesService"/>
+	    <property name="errorEmailService" ref="errorEmailService"/>
+   </bean>
+</beans>
