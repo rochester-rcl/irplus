@@ -82,18 +82,23 @@ implements ServletResponseAware, ServletRequestAware {
     		if( collection != null )
     		{
     			IrFile irFile = collection.getPicture(irFileId);
-    			TransformedFile transform = irFile.getTransformedFileBySystemCode(TransformedFileType.PRIMARY_THUMBNAIL);
-    			if( transform != null )
+    			
+    			// do not send anything if the fils is not part of the collection's pictures
+    			if( irFile != null )
     			{
-    				FileInfo info = transform.getTransformedFile();
-    				if( irFile.isPublicViewable() )
-    	    		{
-    	    		    webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
-    	    		}
-    	    		else
-    	    		{
-    	    			webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), false, false);
-    	    		}
+    			    TransformedFile transform = irFile.getTransformedFileBySystemCode(TransformedFileType.PRIMARY_THUMBNAIL);
+    			    if( transform != null )
+    			    {
+    				    FileInfo info = transform.getTransformedFile();
+    				    if( irFile.isPublicViewable() )
+    	    		    {
+    	    		        webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), true, false);
+    	    		    }
+    	    		    else
+    	    		    {
+    	    			    webIoUtils.StreamFileInfo(info.getName(), info, response, request, (1024*4), false, false);
+    	    		    }
+    			    }
     			}
     		}
     	}
