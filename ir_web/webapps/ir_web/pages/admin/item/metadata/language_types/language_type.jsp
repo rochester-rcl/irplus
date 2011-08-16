@@ -79,13 +79,13 @@
 	        <br/>
 	        <br/>
 	        <div id="newLanguageTypes"></div>
-       <div>
+       </div>
        <!--  end body div -->
 
       <!--  this is the footer of the page -->
       <c:import url="/inc/footer.jsp"/>
       
-  <div>
+  </div>
   <!--  End doc div-->
   
  	         <div id="newLanguageTypeDialog" class="hidden">

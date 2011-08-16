@@ -183,11 +183,11 @@
                                                 <c:param name="collectionId" value="${child.id}"/>
                                                 <c:param name="irFileId" value="${child.primaryPicture.id}"/>
                                            </c:url>
-                                           <img height="66px" width="100px"  src="${url}"/>
+                                           <img class="basic_thumbnail" src="${url}"/>
                                        </c:if>
                                    </td>
                                    <td>
-                                       <p><strong><a href="${institutionalCollectionUrl}">${child.name}</a> </strong><ur:maxText numChars="100" text="${child.description}"></ur:maxText></p>
+                                       <p><strong><a href="${institutionalCollectionUrl}">${child.name}</a></strong></p>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -240,7 +240,7 @@
                            <p>
                            <br/>
                            <c:forEach var="link" items="${institutionalCollection.links}">
-                           <a target="_blank" href="${link.url}">${link.name}</a> <c:if test="${link.description != null}"> <br> ${link.description} </c:if> <br/><br/>
+                           <a href="${link.url}">${link.name}</a> <c:if test="${link.description != null}"> <br> ${link.description} </c:if> <br/><br/>
                            </c:forEach>
                            </p>
                        </div>

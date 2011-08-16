@@ -27,7 +27,7 @@
 <ivy-module version="2.0">
     <info organisation="dspace_urresearch_import" module="dspace_urresearch_import"/>
     <dependencies>
-        <dependency org="ir_service" name="ir_service" rev="1.0" />
-        <dependency org="dspace_urresearch_import_export" name="dspace_urresearch_import_export" rev="1.0" />
+        <dependency org="ir_service" changing="true" name="ir_service" rev="2.1" />
+        <dependency org="dspace_urresearch_import_export" changing="true" name="dspace_urresearch_import_export" rev="2.1" />
     </dependencies>
 </ivy-module>

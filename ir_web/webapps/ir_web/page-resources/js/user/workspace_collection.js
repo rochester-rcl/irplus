@@ -315,6 +315,7 @@ YAHOO.ur.personal.collection =
 	
 	    var handleSuccess = function(o)
 	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 			// check for the timeout - forward user to login page if timout
 	        // occured
 	        if( !urUtil.checkTimeOut(o.responseText) )
@@ -352,6 +353,7 @@ YAHOO.ur.personal.collection =
 	
 	    var handleFailure = function(o) 
 	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
 	        alert('New collection Submission failed ' + o.status + ' status text ' + o.statusText);
 	    };
 
@@ -373,6 +375,8 @@ YAHOO.ur.personal.collection =
 			YAHOO.util.Connect.setForm('newCollectionForm');
 	        if( YAHOO.ur.personal.collection.newCollectionDialog.validate() )
 	        {
+	        	// show wait dialog
+	        	YAHOO.ur.util.wait.waitDialog.showDialog();
 	            //based on what we need to do (update or create a 
 	            // new collection) based on the action.
                 var action = newCollectionAction;
@@ -692,6 +696,37 @@ YAHOO.ur.personal.collection =
     },
 
     
+	/**
+	 * Delete the items and collections by submitting the form.
+	 */
+	deleteItemsCollections : function()
+	{
+		// handle a successful return
+	    var handleSuccess = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+			// check for the timeout - forward user to login page if timeout
+	        // occurred
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       	    
+	            var response = o.responseText;
+	            document.getElementById('newPersonalCollections').innerHTML = response;
+	        }
+	    };
+	
+	    // handle form submission failure
+	    var handleFailure = function(o) 
+	    {
+	    	YAHOO.ur.util.wait.waitDialog.hide();
+	        alert('delete items collections failure '  + o.status + ' status text ' + o.statusText);
+	    };
+
+	    YAHOO.util.Connect.setForm('myCollections');
+    
+        YAHOO.util.Connect.asyncRequest('POST', deleteCollectionAction,
+          {success: handleSuccess, failure: handleFailure});
+	},
+    
     /**
      * create a dialog to confirm the deletion of collections.
      */
@@ -700,8 +735,9 @@ YAHOO.ur.personal.collection =
         // Define various event handlers for Dialog
 	    var handleSubmit = function() 
 	    {
+	    	YAHOO.ur.util.wait.waitDialog.showDialog();
 	    	YAHOO.ur.personal.collection.destroyMenus();
-		    myPersonalCollectionsTable.submitForm(deleteCollectionAction);
+	    	YAHOO.ur.personal.collection.deleteItemsCollections();
 		    this.hide();
 	    };
 	    
@@ -748,7 +784,6 @@ YAHOO.ur.personal.collection =
     executeDeleteAction : function()
     {
     	 YAHOO.ur.personal.collection.deleteCollection.showDialog();
-         resetSelected.selected = true;
          YAHOO.ur.shared.file.inbox.getSharedFilesCount();
     },
     
@@ -758,7 +793,6 @@ YAHOO.ur.personal.collection =
     executeMoveAction : function()
     {
     	 YAHOO.ur.personal.collection.moveCollectionData();
-         resetSelected.selected = true;
          YAHOO.ur.shared.file.inbox.getSharedFilesCount();
     },
 
@@ -770,6 +804,10 @@ YAHOO.ur.personal.collection =
      */
     init: function() 
     {
+	    if (document.getElementById('myCollections_showCollection').value == 'true')
+	    {
+		    YAHOO.ur.user.workspace.setActiveIndex("COLLECTION");
+	    }
         var parentCollectionId = document.getElementById('myCollections_parentCollectionId').value;
         YAHOO.ur.personal.collection.getCollectionByIdWithoutLoadingSharedInboxFiles(parentCollectionId);
         YAHOO.ur.personal.collection.createNewCollectionDialog();

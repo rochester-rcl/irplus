@@ -70,16 +70,9 @@
 	<query name="instItemProcessingRecByItemIdProcessingType">
 	   select institutionalItemIndexProcessingRecord 
 	   from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord 	   
-	   where institutionalItemIndexProcessingRecord.institutionalItemId = :itemId
-	   and institutionalItemIndexProcessingRecord.indexProcessingType.id = :processingTypeId
+	   where institutionalItemIndexProcessingRecord.institutionalItemId = ?
+	   and institutionalItemIndexProcessingRecord.indexProcessingType.id = ?
 	</query>
-	
-	<query name="instItemProcessingRecByProcessingType">
-	   select institutionalItemIndexProcessingRecord 
-	   from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord 	   
-	   where institutionalItemIndexProcessingRecord.indexProcessingType.id = :processingTypeId
-	</query>
-	
 	
 	<!--  this retrieves all items within the collection including all child items in child
 	      collections - this also does not re-insert any items that are already inserted based
@@ -177,6 +170,7 @@
 	        from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
 	</query>
 	
+	
 	<query name="insertAllItemsForContributorPersonName">
 		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
 	    select institutionalItem.id, indexProcessingType, current_timestamp() 
@@ -203,6 +197,17 @@
 	    from InstitutionalItem institutionalItem,
 	         IndexProcessingType indexProcessingType
 	    where institutionalItem.versionedInstitutionalItem.currentVersion.item.externalPublishedItem.publisher.id = :publisherId
+	    and indexProcessingType.id = :processingTypeId
+	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
+	    from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)
+	</query>
+	
+	<query name="insertAllItemsForPlaceOfPublication">
+		insert into InstitutionalItemIndexProcessingRecord (institutionalItemId, indexProcessingType, updatedDate)
+	    select institutionalItem.id, indexProcessingType, current_timestamp() 
+	    from InstitutionalItem institutionalItem,
+	         IndexProcessingType indexProcessingType
+	    where institutionalItem.versionedInstitutionalItem.currentVersion.item.externalPublishedItem.placeOfPublication.id = :placeOfPublicationId
 	    and indexProcessingType.id = :processingTypeId
 	    and institutionalItem.id not in ( select institutionalItemIndexProcessingRecord.institutionalItemId
 	    from InstitutionalItemIndexProcessingRecord as institutionalItemIndexProcessingRecord)

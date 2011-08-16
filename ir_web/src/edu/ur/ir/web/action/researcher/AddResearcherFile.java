@@ -550,7 +550,7 @@ public class AddResearcherFile extends ActionSupport implements UserIdAware{
 		this.fileVersionId = fileVersionId;
 	}
 
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;	
 	}
 

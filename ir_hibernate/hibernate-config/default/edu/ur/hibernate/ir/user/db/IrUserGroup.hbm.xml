@@ -48,8 +48,7 @@
 		<!-- users that belong to this group -->
 		<set name="users" 
 		    optimistic-lock="false"
-		    schema="ir_user"
-		    table="user_group_users"  
+		    table="ir_user.user_group_users"  
 		    cascade="save-update" 
 		    access="field" 
 		    lazy="true"
@@ -77,18 +76,20 @@
 	    select count(*) from IrUserGroup
 	</query>
 	
+	<!-- named query for getting all groups ordered by names -->
+    <query name="getAllGroupNameAsc">from IrUserGroup order by name </query>
     
     <!-- named query for getting a group -->
 	<query name="getGroupByName">
 		from IrUserGroup as IrUserGroup where
-		IrUserGroup.name = :name
+		IrUserGroup.name = ?
 	</query>
 	
 	<!--  Get a list of groups for a particular user -->
 	<query name="getGroupsForUser">
 	    select userGroup from IrUserGroup userGroup
 	    join userGroup.users as user
-	    where user.id = :userId
+	    where user.id = ?
 	</query>
 	
 	<!--  Get a particular user from a user group -->

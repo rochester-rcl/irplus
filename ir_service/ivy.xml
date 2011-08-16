@@ -28,14 +28,13 @@
     <info organisation="ir_service" module="ir_service"/>
     <dependencies>
 
-        <dependency org="ir_hibernate" name="ir_hibernate" rev="2.0" changing="true" />
+        <dependency org="ir_hibernate" name="ir_hibernate" rev="2.1" changing="true" />
         
-        <!--  digester dependency -->    
+         <!--  digester dependency -->    
         <dependency org="commons-digester" name="commons-digester" rev="2.0" transitive="false">
             <artifact name="commons-digester" type="jar"/>
         </dependency>
         
-
   
         <!-- ehcahce -->
         <dependency org="net.sf.ehcache" name="ehcache" rev="1.6.0" transitive="false">
@@ -43,12 +42,12 @@
         </dependency>
 
          <!-- lucene files-->
-        <dependency org="org.apache.lucene" name="lucene-misc" rev="2.9.4">
+        <dependency org="org.apache.lucene" name="lucene-misc" rev="2.4.1">
             <artifact name="lucene-misc" type="jar"/>
         </dependency>
         
         <!-- spring files -->
-        <dependency org="org.springframework" name="spring-context-support" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-context-support" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-context-support" type="jar"/>
         </dependency>
         

@@ -78,13 +78,14 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 	private static final long serialVersionUID = 6464289484410384584L;
 
 	/** Analyzer for dealing with text indexing */
-	private transient Analyzer analyzer;
+	private Analyzer analyzer;
 	
 	/** Service for sending email errors */
 	private ErrorEmailService errorEmailService;
 	
 	/** data access for indexing record failure data access */
 	private IrFileIndexingFailureRecordDAO irFileIndexingFailureRecordDAO;
+	
 	
 	/** Service that maintains file text extractors */
 	private FileTextExtractorService fileTextExtractorService;
@@ -483,7 +484,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		IndexWriter writer = null;
 		try {
 			
-			directory = FSDirectory.open(personalIndexFolder);
+			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
 			writer = getWriter(directory);
 			Term term = new Term(PERSONAL_FILE_ID, NumberTools.longToString(personalFileId));
 			writer.deleteDocuments(term);
@@ -642,7 +643,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		IndexWriter writer = null;
 		try {
 			
-			directory = FSDirectory.open(personalIndexFolder);
+			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
 			writer = getWriter(directory);
 			Term term = new Term(PERSONAL_COLLECTION_ID, NumberTools.longToString(personalCollectionId));
 			writer.deleteDocuments(term);
@@ -714,7 +715,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		IndexWriter writer = null;
 		try {
 			
-			directory = FSDirectory.open(personalIndexFolder);
+			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
 			writer = getWriter(directory);
 			Term term = new Term(PERSONAL_FOLDER_ID, NumberTools.longToString(personalFolderId));
 			writer.deleteDocuments(term);
@@ -909,7 +910,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		IndexWriter writer = null;
 		try {
 			
-			directory = FSDirectory.open(personalIndexFolder);
+			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
 			writer = getWriter(directory);
 			Term term = new Term(SHARED_INBOX_FILE_ID, NumberTools.longToString(sharedInboxFileId));
 			writer.deleteDocuments(term);
@@ -1012,7 +1013,7 @@ public class DefaultUserWorkspaceIndexService implements UserWorkspaceIndexServi
 		IndexWriter writer = null;
 		try {
 			
-			directory = FSDirectory.open(personalIndexFolder);
+			directory = FSDirectory.getDirectory(personalIndexFolder.getAbsolutePath());
 			writer = getWriter(directory);
 			Term term = new Term(PERSONAL_ITEM_ID, NumberTools.longToString(personalItemId));
 			writer.deleteDocuments(term);

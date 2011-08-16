@@ -54,15 +54,17 @@
 
 		<property name="versionNumber" column="version_number" type="int" 
 		          access="field" 
-		          not-null="true"/>		  
-			
+		          not-null="true"/>	
+		  
         <!--  withdrawn token -->
 		<many-to-one class="WithdrawnToken" 
 			unique="true" 
 			name="withdrawnToken" 
 			column="withdrawn_token_id" 
-			access="field"
-			cascade="all"/>
+			cascade="save-update"
+			access="field" 
+			insert="true"
+			update="true"/>
 	
 	    <!--  institutional item repository license -->
 	    <one-to-one name="repositoryLicense" 
@@ -105,7 +107,7 @@
 		<set name="withdrawHistory" 
 		     optimistic-lock="false"
 		     inverse="true" 
-		     cascade="all, delete-orphan" 
+		     cascade="all-delete-orphan" 
 		     access="field"
 			 lazy="true"  
 			 fetch="subselect">
@@ -117,7 +119,7 @@
 		<set name="reinstateHistory" 
 		     optimistic-lock="false"
 		     inverse="true" 
-		     cascade="all, delete-orphan" 
+		     cascade="all-delete-orphan" 
 		     access="field"
 			 lazy="true"  
 			 fetch="subselect">
@@ -272,7 +274,7 @@
 	</query>
 	
 	<query name="getPublicationsForSponsorCount">
-	    select count(institutionalItemVersion) from InstitutionalItemVersion as institutionalItemVersion
+	    select count(distinct institutionalItemVersion) from InstitutionalItemVersion as institutionalItemVersion
 	    join institutionalItemVersion.item as item
 	    join item.itemSponsors as itemSponsor
 	    join itemSponsor.sponsor as sponsor
@@ -699,6 +701,19 @@
 	       from InstitutionalItemVersion as institutionalItemVersion
 	       join institutionalItemVersion.item as item
 	       where item.externalPublishedItem.publisher.id = :publisherId 
+	      )
+	</query>
+	
+		<!--place of publication changes -->
+    <query name="updateItemVersionForPlaceOfPublicationChange">
+	update InstitutionalItemVersion iiv set iiv.dateLastModified = current_timestamp(), 
+	     iiv.lastModifiedNote = :note, iiv.lastModifiedBy = :user
+	     where iiv.id in
+	     ( 
+	       select institutionalItemVersion.id 
+	       from InstitutionalItemVersion as institutionalItemVersion
+	       join institutionalItemVersion.item as item
+	       where item.externalPublishedItem.placeOfPublication.id = :placeOfPublicationId 
 	      )
 	</query>
 	

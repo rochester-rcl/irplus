@@ -122,6 +122,8 @@ public class HbSubTypeDAOTest {
 
 		
 		ts = tm.getTransaction(td);
+		// make sure you get them all back
+		assert  subTypeDAO.getAll().size() == 2 : "size should be 2 ";
 		// test deleting an extension
 		
 		other = subTypeDAO.getById(t1.getId(), false);

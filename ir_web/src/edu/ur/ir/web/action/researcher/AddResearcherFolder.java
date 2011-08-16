@@ -290,7 +290,7 @@ public class AddResearcherFolder extends ActionSupport implements UserIdAware{
 		this.researcherId = researcherId;
 	}
 	
-	public void injectUserId(Long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

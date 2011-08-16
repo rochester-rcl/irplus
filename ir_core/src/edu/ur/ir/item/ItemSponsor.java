@@ -32,10 +32,12 @@ public class ItemSponsor extends BasePersistent{
 	/**  Item */
 	private GenericItem item;
 	
-	/**  Primary item type */
+	/** Sponsor name type */
 	private Sponsor sponsor;
 	
-	/**  Secondary item types */
+	/**  Sponsor description value  - this can be grant number or other important 
+	 *   information and is included in the equals checking
+	 */
 	private String description;
 
 
@@ -63,6 +65,7 @@ public class ItemSponsor extends BasePersistent{
 		int value = 0;
 		value += item == null ? 0 : item .hashCode();
 		value += sponsor == null ? 0 : sponsor.hashCode();
+		value += description == null ? 0 : description.hashCode();
 		return value;
 	}
 	
@@ -80,6 +83,9 @@ public class ItemSponsor extends BasePersistent{
 		
 		if( ( sponsor != null && !sponsor.equals(other.getSponsor()) ) ||
 			( sponsor == null && other.getSponsor() != null ) ) return false;
+		
+		if( ( description != null && !description.equals(other.getDescription()) ) ||
+			( description == null && other.getDescription() != null ) ) return false;
 
 		return true;
 	}

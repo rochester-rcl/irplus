@@ -35,6 +35,9 @@ var viewEditUserAction = basePath + 'admin/userEditView.action';
 // Action for admin to login as any user
 var loginAsUserAction = basePath + 'admin/loginAsUser.action';
 
+// object to hold the specified users data.
+var myUserTable = new YAHOO.ur.table.Table('myUsers', 'newUsers');
+
 
 /**
  * sponsor namespace
@@ -51,14 +54,15 @@ YAHOO.ur.user = {
         var authorRole = document.getElementById("newUserForm_isAuthor");
         var researcherRole = document.getElementById("newUserForm_isResearcher");
         var collectionAdminRole = document.getElementById("newUserForm_isCollectionAdmin");
+        var importerRole = document.getElementById("newUserForm_isImporter");
         
 	    if (permission.id == 'newUserForm_isAdmin') 
 	    {
 		    if (permission.checked) 
 		    {
-		        userRole.checked = true;
-		        authorRole.checked = true;
-		        researcherRole.checked = true;
+		    	 userRole.checked = true;
+			     authorRole.checked = true;
+			     importerRole.checked = true;
 		    }
 	    }
 	
@@ -69,10 +73,6 @@ YAHOO.ur.user = {
 		        userRole.checked = true;
 		        authorRole.checked = true;
 		    } 
-		    else 
-		    {
-		        adminRole.checked = false;
-		    }
 	    }
 
 	    if (permission.id == 'newUserForm_isAuthor') 
@@ -85,6 +85,7 @@ YAHOO.ur.user = {
 		    {
 		        adminRole.checked = false;
 		        researcherRole.checked = false;
+		        importerRole.checked = false;
 		    }
 	    }
 	    
@@ -105,8 +106,19 @@ YAHOO.ur.user = {
 		        authorRole.checked = false;
 		        researcherRole.checked = false;
 		        collectionAdminRole.checked = false;
+		        importerRole.checked = false;
 		    }
 	    }
+	    
+	    if (permission.id == 'newUserForm_isImporter') 
+	    {
+		    if (permission.checked) 
+		    {
+		        authorRole.checked = true;
+		        userRole.checked = true;
+		    }
+	    }
+	    
 	    return true;
     },
 	
@@ -357,6 +369,8 @@ YAHOO.ur.user = {
 		var handleSuccess = function(o) {
 	        YAHOO.ur.user.changePasswordDialog.hide();
 	        YAHOO.ur.user.clearChangePasswordForm();
+	
+		    myUserTable.submitForm(myUserAction);
 		};
 		
 		// handle form submission failure
@@ -669,6 +683,7 @@ YAHOO.ur.user = {
 	 */ 
 	init : function() 
 	{
+	    YAHOO.ur.user.getUsers(0,1,1,'lastName','asc');
 	    YAHOO.ur.user.createErrorDialog();
 	    YAHOO.ur.user.createNewUserDialog();
 	    YAHOO.ur.user.createDeleteUserDialog();

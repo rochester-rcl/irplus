@@ -68,7 +68,6 @@
             
             <c:if test="${totalHits > 0}">
                 <c:import url="ip_ignore_download_counts_pager.jsp"/>
-                <br/>
             </c:if>
             
  			<div class="dataTable">
@@ -102,8 +101,8 @@
                                 descendingSortAction="${sortDescendingUrl}">
                                 <a href="${href}">Download Count</a>                                              
                                             <urstb:thImgSort
-                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                                                         sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                                                         sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
 					                   
 						</urstb:tr>
 			        </urstb:thead>

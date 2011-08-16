@@ -33,9 +33,6 @@ public class UserEmail extends BasePersistent {
 	/** Holds the user Email */
 	private String email;
 	
-	/** lower case version of the email  */
-	private String lowerCaseEmail;
-
 	/**  IrUser */
 	private IrUser irUser;
 
@@ -54,7 +51,7 @@ public class UserEmail extends BasePersistent {
 	 * Default constructor
 	 */
 	public UserEmail(String email){
-		setEmail(email);
+		this.email = email;
 	};
 	
 	/**
@@ -72,8 +69,7 @@ public class UserEmail extends BasePersistent {
 	 * @param email Email id that has to be set
 	 */
 	public void setEmail(String email) {
-		this.email = email.trim();
-		this.lowerCaseEmail = email.toLowerCase(); 
+		this.email = email;
 	}
 	
 
@@ -103,8 +99,8 @@ public class UserEmail extends BasePersistent {
 
 		final UserEmail other = (UserEmail) o;
 
-		if( ( lowerCaseEmail != null && !lowerCaseEmail.equals(other.getLowerCaseEmail()) ) ||
-			( lowerCaseEmail == null && other.getLowerCaseEmail() != null ) ) return false;
+		if( ( email != null && !email.equals(other.getEmail()) ) ||
+			( email == null && other.getEmail() != null ) ) return false;
 		return true;
 	}
 
@@ -116,7 +112,8 @@ public class UserEmail extends BasePersistent {
     public int hashCode()
     {
     	int hash = 0;
-    	hash += lowerCaseEmail == null ? 0 : lowerCaseEmail.hashCode();
+    	hash += email == null ? 0 : email.hashCode();
+    	hash += irUser== null ? 0 : irUser.hashCode();
     	return hash;
     }
 
@@ -136,73 +133,20 @@ public class UserEmail extends BasePersistent {
 		return  sb.toString();
 	}
 
-	/**
-	 * Set to true if the email is verified.
-	 * 
-	 * @return
-	 */
 	public boolean isVerified() {
 		return isVerified;
 	}
 
-	/**
-	 * Sets the email as verified. If the verified is set to true,
-	 * the token will be set to null.
-	 * 
-	 * @param isVerified
-	 */
-	void setVerified(boolean isVerified) {
+	public void setVerified(boolean isVerified) {
 		this.isVerified = isVerified;
 	}
-	
-	/**
-	 * Set the is verified state to true and
-	 * set the token value to null
-	 */
-	public void setVerifiedTrue()
-	{
-		this.isVerified = true;
-		this.token = null;
-	}
-	
-	/**
-	 * Set the is verified state to false and set the token
-	 * to the token value.
-	 * 
-	 * @param token
-	 */
-	public void setVerifiedFalse(String token)
-	{
-		this.isVerified = false;
-		this.token = token;
-	}
 
-	/**
-	 * Get the token to verify the email.
-	 * 
-	 * @return
-	 */
 	public String getToken() {
 		return token;
 	}
 
-	/**
-	 * Set the email to verify the token.
-	 * 
-	 * @param token
-	 */
-	void setToken(String token) {
+	public void setToken(String token) {
 		this.token = token;
 	}
-	
-	/**
-	 * Get the lower case version of the email.
-	 * 
-	 * @return - lower case version of the email
-	 */
-	public String getLowerCaseEmail() {
-		return lowerCaseEmail;
-	}
-	
 
 }

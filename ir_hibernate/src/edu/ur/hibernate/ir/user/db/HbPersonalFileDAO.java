@@ -19,7 +19,6 @@ package edu.ur.hibernate.ir.user.db;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -46,8 +45,7 @@ public class HbPersonalFileDAO implements PersonalFileDAO{
 	/**
 	 * Default Constructor
 	 */
-	public HbPersonalFileDAO() 
-	{
+	public HbPersonalFileDAO() {
 		hbCrudDAO = new HbCrudDAO<PersonalFile>(PersonalFile.class);
 	}
 	
@@ -67,8 +65,16 @@ public class HbPersonalFileDAO implements PersonalFileDAO{
 	 * @see edu.ur.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irFileCount");
-		return (Long)q.uniqueResult();
+		return (Long)
+		HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irFileCount"));
+	}
+
+
+	/**
+	 * Return all PersonalFile
+	 */
+	public List<PersonalFile> getAll() {
+		return hbCrudDAO.getAll();
 	}
 
 	/**
@@ -152,26 +158,24 @@ public class HbPersonalFileDAO implements PersonalFileDAO{
 	 * @return the found files
 	 */
 	@SuppressWarnings("unchecked")
-	public List<PersonalFile> getFilesInFolderForUser(Long userId, Long folderId) 
-	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getFilesInAFolderForUser");
-		q.setParameter("userId", userId);
-		q.setParameter("folderId", folderId );
-		return q.list();
+	public List<PersonalFile> getFilesInFolderForUser(Long userId, Long folderId) {
+		Object[] values = {userId, folderId};
+		return (List<PersonalFile>) (hbCrudDAO.getHibernateTemplate().findByNamedQuery("getFilesInAFolderForUser", values));
+		
 	}
 	
 	/**
-	 * Get the root files - at the user level
+	 * Get the root files 
 	 * 
-	 * @param userId - id of the user to get the root files for
+	 * @param userId
 	 * 
-	 * @return the found files at the root user level
+	 * @return the found files
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PersonalFile> getRootFiles(Long userId) {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getRootFiles");
-		q.setParameter("userId", userId);
-		return q.list();
+		
+		return (List<PersonalFile>) (hbCrudDAO.getHibernateTemplate().
+				findByNamedQuery("getRootFiles", userId));
 	}
 
 	/**
@@ -190,44 +194,6 @@ public class HbPersonalFileDAO implements PersonalFileDAO{
 		   foundFiles = hbCrudDAO.getHibernateTemplate().findByNamedQueryAndNamedParam("getFiles", params, values);
 		}
 		return foundFiles;
-	}
-
-	/**
-	 * Get a list of personal files shared witht he given user.
-	 * 
-	 * @param rowStart - start position in the list
-	 * @param maxResults - maximum number of results
-	 * @param ownerId - owner of the personal files.
-	 * @param sharedWithUserId - id of the user who files are shared with
-	 * 
-	 * @return list of files shared with the user.
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PersonalFile> getFilesSharedWithUser(int rowStart,
-			int maxResults, Long ownerId, Long sharedWithUserId)
-	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getPersonalFilesSharedWithUser");
-		q.setParameter("ownerId", ownerId);
-		q.setParameter("collaboratorId", sharedWithUserId );
-		q.setFirstResult(rowStart);
-		q.setMaxResults(maxResults);
-		return q.list();
-	}
-	
-	/**
-	 * Get the count of files shared with a given user.
-	 * 
-	 * @param ownerId - owner of the personal file sto check
-	 * @param sharedWithUserId - id of the shared with user id.
-	 * 
-	 * @return count of files shared with the given shared with user id
-	 */
-	public Long getFilesSharedWithUserCount(Long ownerId, Long sharedWithUserId)
-	{
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("getPersonalFilesSharedWithUserCount");
-		q.setParameter("ownerId", ownerId);
-		q.setParameter("collaboratorId", sharedWithUserId );
-		return (Long) q.uniqueResult();
 	}
 
 

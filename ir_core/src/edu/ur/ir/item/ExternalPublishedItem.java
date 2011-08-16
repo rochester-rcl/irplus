@@ -27,18 +27,22 @@ import edu.ur.persistent.BasePersistent;
  */
 public class ExternalPublishedItem extends BasePersistent {
 
-	/**  Eclipse generated id */
+	//  Eclipse generated id */
 	private static final long serialVersionUID = -1703893157173707520L;
 	
-	/** Date the item was published */
+	// Date the item was published */
 	private PublishedDate publishedDate;
 	
-	/** Citation */
+	// Citation */
 	private String citation;
 	
-	/** Publisher for the item  */
+	// Publisher for the item  */
 	private Publisher publisher;
 	
+	// location of the publisher
+	private PlaceOfPublication placeOfPublication;
+
+
 	/**
 	 * Get the date item was published
 	 * 
@@ -53,7 +57,7 @@ public class ExternalPublishedItem extends BasePersistent {
 	 * 
 	 * @param datePublished date item was published
 	 */
-	public void setPublishedDate(PublishedDate publishedDate) {
+	void setPublishedDate(PublishedDate publishedDate) {
 		this.publishedDate = publishedDate;
 		
 	}
@@ -66,10 +70,29 @@ public class ExternalPublishedItem extends BasePersistent {
 	 * @param year
 	 * @return publlished date
 	 */
-	public PublishedDate addPublishedDate(int month, int day, int year) {
-		PublishedDate publishedDate = new PublishedDate(month, day, year);
-		publishedDate.setExternalPublishedItem(this);
-		this.publishedDate = publishedDate;
+	public PublishedDate updatePublishedDate(int month, int day, int year)
+	{
+		if(month > 0 || day > 0 || year > 0)
+		{
+			if( publishedDate != null )
+			{
+				publishedDate.setMonth(month);
+				publishedDate.setYear(year);
+				publishedDate.setDay(day);
+			}
+			else
+			{
+				this.publishedDate = new PublishedDate(month, day, year);
+				publishedDate.setExternalPublishedItem(this);
+			}
+		}
+		else
+		{
+			if( publishedDate != null )
+			{
+				publishedDate = null;
+			}
+		}
 		
 		return publishedDate;
 	}
@@ -109,6 +132,25 @@ public class ExternalPublishedItem extends BasePersistent {
 	public void setPublisher(Publisher publisher) {
 		this.publisher = publisher;
 	}
+	
+	/**
+	 * Get the place of publication.
+	 * 
+	 * @return
+	 */
+	public PlaceOfPublication getPlaceOfPublication() {
+		return placeOfPublication;
+	}
+
+	/**
+	 * Set the place of publication.
+	 * 
+	 * @param placeOfPublication
+	 */
+	public void setPlaceOfPublication(PlaceOfPublication placeOfPublication) {
+		this.placeOfPublication = placeOfPublication;
+	}
+
 	
 	/**
 	 * @see java.lang.Object#hashCode()
@@ -155,7 +197,14 @@ public class ExternalPublishedItem extends BasePersistent {
 		
 		if( ( publisher != null && !publisher.equals(other.getPublisher()) ) ||
 				( publisher == null && other.getPublisher() != null ) ) return false;
+		
+		if( ( placeOfPublication != null && !placeOfPublication.equals(other.getPlaceOfPublication()) ) ||
+				( placeOfPublication == null && other.getPlaceOfPublication() != null ) ) return false;
 
 		return true;
 	}
+	
+
+
+	
 }

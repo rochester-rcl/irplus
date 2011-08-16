@@ -2,7 +2,6 @@ package edu.ur.hibernate.ir.repository.db;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
@@ -74,8 +73,7 @@ public class HbVersionedLicenseDAO implements VersionedLicenseDAO{
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("versionedLicenseCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("versionedLicenseCount"));
 	}
 
 	

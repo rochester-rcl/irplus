@@ -63,8 +63,12 @@
 			
 		<!--  Parent Item  -->
 		<many-to-one class="GenericItem"
-			name="item" column="item_id" insert="true"
-			update="true" access="field"/>  
+			name="item" 
+			column="item_id" 
+			insert="true"
+			unique="true"
+			update="true" 
+			access="field"/>  
 
 	</class>
 		

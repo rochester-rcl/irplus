@@ -113,7 +113,7 @@
 		     lazy="true"
 		     fetch="subselect">
 			<key column="versioned_file_id" not-null="true"/>
-			<many-to-many  column="invite_info_id" class="edu.ur.ir.user.FileInviteInfo"/>
+			<many-to-many  column="invite_info_id" class="edu.ur.ir.user.InviteInfo"/>
 		</set>
 		
 	</class>

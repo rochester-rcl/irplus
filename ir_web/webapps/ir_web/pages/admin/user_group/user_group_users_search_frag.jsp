@@ -29,7 +29,7 @@
 <c:import url="user_group_user_search_pager.jsp"/>
 
 <div class="dataTable">
-    <urstb:table>
+    <urstb:table width="95%">
         <urstb:caption>Found Users</urstb:caption>
             <urstb:thead>
                 <urstb:tr>
@@ -40,7 +40,7 @@
                 </urstb:tr>
             </urstb:thead>
             <urstb:tbody
-                var="user" 
+                var="member" 
                 oddRowClass="odd"
                 evenRowClass="even"
                 currentRowClassVar="rowClass"
@@ -50,15 +50,15 @@
                     cssClass="${rowClass}"
                     onMouseOver="this.className='highlight'"
                     onMouseOut="this.className='${rowClass}'">
-                        <c:if test="${!ir:isInGroup(user,userGroup)}">
-                        <urstb:td><a href="javascript:YAHOO.ur.usergroup.edit.addMember(${user.id}, ${userGroup.id}, ${rowStart}, ${startPageNumber}, ${currentPageNumber});">Add User</a></urstb:td>
+                        <c:if test="${!ir:isInGroup(member,userGroup)}">
+                        <urstb:td><a href="javascript:YAHOO.ur.usergroup.edit.addMember(${member.id}, ${userGroup.id}, ${rowStart}, ${startPageNumber}, ${currentPageNumber});">Add User</a></urstb:td>
                         </c:if>
-                        <c:if test="${ir:isInGroup(user,userGroup)}">
-                        <urstb:td><a href="javascript:YAHOO.ur.usergroup.edit.removeMember(${user.id}, ${userGroup.id}, ${rowStart}, ${startPageNumber}, ${currentPageNumber});">Remove User</a></urstb:td>
+                        <c:if test="${ir:isInGroup(member,userGroup)}">
+                        <urstb:td><a href="javascript:YAHOO.ur.usergroup.edit.removeMember(${member.id}, ${userGroup.id}, ${rowStart}, ${startPageNumber}, ${currentPageNumber});">Remove User</a></urstb:td>
                         </c:if>
-                        <urstb:td>${user.username}</urstb:td>
-                        <urstb:td>${user.firstName}</urstb:td>
-                        <urstb:td>${user.lastName}</urstb:td>
+                        <urstb:td>${member.username}</urstb:td>
+                        <urstb:td>${member.firstName}</urstb:td>
+                        <urstb:td>${member.lastName}</urstb:td>
                 
                 </urstb:tr>
             </urstb:tbody>

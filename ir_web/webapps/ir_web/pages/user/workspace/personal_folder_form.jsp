@@ -29,9 +29,6 @@
 <input type="hidden" id="newfolderForm_folderId"
     name="updateFolderId" value="${updateFolderId}"/>
 
-<input type="hidden" id="newfolderForm_workspaceId"
-    name="groupWorkspaceId" value="${groupWorkspaceId}"/>
-
 <div id="folder_error_div">       
     <!--  get the error messages from fieldErrors -->
     <p class="errorMessage"><ir:printError errors="${fieldErrors}" 

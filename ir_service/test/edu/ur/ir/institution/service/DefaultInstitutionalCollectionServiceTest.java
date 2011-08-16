@@ -481,6 +481,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
+		collection = institutionalCollectionService.getCollection(collection.getId(), false);
         institutionalCollectionService.setAllItemsWithinCollectionPublic(collection);
         
 		GenericItem otherItem = itemService.getGenericItem(genericItem.getId(), false);
@@ -550,6 +551,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 		
 		// test searching for the data
 		ts = tm.getTransaction(td);
+		collection = institutionalCollectionService.getCollection(collection.getId(), false);
         institutionalCollectionService.setAllItemsWithinCollectionPrivate(collection);
         
 		GenericItem otherItem = itemService.getGenericItem(genericItem.getId(), false);
@@ -658,7 +660,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 		ts = tm.getTransaction(td);
 
 		   /** Institutional Item index processing record service  */
-		List<InstitutionalItemIndexProcessingRecord> processingRecords = recordProcessingService.getAllOrderByItemIdUpdatedDate(0, 1000);
+		List<InstitutionalItemIndexProcessingRecord> processingRecords = recordProcessingService.getAll();
 		for(InstitutionalItemIndexProcessingRecord pr : processingRecords )
 		{
 			recordProcessingService.delete(pr);
@@ -783,7 +785,7 @@ public class DefaultInstitutionalCollectionServiceTest {
 
 		
 		   /** Institutional Item index processing record service  */
-		List<InstitutionalItemIndexProcessingRecord> processingRecords = recordProcessingService.getAllOrderByItemIdUpdatedDate(0, 1000);
+		List<InstitutionalItemIndexProcessingRecord> processingRecords = recordProcessingService.getAll();
 		for(InstitutionalItemIndexProcessingRecord pr : processingRecords )
 		{
 			recordProcessingService.delete(pr);

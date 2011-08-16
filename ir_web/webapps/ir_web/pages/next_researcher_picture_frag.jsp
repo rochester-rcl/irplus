@@ -38,10 +38,10 @@
                         <c:param name="irFileId" value="${researcher.primaryPicture.id}"/>
                         <c:param name="researcherId" value="${researcher.id}"/>
                     </c:url>
-                    <img height="66px" width="100px" src="${url}"/>
+                    <img class="basic_thumbnail" src="${url}"/>
                 </c:if>
                 <c:if test="${!ir:hasThumbnail(researcher.primaryPicture)}">
-                	   <img height="66px" width="100px" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" height="100" width="100"/>
+                	   <img class="basic_thumbnail" src="${pageContext.request.contextPath}/page-resources/images/all-images/noimage.jpg" class="noimage_size"/>
                 </c:if>	    												
 	        </td>   
 	        <td>

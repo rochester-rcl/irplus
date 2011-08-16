@@ -178,8 +178,8 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 		processAuthors(repository, dspaceItem, genericItem, DspaceMetadataLabel.AUTHORS);
 		processAuthors(repository, dspaceItem, genericItem, DspaceMetadataLabel.CONTRIBUTORS);
 		genericItem.setItemAbstract(dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.ABSTRACT));
-		genericItem.setFirstAvailableDate(getFirstAvailableDate(dspaceItem));
-		genericItem.setOriginalItemCreationDate(getOriginalCreationDate(dspaceItem)); 
+		genericItem.updateFirstAvailableDate(getFirstAvailableDate(dspaceItem).getMonth(), getFirstAvailableDate(dspaceItem).getDay(), getFirstAvailableDate(dspaceItem).getYear());
+		genericItem.updateOriginalItemCreationDate(getOriginalCreationDate(dspaceItem).getMonth(), getOriginalCreationDate(dspaceItem).getDay(), getOriginalCreationDate(dspaceItem).getYear()); 
 	    String description = dspaceItem.getSingleDataForLabel(DspaceMetadataLabel.DESCRIPTION);
 	    genericItem.setDescription(description);
 	    processIdentifiers(dspaceItem, genericItem, "GOVT_DOC", DspaceMetadataLabel.GOVERNMENT_DOC_NO);
@@ -332,8 +332,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 	    	ExternalPublishedItem externalPublishedItem = genericItem.getExternalPublishedItem();
 			if( externalPublishedItem == null )
 			{
-				externalPublishedItem = new ExternalPublishedItem();
-				genericItem.setExternalPublishedItem(externalPublishedItem);
+				externalPublishedItem = genericItem.createExternalPublishedItem();
 			}
 			
 			if( publisher != null)
@@ -343,7 +342,7 @@ public class DefaultGenericItemPopulator implements GenericItemPopulator{
 			
 			if( publishedDate != null)
 			{
-				externalPublishedItem.setPublishedDate(publishedDate);
+				externalPublishedItem.updatePublishedDate(publishedDate.getMonth(), publishedDate.getDay(), publishedDate.getYear());
 			}
 			
 			if( citation != null && !citation.trim().equals(""))

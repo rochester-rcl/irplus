@@ -64,5 +64,9 @@
        <property name="name" value="JPEG Thumbnail Transformer"/>
        <property name="fileExtension" value="jpg"/>
    </bean>
-
+   
+   <!-- ****************************************** --> 
+   <!-- Publisher / Location splitter  -->
+   <!-- ****************************************** --> 
+    <bean id="publicationLocationSplitter" class="edu.ur.ir.DefaultPublicationLocationSplitter"/>
  </beans>

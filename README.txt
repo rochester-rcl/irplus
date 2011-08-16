@@ -6,6 +6,10 @@ A copy is also located in the yui directory of ir_web/webapps/ir_web/page-resour
 
 Many of the icons were used from: http://www.famfamfam.com/  which is under the Creative Commons License
 
+
+marc4j.jar has an LGPL license and is distributed with this software - see the marc4j folder for the license.
+
+
 It is the users responsibility to verify that they comply with all License agreements for 
 externally downloaded packages.
 

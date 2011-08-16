@@ -207,7 +207,10 @@
                   method="post" action="user/addItemLink.action">
               
                    <input type="hidden" id="newLinkForm_itemId"
-                       name="genericItemId" value="${item.id}"/>                       
+                       name="genericItemId" value="${item.id}"/>      
+                    
+                   <input type="hidden" id="newLinkForm_itemId"
+                       name="institutionalItemId" value="${institutionalItemId}"/>                 
                
                    <input type="hidden" id="newLinkForm_new"
                        name="newLink" value="true"/>

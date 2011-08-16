@@ -299,11 +299,13 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	 */
 	public boolean removePersonalItem(PersonalItem item)
 	{
+		boolean removed = false;
 		if( personalItems.contains(item))
 		{
+			removed = personalItems.remove(item);
 			item.setPersonalCollection(null);
 		}
-		return personalItems.remove(item);
+		return removed;
 	}
 	
 	/**
@@ -582,9 +584,8 @@ DescriptionAware, NameAware, Comparable, FileSystem
 	public int hashCode()
 	{
 		int value = 0;
-		value += name == null ? 0 : name.hashCode();
 		value += owner == null ? 0 : owner.hashCode();
-		value += getPath() == null? 0 : getPath().hashCode();
+		value += getFullPath() == null? 0 : getFullPath().hashCode();
 		return value;
 	}
 	

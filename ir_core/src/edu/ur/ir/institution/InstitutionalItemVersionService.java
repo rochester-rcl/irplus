@@ -26,6 +26,7 @@ import edu.ur.ir.item.CopyrightStatement;
 import edu.ur.ir.item.ExtentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -498,6 +499,18 @@ public interface InstitutionalItemVersionService extends Serializable {
 	 * @return number of records set as updated.
 	 */
 	public Long setAllVersionsAsUpdatedForLanguageType(LanguageType languageType, IrUser user, String message);
+	
+	/**
+	 * Set all versions as updated for a place of publication change made by a specific user.  This 
+	 * should also cause any re-indexing to occur.
+	 * 
+	 * @param place of publication - the language type that has been changed
+	 * @param user - user making the change
+	 * @param message - message to set for the modification
+	 * 
+	 * @return number of records set as updated.
+	 */
+	public Long setAllVersionsAsUpdatedForPlaceOfPublication(PlaceOfPublication placeOfPublication, IrUser user, String message);
 	
 	/**
 	 * Set all versions as updated for a person name change made by a specific user.  This 

@@ -26,7 +26,7 @@
     <info organisation="metadata_hibernate" module="metadata_hibernate"/>
     <dependencies>
 
-        <dependency org="metadata_dao" name="metadata_dao" rev="2.0" />
+        <dependency org="metadata_dao" name="metadata_dao" rev="2.1" changing="true"/>
         
         <!-- commons dbcp files -->
         <dependency org="commons-dbcp" name="commons-dbcp" rev="1.2.2" transitive="false">
@@ -50,31 +50,15 @@
 
 
         <!-- hibernate files -->
-       <dependency org="org.hibernate" name="hibernate-core" rev="3.6.0.Final" transitive="false">
+        <dependency org="org.hibernate" name="hibernate-core" rev="3.5.3-Final" transitive="false">
             <artifact name="hibernate-core" type="jar"/>
         </dependency>
-        
-        <dependency org="org.hibernate" name="hibernate-commons-annotations" rev="3.2.0.Final" transitive="false">
-            <artifact name="hibernate-commons-annotations" type="jar"/>
-        </dependency>
-        
-        <dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.0-api" rev="1.0.0.Final" transitive="false">
-            <artifact name="hibernate-jpa-2.0-api" type="jar"/>
-        </dependency>
-        
-        <dependency org="javax.validation" name="validation-api" rev="1.0.0.GA" transitive="false">
-            <artifact name="validation-api" type="jar"/>
-        </dependency>
-        
-        <dependency org="org.hibernate" name="hibernate-validator" rev="4.1.0.Final" transitive="false">
-            <artifact name="hibernate-validator" type="jar"/>
-        </dependency>
 
-         <dependency org="org.slf4j" name="slf4j-api" rev="1.6.1" transitive="false">
+         <dependency org="org.slf4j" name="slf4j-api" rev="1.5.8" transitive="false">
             <artifact name="slf4j-api" type="jar"/>
         </dependency>
 
-        <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.1" transitive="false">
+        <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.8" transitive="false">
             <artifact name="slf4j-log4j12" type="jar"/>
         </dependency>
         
@@ -86,7 +70,7 @@
             <artifact name="jta" type="jar"/>
         </dependency>
         
-        <dependency org="javassist" name="javassist" rev="3.12.0.GA" transitive="false">
+        <dependency org="javassist" name="javassist" rev="3.11.0.GA" transitive="false">
             <artifact name="javassist" type="jar"/>
         </dependency>
         
@@ -94,40 +78,43 @@
             <artifact name="antlr" type="jar"/>
         </dependency>
         
+        
+        
         <!-- spring files -->
-        <dependency org="org.springframework" name="spring-core" rev="3.0.5.RELEASE" transitive="false">
+                <!-- spring files -->
+        <dependency org="org.springframework" name="spring-core" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-core" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-tx" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-tx" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-tx" type="jar"/>
         </dependency>
 
-        <dependency org="org.springframework" name="spring-beans" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-beans" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-beans" type="jar"/>
         </dependency>
 
-        <dependency org="org.springframework" name="spring-context" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-context" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-context" type="jar"/>
         </dependency>
 
-        <dependency org="org.springframework" name="spring-expression" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-expression" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-expression" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-orm" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-orm" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-orm" type="jar"/>
         </dependency>
         
-         <dependency org="org.springframework" name="spring-asm" rev="3.0.5.RELEASE" transitive="false">
+         <dependency org="org.springframework" name="spring-asm" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-asm" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-jdbc" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-jdbc" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-jdbc" type="jar"/>
         </dependency>
         
-        <dependency org="org.springframework" name="spring-aop" rev="3.0.5.RELEASE" transitive="false">
+        <dependency org="org.springframework" name="spring-aop" rev="3.0.2.RELEASE" transitive="false">
             <artifact name="spring-aop" type="jar"/>
         </dependency>
         

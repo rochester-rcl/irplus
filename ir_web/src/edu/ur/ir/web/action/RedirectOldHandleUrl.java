@@ -41,7 +41,7 @@ public class RedirectOldHandleUrl extends ActionSupport implements ServletReques
 	private static final long serialVersionUID = -3542335646160702315L;
 	
 	/** request made */
-	private transient HttpServletRequest request;
+	private HttpServletRequest request;
 	
 	/** Service for dealing with handles */
 	private HandleService handleService;
@@ -49,6 +49,9 @@ public class RedirectOldHandleUrl extends ActionSupport implements ServletReques
 	/** Service for dealing with institutional item version information */
 	private InstitutionalItemVersionService institutionalItemVersionService;
 	
+
+
+
 	/** institutional item id */
 	private Long institutionalItemId;
 	
@@ -104,28 +107,63 @@ public class RedirectOldHandleUrl extends ActionSupport implements ServletReques
 	}
 
 	
+	/**
+	 * Set the servlet request
+	 * 
+	 * @see org.apache.struts2.interceptor.ServletRequestAware#setServletRequest(javax.servlet.http.HttpServletRequest)
+	 */
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
 	}
 
 
+	/**
+	 * Get the handle service.
+	 * 
+	 * @return
+	 */
 	public HandleService getHandleService() {
 		return handleService;
 	}
 
 
+	/**
+	 * Set the handle service
+	 * 
+	 * @param handleService
+	 */
 	public void setHandleService(HandleService handleService) {
 		this.handleService = handleService;
 	}
 
 
+	/**
+	 * Get the institutional item id.
+	 * 
+	 * @return
+	 */
 	public Long getInstitutionalItemId() {
 		return institutionalItemId;
 	}
 
 
+	/**
+	 * Get the version number.
+	 * 
+	 * @return
+	 */
 	public int getVersionNumber() {
 		return versionNumber;
+	}
+	
+	/**
+	 * Set the institutional item version service.
+	 * 
+	 * @param institutionalItemVersionService
+	 */
+	public void setInstitutionalItemVersionService(
+			InstitutionalItemVersionService institutionalItemVersionService) {
+		this.institutionalItemVersionService = institutionalItemVersionService;
 	}
 
 }

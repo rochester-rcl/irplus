@@ -38,14 +38,14 @@ public class IrRole extends CommonPersistent implements GrantedAuthority, Persis
 	/** indicates a user is a collaborator  */
 	public static final String COLLABORATOR_ROLE ="ROLE_COLLABORATOR";
 	
+	/** indicates a user is a collaborator  */
+	public static final String IMPORTER_ROLE ="ROLE_IMPORTER";
+	
 	/** user can author documents in the system */
 	public static final String AUTHOR_ROLE ="ROLE_AUTHOR";
 	
 	/** user can be a researcher  */
 	public static final String RESEARCHER_ROLE ="ROLE_RESEARCHER";
-	
-	/** basic user role to create group spaces  */
-	public static final String GROUP_SPACE_ROLE ="ROLE_GROUP_SPACE";
 
 	/** basic user role to log into the system  */
 	public static final String USER_ROLE ="ROLE_USER";

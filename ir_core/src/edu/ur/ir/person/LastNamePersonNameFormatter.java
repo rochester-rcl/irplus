@@ -37,38 +37,22 @@ public class LastNamePersonNameFormatter implements BasicPersonNameFormatter, Se
 		StringBuffer output = new StringBuffer("");
 		if( personName.getSurname() != null &&  personName.getSurname().trim().length() > 0)
     	{
-    		output.append(personName.getSurname());
+    		output.append(personName.getSurname() + ", ");
     	}
 		if( personName.getForename() != null && personName.getForename().trim().length() > 0)
     	{
-			if(output.length() > 0 )
-			{
-				output.append(", ");
-			}
-			output.append(personName.getForename());
+			output.append(personName.getForename() + " ");
     	}
 		if( personName.getMiddleName() != null &&  personName.getMiddleName().trim().length() > 0)
     	{
-			if(output.length() > 0 )
-			{
-				output.append(", ");
-			}
-			output.append(personName.getMiddleName());
+			output.append(personName.getMiddleName() + " ");
     	}
 		if( personName.getNumeration() != null && personName.getNumeration().trim().length() > 0)
     	{
-			if(output.length() > 0 )
-			{
-				output.append(", ");
-			}
-			output.append(personName.getNumeration());
+			output.append(personName.getNumeration() + " ");
     	}
 		if( personName.getPersonNameTitles() != null && personName.getPersonNameTitles().size() > 0)
     	{
-			if(output.length() > 0 )
-			{
-				output.append(", ");
-			}
     	    for( PersonNameTitle title: personName.getPersonNameTitles())
     	    {
     	    	output.append(title.getTitle() + " ");

@@ -1,3 +1,4 @@
+package edu.ur.ir.institution.service;
 /**  
 Copyright 2008 University of Rochester
 
@@ -14,9 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */  
 
-
-package edu.ur.ir.institution.service;
-
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -31,6 +29,7 @@ import edu.ur.ir.institution.InstitutionalItemService;
 import edu.ur.ir.item.ContentType;
 import edu.ur.ir.item.IdentifierType;
 import edu.ur.ir.item.LanguageType;
+import edu.ur.ir.item.PlaceOfPublication;
 import edu.ur.ir.item.Publisher;
 import edu.ur.ir.item.Series;
 import edu.ur.ir.item.Sponsor;
@@ -58,7 +57,6 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	/** Service for dealing with processing types */
 	private IndexProcessingTypeService indexProcessingTypeService;
 	
-	
 	/**  Get the logger for this class */
 	private static final Logger log = Logger.getLogger(DefaultInstitutionalItemIndexProcessingRecordService.class);
 
@@ -82,31 +80,23 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	}
 
 	/**
-	 * Get all institutional item indexing processing record ordered by updated date descending.
+	 * Get all institutional item index processing records.
 	 * 
-	 * @param rowStart - start position
-	 * @param maxResults - maximum number of results to get.
-	 *  
-	 * @return all institutional item index processing records or an empty list if none found
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#getAll()
 	 */
-	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate(int rowStart, int maxResults) {
-		return processingRecordDAO.getAllOrderByItemIdUpdatedDate(rowStart, maxResults);
-	}
-	
-	
-	/**
-	 * Get all institutional item index processing records for a given index processing type ordered
-	 * by updated date descending
-	 * 
-	 * @param processingTypeId - processing type id
-	 * 
-	 * @return list of records found
-	 */
-	public List<InstitutionalItemIndexProcessingRecord> getAllByProcessingTypeUpdatedDate(Long processingTypeId)
-	{
-		return processingRecordDAO.getAllByProcessingTypeUpdatedDate(processingTypeId);
+	@SuppressWarnings("unchecked")
+	public List<InstitutionalItemIndexProcessingRecord> getAll() {
+		return processingRecordDAO.getAll();
 	}
 
+	/**
+	 * Get all processing records ordered by item id and updated date
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#getAllOrderByItemIdUpdatedDate()
+	 */
+	public List<InstitutionalItemIndexProcessingRecord> getAllOrderByItemIdUpdatedDate() {
+		return processingRecordDAO.getAllOrderByItemIdUpdatedDate();
+	}
 
 	/**
 	 * Get the count of the processing records.
@@ -165,20 +155,9 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	 * 
 	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#processItemsInCollection(edu.ur.ir.institution.InstitutionalCollection, edu.ur.ir.index.IndexProcessingType)
 	 */
-	public void processItemsInRepository( IndexProcessingType processingType, boolean create)
+	public void processItemsInRepository( IndexProcessingType processingType)
 	{
-		if( log.isDebugEnabled() )
-		{
-		    log.debug("seting collection items for re-indexing  repository processing type = " +
-		    		processingType + " create = " + create);
-		}
-		if( create )
-		{
-			IndexProcessingType deleteIndexType = indexProcessingTypeService.get(IndexProcessingTypeService.DELETE_INDEX);
-			InstitutionalItemIndexProcessingRecord deleteIndex = new InstitutionalItemIndexProcessingRecord(-1l, deleteIndexType);
-			processingRecordDAO.makePersistent(deleteIndex);
-		}
-		
+		log.debug("seting collection items for re-indexing  repository processing type = " + processingType);
 	    processingRecordDAO.insertAllItemsForRepository(processingType);
 	}
 
@@ -318,6 +297,16 @@ public class DefaultInstitutionalItemIndexProcessingRecordService  implements In
 	public Long insertAllItemsForLangaugeType(LanguageType languageType,
 			IndexProcessingType processingType) {
 		return processingRecordDAO.insertAllItemsForLanguageType(languageType, processingType);
+	}
+	
+	/**
+	 * Insert all items for place of publication
+	 * 
+	 * @see edu.ur.ir.institution.InstitutionalItemIndexProcessingRecordService#insertAllItemsForPlaceOfPublication(edu.ur.ir.item.PlaceOfPublication, edu.ur.ir.index.IndexProcessingType)
+	 */
+	public Long insertAllItemsForPlaceOfPublication(PlaceOfPublication placeOfPublication,
+			IndexProcessingType processingType) {
+		return processingRecordDAO.insertAllItemsForPlaceOfPublication(placeOfPublication, processingType);
 	}
 
 	/**

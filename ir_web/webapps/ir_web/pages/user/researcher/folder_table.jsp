@@ -90,8 +90,8 @@
                        ascendingSortAction="javascript:YAHOO.ur.researcher.folder.updateSort('asc', 'type');"
                        descendingSortAction="javascript:YAHOO.ur.researcher.folder.updateSort('desc', 'type');">
                        <u>Type</u><urstb:thImgSort
-                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
                     
                     <urstb:tdHeadSort
                        height="33"
@@ -99,8 +99,8 @@
                        ascendingSortAction="javascript:YAHOO.ur.researcher.folder.updateSort('asc', 'name');"
                        descendingSortAction="javascript:YAHOO.ur.researcher.folder.updateSort('desc', 'name');">
                        <u>Name</u><urstb:thImgSort
-                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
                         
                     <urstb:td>Properties</urstb:td>
                 </urstb:tr>

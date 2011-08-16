@@ -70,15 +70,20 @@
              
         </interceptors>
         
-       <default-interceptor-ref name="default"/>
-       
-       <default-action-ref name="unknownAction" />
+        <!--  set the default stack for this package -->
+        <default-interceptor-ref name="default"/>
+        
+        <default-action-ref name="unknownAction" />
 
         <global-results>
         	 <result type="redirect" name="change-password">/pages/user/login/force_change_password.jsp</result>
         	 <result type="redirect" name="registration-error">/pages/user/login/invalid_token.jsp</result>
         	 <result type="redirect" name="handleError">/pages/error.jsp</result>
         	 <result type="redirect" name="accessDenied">/accessDenied.jsp</result>
+        	 <result type="redirectAction" name="acceptLicense">
+        	      <param name="actionName">acceptRepositoryLicense.action</param>
+        	      <param name="namespace">/user</param>
+        	 </result>
         </global-results>
         
         <!--  ************************************ -->
@@ -353,6 +358,7 @@
         <!-- Download Researcher picture  -->
         <action name="downloadResearcherPicture"
             class="edu.ur.ir.web.action.researcher.ResearcherPictureFileDownload">
+            <interceptor-ref name="editStack"/>
             <result name="accessDenied">/accessDenied.jsp</result>
             <result name="success" type="no-op"/>
         </action>
@@ -410,23 +416,23 @@
                 method="getRss">
                 <interceptor-ref name="editStack" />
                 <result name="success">/pages/item/contributor_page_rss_feed.jsp</result>
+                <result name="not_found">/pages/item/contributor_page_not_found_rss_feed.jsp</result>
+                <result name="input">/pages/item/contributor_page_not_found_rss_feed.jsp</result>
         </action>
         
          <action name="viewContributorPage" 
                 class="edu.ur.ir.web.action.item.ViewContributorPage">
          	<result name="success">/pages/item/contributor_page_view.jsp</result>
+         	<result name="not_found">/pages/item/contributor_page_not_found.jsp</result>
+            <result name="input">/pages/item/contributor_page_not_found.jsp</result>
          </action> 
          
          <action name="viewContributorXmlPage" 
                 class="edu.ur.ir.web.action.item.ViewContributorPage">
          	<result name="success">/pages/item/contributor_page_view_xml.jsp</result>
+         	<result name="not_found">/pages/item/institutional_publication_not_found.jsp</result>
+            <result name="input">/pages/item/institutional_publication_not_found.jsp</result>
          </action>
-         
-          <action name="viewByPersonNameContributorPage" 
-                class="edu.ur.ir.web.action.item.ViewByPersonContributorPage">
-         	<result name="success">/pages/item/contributor_page_view.jsp</result>
-         </action>       
-                 
                  
         <!--  ************************************ -->
         <!--    Sponsor actions                 -->
@@ -469,6 +475,20 @@
                 class="edu.ur.ir.web.action.institution.InstitutionalCollectionStatistics">
          	<result name="success">/pages/collection/collection_statistics.jsp</result>
         </action> 
+        
+        <!-- marc MRC file export action -->
+        <action name="exportToMarcMrcFile"
+            class="edu.ur.ir.web.action.export.MarcFileExport"
+            method="mrc">
+            <result name="success" type="no-op"/>
+        </action>
+        
+         <!-- marc XML file export action -->
+        <action name="exportToMarcXmlFile"
+            class="edu.ur.ir.web.action.export.MarcFileExport"
+            method="xml">
+            <result name="success" type="no-op"/>
+        </action>
          
     </package>
          

@@ -22,7 +22,9 @@
 
 
 
-<div class="pager">
+<table class="pager">
+<tr> <td>
+
 
 	<ur:pager currentPageNumber="${currentPageNumber}" 
 	     startPageNumber="${startPageNumber}"  
@@ -67,7 +69,9 @@
 		</ur:lastPage>	
 				    
 	</ur:pager>	
-</div>
+
+</td> </tr>    
+</table>   
 
 				         
 				         

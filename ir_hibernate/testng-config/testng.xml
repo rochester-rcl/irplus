@@ -82,14 +82,12 @@
              <class name="edu.ur.hibernate.ir.user.db.PersonalItemDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.PersonalCollectionDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.UserEmailDAOTest"/>
-             <class name="edu.ur.hibernate.ir.user.db.FileInviteInfoDAOTest"/>
+             <class name="edu.ur.hibernate.ir.user.db.InviteInfoDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.SharedInboxFileDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.UserWorkspaceIndexProcessingRecordDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.PersonalItemDeleteRecordDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.PersonalFileDeleteRecordDAOTest"/>
              <class name="edu.ur.hibernate.ir.user.db.ExternalAccountTypeDAOTest"/>
-             <class name="edu.ur.hibernate.ir.user.db.FolderInviteInfoDAOTest"/>
-             <class name="edu.ur.hibernate.ir.user.db.FolderAutoShareInfoDAOTest"/>
              
              <class name="edu.ur.hibernate.ir.file.db.IrFileDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.file.db.VersionedFileDAOTest"/> 
@@ -112,14 +110,12 @@
 		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.ContributorTypeDublinCoreMappingDAOTest"/>
 		     <class name="edu.ur.hibernate.ir.item.metadata.dc.db.IdentifierTypeDublinCoreMappingDAOTest"/>
 		     
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceFolderDAOTest"/>
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceDAOTest"/>
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceFileDAOTest"/>
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceGroupDAOTest"/>
-		     <class name="edu.ur.hibernate.ir.groupspace.db.GroupWorkspaceGroupInviteDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.MarcContentTypeFieldMapperDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.MarcContributorTypeRelatorCodeDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.MarcDataFieldMapperDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.IdentifierTypeSubFieldMapperDAOTest"/>
+		     <class name="edu.ur.hibernate.ir.metadata.marc.db.ExtentTypeSubFieldMapperDAOTest"/>
 		     
-		     <class name="edu.ur.hibernate.ir.invite.db.InviteTokenDAOTest"/>
-
 		</classes>
 	</test>
 	

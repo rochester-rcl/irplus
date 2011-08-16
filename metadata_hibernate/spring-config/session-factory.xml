@@ -36,6 +36,12 @@
                 <value>edu/ur/hibernate/metadata/MetadataType.hbm.xml</value>
                 <value>edu/ur/hibernate/metadata/dc/DublinCoreTerm.hbm.xml</value>
                 <value>edu/ur/hibernate/metadata/dc/DublinCoreEncodingScheme.hbm.xml</value>
+                
+                
+                <value>edu/ur/hibernate/metadata/marc/MarcDataField.hbm.xml</value>
+                <value>edu/ur/hibernate/metadata/marc/MarcSubField.hbm.xml</value>
+                <value>edu/ur/hibernate/metadata/marc/MarcRelatorCode.hbm.xml</value>
+                <value>edu/ur/hibernate/metadata/marc/MarcTypeOfRecord.hbm.xml</value>
             </set>
         </property>
         <property name="hibernateProperties">

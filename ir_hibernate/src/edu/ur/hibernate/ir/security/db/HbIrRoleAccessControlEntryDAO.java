@@ -16,11 +16,12 @@
 
 package edu.ur.hibernate.ir.security.db;
 
+import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import edu.ur.hibernate.HbCrudDAO;
+import edu.ur.hibernate.HbHelper;
 import edu.ur.ir.security.IrRoleAccessControlEntry;
 import edu.ur.ir.security.IrRoleAccessControlEntryDAO;
 
@@ -64,9 +65,20 @@ IrRoleAccessControlEntryDAO {
 	 * @see edu.ur.dao.CountableDAO#getCount()
 	 */
 	public Long getCount() {
-		Query q = hbCrudDAO.getSessionFactory().getCurrentSession().getNamedQuery("irRoleAccessEntryCount");
-		return (Long)q.uniqueResult();
+		return (Long)HbHelper.getUnique(hbCrudDAO.getHibernateTemplate().findByNamedQuery("irRoleAccessEntryCount"));
 	}
+
+	
+	/**
+	 * Get all role access control entries.
+	 * 
+	 * @see edu.ur.dao.CrudDAO#getAll()
+	 */
+	@SuppressWarnings("unchecked")
+	public List getAll() {
+		return hbCrudDAO.getAll();
+	}
+
 	
 	/**
 	 * Get the role access cotnrol entry by id.

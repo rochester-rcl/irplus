@@ -118,7 +118,8 @@
 	       <!-- End - To create new Publication -->
 	       
            <input type="hidden" id="myFolders_parentFolderId" name="parentFolderId" value="${parentFolderId}"/>
-           <input type="hidden" id="page_type" name="pageType"  value="folder_page"/>
+           <input type="hidden" id="page_type" 
+	                  name="pageType"  value="folder_page"/>
 	       <input type="hidden" id="folder_sort_type" name="sortType" value="${sortType}"/>
 	       <input type="hidden" id="folder_sort_element" name="sortElement" value="${sortElement}"/>
        
@@ -136,8 +137,8 @@
                        ascendingSortAction="javascript:YAHOO.ur.folder.updateSort('asc', 'type');"
                        descendingSortAction="javascript:YAHOO.ur.folder.updateSort('desc', 'type');">
                        <u>Type</u><urstb:thImgSort
-                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
                     
                     
                     <urstb:tdHeadSort
@@ -146,8 +147,8 @@
                        ascendingSortAction="javascript:YAHOO.ur.folder.updateSort('asc', 'name');"
                        descendingSortAction="javascript:YAHOO.ur.folder.updateSort('desc', 'name');">
                        <u>Name</u><urstb:thImgSort
-                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_down.gif"
-                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_up.gif"/></urstb:tdHeadSort>
+                            sortAscendingImage="page-resources/images/all-images/bullet_arrow_up.gif"
+                            sortDescendingImage="page-resources/images/all-images/bullet_arrow_down.gif"/></urstb:tdHeadSort>
                         
                     <urstb:td>Version</urstb:td>
                     <urstb:td>File Size</urstb:td>
@@ -250,13 +251,13 @@
                                 <c:url var="fileProperties" value="/user/viewPersonalFile.action">
                                     <c:param name="personalFileId" value="${fileSystemObject.id}"/>
                                 </c:url>
-	                            <a href="${fileProperties}">Properties</a>
+	                            <a href="${fileProperties}">properties</a>
 	                        </c:if>
 	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
                                 <c:url var="folderProperties" value="/user/viewFolderProperties.action">
                                     <c:param name="personalFolderId" value="${fileSystemObject.id}"/>
                                 </c:url>	                        
-	                           <a href="${folderProperties}">Properties</a>
+	                           <a href="${folderProperties}">properties</a>
 	                        </c:if>
                         </urstb:td>
                         <urstb:td>
@@ -265,19 +266,19 @@
                	                <!--  owners always have invite permissions -->
                	                <c:if test="${ir:isOwner(user, fileSystemObject.versionedFile)}">
                	                    <c:if test="${empty fileSystemObject.versionedFile.collaborators}">
-	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shareable </a>
+	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> shareable </a>
 	                      		    </c:if>
 	                      		    <c:if test="${!empty fileSystemObject.versionedFile.collaborators}">
-	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shared </a>
+	                      		        <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> shared </a>
 	                      		    </c:if>
                	                </c:if>
                	                <c:if test="${!ir:isOwner(user, fileSystemObject.versionedFile)}">
                	                    <ir:acl domainObject="${fileSystemObject.versionedFile}" hasPermission="SHARE">
 	                      		        <c:if test="${empty fileSystemObject.versionedFile.collaborators}">
-	                      		             <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shareable </a>
+	                      		             <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> shareable </a>
 	                      		        </c:if>
 	                      		        <c:if test="${!empty fileSystemObject.versionedFile.collaborators}">
-	                      		            <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> Shared </a>
+	                      		            <span class="groupAddBtnImg">&nbsp;</span> <a href="Javascript:YAHOO.ur.folder.shareSingleConfirm('file_checkbox_${fileSystemObject.id}');"> shared </a>
 	                      		        </c:if>
 	                                </ir:acl>
 	                               
@@ -285,12 +286,7 @@
 	                                    Not Shareable
 	                                </c:if>
                	                </c:if>
-	                        </c:if>
-	                        <c:if test="${fileSystemObject.fileSystemType.type == 'personalFolder'}">
-	                             <c:url var="autoShareUrl" value="/user/autoShareFolder.action">
-                                    <c:param name="personalFolderId" value="${fileSystemObject.id}"/>
-                                </c:url>
-                                <span class="groupAddBtnImg">&nbsp;</span><a href="${autoShareUrl}">Auto Share</a>	 
+               	            
 	                        </c:if>
                         </urstb:td>
                         <urstb:td>

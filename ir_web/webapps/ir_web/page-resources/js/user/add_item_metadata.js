@@ -31,6 +31,7 @@ var saveItemMetadataAndGetIdentifierAction = basePath + 'user/saveItemMetadataAn
 var saveItemMetadataAndGetExtentAction = basePath + 'user/saveItemMetadataAndGetExtent.action';
 var saveItemMetadataAndGetSponsorAction = basePath + 'user/saveItemMetadataAndGetSponsor.action';
 var saveItemMetadataAndGetPublisherAction = basePath + 'user/saveItemMetadataAndGetPublisher.action';
+var saveItemMetadataAndGetPlaceOfPublicationAction = basePath + 'user/saveItemMetadataAndGetPlaceOfPublication.action';
 var saveItemTypeAndUpdateSecondaryTypesAction = basePath + 'user/saveContentType.action';
 
 // Action to save metadata to item
@@ -58,6 +59,7 @@ var newSponsorAction = basePath + 'user/createSponsor.action';
 var newIdentifierTypeAction = basePath + 'user/createIdentifierType.action';
 var newExtentTypeAction = basePath + 'user/createExtentType.action';
 var newPublisherAction = basePath + 'user/createPublisher.action';
+var newPlaceOfPublicationAction = basePath + 'user/createPlaceOfPublication.action';
 
 YAHOO.ur.item.metadata = {
 	
@@ -246,8 +248,8 @@ YAHOO.ur.item.metadata = {
 		            // id to give to the table
 		    	    document.getElementById("series_table_id").value = parseInt(document.getElementById("series_table_id").value) + 1; 
 		    	
-		            // Replace the table id with the latest Id
-		            newSeries = newSeries.replace("series_table_i","series_table_" + document.getElementById("series_table_id").value, "gm");
+		            // Global Replace the table id with the latest Id
+		            newSeries = newSeries.replace(/series_table_i/g,("series_table_" + document.getElementById("series_table_id").value));
 		        
 		            var newDiv = document.getElementById('new_series');
 		            newDiv.innerHTML = newSeries;
@@ -426,17 +428,19 @@ YAHOO.ur.item.metadata = {
 	            {               			    
 		            var divToUpdate = document.getElementById('identifier_forms');
 		            var newIdentifier = o.responseText;
-		        
+		            
+		            
 		            // id to give to the table
 		    	    document.getElementById("identifier_table_id").value = parseInt(document.getElementById("identifier_table_id").value) + 1; 
 		        
-		            // Replace the table id with the latest Id
-		            newIdentifier = newIdentifier.replace("identifier_table_i","identifier_table_" + document.getElementById("identifier_table_id").value, "gm");
-		        
+		            // Global Replace the table id with the latest Id
+		            newIdentifier = newIdentifier.replace(/identifier_table_i/g,("identifier_table_" + document.getElementById("identifier_table_id").value));
+		            
 		            var newDiv = document.getElementById('new_identifier');
 		            newDiv.innerHTML = newIdentifier;
 		            divToUpdate.appendChild(document.getElementById('identifier_table_'+document.getElementById("identifier_table_id").value));
-		            newDiv.innerHTML = "";
+		            newDiv.innerHTML = ""; 
+		           
 		        }
 		    },
 			
@@ -636,8 +640,9 @@ YAHOO.ur.item.metadata = {
 		            // id to give to the table
 		    	    document.getElementById("extent_table_id").value = parseInt(document.getElementById("extent_table_id").value) + 1; 
 		        
-		            // Replace the table id with the latest Id
-		            newExtent = newExtent.replace("extent_table_i","extent_table_" + document.getElementById("extent_table_id").value, "gm");
+		    	    
+		            //Global  Replace the table id with the latest Id
+		            newExtent = newExtent.replace(/extent_table_i/g,("extent_table_" + document.getElementById("extent_table_id").value));
 		        
 		            var newDiv = document.getElementById('new_extent');
 		            newDiv.innerHTML = newExtent;
@@ -841,8 +846,8 @@ YAHOO.ur.item.metadata = {
 		            // id to give to the table
 		    	    document.getElementById("sponsor_table_id").value = parseInt(document.getElementById("sponsor_table_id").value) + 1; 
 		        
-		            // Replace the table id with the latest Id
-		            newSponsor = newSponsor.replace("sponsor_table_i","sponsor_table_" + document.getElementById("sponsor_table_id").value, "gm");
+		            // Global Replace the table id with the latest Id
+		            newSponsor = newSponsor.replace(/sponsor_table_i/g,("sponsor_table_" + document.getElementById("sponsor_table_id").value));
 		        
 		            var newDiv = document.getElementById('new_sponsor');
 		            newDiv.innerHTML = newSponsor;
@@ -1175,7 +1180,7 @@ YAHOO.ur.item.metadata = {
 		YAHOO.ur.item.metadata.newPublisherDialog.validate = function() {
 		    var name = document.getElementById('newPublisherForm_name').value;
 			if (name == "" || name == null) {
-			    alert('A Content type name must be entered');
+			    alert('A name must be entered');
 				return false;
 			} else {
 				return true;
@@ -1409,8 +1414,9 @@ YAHOO.ur.item.metadata = {
 	    	var tableId = 'title_table_' + document.getElementById("title_table_id").value;
 	
 			// Create table row for Title
-	 		mytable     = document.createElement("table");
-	 		mytable.setAttribute("id", "title_table_" + document.getElementById("title_table_id").value);
+	 		var mytable     = document.createElement("table");
+	 		var myId = "title_table_" + document.getElementById("title_table_id").value;
+	 		mytable.setAttribute("id", myId);
 	 		mytable.setAttribute("class", "noPaddingTable");
 	        mytablebody = document.createElement("tbody");
 	        
@@ -1418,18 +1424,18 @@ YAHOO.ur.item.metadata = {
 	        mycurrent_row = document.createElement("tr");
 	
 	        // creates a <td> element
-	        mycurrent_cell1 = document.createElement("td");
+	        var mycurrent_cell1 = document.createElement("td");
 	        mycurrent_cell1.setAttribute("width", "80%");
 	
 	        // creates a text node for the sub title articles
-	        currenttext1 = document.createElement("input");
+	        var currenttext1 = document.createElement("input");
 	        currenttext1.setAttribute("class", "td_for_title_article");
 	        currenttext1.setAttribute("type", "text");
 	        currenttext1.setAttribute("name", "subTitleArticles");
 	        currenttext1.setAttribute("size", "15");
 	        
 	        // creates a Text Node for sub title 
-	        currenttext2 = document.createElement("input");
+	        var currenttext2 = document.createElement("input");
 	        currenttext2.setAttribute("type", "text");
 	        currenttext2.setAttribute("name", "subTitles");
 	        currenttext2.setAttribute("size", "90");
@@ -1442,15 +1448,17 @@ YAHOO.ur.item.metadata = {
 	
 	
 	        // creates a <td> element
-	        mycurrent_cell2 = document.createElement("td");
+	        var mycurrent_cell2 = document.createElement("td");
 	        mycurrent_cell2.setAttribute("width", "18%");
 	
 	        // creates a Button
-	        button = document.createElement("input");
+	        var button = document.createElement("input");
 	        button.setAttribute("type", "button");
 	        button.setAttribute("value", "Remove Other Title");
-	        button.setAttribute("class", "ur_button");
-	        button.setAttribute("onclick", "javascript:YAHOO.ur.item.metadata.removeSubTitle('" + tableId + "')");
+	        button.className = 'ur_button';
+	        button.id = 'remove_other_title_' + tableId;
+	        button.onclick = function (){javascript:YAHOO.ur.item.metadata.removeSubTitle(myId);};
+	        
 	        
 	        // appends the Text Node we created into the cell <td>
 	        mycurrent_cell2.appendChild(button);
@@ -1472,13 +1480,181 @@ YAHOO.ur.item.metadata = {
 	 */
 	removeSubTitle : function(tableId)
 	{
-	        var table_div = document.getElementById("title_forms");
+	    var table_div = document.getElementById("title_forms");
 	
-	        var child = document.getElementById(tableId);
-	        table_div.removeChild(child); 
+	    var child = document.getElementById(tableId);
+	    table_div.removeChild(child); 
 	        
 	},
+	
+	
+	/**
+	 * Save metadata and update the screen with latest place of publication data
+	 *
+	 */
+	saveItemMetadataAndGetPlaceOfPublication : function()
+	{
+		var callback =
+		{
+		    success: function(o) 
+		    {
+			    // check for the timeout - forward user to login page if timout
+	            // occured
+	            if( !urUtil.checkTimeOut(o.responseText) )
+	            {       		    
+		            var divToUpdate = document.getElementById('place_of_publication_form');
+		            divToUpdate.innerHTML = o.responseText; 
+		        }
+		    },
+			
+			failure: function(o) 
+			{
+			    alert('saveItemMetadataAndGetPlaceOfPublication failure ' + o.status + ' status text ' + o.statusText );
+			}
+		}
+		
+
+		YAHOO.util.Connect.setForm('itemForm');
+		 
+		var transaction = YAHOO.util.Connect.asyncRequest('POST', 
+	        saveItemMetadataAndGetPlaceOfPublicationAction, 
+	        callback);
+	        
+	},
+	
+	/**
+	 * Creates a YUI new place of publication modal dialog for when a user wants to create 
+	 * a new publisher
+	 *
+	 */
+	createNewPlaceOfPublicationDialog : function()
+	{
 	    
+		// Define various event handlers for Dialog
+		var handleSubmit = function() 
+		{
+			this.submit();
+		};
+		
+			
+		// handle a cancel of the adding publisher dialog
+		var handleCancel = function() 
+		{
+		    YAHOO.ur.item.metadata.clearPlaceOfPublicationForm();
+		    YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.hide();
+		};
+		
+		var handleSuccess = function(o) 
+		{
+	        // check for the timeout - forward user to login page if timout
+	        // occured
+	        if( !urUtil.checkTimeOut(o.responseText) )
+	        {       		
+		        //get the response from adding a publisher
+		        var response = o.responseText;
+		        var publisherForm = document.getElementById('newPlaceOfPublicationDialogFields');
+		    
+		        // update the form fields with the response.  This updates
+		        // the form, if there was an issue, update the form with
+		        // the error messages.
+		        publisherForm.innerHTML = o.responseText;
+		    
+		        // determine if the add/edit was a success
+		        var success = document.getElementById("newPlaceOfPublicationForm_success").value;
+		    
+		        //if the publisher was not added then show the user the error message.
+		        // received from the server
+		        if( success == "false" )
+		        {
+	                YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.showDialog();
+		        }
+		        else
+		        {
+		            // we can clear the form if the publisher was added
+		            YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.hide();
+		            YAHOO.ur.item.metadata.clearPlaceOfPublicationForm();
+		            YAHOO.ur.item.metadata.saveItemMetadataAndGetPlaceOfPublication();
+		        }
+		    }
+		};
+		
+		// handle form sbumission failure
+		var handleFailure = function(o) {
+		    alert('place of publication submission failed ' + o.status);
+		};
+	
+		// Instantiate the Dialog
+		// make it modal - 
+		// it should not start out as visible - it should not be shown until 
+		// new publisher button is clicked.
+		YAHOO.ur.item.metadata.newPlaceOfPublicationDialog = new YAHOO.widget.Dialog('newPlaceOfPublicationDialog', 
+	        { width : "500px",
+			  visible : false, 
+			  modal : true,
+			  buttons : [ { text:'Submit', handler:handleSubmit, isDefault:true },
+						  { text:'Cancel', handler:handleCancel } ]
+			} );
+
+	    // show and center the affilaition dialog box
+	    YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.showDialog = function()
+	    {
+	       YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.center();
+	       YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.show();
+	    } 
+	    		
+		// Submit form	
+		YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.submit = function()
+		{   
+		    YAHOO.util.Connect.setForm('newPlaceOfPublicationForm');
+		    
+		    	    
+		    if( YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.validate() )
+		    {
+	            var cObj = YAHOO.util.Connect.asyncRequest('post',
+	            newPlaceOfPublicationAction, callback);
+	        }
+	    }
+	        	   
+	 	// Validate the entries in the form to require that both first and last name are entered
+		YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.validate = function() {
+		    var name = document.getElementById('newPlaceOfPublicationForm_name').value;
+			if (name == "" || name == null) {
+			    alert('A name must be entered');
+				return false;
+			} else {
+				return true;
+			}
+		};
+	
+		// Wire up the success and failure handlers
+		var callback = { success: handleSuccess,  failure: handleFailure };
+				
+				
+		// Render the Dialog
+		YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.render();
+	
+	    // listener for showing the dialog when clicked.
+		YAHOO.util.Event.addListener("show_place_of_publication", "click", 
+		    YAHOO.ur.item.metadata.newPlaceOfPublicationDialog.showDialog, 
+		    YAHOO.ur.item.metadata.newPlaceOfPublicationDialog, true);
+	
+	
+	},
+	
+	 /* clear out any form data messages or input
+	  * in the new place of publication form
+	  */
+	clearPlaceOfPublicationForm : function()
+	{
+        // clear out the error message
+        var placeOfPublicationError = document.getElementById('placeOfPublicationError');
+        placeOfPublicationError.innerHTML = "";		
+        
+		document.getElementById('newPlaceOfPublicationForm_name').value = "";
+		document.getElementById('newPlaceOfPublicationForm_letter_code').value = "";
+		document.getElementById('newPlaceOfPublicationForm_description').value = "";
+		document.getElementById('newPlaceOfPublicationForm_id').value = "";
+	},    
 	    
 	// initialize the page
 	// this is called once the dom has
@@ -1504,6 +1680,8 @@ YAHOO.ur.item.metadata = {
 	   YAHOO.ur.item.metadata.showReleaseCalendar();
 	   YAHOO.ur.item.metadata.showCreatedDateCalendar();
 	   YAHOO.ur.item.metadata.showDateAvailableCalendar();
+	   
+	   YAHOO.ur.item.metadata.createNewPlaceOfPublicationDialog();
 	    
 	
 	}
