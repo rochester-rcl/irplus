@@ -28,8 +28,8 @@
     <info organisation="ir_web" module="ir_web"/>
     <dependencies>
      
-        <dependency org="ir_service" name="ir_service" rev="2.0" changing="true"/>
-        <dependency org="ur_tags" name="ur_tags" rev="2.0" transitive="false" changing="true"/>
+        <dependency org="ir_service" name="ir_service" rev="3.0" changing="true"/>
+        <dependency org="ur_tags" name="ur_tags" rev="3.0" transitive="false" changing="true"/>
         
         <!--  struts 2 files and dependencies -->
         <dependency org="org.apache.struts" name="struts2-core" rev="2.2.1" transitive="false">
@@ -58,7 +58,7 @@
         </dependency>
         
         <!--  jstl files -->
-        <dependency org="jstl" name="jstl" rev="1.2" transitive="false">
+        <dependency org="javax.servlet" name="jstl" rev="1.2" transitive="false">
             <artifact name="jstl" type="jar"/>
         </dependency>
         
@@ -87,9 +87,9 @@
         </dependency>
 
         <!--  yui download -->
-	    <dependency org="yui" name="yui" rev="2.8.2" transitive="false">
+	    <dependency org="yui" name="yui" rev="2.9.0" transitive="false" changing="true">
 	        <artifact name="yui" type="zip"
- 	        url="http://yuilibrary.com/downloads/yui2/yui_2.8.2r1.zip"/> 
+ 	        url="http://yui.zenfs.com/releases/yui2/yui_2.9.0.zip"/> 
         </dependency>
 
          <!--  spring security libraries --> 
