@@ -1,4 +1,4 @@
-IR+ changes 2.0 to 2.x
+IR+ changes 2.1 to 3.0
 ==============================
 - Updated Approve affiliations - removed unneeded variables and imports
 - added last login date to user search results table 
@@ -43,6 +43,70 @@ IR+ changes 2.0 to 2.x
 =============================
 - Removed getAll from HbCrudDAO and moved it into its own interface.  Removed method from all
 DAO classes that did not have a client using the method.
+
+
+IR+ 2.0.8 to 2.1
+==========================
+- Added MARC import/export
+    - Importer role added for importing MARC files - users must be given this 
+      privilege before they can import data
+    
+- Fixed IE issue when editing a publication 
+  - Add/Create/Remove Series Button
+  - Add/Create/Remove sub title Button
+
+- Fixed issue with CSS on images with multiple classes (removed comma)
+- Fixed issue where moving files and folders on institutional publication then
+  selecting finish later took user to workspace rather than publication
+  
+- Moved editing buttons on institutional publication to top of page - were hidden before
+- Fixed deleting multiple files and folders within a sub folder - would fail before on personal workspace
+- Fixed deleting multiple files and folders within a sub folder - would fail before on researcher workspace
+
+- Separated place of publication from publisher
+- Added rss feed not found when no contributor id is passed in
+- Added contributor not found when no contributor id is passed in
+
+- Added filter to open  files with the following extensions jpg, tiff, tif, jpeg, png, gif, bmp, pdf
+(Note: this is configurable)
+
+- Fixed view file system in create publication step one to order files and folders ascending by type.
+(Folders first alpha then files alpha)
+
+- Fixed final step of submission screen to show full publication name - previously did not show 
+articles (A, the, ...)  
+
+- Fixed IE issue when users change logo - larger logos cause the header to go beyond set width.  
+  Allowed logo 50% and links 50%
+
+- Fixed issue when url is not correct - causes exception on item_files_frag.jsp.  Updated
+to use ItemLink.urlValue rather than ItemLink.url
+
+- Added processing window when deleting personal publications.  This prevents users from trying to perform
+actions while the delete is occurring.
+
+- Change in default license for the repository now requires the license to be accepted when the user visits 
+their workspace
+
+- Fixed large buttons issue in IE
+
+- Updated Administration documentation
+
+- Updated user documentation
+
+- Researcher pages picture upload - if no primary picture exists, the
+  up loaded picture becomes the primary picture.  If the primary picture
+  is deleted and other pictures exist the next picture in the set 
+  becomes the primary picture.
+
+- No longer require researcher page abilities for administrator privileges.  Administrators 
+  may not need this privilege and can add it at a later time if needed to their own accounts.
+
+- Removed type="submit" on institutional item page so buttons are not selected by IE.
+
+- Fixed issues with IE and FF related to add/remove of other title.
+
+
 
 
 IR+ 2.0.4 to 2.0.5
